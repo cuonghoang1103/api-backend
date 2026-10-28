@@ -1,0 +1,418 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-8-4-ch15-risks-success",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-8-4-ch15-risks-success"
+  },
+  "exercises": [
+    {
+      "title": "Prototype risks 1 — name the risk",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "prototyping risks"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers’ four prototyping risks: <b>pressure to release the prototype</b>, <b>distraction by details</b>, <b>unrealistic performance expectations</b>, <b>investing excessive effort in prototypes</b>. Name the risk in each story.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bốn rủi ro: áp lực phát hành prototype, sa đà chi tiết, kỳ vọng hiệu năng phi thực tế, đầu tư quá mức. Gọi tên rủi ro trong từng tình huống.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "\"Đưa lên chạy luôn\" ⇒ áp lực phát hành.",
+        "Tranh luận màu/chữ ⇒ sa đà chi tiết."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Prototype risks 1 — name the risk\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Prototype risks 1 — name the risk — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Pressure to release the prototype\n   - r1.k: Distraction by details\n   - r2.k: Unrealistic performance expectations\n   - r3.k: Investing excessive effort in prototypes\n   - r4.k: Distraction by details\n   Mitigations: say clearly the prototype is throwaway (and make it look rough); limit it to the uncertain parts; explain that performance is not representative; time-box the prototyping effort.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Mitigations: say clearly the prototype is throwaway (and make it look rough); limit it to the uncertain parts; explain that performance is not representative; time-box the prototyping effort.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Risk",
+                "luaChon": [
+                  "Pressure to release the prototype",
+                  "Distraction by details",
+                  "Unrealistic performance expectations",
+                  "Investing excessive effort in prototypes"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "The director sees the clickable demo and says: \"Great, put it live next week.\""
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "The review meeting spends an hour on button colours instead of the missing refund flow."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Search in the demo is instant (hard-coded results); users now expect the same with 5 million records."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "The team prototyped the whole system for two months and has no time left to build it properly."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "A slick, full-colour prototype makes users argue about fonts."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Pressure to release the prototype",
+              "r1.k": "Distraction by details",
+              "r2.k": "Unrealistic performance expectations",
+              "r3.k": "Investing excessive effort in prototypes",
+              "r4.k": "Distraction by details"
+            },
+            "giaiThich": "<p><p>Mitigations: say clearly the prototype is throwaway (and make it look rough); limit it to the uncertain parts; explain that performance is not representative; time-box the prototyping effort.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm sa đà chi tiết với đầu tư quá mức."
+        },
+        {
+          "loi": "Không nhận ra kết quả \"hard-coded\" gây kỳ vọng hiệu năng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "prototype",
+          "vi": "nguyên mẫu — bản thử để làm rõ yêu cầu (throwaway / evolutionary, mock-up / proof of concept)"
+        }
+      ]
+    },
+    {
+      "title": "Prototype risks 2 — success factors",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "prototyping success factors"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Success factors: include prototyping tasks in the project plan; state each prototype’s purpose before building it and what will happen to it afterwards; plan to build multiple prototypes; create throwaways as quickly and cheaply as possible; don’t prototype requirements you already understand (except to explore design); use plausible data; don’t expect a prototype to replace written requirements.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các yếu tố thành công của prototyping theo Wiegers.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Nêu mục đích + số phận trước khi dựng.",
+        "Dữ liệu hợp lý; không làm prototype điều đã rõ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Prototype risks 2 — success factors\n\nAnswer in the answer panel (no code needed).\n\n1. Before building a prototype you should first…Trước khi dựng prototype, trước hết nên…\n2. The demo shows \"Name 1, Name 2, Lorem ipsum…\". Problem?Demo hiện \"Name 1, Name 2, Lorem ipsum…\". Vấn đề?\n3. Should you prototype the login page everyone already agrees on?Có nên làm prototype trang đăng nhập mà ai cũng đồng ý?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Prototype risks 2 — success factors — answer key\n\n1. Before building a prototype you should first…Trước khi dựng prototype, trước hết nên…\n   Answer: a) state its purpose and whether it will be discarded or grown\n   Purpose and fate decided up front.VI: Mục đích và số phận quyết từ đầu.\n\n2. The demo shows \"Name 1, Name 2, Lorem ipsum…\". Problem?Demo hiện \"Name 1, Name 2, Lorem ipsum…\". Vấn đề?\n   Answer: a) Use plausible data — users cannot judge screens filled with nonsense\n   Plausible (not real personal) data.VI: Dữ liệu hợp lý (không phải dữ liệu cá nhân thật).\n\n3. Should you prototype the login page everyone already agrees on?Có nên làm prototype trang đăng nhập mà ai cũng đồng ý?\n   Answer: a) No — prototype what is uncertain\n   Spend effort where the risk is.VI: Dồn công vào chỗ có rủi ro.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · a · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Before building a prototype you should first…</p><p style=\"opacity:.75;font-size:.92em\"><i>Trước khi dựng prototype, trước hết nên…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "state its purpose and whether it will be discarded or grown"
+              },
+              {
+                "ma": "b",
+                "noiDung": "choose the brand colours"
+              },
+              {
+                "ma": "c",
+                "noiDung": "write production code"
+              },
+              {
+                "ma": "d",
+                "noiDung": "deploy a server"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Purpose and fate decided up front.</p><p><i>VI: Mục đích và số phận quyết từ đầu.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>The demo shows \"Name 1, Name 2, Lorem ipsum…\". Problem?</p><p style=\"opacity:.75;font-size:.92em\"><i>Demo hiện \"Name 1, Name 2, Lorem ipsum…\". Vấn đề?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Use plausible data — users cannot judge screens filled with nonsense"
+              },
+              {
+                "ma": "b",
+                "noiDung": "None"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It should be empty"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It should be real patient data"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Plausible (not real personal) data.</p><p><i>VI: Dữ liệu hợp lý (không phải dữ liệu cá nhân thật).</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Should you prototype the login page everyone already agrees on?</p><p style=\"opacity:.75;font-size:.92em\"><i>Có nên làm prototype trang đăng nhập mà ai cũng đồng ý?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "No — prototype what is uncertain"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Yes, always prototype everything"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only in paper"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only if it is blue"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Spend effort where the risk is.</p><p><i>VI: Dồn công vào chỗ có rủi ro.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng dữ liệu bệnh nhân thật trong demo."
+        },
+        {
+          "loi": "Prototype mọi thứ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "prototype",
+          "vi": "nguyên mẫu — bản thử để làm rõ yêu cầu (throwaway / evolutionary, mock-up / proof of concept)"
+        }
+      ]
+    },
+    {
+      "title": "Prototype risks 3 — write a prototype plan that avoids the traps",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "prototyping success factors"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>ClinicCare: doctors are unsure how the new e-prescription screen should work, and IT doubts the national e-health API can answer within 3 seconds. Plan <b>two</b> prototypes. Write <code>PLANS</code>: an array of two objects <code>{ name, purpose, scope, futureUse, form, fate, timeboxDays, questions }</code>:</p><ul><li><code>scope</code>: \"mock-up\" or \"proof of concept\"; <code>futureUse</code>: \"throwaway\" or \"evolutionary\"; <code>form</code>: \"paper\" or \"electronic\".</li><li><code>fate</code>: what happens afterwards — must be consistent with <code>futureUse</code> (a throwaway is discarded or archived, never released).</li><li><code>timeboxDays</code>: a number ≤ 10 (avoid over-investing).</li><li><code>questions</code>: at least 3 evaluation questions; the UI prototype must ask about missing functionality and error conditions.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>One prototype answers the UI question, the other the technical question.</li>\n</ul>",
+      "problemHtmlVi": "<p>ClinicCare: bác sĩ chưa rõ màn hình kê đơn điện tử; IT nghi API quốc gia không trả lời kịp 3 giây. Lập kế hoạch <b>hai</b> prototype với các trường như mô tả; số phận phải khớp với futureUse; timebox ≤ 10 ngày; ít nhất 3 câu hỏi đánh giá, prototype giao diện phải hỏi về chức năng thiếu và tình huống lỗi.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Một prototype trả lời câu hỏi giao diện, cái kia trả lời câu hỏi kỹ thuật.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "UI uncertainty",
+          "output": "{ scope: 'mock-up', futureUse: 'throwaway', form: 'paper', fate: 'discard after updating the SRS', … }",
+          "explanation": "|||"
+        }
+      ],
+      "hintsJson": [
+        "Câu hỏi giao diện ⇒ mock-up giấy, throwaway; câu hỏi API ⇒ proof of concept điện tử.",
+        "Throwaway: ghi \"discard/archive\", tuyệt đối không \"release\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "plans.js",
+          "language": "javascript",
+          "code": "const PLANS = [\n  { name: '', purpose: '', scope: '', futureUse: '', form: '', fate: '', timeboxDays: 0, questions: [] },\n  { name: '', purpose: '', scope: '', futureUse: '', form: '', fate: '', timeboxDays: 0, questions: [] },\n];\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "plans.js",
+          "language": "javascript",
+          "code": "const PLANS = [\n  {\n    name: 'E-prescription screen mock-up',\n    purpose: 'Clarify how doctors want to search medicines, set dosage and sign the prescription; find missing requirements.',\n    scope: 'mock-up', futureUse: 'throwaway', form: 'paper',\n    fate: 'Discard after the findings are written into the SRS; keep photos in the project archive.',\n    timeboxDays: 3,\n    questions: [\n      'Which steps of writing a prescription are missing from these screens?',\n      'What should happen when a medicine is out of stock or the dosage exceeds the limit (error conditions)?',\n      'Are there any fields or functions here you would never use?',\n      'Is the order of the screens logical for a busy consultation?',\n    ],\n  },\n  {\n    name: 'National e-health API spike',\n    purpose: 'Check that sending one prescription through the national e-health API end to end returns within 3 seconds.',\n    scope: 'proof of concept', futureUse: 'throwaway', form: 'electronic',\n    fate: 'Discard the spike code; record the measured response times and the integration findings in the architecture notes.',\n    timeboxDays: 5,\n    questions: [\n      'What is the 95th-percentile response time for 100 test submissions?',\n      'Which error codes does the API return and how often?',\n      'Does authentication work with our certificate?',\n    ],\n  },\n];\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Two small, purpose-driven, time-boxed experiments: a throwaway paper mock-up for the uncertain screen and an electronic spike for the uncertain API. Their knowledge is kept; their artefacts are discarded.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "plans.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "valid attribute values; one mock-up and one proof of concept",
+              "vi": "giá trị thuộc tính hợp lệ; một mock-up và một PoC"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof PLANS==\"undefined\"||!Array.isArray(PLANS))return\"PLANS must be an array\";if(PLANS.length!==2)return\"plan exactly two prototypes\";for(var r=PLANS.map(function(o){return o=o||{},{p:o,sc:String(o.scope||\"\").toLowerCase().trim(),fu:String(o.futureUse||\"\").toLowerCase().trim(),fo:String(o.form||\"\").toLowerCase().trim(),all:[o.name,o.purpose,o.fate].join(\" \").toLowerCase()}}),t=r.filter(function(o){return o.sc===\"mock-up\"})[0],n=r.filter(function(o){return o.sc===\"proof of concept\"})[0],e=0;e<2;e++){if([\"mock-up\",\"proof of concept\"].indexOf(r[e].sc)<0)return'scope must be \"mock-up\" or \"proof of concept\"';if([\"throwaway\",\"evolutionary\"].indexOf(r[e].fu)<0)return'futureUse must be \"throwaway\" or \"evolutionary\"';if([\"paper\",\"electronic\"].indexOf(r[e].fo)<0)return'form must be \"paper\" or \"electronic\"'}return t&&n?\"OK\":\"one prototype should be a mock-up (UI question), the other a proof of concept (API question)\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "each purpose targets the right uncertainty",
+              "vi": "mục đích nhắm đúng điều chưa chắc chắn"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof PLANS==\"undefined\"||!Array.isArray(PLANS))return\"PLANS must be an array\";if(PLANS.length!==2)return\"plan exactly two prototypes\";var r=PLANS.map(function(e){return e=e||{},{p:e,sc:String(e.scope||\"\").toLowerCase().trim(),fu:String(e.futureUse||\"\").toLowerCase().trim(),fo:String(e.form||\"\").toLowerCase().trim(),all:[e.name,e.purpose,e.fate].join(\" \").toLowerCase()}}),t=r.filter(function(e){return e.sc===\"mock-up\"})[0],o=r.filter(function(e){return e.sc===\"proof of concept\"})[0];return!t||!o?\"need a mock-up and a proof of concept\":/prescri|screen|doctor|ui|dosage/.test(t.all)?/api|e-health|ehealth|national|response|second/.test(o.all)?\"OK\":\"the proof of concept should test the e-health API response time\":\"the mock-up purpose should be about the e-prescription screen\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "the proof of concept is electronic",
+              "vi": "PoC là điện tử"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof PLANS==\"undefined\"||!Array.isArray(PLANS))return\"PLANS must be an array\";if(PLANS.length!==2)return\"plan exactly two prototypes\";var o=PLANS.map(function(r){return r=r||{},{p:r,sc:String(r.scope||\"\").toLowerCase().trim(),fu:String(r.futureUse||\"\").toLowerCase().trim(),fo:String(r.form||\"\").toLowerCase().trim(),all:[r.name,r.purpose,r.fate].join(\" \").toLowerCase()}}),n=o.filter(function(r){return r.sc===\"mock-up\"})[0],e=o.filter(function(r){return r.sc===\"proof of concept\"})[0];return e?e.fo===\"electronic\"?\"OK\":\"a proof of concept runs through the real layers \\u2014 it cannot be paper\":\"no proof of concept\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "fate is consistent with future use (throwaway never released)",
+              "vi": "số phận khớp với future use (throwaway không phát hành)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof PLANS==\"undefined\"||!Array.isArray(PLANS))return\"PLANS must be an array\";if(PLANS.length!==2)return\"plan exactly two prototypes\";for(var t=PLANS.map(function(e){return e=e||{},{p:e,sc:String(e.scope||\"\").toLowerCase().trim(),fu:String(e.futureUse||\"\").toLowerCase().trim(),fo:String(e.form||\"\").toLowerCase().trim(),all:[e.name,e.purpose,e.fate].join(\" \").toLowerCase()}}),n=t.filter(function(e){return e.sc===\"mock-up\"})[0],i=t.filter(function(e){return e.sc===\"proof of concept\"})[0],r=0;r<2;r++){var o=String(t[r].p.fate||\"\").toLowerCase();if(o.length<10)return\"describe the fate of \"+(t[r].p.name||\"each prototype\");if(t[r].fu===\"throwaway\"){if(/\\b(release|ship|deploy|go live|production|reuse the code|keep the code)\\b/.test(o)&&!/\\b(not|never)\\b/.test(o))return\"a throwaway prototype must not be released \\u2014 discard or archive it\";if(!/discard|archive|throw|delete|bin/.test(o))return\"say that the throwaway is discarded or archived\"}else if(!/grow|extend|evolve|build on|basis|foundation|keep/.test(o))return\"an evolutionary prototype grows into the product \\u2014 say so\"}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "time-boxed: 1 to 10 days each",
+              "vi": "có hạn: 1–10 ngày mỗi cái"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof PLANS==\"undefined\"||!Array.isArray(PLANS))return\"PLANS must be an array\";if(PLANS.length!==2)return\"plan exactly two prototypes\";for(var o=PLANS.map(function(r){return r=r||{},{p:r,sc:String(r.scope||\"\").toLowerCase().trim(),fu:String(r.futureUse||\"\").toLowerCase().trim(),fo:String(r.form||\"\").toLowerCase().trim(),all:[r.name,r.purpose,r.fate].join(\" \").toLowerCase()}}),a=o.filter(function(r){return r.sc===\"mock-up\"})[0],u=o.filter(function(r){return r.sc===\"proof of concept\"})[0],t=0;t<2;t++){var e=o[t].p.timeboxDays;if(typeof e!=\"number\"||e<1||e>10)return\"timeboxDays must be a number from 1 to 10 (got \"+e+\")\"}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "evaluation questions: ≥ 3, UI asks about missing functions and errors",
+              "vi": "câu hỏi đánh giá: ≥ 3, UI hỏi chức năng thiếu và lỗi"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof PLANS==\"undefined\"||!Array.isArray(PLANS))return\"PLANS must be an array\";if(PLANS.length!==2)return\"plan exactly two prototypes\";for(var o=PLANS.map(function(t){return t=t||{},{p:t,sc:String(t.scope||\"\").toLowerCase().trim(),fu:String(t.futureUse||\"\").toLowerCase().trim(),fo:String(t.form||\"\").toLowerCase().trim(),all:[t.name,t.purpose,t.fate].join(\" \").toLowerCase()}}),e=o.filter(function(t){return t.sc===\"mock-up\"})[0],a=o.filter(function(t){return t.sc===\"proof of concept\"})[0],r=0;r<2;r++){var n=o[r].p.questions;if(!Array.isArray(n)||n.length<3)return\"at least 3 questions for \"+(o[r].p.name||\"each prototype\")}if(!e)return\"no mock-up\";var i=e.p.questions.join(\" \").toLowerCase();return/missing|forgot|not let|cannot do|lack/.test(i)?/error|fail|wrong|invalid|exceed|out of stock|exception/.test(i)?e.p.questions.some(function(t){return/^\\s*(do you like|is it (ok|good|nice))/i.test(t)})?'\"Do you like it?\" is not a useful evaluation question':\"OK\":\"ask about error conditions\":\"ask the UI evaluators what is missing\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho PoC ở dạng giấy."
+        },
+        {
+          "loi": "Ghi số phận của throwaway là \"release as version 1\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "prototype",
+          "vi": "nguyên mẫu — bản thử để làm rõ yêu cầu (throwaway / evolutionary, mock-up / proof of concept)"
+        },
+        {
+          "en": "time-box",
+          "vi": "giới hạn thời gian cố định"
+        }
+      ]
+    }
+  ]
+}

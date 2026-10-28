@@ -1,0 +1,470 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-8-1-oo-design-prototyping",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-8-1-oo-design-prototyping"
+  },
+  "exercises": [
+    {
+      "title": "OO design 1 — noun–verb analysis",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "noun–verb analysis"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Requirement (library app): \"<i>A member borrows one or more copies of a book. Each loan has a due date. The system calculates the fine when a member returns a copy late.</i>\" In noun–verb analysis, nouns suggest <b>classes</b> or <b>attributes</b>, verbs suggest <b>methods</b>. Classify each word.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Yêu cầu (thư viện): \"Một hội viên mượn một hay nhiều bản sao của một cuốn sách. Mỗi lượt mượn có hạn trả. Hệ thống tính tiền phạt khi hội viên trả muộn.\" Danh từ gợi ý <b>lớp</b> hoặc <b>thuộc tính</b>, động từ gợi ý <b>phương thức</b>. Phân loại từng từ.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Danh từ có nhiều thuộc tính riêng ⇒ lớp; giá trị đơn ⇒ thuộc tính.",
+        "\"The system\" là cả hệ thống — không thành lớp nghiệp vụ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# OO design 1 — noun–verb analysis\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# OO design 1 — noun–verb analysis — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Class\n   - r1.k: Class\n   - r2.k: Class\n   - r3.k: Class\n   - r4.k: Attribute\n   - r5.k: Attribute\n   - r6.k: Method\n   - r7.k: Method\n   - r8.k: Method\n   - r9.k: Not part of the model\n   Things with their own identity and several properties become classes (Member, Book, Copy, Loan); simple values describing them become attributes (Loan.dueDate, Loan.fine); verbs become responsibilities (Member.borrow(), Loan.calculateFine(), Copy.return() or Loan.close()). \"The system\" is the whole thing being designed, not a domain class.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Things with their own identity and several properties become classes (Member, Book, Copy, Loan); simple values describing them become attributes (Loan.dueDate, Loan.fine); verbs become responsibilities (Member.borrow(), Loan.calculateFine(), Copy.return() or Loan.close()). \"The system\" is the whole thing being designed, not a domain class.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Becomes",
+                "luaChon": [
+                  "Class",
+                  "Attribute",
+                  "Method",
+                  "Not part of the model"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "member"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "book"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "copy"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "loan"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "due date"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "fine"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "borrows"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "s": "calculates (the fine)"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "s": "returns"
+                }
+              },
+              {
+                "ma": "r9",
+                "o": {
+                  "s": "the system"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Class",
+              "r1.k": "Class",
+              "r2.k": "Class",
+              "r3.k": "Class",
+              "r4.k": "Attribute",
+              "r5.k": "Attribute",
+              "r6.k": "Method",
+              "r7.k": "Method",
+              "r8.k": "Method",
+              "r9.k": "Not part of the model"
+            },
+            "giaiThich": "<p><p>Things with their own identity and several properties become classes (Member, Book, Copy, Loan); simple values describing them become attributes (Loan.dueDate, Loan.fine); verbs become responsibilities (Member.borrow(), Loan.calculateFine(), Copy.return() or Loan.close()). \"The system\" is the whole thing being designed, not a domain class.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Biến \"due date\" thành lớp."
+        },
+        {
+          "loi": "Tạo lớp System."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "noun–verb analysis",
+          "vi": "phân tích danh từ – động từ"
+        },
+        {
+          "en": "class",
+          "vi": "lớp"
+        },
+        {
+          "en": "responsibility",
+          "vi": "trách nhiệm (phương thức) của lớp"
+        }
+      ]
+    },
+    {
+      "title": "OO design 3 — design from requirements, and why prototype",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "design from requirements",
+        "prototyping"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Requirements say <i>what</i>; design says <i>how</i>. The domain model from analysis is the seed of the class design. A prototype is a partial, preliminary implementation built to <b>learn</b> — to reduce a risk before committing to full development.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Yêu cầu nói <i>cái gì</i>; thiết kế nói <i>thế nào</i>. Mô hình miền từ phân tích là hạt giống của thiết kế lớp. Prototype là hiện thực một phần để <b>học</b> — giảm rủi ro trước khi làm thật.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Mô hình miền ⇒ lớp.",
+        "Prototype nhắm vào điều chưa chắc chắn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# OO design 3 — design from requirements, and why prototype\n\nAnswer in the answer panel (no code needed).\n\n1. Which analysis artefact is the best starting point for the class design?Sản phẩm phân tích nào là điểm khởi đầu tốt nhất cho thiết kế lớp?\n2. Users cannot say whether the triage screen layout works for them. You should…Người dùng không nói được bố cục màn hình phân loại có hợp không. Bạn nên…\n3. The \"three amigos\" refining a story are…\"Three amigos\" cùng làm rõ một story là…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# OO design 3 — design from requirements, and why prototype — answer key\n\n1. Which analysis artefact is the best starting point for the class design?Sản phẩm phân tích nào là điểm khởi đầu tốt nhất cho thiết kế lớp?\n   Answer: a) The conceptual ERD / domain model\n   Its entities and relationships become classes and associations.VI: Thực thể và quan hệ thành lớp và liên kết.\n\n2. Users cannot say whether the triage screen layout works for them. You should…Người dùng không nói được bố cục màn hình phân loại có hợp không. Bạn nên…\n   Answer: a) build a quick throwaway mock-up and let them try it\n   Prototype the uncertain part.VI: Làm prototype phần chưa chắc chắn.\n\n3. The \"three amigos\" refining a story are…\"Three amigos\" cùng làm rõ một story là…\n   Answer: a) BA/PO, developer and tester\n   What & why, how & feasibility, how to prove it.VI: Cái gì & vì sao, làm thế nào & khả thi, chứng minh thế nào.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · a · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which analysis artefact is the best starting point for the class design?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sản phẩm phân tích nào là điểm khởi đầu tốt nhất cho thiết kế lớp?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The conceptual ERD / domain model"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The context diagram"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The vision statement"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The project schedule"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Its entities and relationships become classes and associations.</p><p><i>VI: Thực thể và quan hệ thành lớp và liên kết.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Users cannot say whether the triage screen layout works for them. You should…</p><p style=\"opacity:.75;font-size:.92em\"><i>Người dùng không nói được bố cục màn hình phân loại có hợp không. Bạn nên…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "build a quick throwaway mock-up and let them try it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "write a longer SRS section"
+              },
+              {
+                "ma": "c",
+                "noiDung": "build the full system then ask"
+              },
+              {
+                "ma": "d",
+                "noiDung": "skip the screen"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Prototype the uncertain part.</p><p><i>VI: Làm prototype phần chưa chắc chắn.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>The \"three amigos\" refining a story are…</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Three amigos\" cùng làm rõ một story là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "BA/PO, developer and tester"
+              },
+              {
+                "ma": "b",
+                "noiDung": "three developers"
+              },
+              {
+                "ma": "c",
+                "noiDung": "CEO, CFO, CTO"
+              },
+              {
+                "ma": "d",
+                "noiDung": "three customers"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>What & why, how & feasibility, how to prove it.</p><p><i>VI: Cái gì & vì sao, làm thế nào & khả thi, chứng minh thế nào.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Bắt đầu thiết kế từ context diagram."
+        },
+        {
+          "loi": "Prototype toàn bộ hệ thống."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "prototype",
+          "vi": "nguyên mẫu — bản thử để làm rõ yêu cầu (throwaway / evolutionary, mock-up / proof of concept)"
+        },
+        {
+          "en": "entity-relationship diagram (ERD)",
+          "vi": "sơ đồ thực thể – quan hệ"
+        }
+      ]
+    },
+    {
+      "title": "OO design 2 — a first-cut class model from requirements",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "OO design from requirements"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Requirements (ClinicCare): \"<i>A patient books an appointment with a doctor for a time slot. A doctor has many time slots. When the visit ends, the doctor writes a prescription that lists one or more medicines with a dosage for each. The system calculates the visit fee.</i>\"</p><p>Write <code>MODEL = { classes: [{ name, attributes: [], methods: [] }], associations: [{ a, b, mult }] }</code> where <code>mult</code> is one of \"1-1\", \"1-*\", \"*-1\", \"*-*\" read from <code>a</code> to <code>b</code> (e.g. Doctor \"1-*\" TimeSlot). Use CamelCase class names; methods as names like \"book\" or \"calculateFee\" (no parentheses needed).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Classes: Patient, Doctor, Appointment, TimeSlot, Prescription, Medicine, and an association class for the dosage (e.g. PrescriptionItem).</li>\n</ul>",
+      "problemHtmlVi": "<p>Từ yêu cầu ClinicCare, viết mô hình lớp sơ bộ: lớp (tên, thuộc tính, phương thức) và liên kết kèm bội số đọc từ a sang b.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Các lớp: Patient, Doctor, Appointment, TimeSlot, Prescription, Medicine và một lớp chứa liều dùng (vd PrescriptionItem).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Doctor has many time slots",
+          "output": "{ a: 'Doctor', b: 'TimeSlot', mult: '1-*' }",
+          "explanation": "|||"
+        }
+      ],
+      "hintsJson": [
+        "\"liều dùng cho MỖI thuốc trong MỘT đơn\" ⇒ thuộc tính của dòng đơn (PrescriptionItem), không của Medicine.",
+        "Bội số đọc từ a sang b: \"1-*\" = một a có nhiều b."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "model.js",
+          "language": "javascript",
+          "code": "const MODEL = {\n  classes: [\n    // { name: 'Patient', attributes: ['name'], methods: ['book'] },\n  ],\n  associations: [\n    // { a: 'Doctor', b: 'TimeSlot', mult: '1-*' },\n  ],\n};\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "model.js",
+          "language": "javascript",
+          "code": "const MODEL = {\n  classes: [\n    { name: 'Patient', attributes: ['patientId', 'name', 'phone'], methods: ['bookAppointment'] },\n    { name: 'Doctor', attributes: ['doctorId', 'name', 'specialty'], methods: ['writePrescription'] },\n    { name: 'TimeSlot', attributes: ['start', 'end', 'isFree'], methods: ['reserve'] },\n    { name: 'Appointment', attributes: ['appointmentId', 'status', 'fee'], methods: ['calculateFee', 'cancel'] },\n    { name: 'Prescription', attributes: ['prescriptionId', 'date'], methods: ['addItem'] },\n    { name: 'PrescriptionItem', attributes: ['dosage', 'quantity'], methods: [] },\n    { name: 'Medicine', attributes: ['medicineId', 'name', 'unit'], methods: [] },\n  ],\n  associations: [\n    { a: 'Patient', b: 'Appointment', mult: '1-*' },\n    { a: 'Doctor', b: 'TimeSlot', mult: '1-*' },\n    { a: 'Appointment', b: 'TimeSlot', mult: '1-1' },\n    { a: 'Appointment', b: 'Prescription', mult: '1-1' },\n    { a: 'Prescription', b: 'PrescriptionItem', mult: '1-*' },\n    { a: 'PrescriptionItem', b: 'Medicine', mult: '*-1' },\n  ],\n};\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Reference model: Patient 1—* Appointment; Doctor 1—* TimeSlot; Appointment 1—1 TimeSlot; Appointment 1—1 Prescription; Prescription 1—* PrescriptionItem *—1 Medicine (dosage on the item). Methods follow the verbs: bookAppointment, writePrescription, calculateFee. This is a first cut — refine with encapsulation and design patterns later.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "model.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "the domain classes are present",
+              "vi": "có đủ các lớp nghiệp vụ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){function t(r){return(MODEL.classes||[]).filter(function(e){return e&&String(e.name).toLowerCase().replace(/[^a-z]/g,\"\")===r})[0]}function l(r){return r.split(\"-\").reverse().join(\"-\")}function f(r,e){var i=null;return(MODEL.associations||[]).forEach(function(s){var o=String(s.a).toLowerCase().replace(/[^a-z]/g,\"\"),c=String(s.b).toLowerCase().replace(/[^a-z]/g,\"\");o===r&&c===e?i=s.mult:o===e&&c===r&&(i=l(String(s.mult)))}),i}if(typeof MODEL==\"undefined\"||!MODEL||!Array.isArray(MODEL.classes)||!Array.isArray(MODEL.associations))return\"MODEL must have classes and associations arrays\";for(var a=[\"patient\",\"doctor\",\"appointment\",\"timeslot\",\"prescription\",\"medicine\"],n=0;n<a.length;n++)if(!t(a[n]))return\"missing class for \"+a[n];return t(\"system\")||t(\"clinicsystem\")?'do not model \"the system\" as a class':\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "the dosage lives on an association class, not on Medicine",
+              "vi": "liều dùng nằm ở lớp liên kết, không ở Medicine"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){function l(e){return(MODEL.classes||[]).filter(function(r){return r&&String(r.name).toLowerCase().replace(/[^a-z]/g,\"\")===e})[0]}function f(e){return e.split(\"-\").reverse().join(\"-\")}function a(e,r){var i=null;return(MODEL.associations||[]).forEach(function(t){var c=String(t.a).toLowerCase().replace(/[^a-z]/g,\"\"),u=String(t.b).toLowerCase().replace(/[^a-z]/g,\"\");c===e&&u===r?i=t.mult:c===r&&u===e&&(i=f(String(t.mult)))}),i}if(typeof MODEL==\"undefined\"||!MODEL||!Array.isArray(MODEL.classes)||!Array.isArray(MODEL.associations))return\"MODEL must have classes and associations arrays\";var s=l(\"medicine\");if(s&&(s.attributes||[]).some(function(e){return/dos/i.test(e)}))return\"dosage depends on the prescription, not on the medicine\";var n=(MODEL.classes||[]).filter(function(e){return(e.attributes||[]).some(function(r){return/dos/i.test(r)})})[0];if(!n)return\"add a class holding the dosage (e.g. PrescriptionItem)\";var o=String(n.name).toLowerCase().replace(/[^a-z]/g,\"\");return a(\"prescription\",o)===\"1-*\"&&a(o,\"medicine\")===\"*-1\"?\"OK\":\"link Prescription 1-* \"+n.name+\" and \"+n.name+\" *-1 Medicine\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "multiplicities: Doctor–TimeSlot, Patient–Appointment",
+              "vi": "bội số: Doctor–TimeSlot, Patient–Appointment"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){function u(t){return(MODEL.classes||[]).filter(function(n){return n&&String(n.name).toLowerCase().replace(/[^a-z]/g,\"\")===t})[0]}function s(t){return t.split(\"-\").reverse().join(\"-\")}function e(t,n){var a=null;return(MODEL.associations||[]).forEach(function(r){var o=String(r.a).toLowerCase().replace(/[^a-z]/g,\"\"),i=String(r.b).toLowerCase().replace(/[^a-z]/g,\"\");o===t&&i===n?a=r.mult:o===n&&i===t&&(a=s(String(r.mult)))}),a}return typeof MODEL==\"undefined\"||!MODEL||!Array.isArray(MODEL.classes)||!Array.isArray(MODEL.associations)?\"MODEL must have classes and associations arrays\":e(\"doctor\",\"timeslot\")!==\"1-*\"?\"a doctor has many time slots: Doctor 1-* TimeSlot\":e(\"patient\",\"appointment\")!==\"1-*\"?\"a patient can have many appointments: Patient 1-* Appointment\":\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Appointment is linked to a TimeSlot and to the Prescription",
+              "vi": "Appointment nối với TimeSlot và Prescription"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){function l(t){return(MODEL.classes||[]).filter(function(n){return n&&String(n.name).toLowerCase().replace(/[^a-z]/g,\"\")===t})[0]}function c(t){return t.split(\"-\").reverse().join(\"-\")}function e(t,n){var o=null;return(MODEL.associations||[]).forEach(function(r){var a=String(r.a).toLowerCase().replace(/[^a-z]/g,\"\"),s=String(r.b).toLowerCase().replace(/[^a-z]/g,\"\");a===t&&s===n?o=r.mult:a===n&&s===t&&(o=c(String(r.mult)))}),o}if(typeof MODEL==\"undefined\"||!MODEL||!Array.isArray(MODEL.classes)||!Array.isArray(MODEL.associations))return\"MODEL must have classes and associations arrays\";var i=e(\"appointment\",\"timeslot\");return i!==\"1-1\"&&i!==\"1-*\"?\"link Appointment to TimeSlot so that a slot holds at most one appointment (Appointment 1-1 TimeSlot)\":!e(\"appointment\",\"prescription\")&&!e(\"doctor\",\"prescription\")?\"link the Prescription to the visit (Appointment) or the Doctor\":\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "verbs became methods on the right classes",
+              "vi": "động từ thành phương thức đúng lớp"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){function s(e){return(MODEL.classes||[]).filter(function(r){return r&&String(r.name).toLowerCase().replace(/[^a-z]/g,\"\")===e})[0]}function c(e){return e.split(\"-\").reverse().join(\"-\")}function f(e,r){var t=null;return(MODEL.associations||[]).forEach(function(n){var i=String(n.a).toLowerCase().replace(/[^a-z]/g,\"\"),a=String(n.b).toLowerCase().replace(/[^a-z]/g,\"\");i===e&&a===r?t=n.mult:i===r&&a===e&&(t=c(String(n.mult)))}),t}if(typeof MODEL==\"undefined\"||!MODEL||!Array.isArray(MODEL.classes)||!Array.isArray(MODEL.associations))return\"MODEL must have classes and associations arrays\";function o(e,r){var t=s(e);return t&&(t.methods||[]).some(function(n){return r.test(n)})}return!o(\"patient\",/book/i)&&!o(\"appointment\",/book|create/i)?\"books \\u21D2 a book\\u2026 method (Patient or Appointment)\":!o(\"doctor\",/prescri|write/i)&&!o(\"prescription\",/create|write/i)?\"writes a prescription \\u21D2 a method on Doctor or Prescription\":(MODEL.classes||[]).some(function(e){return(e.methods||[]).some(function(r){return/fee/i.test(r)})})?\"OK\":\"calculates the visit fee \\u21D2 calculateFee method\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "every class has at least one attribute; names are CamelCase",
+              "vi": "mỗi lớp có ít nhất một thuộc tính; tên CamelCase"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){function c(a){return(MODEL.classes||[]).filter(function(e){return e&&String(e.name).toLowerCase().replace(/[^a-z]/g,\"\")===a})[0]}function u(a){return a.split(\"-\").reverse().join(\"-\")}function f(a,e){var t=null;return(MODEL.associations||[]).forEach(function(s){var i=String(s.a).toLowerCase().replace(/[^a-z]/g,\"\"),o=String(s.b).toLowerCase().replace(/[^a-z]/g,\"\");i===a&&o===e?t=s.mult:i===e&&o===a&&(t=u(String(s.mult)))}),t}if(typeof MODEL==\"undefined\"||!MODEL||!Array.isArray(MODEL.classes)||!Array.isArray(MODEL.associations))return\"MODEL must have classes and associations arrays\";for(var n=0;n<MODEL.classes.length;n++){var r=MODEL.classes[n];if(!/^[A-Z][A-Za-z0-9]*$/.test(String(r.name)))return'class name \"'+r.name+'\" should be CamelCase without spaces';if(!(r.attributes||[]).length)return r.name+\" has no attributes\"}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt dosage vào Medicine (liều khác nhau mỗi đơn)."
+        },
+        {
+          "loi": "Tạo lớp \"ClinicSystem\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "associative entity",
+          "vi": "thực thể kết hợp — tách quan hệ nhiều-nhiều khi mỗi lần liên kết có dữ liệu riêng"
+        },
+        {
+          "en": "cardinality",
+          "vi": "bản số — một-một, một-nhiều, nhiều-nhiều (và tuỳ chọn 0 hay bắt buộc 1)"
+        },
+        {
+          "en": "class diagram",
+          "vi": "sơ đồ lớp"
+        }
+      ]
+    }
+  ]
+}

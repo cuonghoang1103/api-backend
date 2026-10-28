@@ -1,0 +1,552 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-8-2-ch15-what-why",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-8-2-ch15-what-why"
+  },
+  "exercises": [
+    {
+      "title": "Prototyping 1 — which purpose?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "purposes of prototyping"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers: a software prototype is a partial, possible or preliminary implementation of a proposed product, used to <b>clarify, complete and validate requirements</b>, to <b>explore design alternatives</b>, or to <b>create a subset that grows into the ultimate product</b>. Name the purpose of each prototype.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Wiegers: prototype dùng để <b>làm rõ, bổ sung, thẩm định yêu cầu</b>, <b>khám phá phương án thiết kế</b>, hoặc <b>tạo một tập con lớn dần thành sản phẩm</b>. Gọi tên mục đích.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Tìm yêu cầu bị bỏ sót ⇒ làm rõ yêu cầu.",
+        "So sánh hai cách ⇒ khám phá thiết kế."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Prototyping 1 — which purpose?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Prototyping 1 — which purpose? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Clarify and validate requirements\n   - r1.k: Explore design alternatives\n   - r2.k: Grow into the product\n   - r3.k: Clarify and validate requirements\n   - r4.k: Explore design alternatives\n   Requirements prototypes find errors and omissions cheaply; design prototypes compare alternatives; evolutionary prototypes become the product.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Requirements prototypes find errors and omissions cheaply; design prototypes compare alternatives; evolutionary prototypes become the product.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Purpose",
+                "luaChon": [
+                  "Clarify and validate requirements",
+                  "Explore design alternatives",
+                  "Grow into the product"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Show pharmacists a sketch of the stock screen to find what they forgot to tell us."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Compare a wizard and a single-page form for booking to see which users finish faster."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Build release 0.1 of the booking core with production-quality code, then add features each sprint."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Let nurses click through the triage flow to confirm the steps are complete."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Try two navigation structures for the mobile app with five users each."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Clarify and validate requirements",
+              "r1.k": "Explore design alternatives",
+              "r2.k": "Grow into the product",
+              "r3.k": "Clarify and validate requirements",
+              "r4.k": "Explore design alternatives"
+            },
+            "giaiThich": "<p><p>Requirements prototypes find errors and omissions cheaply; design prototypes compare alternatives; evolutionary prototypes become the product.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Coi mọi prototype là để làm sản phẩm."
+        },
+        {
+          "loi": "Nhầm so sánh phương án với làm rõ yêu cầu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "prototype",
+          "vi": "nguyên mẫu — bản thử để làm rõ yêu cầu (throwaway / evolutionary, mock-up / proof of concept)"
+        }
+      ]
+    },
+    {
+      "title": "Prototyping 2 — mock-up or proof of concept?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "mock-ups and proofs of concept"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Scope choice: a <b>mock-up</b> (horizontal prototype) shows part of the user interface without diving into the architectural layers — it asks \"is this the right experience and set of requirements?\". A <b>proof of concept</b> (vertical prototype, \"spike\") implements a slice of functionality from the UI down through all technical layers — it asks \"can we build this, and how fast is it?\".</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Mock-up</b> (ngang): một phần giao diện, không xuống các tầng kiến trúc — hỏi \"trải nghiệm và yêu cầu đã đúng chưa?\". <b>Proof of concept</b> (dọc, \"spike\"): một lát chức năng xuyên mọi tầng — hỏi \"làm được không, nhanh tới đâu?\".</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Câu hỏi về kỹ thuật/hiệu năng ⇒ proof of concept.",
+        "Chỉ màn hình, dữ liệu giả ⇒ mock-up."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Prototyping 2 — mock-up or proof of concept?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Prototyping 2 — mock-up or proof of concept? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Mock-up (horizontal)\n   - r1.k: Proof of concept (vertical)\n   - r2.k: Mock-up (horizontal)\n   - r3.k: Proof of concept (vertical)\n   - r4.k: Mock-up (horizontal)\n   - r5.k: Proof of concept (vertical)\n   Broad and shallow (UI only) ⇒ mock-up; narrow and deep (through every layer, technical feasibility or performance) ⇒ proof of concept.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Broad and shallow (UI only) ⇒ mock-up; narrow and deep (through every layer, technical feasibility or performance) ⇒ proof of concept.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Scope",
+                "luaChon": [
+                  "Mock-up (horizontal)",
+                  "Proof of concept (vertical)"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Clickable screens of the online checkout with fake data."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Check that the new payment gateway SDK works with our backend and returns in under 2 seconds."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Paper sketches of the dashboard to discuss which charts managers need."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "A spike: send one real prescription to the national e-health API end to end."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "A wireframe of the search results page."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Measure whether the chosen database can store 10 million readings per day."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Mock-up (horizontal)",
+              "r1.k": "Proof of concept (vertical)",
+              "r2.k": "Mock-up (horizontal)",
+              "r3.k": "Proof of concept (vertical)",
+              "r4.k": "Mock-up (horizontal)",
+              "r5.k": "Proof of concept (vertical)"
+            },
+            "giaiThich": "<p><p>Broad and shallow (UI only) ⇒ mock-up; narrow and deep (through every layer, technical feasibility or performance) ⇒ proof of concept.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gọi wireframe là proof of concept."
+        },
+        {
+          "loi": "Nghĩ PoC phải có đủ giao diện đẹp."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "prototype",
+          "vi": "nguyên mẫu — bản thử để làm rõ yêu cầu (throwaway / evolutionary, mock-up / proof of concept)"
+        },
+        {
+          "en": "wireframe / mock-up",
+          "vi": "khung giao diện / bản mô phỏng màn hình"
+        },
+        {
+          "en": "proof of concept",
+          "vi": "proof of concept — prototype dọc, kiểm tính khả thi kỹ thuật"
+        }
+      ]
+    },
+    {
+      "title": "Prototyping 3 — the three attribute classes",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "prototype attributes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Every prototype is a combination of three attribute choices: <b>scope</b> (mock-up or proof of concept), <b>future use</b> (throwaway or evolutionary), and <b>form</b> (paper or electronic).</p><p>Each question is graded on its own; the explanation appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi prototype là tổ hợp ba lựa chọn: <b>phạm vi</b> (mock-up / PoC), <b>tương lai</b> (throwaway / evolutionary), <b>hình thức</b> (giấy / điện tử).</p><p>Mỗi câu được chấm riêng; giải thích hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Câu hỏi về UI + cần nhanh ⇒ giấy, throwaway, mock-up.",
+        "Câu hỏi về kiến trúc ⇒ PoC điện tử."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Prototyping 3 — the three attribute classes\n\nAnswer in the answer panel (no code needed).\n\n1. Early in elicitation, you want feedback on the flow of a new booking app within one afternoon. Best combination?Đầu giai đoạn khai thác, muốn phản hồi về luồng đặt lịch trong một buổi chiều. Tổ hợp tốt nhất?\n2. The team doubts that the chosen architecture can handle the load. Best?Đội nghi kiến trúc đã chọn chịu được tải. Tốt nhất?\n3. How many attribute classes describe a prototype?Có mấy lớp thuộc tính mô tả một prototype?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Prototyping 3 — the three attribute classes — answer key\n\n1. Early in elicitation, you want feedback on the flow of a new booking app within one afternoon. Best combination?Đầu giai đoạn khai thác, muốn phản hồi về luồng đặt lịch trong một buổi chiều. Tổ hợp tốt nhất?\n   Answer: a) Throwaway paper mock-up\n   Fast, cheap, about the UI.VI: Nhanh, rẻ, về giao diện.\n\n2. The team doubts that the chosen architecture can handle the load. Best?Đội nghi kiến trúc đã chọn chịu được tải. Tốt nhất?\n   Answer: a) An electronic proof of concept\n   Only running code through the layers answers it.VI: Chỉ mã chạy xuyên tầng mới trả lời được.\n\n3. How many attribute classes describe a prototype?Có mấy lớp thuộc tính mô tả một prototype?\n   Answer: a) Three: scope, future use, form\n   Each with two alternatives.VI: Mỗi lớp có hai lựa chọn.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · a · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Early in elicitation, you want feedback on the flow of a new booking app within one afternoon. Best combination?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đầu giai đoạn khai thác, muốn phản hồi về luồng đặt lịch trong một buổi chiều. Tổ hợp tốt nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Throwaway paper mock-up"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Evolutionary electronic proof of concept"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Throwaway proof of concept"
+              },
+              {
+                "ma": "d",
+                "noiDung": "No prototype"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Fast, cheap, about the UI.</p><p><i>VI: Nhanh, rẻ, về giao diện.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>The team doubts that the chosen architecture can handle the load. Best?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đội nghi kiến trúc đã chọn chịu được tải. Tốt nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "An electronic proof of concept"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A paper mock-up"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A longer meeting"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A colour study"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Only running code through the layers answers it.</p><p><i>VI: Chỉ mã chạy xuyên tầng mới trả lời được.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>How many attribute classes describe a prototype?</p><p style=\"opacity:.75;font-size:.92em\"><i>Có mấy lớp thuộc tính mô tả một prototype?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Three: scope, future use, form"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Two"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Five"
+              },
+              {
+                "ma": "d",
+                "noiDung": "One: fidelity"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Each with two alternatives.</p><p><i>VI: Mỗi lớp có hai lựa chọn.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng mock-up giấy để kiểm hiệu năng."
+        },
+        {
+          "loi": "Dựng PoC đầy đủ chỉ để hỏi về bố cục."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "prototype",
+          "vi": "nguyên mẫu — bản thử để làm rõ yêu cầu (throwaway / evolutionary, mock-up / proof of concept)"
+        }
+      ]
+    },
+    {
+      "title": "Prototyping 4 — as a requirements tool",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 4,
+      "points": 10,
+      "concepts": [
+        "prototype as a requirements tool"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>As a requirements tool, a prototype helps obtain agreement, find errors and omissions, and assess the accuracy and quality of requirements — especially for poorly understood, risky or complex parts — so they can be fixed cheaply before construction.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Là công cụ yêu cầu, prototype giúp thống nhất, tìm lỗi và thiếu sót, đánh giá độ chính xác — nhất là phần mơ hồ, rủi ro, phức tạp — để sửa rẻ trước khi xây dựng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Prototype bổ trợ, không thay thế yêu cầu viết.",
+        "Nhắm vào phần bất định."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Prototyping 4 — as a requirements tool\n\nAnswer in the answer panel (no code needed).\n\n1. Which part of the system benefits most from a requirements prototype?Phần nào được lợi nhất từ prototype yêu cầu?\n2. After users evaluate a prototype, the BA should…Sau khi người dùng đánh giá prototype, BA nên…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Prototyping 4 — as a requirements tool — answer key\n\n1. Which part of the system benefits most from a requirements prototype?Phần nào được lợi nhất từ prototype yêu cầu?\n   Answer: a) Poorly understood, risky or complex parts\n   Prototype where uncertainty is highest.VI: Làm prototype nơi bất định cao nhất.\n\n2. After users evaluate a prototype, the BA should…Sau khi người dùng đánh giá prototype, BA nên…\n   Answer: a) update the written requirements with what was learned\n   A prototype does not replace written requirements.VI: Prototype không thay yêu cầu viết.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which part of the system benefits most from a requirements prototype?</p><p style=\"opacity:.75;font-size:.92em\"><i>Phần nào được lợi nhất từ prototype yêu cầu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Poorly understood, risky or complex parts"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The login page everyone knows"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The database backups"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Every part equally"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Prototype where uncertainty is highest.</p><p><i>VI: Làm prototype nơi bất định cao nhất.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>After users evaluate a prototype, the BA should…</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau khi người dùng đánh giá prototype, BA nên…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "update the written requirements with what was learned"
+              },
+              {
+                "ma": "b",
+                "noiDung": "treat the prototype as the requirements"
+              },
+              {
+                "ma": "c",
+                "noiDung": "discard the feedback"
+              },
+              {
+                "ma": "d",
+                "noiDung": "hand the prototype to developers as the spec"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>A prototype does not replace written requirements.</p><p><i>VI: Prototype không thay yêu cầu viết.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Coi prototype là đặc tả."
+        },
+        {
+          "loi": "Prototype cả phần ai cũng hiểu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "prototype",
+          "vi": "nguyên mẫu — bản thử để làm rõ yêu cầu (throwaway / evolutionary, mock-up / proof of concept)"
+        },
+        {
+          "en": "validation",
+          "vi": "thẩm định — xác nhận đúng THỨ cần làm (đúng nhu cầu)"
+        }
+      ]
+    }
+  ]
+}

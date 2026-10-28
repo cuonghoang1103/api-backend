@@ -1,0 +1,525 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-8-3-ch15-types",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-8-3-ch15-types"
+  },
+  "exercises": [
+    {
+      "title": "Prototype types 1 — throwaway or evolutionary?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "throwaway vs evolutionary"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>A <b>throwaway</b> prototype answers questions, resolves uncertainties and improves requirements quality, then is discarded (a wireframe is a common example). An <b>evolutionary</b> prototype provides a solid architectural foundation and grows into the product; agile development is a form of evolutionary prototyping.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Throwaway</b>: trả lời câu hỏi rồi bỏ (wireframe là ví dụ). <b>Evolutionary</b>: nền kiến trúc vững, lớn dần thành sản phẩm; agile là một dạng evolutionary.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Viết nhanh, dữ liệu giả ⇒ throwaway.",
+        "Có test, xử lý lỗi, giữ lại ⇒ evolutionary."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Prototype types 1 — throwaway or evolutionary?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Prototype types 1 — throwaway or evolutionary? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Throwaway\n   - r1.k: Evolutionary\n   - r2.k: Throwaway\n   - r3.k: Evolutionary\n   - r4.k: Throwaway\n   Throwaways are built fast, ignoring quality, and must be discarded; evolutionary prototypes are built with production quality from the start.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Throwaways are built fast, ignoring quality, and must be discarded; evolutionary prototypes are built with production quality from the start.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Future use",
+                "luaChon": [
+                  "Throwaway",
+                  "Evolutionary"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "A wireframe of the website home page made in an afternoon."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Sprint 1 delivers a working, tested booking core that later sprints extend."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "A quick script with hard-coded data to show managers a report idea."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Code written with full error handling and unit tests, intended to be kept."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Sticky-note screens on a whiteboard to explore the checkout steps."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Throwaway",
+              "r1.k": "Evolutionary",
+              "r2.k": "Throwaway",
+              "r3.k": "Evolutionary",
+              "r4.k": "Throwaway"
+            },
+            "giaiThich": "<p><p>Throwaways are built fast, ignoring quality, and must be discarded; evolutionary prototypes are built with production quality from the start.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng wireframe có thể lớn dần thành sản phẩm."
+        },
+        {
+          "loi": "Viết evolutionary bằng mã \"nháp\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "prototype",
+          "vi": "nguyên mẫu — bản thử để làm rõ yêu cầu (throwaway / evolutionary, mock-up / proof of concept)"
+        },
+        {
+          "en": "wireframe / mock-up",
+          "vi": "khung giao diện / bản mô phỏng màn hình"
+        }
+      ]
+    },
+    {
+      "title": "Prototype types 2 — paper or electronic?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "paper vs electronic"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p><b>Paper</b> (low-fidelity) prototypes are cheap, fast and low-tech — paper, index cards, sticky notes, whiteboards — good for testing shared understanding early. <b>Electronic</b> prototypes use drawing, wireframing or prototyping tools and look real; they are better for flow and feel, and required for evolutionary prototypes.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Giấy</b>: rẻ, nhanh, công nghệ thấp; kiểm hiểu biết chung từ sớm. <b>Điện tử</b>: công cụ vẽ/wireframe/prototype, trông thật; tốt cho luồng và cảm giác, bắt buộc cho evolutionary.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Cần nhanh, nhiều phương án, cùng phòng ⇒ giấy.",
+        "Cần cảm giác tương tác, từ xa, hay giữ lại ⇒ điện tử."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Prototype types 2 — paper or electronic?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Prototype types 2 — paper or electronic? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Paper\n   - r1.k: Electronic\n   - r2.k: Electronic\n   - r3.k: Paper\n   - r4.k: Electronic\n   Paper wins on speed and cost early; electronic wins when interaction details, remote evaluation or evolution matter.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Paper wins on speed and cost early; electronic wins when interaction details, remote evaluation or evolution matter.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Best form",
+                "luaChon": [
+                  "Paper",
+                  "Electronic"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "First workshop: 8 users sketch and rearrange screens together in 30 minutes."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Usability test of the animation and timing of the scanning flow on a phone."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "An evolutionary prototype that will become the release."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Quickly trying three layouts before choosing one to draw properly."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Remote users in three cities must try the flow on their own devices."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Paper",
+              "r1.k": "Electronic",
+              "r2.k": "Electronic",
+              "r3.k": "Paper",
+              "r4.k": "Electronic"
+            },
+            "giaiThich": "<p><p>Paper wins on speed and cost early; electronic wins when interaction details, remote evaluation or evolution matter.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng giấy để kiểm thời gian hiệu ứng."
+        },
+        {
+          "loi": "Dựng điện tử cầu kỳ cho buổi phác thảo đầu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "prototype",
+          "vi": "nguyên mẫu — bản thử để làm rõ yêu cầu (throwaway / evolutionary, mock-up / proof of concept)"
+        }
+      ]
+    },
+    {
+      "title": "Prototype types 3 — from use case to UI design",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 4,
+      "points": 20,
+      "concepts": [
+        "working with prototypes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers Figure 15-2: a sequence from use cases to a detailed UI design through a throwaway prototype. Put the steps in order. (In practice you iterate among them.)</p><p>Drag the items into the right order; the explanation appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hình 15-2: trình tự từ use case tới thiết kế UI chi tiết qua prototype throwaway. Sắp thứ tự (thực tế lặp qua lại).</p><p>Kéo các mục về đúng thứ tự; giải thích hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Dialog map đứng giữa use case và màn hình cụ thể.",
+        "Tối ưu khả dụng là bước cuối."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Prototype types 3 — from use case to UI design\n\nAnswer in the answer panel (no code needed).\n\n1. Order the stepsSắp các bước\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Prototype types 3 — from use case to UI design — answer key\n\n1. Order the stepsSắp các bước\n   Answer: a) Use case (actor actions and system responses)  →  b) Dialog map (possible UI architecture)  →  c) Throwaway prototype / wireframe (specific screens)  →  d) Detailed, usability-optimised UI design\n   Use case → dialog map → wireframe → optimised UI.VI: Use case → dialog map → wireframe → UI tối ưu.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Use case → dialog map → throwaway prototype / wireframe → detailed UI design; iterate across the three early steps until users agree.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Order the steps</p><p style=\"opacity:.75;font-size:.92em\"><i>Sắp các bước</i></p>",
+            "muc": [
+              {
+                "ma": "c",
+                "noiDung": "Throwaway prototype / wireframe (specific screens)"
+              },
+              {
+                "ma": "a",
+                "noiDung": "Use case (actor actions and system responses)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Detailed, usability-optimised UI design"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Dialog map (possible UI architecture)"
+              }
+            ],
+            "dapAn": [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            "giaiThich": "<p>Use case → dialog map → wireframe → optimised UI.</p><p><i>VI: Use case → dialog map → wireframe → UI tối ưu.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Vẽ màn hình chi tiết trước dialog map."
+        },
+        {
+          "loi": "Bỏ qua use case."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "dialog map",
+          "vi": "sơ đồ hội thoại — trạng thái là màn hình, chuyển là hành động người dùng"
+        },
+        {
+          "en": "wireframe / mock-up",
+          "vi": "khung giao diện / bản mô phỏng màn hình"
+        },
+        {
+          "en": "use case",
+          "vi": "ca sử dụng — một mục tiêu actor đạt được nhờ hệ thống (tên: động từ + danh từ)"
+        }
+      ]
+    },
+    {
+      "title": "Prototype types 4 — evaluating a prototype",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "prototype evaluation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Questions to ask evaluators: Does it implement the functionality as you expected? What is missing? Are there error conditions it doesn’t address? Are any functions unnecessary? Is the navigation logical and complete? Are tasks too complex (too many steps)? Watch users perform tasks rather than only asking opinions, and choose evaluators who represent the user classes.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi khi đánh giá prototype và cách tổ chức đánh giá.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Hỏi điều còn thiếu và lỗi chưa xử lý.",
+        "Quan sát người dùng làm việc thật."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Prototype types 4 — evaluating a prototype\n\nAnswer in the answer panel (no code needed).\n\n1. Which is a good evaluation question?Câu hỏi đánh giá nào tốt?\n2. Who should evaluate the prototype?Ai nên đánh giá prototype?\n3. Best way to learn whether the flow works?Cách tốt nhất biết luồng có ổn không?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Prototype types 4 — evaluating a prototype — answer key\n\n1. Which is a good evaluation question?Câu hỏi đánh giá nào tốt?\n   Answer: a) \"What would you need to do here that this screen does not let you do?\"\n   Look for missing functionality.VI: Tìm chức năng còn thiếu.\n\n2. Who should evaluate the prototype?Ai nên đánh giá prototype?\n   Answer: a) Representatives of the different user classes\n   Each user class has different needs.VI: Mỗi lớp người dùng có nhu cầu khác.\n\n3. Best way to learn whether the flow works?Cách tốt nhất biết luồng có ổn không?\n   Answer: a) Watch users perform real tasks with it\n   Observation reveals what opinions hide.VI: Quan sát lộ ra điều ý kiến che giấu.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · a · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which is a good evaluation question?</p><p style=\"opacity:.75;font-size:.92em\"><i>Câu hỏi đánh giá nào tốt?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "\"What would you need to do here that this screen does not let you do?\""
+              },
+              {
+                "ma": "b",
+                "noiDung": "\"Do you like it?\""
+              },
+              {
+                "ma": "c",
+                "noiDung": "\"Is blue nice?\""
+              },
+              {
+                "ma": "d",
+                "noiDung": "\"Is this done?\""
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Look for missing functionality.</p><p><i>VI: Tìm chức năng còn thiếu.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Who should evaluate the prototype?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ai nên đánh giá prototype?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Representatives of the different user classes"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Only the developers who built it"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only managers"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nobody"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Each user class has different needs.</p><p><i>VI: Mỗi lớp người dùng có nhu cầu khác.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Best way to learn whether the flow works?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cách tốt nhất biết luồng có ổn không?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Watch users perform real tasks with it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Send a screenshot by e-mail"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Ask \"is it OK?\""
+              },
+              {
+                "ma": "d",
+                "noiDung": "Read the code"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Observation reveals what opinions hide.</p><p><i>VI: Quan sát lộ ra điều ý kiến che giấu.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Hỏi \"có thích không?\"."
+        },
+        {
+          "loi": "Để chính dev tự đánh giá."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "prototype",
+          "vi": "nguyên mẫu — bản thử để làm rõ yêu cầu (throwaway / evolutionary, mock-up / proof of concept)"
+        },
+        {
+          "en": "user class",
+          "vi": "lớp người dùng — nhóm người dùng có cách dùng/nhu cầu giống nhau"
+        }
+      ]
+    }
+  ]
+}

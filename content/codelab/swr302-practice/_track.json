@@ -322,6 +322,30 @@
       "description": "Lab chương 7: máy trạng thái Change Request (Submitted → Evaluated → Approved/Rejected → Change Made → Verified → Closed, Canceled), phân tích ảnh hưởng bằng RTM và ước lượng giờ công, trạng thái yêu cầu và tỉ lệ, chính sách kiểm soát thay đổi, bốn hướng truy vết và phần tử mồ côi."
     },
     {
+      "slug": "swr302-8-1-oo-design-prototyping",
+      "name": "8.1 From requirements to an OO design",
+      "level": "INTERMEDIATE",
+      "description": "Phân tích danh từ–động từ thành lớp/thuộc tính/phương thức, tự dựng mô hình lớp sơ bộ ClinicCare (lớp liên kết cho liều dùng, bội số) chấm theo tính chất, thiết kế từ mô hình miền và vai trò prototype."
+    },
+    {
+      "slug": "swr302-8-2-ch15-what-why",
+      "name": "8.2 Prototyping: what, why, mock-ups and proofs of concept",
+      "level": "BEGINNER",
+      "description": "Ba mục đích của prototype, mock-up (ngang) vs proof of concept (dọc/spike), ba lớp thuộc tính (phạm vi, tương lai, hình thức) và chọn tổ hợp phù hợp, prototype như công cụ yêu cầu."
+    },
+    {
+      "slug": "swr302-8-3-ch15-types",
+      "name": "8.3 Throwaway vs evolutionary, paper vs electronic",
+      "level": "BEGINNER",
+      "description": "Phân biệt throwaway/evolutionary và giấy/điện tử theo tình huống, trình tự use case → dialog map → wireframe → UI tối ưu (Hình 15-2), cách đánh giá prototype."
+    },
+    {
+      "slug": "swr302-8-4-ch15-risks-success",
+      "name": "8.4 Prototyping risks and success factors",
+      "level": "INTERMEDIATE",
+      "description": "Bốn rủi ro của prototyping, các yếu tố thành công, tự lập kế hoạch hai prototype cho ClinicCare (mock-up giấy + spike API) có mục đích, số phận, timebox và câu hỏi đánh giá — chấm theo tính nhất quán."
+    },
+    {
       "slug": "swr302-8-lab-prototyping-bikeshare",
       "name": "Lab 8 — Prototyping and Design: CampusBike",
       "level": "ADVANCED",

@@ -25,6 +25,7 @@ export const KHOA_CUA_TRACK: Readonly<Record<string, string>> = Object.freeze({
   'web-foundations-practice': 'web-foundations',
   'fer202-practice': 'front-end-web-development-with-react',
   'swt301-practice': 'software-testing',
+  'swr302-practice': 'software-requirements',
 });
 
 /**
@@ -78,6 +79,19 @@ export const TEN_CHUONG: Readonly<Record<string, Readonly<Record<number, string>
     8: 'Công cụ & tự động hoá',
     9: 'Kiểm thử trong Agile',
     10: 'Lab trường — Report 5.1 / 5.2 / 5.3',
+    11: 'Luyện PE — đề thực hành có đồng hồ',
+  },
+  'swr302-practice': {
+    1: 'Nền tảng yêu cầu phần mềm',
+    2: 'Khách hàng, BA, tầm nhìn & phạm vi',
+    3: 'Khai thác yêu cầu (Elicitation)',
+    4: 'Phân tích & mô hình hoá',
+    5: 'Đặc tả: SRS & thuộc tính chất lượng',
+    6: 'Thẩm định yêu cầu (Validation)',
+    7: 'Quản lý yêu cầu: thay đổi & truy vết',
+    8: 'Từ yêu cầu tới thiết kế & prototype',
+    9: 'Yêu cầu trong Agile',
+    10: 'Xếp ưu tiên & yêu cầu cho AI/ML',
     11: 'Luyện PE — đề thực hành có đồng hồ',
   },
 });

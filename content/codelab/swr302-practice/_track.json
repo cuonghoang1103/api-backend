@@ -1,0 +1,31 @@
+{
+  "groupSlug": "fptu",
+  "slug": "swr302-practice",
+  "name": "SWR302 — Luyện tập",
+  "language": "javascript",
+  "color": "#7c3aed",
+  "docsUrl": "https://www.oreilly.com/library/view/software-requirements-3rd/9780735679658/",
+  "status": "PUBLISHED",
+  "level": "BEGINNER",
+  "description": "Bộ luyện môn SWR302 (Software Requirements) theo giáo trình Wiegers & Beatty và slide trường — đề tiếng Anh kèm bản Việt và bảng thuật ngữ; mỗi bài học một bộ đề từ dễ đến khó có máy chấm thật (phân loại yêu cầu, MoSCoW/Wiegers, RTM, RACI, CRUD, bảng quyết định; sơ đồ viết bằng Mermaid/PlantUML được chấm theo thuộc tính: context diagram, DFD, use case, ERD, state, swimlane; đặc tả use case theo template), mỗi chương một Lab + Deep Lab dạng bản in, PE luyện đúng định dạng SP26/SU26 và dự án xuyên suốt ClinicCare.",
+  "modules": [
+    {
+      "slug": "swr302-11-pe-1-freshbox-meal-kit",
+      "name": "PE Practice 1 — FreshBox Meal-Kit Subscription (context · use case · ERD)",
+      "level": "ADVANCED",
+      "description": "PE luyện định dạng SP26: trang bìa SRS, context diagram, use case diagram + bảng Actor/Use case, ERD khái niệm + bảng thực thể — chấm theo rubric 10 điểm, kiểm nhất quán giữa các câu, hướng include/extend, bản số và thực thể kết hợp."
+    },
+    {
+      "slug": "swr302-11-pe-2-lostlink-ai-lost-found",
+      "name": "PE Practice 2 — LostLink AI Lost & Found (context · use case · state machine)",
+      "level": "ADVANCED",
+      "description": "PE luyện định dạng SU26 mới nhất: trang bìa SRS, context diagram, use case + hai bảng, sơ đồ chuyển trạng thái của Found Item có chuyển do AI kích hoạt kèm guard theo ngưỡng điểm, luật thời gian 24 giờ / 7 ngày / 60 ngày."
+    },
+    {
+      "slug": "swr302-11-pe-3-labequip-lending",
+      "name": "PE Practice 3 — LabEquip Equipment Lending (context · use case · ERD)",
+      "level": "ADVANCED",
+      "description": "PE luyện định dạng FA25/SU25: trang bìa SRS, context diagram, use case + hai bảng, ERD khái niệm với bẫy loại thiết bị ↔ từng chiếc (serial), thực thể kết hợp Loan × Unit mang tình trạng lúc trả, bảo trì theo từng chiếc."
+    }
+  ]
+}

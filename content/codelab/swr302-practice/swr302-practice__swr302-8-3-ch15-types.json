@@ -410,10 +410,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Prototype types 4 — evaluating a prototype — answer key\n\n1. Which is a good evaluation question?Câu hỏi đánh giá nào tốt?\n   Answer: a) \"What would you need to do here that this screen does not let you do?\"\n   Look for missing functionality.VI: Tìm chức năng còn thiếu.\n\n2. Who should evaluate the prototype?Ai nên đánh giá prototype?\n   Answer: a) Representatives of the different user classes\n   Each user class has different needs.VI: Mỗi lớp người dùng có nhu cầu khác.\n\n3. Best way to learn whether the flow works?Cách tốt nhất biết luồng có ổn không?\n   Answer: a) Watch users perform real tasks with it\n   Observation reveals what opinions hide.VI: Quan sát lộ ra điều ý kiến che giấu.\n"
+          "code": "# Prototype types 4 — evaluating a prototype — answer key\n\n1. Which is a good evaluation question?Câu hỏi đánh giá nào tốt?\n   Answer: b) \"What would you need to do here that this screen does not let you do?\"\n   Look for missing functionality.VI: Tìm chức năng còn thiếu.\n\n2. Who should evaluate the prototype?Ai nên đánh giá prototype?\n   Answer: b) Representatives of the different user classes\n   Each user class has different needs.VI: Mỗi lớp người dùng có nhu cầu khác.\n\n3. Best way to learn whether the flow works?Cách tốt nhất biết luồng có ổn không?\n   Answer: a) Watch users perform real tasks with it\n   Observation reveals what opinions hide.VI: Quan sát lộ ra điều ý kiến che giấu.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: a · a · a.</p>",
+      "solutionExplanationHtml": "<p>Answers: b · b · a.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -426,23 +426,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "\"What would you need to do here that this screen does not let you do?\""
+                "noiDung": "\"Is this done?\""
               },
               {
                 "ma": "b",
-                "noiDung": "\"Do you like it?\""
+                "noiDung": "\"What would you need to do here that this screen does not let you do?\""
               },
               {
                 "ma": "c",
-                "noiDung": "\"Is blue nice?\""
+                "noiDung": "\"Do you like it?\""
               },
               {
                 "ma": "d",
-                "noiDung": "\"Is this done?\""
+                "noiDung": "\"Is blue nice?\""
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>Look for missing functionality.</p><p><i>VI: Tìm chức năng còn thiếu.</i></p>"
           },
@@ -452,23 +452,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Representatives of the different user classes"
-              },
-              {
-                "ma": "b",
                 "noiDung": "Only the developers who built it"
               },
               {
+                "ma": "b",
+                "noiDung": "Representatives of the different user classes"
+              },
+              {
                 "ma": "c",
-                "noiDung": "Only managers"
+                "noiDung": "Nobody"
               },
               {
                 "ma": "d",
-                "noiDung": "Nobody"
+                "noiDung": "Only managers"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>Each user class has different needs.</p><p><i>VI: Mỗi lớp người dùng có nhu cầu khác.</i></p>"
           },

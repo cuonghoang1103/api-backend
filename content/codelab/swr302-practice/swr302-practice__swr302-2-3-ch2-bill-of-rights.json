@@ -338,10 +338,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Rights and responsibilities 3 — decision makers and reaching agreement — answer key\n\n1. What is a requirements baseline?Baseline yêu cầu là gì?\n   Answer: b) The set of requirements agreed upon, reviewed and approved, that serves as the basis for further work and is then changed only through change control\n   After baselining, changes go through the change control process.VI: Sau baseline, thay đổi phải qua quy trình kiểm soát thay đổi.\n\n2. When should the project decide who has the authority to resolve requirements conflicts?Khi nào dự án nên xác định ai có quyền giải quyết xung đột yêu cầu?\n   Answer: b) Early, before conflicts arise\n   Identify decision makers and the decision rule early.VI: Xác định người quyết định và luật quyết định từ sớm.\n\n3. The customers will not sign off the requirements. What does Wiegers suggest?Khách hàng không chịu ký duyệt yêu cầu. Wiegers gợi ý gì?\n   Answer: b) Treat sign-off as agreement on the baseline, record the assumptions and risks, and track the open issues\n   Sign-off means \"I agree this is our best understanding today; changes follow the process\".VI: Ký duyệt nghĩa là \"tôi đồng ý đây là hiểu biết tốt nhất hôm nay; thay đổi theo quy trình\".\n"
+          "code": "# Rights and responsibilities 3 — decision makers and reaching agreement — answer key\n\n1. What is a requirements baseline?Baseline yêu cầu là gì?\n   Answer: b) The set of requirements agreed upon, reviewed and approved, that serves as the basis for further work and is then changed only through change control\n   After baselining, changes go through the change control process.VI: Sau baseline, thay đổi phải qua quy trình kiểm soát thay đổi.\n\n2. When should the project decide who has the authority to resolve requirements conflicts?Khi nào dự án nên xác định ai có quyền giải quyết xung đột yêu cầu?\n   Answer: a) Early, before conflicts arise\n   Identify decision makers and the decision rule early.VI: Xác định người quyết định và luật quyết định từ sớm.\n\n3. The customers will not sign off the requirements. What does Wiegers suggest?Khách hàng không chịu ký duyệt yêu cầu. Wiegers gợi ý gì?\n   Answer: a) Treat sign-off as agreement on the baseline, record the assumptions and risks, and track the open issues\n   Sign-off means \"I agree this is our best understanding today; changes follow the process\".VI: Ký duyệt nghĩa là \"tôi đồng ý đây là hiểu biết tốt nhất hôm nay; thay đổi theo quy trình\".\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: b · b · b.</p>",
+      "solutionExplanationHtml": "<p>Answers: b · a · a.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -380,23 +380,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "When the first conflict blocks the team"
-              },
-              {
-                "ma": "b",
                 "noiDung": "Early, before conflicts arise"
               },
               {
+                "ma": "b",
+                "noiDung": "At the end, during acceptance testing"
+              },
+              {
                 "ma": "c",
-                "noiDung": "Never — the BA decides everything"
+                "noiDung": "When the first conflict blocks the team"
               },
               {
                 "ma": "d",
-                "noiDung": "At the end, during acceptance testing"
+                "noiDung": "Never — the BA decides everything"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>Identify decision makers and the decision rule early.</p><p><i>VI: Xác định người quyết định và luật quyết định từ sớm.</i></p>"
           },
@@ -406,23 +406,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Start coding anyway and hope"
-              },
-              {
-                "ma": "b",
                 "noiDung": "Treat sign-off as agreement on the baseline, record the assumptions and risks, and track the open issues"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "Stop the project"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "Let the developers sign instead"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Start coding anyway and hope"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>Sign-off means \"I agree this is our best understanding today; changes follow the process\".</p><p><i>VI: Ký duyệt nghĩa là \"tôi đồng ý đây là hiểu biết tốt nhất hôm nay; thay đổi theo quy trình\".</i></p>"
           }

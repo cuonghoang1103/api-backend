@@ -174,10 +174,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# User classes 2 — personas — answer key\n\n1. A persona represents…Một persona đại diện cho…\n   Answer: b) a user class, through a believable fictional person\n   A persona is a stand-in for a user class.VI: Persona đứng thay cho một lớp người dùng.\n\n2. Which detail is most useful in a persona?Chi tiết nào hữu ích nhất trong persona?\n   Answer: b) Goals and frustrations related to the product\n   Goals and pain points drive requirements.VI: Mục tiêu và điểm đau dẫn tới yêu cầu.\n\n3. Can a persona replace talking to real users?Persona có thay được việc nói chuyện với người dùng thật không?\n   Answer: b) No — personas complement, not replace, real user representatives\n   Personas come from research and are validated with real users.VI: Persona đến từ nghiên cứu và được kiểm với người dùng thật.\n"
+          "code": "# User classes 2 — personas — answer key\n\n1. A persona represents…Một persona đại diện cho…\n   Answer: a) a user class, through a believable fictional person\n   A persona is a stand-in for a user class.VI: Persona đứng thay cho một lớp người dùng.\n\n2. Which detail is most useful in a persona?Chi tiết nào hữu ích nhất trong persona?\n   Answer: a) Goals and frustrations related to the product\n   Goals and pain points drive requirements.VI: Mục tiêu và điểm đau dẫn tới yêu cầu.\n\n3. Can a persona replace talking to real users?Persona có thay được việc nói chuyện với người dùng thật không?\n   Answer: d) No — personas complement, not replace, real user representatives\n   Personas come from research and are validated with real users.VI: Persona đến từ nghiên cứu và được kiểm với người dùng thật.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: b · b · b.</p>",
+      "solutionExplanationHtml": "<p>Answers: a · a · d.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -190,23 +190,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "one real customer the team interviewed"
-              },
-              {
-                "ma": "b",
                 "noiDung": "a user class, through a believable fictional person"
               },
               {
+                "ma": "b",
+                "noiDung": "the product owner"
+              },
+              {
                 "ma": "c",
-                "noiDung": "the whole market"
+                "noiDung": "one real customer the team interviewed"
               },
               {
                 "ma": "d",
-                "noiDung": "the product owner"
+                "noiDung": "the whole market"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>A persona is a stand-in for a user class.</p><p><i>VI: Persona đứng thay cho một lớp người dùng.</i></p>"
           },
@@ -216,23 +216,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Favourite colour"
-              },
-              {
-                "ma": "b",
                 "noiDung": "Goals and frustrations related to the product"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "Shoe size"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "Zodiac sign"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Favourite colour"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>Goals and pain points drive requirements.</p><p><i>VI: Mục tiêu và điểm đau dẫn tới yêu cầu.</i></p>"
           },
@@ -242,23 +242,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Yes"
-              },
-              {
-                "ma": "b",
-                "noiDung": "No — personas complement, not replace, real user representatives"
-              },
-              {
-                "ma": "c",
                 "noiDung": "Only on agile projects"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "Only for small projects"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Yes"
+              },
+              {
+                "ma": "d",
+                "noiDung": "No — personas complement, not replace, real user representatives"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>Personas come from research and are validated with real users.</p><p><i>VI: Persona đến từ nghiên cứu và được kiểm với người dùng thật.</i></p>"
           }

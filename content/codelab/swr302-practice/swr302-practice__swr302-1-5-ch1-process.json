@@ -47,10 +47,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# RE process 1 — development vs management — answer key\n\n1. Which activity belongs to requirements MANAGEMENT?Hoạt động nào thuộc QUẢN LÝ yêu cầu?\n   Answer: c) Evaluating a change request against the baseline\n   Change control starts after a baseline exists.VI: Kiểm soát thay đổi bắt đầu khi đã có baseline.\n\n2. The four activities of requirements DEVELOPMENT are…Bốn hoạt động của PHÁT TRIỂN yêu cầu là…\n   Answer: a) elicitation, analysis, specification, validation\n   These four are the backbone of the course.VI: Bốn hoạt động này là xương sống của môn.\n\n3. Are the development activities done once, in strict order?Các hoạt động phát triển có làm một lần, đúng thứ tự cứng không?\n   Answer: b) No — they are iterative and incremental; you go back and forth as understanding grows\n   Wiegers stresses iteration: analysis raises new questions for elicitation, validation finds gaps, and so on.VI: Wiegers nhấn mạnh tính lặp: phân tích sinh câu hỏi mới cho khai thác, thẩm định tìm ra chỗ thiếu…\n\n4. \"Confirm that you have the correct set of requirements before development accepts them\" describes…\"Xác nhận bộ yêu cầu là đúng trước khi đội phát triển nhận\" mô tả…\n   Answer: b) validation\n   Validation: reviews, prototypes, acceptance criteria.VI: Thẩm định: review, prototype, tiêu chí chấp nhận.\n"
+          "code": "# RE process 1 — development vs management — answer key\n\n1. Which activity belongs to requirements MANAGEMENT?Hoạt động nào thuộc QUẢN LÝ yêu cầu?\n   Answer: c) Evaluating a change request against the baseline\n   Change control starts after a baseline exists.VI: Kiểm soát thay đổi bắt đầu khi đã có baseline.\n\n2. The four activities of requirements DEVELOPMENT are…Bốn hoạt động của PHÁT TRIỂN yêu cầu là…\n   Answer: b) elicitation, analysis, specification, validation\n   These four are the backbone of the course.VI: Bốn hoạt động này là xương sống của môn.\n\n3. Are the development activities done once, in strict order?Các hoạt động phát triển có làm một lần, đúng thứ tự cứng không?\n   Answer: d) No — they are iterative and incremental; you go back and forth as understanding grows\n   Wiegers stresses iteration: analysis raises new questions for elicitation, validation finds gaps, and so on.VI: Wiegers nhấn mạnh tính lặp: phân tích sinh câu hỏi mới cho khai thác, thẩm định tìm ra chỗ thiếu…\n\n4. \"Confirm that you have the correct set of requirements before development accepts them\" describes…\"Xác nhận bộ yêu cầu là đúng trước khi đội phát triển nhận\" mô tả…\n   Answer: d) validation\n   Validation: reviews, prototypes, acceptance criteria.VI: Thẩm định: review, prototype, tiêu chí chấp nhận.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: c · a · b · b.</p>",
+      "solutionExplanationHtml": "<p>Answers: c · b · d · d.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -67,7 +67,7 @@
               },
               {
                 "ma": "b",
-                "noiDung": "Drawing a context diagram"
+                "noiDung": "Writing the SRS"
               },
               {
                 "ma": "c",
@@ -75,7 +75,7 @@
               },
               {
                 "ma": "d",
-                "noiDung": "Writing the SRS"
+                "noiDung": "Drawing a context diagram"
               }
             ],
             "dapAn": [
@@ -89,23 +89,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "elicitation, analysis, specification, validation"
+                "noiDung": "interview, workshop, prototype, survey"
               },
               {
                 "ma": "b",
-                "noiDung": "planning, coding, testing, deployment"
+                "noiDung": "elicitation, analysis, specification, validation"
               },
               {
                 "ma": "c",
-                "noiDung": "baseline, change control, tracing, status"
+                "noiDung": "planning, coding, testing, deployment"
               },
               {
                 "ma": "d",
-                "noiDung": "interview, workshop, prototype, survey"
+                "noiDung": "baseline, change control, tracing, status"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>These four are the backbone of the course.</p><p><i>VI: Bốn hoạt động này là xương sống của môn.</i></p>"
           },
@@ -115,23 +115,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Yes — elicit everything, then analyse, then write, then validate"
-              },
-              {
-                "ma": "b",
-                "noiDung": "No — they are iterative and incremental; you go back and forth as understanding grows"
-              },
-              {
-                "ma": "c",
                 "noiDung": "Only on agile projects"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "Only validation is repeated"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Yes — elicit everything, then analyse, then write, then validate"
+              },
+              {
+                "ma": "d",
+                "noiDung": "No — they are iterative and incremental; you go back and forth as understanding grows"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>Wiegers stresses iteration: analysis raises new questions for elicitation, validation finds gaps, and so on.</p><p><i>VI: Wiegers nhấn mạnh tính lặp: phân tích sinh câu hỏi mới cho khai thác, thẩm định tìm ra chỗ thiếu…</i></p>"
           },
@@ -145,19 +145,19 @@
               },
               {
                 "ma": "b",
-                "noiDung": "validation"
-              },
-              {
-                "ma": "c",
                 "noiDung": "elicitation"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "management"
+              },
+              {
+                "ma": "d",
+                "noiDung": "validation"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>Validation: reviews, prototypes, acceptance criteria.</p><p><i>VI: Thẩm định: review, prototype, tiêu chí chấp nhận.</i></p>"
           }

@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Characteristics 1 — of each requirement, or of the set? — answer key\n\n1. \"Consistent\" is a characteristic of…\"Nhất quán\" là đặc tính của…\n   Answer: b) the set of requirements\n   Consistency is about requirements not conflicting with each other.VI: Nhất quán là các yêu cầu không mâu thuẫn nhau.\n\n2. \"Verifiable\" means…\"Kiểm chứng được\" nghĩa là…\n   Answer: b) a test or another method can show whether it is correctly implemented\n   If you cannot test it, you cannot prove it is met.VI: Không test được thì không chứng minh được đã đạt.\n\n3. \"Necessary\" means the requirement…\"Cần thiết\" nghĩa là yêu cầu…\n   Answer: a) traces to a business need or objective\n   Otherwise it is gold plating.VI: Nếu không, đó là mạ vàng.\n\n4. \"Modifiable\" refers to the set being…\"Sửa được\" nói tập yêu cầu…\n   Answer: a) easy to change without side effects: each requirement stated once, well organised, with a history\n   No duplication, clear structure, version history.VI: Không trùng lặp, cấu trúc rõ, có lịch sử phiên bản.\n"
+          "code": "# Characteristics 1 — of each requirement, or of the set? — answer key\n\n1. \"Consistent\" is a characteristic of…\"Nhất quán\" là đặc tính của…\n   Answer: d) the set of requirements\n   Consistency is about requirements not conflicting with each other.VI: Nhất quán là các yêu cầu không mâu thuẫn nhau.\n\n2. \"Verifiable\" means…\"Kiểm chứng được\" nghĩa là…\n   Answer: b) a test or another method can show whether it is correctly implemented\n   If you cannot test it, you cannot prove it is met.VI: Không test được thì không chứng minh được đã đạt.\n\n3. \"Necessary\" means the requirement…\"Cần thiết\" nghĩa là yêu cầu…\n   Answer: c) traces to a business need or objective\n   Otherwise it is gold plating.VI: Nếu không, đó là mạ vàng.\n\n4. \"Modifiable\" refers to the set being…\"Sửa được\" nói tập yêu cầu…\n   Answer: d) easy to change without side effects: each requirement stated once, well organised, with a history\n   No duplication, clear structure, version history.VI: Không trùng lặp, cấu trúc rõ, có lịch sử phiên bản.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: b · b · a · a.</p>",
+      "solutionExplanationHtml": "<p>Answers: d · b · c · d.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -62,23 +62,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "each requirement"
-              },
-              {
-                "ma": "b",
-                "noiDung": "the set of requirements"
-              },
-              {
-                "ma": "c",
                 "noiDung": "the code"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "the test plan"
+              },
+              {
+                "ma": "c",
+                "noiDung": "each requirement"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the set of requirements"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>Consistency is about requirements not conflicting with each other.</p><p><i>VI: Nhất quán là các yêu cầu không mâu thuẫn nhau.</i></p>"
           },
@@ -88,7 +88,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "the customer has signed it"
+                "noiDung": "it is short"
               },
               {
                 "ma": "b",
@@ -96,7 +96,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "it is short"
+                "noiDung": "the customer has signed it"
               },
               {
                 "ma": "d",
@@ -114,7 +114,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "traces to a business need or objective"
+                "noiDung": "was requested by a developer"
               },
               {
                 "ma": "b",
@@ -122,7 +122,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "was requested by a developer"
+                "noiDung": "traces to a business need or objective"
               },
               {
                 "ma": "d",
@@ -130,7 +130,7 @@
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>Otherwise it is gold plating.</p><p><i>VI: Nếu không, đó là mạ vàng.</i></p>"
           },
@@ -140,23 +140,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "easy to change without side effects: each requirement stated once, well organised, with a history"
-              },
-              {
-                "ma": "b",
                 "noiDung": "written in Word"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "always changing"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "locked"
+              },
+              {
+                "ma": "d",
+                "noiDung": "easy to change without side effects: each requirement stated once, well organised, with a history"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>No duplication, clear structure, version history.</p><p><i>VI: Không trùng lặp, cấu trúc rõ, có lịch sử phiên bản.</i></p>"
           }
@@ -223,10 +223,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Characteristics 3 — choose the better requirement — answer key\n\n1. SearchTìm kiếm\n   Answer: b) The system shall display the first 20 matching rooms within 2 seconds after the tenant submits a search, for 95% of searches.\n   Verifiable and unambiguous.VI: Kiểm chứng được và không mơ hồ.\n\n2. NotificationsThông báo\n   Answer: b) The system shall e-mail the landlord within 5 minutes after a tenant submits a viewing request.\n   No \"and/or\", no \"when appropriate\".VI: Không \"and/or\", không \"khi phù hợp\".\n\n3. PaymentsThanh toán\n   Answer: b) The system shall accept rent payments by card through the payment provider selected by the company.\n   A need, not a design decision.VI: Một nhu cầu, không phải quyết định thiết kế.\n"
+          "code": "# Characteristics 3 — choose the better requirement — answer key\n\n1. SearchTìm kiếm\n   Answer: a) The system shall display the first 20 matching rooms within 2 seconds after the tenant submits a search, for 95% of searches.\n   Verifiable and unambiguous.VI: Kiểm chứng được và không mơ hồ.\n\n2. NotificationsThông báo\n   Answer: a) The system shall e-mail the landlord within 5 minutes after a tenant submits a viewing request.\n   No \"and/or\", no \"when appropriate\".VI: Không \"and/or\", không \"khi phù hợp\".\n\n3. PaymentsThanh toán\n   Answer: b) The system shall accept rent payments by card through the payment provider selected by the company.\n   A need, not a design decision.VI: Một nhu cầu, không phải quyết định thiết kế.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: b · b · b.</p>",
+      "solutionExplanationHtml": "<p>Answers: a · a · b.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -239,15 +239,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Search shall be fast."
+                "noiDung": "The system shall display the first 20 matching rooms within 2 seconds after the tenant submits a search, for 95% of searches."
               },
               {
                 "ma": "b",
-                "noiDung": "The system shall display the first 20 matching rooms within 2 seconds after the tenant submits a search, for 95% of searches."
+                "noiDung": "Search shall be fast."
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>Verifiable and unambiguous.</p><p><i>VI: Kiểm chứng được và không mơ hồ.</i></p>"
           },
@@ -257,15 +257,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "The system shall notify the landlord and/or the tenant when appropriate."
+                "noiDung": "The system shall e-mail the landlord within 5 minutes after a tenant submits a viewing request."
               },
               {
                 "ma": "b",
-                "noiDung": "The system shall e-mail the landlord within 5 minutes after a tenant submits a viewing request."
+                "noiDung": "The system shall notify the landlord and/or the tenant when appropriate."
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>No \"and/or\", no \"when appropriate\".</p><p><i>VI: Không \"and/or\", không \"khi phù hợp\".</i></p>"
           },

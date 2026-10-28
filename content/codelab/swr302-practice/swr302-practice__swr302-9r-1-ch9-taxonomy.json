@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Business rules 1 — the five types — answer key\n\n1. \"Every course has exactly one course code.\" is a…\"Mỗi môn học có đúng một mã môn.\" là…\n   Answer: a) Fact\n   A statement that is simply true.VI: Một phát biểu đơn giản là đúng.\n\n2. \"A student may not register for more than 25 credits per semester.\" is a…\"Sinh viên không được đăng ký quá 25 tín chỉ mỗi kỳ.\" là…\n   Answer: b) Constraint\n   It restricts an action.VI: Nó hạn chế một hành động.\n\n3. \"If a seat is freed, offer it to the first student on the waitlist.\" is an…\"Nếu có chỗ trống, mời sinh viên đầu danh sách chờ.\" là…\n   Answer: c) Action enabler\n   If condition ⇒ do something.VI: Nếu điều kiện ⇒ làm gì đó.\n\n4. \"If a student’s GPA is below 2.0, the student is on academic probation.\" is an…\"Nếu GPA dưới 2.0 thì sinh viên bị cảnh báo học vụ.\" là…\n   Answer: d) Inference\n   If condition ⇒ a new fact (probation).VI: Nếu điều kiện ⇒ một sự thật mới (bị cảnh báo).\n\n5. \"Tuition = credits × price per credit − scholarship.\" is a…\"Học phí = số tín chỉ × đơn giá − học bổng.\" là…\n   Answer: e) Computation\n   A formula.VI: Một công thức.\n"
+          "code": "# Business rules 1 — the five types — answer key\n\n1. \"Every course has exactly one course code.\" is a…\"Mỗi môn học có đúng một mã môn.\" là…\n   Answer: b) Fact\n   A statement that is simply true.VI: Một phát biểu đơn giản là đúng.\n\n2. \"A student may not register for more than 25 credits per semester.\" is a…\"Sinh viên không được đăng ký quá 25 tín chỉ mỗi kỳ.\" là…\n   Answer: a) Constraint\n   It restricts an action.VI: Nó hạn chế một hành động.\n\n3. \"If a seat is freed, offer it to the first student on the waitlist.\" is an…\"Nếu có chỗ trống, mời sinh viên đầu danh sách chờ.\" là…\n   Answer: d) Action enabler\n   If condition ⇒ do something.VI: Nếu điều kiện ⇒ làm gì đó.\n\n4. \"If a student’s GPA is below 2.0, the student is on academic probation.\" is an…\"Nếu GPA dưới 2.0 thì sinh viên bị cảnh báo học vụ.\" là…\n   Answer: e) Inference\n   If condition ⇒ a new fact (probation).VI: Nếu điều kiện ⇒ một sự thật mới (bị cảnh báo).\n\n5. \"Tuition = credits × price per credit − scholarship.\" is a…\"Học phí = số tín chỉ × đơn giá − học bổng.\" là…\n   Answer: d) Computation\n   A formula.VI: Một công thức.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: a · b · c · d · e.</p>",
+      "solutionExplanationHtml": "<p>Answers: b · a · d · e · d.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -62,27 +62,27 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Fact"
-              },
-              {
-                "ma": "b",
-                "noiDung": "Constraint"
-              },
-              {
-                "ma": "c",
-                "noiDung": "Action enabler"
-              },
-              {
-                "ma": "d",
                 "noiDung": "Inference"
               },
               {
-                "ma": "e",
+                "ma": "b",
+                "noiDung": "Fact"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Constraint"
+              },
+              {
+                "ma": "d",
                 "noiDung": "Computation"
+              },
+              {
+                "ma": "e",
+                "noiDung": "Action enabler"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>A statement that is simply true.</p><p><i>VI: Một phát biểu đơn giản là đúng.</i></p>"
           },
@@ -92,27 +92,27 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Fact"
-              },
-              {
-                "ma": "b",
                 "noiDung": "Constraint"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "Action enabler"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "Inference"
               },
               {
-                "ma": "e",
+                "ma": "d",
                 "noiDung": "Computation"
+              },
+              {
+                "ma": "e",
+                "noiDung": "Fact"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>It restricts an action.</p><p><i>VI: Nó hạn chế một hành động.</i></p>"
           },
@@ -122,27 +122,27 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Fact"
+                "noiDung": "Computation"
               },
               {
                 "ma": "b",
-                "noiDung": "Constraint"
-              },
-              {
-                "ma": "c",
-                "noiDung": "Action enabler"
-              },
-              {
-                "ma": "d",
                 "noiDung": "Inference"
               },
               {
+                "ma": "c",
+                "noiDung": "Fact"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Action enabler"
+              },
+              {
                 "ma": "e",
-                "noiDung": "Computation"
+                "noiDung": "Constraint"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>If condition ⇒ do something.</p><p><i>VI: Nếu điều kiện ⇒ làm gì đó.</i></p>"
           },
@@ -152,27 +152,27 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Fact"
-              },
-              {
-                "ma": "b",
                 "noiDung": "Constraint"
               },
               {
+                "ma": "b",
+                "noiDung": "Computation"
+              },
+              {
                 "ma": "c",
-                "noiDung": "Action enabler"
+                "noiDung": "Fact"
               },
               {
                 "ma": "d",
-                "noiDung": "Inference"
+                "noiDung": "Action enabler"
               },
               {
                 "ma": "e",
-                "noiDung": "Computation"
+                "noiDung": "Inference"
               }
             ],
             "dapAn": [
-              "d"
+              "e"
             ],
             "giaiThich": "<p>If condition ⇒ a new fact (probation).</p><p><i>VI: Nếu điều kiện ⇒ một sự thật mới (bị cảnh báo).</i></p>"
           },
@@ -186,7 +186,7 @@
               },
               {
                 "ma": "b",
-                "noiDung": "Constraint"
+                "noiDung": "Inference"
               },
               {
                 "ma": "c",
@@ -194,15 +194,15 @@
               },
               {
                 "ma": "d",
-                "noiDung": "Inference"
+                "noiDung": "Computation"
               },
               {
                 "ma": "e",
-                "noiDung": "Computation"
+                "noiDung": "Constraint"
               }
             ],
             "dapAn": [
-              "e"
+              "d"
             ],
             "giaiThich": "<p>A formula.</p><p><i>VI: Một công thức.</i></p>"
           }
@@ -416,10 +416,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Business rules 3 — rules and requirements — answer key\n\n1. Why keep business rules in a separate catalogue instead of inside each requirement?Vì sao giữ business rule trong danh mục riêng thay vì trong từng yêu cầu?\n   Answer: b) Because one rule can drive several requirements across projects, and when it changes you find every affected requirement through the trace\n   Reuse and change impact.VI: Tái sử dụng và phân tích ảnh hưởng khi thay đổi.\n\n2. BR-7 \"Alcohol may only be sold to customers aged 18 or older\" leads to which functional requirement?BR-7 \"Rượu chỉ bán cho khách từ 18 tuổi\" dẫn tới yêu cầu chức năng nào?\n   Answer: b) The system shall ask for the date of birth before an alcohol product is added to the cart and refuse it for customers younger than 18.\n   A testable behaviour that enforces the rule.VI: Hành vi test được thực thi luật.\n\n3. The VAT rate changes from time to time. In the catalogue this rule is…Thuế suất VAT thay đổi theo thời gian. Trong danh mục rule này là…\n   Answer: b) dynamic — design the system so the value can be changed without new code\n   Dynamic rules lead to configurability requirements.VI: Rule động dẫn tới yêu cầu cấu hình được.\n"
+          "code": "# Business rules 3 — rules and requirements — answer key\n\n1. Why keep business rules in a separate catalogue instead of inside each requirement?Vì sao giữ business rule trong danh mục riêng thay vì trong từng yêu cầu?\n   Answer: a) Because one rule can drive several requirements across projects, and when it changes you find every affected requirement through the trace\n   Reuse and change impact.VI: Tái sử dụng và phân tích ảnh hưởng khi thay đổi.\n\n2. BR-7 \"Alcohol may only be sold to customers aged 18 or older\" leads to which functional requirement?BR-7 \"Rượu chỉ bán cho khách từ 18 tuổi\" dẫn tới yêu cầu chức năng nào?\n   Answer: d) The system shall ask for the date of birth before an alcohol product is added to the cart and refuse it for customers younger than 18.\n   A testable behaviour that enforces the rule.VI: Hành vi test được thực thi luật.\n\n3. The VAT rate changes from time to time. In the catalogue this rule is…Thuế suất VAT thay đổi theo thời gian. Trong danh mục rule này là…\n   Answer: b) dynamic — design the system so the value can be changed without new code\n   Dynamic rules lead to configurability requirements.VI: Rule động dẫn tới yêu cầu cấu hình được.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: b · b · b.</p>",
+      "solutionExplanationHtml": "<p>Answers: a · d · b.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -432,23 +432,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "To make the SRS longer"
-              },
-              {
-                "ma": "b",
                 "noiDung": "Because one rule can drive several requirements across projects, and when it changes you find every affected requirement through the trace"
               },
               {
+                "ma": "b",
+                "noiDung": "There is no reason"
+              },
+              {
                 "ma": "c",
-                "noiDung": "Because developers prefer it"
+                "noiDung": "To make the SRS longer"
               },
               {
                 "ma": "d",
-                "noiDung": "There is no reason"
+                "noiDung": "Because developers prefer it"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>Reuse and change impact.</p><p><i>VI: Tái sử dụng và phân tích ảnh hưởng khi thay đổi.</i></p>"
           },
@@ -462,7 +462,7 @@
               },
               {
                 "ma": "b",
-                "noiDung": "The system shall ask for the date of birth before an alcohol product is added to the cart and refuse it for customers younger than 18."
+                "noiDung": "None"
               },
               {
                 "ma": "c",
@@ -470,11 +470,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "None"
+                "noiDung": "The system shall ask for the date of birth before an alcohol product is added to the cart and refuse it for customers younger than 18."
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>A testable behaviour that enforces the rule.</p><p><i>VI: Hành vi test được thực thi luật.</i></p>"
           },
@@ -484,7 +484,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "static"
+                "noiDung": "a fact"
               },
               {
                 "ma": "b",
@@ -492,7 +492,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "a fact"
+                "noiDung": "static"
               },
               {
                 "ma": "d",

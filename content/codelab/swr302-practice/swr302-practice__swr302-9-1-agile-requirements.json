@@ -294,10 +294,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Agile 4 — refinement, acceptance criteria and DoD — answer key\n\n1. \"We’re agile, so we don’t do requirements.\" This is…\"Chúng tôi agile nên không làm yêu cầu.\" Câu này…\n   Answer: a) a myth — agile does requirements continuously, in small batches\n   Agile removes the big document, not the thinking.VI: Agile bỏ tài liệu lớn, không bỏ tư duy.\n\n2. Who owns the product backlog?Ai sở hữu product backlog?\n   Answer: a) The product owner\n   The PO orders it and represents the customers.VI: PO sắp xếp và đại diện khách hàng.\n\n3. Refinement mainly aims to…Refinement chủ yếu nhằm…\n   Answer: a) keep the top of the backlog ready (small, clear, estimated, testable)\n   Ready items enter the next iterations.VI: Mục sẵn sàng vào các vòng tới.\n"
+          "code": "# Agile 4 — refinement, acceptance criteria and DoD — answer key\n\n1. \"We’re agile, so we don’t do requirements.\" This is…\"Chúng tôi agile nên không làm yêu cầu.\" Câu này…\n   Answer: a) a myth — agile does requirements continuously, in small batches\n   Agile removes the big document, not the thinking.VI: Agile bỏ tài liệu lớn, không bỏ tư duy.\n\n2. Who owns the product backlog?Ai sở hữu product backlog?\n   Answer: c) The product owner\n   The PO orders it and represents the customers.VI: PO sắp xếp và đại diện khách hàng.\n\n3. Refinement mainly aims to…Refinement chủ yếu nhằm…\n   Answer: c) keep the top of the backlog ready (small, clear, estimated, testable)\n   Ready items enter the next iterations.VI: Mục sẵn sàng vào các vòng tới.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: a · a · a.</p>",
+      "solutionExplanationHtml": "<p>Answers: a · c · c.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -314,15 +314,15 @@
               },
               {
                 "ma": "b",
-                "noiDung": "correct"
-              },
-              {
-                "ma": "c",
                 "noiDung": "correct for small teams"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "required by Scrum"
+              },
+              {
+                "ma": "d",
+                "noiDung": "correct"
               }
             ],
             "dapAn": [
@@ -336,23 +336,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "The product owner"
-              },
-              {
-                "ma": "b",
-                "noiDung": "The tester"
-              },
-              {
-                "ma": "c",
                 "noiDung": "The CEO"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "Each developer"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The product owner"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The tester"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>The PO orders it and represents the customers.</p><p><i>VI: PO sắp xếp và đại diện khách hàng.</i></p>"
           },
@@ -362,23 +362,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "keep the top of the backlog ready (small, clear, estimated, testable)"
-              },
-              {
-                "ma": "b",
                 "noiDung": "write the whole SRS"
               },
               {
+                "ma": "b",
+                "noiDung": "deploy the release"
+              },
+              {
                 "ma": "c",
-                "noiDung": "assign blame"
+                "noiDung": "keep the top of the backlog ready (small, clear, estimated, testable)"
               },
               {
                 "ma": "d",
-                "noiDung": "deploy the release"
+                "noiDung": "assign blame"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>Ready items enter the next iterations.</p><p><i>VI: Mục sẵn sàng vào các vòng tới.</i></p>"
           }

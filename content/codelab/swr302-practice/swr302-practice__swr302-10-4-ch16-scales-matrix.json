@@ -177,10 +177,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Scales 2 — multipass, MoSCoW and $100 — answer key\n\n1. 70 of 90 requirements are High. Wiegers suggests…70/90 yêu cầu là High. Wiegers gợi ý…\n   Answer: a) Partition the Highs again (high/higher/highest); only \"highest\" stays top\n   Figure 16-2.VI: Hình 16-2.\n\n2. The book’s main criticism of MoSCoW is that…Phê phán chính của sách về MoSCoW là…\n   Answer: a) it gives no rationale for rating and \"Won’t\" is ambiguous about timing\n   Prefer importance × urgency.VI: Ưu tiên thang quan trọng × gấp.\n\n3. In a $100 exercise one stakeholder puts all $100 on his pet feature. This shows…Trong bài $100, một người dồn cả $100 cho tính năng yêu thích. Điều này cho thấy…\n   Answer: a) the technique can be gamed\n   Davis: easy to game, ignores cost.VI: Davis: dễ bị lách, bỏ qua chi phí.\n\n4. Where should each requirement’s priority be stored?Lưu ưu tiên của mỗi yêu cầu ở đâu?\n   Answer: a) As an attribute of the requirement (SRS, database), with a convention about inheritance from parent requirements\n   Priority is a requirement attribute.VI: Ưu tiên là một thuộc tính của yêu cầu.\n"
+          "code": "# Scales 2 — multipass, MoSCoW and $100 — answer key\n\n1. 70 of 90 requirements are High. Wiegers suggests…70/90 yêu cầu là High. Wiegers gợi ý…\n   Answer: d) Partition the Highs again (high/higher/highest); only \"highest\" stays top\n   Figure 16-2.VI: Hình 16-2.\n\n2. The book’s main criticism of MoSCoW is that…Phê phán chính của sách về MoSCoW là…\n   Answer: d) it gives no rationale for rating and \"Won’t\" is ambiguous about timing\n   Prefer importance × urgency.VI: Ưu tiên thang quan trọng × gấp.\n\n3. In a $100 exercise one stakeholder puts all $100 on his pet feature. This shows…Trong bài $100, một người dồn cả $100 cho tính năng yêu thích. Điều này cho thấy…\n   Answer: a) the technique can be gamed\n   Davis: easy to game, ignores cost.VI: Davis: dễ bị lách, bỏ qua chi phí.\n\n4. Where should each requirement’s priority be stored?Lưu ưu tiên của mỗi yêu cầu ở đâu?\n   Answer: a) As an attribute of the requirement (SRS, database), with a convention about inheritance from parent requirements\n   Priority is a requirement attribute.VI: Ưu tiên là một thuộc tính của yêu cầu.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: a · a · a · a.</p>",
+      "solutionExplanationHtml": "<p>Answers: d · d · a · a.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -193,23 +193,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Partition the Highs again (high/higher/highest); only \"highest\" stays top"
-              },
-              {
-                "ma": "b",
                 "noiDung": "Accept it"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "Make all of them Medium"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "Delete 70 requirements"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Partition the Highs again (high/higher/highest); only \"highest\" stays top"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>Figure 16-2.</p><p><i>VI: Hình 16-2.</i></p>"
           },
@@ -219,23 +219,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "it gives no rationale for rating and \"Won’t\" is ambiguous about timing"
-              },
-              {
-                "ma": "b",
                 "noiDung": "it has too few levels"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "it is too mathematical"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "it is only for waterfall"
+              },
+              {
+                "ma": "d",
+                "noiDung": "it gives no rationale for rating and \"Won’t\" is ambiguous about timing"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>Prefer importance × urgency.</p><p><i>VI: Ưu tiên thang quan trọng × gấp.</i></p>"
           },

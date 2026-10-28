@@ -174,10 +174,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# SRS 3 — purpose and audiences — answer key\n\n1. Which audience uses the SRS to write test cases?Đối tượng nào dùng SRS để viết test case?\n   Answer: a) Testers\n   Every requirement must be verifiable for them.VI: Mỗi yêu cầu phải kiểm chứng được với họ.\n\n2. Should the SRS describe the database tables?SRS có nên mô tả các bảng CSDL không?\n   Answer: b) No — it states what data is needed (data requirements), not how it is stored\n   Design belongs to the design documents.VI: Thiết kế thuộc tài liệu thiết kế.\n\n3. One SRS or several?Một SRS hay nhiều?\n   Answer: b) It depends: a large system may have one SRS per subsystem or release, plus a vision document\n   Wiegers: organise by what the project needs.VI: Wiegers: tổ chức theo nhu cầu dự án.\n"
+          "code": "# SRS 3 — purpose and audiences — answer key\n\n1. Which audience uses the SRS to write test cases?Đối tượng nào dùng SRS để viết test case?\n   Answer: d) Testers\n   Every requirement must be verifiable for them.VI: Mỗi yêu cầu phải kiểm chứng được với họ.\n\n2. Should the SRS describe the database tables?SRS có nên mô tả các bảng CSDL không?\n   Answer: b) No — it states what data is needed (data requirements), not how it is stored\n   Design belongs to the design documents.VI: Thiết kế thuộc tài liệu thiết kế.\n\n3. One SRS or several?Một SRS hay nhiều?\n   Answer: a) It depends: a large system may have one SRS per subsystem or release, plus a vision document\n   Wiegers: organise by what the project needs.VI: Wiegers: tổ chức theo nhu cầu dự án.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: a · b · b.</p>",
+      "solutionExplanationHtml": "<p>Answers: d · b · a.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -190,23 +190,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Testers"
-              },
-              {
-                "ma": "b",
-                "noiDung": "Marketing"
-              },
-              {
-                "ma": "c",
                 "noiDung": "Legal staff"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "The sponsor only"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Marketing"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Testers"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>Every requirement must be verifiable for them.</p><p><i>VI: Mỗi yêu cầu phải kiểm chứng được với họ.</i></p>"
           },
@@ -242,11 +242,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Always exactly one"
+                "noiDung": "It depends: a large system may have one SRS per subsystem or release, plus a vision document"
               },
               {
                 "ma": "b",
-                "noiDung": "It depends: a large system may have one SRS per subsystem or release, plus a vision document"
+                "noiDung": "One per developer"
               },
               {
                 "ma": "c",
@@ -254,11 +254,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "One per developer"
+                "noiDung": "Always exactly one"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>Wiegers: organise by what the project needs.</p><p><i>VI: Wiegers: tổ chức theo nhu cầu dự án.</i></p>"
           }

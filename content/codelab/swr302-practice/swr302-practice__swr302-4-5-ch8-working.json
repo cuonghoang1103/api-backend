@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Working with use cases 1 — use cases and functional requirements — answer key\n\n1. Where do most functional requirements come from in a use-case-driven project?Trong dự án lấy use case làm gốc, phần lớn yêu cầu chức năng đến từ đâu?\n   Answer: a) From the steps, alternative flows, exceptions and business rules of the use cases\n   Each of those produces system behaviour that must be specified.VI: Mỗi phần đó sinh hành vi hệ thống cần đặc tả.\n\n2. Is a use case alone enough as a specification for developers?Một use case có đủ làm đặc tả cho dev không?\n   Answer: b) Often not — details such as validations, messages, rules and data are added as functional requirements\n   The use case gives context; the FRs give precise, testable behaviour.VI: Use case cho bối cảnh; FR cho hành vi chính xác, test được.\n\n3. An exception \"the slot was taken by someone else\" produces…Ngoại lệ \"khung giờ đã bị người khác lấy\" sinh ra…\n   Answer: b) a functional requirement for how the system detects and responds to it\n   Exceptions are rich sources of functional requirements.VI: Ngoại lệ là nguồn yêu cầu chức năng phong phú.\n"
+          "code": "# Working with use cases 1 — use cases and functional requirements — answer key\n\n1. Where do most functional requirements come from in a use-case-driven project?Trong dự án lấy use case làm gốc, phần lớn yêu cầu chức năng đến từ đâu?\n   Answer: a) From the steps, alternative flows, exceptions and business rules of the use cases\n   Each of those produces system behaviour that must be specified.VI: Mỗi phần đó sinh hành vi hệ thống cần đặc tả.\n\n2. Is a use case alone enough as a specification for developers?Một use case có đủ làm đặc tả cho dev không?\n   Answer: a) Often not — details such as validations, messages, rules and data are added as functional requirements\n   The use case gives context; the FRs give precise, testable behaviour.VI: Use case cho bối cảnh; FR cho hành vi chính xác, test được.\n\n3. An exception \"the slot was taken by someone else\" produces…Ngoại lệ \"khung giờ đã bị người khác lấy\" sinh ra…\n   Answer: a) a functional requirement for how the system detects and responds to it\n   Exceptions are rich sources of functional requirements.VI: Ngoại lệ là nguồn yêu cầu chức năng phong phú.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: a · b · b.</p>",
+      "solutionExplanationHtml": "<p>Answers: a · a · a.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -66,15 +66,15 @@
               },
               {
                 "ma": "b",
-                "noiDung": "From the database design"
-              },
-              {
-                "ma": "c",
                 "noiDung": "From the developers’ ideas"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "From the test cases"
+              },
+              {
+                "ma": "d",
+                "noiDung": "From the database design"
               }
             ],
             "dapAn": [
@@ -88,23 +88,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Always"
-              },
-              {
-                "ma": "b",
                 "noiDung": "Often not — details such as validations, messages, rules and data are added as functional requirements"
               },
               {
+                "ma": "b",
+                "noiDung": "Only if it has a diagram"
+              },
+              {
                 "ma": "c",
-                "noiDung": "Never useful"
+                "noiDung": "Always"
               },
               {
                 "ma": "d",
-                "noiDung": "Only if it has a diagram"
+                "noiDung": "Never useful"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>The use case gives context; the FRs give precise, testable behaviour.</p><p><i>VI: Use case cho bối cảnh; FR cho hành vi chính xác, test được.</i></p>"
           },
@@ -114,11 +114,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "nothing"
+                "noiDung": "a functional requirement for how the system detects and responds to it"
               },
               {
                 "ma": "b",
-                "noiDung": "a functional requirement for how the system detects and responds to it"
+                "noiDung": "a quality attribute only"
               },
               {
                 "ma": "c",
@@ -126,11 +126,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "a quality attribute only"
+                "noiDung": "nothing"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>Exceptions are rich sources of functional requirements.</p><p><i>VI: Ngoại lệ là nguồn yêu cầu chức năng phong phú.</i></p>"
           }

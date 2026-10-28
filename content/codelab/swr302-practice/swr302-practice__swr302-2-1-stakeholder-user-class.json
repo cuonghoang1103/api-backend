@@ -48,10 +48,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Stakeholders 1 — stakeholder, customer, user — answer key\n\n1. Which set is the largest?Tập nào lớn nhất?\n   Answer: c) Stakeholders\n   Users ⊂ customers ⊂ stakeholders.VI: Người dùng ⊂ khách hàng ⊂ bên liên quan.\n\n2. The government tax office that receives the monthly VAT file produced by a shop’s billing system is…Cơ quan thuế nhận tệp VAT hằng tháng do hệ thống bán hàng của cửa hàng sinh ra là…\n   Answer: b) a stakeholder (it can influence the requirements) — possibly an indirect user\n   It receives output and its regulations shape requirements.VI: Nó nhận đầu ra và quy định của nó định hình yêu cầu.\n\n3. A sales manager who reads the reports of a CRM but never logs in (the assistant prints them) is…Quản lý bán hàng đọc báo cáo CRM nhưng không bao giờ đăng nhập (thư ký in cho) là…\n   Answer: b) an indirect user\n   Indirect users receive the product’s outputs without touching it.VI: Người dùng gián tiếp nhận đầu ra mà không chạm vào sản phẩm.\n\n4. Why does the expectation gap appear between what customers expect and what developers build?Vì sao có \"khoảng cách kỳ vọng\" giữa điều khách mong và điều dev xây?\n   Answer: b) Because communication about requirements is insufficient and needs change over time\n   Frequent customer engagement shrinks the gap (Ch.2 slide 4).VI: Tương tác thường xuyên với khách hàng thu hẹp khoảng cách (Ch.2 slide 4).\n"
+          "code": "# Stakeholders 1 — stakeholder, customer, user — answer key\n\n1. Which set is the largest?Tập nào lớn nhất?\n   Answer: c) Stakeholders\n   Users ⊂ customers ⊂ stakeholders.VI: Người dùng ⊂ khách hàng ⊂ bên liên quan.\n\n2. The government tax office that receives the monthly VAT file produced by a shop’s billing system is…Cơ quan thuế nhận tệp VAT hằng tháng do hệ thống bán hàng của cửa hàng sinh ra là…\n   Answer: d) a stakeholder (it can influence the requirements) — possibly an indirect user\n   It receives output and its regulations shape requirements.VI: Nó nhận đầu ra và quy định của nó định hình yêu cầu.\n\n3. A sales manager who reads the reports of a CRM but never logs in (the assistant prints them) is…Quản lý bán hàng đọc báo cáo CRM nhưng không bao giờ đăng nhập (thư ký in cho) là…\n   Answer: c) an indirect user\n   Indirect users receive the product’s outputs without touching it.VI: Người dùng gián tiếp nhận đầu ra mà không chạm vào sản phẩm.\n\n4. Why does the expectation gap appear between what customers expect and what developers build?Vì sao có \"khoảng cách kỳ vọng\" giữa điều khách mong và điều dev xây?\n   Answer: a) Because communication about requirements is insufficient and needs change over time\n   Frequent customer engagement shrinks the gap (Ch.2 slide 4).VI: Tương tác thường xuyên với khách hàng thu hẹp khoảng cách (Ch.2 slide 4).\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: c · b · b · b.</p>",
+      "solutionExplanationHtml": "<p>Answers: c · d · c · a.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -94,7 +94,7 @@
               },
               {
                 "ma": "b",
-                "noiDung": "a stakeholder (it can influence the requirements) — possibly an indirect user"
+                "noiDung": "the sponsor"
               },
               {
                 "ma": "c",
@@ -102,11 +102,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "the sponsor"
+                "noiDung": "a stakeholder (it can influence the requirements) — possibly an indirect user"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>It receives output and its regulations shape requirements.</p><p><i>VI: Nó nhận đầu ra và quy định của nó định hình yêu cầu.</i></p>"
           },
@@ -116,23 +116,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "a direct user"
+                "noiDung": "a developer"
               },
               {
                 "ma": "b",
-                "noiDung": "an indirect user"
+                "noiDung": "a direct user"
               },
               {
                 "ma": "c",
-                "noiDung": "not a user"
+                "noiDung": "an indirect user"
               },
               {
                 "ma": "d",
-                "noiDung": "a developer"
+                "noiDung": "not a user"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Indirect users receive the product’s outputs without touching it.</p><p><i>VI: Người dùng gián tiếp nhận đầu ra mà không chạm vào sản phẩm.</i></p>"
           },
@@ -142,23 +142,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Because developers are lazy"
-              },
-              {
-                "ma": "b",
                 "noiDung": "Because communication about requirements is insufficient and needs change over time"
               },
               {
+                "ma": "b",
+                "noiDung": "It cannot be reduced"
+              },
+              {
                 "ma": "c",
-                "noiDung": "Because customers never know what they want"
+                "noiDung": "Because developers are lazy"
               },
               {
                 "ma": "d",
-                "noiDung": "It cannot be reduced"
+                "noiDung": "Because customers never know what they want"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>Frequent customer engagement shrinks the gap (Ch.2 slide 4).</p><p><i>VI: Tương tác thường xuyên với khách hàng thu hẹp khoảng cách (Ch.2 slide 4).</i></p>"
           }
@@ -504,10 +504,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Stakeholders 4 — the product champion — answer key\n\n1. Who is the best product champion for the Front desk class of MediBook?Ai là product champion tốt nhất cho lớp Front desk của MediBook?\n   Answer: b) An experienced receptionist respected by colleagues and given time to do it\n   A champion must be an actual member of the class, credible to peers, with time allocated.VI: Champion phải là thành viên thật của lớp, được đồng nghiệp tin, có thời gian.\n\n2. Which is NOT a typical activity of a product champion?Việc nào KHÔNG phải việc điển hình của product champion?\n   Answer: c) Write the production code of the features\n   Champions provide and validate requirements; they do not build the product.VI: Champion cung cấp và thẩm định yêu cầu; họ không xây sản phẩm.\n\n3. Two user classes ask for conflicting requirements. Wiegers suggests the decision usually follows…Hai lớp người dùng đòi yêu cầu mâu thuẫn. Wiegers gợi ý quyết định thường dựa trên…\n   Answer: b) the favored user class, i.e. the class most important to the business objectives\n   Favored user classes get priority because they matter most to the business objectives.VI: Lớp người dùng ưu tiên được ưu tiên vì quan trọng nhất với mục tiêu nghiệp vụ.\n"
+          "code": "# Stakeholders 4 — the product champion — answer key\n\n1. Who is the best product champion for the Front desk class of MediBook?Ai là product champion tốt nhất cho lớp Front desk của MediBook?\n   Answer: b) An experienced receptionist respected by colleagues and given time to do it\n   A champion must be an actual member of the class, credible to peers, with time allocated.VI: Champion phải là thành viên thật của lớp, được đồng nghiệp tin, có thời gian.\n\n2. Which is NOT a typical activity of a product champion?Việc nào KHÔNG phải việc điển hình của product champion?\n   Answer: a) Write the production code of the features\n   Champions provide and validate requirements; they do not build the product.VI: Champion cung cấp và thẩm định yêu cầu; họ không xây sản phẩm.\n\n3. Two user classes ask for conflicting requirements. Wiegers suggests the decision usually follows…Hai lớp người dùng đòi yêu cầu mâu thuẫn. Wiegers gợi ý quyết định thường dựa trên…\n   Answer: c) the favored user class, i.e. the class most important to the business objectives\n   Favored user classes get priority because they matter most to the business objectives.VI: Lớp người dùng ưu tiên được ưu tiên vì quan trọng nhất với mục tiêu nghiệp vụ.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: b · c · b.</p>",
+      "solutionExplanationHtml": "<p>Answers: b · a · c.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -520,7 +520,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "The clinic owner, because she pays"
+                "noiDung": "The project manager"
               },
               {
                 "ma": "b",
@@ -528,7 +528,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "The project manager"
+                "noiDung": "The clinic owner, because she pays"
               },
               {
                 "ma": "d",
@@ -546,7 +546,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Collect input from other members of the user class"
+                "noiDung": "Write the production code of the features"
               },
               {
                 "ma": "b",
@@ -554,7 +554,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "Write the production code of the features"
+                "noiDung": "Collect input from other members of the user class"
               },
               {
                 "ma": "d",
@@ -562,7 +562,7 @@
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>Champions provide and validate requirements; they do not build the product.</p><p><i>VI: Champion cung cấp và thẩm định yêu cầu; họ không xây sản phẩm.</i></p>"
           },
@@ -572,23 +572,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "whichever class shouts loudest"
-              },
-              {
-                "ma": "b",
-                "noiDung": "the favored user class, i.e. the class most important to the business objectives"
-              },
-              {
-                "ma": "c",
                 "noiDung": "the developers’ preference"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "a coin toss"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the favored user class, i.e. the class most important to the business objectives"
+              },
+              {
+                "ma": "d",
+                "noiDung": "whichever class shouts loudest"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Favored user classes get priority because they matter most to the business objectives.</p><p><i>VI: Lớp người dùng ưu tiên được ưu tiên vì quan trọng nhất với mục tiêu nghiệp vụ.</i></p>"
           }

@@ -286,10 +286,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Inspection 3 — entry and exit criteria — answer key\n\n1. The draft is full of spelling errors and half the sections are empty. The moderator should…Bản nháp đầy lỗi chính tả, nửa số mục trống. Moderator nên…\n   Answer: a) postpone the inspection — entry criteria are not met\n   Do not waste inspectors on obvious problems.VI: Đừng phí inspector vào lỗi hiển nhiên.\n\n2. Which is an exit criterion?Đâu là tiêu chí ra?\n   Answer: a) All issues raised are resolved and the changes are verified\n   Exit = issues closed, changes checked.VI: Ra = lỗi đã đóng, thay đổi đã kiểm.\n\n3. Why are line numbers an entry criterion?Vì sao đánh số dòng là tiêu chí vào?\n   Answer: a) So issues can be located precisely in the meeting and the log\n   Precise references speed up the meeting and rework.VI: Tham chiếu chính xác giúp họp và sửa nhanh.\n"
+          "code": "# Inspection 3 — entry and exit criteria — answer key\n\n1. The draft is full of spelling errors and half the sections are empty. The moderator should…Bản nháp đầy lỗi chính tả, nửa số mục trống. Moderator nên…\n   Answer: d) postpone the inspection — entry criteria are not met\n   Do not waste inspectors on obvious problems.VI: Đừng phí inspector vào lỗi hiển nhiên.\n\n2. Which is an exit criterion?Đâu là tiêu chí ra?\n   Answer: b) All issues raised are resolved and the changes are verified\n   Exit = issues closed, changes checked.VI: Ra = lỗi đã đóng, thay đổi đã kiểm.\n\n3. Why are line numbers an entry criterion?Vì sao đánh số dòng là tiêu chí vào?\n   Answer: c) So issues can be located precisely in the meeting and the log\n   Precise references speed up the meeting and rework.VI: Tham chiếu chính xác giúp họp và sửa nhanh.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: a · a · a.</p>",
+      "solutionExplanationHtml": "<p>Answers: d · b · c.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -302,23 +302,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "postpone the inspection — entry criteria are not met"
-              },
-              {
-                "ma": "b",
                 "noiDung": "run it anyway"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "fix it himself"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "cancel the project"
+              },
+              {
+                "ma": "d",
+                "noiDung": "postpone the inspection — entry criteria are not met"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>Do not waste inspectors on obvious problems.</p><p><i>VI: Đừng phí inspector vào lỗi hiển nhiên.</i></p>"
           },
@@ -328,23 +328,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "All issues raised are resolved and the changes are verified"
-              },
-              {
-                "ma": "b",
                 "noiDung": "The document has line numbers"
               },
               {
+                "ma": "b",
+                "noiDung": "All issues raised are resolved and the changes are verified"
+              },
+              {
                 "ma": "c",
-                "noiDung": "The author is present"
+                "noiDung": "Inspectors have read the template"
               },
               {
                 "ma": "d",
-                "noiDung": "Inspectors have read the template"
+                "noiDung": "The author is present"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>Exit = issues closed, changes checked.</p><p><i>VI: Ra = lỗi đã đóng, thay đổi đã kiểm.</i></p>"
           },
@@ -354,23 +354,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "So issues can be located precisely in the meeting and the log"
-              },
-              {
-                "ma": "b",
-                "noiDung": "For decoration"
-              },
-              {
-                "ma": "c",
                 "noiDung": "The printer needs them"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "Template rule only"
+              },
+              {
+                "ma": "c",
+                "noiDung": "So issues can be located precisely in the meeting and the log"
+              },
+              {
+                "ma": "d",
+                "noiDung": "For decoration"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>Precise references speed up the meeting and rework.</p><p><i>VI: Tham chiếu chính xác giúp họp và sửa nhanh.</i></p>"
           }

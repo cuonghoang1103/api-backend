@@ -47,10 +47,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Use cases 1 — use case or user story? — answer key\n\n1. What does a use case describe?Use case mô tả gì?\n   Answer: b) A sequence of actor–system interactions that gives the actor a result of value\n   The value to the actor is what makes it a use case.VI: Giá trị cho actor là thứ làm nên một use case.\n\n2. Which is a user story?Cái nào là một user story?\n   Answer: b) As a patient, I want to book an appointment online so that I do not have to call the clinic.\n   Role, goal, benefit.VI: Vai trò, mục tiêu, lợi ích.\n\n3. Which name is a good use case name?Tên nào là tên use case tốt?\n   Answer: b) Book Appointment\n   Verb + object, from the actor’s point of view.VI: Động từ + tân ngữ, từ góc nhìn actor.\n\n4. Use cases are usually written…Use case thường được viết…\n   Answer: a) with more structure and detail before development, often on waterfall-style projects\n   User stories are lighter and detailed just in time; use cases carry more structure up front. Both can be used together.VI: User story nhẹ hơn, chi tiết hoá đúng lúc; use case có cấu trúc từ đầu. Có thể dùng cả hai.\n"
+          "code": "# Use cases 1 — use case or user story? — answer key\n\n1. What does a use case describe?Use case mô tả gì?\n   Answer: b) A sequence of actor–system interactions that gives the actor a result of value\n   The value to the actor is what makes it a use case.VI: Giá trị cho actor là thứ làm nên một use case.\n\n2. Which is a user story?Cái nào là một user story?\n   Answer: b) As a patient, I want to book an appointment online so that I do not have to call the clinic.\n   Role, goal, benefit.VI: Vai trò, mục tiêu, lợi ích.\n\n3. Which name is a good use case name?Tên nào là tên use case tốt?\n   Answer: c) Book Appointment\n   Verb + object, from the actor’s point of view.VI: Động từ + tân ngữ, từ góc nhìn actor.\n\n4. Use cases are usually written…Use case thường được viết…\n   Answer: b) with more structure and detail before development, often on waterfall-style projects\n   User stories are lighter and detailed just in time; use cases carry more structure up front. Both can be used together.VI: User story nhẹ hơn, chi tiết hoá đúng lúc; use case có cấu trúc từ đầu. Có thể dùng cả hai.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: b · b · b · a.</p>",
+      "solutionExplanationHtml": "<p>Answers: b · b · c · b.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -89,7 +89,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "UC-05 Book Appointment: normal flow 1…7, alternative flow 4a"
+                "noiDung": "The system shall store appointments."
               },
               {
                 "ma": "b",
@@ -97,7 +97,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "The system shall store appointments."
+                "noiDung": "UC-05 Book Appointment: normal flow 1…7, alternative flow 4a"
               },
               {
                 "ma": "d",
@@ -119,11 +119,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "Book Appointment"
+                "noiDung": "Appointment Screen"
               },
               {
                 "ma": "c",
-                "noiDung": "Appointment Screen"
+                "noiDung": "Book Appointment"
               },
               {
                 "ma": "d",
@@ -131,7 +131,7 @@
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Verb + object, from the actor’s point of view.</p><p><i>VI: Động từ + tân ngữ, từ góc nhìn actor.</i></p>"
           },
@@ -141,23 +141,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "with more structure and detail before development, often on waterfall-style projects"
-              },
-              {
-                "ma": "b",
                 "noiDung": "only on agile projects"
               },
               {
+                "ma": "b",
+                "noiDung": "with more structure and detail before development, often on waterfall-style projects"
+              },
+              {
                 "ma": "c",
-                "noiDung": "after the code is written"
+                "noiDung": "by the testers only"
               },
               {
                 "ma": "d",
-                "noiDung": "by the testers only"
+                "noiDung": "after the code is written"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>User stories are lighter and detailed just in time; use cases carry more structure up front. Both can be used together.</p><p><i>VI: User story nhẹ hơn, chi tiết hoá đúng lúc; use case có cấu trúc từ đầu. Có thể dùng cả hai.</i></p>"
           }

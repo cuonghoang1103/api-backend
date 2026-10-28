@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Prioritisation 1 — why and when — answer key\n\n1. When should priorities be set?Khi nào đặt ưu tiên?\n   Answer: a) Early, and revisited periodically as the project and business change\n   Early = most flexibility.VI: Sớm = linh hoạt nhất.\n\n2. FR-8 \"Export to PDF\" cannot work before FR-3 \"Generate report\". Which pragmatic issue is this?FR-8 \"Xuất PDF\" không thể chạy trước FR-3 \"Tạo báo cáo\". Đây là vấn đề nào?\n   Answer: a) Predecessors (dependencies)\n   A predecessor must come first.VI: Yêu cầu tiên quyết phải đi trước.\n\n3. Is priority the same as importance?Ưu tiên có giống tầm quan trọng không?\n   Answer: a) No — importance is weighed against timing, dependencies and cost\n   Priority is a trade-off.VI: Ưu tiên là một sự đánh đổi.\n"
+          "code": "# Prioritisation 1 — why and when — answer key\n\n1. When should priorities be set?Khi nào đặt ưu tiên?\n   Answer: a) Early, and revisited periodically as the project and business change\n   Early = most flexibility.VI: Sớm = linh hoạt nhất.\n\n2. FR-8 \"Export to PDF\" cannot work before FR-3 \"Generate report\". Which pragmatic issue is this?FR-8 \"Xuất PDF\" không thể chạy trước FR-3 \"Tạo báo cáo\". Đây là vấn đề nào?\n   Answer: a) Predecessors (dependencies)\n   A predecessor must come first.VI: Yêu cầu tiên quyết phải đi trước.\n\n3. Is priority the same as importance?Ưu tiên có giống tầm quan trọng không?\n   Answer: b) No — importance is weighed against timing, dependencies and cost\n   Priority is a trade-off.VI: Ưu tiên là một sự đánh đổi.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: a · a · a.</p>",
+      "solutionExplanationHtml": "<p>Answers: a · a · b.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -66,11 +66,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "Once, at the end of analysis"
+                "noiDung": "Only when late"
               },
               {
                 "ma": "c",
-                "noiDung": "Only when late"
+                "noiDung": "Once, at the end of analysis"
               },
               {
                 "ma": "d",
@@ -114,23 +114,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "No — importance is weighed against timing, dependencies and cost"
+                "noiDung": "Only for NFRs"
               },
               {
                 "ma": "b",
-                "noiDung": "Yes"
+                "noiDung": "No — importance is weighed against timing, dependencies and cost"
               },
               {
                 "ma": "c",
-                "noiDung": "Only in agile"
+                "noiDung": "Yes"
               },
               {
                 "ma": "d",
-                "noiDung": "Only for NFRs"
+                "noiDung": "Only in agile"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>Priority is a trade-off.</p><p><i>VI: Ưu tiên là một sự đánh đổi.</i></p>"
           }

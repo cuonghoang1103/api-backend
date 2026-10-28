@@ -239,11 +239,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "The context diagram"
+                "noiDung": "The vision statement"
               },
               {
                 "ma": "c",
-                "noiDung": "The vision statement"
+                "noiDung": "The context diagram"
               },
               {
                 "ma": "d",
@@ -265,11 +265,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "write a longer SRS section"
+                "noiDung": "build the full system then ask"
               },
               {
                 "ma": "c",
-                "noiDung": "build the full system then ask"
+                "noiDung": "write a longer SRS section"
               },
               {
                 "ma": "d",
@@ -291,15 +291,15 @@
               },
               {
                 "ma": "b",
-                "noiDung": "three developers"
-              },
-              {
-                "ma": "c",
                 "noiDung": "CEO, CFO, CTO"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "three customers"
+              },
+              {
+                "ma": "d",
+                "noiDung": "three developers"
               }
             ],
             "dapAn": [

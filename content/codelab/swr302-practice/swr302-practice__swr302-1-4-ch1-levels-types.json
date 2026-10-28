@@ -47,10 +47,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Levels and types 1 — Figure 1-1 — answer key\n\n1. Which level answers WHY the organisation builds the system?Cấp nào trả lời VÌ SAO tổ chức xây hệ thống?\n   Answer: b) Business requirements\n   Business requirements state the business benefits sought.VI: Business requirement nêu lợi ích nghiệp vụ mong đạt.\n\n2. Where are business requirements usually recorded?Business requirement thường được ghi ở đâu?\n   Answer: b) In the vision and scope document\n   The vision and scope document (Chapter 5).VI: Tài liệu tầm nhìn & phạm vi (Chương 5).\n\n3. User requirements are typically represented as…User requirement thường được biểu diễn bằng…\n   Answer: a) use cases, user stories or event-response tables\n   They describe what users must be able to do.VI: Chúng mô tả người dùng phải làm được gì.\n\n4. A business rule is…Một business rule là…\n   Answer: b) a policy, regulation, standard or algorithm that exists outside any one application and often leads to functional requirements\n   It is not itself a software requirement, but functional requirements trace back to it.VI: Tự nó không phải yêu cầu phần mềm, nhưng yêu cầu chức năng truy về nó.\n\n5. In Wiegers’ book, \"system requirements\" means…Trong sách Wiegers, \"system requirements\" nghĩa là…\n   Answer: b) requirements of a product made of several components — software, hardware, even people\n   The book does NOT use the term for \"detailed software requirements\".VI: Sách KHÔNG dùng thuật ngữ này cho \"yêu cầu phần mềm chi tiết\".\n"
+          "code": "# Levels and types 1 — Figure 1-1 — answer key\n\n1. Which level answers WHY the organisation builds the system?Cấp nào trả lời VÌ SAO tổ chức xây hệ thống?\n   Answer: d) Business requirements\n   Business requirements state the business benefits sought.VI: Business requirement nêu lợi ích nghiệp vụ mong đạt.\n\n2. Where are business requirements usually recorded?Business requirement thường được ghi ở đâu?\n   Answer: d) In the vision and scope document\n   The vision and scope document (Chapter 5).VI: Tài liệu tầm nhìn & phạm vi (Chương 5).\n\n3. User requirements are typically represented as…User requirement thường được biểu diễn bằng…\n   Answer: a) use cases, user stories or event-response tables\n   They describe what users must be able to do.VI: Chúng mô tả người dùng phải làm được gì.\n\n4. A business rule is…Một business rule là…\n   Answer: b) a policy, regulation, standard or algorithm that exists outside any one application and often leads to functional requirements\n   It is not itself a software requirement, but functional requirements trace back to it.VI: Tự nó không phải yêu cầu phần mềm, nhưng yêu cầu chức năng truy về nó.\n\n5. In Wiegers’ book, \"system requirements\" means…Trong sách Wiegers, \"system requirements\" nghĩa là…\n   Answer: a) requirements of a product made of several components — software, hardware, even people\n   The book does NOT use the term for \"detailed software requirements\".VI: Sách KHÔNG dùng thuật ngữ này cho \"yêu cầu phần mềm chi tiết\".\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: b · b · a · b · b.</p>",
+      "solutionExplanationHtml": "<p>Answers: d · d · a · b · a.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -67,19 +67,19 @@
               },
               {
                 "ma": "b",
-                "noiDung": "Business requirements"
-              },
-              {
-                "ma": "c",
                 "noiDung": "Functional requirements"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "System requirements"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Business requirements"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>Business requirements state the business benefits sought.</p><p><i>VI: Business requirement nêu lợi ích nghiệp vụ mong đạt.</i></p>"
           },
@@ -93,19 +93,19 @@
               },
               {
                 "ma": "b",
-                "noiDung": "In the vision and scope document"
-              },
-              {
-                "ma": "c",
                 "noiDung": "In the source code"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "In the test plan"
+              },
+              {
+                "ma": "d",
+                "noiDung": "In the vision and scope document"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>The vision and scope document (Chapter 5).</p><p><i>VI: Tài liệu tầm nhìn & phạm vi (Chương 5).</i></p>"
           },
@@ -119,15 +119,15 @@
               },
               {
                 "ma": "b",
-                "noiDung": "class diagrams"
-              },
-              {
-                "ma": "c",
                 "noiDung": "database schemas"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "Gantt charts"
+              },
+              {
+                "ma": "d",
+                "noiDung": "class diagrams"
               }
             ],
             "dapAn": [
@@ -141,7 +141,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "a functional requirement written by the business"
+                "noiDung": "a rule in the code"
               },
               {
                 "ma": "b",
@@ -149,7 +149,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "a rule in the code"
+                "noiDung": "a functional requirement written by the business"
               },
               {
                 "ma": "d",
@@ -167,23 +167,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "very detailed software requirements"
-              },
-              {
-                "ma": "b",
                 "noiDung": "requirements of a product made of several components — software, hardware, even people"
               },
               {
+                "ma": "b",
+                "noiDung": "very detailed software requirements"
+              },
+              {
                 "ma": "c",
-                "noiDung": "the requirements of the operating system"
+                "noiDung": "nonfunctional requirements"
               },
               {
                 "ma": "d",
-                "noiDung": "nonfunctional requirements"
+                "noiDung": "the requirements of the operating system"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>The book does NOT use the term for \"detailed software requirements\".</p><p><i>VI: Sách KHÔNG dùng thuật ngữ này cho \"yêu cầu phần mềm chi tiết\".</i></p>"
           }

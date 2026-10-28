@@ -47,10 +47,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Use case anatomy 1 — «include» or «extend»? — answer key\n\n1. Every time a patient books an appointment, the system authenticates the patient. Booking ___ Authenticate.Mỗi lần đặt lịch, hệ thống xác thực bệnh nhân. Booking ___ Authenticate.\n   Answer: a) «include»\n   Always ⇒ include.VI: Luôn luôn ⇒ include.\n\n2. A patient MAY add a referral letter when booking. Attach Referral ___ Book Appointment.Bệnh nhân CÓ THỂ đính kèm giấy giới thiệu khi đặt lịch. Attach Referral ___ Book Appointment.\n   Answer: b) «extend»\n   Optional ⇒ extend, arrow from Attach Referral to Book Appointment.VI: Tuỳ chọn ⇒ extend, mũi tên từ Attach Referral tới Book Appointment.\n\n3. In PlantUML, which line is correct for \"Book Appointment always includes Pay Deposit\"?Trong PlantUML, dòng nào đúng cho \"Book Appointment luôn gộp Pay Deposit\"?\n   Answer: a) Book ..> Pay : <<include>>\n   Base → included, dashed.VI: Gốc → được gộp, nét đứt.\n\n4. A late-cancellation fee is charged only when a patient cancels less than 24 h before. Which is right?Phí huỷ muộn chỉ thu khi bệnh nhân huỷ trong vòng 24 giờ trước. Cái nào đúng?\n   Answer: b) Charge Late Fee ..> Cancel Appointment : <<extend>>\n   Conditional ⇒ extend, from the extension to the base.VI: Có điều kiện ⇒ extend, từ use case mở rộng tới gốc.\n\n5. Can «include» connect an actor to a use case?«include» có nối actor với use case được không?\n   Answer: b) No — include/extend only connect use cases; actors use plain associations\n   A frequent PE mistake.VI: Lỗi hay gặp trong PE.\n"
+          "code": "# Use case anatomy 1 — «include» or «extend»? — answer key\n\n1. Every time a patient books an appointment, the system authenticates the patient. Booking ___ Authenticate.Mỗi lần đặt lịch, hệ thống xác thực bệnh nhân. Booking ___ Authenticate.\n   Answer: a) «include»\n   Always ⇒ include.VI: Luôn luôn ⇒ include.\n\n2. A patient MAY add a referral letter when booking. Attach Referral ___ Book Appointment.Bệnh nhân CÓ THỂ đính kèm giấy giới thiệu khi đặt lịch. Attach Referral ___ Book Appointment.\n   Answer: a) «extend»\n   Optional ⇒ extend, arrow from Attach Referral to Book Appointment.VI: Tuỳ chọn ⇒ extend, mũi tên từ Attach Referral tới Book Appointment.\n\n3. In PlantUML, which line is correct for \"Book Appointment always includes Pay Deposit\"?Trong PlantUML, dòng nào đúng cho \"Book Appointment luôn gộp Pay Deposit\"?\n   Answer: a) Book ..> Pay : <<include>>\n   Base → included, dashed.VI: Gốc → được gộp, nét đứt.\n\n4. A late-cancellation fee is charged only when a patient cancels less than 24 h before. Which is right?Phí huỷ muộn chỉ thu khi bệnh nhân huỷ trong vòng 24 giờ trước. Cái nào đúng?\n   Answer: b) Charge Late Fee ..> Cancel Appointment : <<extend>>\n   Conditional ⇒ extend, from the extension to the base.VI: Có điều kiện ⇒ extend, từ use case mở rộng tới gốc.\n\n5. Can «include» connect an actor to a use case?«include» có nối actor với use case được không?\n   Answer: a) No — include/extend only connect use cases; actors use plain associations\n   A frequent PE mistake.VI: Lỗi hay gặp trong PE.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: a · b · a · b · b.</p>",
+      "solutionExplanationHtml": "<p>Answers: a · a · a · b · a.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -67,7 +67,7 @@
               },
               {
                 "ma": "b",
-                "noiDung": "«extend»"
+                "noiDung": "association"
               },
               {
                 "ma": "c",
@@ -75,7 +75,7 @@
               },
               {
                 "ma": "d",
-                "noiDung": "association"
+                "noiDung": "«extend»"
               }
             ],
             "dapAn": [
@@ -89,23 +89,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "«include»"
-              },
-              {
-                "ma": "b",
                 "noiDung": "«extend»"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "generalization"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "nothing"
+              },
+              {
+                "ma": "d",
+                "noiDung": "«include»"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>Optional ⇒ extend, arrow from Attach Referral to Book Appointment.</p><p><i>VI: Tuỳ chọn ⇒ extend, mũi tên từ Attach Referral tới Book Appointment.</i></p>"
           },
@@ -119,15 +119,15 @@
               },
               {
                 "ma": "b",
-                "noiDung": "Pay ..> Book : &lt;&lt;include&gt;&gt;"
-              },
-              {
-                "ma": "c",
                 "noiDung": "Book --> Pay"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "Pay ..> Book : &lt;&lt;extend&gt;&gt;"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Pay ..> Book : &lt;&lt;include&gt;&gt;"
               }
             ],
             "dapAn": [
@@ -167,23 +167,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Yes"
-              },
-              {
-                "ma": "b",
                 "noiDung": "No — include/extend only connect use cases; actors use plain associations"
               },
               {
+                "ma": "b",
+                "noiDung": "Only with a dashed line"
+              },
+              {
                 "ma": "c",
-                "noiDung": "Only for external systems"
+                "noiDung": "Yes"
               },
               {
                 "ma": "d",
-                "noiDung": "Only with a dashed line"
+                "noiDung": "Only for external systems"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>A frequent PE mistake.</p><p><i>VI: Lỗi hay gặp trong PE.</i></p>"
           }
@@ -394,10 +394,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Use case anatomy 4 — actor generalization and primary/secondary actors — answer key\n\n1. In \"Pay Deposit\", the payment gateway is…Trong \"Pay Deposit\", cổng thanh toán là…\n   Answer: b) a secondary actor\n   The patient starts it; the gateway helps complete it.VI: Bệnh nhân khởi động; cổng thanh toán giúp hoàn tất.\n\n2. A Head Receptionist can do everything a Receptionist can, plus approve refunds. How do you draw it?Lễ tân trưởng làm được mọi việc của lễ tân, thêm duyệt hoàn tiền. Vẽ thế nào?\n   Answer: b) \"Head Receptionist\" --|> Receptionist, and link Head Receptionist to Approve Refund\n   Child --|> parent; the child adds its own use cases.VI: Con --|> cha; con thêm use case riêng.\n\n3. Which line is ILLEGAL in a use case diagram?Dòng nào SAI trong sơ đồ use case?\n   Answer: b) Patient --> Receptionist\n   Actors never interact with each other in a use case diagram.VI: Actor không bao giờ nối với nhau bằng association trong sơ đồ use case.\n"
+          "code": "# Use case anatomy 4 — actor generalization and primary/secondary actors — answer key\n\n1. In \"Pay Deposit\", the payment gateway is…Trong \"Pay Deposit\", cổng thanh toán là…\n   Answer: a) a secondary actor\n   The patient starts it; the gateway helps complete it.VI: Bệnh nhân khởi động; cổng thanh toán giúp hoàn tất.\n\n2. A Head Receptionist can do everything a Receptionist can, plus approve refunds. How do you draw it?Lễ tân trưởng làm được mọi việc của lễ tân, thêm duyệt hoàn tiền. Vẽ thế nào?\n   Answer: c) \"Head Receptionist\" --|> Receptionist, and link Head Receptionist to Approve Refund\n   Child --|> parent; the child adds its own use cases.VI: Con --|> cha; con thêm use case riêng.\n\n3. Which line is ILLEGAL in a use case diagram?Dòng nào SAI trong sơ đồ use case?\n   Answer: c) Patient --> Receptionist\n   Actors never interact with each other in a use case diagram.VI: Actor không bao giờ nối với nhau bằng association trong sơ đồ use case.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: b · b · b.</p>",
+      "solutionExplanationHtml": "<p>Answers: a · c · c.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -410,23 +410,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "the primary actor"
-              },
-              {
-                "ma": "b",
                 "noiDung": "a secondary actor"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "not an actor"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "a use case"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the primary actor"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>The patient starts it; the gateway helps complete it.</p><p><i>VI: Bệnh nhân khởi động; cổng thanh toán giúp hoàn tất.</i></p>"
           },
@@ -436,23 +436,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Receptionist --|> \"Head Receptionist\""
+                "noiDung": "«include» between the actors"
               },
               {
                 "ma": "b",
-                "noiDung": "\"Head Receptionist\" --|> Receptionist, and link Head Receptionist to Approve Refund"
+                "noiDung": "Receptionist --|> \"Head Receptionist\""
               },
               {
                 "ma": "c",
-                "noiDung": "Two unrelated actors linked to all the same use cases"
+                "noiDung": "\"Head Receptionist\" --|> Receptionist, and link Head Receptionist to Approve Refund"
               },
               {
                 "ma": "d",
-                "noiDung": "«include» between the actors"
+                "noiDung": "Two unrelated actors linked to all the same use cases"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Child --|> parent; the child adds its own use cases.</p><p><i>VI: Con --|> cha; con thêm use case riêng.</i></p>"
           },
@@ -462,23 +462,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Patient --> UC1"
-              },
-              {
-                "ma": "b",
-                "noiDung": "Patient --> Receptionist"
-              },
-              {
-                "ma": "c",
                 "noiDung": "UC3 ..> UC1 : <<extend>>"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "Doctor --|> Staff"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Patient --> Receptionist"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Patient --> UC1"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Actors never interact with each other in a use case diagram.</p><p><i>VI: Actor không bao giờ nối với nhau bằng association trong sơ đồ use case.</i></p>"
           }

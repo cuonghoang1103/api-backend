@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Review tips 1 — review challenges and remedies — answer key\n\n1. The SRS is 300 pages. Best approach?SRS dày 300 trang. Cách tốt nhất?\n   Answer: a) Review it incrementally as sections are written, focusing on high-risk parts\n   Small chunks, early, risk-based.VI: Từng phần nhỏ, sớm, theo rủi ro.\n\n2. 15 stakeholders want to attend the inspection. What do you do?15 bên liên quan muốn dự inspection. Làm gì?\n   Answer: b) Keep the meeting small; pick representatives of each perspective; let others review offline\n   Large teams slow decisions; choose perspectives.VI: Nhóm đông chậm quyết định; chọn đại diện góc nhìn.\n\n3. Several inspectors arrive without having read the document. What does the moderator do?Vài inspector tới mà chưa đọc tài liệu. Moderator làm gì?\n   Answer: a) Reschedule; preparation is essential\n   Most defects are found during preparation.VI: Phần lớn lỗi được tìm ra lúc chuẩn bị.\n\n4. Reviewers are in Hanoi, HCMC and Tokyo. Wiegers suggests…Người review ở Hà Nội, TP.HCM và Tokyo. Wiegers gợi ý…\n   Answer: a) collaborative review tools and asynchronous comments, with a short online meeting for disputed issues\n   Use tools and asynchronous review.VI: Dùng công cụ và review bất đồng bộ.\n"
+          "code": "# Review tips 1 — review challenges and remedies — answer key\n\n1. The SRS is 300 pages. Best approach?SRS dày 300 trang. Cách tốt nhất?\n   Answer: a) Review it incrementally as sections are written, focusing on high-risk parts\n   Small chunks, early, risk-based.VI: Từng phần nhỏ, sớm, theo rủi ro.\n\n2. 15 stakeholders want to attend the inspection. What do you do?15 bên liên quan muốn dự inspection. Làm gì?\n   Answer: d) Keep the meeting small; pick representatives of each perspective; let others review offline\n   Large teams slow decisions; choose perspectives.VI: Nhóm đông chậm quyết định; chọn đại diện góc nhìn.\n\n3. Several inspectors arrive without having read the document. What does the moderator do?Vài inspector tới mà chưa đọc tài liệu. Moderator làm gì?\n   Answer: a) Reschedule; preparation is essential\n   Most defects are found during preparation.VI: Phần lớn lỗi được tìm ra lúc chuẩn bị.\n\n4. Reviewers are in Hanoi, HCMC and Tokyo. Wiegers suggests…Người review ở Hà Nội, TP.HCM và Tokyo. Wiegers gợi ý…\n   Answer: a) collaborative review tools and asynchronous comments, with a short online meeting for disputed issues\n   Use tools and asynchronous review.VI: Dùng công cụ và review bất đồng bộ.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: a · b · a · a.</p>",
+      "solutionExplanationHtml": "<p>Answers: a · d · a · a.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -66,11 +66,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "One 8-hour meeting at the end"
+                "noiDung": "Skip the review"
               },
               {
                 "ma": "c",
-                "noiDung": "Skip the review"
+                "noiDung": "One 8-hour meeting at the end"
               },
               {
                 "ma": "d",
@@ -92,7 +92,7 @@
               },
               {
                 "ma": "b",
-                "noiDung": "Keep the meeting small; pick representatives of each perspective; let others review offline"
+                "noiDung": "Invite only developers"
               },
               {
                 "ma": "c",
@@ -100,11 +100,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "Invite only developers"
+                "noiDung": "Keep the meeting small; pick representatives of each perspective; let others review offline"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>Large teams slow decisions; choose perspectives.</p><p><i>VI: Nhóm đông chậm quyết định; chọn đại diện góc nhìn.</i></p>"
           },
@@ -144,11 +144,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "no review"
+                "noiDung": "flying everyone to one city every week"
               },
               {
                 "ma": "c",
-                "noiDung": "flying everyone to one city every week"
+                "noiDung": "no review"
               },
               {
                 "ma": "d",

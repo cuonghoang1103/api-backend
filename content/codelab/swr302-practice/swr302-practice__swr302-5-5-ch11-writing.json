@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Writing 1 — system or user perspective? — answer key\n\n1. Which follows the guidelines?Câu nào theo hướng dẫn?\n   Answer: b) The system shall send a reminder to the tenant 3 days before the rent is due.\n   Active voice, an actor, a time, a recipient.VI: Chủ động, có chủ thể, thời điểm, người nhận.\n\n2. \"The rent shall be calculated.\" What is the problem?\"The rent shall be calculated.\" Vấn đề là gì?\n   Answer: a) Passive voice hides WHO calculates it and HOW\n   Rewrite in active voice with the rule.VI: Viết lại chủ động kèm luật tính.\n\n3. \"The tenant shall be able to cancel a viewing\" is written from…\"The tenant shall be able to cancel a viewing\" viết từ…\n   Answer: b) the user’s perspective — acceptable\n   Both perspectives are acceptable; be consistent.VI: Cả hai góc nhìn đều được; hãy nhất quán.\n"
+          "code": "# Writing 1 — system or user perspective? — answer key\n\n1. Which follows the guidelines?Câu nào theo hướng dẫn?\n   Answer: a) The system shall send a reminder to the tenant 3 days before the rent is due.\n   Active voice, an actor, a time, a recipient.VI: Chủ động, có chủ thể, thời điểm, người nhận.\n\n2. \"The rent shall be calculated.\" What is the problem?\"The rent shall be calculated.\" Vấn đề là gì?\n   Answer: b) Passive voice hides WHO calculates it and HOW\n   Rewrite in active voice with the rule.VI: Viết lại chủ động kèm luật tính.\n\n3. \"The tenant shall be able to cancel a viewing\" is written from…\"The tenant shall be able to cancel a viewing\" viết từ…\n   Answer: a) the user’s perspective — acceptable\n   Both perspectives are acceptable; be consistent.VI: Cả hai góc nhìn đều được; hãy nhất quán.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: b · a · b.</p>",
+      "solutionExplanationHtml": "<p>Answers: a · b · a.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -62,11 +62,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "A reminder will be sent."
+                "noiDung": "The system shall send a reminder to the tenant 3 days before the rent is due."
               },
               {
                 "ma": "b",
-                "noiDung": "The system shall send a reminder to the tenant 3 days before the rent is due."
+                "noiDung": "Send reminders, maybe by SMS or e-mail etc."
               },
               {
                 "ma": "c",
@@ -74,11 +74,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "Send reminders, maybe by SMS or e-mail etc."
+                "noiDung": "A reminder will be sent."
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>Active voice, an actor, a time, a recipient.</p><p><i>VI: Chủ động, có chủ thể, thời điểm, người nhận.</i></p>"
           },
@@ -88,23 +88,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Passive voice hides WHO calculates it and HOW"
-              },
-              {
-                "ma": "b",
                 "noiDung": "It is too long"
               },
               {
+                "ma": "b",
+                "noiDung": "Passive voice hides WHO calculates it and HOW"
+              },
+              {
                 "ma": "c",
-                "noiDung": "It uses shall"
+                "noiDung": "Nothing"
               },
               {
                 "ma": "d",
-                "noiDung": "Nothing"
+                "noiDung": "It uses shall"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>Rewrite in active voice with the rule.</p><p><i>VI: Viết lại chủ động kèm luật tính.</i></p>"
           },
@@ -114,11 +114,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "the system’s perspective"
+                "noiDung": "the user’s perspective — acceptable"
               },
               {
                 "ma": "b",
-                "noiDung": "the user’s perspective — acceptable"
+                "noiDung": "no perspective"
               },
               {
                 "ma": "c",
@@ -126,11 +126,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "no perspective"
+                "noiDung": "the system’s perspective"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>Both perspectives are acceptable; be consistent.</p><p><i>VI: Cả hai góc nhìn đều được; hãy nhất quán.</i></p>"
           }

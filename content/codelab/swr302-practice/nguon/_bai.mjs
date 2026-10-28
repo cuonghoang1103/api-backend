@@ -40,17 +40,39 @@ export function phanLoai(q) {
   });
 }
 
+/** Xáo phương án theo hạt giống cố định (băm câu hỏi) ⇒ đáp án không dồn về "a", mỗi lần xuất vẫn như nhau. */
+function xao(c) {
+  if (c.giuThuTu) return { lc: c.lc, dap: c.dap };
+  let h = 2166136261;
+  for (const ch of String(c.en)) { h ^= ch.codePointAt(0); h = Math.imul(h, 16777619) >>> 0; }
+  const idx = c.lc.map((_, i) => i);
+  for (let i = idx.length - 1; i > 0; i--) {
+    h = (Math.imul(h, 1103515245) + 12345) >>> 0;
+    const j = h % (i + 1);
+    [idx[i], idx[j]] = [idx[j], idx[i]];
+  }
+  const doi = {};
+  const lc = idx.map((cu, moi) => { doi[c.lc[cu][0]] = LC[moi]; return [LC[moi], c.lc[cu][1]]; });
+  const dap = Array.isArray(c.dap) ? c.dap.map((d) => doi[d]).sort() : doi[c.dap];
+  return { lc, dap };
+}
+
 export function tracNghiem(q) {
-  const { cau, ...rest } = q;
+  const { cau, giuThuTu, ...rest } = q;
+  const da = cau.map((c) => xao(giuThuTu ? { ...c, giuThuTu } : c));
+  let giaiThich = rest.giaiThich;
+  const m = typeof giaiThich === 'string' && /^<p>Answers: [a-j ·,+]+(\.| — )/.exec(giaiThich);
+  if (m) giaiThich = `<p>Answers: ${da.map((x) => (Array.isArray(x.dap) ? x.dap.join('+') : x.dap)).join(' · ')}${m[1]}${giaiThich.slice(m[0].length)}`;
   return tinhDe({
     ...rest,
+    giaiThich,
     moTa: duMoTa(rest.moTa, 'choice'),
     loai: 'choice',
     cauHoi: cau.map((c, i) => ({
       ma: `q${i + 1}`,
       de: hai(c.en, c.vi),
-      luaChon: lcGoc(...c.lc),
-      dapAn: Array.isArray(c.dap) ? (c.nhieu ? [c.dap] : c.dap) : [c.dap],
+      luaChon: lcGoc(...da[i].lc),
+      dapAn: Array.isArray(da[i].dap) ? (c.nhieu ? [da[i].dap] : da[i].dap) : [da[i].dap],
       ...(c.nhieu ? { nhieu: true } : {}),
       giaiThich: giai(c.giai[0], c.giai[1]),
     })),

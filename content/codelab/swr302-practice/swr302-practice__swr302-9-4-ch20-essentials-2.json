@@ -179,10 +179,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Agile essentials 5 — timing and expecting change — answer key\n\n1. When are the details of a story usually worked out?Chi tiết của story thường được làm rõ khi nào?\n   Answer: a) In the iteration that implements it (just in time)\n   Figure 20-1.VI: Hình 20-1.\n\n2. Which requirements should be explored early even on agile projects?Yêu cầu nào nên tìm hiểu sớm kể cả trong agile?\n   Answer: a) Nonfunctional requirements that shape the architecture (performance, security, scalability)\n   They are costly to retrofit.VI: Thêm sau rất tốn.\n\n3. The client asks to add a feature mid-project. The agile BA’s first response is…Khách xin thêm tính năng giữa dự án. Phản ứng đầu tiên của BA agile là…\n   Answer: a) \"Okay, let’s talk about the change\" — write the story and prioritise it against the backlog\n   Embrace change, but manage it.VI: Đón nhận thay đổi nhưng có quản lý.\n\n4. Change in agile can also mean…Thay đổi trong agile cũng có thể là…\n   Answer: a) removing items from the backlog that are no longer valuable\n   Dropping work is a change too.VI: Bỏ việc cũng là thay đổi.\n"
+          "code": "# Agile essentials 5 — timing and expecting change — answer key\n\n1. When are the details of a story usually worked out?Chi tiết của story thường được làm rõ khi nào?\n   Answer: b) In the iteration that implements it (just in time)\n   Figure 20-1.VI: Hình 20-1.\n\n2. Which requirements should be explored early even on agile projects?Yêu cầu nào nên tìm hiểu sớm kể cả trong agile?\n   Answer: c) Nonfunctional requirements that shape the architecture (performance, security, scalability)\n   They are costly to retrofit.VI: Thêm sau rất tốn.\n\n3. The client asks to add a feature mid-project. The agile BA’s first response is…Khách xin thêm tính năng giữa dự án. Phản ứng đầu tiên của BA agile là…\n   Answer: b) \"Okay, let’s talk about the change\" — write the story and prioritise it against the backlog\n   Embrace change, but manage it.VI: Đón nhận thay đổi nhưng có quản lý.\n\n4. Change in agile can also mean…Thay đổi trong agile cũng có thể là…\n   Answer: c) removing items from the backlog that are no longer valuable\n   Dropping work is a change too.VI: Bỏ việc cũng là thay đổi.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: a · a · a · a.</p>",
+      "solutionExplanationHtml": "<p>Answers: b · c · b · c.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -195,23 +195,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "In the iteration that implements it (just in time)"
-              },
-              {
-                "ma": "b",
                 "noiDung": "All at the start of the project"
               },
               {
+                "ma": "b",
+                "noiDung": "In the iteration that implements it (just in time)"
+              },
+              {
                 "ma": "c",
-                "noiDung": "After release"
+                "noiDung": "Never"
               },
               {
                 "ma": "d",
-                "noiDung": "Never"
+                "noiDung": "After release"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>Figure 20-1.</p><p><i>VI: Hình 20-1.</i></p>"
           },
@@ -221,7 +221,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Nonfunctional requirements that shape the architecture (performance, security, scalability)"
+                "noiDung": "Report fonts"
               },
               {
                 "ma": "b",
@@ -229,7 +229,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "Report fonts"
+                "noiDung": "Nonfunctional requirements that shape the architecture (performance, security, scalability)"
               },
               {
                 "ma": "d",
@@ -237,7 +237,7 @@
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>They are costly to retrofit.</p><p><i>VI: Thêm sau rất tốn.</i></p>"
           },
@@ -247,23 +247,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "\"Okay, let’s talk about the change\" — write the story and prioritise it against the backlog"
+                "noiDung": "Ignore it until the end"
               },
               {
                 "ma": "b",
-                "noiDung": "\"No changes allowed\""
+                "noiDung": "\"Okay, let’s talk about the change\" — write the story and prioritise it against the backlog"
               },
               {
                 "ma": "c",
-                "noiDung": "Start coding it immediately"
+                "noiDung": "\"No changes allowed\""
               },
               {
                 "ma": "d",
-                "noiDung": "Ignore it until the end"
+                "noiDung": "Start coding it immediately"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>Embrace change, but manage it.</p><p><i>VI: Đón nhận thay đổi nhưng có quản lý.</i></p>"
           },
@@ -273,23 +273,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "removing items from the backlog that are no longer valuable"
-              },
-              {
-                "ma": "b",
-                "noiDung": "only adding items"
-              },
-              {
-                "ma": "c",
                 "noiDung": "changing the team every sprint"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "rewriting the vision daily"
+              },
+              {
+                "ma": "c",
+                "noiDung": "removing items from the backlog that are no longer valuable"
+              },
+              {
+                "ma": "d",
+                "noiDung": "only adding items"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>Dropping work is a change too.</p><p><i>VI: Bỏ việc cũng là thay đổi.</i></p>"
           }
@@ -496,10 +496,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Agile essentials 7 — transitioning to agile — answer key\n\n1. Your company has never used agile. Best first step?Công ty chưa từng dùng agile. Bước đầu tốt nhất?\n   Answer: a) Pilot agile on a small project, or adopt a few low-risk practices\n   Transition incrementally.VI: Chuyển đổi từng bước.\n\n2. In agile, does the BA role disappear?Trong agile, vai trò BA có biến mất không?\n   Answer: a) No — the BA may act as or support the product owner and keep doing requirements work continuously\n   The activities remain; the timing changes.VI: Hoạt động vẫn còn; thời điểm thay đổi.\n"
+          "code": "# Agile essentials 7 — transitioning to agile — answer key\n\n1. Your company has never used agile. Best first step?Công ty chưa từng dùng agile. Bước đầu tốt nhất?\n   Answer: b) Pilot agile on a small project, or adopt a few low-risk practices\n   Transition incrementally.VI: Chuyển đổi từng bước.\n\n2. In agile, does the BA role disappear?Trong agile, vai trò BA có biến mất không?\n   Answer: d) No — the BA may act as or support the product owner and keep doing requirements work continuously\n   The activities remain; the timing changes.VI: Hoạt động vẫn còn; thời điểm thay đổi.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: a · a.</p>",
+      "solutionExplanationHtml": "<p>Answers: b · d.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -512,23 +512,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Pilot agile on a small project, or adopt a few low-risk practices"
+                "noiDung": "Fire the BAs"
               },
               {
                 "ma": "b",
-                "noiDung": "Switch every project to Scrum tomorrow"
+                "noiDung": "Pilot agile on a small project, or adopt a few low-risk practices"
               },
               {
                 "ma": "c",
-                "noiDung": "Stop writing requirements"
+                "noiDung": "Switch every project to Scrum tomorrow"
               },
               {
                 "ma": "d",
-                "noiDung": "Fire the BAs"
+                "noiDung": "Stop writing requirements"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>Transition incrementally.</p><p><i>VI: Chuyển đổi từng bước.</i></p>"
           },
@@ -538,23 +538,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "No — the BA may act as or support the product owner and keep doing requirements work continuously"
-              },
-              {
-                "ma": "b",
                 "noiDung": "Yes, always"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "Only in big teams"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "Only testers remain"
+              },
+              {
+                "ma": "d",
+                "noiDung": "No — the BA may act as or support the product owner and keep doing requirements work continuously"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>The activities remain; the timing changes.</p><p><i>VI: Hoạt động vẫn còn; thời điểm thay đổi.</i></p>"
           }

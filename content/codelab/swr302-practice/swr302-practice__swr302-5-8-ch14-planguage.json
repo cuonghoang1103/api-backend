@@ -208,10 +208,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Planguage 2 — read a Planguage requirement — answer key\n\n1. The release measures 2.6 s. Is the requirement satisfied?Bản phát hành đo được 2,6 giây. Đạt yêu cầu không?\n   Answer: a) Yes — the GOAL (≤ 3 s) is met; STRETCH is not\n   Only GOAL is mandatory.VI: Chỉ GOAL là bắt buộc.\n\n2. Which line tells the tester how to measure?Dòng nào cho tester biết đo thế nào?\n   Answer: b) METER\n   METER is the measuring method.VI: METER là phương pháp đo.\n\n3. The word \"quickly\" appears in AMBITION. Is that a problem?AMBITION có chữ \"quickly\". Có sao không?\n   Answer: a) No — AMBITION states intent; SCALE, METER and GOAL make it precise\n   The precision lives in the other keywords.VI: Độ chính xác nằm ở các từ khoá khác.\n"
+          "code": "# Planguage 2 — read a Planguage requirement — answer key\n\n1. The release measures 2.6 s. Is the requirement satisfied?Bản phát hành đo được 2,6 giây. Đạt yêu cầu không?\n   Answer: a) Yes — the GOAL (≤ 3 s) is met; STRETCH is not\n   Only GOAL is mandatory.VI: Chỉ GOAL là bắt buộc.\n\n2. Which line tells the tester how to measure?Dòng nào cho tester biết đo thế nào?\n   Answer: c) METER\n   METER is the measuring method.VI: METER là phương pháp đo.\n\n3. The word \"quickly\" appears in AMBITION. Is that a problem?AMBITION có chữ \"quickly\". Có sao không?\n   Answer: a) No — AMBITION states intent; SCALE, METER and GOAL make it precise\n   The precision lives in the other keywords.VI: Độ chính xác nằm ở các từ khoá khác.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: a · b · a.</p>",
+      "solutionExplanationHtml": "<p>Answers: a · c · a.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -228,7 +228,7 @@
               },
               {
                 "ma": "b",
-                "noiDung": "No — the WISH is not met"
+                "noiDung": "Cannot tell"
               },
               {
                 "ma": "c",
@@ -236,7 +236,7 @@
               },
               {
                 "ma": "d",
-                "noiDung": "Cannot tell"
+                "noiDung": "No — the WISH is not met"
               }
             ],
             "dapAn": [
@@ -254,11 +254,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "METER"
+                "noiDung": "AMBITION"
               },
               {
                 "ma": "c",
-                "noiDung": "AMBITION"
+                "noiDung": "METER"
               },
               {
                 "ma": "d",
@@ -266,7 +266,7 @@
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>METER is the measuring method.</p><p><i>VI: METER là phương pháp đo.</i></p>"
           },
@@ -280,11 +280,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "Yes — remove the whole requirement"
+                "noiDung": "Yes — AMBITION must contain a number"
               },
               {
                 "ma": "c",
-                "noiDung": "Yes — AMBITION must contain a number"
+                "noiDung": "Yes — remove the whole requirement"
               },
               {
                 "ma": "d",

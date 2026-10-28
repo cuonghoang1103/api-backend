@@ -196,10 +196,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Constraints 2 — translating quality attributes into design and code — answer key\n\n1. A reliability requirement \"no lost bookings after a crash\" most likely leads to…Yêu cầu tin cậy \"không mất lịch hẹn sau sự cố\" dẫn tới…\n   Answer: a) transaction logging and recovery design\n   Reliability ⇒ architecture choices.VI: Tin cậy ⇒ lựa chọn kiến trúc.\n\n2. An availability goal of 99.9% usually requires…Mục tiêu sẵn sàng 99,9% thường đòi hỏi…\n   Answer: a) redundant servers and failover\n   High availability is a structural decision.VI: Sẵn sàng cao là quyết định cấu trúc.\n\n3. Which is a derived functional requirement of \"accounts lock after 5 failed logins\"?Yêu cầu chức năng phái sinh của \"khoá tài khoản sau 5 lần đăng nhập sai\"?\n   Answer: a) The system shall let an administrator unlock a locked account.\n   Someone must be able to undo the lock.VI: Phải có cách mở khoá.\n"
+          "code": "# Constraints 2 — translating quality attributes into design and code — answer key\n\n1. A reliability requirement \"no lost bookings after a crash\" most likely leads to…Yêu cầu tin cậy \"không mất lịch hẹn sau sự cố\" dẫn tới…\n   Answer: d) transaction logging and recovery design\n   Reliability ⇒ architecture choices.VI: Tin cậy ⇒ lựa chọn kiến trúc.\n\n2. An availability goal of 99.9% usually requires…Mục tiêu sẵn sàng 99,9% thường đòi hỏi…\n   Answer: a) redundant servers and failover\n   High availability is a structural decision.VI: Sẵn sàng cao là quyết định cấu trúc.\n\n3. Which is a derived functional requirement of \"accounts lock after 5 failed logins\"?Yêu cầu chức năng phái sinh của \"khoá tài khoản sau 5 lần đăng nhập sai\"?\n   Answer: d) The system shall let an administrator unlock a locked account.\n   Someone must be able to undo the lock.VI: Phải có cách mở khoá.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: a · a · a.</p>",
+      "solutionExplanationHtml": "<p>Answers: d · a · d.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -212,11 +212,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "transaction logging and recovery design"
+                "noiDung": "a new colour scheme"
               },
               {
                 "ma": "b",
-                "noiDung": "a new colour scheme"
+                "noiDung": "nothing"
               },
               {
                 "ma": "c",
@@ -224,11 +224,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "nothing"
+                "noiDung": "transaction logging and recovery design"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>Reliability ⇒ architecture choices.</p><p><i>VI: Tin cậy ⇒ lựa chọn kiến trúc.</i></p>"
           },
@@ -242,7 +242,7 @@
               },
               {
                 "ma": "b",
-                "noiDung": "a longer SRS"
+                "noiDung": "more test cases only"
               },
               {
                 "ma": "c",
@@ -250,7 +250,7 @@
               },
               {
                 "ma": "d",
-                "noiDung": "more test cases only"
+                "noiDung": "a longer SRS"
               }
             ],
             "dapAn": [
@@ -264,23 +264,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "The system shall let an administrator unlock a locked account."
-              },
-              {
-                "ma": "b",
                 "noiDung": "The login page shall be blue."
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "Use PostgreSQL."
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "Train the users."
+              },
+              {
+                "ma": "d",
+                "noiDung": "The system shall let an administrator unlock a locked account."
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>Someone must be able to undo the lock.</p><p><i>VI: Phải có cách mở khoá.</i></p>"
           }
@@ -347,10 +347,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Constraints 3 — quality requirements in agile projects — answer key\n\n1. \"Every screen must meet WCAG 2.2 AA.\" Where does it belong best?\"Mọi màn hình phải đạt WCAG 2.2 AA.\" Đặt ở đâu tốt nhất?\n   Answer: a) In the Definition of Done\n   It applies to every story.VI: Nó áp cho mọi story.\n\n2. \"Search returns in 1 s\" for the search story belongs…\"Tìm kiếm trả về trong 1 giây\" của story tìm kiếm thuộc…\n   Answer: a) in the acceptance criteria of that story\n   Specific to one story ⇒ its acceptance criteria.VI: Riêng một story ⇒ tiêu chí chấp nhận của story đó.\n\n3. Why must scalability be discussed in the first iterations?Vì sao phải bàn khả năng mở rộng từ những vòng đầu?\n   Answer: a) It shapes the architecture; adding it later costs much more\n   Architecture-shaping attributes need early attention.VI: Thuộc tính định hình kiến trúc cần chú ý sớm.\n"
+          "code": "# Constraints 3 — quality requirements in agile projects — answer key\n\n1. \"Every screen must meet WCAG 2.2 AA.\" Where does it belong best?\"Mọi màn hình phải đạt WCAG 2.2 AA.\" Đặt ở đâu tốt nhất?\n   Answer: b) In the Definition of Done\n   It applies to every story.VI: Nó áp cho mọi story.\n\n2. \"Search returns in 1 s\" for the search story belongs…\"Tìm kiếm trả về trong 1 giây\" của story tìm kiếm thuộc…\n   Answer: a) in the acceptance criteria of that story\n   Specific to one story ⇒ its acceptance criteria.VI: Riêng một story ⇒ tiêu chí chấp nhận của story đó.\n\n3. Why must scalability be discussed in the first iterations?Vì sao phải bàn khả năng mở rộng từ những vòng đầu?\n   Answer: a) It shapes the architecture; adding it later costs much more\n   Architecture-shaping attributes need early attention.VI: Thuộc tính định hình kiến trúc cần chú ý sớm.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: a · a · a.</p>",
+      "solutionExplanationHtml": "<p>Answers: b · a · a.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -363,23 +363,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "In the Definition of Done"
-              },
-              {
-                "ma": "b",
                 "noiDung": "In one user story only"
               },
               {
+                "ma": "b",
+                "noiDung": "In the Definition of Done"
+              },
+              {
                 "ma": "c",
-                "noiDung": "Nowhere"
+                "noiDung": "In the retrospective notes"
               },
               {
                 "ma": "d",
-                "noiDung": "In the retrospective notes"
+                "noiDung": "Nowhere"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>It applies to every story.</p><p><i>VI: Nó áp cho mọi story.</i></p>"
           },
@@ -419,15 +419,15 @@
               },
               {
                 "ma": "b",
-                "noiDung": "Because agile forbids it later"
-              },
-              {
-                "ma": "c",
                 "noiDung": "Only to please the PO"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "It does not matter"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Because agile forbids it later"
               }
             ],
             "dapAn": [

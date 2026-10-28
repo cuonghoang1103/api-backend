@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# DFD 1 — the four symbols and the rules — answer key\n\n1. Which is a well-named process?Process nào đặt tên tốt?\n   Answer: b) 2.0 Validate order\n   Number + verb phrase.VI: Số + cụm động từ.\n\n2. May a customer write directly into the Orders store?Khách hàng có được ghi thẳng vào kho Orders không?\n   Answer: b) No — data must pass through a process\n   Entity → store directly is illegal.VI: Thực thể → kho trực tiếp là sai.\n\n3. A process with inputs but no outputs is a…Process có vào mà không có ra là…\n   Answer: b) black hole\n   Inputs disappear — a black hole.VI: Dữ liệu vào biến mất — hố đen.\n\n4. A process with outputs but no inputs is a…Process có ra mà không có vào là…\n   Answer: a) miracle\n   Data from nowhere — a miracle.VI: Dữ liệu từ hư không — phép màu.\n\n5. Balancing between levels means…Cân bằng giữa các mức nghĩa là…\n   Answer: b) the flows into and out of a process appear, with the same names and directions, on the diagram that decomposes it\n   Nothing added, nothing dropped, same names.VI: Không thêm, không bớt, cùng tên.\n"
+          "code": "# DFD 1 — the four symbols and the rules — answer key\n\n1. Which is a well-named process?Process nào đặt tên tốt?\n   Answer: a) 2.0 Validate order\n   Number + verb phrase.VI: Số + cụm động từ.\n\n2. May a customer write directly into the Orders store?Khách hàng có được ghi thẳng vào kho Orders không?\n   Answer: c) No — data must pass through a process\n   Entity → store directly is illegal.VI: Thực thể → kho trực tiếp là sai.\n\n3. A process with inputs but no outputs is a…Process có vào mà không có ra là…\n   Answer: a) black hole\n   Inputs disappear — a black hole.VI: Dữ liệu vào biến mất — hố đen.\n\n4. A process with outputs but no inputs is a…Process có ra mà không có vào là…\n   Answer: b) miracle\n   Data from nowhere — a miracle.VI: Dữ liệu từ hư không — phép màu.\n\n5. Balancing between levels means…Cân bằng giữa các mức nghĩa là…\n   Answer: c) the flows into and out of a process appear, with the same names and directions, on the diagram that decomposes it\n   Nothing added, nothing dropped, same names.VI: Không thêm, không bớt, cùng tên.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: b · b · b · a · b.</p>",
+      "solutionExplanationHtml": "<p>Answers: a · c · a · b · c.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -62,23 +62,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "2.0 Orders"
-              },
-              {
-                "ma": "b",
                 "noiDung": "2.0 Validate order"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "2.0 Order DB"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "2.0 Customer"
+              },
+              {
+                "ma": "d",
+                "noiDung": "2.0 Orders"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>Number + verb phrase.</p><p><i>VI: Số + cụm động từ.</i></p>"
           },
@@ -92,11 +92,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "No — data must pass through a process"
+                "noiDung": "Only on level 0"
               },
               {
                 "ma": "c",
-                "noiDung": "Only on level 0"
+                "noiDung": "No — data must pass through a process"
               },
               {
                 "ma": "d",
@@ -104,7 +104,7 @@
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Entity → store directly is illegal.</p><p><i>VI: Thực thể → kho trực tiếp là sai.</i></p>"
           },
@@ -114,11 +114,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "miracle"
+                "noiDung": "black hole"
               },
               {
                 "ma": "b",
-                "noiDung": "black hole"
+                "noiDung": "data store"
               },
               {
                 "ma": "c",
@@ -126,11 +126,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "data store"
+                "noiDung": "miracle"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>Inputs disappear — a black hole.</p><p><i>VI: Dữ liệu vào biến mất — hố đen.</i></p>"
           },
@@ -140,23 +140,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "miracle"
-              },
-              {
-                "ma": "b",
                 "noiDung": "black hole"
               },
               {
+                "ma": "b",
+                "noiDung": "miracle"
+              },
+              {
                 "ma": "c",
-                "noiDung": "context"
+                "noiDung": "balancing"
               },
               {
                 "ma": "d",
-                "noiDung": "balancing"
+                "noiDung": "context"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>Data from nowhere — a miracle.</p><p><i>VI: Dữ liệu từ hư không — phép màu.</i></p>"
           },
@@ -166,23 +166,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "every level has the same number of processes"
+                "noiDung": "stores are balanced in size"
               },
               {
                 "ma": "b",
-                "noiDung": "the flows into and out of a process appear, with the same names and directions, on the diagram that decomposes it"
+                "noiDung": "every level has the same number of processes"
               },
               {
                 "ma": "c",
-                "noiDung": "the diagram is symmetrical"
+                "noiDung": "the flows into and out of a process appear, with the same names and directions, on the diagram that decomposes it"
               },
               {
                 "ma": "d",
-                "noiDung": "stores are balanced in size"
+                "noiDung": "the diagram is symmetrical"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Nothing added, nothing dropped, same names.</p><p><i>VI: Không thêm, không bớt, cùng tên.</i></p>"
           }

@@ -438,10 +438,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Elicitation planning 4 — the elicitation plan — answer key\n\n1. Which item does NOT belong in an elicitation plan?Mục nào KHÔNG thuộc kế hoạch khai thác?\n   Answer: c) The database schema\n   The database design is not part of planning elicitation.VI: Thiết kế CSDL không thuộc kế hoạch khai thác.\n\n2. Why plan the ORDER of techniques?Vì sao phải lập THỨ TỰ kỹ thuật?\n   Answer: b) Early techniques (document analysis, interviews) prepare later ones (workshops, prototypes)\n   You arrive at a workshop with a straw-man model from the earlier work.VI: Bạn tới workshop với mô hình nháp từ các bước trước.\n\n3. A risk of the dormitory elicitation is that students are on holiday in August. Where do you write it?Một rủi ro của việc khai thác KTX là sinh viên nghỉ hè tháng 8. Ghi ở đâu?\n   Answer: b) In the risks of the elicitation plan, with a mitigation such as an online questionnaire\n   Planned risks come with mitigations.VI: Rủi ro được lập kế hoạch kèm cách giảm thiểu.\n"
+          "code": "# Elicitation planning 4 — the elicitation plan — answer key\n\n1. Which item does NOT belong in an elicitation plan?Mục nào KHÔNG thuộc kế hoạch khai thác?\n   Answer: d) The database schema\n   The database design is not part of planning elicitation.VI: Thiết kế CSDL không thuộc kế hoạch khai thác.\n\n2. Why plan the ORDER of techniques?Vì sao phải lập THỨ TỰ kỹ thuật?\n   Answer: d) Early techniques (document analysis, interviews) prepare later ones (workshops, prototypes)\n   You arrive at a workshop with a straw-man model from the earlier work.VI: Bạn tới workshop với mô hình nháp từ các bước trước.\n\n3. A risk of the dormitory elicitation is that students are on holiday in August. Where do you write it?Một rủi ro của việc khai thác KTX là sinh viên nghỉ hè tháng 8. Ghi ở đâu?\n   Answer: a) In the risks of the elicitation plan, with a mitigation such as an online questionnaire\n   Planned risks come with mitigations.VI: Rủi ro được lập kế hoạch kèm cách giảm thiểu.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: c · b · b.</p>",
+      "solutionExplanationHtml": "<p>Answers: d · d · a.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -454,23 +454,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Elicitation objectives"
+                "noiDung": "Expected products of each session"
               },
               {
                 "ma": "b",
-                "noiDung": "Planned techniques and their order"
+                "noiDung": "Elicitation objectives"
               },
               {
                 "ma": "c",
-                "noiDung": "The database schema"
+                "noiDung": "Planned techniques and their order"
               },
               {
                 "ma": "d",
-                "noiDung": "Expected products of each session"
+                "noiDung": "The database schema"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>The database design is not part of planning elicitation.</p><p><i>VI: Thiết kế CSDL không thuộc kế hoạch khai thác.</i></p>"
           },
@@ -480,23 +480,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "It does not matter"
-              },
-              {
-                "ma": "b",
-                "noiDung": "Early techniques (document analysis, interviews) prepare later ones (workshops, prototypes)"
-              },
-              {
-                "ma": "c",
                 "noiDung": "To please the sponsor"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "Because tools require it"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It does not matter"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Early techniques (document analysis, interviews) prepare later ones (workshops, prototypes)"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>You arrive at a workshop with a straw-man model from the earlier work.</p><p><i>VI: Bạn tới workshop với mô hình nháp từ các bước trước.</i></p>"
           },
@@ -506,11 +506,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Nowhere"
+                "noiDung": "In the risks of the elicitation plan, with a mitigation such as an online questionnaire"
               },
               {
                 "ma": "b",
-                "noiDung": "In the risks of the elicitation plan, with a mitigation such as an online questionnaire"
+                "noiDung": "In the code comments"
               },
               {
                 "ma": "c",
@@ -518,11 +518,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "In the code comments"
+                "noiDung": "Nowhere"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>Planned risks come with mitigations.</p><p><i>VI: Rủi ro được lập kế hoạch kèm cách giảm thiểu.</i></p>"
           }

@@ -193,17 +193,17 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Ambiguity 2 — boundary values\n\nAnswer in the answer panel (no code needed).\n\n1. In the original wording, 5 days falls into…Với cách viết gốc, 5 ngày rơi vào…\n2. Which rewrite is unambiguous?Cách viết lại nào không mơ hồ?\n3. Option b leaves which values uncovered?Phương án b bỏ sót giá trị nào?\n"
+          "code": "# Ambiguity 2 — boundary values\n\nAnswer in the answer panel (no code needed).\n\n1. In the original wording, 5 days falls into…Với cách viết gốc, 5 ngày rơi vào…\n2. Which rewrite is unambiguous?Cách viết lại nào không mơ hồ?\n3. The rewrite \" 5 and 10: management\" leaves which values uncovered?Cách viết \" 5 và 10: ban giám đốc\" bỏ sót giá trị nào?\n"
         }
       ],
       "solutionCodeJson": [
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Ambiguity 2 — boundary values — answer key\n\n1. In the original wording, 5 days falls into…Với cách viết gốc, 5 ngày rơi vào…\n   Answer: b) both the first and the second rule — overlap\n   \"up to 5\" and \"5 to 10\" both include 5.VI: \"tới 5\" và \"5 tới 10\" đều chứa 5.\n\n2. Which rewrite is unambiguous?Cách viết lại nào không mơ hồ?\n   Answer: a) ≤ 5 days: none; 6–10 days: supervisor; > 10 days: management (whole days)\n   Every whole number falls into exactly one rule.VI: Mỗi số nguyên rơi đúng vào một luật.\n\n3. Option b leaves which values uncovered?Phương án b bỏ sót giá trị nào?\n   Answer: b) Exactly 5 and exactly 10\n   Strict inequalities on both sides create gaps.VI: Bất đẳng thức nghiêm ngặt hai phía tạo khoảng trống.\n"
+          "code": "# Ambiguity 2 — boundary values — answer key\n\n1. In the original wording, 5 days falls into…Với cách viết gốc, 5 ngày rơi vào…\n   Answer: d) both the first and the second rule — overlap\n   \"up to 5\" and \"5 to 10\" both include 5.VI: \"tới 5\" và \"5 tới 10\" đều chứa 5.\n\n2. Which rewrite is unambiguous?Cách viết lại nào không mơ hồ?\n   Answer: c) ≤ 5 days: none; 6–10 days: supervisor; > 10 days: management (whole days)\n   Every whole number falls into exactly one rule.VI: Mỗi số nguyên rơi đúng vào một luật.\n\n3. The rewrite \" 5 and 10: management\" leaves which values uncovered?Cách viết \" 5 và 10: ban giám đốc\" bỏ sót giá trị nào?\n   Answer: c) Exactly 5 and exactly 10\n   Strict inequalities on both sides create gaps.VI: Bất đẳng thức nghiêm ngặt hai phía tạo khoảng trống.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: b · a · b.</p>",
+      "solutionExplanationHtml": "<p>Answers: d · c · c.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -216,23 +216,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "only the first rule"
-              },
-              {
-                "ma": "b",
-                "noiDung": "both the first and the second rule — overlap"
-              },
-              {
-                "ma": "c",
                 "noiDung": "no rule — gap"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "the third rule"
+              },
+              {
+                "ma": "c",
+                "noiDung": "only the first rule"
+              },
+              {
+                "ma": "d",
+                "noiDung": "both the first and the second rule — overlap"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>\"up to 5\" and \"5 to 10\" both include 5.</p><p><i>VI: \"tới 5\" và \"5 tới 10\" đều chứa 5.</i></p>"
           },
@@ -242,49 +242,49 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "≤ 5 days: none; 6–10 days: supervisor; > 10 days: management (whole days)"
-              },
-              {
-                "ma": "b",
-                "noiDung": "< 5: none; > 5 and < 10: supervisor; > 10: management"
-              },
-              {
-                "ma": "c",
                 "noiDung": "Short: none; medium: supervisor; long: management"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "0–5: none; 5–10: supervisor; 10+: management"
+              },
+              {
+                "ma": "c",
+                "noiDung": "≤ 5 days: none; 6–10 days: supervisor; > 10 days: management (whole days)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "< 5: none; > 5 and < 10: supervisor; > 10: management"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>Every whole number falls into exactly one rule.</p><p><i>VI: Mỗi số nguyên rơi đúng vào một luật.</i></p>"
           },
           {
             "ma": "q3",
-            "de": "<p>Option b leaves which values uncovered?</p><p style=\"opacity:.75;font-size:.92em\"><i>Phương án b bỏ sót giá trị nào?</i></p>",
+            "de": "<p>The rewrite \"< 5: none; > 5 and < 10: supervisor; > 10: management\" leaves which values uncovered?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cách viết \"< 5: không; > 5 và < 10: trưởng nhóm; > 10: ban giám đốc\" bỏ sót giá trị nào?</i></p>",
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "None"
-              },
-              {
-                "ma": "b",
-                "noiDung": "Exactly 5 and exactly 10"
-              },
-              {
-                "ma": "c",
                 "noiDung": "Only 0"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "Only 11"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Exactly 5 and exactly 10"
+              },
+              {
+                "ma": "d",
+                "noiDung": "None"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Strict inequalities on both sides create gaps.</p><p><i>VI: Bất đẳng thức nghiêm ngặt hai phía tạo khoảng trống.</i></p>"
           }
@@ -347,10 +347,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Ambiguity 3 — negatives, omissions and \"and/or\" logic — answer key\n\n1. \"If the payment succeeds, the system shall confirm the order.\" What is missing?\"Nếu thanh toán thành công, hệ thống xác nhận đơn.\" Thiếu gì?\n   Answer: b) What the system does when the payment fails\n   Always specify the else-branch.VI: Luôn đặc tả nhánh còn lại.\n\n2. \"Students who are enrolled and have paid or have a scholarship may register.\" How many readings?\"Students who are enrolled and have paid or have a scholarship may register.\" Mấy cách hiểu?\n   Answer: b) Two: enrolled AND (paid OR scholarship), or (enrolled AND paid) OR scholarship\n   Use parentheses, a list or a decision table.VI: Dùng ngoặc, danh sách hoặc bảng quyết định.\n\n3. \"The system shall not allow a user to delete a course.\" The better form is…\"The system shall not allow a user to delete a course.\" Dạng tốt hơn là…\n   Answer: a) \"Only an administrator shall be able to delete a course.\" — positive, names who CAN\n   A positive statement says who may do it.VI: Câu khẳng định nói ai được phép.\n"
+          "code": "# Ambiguity 3 — negatives, omissions and \"and/or\" logic — answer key\n\n1. \"If the payment succeeds, the system shall confirm the order.\" What is missing?\"Nếu thanh toán thành công, hệ thống xác nhận đơn.\" Thiếu gì?\n   Answer: d) What the system does when the payment fails\n   Always specify the else-branch.VI: Luôn đặc tả nhánh còn lại.\n\n2. \"Students who are enrolled and have paid or have a scholarship may register.\" How many readings?\"Students who are enrolled and have paid or have a scholarship may register.\" Mấy cách hiểu?\n   Answer: c) Two: enrolled AND (paid OR scholarship), or (enrolled AND paid) OR scholarship\n   Use parentheses, a list or a decision table.VI: Dùng ngoặc, danh sách hoặc bảng quyết định.\n\n3. \"The system shall not allow a user to delete a course.\" The better form is…\"The system shall not allow a user to delete a course.\" Dạng tốt hơn là…\n   Answer: a) \"Only an administrator shall be able to delete a course.\" — positive, names who CAN\n   A positive statement says who may do it.VI: Câu khẳng định nói ai được phép.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: b · b · a.</p>",
+      "solutionExplanationHtml": "<p>Answers: d · c · a.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -367,19 +367,19 @@
               },
               {
                 "ma": "b",
-                "noiDung": "What the system does when the payment fails"
-              },
-              {
-                "ma": "c",
                 "noiDung": "The colour of the button"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "The database name"
+              },
+              {
+                "ma": "d",
+                "noiDung": "What the system does when the payment fails"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>Always specify the else-branch.</p><p><i>VI: Luôn đặc tả nhánh còn lại.</i></p>"
           },
@@ -393,11 +393,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "Two: enrolled AND (paid OR scholarship), or (enrolled AND paid) OR scholarship"
+                "noiDung": "Three"
               },
               {
                 "ma": "c",
-                "noiDung": "Three"
+                "noiDung": "Two: enrolled AND (paid OR scholarship), or (enrolled AND paid) OR scholarship"
               },
               {
                 "ma": "d",
@@ -405,7 +405,7 @@
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Use parentheses, a list or a decision table.</p><p><i>VI: Dùng ngoặc, danh sách hoặc bảng quyết định.</i></p>"
           },
@@ -419,15 +419,15 @@
               },
               {
                 "ma": "b",
-                "noiDung": "Delete the requirement"
-              },
-              {
-                "ma": "c",
                 "noiDung": "\"Deleting courses is bad.\""
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "Keep it — negatives are best"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Delete the requirement"
               }
             ],
             "dapAn": [

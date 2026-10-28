@@ -200,10 +200,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# AI/ML 2 — choose the metric that matches the cost of errors — answer key\n\n1. Cancer screening: missing a cancer (false negative) is far worse than a false alarm. Prioritise…Tầm soát ung thư: bỏ sót (FN) tệ hơn nhiều báo nhầm. Ưu tiên…\n   Answer: a) recall\n   High recall = few missed cases.VI: Recall cao = ít bỏ sót.\n\n2. A spam filter: putting a real customer e-mail into spam (false positive) is very costly. Prioritise…Lọc thư rác: cho thư khách thật vào spam (FP) rất tốn kém. Ưu tiên…\n   Answer: b) precision\n   High precision = few false alarms.VI: Precision cao = ít báo nhầm.\n\n3. Only 1% of transactions are fraud. A model that says \"not fraud\" for everything has 99% accuracy. This shows…Chỉ 1% giao dịch là gian lận. Mô hình luôn nói \"không gian lận\" đạt 99% accuracy. Điều này cho thấy…\n   Answer: a) accuracy hides class imbalance — specify recall/precision for the fraud class\n   Its recall for fraud is 0.VI: Recall cho gian lận bằng 0.\n\n4. \"The AI will figure it out.\" As a requirement this is…\"AI sẽ tự lo.\" Là một yêu cầu, câu này…\n   Answer: a) not a requirement — no metric, no test set, no fallback\n   Without thresholds there is no way to say \"done\".VI: Không có ngưỡng thì không thể nói \"xong\".\n"
+          "code": "# AI/ML 2 — choose the metric that matches the cost of errors — answer key\n\n1. Cancer screening: missing a cancer (false negative) is far worse than a false alarm. Prioritise…Tầm soát ung thư: bỏ sót (FN) tệ hơn nhiều báo nhầm. Ưu tiên…\n   Answer: a) recall\n   High recall = few missed cases.VI: Recall cao = ít bỏ sót.\n\n2. A spam filter: putting a real customer e-mail into spam (false positive) is very costly. Prioritise…Lọc thư rác: cho thư khách thật vào spam (FP) rất tốn kém. Ưu tiên…\n   Answer: b) precision\n   High precision = few false alarms.VI: Precision cao = ít báo nhầm.\n\n3. Only 1% of transactions are fraud. A model that says \"not fraud\" for everything has 99% accuracy. This shows…Chỉ 1% giao dịch là gian lận. Mô hình luôn nói \"không gian lận\" đạt 99% accuracy. Điều này cho thấy…\n   Answer: d) accuracy hides class imbalance — specify recall/precision for the fraud class\n   Its recall for fraud is 0.VI: Recall cho gian lận bằng 0.\n\n4. \"The AI will figure it out.\" As a requirement this is…\"AI sẽ tự lo.\" Là một yêu cầu, câu này…\n   Answer: c) not a requirement — no metric, no test set, no fallback\n   Without thresholds there is no way to say \"done\".VI: Không có ngưỡng thì không thể nói \"xong\".\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: a · b · a · a.</p>",
+      "solutionExplanationHtml": "<p>Answers: a · b · d · c.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -242,7 +242,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "recall"
+                "noiDung": "model size"
               },
               {
                 "ma": "b",
@@ -250,7 +250,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "model size"
+                "noiDung": "recall"
               },
               {
                 "ma": "d",
@@ -268,23 +268,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "accuracy hides class imbalance — specify recall/precision for the fraud class"
-              },
-              {
-                "ma": "b",
                 "noiDung": "the model is excellent"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "fraud does not matter"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "we need more servers"
+              },
+              {
+                "ma": "d",
+                "noiDung": "accuracy hides class imbalance — specify recall/precision for the fraud class"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>Its recall for fraud is 0.</p><p><i>VI: Recall cho gian lận bằng 0.</i></p>"
           },
@@ -294,23 +294,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "not a requirement — no metric, no test set, no fallback"
-              },
-              {
-                "ma": "b",
                 "noiDung": "a good functional requirement"
               },
               {
+                "ma": "b",
+                "noiDung": "enough for an AI project"
+              },
+              {
                 "ma": "c",
-                "noiDung": "a fairness requirement"
+                "noiDung": "not a requirement — no metric, no test set, no fallback"
               },
               {
                 "ma": "d",
-                "noiDung": "enough for an AI project"
+                "noiDung": "a fairness requirement"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>Without thresholds there is no way to say \"done\".</p><p><i>VI: Không có ngưỡng thì không thể nói \"xong\".</i></p>"
           }

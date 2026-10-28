@@ -175,10 +175,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Prototype risks 2 — success factors — answer key\n\n1. Before building a prototype you should first…Trước khi dựng prototype, trước hết nên…\n   Answer: a) state its purpose and whether it will be discarded or grown\n   Purpose and fate decided up front.VI: Mục đích và số phận quyết từ đầu.\n\n2. The demo shows \"Name 1, Name 2, Lorem ipsum…\". Problem?Demo hiện \"Name 1, Name 2, Lorem ipsum…\". Vấn đề?\n   Answer: a) Use plausible data — users cannot judge screens filled with nonsense\n   Plausible (not real personal) data.VI: Dữ liệu hợp lý (không phải dữ liệu cá nhân thật).\n\n3. Should you prototype the login page everyone already agrees on?Có nên làm prototype trang đăng nhập mà ai cũng đồng ý?\n   Answer: a) No — prototype what is uncertain\n   Spend effort where the risk is.VI: Dồn công vào chỗ có rủi ro.\n"
+          "code": "# Prototype risks 2 — success factors — answer key\n\n1. Before building a prototype you should first…Trước khi dựng prototype, trước hết nên…\n   Answer: c) state its purpose and whether it will be discarded or grown\n   Purpose and fate decided up front.VI: Mục đích và số phận quyết từ đầu.\n\n2. The demo shows \"Name 1, Name 2, Lorem ipsum…\". Problem?Demo hiện \"Name 1, Name 2, Lorem ipsum…\". Vấn đề?\n   Answer: d) Use plausible data — users cannot judge screens filled with nonsense\n   Plausible (not real personal) data.VI: Dữ liệu hợp lý (không phải dữ liệu cá nhân thật).\n\n3. Should you prototype the login page everyone already agrees on?Có nên làm prototype trang đăng nhập mà ai cũng đồng ý?\n   Answer: c) No — prototype what is uncertain\n   Spend effort where the risk is.VI: Dồn công vào chỗ có rủi ro.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: a · a · a.</p>",
+      "solutionExplanationHtml": "<p>Answers: c · d · c.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -191,23 +191,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "state its purpose and whether it will be discarded or grown"
-              },
-              {
-                "ma": "b",
                 "noiDung": "choose the brand colours"
               },
               {
+                "ma": "b",
+                "noiDung": "deploy a server"
+              },
+              {
                 "ma": "c",
-                "noiDung": "write production code"
+                "noiDung": "state its purpose and whether it will be discarded or grown"
               },
               {
                 "ma": "d",
-                "noiDung": "deploy a server"
+                "noiDung": "write production code"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>Purpose and fate decided up front.</p><p><i>VI: Mục đích và số phận quyết từ đầu.</i></p>"
           },
@@ -217,23 +217,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Use plausible data — users cannot judge screens filled with nonsense"
-              },
-              {
-                "ma": "b",
-                "noiDung": "None"
-              },
-              {
-                "ma": "c",
                 "noiDung": "It should be empty"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "It should be real patient data"
+              },
+              {
+                "ma": "c",
+                "noiDung": "None"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Use plausible data — users cannot judge screens filled with nonsense"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>Plausible (not real personal) data.</p><p><i>VI: Dữ liệu hợp lý (không phải dữ liệu cá nhân thật).</i></p>"
           },
@@ -243,23 +243,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "No — prototype what is uncertain"
-              },
-              {
-                "ma": "b",
-                "noiDung": "Yes, always prototype everything"
-              },
-              {
-                "ma": "c",
                 "noiDung": "Only in paper"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "Only if it is blue"
+              },
+              {
+                "ma": "c",
+                "noiDung": "No — prototype what is uncertain"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Yes, always prototype everything"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>Spend effort where the risk is.</p><p><i>VI: Dồn công vào chỗ có rủi ro.</i></p>"
           }

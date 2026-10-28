@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Requirement tests 1 — what conceptual tests reveal — answer key\n\n1. Requirement: \"Members get a discount.\" Writing a test, you ask \"how much, and from when?\" This reveals…Yêu cầu: \"Hội viên được giảm giá.\" Viết test, bạn hỏi \"bao nhiêu, từ khi nào?\". Điều này cho thấy…\n   Answer: a) an incomplete, unverifiable requirement\n   Missing values ⇒ incomplete.VI: Thiếu giá trị ⇒ chưa đầy đủ.\n\n2. Conceptual tests are written…Test khái niệm được viết…\n   Answer: a) from the requirements, independent of the UI and code\n   They test the requirements themselves.VI: Chúng kiểm chính các yêu cầu.\n\n3. A test from the use case and a test from the functional requirement give different expected results. You should…Test từ use case và test từ yêu cầu chức năng cho kết quả mong đợi khác nhau. Bạn nên…\n   Answer: a) investigate — one of the requirements (or models) is wrong\n   Disagreement reveals a defect.VI: Mâu thuẫn lộ ra lỗi.\n"
+          "code": "# Requirement tests 1 — what conceptual tests reveal — answer key\n\n1. Requirement: \"Members get a discount.\" Writing a test, you ask \"how much, and from when?\" This reveals…Yêu cầu: \"Hội viên được giảm giá.\" Viết test, bạn hỏi \"bao nhiêu, từ khi nào?\". Điều này cho thấy…\n   Answer: c) an incomplete, unverifiable requirement\n   Missing values ⇒ incomplete.VI: Thiếu giá trị ⇒ chưa đầy đủ.\n\n2. Conceptual tests are written…Test khái niệm được viết…\n   Answer: d) from the requirements, independent of the UI and code\n   They test the requirements themselves.VI: Chúng kiểm chính các yêu cầu.\n\n3. A test from the use case and a test from the functional requirement give different expected results. You should…Test từ use case và test từ yêu cầu chức năng cho kết quả mong đợi khác nhau. Bạn nên…\n   Answer: d) investigate — one of the requirements (or models) is wrong\n   Disagreement reveals a defect.VI: Mâu thuẫn lộ ra lỗi.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: a · a · a.</p>",
+      "solutionExplanationHtml": "<p>Answers: c · d · d.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -62,23 +62,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "an incomplete, unverifiable requirement"
-              },
-              {
-                "ma": "b",
                 "noiDung": "a code bug"
               },
               {
+                "ma": "b",
+                "noiDung": "a UI problem"
+              },
+              {
                 "ma": "c",
-                "noiDung": "nothing"
+                "noiDung": "an incomplete, unverifiable requirement"
               },
               {
                 "ma": "d",
-                "noiDung": "a UI problem"
+                "noiDung": "nothing"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>Missing values ⇒ incomplete.</p><p><i>VI: Thiếu giá trị ⇒ chưa đầy đủ.</i></p>"
           },
@@ -88,11 +88,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "from the requirements, independent of the UI and code"
+                "noiDung": "after the UI is finished"
               },
               {
                 "ma": "b",
-                "noiDung": "after the UI is finished"
+                "noiDung": "only by developers"
               },
               {
                 "ma": "c",
@@ -100,11 +100,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "only by developers"
+                "noiDung": "from the requirements, independent of the UI and code"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>They test the requirements themselves.</p><p><i>VI: Chúng kiểm chính các yêu cầu.</i></p>"
           },
@@ -114,11 +114,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "investigate — one of the requirements (or models) is wrong"
+                "noiDung": "pick the easier one"
               },
               {
                 "ma": "b",
-                "noiDung": "pick the easier one"
+                "noiDung": "ignore"
               },
               {
                 "ma": "c",
@@ -126,11 +126,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "ignore"
+                "noiDung": "investigate — one of the requirements (or models) is wrong"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>Disagreement reveals a defect.</p><p><i>VI: Mâu thuẫn lộ ra lỗi.</i></p>"
           }

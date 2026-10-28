@@ -100,6 +100,12 @@
       "description": "Deep Lab chương 2: tự viết công cụ phân tích bên liên quan — lưới quyền lực/quan tâm, kiểm ma trận RACI (đúng một A, ít nhất một R, ô sai, hoạt động thiếu/thừa) và áp quy tắc ra quyết định (nhất trí, đa số, trưởng nhóm) — chấm mẫu ClinicCare + dữ liệu ẩn."
     },
     {
+      "slug": "swr302-2-project-cliniccare-m1-vision",
+      "name": "ClinicCare project — Milestone 1: Vision, scope and context",
+      "level": "INTERMEDIATE",
+      "description": "Dự án xuyên suốt ClinicCare, mốc 1 (chương 2): mục tiêu nghiệp vụ đo được, tuyên bố tầm nhìn theo khuôn Moore, phạm vi trong/ngoài bản 1, sơ đồ ngữ cảnh 8 thực thể ngoài — chấm bằng máy đọc Mermaid; kèm Góc phỏng vấn."
+    },
+    {
       "slug": "swr302-3-1-ky-thuat-elicitation",
       "name": "3.1 Elicitation techniques",
       "level": "INTERMEDIATE",

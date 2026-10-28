@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Impact 1 — the questions to ask — answer key\n\n1. Which question is part of an impact analysis?Câu nào thuộc phân tích ảnh hưởng?\n   Answer: a) Which tests and help screens must be updated?\n   Find all affected work products.VI: Tìm mọi sản phẩm bị ảnh hưởng.\n\n2. Why ask \"what happens if we don’t make the change?\"Vì sao hỏi \"nếu KHÔNG thay đổi thì sao?\"\n   Answer: a) To weigh the cost of the change against the cost of not changing\n   Both options have consequences.VI: Cả hai lựa chọn đều có hệ quả.\n\n3. The impact analysis is used mainly by…Kết quả phân tích ảnh hưởng chủ yếu dùng cho…\n   Answer: a) the CCB, to make an informed decision\n   It is input to the decision.VI: Nó là đầu vào cho quyết định.\n"
+          "code": "# Impact 1 — the questions to ask — answer key\n\n1. Which question is part of an impact analysis?Câu nào thuộc phân tích ảnh hưởng?\n   Answer: a) Which tests and help screens must be updated?\n   Find all affected work products.VI: Tìm mọi sản phẩm bị ảnh hưởng.\n\n2. Why ask \"what happens if we don’t make the change?\"Vì sao hỏi \"nếu KHÔNG thay đổi thì sao?\"\n   Answer: a) To weigh the cost of the change against the cost of not changing\n   Both options have consequences.VI: Cả hai lựa chọn đều có hệ quả.\n\n3. The impact analysis is used mainly by…Kết quả phân tích ảnh hưởng chủ yếu dùng cho…\n   Answer: c) the CCB, to make an informed decision\n   It is input to the decision.VI: Nó là đầu vào cho quyết định.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: a · a · a.</p>",
+      "solutionExplanationHtml": "<p>Answers: a · a · c.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -66,15 +66,15 @@
               },
               {
                 "ma": "b",
-                "noiDung": "Who wrote the original code?"
-              },
-              {
-                "ma": "c",
                 "noiDung": "What colour is the logo?"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "How many lines does the SRS have?"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Who wrote the original code?"
               }
             ],
             "dapAn": [
@@ -114,23 +114,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "the CCB, to make an informed decision"
-              },
-              {
-                "ma": "b",
-                "noiDung": "marketing only"
-              },
-              {
-                "ma": "c",
                 "noiDung": "the end users"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "nobody"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the CCB, to make an informed decision"
+              },
+              {
+                "ma": "d",
+                "noiDung": "marketing only"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>It is input to the decision.</p><p><i>VI: Nó là đầu vào cho quyết định.</i></p>"
           }

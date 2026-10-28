@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Agile essentials 1 — customer involvement — answer key\n\n1. During an iteration a developer has a question about a story. Who answers?Trong vòng, dev có câu hỏi về một story. Ai trả lời?\n   Answer: a) The product owner / customer representative, right away\n   Stories are less detailed, so the PO must be available.VI: Story ít chi tiết nên PO phải sẵn sàng.\n\n2. Why must customers stay available on agile projects?Vì sao khách phải luôn sẵn sàng trong agile?\n   Answer: a) Stories are less detailed than traditional requirements; details come from conversations\n   Conversation replaces part of the written detail.VI: Trao đổi thay một phần chi tiết viết.\n"
+          "code": "# Agile essentials 1 — customer involvement — answer key\n\n1. During an iteration a developer has a question about a story. Who answers?Trong vòng, dev có câu hỏi về một story. Ai trả lời?\n   Answer: d) The product owner / customer representative, right away\n   Stories are less detailed, so the PO must be available.VI: Story ít chi tiết nên PO phải sẵn sàng.\n\n2. Why must customers stay available on agile projects?Vì sao khách phải luôn sẵn sàng trong agile?\n   Answer: d) Stories are less detailed than traditional requirements; details come from conversations\n   Conversation replaces part of the written detail.VI: Trao đổi thay một phần chi tiết viết.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: a · a.</p>",
+      "solutionExplanationHtml": "<p>Answers: d · d.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -62,23 +62,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "The product owner / customer representative, right away"
-              },
-              {
-                "ma": "b",
                 "noiDung": "Nobody until the next release"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "The developer guesses"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "The SRS only"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The product owner / customer representative, right away"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>Stories are less detailed, so the PO must be available.</p><p><i>VI: Story ít chi tiết nên PO phải sẵn sàng.</i></p>"
           },
@@ -88,23 +88,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Stories are less detailed than traditional requirements; details come from conversations"
-              },
-              {
-                "ma": "b",
                 "noiDung": "To write code"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "To approve every commit"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "They need not"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Stories are less detailed than traditional requirements; details come from conversations"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>Conversation replaces part of the written detail.</p><p><i>VI: Trao đổi thay một phần chi tiết viết.</i></p>"
           }

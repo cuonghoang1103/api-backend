@@ -158,10 +158,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Change control 2 — policy and the CCB — answer key\n\n1. A developer adds a \"small\" field the customer asked for by phone, without a CR. This breaks…Dev thêm một trường \"nhỏ\" khách xin qua điện thoại, không có CR. Vi phạm…\n   Answer: a) \"all changes must follow the process\" and traceability to an approved CR\n   Small unmanaged changes add up to scope creep.VI: Thay đổi nhỏ không quản lý cộng dồn thành phình phạm vi.\n\n2. Who should sit on a CCB?Ai nên ngồi trong CCB?\n   Answer: a) Representatives of the groups affected: project management, product owner/BA, development, testing, customers or marketing…\n   Decision makers representing the affected groups.VI: Người có quyền quyết, đại diện các nhóm bị ảnh hưởng.\n\n3. Before the CCB decides, the request must have…Trước khi CCB quyết, yêu cầu phải có…\n   Answer: a) an impact analysis\n   Decide with cost, schedule and risk in view.VI: Quyết định khi đã thấy chi phí, lịch và rủi ro.\n\n4. A change request was rejected. The requester should…Yêu cầu thay đổi bị từ chối. Người yêu cầu nên…\n   Answer: a) be told the decision and its rationale, recorded in the change database\n   Decisions and reasons are communicated and recorded.VI: Quyết định và lý do được thông báo và ghi lại.\n"
+          "code": "# Change control 2 — policy and the CCB — answer key\n\n1. A developer adds a \"small\" field the customer asked for by phone, without a CR. This breaks…Dev thêm một trường \"nhỏ\" khách xin qua điện thoại, không có CR. Vi phạm…\n   Answer: d) \"all changes must follow the process\" and traceability to an approved CR\n   Small unmanaged changes add up to scope creep.VI: Thay đổi nhỏ không quản lý cộng dồn thành phình phạm vi.\n\n2. Who should sit on a CCB?Ai nên ngồi trong CCB?\n   Answer: b) Representatives of the groups affected: project management, product owner/BA, development, testing, customers or marketing…\n   Decision makers representing the affected groups.VI: Người có quyền quyết, đại diện các nhóm bị ảnh hưởng.\n\n3. Before the CCB decides, the request must have…Trước khi CCB quyết, yêu cầu phải có…\n   Answer: d) an impact analysis\n   Decide with cost, schedule and risk in view.VI: Quyết định khi đã thấy chi phí, lịch và rủi ro.\n\n4. A change request was rejected. The requester should…Yêu cầu thay đổi bị từ chối. Người yêu cầu nên…\n   Answer: a) be told the decision and its rationale, recorded in the change database\n   Decisions and reasons are communicated and recorded.VI: Quyết định và lý do được thông báo và ghi lại.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: a · a · a · a.</p>",
+      "solutionExplanationHtml": "<p>Answers: d · b · d · a.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -174,11 +174,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "\"all changes must follow the process\" and traceability to an approved CR"
+                "noiDung": "nothing — it was small"
               },
               {
                 "ma": "b",
-                "noiDung": "nothing — it was small"
+                "noiDung": "the DoD"
               },
               {
                 "ma": "c",
@@ -186,11 +186,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "the DoD"
+                "noiDung": "\"all changes must follow the process\" and traceability to an approved CR"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>Small unmanaged changes add up to scope creep.</p><p><i>VI: Thay đổi nhỏ không quản lý cộng dồn thành phình phạm vi.</i></p>"
           },
@@ -200,23 +200,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Representatives of the groups affected: project management, product owner/BA, development, testing, customers or marketing…"
+                "noiDung": "Everyone in the company"
               },
               {
                 "ma": "b",
-                "noiDung": "Only developers"
+                "noiDung": "Representatives of the groups affected: project management, product owner/BA, development, testing, customers or marketing…"
               },
               {
                 "ma": "c",
-                "noiDung": "Only the person requesting the change"
+                "noiDung": "Only developers"
               },
               {
                 "ma": "d",
-                "noiDung": "Everyone in the company"
+                "noiDung": "Only the person requesting the change"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>Decision makers representing the affected groups.</p><p><i>VI: Người có quyền quyết, đại diện các nhóm bị ảnh hưởng.</i></p>"
           },
@@ -226,23 +226,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "an impact analysis"
-              },
-              {
-                "ma": "b",
-                "noiDung": "working code"
-              },
-              {
-                "ma": "c",
                 "noiDung": "a test report"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "nothing"
+              },
+              {
+                "ma": "c",
+                "noiDung": "working code"
+              },
+              {
+                "ma": "d",
+                "noiDung": "an impact analysis"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>Decide with cost, schedule and risk in view.</p><p><i>VI: Quyết định khi đã thấy chi phí, lịch và rủi ro.</i></p>"
           },

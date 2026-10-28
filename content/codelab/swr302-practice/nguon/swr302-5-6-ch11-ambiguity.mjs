@@ -33,7 +33,7 @@ const E2 = tracNghiem({
   cau: [
     { en: 'In the original wording, 5 days falls into…', vi: 'Với cách viết gốc, 5 ngày rơi vào…', lc: [['a', 'only the first rule'], ['b', 'both the first and the second rule — overlap'], ['c', 'no rule — gap'], ['d', 'the third rule']], dap: 'b', giai: ['"up to 5" and "5 to 10" both include 5.', '"tới 5" và "5 tới 10" đều chứa 5.'] },
     { en: 'Which rewrite is unambiguous?', vi: 'Cách viết lại nào không mơ hồ?', lc: [['a', '≤ 5 days: none; 6–10 days: supervisor; > 10 days: management (whole days)'], ['b', '< 5: none; > 5 and < 10: supervisor; > 10: management'], ['c', 'Short: none; medium: supervisor; long: management'], ['d', '0–5: none; 5–10: supervisor; 10+: management']], dap: 'a', giai: ['Every whole number falls into exactly one rule.', 'Mỗi số nguyên rơi đúng vào một luật.'] },
-    { en: 'Option b leaves which values uncovered?', vi: 'Phương án b bỏ sót giá trị nào?', lc: [['a', 'None'], ['b', 'Exactly 5 and exactly 10'], ['c', 'Only 0'], ['d', 'Only 11']], dap: 'b', giai: ['Strict inequalities on both sides create gaps.', 'Bất đẳng thức nghiêm ngặt hai phía tạo khoảng trống.'] },
+    { en: 'The rewrite "< 5: none; > 5 and < 10: supervisor; > 10: management" leaves which values uncovered?', vi: 'Cách viết "< 5: không; > 5 và < 10: trưởng nhóm; > 10: ban giám đốc" bỏ sót giá trị nào?', lc: [['a', 'None'], ['b', 'Exactly 5 and exactly 10'], ['c', 'Only 0'], ['d', 'Only 11']], dap: 'b', giai: ['Strict inequalities on both sides create gaps.', 'Bất đẳng thức nghiêm ngặt hai phía tạo khoảng trống.'] },
   ],
   goiY: ['Thử đúng các giá trị biên: 5, 10.', 'Mỗi giá trị phải rơi vào ĐÚNG MỘT luật.'],
   loiHayGap: ['Viết "5–10" và "10+" — 10 rơi vào hai luật.', 'Dùng "<" hai phía làm hở biên.'],

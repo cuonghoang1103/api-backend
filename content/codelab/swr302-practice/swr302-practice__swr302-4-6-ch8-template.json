@@ -224,10 +224,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Use case template 2 — writing good flows — answer key\n\n1. Which normal-flow step is written best?Bước luồng chính nào viết tốt nhất?\n   Answer: b) Customer confirms the withdrawal amount.\n   Intent, not UI or implementation.VI: Ý định, không phải giao diện hay hiện thực.\n\n2. Where does \"insufficient funds\" belong?\"Không đủ số dư\" thuộc về đâu?\n   Answer: b) Exception, attached to the step where the system checks the balance\n   It prevents the goal and branches at the check step.VI: Nó ngăn mục tiêu và rẽ nhánh ở bước kiểm tra.\n\n3. The customer may ask for a receipt. In the template this is…Khách có thể yêu cầu in hoá đơn. Trong template đây là…\n   Answer: a) an alternative flow (or an extension)\n   An optional variation that still reaches the goal.VI: Một biến thể tuỳ chọn vẫn đạt mục tiêu.\n"
+          "code": "# Use case template 2 — writing good flows — answer key\n\n1. Which normal-flow step is written best?Bước luồng chính nào viết tốt nhất?\n   Answer: c) Customer confirms the withdrawal amount.\n   Intent, not UI or implementation.VI: Ý định, không phải giao diện hay hiện thực.\n\n2. Where does \"insufficient funds\" belong?\"Không đủ số dư\" thuộc về đâu?\n   Answer: b) Exception, attached to the step where the system checks the balance\n   It prevents the goal and branches at the check step.VI: Nó ngăn mục tiêu và rẽ nhánh ở bước kiểm tra.\n\n3. The customer may ask for a receipt. In the template this is…Khách có thể yêu cầu in hoá đơn. Trong template đây là…\n   Answer: a) an alternative flow (or an extension)\n   An optional variation that still reaches the goal.VI: Một biến thể tuỳ chọn vẫn đạt mục tiêu.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: b · b · a.</p>",
+      "solutionExplanationHtml": "<p>Answers: c · b · a.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -244,11 +244,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "Customer confirms the withdrawal amount."
+                "noiDung": "The SQL UPDATE runs on the accounts table."
               },
               {
                 "ma": "c",
-                "noiDung": "The SQL UPDATE runs on the accounts table."
+                "noiDung": "Customer confirms the withdrawal amount."
               },
               {
                 "ma": "d",
@@ -256,7 +256,7 @@
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Intent, not UI or implementation.</p><p><i>VI: Ý định, không phải giao diện hay hiện thực.</i></p>"
           },
@@ -296,11 +296,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "an exception"
+                "noiDung": "a precondition"
               },
               {
                 "ma": "c",
-                "noiDung": "a precondition"
+                "noiDung": "an exception"
               },
               {
                 "ma": "d",

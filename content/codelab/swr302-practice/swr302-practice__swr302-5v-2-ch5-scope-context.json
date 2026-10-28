@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Scope 1 — context diagram rules — answer key\n\n1. How many processes does a context diagram contain?Sơ đồ ngữ cảnh có bao nhiêu process?\n   Answer: a) One, the whole system\n   Sub-processes belong to the level-0 DFD.VI: Process con thuộc DFD mức 0.\n\n2. May a context diagram show the system’s database?Sơ đồ ngữ cảnh có được vẽ CSDL của hệ thống không?\n   Answer: c) No — it is inside the system\n   No data stores, no internals.VI: Không kho dữ liệu, không phần bên trong.\n\n3. Which arrow label is correct?Nhãn mũi tên nào đúng?\n   Answer: b) order details\n   Name the DATA as a noun phrase.VI: Gọi tên DỮ LIỆU bằng cụm danh từ.\n\n4. The canteen sends menu updates to FoodRun and receives sales reports. How do you draw it?Căng-tin gửi cập nhật thực đơn tới FoodRun và nhận báo cáo doanh số. Vẽ thế nào?\n   Answer: b) Two arrows, one per direction, each with its own label\n   One arrow per direction, each naming its data.VI: Mỗi chiều một mũi tên, mỗi cái nêu dữ liệu của nó.\n"
+          "code": "# Scope 1 — context diagram rules — answer key\n\n1. How many processes does a context diagram contain?Sơ đồ ngữ cảnh có bao nhiêu process?\n   Answer: a) One, the whole system\n   Sub-processes belong to the level-0 DFD.VI: Process con thuộc DFD mức 0.\n\n2. May a context diagram show the system’s database?Sơ đồ ngữ cảnh có được vẽ CSDL của hệ thống không?\n   Answer: b) No — it is inside the system\n   No data stores, no internals.VI: Không kho dữ liệu, không phần bên trong.\n\n3. Which arrow label is correct?Nhãn mũi tên nào đúng?\n   Answer: c) order details\n   Name the DATA as a noun phrase.VI: Gọi tên DỮ LIỆU bằng cụm danh từ.\n\n4. The canteen sends menu updates to FoodRun and receives sales reports. How do you draw it?Căng-tin gửi cập nhật thực đơn tới FoodRun và nhận báo cáo doanh số. Vẽ thế nào?\n   Answer: c) Two arrows, one per direction, each with its own label\n   One arrow per direction, each naming its data.VI: Mỗi chiều một mũi tên, mỗi cái nêu dữ liệu của nó.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: a · c · b · b.</p>",
+      "solutionExplanationHtml": "<p>Answers: a · b · c · c.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -66,7 +66,7 @@
               },
               {
                 "ma": "b",
-                "noiDung": "One per major feature"
+                "noiDung": "None"
               },
               {
                 "ma": "c",
@@ -74,7 +74,7 @@
               },
               {
                 "ma": "d",
-                "noiDung": "None"
+                "noiDung": "One per major feature"
               }
             ],
             "dapAn": [
@@ -92,11 +92,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "Yes, as a data store"
+                "noiDung": "No — it is inside the system"
               },
               {
                 "ma": "c",
-                "noiDung": "No — it is inside the system"
+                "noiDung": "Yes, as a data store"
               },
               {
                 "ma": "d",
@@ -104,7 +104,7 @@
               }
             ],
             "dapAn": [
-              "c"
+              "b"
             ],
             "giaiThich": "<p>No data stores, no internals.</p><p><i>VI: Không kho dữ liệu, không phần bên trong.</i></p>"
           },
@@ -118,11 +118,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "order details"
+                "noiDung": "click Submit"
               },
               {
                 "ma": "c",
-                "noiDung": "click Submit"
+                "noiDung": "order details"
               },
               {
                 "ma": "d",
@@ -130,7 +130,7 @@
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Name the DATA as a noun phrase.</p><p><i>VI: Gọi tên DỮ LIỆU bằng cụm danh từ.</i></p>"
           },
@@ -144,11 +144,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "Two arrows, one per direction, each with its own label"
+                "noiDung": "No arrow"
               },
               {
                 "ma": "c",
-                "noiDung": "No arrow"
+                "noiDung": "Two arrows, one per direction, each with its own label"
               },
               {
                 "ma": "d",
@@ -156,7 +156,7 @@
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>One arrow per direction, each naming its data.</p><p><i>VI: Mỗi chiều một mũi tên, mỗi cái nêu dữ liệu của nó.</i></p>"
           }

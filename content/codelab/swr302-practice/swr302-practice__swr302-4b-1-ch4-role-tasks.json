@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# The business analyst 1 — the role — answer key\n\n1. The BA is best described as…BA được mô tả đúng nhất là…\n   Answer: b) a communication bridge between stakeholders and the development team\n   The BA translates needs into requirements developers can implement.VI: BA dịch nhu cầu thành yêu cầu dev hiện thực được.\n\n2. In a small team without a BA, who performs the BA role?Trong nhóm nhỏ không có BA, ai làm vai BA?\n   Answer: b) Someone else (a developer, PM, product owner) must still do the BA activities\n   The work still has to be done; the role is shared or assigned.VI: Việc vẫn phải làm; vai được chia hoặc giao cho ai đó.\n\n3. On agile projects, much of the BA work is often done by…Trong dự án agile, phần lớn việc BA thường do… làm\n   Answer: a) the product owner, with team members helping\n   The agile analyst role is shared; the product owner owns the backlog.VI: Vai phân tích trong agile được chia sẻ; product owner sở hữu backlog.\n"
+          "code": "# The business analyst 1 — the role — answer key\n\n1. The BA is best described as…BA được mô tả đúng nhất là…\n   Answer: b) a communication bridge between stakeholders and the development team\n   The BA translates needs into requirements developers can implement.VI: BA dịch nhu cầu thành yêu cầu dev hiện thực được.\n\n2. In a small team without a BA, who performs the BA role?Trong nhóm nhỏ không có BA, ai làm vai BA?\n   Answer: d) Someone else (a developer, PM, product owner) must still do the BA activities\n   The work still has to be done; the role is shared or assigned.VI: Việc vẫn phải làm; vai được chia hoặc giao cho ai đó.\n\n3. On agile projects, much of the BA work is often done by…Trong dự án agile, phần lớn việc BA thường do… làm\n   Answer: c) the product owner, with team members helping\n   The agile analyst role is shared; the product owner owns the backlog.VI: Vai phân tích trong agile được chia sẻ; product owner sở hữu backlog.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: b · b · a.</p>",
+      "solutionExplanationHtml": "<p>Answers: b · d · c.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -62,7 +62,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "the person who writes all the code"
+                "noiDung": "the project sponsor"
               },
               {
                 "ma": "b",
@@ -70,7 +70,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "the project sponsor"
+                "noiDung": "the person who writes all the code"
               },
               {
                 "ma": "d",
@@ -92,7 +92,7 @@
               },
               {
                 "ma": "b",
-                "noiDung": "Someone else (a developer, PM, product owner) must still do the BA activities"
+                "noiDung": "The tool"
               },
               {
                 "ma": "c",
@@ -100,11 +100,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "The tool"
+                "noiDung": "Someone else (a developer, PM, product owner) must still do the BA activities"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>The work still has to be done; the role is shared or assigned.</p><p><i>VI: Việc vẫn phải làm; vai được chia hoặc giao cho ai đó.</i></p>"
           },
@@ -114,23 +114,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "the product owner, with team members helping"
-              },
-              {
-                "ma": "b",
-                "noiDung": "the database administrator"
-              },
-              {
-                "ma": "c",
                 "noiDung": "nobody, agile has no requirements"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "an external auditor"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the product owner, with team members helping"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the database administrator"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>The agile analyst role is shared; the product owner owns the backlog.</p><p><i>VI: Vai phân tích trong agile được chia sẻ; product owner sở hữu backlog.</i></p>"
           }

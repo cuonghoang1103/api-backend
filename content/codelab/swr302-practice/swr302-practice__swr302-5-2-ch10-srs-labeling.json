@@ -181,10 +181,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Labeling 2 — strengths and weaknesses of each scheme — answer key\n\n1. A new section is inserted before 3.2. What happens to hierarchical numbers like 3.2.4.3?Chèn một mục mới trước 3.2. Số phân cấp như 3.2.4.3 bị gì?\n   Answer: b) They may shift, breaking every reference to them\n   The weakness of hierarchical numbering.VI: Điểm yếu của đánh số phân cấp.\n\n2. A requirement FR-26 is deleted. What should happen to the number 26?Xoá FR-26. Số 26 xử lý thế nào?\n   Answer: b) Retire it — never reuse a label\n   Reusing labels confuses history and traces.VI: Dùng lại nhãn làm rối lịch sử và truy vết.\n\n3. Which scheme carries meaning and survives reorganisation best?Cách nào mang ý nghĩa và chịu được sắp xếp lại tốt nhất?\n   Answer: c) Hierarchical textual tags\n   Tags like Print.ConfirmCopies do not change when sections move.VI: Thẻ như Print.ConfirmCopies không đổi khi mục di chuyển.\n"
+          "code": "# Labeling 2 — strengths and weaknesses of each scheme — answer key\n\n1. A new section is inserted before 3.2. What happens to hierarchical numbers like 3.2.4.3?Chèn một mục mới trước 3.2. Số phân cấp như 3.2.4.3 bị gì?\n   Answer: d) They may shift, breaking every reference to them\n   The weakness of hierarchical numbering.VI: Điểm yếu của đánh số phân cấp.\n\n2. A requirement FR-26 is deleted. What should happen to the number 26?Xoá FR-26. Số 26 xử lý thế nào?\n   Answer: b) Retire it — never reuse a label\n   Reusing labels confuses history and traces.VI: Dùng lại nhãn làm rối lịch sử và truy vết.\n\n3. Which scheme carries meaning and survives reorganisation best?Cách nào mang ý nghĩa và chịu được sắp xếp lại tốt nhất?\n   Answer: d) Hierarchical textual tags\n   Tags like Print.ConfirmCopies do not change when sections move.VI: Thẻ như Print.ConfirmCopies không đổi khi mục di chuyển.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: b · b · c.</p>",
+      "solutionExplanationHtml": "<p>Answers: d · b · d.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -197,23 +197,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Nothing"
-              },
-              {
-                "ma": "b",
-                "noiDung": "They may shift, breaking every reference to them"
-              },
-              {
-                "ma": "c",
                 "noiDung": "They become textual tags"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "They are deleted"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Nothing"
+              },
+              {
+                "ma": "d",
+                "noiDung": "They may shift, breaking every reference to them"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>The weakness of hierarchical numbering.</p><p><i>VI: Điểm yếu của đánh số phân cấp.</i></p>"
           },
@@ -249,23 +249,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Sequence numbers"
+                "noiDung": "Page numbers"
               },
               {
                 "ma": "b",
-                "noiDung": "Hierarchical numbering"
+                "noiDung": "Sequence numbers"
               },
               {
                 "ma": "c",
-                "noiDung": "Hierarchical textual tags"
+                "noiDung": "Hierarchical numbering"
               },
               {
                 "ma": "d",
-                "noiDung": "Page numbers"
+                "noiDung": "Hierarchical textual tags"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>Tags like Print.ConfirmCopies do not change when sections move.</p><p><i>VI: Thẻ như Print.ConfirmCopies không đổi khi mục di chuyển.</i></p>"
           }
@@ -329,10 +329,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Labeling 3 — TBDs and user interfaces in the SRS — answer key\n\n1. The fine per day is not decided yet. What do you write?Tiền phạt mỗi ngày chưa quyết. Viết gì?\n   Answer: b) \"The fine per day is TBD\" — with the person responsible and a due date in the issue list\n   Make the gap visible and owned.VI: Làm chỗ thiếu hiện rõ và có người chịu trách nhiệm.\n\n2. When must all TBDs be resolved?Khi nào phải giải quyết hết TBD?\n   Answer: b) Before the affected requirements are baselined and implemented\n   A TBD in a baselined requirement is a defect waiting to happen.VI: TBD trong yêu cầu đã baseline là lỗi chờ xảy ra.\n\n3. Should the SRS contain the exact pixel layout of every screen?SRS có nên chứa bố cục từng pixel của mọi màn hình?\n   Answer: b) No — state what the user must do and the essential data; keep detailed layouts in UI specs or prototypes\n   Layouts change often; requirements should not.VI: Bố cục đổi thường xuyên; yêu cầu thì không nên.\n"
+          "code": "# Labeling 3 — TBDs and user interfaces in the SRS — answer key\n\n1. The fine per day is not decided yet. What do you write?Tiền phạt mỗi ngày chưa quyết. Viết gì?\n   Answer: b) \"The fine per day is TBD\" — with the person responsible and a due date in the issue list\n   Make the gap visible and owned.VI: Làm chỗ thiếu hiện rõ và có người chịu trách nhiệm.\n\n2. When must all TBDs be resolved?Khi nào phải giải quyết hết TBD?\n   Answer: d) Before the affected requirements are baselined and implemented\n   A TBD in a baselined requirement is a defect waiting to happen.VI: TBD trong yêu cầu đã baseline là lỗi chờ xảy ra.\n\n3. Should the SRS contain the exact pixel layout of every screen?SRS có nên chứa bố cục từng pixel của mọi màn hình?\n   Answer: c) No — state what the user must do and the essential data; keep detailed layouts in UI specs or prototypes\n   Layouts change often; requirements should not.VI: Bố cục đổi thường xuyên; yêu cầu thì không nên.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: b · b · b.</p>",
+      "solutionExplanationHtml": "<p>Answers: b · d · c.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -375,7 +375,7 @@
               },
               {
                 "ma": "b",
-                "noiDung": "Before the affected requirements are baselined and implemented"
+                "noiDung": "During testing"
               },
               {
                 "ma": "c",
@@ -383,11 +383,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "During testing"
+                "noiDung": "Before the affected requirements are baselined and implemented"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>A TBD in a baselined requirement is a defect waiting to happen.</p><p><i>VI: TBD trong yêu cầu đã baseline là lỗi chờ xảy ra.</i></p>"
           },
@@ -401,11 +401,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "No — state what the user must do and the essential data; keep detailed layouts in UI specs or prototypes"
+                "noiDung": "Only colours"
               },
               {
                 "ma": "c",
-                "noiDung": "Only colours"
+                "noiDung": "No — state what the user must do and the essential data; keep detailed layouts in UI specs or prototypes"
               },
               {
                 "ma": "d",
@@ -413,7 +413,7 @@
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Layouts change often; requirements should not.</p><p><i>VI: Bố cục đổi thường xuyên; yêu cầu thì không nên.</i></p>"
           }

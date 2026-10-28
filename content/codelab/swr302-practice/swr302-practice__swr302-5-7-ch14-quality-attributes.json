@@ -392,10 +392,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Quality 3 — trade-offs and exploring attributes — answer key\n\n1. Adding strong encryption and two-factor login usually hurts…Thêm mã hoá mạnh và đăng nhập hai lớp thường làm giảm…\n   Answer: b) usability and performance\n   Security often trades against usability and performance.VI: Bảo mật thường đánh đổi với tính dễ dùng và hiệu năng.\n\n2. Making the code highly portable across platforms may reduce…Làm mã chạy được trên nhiều nền tảng có thể làm giảm…\n   Answer: a) efficiency/performance\n   Generic code cannot use platform-specific optimisations.VI: Mã chung không tận dụng tối ưu riêng nền tảng.\n\n3. Why prioritise quality attributes?Vì sao phải xếp ưu tiên thuộc tính chất lượng?\n   Answer: a) Because you cannot maximise all of them — trade-offs must be decided\n   Conflicts need an agreed order.VI: Xung đột cần thứ tự đã thống nhất.\n\n4. The best first step to elicit a quality requirement is to ask…Bước đầu tốt nhất để khai thác yêu cầu chất lượng là hỏi…\n   Answer: b) \"What would be unacceptable? How long would make you give up?\" — and turn the answer into a measurable target\n   Ask for the consequences and limits, then quantify.VI: Hỏi hậu quả và giới hạn, rồi lượng hoá.\n"
+          "code": "# Quality 3 — trade-offs and exploring attributes — answer key\n\n1. Adding strong encryption and two-factor login usually hurts…Thêm mã hoá mạnh và đăng nhập hai lớp thường làm giảm…\n   Answer: a) usability and performance\n   Security often trades against usability and performance.VI: Bảo mật thường đánh đổi với tính dễ dùng và hiệu năng.\n\n2. Making the code highly portable across platforms may reduce…Làm mã chạy được trên nhiều nền tảng có thể làm giảm…\n   Answer: a) efficiency/performance\n   Generic code cannot use platform-specific optimisations.VI: Mã chung không tận dụng tối ưu riêng nền tảng.\n\n3. Why prioritise quality attributes?Vì sao phải xếp ưu tiên thuộc tính chất lượng?\n   Answer: c) Because you cannot maximise all of them — trade-offs must be decided\n   Conflicts need an agreed order.VI: Xung đột cần thứ tự đã thống nhất.\n\n4. The best first step to elicit a quality requirement is to ask…Bước đầu tốt nhất để khai thác yêu cầu chất lượng là hỏi…\n   Answer: b) \"What would be unacceptable? How long would make you give up?\" — and turn the answer into a measurable target\n   Ask for the consequences and limits, then quantify.VI: Hỏi hậu quả và giới hạn, rồi lượng hoá.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: b · a · a · b.</p>",
+      "solutionExplanationHtml": "<p>Answers: a · a · c · b.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -408,23 +408,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "security"
-              },
-              {
-                "ma": "b",
                 "noiDung": "usability and performance"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "integrity"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "nothing"
+              },
+              {
+                "ma": "d",
+                "noiDung": "security"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>Security often trades against usability and performance.</p><p><i>VI: Bảo mật thường đánh đổi với tính dễ dùng và hiệu năng.</i></p>"
           },
@@ -438,11 +438,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "portability"
+                "noiDung": "availability always"
               },
               {
                 "ma": "c",
-                "noiDung": "availability always"
+                "noiDung": "portability"
               },
               {
                 "ma": "d",
@@ -460,23 +460,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Because you cannot maximise all of them — trade-offs must be decided"
-              },
-              {
-                "ma": "b",
-                "noiDung": "Because the template requires it"
-              },
-              {
-                "ma": "c",
                 "noiDung": "Only to shorten the SRS"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "For marketing"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Because you cannot maximise all of them — trade-offs must be decided"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Because the template requires it"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>Conflicts need an agreed order.</p><p><i>VI: Xung đột cần thứ tự đã thống nhất.</i></p>"
           },

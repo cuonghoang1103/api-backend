@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Scope techniques 1 — which representation? — answer key\n\n1. You need to show that the library system exchanges data with the student information system, which itself feeds the finance system that our system never touches.Bạn cần cho thấy hệ thống thư viện trao đổi dữ liệu với hệ thống thông tin sinh viên, hệ thống này lại cấp dữ liệu cho hệ thống tài chính mà hệ thống ta không chạm tới.\n   Answer: b) Ecosystem map\n   Only the ecosystem map shows flows between other systems.VI: Chỉ ecosystem map thể hiện luồng giữa các hệ thống khác.\n\n2. The sponsor wants a one-page picture of the main capabilities of release 1 and release 2, grouped by area.Nhà tài trợ muốn một trang hình các khả năng chính của bản 1 và bản 2, gom theo mảng.\n   Answer: a) Feature tree\n   A feature tree shows features and sub-features; colour or marks can show the release.VI: Feature tree thể hiện tính năng và tính năng con; có thể đánh dấu bản phát hành.\n\n3. You must list everything that can happen outside the system and requires a response: a user request, a sensor signal, a date arriving.Bạn phải liệt kê mọi điều xảy ra bên ngoài hệ thống cần hệ thống phản hồi: yêu cầu người dùng, tín hiệu cảm biến, một mốc thời gian đến.\n   Answer: a) Event list\n   Business, signal and temporal events form the event list.VI: Sự kiện nghiệp vụ, tín hiệu và thời gian tạo thành event list.\n\n4. You want to show who is outside the system and what data crosses the boundary.Bạn muốn thể hiện ai ở ngoài hệ thống và dữ liệu nào đi qua biên.\n   Answer: a) Context diagram\n   That is exactly the context diagram.VI: Đúng là context diagram.\n"
+          "code": "# Scope techniques 1 — which representation? — answer key\n\n1. You need to show that the library system exchanges data with the student information system, which itself feeds the finance system that our system never touches.Bạn cần cho thấy hệ thống thư viện trao đổi dữ liệu với hệ thống thông tin sinh viên, hệ thống này lại cấp dữ liệu cho hệ thống tài chính mà hệ thống ta không chạm tới.\n   Answer: c) Ecosystem map\n   Only the ecosystem map shows flows between other systems.VI: Chỉ ecosystem map thể hiện luồng giữa các hệ thống khác.\n\n2. The sponsor wants a one-page picture of the main capabilities of release 1 and release 2, grouped by area.Nhà tài trợ muốn một trang hình các khả năng chính của bản 1 và bản 2, gom theo mảng.\n   Answer: c) Feature tree\n   A feature tree shows features and sub-features; colour or marks can show the release.VI: Feature tree thể hiện tính năng và tính năng con; có thể đánh dấu bản phát hành.\n\n3. You must list everything that can happen outside the system and requires a response: a user request, a sensor signal, a date arriving.Bạn phải liệt kê mọi điều xảy ra bên ngoài hệ thống cần hệ thống phản hồi: yêu cầu người dùng, tín hiệu cảm biến, một mốc thời gian đến.\n   Answer: a) Event list\n   Business, signal and temporal events form the event list.VI: Sự kiện nghiệp vụ, tín hiệu và thời gian tạo thành event list.\n\n4. You want to show who is outside the system and what data crosses the boundary.Bạn muốn thể hiện ai ở ngoài hệ thống và dữ liệu nào đi qua biên.\n   Answer: c) Context diagram\n   That is exactly the context diagram.VI: Đúng là context diagram.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: b · a · a · a.</p>",
+      "solutionExplanationHtml": "<p>Answers: c · c · a · c.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -62,23 +62,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Context diagram"
-              },
-              {
-                "ma": "b",
-                "noiDung": "Ecosystem map"
-              },
-              {
-                "ma": "c",
                 "noiDung": "Feature tree"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "Event list"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Ecosystem map"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Context diagram"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Only the ecosystem map shows flows between other systems.</p><p><i>VI: Chỉ ecosystem map thể hiện luồng giữa các hệ thống khác.</i></p>"
           },
@@ -88,7 +88,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Feature tree"
+                "noiDung": "Event list"
               },
               {
                 "ma": "b",
@@ -96,7 +96,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "Event list"
+                "noiDung": "Feature tree"
               },
               {
                 "ma": "d",
@@ -104,7 +104,7 @@
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>A feature tree shows features and sub-features; colour or marks can show the release.</p><p><i>VI: Feature tree thể hiện tính năng và tính năng con; có thể đánh dấu bản phát hành.</i></p>"
           },
@@ -140,23 +140,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Context diagram"
-              },
-              {
-                "ma": "b",
                 "noiDung": "Feature tree"
               },
               {
+                "ma": "b",
+                "noiDung": "Event list"
+              },
+              {
                 "ma": "c",
-                "noiDung": "State diagram"
+                "noiDung": "Context diagram"
               },
               {
                 "ma": "d",
-                "noiDung": "Event list"
+                "noiDung": "State diagram"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>That is exactly the context diagram.</p><p><i>VI: Đúng là context diagram.</i></p>"
           }

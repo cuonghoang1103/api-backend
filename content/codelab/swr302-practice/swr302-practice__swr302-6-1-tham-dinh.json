@@ -184,10 +184,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Validation 4 — why validate early? — answer key\n\n1. When should requirements validation start?Khi nào bắt đầu thẩm định yêu cầu?\n   Answer: a) As soon as the first requirements are written, incrementally\n   Small, early, frequent reviews.VI: Review nhỏ, sớm, thường xuyên.\n\n2. A requirement changes after it was validated. What now?Một yêu cầu đã thẩm định bị thay đổi. Làm gì?\n   Answer: a) Validate the change and its impact again\n   Validation follows every change.VI: Thẩm định đi theo mỗi thay đổi.\n\n3. Does validation guarantee the requirements are perfect?Thẩm định có đảm bảo yêu cầu hoàn hảo không?\n   Answer: a) No — it reduces risk; some defects will still be found later\n   It reduces, not removes, risk.VI: Nó giảm, không xoá rủi ro.\n"
+          "code": "# Validation 4 — why validate early? — answer key\n\n1. When should requirements validation start?Khi nào bắt đầu thẩm định yêu cầu?\n   Answer: a) As soon as the first requirements are written, incrementally\n   Small, early, frequent reviews.VI: Review nhỏ, sớm, thường xuyên.\n\n2. A requirement changes after it was validated. What now?Một yêu cầu đã thẩm định bị thay đổi. Làm gì?\n   Answer: d) Validate the change and its impact again\n   Validation follows every change.VI: Thẩm định đi theo mỗi thay đổi.\n\n3. Does validation guarantee the requirements are perfect?Thẩm định có đảm bảo yêu cầu hoàn hảo không?\n   Answer: c) No — it reduces risk; some defects will still be found later\n   It reduces, not removes, risk.VI: Nó giảm, không xoá rủi ro.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: a · a · a.</p>",
+      "solutionExplanationHtml": "<p>Answers: a · d · c.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -204,7 +204,7 @@
               },
               {
                 "ma": "b",
-                "noiDung": "After coding"
+                "noiDung": "During acceptance testing"
               },
               {
                 "ma": "c",
@@ -212,7 +212,7 @@
               },
               {
                 "ma": "d",
-                "noiDung": "During acceptance testing"
+                "noiDung": "After coding"
               }
             ],
             "dapAn": [
@@ -226,23 +226,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Validate the change and its impact again"
-              },
-              {
-                "ma": "b",
                 "noiDung": "Nothing — it was validated"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "Delete it"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "Ask developers to decide"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Validate the change and its impact again"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>Validation follows every change.</p><p><i>VI: Thẩm định đi theo mỗi thay đổi.</i></p>"
           },
@@ -252,7 +252,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "No — it reduces risk; some defects will still be found later"
+                "noiDung": "Only if the SRS is short"
               },
               {
                 "ma": "b",
@@ -260,7 +260,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "Only if the SRS is short"
+                "noiDung": "No — it reduces risk; some defects will still be found later"
               },
               {
                 "ma": "d",
@@ -268,7 +268,7 @@
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>It reduces, not removes, risk.</p><p><i>VI: Nó giảm, không xoá rủi ro.</i></p>"
           }
@@ -331,10 +331,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Validation 2 — choose the validation technique — answer key\n\n1. Users cannot imagine how the new triage screen will work.Người dùng không hình dung được màn hình phân loại bệnh mới.\n   Answer: a) Prototyping\n   Let them see and try it.VI: Cho họ xem và thử.\n\n2. A high-risk SRS for a medical device must be checked rigorously by a team.SRS rủi ro cao cho thiết bị y tế cần kiểm tra chặt chẽ bởi một nhóm.\n   Answer: b) Inspection\n   Inspection is the most formal review.VI: Inspection là review chính thức nhất.\n\n3. Writing test cases from the requirements before any code exists mainly reveals…Viết test từ yêu cầu trước khi có code chủ yếu phát hiện…\n   Answer: a) ambiguities, missing requirements and errors in the requirements\n   If you cannot write a test, the requirement is not clear.VI: Không viết được test ⇒ yêu cầu chưa rõ.\n\n4. The customer asks: \"How will we know the release is good enough to accept?\"Khách hỏi: \"Làm sao biết bản phát hành đủ tốt để nghiệm thu?\"\n   Answer: a) Define acceptance criteria\n   Agree the criteria up front.VI: Thống nhất tiêu chí từ đầu.\n"
+          "code": "# Validation 2 — choose the validation technique — answer key\n\n1. Users cannot imagine how the new triage screen will work.Người dùng không hình dung được màn hình phân loại bệnh mới.\n   Answer: a) Prototyping\n   Let them see and try it.VI: Cho họ xem và thử.\n\n2. A high-risk SRS for a medical device must be checked rigorously by a team.SRS rủi ro cao cho thiết bị y tế cần kiểm tra chặt chẽ bởi một nhóm.\n   Answer: d) Inspection\n   Inspection is the most formal review.VI: Inspection là review chính thức nhất.\n\n3. Writing test cases from the requirements before any code exists mainly reveals…Viết test từ yêu cầu trước khi có code chủ yếu phát hiện…\n   Answer: d) ambiguities, missing requirements and errors in the requirements\n   If you cannot write a test, the requirement is not clear.VI: Không viết được test ⇒ yêu cầu chưa rõ.\n\n4. The customer asks: \"How will we know the release is good enough to accept?\"Khách hỏi: \"Làm sao biết bản phát hành đủ tốt để nghiệm thu?\"\n   Answer: a) Define acceptance criteria\n   Agree the criteria up front.VI: Thống nhất tiêu chí từ đầu.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: a · b · a · a.</p>",
+      "solutionExplanationHtml": "<p>Answers: a · d · d · a.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -351,11 +351,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "Formal inspection only"
+                "noiDung": "Simulation of the network"
               },
               {
                 "ma": "c",
-                "noiDung": "Simulation of the network"
+                "noiDung": "Formal inspection only"
               },
               {
                 "ma": "d",
@@ -377,7 +377,7 @@
               },
               {
                 "ma": "b",
-                "noiDung": "Inspection"
+                "noiDung": "A survey"
               },
               {
                 "ma": "c",
@@ -385,11 +385,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "A survey"
+                "noiDung": "Inspection"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>Inspection is the most formal review.</p><p><i>VI: Inspection là review chính thức nhất.</i></p>"
           },
@@ -399,23 +399,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "ambiguities, missing requirements and errors in the requirements"
-              },
-              {
-                "ma": "b",
                 "noiDung": "code bugs"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "server problems"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "nothing until coding"
+              },
+              {
+                "ma": "d",
+                "noiDung": "ambiguities, missing requirements and errors in the requirements"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>If you cannot write a test, the requirement is not clear.</p><p><i>VI: Không viết được test ⇒ yêu cầu chưa rõ.</i></p>"
           },

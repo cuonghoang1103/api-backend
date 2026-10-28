@@ -205,10 +205,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Reports 2 — questions to elicit a report — answer key\n\n1. Which question should be asked FIRST?Câu hỏi nào nên hỏi TRƯỚC?\n   Answer: b) What decision will this report help you make?\n   Purpose first; layout later.VI: Mục đích trước; bố cục sau.\n\n2. A report shows nothing when no loan is overdue. The spec should…Báo cáo không hiện gì khi không có lượt quá hạn. Đặc tả nên…\n   Answer: b) state what the report shows when no data is returned (e.g. \"No overdue loans this month\")\n   The empty case is a requirement.VI: Trường hợp rỗng cũng là một yêu cầu.\n\n3. A dashboard differs from a report mainly because it…Dashboard khác báo cáo chủ yếu vì nó…\n   Answer: b) shows several key indicators at a glance, often updated frequently, with drill-down\n   Dashboards show multiple indicators at once.VI: Dashboard hiện nhiều chỉ số cùng lúc.\n"
+          "code": "# Reports 2 — questions to elicit a report — answer key\n\n1. Which question should be asked FIRST?Câu hỏi nào nên hỏi TRƯỚC?\n   Answer: c) What decision will this report help you make?\n   Purpose first; layout later.VI: Mục đích trước; bố cục sau.\n\n2. A report shows nothing when no loan is overdue. The spec should…Báo cáo không hiện gì khi không có lượt quá hạn. Đặc tả nên…\n   Answer: a) state what the report shows when no data is returned (e.g. \"No overdue loans this month\")\n   The empty case is a requirement.VI: Trường hợp rỗng cũng là một yêu cầu.\n\n3. A dashboard differs from a report mainly because it…Dashboard khác báo cáo chủ yếu vì nó…\n   Answer: a) shows several key indicators at a glance, often updated frequently, with drill-down\n   Dashboards show multiple indicators at once.VI: Dashboard hiện nhiều chỉ số cùng lúc.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: b · b · b.</p>",
+      "solutionExplanationHtml": "<p>Answers: c · a · a.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -221,23 +221,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Which font should the report use?"
+                "noiDung": "Which colour for the header?"
               },
               {
                 "ma": "b",
-                "noiDung": "What decision will this report help you make?"
+                "noiDung": "Which font should the report use?"
               },
               {
                 "ma": "c",
-                "noiDung": "How many pages should it have?"
+                "noiDung": "What decision will this report help you make?"
               },
               {
                 "ma": "d",
-                "noiDung": "Which colour for the header?"
+                "noiDung": "How many pages should it have?"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Purpose first; layout later.</p><p><i>VI: Mục đích trước; bố cục sau.</i></p>"
           },
@@ -247,11 +247,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "ignore this case"
+                "noiDung": "state what the report shows when no data is returned (e.g. \"No overdue loans this month\")"
               },
               {
                 "ma": "b",
-                "noiDung": "state what the report shows when no data is returned (e.g. \"No overdue loans this month\")"
+                "noiDung": "not send the report"
               },
               {
                 "ma": "c",
@@ -259,11 +259,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "not send the report"
+                "noiDung": "ignore this case"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>The empty case is a requirement.</p><p><i>VI: Trường hợp rỗng cũng là một yêu cầu.</i></p>"
           },
@@ -273,23 +273,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "is printed"
-              },
-              {
-                "ma": "b",
                 "noiDung": "shows several key indicators at a glance, often updated frequently, with drill-down"
               },
               {
+                "ma": "b",
+                "noiDung": "is printed"
+              },
+              {
                 "ma": "c",
-                "noiDung": "has no data"
+                "noiDung": "is only for developers"
               },
               {
                 "ma": "d",
-                "noiDung": "is only for developers"
+                "noiDung": "has no data"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>Dashboards show multiple indicators at once.</p><p><i>VI: Dashboard hiện nhiều chỉ số cùng lúc.</i></p>"
           }
@@ -506,10 +506,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Reports 4 — dashboards — answer key\n\n1. A gauge \"today’s orders\" turns red below 300 orders. This is its…Đồng hồ \"đơn hôm nay\" chuyển đỏ khi dưới 300 đơn. Đây là… của nó\n   Answer: b) threshold\n   Thresholds and colours must be specified.VI: Ngưỡng và màu phải được đặc tả.\n\n2. \"The sales tile is updated every 5 minutes.\" This is its…\"Ô doanh số cập nhật mỗi 5 phút.\" Đây là… của nó\n   Answer: a) refresh rate (latency)\n   How fresh the data must be.VI: Dữ liệu phải mới tới mức nào.\n\n3. Clicking the \"late deliveries\" chart shows the list of late orders. This is…Bấm vào biểu đồ \"giao trễ\" hiện danh sách đơn trễ. Đây là…\n   Answer: a) drill-down\n   From the indicator to the details.VI: Từ chỉ số xuống chi tiết.\n"
+          "code": "# Reports 4 — dashboards — answer key\n\n1. A gauge \"today’s orders\" turns red below 300 orders. This is its…Đồng hồ \"đơn hôm nay\" chuyển đỏ khi dưới 300 đơn. Đây là… của nó\n   Answer: c) threshold\n   Thresholds and colours must be specified.VI: Ngưỡng và màu phải được đặc tả.\n\n2. \"The sales tile is updated every 5 minutes.\" This is its…\"Ô doanh số cập nhật mỗi 5 phút.\" Đây là… của nó\n   Answer: a) refresh rate (latency)\n   How fresh the data must be.VI: Dữ liệu phải mới tới mức nào.\n\n3. Clicking the \"late deliveries\" chart shows the list of late orders. This is…Bấm vào biểu đồ \"giao trễ\" hiện danh sách đơn trễ. Đây là…\n   Answer: d) drill-down\n   From the indicator to the details.VI: Từ chỉ số xuống chi tiết.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: b · a · a.</p>",
+      "solutionExplanationHtml": "<p>Answers: c · a · d.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -522,23 +522,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "refresh rate"
-              },
-              {
-                "ma": "b",
-                "noiDung": "threshold"
-              },
-              {
-                "ma": "c",
                 "noiDung": "drill-down"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "security"
+              },
+              {
+                "ma": "c",
+                "noiDung": "threshold"
+              },
+              {
+                "ma": "d",
+                "noiDung": "refresh rate"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Thresholds and colours must be specified.</p><p><i>VI: Ngưỡng và màu phải được đặc tả.</i></p>"
           },
@@ -574,23 +574,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "drill-down"
-              },
-              {
-                "ma": "b",
-                "noiDung": "a business rule"
-              },
-              {
-                "ma": "c",
                 "noiDung": "a trigger"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "a constraint"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a business rule"
+              },
+              {
+                "ma": "d",
+                "noiDung": "drill-down"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>From the indicator to the details.</p><p><i>VI: Từ chỉ số xuống chi tiết.</i></p>"
           }

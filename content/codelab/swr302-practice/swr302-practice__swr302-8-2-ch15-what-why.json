@@ -316,10 +316,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Prototyping 3 — the three attribute classes — answer key\n\n1. Early in elicitation, you want feedback on the flow of a new booking app within one afternoon. Best combination?Đầu giai đoạn khai thác, muốn phản hồi về luồng đặt lịch trong một buổi chiều. Tổ hợp tốt nhất?\n   Answer: a) Throwaway paper mock-up\n   Fast, cheap, about the UI.VI: Nhanh, rẻ, về giao diện.\n\n2. The team doubts that the chosen architecture can handle the load. Best?Đội nghi kiến trúc đã chọn chịu được tải. Tốt nhất?\n   Answer: a) An electronic proof of concept\n   Only running code through the layers answers it.VI: Chỉ mã chạy xuyên tầng mới trả lời được.\n\n3. How many attribute classes describe a prototype?Có mấy lớp thuộc tính mô tả một prototype?\n   Answer: a) Three: scope, future use, form\n   Each with two alternatives.VI: Mỗi lớp có hai lựa chọn.\n"
+          "code": "# Prototyping 3 — the three attribute classes — answer key\n\n1. Early in elicitation, you want feedback on the flow of a new booking app within one afternoon. Best combination?Đầu giai đoạn khai thác, muốn phản hồi về luồng đặt lịch trong một buổi chiều. Tổ hợp tốt nhất?\n   Answer: d) Throwaway paper mock-up\n   Fast, cheap, about the UI.VI: Nhanh, rẻ, về giao diện.\n\n2. The team doubts that the chosen architecture can handle the load. Best?Đội nghi kiến trúc đã chọn chịu được tải. Tốt nhất?\n   Answer: d) An electronic proof of concept\n   Only running code through the layers answers it.VI: Chỉ mã chạy xuyên tầng mới trả lời được.\n\n3. How many attribute classes describe a prototype?Có mấy lớp thuộc tính mô tả một prototype?\n   Answer: b) Three: scope, future use, form\n   Each with two alternatives.VI: Mỗi lớp có hai lựa chọn.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: a · a · a.</p>",
+      "solutionExplanationHtml": "<p>Answers: d · d · b.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -332,23 +332,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Throwaway paper mock-up"
-              },
-              {
-                "ma": "b",
-                "noiDung": "Evolutionary electronic proof of concept"
-              },
-              {
-                "ma": "c",
                 "noiDung": "Throwaway proof of concept"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "No prototype"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Evolutionary electronic proof of concept"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Throwaway paper mock-up"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>Fast, cheap, about the UI.</p><p><i>VI: Nhanh, rẻ, về giao diện.</i></p>"
           },
@@ -358,23 +358,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "An electronic proof of concept"
-              },
-              {
-                "ma": "b",
-                "noiDung": "A paper mock-up"
-              },
-              {
-                "ma": "c",
                 "noiDung": "A longer meeting"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "A colour study"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A paper mock-up"
+              },
+              {
+                "ma": "d",
+                "noiDung": "An electronic proof of concept"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>Only running code through the layers answers it.</p><p><i>VI: Chỉ mã chạy xuyên tầng mới trả lời được.</i></p>"
           },
@@ -384,23 +384,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Three: scope, future use, form"
-              },
-              {
-                "ma": "b",
                 "noiDung": "Two"
               },
               {
+                "ma": "b",
+                "noiDung": "Three: scope, future use, form"
+              },
+              {
                 "ma": "c",
-                "noiDung": "Five"
+                "noiDung": "One: fidelity"
               },
               {
                 "ma": "d",
-                "noiDung": "One: fidelity"
+                "noiDung": "Five"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>Each with two alternatives.</p><p><i>VI: Mỗi lớp có hai lựa chọn.</i></p>"
           }
@@ -463,10 +463,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Prototyping 4 — as a requirements tool — answer key\n\n1. Which part of the system benefits most from a requirements prototype?Phần nào được lợi nhất từ prototype yêu cầu?\n   Answer: a) Poorly understood, risky or complex parts\n   Prototype where uncertainty is highest.VI: Làm prototype nơi bất định cao nhất.\n\n2. After users evaluate a prototype, the BA should…Sau khi người dùng đánh giá prototype, BA nên…\n   Answer: a) update the written requirements with what was learned\n   A prototype does not replace written requirements.VI: Prototype không thay yêu cầu viết.\n"
+          "code": "# Prototyping 4 — as a requirements tool — answer key\n\n1. Which part of the system benefits most from a requirements prototype?Phần nào được lợi nhất từ prototype yêu cầu?\n   Answer: c) Poorly understood, risky or complex parts\n   Prototype where uncertainty is highest.VI: Làm prototype nơi bất định cao nhất.\n\n2. After users evaluate a prototype, the BA should…Sau khi người dùng đánh giá prototype, BA nên…\n   Answer: c) update the written requirements with what was learned\n   A prototype does not replace written requirements.VI: Prototype không thay yêu cầu viết.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: a · a.</p>",
+      "solutionExplanationHtml": "<p>Answers: c · c.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -479,23 +479,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Poorly understood, risky or complex parts"
-              },
-              {
-                "ma": "b",
                 "noiDung": "The login page everyone knows"
               },
               {
+                "ma": "b",
+                "noiDung": "Every part equally"
+              },
+              {
                 "ma": "c",
-                "noiDung": "The database backups"
+                "noiDung": "Poorly understood, risky or complex parts"
               },
               {
                 "ma": "d",
-                "noiDung": "Every part equally"
+                "noiDung": "The database backups"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>Prototype where uncertainty is highest.</p><p><i>VI: Làm prototype nơi bất định cao nhất.</i></p>"
           },
@@ -505,7 +505,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "update the written requirements with what was learned"
+                "noiDung": "discard the feedback"
               },
               {
                 "ma": "b",
@@ -513,7 +513,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "discard the feedback"
+                "noiDung": "update the written requirements with what was learned"
               },
               {
                 "ma": "d",
@@ -521,7 +521,7 @@
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>A prototype does not replace written requirements.</p><p><i>VI: Prototype không thay yêu cầu viết.</i></p>"
           }

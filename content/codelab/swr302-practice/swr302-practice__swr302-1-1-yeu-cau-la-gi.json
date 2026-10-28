@@ -47,10 +47,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# What is a requirement 1 — the definitions — answer key\n\n1. According to Sommerville & Sawyer, which of these can be a requirement?Theo Sommerville & Sawyer, cái nào có thể là một requirement?\n   Answer: b) Behaviour, system properties and constraints on the development process\n   Behaviour, properties (quality attributes) AND constraints all count.VI: Hành vi, thuộc tính (chất lượng) VÀ ràng buộc đều được tính.\n\n2. \"The app must be written in Kotlin because the company only has Kotlin developers.\" Is this a requirement?\"App phải viết bằng Kotlin vì công ty chỉ có lập trình viên Kotlin.\" Đây có phải requirement không?\n   Answer: b) Yes — a constraint that drives design choices\n   It limits the design choices, so by both definitions it is a requirement — a constraint.VI: Nó giới hạn lựa chọn thiết kế, nên theo cả hai định nghĩa đó là requirement — loại ràng buộc.\n\n3. Which statement describes WHAT the system does rather than HOW WELL it does it?Phát biểu nào mô tả hệ thống LÀM GÌ chứ không phải làm TỐT tới đâu?\n   Answer: b) The system shall let a reader renew a loan.\n   Renewing a loan is a behaviour (functional); the others are properties (nonfunctional).VI: Gia hạn là một hành vi (chức năng); các câu khác là thuộc tính (phi chức năng).\n\n4. Nonfunctional requirements are…Yêu cầu phi chức năng là…\n   Answer: b) quality attributes, external interfaces and constraints — as important as functions\n   Wiegers: the SRS holds quality attributes, external interfaces and constraints next to functions; they shape the architecture.VI: Wiegers: SRS chứa thuộc tính chất lượng, giao diện ngoài và ràng buộc bên cạnh chức năng; chúng định hình kiến trúc.\n\n5. Why do requirements matter so much? Studies quoted in the course say about…Vì sao requirement quan trọng? Nghiên cứu được trích trong môn nói khoảng…\n   Answer: b) 50% of defects originate in requirements, and they are the most expensive to fix when found late\n   Martin & Leffingwell: about half of the defects start in requirements, and fixing them late costs many times more.VI: Martin & Leffingwell: khoảng một nửa lỗi bắt nguồn từ yêu cầu, và sửa muộn tốn gấp nhiều lần.\n"
+          "code": "# What is a requirement 1 — the definitions — answer key\n\n1. According to Sommerville & Sawyer, which of these can be a requirement?Theo Sommerville & Sawyer, cái nào có thể là một requirement?\n   Answer: a) Behaviour, system properties and constraints on the development process\n   Behaviour, properties (quality attributes) AND constraints all count.VI: Hành vi, thuộc tính (chất lượng) VÀ ràng buộc đều được tính.\n\n2. \"The app must be written in Kotlin because the company only has Kotlin developers.\" Is this a requirement?\"App phải viết bằng Kotlin vì công ty chỉ có lập trình viên Kotlin.\" Đây có phải requirement không?\n   Answer: a) Yes — a constraint that drives design choices\n   It limits the design choices, so by both definitions it is a requirement — a constraint.VI: Nó giới hạn lựa chọn thiết kế, nên theo cả hai định nghĩa đó là requirement — loại ràng buộc.\n\n3. Which statement describes WHAT the system does rather than HOW WELL it does it?Phát biểu nào mô tả hệ thống LÀM GÌ chứ không phải làm TỐT tới đâu?\n   Answer: a) The system shall let a reader renew a loan.\n   Renewing a loan is a behaviour (functional); the others are properties (nonfunctional).VI: Gia hạn là một hành vi (chức năng); các câu khác là thuộc tính (phi chức năng).\n\n4. Nonfunctional requirements are…Yêu cầu phi chức năng là…\n   Answer: c) quality attributes, external interfaces and constraints — as important as functions\n   Wiegers: the SRS holds quality attributes, external interfaces and constraints next to functions; they shape the architecture.VI: Wiegers: SRS chứa thuộc tính chất lượng, giao diện ngoài và ràng buộc bên cạnh chức năng; chúng định hình kiến trúc.\n\n5. Why do requirements matter so much? Studies quoted in the course say about…Vì sao requirement quan trọng? Nghiên cứu được trích trong môn nói khoảng…\n   Answer: c) 50% of defects originate in requirements, and they are the most expensive to fix when found late\n   Martin & Leffingwell: about half of the defects start in requirements, and fixing them late costs many times more.VI: Martin & Leffingwell: khoảng một nửa lỗi bắt nguồn từ yêu cầu, và sửa muộn tốn gấp nhiều lần.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: b · b · b · b · b — a requirement is anything that drives design choices: behaviour, properties and constraints.</p>",
+      "solutionExplanationHtml": "<p>Answers: a · a · a · c · c — a requirement is anything that drives design choices: behaviour, properties and constraints.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -63,23 +63,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Only descriptions of system behaviour"
-              },
-              {
-                "ma": "b",
                 "noiDung": "Behaviour, system properties and constraints on the development process"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "Only what the customer writes in the contract"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "Only the user interface"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only descriptions of system behaviour"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>Behaviour, properties (quality attributes) AND constraints all count.</p><p><i>VI: Hành vi, thuộc tính (chất lượng) VÀ ràng buộc đều được tính.</i></p>"
           },
@@ -89,23 +89,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "No — it is a design decision of the developers"
-              },
-              {
-                "ma": "b",
                 "noiDung": "Yes — a constraint that drives design choices"
               },
               {
+                "ma": "b",
+                "noiDung": "No — it is a design decision of the developers"
+              },
+              {
                 "ma": "c",
-                "noiDung": "No — requirements never mention technology"
+                "noiDung": "Yes — a functional requirement"
               },
               {
                 "ma": "d",
-                "noiDung": "Yes — a functional requirement"
+                "noiDung": "No — requirements never mention technology"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>It limits the design choices, so by both definitions it is a requirement — a constraint.</p><p><i>VI: Nó giới hạn lựa chọn thiết kế, nên theo cả hai định nghĩa đó là requirement — loại ràng buộc.</i></p>"
           },
@@ -115,23 +115,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Search results appear within 2 seconds."
-              },
-              {
-                "ma": "b",
                 "noiDung": "The system shall let a reader renew a loan."
               },
               {
+                "ma": "b",
+                "noiDung": "Passwords are stored hashed."
+              },
+              {
                 "ma": "c",
-                "noiDung": "The system is available 99.5% of the time."
+                "noiDung": "Search results appear within 2 seconds."
               },
               {
                 "ma": "d",
-                "noiDung": "Passwords are stored hashed."
+                "noiDung": "The system is available 99.5% of the time."
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>Renewing a loan is a behaviour (functional); the others are properties (nonfunctional).</p><p><i>VI: Gia hạn là một hành vi (chức năng); các câu khác là thuộc tính (phi chức năng).</i></p>"
           },
@@ -141,23 +141,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "less important than functional ones and can be added at the end"
+                "noiDung": "requirements that are not implemented"
               },
               {
                 "ma": "b",
-                "noiDung": "quality attributes, external interfaces and constraints — as important as functions"
+                "noiDung": "less important than functional ones and can be added at the end"
               },
               {
                 "ma": "c",
-                "noiDung": "only performance requirements"
+                "noiDung": "quality attributes, external interfaces and constraints — as important as functions"
               },
               {
                 "ma": "d",
-                "noiDung": "requirements that are not implemented"
+                "noiDung": "only performance requirements"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Wiegers: the SRS holds quality attributes, external interfaces and constraints next to functions; they shape the architecture.</p><p><i>VI: Wiegers: SRS chứa thuộc tính chất lượng, giao diện ngoài và ràng buộc bên cạnh chức năng; chúng định hình kiến trúc.</i></p>"
           },
@@ -167,23 +167,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "5% of defects come from requirements"
-              },
-              {
-                "ma": "b",
-                "noiDung": "50% of defects originate in requirements, and they are the most expensive to fix when found late"
-              },
-              {
-                "ma": "c",
                 "noiDung": "requirements defects are cheap because they are only text"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "most defects come from the compiler"
+              },
+              {
+                "ma": "c",
+                "noiDung": "50% of defects originate in requirements, and they are the most expensive to fix when found late"
+              },
+              {
+                "ma": "d",
+                "noiDung": "5% of defects come from requirements"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Martin & Leffingwell: about half of the defects start in requirements, and fixing them late costs many times more.</p><p><i>VI: Martin & Leffingwell: khoảng một nửa lỗi bắt nguồn từ yêu cầu, và sửa muộn tốn gấp nhiều lần.</i></p>"
           }
@@ -584,10 +584,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# What is a requirement 4 — find the requirement inside the talk — answer key\n\n1. Librarian: \"Students keep losing track of when their books are due.\"Thủ thư: \"Học sinh hay quên hạn trả sách.\"\n   Answer: b) A need that can lead to a functional requirement such as due-date reminders\n   A problem statement points to a user need; reminders are one functional answer.VI: Một câu nêu vấn đề chỉ ra nhu cầu người dùng; nhắc hạn là một đáp án chức năng.\n\n2. Principal: \"Parents must never see other students’ loans.\"Hiệu trưởng: \"Phụ huynh không bao giờ được thấy lượt mượn của học sinh khác.\"\n   Answer: a) Security quality attribute (privacy)\n   Who may see what is a security/privacy quality attribute.VI: Ai được xem gì là thuộc tính chất lượng bảo mật/quyền riêng tư.\n\n3. IT teacher: \"Use React for the front end, it is modern.\"GV tin học: \"Dùng React cho giao diện, nó hiện đại.\"\n   Answer: b) A solution idea: ask whether there is a real constraint behind it (skills, policy) before treating it as a requirement\n   A preferred technology is a solution idea unless a real constraint (policy, staff skills) makes it mandatory.VI: Một công nghệ ưa thích là ý tưởng giải pháp, trừ khi có ràng buộc thật (chính sách, kỹ năng nhân sự) bắt buộc nó.\n\n4. Librarian: \"It has to be fast.\"Thủ thư: \"Phải nhanh.\"\n   Answer: b) The seed of a performance requirement that needs a number: which action, how fast, under what load\n   \"Fast\" is a quality expectation; the BA must turn it into something measurable.VI: \"Nhanh\" là kỳ vọng chất lượng; BA phải biến nó thành thứ đo được.\n"
+          "code": "# What is a requirement 4 — find the requirement inside the talk — answer key\n\n1. Librarian: \"Students keep losing track of when their books are due.\"Thủ thư: \"Học sinh hay quên hạn trả sách.\"\n   Answer: b) A need that can lead to a functional requirement such as due-date reminders\n   A problem statement points to a user need; reminders are one functional answer.VI: Một câu nêu vấn đề chỉ ra nhu cầu người dùng; nhắc hạn là một đáp án chức năng.\n\n2. Principal: \"Parents must never see other students’ loans.\"Hiệu trưởng: \"Phụ huynh không bao giờ được thấy lượt mượn của học sinh khác.\"\n   Answer: a) Security quality attribute (privacy)\n   Who may see what is a security/privacy quality attribute.VI: Ai được xem gì là thuộc tính chất lượng bảo mật/quyền riêng tư.\n\n3. IT teacher: \"Use React for the front end, it is modern.\"GV tin học: \"Dùng React cho giao diện, nó hiện đại.\"\n   Answer: c) A solution idea: ask whether there is a real constraint behind it (skills, policy) before treating it as a requirement\n   A preferred technology is a solution idea unless a real constraint (policy, staff skills) makes it mandatory.VI: Một công nghệ ưa thích là ý tưởng giải pháp, trừ khi có ràng buộc thật (chính sách, kỹ năng nhân sự) bắt buộc nó.\n\n4. Librarian: \"It has to be fast.\"Thủ thư: \"Phải nhanh.\"\n   Answer: d) The seed of a performance requirement that needs a number: which action, how fast, under what load\n   \"Fast\" is a quality expectation; the BA must turn it into something measurable.VI: \"Nhanh\" là kỳ vọng chất lượng; BA phải biến nó thành thứ đo được.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: b · a · b · b.</p>",
+      "solutionExplanationHtml": "<p>Answers: b · a · c · d.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -630,11 +630,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "User interface design"
+                "noiDung": "Project requirement"
               },
               {
                 "ma": "c",
-                "noiDung": "Project requirement"
+                "noiDung": "User interface design"
               },
               {
                 "ma": "d",
@@ -656,11 +656,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "A solution idea: ask whether there is a real constraint behind it (skills, policy) before treating it as a requirement"
+                "noiDung": "A business requirement"
               },
               {
                 "ma": "c",
-                "noiDung": "A business requirement"
+                "noiDung": "A solution idea: ask whether there is a real constraint behind it (skills, policy) before treating it as a requirement"
               },
               {
                 "ma": "d",
@@ -668,7 +668,7 @@
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>A preferred technology is a solution idea unless a real constraint (policy, staff skills) makes it mandatory.</p><p><i>VI: Một công nghệ ưa thích là ý tưởng giải pháp, trừ khi có ràng buộc thật (chính sách, kỹ năng nhân sự) bắt buộc nó.</i></p>"
           },
@@ -682,19 +682,19 @@
               },
               {
                 "ma": "b",
-                "noiDung": "The seed of a performance requirement that needs a number: which action, how fast, under what load"
-              },
-              {
-                "ma": "c",
                 "noiDung": "A functional requirement"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "A constraint"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The seed of a performance requirement that needs a number: which action, how fast, under what load"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>\"Fast\" is a quality expectation; the BA must turn it into something measurable.</p><p><i>VI: \"Nhanh\" là kỳ vọng chất lượng; BA phải biến nó thành thứ đo được.</i></p>"
           }

@@ -182,10 +182,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Traceability 2 — why trace? — answer key\n\n1. A code module traces to no requirement. This suggests…Một module code không truy về yêu cầu nào. Điều này gợi ý…\n   Answer: a) gold plating or a missing requirement\n   Either it is unneeded, or the requirement was never written.VI: Hoặc không cần, hoặc yêu cầu chưa được viết.\n\n2. A requirement has no test case. Risk?Một yêu cầu không có test case. Rủi ro?\n   Answer: a) It may be shipped unverified\n   Traceability exposes untested requirements.VI: Truy vết lộ yêu cầu chưa được kiểm.\n\n3. A medical-device regulator asks you to prove every safety requirement was tested. You use…Cơ quan quản lý thiết bị y tế yêu cầu chứng minh mọi yêu cầu an toàn đã được test. Bạn dùng…\n   Answer: a) the requirements traceability matrix\n   Certification is a classic use of the RTM.VI: Chứng nhận là công dụng kinh điển của RTM.\n\n4. Who should record trace links, and when?Ai ghi liên kết truy vết, và khi nào?\n   Answer: a) Everyone who creates a work product, at the time they create it\n   Capturing links later is costly and inaccurate.VI: Ghi sau thì tốn kém và thiếu chính xác.\n"
+          "code": "# Traceability 2 — why trace? — answer key\n\n1. A code module traces to no requirement. This suggests…Một module code không truy về yêu cầu nào. Điều này gợi ý…\n   Answer: c) gold plating or a missing requirement\n   Either it is unneeded, or the requirement was never written.VI: Hoặc không cần, hoặc yêu cầu chưa được viết.\n\n2. A requirement has no test case. Risk?Một yêu cầu không có test case. Rủi ro?\n   Answer: a) It may be shipped unverified\n   Traceability exposes untested requirements.VI: Truy vết lộ yêu cầu chưa được kiểm.\n\n3. A medical-device regulator asks you to prove every safety requirement was tested. You use…Cơ quan quản lý thiết bị y tế yêu cầu chứng minh mọi yêu cầu an toàn đã được test. Bạn dùng…\n   Answer: b) the requirements traceability matrix\n   Certification is a classic use of the RTM.VI: Chứng nhận là công dụng kinh điển của RTM.\n\n4. Who should record trace links, and when?Ai ghi liên kết truy vết, và khi nào?\n   Answer: b) Everyone who creates a work product, at the time they create it\n   Capturing links later is costly and inaccurate.VI: Ghi sau thì tốn kém và thiếu chính xác.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: a · a · a · a.</p>",
+      "solutionExplanationHtml": "<p>Answers: c · a · b · b.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -198,23 +198,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "gold plating or a missing requirement"
-              },
-              {
-                "ma": "b",
                 "noiDung": "the module is perfect"
               },
               {
+                "ma": "b",
+                "noiDung": "nothing"
+              },
+              {
                 "ma": "c",
-                "noiDung": "a testing tool bug"
+                "noiDung": "gold plating or a missing requirement"
               },
               {
                 "ma": "d",
-                "noiDung": "nothing"
+                "noiDung": "a testing tool bug"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>Either it is unneeded, or the requirement was never written.</p><p><i>VI: Hoặc không cần, hoặc yêu cầu chưa được viết.</i></p>"
           },
@@ -228,15 +228,15 @@
               },
               {
                 "ma": "b",
-                "noiDung": "None"
-              },
-              {
-                "ma": "c",
                 "noiDung": "It will be deleted"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "The build fails"
+              },
+              {
+                "ma": "d",
+                "noiDung": "None"
               }
             ],
             "dapAn": [
@@ -250,23 +250,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "the requirements traceability matrix"
+                "noiDung": "the context diagram"
               },
               {
                 "ma": "b",
-                "noiDung": "the vision statement"
+                "noiDung": "the requirements traceability matrix"
               },
               {
                 "ma": "c",
-                "noiDung": "the backlog burndown"
+                "noiDung": "the vision statement"
               },
               {
                 "ma": "d",
-                "noiDung": "the context diagram"
+                "noiDung": "the backlog burndown"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>Certification is a classic use of the RTM.</p><p><i>VI: Chứng nhận là công dụng kinh điển của RTM.</i></p>"
           },
@@ -276,23 +276,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Everyone who creates a work product, at the time they create it"
-              },
-              {
-                "ma": "b",
                 "noiDung": "One BA at the end of the project"
               },
               {
+                "ma": "b",
+                "noiDung": "Everyone who creates a work product, at the time they create it"
+              },
+              {
                 "ma": "c",
-                "noiDung": "Testers after release"
+                "noiDung": "Nobody — tools guess them"
               },
               {
                 "ma": "d",
-                "noiDung": "Nobody — tools guess them"
+                "noiDung": "Testers after release"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>Capturing links later is costly and inaccurate.</p><p><i>VI: Ghi sau thì tốn kém và thiếu chính xác.</i></p>"
           }

@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Done and missing 1 — signals of completeness — answer key\n\n1. Which is evidence that elicitation is nearly complete?Điều nào là bằng chứng khai thác sắp xong?\n   Answer: b) New scenarios are variations of use cases already captured\n   Repetition in what you hear is a sign of saturation.VI: Nghe lặp lại là dấu hiệu bão hoà.\n\n2. Users start proposing features \"that would be nice in a future version\". This suggests…Người dùng bắt đầu đề xuất tính năng \"có thì hay cho bản sau\". Điều đó gợi ý…\n   Answer: b) the important requirements for this release are probably captured\n   Low-priority ideas mean the core is covered.VI: Ý tưởng ưu tiên thấp nghĩa là phần lõi đã phủ.\n\n3. Can you ever be completely sure you found all requirements?Có bao giờ chắc chắn tìm đủ mọi yêu cầu không?\n   Answer: b) No — but you can reduce the risk with modelling, checklists and reviews\n   Completeness is managed, not proven.VI: Độ đầy đủ được quản lý, không chứng minh được.\n"
+          "code": "# Done and missing 1 — signals of completeness — answer key\n\n1. Which is evidence that elicitation is nearly complete?Điều nào là bằng chứng khai thác sắp xong?\n   Answer: d) New scenarios are variations of use cases already captured\n   Repetition in what you hear is a sign of saturation.VI: Nghe lặp lại là dấu hiệu bão hoà.\n\n2. Users start proposing features \"that would be nice in a future version\". This suggests…Người dùng bắt đầu đề xuất tính năng \"có thì hay cho bản sau\". Điều đó gợi ý…\n   Answer: c) the important requirements for this release are probably captured\n   Low-priority ideas mean the core is covered.VI: Ý tưởng ưu tiên thấp nghĩa là phần lõi đã phủ.\n\n3. Can you ever be completely sure you found all requirements?Có bao giờ chắc chắn tìm đủ mọi yêu cầu không?\n   Answer: a) No — but you can reduce the risk with modelling, checklists and reviews\n   Completeness is managed, not proven.VI: Độ đầy đủ được quản lý, không chứng minh được.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: b · b · b.</p>",
+      "solutionExplanationHtml": "<p>Answers: d · c · a.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -66,7 +66,7 @@
               },
               {
                 "ma": "b",
-                "noiDung": "New scenarios are variations of use cases already captured"
+                "noiDung": "The SRS template is full"
               },
               {
                 "ma": "c",
@@ -74,11 +74,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "The SRS template is full"
+                "noiDung": "New scenarios are variations of use cases already captured"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>Repetition in what you hear is a sign of saturation.</p><p><i>VI: Nghe lặp lại là dấu hiệu bão hoà.</i></p>"
           },
@@ -88,23 +88,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "scope creep is out of control"
+                "noiDung": "nothing"
               },
               {
                 "ma": "b",
-                "noiDung": "the important requirements for this release are probably captured"
+                "noiDung": "scope creep is out of control"
               },
               {
                 "ma": "c",
-                "noiDung": "the users are confused"
+                "noiDung": "the important requirements for this release are probably captured"
               },
               {
                 "ma": "d",
-                "noiDung": "nothing"
+                "noiDung": "the users are confused"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Low-priority ideas mean the core is covered.</p><p><i>VI: Ý tưởng ưu tiên thấp nghĩa là phần lõi đã phủ.</i></p>"
           },
@@ -114,23 +114,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Yes, with enough interviews"
-              },
-              {
-                "ma": "b",
                 "noiDung": "No — but you can reduce the risk with modelling, checklists and reviews"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "Yes, when the customer signs"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "Only on small projects"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Yes, with enough interviews"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>Completeness is managed, not proven.</p><p><i>VI: Độ đầy đủ được quản lý, không chứng minh được.</i></p>"
           }
@@ -193,10 +193,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Done and missing 4 — spot the missing requirement — answer key\n\n1. ATM: withdraw cash; check balance; print receipt; PIN entered three times wrong ⇒ ?ATM: rút tiền; xem số dư; in hoá đơn; nhập sai PIN ba lần ⇒ ?\n   Answer: b) What the ATM does with the card after three wrong PINs (retain it, notify the bank)\n   An exception with no defined response.VI: Một ngoại lệ chưa có phản hồi.\n\n2. Library: borrow; return; reserve a book that is on loan. What is missing?Thư viện: mượn; trả; đặt trước sách đang được mượn. Thiếu gì?\n   Answer: a) Cancel a reservation\n   Symmetry: every reservation needs a way to cancel it.VI: Đối xứng: đặt trước thì phải huỷ được.\n\n3. Gym: members book classes; trainers record attendance. Which user class is forgotten?Gym: hội viên đặt lớp; huấn luyện viên điểm danh. Lớp người dùng nào bị quên?\n   Answer: a) The manager who sets the class schedule and capacity\n   Someone must create the classes being booked.VI: Phải có người tạo các lớp để mà đặt.\n"
+          "code": "# Done and missing 4 — spot the missing requirement — answer key\n\n1. ATM: withdraw cash; check balance; print receipt; PIN entered three times wrong ⇒ ?ATM: rút tiền; xem số dư; in hoá đơn; nhập sai PIN ba lần ⇒ ?\n   Answer: d) What the ATM does with the card after three wrong PINs (retain it, notify the bank)\n   An exception with no defined response.VI: Một ngoại lệ chưa có phản hồi.\n\n2. Library: borrow; return; reserve a book that is on loan. What is missing?Thư viện: mượn; trả; đặt trước sách đang được mượn. Thiếu gì?\n   Answer: a) Cancel a reservation\n   Symmetry: every reservation needs a way to cancel it.VI: Đối xứng: đặt trước thì phải huỷ được.\n\n3. Gym: members book classes; trainers record attendance. Which user class is forgotten?Gym: hội viên đặt lớp; huấn luyện viên điểm danh. Lớp người dùng nào bị quên?\n   Answer: a) The manager who sets the class schedule and capacity\n   Someone must create the classes being booked.VI: Phải có người tạo các lớp để mà đặt.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: b · a · a.</p>",
+      "solutionExplanationHtml": "<p>Answers: d · a · a.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -213,19 +213,19 @@
               },
               {
                 "ma": "b",
-                "noiDung": "What the ATM does with the card after three wrong PINs (retain it, notify the bank)"
-              },
-              {
-                "ma": "c",
                 "noiDung": "The colour of the screen"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "The brand of the printer"
+              },
+              {
+                "ma": "d",
+                "noiDung": "What the ATM does with the card after three wrong PINs (retain it, notify the bank)"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>An exception with no defined response.</p><p><i>VI: Một ngoại lệ chưa có phản hồi.</i></p>"
           },
@@ -239,11 +239,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "Print the catalogue"
+                "noiDung": "Change the logo"
               },
               {
                 "ma": "c",
-                "noiDung": "Change the logo"
+                "noiDung": "Print the catalogue"
               },
               {
                 "ma": "d",
@@ -265,11 +265,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "The members"
+                "noiDung": "The trainers"
               },
               {
                 "ma": "c",
-                "noiDung": "The trainers"
+                "noiDung": "The members"
               },
               {
                 "ma": "d",

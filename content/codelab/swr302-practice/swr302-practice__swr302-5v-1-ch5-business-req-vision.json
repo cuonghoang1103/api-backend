@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Business requirements 2 — SMART objectives — answer key\n\n1. Which objective is SMART?Mục tiêu nào SMART?\n   Answer: b) Increase canteen revenue by 20% by December 2027.\n   Specific, measurable (20%), time-bound (Dec 2027).VI: Cụ thể, đo được (20%), có hạn (12/2027).\n\n2. Which candidate is a solution, not a business objective?Phương án nào là giải pháp, không phải mục tiêu nghiệp vụ?\n   Answer: b) Build the app with Flutter.\n   A technology choice is not a business result.VI: Lựa chọn công nghệ không phải kết quả nghiệp vụ.\n\n3. \"Improve customer satisfaction\" becomes SMART when written as…\"Tăng sự hài lòng\" trở thành SMART khi viết…\n   Answer: b) Raise the average rating from 3.6 to 4.3 stars within six months of launch.\n   Baseline, target and deadline make it measurable and time-bound.VI: Mốc hiện tại, mục tiêu và hạn làm nó đo được và có thời hạn.\n"
+          "code": "# Business requirements 2 — SMART objectives — answer key\n\n1. Which objective is SMART?Mục tiêu nào SMART?\n   Answer: c) Increase canteen revenue by 20% by December 2027.\n   Specific, measurable (20%), time-bound (Dec 2027).VI: Cụ thể, đo được (20%), có hạn (12/2027).\n\n2. Which candidate is a solution, not a business objective?Phương án nào là giải pháp, không phải mục tiêu nghiệp vụ?\n   Answer: c) Build the app with Flutter.\n   A technology choice is not a business result.VI: Lựa chọn công nghệ không phải kết quả nghiệp vụ.\n\n3. \"Improve customer satisfaction\" becomes SMART when written as…\"Tăng sự hài lòng\" trở thành SMART khi viết…\n   Answer: c) Raise the average rating from 3.6 to 4.3 stars within six months of launch.\n   Baseline, target and deadline make it measurable and time-bound.VI: Mốc hiện tại, mục tiêu và hạn làm nó đo được và có thời hạn.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: b · b · b.</p>",
+      "solutionExplanationHtml": "<p>Answers: c · c · c.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -62,23 +62,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Make students happier with food."
-              },
-              {
-                "ma": "b",
-                "noiDung": "Increase canteen revenue by 20% by December 2027."
-              },
-              {
-                "ma": "c",
                 "noiDung": "Become the best food app in Vietnam."
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "Use machine learning for recommendations."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Increase canteen revenue by 20% by December 2027."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Make students happier with food."
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Specific, measurable (20%), time-bound (Dec 2027).</p><p><i>VI: Cụ thể, đo được (20%), có hạn (12/2027).</i></p>"
           },
@@ -88,23 +88,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Cut the lunch queue time from 20 to 5 minutes by June."
-              },
-              {
-                "ma": "b",
-                "noiDung": "Build the app with Flutter."
-              },
-              {
-                "ma": "c",
                 "noiDung": "Reduce food waste by 30% this year."
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "Serve 500 more students per day."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Build the app with Flutter."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Cut the lunch queue time from 20 to 5 minutes by June."
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>A technology choice is not a business result.</p><p><i>VI: Lựa chọn công nghệ không phải kết quả nghiệp vụ.</i></p>"
           },
@@ -114,23 +114,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Greatly improve customer satisfaction."
+                "noiDung": "Improve satisfaction using surveys."
               },
               {
                 "ma": "b",
-                "noiDung": "Raise the average rating from 3.6 to 4.3 stars within six months of launch."
+                "noiDung": "Greatly improve customer satisfaction."
               },
               {
                 "ma": "c",
-                "noiDung": "Customers will love us."
+                "noiDung": "Raise the average rating from 3.6 to 4.3 stars within six months of launch."
               },
               {
                 "ma": "d",
-                "noiDung": "Improve satisfaction using surveys."
+                "noiDung": "Customers will love us."
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Baseline, target and deadline make it measurable and time-bound.</p><p><i>VI: Mốc hiện tại, mục tiêu và hạn làm nó đo được và có thời hạn.</i></p>"
           }

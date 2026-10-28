@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Decision models 1 — table or tree? — answer key\n\n1. A discount rule has 4 independent yes/no conditions. How many columns does the full decision table have?Luật giảm giá có 4 điều kiện có/không độc lập. Bảng quyết định đầy đủ có bao nhiêu cột?\n   Answer: c) 16\n   2⁴ = 16.VI: 2⁴ = 16.\n\n2. The question \"is the member a student?\" is only asked when \"is the member under 25?\" is yes. Best model?Câu \"có phải sinh viên?\" chỉ hỏi khi \"dưới 25 tuổi?\" là có. Mô hình phù hợp nhất?\n   Answer: b) Decision tree\n   Nested conditions ⇒ tree.VI: Điều kiện lồng nhau ⇒ cây.\n\n3. What does \"–\" mean in a reduced decision table?\"–\" nghĩa là gì trong bảng quyết định rút gọn?\n   Answer: b) The condition does not matter for that rule\n   \"Don’t care\": both values give the same action.VI: \"Không quan trọng\": hai giá trị cho cùng hành động.\n\n4. For a thermostat, \"temperature drops below the set point while the heater is off ⇒ turn the heater on\" belongs in…Với bộ điều nhiệt, \"nhiệt độ xuống dưới mức đặt khi máy sưởi tắt ⇒ bật máy sưởi\" thuộc về…\n   Answer: a) an event-response table\n   Event + state ⇒ response.VI: Sự kiện + trạng thái ⇒ phản hồi.\n"
+          "code": "# Decision models 1 — table or tree? — answer key\n\n1. A discount rule has 4 independent yes/no conditions. How many columns does the full decision table have?Luật giảm giá có 4 điều kiện có/không độc lập. Bảng quyết định đầy đủ có bao nhiêu cột?\n   Answer: a) 16\n   2⁴ = 16.VI: 2⁴ = 16.\n\n2. The question \"is the member a student?\" is only asked when \"is the member under 25?\" is yes. Best model?Câu \"có phải sinh viên?\" chỉ hỏi khi \"dưới 25 tuổi?\" là có. Mô hình phù hợp nhất?\n   Answer: d) Decision tree\n   Nested conditions ⇒ tree.VI: Điều kiện lồng nhau ⇒ cây.\n\n3. What does \"–\" mean in a reduced decision table?\"–\" nghĩa là gì trong bảng quyết định rút gọn?\n   Answer: c) The condition does not matter for that rule\n   \"Don’t care\": both values give the same action.VI: \"Không quan trọng\": hai giá trị cho cùng hành động.\n\n4. For a thermostat, \"temperature drops below the set point while the heater is off ⇒ turn the heater on\" belongs in…Với bộ điều nhiệt, \"nhiệt độ xuống dưới mức đặt khi máy sưởi tắt ⇒ bật máy sưởi\" thuộc về…\n   Answer: d) an event-response table\n   Event + state ⇒ response.VI: Sự kiện + trạng thái ⇒ phản hồi.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: c · b · b · a.</p>",
+      "solutionExplanationHtml": "<p>Answers: a · d · c · d.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -62,7 +62,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "4"
+                "noiDung": "16"
               },
               {
                 "ma": "b",
@@ -70,7 +70,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "16"
+                "noiDung": "4"
               },
               {
                 "ma": "d",
@@ -78,7 +78,7 @@
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>2⁴ = 16.</p><p><i>VI: 2⁴ = 16.</i></p>"
           },
@@ -92,19 +92,19 @@
               },
               {
                 "ma": "b",
-                "noiDung": "Decision tree"
-              },
-              {
-                "ma": "c",
                 "noiDung": "Context diagram"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "ERD"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Decision tree"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>Nested conditions ⇒ tree.</p><p><i>VI: Điều kiện lồng nhau ⇒ cây.</i></p>"
           },
@@ -114,23 +114,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "The condition is false"
+                "noiDung": "The rule is impossible"
               },
               {
                 "ma": "b",
-                "noiDung": "The condition does not matter for that rule"
+                "noiDung": "The condition is false"
               },
               {
                 "ma": "c",
-                "noiDung": "The action is missing"
+                "noiDung": "The condition does not matter for that rule"
               },
               {
                 "ma": "d",
-                "noiDung": "The rule is impossible"
+                "noiDung": "The action is missing"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>\"Don’t care\": both values give the same action.</p><p><i>VI: \"Không quan trọng\": hai giá trị cho cùng hành động.</i></p>"
           },
@@ -140,23 +140,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "an event-response table"
-              },
-              {
-                "ma": "b",
                 "noiDung": "an ERD"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "a feature tree"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "a use case diagram"
+              },
+              {
+                "ma": "d",
+                "noiDung": "an event-response table"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>Event + state ⇒ response.</p><p><i>VI: Sự kiện + trạng thái ⇒ phản hồi.</i></p>"
           }

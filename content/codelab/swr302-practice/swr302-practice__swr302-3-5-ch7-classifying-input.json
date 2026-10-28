@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Classifying input 1 — clue words — answer key\n\n1. \"…increase market share by 10%…\", \"…save $200,000 a year…\" usually signal a…\"…tăng thị phần 10%…\", \"…tiết kiệm 200.000 đô mỗi năm…\" thường báo hiệu…\n   Answer: a) business requirement\n   Financial or market benefits = business requirements.VI: Lợi ích tài chính, thị trường = yêu cầu nghiệp vụ.\n\n2. \"I need to…\", \"I want to be able to…\" from a user usually signal a…\"Tôi cần…\", \"Tôi muốn có thể…\" từ người dùng thường báo hiệu…\n   Answer: a) user requirement\n   A task or goal of the user.VI: Một việc hay mục tiêu của người dùng.\n\n3. \"…must comply with…\", \"…according to the policy…\" usually signal a…\"…phải tuân theo…\", \"…theo chính sách…\" thường báo hiệu…\n   Answer: a) business rule\n   Policies and regulations exist outside the software.VI: Chính sách và quy định tồn tại ngoài phần mềm.\n\n4. \"…fast, easy, secure, reliable…\" usually signal a…\"…nhanh, dễ, an toàn, ổn định…\" thường báo hiệu…\n   Answer: a) quality attribute (to be made measurable)\n   Adjectives about how well ⇒ quality attributes; the BA must quantify them.VI: Tính từ về mức độ tốt ⇒ thuộc tính chất lượng; BA phải lượng hoá.\n\n5. \"Use a drop-down list…\", \"Store it in a spreadsheet…\" usually signal a…\"Dùng danh sách thả xuống…\", \"Lưu vào bảng tính…\" thường báo hiệu…\n   Answer: a) solution idea\n   A how, not a what — look for the need behind it.VI: Một cách làm, không phải điều cần — tìm nhu cầu đằng sau.\n"
+          "code": "# Classifying input 1 — clue words — answer key\n\n1. \"…increase market share by 10%…\", \"…save $200,000 a year…\" usually signal a…\"…tăng thị phần 10%…\", \"…tiết kiệm 200.000 đô mỗi năm…\" thường báo hiệu…\n   Answer: c) business requirement\n   Financial or market benefits = business requirements.VI: Lợi ích tài chính, thị trường = yêu cầu nghiệp vụ.\n\n2. \"I need to…\", \"I want to be able to…\" from a user usually signal a…\"Tôi cần…\", \"Tôi muốn có thể…\" từ người dùng thường báo hiệu…\n   Answer: c) user requirement\n   A task or goal of the user.VI: Một việc hay mục tiêu của người dùng.\n\n3. \"…must comply with…\", \"…according to the policy…\" usually signal a…\"…phải tuân theo…\", \"…theo chính sách…\" thường báo hiệu…\n   Answer: a) business rule\n   Policies and regulations exist outside the software.VI: Chính sách và quy định tồn tại ngoài phần mềm.\n\n4. \"…fast, easy, secure, reliable…\" usually signal a…\"…nhanh, dễ, an toàn, ổn định…\" thường báo hiệu…\n   Answer: a) quality attribute (to be made measurable)\n   Adjectives about how well ⇒ quality attributes; the BA must quantify them.VI: Tính từ về mức độ tốt ⇒ thuộc tính chất lượng; BA phải lượng hoá.\n\n5. \"Use a drop-down list…\", \"Store it in a spreadsheet…\" usually signal a…\"Dùng danh sách thả xuống…\", \"Lưu vào bảng tính…\" thường báo hiệu…\n   Answer: c) solution idea\n   A how, not a what — look for the need behind it.VI: Một cách làm, không phải điều cần — tìm nhu cầu đằng sau.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: a · a · a · a · a.</p>",
+      "solutionExplanationHtml": "<p>Answers: c · c · a · a · c.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -62,23 +62,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "business requirement"
-              },
-              {
-                "ma": "b",
-                "noiDung": "quality attribute"
-              },
-              {
-                "ma": "c",
                 "noiDung": "constraint"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "data requirement"
+              },
+              {
+                "ma": "c",
+                "noiDung": "business requirement"
+              },
+              {
+                "ma": "d",
+                "noiDung": "quality attribute"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>Financial or market benefits = business requirements.</p><p><i>VI: Lợi ích tài chính, thị trường = yêu cầu nghiệp vụ.</i></p>"
           },
@@ -88,23 +88,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "user requirement"
-              },
-              {
-                "ma": "b",
                 "noiDung": "business rule"
               },
               {
+                "ma": "b",
+                "noiDung": "solution idea"
+              },
+              {
                 "ma": "c",
-                "noiDung": "external interface"
+                "noiDung": "user requirement"
               },
               {
                 "ma": "d",
-                "noiDung": "solution idea"
+                "noiDung": "external interface"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>A task or goal of the user.</p><p><i>VI: Một việc hay mục tiêu của người dùng.</i></p>"
           },
@@ -118,11 +118,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "functional requirement"
+                "noiDung": "user requirement"
               },
               {
                 "ma": "c",
-                "noiDung": "user requirement"
+                "noiDung": "functional requirement"
               },
               {
                 "ma": "d",
@@ -144,7 +144,7 @@
               },
               {
                 "ma": "b",
-                "noiDung": "business requirement"
+                "noiDung": "data requirement"
               },
               {
                 "ma": "c",
@@ -152,7 +152,7 @@
               },
               {
                 "ma": "d",
-                "noiDung": "data requirement"
+                "noiDung": "business requirement"
               }
             ],
             "dapAn": [
@@ -166,23 +166,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "solution idea"
-              },
-              {
-                "ma": "b",
                 "noiDung": "functional requirement"
               },
               {
+                "ma": "b",
+                "noiDung": "external interface"
+              },
+              {
                 "ma": "c",
-                "noiDung": "business rule"
+                "noiDung": "solution idea"
               },
               {
                 "ma": "d",
-                "noiDung": "external interface"
+                "noiDung": "business rule"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>A how, not a what — look for the need behind it.</p><p><i>VI: Một cách làm, không phải điều cần — tìm nhu cầu đằng sau.</i></p>"
           }

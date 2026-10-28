@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Data dictionary 1 — the notation — answer key\n\n1. \"An order has one to ten order lines\" is written…\"Một đơn có từ một tới mười dòng\" viết là…\n   Answer: b) 1:10{Order Line}\n   m:n{…} is the repeating group.VI: m:n{…} là nhóm lặp.\n\n2. \"A delivery note is optional\" is written…\"Ghi chú giao hàng là tuỳ chọn\" viết là…\n   Answer: a) (Delivery Note)\n   Parentheses mark an optional element.VI: Ngoặc tròn đánh dấu phần tử tuỳ chọn.\n\n3. Which element is a primitive?Phần tử nào là primitive?\n   Answer: b) Phone Number: 10 digits starting with 0\n   A single value with a format.VI: Một giá trị đơn có định dạng.\n\n4. Why keep a data dictionary at all?Vì sao cần data dictionary?\n   Answer: b) So that every team member uses one definition of each data element (name, composition, type, allowed values)\n   One shared definition avoids two names for one thing.VI: Một định nghĩa chung tránh hai tên cho một thứ.\n"
+          "code": "# Data dictionary 1 — the notation — answer key\n\n1. \"An order has one to ten order lines\" is written…\"Một đơn có từ một tới mười dòng\" viết là…\n   Answer: d) 1:10{Order Line}\n   m:n{…} is the repeating group.VI: m:n{…} là nhóm lặp.\n\n2. \"A delivery note is optional\" is written…\"Ghi chú giao hàng là tuỳ chọn\" viết là…\n   Answer: c) (Delivery Note)\n   Parentheses mark an optional element.VI: Ngoặc tròn đánh dấu phần tử tuỳ chọn.\n\n3. Which element is a primitive?Phần tử nào là primitive?\n   Answer: a) Phone Number: 10 digits starting with 0\n   A single value with a format.VI: Một giá trị đơn có định dạng.\n\n4. Why keep a data dictionary at all?Vì sao cần data dictionary?\n   Answer: b) So that every team member uses one definition of each data element (name, composition, type, allowed values)\n   One shared definition avoids two names for one thing.VI: Một định nghĩa chung tránh hai tên cho một thứ.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: b · a · b · b.</p>",
+      "solutionExplanationHtml": "<p>Answers: d · c · a · b.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -66,7 +66,7 @@
               },
               {
                 "ma": "b",
-                "noiDung": "1:10{Order Line}"
+                "noiDung": "Order Line + Order Line"
               },
               {
                 "ma": "c",
@@ -74,11 +74,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "Order Line + Order Line"
+                "noiDung": "1:10{Order Line}"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>m:n{…} is the repeating group.</p><p><i>VI: m:n{…} là nhóm lặp.</i></p>"
           },
@@ -88,23 +88,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "(Delivery Note)"
-              },
-              {
-                "ma": "b",
                 "noiDung": "{Delivery Note}"
               },
               {
+                "ma": "b",
+                "noiDung": "Delivery Note?"
+              },
+              {
                 "ma": "c",
-                "noiDung": "0{Delivery Note}"
+                "noiDung": "(Delivery Note)"
               },
               {
                 "ma": "d",
-                "noiDung": "Delivery Note?"
+                "noiDung": "0{Delivery Note}"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>Parentheses mark an optional element.</p><p><i>VI: Ngoặc tròn đánh dấu phần tử tuỳ chọn.</i></p>"
           },
@@ -114,23 +114,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Customer Address = Street + City + (Postal Code)"
-              },
-              {
-                "ma": "b",
                 "noiDung": "Phone Number: 10 digits starting with 0"
               },
               {
+                "ma": "b",
+                "noiDung": "Customer Address = Street + City + (Postal Code)"
+              },
+              {
                 "ma": "c",
-                "noiDung": "Order = Order ID + 1:10{Order Line}"
+                "noiDung": "Order Line = Product ID + Quantity"
               },
               {
                 "ma": "d",
-                "noiDung": "Order Line = Product ID + Quantity"
+                "noiDung": "Order = Order ID + 1:10{Order Line}"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>A single value with a format.</p><p><i>VI: Một giá trị đơn có định dạng.</i></p>"
           },

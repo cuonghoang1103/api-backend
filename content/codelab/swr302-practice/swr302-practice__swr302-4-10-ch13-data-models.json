@@ -180,10 +180,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# ERD 2 — entity, attribute or relationship? — answer key\n\n1. In a hotel system, \"room price\" is…Trong hệ thống khách sạn, \"giá phòng\" là…\n   Answer: b) an attribute of Room (or of Room Type)\n   It describes a room; it has no identity of its own.VI: Nó mô tả phòng; không có danh tính riêng.\n\n2. Each stay of a guest in a room has its own check-in and check-out dates. Guest–Room is…Mỗi lần khách ở một phòng có ngày nhận/trả riêng. Guest–Room là…\n   Answer: b) many-to-many, best shown through an associative entity Stay (or Reservation)\n   A many-to-many link with its own data becomes an associative entity.VI: Nhiều–nhiều có dữ liệu riêng ⇒ thực thể kết hợp.\n\n3. Which line does NOT belong in a conceptual ERD?Dòng nào KHÔNG thuộc ERD khái niệm?\n   Answer: c) string guestId FK (inside STAY)\n   The relationship line already says it; FKs are logical design.VI: Đường quan hệ đã nói điều đó; FK là thiết kế logic.\n\n4. The \"Payment Gateway\" that charges the guest is…\"Cổng thanh toán\" trừ tiền khách là…\n   Answer: b) an external system (an actor), not data the hotel keeps — the hotel keeps Payment records\n   Do not draw external systems as entities.VI: Không vẽ hệ thống ngoài thành thực thể.\n"
+          "code": "# ERD 2 — entity, attribute or relationship? — answer key\n\n1. In a hotel system, \"room price\" is…Trong hệ thống khách sạn, \"giá phòng\" là…\n   Answer: d) an attribute of Room (or of Room Type)\n   It describes a room; it has no identity of its own.VI: Nó mô tả phòng; không có danh tính riêng.\n\n2. Each stay of a guest in a room has its own check-in and check-out dates. Guest–Room is…Mỗi lần khách ở một phòng có ngày nhận/trả riêng. Guest–Room là…\n   Answer: a) many-to-many, best shown through an associative entity Stay (or Reservation)\n   A many-to-many link with its own data becomes an associative entity.VI: Nhiều–nhiều có dữ liệu riêng ⇒ thực thể kết hợp.\n\n3. Which line does NOT belong in a conceptual ERD?Dòng nào KHÔNG thuộc ERD khái niệm?\n   Answer: d) string guestId FK (inside STAY)\n   The relationship line already says it; FKs are logical design.VI: Đường quan hệ đã nói điều đó; FK là thiết kế logic.\n\n4. The \"Payment Gateway\" that charges the guest is…\"Cổng thanh toán\" trừ tiền khách là…\n   Answer: a) an external system (an actor), not data the hotel keeps — the hotel keeps Payment records\n   Do not draw external systems as entities.VI: Không vẽ hệ thống ngoài thành thực thể.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: b · b · c · b.</p>",
+      "solutionExplanationHtml": "<p>Answers: d · a · d · a.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -200,19 +200,19 @@
               },
               {
                 "ma": "b",
-                "noiDung": "an attribute of Room (or of Room Type)"
-              },
-              {
-                "ma": "c",
                 "noiDung": "a relationship"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "an actor"
+              },
+              {
+                "ma": "d",
+                "noiDung": "an attribute of Room (or of Room Type)"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>It describes a room; it has no identity of its own.</p><p><i>VI: Nó mô tả phòng; không có danh tính riêng.</i></p>"
           },
@@ -222,11 +222,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "one-to-one"
+                "noiDung": "many-to-many, best shown through an associative entity Stay (or Reservation)"
               },
               {
                 "ma": "b",
-                "noiDung": "many-to-many, best shown through an associative entity Stay (or Reservation)"
+                "noiDung": "an attribute of Guest"
               },
               {
                 "ma": "c",
@@ -234,11 +234,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "an attribute of Guest"
+                "noiDung": "one-to-one"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>A many-to-many link with its own data becomes an associative entity.</p><p><i>VI: Nhiều–nhiều có dữ liệu riêng ⇒ thực thể kết hợp.</i></p>"
           },
@@ -248,23 +248,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "GUEST ||--o{ STAY : makes"
-              },
-              {
-                "ma": "b",
                 "noiDung": "string guestId PK"
               },
               {
+                "ma": "b",
+                "noiDung": "ROOM ||--o{ STAY : \"is used in\""
+              },
+              {
                 "ma": "c",
-                "noiDung": "string guestId FK (inside STAY)"
+                "noiDung": "GUEST ||--o{ STAY : makes"
               },
               {
                 "ma": "d",
-                "noiDung": "ROOM ||--o{ STAY : \"is used in\""
+                "noiDung": "string guestId FK (inside STAY)"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>The relationship line already says it; FKs are logical design.</p><p><i>VI: Đường quan hệ đã nói điều đó; FK là thiết kế logic.</i></p>"
           },
@@ -274,23 +274,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "an entity of the ERD"
-              },
-              {
-                "ma": "b",
                 "noiDung": "an external system (an actor), not data the hotel keeps — the hotel keeps Payment records"
               },
               {
+                "ma": "b",
+                "noiDung": "an entity of the ERD"
+              },
+              {
                 "ma": "c",
-                "noiDung": "an attribute"
+                "noiDung": "a relationship"
               },
               {
                 "ma": "d",
-                "noiDung": "a relationship"
+                "noiDung": "an attribute"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>Do not draw external systems as entities.</p><p><i>VI: Không vẽ hệ thống ngoài thành thực thể.</i></p>"
           }
@@ -357,10 +357,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# ERD 4 — cardinality from business sentences — answer key\n\n1. A department has one or more employees; an employee works in exactly one department.Một phòng có một hoặc nhiều nhân viên; một nhân viên thuộc đúng một phòng.\n   Answer: a) DEPARTMENT ||--|{ EMPLOYEE : employs\n   Department side ||, employee side |{.VI: Phía phòng ||, phía nhân viên |{.\n\n2. A course may have no prerequisite or several; a course can be the prerequisite of several courses.Một môn có thể không có hoặc có nhiều môn tiên quyết; một môn có thể là tiên quyết của nhiều môn.\n   Answer: b) COURSE }o--o{ COURSE : requires\n   A recursive many-to-many relationship (LAB L.5).VI: Quan hệ nhiều–nhiều đệ quy (LAB L.5).\n\n3. An order has at most one invoice, issued after payment; an invoice belongs to exactly one order.Một đơn có tối đa một hoá đơn, xuất sau khi thanh toán; một hoá đơn thuộc đúng một đơn.\n   Answer: a) ORDER ||--o| INVOICE : \"is billed by\"\n   Zero or one invoice per order (none before payment).VI: Mỗi đơn không hoặc một hoá đơn (chưa có trước khi trả).\n"
+          "code": "# ERD 4 — cardinality from business sentences — answer key\n\n1. A department has one or more employees; an employee works in exactly one department.Một phòng có một hoặc nhiều nhân viên; một nhân viên thuộc đúng một phòng.\n   Answer: c) DEPARTMENT ||--|{ EMPLOYEE : employs\n   Department side ||, employee side |{.VI: Phía phòng ||, phía nhân viên |{.\n\n2. A course may have no prerequisite or several; a course can be the prerequisite of several courses.Một môn có thể không có hoặc có nhiều môn tiên quyết; một môn có thể là tiên quyết của nhiều môn.\n   Answer: d) COURSE }o--o{ COURSE : requires\n   A recursive many-to-many relationship (LAB L.5).VI: Quan hệ nhiều–nhiều đệ quy (LAB L.5).\n\n3. An order has at most one invoice, issued after payment; an invoice belongs to exactly one order.Một đơn có tối đa một hoá đơn, xuất sau khi thanh toán; một hoá đơn thuộc đúng một đơn.\n   Answer: a) ORDER ||--o| INVOICE : \"is billed by\"\n   Zero or one invoice per order (none before payment).VI: Mỗi đơn không hoặc một hoá đơn (chưa có trước khi trả).\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: a · b · a.</p>",
+      "solutionExplanationHtml": "<p>Answers: c · d · a.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -373,23 +373,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "DEPARTMENT ||--|{ EMPLOYEE : employs"
-              },
-              {
-                "ma": "b",
-                "noiDung": "DEPARTMENT }|--|| EMPLOYEE : employs"
-              },
-              {
-                "ma": "c",
                 "noiDung": "DEPARTMENT ||--o| EMPLOYEE : employs"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "DEPARTMENT }o--o{ EMPLOYEE : employs"
+              },
+              {
+                "ma": "c",
+                "noiDung": "DEPARTMENT ||--|{ EMPLOYEE : employs"
+              },
+              {
+                "ma": "d",
+                "noiDung": "DEPARTMENT }|--|| EMPLOYEE : employs"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>Department side ||, employee side |{.</p><p><i>VI: Phía phòng ||, phía nhân viên |{.</i></p>"
           },
@@ -403,19 +403,19 @@
               },
               {
                 "ma": "b",
-                "noiDung": "COURSE }o--o{ COURSE : requires"
-              },
-              {
-                "ma": "c",
                 "noiDung": "COURSE ||--o{ PREREQUISITE_COURSE : has"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "no relationship"
+              },
+              {
+                "ma": "d",
+                "noiDung": "COURSE }o--o{ COURSE : requires"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>A recursive many-to-many relationship (LAB L.5).</p><p><i>VI: Quan hệ nhiều–nhiều đệ quy (LAB L.5).</i></p>"
           },

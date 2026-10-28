@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Elicitation techniques 1 — what each technique is — answer key\n\n1. Which technique best reveals tacit knowledge — things people do but cannot explain?Kỹ thuật nào lộ ra tri thức ngầm — điều người ta làm nhưng không giải thích được?\n   Answer: b) Observation\n   Watching people work shows steps they skip when they describe their job.VI: Quan sát người làm việc cho thấy các bước họ bỏ qua khi kể.\n\n2. Which technique reaches hundreds of users cheaply and gives statistics?Kỹ thuật nào tới được hàng trăm người dùng với chi phí thấp và cho số liệu thống kê?\n   Answer: a) Questionnaire\n   Questionnaires scale; their questions must be well designed.VI: Bảng hỏi mở rộng được; câu hỏi phải thiết kế tốt.\n\n3. A facilitated session in which several stakeholders define requirements together is a…Buổi làm việc có điều phối, nhiều bên cùng xác định yêu cầu, là…\n   Answer: b) workshop\n   A workshop produces agreed requirements; a focus group gathers opinions from users of one kind.VI: Workshop tạo ra yêu cầu thống nhất; focus group thu ý kiến của một nhóm người dùng.\n\n4. Reading an existing system’s reports and screens to find features to keep is…Đọc báo cáo và màn hình của hệ thống hiện có để tìm tính năng cần giữ là…\n   Answer: a) user interface analysis\n   UI analysis studies existing screens to uncover requirements.VI: Phân tích giao diện người dùng nghiên cứu màn hình hiện có để tìm yêu cầu.\n\n5. Studying the external system your product must exchange data with is…Nghiên cứu hệ thống bên ngoài mà sản phẩm phải trao đổi dữ liệu là…\n   Answer: a) system interface analysis\n   It reveals functional requirements about data exchanged with other systems.VI: Nó lộ ra yêu cầu chức năng về dữ liệu trao đổi với hệ thống khác.\n"
+          "code": "# Elicitation techniques 1 — what each technique is — answer key\n\n1. Which technique best reveals tacit knowledge — things people do but cannot explain?Kỹ thuật nào lộ ra tri thức ngầm — điều người ta làm nhưng không giải thích được?\n   Answer: d) Observation\n   Watching people work shows steps they skip when they describe their job.VI: Quan sát người làm việc cho thấy các bước họ bỏ qua khi kể.\n\n2. Which technique reaches hundreds of users cheaply and gives statistics?Kỹ thuật nào tới được hàng trăm người dùng với chi phí thấp và cho số liệu thống kê?\n   Answer: a) Questionnaire\n   Questionnaires scale; their questions must be well designed.VI: Bảng hỏi mở rộng được; câu hỏi phải thiết kế tốt.\n\n3. A facilitated session in which several stakeholders define requirements together is a…Buổi làm việc có điều phối, nhiều bên cùng xác định yêu cầu, là…\n   Answer: c) workshop\n   A workshop produces agreed requirements; a focus group gathers opinions from users of one kind.VI: Workshop tạo ra yêu cầu thống nhất; focus group thu ý kiến của một nhóm người dùng.\n\n4. Reading an existing system’s reports and screens to find features to keep is…Đọc báo cáo và màn hình của hệ thống hiện có để tìm tính năng cần giữ là…\n   Answer: c) user interface analysis\n   UI analysis studies existing screens to uncover requirements.VI: Phân tích giao diện người dùng nghiên cứu màn hình hiện có để tìm yêu cầu.\n\n5. Studying the external system your product must exchange data with is…Nghiên cứu hệ thống bên ngoài mà sản phẩm phải trao đổi dữ liệu là…\n   Answer: d) system interface analysis\n   It reveals functional requirements about data exchanged with other systems.VI: Nó lộ ra yêu cầu chức năng về dữ liệu trao đổi với hệ thống khác.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: b · a · b · a · a.</p>",
+      "solutionExplanationHtml": "<p>Answers: d · a · c · c · d.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -66,7 +66,7 @@
               },
               {
                 "ma": "b",
-                "noiDung": "Observation"
+                "noiDung": "Interview"
               },
               {
                 "ma": "c",
@@ -74,11 +74,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "Interview"
+                "noiDung": "Observation"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>Watching people work shows steps they skip when they describe their job.</p><p><i>VI: Quan sát người làm việc cho thấy các bước họ bỏ qua khi kể.</i></p>"
           },
@@ -92,11 +92,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "Workshop"
+                "noiDung": "Observation"
               },
               {
                 "ma": "c",
-                "noiDung": "Observation"
+                "noiDung": "Workshop"
               },
               {
                 "ma": "d",
@@ -114,23 +114,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "focus group"
+                "noiDung": "survey"
               },
               {
                 "ma": "b",
-                "noiDung": "workshop"
+                "noiDung": "focus group"
               },
               {
                 "ma": "c",
-                "noiDung": "interview"
+                "noiDung": "workshop"
               },
               {
                 "ma": "d",
-                "noiDung": "survey"
+                "noiDung": "interview"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>A workshop produces agreed requirements; a focus group gathers opinions from users of one kind.</p><p><i>VI: Workshop tạo ra yêu cầu thống nhất; focus group thu ý kiến của một nhóm người dùng.</i></p>"
           },
@@ -140,7 +140,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "user interface analysis"
+                "noiDung": "focus group"
               },
               {
                 "ma": "b",
@@ -148,7 +148,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "focus group"
+                "noiDung": "user interface analysis"
               },
               {
                 "ma": "d",
@@ -156,7 +156,7 @@
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>UI analysis studies existing screens to uncover requirements.</p><p><i>VI: Phân tích giao diện người dùng nghiên cứu màn hình hiện có để tìm yêu cầu.</i></p>"
           },
@@ -166,23 +166,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "system interface analysis"
-              },
-              {
-                "ma": "b",
-                "noiDung": "document analysis"
-              },
-              {
-                "ma": "c",
                 "noiDung": "prototyping"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "observation"
+              },
+              {
+                "ma": "c",
+                "noiDung": "document analysis"
+              },
+              {
+                "ma": "d",
+                "noiDung": "system interface analysis"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>It reveals functional requirements about data exchanged with other systems.</p><p><i>VI: Nó lộ ra yêu cầu chức năng về dữ liệu trao đổi với hệ thống khác.</i></p>"
           }
@@ -542,10 +542,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Elicitation techniques 4 — combine techniques for a plan — answer key\n\n1. Understand the current night-shift process in depth (choose two).Hiểu sâu quy trình ca đêm hiện tại (chọn hai).\n   Answer: a) Observation + c) Interview with night-shift pharmacists\n   Watch the work, then interview to understand why.VI: Quan sát công việc rồi phỏng vấn để hiểu vì sao.\n\n2. Find every data element exchanged with external systems (choose two).Tìm mọi phần tử dữ liệu trao đổi với hệ thống ngoài (chọn hai).\n   Answer: a) System interface analysis + b) Document analysis of the interface specifications\n   Read the interfaces and their specifications.VI: Đọc các giao diện và đặc tả của chúng.\n\n3. Agree the urgent-prescription rules and check that the new screens support them (choose two).Thống nhất luật đơn thuốc khẩn và kiểm màn hình mới đáp ứng chúng (chọn hai).\n   Answer: a) Workshop + b) Prototyping\n   Agree in a workshop, then confirm with a prototype.VI: Thống nhất trong workshop, rồi xác nhận bằng prototype.\n"
+          "code": "# Elicitation techniques 4 — combine techniques for a plan — answer key\n\n1. Understand the current night-shift process in depth (choose two).Hiểu sâu quy trình ca đêm hiện tại (chọn hai).\n   Answer: b) Interview with night-shift pharmacists + d) Observation\n   Watch the work, then interview to understand why.VI: Quan sát công việc rồi phỏng vấn để hiểu vì sao.\n\n2. Find every data element exchanged with external systems (choose two).Tìm mọi phần tử dữ liệu trao đổi với hệ thống ngoài (chọn hai).\n   Answer: a) Document analysis of the interface specifications + c) System interface analysis\n   Read the interfaces and their specifications.VI: Đọc các giao diện và đặc tả của chúng.\n\n3. Agree the urgent-prescription rules and check that the new screens support them (choose two).Thống nhất luật đơn thuốc khẩn và kiểm màn hình mới đáp ứng chúng (chọn hai).\n   Answer: a) Workshop + c) Prototyping\n   Agree in a workshop, then confirm with a prototype.VI: Thống nhất trong workshop, rồi xác nhận bằng prototype.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: a+c · a+b · a+b.</p>",
+      "solutionExplanationHtml": "<p>Answers: b+d · a+c · a+c.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -558,25 +558,25 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Observation"
-              },
-              {
-                "ma": "b",
                 "noiDung": "Questionnaire"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "Interview with night-shift pharmacists"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "System interface analysis"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Observation"
               }
             ],
             "dapAn": [
               [
-                "a",
-                "c"
+                "b",
+                "d"
               ]
             ],
             "nhieu": true,
@@ -588,25 +588,25 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "System interface analysis"
-              },
-              {
-                "ma": "b",
                 "noiDung": "Document analysis of the interface specifications"
               },
               {
+                "ma": "b",
+                "noiDung": "Prototyping"
+              },
+              {
                 "ma": "c",
-                "noiDung": "Focus group"
+                "noiDung": "System interface analysis"
               },
               {
                 "ma": "d",
-                "noiDung": "Prototyping"
+                "noiDung": "Focus group"
               }
             ],
             "dapAn": [
               [
                 "a",
-                "b"
+                "c"
               ]
             ],
             "nhieu": true,
@@ -622,11 +622,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "Prototyping"
+                "noiDung": "Questionnaire"
               },
               {
                 "ma": "c",
-                "noiDung": "Questionnaire"
+                "noiDung": "Prototyping"
               },
               {
                 "ma": "d",
@@ -636,7 +636,7 @@
             "dapAn": [
               [
                 "a",
-                "b"
+                "c"
               ]
             ],
             "nhieu": true,

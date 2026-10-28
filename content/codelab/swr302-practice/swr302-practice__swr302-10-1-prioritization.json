@@ -182,10 +182,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Priorities 3 — why prioritise, and the games — answer key\n\n1. 85% of the requirements are Must. What do you do?85% yêu cầu là Must. Làm gì?\n   Answer: a) Cap the Musts and ask which Must drops for each new Must; trace Musts to objectives\n   Make trade-offs explicit.VI: Làm đánh đổi minh bạch.\n\n2. Why attack high-risk items early?Vì sao xử lý mục rủi ro cao sớm?\n   Answer: a) So there is still time to react if they fail\n   Late failures leave no room.VI: Thất bại muộn không còn đường lùi.\n\n3. Who should decide priorities?Ai quyết định ưu tiên?\n   Answer: a) Customer representatives together with the team, which estimates cost and risk\n   Value from customers, cost and risk from the team.VI: Giá trị từ khách, chi phí và rủi ro từ đội.\n"
+          "code": "# Priorities 3 — why prioritise, and the games — answer key\n\n1. 85% of the requirements are Must. What do you do?85% yêu cầu là Must. Làm gì?\n   Answer: c) Cap the Musts and ask which Must drops for each new Must; trace Musts to objectives\n   Make trade-offs explicit.VI: Làm đánh đổi minh bạch.\n\n2. Why attack high-risk items early?Vì sao xử lý mục rủi ro cao sớm?\n   Answer: b) So there is still time to react if they fail\n   Late failures leave no room.VI: Thất bại muộn không còn đường lùi.\n\n3. Who should decide priorities?Ai quyết định ưu tiên?\n   Answer: d) Customer representatives together with the team, which estimates cost and risk\n   Value from customers, cost and risk from the team.VI: Giá trị từ khách, chi phí và rủi ro từ đội.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: a · a · a.</p>",
+      "solutionExplanationHtml": "<p>Answers: c · b · d.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -198,7 +198,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Cap the Musts and ask which Must drops for each new Must; trace Musts to objectives"
+                "noiDung": "Remove all Coulds and be done"
               },
               {
                 "ma": "b",
@@ -206,7 +206,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "Remove all Coulds and be done"
+                "noiDung": "Cap the Musts and ask which Must drops for each new Must; trace Musts to objectives"
               },
               {
                 "ma": "d",
@@ -214,7 +214,7 @@
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>Make trade-offs explicit.</p><p><i>VI: Làm đánh đổi minh bạch.</i></p>"
           },
@@ -224,23 +224,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "So there is still time to react if they fail"
-              },
-              {
-                "ma": "b",
                 "noiDung": "Because they are easy"
               },
               {
+                "ma": "b",
+                "noiDung": "So there is still time to react if they fail"
+              },
+              {
                 "ma": "c",
-                "noiDung": "To impress the customer"
+                "noiDung": "It does not matter"
               },
               {
                 "ma": "d",
-                "noiDung": "It does not matter"
+                "noiDung": "To impress the customer"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>Late failures leave no room.</p><p><i>VI: Thất bại muộn không còn đường lùi.</i></p>"
           },
@@ -250,23 +250,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Customer representatives together with the team, which estimates cost and risk"
-              },
-              {
-                "ma": "b",
                 "noiDung": "Only developers"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "Whoever shouts loudest"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "The most senior manager alone"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Customer representatives together with the team, which estimates cost and risk"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>Value from customers, cost and risk from the team.</p><p><i>VI: Giá trị từ khách, chi phí và rủi ro từ đội.</i></p>"
           }

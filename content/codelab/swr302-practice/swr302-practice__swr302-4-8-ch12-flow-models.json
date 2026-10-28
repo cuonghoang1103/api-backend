@@ -198,10 +198,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Behaviour models 2 — swimlane basics — answer key\n\n1. What should a lane represent?Một lane nên đại diện cho gì?\n   Answer: b) A role (or a system) that performs actions\n   Roles, not departments.VI: Vai trò, không phải phòng ban.\n\n2. Why count the hand-offs in a swimlane?Vì sao đếm điểm bàn giao trong swimlane?\n   Answer: b) Hand-offs are where work waits — fewer hand-offs usually means a faster process\n   They turn \"slow process\" into evidence.VI: Chúng biến \"quy trình chậm\" thành bằng chứng.\n\n3. Which question does a swimlane answer that a DFD does not?Swimlane trả lời câu hỏi nào mà DFD không trả lời?\n   Answer: b) Who acts, and in which order?\n   DFD = data; swimlane = who and when.VI: DFD = dữ liệu; swimlane = ai và khi nào.\n"
+          "code": "# Behaviour models 2 — swimlane basics — answer key\n\n1. What should a lane represent?Một lane nên đại diện cho gì?\n   Answer: b) A role (or a system) that performs actions\n   Roles, not departments.VI: Vai trò, không phải phòng ban.\n\n2. Why count the hand-offs in a swimlane?Vì sao đếm điểm bàn giao trong swimlane?\n   Answer: b) Hand-offs are where work waits — fewer hand-offs usually means a faster process\n   They turn \"slow process\" into evidence.VI: Chúng biến \"quy trình chậm\" thành bằng chứng.\n\n3. Which question does a swimlane answer that a DFD does not?Swimlane trả lời câu hỏi nào mà DFD không trả lời?\n   Answer: a) Who acts, and in which order?\n   DFD = data; swimlane = who and when.VI: DFD = dữ liệu; swimlane = ai và khi nào.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: b · b · b.</p>",
+      "solutionExplanationHtml": "<p>Answers: b · b · a.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -214,7 +214,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "A department"
+                "noiDung": "A screen"
               },
               {
                 "ma": "b",
@@ -222,7 +222,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "A screen"
+                "noiDung": "A department"
               },
               {
                 "ma": "d",
@@ -266,23 +266,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Where is the data stored?"
-              },
-              {
-                "ma": "b",
                 "noiDung": "Who acts, and in which order?"
               },
               {
+                "ma": "b",
+                "noiDung": "Where is the data stored?"
+              },
+              {
                 "ma": "c",
-                "noiDung": "What are the entities and their cardinality?"
+                "noiDung": "Which states can an object be in?"
               },
               {
                 "ma": "d",
-                "noiDung": "Which states can an object be in?"
+                "noiDung": "What are the entities and their cardinality?"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>DFD = data; swimlane = who and when.</p><p><i>VI: DFD = dữ liệu; swimlane = ai và khi nào.</i></p>"
           }

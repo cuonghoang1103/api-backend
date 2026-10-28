@@ -184,10 +184,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Waterfall vs agile 2 — why the waterfall struggles — answer key\n\n1. The main advantage claimed for the waterfall is…Ưu điểm chính được nêu của waterfall là…\n   Answer: a) catching flaws early, when fixing is cheaper\n   Early, complete requirements in theory reduce later rework.VI: Về lý thuyết, yêu cầu đầy đủ sớm giảm làm lại.\n\n2. Why does feedback come late in a waterfall project?Vì sao phản hồi đến muộn trong waterfall?\n   Answer: a) Customers see working software only near the end\n   So requirement errors surface at their most expensive.VI: Nên lỗi yêu cầu lộ ra lúc đắt nhất.\n\n3. Agile fits best when…Agile hợp nhất khi…\n   Answer: a) requirements are uncertain or expected to evolve and customers can be continuously available\n   Uncertainty + available customers + value from early delivery.VI: Bất định + khách luôn sẵn + giá trị từ giao sớm.\n"
+          "code": "# Waterfall vs agile 2 — why the waterfall struggles — answer key\n\n1. The main advantage claimed for the waterfall is…Ưu điểm chính được nêu của waterfall là…\n   Answer: c) catching flaws early, when fixing is cheaper\n   Early, complete requirements in theory reduce later rework.VI: Về lý thuyết, yêu cầu đầy đủ sớm giảm làm lại.\n\n2. Why does feedback come late in a waterfall project?Vì sao phản hồi đến muộn trong waterfall?\n   Answer: b) Customers see working software only near the end\n   So requirement errors surface at their most expensive.VI: Nên lỗi yêu cầu lộ ra lúc đắt nhất.\n\n3. Agile fits best when…Agile hợp nhất khi…\n   Answer: d) requirements are uncertain or expected to evolve and customers can be continuously available\n   Uncertainty + available customers + value from early delivery.VI: Bất định + khách luôn sẵn + giá trị từ giao sớm.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: a · a · a.</p>",
+      "solutionExplanationHtml": "<p>Answers: c · b · d.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -200,23 +200,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "catching flaws early, when fixing is cheaper"
-              },
-              {
-                "ma": "b",
                 "noiDung": "no documentation"
               },
               {
+                "ma": "b",
+                "noiDung": "customers never change their minds"
+              },
+              {
                 "ma": "c",
-                "noiDung": "no planning"
+                "noiDung": "catching flaws early, when fixing is cheaper"
               },
               {
                 "ma": "d",
-                "noiDung": "customers never change their minds"
+                "noiDung": "no planning"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>Early, complete requirements in theory reduce later rework.</p><p><i>VI: Về lý thuyết, yêu cầu đầy đủ sớm giảm làm lại.</i></p>"
           },
@@ -226,23 +226,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Customers see working software only near the end"
+                "noiDung": "Feedback is forbidden"
               },
               {
                 "ma": "b",
-                "noiDung": "Testers are lazy"
+                "noiDung": "Customers see working software only near the end"
               },
               {
                 "ma": "c",
-                "noiDung": "The SRS is too short"
+                "noiDung": "Testers are lazy"
               },
               {
                 "ma": "d",
-                "noiDung": "Feedback is forbidden"
+                "noiDung": "The SRS is too short"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>So requirement errors surface at their most expensive.</p><p><i>VI: Nên lỗi yêu cầu lộ ra lúc đắt nhất.</i></p>"
           },
@@ -252,11 +252,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "requirements are uncertain or expected to evolve and customers can be continuously available"
+                "noiDung": "requirements are fixed by contract and the customer is unavailable"
               },
               {
                 "ma": "b",
-                "noiDung": "requirements are fixed by contract and the customer is unavailable"
+                "noiDung": "the team never meets"
               },
               {
                 "ma": "c",
@@ -264,11 +264,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "the team never meets"
+                "noiDung": "requirements are uncertain or expected to evolve and customers can be continuously available"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>Uncertainty + available customers + value from early delivery.</p><p><i>VI: Bất định + khách luôn sẵn + giá trị từ giao sớm.</i></p>"
           }

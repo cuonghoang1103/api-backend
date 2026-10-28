@@ -197,10 +197,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Requirements problems 2 — the cost of late defects — answer key\n\n1. Why are requirements defects so expensive?Vì sao lỗi yêu cầu đắt như vậy?\n   Answer: b) Because they surface late, after design, code and tests were built on the wrong requirement\n   Everything built on the wrong requirement must be reworked.VI: Mọi thứ xây trên yêu cầu sai đều phải làm lại.\n\n2. Which practice gives the cheapest defect removal?Thực hành nào gỡ lỗi rẻ nhất?\n   Answer: b) Reviewing requirements with stakeholders before design starts\n   A defect removed in the requirements phase costs a fraction of one removed later.VI: Lỗi gỡ ở giai đoạn yêu cầu chỉ tốn một phần nhỏ so với gỡ muộn.\n\n3. Which is NOT a benefit of a high-quality requirements process?Điều nào KHÔNG phải lợi ích của quy trình yêu cầu chất lượng cao?\n   Answer: d) No change requests will ever happen\n   Changes still happen; a good process controls them instead of preventing them.VI: Thay đổi vẫn xảy ra; quy trình tốt kiểm soát chúng chứ không ngăn được.\n"
+          "code": "# Requirements problems 2 — the cost of late defects — answer key\n\n1. Why are requirements defects so expensive?Vì sao lỗi yêu cầu đắt như vậy?\n   Answer: c) Because they surface late, after design, code and tests were built on the wrong requirement\n   Everything built on the wrong requirement must be reworked.VI: Mọi thứ xây trên yêu cầu sai đều phải làm lại.\n\n2. Which practice gives the cheapest defect removal?Thực hành nào gỡ lỗi rẻ nhất?\n   Answer: a) Reviewing requirements with stakeholders before design starts\n   A defect removed in the requirements phase costs a fraction of one removed later.VI: Lỗi gỡ ở giai đoạn yêu cầu chỉ tốn một phần nhỏ so với gỡ muộn.\n\n3. Which is NOT a benefit of a high-quality requirements process?Điều nào KHÔNG phải lợi ích của quy trình yêu cầu chất lượng cao?\n   Answer: c) No change requests will ever happen\n   Changes still happen; a good process controls them instead of preventing them.VI: Thay đổi vẫn xảy ra; quy trình tốt kiểm soát chúng chứ không ngăn được.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: b · b · d.</p>",
+      "solutionExplanationHtml": "<p>Answers: c · a · c.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -213,23 +213,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Because documents are expensive to print"
-              },
-              {
-                "ma": "b",
-                "noiDung": "Because they surface late, after design, code and tests were built on the wrong requirement"
-              },
-              {
-                "ma": "c",
                 "noiDung": "Because BAs are paid more than developers"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "They are not expensive"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Because they surface late, after design, code and tests were built on the wrong requirement"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Because documents are expensive to print"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Everything built on the wrong requirement must be reworked.</p><p><i>VI: Mọi thứ xây trên yêu cầu sai đều phải làm lại.</i></p>"
           },
@@ -239,23 +239,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Finding defects in system testing"
-              },
-              {
-                "ma": "b",
                 "noiDung": "Reviewing requirements with stakeholders before design starts"
               },
               {
+                "ma": "b",
+                "noiDung": "Finding defects in system testing"
+              },
+              {
                 "ma": "c",
-                "noiDung": "Letting users report them in production"
+                "noiDung": "Fixing them in maintenance"
               },
               {
                 "ma": "d",
-                "noiDung": "Fixing them in maintenance"
+                "noiDung": "Letting users report them in production"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>A defect removed in the requirements phase costs a fraction of one removed later.</p><p><i>VI: Lỗi gỡ ở giai đoạn yêu cầu chỉ tốn một phần nhỏ so với gỡ muộn.</i></p>"
           },
@@ -265,23 +265,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Fewer requirements defects"
-              },
-              {
-                "ma": "b",
                 "noiDung": "Less rework"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "Faster development and more satisfied customers"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "No change requests will ever happen"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Fewer requirements defects"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>Changes still happen; a good process controls them instead of preventing them.</p><p><i>VI: Thay đổi vẫn xảy ra; quy trình tốt kiểm soát chúng chứ không ngăn được.</i></p>"
           }

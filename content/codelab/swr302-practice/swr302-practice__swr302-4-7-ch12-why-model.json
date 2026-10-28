@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Choosing a model 2 — why model at all? — answer key\n\n1. The main benefit of drawing analysis models is…Lợi ích chính của vẽ mô hình phân tích là…\n   Answer: b) they reveal missing, conflicting and wrong requirements\n   A diagram shows holes that text hides.VI: Sơ đồ lộ ra lỗ hổng mà văn bản giấu.\n\n2. Should you draw every model for every project?Có nên vẽ mọi mô hình cho mọi dự án?\n   Answer: b) No — choose the models that answer the questions your project has\n   Select by need; a model nobody uses is waste.VI: Chọn theo nhu cầu; mô hình không ai dùng là lãng phí.\n\n3. A diagram contains a symbol you invented. What must you do?Sơ đồ có ký hiệu bạn tự chế. Phải làm gì?\n   Answer: b) Add a legend\n   You may deviate from the notation, not silently.VI: Được lệch ký pháp, không được lệch trong im lặng.\n"
+          "code": "# Choosing a model 2 — why model at all? — answer key\n\n1. The main benefit of drawing analysis models is…Lợi ích chính của vẽ mô hình phân tích là…\n   Answer: c) they reveal missing, conflicting and wrong requirements\n   A diagram shows holes that text hides.VI: Sơ đồ lộ ra lỗ hổng mà văn bản giấu.\n\n2. Should you draw every model for every project?Có nên vẽ mọi mô hình cho mọi dự án?\n   Answer: a) No — choose the models that answer the questions your project has\n   Select by need; a model nobody uses is waste.VI: Chọn theo nhu cầu; mô hình không ai dùng là lãng phí.\n\n3. A diagram contains a symbol you invented. What must you do?Sơ đồ có ký hiệu bạn tự chế. Phải làm gì?\n   Answer: a) Add a legend\n   You may deviate from the notation, not silently.VI: Được lệch ký pháp, không được lệch trong im lặng.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: b · b · b.</p>",
+      "solutionExplanationHtml": "<p>Answers: c · a · a.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -62,23 +62,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "nicer documents"
-              },
-              {
-                "ma": "b",
-                "noiDung": "they reveal missing, conflicting and wrong requirements"
-              },
-              {
-                "ma": "c",
                 "noiDung": "they replace the SRS"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "the tool generates the code"
+              },
+              {
+                "ma": "c",
+                "noiDung": "they reveal missing, conflicting and wrong requirements"
+              },
+              {
+                "ma": "d",
+                "noiDung": "nicer documents"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>A diagram shows holes that text hides.</p><p><i>VI: Sơ đồ lộ ra lỗ hổng mà văn bản giấu.</i></p>"
           },
@@ -88,23 +88,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Yes, always"
-              },
-              {
-                "ma": "b",
                 "noiDung": "No — choose the models that answer the questions your project has"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "Only the ERD"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "Never"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Yes, always"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>Select by need; a model nobody uses is waste.</p><p><i>VI: Chọn theo nhu cầu; mô hình không ai dùng là lãng phí.</i></p>"
           },
@@ -114,11 +114,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Nothing"
+                "noiDung": "Add a legend"
               },
               {
                 "ma": "b",
-                "noiDung": "Add a legend"
+                "noiDung": "Use colours only"
               },
               {
                 "ma": "c",
@@ -126,11 +126,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "Use colours only"
+                "noiDung": "Nothing"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>You may deviate from the notation, not silently.</p><p><i>VI: Được lệch ký pháp, không được lệch trong im lặng.</i></p>"
           }
@@ -517,10 +517,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Choosing a model 4 — the swimlane / DFD trap — answer key\n\n1. A DFD has a lane called \"Manager\". What is wrong?Một DFD có lane tên \"Manager\". Sai ở đâu?\n   Answer: b) Lanes and actors belong to swimlanes; in a DFD the manager is an external entity (if outside) and the work is a process\n   Do not draw roles as lanes in a DFD.VI: Không vẽ vai trò thành lane trong DFD.\n\n2. A swimlane has a data store \"Orders\". What is wrong?Một swimlane có kho dữ liệu \"Orders\". Sai ở đâu?\n   Answer: b) Data stores belong to DFDs; a swimlane shows actions in order\n   Each model answers its own question.VI: Mỗi mô hình trả lời câu hỏi của riêng nó.\n\n3. You need to show how long approvals wait between the clerk and the manager. Which model?Cần thể hiện việc duyệt phải chờ bao lâu giữa nhân viên và quản lý. Mô hình nào?\n   Answer: b) Swimlane\n   Hand-offs between roles are visible in a swimlane.VI: Bàn giao giữa các vai thấy rõ trong swimlane.\n"
+          "code": "# Choosing a model 4 — the swimlane / DFD trap — answer key\n\n1. A DFD has a lane called \"Manager\". What is wrong?Một DFD có lane tên \"Manager\". Sai ở đâu?\n   Answer: c) Lanes and actors belong to swimlanes; in a DFD the manager is an external entity (if outside) and the work is a process\n   Do not draw roles as lanes in a DFD.VI: Không vẽ vai trò thành lane trong DFD.\n\n2. A swimlane has a data store \"Orders\". What is wrong?Một swimlane có kho dữ liệu \"Orders\". Sai ở đâu?\n   Answer: c) Data stores belong to DFDs; a swimlane shows actions in order\n   Each model answers its own question.VI: Mỗi mô hình trả lời câu hỏi của riêng nó.\n\n3. You need to show how long approvals wait between the clerk and the manager. Which model?Cần thể hiện việc duyệt phải chờ bao lâu giữa nhân viên và quản lý. Mô hình nào?\n   Answer: c) Swimlane\n   Hand-offs between roles are visible in a swimlane.VI: Bàn giao giữa các vai thấy rõ trong swimlane.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: b · b · b.</p>",
+      "solutionExplanationHtml": "<p>Answers: c · c · c.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -533,23 +533,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Nothing"
+                "noiDung": "DFDs need two lanes"
               },
               {
                 "ma": "b",
-                "noiDung": "Lanes and actors belong to swimlanes; in a DFD the manager is an external entity (if outside) and the work is a process"
+                "noiDung": "Nothing"
               },
               {
                 "ma": "c",
-                "noiDung": "The lane should be called \"Managers\""
+                "noiDung": "Lanes and actors belong to swimlanes; in a DFD the manager is an external entity (if outside) and the work is a process"
               },
               {
                 "ma": "d",
-                "noiDung": "DFDs need two lanes"
+                "noiDung": "The lane should be called \"Managers\""
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Do not draw roles as lanes in a DFD.</p><p><i>VI: Không vẽ vai trò thành lane trong DFD.</i></p>"
           },
@@ -559,23 +559,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Nothing"
-              },
-              {
-                "ma": "b",
-                "noiDung": "Data stores belong to DFDs; a swimlane shows actions in order"
-              },
-              {
-                "ma": "c",
                 "noiDung": "The store should be in the first lane"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "Stores must be named in singular"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Data stores belong to DFDs; a swimlane shows actions in order"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nothing"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Each model answers its own question.</p><p><i>VI: Mỗi mô hình trả lời câu hỏi của riêng nó.</i></p>"
           },
@@ -585,23 +585,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "DFD"
-              },
-              {
-                "ma": "b",
-                "noiDung": "Swimlane"
-              },
-              {
-                "ma": "c",
                 "noiDung": "ERD"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "Context diagram"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Swimlane"
+              },
+              {
+                "ma": "d",
+                "noiDung": "DFD"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Hand-offs between roles are visible in a swimlane.</p><p><i>VI: Bàn giao giữa các vai thấy rõ trong swimlane.</i></p>"
           }

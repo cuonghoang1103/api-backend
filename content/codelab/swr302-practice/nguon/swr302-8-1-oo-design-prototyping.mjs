@@ -68,9 +68,29 @@ const E3 = tracNghiem({
   khaiNiem: ['design from requirements', 'prototyping'],
 });
 
+const E4 = phanLoai({
+  tieuDe: 'OO design 4 — class, attribute, association or method?',
+  doKho: 'MEDIUM', phut: 5,
+  moTa: { en: '<p>From the requirement "<i>A customer places an order containing one or more books; the system calculates the order total including tax</i>", classify each design element of the first-cut class model.</p>', vi: '<p>Từ yêu cầu đặt sách, phân loại từng phần tử của mô hình lớp sơ bộ.</p>' },
+  cot: 'Element', luaChon: ['Class', 'Attribute', 'Association', 'Method'],
+  hang: [
+    ['OrderLine', 'Class'],
+    ['Order.total', 'Attribute'],
+    ['Customer 1—* Order', 'Association'],
+    ['Order.calculateTotal()', 'Method'],
+    ['OrderLine.quantity', 'Attribute'],
+    ['OrderLine *—1 Book', 'Association'],
+  ],
+  giaiThich: '<p>Nouns → classes and attributes; verbs → methods; relations between nouns → associations with multiplicities.</p>',
+  goiY: ['"one or more books" ⇒ lớp dòng đơn + liên kết.', 'Động từ "calculates" ⇒ phương thức.'],
+  loiHayGap: ['Biến total thành lớp.', 'Quên lớp OrderLine.'],
+  thuatNgu: [{ en: 'association', vi: 'liên kết' }],
+  khaiNiem: ['noun–verb analysis'],
+});
+
 export default moDun({
   slug: 'swr302-8-1-oo-design-prototyping',
   ten: '8.1 From requirements to an OO design',
   moTaModule: 'Phân tích danh từ–động từ thành lớp/thuộc tính/phương thức, tự dựng mô hình lớp sơ bộ ClinicCare (lớp liên kết cho liều dùng, bội số) chấm theo tính chất, thiết kế từ mô hình miền và vai trò prototype.',
-  de: [E1, E3, E2],
+  de: [E1, E3, E2, E4],
 });

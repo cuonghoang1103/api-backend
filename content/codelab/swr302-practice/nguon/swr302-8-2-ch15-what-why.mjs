@@ -76,7 +76,7 @@ const E4 = tracNghiem({
 
 export default moDun({
   slug: 'swr302-8-2-ch15-what-why',
-  ten: '8.2 Prototyping: what, why, mock-ups and proofs of concept',
+  ten: '8.4 Prototyping: what, why, mock-ups and proofs of concept',
   moTaModule: 'Ba mục đích của prototype, mock-up (ngang) vs proof of concept (dọc/spike), ba lớp thuộc tính (phạm vi, tương lai, hình thức) và chọn tổ hợp phù hợp, prototype như công cụ yêu cầu.',
   de: [E1, E2, E3, E4],
 });

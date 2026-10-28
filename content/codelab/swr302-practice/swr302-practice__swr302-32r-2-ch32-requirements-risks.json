@@ -1,0 +1,489 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-32r-2-ch32-requirements-risks",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-32r-2-ch32-requirements-risks"
+  },
+  "exercises": [
+    {
+      "title": "Requirements risks 1 — which stage does the risk belong to?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "requirements risks"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers groups requirements risks by stage: <b>elicitation</b> (vision and scope, time spent, customer involvement, innovative products, nonfunctional requirements, solutions presented as needs…), <b>analysis</b> (prioritisation, technically difficult features, unfamiliar technologies), <b>specification</b> (understanding, time pressure to proceed with TBDs, ambiguous terminology, design in requirements), <b>validation</b> (unvalidated requirements, inspection proficiency) and <b>management</b> (changing requirements, change process, unimplemented requirements, expanding scope).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Rủi ro yêu cầu theo giai đoạn.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Giải pháp thay cho nhu cầu, NFR bị bỏ ⇒ khai thác.",
+        "Không ai review ⇒ thẩm định."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Requirements risks 1 — which stage does the risk belong to?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Requirements risks 1 — which stage does the risk belong to? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Elicitation\n   - r1.k: Analysis\n   - r2.k: Specification\n   - r3.k: Validation\n   - r4.k: Management\n   - r5.k: Elicitation\n   Each stage has typical risks — and typical mitigations taken from the practices of the earlier chapters.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each stage has typical risks — and typical mitigations taken from the practices of the earlier chapters.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Stage",
+                "luaChon": [
+                  "Elicitation",
+                  "Analysis",
+                  "Specification",
+                  "Validation",
+                  "Management"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Users propose \"a drop-down with all doctors\" instead of describing their need."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Nobody has checked whether real-time bed tracking is technically possible."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The team starts coding with 15 TBDs still open because of schedule pressure."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "The 200-page SRS was never reviewed by anyone outside the BA team."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "A requirement was approved but nobody can find it in the design or tests."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Quality attributes were never discussed with the customers."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Elicitation",
+              "r1.k": "Analysis",
+              "r2.k": "Specification",
+              "r3.k": "Validation",
+              "r4.k": "Management",
+              "r5.k": "Elicitation"
+            },
+            "giaiThich": "<p><p>Each stage has typical risks — and typical mitigations taken from the practices of the earlier chapters.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Xếp TBD vào quản lý."
+        },
+        {
+          "loi": "Xếp \"không tìm thấy trong thiết kế\" vào đặc tả."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "TBD (to be determined)",
+          "vi": "chỗ chưa quyết, đánh dấu để theo dõi tới khi đóng"
+        },
+        {
+          "en": "nonfunctional requirement (NFR)",
+          "vi": "yêu cầu phi chức năng — thuộc tính chất lượng, giao diện ngoài, ràng buộc"
+        },
+        {
+          "en": "requirements traceability matrix (RTM)",
+          "vi": "ma trận truy vết yêu cầu — nối nguồn ↔ yêu cầu ↔ thiết kế ↔ mã ↔ test"
+        }
+      ]
+    },
+    {
+      "title": "Requirements risks 2 — choose the mitigation",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "mitigating requirements risks"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Choose the mitigation Wiegers suggests for each risk.</p><p>Each row is graded on its own; the explanation of every answer appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chọn biện pháp giảm thiểu cho từng rủi ro.</p><p>Mỗi dòng được chấm riêng; giải thích từng đáp án hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Hiểu khác nhau ⇒ review đa góc nhìn.",
+        "Bị bỏ sót khi làm ⇒ truy vết."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Requirements risks 2 — choose the mitigation\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Requirements risks 2 — choose the mitigation — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Write a vision and scope document early\n   - r1.k: Prototypes and focus groups for early feedback\n   - r2.k: Peer review with developers, testers and customers\n   - r3.k: Requirements tracing\n   - r4.k: Use the documented scope as the benchmark for changes\n   Risk management in requirements is mostly applying the good practices of the course deliberately to the risks you see.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Risk management in requirements is mostly applying the good practices of the course deliberately to the risks you see.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Mitigation",
+                "luaChon": [
+                  "Write a vision and scope document early",
+                  "Prototypes and focus groups for early feedback",
+                  "Peer review with developers, testers and customers",
+                  "Requirements tracing",
+                  "Use the documented scope as the benchmark for changes"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Scope creep because nobody shares an understanding of what the product is and is not."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "A first-of-its-kind product whose market response is hard to predict."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Developers and customers interpret the requirements differently."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Requirements get overlooked during design, construction or testing."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Change requests keep arriving and are hard to accept or refuse."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Write a vision and scope document early",
+              "r1.k": "Prototypes and focus groups for early feedback",
+              "r2.k": "Peer review with developers, testers and customers",
+              "r3.k": "Requirements tracing",
+              "r4.k": "Use the documented scope as the benchmark for changes"
+            },
+            "giaiThich": "<p><p>Risk management in requirements is mostly applying the good practices of the course deliberately to the risks you see.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng prototype để chống bỏ sót yêu cầu khi test."
+        },
+        {
+          "loi": "Không có thước đo phạm vi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "vision and scope document",
+          "vi": "tài liệu tầm nhìn & phạm vi — chứa business requirements"
+        },
+        {
+          "en": "requirements traceability matrix (RTM)",
+          "vi": "ma trận truy vết yêu cầu — nối nguồn ↔ yêu cầu ↔ thiết kế ↔ mã ↔ test"
+        },
+        {
+          "en": "inspection",
+          "vi": "thanh tra — loại review hình thức nhất, có vai trò và quy trình"
+        }
+      ]
+    },
+    {
+      "title": "Requirements risks 3 — write risk statements",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "documenting risks"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Write <code>RISK_LIST</code>: three requirements risks for ClinicCare, each <code>{ id, statement, stage, mitigation }</code>. The statement must be in condition–consequence form (\"If …, then …\"); <code>stage</code> one of elicitation, analysis, specification, validation, management; the three risks must cover three different stages; each mitigation is a concrete action (at least 6 words).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Ids unique, like RK-1.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết ba rủi ro yêu cầu cho ClinicCare dạng \"If …, then …\", ba giai đoạn khác nhau, mỗi rủi ro có biện pháp cụ thể.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Id không trùng, dạng RK-1.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "elicitation",
+          "output": "{ id: 'RK-1', statement: 'If pharmacists are not interviewed, then the e-prescription flow may miss dispensing rules.', stage: 'elicitation', mitigation: 'Schedule an interview and an observation session with the pharmacist in week 2.' }",
+          "explanation": "|||"
+        }
+      ],
+      "hintsJson": [
+        "\"If …, then …\".",
+        "Biện pháp có người, việc, thời điểm."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "risk-list.js",
+          "language": "javascript",
+          "code": "const RISK_LIST = [\n  // { id: 'RK-1', statement: 'If …, then …', stage: '', mitigation: '' },\n];\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "risk-list.js",
+          "language": "javascript",
+          "code": "const RISK_LIST = [\n  { id: 'RK-1', statement: 'If pharmacists are not interviewed, then the e-prescription flow may miss dispensing rules.', stage: 'elicitation', mitigation: 'Schedule an interview and an observation session with the pharmacist in week 2.' },\n  { id: 'RK-2', statement: 'If the cancellation fee stays TBD when sprint 3 starts, then developers may implement the wrong rule.', stage: 'specification', mitigation: 'Assign the clinic owner to decide the fee by the end of sprint 2 and log it in the issue tracker.' },\n  { id: 'RK-3', statement: 'If change requests are accepted without impact analysis, then release 1 may slip by weeks.', stage: 'management', mitigation: 'Route every change through the CCB with an impact analysis based on the RTM.' },\n];\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A good risk list names the condition, the consequence and a concrete action with an owner — then gets tracked every week.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "risk-list.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "three well-formed risks with unique ids",
+              "vi": "ba rủi ro đúng dạng, id không trùng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof RISK_LIST==\"undefined\"||!Array.isArray(RISK_LIST)||RISK_LIST.length!==3)return\"RISK_LIST must have 3 risks\";for(var e={},t=0;t<3;t++){var i=RISK_LIST[t]||{};if(!/^RK-\\d+$/.test(String(i.id)))return\"risk \"+(t+1)+\": id like RK-1\";if(e[i.id])return\"duplicate id \"+i.id;if(e[i.id]=1,!/^if\\b.+,?\\s*then\\b.+/i.test(String(i.statement).trim()))return i.id+': write \"If <condition>, then <consequence>\"';if(String(i.mitigation||\"\").trim().split(/\\s+/).length<6)return i.id+\": give a concrete mitigation\"}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "three different stages",
+              "vi": "ba giai đoạn khác nhau"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof RISK_LIST==\"undefined\"||!Array.isArray(RISK_LIST))return\"RISK_LIST is missing\";for(var n=[\"elicitation\",\"analysis\",\"specification\",\"validation\",\"management\"],t={},e=0;e<RISK_LIST.length;e++){var i=String((RISK_LIST[e]||{}).stage).toLowerCase().trim();if(n.indexOf(i)<0)return\"stage must be one of \"+n.join(\", \");t[i]=1}return Object.keys(t).length===3?\"OK\":\"cover three different stages\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "each risk is about requirements work, and its mitigation is an action",
+              "vi": "mỗi rủi ro liên quan tới công việc yêu cầu, và biện pháp là một hành động"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof RISK_LIST==\"undefined\"||!Array.isArray(RISK_LIST))return\"RISK_LIST is missing\";for(var e=0;e<RISK_LIST.length;e++){var t=RISK_LIST[e]||{};if(!/(requirement|user|scope|change|tbd|review|stakeholder|pharmac|patient|doctor|interview|elicit|priorit|specif|test|backlog|story|rule|approv)/i.test(String(t.statement)))return(t.id||e)+\": the risk should concern the requirements (users, scope, changes, TBDs, reviews\\u2026)\";if(!/^(schedule|assign|route|run|hold|review|write|ask|add|plan|invite|log|record|define|agree|use|build|create|train|track|set|document|interview|observe|prototype|baseline)\\b/i.test(String(t.mitigation).trim()))return(t.id||e)+\": start the mitigation with an action verb (Schedule\\u2026, Assign\\u2026, Route\\u2026)\"}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết rủi ro như vấn đề đã xảy ra."
+        },
+        {
+          "loi": "Biện pháp chung chung \"be careful\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "risk statement",
+          "vi": "phát biểu rủi ro"
+        }
+      ]
+    },
+    {
+      "title": "Requirements risks 4 — risk is your friend",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 3,
+      "points": 10,
+      "concepts": [
+        "requirements risks"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Facing risks openly is healthy: the sooner a risk is identified, the cheaper it is to control. Collaborative elicitation with extensive user involvement can cut requirements creep nearly in half.</p><p>Each question is graded on its own; the explanation appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đối diện rủi ro sớm là lành mạnh.</p><p>Mỗi câu được chấm riêng; giải thích hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Phát hiện sớm rẻ hơn.",
+        "Rủi ro giấu đi thành bất ngờ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Requirements risks 4 — risk is your friend\n\nAnswer in the answer panel (no code needed).\n\n1. A BA hides a risk because it \"looks negative\". Why is that wrong?BA giấu một rủi ro vì nó \"trông tiêu cực\". Vì sao sai?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Requirements risks 4 — risk is your friend — answer key\n\n1. A BA hides a risk because it \"looks negative\". Why is that wrong?BA giấu một rủi ro vì nó \"trông tiêu cực\". Vì sao sai?\n   Answer: c) Risks identified early are cheaper to control; hidden risks become surprises\n   Risk is your friend.VI: Rủi ro là bạn.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: c.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>A BA hides a risk because it \"looks negative\". Why is that wrong?</p><p style=\"opacity:.75;font-size:.92em\"><i>BA giấu một rủi ro vì nó \"trông tiêu cực\". Vì sao sai?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It is not wrong"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Only managers handle risk"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Risks identified early are cheaper to control; hidden risks become surprises"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Risks disappear if ignored"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Risk is your friend.</p><p><i>VI: Rủi ro là bạn.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Giấu rủi ro."
+        },
+        {
+          "loi": "Nghĩ rủi ro tự biến mất."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "risk",
+          "vi": "rủi ro"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,453 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-31i-2-ch31-spi-rootcause",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-31i-2-ch31-spi-rootcause"
+  },
+  "exercises": [
+    {
+      "title": "SPI 1 — which fundamental of process improvement?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "SPI fundamentals"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Four SPI fundamentals: (1) improvement is <b>evolutionary and continuous</b> — start small, adjust, pick low-hanging fruit; (2) people change only with an <b>incentive</b> — the strongest is pain from previous projects; (3) improvement is <b>goal-oriented</b>; (4) treat improvement activities as <b>mini-projects</b> with plans and resources. Which fundamental does each statement apply?</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bốn nguyên lý cải tiến quy trình.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Bắt đầu nhỏ, điều chỉnh ⇒ tiến hoá liên tục.",
+        "Nỗi đau từ dự án trước ⇒ động lực."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# SPI 1 — which fundamental of process improvement?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# SPI 1 — which fundamental of process improvement? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Evolutionary and continuous\n   - r1.k: Incentive (pain)\n   - r2.k: Goal-oriented\n   - r3.k: Mini-projects\n   Many improvement initiatives fail from poor planning and missing resources — treat them as real projects.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Many improvement initiatives fail from poor planning and missing resources — treat them as real projects.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Fundamental",
+                "luaChon": [
+                  "Evolutionary and continuous",
+                  "Incentive (pain)",
+                  "Goal-oriented",
+                  "Mini-projects"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "\"Let’s start with one review checklist and improve it after each sprint.\""
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "\"We missed two deadlines because requirements were twice as big as expected — let’s fix elicitation.\""
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "\"Our objective: cut rework caused by requirements by 30% this year.\""
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "\"The improvement has an owner, a plan, a budget and a deadline.\""
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Evolutionary and continuous",
+              "r1.k": "Incentive (pain)",
+              "r2.k": "Goal-oriented",
+              "r3.k": "Mini-projects"
+            },
+            "giaiThich": "<p><p>Many improvement initiatives fail from poor planning and missing resources — treat them as real projects.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đòi quy trình hoàn hảo ngay lần đầu."
+        },
+        {
+          "loi": "Cải tiến không có người phụ trách."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "software process improvement (SPI)",
+          "vi": "cải tiến quy trình phần mềm"
+        }
+      ]
+    },
+    {
+      "title": "SPI 2 — root cause analysis",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "root cause analysis"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Do root cause analysis before changing practices: distinguish symptoms from causes by asking \"why?\" several times. A cause-and-effect (fishbone, Ishikawa) diagram shows the answers as bones; the most highly branched bones reveal fundamental causes. You need not tackle every cause — a Pareto analysis focuses on the few causes behind most problems.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phân tích nguyên nhân gốc: hỏi \"vì sao\" nhiều lần, biểu đồ xương cá, Pareto.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Hỏi \"vì sao\" nhiều lần.",
+        "Nhánh nhiều nhánh con ⇒ nguyên nhân cơ bản."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# SPI 2 — root cause analysis\n\nAnswer in the answer panel (no code needed).\n\n1. \"Projects finish late.\" Asking why: requirements grow → users are not involved early → no product champions were named. The root cause to address is…\"Dự án trễ.\" Hỏi vì sao: yêu cầu phình → người dùng không tham gia sớm → không chỉ định product champion. Nguyên nhân gốc cần xử lý là…\n2. In a fishbone diagram, which bones point to fundamental causes?Trong biểu đồ xương cá, nhánh nào chỉ nguyên nhân cơ bản?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# SPI 2 — root cause analysis — answer key\n\n1. \"Projects finish late.\" Asking why: requirements grow → users are not involved early → no product champions were named. The root cause to address is…\"Dự án trễ.\" Hỏi vì sao: yêu cầu phình → người dùng không tham gia sớm → không chỉ định product champion. Nguyên nhân gốc cần xử lý là…\n   Answer: c) no product champions were named\n   Keep asking why until you reach an actionable cause.VI: Hỏi vì sao tới khi gặp nguyên nhân hành động được.\n\n2. In a fishbone diagram, which bones point to fundamental causes?Trong biểu đồ xương cá, nhánh nào chỉ nguyên nhân cơ bản?\n   Answer: b) The most highly branched ones\n   Highly branched bones.VI: Nhánh nhiều nhánh con.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: c · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>\"Projects finish late.\" Asking why: requirements grow → users are not involved early → no product champions were named. The root cause to address is…</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Dự án trễ.\" Hỏi vì sao: yêu cầu phình → người dùng không tham gia sớm → không chỉ định product champion. Nguyên nhân gốc cần xử lý là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "requirements grow"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the calendar"
+              },
+              {
+                "ma": "c",
+                "noiDung": "no product champions were named"
+              },
+              {
+                "ma": "d",
+                "noiDung": "projects finish late"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Keep asking why until you reach an actionable cause.</p><p><i>VI: Hỏi vì sao tới khi gặp nguyên nhân hành động được.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>In a fishbone diagram, which bones point to fundamental causes?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong biểu đồ xương cá, nhánh nào chỉ nguyên nhân cơ bản?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "None"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The most highly branched ones"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The shortest ones"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The head"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Highly branched bones.</p><p><i>VI: Nhánh nhiều nhánh con.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chữa triệu chứng."
+        },
+        {
+          "loi": "Chọn phương pháp mới mà không phân tích."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "root cause analysis",
+          "vi": "phân tích nguyên nhân gốc"
+        },
+        {
+          "en": "fishbone (Ishikawa) diagram",
+          "vi": "biểu đồ xương cá"
+        }
+      ]
+    },
+    {
+      "title": "SPI 3 — a Pareto analysis",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "Pareto analysis"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>The project’s rework hours were tagged with their causes (<code>CAUSES</code>). Write <code>function pareto(counts, threshold)</code> that returns the causes, highest first (ties by name), taken until their cumulative share of the total reaches at least <code>threshold</code> percent — the \"vital few\" to fix first. Return <code>[]</code> for an empty object.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>pareto(CAUSES, 80) ⇒ the first three causes (81%).</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>pareto(counts, threshold)</code>: lấy nguyên nhân theo thứ tự giảm dần (hoà theo tên) tới khi tỷ lệ cộng dồn ≥ ngưỡng %.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>pareto(CAUSES, 80) ⇒ ba nguyên nhân đầu (81%).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "pareto({ a: 5, b: 3, c: 2 }, 50)",
+          "output": "['a']",
+          "explanation": "5/10 = 50%|||"
+        }
+      ],
+      "hintsJson": [
+        "Sắp giảm dần; cộng dồn; dừng khi cum ≥ ngưỡng × tổng.",
+        "So sánh bằng số nguyên (cum × 100 ≥ threshold × total) tránh sai số."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "pareto.js",
+          "language": "javascript",
+          "code": "const CAUSES = {\n \"Unclear requirements\": 42,\n \"Late scope changes\": 25,\n \"Missing users in reviews\": 14,\n \"Tool problems\": 6,\n \"Staff turnover\": 5,\n \"Unclear templates\": 4,\n \"Other\": 4\n};\nfunction pareto(counts, threshold) {\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "pareto.js",
+          "language": "javascript",
+          "code": "const CAUSES = {\n \"Unclear requirements\": 42,\n \"Late scope changes\": 25,\n \"Missing users in reviews\": 14,\n \"Tool problems\": 6,\n \"Staff turnover\": 5,\n \"Unclear templates\": 4,\n \"Other\": 4\n};\nfunction pareto(counts, threshold) {\n  var keys = Object.keys(counts).sort(function (a, b) { return counts[b] - counts[a] || (a < b ? -1 : a > b ? 1 : 0); });\n  var total = keys.reduce(function (s, k) { return s + counts[k]; }, 0);\n  var out = [], cum = 0;\n  for (var i = 0; i < keys.length && total > 0; i++) {\n    out.push(keys[i]); cum += counts[keys[i]];\n    if (cum * 100 >= threshold * total) break;\n  }\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Three causes explain 81% of the rework — fix those first, starting with unclear requirements.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "pareto.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "pareto(CAUSES, 80)",
+              "vi": "pareto(CAUSES, 80)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof pareto!=\"function\")return\"pareto is not a function\";var n=pareto(CAUSES,80);return JSON.stringify(n)==='[\"Unclear requirements\",\"Late scope changes\",\"Missing users in reviews\"]'?\"OK\":\"got \"+JSON.stringify(n)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "exact threshold and empty input",
+              "vi": "đúng ngưỡng và đầu vào rỗng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){return typeof pareto!=\"function\"?\"pareto is not a function\":JSON.stringify(pareto({a:5,b:3,c:2},50))!=='[\"a\"]'?\"reaching exactly the threshold is enough\":JSON.stringify(pareto({},80))===\"[]\"?\"OK\":\"empty \\u21D2 []\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "hidden: ties by name",
+              "vi": "ẩn: hoà theo tên"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof pareto!=\"function\")return\"pareto is not a function\";var t=pareto({z:4,b:4,m:2},60);return JSON.stringify(t)==='[\"b\",\"z\"]'?\"OK\":\"got \"+JSON.stringify(t)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dừng TRƯỚC khi đạt ngưỡng."
+        },
+        {
+          "loi": "Không phá hoà."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Pareto analysis",
+          "vi": "phân tích Pareto"
+        }
+      ]
+    },
+    {
+      "title": "SPI 4 — the strongest incentive",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 3,
+      "points": 10,
+      "concepts": [
+        "SPI fundamentals"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>The strongest incentive for change is pain from previous projects: missed deadlines because requirements were bigger than expected, overtime from ambiguous requirements, wasted test effort, rework.</p><p>Each question is graded on its own; the explanation appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Động lực mạnh nhất là nỗi đau từ dự án trước.</p><p>Mỗi câu được chấm riêng; giải thích hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Dữ liệu thật từ dự án trước.",
+        "Nối nỗi đau với nguyên nhân yêu cầu."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# SPI 4 — the strongest incentive\n\nAnswer in the answer panel (no code needed).\n\n1. How do you build support for improving requirements practices?Làm sao tạo ủng hộ cho việc cải tiến thực hành yêu cầu?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# SPI 4 — the strongest incentive — answer key\n\n1. How do you build support for improving requirements practices?Làm sao tạo ủng hộ cho việc cải tiến thực hành yêu cầu?\n   Answer: c) Show the real pain of past projects — missed dates, overtime, rework — and link it to requirements problems\n   Pain is the incentive.VI: Nỗi đau là động lực.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: c.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>How do you build support for improving requirements practices?</p><p style=\"opacity:.75;font-size:.92em\"><i>Làm sao tạo ủng hộ cho việc cải tiến thực hành yêu cầu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Quote a textbook"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Change everything at once"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Show the real pain of past projects — missed dates, overtime, rework — and link it to requirements problems"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Buy a tool"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Pain is the incentive.</p><p><i>VI: Nỗi đau là động lực.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chỉ trích sách."
+        },
+        {
+          "loi": "Mua công cụ thay vì sửa quy trình."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "incentive",
+          "vi": "động lực"
+        }
+      ]
+    }
+  ]
+}

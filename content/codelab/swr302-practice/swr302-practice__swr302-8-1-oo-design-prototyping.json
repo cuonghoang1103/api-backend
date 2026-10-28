@@ -465,6 +465,142 @@
           "vi": "sơ đồ lớp"
         }
       ]
+    },
+    {
+      "title": "OO design 4 — class, attribute, association or method?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "noun–verb analysis"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>From the requirement \"<i>A customer places an order containing one or more books; the system calculates the order total including tax</i>\", classify each design element of the first-cut class model.</p><p>Each row is graded on its own; the explanation of every answer appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Từ yêu cầu đặt sách, phân loại từng phần tử của mô hình lớp sơ bộ.</p><p>Mỗi dòng được chấm riêng; giải thích từng đáp án hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "\"one or more books\" ⇒ lớp dòng đơn + liên kết.",
+        "Động từ \"calculates\" ⇒ phương thức."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# OO design 4 — class, attribute, association or method?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# OO design 4 — class, attribute, association or method? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Class\n   - r1.k: Attribute\n   - r2.k: Association\n   - r3.k: Method\n   - r4.k: Attribute\n   - r5.k: Association\n   Nouns → classes and attributes; verbs → methods; relations between nouns → associations with multiplicities.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Nouns → classes and attributes; verbs → methods; relations between nouns → associations with multiplicities.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Element",
+                "luaChon": [
+                  "Class",
+                  "Attribute",
+                  "Association",
+                  "Method"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "OrderLine"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Order.total"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Customer 1—* Order"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Order.calculateTotal()"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "OrderLine.quantity"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "OrderLine *—1 Book"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Class",
+              "r1.k": "Attribute",
+              "r2.k": "Association",
+              "r3.k": "Method",
+              "r4.k": "Attribute",
+              "r5.k": "Association"
+            },
+            "giaiThich": "<p><p>Nouns → classes and attributes; verbs → methods; relations between nouns → associations with multiplicities.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Biến total thành lớp."
+        },
+        {
+          "loi": "Quên lớp OrderLine."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "association",
+          "vi": "liên kết"
+        }
+      ]
     }
   ]
 }

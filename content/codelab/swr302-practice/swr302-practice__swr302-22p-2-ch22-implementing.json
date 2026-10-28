@@ -1,0 +1,477 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-22p-2-ch22-implementing",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-22p-2-ch22-implementing"
+  },
+  "exercises": [
+    {
+      "title": "COTS implementation 1 — which kind of implementation requirement?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "COTS implementation requirements"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Five kinds of requirements for implementing a package: <b>configuration</b> (setting parameters), <b>integration</b> (interfaces with other applications), <b>extension</b> (new functionality to close a gap), <b>data</b> (mapping your data to the package’s) and <b>business process changes</b> (adapting your processes to the package). Classify.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm loại yêu cầu khi triển khai gói có sẵn.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Đặt tham số ⇒ configuration.",
+        "Viết thêm module ⇒ extension."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# COTS implementation 1 — which kind of implementation requirement?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# COTS implementation 1 — which kind of implementation requirement? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Configuration\n   - r1.k: Integration\n   - r2.k: Extension\n   - r3.k: Data\n   - r4.k: Business process changes\n   Most successful COTS implementations rely on configuration; extensions should be the exception.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Most successful COTS implementations rely on configuration; extensions should be the exception.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Kind",
+                "luaChon": [
+                  "Configuration",
+                  "Integration",
+                  "Extension",
+                  "Data",
+                  "Business process changes"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Set the slot length parameter to 15 minutes and opening hours to 07:00–20:00."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Send every e-prescription from the package to the national system."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Build a custom family-booking module because the package has none."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Map our \"visit type\" codes to the package’s \"service category\" field."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Receptionists will confirm bookings in the package instead of in a paper book."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Configuration",
+              "r1.k": "Integration",
+              "r2.k": "Extension",
+              "r3.k": "Data",
+              "r4.k": "Business process changes"
+            },
+            "giaiThich": "<p><p>Most successful COTS implementations rely on configuration; extensions should be the exception.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gọi ánh xạ dữ liệu là integration."
+        },
+        {
+          "loi": "Coi thay đổi quy trình không phải yêu cầu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "COTS",
+          "vi": "phần mềm thương mại có sẵn"
+        }
+      ]
+    },
+    {
+      "title": "COTS implementation 2 — what to do with each gap",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "handling COTS gaps"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>For each gap between what you need and what the package delivers, decide: <b>ignore it</b> (drop the requirement and live with the tool), <b>change your process</b> (do it outside the solution), or <b>build a bridge</b> (extend the package). Choose the most reasonable option.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi khoảng trống: bỏ qua, đổi quy trình, hay xây cầu nối (mở rộng)?</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Bắt buộc theo luật ⇒ xây cầu nối.",
+        "Chỉ là thói quen ⇒ đổi quy trình."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# COTS implementation 2 — what to do with each gap\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# COTS implementation 2 — what to do with each gap — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Ignore it\n   - r1.k: Build a bridge\n   - r2.k: Change your process\n   - r3.k: Change your process\n   Extend only where a gap blocks a business objective or a legal requirement; otherwise adapt or accept.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Extend only where a gap blocks a business objective or a legal requirement; otherwise adapt or accept.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Decision",
+                "luaChon": [
+                  "Ignore it",
+                  "Change your process",
+                  "Build a bridge"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "The package’s report header cannot show the clinic’s second logo."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "The package cannot send the legally required e-prescription to the national system."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The package requires payment before printing an invoice; today staff print first and collect later."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "The package lists appointments by time, not grouped by doctor as staff are used to."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Ignore it",
+              "r1.k": "Build a bridge",
+              "r2.k": "Change your process",
+              "r3.k": "Change your process"
+            },
+            "giaiThich": "<p><p>Extend only where a gap blocks a business objective or a legal requirement; otherwise adapt or accept.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Tuỳ biến mọi khác biệt nhỏ."
+        },
+        {
+          "loi": "Bỏ qua yêu cầu pháp lý."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "customization",
+          "vi": "tuỳ biến"
+        }
+      ]
+    },
+    {
+      "title": "COTS implementation 3 — configuration and process",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "configuration requirements"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Define configuration requirements one process flow, use case or story at a time, walking through the vendor’s documentation. A package is usually chosen to be cheaper than custom software — so the organisation adapts its processes to the package, the reverse of custom development.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Định nghĩa yêu cầu cấu hình theo từng quy trình/use case; tổ chức thích nghi với gói.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Từng quy trình một.",
+        "Quy trình thích nghi với gói."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# COTS implementation 3 — configuration and process\n\nAnswer in the answer panel (no code needed).\n\n1. How should the team define configuration requirements?Đội nên định nghĩa yêu cầu cấu hình thế nào?\n2. In a COTS project, who usually adapts to whom?Trong dự án gói có sẵn, ai thường thích nghi với ai?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# COTS implementation 3 — configuration and process — answer key\n\n1. How should the team define configuration requirements?Đội nên định nghĩa yêu cầu cấu hình thế nào?\n   Answer: a) One process flow or use case at a time, using the vendor’s manuals\n   Systematic walkthrough.VI: Đi qua có hệ thống.\n\n2. In a COTS project, who usually adapts to whom?Trong dự án gói có sẵn, ai thường thích nghi với ai?\n   Answer: c) The organisation’s processes adapt to the package\n   Otherwise, build custom.VI: Nếu không, hãy tự làm.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · c.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>How should the team define configuration requirements?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đội nên định nghĩa yêu cầu cấu hình thế nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "One process flow or use case at a time, using the vendor’s manuals"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Skip configuration"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Let the vendor guess"
+              },
+              {
+                "ma": "d",
+                "noiDung": "All at once from memory"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Systematic walkthrough.</p><p><i>VI: Đi qua có hệ thống.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>In a COTS project, who usually adapts to whom?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong dự án gói có sẵn, ai thường thích nghi với ai?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Nobody adapts"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The vendor adapts to every customer"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The organisation’s processes adapt to the package"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The package is rewritten to match every process"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Otherwise, build custom.</p><p><i>VI: Nếu không, hãy tự làm.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết lại gói cho khớp quy trình cũ."
+        },
+        {
+          "loi": "Cấu hình tuỳ hứng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "configuration",
+          "vi": "cấu hình"
+        }
+      ]
+    },
+    {
+      "title": "COTS implementation 4 — users and expectations",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 3,
+      "points": 10,
+      "concepts": [
+        "COTS adoption"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>As with any project, engage users in selection or early implementation so their needs are met — otherwise they may reject the solution. A package that looks great in a demo may not behave as expected after installation.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mời người dùng tham gia chọn và triển khai sớm.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Người dùng tham gia sớm.",
+        "Đừng chỉ tin demo."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# COTS implementation 4 — users and expectations\n\nAnswer in the answer panel (no code needed).\n\n1. How do you reduce the risk that users reject the package?Giảm rủi ro người dùng từ chối gói thế nào?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# COTS implementation 4 — users and expectations — answer key\n\n1. How do you reduce the risk that users reject the package?Giảm rủi ro người dùng từ chối gói thế nào?\n   Answer: d) Involve them in selection and early implementation\n   User involvement.VI: Người dùng tham gia.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: d.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>How do you reduce the risk that users reject the package?</p><p style=\"opacity:.75;font-size:.92em\"><i>Giảm rủi ro người dùng từ chối gói thế nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Choose it without them"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Hide it until go-live"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only train managers"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Involve them in selection and early implementation"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>User involvement.</p><p><i>VI: Người dùng tham gia.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chọn gói không hỏi người dùng."
+        },
+        {
+          "loi": "Chỉ đào tạo quản lý."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "user class",
+          "vi": "lớp người dùng — nhóm người dùng có cách dùng/nhu cầu giống nhau"
+        }
+      ]
+    }
+  ]
+}

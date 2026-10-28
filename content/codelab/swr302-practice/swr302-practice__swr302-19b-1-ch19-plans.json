@@ -1,0 +1,460 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-19b-1-ch19-plans",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-19b-1-ch19-plans"
+  },
+  "exercises": [
+    {
+      "title": "Beyond RD 1 — requirements as the hub",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "effects of requirements on development"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Figure 19-1: requirements are the hub — they drive project planning, design, coding and testing. Every downstream activity traces back to them, which is why a requirement defect ripples so widely. Requirements effort is spread differently by life cycle: a sequential project front-loads it; an iterative or incremental project spreads it across iterations.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Yêu cầu là trung tâm dẫn dắt lập kế hoạch, thiết kế, code, kiểm thử.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Yêu cầu → kế hoạch, thiết kế, code, test.",
+        "Lặp/tăng dần ⇒ rải đều."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Beyond RD 1 — requirements as the hub\n\nAnswer in the answer panel (no code needed).\n\n1. Which four activities does Figure 19-1 show requirements driving?Hình 19-1 cho thấy yêu cầu dẫn dắt bốn hoạt động nào?\n2. On an incremental project, requirements effort is…Trong dự án tăng dần, công sức làm yêu cầu…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Beyond RD 1 — requirements as the hub — answer key\n\n1. Which four activities does Figure 19-1 show requirements driving?Hình 19-1 cho thấy yêu cầu dẫn dắt bốn hoạt động nào?\n   Answer: b) Project planning, design, coding and testing\n   The four arrows of the hub.VI: Bốn mũi tên từ trung tâm.\n\n2. On an incremental project, requirements effort is…Trong dự án tăng dần, công sức làm yêu cầu…\n   Answer: a) spread across the iterations, revisiting requirements as the product grows\n   Distributed by life cycle.VI: Phân bổ theo vòng đời.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which four activities does Figure 19-1 show requirements driving?</p><p style=\"opacity:.75;font-size:.92em\"><i>Hình 19-1 cho thấy yêu cầu dẫn dắt bốn hoạt động nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Marketing, sales, HR and finance"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Project planning, design, coding and testing"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only coding"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only testing"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The four arrows of the hub.</p><p><i>VI: Bốn mũi tên từ trung tâm.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>On an incremental project, requirements effort is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong dự án tăng dần, công sức làm yêu cầu…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "spread across the iterations, revisiting requirements as the product grows"
+              },
+              {
+                "ma": "b",
+                "noiDung": "all at the end"
+              },
+              {
+                "ma": "c",
+                "noiDung": "all in the first month"
+              },
+              {
+                "ma": "d",
+                "noiDung": "zero"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Distributed by life cycle.</p><p><i>VI: Phân bổ theo vòng đời.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nghĩ yêu cầu chỉ ảnh hưởng code."
+        },
+        {
+          "loi": "Dồn hết công yêu cầu vào đầu dự án agile."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "requirement",
+          "vi": "yêu cầu — điều hệ thống phải làm/có, hoặc ràng buộc lên nó"
+        }
+      ]
+    },
+    {
+      "title": "Beyond RD 2 — size measures from requirements",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "estimation from requirements"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Estimating size and effort from requirements can use: the number of individually testable requirements; function points; story points or use case points; the number, type and complexity of UI elements; or estimated lines of code per requirement. Name the measure each team uses.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các thước đo kích thước suy từ yêu cầu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Đầu vào/đầu ra/truy vấn/tệp/giao diện ⇒ function points.",
+        "Thang tương đối của đội agile ⇒ story points."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Beyond RD 2 — size measures from requirements\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Beyond RD 2 — size measures from requirements — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Testable requirements count\n   - r1.k: Function points\n   - r2.k: Story points\n   - r3.k: UI elements\n   - r4.k: Lines of code per requirement\n   Any of these works if the team has historical productivity data for that measure — size × productivity ⇒ effort ⇒ schedule.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Any of these works if the team has historical productivity data for that measure — size × productivity ⇒ effort ⇒ schedule.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Size measure",
+                "luaChon": [
+                  "Testable requirements count",
+                  "Function points",
+                  "Story points",
+                  "UI elements",
+                  "Lines of code per requirement"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "\"We counted 140 individually testable functional requirements.\""
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "\"Inputs, outputs, inquiries, internal files and interfaces gave 320.\""
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "\"The backlog totals 210 points at our usual relative scale.\""
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "\"38 screens: 12 simple, 20 average, 6 complex.\""
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "\"Each requirement averages about 150 lines of Java in our history.\""
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Testable requirements count",
+              "r1.k": "Function points",
+              "r2.k": "Story points",
+              "r3.k": "UI elements",
+              "r4.k": "Lines of code per requirement"
+            },
+            "giaiThich": "<p><p>Any of these works if the team has historical productivity data for that measure — size × productivity ⇒ effort ⇒ schedule.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm function points với số yêu cầu."
+        },
+        {
+          "loi": "Ước lượng không có dữ liệu năng suất quá khứ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "function point",
+          "vi": "điểm chức năng"
+        },
+        {
+          "en": "story point",
+          "vi": "điểm story"
+        }
+      ]
+    },
+    {
+      "title": "Beyond RD 3 — from size to effort and schedule",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "from requirements to plans"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Effective scheduling needs an estimated product size, the team’s known productivity from history, and the effort for every task. Write <code>function plan(size, hoursPerUnit, teamHoursPerWeek, contingencyPct)</code> that returns <code>{ effortHours, weeks }</code>: effort = size × hoursPerUnit, increased by <code>contingencyPct</code> percent and rounded up to a whole hour; weeks = effort ÷ team hours per week, rounded up. Then set <code>CLINIC_PLAN</code> for ClinicCare: 140 testable requirements, 6.5 hours each, a team of 4 people × 30 productive hours per week, 20% contingency.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>plan(100, 5, 120, 10) ⇒ { effortHours: 550, weeks: 5 }.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>plan(size, hoursPerUnit, teamHoursPerWeek, contingencyPct)</code> trả { effortHours, weeks } (làm tròn lên), rồi <code>CLINIC_PLAN</code> cho ClinicCare.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>plan(100, 5, 120, 10) ⇒ { effortHours: 550, weeks: 5 }.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "plan(100, 5, 120, 10)",
+          "output": "{ effortHours: 550, weeks: 5 }",
+          "explanation": "100 × 5 × 1.1 = 550; 550 / 120 = 4.6 ⇒ 5|||"
+        }
+      ],
+      "hintsJson": [
+        "Math.ceil cho cả giờ và tuần.",
+        "Đội 4 người × 30 giờ = 120 giờ/tuần."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "plan.js",
+          "language": "javascript",
+          "code": "function plan(size, hoursPerUnit, teamHoursPerWeek, contingencyPct) {\n  return { effortHours: 0, weeks: 0 };\n}\nconst CLINIC_PLAN = null;\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "plan.js",
+          "language": "javascript",
+          "code": "function plan(size, hoursPerUnit, teamHoursPerWeek, contingencyPct) {\n  var effortHours = Math.ceil(size * hoursPerUnit * (1 + contingencyPct / 100) - 1e-9);\n  return { effortHours: effortHours, weeks: Math.ceil(effortHours / teamHoursPerWeek) };\n}\n// 140 × 6.5 = 910 h; +20% = 1092 h; team = 4 × 30 = 120 h/week ⇒ 9.1 ⇒ 10 weeks\nconst CLINIC_PLAN = plan(140, 6.5, 4 * 30, 20);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Requirements size × historical productivity, plus contingency for uncertainty, gives an estimate you can defend — and update as requirements become clearer.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "plan.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "plan() on the example",
+              "vi": "plan() với ví dụ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof plan!=\"function\")return\"plan is not a function\";var n=plan(100,5,120,10)||{};return n.effortHours===550&&n.weeks===5?\"OK\":\"expected { effortHours: 550, weeks: 5 }, got \"+JSON.stringify(n)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "rounding up",
+              "vi": "làm tròn lên"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof plan!=\"function\")return\"plan is not a function\";var n=plan(7,3.3,10,0)||{};return n.effortHours===24&&n.weeks===3?\"OK\":\"7 \\xD7 3.3 = 23.1 \\u21D2 24 h; 24 / 10 \\u21D2 3 weeks; got \"+JSON.stringify(n)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "CLINIC_PLAN",
+              "vi": "CLINIC_PLAN"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){return typeof CLINIC_PLAN==\"undefined\"||!CLINIC_PLAN?\"CLINIC_PLAN is missing\":CLINIC_PLAN.effortHours===1092&&CLINIC_PLAN.weeks===10?\"OK\":\"expected 1092 hours and 10 weeks, got \"+JSON.stringify(CLINIC_PLAN)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên dự phòng 20%."
+        },
+        {
+          "loi": "Làm tròn xuống số tuần."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "contingency",
+          "vi": "dự phòng"
+        }
+      ]
+    },
+    {
+      "title": "Beyond RD 4 — plans that follow the requirements",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 4,
+      "points": 20,
+      "concepts": [
+        "project plans"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Base plans on requirements and refine them as requirements become clearer; early estimates from fuzzy requirements are uncertain. If planning shows the full feature set cannot fit the available time and resources, reduce scope or stage the releases — on agile, scope is adjusted to the time-boxes.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Kế hoạch theo yêu cầu, tinh chỉnh dần; không vừa thì giảm phạm vi hoặc chia bản phát hành.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Không vừa ⇒ giảm phạm vi hoặc chia đợt.",
+        "Đừng cắt kiểm thử."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Beyond RD 4 — plans that follow the requirements\n\nAnswer in the answer panel (no code needed).\n\n1. The estimate is 10 weeks but the deadline is in 7. Reasonable options?Ước lượng 10 tuần nhưng hạn còn 7. Lựa chọn hợp lý?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Beyond RD 4 — plans that follow the requirements — answer key\n\n1. The estimate is 10 weeks but the deadline is in 7. Reasonable options?Ước lượng 10 tuần nhưng hạn còn 7. Lựa chọn hợp lý?\n   Answer: b) Reduce scope by priority or stage the delivery into releases\n   Scope, staging, resources — not wishful thinking.VI: Phạm vi, chia đợt, nguồn lực — không phải mơ ước.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>The estimate is 10 weeks but the deadline is in 7. Reasonable options?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ước lượng 10 tuần nhưng hạn còn 7. Lựa chọn hợp lý?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Cut testing"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Reduce scope by priority or stage the delivery into releases"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Ignore the estimate"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Promise 7 weeks anyway"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Scope, staging, resources — not wishful thinking.</p><p><i>VI: Phạm vi, chia đợt, nguồn lực — không phải mơ ước.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Hứa theo hạn mà không đổi gì."
+        },
+        {
+          "loi": "Cắt kiểm thử để kịp."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "scope",
+          "vi": "phạm vi — phần nào của tầm nhìn dự án/phiên bản này sẽ làm"
+        }
+      ]
+    }
+  ]
+}

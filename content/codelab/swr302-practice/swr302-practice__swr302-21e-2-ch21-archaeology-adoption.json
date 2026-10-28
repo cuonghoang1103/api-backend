@@ -1,0 +1,483 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-21e-2-ch21-archaeology-adoption",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-21e-2-ch21-archaeology-adoption"
+  },
+  "exercises": [
+    {
+      "title": "Archaeology 1 — when old requirements don’t exist",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "software archaeology"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Most older systems have no accurate documented requirements. Teams reverse-engineer what the system does from its UI, code and database — \"software archaeology\" — and record what they learn to stop the knowledge drain. It is rarely worth reconstructing a complete requirement set: document the area you are changing and the areas it touches (Figure 21-2), and grow the documentation over time.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>\"Khảo cổ phần mềm\" và nên ghi lại bao nhiêu yêu cầu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ghi phần mình đụng tới.",
+        "Không cần tái dựng toàn bộ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Archaeology 1 — when old requirements don’t exist\n\nAnswer in the answer panel (no code needed).\n\n1. You must add a feature to region A of an undocumented legacy system. What do you document?Bạn phải thêm tính năng vào vùng A của hệ thống cũ không tài liệu. Ghi lại cái gì?\n2. Why record what archaeology reveals?Vì sao ghi lại điều khảo cổ tìm được?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Archaeology 1 — when old requirements don’t exist — answer key\n\n1. You must add a feature to region A of an undocumented legacy system. What do you document?Bạn phải thêm tính năng vào vùng A của hệ thống cũ không tài liệu. Ghi lại cái gì?\n   Answer: a) The new requirements, plus what you learn about the existing functionality that region A touches\n   Document where you work; grow it over time.VI: Ghi phần đang làm; mở rộng dần.\n\n2. Why record what archaeology reveals?Vì sao ghi lại điều khảo cổ tìm được?\n   Answer: b) To stop the knowledge drain so future maintainers understand the system\n   Knowledge drain.VI: Thất thoát tri thức.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>You must add a feature to region A of an undocumented legacy system. What do you document?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bạn phải thêm tính năng vào vùng A của hệ thống cũ không tài liệu. Ghi lại cái gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The new requirements, plus what you learn about the existing functionality that region A touches"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Nothing"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The entire system, perfectly, before starting"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only the code comments"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Document where you work; grow it over time.</p><p><i>VI: Ghi phần đang làm; mở rộng dần.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Why record what archaeology reveals?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao ghi lại điều khảo cổ tìm được?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "For decoration"
+              },
+              {
+                "ma": "b",
+                "noiDung": "To stop the knowledge drain so future maintainers understand the system"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It is not useful"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It is required by Scrum"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Knowledge drain.</p><p><i>VI: Thất thoát tri thức.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đòi tài liệu hoá toàn bộ hệ thống trước."
+        },
+        {
+          "loi": "Không ghi gì."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "software archaeology",
+          "vi": "khảo cổ phần mềm — suy ngược chức năng từ hệ thống cũ"
+        }
+      ]
+    },
+    {
+      "title": "Archaeology 2 — where to look in a running system",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "discovering existing requirements"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Even without documents you have a running system. Which source reveals each kind of requirement?</p><p>Each row is graded on its own; the explanation of every answer appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Nguồn nào trong hệ thống đang chạy lộ ra từng loại yêu cầu?</p><p>Mỗi dòng được chấm riêng; giải thích từng đáp án hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Luật tính toán ẩn ⇒ code.",
+        "Dùng hay không dùng ⇒ log sử dụng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Archaeology 2 — where to look in a running system\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Archaeology 2 — where to look in a running system — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: User interface\n   - r1.k: Code\n   - r2.k: Database\n   - r3.k: Interfaces to other systems\n   - r4.k: Usage logs and reports\n   Each source answers a different question; together they reconstruct what the system does and what still matters.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each source answers a different question; together they reconstruct what the system does and what still matters.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Source",
+                "luaChon": [
+                  "User interface",
+                  "Code",
+                  "Database",
+                  "Interfaces to other systems",
+                  "Usage logs and reports"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "The fields and validation messages on the registration screen."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "The discount rule hidden in a stored procedure."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The tables and columns kept for every prescription."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "The nightly file sent to the accounting system."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Which functions are used every day and which never."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "User interface",
+              "r1.k": "Code",
+              "r2.k": "Database",
+              "r3.k": "Interfaces to other systems",
+              "r4.k": "Usage logs and reports"
+            },
+            "giaiThich": "<p><p>Each source answers a different question; together they reconstruct what the system does and what still matters.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chỉ xem giao diện."
+        },
+        {
+          "loi": "Bỏ qua giao diện với hệ thống khác."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "external interface requirement",
+          "vi": "yêu cầu giao diện ngoài — giữa hệ thống với người dùng, phần cứng, hệ thống khác"
+        }
+      ]
+    },
+    {
+      "title": "Archaeology 3 — transition requirements",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "transition requirements"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p><b>Transition requirements</b> describe capabilities the whole solution — not only the software — needs to move from the old system to the new: data conversion, user training, organisational and business-process changes, running old and new systems in parallel for a time. Is each item a transition requirement or an ordinary (lasting) requirement?</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Yêu cầu chuyển đổi (chỉ cần trong thời gian chuyển từ cũ sang mới) hay yêu cầu thường?</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Chỉ cần trong thời gian chuyển ⇒ chuyển đổi.",
+        "Hành vi lâu dài của hệ thống ⇒ thường."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Archaeology 3 — transition requirements\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Archaeology 3 — transition requirements — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Transition requirement\n   - r1.k: Transition requirement\n   - r2.k: Ordinary requirement\n   - r3.k: Transition requirement\n   - r4.k: Ordinary requirement\n   Transition requirements are temporary but critical: a perfect new system fails if the data, people and processes are not moved over.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Transition requirements are temporary but critical: a perfect new system fails if the data, people and processes are not moved over.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Kind",
+                "luaChon": [
+                  "Transition requirement",
+                  "Ordinary requirement"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Convert 12 years of patient records from the old database."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Run the old and new billing systems in parallel for one month."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The system shall send an SMS reminder 24 hours before each appointment."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Train all receptionists before the switch-over weekend."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "The system shall show free slots within 2 seconds."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Transition requirement",
+              "r1.k": "Transition requirement",
+              "r2.k": "Ordinary requirement",
+              "r3.k": "Transition requirement",
+              "r4.k": "Ordinary requirement"
+            },
+            "giaiThich": "<p><p>Transition requirements are temporary but critical: a perfect new system fails if the data, people and processes are not moved over.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên chuyển đổi dữ liệu."
+        },
+        {
+          "loi": "Coi đào tạo không phải yêu cầu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "transition requirement",
+          "vi": "yêu cầu chuyển đổi"
+        }
+      ]
+    },
+    {
+      "title": "Archaeology 4 — encouraging adoption",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 4,
+      "points": 10,
+      "concepts": [
+        "adoption"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>People resist changing a stable, well-understood system; some fear losing their jobs if tasks are automated. Understand the business objectives and user requirements, involve users early, explain what they gain, and plan training and support.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Người dùng kháng cự thay đổi; cần hiểu, mời tham gia sớm, giải thích lợi ích, đào tạo.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Mời tham gia sớm.",
+        "Giải thích lợi ích, đào tạo."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Archaeology 4 — encouraging adoption\n\nAnswer in the answer panel (no code needed).\n\n1. Clerks fear the new system will replace them. Best response?Nhân viên sợ hệ thống mới thay thế họ. Cách phản hồi tốt nhất?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Archaeology 4 — encouraging adoption — answer key\n\n1. Clerks fear the new system will replace them. Best response?Nhân viên sợ hệ thống mới thay thế họ. Cách phản hồi tốt nhất?\n   Answer: b) Involve them early, explain how their work changes and what they gain, and plan training\n   Anticipate and plan for resistance.VI: Lường trước và lên kế hoạch.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Clerks fear the new system will replace them. Best response?</p><p style=\"opacity:.75;font-size:.92em\"><i>Nhân viên sợ hệ thống mới thay thế họ. Cách phản hồi tốt nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Cancel the project"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Involve them early, explain how their work changes and what they gain, and plan training"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Ignore their fear"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Delay telling them until go-live"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Anticipate and plan for resistance.</p><p><i>VI: Lường trước và lên kế hoạch.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Giấu kế hoạch đến ngày chạy."
+        },
+        {
+          "loi": "Coi kháng cự là chuyện riêng của họ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "user class",
+          "vi": "lớp người dùng — nhóm người dùng có cách dùng/nhu cầu giống nhau"
+        }
+      ]
+    }
+  ]
+}

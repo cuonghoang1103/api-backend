@@ -1,0 +1,457 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-22p-1-ch22-selecting",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-22p-1-ch22-selecting"
+  },
+  "exercises": [
+    {
+      "title": "COTS selection 1 — which selection aspect?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "COTS selection"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Five aspects feed COTS selection: <b>user requirements</b> (use cases, stories — not detailed functional specs), <b>business rules</b> (can the package be configured to comply?), <b>data needs</b> (major disconnects with the vendor’s data model), <b>quality requirements</b> (performance, usability, modifiability, interoperability, security…), and <b>evaluating solutions</b>. Which aspect does each selection question belong to?</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm khía cạnh khi chọn gói phần mềm có sẵn.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Chính sách công ty, luật ⇒ business rules.",
+        "Hiệu năng, khả dụng ⇒ quality."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# COTS selection 1 — which selection aspect?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# COTS selection 1 — which selection aspect? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: User requirements\n   - r1.k: Business rules\n   - r2.k: Data needs\n   - r3.k: Quality requirements\n   - r4.k: Evaluating solutions\n   Selecting a package is still requirements work: your prioritised requirements become the evaluation criteria.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Selecting a package is still requirements work: your prioritised requirements become the evaluation criteria.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Aspect",
+                "luaChon": [
+                  "User requirements",
+                  "Business rules",
+                  "Data needs",
+                  "Quality requirements",
+                  "Evaluating solutions"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "\"Can a receptionist book a slot for a caller in the package?\""
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "\"Can we configure the 2-hour free-cancellation policy?\""
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "\"Does the package store a family member separately from the account holder?\""
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "\"Can it serve 200 concurrent users with 2-second responses?\""
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "\"Weight each requirement and score the three short-listed packages.\""
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "User requirements",
+              "r1.k": "Business rules",
+              "r2.k": "Data needs",
+              "r3.k": "Quality requirements",
+              "r4.k": "Evaluating solutions"
+            },
+            "giaiThich": "<p><p>Selecting a package is still requirements work: your prioritised requirements become the evaluation criteria.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết đặc tả chức năng chi tiết cho gói có sẵn."
+        },
+        {
+          "loi": "Bỏ qua mô hình dữ liệu của nhà cung cấp."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "COTS (commercial off-the-shelf)",
+          "vi": "phần mềm thương mại có sẵn"
+        }
+      ]
+    },
+    {
+      "title": "COTS selection 2 — the weighted evaluation",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "weighted COTS evaluation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers (after Lawlis et al.): 1. weight each requirement 1–10 by importance; 2. rate each package’s satisfaction of each requirement: 1 = fully, 0.5 = partially, 0 = not at all; 3. score = Σ weight × rating; 4. compare. Write <code>function evaluate(requirements, ratings)</code> returning the packages sorted by score (highest first, ties by name) as <code>[{ name, score, pct }]</code> where <code>pct</code> = score ÷ maximum possible score × 100, rounded to 1 decimal. A missing rating counts as 0; a rating other than 0, 0.5 or 1 makes the whole package <b>invalid</b> — leave it out. Then set <code>WINNER</code> for the sample.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Maximum score = Σ weights.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phương pháp có trọng số: trọng số 1–10, mức đáp ứng 1/0,5/0, điểm = Σ trọng số × mức; xếp hạng, % so với tối đa; mức không hợp lệ ⇒ loại gói.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Điểm tối đa = tổng trọng số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "CareSuite",
+          "output": "10 × 1 + 6 × 0.5 + 8 × 0 + 4 × 1 = 17 (60.7%)",
+          "explanation": "|||"
+        }
+      ],
+      "hintsJson": [
+        "Điểm = Σ trọng số × mức.",
+        "Kiểm mức ∈ {0, 0.5, 1}; sai ⇒ bỏ cả gói."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "evaluate.js",
+          "language": "javascript",
+          "code": "const REQUIREMENTS = [{\"id\":\"R1\",\"name\":\"Online booking\",\"weight\":10},{\"id\":\"R2\",\"name\":\"SMS reminders\",\"weight\":6},{\"id\":\"R3\",\"name\":\"Vietnamese e-invoice\",\"weight\":8},{\"id\":\"R4\",\"name\":\"Open API\",\"weight\":4}];\nconst RATINGS = {\"CareSuite\":{\"R1\":1,\"R2\":0.5,\"R3\":0,\"R4\":1},\"MediBook\":{\"R1\":1,\"R2\":1,\"R3\":0.5,\"R4\":0},\"ClinicOne\":{\"R1\":0.5,\"R2\":1,\"R3\":1,\"R4\":0.5}};\nfunction evaluate(requirements, ratings) {\n  return [];\n}\nconst WINNER = '';\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "evaluate.js",
+          "language": "javascript",
+          "code": "const REQUIREMENTS = [{\"id\":\"R1\",\"name\":\"Online booking\",\"weight\":10},{\"id\":\"R2\",\"name\":\"SMS reminders\",\"weight\":6},{\"id\":\"R3\",\"name\":\"Vietnamese e-invoice\",\"weight\":8},{\"id\":\"R4\",\"name\":\"Open API\",\"weight\":4}];\nconst RATINGS = {\"CareSuite\":{\"R1\":1,\"R2\":0.5,\"R3\":0,\"R4\":1},\"MediBook\":{\"R1\":1,\"R2\":1,\"R3\":0.5,\"R4\":0},\"ClinicOne\":{\"R1\":0.5,\"R2\":1,\"R3\":1,\"R4\":0.5}};\nfunction evaluate(requirements, ratings) {\n  var max = requirements.reduce(function (s, r) { return s + r.weight; }, 0);\n  var out = [];\n  Object.keys(ratings).forEach(function (name) {\n    var rt = ratings[name], ok = true, score = 0;\n    requirements.forEach(function (r) {\n      var v = Object.prototype.hasOwnProperty.call(rt, r.id) ? rt[r.id] : 0;\n      if ([0, 0.5, 1].indexOf(v) < 0) ok = false;\n      else score += r.weight * v;\n    });\n    if (ok) out.push({ name: name, score: score, pct: max ? Math.round(score / max * 1000) / 10 : 0 });\n  });\n  return out.sort(function (a, b) { return b.score - a.score || (a.name < b.name ? -1 : a.name > b.name ? 1 : 0); });\n}\nconst WINNER = evaluate(REQUIREMENTS, RATINGS)[0].name;\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The matrix makes the decision transparent and defensible; changing a weight instantly re-ranks the packages. Here MediBook has the best functional fit on reminders, but ClinicOne wins because it satisfies the heavily weighted Vietnamese e-invoice requirement.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "evaluate.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "scores and ranking on the sample",
+              "vi": "điểm và xếp hạng trên mẫu"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof evaluate!=\"function\")return\"evaluate is not a function\";var e=evaluate(REQUIREMENTS,RATINGS),n='[{\"name\":\"ClinicOne\",\"score\":21,\"pct\":75},{\"name\":\"MediBook\",\"score\":20,\"pct\":71.4},{\"name\":\"CareSuite\",\"score\":17,\"pct\":60.7}]';return JSON.stringify(e)===n?\"OK\":\"got \"+JSON.stringify(e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "WINNER",
+              "vi": "WINNER"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){return typeof WINNER!=\"undefined\"&&WINNER===\"ClinicOne\"?\"OK\":\"the highest weighted score wins\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "hidden: missing ratings = 0, invalid ratings exclude the package, ties by name",
+              "vi": "ẩn: thiếu = 0, mức sai loại gói, hoà theo tên"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof evaluate!=\"function\")return\"evaluate is not a function\";var e=[{id:\"A\",weight:5},{id:\"B\",weight:5}],t=evaluate(e,{Zeta:{A:1},Alpha:{B:1},Bad:{A:.7,B:1}});return JSON.stringify(t)==='[{\"name\":\"Alpha\",\"score\":5,\"pct\":50},{\"name\":\"Zeta\",\"score\":5,\"pct\":50}]'?\"OK\":\"got \"+JSON.stringify(t)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cộng mức mà quên nhân trọng số."
+        },
+        {
+          "loi": "Coi 0.7 là đáp ứng một phần."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "evaluation matrix",
+          "vi": "ma trận đánh giá"
+        }
+      ]
+    },
+    {
+      "title": "COTS selection 3 — requirements at the right level",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "COTS requirements"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Focus COTS acquisition requirements at the user-requirement level: there is little point specifying detailed functional requirements or designing a UI, since the vendor already did that. Evaluate business rules that matter most, look for real data-model disconnects (not just different names), and explore quality attributes.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Yêu cầu chọn gói ở cấp yêu cầu người dùng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Cấp yêu cầu người dùng.",
+        "Tìm khác biệt cấu trúc, không phải tên."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# COTS selection 3 — requirements at the right level\n\nAnswer in the answer panel (no code needed).\n\n1. Before buying a package, should you design the screens in detail?Trước khi mua gói, có nên thiết kế màn hình chi tiết?\n2. The vendor calls patients \"contacts\". Is this a data disconnect?Nhà cung cấp gọi bệnh nhân là \"contacts\". Đây có phải lệch dữ liệu?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# COTS selection 3 — requirements at the right level — answer key\n\n1. Before buying a package, should you design the screens in detail?Trước khi mua gói, có nên thiết kế màn hình chi tiết?\n   Answer: a) No — specify user requirements and evaluate how the package supports them\n   The vendor already designed the UI.VI: Nhà cung cấp đã thiết kế giao diện.\n\n2. The vendor calls patients \"contacts\". Is this a data disconnect?Nhà cung cấp gọi bệnh nhân là \"contacts\". Đây có phải lệch dữ liệu?\n   Answer: a) Not necessarily — look for real structural gaps, not merely different names\n   Names differ; structure matters.VI: Tên khác không quan trọng bằng cấu trúc.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Before buying a package, should you design the screens in detail?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trước khi mua gói, có nên thiết kế màn hình chi tiết?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "No — specify user requirements and evaluate how the package supports them"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Only colours"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only for mobile"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Yes, every pixel"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The vendor already designed the UI.</p><p><i>VI: Nhà cung cấp đã thiết kế giao diện.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>The vendor calls patients \"contacts\". Is this a data disconnect?</p><p style=\"opacity:.75;font-size:.92em\"><i>Nhà cung cấp gọi bệnh nhân là \"contacts\". Đây có phải lệch dữ liệu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Not necessarily — look for real structural gaps, not merely different names"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Yes, always"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Yes, reject the package"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It does not matter at all"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Names differ; structure matters.</p><p><i>VI: Tên khác không quan trọng bằng cấu trúc.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết SRS chi tiết cho gói có sẵn."
+        },
+        {
+          "loi": "Loại gói vì tên trường khác."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "user requirement",
+          "vi": "yêu cầu người dùng — việc người dùng phải làm được (use case, user story)"
+        }
+      ]
+    },
+    {
+      "title": "COTS selection 4 — common selection challenges",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 4,
+      "points": 20,
+      "concepts": [
+        "COTS selection"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Too many candidates ⇒ a short list of key criteria to narrow down. Too many criteria ⇒ use the business objectives to pick the most important. Vendor misrepresentation and demos that look great ⇒ ask the vendor to walk through your actual use cases.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Thách thức thường gặp khi chọn gói.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Dùng use case của mình khi demo.",
+        "Mục tiêu nghiệp vụ chọn tiêu chí."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# COTS selection 4 — common selection challenges\n\nAnswer in the answer panel (no code needed).\n\n1. A demo looks perfect. How do you check the package really fits?Buổi demo trông hoàn hảo. Kiểm thế nào gói thực sự phù hợp?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# COTS selection 4 — common selection challenges — answer key\n\n1. A demo looks perfect. How do you check the package really fits?Buổi demo trông hoàn hảo. Kiểm thế nào gói thực sự phù hợp?\n   Answer: d) Ask the vendor to walk through your own use cases with your data\n   Your scenarios, not theirs.VI: Kịch bản của bạn, không phải của họ.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: d.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>A demo looks perfect. How do you check the package really fits?</p><p style=\"opacity:.75;font-size:.92em\"><i>Buổi demo trông hoàn hảo. Kiểm thế nào gói thực sự phù hợp?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Trust the demo"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Ask the salesperson’s opinion"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Read the brochure"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Ask the vendor to walk through your own use cases with your data"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Your scenarios, not theirs.</p><p><i>VI: Kịch bản của bạn, không phải của họ.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Tin demo chuẩn bị sẵn."
+        },
+        {
+          "loi": "Đánh giá với 200 tiêu chí ngay từ đầu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "COTS",
+          "vi": "phần mềm thương mại có sẵn"
+        }
+      ]
+    }
+  ]
+}

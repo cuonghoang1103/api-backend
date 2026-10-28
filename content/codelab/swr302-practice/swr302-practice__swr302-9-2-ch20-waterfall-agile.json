@@ -410,6 +410,127 @@
           "vi": "danh sách việc của sản phẩm, xếp theo ưu tiên"
         }
       ]
+    },
+    {
+      "title": "Waterfall vs agile 4 — the key differentiator",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 4,
+      "points": 20,
+      "concepts": [
+        "waterfall vs agile"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>A key differentiator across the predictive-to-adaptive spectrum is the <b>time between when a requirement is created and when software based on it reaches customers</b>. Agile shortens it; that is what lets teams correct course early.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Khác biệt then chốt: thời gian từ lúc tạo yêu cầu tới lúc phần mềm dựa trên nó tới tay khách.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Phản hồi sớm ⇒ sửa rẻ.",
+        "Agile vẫn làm yêu cầu."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Waterfall vs agile 4 — the key differentiator\n\nAnswer in the answer panel (no code needed).\n\n1. Why does a shorter requirement-to-delivery time reduce risk?Vì sao rút ngắn thời gian từ yêu cầu tới giao hàng làm giảm rủi ro?\n2. Is agile \"requirements-free\"?Agile có \"không cần yêu cầu\"?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Waterfall vs agile 4 — the key differentiator — answer key\n\n1. Why does a shorter requirement-to-delivery time reduce risk?Vì sao rút ngắn thời gian từ yêu cầu tới giao hàng làm giảm rủi ro?\n   Answer: d) Wrong requirements are discovered while they are still cheap to fix\n   Fast feedback.VI: Phản hồi nhanh.\n\n2. Is agile \"requirements-free\"?Agile có \"không cần yêu cầu\"?\n   Answer: d) No — the same activities are done just in time, in smaller pieces\n   Redistributed, not removed.VI: Phân bổ lại, không bỏ đi.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: d · d.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Why does a shorter requirement-to-delivery time reduce risk?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao rút ngắn thời gian từ yêu cầu tới giao hàng làm giảm rủi ro?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It makes testing unnecessary"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It does not reduce risk"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It removes the need for requirements"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Wrong requirements are discovered while they are still cheap to fix"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Fast feedback.</p><p><i>VI: Phản hồi nhanh.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Is agile \"requirements-free\"?</p><p style=\"opacity:.75;font-size:.92em\"><i>Agile có \"không cần yêu cầu\"?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Only for small teams"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Only in Scrum"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Yes"
+              },
+              {
+                "ma": "d",
+                "noiDung": "No — the same activities are done just in time, in smaller pieces"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Redistributed, not removed.</p><p><i>VI: Phân bổ lại, không bỏ đi.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nghĩ agile bỏ yêu cầu."
+        },
+        {
+          "loi": "Đo khác biệt bằng số tài liệu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "product backlog",
+          "vi": "danh sách việc của sản phẩm, xếp theo ưu tiên"
+        }
+      ]
     }
   ]
 }

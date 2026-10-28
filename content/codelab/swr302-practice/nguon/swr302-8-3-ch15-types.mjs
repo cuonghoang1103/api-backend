@@ -72,7 +72,7 @@ const E4 = tracNghiem({
 
 export default moDun({
   slug: 'swr302-8-3-ch15-types',
-  ten: '8.3 Throwaway vs evolutionary, paper vs electronic',
+  ten: '8.5 Throwaway vs evolutionary, paper vs electronic',
   moTaModule: 'Phân biệt throwaway/evolutionary và giấy/điện tử theo tình huống, trình tự use case → dialog map → wireframe → UI tối ưu (Hình 15-2), cách đánh giá prototype.',
   de: [E1, E2, E3, E4],
 });

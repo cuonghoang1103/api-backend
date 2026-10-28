@@ -1,0 +1,489 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-30t-1-ch30-tools",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-30t-1-ch30-tools"
+  },
+  "exercises": [
+    {
+      "title": "RE tools 1 — which kind of tool?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "requirements tools"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Requirements <b>development</b> tools help elicit and document: <b>elicitation</b> tools (note-taking, mind maps, audio pens), <b>prototyping</b> tools (wireframes to clickable simulations) and <b>modeling</b> tools (diagrams with standard notation). Requirements <b>management</b> tools store requirements in a multi-user database with attributes, versions, status and traceability. Classify each tool use.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Công cụ phát triển yêu cầu (khai thác, prototype, mô hình hoá) và công cụ quản lý yêu cầu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Sơ đồ chuẩn ký hiệu ⇒ modeling.",
+        "Cơ sở dữ liệu yêu cầu + thuộc tính ⇒ RM tool."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# RE tools 1 — which kind of tool?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# RE tools 1 — which kind of tool? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Elicitation tool\n   - r1.k: Prototyping tool\n   - r2.k: Modeling tool\n   - r3.k: Requirements management tool\n   - r4.k: Elicitation tool\n   Development tools help create requirements; management tools help keep them under control.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Development tools help create requirements; management tools help keep them under control.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Tool kind",
+                "luaChon": [
+                  "Elicitation tool",
+                  "Prototyping tool",
+                  "Modeling tool",
+                  "Requirements management tool"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "A mind map to organise ideas during a brainstorm"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "A clickable mock-up of the booking flow"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "A diagram editor that keeps DFD arrows attached when shapes move"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "A database of requirements with attributes, baselines and trace links"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "An audio pen that links recorded speech to the notes written at that moment"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Elicitation tool",
+              "r1.k": "Prototyping tool",
+              "r2.k": "Modeling tool",
+              "r3.k": "Requirements management tool",
+              "r4.k": "Elicitation tool"
+            },
+            "giaiThich": "<p><p>Development tools help create requirements; management tools help keep them under control.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gọi công cụ wireframe là modeling tool."
+        },
+        {
+          "loi": "Coi bảng tính là RM tool đầy đủ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "requirements management tool",
+          "vi": "công cụ quản lý yêu cầu"
+        }
+      ]
+    },
+    {
+      "title": "RE tools 2 — what an RM tool gives you",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "RM tool benefits"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>An RM tool can manage versions and changes, store attributes, facilitate impact analysis through tracing, find missing or extraneous requirements from trace gaps, track status, control access, and communicate with stakeholders. Which benefit does each situation use?</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lợi ích của công cụ quản lý yêu cầu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Lịch sử từ ngữ ⇒ versions/changes.",
+        "Ai được sửa ⇒ access."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# RE tools 2 — what an RM tool gives you\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# RE tools 2 — what an RM tool gives you — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Manage versions and changes\n   - r1.k: Store attributes\n   - r2.k: Facilitate impact analysis\n   - r3.k: Track status\n   - r4.k: Control access\n   These capabilities solve the real limits of document-based requirements.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>These capabilities solve the real limits of document-based requirements.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Benefit",
+                "luaChon": [
+                  "Manage versions and changes",
+                  "Store attributes",
+                  "Facilitate impact analysis",
+                  "Track status",
+                  "Control access"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "See every earlier wording of FR-12 and who changed it."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Filter requirements by priority = High and release = 2.0."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "List everything linked to BR-07 before changing it."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Show a chart of Approved / Implemented / Verified requirements."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Let the client read but not edit the requirements."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Manage versions and changes",
+              "r1.k": "Store attributes",
+              "r2.k": "Facilitate impact analysis",
+              "r3.k": "Track status",
+              "r4.k": "Control access"
+            },
+            "giaiThich": "<p><p>These capabilities solve the real limits of document-based requirements.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm thuộc tính với trạng thái."
+        },
+        {
+          "loi": "Nhầm truy vết với phiên bản."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "requirements traceability matrix (RTM)",
+          "vi": "ma trận truy vết yêu cầu — nối nguồn ↔ yêu cầu ↔ thiết kế ↔ mã ↔ test"
+        },
+        {
+          "en": "baseline",
+          "vi": "đường cơ sở — bộ yêu cầu đã thống nhất, từ đó mọi thay đổi phải qua kiểm soát"
+        }
+      ]
+    },
+    {
+      "title": "RE tools 3 — documents vs a database",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "RM tool capabilities"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>In an RM tool, a specification document is just a report generated by a query and formatted like an SRS. Requirements of different types (business, use case, functional, hardware, constraint) each have their own attributes. Tools integrate with design and test tools so requirements can be traced to design elements and tests.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trong công cụ RM, tài liệu đặc tả chỉ là một báo cáo sinh từ truy vấn.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Tài liệu = báo cáo.",
+        "Tích hợp ⇒ truy vết."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# RE tools 3 — documents vs a database\n\nAnswer in the answer panel (no code needed).\n\n1. In an RM tool, the SRS document is…Trong công cụ RM, tài liệu SRS là…\n2. Why check that an RM tool integrates with the test-management tool?Vì sao cần công cụ RM tích hợp với công cụ quản lý test?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# RE tools 3 — documents vs a database — answer key\n\n1. In an RM tool, the SRS document is…Trong công cụ RM, tài liệu SRS là…\n   Answer: a) a report generated from the requirements database\n   The database is the master.VI: Cơ sở dữ liệu là bản gốc.\n\n2. Why check that an RM tool integrates with the test-management tool?Vì sao cần công cụ RM tích hợp với công cụ quản lý test?\n   Answer: a) To trace requirements to tests automatically\n   Traceability across tools.VI: Truy vết xuyên công cụ.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>In an RM tool, the SRS document is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong công cụ RM, tài liệu SRS là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a report generated from the requirements database"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a separate Word file nobody updates"
+              },
+              {
+                "ma": "c",
+                "noiDung": "not possible"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the master copy edited by hand"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The database is the master.</p><p><i>VI: Cơ sở dữ liệu là bản gốc.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Why check that an RM tool integrates with the test-management tool?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao cần công cụ RM tích hợp với công cụ quản lý test?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "To trace requirements to tests automatically"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It is never useful"
+              },
+              {
+                "ma": "c",
+                "noiDung": "To print faster"
+              },
+              {
+                "ma": "d",
+                "noiDung": "For the colours"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Traceability across tools.</p><p><i>VI: Truy vết xuyên công cụ.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Sửa song song Word và công cụ."
+        },
+        {
+          "loi": "Không xét tích hợp."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "requirements traceability matrix (RTM)",
+          "vi": "ma trận truy vết yêu cầu — nối nguồn ↔ yêu cầu ↔ thiết kế ↔ mã ↔ test"
+        }
+      ]
+    },
+    {
+      "title": "RE tools 4 — the real costs of tools",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 3,
+      "points": 10,
+      "concepts": [
+        "tool costs"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Every tool brings costs beyond the licence: annual maintenance fees, upgrades, installation, configuration, administration, vendor support and user training. Tools amplify good practice; they do not create it.</p><p>Each question is graded on its own; the explanation appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chi phí thật của công cụ; công cụ khuếch đại thực hành tốt chứ không tạo ra nó.</p><p>Mỗi câu được chấm riêng; giải thích hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Có quy trình trước, công cụ sau.",
+        "Tính cả chi phí đào tạo, bảo trì."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# RE tools 4 — the real costs of tools\n\nAnswer in the answer panel (no code needed).\n\n1. A team with no requirements process buys an expensive RM tool. Likely result?Một đội chưa có quy trình yêu cầu mua công cụ RM đắt tiền. Kết quả có thể là?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# RE tools 4 — the real costs of tools — answer key\n\n1. A team with no requirements process buys an expensive RM tool. Likely result?Một đội chưa có quy trình yêu cầu mua công cụ RM đắt tiền. Kết quả có thể là?\n   Answer: d) Expensive shelfware — tools amplify good practice, they do not create it\n   Practice first.VI: Thực hành trước.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: d.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>A team with no requirements process buys an expensive RM tool. Likely result?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một đội chưa có quy trình yêu cầu mua công cụ RM đắt tiền. Kết quả có thể là?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Perfect requirements"
+              },
+              {
+                "ma": "b",
+                "noiDung": "No more meetings"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Zero defects"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Expensive shelfware — tools amplify good practice, they do not create it"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Practice first.</p><p><i>VI: Thực hành trước.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Mong công cụ sửa quy trình."
+        },
+        {
+          "loi": "Chỉ tính giá bản quyền."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "shelfware",
+          "vi": "phần mềm mua về để đó không dùng"
+        }
+      ]
+    }
+  ]
+}

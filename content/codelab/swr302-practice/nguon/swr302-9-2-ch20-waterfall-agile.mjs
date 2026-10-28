@@ -58,9 +58,24 @@ const E3 = phanLoai({
   khaiNiem: ['choosing an approach'],
 });
 
+const E4 = tracNghiem({
+  tieuDe: 'Waterfall vs agile 4 — the key differentiator',
+  doKho: 'MEDIUM', phut: 4,
+  moTa: { en: '<p>A key differentiator across the predictive-to-adaptive spectrum is the <b>time between when a requirement is created and when software based on it reaches customers</b>. Agile shortens it; that is what lets teams correct course early.</p>', vi: '<p>Khác biệt then chốt: thời gian từ lúc tạo yêu cầu tới lúc phần mềm dựa trên nó tới tay khách.</p>' },
+  cau: [
+    { en: 'Why does a shorter requirement-to-delivery time reduce risk?', vi: 'Vì sao rút ngắn thời gian từ yêu cầu tới giao hàng làm giảm rủi ro?', lc: [['a', 'Wrong requirements are discovered while they are still cheap to fix'], ['b', 'It removes the need for requirements'], ['c', 'It makes testing unnecessary'], ['d', 'It does not reduce risk']], dap: 'a', giai: ['Fast feedback.', 'Phản hồi nhanh.'] },
+    { en: 'Is agile "requirements-free"?', vi: 'Agile có "không cần yêu cầu"?', lc: [['a', 'No — the same activities are done just in time, in smaller pieces'], ['b', 'Yes'], ['c', 'Only for small teams'], ['d', 'Only in Scrum']], dap: 'a', giai: ['Redistributed, not removed.', 'Phân bổ lại, không bỏ đi.'] },
+  ],
+  goiY: ['Phản hồi sớm ⇒ sửa rẻ.', 'Agile vẫn làm yêu cầu.'],
+  loiHayGap: ['Nghĩ agile bỏ yêu cầu.', 'Đo khác biệt bằng số tài liệu.'],
+  giaiThich: '<p>Answers: a · a.</p>',
+  thuatNgu: tn('backlog'),
+  khaiNiem: ['waterfall vs agile'],
+});
+
 export default moDun({
   slug: 'swr302-9-2-ch20-waterfall-agile',
   ten: '9.2 Waterfall limits and the agile approach',
   moTaModule: 'Đặc điểm waterfall và agile, vì sao waterfall gặp khó (phản hồi muộn, yêu cầu thay đổi), khi nào agile phù hợp, chọn cách tiếp cận cho 4 dự án.',
-  de: [E1, E2, E3],
+  de: [E1, E2, E3, E4],
 });

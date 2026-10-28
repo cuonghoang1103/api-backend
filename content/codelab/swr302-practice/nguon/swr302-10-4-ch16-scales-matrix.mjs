@@ -75,9 +75,24 @@ const E3 = baiJs({
   boYeu: [{ ten: 'không kiểm phiếu', tep: { 'vote.js': "function hundredDollar(bs){ var t={},g=[]; bs.forEach(function(b){ Object.keys(b.alloc).forEach(function(k){ t[k]=(t[k]||0)+b.alloc[k]; if(b.alloc[k]>60&&g.indexOf(b.voter)<0) g.push(b.voter); }); }); return {totals:t,ranking:Object.keys(t).sort(function(a,b){return t[b]-t[a];}),invalid:[],gamed:g}; }\n" } }],
 });
 
+const E4 = tracNghiem({
+  tieuDe: 'Scales 4 — reading the value/cost/risk matrix',
+  doKho: 'MEDIUM', phut: 5,
+  moTa: { en: '<p>In Wiegers’ Table 16-1, value is the weighted sum of the relative benefit of having a feature and the relative penalty of not having it; cost and risk are estimated by the team; each is normalised to a percentage; priority = value% ÷ (cost%·cost weight + risk%·risk weight). Its real worth is the structured, transparent conversation it creates.</p>', vi: '<p>Đọc ma trận value/cost/risk.</p>' },
+  cau: [
+    { en: 'Who estimates the benefit and penalty, and who the cost and risk?', vi: 'Ai ước benefit và penalty, ai ước cost và risk?', lc: [['a', 'Customer representatives rate benefit and penalty; developers rate cost and risk'], ['b', 'Developers rate everything'], ['c', 'Customers rate everything'], ['d', 'The tool calculates them']], dap: 'a', giai: ['Each side rates what it knows.', 'Mỗi bên chấm thứ mình hiểu.'] },
+    { en: 'A feature has the highest value but ranks low. The most likely reason is…', vi: 'Một tính năng value cao nhất nhưng xếp thấp. Lý do có thể nhất là…', lc: [['a', 'its cost and risk are high relative to the others'], ['b', 'the formula is wrong'], ['c', 'value does not matter'], ['d', 'it has no penalty']], dap: 'a', giai: ['Value per unit of cost and risk.', 'Value trên mỗi đơn vị chi phí và rủi ro.'] },
+  ],
+  goiY: ['Khách chấm lợi ích/thiệt hại; dev chấm chi phí/rủi ro.', 'Xếp hạng = value tương đối so với cost + risk.'],
+  loiHayGap: ['Để dev chấm benefit.', 'Xếp theo value thuần.'],
+  giaiThich: '<p>Answers: a · a.</p>',
+  thuatNgu: tn('valueCostRisk'),
+  khaiNiem: ['value, cost and risk'],
+});
+
 export default moDun({
   slug: 'swr302-10-4-ch16-scales-matrix',
   ten: '10.4 Three-level scale, MoSCoW, $100 and value/cost/risk',
   moTaModule: 'Thang quan trọng × gấp (Hình 16-1, ô "đừng làm"), ưu tiên nhiều lượt (Hình 16-2), phê phán MoSCoW, tự viết bộ đếm phiếu $100 có kiểm phiếu và cảnh báo dồn phiếu chấm dữ liệu ẩn.',
-  de: [E1, E2, E3],
+  de: [E1, E2, E3, E4],
 });

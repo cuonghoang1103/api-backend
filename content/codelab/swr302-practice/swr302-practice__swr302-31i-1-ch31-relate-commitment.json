@@ -1,0 +1,491 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-31i-1-ch31-relate-commitment",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-31i-1-ch31-relate-commitment"
+  },
+  "exercises": [
+    {
+      "title": "Improvement 1 — which process do requirements feed?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "requirements and other processes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Figure 31-1: requirements are at the heart of a project and feed planning, tracking and control, change control, acceptance and system testing, construction, and user documentation. Which process does each effect describe?</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Yêu cầu nuôi các quy trình khác của dự án.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ước lượng, chia đợt ⇒ planning.",
+        "Viết tài liệu người dùng \"cuối chuỗi thức ăn\" ⇒ user documentation."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Improvement 1 — which process do requirements feed?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Improvement 1 — which process do requirements feed? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Project planning\n   - r1.k: Project tracking and control\n   - r2.k: Change control\n   - r3.k: Acceptance and system testing\n   - r4.k: Construction\n   - r5.k: User documentation\n   Because requirements touch every process, changing how you do requirements always changes how other groups work — expect reactions.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Because requirements touch every process, changing how you do requirements always changes how other groups work — expect reactions.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Process",
+                "luaChon": [
+                  "Project planning",
+                  "Project tracking and control",
+                  "Change control",
+                  "Acceptance and system testing",
+                  "Construction",
+                  "User documentation"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Estimates show the full feature set cannot fit, so the release is staged."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Counting verified requirements shows the project is behind."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "After the baseline, a new requirement goes through the CCB."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "User requirements become the basis of the acceptance tests."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Developers implement the functional requirements of the sprint."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Late UI changes force the technical writer to redo the help pages."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Project planning",
+              "r1.k": "Project tracking and control",
+              "r2.k": "Change control",
+              "r3.k": "Acceptance and system testing",
+              "r4.k": "Construction",
+              "r5.k": "User documentation"
+            },
+            "giaiThich": "<p><p>Because requirements touch every process, changing how you do requirements always changes how other groups work — expect reactions.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nghĩ cải tiến yêu cầu không ảnh hưởng nhóm khác."
+        },
+        {
+          "loi": "Nhầm tracking với planning."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "change control board (CCB)",
+          "vi": "hội đồng kiểm soát thay đổi — người quyết định chấp nhận/từ chối thay đổi"
+        }
+      ]
+    },
+    {
+      "title": "Improvement 2 — understanding resistance",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "gaining commitment"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Changing requirements processes changes how stakeholder groups interact, and people dislike being pushed out of their comfort zone. Much resistance comes from fear of the unknown: communicate the rationale and the benefits each group will gain. People ask \"What’s in it for me?\" — the pay-off (less rework, lower support costs, more customer value) may not be immediate.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hiểu nguồn gốc kháng cự; trả lời \"tôi được gì?\".</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Giải thích lý do và lợi ích.",
+        "Sợ điều chưa biết."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Improvement 2 — understanding resistance\n\nAnswer in the answer panel (no code needed).\n\n1. Developers resist writing acceptance criteria with the BA. Best first step?Dev kháng cự việc viết tiêu chí chấp nhận cùng BA. Bước đầu tốt nhất?\n2. Most resistance to process change comes from…Phần lớn kháng cự với thay đổi quy trình đến từ…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Improvement 2 — understanding resistance — answer key\n\n1. Developers resist writing acceptance criteria with the BA. Best first step?Dev kháng cự việc viết tiêu chí chấp nhận cùng BA. Bước đầu tốt nhất?\n   Answer: c) Explain the rationale and what they gain (less rework, fewer late surprises)\n   Address \"what’s in it for me\".VI: Trả lời \"tôi được gì\".\n\n2. Most resistance to process change comes from…Phần lớn kháng cự với thay đổi quy trình đến từ…\n   Answer: a) fear of the unknown\n   Communicate to reduce the unknown.VI: Giao tiếp để giảm điều chưa biết.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: c · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Developers resist writing acceptance criteria with the BA. Best first step?</p><p style=\"opacity:.75;font-size:.92em\"><i>Dev kháng cự việc viết tiêu chí chấp nhận cùng BA. Bước đầu tốt nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Force it by management order only"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Write them secretly"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Explain the rationale and what they gain (less rework, fewer late surprises)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Give up"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Address \"what’s in it for me\".</p><p><i>VI: Trả lời \"tôi được gì\".</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Most resistance to process change comes from…</p><p style=\"opacity:.75;font-size:.92em\"><i>Phần lớn kháng cự với thay đổi quy trình đến từ…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "fear of the unknown"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the tools"
+              },
+              {
+                "ma": "c",
+                "noiDung": "nothing — people love change"
+              },
+              {
+                "ma": "d",
+                "noiDung": "laziness only"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Communicate to reduce the unknown.</p><p><i>VI: Giao tiếp để giảm điều chưa biết.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chỉ dùng mệnh lệnh."
+        },
+        {
+          "loi": "Coi kháng cự là lười biếng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "software process improvement (SPI)",
+          "vi": "cải tiến quy trình phần mềm"
+        }
+      ]
+    },
+    {
+      "title": "Improvement 3 — real management commitment?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "commitment behaviours"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Figure 31-3: commitment is what management does, not what it says — funding training and review time, protecting requirements activities from schedule pressure, taking part in prioritisation, holding people accountable for following the process. Which behaviours show real commitment?</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cam kết là điều quản lý làm, không phải điều quản lý nói.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Bỏ tiền, giữ thời gian review khi gấp ⇒ cam kết thật.",
+        "Khẩu hiệu ⇒ nói suông."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Improvement 3 — real management commitment?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Improvement 3 — real management commitment? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Real commitment\n   - r1.k: Lip service\n   - r2.k: Real commitment\n   - r3.k: Lip service\n   - r4.k: Real commitment\n   Watch what happens under schedule pressure — that reveals the real commitment.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Watch what happens under schedule pressure — that reveals the real commitment.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Behaviour",
+                "luaChon": [
+                  "Real commitment",
+                  "Lip service"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "The director funds two days of requirements training for every BA."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "A \"Quality first\" poster is hung in the corridor."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "When the deadline is tight, the manager keeps the time for the SRS inspection."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "The manager praises the new process but approves skipping reviews every sprint."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Managers attend the prioritisation workshop and make the trade-off decisions."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Real commitment",
+              "r1.k": "Lip service",
+              "r2.k": "Real commitment",
+              "r3.k": "Lip service",
+              "r4.k": "Real commitment"
+            },
+            "giaiThich": "<p><p>Watch what happens under schedule pressure — that reveals the real commitment.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Coi khẩu hiệu là cam kết."
+        },
+        {
+          "loi": "Bỏ review khi gấp mà vẫn nói ủng hộ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "management commitment",
+          "vi": "cam kết của quản lý"
+        }
+      ]
+    },
+    {
+      "title": "Improvement 4 — the end of the food chain",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 3,
+      "points": 10,
+      "concepts": [
+        "requirements and documentation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>A technical writer explained her long hours: \"We’re at the end of the food chain — we have to respond to the final UI changes and to features dropped or added at the last minute.\" Poorly written or late-changing requirements hurt every group downstream.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Người viết tài liệu ở \"cuối chuỗi thức ăn\".</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ổn định + thay đổi có kiểm soát.",
+        "Thông báo thay đổi kịp thời."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Improvement 4 — the end of the food chain\n\nAnswer in the answer panel (no code needed).\n\n1. Which improvement helps the documentation team most?Cải tiến nào giúp nhóm viết tài liệu nhiều nhất?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Improvement 4 — the end of the food chain — answer key\n\n1. Which improvement helps the documentation team most?Cải tiến nào giúp nhóm viết tài liệu nhiều nhất?\n   Answer: a) Stable, baselined requirements with controlled, communicated changes\n   Downstream groups need stability.VI: Nhóm phía sau cần ổn định.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which improvement helps the documentation team most?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cải tiến nào giúp nhóm viết tài liệu nhiều nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Stable, baselined requirements with controlled, communicated changes"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Skipping the user guide"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Hiring more writers only"
+              },
+              {
+                "ma": "d",
+                "noiDung": "More last-minute features"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Downstream groups need stability.</p><p><i>VI: Nhóm phía sau cần ổn định.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thêm người thay vì sửa quy trình."
+        },
+        {
+          "loi": "Bỏ tài liệu người dùng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "baseline",
+          "vi": "đường cơ sở — bộ yêu cầu đã thống nhất, từ đó mọi thay đổi phải qua kiểm soát"
+        }
+      ]
+    }
+  ]
+}

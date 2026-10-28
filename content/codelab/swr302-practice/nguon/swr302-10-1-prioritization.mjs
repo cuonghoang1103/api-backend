@@ -76,9 +76,27 @@ const E3 = tracNghiem({
   khaiNiem: ['why prioritise'],
 });
 
+const E4 = phanLoai({
+  tieuDe: 'Priorities 4 — Kano categories and MoSCoW',
+  doKho: 'MEDIUM', phut: 5,
+  moTa: { en: '<p>Beyond the syllabus: combine the Kano model with MoSCoW — <b>must-be</b> (basic) features are almost always "Must" (their absence is fatal), <b>performance</b> features compete for "Should", and <b>delighters</b> are strategic "Could"s that differentiate you. Classify each feature of a food-delivery app by its Kano category.</p>', vi: '<p>Kết hợp Kano với MoSCoW: cơ bản ⇒ Must; hiệu năng ⇒ Should; tạo bất ngờ ⇒ Could.</p>' },
+  cot: 'Kano category', luaChon: ['Must-be (basic)', 'Performance', 'Delighter'],
+  hang: [
+    ['The order reaches the restaurant correctly.', 'Must-be (basic)'],
+    ['Faster delivery estimates make users happier the more accurate they are.', 'Performance'],
+    ['A surprise thank-you voucher on the user’s birthday.', 'Delighter'],
+    ['Payment is processed securely.', 'Must-be (basic)'],
+  ],
+  giaiThich: '<p>Basics cause dissatisfaction when absent but no delight when present; performance features scale satisfaction; delighters surprise.</p>',
+  goiY: ['Thiếu là thất bại ⇒ cơ bản.', 'Càng tốt càng hài lòng ⇒ hiệu năng.'],
+  loiHayGap: ['Coi bảo mật thanh toán là delighter.', 'Coi quà bất ngờ là Must.'],
+  thuatNgu: tn('moscow'),
+  khaiNiem: ['Kano model'],
+});
+
 export default moDun({
   slug: 'swr302-10-1-prioritization',
   ten: '10.1 Setting priorities: MoSCoW and value ÷ (cost + risk)',
   moTaModule: 'MoSCoW cho app giao đồ ăn, tự viết hàm xếp hạng value ÷ (cost + risk) (lọc điểm sai, hoà, không sửa đầu vào) chấm dữ liệu ẩn, vì sao ưu tiên và cách chống "mọi thứ đều Must".',
-  de: [E1, E3, E2],
+  de: [E1, E3, E2, E4],
 });

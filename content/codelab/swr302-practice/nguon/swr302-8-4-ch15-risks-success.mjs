@@ -66,9 +66,24 @@ const E3 = baiJs({
   boYeu: [{ ten: 'throwaway đem phát hành, PoC giấy', tep: { 'plans.js': "const PLANS=[{name:'Screen',purpose:'prescription screen',scope:'mock-up',futureUse:'throwaway',form:'paper',fate:'Release it as version 1 to save time.',timeboxDays:30,questions:['Do you like it?','Is it nice?','Any comments?']},{name:'API',purpose:'api speed',scope:'proof of concept',futureUse:'throwaway',form:'paper',fate:'discard',timeboxDays:5,questions:['a','b','c']}];\n" } }],
 });
 
+const E4 = tracNghiem({
+  tieuDe: 'Prototype risks 4 — mitigating the four risks',
+  doKho: 'MEDIUM', phut: 5,
+  moTa: { en: '<p>Mitigations: make throwaway prototypes look rough and say clearly they will be discarded; limit the prototype to the uncertain parts; explain that its performance is not representative; time-box the prototyping effort.</p>', vi: '<p>Biện pháp giảm bốn rủi ro của prototyping.</p>' },
+  cau: [
+    { en: 'How do you reduce the pressure to release a throwaway prototype?', vi: 'Giảm áp lực phát hành prototype throwaway thế nào?', lc: [['a', 'Make it obviously rough (paper, greyscale) and state up front that it will be discarded'], ['b', 'Polish it until it looks finished'], ['c', 'Show it only to the CEO'], ['d', 'Build it in the production stack']], dap: 'a', giai: ['Nobody mistakes a sketch for a product.', 'Không ai nhầm bản phác thảo là sản phẩm.'] },
+    { en: 'How do you avoid unrealistic performance expectations?', vi: 'Tránh kỳ vọng hiệu năng phi thực tế thế nào?', lc: [['a', 'Explain that results are hard-coded and the real system will behave differently'], ['b', 'Hide the fact'], ['c', 'Promise the same speed'], ['d', 'Remove all data']], dap: 'a', giai: ['Set expectations explicitly.', 'Nói rõ kỳ vọng.'] },
+  ],
+  goiY: ['Thô ⇒ không ai đòi phát hành.', 'Nói rõ kết quả là giả lập.'],
+  loiHayGap: ['Làm prototype quá đẹp.', 'Hứa hiệu năng như demo.'],
+  giaiThich: '<p>Answers: a · a.</p>',
+  thuatNgu: tn('prototype'),
+  khaiNiem: ['prototyping risks'],
+});
+
 export default moDun({
   slug: 'swr302-8-4-ch15-risks-success',
-  ten: '8.4 Prototyping risks and success factors',
+  ten: '8.6 Prototyping risks and success factors',
   moTaModule: 'Bốn rủi ro của prototyping, các yếu tố thành công, tự lập kế hoạch hai prototype cho ClinicCare (mock-up giấy + spike API) có mục đích, số phận, timebox và câu hỏi đánh giá — chấm theo tính nhất quán.',
-  de: [E1, E2, E3],
+  de: [E1, E2, E3, E4],
 });

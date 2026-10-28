@@ -409,6 +409,127 @@
           "vi": "danh sách việc của sản phẩm, xếp theo ưu tiên"
         }
       ]
+    },
+    {
+      "title": "Agile essentials 4 — one backlog",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 4,
+      "points": 10,
+      "concepts": [
+        "product backlog"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>The product backlog lists the work the team might do — mostly user stories, sometimes other requirements, business processes and defects. Keep <b>only one backlog</b>, so defects are prioritised against new stories. Prioritisation is ongoing: priorities only need to hold for the next iteration.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chỉ một backlog; lỗi được xếp ưu tiên cùng story mới; ưu tiên chỉ cần đúng cho vòng tới.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Một backlog chung.",
+        "Xếp lại trước mỗi vòng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agile essentials 4 — one backlog\n\nAnswer in the answer panel (no code needed).\n\n1. Where should defects found in production go on an agile project?Lỗi phát hiện ở production nên đi đâu trong dự án agile?\n2. How long must the backlog priorities hold?Thứ tự ưu tiên của backlog cần đúng trong bao lâu?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agile essentials 4 — one backlog — answer key\n\n1. Where should defects found in production go on an agile project?Lỗi phát hiện ở production nên đi đâu trong dự án agile?\n   Answer: d) Into the same product backlog, prioritised against new stories\n   One backlog.VI: Một backlog.\n\n2. How long must the backlog priorities hold?Thứ tự ưu tiên của backlog cần đúng trong bao lâu?\n   Answer: c) For the next iteration; they are revisited before each planning\n   Ongoing prioritisation.VI: Ưu tiên liên tục.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: d · c.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Where should defects found in production go on an agile project?</p><p style=\"opacity:.75;font-size:.92em\"><i>Lỗi phát hiện ở production nên đi đâu trong dự án agile?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Fixed immediately, always, whatever the priority"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Ignored until the next release"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Into a separate list nobody plans"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Into the same product backlog, prioritised against new stories"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>One backlog.</p><p><i>VI: Một backlog.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>How long must the backlog priorities hold?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thứ tự ưu tiên của backlog cần đúng trong bao lâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "For one year"
+              },
+              {
+                "ma": "b",
+                "noiDung": "They never change"
+              },
+              {
+                "ma": "c",
+                "noiDung": "For the next iteration; they are revisited before each planning"
+              },
+              {
+                "ma": "d",
+                "noiDung": "For the whole project"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Ongoing prioritisation.</p><p><i>VI: Ưu tiên liên tục.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Hai backlog riêng cho lỗi và story."
+        },
+        {
+          "loi": "Khoá thứ tự ưu tiên cả dự án."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "product backlog",
+          "vi": "danh sách việc của sản phẩm, xếp theo ưu tiên"
+        }
+      ]
     }
   ]
 }

@@ -414,6 +414,127 @@
           "vi": "xếp ưu tiên kiểu Wiegers: priority = value% ÷ (cost% × trọng số + risk% × trọng số)"
         }
       ]
+    },
+    {
+      "title": "Priorities 4 — Kano categories and MoSCoW",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "Kano model"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Beyond the syllabus: combine the Kano model with MoSCoW — <b>must-be</b> (basic) features are almost always \"Must\" (their absence is fatal), <b>performance</b> features compete for \"Should\", and <b>delighters</b> are strategic \"Could\"s that differentiate you. Classify each feature of a food-delivery app by its Kano category.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Kết hợp Kano với MoSCoW: cơ bản ⇒ Must; hiệu năng ⇒ Should; tạo bất ngờ ⇒ Could.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Thiếu là thất bại ⇒ cơ bản.",
+        "Càng tốt càng hài lòng ⇒ hiệu năng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Priorities 4 — Kano categories and MoSCoW\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Priorities 4 — Kano categories and MoSCoW — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Must-be (basic)\n   - r1.k: Performance\n   - r2.k: Delighter\n   - r3.k: Must-be (basic)\n   Basics cause dissatisfaction when absent but no delight when present; performance features scale satisfaction; delighters surprise.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Basics cause dissatisfaction when absent but no delight when present; performance features scale satisfaction; delighters surprise.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Kano category",
+                "luaChon": [
+                  "Must-be (basic)",
+                  "Performance",
+                  "Delighter"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "The order reaches the restaurant correctly."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Faster delivery estimates make users happier the more accurate they are."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "A surprise thank-you voucher on the user’s birthday."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Payment is processed securely."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Must-be (basic)",
+              "r1.k": "Performance",
+              "r2.k": "Delighter",
+              "r3.k": "Must-be (basic)"
+            },
+            "giaiThich": "<p><p>Basics cause dissatisfaction when absent but no delight when present; performance features scale satisfaction; delighters surprise.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Coi bảo mật thanh toán là delighter."
+        },
+        {
+          "loi": "Coi quà bất ngờ là Must."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "MoSCoW",
+          "vi": "Must / Should / Could / Won’t (this time) — thang ưu tiên"
+        }
+      ]
     }
   ]
 }

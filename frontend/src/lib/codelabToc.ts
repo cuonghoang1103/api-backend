@@ -94,6 +94,7 @@ export const TEN_CHUONG: Readonly<Record<string, Readonly<Record<number, string>
     9: 'Yêu cầu trong Agile',
     10: 'Xếp ưu tiên & yêu cầu cho AI/ML',
     11: 'Luyện PE — đề thực hành có đồng hồ',
+    12: 'Chuyên đề: nâng cấp/thay thế, gói có sẵn, công cụ, cải tiến, rủi ro',
   },
 });
 

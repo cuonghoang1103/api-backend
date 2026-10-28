@@ -1,0 +1,455 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-21e-1-ch21-gap-analysis",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-21e-1-ch21-gap-analysis"
+  },
+  "exercises": [
+    {
+      "title": "Enhancement 1 — enhancement or replacement project?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 4,
+      "points": 10,
+      "concepts": [
+        "enhancement and replacement projects"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>An <b>enhancement</b> project adds capabilities to an existing system. A <b>replacement</b> (reengineering) project replaces an existing application with a new custom system, a COTS package, or a hybrid. Classify.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dự án nâng cấp hay thay thế?</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Thêm vào hệ thống đang chạy ⇒ nâng cấp.",
+        "Bỏ hệ thống cũ ⇒ thay thế."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Enhancement 1 — enhancement or replacement project?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Enhancement 1 — enhancement or replacement project? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Enhancement\n   - r1.k: Replacement\n   - r2.k: Replacement\n   - r3.k: Enhancement\n   Both differ from greenfield work: a working system — and users’ expectations of it — already exist.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Both differ from greenfield work: a working system — and users’ expectations of it — already exist.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Project type",
+                "luaChon": [
+                  "Enhancement",
+                  "Replacement"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Add online payment to the existing clinic booking system."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Retire the 15-year-old desktop pharmacy system and move to a new web system."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Replace the home-made HR tool with a commercial HR package."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Add an English interface to the current patient app."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Enhancement",
+              "r1.k": "Replacement",
+              "r2.k": "Replacement",
+              "r3.k": "Enhancement"
+            },
+            "giaiThich": "<p><p>Both differ from greenfield work: a working system — and users’ expectations of it — already exist.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Coi chuyển sang gói thương mại là nâng cấp."
+        },
+        {
+          "loi": "Quên kỳ vọng của người dùng hệ thống cũ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "enhancement project",
+          "vi": "dự án nâng cấp"
+        },
+        {
+          "en": "replacement project",
+          "vi": "dự án thay thế"
+        }
+      ]
+    },
+    {
+      "title": "Enhancement 2 — expected challenges",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "challenges of replacement projects"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Expected challenges: changes that degrade performance users are used to; little or no documentation of the existing system; users who dislike changes; unknowingly omitting functionality vital to some stakeholders; stakeholders using the opportunity to request many new features. Counter gold plating and scope creep by tracing requirements to business objectives and implementing the highest-impact features first.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Thách thức thường gặp và cách chống mạ vàng / phình phạm vi.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Mọi tính năng phải truy về mục tiêu.",
+        "Chức năng \"ai cũng quên\" của hệ thống cũ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Enhancement 2 — expected challenges\n\nAnswer in the answer panel (no code needed).\n\n1. \"Since we are rebuilding anyway, let’s add everything we ever wanted.\" The BA should…\"Đằng nào cũng làm lại, thêm hết mọi thứ ta từng muốn.\" BA nên…\n2. After go-live, the pharmacy team finds the new system no longer prints controlled-drug labels. This illustrates…Sau khi chạy, nhóm dược thấy hệ thống mới không còn in nhãn thuốc kiểm soát. Điều này minh hoạ…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Enhancement 2 — expected challenges — answer key\n\n1. \"Since we are rebuilding anyway, let’s add everything we ever wanted.\" The BA should…\"Đằng nào cũng làm lại, thêm hết mọi thứ ta từng muốn.\" BA nên…\n   Answer: c) trace each proposed feature to a business objective and prioritise the highest-impact ones\n   Business objectives guard the scope.VI: Mục tiêu nghiệp vụ giữ phạm vi.\n\n2. After go-live, the pharmacy team finds the new system no longer prints controlled-drug labels. This illustrates…Sau khi chạy, nhóm dược thấy hệ thống mới không còn in nhãn thuốc kiểm soát. Điều này minh hoạ…\n   Answer: d) unknowingly omitting functionality vital to a stakeholder group\n   Hidden functionality of the old system.VI: Chức năng ẩn của hệ thống cũ.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: c · d.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>\"Since we are rebuilding anyway, let’s add everything we ever wanted.\" The BA should…</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Đằng nào cũng làm lại, thêm hết mọi thứ ta từng muốn.\" BA nên…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "refuse all new features"
+              },
+              {
+                "ma": "b",
+                "noiDung": "accept every request"
+              },
+              {
+                "ma": "c",
+                "noiDung": "trace each proposed feature to a business objective and prioritise the highest-impact ones"
+              },
+              {
+                "ma": "d",
+                "noiDung": "let developers choose"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Business objectives guard the scope.</p><p><i>VI: Mục tiêu nghiệp vụ giữ phạm vi.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>After go-live, the pharmacy team finds the new system no longer prints controlled-drug labels. This illustrates…</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau khi chạy, nhóm dược thấy hệ thống mới không còn in nhãn thuốc kiểm soát. Điều này minh hoạ…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "good performance"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a usability improvement"
+              },
+              {
+                "ma": "c",
+                "noiDung": "gold plating"
+              },
+              {
+                "ma": "d",
+                "noiDung": "unknowingly omitting functionality vital to a stakeholder group"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Hidden functionality of the old system.</p><p><i>VI: Chức năng ẩn của hệ thống cũ.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thêm mọi thứ vì \"đằng nào cũng làm lại\"."
+        },
+        {
+          "loi": "Không kiểm kê chức năng hệ thống cũ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "gold plating",
+          "vi": "mạ vàng — dev tự thêm chức năng không ai yêu cầu"
+        },
+        {
+          "en": "scope creep (creeping requirements)",
+          "vi": "phạm vi phình dần ngoài kiểm soát"
+        }
+      ]
+    },
+    {
+      "title": "Enhancement 3 — a gap analysis",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "gap analysis"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Gap analysis compares the functionality of the existing system with the desired new one (Figure 21-1). Write <code>function gap(existing, desired, retire)</code> returning <code>{ keep, add, missing }</code>: <code>keep</code> = in both; <code>add</code> = only in desired (new capabilities); <code>missing</code> = in existing, not in desired, and <b>not</b> listed in <code>retire</code> — functionality that may be lost by mistake and must be confirmed with stakeholders. Compare names case-insensitively, trimmed; keep the original spelling of the first list that contains the item; each list sorted alphabetically (case-insensitive).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>On the sample with retire = [\"export to fax\"], missing = [\"Print controlled-drug label\"].</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>gap(existing, desired, retire)</code> trả keep / add / missing (chức năng cũ có thể mất mà chưa được quyết định bỏ).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Với retire = [\"export to fax\"], missing = [\"Print controlled-drug label\"].</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "gap(EXISTING, DESIRED, [\"export to fax\"]).add",
+          "output": "[\"Online payment\", \"SMS reminder\"]",
+          "explanation": "|||"
+        }
+      ],
+      "hintsJson": [
+        "So sánh sau khi trim + toLowerCase.",
+        "missing = cũ, không có trong mới, không nằm trong danh sách bỏ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "gap.js",
+          "language": "javascript",
+          "code": "const EXISTING = [\"Search patient\",\"Book appointment\",\"Print controlled-drug label\",\"Export to fax\",\"Monthly report\"];\nconst DESIRED = [\"Search patient\",\"Book appointment\",\"Online payment\",\"Monthly report\",\"SMS reminder\"];\nfunction gap(existing, desired, retire) {\n  return { keep: [], add: [], missing: [] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "gap.js",
+          "language": "javascript",
+          "code": "const EXISTING = [\"Search patient\",\"Book appointment\",\"Print controlled-drug label\",\"Export to fax\",\"Monthly report\"];\nconst DESIRED = [\"Search patient\",\"Book appointment\",\"Online payment\",\"Monthly report\",\"SMS reminder\"];\nfunction gap(existing, desired, retire) {\n  function k(s) { return String(s).trim().toLowerCase(); }\n  function has(list, s) { return list.some(function (x) { return k(x) === k(s); }); }\n  function sx(a) { return a.slice().sort(function (x, y) { return k(x) < k(y) ? -1 : k(x) > k(y) ? 1 : 0; }); }\n  var keep = existing.filter(function (x) { return has(desired, x); });\n  var add = desired.filter(function (x) { return !has(existing, x); });\n  var missing = existing.filter(function (x) { return !has(desired, x) && !has(retire || [], x); });\n  return { keep: sx(keep).map(function (s) { return String(s).trim(); }), add: sx(add).map(function (s) { return String(s).trim(); }), missing: sx(missing).map(function (s) { return String(s).trim(); }) };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The dangerous column is <i>missing</i>: functionality nobody decided to retire, which some stakeholder may depend on — like the controlled-drug label.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "gap.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "sample: keep and add",
+              "vi": "mẫu: keep và add"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof gap!=\"function\")return\"gap is not a function\";var n=gap(EXISTING,DESIRED,[\"export to fax\"]);return JSON.stringify(n.keep)!=='[\"Book appointment\",\"Monthly report\",\"Search patient\"]'?\"keep: got \"+JSON.stringify(n.keep):JSON.stringify(n.add)==='[\"Online payment\",\"SMS reminder\"]'?\"OK\":\"add: got \"+JSON.stringify(n.add)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "sample: missing functionality not explicitly retired",
+              "vi": "mẫu: chức năng có thể mất mà chưa quyết định bỏ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof gap!=\"function\")return\"gap is not a function\";var n=gap(EXISTING,DESIRED,[\"export to fax\"]);return JSON.stringify(n.missing)==='[\"Print controlled-drug label\"]'?\"OK\":\"missing: got \"+JSON.stringify(n.missing)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "hidden: case, spaces, no retire list",
+              "vi": "ẩn: hoa thường, khoảng trắng, không có danh sách bỏ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof gap!=\"function\")return\"gap is not a function\";var n=gap([\" Login \",\"b-Report\",\"Archive\"],[\"login\",\"Chat\"],void 0);return JSON.stringify(n)==='{\"keep\":[\"Login\"],\"add\":[\"Chat\"],\"missing\":[\"Archive\",\"b-Report\"]}'?\"OK\":\"got \"+JSON.stringify(n)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Coi mọi chức năng cũ không có trong mới là \"cố ý bỏ\"."
+        },
+        {
+          "loi": "So sánh phân biệt hoa thường."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "gap analysis",
+          "vi": "phân tích khoảng trống"
+        }
+      ]
+    },
+    {
+      "title": "Enhancement 4 — keeping performance levels (KPIs)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 4,
+      "points": 20,
+      "concepts": [
+        "KPIs"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Existing systems set expectations for performance and throughput; stakeholders have KPIs for existing processes they want maintained. A key performance indicator model (KPIM) identifies these metrics so stakeholders see the new system will perform at least as well.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Giữ các chỉ số hiệu năng (KPI) của quy trình hiện tại.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "KPI cũ ⇒ yêu cầu chất lượng mới.",
+        "Đo trước khi thay."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Enhancement 4 — keeping performance levels (KPIs)\n\nAnswer in the answer panel (no code needed).\n\n1. Today a receptionist checks in a patient in 40 seconds. For the replacement system you should…Hiện lễ tân check-in một bệnh nhân trong 40 giây. Với hệ thống thay thế bạn nên…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Enhancement 4 — keeping performance levels (KPIs) — answer key\n\n1. Today a receptionist checks in a patient in 40 seconds. For the replacement system you should…Hiện lễ tân check-in một bệnh nhân trong 40 giây. Với hệ thống thay thế bạn nên…\n   Answer: b) record this KPI and specify that the new check-in takes at most 40 seconds\n   Preserve existing KPIs.VI: Giữ KPI hiện có.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Today a receptionist checks in a patient in 40 seconds. For the replacement system you should…</p><p style=\"opacity:.75;font-size:.92em\"><i>Hiện lễ tân check-in một bệnh nhân trong 40 giây. Với hệ thống thay thế bạn nên…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "double it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "record this KPI and specify that the new check-in takes at most 40 seconds"
+              },
+              {
+                "ma": "c",
+                "noiDung": "ignore it — the new system is modern"
+              },
+              {
+                "ma": "d",
+                "noiDung": "measure it after go-live only"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Preserve existing KPIs.</p><p><i>VI: Giữ KPI hiện có.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng hệ thống mới tự nhiên nhanh hơn."
+        },
+        {
+          "loi": "Chỉ đo sau khi chạy."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "KPI",
+          "vi": "chỉ số hiệu suất chính"
+        }
+      ]
+    }
+  ]
+}

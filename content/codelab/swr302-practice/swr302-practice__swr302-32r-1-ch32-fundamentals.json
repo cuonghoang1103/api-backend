@@ -1,0 +1,493 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-32r-1-ch32-fundamentals",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-32r-1-ch32-fundamentals"
+  },
+  "exercises": [
+    {
+      "title": "Risk 1 — assessment or control?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "risk management"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Risk management (Figure 32-1): <b>risk assessment</b> = identification, analysis (probability, impact), prioritisation; <b>risk control</b> = management planning (mitigation, contingency, owner, timeline), resolution (executing the plans), monitoring (tracking progress). Classify.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đánh giá rủi ro (nhận diện, phân tích, xếp ưu tiên) vs kiểm soát rủi ro (lập kế hoạch, giải quyết, giám sát).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Nhận diện, ước xác suất/tác động, xếp hạng ⇒ đánh giá.",
+        "Kế hoạch, thực hiện, theo dõi ⇒ kiểm soát."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Risk 1 — assessment or control?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Risk 1 — assessment or control? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Risk assessment\n   - r1.k: Risk assessment\n   - r2.k: Risk control\n   - r3.k: Risk control\n   - r4.k: Risk assessment\n   Most control effort goes to the top-priority risks identified by assessment.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Most control effort goes to the top-priority risks identified by assessment.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Activity",
+                "luaChon": [
+                  "Risk assessment",
+                  "Risk control"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "List possible risks with a checklist of common risk factors."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Estimate the probability and impact of each risk."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Write a mitigation and a contingency plan for the top risks."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Track each week whether the mitigation is working."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Rank risks by exposure."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Risk assessment",
+              "r1.k": "Risk assessment",
+              "r2.k": "Risk control",
+              "r3.k": "Risk control",
+              "r4.k": "Risk assessment"
+            },
+            "giaiThich": "<p><p>Most control effort goes to the top-priority risks identified by assessment.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Coi xếp hạng là kiểm soát."
+        },
+        {
+          "loi": "Lập danh sách rồi không làm gì."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "risk exposure",
+          "vi": "mức phơi nhiễm rủi ro = xác suất × tác động"
+        }
+      ]
+    },
+    {
+      "title": "Risk 2 — risk exposure and the top risks",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "risk exposure"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Risk exposure = probability (0–1) × impact (1–10). Write <code>function topRisks(risks, n)</code> returning the ids of the <code>n</code> risks with the highest exposure (ties by id), and <code>function worthMitigating(costOfMitigation, risk, costPerImpactPoint)</code> returning <code>true</code> only if the mitigation costs less than the expected loss (exposure × costPerImpactPoint) — \"it makes no sense to spend $20,000 controlling a risk whose maximum impact is $10,000\". Ignore risks whose probability is outside 0–1 or impact outside 1–10.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>topRisks(RISKS, 2) ⇒ [\"RK-3\", \"RK-1\"].</li>\n</ul>",
+      "problemHtmlVi": "<p>Mức phơi nhiễm = xác suất × tác động. Viết <code>topRisks(risks, n)</code> và <code>worthMitigating(...)</code>: chỉ đáng giảm thiểu khi chi phí nhỏ hơn tổn thất kỳ vọng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>topRisks(RISKS, 2) ⇒ [\"RK-3\", \"RK-1\"].</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "RK-3",
+          "output": "0.5 × 10 = 5.0",
+          "explanation": "|||"
+        }
+      ],
+      "hintsJson": [
+        "Exposure = probability × impact.",
+        "Chỉ giảm thiểu khi chi phí < tổn thất kỳ vọng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "risks.js",
+          "language": "javascript",
+          "code": "const RISKS = [\n {\n  \"id\": \"RK-1\",\n  \"statement\": \"If key users are not available for elicitation, then requirements may be incomplete.\",\n  \"probability\": 0.6,\n  \"impact\": 8\n },\n {\n  \"id\": \"RK-2\",\n  \"statement\": \"If the national e-prescription API changes, then integration may be delayed.\",\n  \"probability\": 0.3,\n  \"impact\": 9\n },\n {\n  \"id\": \"RK-3\",\n  \"statement\": \"If the stakeholders disagree on scope, then we may build the wrong product.\",\n  \"probability\": 0.5,\n  \"impact\": 10\n },\n {\n  \"id\": \"RK-4\",\n  \"statement\": \"If the UI library is buggy, then screens may need rework.\",\n  \"probability\": 0.2,\n  \"impact\": 3\n }\n];\nfunction topRisks(risks, n) {\n  return [];\n}\nfunction worthMitigating(costOfMitigation, risk, costPerImpactPoint) {\n  return false;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "risks.js",
+          "language": "javascript",
+          "code": "const RISKS = [\n {\n  \"id\": \"RK-1\",\n  \"statement\": \"If key users are not available for elicitation, then requirements may be incomplete.\",\n  \"probability\": 0.6,\n  \"impact\": 8\n },\n {\n  \"id\": \"RK-2\",\n  \"statement\": \"If the national e-prescription API changes, then integration may be delayed.\",\n  \"probability\": 0.3,\n  \"impact\": 9\n },\n {\n  \"id\": \"RK-3\",\n  \"statement\": \"If the stakeholders disagree on scope, then we may build the wrong product.\",\n  \"probability\": 0.5,\n  \"impact\": 10\n },\n {\n  \"id\": \"RK-4\",\n  \"statement\": \"If the UI library is buggy, then screens may need rework.\",\n  \"probability\": 0.2,\n  \"impact\": 3\n }\n];\nfunction __ok(r) { return r && r.probability >= 0 && r.probability <= 1 && r.impact >= 1 && r.impact <= 10; }\nfunction topRisks(risks, n) {\n  return risks.filter(__ok).map(function (r) { return { id: r.id, e: r.probability * r.impact }; })\n    .sort(function (a, b) { return b.e - a.e || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0); })\n    .slice(0, n).map(function (x) { return x.id; });\n}\nfunction worthMitigating(costOfMitigation, risk, costPerImpactPoint) {\n  if (!__ok(risk)) return false;\n  return costOfMitigation < risk.probability * risk.impact * costPerImpactPoint;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Exposure turns a long list of worries into a ranked list; comparing mitigation cost with expected loss keeps risk control economical.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "risks.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "topRisks on the sample",
+              "vi": "topRisks trên mẫu"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof topRisks!=\"function\")return\"topRisks is not a function\";var t=topRisks(RISKS,2);return JSON.stringify(t)==='[\"RK-3\",\"RK-1\"]'?\"OK\":'expected [\"RK-3\",\"RK-1\"] (exposures 5.0 and 4.8), got '+JSON.stringify(t)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "worthMitigating",
+              "vi": "worthMitigating"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof worthMitigating!=\"function\")return\"worthMitigating is not a function\";var t=RISKS[2];return worthMitigating(2e4,{probability:1,impact:10},1e3)!==!1?\"$20,000 to control a $10,000 loss is not worth it\":worthMitigating(1e3,t,1e3)===!0?\"OK\":\"RK-3 expected loss 5 \\xD7 1000 = 5000 > 1000 \\u21D2 worth it\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "hidden: invalid risks ignored, ties by id",
+              "vi": "ẩn: rủi ro sai bị bỏ, hoà theo id"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof topRisks!=\"function\")return\"topRisks is not a function\";var i=topRisks([{id:\"B\",probability:.5,impact:4},{id:\"A\",probability:.4,impact:5},{id:\"X\",probability:1.5,impact:9},{id:\"Y\",probability:.9,impact:0}],3);return JSON.stringify(i)==='[\"A\",\"B\"]'?\"OK\":\"got \"+JSON.stringify(i)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Xếp theo tác động thay vì phơi nhiễm."
+        },
+        {
+          "loi": "Chi nhiều hơn tổn thất để kiểm soát rủi ro."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "risk exposure",
+          "vi": "mức phơi nhiễm rủi ro"
+        },
+        {
+          "en": "mitigation",
+          "vi": "giảm thiểu"
+        }
+      ]
+    },
+    {
+      "title": "Risk 3 — writing a risk statement",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "documenting risks"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Write risks in a <b>condition–consequence</b> format: the risk condition, then the possible adverse outcome — \"If the customers don’t agree on the product requirements, then we might satisfy only one of them.\" Record probability, impact, exposure, mitigation, owner and date (Figure 32-2). A risk list is not a risk management plan.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết rủi ro theo dạng điều kiện – hậu quả; danh sách rủi ro chưa phải kế hoạch quản lý rủi ro.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "\"If … then …\".",
+        "Giảm xác suất vs dự phòng sau khi xảy ra."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Risk 3 — writing a risk statement\n\nAnswer in the answer panel (no code needed).\n\n1. Which is a well-formed risk statement?Phát biểu rủi ro nào đúng dạng?\n2. A mitigation that reduces the probability of a risk is…Biện pháp giảm XÁC SUẤT của rủi ro là…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Risk 3 — writing a risk statement — answer key\n\n1. Which is a well-formed risk statement?Phát biểu rủi ro nào đúng dạng?\n   Answer: a) If the product owner leaves mid-project, then backlog decisions may stall for weeks.\n   Condition → consequence.VI: Điều kiện → hậu quả.\n\n2. A mitigation that reduces the probability of a risk is…Biện pháp giảm XÁC SUẤT của rủi ro là…\n   Answer: a) naming a backup product owner and sharing knowledge regularly\n   Mitigation can reduce probability or impact; contingency acts after.VI: Giảm thiểu giảm xác suất hoặc tác động; dự phòng dùng khi đã xảy ra.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which is a well-formed risk statement?</p><p style=\"opacity:.75;font-size:.92em\"><i>Phát biểu rủi ro nào đúng dạng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "If the product owner leaves mid-project, then backlog decisions may stall for weeks."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Requirements."
+              },
+              {
+                "ma": "c",
+                "noiDung": "The product owner is bad."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Risk: high."
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Condition → consequence.</p><p><i>VI: Điều kiện → hậu quả.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>A mitigation that reduces the probability of a risk is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Biện pháp giảm XÁC SUẤT của rủi ro là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "naming a backup product owner and sharing knowledge regularly"
+              },
+              {
+                "ma": "b",
+                "noiDung": "writing it in red"
+              },
+              {
+                "ma": "c",
+                "noiDung": "ignoring it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a contingency budget used after the risk happens"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Mitigation can reduce probability or impact; contingency acts after.</p><p><i>VI: Giảm thiểu giảm xác suất hoặc tác động; dự phòng dùng khi đã xảy ra.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Ghi rủi ro một chữ."
+        },
+        {
+          "loi": "Nhầm biện pháp giảm thiểu với kế hoạch dự phòng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "contingency plan",
+          "vi": "kế hoạch dự phòng"
+        }
+      ]
+    },
+    {
+      "title": "Risk 4 — sources of project risk",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "sources of risk"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Projects face risks from many sources: dependence on <b>external entities</b>; <b>project management</b> (poor estimation, turnover, poor visibility); <b>technology</b> (complex, leading-edge work); <b>lack of knowledge</b> (inexperience with tools or the domain); and <b>requirements</b>. Classify each risk.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các nguồn rủi ro của dự án.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Bên thứ ba ⇒ external entity.",
+        "Chưa từng dùng ⇒ lack of knowledge."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Risk 4 — sources of project risk\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Risk 4 — sources of project risk — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: External entity\n   - r1.k: Project management\n   - r2.k: Lack of knowledge\n   - r3.k: Technology\n   - r4.k: Requirements\n   Requirements risks are only one family — but, as the next lesson shows, they appear in every stage of requirements work.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Requirements risks are only one family — but, as the next lesson shows, they appear in every stage of requirements work.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Source",
+                "luaChon": [
+                  "External entity",
+                  "Project management",
+                  "Technology",
+                  "Lack of knowledge",
+                  "Requirements"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "The subcontractor building the payment module may deliver late."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Managers reject the team’s estimates and impose a shorter schedule."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The team has never used the speech-recognition engine before."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "The real-time video streaming architecture is unproven at this scale."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Users keep changing their minds about the booking rules."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "External entity",
+              "r1.k": "Project management",
+              "r2.k": "Lack of knowledge",
+              "r3.k": "Technology",
+              "r4.k": "Requirements"
+            },
+            "giaiThich": "<p><p>Requirements risks are only one family — but, as the next lesson shows, they appear in every stage of requirements work.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm technology với lack of knowledge."
+        },
+        {
+          "loi": "Coi ước lượng bị ép là rủi ro yêu cầu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "risk",
+          "vi": "rủi ro"
+        }
+      ]
+    }
+  ]
+}

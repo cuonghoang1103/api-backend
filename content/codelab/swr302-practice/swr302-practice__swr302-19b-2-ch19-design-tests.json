@@ -1,0 +1,480 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-19b-2-ch19-design-tests",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-19b-2-ch19-design-tests"
+  },
+  "exercises": [
+    {
+      "title": "Requirements to design 1 — which downstream front?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "requirements to design"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Requirements flow downstream into <b>architecture and allocation</b> (subsystems, hardware/software split, driven by functionality, quality attributes and constraints), <b>software design</b> (components, classes, interfaces), <b>user interface design</b> (dialog maps, wireframes, the display-action-response model) and <b>tests</b>. Which front does each activity belong to?</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Yêu cầu chảy xuống kiến trúc & phân bổ, thiết kế phần mềm, thiết kế giao diện, kiểm thử.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Thuộc tính chất lượng ⇒ kiến trúc.",
+        "Bảng DAR ⇒ thiết kế giao diện."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Requirements to design 1 — which downstream front?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Requirements to design 1 — which downstream front? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Architecture and allocation\n   - r1.k: Software design\n   - r2.k: User interface design\n   - r3.k: Tests\n   - r4.k: Architecture and allocation\n   Quality attributes and constraints mostly shape the architecture; functional requirements shape the detailed design; usage requirements shape the UI; all requirements shape the tests.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Quality attributes and constraints mostly shape the architecture; functional requirements shape the detailed design; usage requirements shape the UI; all requirements shape the tests.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Front",
+                "luaChon": [
+                  "Architecture and allocation",
+                  "Software design",
+                  "User interface design",
+                  "Tests"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "The 99.9% availability requirement leads to two redundant servers."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "The analysis class diagram is elaborated into a detailed object model."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "A display-action-response table lists what each button on the booking screen does."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Each user requirement gets acceptance tests reviewed with the users."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "The access-control requirements are split between door hardware and the control software."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Architecture and allocation",
+              "r1.k": "Software design",
+              "r2.k": "User interface design",
+              "r3.k": "Tests",
+              "r4.k": "Architecture and allocation"
+            },
+            "giaiThich": "<p><p>Quality attributes and constraints mostly shape the architecture; functional requirements shape the detailed design; usage requirements shape the UI; all requirements shape the tests.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nghĩ yêu cầu chất lượng chỉ ảnh hưởng test."
+        },
+        {
+          "loi": "Nhầm DAR với ERD."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "quality attribute",
+          "vi": "thuộc tính chất lượng — các \"-ility\": performance, usability, security, availability…"
+        },
+        {
+          "en": "dialog map",
+          "vi": "sơ đồ hội thoại — trạng thái là màn hình, chuyển là hành động người dùng"
+        }
+      ]
+    },
+    {
+      "title": "Requirements to design 2 — the DAR model",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "DAR model"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>A display-action-response (DAR) model documents the UI elements of each screen: what is <b>displayed</b> (and when), the <b>actions</b> a user can take on each element, and the system’s <b>response</b>. Paired with a visual design, it bridges \"what the screen looks like\" and \"what it does\".</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mô hình DAR: hiển thị – hành động – phản hồi cho từng phần tử giao diện.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "DAR = hiển thị khi nào, làm gì được, hệ thống phản ứng gì.",
+        "Hình + hành vi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Requirements to design 2 — the DAR model\n\nAnswer in the answer panel (no code needed).\n\n1. Which row belongs in a DAR table for the \"Cancel appointment\" button?Dòng nào thuộc bảng DAR cho nút \"Huỷ lịch hẹn\"?\n2. Why pair a DAR model with a high-fidelity screen design?Vì sao ghép DAR với thiết kế màn hình chi tiết?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Requirements to design 2 — the DAR model — answer key\n\n1. Which row belongs in a DAR table for the \"Cancel appointment\" button?Dòng nào thuộc bảng DAR cho nút \"Huỷ lịch hẹn\"?\n   Answer: d) Display: only if the appointment starts in more than 2 hours · Action: click · Response: ask for confirmation, then cancel and show a message\n   Display condition, action, response.VI: Điều kiện hiển thị, hành động, phản hồi.\n\n2. Why pair a DAR model with a high-fidelity screen design?Vì sao ghép DAR với thiết kế màn hình chi tiết?\n   Answer: d) The design shows how it looks; the DAR shows how it behaves — neither alone is complete\n   Look + behaviour.VI: Hình thức + hành vi.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: d · d.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which row belongs in a DAR table for the \"Cancel appointment\" button?</p><p style=\"opacity:.75;font-size:.92em\"><i>Dòng nào thuộc bảng DAR cho nút \"Huỷ lịch hẹn\"?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The button is red"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The database table name"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The developer who coded it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Display: only if the appointment starts in more than 2 hours · Action: click · Response: ask for confirmation, then cancel and show a message"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Display condition, action, response.</p><p><i>VI: Điều kiện hiển thị, hành động, phản hồi.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Why pair a DAR model with a high-fidelity screen design?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao ghép DAR với thiết kế màn hình chi tiết?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "To make the document longer"
+              },
+              {
+                "ma": "b",
+                "noiDung": "DAR replaces the design"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only for testers"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The design shows how it looks; the DAR shows how it behaves — neither alone is complete"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Look + behaviour.</p><p><i>VI: Hình thức + hành vi.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Ghi màu sắc thay vì hành vi."
+        },
+        {
+          "loi": "Nghĩ ảnh màn hình là đủ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "display-action-response (DAR) model",
+          "vi": "mô hình hiển thị – hành động – phản hồi"
+        }
+      ]
+    },
+    {
+      "title": "Requirements to design 3 — requirements and tests",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "requirements and tests"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>\"Good requirements engineering produces better tests; good test analysis produces better requirements.\" Test the product against what it was intended to do — the requirements — not against its design or code. Include testers in requirements reviews so requirements are verifiable.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Kiểm sản phẩm theo yêu cầu, không theo thiết kế/code; mời tester review yêu cầu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Test theo yêu cầu.",
+        "Tester giúp yêu cầu kiểm được."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Requirements to design 3 — requirements and tests\n\nAnswer in the answer panel (no code needed).\n\n1. A tester writes tests by reading the code. What is the risk?Tester viết test bằng cách đọc code. Rủi ro là gì?\n2. Why invite testers to requirements reviews?Vì sao mời tester vào buổi review yêu cầu?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Requirements to design 3 — requirements and tests — answer key\n\n1. A tester writes tests by reading the code. What is the risk?Tester viết test bằng cách đọc code. Rủi ro là gì?\n   Answer: a) The tests confirm what the code does, not what it should do — wrong behaviour passes\n   Test against requirements.VI: Kiểm theo yêu cầu.\n\n2. Why invite testers to requirements reviews?Vì sao mời tester vào buổi review yêu cầu?\n   Answer: c) They spot requirements that cannot be verified and missing expected results\n   Verifiability.VI: Tính kiểm chứng được.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · c.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>A tester writes tests by reading the code. What is the risk?</p><p style=\"opacity:.75;font-size:.92em\"><i>Tester viết test bằng cách đọc code. Rủi ro là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The tests confirm what the code does, not what it should do — wrong behaviour passes"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Tests run slower"
+              },
+              {
+                "ma": "c",
+                "noiDung": "None"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The code gets longer"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Test against requirements.</p><p><i>VI: Kiểm theo yêu cầu.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Why invite testers to requirements reviews?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao mời tester vào buổi review yêu cầu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "To count pages"
+              },
+              {
+                "ma": "b",
+                "noiDung": "They should not be invited"
+              },
+              {
+                "ma": "c",
+                "noiDung": "They spot requirements that cannot be verified and missing expected results"
+              },
+              {
+                "ma": "d",
+                "noiDung": "To write code"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Verifiability.</p><p><i>VI: Tính kiểm chứng được.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết test từ code."
+        },
+        {
+          "loi": "Không mời tester."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "verifiable",
+          "vi": "kiểm chứng được — có cách test/đo để biết đạt hay không"
+        }
+      ]
+    },
+    {
+      "title": "Requirements to design 4 — requirements and success",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 3,
+      "points": 10,
+      "concepts": [
+        "requirements and success"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>It is faster to read the requirements before implementation than to build the wrong system and rebuild it correctly — and faster still to engage the development team early so they take part in requirements work, prototyping or iterative development.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đọc yêu cầu trước khi làm nhanh hơn làm sai rồi làm lại; mời đội phát triển tham gia sớm còn nhanh hơn.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Dev tham gia sớm.",
+        "Đọc yêu cầu trước khi làm."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Requirements to design 4 — requirements and success\n\nAnswer in the answer panel (no code needed).\n\n1. What does Wiegers recommend about involving developers?Wiegers khuyên gì về việc mời dev tham gia?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Requirements to design 4 — requirements and success — answer key\n\n1. What does Wiegers recommend about involving developers?Wiegers khuyên gì về việc mời dev tham gia?\n   Answer: b) Engage them early in requirements work, prototyping or iterative development\n   Early engagement.VI: Tham gia sớm.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>What does Wiegers recommend about involving developers?</p><p style=\"opacity:.75;font-size:.92em\"><i>Wiegers khuyên gì về việc mời dev tham gia?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Let them skip the requirements"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Engage them early in requirements work, prototyping or iterative development"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Give them the final SRS only at the end"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Keep them away from users"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Early engagement.</p><p><i>VI: Tham gia sớm.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "\"Ném\" SRS sang đội dev vào phút chót."
+        },
+        {
+          "loi": "Dev không cần đọc yêu cầu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "requirement",
+          "vi": "yêu cầu — điều hệ thống phải làm/có, hoặc ràng buộc lên nó"
+        }
+      ]
+    }
+  ]
+}

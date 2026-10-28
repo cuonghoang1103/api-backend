@@ -87,9 +87,24 @@ const E3 = baiJs({
   boYeu: [{ ten: 'dừng khi không vừa, bỏ qua phụ thuộc', tep: { 'plan.js': "function plan(b,c,d){ var r=[],l=c; var s=b.slice().sort(function(x,y){return x.rank-y.rank;}); for(var i=0;i<s.length;i++){ if(s[i].points>l) break; r.push(s[i].id); l-=s[i].points; } return r; }\n" } }],
 });
 
+const E4 = tracNghiem({
+  tieuDe: 'Agile essentials 4 — one backlog',
+  doKho: 'EASY', phut: 4,
+  moTa: { en: '<p>The product backlog lists the work the team might do — mostly user stories, sometimes other requirements, business processes and defects. Keep <b>only one backlog</b>, so defects are prioritised against new stories. Prioritisation is ongoing: priorities only need to hold for the next iteration.</p>', vi: '<p>Chỉ một backlog; lỗi được xếp ưu tiên cùng story mới; ưu tiên chỉ cần đúng cho vòng tới.</p>' },
+  cau: [
+    { en: 'Where should defects found in production go on an agile project?', vi: 'Lỗi phát hiện ở production nên đi đâu trong dự án agile?', lc: [['a', 'Into the same product backlog, prioritised against new stories'], ['b', 'Into a separate list nobody plans'], ['c', 'Fixed immediately, always, whatever the priority'], ['d', 'Ignored until the next release']], dap: 'a', giai: ['One backlog.', 'Một backlog.'] },
+    { en: 'How long must the backlog priorities hold?', vi: 'Thứ tự ưu tiên của backlog cần đúng trong bao lâu?', lc: [['a', 'For the next iteration; they are revisited before each planning'], ['b', 'For the whole project'], ['c', 'For one year'], ['d', 'They never change']], dap: 'a', giai: ['Ongoing prioritisation.', 'Ưu tiên liên tục.'] },
+  ],
+  goiY: ['Một backlog chung.', 'Xếp lại trước mỗi vòng.'],
+  loiHayGap: ['Hai backlog riêng cho lỗi và story.', 'Khoá thứ tự ưu tiên cả dự án.'],
+  giaiThich: '<p>Answers: a · a.</p>',
+  thuatNgu: tn('backlog'),
+  khaiNiem: ['product backlog'],
+});
+
 export default moDun({
   slug: 'swr302-9-3-ch20-essentials-1',
   ten: '9.3 Agile essentials: customer, documentation and backlog',
   moTaModule: 'Khách hàng/PO tham gia liên tục, tài liệu tối thiểu đủ dùng vs lãng phí, tự viết hàm lập kế hoạch vòng lặp từ backlog (rank, phụ thuộc, sức chứa) chấm dữ liệu ẩn.',
-  de: [E1, E2, E3],
+  de: [E1, E2, E3, E4],
 });

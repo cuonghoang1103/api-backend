@@ -1,0 +1,622 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-5-project-cliniccare-m5-srs",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-5-1-srs-ieee-830"
+  },
+  "exercises": [
+    {
+      "title": "ClinicCare project — Milestone 5: Software requirements specification",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 80,
+      "points": 100,
+      "concepts": [
+        "SRS",
+        "functional requirements",
+        "quality attributes",
+        "Planguage",
+        "data dictionary"
+      ],
+      "prerequisites": [
+        "Milestones 3–4",
+        "SWR302 lessons 5.1–5.8"
+      ],
+      "tags": [
+        "swr302",
+        "project"
+      ],
+      "problemHtml": "<h1>ClinicCare project — Milestone 5: Software requirements specification</h1>\n<p class=\"bi-phu\">Running project · milestone 5 of 7 · requirements you can test · 10 marks</p>\n<h2>1. Overview</h2>\n<p><b>Minh An Family Clinic</b> has 3 doctors, 2 receptionists, 1 pharmacist and a clinic manager. Today patients phone the reception desk to book: about <b>120 calls a day</b>, many unanswered at peak time, and <b>15% of appointments are no-shows</b>. The owner wants <b>ClinicCare</b>, a web and mobile system, live within 6 months.</p>\n<ul>\n<li><b>Patients</b> register, book an appointment with a chosen doctor in a free 15-minute slot, cancel it, pay the visit fee online, and read their prescriptions.</li>\n<li><b>Doctors</b> publish their working slots, see the day’s appointment list, record visit notes and write e-prescriptions.</li>\n<li><b>Receptionists</b> check patients in, book on behalf of patients who still phone, and mark no-shows.</li>\n<li>The <b>pharmacist</b> receives e-prescriptions and marks them dispensed.</li>\n<li>The <b>clinic manager</b> sets services and fees and reads monthly reports.</li>\n<li>External systems: the <b>VNPay payment gateway</b> (charges, confirms and refunds), the <b>SMS gateway</b> (delivers the reminder sent 24 hours before each appointment), and the <b>National e-Prescription System</b>, to which every prescription must be sent by law and which returns a prescription code.</li>\n</ul>\n<p><b>Business rules.</b> BR-01 an appointment can be cancelled free of charge up to 2 hours before it starts · BR-02 a patient with 3 no-shows in the last 90 days must prepay when booking · BR-03 a patient may hold at most 2 future appointments · BR-04 visit fee = service fee + 10% VAT · BR-05 a slot lasts 15 minutes.</p>\n<p><b>Not in release 1:</b> video consultation, insurance e-claims, a loyalty programme, integration with the lab machines.</p><p>Use your use cases (Milestone 3) and models (Milestone 4). Extra fact: the doctor may add a short note to any line of a prescription.</p>\n<ol>\n<li><b>A.</b> At least 8 functional requirements <code>{ id, source, text }</code>, each traced to a use case (UC-02, UC-11…) or a business rule (BR-01…), together covering BR-01 to BR-04, the 24-hour SMS reminder, the national prescription code and the 15-minute no-show.</li>\n<li><b>B.</b> Four quality requirements — performance, availability, security, usability — each measurable.</li>\n<li><b>C.</b> One of them rewritten in Planguage.</li>\n<li><b>D.</b> The data dictionary of a <b>prescription</b> (structures and primitives, Wiegers notation).</li>\n<li><b>E.</b> The SRS section (Wiegers template) for each statement:</li>\n</ol><table><thead><tr><th>#</th><th>Statement</th></tr></thead><tbody><tr><td>S1</td><td>Users are patients (mostly on phones), three doctors, two receptionists, a pharmacist and a manager; some older patients never use apps.</td></tr><tr><td>S2</td><td>Reception PCs run Windows 10 with Chrome; patients use Android 12+ or iOS 16+ phones.</td></tr><tr><td>S3</td><td>Prescriptions must follow the Ministry of Health format for electronic prescriptions.</td></tr><tr><td>S4</td><td>We assume the national e-prescription service remains free of charge for clinics.</td></tr><tr><td>S5</td><td>The system shall send each prescription to the National e-Prescription System and store the code it returns.</td></tr><tr><td>S6</td><td>The system shall display the free slots of a doctor within 2 seconds for 95% of requests.</td></tr><tr><td>S7</td><td>Appointment = Appointment Code + Patient ID + Doctor ID + Slot Start + Service Code + Status.</td></tr><tr><td>S8</td><td>3.2 Online booking — description, priority and FR-1 to FR-6.</td></tr><tr><td>S9</td><td>Release 1 covers booking, payment, visits and e-prescriptions; video consultation is excluded.</td></tr></tbody></table>\n<h3>Main features</h3>\n<ul>\n  <li>A. Functional requirements.</li>\n  <li>B. Quality requirements.</li>\n  <li>C. Planguage.</li>\n  <li>D. Data dictionary.</li>\n  <li>E. SRS sections.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>Every requirement verifiable; every functional requirement traced to its source.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>answers/\n├── a-functional.js   ← const FRS = [ { id, source, text }, … ]\n├── b-quality.js      ← const NFRS = { performance, availability, security, usability }\n├── c-planguage.js    ← const PLANGUAGE = { TAG, AMBITION, SCALE, METER, GOAL, STRETCH }\n├── d-dictionary.js   ← const DATA_DICTIONARY = [ { element, type, composition | dataType+length+values, description } ]\n└── e-sections.js     ← const SRS_SECTION = { S1: '…', … }</pre>\n<h2>3. Data model</h2>\n<p><b>Answer records</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>FRS[i]</code></td><td>{ id: 'FR-n', source: 'UC-nn' | 'BR-nn', text }</td><td>one \"shall\" each</td></tr><tr><td><code>NFRS</code></td><td>{ performance, availability, security, usability }</td><td>numbers and units</td></tr><tr><td><code>DATA_DICTIONARY[i]</code></td><td>{ element, type: structure | primitive, … }</td><td>closed: every name used is defined</td></tr></tbody></table>\n<h2>4. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. A1. Coverage of the rules <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>BR-01…04, reminder, national code, no-show.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">functional requirements</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. A2. Quality of the statements <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Ids, sources, one shall, no vague words.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">writing requirements</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. B. Quality requirements <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Measurable, right measure.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">quality attributes</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. C. Planguage <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Scale, meter, numeric goal.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">Planguage</span></p>\n</div>\n<div class=\"bi-cn\"><h3>5. D. Data dictionary <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Closed; repetition and optional elements.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">data dictionary</span></p>\n</div>\n<div class=\"bi-cn\"><h3>6. E. SRS sections <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Wiegers template.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">SRS template</span></p>\n</div>\n<h2>5. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>FRS</code></td><td>answers/a-functional.js</td></tr><tr><td><code>NFRS</code></td><td>answers/b-quality.js</td></tr><tr><td><code>PLANGUAGE</code></td><td>answers/c-planguage.js</td></tr><tr><td><code>DATA_DICTIONARY</code></td><td>answers/d-dictionary.js</td></tr><tr><td><code>SRS_SECTION</code></td><td>answers/e-sections.js</td></tr></tbody></table>\n<h2>6. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>A1. Coverage of the rules</td><td>2</td></tr><tr><td>2</td><td>A2. Quality of the statements</td><td>1.5</td></tr><tr><td>3</td><td>B. Quality requirements</td><td>1.5</td></tr><tr><td>4</td><td>C. Planguage</td><td>1</td></tr><tr><td>5</td><td>D. Data dictionary</td><td>2</td></tr><tr><td>6</td><td>E. SRS sections</td><td>2</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>A requirement with no source — nobody can tell why it exists (gold plating risk).</li>\n  <li>\"The system shall be secure.\" — not verifiable.</li>\n  <li>\"Prescription = … + Prescription Items\" without 1:n{ } — the repetition and its lower bound are business rules.</li>\n</ul>\n<h2>7. Submission</h2>\n<p>Write your answers in the files of <code>answers/</code> on the right. Diagrams are written as text in the syntax of a real tool (Mermaid or PlantUML — paste them into <a href=\"https://mermaid.live\" target=\"_blank\" rel=\"noopener\">mermaid.live</a> or <a href=\"https://www.plantuml.com/plantuml\" target=\"_blank\" rel=\"noopener\">plantuml.com</a> to SEE the picture); tables are JavaScript arrays, one object per row of the school template. Press <b>Run</b> for the visible checks and <b>Submit</b> for full grading, hidden checks included. Your mark per question appears in the rubric table.</p>",
+      "problemHtmlVi": "<h1>ClinicCare project — Milestone 5: Software requirements specification</h1>\n<p class=\"bi-phu\">Dự án xuyên suốt · mốc 5/7 · yêu cầu kiểm được · 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p><b>Phòng khám gia đình Minh An</b> có 3 bác sĩ, 2 lễ tân, 1 dược sĩ và một quản lý. Hiện bệnh nhân gọi điện tới lễ tân để đặt lịch: khoảng <b>120 cuộc/ngày</b>, giờ cao điểm nhiều cuộc không ai nghe, và <b>15% lịch hẹn bị bỏ (no-show)</b>. Chủ phòng khám muốn <b>ClinicCare</b> — hệ thống web và di động — chạy trong 6 tháng.</p>\n<ul><li><b>Bệnh nhân</b> đăng ký, đặt lịch với bác sĩ chọn trong slot 15 phút còn trống, huỷ lịch, trả phí khám trực tuyến, xem đơn thuốc.</li><li><b>Bác sĩ</b> công bố slot làm việc, xem danh sách hẹn trong ngày, ghi chú khám và kê đơn điện tử.</li><li><b>Lễ tân</b> làm thủ tục check-in, đặt lịch thay người gọi điện, đánh dấu no-show.</li><li><b>Dược sĩ</b> nhận đơn điện tử và đánh dấu đã phát thuốc.</li><li><b>Quản lý</b> đặt dịch vụ và phí, xem báo cáo tháng.</li><li>Hệ thống ngoài: <b>cổng thanh toán VNPay</b> (thu, xác nhận, hoàn tiền), <b>SMS gateway</b> (gửi nhắc lịch trước 24 giờ), <b>Hệ thống Đơn thuốc Quốc gia</b> (luật bắt buộc gửi mọi đơn, trả về mã đơn).</li></ul>\n<p><b>Luật nghiệp vụ.</b> BR-01 huỷ miễn phí tới trước 2 giờ · BR-02 bệnh nhân có 3 lần no-show trong 90 ngày phải trả trước khi đặt · BR-03 tối đa 2 lịch hẹn tương lai mỗi bệnh nhân · BR-04 phí khám = phí dịch vụ + 10% VAT · BR-05 mỗi slot 15 phút.</p>\n<p><b>Ngoài bản 1:</b> khám qua video, bảo hiểm điện tử, chương trình khách hàng thân thiết, kết nối máy xét nghiệm.</p><p>Dùng use case (mốc 3) và mô hình (mốc 4). Thêm: bác sĩ có thể ghi chú ngắn cho từng dòng đơn.</p><ol><li>A. ≥ 8 yêu cầu chức năng có nguồn (UC/BR), phủ BR-01…BR-04, nhắc SMS 24 giờ, mã đơn quốc gia, no-show 15 phút.</li><li>B. Bốn yêu cầu chất lượng đo được.</li><li>C. Một yêu cầu viết lại bằng Planguage.</li><li>D. Data dictionary của <b>đơn thuốc</b>.</li><li>E. Mục SRS cho từng phát biểu (bảng ở bản tiếng Anh).</li></ol>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>A. Yêu cầu chức năng.</li>\n  <li>B. Yêu cầu chất lượng.</li>\n  <li>C. Planguage.</li>\n  <li>D. Data dictionary.</li>\n  <li>E. Mục SRS.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Mọi yêu cầu kiểm được; mọi yêu cầu chức năng truy được về nguồn.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>answers/\n├── a-functional.js   ← const FRS = [ { id, source, text }, … ]\n├── b-quality.js      ← const NFRS = { performance, availability, security, usability }\n├── c-planguage.js    ← const PLANGUAGE = { TAG, AMBITION, SCALE, METER, GOAL, STRETCH }\n├── d-dictionary.js   ← const DATA_DICTIONARY = [ { element, type, composition | dataType+length+values, description } ]\n└── e-sections.js     ← const SRS_SECTION = { S1: '…', … }</pre>\n<h2>3. Mô hình dữ liệu</h2>\n<p><b>Answer records</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>FRS[i]</code></td><td>{ id: 'FR-n', source: 'UC-nn' | 'BR-nn', text }</td><td>mỗi câu một \"shall\"</td></tr><tr><td><code>NFRS</code></td><td>{ performance, availability, security, usability }</td><td>có số và đơn vị</td></tr><tr><td><code>DATA_DICTIONARY[i]</code></td><td>{ element, type: structure | primitive, … }</td><td>khép kín: tên nào dùng cũng được định nghĩa</td></tr></tbody></table>\n<h2>4. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. A1. Phủ các luật <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>BR-01…04, nhắc lịch, mã quốc gia, no-show.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">functional requirements</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. A2. Chất lượng câu <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Id, nguồn, một shall, không từ mơ hồ.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">writing requirements</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. B. Yêu cầu chất lượng <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Đo được, đúng thước đo.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">quality attributes</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. C. Planguage <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Scale, meter, goal có số.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">Planguage</span></p>\n</div>\n<div class=\"bi-cn\"><h3>5. D. Data dictionary <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Khép kín; lặp và tuỳ chọn.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">data dictionary</span></p>\n</div>\n<div class=\"bi-cn\"><h3>6. E. Mục SRS <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Template Wiegers.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">SRS template</span></p>\n</div>\n<h2>5. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>FRS</code></td><td>answers/a-functional.js</td></tr><tr><td><code>NFRS</code></td><td>answers/b-quality.js</td></tr><tr><td><code>PLANGUAGE</code></td><td>answers/c-planguage.js</td></tr><tr><td><code>DATA_DICTIONARY</code></td><td>answers/d-dictionary.js</td></tr><tr><td><code>SRS_SECTION</code></td><td>answers/e-sections.js</td></tr></tbody></table>\n<h2>6. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>A1. Phủ các luật</td><td>2</td></tr><tr><td>2</td><td>A2. Chất lượng câu</td><td>1.5</td></tr><tr><td>3</td><td>B. Yêu cầu chất lượng</td><td>1.5</td></tr><tr><td>4</td><td>C. Planguage</td><td>1</td></tr><tr><td>5</td><td>D. Data dictionary</td><td>2</td></tr><tr><td>6</td><td>E. Mục SRS</td><td>2</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Yêu cầu không nguồn — không ai biết vì sao có nó (nguy cơ mạ vàng).</li>\n  <li>\"The system shall be secure.\" — không kiểm được.</li>\n  <li>\"Prescription = … + Prescription Items\" thiếu 1:n{ } — sự lặp và cận dưới là luật nghiệp vụ.</li>\n</ul>\n<h2>7. Nộp bài</h2>\n<p>Viết câu trả lời vào các tệp trong <code>answers/</code> bên phải. Sơ đồ viết bằng chữ theo cú pháp của công cụ thật (Mermaid hoặc PlantUML — dán vào <a href=\"https://mermaid.live\" target=\"_blank\" rel=\"noopener\">mermaid.live</a> hoặc <a href=\"https://www.plantuml.com/plantuml\" target=\"_blank\" rel=\"noopener\">plantuml.com</a> để XEM hình); bảng là mảng JavaScript, mỗi object là một dòng của template trường. Bấm <b>Chạy thử</b> để chạy kiểm hiện, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn). Điểm từng câu hiện trong bảng thang điểm.</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "Every requirement verifiable; every functional requirement traced to its source.|||Mọi yêu cầu kiểm được; mọi yêu cầu chức năng truy được về nguồn.",
+      "examplesJson": [
+        {
+          "input": "answers/*.js — one object per row of the template",
+          "output": "Rubric table: marks per question (e.g. B. 2.5/3)",
+          "explanation": "Every rubric line is checked separately; hidden checks run on Submit.|||Mỗi dòng rubric được kiểm riêng; kiểm ẩn chạy khi Nộp."
+        }
+      ],
+      "hintsJson": [
+        "A: đi từng luật BR-01…BR-04 và từng bước use case, mỗi thứ ra một câu \"The system shall …\" có nguồn.",
+        "B: hiệu năng = thời gian + phân vị + tải; sẵn sàng = % trong khung giờ; bảo mật = ai được xem gì / cơ chế; khả dụng = nhóm người dùng + tác vụ + mục tiêu.",
+        "E: phần 2 là bối cảnh (người dùng, môi trường, ràng buộc, giả định); 5.2 là giao diện phần mềm."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers/a-functional.js",
+          "language": "javascript",
+          "code": "// A. Functional requirements — { id: 'FR-n', source: 'UC-nn' | 'BR-nn', text: 'The system shall …' }\nconst FRS = [\n  { id: 'FR-1', source: 'UC-02', text: '' },\n];\n"
+        },
+        {
+          "name": "answers/b-quality.js",
+          "language": "javascript",
+          "code": "// B. Quality attributes — measurable \"shall\" statements.\nconst NFRS = { performance: '', availability: '', security: '', usability: '' };\n"
+        },
+        {
+          "name": "answers/c-planguage.js",
+          "language": "javascript",
+          "code": "// C. One quality requirement in Planguage.\nconst PLANGUAGE = { TAG: '', AMBITION: '', SCALE: '', METER: '', GOAL: '', STRETCH: '' };\n"
+        },
+        {
+          "name": "answers/d-dictionary.js",
+          "language": "javascript",
+          "code": "// D. Data dictionary of a prescription — Wiegers notation: + composition · m:n{ } repetition · ( ) optional.\nconst DATA_DICTIONARY = [\n  { element: 'Prescription', type: 'structure', composition: 'Prescription ID + …', description: '' },\n];\n"
+        },
+        {
+          "name": "answers/e-sections.js",
+          "language": "javascript",
+          "code": "// E. One of: 1.1 Purpose | 1.3 Project scope | 2.2 User classes and characteristics | 2.3 Operating environment | 2.4 Design and implementation constraints | 2.5 Assumptions and dependencies | 3 System features | 4 Data requirements | 5.2 Software interfaces | 6 Quality attributes\nconst SRS_SECTION = {\n  S1: '',\n  S2: '',\n  S3: '',\n  S4: '',\n  S5: '',\n  S6: '',\n  S7: '',\n  S8: '',\n  S9: '',\n};\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers/a-functional.js",
+          "language": "javascript",
+          "code": "// A. One requirement per statement, each traced to its source.\nconst FRS = [\n  {\n    id: 'FR-1',\n    source: 'UC-02',\n    text: 'The system shall display the free 15-minute slots of a selected doctor for the next 14 days.',\n  },\n  {\n    id: 'FR-2',\n    source: 'BR-03',\n    text: 'The system shall refuse a booking from a patient who already holds 2 future appointments.',\n  },\n  {\n    id: 'FR-3',\n    source: 'BR-02',\n    text: 'The system shall require prepayment through VNPay when the patient has 3 no-shows in the last 90 days.',\n  },\n  { id: 'FR-4', source: 'BR-04', text: 'The system shall calculate the visit fee as the service fee plus 10% VAT.' },\n  {\n    id: 'FR-5',\n    source: 'BR-01',\n    text: 'The system shall allow a patient to cancel an appointment free of charge up to 2 hours before it starts.',\n  },\n  {\n    id: 'FR-6',\n    source: 'UC-17',\n    text: 'The system shall send an SMS reminder to the patient 24 hours before each appointment.',\n  },\n  {\n    id: 'FR-7',\n    source: 'UC-13',\n    text: 'The system shall mark an appointment as a no-show when the patient has not checked in 15 minutes after its start.',\n  },\n  {\n    id: 'FR-8',\n    source: 'UC-11',\n    text: 'The system shall store the prescription code returned by the National e-Prescription System with each prescription.',\n  },\n  {\n    id: 'FR-9',\n    source: 'UC-12',\n    text: 'The system shall let a receptionist record the arrival time of a patient with a booked appointment.',\n  },\n];\n"
+        },
+        {
+          "name": "answers/b-quality.js",
+          "language": "javascript",
+          "code": "// B. Each one: action, measure, unit, conditions.\nconst NFRS = {\n  performance: 'The system shall display the free slots of a doctor within 2 seconds for 95% of requests with 200 concurrent users.',\n  availability: 'The system shall be available 99.5% of the time between 06:00 and 22:00 every day, excluding announced maintenance.',\n  security: 'The system shall allow only the doctor of an appointment and the patient to view its visit notes, and shall lock an account for 15 minutes after 5 failed login attempts.',\n  usability: 'The system shall let 90% of first-time patients complete a booking within 3 minutes without help.',\n};\n"
+        },
+        {
+          "name": "answers/c-planguage.js",
+          "language": "javascript",
+          "code": "// C. Planguage for the usability requirement.\nconst PLANGUAGE = {\n  TAG: 'Booking.Usability',\n  AMBITION: 'First-time patients book without help.',\n  SCALE: 'Minutes from opening the app to the confirmation screen for a first-time patient.',\n  METER: 'Usability test with 20 first-time patients aged 18–70, 90th percentile.',\n  GOAL: '3 minutes',\n  STRETCH: '2 minutes',\n};\n"
+        },
+        {
+          "name": "answers/d-dictionary.js",
+          "language": "javascript",
+          "code": "// D. Two structures, eight primitives; 1:n{ } and ( ) carry the rules.\nconst DATA_DICTIONARY = [\n  {\n    element: 'Prescription',\n    type: 'structure',\n    composition: 'Prescription ID + Appointment Code + National Code + Issue Date + 1:n{Prescription Item}',\n    description: 'An e-prescription written by the doctor at the end of a visit.',\n  },\n  {\n    element: 'Prescription Item',\n    type: 'structure',\n    composition: 'Medicine ID + Dosage + Quantity + (Doctor Note)',\n    description: 'One medicine of a prescription with its own dosage.',\n  },\n  {\n    element: 'Prescription ID',\n    type: 'primitive',\n    dataType: 'alphanumeric',\n    length: 10,\n    values: '\"RX\" followed by 8 digits',\n    description: 'Identifier inside ClinicCare.',\n  },\n  {\n    element: 'Appointment Code',\n    type: 'primitive',\n    dataType: 'alphanumeric',\n    length: 7,\n    values: '\"M\" followed by 6 digits',\n    description: 'The visit the prescription belongs to.',\n  },\n  {\n    element: 'National Code',\n    type: 'primitive',\n    dataType: 'alphanumeric',\n    length: 14,\n    values: 'code returned by the National e-Prescription System',\n    description: 'Proof that the prescription was registered nationally.',\n  },\n  {\n    element: 'Issue Date',\n    type: 'primitive',\n    dataType: 'date',\n    length: 10,\n    values: 'yyyy-mm-dd',\n    description: 'Date of the prescription.',\n  },\n  {\n    element: 'Medicine ID',\n    type: 'primitive',\n    dataType: 'alphanumeric',\n    length: 8,\n    values: 'code of the clinic medicine list',\n    description: 'The prescribed medicine.',\n  },\n  {\n    element: 'Dosage',\n    type: 'primitive',\n    dataType: 'text',\n    length: 60,\n    values: 'e.g. \"1 tablet, 3 times a day after meals\"',\n    description: 'How to take the medicine.',\n  },\n  {\n    element: 'Quantity',\n    type: 'primitive',\n    dataType: 'integer',\n    length: 3,\n    values: '1–999',\n    description: 'Number of units dispensed.',\n  },\n  {\n    element: 'Doctor Note',\n    type: 'primitive',\n    dataType: 'text',\n    length: 200,\n    values: 'any text, at most 200 characters',\n    description: 'Optional instruction for this line.',\n  },\n];\n"
+        },
+        {
+          "name": "answers/e-sections.js",
+          "language": "javascript",
+          "code": "// E. Context in section 2, features in 3, data in 4, interfaces in 5, quality in 6.\nconst SRS_SECTION = {\n  S1: '2.2 User classes and characteristics',\n  S2: '2.3 Operating environment',\n  S3: '2.4 Design and implementation constraints',\n  S4: '2.5 Assumptions and dependencies',\n  S5: '5.2 Software interfaces',\n  S6: '6 Quality attributes',\n  S7: '4 Data requirements',\n  S8: '3 System features',\n  S9: '1.3 Project scope',\n};\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A slice of a real SRS: functional requirements derived from use cases and rules and traced back to them; quality requirements with numbers; one in Planguage; a closed data dictionary where the repetition (1:n items) and the optional note encode business facts; and the statements of the case filed in the right sections of the Wiegers template. The reference solution is in the answer files.</p>",
+      "solutionExplanationHtmlVi": "<p>Một lát cắt SRS thật: yêu cầu chức năng suy từ use case và luật, truy ngược được; yêu cầu chất lượng có số; một yêu cầu bằng Planguage; data dictionary khép kín trong đó sự lặp (1:n dòng) và ghi chú tuỳ chọn mã hoá sự thật nghiệp vụ; các phát biểu của đề nằm đúng mục template Wiegers. Lời giải tham chiếu ở các tệp đáp án.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "answers/a-functional.js",
+          "answers/b-quality.js",
+          "answers/c-planguage.js",
+          "answers/d-dictionary.js",
+          "answers/e-sections.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A — at least 8 functional requirements, well formed, with unique ids and a source (UC-nn or BR-nn)",
+              "vi": "A — ít nhất 8 yêu cầu chức năng, đúng dạng, id không trùng, có nguồn (UC-nn hoặc BR-nn)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof FRS==\"undefined\"||!Array.isArray(FRS))return\"FRS is missing\";if(FRS.length<8)return\"only \"+FRS.length+\" requirements \\u2014 write at least 8\";for(var t={},r=0;r<FRS.length;r++){var e=FRS[r]||{};if(!/^FR-[1-9]\\d*$/.test(String(e.id)))return\"FRS[\"+r+\"].id must look like FR-1\";if(t[e.id])return\"duplicate id \"+e.id;if(t[e.id]=1,!/^(UC|BR)-\\d{2}$/.test(String(e.source)))return e.id+\": source must be a use case (UC-02) or a business rule (BR-03)\"}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "A — each requirement: \"The system shall\", one shall, no vague word, verifiable length",
+              "vi": "A — mỗi yêu cầu: \"The system shall\", một shall, không từ mơ hồ, đủ cụ thể"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof FRS==\"undefined\"||!Array.isArray(FRS))return\"FRS is missing\";for(var e=0;e<FRS.length;e++){var t=String((FRS[e]||{}).text||\"\").trim(),r=(FRS[e]||{}).id;if(!/^the system shall\\b/i.test(t))return r+': start with \"The system shall\"';if((t.match(/\\bshall\\b/gi)||[]).length!==1)return r+': one requirement per statement (exactly one \"shall\")';if(/\\b(fast|quickly|user[- ]friendly|easy|easily|efficient|flexible|appropriate|several|some|etc|and\\/or|support|robust)\\b/i.test(t))return r+\": remove the vague word\";if(t.split(/\\s+/).length<9)return r+\": too short to be verifiable\"}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "A — covers the 2-future-appointment limit (BR-03)",
+              "vi": "A — có yêu cầu cho the 2-future-appointment limit (BR-03)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof FRS==\"undefined\"||!Array.isArray(FRS))return\"FRS is missing\";var t=FRS.some(function(r){var e=String((r||{}).text||\"\").toLowerCase();return/(2|two) future|at most 2|more than 2|already holds 2/.test(e)});return t?\"OK\":\"no requirement for the 2-future-appointment limit (BR-03)\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — covers prepayment after 3 no-shows (BR-02)",
+              "vi": "A — có yêu cầu cho prepayment after 3 no-shows (BR-02)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof FRS==\"undefined\"||!Array.isArray(FRS))return\"FRS is missing\";var e=FRS.some(function(n){var r=String((n||{}).text||\"\").toLowerCase();return/prepay|pay in advance|deposit/.test(r)});return e?\"OK\":\"no requirement for prepayment after 3 no-shows (BR-02)\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — covers free cancellation up to 2 hours before (BR-01)",
+              "vi": "A — có yêu cầu cho free cancellation up to 2 hours before (BR-01)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof FRS==\"undefined\"||!Array.isArray(FRS))return\"FRS is missing\";var r=FRS.some(function(n){var e=String((n||{}).text||\"\").toLowerCase();return/cancel/.test(e)&&/2 hours|two hours|120 minutes/.test(e)});return r?\"OK\":\"no requirement for free cancellation up to 2 hours before (BR-01)\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — covers the visit fee with 10% VAT (BR-04)",
+              "vi": "A — có yêu cầu cho the visit fee with 10% VAT (BR-04)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof FRS==\"undefined\"||!Array.isArray(FRS))return\"FRS is missing\";var t=FRS.some(function(e){var r=String((e||{}).text||\"\").toLowerCase();return/vat|10\\s*%/.test(r)});return t?\"OK\":\"no requirement for the visit fee with 10% VAT (BR-04)\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — covers the SMS reminder 24 hours before",
+              "vi": "A — có yêu cầu cho the SMS reminder 24 hours before"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof FRS==\"undefined\"||!Array.isArray(FRS))return\"FRS is missing\";var e=FRS.some(function(n){var r=String((n||{}).text||\"\").toLowerCase();return/remind/.test(r)&&/24 hours|one day|a day/.test(r)});return e?\"OK\":\"no requirement for the SMS reminder 24 hours before\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — covers the national prescription code",
+              "vi": "A — có yêu cầu cho the national prescription code"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof FRS==\"undefined\"||!Array.isArray(FRS))return\"FRS is missing\";var t=FRS.some(function(e){var n=String((e||{}).text||\"\").toLowerCase();return/national/.test(n)&&/code/.test(n)});return t?\"OK\":\"no requirement for the national prescription code\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "A — covers the no-show 15 minutes after the start",
+              "vi": "A — có yêu cầu cho the no-show 15 minutes after the start"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof FRS==\"undefined\"||!Array.isArray(FRS))return\"FRS is missing\";var e=FRS.some(function(n){var t=String((n||{}).text||\"\").toLowerCase();return/no-show|no show/.test(t)&&/15 minutes|fifteen minutes/.test(t)});return e?\"OK\":\"no requirement for the no-show 15 minutes after the start\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "B — four quality requirements, each a measurable \"shall\" statement without vague words",
+              "vi": "B — bốn yêu cầu chất lượng, mỗi câu \"shall\" đo được, không từ mơ hồ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof NFRS==\"undefined\"||!NFRS)return\"NFRS is missing\";for(var t=[\"performance\",\"availability\",\"security\",\"usability\"],e=0;e<t.length;e++){var r=String(NFRS[t[e]]||\"\");if(!/^the system shall\\b/i.test(r))return t[e]+': start with \"The system shall\"';if(/\\b(fast|quickly|user[- ]friendly|easy|easily|efficient|secure|securely|robust|intuitive)\\b/i.test(r))return t[e]+\": remove the vague word\";if(!/\\d/.test(r))return t[e]+\": add a number\"}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "B — each quality requirement uses a measure that fits its attribute",
+              "vi": "B — mỗi yêu cầu chất lượng dùng thước đo hợp thuộc tính"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){return typeof NFRS==\"undefined\"||!NFRS?\"NFRS is missing\":!/(second|ms\\b|millisecond)/i.test(NFRS.performance)||!/%/.test(NFRS.performance)?\"performance: a time with a percentile (e.g. within 2 seconds for 95% of requests)\":!/%/.test(NFRS.availability)||!/(\\d{1,2}:\\d{2}|hour|day|week|month)/i.test(NFRS.availability)?\"availability: a percentage over a stated period\":/(only|role|authori|authenti|password|login|log in|lock|encrypt)/i.test(NFRS.security)?/(minute|second|%|first-time|first time|without help|error)/i.test(NFRS.usability)?\"OK\":\"usability: a task, a user group and a target (time, % success)\":\"security: who may access what, or a concrete protection mechanism\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — one Planguage requirement with TAG, AMBITION, SCALE, METER and a numeric GOAL",
+              "vi": "C — một yêu cầu Planguage có TAG, AMBITION, SCALE, METER và GOAL có số"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof PLANGUAGE==\"undefined\"||!PLANGUAGE)return\"PLANGUAGE is missing\";for(var t=[\"TAG\",\"AMBITION\",\"SCALE\",\"METER\",\"GOAL\"],e=0;e<t.length;e++)if(String(PLANGUAGE[t[e]]||\"\").trim().length<3)return t[e]+\" is empty\";return/\\s/.test(String(PLANGUAGE.TAG).trim())?\"TAG: one identifier, e.g. Booking.Usability\":/\\d/.test(PLANGUAGE.GOAL)?/(test|monitor|log|measure|survey|analytics|tool|sample|percentile)/i.test(PLANGUAGE.METER)?\"OK\":\"METER: how is it measured?\":\"GOAL needs a number\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "D — the prescription dictionary is closed and well formed",
+              "vi": "D — từ điển đơn thuốc khép kín và đúng dạng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var r=(function(){if(typeof DATA_DICTIONARY==\"undefined\"||!Array.isArray(DATA_DICTIONARY)||!DATA_DICTIONARY.length)return{loi:\"DATA_DICTIONARY is missing\"};var f=function(n){return String(n==null?\"\":n).toLowerCase().replace(/[^a-z0-9]+/g,\" \").trim()},A={};DATA_DICTIONARY.forEach(function(n){n&&n.element&&(A[f(n.element)]=n)});function c(n){for(var a=[],p=String(n||\"\").split(\"+\"),l=0;l<p.length;l++){var u=p[l].trim(),t;if(t=/^\\(\\s*([^(){}]+?)\\s*\\)$/.exec(u))a.push({ten:t[1],tuyChon:!0});else if(t=/^(\\d+)\\s*:\\s*(\\d+|n)\\s*\\{\\s*([^(){}]+?)\\s*\\}$/i.exec(u))a.push({ten:t[3],lap:[Number(t[1]),t[2]]});else if(/^[A-Za-z][\\w .'-]*$/.test(u))a.push({ten:u});else return'cannot read \"'+u+'\"'}return a}return{n:f,ten:A,tach:c}})();if(r.loi)return r.loi;for(var o=0;o<DATA_DICTIONARY.length;o++){var e=DATA_DICTIONARY[o]||{};if(e.type===\"structure\"){var i=r.tach(e.composition);if(typeof i==\"string\")return e.element+\": \"+i;for(var s=0;s<i.length;s++)if(!r.ten[r.n(i[s].ten)])return'\"'+i[s].ten+'\" is used in '+e.element+\" but not defined\"}else if(e.type===\"primitive\"){if(!e.dataType||!e.length&&!e.values)return e.element+\": give dataType and length or values\"}else return e.element+\": type must be primitive or structure\"}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f5"
+          },
+          {
+            "moTa": {
+              "en": "D — a prescription has one or more items; each item carries medicine, dosage and quantity",
+              "vi": "D — đơn có một hay nhiều dòng; mỗi dòng có thuốc, liều, số lượng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var t=(function(){if(typeof DATA_DICTIONARY==\"undefined\"||!Array.isArray(DATA_DICTIONARY)||!DATA_DICTIONARY.length)return{loi:\"DATA_DICTIONARY is missing\"};var n=function(e){return String(e==null?\"\":e).toLowerCase().replace(/[^a-z0-9]+/g,\" \").trim()},d={};DATA_DICTIONARY.forEach(function(e){e&&e.element&&(d[n(e.element)]=e)});function A(e){for(var a=[],h=String(e||\"\").split(\"+\"),p=0;p<h.length;p++){var i=h[p].trim(),r;if(r=/^\\(\\s*([^(){}]+?)\\s*\\)$/.exec(i))a.push({ten:r[1],tuyChon:!0});else if(r=/^(\\d+)\\s*:\\s*(\\d+|n)\\s*\\{\\s*([^(){}]+?)\\s*\\}$/i.exec(i))a.push({ten:r[3],lap:[Number(r[1]),r[2]]});else if(/^[A-Za-z][\\w .'-]*$/.test(i))a.push({ten:i});else return'cannot read \"'+i+'\"'}return a}return{n,ten:d,tach:A}})();if(t.loi)return t.loi;var l=t.ten.prescription;if(!l)return'define \"Prescription\"';var s=t.tach(l.composition);if(typeof s==\"string\")return s;var o=s.filter(function(n){return n.lap})[0];if(!o)return\"the items repeat: write 1:n{Prescription Item}\";if(o.lap[0]!==1)return\"a prescription has at least one item \\u21D2 lower bound 1\";var u=t.ten[t.n(o.ten)];if(!u||u.type!==\"structure\")return\"define the repeated element as a structure\";var f=t.tach(u.composition);if(typeof f==\"string\")return f;var c=f.map(function(n){return t.n(n.ten)}).join(\" | \");return/medicine|drug/.test(c)&&/dosage|dose/.test(c)&&/quantity|qty/.test(c)?\"OK\":\"the item needs the medicine, the dosage and the quantity\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f5"
+          },
+          {
+            "moTa": {
+              "en": "D — the national code is part of the prescription; the doctor’s note is optional",
+              "vi": "D — mã quốc gia thuộc đơn; ghi chú của bác sĩ là tuỳ chọn"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var e=(function(){if(typeof DATA_DICTIONARY==\"undefined\"||!Array.isArray(DATA_DICTIONARY)||!DATA_DICTIONARY.length)return{loi:\"DATA_DICTIONARY is missing\"};var t=function(n){return String(n==null?\"\":n).toLowerCase().replace(/[^a-z0-9]+/g,\" \").trim()},f={};DATA_DICTIONARY.forEach(function(n){n&&n.element&&(f[t(n.element)]=n)});function A(n){for(var i=[],l=String(n||\"\").split(\"+\"),a=0;a<l.length;a++){var o=l[a].trim(),r;if(r=/^\\(\\s*([^(){}]+?)\\s*\\)$/.exec(o))i.push({ten:r[1],tuyChon:!0});else if(r=/^(\\d+)\\s*:\\s*(\\d+|n)\\s*\\{\\s*([^(){}]+?)\\s*\\}$/i.exec(o))i.push({ten:r[3],lap:[Number(r[1]),r[2]]});else if(/^[A-Za-z][\\w .'-]*$/.test(o))i.push({ten:o});else return'cannot read \"'+o+'\"'}return i}return{n:t,ten:f,tach:A}})();if(e.loi)return e.loi;var s=e.ten.prescription;if(!s)return'define \"Prescription\"';var u=e.tach(s.composition);if(typeof u==\"string\")return u;if(!u.some(function(t){return/national|code/.test(e.n(t.ten))&&!/appointment/.test(e.n(t.ten))}))return\"store the code returned by the national system in the prescription\";var p=DATA_DICTIONARY.filter(function(t){return t.type===\"structure\"}).map(function(t){return e.tach(t.composition)}).filter(function(t){return typeof t!=\"string\"}),c=[].concat.apply([],p).filter(function(t){return/note|instruction|comment/.test(e.n(t.ten))})[0];return c&&c.tuyChon?\"OK\":\"the doctor may add a note to a line \\u21D2 (Doctor Note) is optional\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f5",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "E — SRS section of S1",
+              "vi": "E — mục SRS của S1"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (SRS_SECTION[\"S1\"]); } catch (e) { return 'SRS_SECTION[\"S1\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'SRS_SECTION[\"S1\"] is empty';\n  var chap = [\"2.2 User classes and characteristics\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f6"
+          },
+          {
+            "moTa": {
+              "en": "E — SRS section of S2",
+              "vi": "E — mục SRS của S2"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (SRS_SECTION[\"S2\"]); } catch (e) { return 'SRS_SECTION[\"S2\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'SRS_SECTION[\"S2\"] is empty';\n  var chap = [\"2.3 Operating environment\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f6"
+          },
+          {
+            "moTa": {
+              "en": "E — SRS section of S3",
+              "vi": "E — mục SRS của S3"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (SRS_SECTION[\"S3\"]); } catch (e) { return 'SRS_SECTION[\"S3\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'SRS_SECTION[\"S3\"] is empty';\n  var chap = [\"2.4 Design and implementation constraints\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet — it limits how the product may be built';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f6"
+          },
+          {
+            "moTa": {
+              "en": "E — SRS section of S4",
+              "vi": "E — mục SRS của S4"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (SRS_SECTION[\"S4\"]); } catch (e) { return 'SRS_SECTION[\"S4\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'SRS_SECTION[\"S4\"] is empty';\n  var chap = [\"2.5 Assumptions and dependencies\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet — something the project relies on but does not control';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f6"
+          },
+          {
+            "moTa": {
+              "en": "E — SRS section of S5",
+              "vi": "E — mục SRS của S5"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (SRS_SECTION[\"S5\"]); } catch (e) { return 'SRS_SECTION[\"S5\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'SRS_SECTION[\"S5\"] is empty';\n  var chap = [\"5.2 Software interfaces\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet — it is the connection to another software system';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f6"
+          },
+          {
+            "moTa": {
+              "en": "E — SRS section of S6",
+              "vi": "E — mục SRS của S6"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (SRS_SECTION[\"S6\"]); } catch (e) { return 'SRS_SECTION[\"S6\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'SRS_SECTION[\"S6\"] is empty';\n  var chap = [\"6 Quality attributes\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f6"
+          },
+          {
+            "moTa": {
+              "en": "E — SRS section of S7",
+              "vi": "E — mục SRS của S7"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (SRS_SECTION[\"S7\"]); } catch (e) { return 'SRS_SECTION[\"S7\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'SRS_SECTION[\"S7\"] is empty';\n  var chap = [\"4 Data requirements\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f6"
+          },
+          {
+            "moTa": {
+              "en": "E — SRS section of S8",
+              "vi": "E — mục SRS của S8"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (SRS_SECTION[\"S8\"]); } catch (e) { return 'SRS_SECTION[\"S8\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'SRS_SECTION[\"S8\"] is empty';\n  var chap = [\"3 System features\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f6",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "E — SRS section of S9",
+              "vi": "E — mục SRS của S9"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (SRS_SECTION[\"S9\"]); } catch (e) { return 'SRS_SECTION[\"S9\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'SRS_SECTION[\"S9\"] is empty';\n  var chap = [\"1.3 Project scope\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f6",
+            "an": true
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. A1. Coverage of the rules",
+            "diem": 2
+          },
+          {
+            "ma": "f2",
+            "ten": "2. A2. Quality of the statements",
+            "diem": 1.5
+          },
+          {
+            "ma": "f3",
+            "ten": "3. B. Quality requirements",
+            "diem": 1.5
+          },
+          {
+            "ma": "f4",
+            "ten": "4. C. Planguage",
+            "diem": 1
+          },
+          {
+            "ma": "f5",
+            "ten": "5. D. Data dictionary",
+            "diem": 2
+          },
+          {
+            "ma": "f6",
+            "ten": "6. E. SRS sections",
+            "diem": 2
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "project",
+      "mistakesJson": [
+        {
+          "loi": "Gộp hai luật vào một câu (hai \"shall\")."
+        },
+        {
+          "loi": "Xếp S3 (định dạng của Bộ Y tế) vào quality attributes."
+        },
+        {
+          "loi": "Quên định nghĩa primitive đã dùng trong structure."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Software Requirements Specification (SRS)",
+          "vi": "tài liệu đặc tả yêu cầu phần mềm"
+        },
+        {
+          "en": "functional requirement (FR)",
+          "vi": "yêu cầu chức năng — hành vi hệ thống thể hiện trong điều kiện cụ thể (\"The system shall…\"); ghi trong SRS"
+        },
+        {
+          "en": "nonfunctional requirement (NFR)",
+          "vi": "yêu cầu phi chức năng — thuộc tính chất lượng, giao diện ngoài, ràng buộc"
+        },
+        {
+          "en": "quality attribute",
+          "vi": "thuộc tính chất lượng — các \"-ility\": performance, usability, security, availability…"
+        },
+        {
+          "en": "Planguage",
+          "vi": "ngôn ngữ của Tom Gilb để viết yêu cầu chất lượng đo được (TAG, SCALE, METER, GOAL…)"
+        },
+        {
+          "en": "data dictionary",
+          "vi": "từ điển dữ liệu — định nghĩa mọi phần tử dữ liệu (thành phần, kiểu, độ dài, giá trị hợp lệ)"
+        },
+        {
+          "en": "verifiable",
+          "vi": "kiểm chứng được — có cách test/đo để biết đạt hay không"
+        }
+      ]
+    },
+    {
+      "title": "Interview corner — the SRS",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "SRS",
+        "verifiable requirements"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p><b>Interview corner.</b> Questions that interviewers for business analyst, junior software engineer and QA positions really ask about this part of the project. Choose the answer a strong candidate would give; read the explanation — it is what you would say out loud.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Góc phỏng vấn.</b> Câu hỏi nhà tuyển dụng BA, kỹ sư phần mềm junior và QA thật sự hỏi về phần này của dự án. Chọn câu trả lời của một ứng viên giỏi; đọc phần giải thích — đó là điều bạn sẽ nói thành lời.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Câu trả lời tốt gắn với tình huống cụ thể của dự án, không đọc định nghĩa suông.",
+        "Nhà tuyển dụng muốn nghe lý do (vì sao), không chỉ cái gì."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Interview corner — the SRS\n\nAnswer in the answer panel (no code needed).\n\n1. \"What makes a requirement testable?\"\"Điều gì làm một yêu cầu kiểm thử được?\"\n2. \"How do you handle a non-functional requirement like ‘the system must be secure’?\"\"Bạn xử lý yêu cầu phi chức năng kiểu ‘hệ thống phải an toàn’ thế nào?\"\n3. \"Why trace every functional requirement to a source?\"\"Vì sao truy mỗi yêu cầu chức năng về nguồn?\"\n4. \"Does an agile team need an SRS?\"\"Đội agile có cần SRS không?\"\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Interview corner — the SRS — answer key\n\n1. \"What makes a requirement testable?\"\"Điều gì làm một yêu cầu kiểm thử được?\"\n   Answer: b) \"It states one behaviour or quality with concrete values and conditions, so a tester can write a pass/fail test — ‘free slots appear within 2 seconds for 95% of requests’, not ‘search is fast’.\"\n   Concrete values and conditions ⇒ pass/fail.VI: Giá trị và điều kiện cụ thể ⇒ đạt/trượt.\n\n2. \"How do you handle a non-functional requirement like ‘the system must be secure’?\"\"Bạn xử lý yêu cầu phi chức năng kiểu ‘hệ thống phải an toàn’ thế nào?\"\n   Answer: a) \"I ask what is being protected, from whom, and what would be unacceptable, then write specific requirements: who may see visit notes, account lock-out after failed logins, encryption of personal data — each verifiable.\"\n   Elicit and decompose into specific, verifiable statements.VI: Khai thác và tách thành câu cụ thể, kiểm được.\n\n3. \"Why trace every functional requirement to a source?\"\"Vì sao truy mỗi yêu cầu chức năng về nguồn?\"\n   Answer: b) \"So we know why it exists, who to ask about it, what to change when the source changes, and to spot gold plating — a requirement with no source.\"\n   Rationale, change impact, gold plating.VI: Lý do, ảnh hưởng thay đổi, mạ vàng.\n\n4. \"Does an agile team need an SRS?\"\"Đội agile có cần SRS không?\"\n   Answer: a) \"Not necessarily as one big document, but the same information must exist somewhere — stories with acceptance criteria, quality requirements, rules and data definitions — at the level of detail the team and any regulator need.\"\n   Content matters, not the format.VI: Quan trọng là nội dung, không phải hình thức.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · a · b · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>\"What makes a requirement testable?\"</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Điều gì làm một yêu cầu kiểm thử được?\"</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "\"It is approved by the manager.\""
+              },
+              {
+                "ma": "b",
+                "noiDung": "\"It states one behaviour or quality with concrete values and conditions, so a tester can write a pass/fail test — ‘free slots appear within 2 seconds for 95% of requests’, not ‘search is fast’.\""
+              },
+              {
+                "ma": "c",
+                "noiDung": "\"It mentions a test tool.\""
+              },
+              {
+                "ma": "d",
+                "noiDung": "\"It is written in bold.\""
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Concrete values and conditions ⇒ pass/fail.</p><p><i>VI: Giá trị và điều kiện cụ thể ⇒ đạt/trượt.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>\"How do you handle a non-functional requirement like ‘the system must be secure’?\"</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Bạn xử lý yêu cầu phi chức năng kiểu ‘hệ thống phải an toàn’ thế nào?\"</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "\"I ask what is being protected, from whom, and what would be unacceptable, then write specific requirements: who may see visit notes, account lock-out after failed logins, encryption of personal data — each verifiable.\""
+              },
+              {
+                "ma": "b",
+                "noiDung": "\"I copy it into the SRS as it is.\""
+              },
+              {
+                "ma": "c",
+                "noiDung": "\"I leave it to the developers.\""
+              },
+              {
+                "ma": "d",
+                "noiDung": "\"I delete it because it cannot be tested.\""
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Elicit and decompose into specific, verifiable statements.</p><p><i>VI: Khai thác và tách thành câu cụ thể, kiểm được.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>\"Why trace every functional requirement to a source?\"</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Vì sao truy mỗi yêu cầu chức năng về nguồn?\"</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "\"Because the template has a column for it.\""
+              },
+              {
+                "ma": "b",
+                "noiDung": "\"So we know why it exists, who to ask about it, what to change when the source changes, and to spot gold plating — a requirement with no source.\""
+              },
+              {
+                "ma": "c",
+                "noiDung": "\"Only auditors care.\""
+              },
+              {
+                "ma": "d",
+                "noiDung": "\"To make the document longer.\""
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Rationale, change impact, gold plating.</p><p><i>VI: Lý do, ảnh hưởng thay đổi, mạ vàng.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>\"Does an agile team need an SRS?\"</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Đội agile có cần SRS không?\"</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "\"Not necessarily as one big document, but the same information must exist somewhere — stories with acceptance criteria, quality requirements, rules and data definitions — at the level of detail the team and any regulator need.\""
+              },
+              {
+                "ma": "b",
+                "noiDung": "\"Only for the testers.\""
+              },
+              {
+                "ma": "c",
+                "noiDung": "\"Yes, always 100 pages before coding.\""
+              },
+              {
+                "ma": "d",
+                "noiDung": "\"No, agile has no requirements.\""
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Content matters, not the format.</p><p><i>VI: Quan trọng là nội dung, không phải hình thức.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Trả lời bằng định nghĩa thuộc lòng, không ví dụ."
+        },
+        {
+          "loi": "Chọn đáp án nghe \"kỹ thuật\" nhất thay vì đáp án đúng nghiệp vụ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Software Requirements Specification (SRS)",
+          "vi": "tài liệu đặc tả yêu cầu phần mềm"
+        },
+        {
+          "en": "verifiable",
+          "vi": "kiểm chứng được — có cách test/đo để biết đạt hay không"
+        },
+        {
+          "en": "nonfunctional requirement (NFR)",
+          "vi": "yêu cầu phi chức năng — thuộc tính chất lượng, giao diện ngoài, ràng buộc"
+        }
+      ]
+    }
+  ]
+}

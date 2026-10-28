@@ -316,6 +316,12 @@
       "description": "Deep Lab chương 5: tự viết cổng chất lượng SRS — linter yêu cầu (không shall, nhiều shall, từ mơ hồ, bị động, phủ định, TBD, biên \"between\", NFR không số), kiểm nhãn (trùng, sai định dạng/loại), sổ TBD (người phụ trách, hạn) và quyết định qua cổng — chấm mẫu LibraNet + dữ liệu ẩn."
     },
     {
+      "slug": "swr302-5-project-cliniccare-m5-srs",
+      "name": "ClinicCare project — Milestone 5: The SRS",
+      "level": "INTERMEDIATE",
+      "description": "Dự án ClinicCare, mốc 5 (chương 5): ≥ 8 yêu cầu chức năng có nguồn (UC/BR) và phủ đủ luật, 4 yêu cầu chất lượng đo được, một yêu cầu Planguage, data dictionary của đơn thuốc, xếp 9 phát biểu vào đúng mục SRS; kèm Góc phỏng vấn."
+    },
+    {
       "slug": "swr302-6-1-tham-dinh",
       "name": "6.1 Validation vs verification and validation techniques",
       "level": "BEGINNER",

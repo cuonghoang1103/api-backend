@@ -1,0 +1,19 @@
+$ uname -srm
+Linux 7.0.12-linuxkit aarch64
+$ cat /proc/version
+Linux version 7.0.12-linuxkit (root@buildkitsandbox) (gcc (Alpine 15.2.0) 15.2.0, GNU ld (GNU Binutils) 2.45.1) #1 SMP PREEMPT Thu Aug 27 14:02:21 UTC 2026
+$ grep -cE '^#define __NR_' /usr/include/asm-generic/unistd.h
+365
+$ grep -E '^#define __NR_(openat|write|clone|execve) ' /usr/include/asm-generic/unistd.h
+#define __NR_openat 56
+#define __NR_write 64
+#define __NR_clone 220
+#define __NR_execve 221
+$ ldd /usr/bin/true
+	linux-vdso.so.1 (0x0000ffff92808000)
+	libc.so.6 => /usr/lib/aarch64-linux-gnu/libc.so.6 (0x0000ffff925c0000)
+	/lib/ld-linux-aarch64.so.1 (0x0000ffff927c0000)
+$ wc -l < /proc/modules
+5
+$ ls /sys/module | wc -l
+146

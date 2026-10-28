@@ -1,0 +1,22 @@
+$ df -T / | tail -1
+overlay        overlay 954976684 49505916 856886936   6% /
+$ mount | grep ' /mac '
+virtiofs2 on /mac type virtiofs (rw,nosuid,nodev,relatime,ignore_atime,no_xattr)
+$ cd /tmp && touch Readme.md README.md && ls *.md
+README.md
+Readme.md
+$ cd /mac && touch Readme.md README.md && ls *.md
+Readme.md
+$ cd /tmp && getconf PATH_MAX /; getconf NAME_MAX /
+4096
+255
+$ head -c 1M /dev/urandom > a; cp --reflink=always a b; echo "exit=$?"
+cp: failed to clone 'b' from 'a': Operation not supported
+exit=1
+$ echo hi > f; setfacl -m u:nobody:r f; getfacl -c f
+user::rw-
+user:nobody:r--
+group::r--
+mask::r--
+other::r--
+

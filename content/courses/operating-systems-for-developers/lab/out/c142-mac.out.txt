@@ -1,0 +1,23 @@
+$ clang -O2 -Wno-deprecated-declarations -o "$W/spawn" spawn.c && echo built
+built
+$ sysctl -n vm.loadavg
+{ 18.44 15.68 13.02 }
+$ for run in 1 2; do "$W/spawn" 300 0; "$W/spawn" 300 512; done
+parent touched    0 MiB | fork+exec  2162.1 us | vfork+exec  2193.9 us | posix_spawn  1452.4 us
+parent touched  512 MiB | fork+exec  2223.0 us | vfork+exec  2235.4 us | posix_spawn  1504.2 us
+parent touched    0 MiB | fork+exec  2034.6 us | vfork+exec  1926.0 us | posix_spawn  1434.1 us
+parent touched  512 MiB | fork+exec  1927.6 us | vfork+exec  1806.5 us | posix_spawn  1344.3 us
+$ /bin/kill -l
+HUP INT QUIT ILL TRAP ABRT EMT FPE KILL BUS SEGV SYS PIPE ALRM TERM URG
+STOP TSTP CONT CHLD TTIN TTOU IO XCPU XFSZ VTALRM PROF WINCH INFO USR1 USR2
+$ sh -c 'kill -USR1 $$'; echo "exit=$?"
+phien-host.sh: line 20: 46355 User defined signal 1: 30 sh -c 'kill -USR1 $$'
+exit=158
+$ sh -c 'kill -BUS $$'; echo "exit=$?"
+phien-host.sh: line 20: 46357 Bus error: 10           sh -c 'kill -BUS $$'
+exit=138
+$ node sig.js & P=$!; sleep 0.5; echo "threads: $(ps -M -p $P | tail -n +2 | wc -l)"; kill -TERM $P; wait $P; echo "exit=$?"
+pid 46360 running on darwin/arm64
+threads:        7
+SIGTERM after 466 ms on darwin — closing cleanly
+exit=0

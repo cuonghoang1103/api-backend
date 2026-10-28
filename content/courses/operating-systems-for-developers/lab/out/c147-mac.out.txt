@@ -1,0 +1,16 @@
+$ echo $SHELL; zsh --version; /bin/bash --version | head -1
+/bin/zsh
+zsh 5.9 (arm64-apple-darwin26.0)
+GNU bash, version 3.2.57(1)-release (arm64-apple-darwin26)
+$ brew --version | head -1; brew --prefix
+Homebrew 7.0.10
+/opt/homebrew
+$ echo "formulae installed: $(brew list --formula | wc -l)"
+formulae installed:      135
+$ brew info node | head -1
+==> node: 26.8.1 → stable 26.12.1 (bottled), HEAD
+$ ls -l "$(brew --prefix)/bin/node" | awk '{print $9, $10, $11}'
+/opt/homebrew/bin/node -> ../Cellar/node/26.8.1/bin/node
+$ /bin/bash -c 'mapfile -t lines < /etc/hosts; echo "read ${#lines[@]} lines"'
+/bin/bash: mapfile: command not found
+read 0 lines

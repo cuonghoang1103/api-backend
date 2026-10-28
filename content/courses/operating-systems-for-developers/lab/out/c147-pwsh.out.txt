@@ -1,0 +1,74 @@
+$ curl -sSL -o /tmp/hashes.sha256 https://github.com/PowerShell/PowerShell/releases/download/v7.6.9/hashes.sha256; file /tmp/hashes.sha256
+/tmp/hashes.sha256: Unicode text, UTF-16, little-endian text, with CRLF line terminators
+$ grep -c linux-arm64 /tmp/hashes.sha256; iconv -f UTF-16 -t UTF-8 /tmp/hashes.sha256 | tr -d '\r' | grep 'linux-arm64.tar.gz'
+0
+02eb9991af447c7e7fe881acde195961afd397c40b8eb1c2b3856b84ec2d85f2 *powershell-7.6.9-linux-arm64.tar.gz
+$ sha256sum /cache/powershell-7.6.9-linux-arm64.tar.gz
+02eb9991af447c7e7fe881acde195961afd397c40b8eb1c2b3856b84ec2d85f2  /cache/powershell-7.6.9-linux-arm64.tar.gz
+$ mkdir -p /opt/pwsh && tar xzf /cache/powershell-7.6.9-linux-arm64.tar.gz -C /opt/pwsh && ln -s /opt/pwsh/pwsh /usr/local/bin/pwsh && echo installed
+installed
+$ export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1 NO_COLOR=1
+$ pwsh -NoProfile -c '"PowerShell " + $PSVersionTable.PSVersion + " on " + $PSVersionTable.OS'
+PowerShell 7.6.9 on Ubuntu 26.04.1 LTS
+$ ps -eo pid,comm,time,rss --sort=-time | head -4
+    PID COMMAND             TIME   RSS
+     60 node            00:00:01 59992
+      1 bash            00:00:00  3452
+      7 phien           00:00:00  4168
+$ pwsh -NoProfile -c 'Get-Process | Sort-Object CPU -Descending | Select-Object -First 3 Id, ProcessName, CPU, @{n="RSS_MiB"; e={[math]::Round($_.WorkingSet64 / 1MB, 1)}} | Format-Table -AutoSize'
+
+Id ProcessName  CPU RSS_MiB
+-- -----------  --- -------
+60 node        1.25   58.60
+76 pwsh        0.28  131.70
+ 1 bash        0.00    3.40
+
+$ pwsh -NoProfile -c '$p = Get-Process -Id $PID; $p.GetType().FullName; ($p | Get-Member -MemberType Property).Count'
+System.Diagnostics.Process
+52
+$ pwsh -NoProfile -c 'Get-Process -Id $PID | Select-Object Id, ProcessName, StartTime, Threads | Format-List'
+
+Id          : 124
+ProcessName : pwsh
+StartTime   : 10/29/2026 01:04:30
+Threads     : {124, 125, 126, 127…}
+
+$ find /usr/bin -type f -size +2M -printf '%s %f\n' | sort -rn | head -3
+33249504 aarch64-linux-gnu-lto-dump-15
+18701184 perf
+11671040 gdb
+$ pwsh -NoProfile -c 'Get-ChildItem /usr/bin -File | Where-Object Length -gt 2MB | Sort-Object Length -Descending | Select-Object -First 3 Name, Length'
+
+Name                            Length
+----                            ------
+aarch64-linux-gnu-lto-dump-15 33249504
+perf                          18701184
+gdb                           11671040
+
+$ pwsh -NoProfile -c 'Get-ChildItem /usr/bin -File | Measure-Object Length -Sum | Select-Object Count, Sum | ConvertTo-Json -Compress'
+{"Count":749,"Sum":170336441.0}
+$ pwsh -NoProfile -c 'Get-Content /etc/os-release | Select-String "^VERSION="'
+
+VERSION="26.04.1 LTS (Resolute Raccoon)"
+
+$ pwsh -NoProfile -c 'Get-Alias gci, gps, select, where | Format-Table Name, Definition -AutoSize'
+
+Name   Definition
+----   ----------
+gci    Get-ChildItem
+gps    Get-Process
+select Select-Object
+where  Where-Object
+
+$ pwsh -NoProfile -c '"aliases named ls/cat/ps/curl/sort on Linux: " + @(Get-Alias ls, cat, ps, curl, sort -ErrorAction SilentlyContinue).Count; "ls is: " + (Get-Command ls).CommandType + " " + (Get-Command ls).Source'
+aliases named ls/cat/ps/curl/sort on Linux: 0
+ls is: Application /usr/bin/ls
+$ pwsh -NoProfile -c "Stop-Process -Id $SLEEPER"; wait $SLEEPER; echo "exit=$?"
+/usr/local/bin/phien: line 24:    57 Killed                     sleep 600
+exit=137
+$ dpkg-query -W -f '${Package}\n' | wc -l
+303
+$ apt-cache policy curl | head -3
+curl:
+  Installed: 8.18.0-1ubuntu2.8
+  Candidate: 8.18.0-1ubuntu2.8

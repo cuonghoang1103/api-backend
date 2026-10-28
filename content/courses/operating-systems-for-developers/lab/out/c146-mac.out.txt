@@ -1,0 +1,24 @@
+$ uname -sm
+Darwin arm64
+$ docker version --format 'client {{.Client.Os}}/{{.Client.Arch}}  ·  server {{.Server.Os}}/{{.Server.Arch}}, kernel {{.Server.KernelVersion}}'
+client darwin/arm64  ·  server linux/arm64, kernel 7.0.12-linuxkit
+$ docker info --format '{{.OperatingSystem}} · {{.NCPU}} CPUs · {{.MemTotal}} bytes RAM'
+Docker Desktop · 10 CPUs · 8319504384 bytes RAM
+$ ps -axo pid,%cpu,rss,comm | awk '/Virtualization.VirtualMachine$/{printf "%s  %s%% CPU  RSS %.1f GiB  %s\n", $1, $2, $3/1048576, "com.apple.Virtualization.VirtualMachine"}'
+16043  12.2% CPU  RSS 3.6 GiB  com.apple.Virtualization.VirtualMachine
+$ docker run --rm --label oslab=1 --name os-c146-vm --pid=host os-lab bash -c 'echo "processes in the VM: $(ps -e --no-headers | wc -l)"; grep MemTotal /proc/meminfo; ps -o pid,comm -p 1'
+processes in the VM: 235
+MemTotal:        8124516 kB
+  PID COMMAND
+    1 initd
+$ docker run --rm --label oslab=1 --name os-c146-a alpine:latest uname -sr
+Linux 7.0.12-linuxkit
+$ docker run --rm --label oslab=1 --name os-c146-b os-lab uname -sr
+Linux 7.0.12-linuxkit
+$ docker run --rm --label oslab=1 --name os-c146-fs -v "$PWD":/lab/ch14 -v "$W/m":/mac os-lab bash -c 'mount | grep -E " /mac | / " | cut -c1-70; for r in 1 2; do /lab/ch14/bench-fs.sh /mac; /lab/ch14/bench-fs.sh /tmp; done'
+overlay on / type overlay (rw,relatime,lowerdir=/var/lib/desktop-conta
+virtiofs2 on /mac type virtiofs (rw,nosuid,nodev,relatime,ignore_atime
+/mac (3000 files)            write  1.445 s | stat  0.326 s | read  0.539 s | delete  0.570 s
+/tmp (3000 files)            write  0.094 s | stat  0.024 s | read  0.021 s | delete  0.028 s
+/mac (3000 files)            write  0.915 s | stat  0.303 s | read  0.483 s | delete  0.614 s
+/tmp (3000 files)            write  0.085 s | stat  0.025 s | read  0.022 s | delete  0.026 s

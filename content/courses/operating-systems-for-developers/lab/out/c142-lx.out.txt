@@ -1,0 +1,32 @@
+$ gcc -O2 -Wall -o /tmp/spawn spawn.c && echo built
+built
+$ cat /proc/loadavg
+1.51 1.79 1.27 6/691 17
+$ for run in 1 2; do /tmp/spawn 300 0; /tmp/spawn 300 512; done
+parent touched    0 MiB | fork+exec   384.5 us | vfork+exec   301.8 us | posix_spawn   247.6 us
+parent touched  512 MiB | fork+exec  5202.1 us | vfork+exec   212.4 us | posix_spawn   222.9 us
+parent touched    0 MiB | fork+exec   263.7 us | vfork+exec   203.8 us | posix_spawn   231.9 us
+parent touched  512 MiB | fork+exec  5038.7 us | vfork+exec   221.5 us | posix_spawn   246.8 us
+$ kill -l | head -4
+ 1) SIGHUP	 2) SIGINT	 3) SIGQUIT	 4) SIGILL	 5) SIGTRAP
+ 6) SIGABRT	 7) SIGBUS	 8) SIGFPE	 9) SIGKILL	10) SIGUSR1
+11) SIGSEGV	12) SIGUSR2	13) SIGPIPE	14) SIGALRM	15) SIGTERM
+16) SIGSTKFLT	17) SIGCHLD	18) SIGCONT	19) SIGSTOP	20) SIGTSTP
+$ sh -c 'kill -USR1 $$'; echo "exit=$?"
+/usr/local/bin/phien: line 24:  3630 User defined signal 1      sh -c 'kill -USR1 $$'
+exit=138
+$ sh -c 'kill -BUS $$'; echo "exit=$?"
+/usr/local/bin/phien: line 24:  3633 Bus error                  sh -c 'kill -BUS $$'
+exit=135
+$ node sig.js & P=$!; sleep 0.5; echo "threads: $(ls /proc/$P/task | wc -l)"; kill -TERM $P; wait $P; echo "exit=$?"
+pid 3636 running on linux/arm64
+threads: 7
+SIGTERM after 497 ms on linux — closing cleanly
+exit=0
+$ strace -f -e trace=clone,clone3,vfork,execve -o /tmp/st.txt /tmp/spawn 1 0 > /dev/null; grep -E 'clone|vfork' /tmp/st.txt | sed -E 's/child_tidptr=0x[0-9a-f]+/child_tidptr=…/; s/stack=0x[0-9a-f]+, stack_size=0x[0-9a-f]+/stack=…/; s/child_stack=0x[0-9a-f]+/child_stack=…/'
+3651  clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=…) = 3652
+3651  clone(child_stack=…, flags=CLONE_VM|CLONE_VFORK|SIGCHLD <unfinished ...>
+3651  <... clone resumed>)              = 3653
+3651  clone3({flags=CLONE_VM|CLONE_VFORK|CLONE_CLEAR_SIGHAND, exit_signal=SIGCHLD, stack=…}, 88) = -1 ENOSYS (Function not implemented)
+3651  clone(child_stack=…, flags=CLONE_VM|CLONE_VFORK|SIGCHLD <unfinished ...>
+3651  <... clone resumed>)              = 3654

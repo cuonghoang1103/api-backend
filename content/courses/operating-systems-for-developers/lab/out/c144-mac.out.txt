@@ -1,0 +1,49 @@
+$ sysctl hw.memsize hw.pagesize
+hw.memsize: 34359738368
+hw.pagesize: 16384
+$ vm_stat
+Mach Virtual Memory Statistics: (page size of 16384 bytes)
+Pages free:                                    88093.
+Pages active:                                 547062.
+Pages inactive:                               542533.
+Pages speculative:                              3452.
+Pages throttled:                                   0.
+Pages wired down:                             215815.
+Pages purgeable:                                 733.
+"Translation faults":                    40722270263.
+Pages copy-on-write:                      5380775897.
+Pages zero filled:                       18514786554.
+Pages reactivated:                        1270030998.
+Pages purged:                               28109040.
+File-backed pages:                            239741.
+Anonymous pages:                              853306.
+Pages stored in compressor:                  1105590.
+Pages occupied by compressor:                 643774.
+Decompressions:                            970411421.
+Compressions:                             1227338849.
+Pageins:                                   700301373.
+Pageouts:                                     885529.
+Swapins:                                     7005789.
+Swapouts:                                    9333762.
+$ vm_stat | awk -F: '/stored in compressor/{s=$2} /occupied by compressor/{o=$2} END{printf "compressor holds %.1f GiB of data in %.1f GiB of RAM (ratio %.2f)\n", s*16384/2^30, o*16384/2^30, s/o}'
+compressor holds 16.9 GiB of data in 9.8 GiB of RAM (ratio 1.72)
+$ top -l 1 -n 0 -s 0 | grep -E '^PhysMem'
+PhysMem: 30G used (3446M wired, 10G compressor), 1086M unused.
+$ memory_pressure | tail -1
+System-wide memory free percentage: 57%
+$ sysctl vm.swapusage
+vm.swapusage: total = 13312.00M  used = 12149.12M  free = 1162.88M  (encrypted)
+$ ls /System/Volumes/VM | head -3; ls /System/Volumes/VM | wc -l
+swapfile0
+swapfile1
+swapfile10
+      13
+$ python3 an.py 512 4 & P=$!; sleep 2; ps -o pid,rss,vsz,comm -p $P | cut -c1-60
+pid 46507 holds 512 MiB
+  PID    RSS      VSZ COMM
+46507 539008 489273552 /opt/homebrew/Cellar/python@3.14/3.14
+$ footprint -p $P 2>/dev/null | sed -n '2p;7,8p'
+Python [46507]: 64-bit    Footprint: 519 MB (16384 bytes per page)
+ 512 MB        0 B          0 B          5    Malloc Large
+2544 KB        0 B          0 B          8    Untagged
+$ wait $P

@@ -1,0 +1,38 @@
+$ node cross.cjs
+platform darwin | sep "/" | delimiter ":" | EOL "\n"
+path.join         src/config/app.json
+path.win32.join   src\config\app.json
+path.posix.join   src/config/app.json
+win32.resolve     C:\Users\Public\a.txt
+posix.normalize   src/config\app.json   <- the backslash is part of a file name
+win32.normalize   src\config\app.json
+win32.isAbsolute("/etc") = true | posix.isAbsolute("C:\\x") = false
+$ python3 cross.py
+platform darwin | os.sep '/' | os.pathsep ':' | os.linesep '\n'
+os.path.join    src/config/app.json
+ntpath.join     src\config\app.json
+posixpath.join  src/config/app.json
+PureWindowsPath C:\Users\dev\app\a.txt | parts ('C:\\', 'Users', 'dev', 'a.txt')
+PurePosixPath   /home/dev/app/a.txt
+case: PureWindowsPath('A.TXT') == PureWindowsPath('a.txt') -> True | PurePosixPath -> False
+$ java Cross.java
+os.name Mac OS X | File.separator "/" | File.pathSeparator ":" | lineSeparator \n
+Path.of("src","config","app.json") = src/config/app.json
+"src" + "\\" + "app.json" exists as one name: 1 name element(s)
+$ java Res.java
+db.url=jdbc:postgresql://localhost:5432/app
+$ git -C . config core.ignorecase
+true
+$ git init -q && git config user.name dev && git config user.email dev@example.com && echo hi > Readme.md && git add . && git commit -qm init && git ls-files
+Readme.md
+$ mv Readme.md README.md; ls; git status --short; echo "(git sees no change)"
+README.md
+(git sees no change)
+$ git mv -f Readme.md README.md; git status --short
+R  Readme.md -> README.md
+$ git init -q && git config user.name dev && git config user.email dev@example.com && printf '#!/bin/bash\necho ok\n' > run.sh && git add run.sh && git commit -qm init && file run.sh
+run.sh: Bourne-Again shell script text executable, ASCII text
+$ git config core.autocrlf true; rm run.sh; git checkout -- run.sh; file run.sh
+run.sh: Bourne-Again shell script text executable, ASCII text, with CRLF line terminators
+$ printf '*.sh text eol=lf\n' > .gitattributes; rm run.sh; git checkout -- run.sh; file run.sh
+run.sh: Bourne-Again shell script text executable, ASCII text

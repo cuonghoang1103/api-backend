@@ -1,0 +1,23 @@
+$ free -m
+               total        used        free      shared  buff/cache   available
+Mem:            7934        3327        2054         156        2907        4606
+Swap:           1023           0        1023
+$ grep -E '^(MemTotal|MemAvailable|SwapTotal|SwapFree|CommitLimit|Committed_AS):' /proc/meminfo
+MemTotal:        8124516 kB
+MemAvailable:    4716872 kB
+SwapTotal:       1048572 kB
+SwapFree:        1048572 kB
+CommitLimit:     5110828 kB
+Committed_AS:    5256044 kB
+$ cat /proc/sys/vm/overcommit_memory
+1
+$ cat /sys/module/zswap/parameters/enabled 2>/dev/null || echo "zswap: not built in"
+N
+$ python3 an.py 512 3 & P=$!; sleep 1.5; ps -o pid,rss,vsz,comm -p $P; grep -E '^(VmRSS|RssAnon|VmSwap):' /proc/$P/status
+pid 22 holds 512 MiB
+    PID   RSS    VSZ COMMAND
+     22 534720 543516 python3
+VmRSS:	  534720 kB
+RssAnon:	  528808 kB
+VmSwap:	       0 kB
+$ wait $P

@@ -1,0 +1,40 @@
+$ sw_vers
+ProductName:		macOS
+ProductVersion:		27.0.1
+BuildVersion:		26A434
+$ uname -srm
+Darwin 27.0.0 arm64
+$ sysctl -n kern.version
+Darwin Kernel Version 27.0.0: Tue Aug 11 21:22:49 PDT 2026; root:xnu-13432.1.9~1/RELEASE_ARM64_T6000
+$ sysctl hw.model hw.ncpu hw.perflevel0.physicalcpu hw.perflevel1.physicalcpu hw.memsize hw.pagesize
+hw.model: MacBookPro18,2
+hw.ncpu: 10
+hw.perflevel0.physicalcpu: 8
+hw.perflevel1.physicalcpu: 2
+hw.memsize: 34359738368
+hw.pagesize: 16384
+$ ps -o pid,ppid,user,comm -p 1
+  PID  PPID USER COMM
+    1     0 root /sbin/launchd
+$ kmutil showloaded --list-only 2>/dev/null | grep -c com.apple
+254
+$ otool -L /usr/bin/true
+/usr/bin/true:
+	/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1359.0.0)
+$ SDK=$(xcrun --show-sdk-path); grep -c '^#define[[:space:]]SYS_' $SDK/usr/include/sys/syscall.h
+467
+$ grep -E 'SYS_(fork|write|open|posix_spawn)[[:space:]]' $SDK/usr/include/sys/syscall.h
+#define	SYS_fork           2
+#define	SYS_write          4
+#define	SYS_open           5
+#define	SYS_posix_spawn    244
+$ docker run --rm --label oslab=1 --name os-c141-lx os-lab bash -c 'uname -srm; getconf PAGESIZE; nproc'
+Linux 7.0.12-linuxkit aarch64
+4096
+10
+$ docker run --rm --label oslab=1 --name os-c141-vm --pid=host os-lab ps -o pid,ppid,comm -p 1,2
+  PID  PPID COMMAND
+    1     0 initd
+    2     0 kthreadd
+$ docker run --rm --label oslab=1 --name os-c141-vm --pid=host os-lab bash -c 'echo "kernel threads (children of kthreadd): $(ps --ppid 2 --no-headers | wc -l)"'
+kernel threads (children of kthreadd): 172

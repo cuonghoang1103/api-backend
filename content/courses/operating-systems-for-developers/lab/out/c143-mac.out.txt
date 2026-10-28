@@ -1,0 +1,58 @@
+$ ps -o pid,ppid,user,comm -p 1
+  PID  PPID USER COMM
+    1     0 root /sbin/launchd
+$ echo "processes whose parent is launchd: $(ps -ax -o ppid= | awk '$1==1' | wc -l) of $(ps -ax -o pid= | wc -l)"
+processes whose parent is launchd:      549 of      724
+$ ls /System/Library/LaunchDaemons | wc -l; ls /System/Library/LaunchAgents | wc -l
+     425
+     486
+$ plutil -p /System/Library/LaunchDaemons/com.apple.newsyslog.plist
+{
+  "Label" => "com.apple.newsyslog"
+  "LowPriorityIO" => true
+  "Nice" => 1
+  "ProgramArguments" => [
+    0 => "/usr/sbin/newsyslog"
+  ]
+  "StartCalendarInterval" => {
+    "Minute" => 30
+  }
+}
+$ launchctl print system/com.apple.newsyslog | grep -E '^	(path|type|state|program|runs|last exit code) '
+	path = /System/Library/LaunchDaemons/com.apple.newsyslog.plist
+	type = LaunchDaemon
+	state = not running
+	program = /usr/sbin/newsyslog
+	runs = 110
+	last exit code = 0
+$ plutil -lint com.cuongthai.hot.plist
+com.cuongthai.hot.plist: OK
+$ top -l 1 -n 0 -s 0 | grep -E '^(Processes|Load Avg|CPU usage|PhysMem|VM):'
+Processes: 722 total, 6 running, 716 sleeping, 5397 threads 
+Load Avg: 16.82, 15.43, 12.96 
+CPU usage: 30.67% user, 19.11% sys, 50.21% idle 
+PhysMem: 29G used (3440M wired, 10G compressor), 1882M unused.
+VM: 406T vsize, 57G framework vsize, 7005785(0) swapins, 9333762(0) swapouts.
+$ node hot.cjs & P=$!; sleep 1; ps -o pid,%cpu,rss,etime,comm -p $P
+pid 46412 listening on :3141
+  PID  %CPU    RSS ELAPSED COMM
+46412  46.4  45344   00:01 node
+$ lsof -nP -a -p $P -iTCP -sTCP:LISTEN
+COMMAND   PID  USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+node    46412 dev   12u  IPv6 0xe92979f1962b588b      0t0  TCP *:3141 (LISTEN)
+$ sample $P 1 -file "$W/hot.sample.txt" > /dev/null 2>&1; sed -n '/Sort by top of stack/,/^$/p' "$W/hot.sample.txt" | head -6
+Sort by top of stack, same collapsed (when >= 5):
+        __psynch_cvwait  (in libsystem_kernel.dylib)        3268
+        kevent  (in libsystem_kernel.dylib)        1215
+        semaphore_wait_trap  (in libsystem_kernel.dylib)        817
+        ???  (in <unknown binary>)  [0x1192c8798]        63
+        ???  (in <unknown binary>)  [0x1192c87d0]        55
+$ fs_usage -w -f filesys $P 2>&1 | head -1
+'fs_usage' must be run as root...
+$ dtruss -p $P 2>&1 | head -2
+dtrace: system integrity protection is on, some features will not be available
+dtrace: failed to initialize dtrace: DTrace requires additional privileges
+$ kill $P; wait $P 2>/dev/null; echo "stopped"
+stopped
+$ logger -t ch14 "hello from chapter 14"; log show --last 1m --style compact --predicate 'process == "logger" AND eventMessage CONTAINS "chapter 14"' | tail -1 | cut -c1-110
+2026-10-29 01:03:58.609 Df logger[46447:763b13f] hello from chapter 14

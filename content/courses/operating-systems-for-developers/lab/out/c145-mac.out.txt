@@ -1,0 +1,55 @@
+$ mount | grep -E ' on / | on /System/Volumes/Data '
+/dev/disk3s1s1 on / (apfs, sealed, local, read-only, journaled)
+/dev/disk3s5 on /System/Volumes/Data (apfs, local, journaled, nobrowse, protect, root data)
+$ diskutil info / | grep -E 'File System Personality|Sealed'
+   File System Personality:   APFS
+   Sealed:                    Yes
+$ csrutil status; spctl --status
+System Integrity Protection status: enabled.
+assessments enabled
+$ getconf PATH_MAX /; getconf NAME_MAX /
+1024
+255
+$ touch Readme.md; ls readme.md; touch README.md; ls
+readme.md
+Readme.md
+$ dd if=/dev/urandom of=big.bin bs=1m count=512 2>/dev/null; df -m . | awk 'NR==2{print "free MiB:", $4}'
+free MiB: 31556
+$ time cp -c big.bin clone.bin
+
+real	0m0.003s
+user	0m0.001s
+sys	0m0.002s
+$ df -m . | awk 'NR==2{print "free MiB:", $4}'
+free MiB: 31557
+$ time cp big.bin copy.bin
+
+real	0m0.263s
+user	0m0.001s
+sys	0m0.126s
+$ df -m . | awk 'NR==2{print "free MiB:", $4}'
+free MiB: 31045
+$ du -sm .
+1549	.
+$ rm big.bin clone.bin copy.bin
+$ echo 'echo hi' > tool.sh; echo "secret notes" > tool.sh/..namedfork/rsrc; ls -l tool.sh; cat tool.sh/..namedfork/rsrc
+-rw-r--r--@ 1 dev  wheel  8 Oct 29 01:04 tool.sh
+secret notes
+$ xattr -w com.apple.quarantine "0081;$(printf %x $(date +%s));Safari;" tool.sh; xattr -l tool.sh
+com.apple.ResourceFork: secret notes
+
+com.apple.provenance: 
+com.apple.quarantine: 0081;6ae23917;Safari;
+$ xattr -d com.apple.quarantine tool.sh; xattr tool.sh
+com.apple.ResourceFork
+com.apple.provenance
+$ chmod +a "everyone deny delete" tool.sh; ls -le tool.sh; rm tool.sh
+-rw-r--r--@ 1 dev  wheel  8 Oct 29 01:04 tool.sh
+ 0: group:everyone deny delete
+rm: tool.sh: Permission denied
+$ chmod -a "everyone deny delete" tool.sh; rm tool.sh && echo deleted
+deleted
+$ ls -lO /usr/bin/true
+-rwxr-xr-x  1 root  wheel  restricted,compressed 133184 Sep 24 14:10 /usr/bin/true
+$ touch /usr/bin/x
+touch: /usr/bin/x: Operation not permitted

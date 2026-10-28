@@ -1,0 +1,40 @@
+$ node cross.cjs
+platform linux | sep "/" | delimiter ":" | EOL "\n"
+path.join         src/config/app.json
+path.win32.join   src\config\app.json
+path.posix.join   src/config/app.json
+win32.resolve     C:\Users\Public\a.txt
+posix.normalize   src/config\app.json   <- the backslash is part of a file name
+win32.normalize   src\config\app.json
+win32.isAbsolute("/etc") = true | posix.isAbsolute("C:\\x") = false
+$ python3 cross.py
+platform linux | os.sep '/' | os.pathsep ':' | os.linesep '\n'
+os.path.join    src/config/app.json
+ntpath.join     src\config\app.json
+posixpath.join  src/config/app.json
+PureWindowsPath C:\Users\dev\app\a.txt | parts ('C:\\', 'Users', 'dev', 'a.txt')
+PurePosixPath   /home/dev/app/a.txt
+case: PureWindowsPath('A.TXT') == PureWindowsPath('a.txt') -> True | PurePosixPath -> False
+$ java Cross.java
+os.name Linux | File.separator "/" | File.pathSeparator ":" | lineSeparator \n
+Path.of("src","config","app.json") = src/config/app.json
+"src" + "\\" + "app.json" exists as one name: 1 name element(s)
+$ java Res.java 2>&1 | head -2
+Exception in thread "main" java.nio.file.NoSuchFileException: data/Config.properties
+	at java.base/sun.nio.fs.UnixException.translateToIOException(UnixException.java:92)
+$ printf '#!/bin/bash\r\necho "hello from $(uname -s)"\r\n' > crlf.sh; chmod +x crlf.sh; file crlf.sh
+crlf.sh: Bourne-Again shell script, ASCII text executable, with CRLF line terminators
+$ ./crlf.sh
+/usr/local/bin/phien: ./crlf.sh: /bin/bash^M: bad interpreter: No such file or directory
+$ bash crlf.sh | cat -A
+hello from Linux^M$
+$ printf 'NAME=prod\r\necho "deploying to [$NAME]"\r\ncd /tmp\r\n' > deploy.sh; bash deploy.sh 2>&1 | cat -A
+deploying to [prod^M]^M$
+deploy.sh: line 3: cd: $'/tmp\r': No such file or directory$
+$ sed -i 's/\r$//' crlf.sh deploy.sh; file crlf.sh; ./crlf.sh; bash deploy.sh
+crlf.sh: Bourne-Again shell script, ASCII text executable
+hello from Linux
+deploying to [prod]
+$ exec 3> /tmp/app.log; echo busy >&3; rm /tmp/app.log && echo "rm while open: OK"; readlink /proc/$$/fd/3; exec 3>&-
+rm while open: OK
+/tmp/app.log (deleted)

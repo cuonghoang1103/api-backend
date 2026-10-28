@@ -268,6 +268,60 @@
       "description": "Dự án LabBook — mốc chương 6: ba phiên exploratory có charter trên bản beta có lỗi chưa biết (phân quyền, đóng/mở phòng, đăng nhập sai); báo mỗi lỗi bằng ca tái hiện chạy thật, nộp phiếu phiên; kèm góc phỏng vấn 6."
     },
     {
+      "slug": "swt301-test-organisation",
+      "name": "7.1 Test organisation: independence, test manager and tester",
+      "level": "BEGINNER",
+      "description": "Năm mức độc lập kiểm thử và ưu nhược điểm, việc của test manager và tester trên dự án LabBook, lợi ích/hạn chế của tester độc lập, câu thi."
+    },
+    {
+      "slug": "swt301-test-plan-risk",
+      "name": "7.2 Test planning and estimation",
+      "level": "BEGINNER",
+      "description": "Bảy chiến lược test, entry/exit criteria, viết code lập lịch thực thi theo ưu tiên + phụ thuộc (K3), ước lượng dựa số liệu, ba điểm và chu kỳ test lại, câu thi."
+    },
+    {
+      "slug": "swt301-test-monitoring-control",
+      "name": "7.3 Test monitoring and control: metrics and reports",
+      "level": "BEGINNER",
+      "description": "Báo cáo tiến độ và báo cáo tổng kết, chọn hành động kiểm soát, viết code tính báo cáo tuần (tiến độ, tỉ lệ đạt, mật độ lỗi, DDP, trạng thái RAG), câu thi về số đo và người đọc."
+    },
+    {
+      "slug": "swt301-configuration-management",
+      "name": "7.4 Configuration management",
+      "level": "BEGINNER",
+      "description": "CM hỗ trợ kiểm thử thế nào, bốn hoạt động CM (identification, control, status accounting, audit), viết code so hai baseline và kiểm test log khớp cấu hình, cái gì thuộc CM."
+    },
+    {
+      "slug": "swt301-risk-based-testing",
+      "name": "7.5 Risk and testing",
+      "level": "BEGINNER",
+      "description": "Phân biệt rủi ro sản phẩm/dự án trên LabBook, viết code bảng phân tích rủi ro (L × I, độ sâu kiểm thử), rủi ro thay đổi cách tiếp cận test, câu thi."
+    },
+    {
+      "slug": "swt301-bug-lifecycle",
+      "name": "7.6 Defect management: reports, severity vs priority, lifecycle",
+      "level": "INTERMEDIATE",
+      "description": "Severity khác priority, viết code máy trạng thái vòng đời lỗi, viết defect report đủ thành phần (K3), tính số liệu lỗi (thời gian đóng, tỉ lệ mở lại, tỉ lệ từ chối), câu thi."
+    },
+    {
+      "slug": "swt301-7-lab-test-management-release21",
+      "name": "Lab 7 — Test Management of LabBook 2.1",
+      "level": "ADVANCED",
+      "description": "Lab chương 7: lập lịch thực thi 8 test theo ưu tiên + phụ thuộc (K3), phân tích rủi ro L × I và độ sâu kiểm thử, số liệu tuần (tiến độ, tỉ lệ đạt, DDP, mật độ) + trạng thái và hành động kiểm soát, defect report K3 + severity/priority."
+    },
+    {
+      "slug": "swt301-7-deep-defect-tracker",
+      "name": "Deep Lab 7 — Build the Core of a Defect-Tracking Tool",
+      "level": "ADVANCED",
+      "description": "Deep Lab chương 7: class DefectTracker — báo lỗi + chống trùng, vòng đời phân quyền lead/developer/tester, priority, nhật ký ai/khi nào, bản sao an toàn, số liệu (mở, theo mức, thời gian chu trình, tỉ lệ mở lại); nhiều kiểm ẩn."
+    },
+    {
+      "slug": "swt301-7-project-labbook-rc-test-report",
+      "name": "LabBook Project 7 — Release Candidate: Plan, Defect Reports, Decision",
+      "level": "INTERMEDIATE",
+      "description": "Dự án LabBook — mốc chương 7: kế hoạch theo rủi ro (mức, ưu tiên, thứ tự chạy có phụ thuộc), ba defect report chạy được tái hiện failure của bản rc2 (mất booking, 500 thay 422, đóng phòng bỏ sót PENDING), quyết định go/no-go; kèm góc phỏng vấn 7."
+    },
+    {
       "slug": "swt301-10-lab2-unit-test-report51",
       "name": "Lab 2 Practice — Unit Test Report 5.1 (reserveSeat)",
       "level": "ADVANCED",

@@ -1,0 +1,621 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-configuration-management",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-configuration-management"
+  },
+  "exercises": [
+    {
+      "title": "Configuration management 1 — How CM supports testing (K2)",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "configuration management"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>A test result means nothing unless you can say exactly what was tested. Five questions on what configuration management must ensure and why testers need it.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Kết quả test vô nghĩa nếu không nói được chính xác cái gì đã được test. Năm câu về những gì quản lý cấu hình phải bảo đảm và vì sao tester cần nó.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "CM trả lời câu “ta đã test phiên bản nào?”.",
+        "Cả testware cũng phải có phiên bản."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Configuration management 1 — How CM supports testing (K2)\n\nAnswer in the answer panel (no code needed).\n\n1. What is the purpose of configuration management in testing?Mục đích của quản lý cấu hình trong kiểm thử là gì?\n2. A tester cannot reproduce a failure reported last month. Which CM weakness is the most likely cause?Tester không tái hiện được failure báo tháng trước. Điểm yếu CM nào có khả năng nhất?\n3. Which must be under configuration management?Thứ gì phải được quản lý cấu hình?\n4. When should configuration management procedures and infrastructure be identified and implemented?Khi nào nên xác định và dựng quy trình, hạ tầng quản lý cấu hình?\n5. Why does a defect report need “test item and version”?Vì sao defect report cần “hạng mục test và phiên bản”?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Configuration management 1 — How CM supports testing (K2) — answer key\n\n1. What is the purpose of configuration management in testing?Mục đích của quản lý cấu hình trong kiểm thử là gì?\n   Answer: b) To establish and maintain the integrity of the component or system, the testware and their relationships throughout the lifecycle\n   Integrity of items, testware and their relationships.VI: Toàn vẹn của hạng mục, testware và mối liên kết giữa chúng.\n\n2. A tester cannot reproduce a failure reported last month. Which CM weakness is the most likely cause?Tester không tái hiện được failure báo tháng trước. Điểm yếu CM nào có khả năng nhất?\n   Answer: b) The report does not say which build, configuration and test data were used\n   Test item + version + environment must be referenced unambiguously.VI: Hạng mục test + phiên bản + môi trường phải được tham chiếu rõ ràng.\n\n3. Which must be under configuration management?Thứ gì phải được quản lý cấu hình?\n   Answer: b) Test items AND testware: test cases, scripts, test data, expected results, environment set-up\n   All items of testware are uniquely identified, version controlled, tracked for changes and related to each other and to the test items.VI: Mọi thành phần testware được định danh duy nhất, quản lý phiên bản, theo dõi thay đổi và liên kết với nhau và với hạng mục test.\n\n4. When should configuration management procedures and infrastructure be identified and implemented?Khi nào nên xác định và dựng quy trình, hạ tầng quản lý cấu hình?\n   Answer: b) During test planning\n   Planned early, as part of test planning.VI: Lập sớm, trong test planning.\n\n5. Why does a defect report need “test item and version”?Vì sao defect report cần “hạng mục test và phiên bản”?\n   Answer: b) So that the developer debugs exactly the build that failed, and confirmation testing uses a build that contains the fix\n   This ties defect management to CM (lesson 7.6).VI: Đây là chỗ nối quản lý lỗi với CM (bài 7.6).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · b · b · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>What is the purpose of configuration management in testing?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mục đích của quản lý cấu hình trong kiểm thử là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "To speed up test execution"
+              },
+              {
+                "ma": "b",
+                "noiDung": "To establish and maintain the integrity of the component or system, the testware and their relationships throughout the lifecycle"
+              },
+              {
+                "ma": "c",
+                "noiDung": "To manage the test team"
+              },
+              {
+                "ma": "d",
+                "noiDung": "To write the test plan"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Integrity of items, testware and their relationships.</p><p><i>VI: Toàn vẹn của hạng mục, testware và mối liên kết giữa chúng.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>A tester cannot reproduce a failure reported last month. Which CM weakness is the most likely cause?</p><p style=\"opacity:.75;font-size:.92em\"><i>Tester không tái hiện được failure báo tháng trước. Điểm yếu CM nào có khả năng nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Too many testers"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The report does not say which build, configuration and test data were used"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The test was automated"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The defect was severe"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Test item + version + environment must be referenced unambiguously.</p><p><i>VI: Hạng mục test + phiên bản + môi trường phải được tham chiếu rõ ràng.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Which must be under configuration management?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thứ gì phải được quản lý cấu hình?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Only the source code"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Test items AND testware: test cases, scripts, test data, expected results, environment set-up"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only the test plan"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only defect reports"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>All items of testware are uniquely identified, version controlled, tracked for changes and related to each other and to the test items.</p><p><i>VI: Mọi thành phần testware được định danh duy nhất, quản lý phiên bản, theo dõi thay đổi và liên kết với nhau và với hạng mục test.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>When should configuration management procedures and infrastructure be identified and implemented?</p><p style=\"opacity:.75;font-size:.92em\"><i>Khi nào nên xác định và dựng quy trình, hạ tầng quản lý cấu hình?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "After the first release"
+              },
+              {
+                "ma": "b",
+                "noiDung": "During test planning"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only when a defect cannot be reproduced"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Never — Git does it automatically"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Planned early, as part of test planning.</p><p><i>VI: Lập sớm, trong test planning.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>Why does a defect report need “test item and version”?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao defect report cần “hạng mục test và phiên bản”?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "For the reporter’s statistics"
+              },
+              {
+                "ma": "b",
+                "noiDung": "So that the developer debugs exactly the build that failed, and confirmation testing uses a build that contains the fix"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It does not need it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "For billing"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>This ties defect management to CM (lesson 7.6).</p><p><i>VI: Đây là chỗ nối quản lý lỗi với CM (bài 7.6).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng chỉ mã nguồn cần quản lý cấu hình."
+        },
+        {
+          "loi": "Để việc dựng CM tới khi có sự cố."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "configuration management (CM)",
+          "vi": "quản lý cấu hình"
+        },
+        {
+          "en": "configuration item",
+          "vi": "hạng mục cấu hình"
+        },
+        {
+          "en": "baseline",
+          "vi": "mốc cấu hình đã chốt"
+        }
+      ]
+    },
+    {
+      "title": "Configuration management 2 — The four classic CM activities (2023 deck)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "configuration management"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>The 2023 SWT5 deck lists four classic CM activities: <b>identification</b> (what is a configuration item, how it is named and versioned), <b>control</b> (how changes are requested, approved and released), <b>status accounting</b> (recording and reporting the state of items and changes), <b>audit</b> (checking that what is delivered matches the records). Classify each LabBook practice.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bộ slide SWT5 2023 nêu bốn hoạt động CM kinh điển: <b>identification</b> (cái gì là hạng mục cấu hình, đặt tên và phiên bản ra sao), <b>control</b> (yêu cầu, duyệt, phát hành thay đổi thế nào), <b>status accounting</b> (ghi nhận và báo cáo trạng thái hạng mục và thay đổi), <b>audit</b> (kiểm tra thứ được giao khớp với hồ sơ). Phân loại từng việc của LabBook.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "“Ai duyệt thay đổi” ⇒ control; “báo cáo trạng thái” ⇒ status accounting.",
+        "“So thứ được giao với hồ sơ” ⇒ audit."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Configuration management 2 — The four classic CM activities (2023 deck)\n\nAnswer in the answer panel (no code needed).\n\n1. Practice → activityViệc → hoạt động\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Configuration management 2 — The four classic CM activities (2023 deck) — answer key\n\n1. Practice → activityViệc → hoạt động\n   - r0.a: Configuration identification\n   - r1.a: Configuration control\n   - r2.a: Status accounting\n   - r3.a: Configuration audit\n   - r4.a: Configuration identification\n   - r5.a: Configuration control\n   Naming and versioning items = identification; approving changes = control; reporting the state = status accounting; verifying the delivered configuration = audit.VI: Đặt tên, phiên bản = identification; duyệt thay đổi = control; báo trạng thái = status accounting; kiểm tra cấu hình được giao = audit.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Identification · Control · Status accounting · Audit · Identification · Control.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Practice → activity</p><p style=\"opacity:.75;font-size:.92em\"><i>Việc → hoạt động</i></p>",
+            "cot": [
+              {
+                "ma": "p",
+                "ten": "Practice"
+              },
+              {
+                "ma": "a",
+                "ten": "Activity",
+                "luaChon": [
+                  "Configuration identification",
+                  "Configuration control",
+                  "Status accounting",
+                  "Configuration audit"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "p": "Every build is tagged labbook-<major>.<minor>.<patch>+<CI number>; test data sets are named D1, D2… with a version"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "p": "A change to the booking rules needs an approved change request before it is merged into the release branch"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "p": "A dashboard shows which build is on each environment and which change requests are included"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "p": "Before go-live, QA checks that the package on the server contains exactly the components listed in the release notes"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "p": "The Postman collection, its environment file and the seed data are stored in the repository and versioned with the code"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "p": "The change control board rejects a last-minute UI change for release 2.1"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.a": "Configuration identification",
+              "r1.a": "Configuration control",
+              "r2.a": "Status accounting",
+              "r3.a": "Configuration audit",
+              "r4.a": "Configuration identification",
+              "r5.a": "Configuration control"
+            },
+            "giaiThich": "<p>Naming and versioning items = identification; approving changes = control; reporting the state = status accounting; verifying the delivered configuration = audit.</p><p><i>VI: Đặt tên, phiên bản = identification; duyệt thay đổi = control; báo trạng thái = status accounting; kiểm tra cấu hình được giao = audit.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm status accounting với audit."
+        },
+        {
+          "loi": "Cho rằng testware không phải hạng mục cấu hình."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "change control board",
+          "vi": "hội đồng duyệt thay đổi"
+        },
+        {
+          "en": "release notes",
+          "vi": "ghi chú phát hành"
+        }
+      ]
+    },
+    {
+      "title": "Configuration management 3 — Compare two baselines",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "configuration management"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>A <b>baseline</b> is a frozen set of configuration items with their versions, e.g. <code>{ 'booking-service': '2.3.1', 'seed-data': 'D7', 'postman-suite': 'v12' }</code>. When a failure appears on build B but not on build A, the first question is: <i>what changed?</i></p>\n<p>Write <code>diffBaselines(a, b)</code> returning <code>{ added, removed, changed }</code>: <code>added</code> = items only in b, <code>removed</code> = items only in a (both sorted A→Z), <code>changed</code> = <code>[{ item, from, to }]</code> for items whose version differs, sorted by item. Then write <code>sameTestedConfiguration(log, baseline)</code> — <code>log</code> is <code>{ item: version }</code> recorded in a test log: return <code>true</code> only if every item of the log exists in the baseline with exactly that version.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Do not modify the inputs.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Baseline</b> là một tập hạng mục cấu hình đã chốt kèm phiên bản. Khi failure xuất hiện trên build B mà không có trên build A, câu hỏi đầu tiên là: <i>cái gì đã đổi?</i> Viết <code>diffBaselines(a, b)</code> trả <code>{ added, removed, changed }</code> như bản tiếng Anh, và <code>sameTestedConfiguration(log, baseline)</code> trả <code>true</code> chỉ khi mọi hạng mục ghi trong test log có trong baseline với đúng phiên bản đó.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Không sửa đầu vào.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "diffBaselines({ api: '2.3.0', data: 'D7' }, { api: '2.3.1', data: 'D7', mail: '1.0' })",
+          "output": "{ added: ['mail'], removed: [], changed: [{ item: 'api', from: '2.3.0', to: '2.3.1' }] }",
+          "explanation": "api changed, mail is new.|||api đổi, mail mới thêm."
+        }
+      ],
+      "hintsJson": [
+        "Duyệt khoá của a và b; dùng Object.keys và kiểm `in`.",
+        "sameTestedConfiguration: Object.entries(log).every(...)"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "baseline.js",
+          "language": "javascript",
+          "code": "function diffBaselines(a, b) {\n  return { added: [], removed: [], changed: [] };\n}\n\nfunction sameTestedConfiguration(log, baseline) {\n  return true;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "baseline.js",
+          "language": "javascript",
+          "code": "function diffBaselines(a, b) {\n  const added = Object.keys(b).filter((k) => !(k in a)).sort();\n  const removed = Object.keys(a).filter((k) => !(k in b)).sort();\n  const changed = Object.keys(a).filter((k) => k in b && a[k] !== b[k]).sort().map((item) => ({ item, from: a[item], to: b[item] }));\n  return { added, removed, changed };\n}\n\nfunction sameTestedConfiguration(log, baseline) {\n  return Object.entries(log).every(([k, v]) => k in baseline && baseline[k] === v);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Comparing baselines is the everyday use of CM in testing: it narrows the search for the cause of a new failure and proves which configuration a test log refers to.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "baseline.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "diffBaselines — the example",
+              "vi": "diffBaselines — ví dụ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const a=diffBaselines({api:\"2.3.0\",data:\"D7\"},{api:\"2.3.1\",data:\"D7\",mail:\"1.0\"});return JSON.stringify(a)==='{\"added\":[\"mail\"],\"removed\":[],\"changed\":[{\"item\":\"api\",\"from\":\"2.3.0\",\"to\":\"2.3.1\"}]}'?\"OK\":\"got \"+JSON.stringify(a)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "diffBaselines — removed and several changes, sorted",
+              "vi": "diffBaselines — bị xoá và nhiều thay đổi, đã sắp"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const o=diffBaselines({z:\"1\",b:\"1\",a:\"1\",old:\"x\"},{z:\"2\",b:\"1\",a:\"3\"});return JSON.stringify(o)==='{\"added\":[],\"removed\":[\"old\"],\"changed\":[{\"item\":\"a\",\"from\":\"1\",\"to\":\"3\"},{\"item\":\"z\",\"from\":\"1\",\"to\":\"2\"}]}'?\"OK\":\"got \"+JSON.stringify(o)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "sameTestedConfiguration — match and version mismatch",
+              "vi": "sameTestedConfiguration — khớp và lệch phiên bản"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const e={api:\"2.3.1\",data:\"D7\",suite:\"v12\"};return sameTestedConfiguration({api:\"2.3.1\",data:\"D7\"},e)===!0&&sameTestedConfiguration({api:\"2.3.0\"},e)===!1?\"OK\":\"expected true then false\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "sameTestedConfiguration — item missing from the baseline",
+              "vi": "sameTestedConfiguration — hạng mục không có trong baseline"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>sameTestedConfiguration({mail:\"1.0\"},{api:\"2.3.1\"})===!1?\"OK\":\"an item that is not in the baseline cannot match\")))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "identical baselines ⇒ nothing changed",
+              "vi": "baseline giống hệt ⇒ không đổi gì"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const e=diffBaselines({a:\"1\"},{a:\"1\"});return JSON.stringify(e)==='{\"added\":[],\"removed\":[],\"changed\":[]}'?\"OK\":\"got \"+JSON.stringify(e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên sắp kết quả."
+        },
+        {
+          "loi": "Coi hạng mục có trong log mà không có trong baseline là khớp."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "baseline",
+          "vi": "mốc cấu hình đã chốt"
+        },
+        {
+          "en": "test log",
+          "vi": "nhật ký chạy test"
+        }
+      ]
+    },
+    {
+      "title": "Configuration management 4 — What belongs under CM?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "configuration management"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>The 2023 deck asks what is — and is not — put under CM in testing. Decide for each LabBook item.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bộ slide 2023 hỏi cái gì được — và không cần — đặt dưới CM trong kiểm thử. Quyết định cho từng hạng mục LabBook.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Hỏi: thiếu nó thì có chạy lại được test y hệt không?",
+        "Môi trường test cũng là cấu hình."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Configuration management 4 — What belongs under CM?\n\nAnswer in the answer panel (no code needed).\n\n1. Item → CM?Hạng mục → CM?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Configuration management 4 — What belongs under CM? — answer key\n\n1. Item → CM?Hạng mục → CM?\n   - r0.c: Under configuration management\n   - r1.c: Under configuration management\n   - r2.c: Under configuration management\n   - r3.c: Under configuration management\n   - r4.c: Not needed under CM\n   - r5.c: Under configuration management\n   - r6.c: Not needed under CM\n   Everything needed to repeat a test exactly — cases, data, expected results, environment set-up, automated tests — is testware under CM. Personal scratch notes and unrelated items are not.VI: Mọi thứ cần để chạy lại một test y hệt — case, dữ liệu, kết quả mong đợi, cách dựng môi trường, test tự động — là testware dưới CM. Ghi chú nháp cá nhân và thứ không liên quan thì không.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>CM · CM · CM · CM · Not · CM · Not.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Item → CM?</p><p style=\"opacity:.75;font-size:.92em\"><i>Hạng mục → CM?</i></p>",
+            "cot": [
+              {
+                "ma": "i",
+                "ten": "Item"
+              },
+              {
+                "ma": "c",
+                "ten": "Decision",
+                "luaChon": [
+                  "Under configuration management",
+                  "Not needed under CM"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "i": "The system test cases of release 2.1"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "i": "The seed data set D7 used by the regression suite"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "i": "The Docker file that builds the test environment"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "i": "The expected results of the refund tests"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "i": "A tester’s scratch notes made while thinking about a charter"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "i": "The JUnit tests of BookingService"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "i": "The coffee machine schedule of the test room"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.c": "Under configuration management",
+              "r1.c": "Under configuration management",
+              "r2.c": "Under configuration management",
+              "r3.c": "Under configuration management",
+              "r4.c": "Not needed under CM",
+              "r5.c": "Under configuration management",
+              "r6.c": "Not needed under CM"
+            },
+            "giaiThich": "<p>Everything needed to repeat a test exactly — cases, data, expected results, environment set-up, automated tests — is testware under CM. Personal scratch notes and unrelated items are not.</p><p><i>VI: Mọi thứ cần để chạy lại một test y hệt — case, dữ liệu, kết quả mong đợi, cách dựng môi trường, test tự động — là testware dưới CM. Ghi chú nháp cá nhân và thứ không liên quan thì không.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Bỏ môi trường test ra khỏi CM."
+        },
+        {
+          "loi": "Đưa ghi chú nháp cá nhân vào CM (phiếu phiên đã nộp thì khác — nó là sản phẩm)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "testware",
+          "vi": "mọi sản phẩm của việc test"
+        }
+      ]
+    }
+  ]
+}

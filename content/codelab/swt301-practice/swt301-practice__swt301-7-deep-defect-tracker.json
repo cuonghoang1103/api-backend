@@ -1,0 +1,337 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-7-deep-defect-tracker",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-bug-lifecycle"
+  },
+  "exercises": [
+    {
+      "title": "Deep Lab 7 — Build the Core of a Defect-Tracking Tool",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 120,
+      "points": 100,
+      "concepts": [
+        "defect management",
+        "defect lifecycle",
+        "test management tools"
+      ],
+      "prerequisites": [
+        "SWT301 lesson 7.6",
+        "JavaScript classes"
+      ],
+      "tags": [
+        "swt301",
+        "deep-lab",
+        "defect-management"
+      ],
+      "problemHtml": "<h1>Deep Lab 7 — Build the Core of a Defect-Tracking Tool</h1>\n<p class=\"bi-phu\">Chapter 7 deep lab · defect lifecycle with role permissions, duplicates, audit trail and metrics · 10 marks</p>\n<h2>1. Overview</h2>\n<p>Jira, Azure DevOps or CT Work enforce the defect lifecycle so that nobody closes a defect that was never repaired and every change is traceable. Build that core as <code>class DefectTracker</code>:</p>\n<pre>new DefectTracker(clock)            // clock() returns the current day number (default () =&gt; 0)\nreport({ title, component, severity, reporter })  → 'D-1', 'D-2', …\nact(id, event, actor)               → the new status          actor = { name, role: 'lead' | 'developer' | 'tester' }\nsetPriority(id, priority, actor)    → priority ('P1'…'P4')\nget(id)                             → a COPY of the defect, or null\nmetrics()                           → { total, open, byStatus, openBySeverity, avgCycleDays, reopenRate }</pre>\n<ul>\n<li><b>report</b>: severity ∈ Critical · Major · Minor · Trivial (else <code>INVALID_SEVERITY</code>); title and component required (else <code>INVALID_REPORT</code>); if a defect that is neither Closed nor Rejected has the same component and the same title (ignoring case, surrounding spaces and repeated spaces), throw <code>'DUPLICATE ' + its id</code>. A new defect is <code>New</code>, priority <code>null</code>, reopenCount 0, history <code>[{ event: 'report', from: null, to: 'New', by: reporter, at: clock() }]</code>.</li>\n<li><b>act</b>: transitions as lesson 7.6 (accept, reject, defer, reconsider, repair, pass, fail, reappear). Roles: <b>lead</b> accept/reject/defer/reconsider, <b>developer</b> repair, <b>tester</b> pass/fail/reappear. Errors, checked in this order: <code>NOT_FOUND</code>, <code>FORBIDDEN</code>, <code>INVALID_TRANSITION</code>. Each success appends <code>{ event, from, to, by: actor.name, at: clock() }</code>; reaching <code>Reopened</code> increments reopenCount.</li>\n<li><b>setPriority</b>: <code>NOT_FOUND</code>, then lead only (<code>FORBIDDEN</code>), then P1–P4 (<code>INVALID_PRIORITY</code>); appends <code>{ event: 'priority', from: old, to: new, by, at }</code>.</li>\n<li><b>metrics</b>: open = not Closed and not Rejected; byStatus counts only statuses present; openBySeverity has all four keys; avgCycleDays = mean over Closed defects of (time of the LAST transition to Closed − time of report), 1 decimal, null if none; reopenRate = % of non-rejected defects with reopenCount &gt; 0, 1 decimal, 0 if none.</li>\n<li>Refused actions must change nothing.</li></ul>\n<h3>Main features</h3>\n<ul>\n  <li>f1 Reporting and duplicate detection.</li>\n  <li>f2 Lifecycle with role permissions and error order.</li>\n  <li>f3 Priority, audit trail, safe copies.</li>\n  <li>f4 Metrics.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>Hidden checks combine many actions — a refused action must leave the defect exactly as it was.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>src/\n└── defect-tracker.js   ← class DefectTracker</pre>\n<h2>3. Data model</h2>\n<p><b>Roles and events</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>lead</code></td><td>role</td><td>accept · reject · defer · reconsider · setPriority</td></tr><tr><td><code>developer</code></td><td>role</td><td>repair</td></tr><tr><td><code>tester</code></td><td>role</td><td>report · pass · fail · reappear</td></tr></tbody></table>\n<h2>4. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. f1 Reporting <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Ids, validation, duplicates.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">defect report</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. f2 Lifecycle <span class=\"bi-diem\">3 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Transitions, roles, errors.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">defect lifecycle</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. f3 Priority and history <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Lead-only priority, audit trail, copies.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">traceability</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. f4 Metrics <span class=\"bi-diem\">3 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Open counts, cycle time, reopen rate.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">defect metrics</span></p>\n</div>\n<h2>5. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>class DefectTracker</code></td><td>src/defect-tracker.js</td></tr></tbody></table>\n<h2>6. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>f1 Reporting</td><td>2</td></tr><tr><td>2</td><td>f2 Lifecycle</td><td>3</td></tr><tr><td>3</td><td>f3 Priority and history</td><td>2</td></tr><tr><td>4</td><td>f4 Metrics</td><td>3</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Checking the transition before the role — a tester then learns about states she is not allowed to change.</li>\n  <li>Returning the internal object from get() — any caller can then corrupt the audit trail.</li>\n</ul>\n<h2>7. Submission</h2>\n<p>Write your answers in the answer files on the right (they mirror the official template: one JavaScript object per test case / issue). Press <b>Run</b> for the visible checks and <b>Submit</b> for full grading, hidden checks included. Your score per question appears in the rubric table.</p>",
+      "problemHtmlVi": "<h1>Deep Lab 7 — Build the Core of a Defect-Tracking Tool</h1>\n<p class=\"bi-phu\">Deep Lab chương 7 · vòng đời lỗi có phân quyền, chống trùng, nhật ký và số liệu · 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p>Jira, Azure DevOps hay CT Work ép vòng đời lỗi để không ai đóng được lỗi chưa từng được sửa và mọi thay đổi đều truy vết được. Dựng lõi đó thành <code>class DefectTracker</code> với API và luật như bản tiếng Anh: báo lỗi kèm kiểm severity và chống trùng (không phân biệt hoa thường, khoảng trắng), chuyển trạng thái theo bài 7.6 với phân quyền theo vai trò (lead/developer/tester) và thứ tự lỗi NOT_FOUND → FORBIDDEN → INVALID_TRANSITION, priority chỉ lead đặt, lịch sử ghi ai/khi nào, get trả bản sao, số liệu (mở, theo trạng thái, theo mức, thời gian chu trình, tỉ lệ mở lại). Hành động bị từ chối không được thay đổi gì.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>f1 Báo lỗi và chống trùng.</li>\n  <li>f2 Vòng đời có phân quyền và thứ tự lỗi.</li>\n  <li>f3 Priority, nhật ký, bản sao an toàn.</li>\n  <li>f4 Số liệu.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Kiểm ẩn kết hợp nhiều thao tác — hành động bị từ chối phải để lỗi y như cũ.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>src/\n└── defect-tracker.js   ← class DefectTracker</pre>\n<h2>3. Mô hình dữ liệu</h2>\n<p><b>Roles and events</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>lead</code></td><td>role</td><td>accept · reject · defer · reconsider · setPriority</td></tr><tr><td><code>developer</code></td><td>role</td><td>repair</td></tr><tr><td><code>tester</code></td><td>role</td><td>report · pass · fail · reappear</td></tr></tbody></table>\n<h2>4. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. f1 Báo lỗi <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Mã, kiểm hợp lệ, chống trùng.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">defect report</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. f2 Vòng đời <span class=\"bi-diem\">3 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Chuyển trạng thái, vai trò, lỗi.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">defect lifecycle</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. f3 Priority và lịch sử <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Priority chỉ lead, nhật ký, bản sao.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">traceability</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. f4 Số liệu <span class=\"bi-diem\">3 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Số lỗi mở, thời gian chu trình, tỉ lệ mở lại.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">defect metrics</span></p>\n</div>\n<h2>5. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>class DefectTracker</code></td><td>src/defect-tracker.js</td></tr></tbody></table>\n<h2>6. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>f1 Báo lỗi</td><td>2</td></tr><tr><td>2</td><td>f2 Vòng đời</td><td>3</td></tr><tr><td>3</td><td>f3 Priority và lịch sử</td><td>2</td></tr><tr><td>4</td><td>f4 Số liệu</td><td>3</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Kiểm chuyển trạng thái trước vai trò — tester biết được trạng thái mình không được đổi.</li>\n  <li>get() trả đối tượng bên trong — ai cũng có thể làm hỏng nhật ký.</li>\n</ul>\n<h2>7. Nộp bài</h2>\n<p>Viết câu trả lời vào các tệp bên phải (giống template chính thức: mỗi test case / lỗi là một object JavaScript). Bấm <b>Chạy thử</b> để chạy kiểm hiện, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn). Điểm từng câu hiện trong bảng thang điểm.</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "Hidden checks combine many actions — a refused action must leave the defect exactly as it was.|||Kiểm ẩn kết hợp nhiều thao tác — hành động bị từ chối phải để lỗi y như cũ.",
+      "examplesJson": [
+        {
+          "input": "T.report({...}); T.act('D-1', 'accept', lead); T.act('D-1', 'repair', dev); T.act('D-1', 'pass', tester)",
+          "output": "'Open' → 'Fixed' → 'Closed'",
+          "explanation": "The happy path, each step by the right role.|||Đường chính, mỗi bước đúng vai trò."
+        }
+      ],
+      "hintsJson": [
+        "Bảng TRANSITIONS như bài 7.6 + bảng ROLE_OF[event].",
+        "act: tìm lỗi (NOT_FOUND) → kiểm vai trò (FORBIDDEN) → tra bảng (INVALID_TRANSITION) → ghi lịch sử → đổi trạng thái.",
+        "get: JSON.parse(JSON.stringify(d)) là bản sao sâu đủ dùng.",
+        "avgCycleDays: lần chuyển tới Closed CUỐI CÙNG trừ thời điểm báo."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/defect-tracker.js",
+          "language": "javascript",
+          "code": "// Deep Lab 7 — implement the DefectTracker described on the left.\nclass DefectTracker {\n  constructor(clock) {\n    this.clock = clock || (() => 0);\n  }\n  report(defect) { return 'D-1'; }\n  act(id, event, actor) { return 'Open'; }\n  setPriority(id, priority, actor) { return priority; }\n  get(id) { return null; }\n  metrics() { return { total: 0, open: 0, byStatus: {}, openBySeverity: { Critical: 0, Major: 0, Minor: 0, Trivial: 0 }, avgCycleDays: null, reopenRate: 0 }; }\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/defect-tracker.js",
+          "language": "javascript",
+          "code": "// Deep Lab 7 — the core of a defect-tracking tool.\nconst SEVERITIES = ['Critical', 'Major', 'Minor', 'Trivial'];\nconst PRIORITIES = ['P1', 'P2', 'P3', 'P4'];\nconst TRANSITIONS = {\n  New: { accept: 'Open', reject: 'Rejected' },\n  Open: { defer: 'Deferred', repair: 'Fixed' },\n  Deferred: { reconsider: 'Open' },\n  Fixed: { pass: 'Closed', fail: 'Reopened' },\n  Reopened: { repair: 'Fixed' },\n  Closed: { reappear: 'Reopened' },\n  Rejected: {},\n};\nconst ROLE_OF = { accept: 'lead', reject: 'lead', defer: 'lead', reconsider: 'lead', repair: 'developer', pass: 'tester', fail: 'tester', reappear: 'tester' };\nconst norm = (s) => String(s).trim().toLowerCase().replace(/\\s+/g, ' ');\nconst isOpen = (d) => d.status !== 'Closed' && d.status !== 'Rejected';\nconst r1 = (x) => Math.round(x * 10) / 10;\n\nclass DefectTracker {\n  constructor(clock) {\n    this.clock = clock || (() => 0);\n    this.items = [];\n    this.next = 1;\n  }\n\n  report({ title, component, severity, reporter } = {}) {\n    if (!String(title || '').trim() || !String(component || '').trim()) throw new Error('INVALID_REPORT');\n    if (!SEVERITIES.includes(severity)) throw new Error('INVALID_SEVERITY');\n    const dup = this.items.find((d) => isOpen(d) && d.component === component && norm(d.title) === norm(title));\n    if (dup) throw new Error('DUPLICATE ' + dup.id);\n    const id = 'D-' + this.next++;\n    this.items.push({\n      id, title: String(title).trim(), component, severity, priority: null, status: 'New', reopenCount: 0,\n      history: [{ event: 'report', from: null, to: 'New', by: reporter, at: this.clock() }],\n    });\n    return id;\n  }\n\n  find(id) {\n    const d = this.items.find((x) => x.id === id);\n    if (!d) throw new Error('NOT_FOUND');\n    return d;\n  }\n\n  act(id, event, actor) {\n    const d = this.find(id);\n    if (!actor || ROLE_OF[event] !== actor.role) throw new Error('FORBIDDEN');\n    const to = TRANSITIONS[d.status][event];\n    if (!to) throw new Error('INVALID_TRANSITION');\n    d.history.push({ event, from: d.status, to, by: actor.name, at: this.clock() });\n    if (to === 'Reopened') d.reopenCount++;\n    d.status = to;\n    return to;\n  }\n\n  setPriority(id, priority, actor) {\n    const d = this.find(id);\n    if (!actor || actor.role !== 'lead') throw new Error('FORBIDDEN');\n    if (!PRIORITIES.includes(priority)) throw new Error('INVALID_PRIORITY');\n    d.history.push({ event: 'priority', from: d.priority, to: priority, by: actor.name, at: this.clock() });\n    d.priority = priority;\n    return priority;\n  }\n\n  get(id) {\n    const d = this.items.find((x) => x.id === id);\n    return d ? JSON.parse(JSON.stringify(d)) : null;\n  }\n\n  metrics() {\n    const byStatus = {};\n    const openBySeverity = { Critical: 0, Major: 0, Minor: 0, Trivial: 0 };\n    let open = 0, closedN = 0, cycle = 0, nonRejected = 0, reopened = 0;\n    for (const d of this.items) {\n      byStatus[d.status] = (byStatus[d.status] || 0) + 1;\n      if (isOpen(d)) { open++; openBySeverity[d.severity]++; }\n      if (d.status === 'Closed') {\n        const last = d.history.filter((h) => h.to === 'Closed').pop();\n        closedN++;\n        cycle += last.at - d.history[0].at;\n      }\n      if (d.status !== 'Rejected') { nonRejected++; if (d.reopenCount > 0) reopened++; }\n    }\n    return {\n      total: this.items.length,\n      open,\n      byStatus,\n      openBySeverity,\n      avgCycleDays: closedN ? r1(cycle / closedN) : null,\n      reopenRate: nonRejected ? r1((reopened / nonRejected) * 100) : 0,\n    };\n  }\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Two tables (transitions and role per event) plus a strict order of checks make the lifecycle safe; the audit trail and the copies returned by get() make it traceable; metrics come straight from the history.</p>",
+      "solutionExplanationHtmlVi": "<p>Hai bảng (chuyển trạng thái và vai trò của từng sự kiện) cộng thứ tự kiểm chặt chẽ làm vòng đời an toàn; nhật ký và bản sao từ get() làm nó truy vết được; số liệu lấy thẳng từ lịch sử.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "src/defect-tracker.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "f1 — report returns D-1, D-2… and the defect starts New without priority",
+              "vi": "f1 — report trả D-1, D-2… và lỗi bắt đầu ở New, chưa có priority"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){let i=0;const n=new DefectTracker(()=>i),a={name:\"Lan\",role:\"lead\"},c={name:\"Duc\",role:\"developer\"},g={name:\"Quynh\",role:\"tester\"},l=u=>{try{return u(),null}catch(o){return o&&o.message}},t=n.report({title:\"Booking 500 on LAB02\",component:\"booking\",severity:\"Major\",reporter:\"Quynh\"}),r=n.report({title:\"Typo on login page\",component:\"ui\",severity:\"Minor\",reporter:\"Quynh\"}),e=n.get(t);return t!==\"D-1\"||r!==\"D-2\"?\"ids must be D-1, D-2 \\u2014 got \"+t+\", \"+r:e?e.status===\"New\"&&e.priority===null&&e.reopenCount===0?\"OK\":\"got \"+JSON.stringify(e):\"get(D-1) returned nothing\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "f1 — invalid severity and missing fields are refused",
+              "vi": "f1 — từ chối severity sai và thiếu trường"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){let c=0;const e=new DefectTracker(()=>c),l={name:\"Lan\",role:\"lead\"},u={name:\"Duc\",role:\"developer\"},i={name:\"Quynh\",role:\"tester\"},r=a=>{try{return a(),null}catch(n){return n&&n.message}},o=r(()=>e.report({title:\"x crash\",component:\"booking\",severity:\"Blocker\",reporter:\"Q\"})),t=r(()=>e.report({title:\"  \",component:\"booking\",severity:\"Major\",reporter:\"Q\"}));return o===\"INVALID_SEVERITY\"&&t===\"INVALID_REPORT\"?\"OK\":\"got \"+o+\" and \"+t})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "f1 — a duplicate of an open defect is refused with its id",
+              "vi": "f1 — trùng với lỗi đang mở bị từ chối kèm mã"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){let r=0;const e=new DefectTracker(()=>r),l={name:\"Lan\",role:\"lead\"},i={name:\"Duc\",role:\"developer\"},s={name:\"Quynh\",role:\"tester\"},t=c=>{try{return c(),null}catch(n){return n&&n.message}};e.report({title:\"Booking 500 on LAB02\",component:\"booking\",severity:\"Major\",reporter:\"Quynh\"});const o=t(()=>e.report({title:\"  booking 500   on lab02 \",component:\"booking\",severity:\"Critical\",reporter:\"An\"}));return o===\"DUPLICATE D-1\"?\"OK\":'expected \"DUPLICATE D-1\", got '+o})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "f1 — same title in another component, or after the first was closed/rejected, is not a duplicate",
+              "vi": "f1 — cùng tiêu đề ở thành phần khác, hoặc khi lỗi cũ đã đóng/từ chối, không phải trùng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){let t=0;const e=new DefectTracker(()=>t),c={name:\"Lan\",role:\"lead\"},s={name:\"Duc\",role:\"developer\"},l={name:\"Quynh\",role:\"tester\"},p=a=>{try{return a(),null}catch(n){return n&&n.message}};e.report({title:\"Booking 500 on LAB02\",component:\"booking\",severity:\"Major\",reporter:\"Quynh\"});const o=e.report({title:\"Booking 500 on LAB02\",component:\"api\",severity:\"Major\",reporter:\"Quynh\"});e.act(\"D-1\",\"reject\",c);const r=e.report({title:\"Booking 500 on LAB02\",component:\"booking\",severity:\"Major\",reporter:\"Quynh\"});return o===\"D-2\"&&r===\"D-3\"?\"OK\":\"got \"+o+\", \"+r})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "f2 — the happy path New → Open → Fixed → Closed with the right roles",
+              "vi": "f2 — đường chính New → Open → Fixed → Closed với đúng vai trò"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){let o=0;const e=new DefectTracker(()=>o),r={name:\"Lan\",role:\"lead\"},a={name:\"Duc\",role:\"developer\"},c={name:\"Quynh\",role:\"tester\"},u=s=>{try{return s(),null}catch(t){return t&&t.message}};e.report({title:\"Booking 500 on LAB02\",component:\"booking\",severity:\"Major\",reporter:\"Quynh\"});const n=[e.act(\"D-1\",\"accept\",r),e.act(\"D-1\",\"repair\",a),e.act(\"D-1\",\"pass\",c)];return n.join(\">\")===\"Open>Fixed>Closed\"&&e.get(\"D-1\").status===\"Closed\"?\"OK\":\"got \"+n.join(\">\")})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "f2 — wrong role is FORBIDDEN",
+              "vi": "f2 — sai vai trò bị FORBIDDEN"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){let s=0;const e=new DefectTracker(()=>s),l={name:\"Lan\",role:\"lead\"},n={name:\"Duc\",role:\"developer\"},r={name:\"Quynh\",role:\"tester\"},t=p=>{try{return p(),null}catch(D){return D&&D.message}};e.report({title:\"Booking 500 on LAB02\",component:\"booking\",severity:\"Major\",reporter:\"Quynh\"});const o=t(()=>e.act(\"D-1\",\"accept\",r));e.act(\"D-1\",\"accept\",l);const c=t(()=>e.act(\"D-1\",\"repair\",r));e.act(\"D-1\",\"repair\",n);const a=t(()=>e.act(\"D-1\",\"pass\",n));return o===\"FORBIDDEN\"&&c===\"FORBIDDEN\"&&a===\"FORBIDDEN\"?\"OK\":\"got \"+[o,c,a].join(\", \")})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "f2 — an event not allowed in the state is INVALID_TRANSITION",
+              "vi": "f2 — sự kiện không hợp lệ ở trạng thái là INVALID_TRANSITION"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){let a=0;const e=new DefectTracker(()=>a),I={name:\"Lan\",role:\"lead\"},c={name:\"Duc\",role:\"developer\"},s={name:\"Quynh\",role:\"tester\"},n=l=>{try{return l(),null}catch(t){return t&&t.message}};e.report({title:\"Booking 500 on LAB02\",component:\"booking\",severity:\"Major\",reporter:\"Quynh\"});const r=n(()=>e.act(\"D-1\",\"repair\",c)),o=n(()=>e.act(\"D-1\",\"pass\",s));return r===\"INVALID_TRANSITION\"&&o===\"INVALID_TRANSITION\"?\"OK\":\"got \"+r+\", \"+o})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "f2 — unknown id is NOT_FOUND (checked before the role)",
+              "vi": "f2 — mã lạ là NOT_FOUND (kiểm trước vai trò)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){let a=0;const e=new DefectTracker(()=>a),u={name:\"Lan\",role:\"lead\"},D={name:\"Duc\",role:\"developer\"},n={name:\"Quynh\",role:\"tester\"},t=s=>{try{return s(),null}catch(c){return c&&c.message}},r=t(()=>e.act(\"D-9\",\"accept\",n)),o=t(()=>e.setPriority(\"D-9\",\"P1\",n));return r===\"NOT_FOUND\"&&o===\"NOT_FOUND\"?\"OK\":\"got \"+r+\", \"+o})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "f2 — fail and reappear reopen the defect and count it",
+              "vi": "f2 — fail và reappear mở lại lỗi và được đếm"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){let a=0;const e=new DefectTracker(()=>a),c={name:\"Lan\",role:\"lead\"},r={name:\"Duc\",role:\"developer\"},n={name:\"Quynh\",role:\"tester\"},p=s=>{try{return s(),null}catch(o){return o&&o.message}};e.report({title:\"Booking 500 on LAB02\",component:\"booking\",severity:\"Major\",reporter:\"Quynh\"}),e.act(\"D-1\",\"accept\",c),e.act(\"D-1\",\"repair\",r),e.act(\"D-1\",\"fail\",n),e.act(\"D-1\",\"repair\",r),e.act(\"D-1\",\"pass\",n),e.act(\"D-1\",\"reappear\",n);const t=e.get(\"D-1\");return t.status===\"Reopened\"&&t.reopenCount===2?\"OK\":\"got status \"+t.status+\", reopenCount \"+t.reopenCount})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "f2 — the role is checked before the transition",
+              "vi": "f2 — kiểm vai trò trước khi kiểm chuyển trạng thái"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){let t=0;const e=new DefectTracker(()=>t),l={name:\"Lan\",role:\"lead\"},o={name:\"Duc\",role:\"developer\"},u={name:\"Quynh\",role:\"tester\"},a=s=>{try{return s(),null}catch(r){return r&&r.message}};e.report({title:\"Booking 500 on LAB02\",component:\"booking\",severity:\"Major\",reporter:\"Quynh\"});const n=a(()=>e.act(\"D-1\",\"pass\",o));return n===\"FORBIDDEN\"?\"OK\":\"a developer passing a New defect must give FORBIDDEN first, got \"+n})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "f2 — Rejected is final; Deferred can be reconsidered",
+              "vi": "f2 — Rejected là cuối; Deferred xem lại được"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){let c=0;const e=new DefectTracker(()=>c),t={name:\"Lan\",role:\"lead\"},i={name:\"Duc\",role:\"developer\"},l={name:\"Quynh\",role:\"tester\"},a=s=>{try{return s(),null}catch(o){return o&&o.message}};e.report({title:\"Booking 500 on LAB02\",component:\"booking\",severity:\"Major\",reporter:\"Quynh\"}),e.report({title:\"Other\",component:\"ui\",severity:\"Minor\",reporter:\"Quynh\"}),e.act(\"D-1\",\"reject\",t);const r=a(()=>e.act(\"D-1\",\"accept\",t));e.act(\"D-2\",\"accept\",t),e.act(\"D-2\",\"defer\",t);const n=e.act(\"D-2\",\"reconsider\",t);return r===\"INVALID_TRANSITION\"&&n===\"Open\"?\"OK\":\"got \"+r+\", \"+n})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "f3 — only the lead sets a priority P1–P4",
+              "vi": "f3 — chỉ lead đặt priority P1–P4"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){let s=0;const e=new DefectTracker(()=>s),r={name:\"Lan\",role:\"lead\"},a={name:\"Duc\",role:\"developer\"},l={name:\"Quynh\",role:\"tester\"},t=y=>{try{return y(),null}catch(i){return i&&i.message}};e.report({title:\"Booking 500 on LAB02\",component:\"booking\",severity:\"Major\",reporter:\"Quynh\"});const o=t(()=>e.setPriority(\"D-1\",\"P1\",a)),n=t(()=>e.setPriority(\"D-1\",\"P0\",r)),c=e.setPriority(\"D-1\",\"P2\",r);return o===\"FORBIDDEN\"&&n===\"INVALID_PRIORITY\"&&c===\"P2\"&&e.get(\"D-1\").priority===\"P2\"?\"OK\":\"got \"+[o,n,c].join(\", \")})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "f3 — the history records every change with who and when",
+              "vi": "f3 — lịch sử ghi mọi thay đổi kèm ai và khi nào"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){let t=0;const e=new DefectTracker(()=>t),n={name:\"Lan\",role:\"lead\"},y={name:\"Duc\",role:\"developer\"},s={name:\"Quynh\",role:\"tester\"},l=c=>{try{return c(),null}catch(o){return o&&o.message}};e.report({title:\"Booking 500 on LAB02\",component:\"booking\",severity:\"Major\",reporter:\"Quynh\"}),t=2,e.act(\"D-1\",\"accept\",n),t=3,e.setPriority(\"D-1\",\"P1\",n);const r=e.get(\"D-1\").history,a=[{event:\"report\",from:null,to:\"New\",by:\"Quynh\",at:0},{event:\"accept\",from:\"New\",to:\"Open\",by:\"Lan\",at:2},{event:\"priority\",from:null,to:\"P1\",by:\"Lan\",at:3}];return JSON.stringify(r)===JSON.stringify(a)?\"OK\":\"got \"+JSON.stringify(r)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "f3 — a refused action leaves no trace",
+              "vi": "f3 — hành động bị từ chối không để lại dấu vết"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){let o=0;const e=new DefectTracker(()=>o),a={name:\"Lan\",role:\"lead\"},c={name:\"Duc\",role:\"developer\"},s={name:\"Quynh\",role:\"tester\"},r=i=>{try{return i(),null}catch(n){return n&&n.message}};e.report({title:\"Booking 500 on LAB02\",component:\"booking\",severity:\"Major\",reporter:\"Quynh\"}),r(()=>e.act(\"D-1\",\"repair\",c)),r(()=>e.act(\"D-1\",\"accept\",s)),r(()=>e.setPriority(\"D-1\",\"P7\",a));const t=e.get(\"D-1\");return t.history.length===1&&t.status===\"New\"&&t.priority===null?\"OK\":\"refused actions changed the defect: \"+JSON.stringify(t)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "f3 — get returns a copy; unknown id gives null",
+              "vi": "f3 — get trả bản sao; mã lạ trả null"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){let r=0;const e=new DefectTracker(()=>r),c={name:\"Lan\",role:\"lead\"},u={name:\"Duc\",role:\"developer\"},l={name:\"Quynh\",role:\"tester\"},g=s=>{try{return s(),null}catch(o){return o&&o.message}};e.report({title:\"Booking 500 on LAB02\",component:\"booking\",severity:\"Major\",reporter:\"Quynh\"});const t=e.get(\"D-1\");t.status=\"Closed\",t.history.push({});const n=e.get(\"D-1\");return n.status===\"New\"&&n.history.length===1&&e.get(\"D-7\")===null?\"OK\":\"changing the object returned by get() changed the tracker, or get(unknown) is not null\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "f4 — metrics: total, open, byStatus, openBySeverity",
+              "vi": "f4 — số liệu: tổng, mở, theo trạng thái, theo mức"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){let o=0;const e=new DefectTracker(()=>o),r={name:\"Lan\",role:\"lead\"},i={name:\"Duc\",role:\"developer\"},a={name:\"Quynh\",role:\"tester\"},l=c=>{try{return c(),null}catch(n){return n&&n.message}};e.report({title:\"Booking 500 on LAB02\",component:\"booking\",severity:\"Critical\",reporter:\"Quynh\"}),e.report({title:\"Typo\",component:\"ui\",severity:\"Minor\",reporter:\"Quynh\"}),e.report({title:\"Slow list\",component:\"labs\",severity:\"Major\",reporter:\"Quynh\"}),e.act(\"D-2\",\"reject\",r),e.act(\"D-3\",\"accept\",r),e.act(\"D-3\",\"repair\",i),e.act(\"D-3\",\"pass\",a);const t=e.metrics();return t.total===3&&t.open===1&&JSON.stringify(t.byStatus)===JSON.stringify({New:1,Rejected:1,Closed:1})&&JSON.stringify(t.openBySeverity)===JSON.stringify({Critical:1,Major:0,Minor:0,Trivial:0})?\"OK\":\"got \"+JSON.stringify(t)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "f4 — avgCycleDays from report to the last closing",
+              "vi": "f4 — avgCycleDays từ lúc báo tới lần đóng cuối"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){let t=0;const e=new DefectTracker(()=>t),r={name:\"Lan\",role:\"lead\"},n={name:\"Duc\",role:\"developer\"},o={name:\"Quynh\",role:\"tester\"},y=s=>{try{return s(),null}catch(c){return c&&c.message}};t=1,e.report({title:\"Booking 500 on LAB02\",component:\"booking\",severity:\"Major\",reporter:\"Quynh\"}),t=2,e.report({title:\"Typo\",component:\"ui\",severity:\"Minor\",reporter:\"Quynh\"}),e.act(\"D-1\",\"accept\",r),e.act(\"D-2\",\"accept\",r),e.act(\"D-1\",\"repair\",n),e.act(\"D-2\",\"repair\",n),t=4,e.act(\"D-1\",\"pass\",o),t=6,e.act(\"D-2\",\"pass\",o);const a=e.metrics();return a.avgCycleDays===3.5?\"OK\":\"expected (3 + 4) / 2 = 3.5, got \"+a.avgCycleDays})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "f4 — reopenRate among non-rejected defects",
+              "vi": "f4 — reopenRate trên các lỗi không bị từ chối"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){let n=0;const e=new DefectTracker(()=>n),r={name:\"Lan\",role:\"lead\"},c={name:\"Duc\",role:\"developer\"},a={name:\"Quynh\",role:\"tester\"},l=p=>{try{return p(),null}catch(o){return o&&o.message}};e.report({title:\"Booking 500 on LAB02\",component:\"booking\",severity:\"Major\",reporter:\"Quynh\"}),e.report({title:\"Typo\",component:\"ui\",severity:\"Minor\",reporter:\"Quynh\"}),e.report({title:\"Old\",component:\"x\",severity:\"Trivial\",reporter:\"Quynh\"}),e.report({title:\"Q\",component:\"y\",severity:\"Major\",reporter:\"Quynh\"}),e.act(\"D-3\",\"reject\",r),e.act(\"D-1\",\"accept\",r),e.act(\"D-1\",\"repair\",c),e.act(\"D-1\",\"fail\",a);const t=e.metrics();return t.reopenRate===33.3?\"OK\":\"expected 1 of 3 = 33.3, got \"+t.reopenRate})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "f4 — empty tracker",
+              "vi": "f4 — chưa có lỗi"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){let t=0;const r=new DefectTracker(()=>t),s={name:\"Lan\",role:\"lead\"},c={name:\"Duc\",role:\"developer\"},l={name:\"Quynh\",role:\"tester\"},u=o=>{try{return o(),null}catch(n){return n&&n.message}},e=r.metrics();return e.total===0&&e.open===0&&e.avgCycleDays===null&&e.reopenRate===0&&JSON.stringify(e.byStatus)===\"{}\"?\"OK\":\"got \"+JSON.stringify(e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "f4 — a reappeared-then-closed defect uses its LAST closing",
+              "vi": "f4 — lỗi quay lại rồi đóng dùng lần đóng CUỐI"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){let r=0;const e=new DefectTracker(()=>r),c={name:\"Lan\",role:\"lead\"},n={name:\"Duc\",role:\"developer\"},t={name:\"Quynh\",role:\"tester\"},i=s=>{try{return s(),null}catch(o){return o&&o.message}};e.report({title:\"Booking 500 on LAB02\",component:\"booking\",severity:\"Major\",reporter:\"Quynh\"}),e.act(\"D-1\",\"accept\",c),e.act(\"D-1\",\"repair\",n),r=2,e.act(\"D-1\",\"pass\",t),r=5,e.act(\"D-1\",\"reappear\",t),e.act(\"D-1\",\"repair\",n),r=9,e.act(\"D-1\",\"pass\",t);const a=e.metrics();return a.avgCycleDays===9&&a.reopenRate===100?\"OK\":\"got \"+JSON.stringify(a)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4",
+            "an": true
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. f1 Reporting",
+            "diem": 2
+          },
+          {
+            "ma": "f2",
+            "ten": "2. f2 Lifecycle",
+            "diem": 3
+          },
+          {
+            "ma": "f3",
+            "ten": "3. f3 Priority and history",
+            "diem": 2
+          },
+          {
+            "ma": "f4",
+            "ten": "4. f4 Metrics",
+            "diem": 3
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "deep-lab",
+      "mistakesJson": [
+        {
+          "loi": "Ghi lịch sử trước khi kiểm hợp lệ — hành động bị từ chối vẫn để lại dấu."
+        },
+        {
+          "loi": "Chống trùng cả với lỗi đã đóng."
+        },
+        {
+          "loi": "Tính reopenRate trên cả lỗi bị từ chối."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "audit trail",
+          "vi": "nhật ký thay đổi truy vết được"
+        },
+        {
+          "en": "permission",
+          "vi": "quyền"
+        },
+        {
+          "en": "cycle time",
+          "vi": "thời gian chu trình — từ lúc báo tới lúc đóng"
+        },
+        {
+          "en": "duplicate",
+          "vi": "báo trùng"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,636 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-test-organisation",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-test-organisation"
+  },
+  "exercises": [
+    {
+      "title": "Organisation 1 — Which level of independence is this?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "independent testing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>SWT5 shows five usual levels of test independence, from low to high. Each sentence describes the typical use, a benefit or a drawback of one level. Name the level.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>SWT5 nêu năm mức độc lập kiểm thử thường gặp, từ thấp tới cao. Mỗi câu mô tả cách dùng điển hình, một lợi ích hay một hạn chế của một mức. Gọi tên mức đó.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Càng xa nhóm phát triển càng độc lập nhưng càng thiếu hiểu biết sản phẩm.",
+        "“Ném qua tường” là nhược điểm của nhóm test tách riêng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Organisation 1 — Which level of independence is this?\n\nAnswer in the answer panel (no code needed).\n\n1. Sentence → levelCâu → mức\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Organisation 1 — Which level of independence is this? — answer key\n\n1. Sentence → levelCâu → mức\n   - r0.l: Developer tests own code\n   - r1.l: Tester inside the development team\n   - r2.l: Independent test team\n   - r3.l: Internal test specialists / consultants\n   - r4.l: Third-party organisation\n   The essentials table of lesson 7.1, row by row.VI: Bảng cốt lõi của bài 7.1, lần lượt từng dòng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Rows 1–5 = levels 1–5.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Sentence → level</p><p style=\"opacity:.75;font-size:.92em\"><i>Câu → mức</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Sentence"
+              },
+              {
+                "ma": "l",
+                "ten": "Level",
+                "luaChon": [
+                  "Developer tests own code",
+                  "Tester inside the development team",
+                  "Independent test team",
+                  "Internal test specialists / consultants",
+                  "Third-party organisation"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Knows the code best and fixes cheaply, but “sees” what he expects to see"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Shares the team’s goal and sits next to the developers in the sprint, but may give in to peer pressure"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Dedicated and objective in system testing, but developers may stop caring about quality (“throw it over the wall”)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "A usability or security expert inside the company: deep expertise, but only influence, not authority"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "An outsourced certification lab: independent of internal politics, but lacks product knowledge and is expensive"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.l": "Developer tests own code",
+              "r1.l": "Tester inside the development team",
+              "r2.l": "Independent test team",
+              "r3.l": "Internal test specialists / consultants",
+              "r4.l": "Third-party organisation"
+            },
+            "giaiThich": "<p>The essentials table of lesson 7.1, row by row.</p><p><i>VI: Bảng cốt lõi của bài 7.1, lần lượt từng dòng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng mức độc lập cao nhất luôn tốt nhất."
+        },
+        {
+          "loi": "Nhầm chuyên gia nội bộ với tổ chức bên thứ ba."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "independent testing",
+          "vi": "kiểm thử độc lập"
+        },
+        {
+          "en": "peer pressure",
+          "vi": "áp lực đồng nghiệp"
+        }
+      ]
+    },
+    {
+      "title": "Organisation 2 — Test manager or tester?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "test roles"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>The test manager plans, monitors and controls testing; the tester analyses, designs, implements and executes tests (LO-5.1.2). Assign each LabBook task.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Test manager lập kế hoạch, giám sát và kiểm soát kiểm thử; tester phân tích, thiết kế, triển khai và thực thi test (LO-5.1.2). Giao từng việc của LabBook.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Việc mang tính tổ chức/quyết định ⇒ test manager.",
+        "Việc chạm trực tiếp vào test case, dữ liệu, script ⇒ tester."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Organisation 2 — Test manager or tester?\n\nAnswer in the answer panel (no code needed).\n\n1. Task → roleViệc → vai trò\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Organisation 2 — Test manager or tester? — answer key\n\n1. Task → roleViệc → vai trò\n   - r0.r: Test manager\n   - r1.r: Tester\n   - r2.r: Test manager\n   - r3.r: Tester\n   - r4.r: Test manager\n   - r5.r: Tester\n   - r6.r: Test manager\n   - r7.r: Tester\n   Policy, strategy, estimation, resources, tools and metrics, reports to stakeholders = test manager; reviewing work products, test design, data, execution, automation = tester.VI: Chính sách, chiến lược, ước lượng, nguồn lực, công cụ và số đo, báo cáo cho các bên = test manager; review sản phẩm, thiết kế test, dữ liệu, thực thi, tự động hoá = tester.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>TM · T · TM · T · TM · T · TM · T.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Task → role</p><p style=\"opacity:.75;font-size:.92em\"><i>Việc → vai trò</i></p>",
+            "cot": [
+              {
+                "ma": "t",
+                "ten": "Task"
+              },
+              {
+                "ma": "r",
+                "ten": "Role",
+                "luaChon": [
+                  "Test manager",
+                  "Tester"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "t": "Write the test policy and strategy for the LabBook programme together with the university"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "t": "Review the booking user stories and contribute to their test conditions"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "t": "Estimate the test effort of release 2.1 and acquire the resources"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "t": "Design boundary tests for the weekly limit and prepare the test data"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "t": "Decide on the introduction of a test-management tool and of metrics"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "t": "Run the regression suite on build 2.1.3 and log the failures"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "t": "Write the test summary report for the go/no-go meeting"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "t": "Automate the smoke tests and keep them running in CI"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.r": "Test manager",
+              "r1.r": "Tester",
+              "r2.r": "Test manager",
+              "r3.r": "Tester",
+              "r4.r": "Test manager",
+              "r5.r": "Tester",
+              "r6.r": "Test manager",
+              "r7.r": "Tester"
+            },
+            "giaiThich": "<p>Policy, strategy, estimation, resources, tools and metrics, reports to stakeholders = test manager; reviewing work products, test design, data, execution, automation = tester.</p><p><i>VI: Chính sách, chiến lược, ước lượng, nguồn lực, công cụ và số đo, báo cáo cho các bên = test manager; review sản phẩm, thiết kế test, dữ liệu, thực thi, tự động hoá = tester.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gán viết test summary report cho tester."
+        },
+        {
+          "loi": "Gán review user story cho test manager — tester đóng góp review."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "test manager / test leader",
+          "vi": "quản lý / trưởng nhóm test"
+        },
+        {
+          "en": "test policy",
+          "vi": "chính sách test của tổ chức"
+        }
+      ]
+    },
+    {
+      "title": "Organisation 3 — Benefits and drawbacks of independent testing (K2)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "independent testing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Mark each statement about independent testers as a <b>benefit</b> or a <b>drawback</b> (syllabus §5.1.1).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đánh dấu mỗi phát biểu về tester độc lập là <b>lợi ích</b> hay <b>hạn chế</b> (syllabus §5.1.1).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Bốn lợi ích, bốn hạn chế trong syllabus — mỗi câu đúng một ý.",
+        "Thiếu thông tin về đối tượng test là cái giá của độc lập."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Organisation 3 — Benefits and drawbacks of independent testing (K2)\n\nAnswer in the answer panel (no code needed).\n\n1. Statement → benefit or drawbackPhát biểu → lợi ích hay hạn chế\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Organisation 3 — Benefits and drawbacks of independent testing (K2) — answer key\n\n1. Statement → benefit or drawbackPhát biểu → lợi ích hay hạn chế\n   - r0.k: Benefit\n   - r1.k: Drawback\n   - r2.k: Benefit\n   - r3.k: Drawback\n   - r4.k: Drawback\n   - r5.k: Benefit\n   - r6.k: Drawback\n   Benefits: different failures, unbiased view, challenging assumptions, honest reporting. Drawbacks: isolation, less developer responsibility, bottleneck/blame, missing information.VI: Lợi ích: thấy failure khác, không thiên kiến, chất vấn giả định, báo cáo trung thực. Hạn chế: cô lập, developer bớt trách nhiệm, thành “nút thắt”/bị đổ lỗi, thiếu thông tin.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>B · D · B · D · D · B · D.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Statement → benefit or drawback</p><p style=\"opacity:.75;font-size:.92em\"><i>Phát biểu → lợi ích hay hạn chế</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Kind",
+                "luaChon": [
+                  "Benefit",
+                  "Drawback"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "They are likely to recognise different kinds of failures because of their different background and perspective"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "They may be isolated from the development team, causing lack of collaboration and delays in feedback"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "They can verify, challenge or disprove assumptions made by stakeholders during specification and implementation"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Developers may lose a sense of responsibility for quality"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Independent testers may be seen as a bottleneck or blamed for delays in release"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Independent testers of a vendor can report upright and objectively without political pressure from the company that hired them"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "They may lack important information, e.g. about the test object"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Benefit",
+              "r1.k": "Drawback",
+              "r2.k": "Benefit",
+              "r3.k": "Drawback",
+              "r4.k": "Drawback",
+              "r5.k": "Benefit",
+              "r6.k": "Drawback"
+            },
+            "giaiThich": "<p>Benefits: different failures, unbiased view, challenging assumptions, honest reporting. Drawbacks: isolation, less developer responsibility, bottleneck/blame, missing information.</p><p><i>VI: Lợi ích: thấy failure khác, không thiên kiến, chất vấn giả định, báo cáo trung thực. Hạn chế: cô lập, developer bớt trách nhiệm, thành “nút thắt”/bị đổ lỗi, thiếu thông tin.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng “developer bớt trách nhiệm” là lợi ích vì tester lo hết."
+        },
+        {
+          "loi": "Cho rằng tester độc lập thì tự động khách quan nên không có hạn chế."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "bottleneck",
+          "vi": "nút thắt cổ chai"
+        }
+      ]
+    },
+    {
+      "title": "Organisation 4 — Exam questions on test organisation",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "test organisation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Five FE-style questions on SWT5 slides 6–24, including the usual choice of independence per test level and the role of a tester in Agile teams.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu kiểu FE về slide SWT5 6–24, gồm lựa chọn mức độc lập thường gặp theo cấp test và vai trò tester trong nhóm Agile.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Mỗi cấp test có mức độc lập thường dùng riêng.",
+        "Vai trò test manager có thể do người có chức danh khác đảm nhận."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Organisation 4 — Exam questions on test organisation\n\nAnswer in the answer panel (no code needed).\n\n1. Who usually performs component testing?Ai thường làm component testing?\n2. In many organisations the role of test manager is performed by…Ở nhiều tổ chức, vai trò test manager do ai đảm nhiệm?\n3. Which is the best mix of independence for a safety-critical product?Mức độc lập nào hợp nhất cho sản phẩm an toàn sống còn?\n4. Which drawback is the “over the wall” effect?Hạn chế nào là hiệu ứng “ném qua tường”?\n5. In an Agile team, which tester task is typical?Trong nhóm Agile, việc nào là điển hình của tester?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Organisation 4 — Exam questions on test organisation — answer key\n\n1. Who usually performs component testing?Ai thường làm component testing?\n   Answer: b) The developers, possibly with a buddy or a tester in the team\n   Low independence fits component testing; system testing typically uses an independent test team; acceptance testing users.VI: Độc lập thấp hợp component testing; system testing thường dùng nhóm test độc lập; acceptance testing do người dùng.\n\n2. In many organisations the role of test manager is performed by…Ở nhiều tổ chức, vai trò test manager do ai đảm nhiệm?\n   Answer: b) a project manager, development manager or quality assurance manager — or, in Agile teams, partly by the team itself\n   The way the role is carried out varies with context.VI: Cách thực hiện vai trò thay đổi theo ngữ cảnh.\n\n3. Which is the best mix of independence for a safety-critical product?Mức độc lập nào hợp nhất cho sản phẩm an toàn sống còn?\n   Answer: b) Several levels: developer testing for components and an independent team or third party for system and acceptance testing\n   Multiple levels of independence are typical; highly independent testing for safety-critical systems.VI: Thường dùng nhiều mức độc lập; mức độc lập cao cho hệ thống an toàn sống còn.\n\n4. Which drawback is the “over the wall” effect?Hạn chế nào là hiệu ứng “ném qua tường”?\n   Answer: b) Developers stop caring about quality because a separate team will test\n   A separate test team can make quality “someone else’s job”.VI: Nhóm test tách riêng dễ khiến chất lượng thành “việc của người khác”.\n\n5. In an Agile team, which tester task is typical?Trong nhóm Agile, việc nào là điển hình của tester?\n   Answer: b) Working with the team on acceptance criteria, automation and exploratory testing in every sprint\n   Much of the test management role is handled by the team; testers work inside it.VI: Phần lớn vai trò quản lý test do cả nhóm đảm nhận; tester làm việc bên trong nhóm.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · b · b · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Who usually performs component testing?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ai thường làm component testing?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A third-party organisation"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The developers, possibly with a buddy or a tester in the team"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The end users"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only the test manager"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Low independence fits component testing; system testing typically uses an independent test team; acceptance testing users.</p><p><i>VI: Độc lập thấp hợp component testing; system testing thường dùng nhóm test độc lập; acceptance testing do người dùng.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>In many organisations the role of test manager is performed by…</p><p style=\"opacity:.75;font-size:.92em\"><i>Ở nhiều tổ chức, vai trò test manager do ai đảm nhiệm?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "only certified testers"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a project manager, development manager or quality assurance manager — or, in Agile teams, partly by the team itself"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the customer"
+              },
+              {
+                "ma": "d",
+                "noiDung": "nobody"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The way the role is carried out varies with context.</p><p><i>VI: Cách thực hiện vai trò thay đổi theo ngữ cảnh.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Which is the best mix of independence for a safety-critical product?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mức độc lập nào hợp nhất cho sản phẩm an toàn sống còn?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Only developers test"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Several levels: developer testing for components and an independent team or third party for system and acceptance testing"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only third-party testing"
+              },
+              {
+                "ma": "d",
+                "noiDung": "No testing"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Multiple levels of independence are typical; highly independent testing for safety-critical systems.</p><p><i>VI: Thường dùng nhiều mức độc lập; mức độc lập cao cho hệ thống an toàn sống còn.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Which drawback is the “over the wall” effect?</p><p style=\"opacity:.75;font-size:.92em\"><i>Hạn chế nào là hiệu ứng “ném qua tường”?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Testers lack product knowledge"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Developers stop caring about quality because a separate team will test"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Tools are expensive"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Reviews take long"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A separate test team can make quality “someone else’s job”.</p><p><i>VI: Nhóm test tách riêng dễ khiến chất lượng thành “việc của người khác”.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>In an Agile team, which tester task is typical?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong nhóm Agile, việc nào là điển hình của tester?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Writing the test policy of the company"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Working with the team on acceptance criteria, automation and exploratory testing in every sprint"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Approving the budget"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Testing only after the release"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Much of the test management role is handled by the team; testers work inside it.</p><p><i>VI: Phần lớn vai trò quản lý test do cả nhóm đảm nhận; tester làm việc bên trong nhóm.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chọn “chỉ bên thứ ba” cho hệ thống an toàn sống còn — thường dùng nhiều mức."
+        },
+        {
+          "loi": "Gán việc viết chính sách test cho tester Agile."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "buddy testing",
+          "vi": "kiểm thử theo cặp bạn — developer test chéo cho nhau"
+        }
+      ]
+    }
+  ]
+}

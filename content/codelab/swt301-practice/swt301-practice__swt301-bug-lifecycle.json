@@ -1,0 +1,743 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-bug-lifecycle",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-bug-lifecycle"
+  },
+  "exercises": [
+    {
+      "title": "Defects 1 — Severity and priority are different things",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "severity vs priority"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p><b>Severity</b> = impact of the failure on the system and stakeholders (usually set by the tester). <b>Priority</b> = urgency to fix (set by the product owner, project manager or triage board). Rate each LabBook defect.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Severity</b> = tác động của failure lên hệ thống và các bên (thường do tester đặt). <b>Priority</b> = độ khẩn cấp phải sửa (do product owner, quản lý dự án hay hội đồng phân loại đặt). Đánh giá từng lỗi của LabBook.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Severity hỏi “hỏng nặng tới đâu?”; priority hỏi “phải sửa gấp tới đâu?”.",
+        "Lỗi chữ trên trang demo cho hiệu trưởng: nhẹ nhưng gấp."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Defects 1 — Severity and priority are different things\n\nAnswer in the answer panel (no code needed).\n\n1. Defect → severity · priorityLỗi → severity · priority\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Defects 1 — Severity and priority are different things — answer key\n\n1. Defect → severity · priorityLỗi → severity · priority\n   - r0.k: High severity · High priority\n   - r1.k: High severity · Low priority\n   - r2.k: Low severity · High priority\n   - r3.k: Low severity · Low priority\n   The classic mismatch examples of SWT5: a crash in an unused feature is severe but not urgent; a misspelled name on a highly visible page is cosmetic but urgent.VI: Ví dụ lệch kinh điển của SWT5: crash ở tính năng chưa ai dùng thì nặng nhưng không gấp; sai tên trên trang ai cũng thấy thì nhẹ nhưng gấp.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>H·H · H·L · L·H · L·L.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Defect → severity · priority</p><p style=\"opacity:.75;font-size:.92em\"><i>Lỗi → severity · priority</i></p>",
+            "cot": [
+              {
+                "ma": "d",
+                "ten": "Defect"
+              },
+              {
+                "ma": "k",
+                "ten": "Rating",
+                "luaChon": [
+                  "High severity · High priority",
+                  "High severity · Low priority",
+                  "Low severity · High priority",
+                  "Low severity · Low priority"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "d": "Booking crashes with HTTP 500 for every student, one day before registration week"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "d": "The hidden “export bookings to XML” feature, not used by anyone yet, crashes the server"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "d": "The university’s name is misspelled on the login page; the rector will demo the system tomorrow"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "d": "A tooltip on the admin statistics page has a grammar mistake"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "High severity · High priority",
+              "r1.k": "High severity · Low priority",
+              "r2.k": "Low severity · High priority",
+              "r3.k": "Low severity · Low priority"
+            },
+            "giaiThich": "<p>The classic mismatch examples of SWT5: a crash in an unused feature is severe but not urgent; a misspelled name on a highly visible page is cosmetic but urgent.</p><p><i>VI: Ví dụ lệch kinh điển của SWT5: crash ở tính năng chưa ai dùng thì nặng nhưng không gấp; sai tên trên trang ai cũng thấy thì nhẹ nhưng gấp.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng severity cao thì priority luôn cao."
+        },
+        {
+          "loi": "Cho rằng tester quyết định priority."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "severity",
+          "vi": "mức nghiêm trọng"
+        },
+        {
+          "en": "priority",
+          "vi": "mức ưu tiên sửa"
+        },
+        {
+          "en": "triage",
+          "vi": "phân loại, sắp ưu tiên lỗi"
+        }
+      ]
+    },
+    {
+      "title": "Defects 2 — Implement the defect lifecycle as a state machine",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 16,
+      "points": 20,
+      "concepts": [
+        "defect lifecycle"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>The defect lifecycle of SWT5 (simplified):</p><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 640 230\" width=\"100%\" style=\"max-width:640px;display:block;margin:8px auto\" role=\"img\" aria-label=\"defect lifecycle\" font-family=\"Arial, Helvetica, sans-serif\" font-size=\"12\"><defs><marker id=\"mt\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#1f2937\"/></marker></defs><rect x=\"0\" y=\"0\" width=\"640\" height=\"230\" rx=\"10\" fill=\"#ffffff\" stroke=\"#d1d5db\"/><text x=\"320\" y=\"18\" text-anchor=\"middle\" font-weight=\"700\" fill=\"#111827\">defect lifecycle</text><path d=\"M105.0,110.0 L165.0,110.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"105.4\" y=\"101.0\" width=\"59.2\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"135.0\" y=\"113.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">accepted</text><path d=\"M81.3,127.0 L118.7,183.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"57.6\" y=\"146.0\" width=\"84.8\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"100.0\" y=\"158.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">not a defect</text><path d=\"M200.0,93.0 L200.0,47.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"167.2\" y=\"61.0\" width=\"65.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"200.0\" y=\"73.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">postponed</text><path d=\"M187.3,47.0 Q170.0,70.0 187.3,93.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"136.2\" y=\"61.0\" width=\"84.8\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"178.6\" y=\"73.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">reconsidered</text><path d=\"M235.0,110.0 L295.0,110.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"235.4\" y=\"101.0\" width=\"59.2\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"265.0\" y=\"113.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">repaired</text><path d=\"M365.0,110.0 L435.0,110.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"335.2\" y=\"101.0\" width=\"129.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"400.0\" y=\"113.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">confirmation passed</text><path d=\"M343.2,127.0 L386.8,183.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"300.2\" y=\"146.0\" width=\"129.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"365.0\" y=\"158.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">confirmation failed</text><path d=\"M397.0,183.0 Q388.7,136.6 365.0,125.9\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"355.2\" y=\"136.5\" width=\"59.2\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"384.8\" y=\"149.0\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">repaired</text><path d=\"M456.8,127.0 L413.2,183.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"402.2\" y=\"146.0\" width=\"65.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"435.0\" y=\"158.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">came back</text><rect x=\"35\" y=\"93\" width=\"70\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"70\" y=\"114.0\" text-anchor=\"middle\" fill=\"#111827\">New</text><rect x=\"165\" y=\"93\" width=\"70\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"200\" y=\"114.0\" text-anchor=\"middle\" fill=\"#111827\">Open</text><rect x=\"295\" y=\"93\" width=\"70\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"330\" y=\"114.0\" text-anchor=\"middle\" fill=\"#111827\">Fixed</text><rect x=\"435\" y=\"93\" width=\"70\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"470\" y=\"114.0\" text-anchor=\"middle\" fill=\"#111827\">Closed</text><rect x=\"90\" y=\"183\" width=\"80\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"130\" y=\"204.0\" text-anchor=\"middle\" fill=\"#111827\">Rejected</text><rect x=\"160\" y=\"13\" width=\"80\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"200\" y=\"34.0\" text-anchor=\"middle\" fill=\"#111827\">Deferred</text><rect x=\"357.5\" y=\"183\" width=\"85\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"400\" y=\"204.0\" text-anchor=\"middle\" fill=\"#111827\">Reopened</text></svg><p>Write <code>apply(state, event)</code> returning the new state, or throwing an <code>Error</code> whose message is <code>'INVALID'</code> when the event is not allowed in that state. Events: <code>accept</code> (New→Open), <code>reject</code> (New→Rejected), <code>defer</code> (Open→Deferred), <code>reconsider</code> (Deferred→Open), <code>repair</code> (Open→Fixed, Reopened→Fixed), <code>pass</code> (Fixed→Closed), <code>fail</code> (Fixed→Reopened), <code>reappear</code> (Closed→Reopened). Then write <code>history(events)</code> that starts at <code>New</code>, applies the events in order and returns the list of states visited (including <code>New</code>), or <code>null</code> as soon as one event is invalid.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Rejected is a final state: no event is allowed after it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Vòng đời lỗi của SWT5 (rút gọn) như sơ đồ. Viết <code>apply(state, event)</code> trả trạng thái mới, hoặc ném <code>Error</code> có message <code>'INVALID'</code> khi sự kiện không được phép ở trạng thái đó (danh sách sự kiện như bản tiếng Anh). Rồi viết <code>history(events)</code> bắt đầu từ <code>New</code>, áp các sự kiện theo thứ tự, trả danh sách trạng thái đã đi qua (kể cả <code>New</code>), hoặc <code>null</code> ngay khi gặp một sự kiện không hợp lệ.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Rejected là trạng thái cuối: không sự kiện nào được phép sau nó.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "history(['accept', 'repair', 'fail', 'repair', 'pass'])",
+          "output": "['New','Open','Fixed','Reopened','Fixed','Closed']",
+          "explanation": "A fix that failed confirmation once.|||Một bản sửa trượt confirmation một lần."
+        }
+      ],
+      "hintsJson": [
+        "Bảng chuyển: { New: { accept: \"Open\", reject: \"Rejected\" }, Open: { … }, … }.",
+        "history: try/catch quanh apply, gặp lỗi thì trả null."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "lifecycle.js",
+          "language": "javascript",
+          "code": "function apply(state, event) {\n  if (state === 'New' && event === 'accept') return 'Open';\n  throw new Error('INVALID');\n}\n\nfunction history(events) {\n  return ['New'];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "lifecycle.js",
+          "language": "javascript",
+          "code": "const T = {\n  New: { accept: 'Open', reject: 'Rejected' },\n  Open: { defer: 'Deferred', repair: 'Fixed' },\n  Deferred: { reconsider: 'Open' },\n  Fixed: { pass: 'Closed', fail: 'Reopened' },\n  Reopened: { repair: 'Fixed' },\n  Closed: { reappear: 'Reopened' },\n  Rejected: {},\n};\n\nfunction apply(state, event) {\n  const next = T[state] && T[state][event];\n  if (!next) throw new Error('INVALID');\n  return next;\n}\n\nfunction history(events) {\n  const out = ['New'];\n  let s = 'New';\n  for (const e of events) {\n    try { s = apply(s, e); } catch (err) { return null; }\n    out.push(s);\n  }\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A defect-tracking tool enforces exactly this table — which is why a tester cannot close a defect that was never repaired, and why “reopened” counts are a useful quality metric.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "lifecycle.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "history — the example",
+              "vi": "history — ví dụ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const e=history([\"accept\",\"repair\",\"fail\",\"repair\",\"pass\"]);return JSON.stringify(e)==='[\"New\",\"Open\",\"Fixed\",\"Reopened\",\"Fixed\",\"Closed\"]'?\"OK\":\"got \"+JSON.stringify(e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "apply — every valid transition",
+              "vi": "apply — mọi chuyển hợp lệ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const n=[[\"New\",\"accept\",\"Open\"],[\"New\",\"reject\",\"Rejected\"],[\"Open\",\"defer\",\"Deferred\"],[\"Deferred\",\"reconsider\",\"Open\"],[\"Open\",\"repair\",\"Fixed\"],[\"Fixed\",\"pass\",\"Closed\"],[\"Fixed\",\"fail\",\"Reopened\"],[\"Reopened\",\"repair\",\"Fixed\"],[\"Closed\",\"reappear\",\"Reopened\"]];for(const[r,p,d]of n){let e;try{e=apply(r,p)}catch{e=\"threw\"}if(e!==d)return r+\" -\"+p+\"-> expected \"+d+\", got \"+e}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "apply — invalid transitions throw INVALID",
+              "vi": "apply — chuyển không hợp lệ ném INVALID"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const s=[[\"Open\",\"pass\"],[\"New\",\"repair\"],[\"Rejected\",\"accept\"],[\"Closed\",\"repair\"],[\"Deferred\",\"repair\"]];for(const[e,r]of s)try{return apply(e,r),e+\" -\"+r+\"-> should throw\"}catch(t){if(t.message!==\"INVALID\")return\"message must be INVALID\"}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "history — an invalid event gives null",
+              "vi": "history — sự kiện không hợp lệ trả null"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>history([\"accept\",\"pass\"])===null&&history([\"reject\",\"accept\"])===null?\"OK\":\"expected null for both\")))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "history — deferred then reconsidered, closed then reappeared",
+              "vi": "history — hoãn rồi xem lại, đóng rồi quay lại"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const e=history([\"accept\",\"defer\",\"reconsider\",\"repair\",\"pass\",\"reappear\"]);return JSON.stringify(e)==='[\"New\",\"Open\",\"Deferred\",\"Open\",\"Fixed\",\"Closed\",\"Reopened\"]'?\"OK\":\"got \"+JSON.stringify(e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "history — no events",
+              "vi": "history — không có sự kiện"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>JSON.stringify(history([]))==='[\"New\"]'?\"OK\":'expected [\"New\"]')))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho phép pass từ Open (chưa sửa đã đóng)."
+        },
+        {
+          "loi": "Quên Closed → Reopened khi lỗi quay lại."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "defect lifecycle",
+          "vi": "vòng đời lỗi"
+        },
+        {
+          "en": "reopened",
+          "vi": "mở lại — bản sửa không đạt hoặc lỗi quay lại"
+        },
+        {
+          "en": "deferred",
+          "vi": "tạm hoãn"
+        }
+      ]
+    },
+    {
+      "title": "Defects 3 — Write a complete defect report (K3)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "defect report"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>LO-5.6.1 (K3): write a defect report. During system testing of LabBook <b>2.1.3</b> (Chrome 130, test server <i>stg-2</i>, seed data D7), test case <b>ST-22</b> did this: as <i>student2</i> book LAB02 on 2026-11-04 at 09:00 for 1 hour while <i>student1</i> already holds the only seat → the booking is PENDING (correct). Then <i>student1</i> cancels her booking. Expected: student2’s booking becomes CONFIRMED and she receives “Booking confirmed”. Actual: the booking stays PENDING; no e-mail. Reproduced 3 of 3 times.</p>\n<p>Write <code>REPORT</code> with the components of slide 93: <code>id, title, date, author, testItem, version, environment, phase, steps, expected, actual, severity, priority, status, references</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>version</code> = \"2.1.3\"; <code>environment</code> mentions Chrome and stg-2; <code>phase</code> = \"System testing\"; <code>references</code> includes \"ST-22\".</li>\n  <li>At least 3 steps; expected mentions CONFIRMED; actual mentions PENDING; severity and priority are each one of Critical, High, Medium, Low; status = \"New\".</li>\n</ul>",
+      "problemHtmlVi": "<p>LO-5.6.1 (K3): viết defect report. Khi system test LabBook <b>2.1.3</b> (Chrome 130, máy test <i>stg-2</i>, dữ liệu D7), test case <b>ST-22</b>: <i>student2</i> đặt LAB02 ngày 2026-11-04 lúc 09:00 trong 1 giờ trong khi <i>student1</i> đang giữ chỗ duy nhất → booking PENDING (đúng). Rồi <i>student1</i> huỷ. Mong đợi: booking của student2 thành CONFIRMED và nhận thư “Booking confirmed”. Thực tế: vẫn PENDING; không có thư. Tái hiện 3/3. Viết <code>REPORT</code> đủ các thành phần của slide 93.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>version</code> = \"2.1.3\"; <code>environment</code> có Chrome và stg-2; <code>phase</code> = \"System testing\"; <code>references</code> có \"ST-22\".</li>\n  <li>Ít nhất 3 bước; expected có CONFIRMED; actual có PENDING; severity và priority mỗi cái là Critical, High, Medium, Low; status = \"New\".</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "title",
+          "output": "\"Waitlisted booking is not promoted after the confirmed booking is cancelled (LAB02)\"",
+          "explanation": "What fails + when.|||Cái gì hỏng + khi nào."
+        }
+      ],
+      "hintsJson": [
+        "Thiếu phiên bản thì developer không biết build nào hỏng (nối với CM).",
+        "Tham chiếu test case để confirmation testing chạy lại đúng ca."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "report.js",
+          "language": "javascript",
+          "code": "const REPORT = {\n  id: 'DEF-',\n  title: '',\n  date: '2026-11-04',\n  author: '',\n  testItem: 'LabBook',\n  version: '',\n  environment: '',\n  phase: '',\n  steps: [],\n  expected: '',\n  actual: '',\n  severity: '',\n  priority: '',\n  status: '',\n  references: [],\n};\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "report.js",
+          "language": "javascript",
+          "code": "const REPORT = {\n  id: 'DEF-57',\n  title: 'Waitlisted booking is not promoted after the confirmed booking is cancelled (LAB02)',\n  date: '2026-11-04',\n  author: 'Tester A, LabBook test team',\n  testItem: 'LabBook booking service',\n  version: '2.1.3',\n  environment: 'Chrome 130, test server stg-2, seed data D7',\n  phase: 'System testing',\n  steps: [\n    'As student1 book LAB02 on 2026-11-04 at 09:00 for 1 hour (CONFIRMED)',\n    'As student2 book LAB02 on 2026-11-04 at 09:00 for 1 hour (PENDING)',\n    'As student1 cancel the booking',\n    'As student2 open My bookings and check the mailbox',\n  ],\n  expected: 'student2 booking becomes CONFIRMED and the e-mail Booking confirmed is sent',\n  actual: 'student2 booking stays PENDING; no e-mail is sent (3 of 3 runs)',\n  severity: 'High',\n  priority: 'High',\n  status: 'New',\n  references: ['ST-22', 'US5 AC5.2'],\n};\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Identifier, title, date, author, test item + version, environment, phase, steps, expected vs actual, severity, priority, state, references — exactly the eleven components of slide 93 (conclusions and change history are added later by the workflow).</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "report.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "identification: id, title, date, author",
+              "vi": "định danh: id, title, date, author"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>REPORT.id&&/\\d/.test(REPORT.id)&&String(REPORT.title).length>=15&&/^\\d{4}-\\d{2}-\\d{2}$/.test(REPORT.date)&&String(REPORT.author).trim()?\"OK\":\"id (with a number), a real title, an ISO date and the author are required\")))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "test item, version and environment",
+              "vi": "hạng mục test, phiên bản và môi trường"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>String(REPORT.testItem).trim()&&REPORT.version===\"2.1.3\"&&/chrome/i.test(REPORT.environment)&&/stg-2/i.test(REPORT.environment)?\"OK\":'version must be \"2.1.3\" and the environment must name Chrome and stg-2')))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "phase and references",
+              "vi": "giai đoạn và tham chiếu"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>/^system testing$/i.test(String(REPORT.phase).trim())&&Array.isArray(REPORT.references)&&REPORT.references.includes(\"ST-22\")?\"OK\":'phase \"System testing\" and a reference to ST-22 are required')))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "steps, expected and actual",
+              "vi": "các bước, mong đợi và thực tế"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>Array.isArray(REPORT.steps)&&REPORT.steps.length>=3&&/confirmed/i.test(REPORT.expected)&&/pending/i.test(REPORT.actual)&&REPORT.expected!==REPORT.actual?\"OK\":\"\\u2265 3 steps; expected mentions CONFIRMED, actual mentions PENDING\")))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "severity, priority and status",
+              "vi": "severity, priority và trạng thái"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const i=[\"Critical\",\"High\",\"Medium\",\"Low\"];return i.includes(REPORT.severity)&&i.includes(REPORT.priority)&&REPORT.status===\"New\"?\"OK\":'severity and priority must be Critical, High, Medium or Low; status \"New\"'})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Bỏ trống phase hoặc references."
+        },
+        {
+          "loi": "Gộp expected và actual vào một câu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "defect report",
+          "vi": "báo cáo lỗi"
+        },
+        {
+          "en": "steps to reproduce",
+          "vi": "các bước tái hiện"
+        }
+      ]
+    },
+    {
+      "title": "Defects 4 — Defect metrics for the retrospective",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "defect metrics"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Slide 95 uses defect data to answer management questions. Write <code>defectStats(defects)</code> where each defect is <code>{ id, status, severity, opened, closed, reopenCount }</code> (<code>opened</code>/<code>closed</code> are day numbers; <code>closed</code> is null if not closed). Return:</p>\n<ul><li><code>byStatus</code> — object counting each status;</li>\n<li><code>openCount</code> — defects whose status is not Closed and not Rejected;</li>\n<li><code>avgDaysToClose</code> — mean of closed − opened over Closed defects (1 decimal; null if none);</li>\n<li><code>reopenRate</code> — % of defects with reopenCount &gt; 0 among all non-Rejected defects (1 decimal; 0 if none);</li>\n<li><code>rejectRate</code> — % Rejected among all defects (1 decimal) — a high value suggests poor reports or unclear requirements.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Round with <code>Math.round(x * 10) / 10</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 95 dùng dữ liệu lỗi để trả lời câu hỏi quản lý. Viết <code>defectStats(defects)</code> trả các số như bản tiếng Anh: đếm theo trạng thái, số lỗi còn mở, số ngày trung bình để đóng, tỉ lệ mở lại và tỉ lệ bị từ chối.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Làm tròn bằng <code>Math.round(x * 10) / 10</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "defectStats([{id:'D1',status:'Closed',severity:'High',opened:1,closed:4,reopenCount:1},{id:'D2',status:'Open',severity:'Low',opened:2,closed:null,reopenCount:0},{id:'D3',status:'Rejected',severity:'Low',opened:3,closed:null,reopenCount:0},{id:'D4',status:'Closed',severity:'Medium',opened:2,closed:4,reopenCount:0}])",
+          "output": "{ byStatus: { Closed: 2, Open: 1, Rejected: 1 }, openCount: 1, avgDaysToClose: 2.5, reopenRate: 33.3, rejectRate: 25 }",
+          "explanation": "(3 + 2) ÷ 2 = 2.5 days; 1 of 3 non-rejected reopened.|||(3 + 2) ÷ 2 = 2,5 ngày; 1 trên 3 lỗi không bị từ chối từng mở lại."
+        }
+      ],
+      "hintsJson": [
+        "Một vòng lặp gom mọi bộ đếm.",
+        "Rejected không tính vào mẫu số của reopenRate."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "stats.js",
+          "language": "javascript",
+          "code": "function defectStats(defects) {\n  return { byStatus: {}, openCount: 0, avgDaysToClose: null, reopenRate: 0, rejectRate: 0 };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "stats.js",
+          "language": "javascript",
+          "code": "function defectStats(defects) {\n  const r1 = (x) => Math.round(x * 10) / 10;\n  const byStatus = {};\n  let openCount = 0, closedN = 0, closedDays = 0, nonRejected = 0, reopened = 0, rejected = 0;\n  for (const d of defects) {\n    byStatus[d.status] = (byStatus[d.status] || 0) + 1;\n    if (d.status !== 'Closed' && d.status !== 'Rejected') openCount++;\n    if (d.status === 'Closed') { closedN++; closedDays += d.closed - d.opened; }\n    if (d.status === 'Rejected') rejected++;\n    else { nonRejected++; if (d.reopenCount > 0) reopened++; }\n  }\n  return {\n    byStatus,\n    openCount,\n    avgDaysToClose: closedN ? r1(closedDays / closedN) : null,\n    reopenRate: nonRejected ? r1((reopened / nonRejected) * 100) : 0,\n    rejectRate: defects.length ? r1((rejected / defects.length) * 100) : 0,\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Reopen rate tells how good the fixes and confirmation tests are; reject rate tells how good the reports and the requirements are; time-to-close tells how fast the team reacts.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "stats.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "the example",
+              "vi": "ví dụ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const e=defectStats([{id:\"D1\",status:\"Closed\",severity:\"High\",opened:1,closed:4,reopenCount:1},{id:\"D2\",status:\"Open\",severity:\"Low\",opened:2,closed:null,reopenCount:0},{id:\"D3\",status:\"Rejected\",severity:\"Low\",opened:3,closed:null,reopenCount:0},{id:\"D4\",status:\"Closed\",severity:\"Medium\",opened:2,closed:4,reopenCount:0}]);return JSON.stringify(e)==='{\"byStatus\":{\"Closed\":2,\"Open\":1,\"Rejected\":1},\"openCount\":1,\"avgDaysToClose\":2.5,\"reopenRate\":33.3,\"rejectRate\":25}'?\"OK\":\"got \"+JSON.stringify(e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Fixed and Reopened still count as open",
+              "vi": "Fixed và Reopened vẫn tính là mở"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const e=defectStats([{id:\"a\",status:\"Fixed\",opened:1,closed:null,reopenCount:0},{id:\"b\",status:\"Reopened\",opened:1,closed:null,reopenCount:2},{id:\"c\",status:\"Deferred\",opened:1,closed:null,reopenCount:0}]);return e.openCount===3&&e.avgDaysToClose===null&&e.reopenRate===33.3?\"OK\":\"got \"+JSON.stringify(e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "empty list",
+              "vi": "danh sách rỗng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const t=defectStats([]);return JSON.stringify(t)==='{\"byStatus\":{},\"openCount\":0,\"avgDaysToClose\":null,\"reopenRate\":0,\"rejectRate\":0}'?\"OK\":\"got \"+JSON.stringify(t)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "all rejected",
+              "vi": "tất cả bị từ chối"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const e=defectStats([{id:\"a\",status:\"Rejected\",opened:1,closed:null,reopenCount:0}]);return e.reopenRate===0&&e.rejectRate===100?\"OK\":\"got \"+JSON.stringify(e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Tính avgDaysToClose cả với lỗi chưa đóng."
+        },
+        {
+          "loi": "Đếm Fixed là đã đóng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "reopen rate",
+          "vi": "tỉ lệ mở lại"
+        },
+        {
+          "en": "reject rate",
+          "vi": "tỉ lệ bị từ chối"
+        }
+      ]
+    },
+    {
+      "title": "Defects 5 — Exam questions on defect management",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "defect management"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Six FE-style questions on SWT5 slides 89–101: the objectives of a defect report, false positives, what a report needs to be useful, and how defect data is used.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sáu câu kiểu FE về slide SWT5 89–101: mục tiêu của defect report, dương tính giả, báo cáo cần gì để hữu ích và dữ liệu lỗi được dùng thế nào.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Defect report phục vụ developer, quản lý và cải tiến quy trình — không phải chấm điểm cá nhân.",
+        "Đường cong lỗi giảm có thể do bộ test mòn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Defects 5 — Exam questions on defect management\n\nAnswer in the answer panel (no code needed).\n\n1. Which is NOT an objective of a defect report?Đâu KHÔNG phải mục tiêu của defect report?\n2. A test reported a failure, but the test data was wrong. In defect management this is…Test báo failure nhưng dữ liệu test sai. Trong quản lý lỗi đây là…\n3. Who usually decides the priority of a defect?Ai thường quyết định priority của lỗi?\n4. Defects found per week rise, peak and fall towards zero. What must you check before saying the product is good?Lỗi tìm được mỗi tuần tăng, đạt đỉnh rồi giảm về 0. Phải kiểm gì trước khi nói sản phẩm tốt?\n5. Which detail makes a defect report reproducible?Chi tiết nào làm defect report tái hiện được?\n6. Defects can be reported during…Lỗi có thể được báo trong…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Defects 5 — Exam questions on defect management — answer key\n\n1. Which is NOT an objective of a defect report?Đâu KHÔNG phải mục tiêu của defect report?\n   Answer: d) Measure the productivity of individual developers\n   The first three are the syllabus objectives.VI: Ba ý đầu là mục tiêu theo syllabus.\n\n2. A test reported a failure, but the test data was wrong. In defect management this is…Test báo failure nhưng dữ liệu test sai. Trong quản lý lỗi đây là…\n   Answer: b) a false positive, which should also be tracked (e.g. as rejected) because it costs effort\n   False positives are part of the anomaly flow.VI: Dương tính giả cũng là một phần của luồng xử lý bất thường.\n\n3. Who usually decides the priority of a defect?Ai thường quyết định priority của lỗi?\n   Answer: b) The product owner, project manager or a triage board, from a business view\n   Severity is technical, priority is business.VI: Severity là kỹ thuật, priority là nghiệp vụ.\n\n4. Defects found per week rise, peak and fall towards zero. What must you check before saying the product is good?Lỗi tìm được mỗi tuần tăng, đạt đỉnh rồi giảm về 0. Phải kiểm gì trước khi nói sản phẩm tốt?\n   Answer: b) Whether the tests are still finding new kinds of defects or the suite is worn out (pesticide paradox)\n   Slide 95, top-left corner.VI: Slide 95, góc trên bên trái.\n\n5. Which detail makes a defect report reproducible?Chi tiết nào làm defect report tái hiện được?\n   Answer: b) Steps from a known state, test data, environment and the exact build\n   Plus logs, screenshots, database dumps.VI: Cộng log, ảnh chụp, dump CSDL.\n\n6. Defects can be reported during…Lỗi có thể được báo trong…\n   Answer: b) coding, static analysis, reviews, dynamic testing and use of the product\n   Any work product, any activity.VI: Mọi sản phẩm, mọi hoạt động.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: d · b · b · b · b · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which is NOT an objective of a defect report?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đâu KHÔNG phải mục tiêu của defect report?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Provide developers with information to identify, isolate and correct the defect"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Provide test managers a means of tracking the quality of the work product and the impact on testing"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Provide ideas for development and test process improvement"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Measure the productivity of individual developers"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The first three are the syllabus objectives.</p><p><i>VI: Ba ý đầu là mục tiêu theo syllabus.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>A test reported a failure, but the test data was wrong. In defect management this is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Test báo failure nhưng dữ liệu test sai. Trong quản lý lỗi đây là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a true defect"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a false positive, which should also be tracked (e.g. as rejected) because it costs effort"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a regression"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a deferred defect"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>False positives are part of the anomaly flow.</p><p><i>VI: Dương tính giả cũng là một phần của luồng xử lý bất thường.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Who usually decides the priority of a defect?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ai thường quyết định priority của lỗi?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The tester alone"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The product owner, project manager or a triage board, from a business view"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The developer who caused it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The tool"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Severity is technical, priority is business.</p><p><i>VI: Severity là kỹ thuật, priority là nghiệp vụ.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Defects found per week rise, peak and fall towards zero. What must you check before saying the product is good?</p><p style=\"opacity:.75;font-size:.92em\"><i>Lỗi tìm được mỗi tuần tăng, đạt đỉnh rồi giảm về 0. Phải kiểm gì trước khi nói sản phẩm tốt?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Nothing"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Whether the tests are still finding new kinds of defects or the suite is worn out (pesticide paradox)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The number of testers"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The release date"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Slide 95, top-left corner.</p><p><i>VI: Slide 95, góc trên bên trái.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>Which detail makes a defect report reproducible?</p><p style=\"opacity:.75;font-size:.92em\"><i>Chi tiết nào làm defect report tái hiện được?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The tester’s opinion of the developer"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Steps from a known state, test data, environment and the exact build"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A long title"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The priority"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Plus logs, screenshots, database dumps.</p><p><i>VI: Cộng log, ảnh chụp, dump CSDL.</i></p>"
+          },
+          {
+            "ma": "q6",
+            "de": "<p>Defects can be reported during…</p><p style=\"opacity:.75;font-size:.92em\"><i>Lỗi có thể được báo trong…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "dynamic testing only"
+              },
+              {
+                "ma": "b",
+                "noiDung": "coding, static analysis, reviews, dynamic testing and use of the product"
+              },
+              {
+                "ma": "c",
+                "noiDung": "acceptance testing only"
+              },
+              {
+                "ma": "d",
+                "noiDung": "production only"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Any work product, any activity.</p><p><i>VI: Mọi sản phẩm, mọi hoạt động.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chọn “tester quyết định priority”."
+        },
+        {
+          "loi": "Cho rằng dương tính giả không cần ghi nhận."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "anomaly",
+          "vi": "bất thường — kết quả khác mong đợi"
+        },
+        {
+          "en": "false positive",
+          "vi": "dương tính giả"
+        }
+      ]
+    }
+  ]
+}

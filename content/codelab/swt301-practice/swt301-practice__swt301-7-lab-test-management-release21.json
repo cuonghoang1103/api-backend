@@ -1,0 +1,394 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-7-lab-test-management-release21",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-bug-lifecycle"
+  },
+  "exercises": [
+    {
+      "title": "Lab 7 — Test Management of LabBook 2.1",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 75,
+      "points": 100,
+      "concepts": [
+        "test execution schedule",
+        "risk-based testing",
+        "test monitoring",
+        "test control",
+        "defect report"
+      ],
+      "prerequisites": [
+        "SWT301 chapter 7"
+      ],
+      "tags": [
+        "swt301",
+        "lab",
+        "test-management"
+      ],
+      "problemHtml": "<h1>Lab 7 — Test Management of LabBook 2.1</h1>\n<p class=\"bi-phu\">Chapter 7 lab · execution schedule (K3), risk analysis, monitoring & control, defect report (K3) · 10 marks</p>\n<h2>1. Overview</h2>\n<p>You are the test lead of <b>LabBook 2.1</b>.</p>\n<p><b>A. Test execution schedule.</b> Priority 1 = highest. Rule of slide 40: order by priority, but a test that another test depends on runs first; ties by id.</p><table><thead><tr><th>Test</th><th>Feature</th><th>Priority</th><th>Depends on</th></tr></thead><tbody><tr><td>T1</td><td>Log in as a student</td><td>2</td><td>—</td></tr><tr><td>T2</td><td>Search labs by building</td><td>3</td><td>—</td></tr><tr><td>T3</td><td>Book a seat</td><td>1</td><td>T1</td></tr><tr><td>T4</td><td>Cancel a booking</td><td>1</td><td>T3</td></tr><tr><td>T5</td><td>Waitlist promotion</td><td>2</td><td>T3</td></tr><tr><td>T6</td><td>Admin usage report</td><td>3</td><td>T1</td></tr><tr><td>T7</td><td>Lock an account after 3 failures</td><td>2</td><td>T1</td></tr><tr><td>T8</td><td>Manager closes a lab</td><td>1</td><td>—</td></tr></tbody></table>\n<p><b>B. Risk analysis</b> on the 5-point scale (5 = very high); level = L × I; extent: 15–25 extensive, 8–14 broad, 4–7 cursory, 1–3 report bugs only.</p><table><thead><tr><th>Risk</th><th>Description</th><th>Likelihood</th><th>Impact</th></tr></thead><tbody><tr><td>R1</td><td>The weekly limit counts cancelled bookings</td><td>3</td><td>4</td></tr><tr><td>R2</td><td>A student can see other students’ bookings</td><td>2</td><td>5</td></tr><tr><td>R3</td><td>Booking at 07:00 on Monday takes more than 3 s</td><td>4</td><td>4</td></tr><tr><td>R4</td><td>Waitlist promotion picks the wrong student</td><td>3</td><td>5</td></tr><tr><td>R5</td><td>Dark-mode colours are wrong</td><td>2</td><td>1</td></tr><tr><td>R6</td><td>The confirmation e-mail is delayed</td><td>2</td><td>3</td></tr></tbody></table><p>Also in the risk workshop: <b>PR1</b> The load-test server is shared with another project · <b>PR2</b> Only one tester knows the payment module.</p>\n<p><b>C. Weekly snapshot.</b> 240 tests planned, 150 should have run by now, 110 executed (88 passed, 18 failed, 4 blocked). 64 defects so far in 20 KLOC; one Critical defect (DEF-61) is open and blocks 30 cancellation tests. Release 2.0 had 95 defects found by testing and 5 found by users after release (use these two numbers for DDP). Status rule: RED if an open Critical exists or execution is more than 20 points behind plan; AMBER if behind at all or pass rate &lt; 90; otherwise GREEN.</p>\n<p><b>D. Defect report.</b> System test case <b>ST-31</b> on build <b>2.1.0</b> (Firefox 131, test server <i>stg-1</i>): student2 has a PENDING booking BK0007 for LAB01 on 2026-11-05; the manager closes LAB01. Expected: BK0007 becomes CANCELLED and student2 receives “Lab closed - booking cancelled”. Actual: BK0007 stays PENDING, no e-mail (3 of 3 runs). Also rate: <b>D1</b> the never-used “export to XML” admin feature crashes the server · <b>D2</b> the university name is misspelled on the login page the day before the rector’s demo.</p>\n<h3>Main features</h3>\n<ul>\n  <li>A. The order of the 8 tests.</li>\n  <li>B. Risk levels, extents, test order, project risks.</li>\n  <li>C. Progress figures, status and control action.</li>\n  <li>D. A complete defect report and two severity/priority ratings.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>Percentages are rounded to 2 decimals.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>answers/\n├── a-schedule.js   ← const SCHEDULE = ['T8', …]\n├── b-risk.js       ← const RISK = { levels: { R1: … }, extents: { R1: … }, order: [...], projectRisks: [...] }\n├── c-monitor.js    ← const MONITOR = { executedPct, expectedPct, passRate, ddp, density, status, action }\n└── d-defects.js    ← const REPORT = { id, title, version, environment, phase, steps, expected, actual, severity, priority, status, references }; const RATINGS = { D1, D2 }</pre>\n<h2>3. Data model</h2>\n<p><b>Allowed values</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>RISK.extents.*</code></td><td>string</td><td>extensive · broad · cursory · report bugs only</td></tr><tr><td><code>MONITOR.action</code></td><td>string</td><td>Re-prioritise tests · Change the test execution schedule · Re-evaluate the exit criteria with stakeholders · Add resources / ask for a fix</td></tr><tr><td><code>RATINGS.*</code></td><td>string</td><td>High severity · High priority · High severity · Low priority · Low severity · High priority · Low severity · Low priority</td></tr></tbody></table>\n<h2>4. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. A. Execution schedule <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Priority + dependencies (K3).</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">test execution schedule</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. B. Risk analysis <span class=\"bi-diem\">2.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Levels, extents, order, project risks.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">risk-based testing</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. C. Monitoring and control <span class=\"bi-diem\">2.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Five figures, status, action.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">test monitoring</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. D. Defect management <span class=\"bi-diem\">3 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>A K3 defect report and two ratings.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">defect report</span></p>\n</div>\n<h2>5. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>SCHEDULE</code></td><td>answers/a-schedule.js</td></tr><tr><td><code>RISK</code></td><td>answers/b-risk.js</td></tr><tr><td><code>MONITOR</code></td><td>answers/c-monitor.js</td></tr><tr><td><code>REPORT · RATINGS</code></td><td>answers/d-defects.js</td></tr></tbody></table>\n<h2>6. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>A. Execution schedule</td><td>2</td></tr><tr><td>2</td><td>B. Risk analysis</td><td>2.5</td></tr><tr><td>3</td><td>C. Monitoring and control</td><td>2.5</td></tr><tr><td>4</td><td>D. Defect management</td><td>3</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Running T3 before T1 because it has priority 1 — the dependency comes first.</li>\n  <li>Calling the snapshot AMBER because it is “only” 16.67 points behind — the open Critical makes it RED.</li>\n</ul>\n<h2>7. Submission</h2>\n<p>Write your answers in the answer files on the right (they mirror the official template: one JavaScript object per test case / issue). Press <b>Run</b> for the visible checks and <b>Submit</b> for full grading, hidden checks included. Your score per question appears in the rubric table.</p>",
+      "problemHtmlVi": "<h1>Lab 7 — Test Management of LabBook 2.1</h1>\n<p class=\"bi-phu\">Lab chương 7 · lịch thực thi (K3), phân tích rủi ro, giám sát & kiểm soát, defect report (K3) · 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p>Bạn là trưởng nhóm test của <b>LabBook 2.1</b>. <b>A.</b> Lập lịch thực thi theo luật slide 40 cho bảng tám test (ưu tiên 1 cao nhất). <b>B.</b> Phân tích rủi ro thang 5 điểm (5 = rất cao), mức = L × I, độ sâu: 15–25 extensive, 8–14 broad, 4–7 cursory, 1–3 report bugs only; xác định câu nào là rủi ro dự án. <b>C.</b> Tính các số của bản chụp tuần (240 dự kiến, 150 lẽ ra đã chạy, 110 đã chạy: 88 đạt, 18 trượt, 4 bị chặn; 64 lỗi trên 20 KLOC; DEF-61 Critical còn mở chặn 30 test huỷ; bản 2.0: 95 lỗi do test tìm, 5 lỗi người dùng tìm sau phát hành), trạng thái và hành động kiểm soát. <b>D.</b> Viết defect report cho ST-31 trên build 2.1.0 (Firefox 131, stg-1) và đánh giá D1, D2.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>A. Thứ tự 8 test.</li>\n  <li>B. Mức rủi ro, độ sâu, thứ tự test, rủi ro dự án.</li>\n  <li>C. Số tiến độ, trạng thái và hành động kiểm soát.</li>\n  <li>D. Một defect report đầy đủ và hai đánh giá severity/priority.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Phần trăm làm tròn 2 chữ số.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>answers/\n├── a-schedule.js   ← const SCHEDULE = ['T8', …]\n├── b-risk.js       ← const RISK = { levels: { R1: … }, extents: { R1: … }, order: [...], projectRisks: [...] }\n├── c-monitor.js    ← const MONITOR = { executedPct, expectedPct, passRate, ddp, density, status, action }\n└── d-defects.js    ← const REPORT = { id, title, version, environment, phase, steps, expected, actual, severity, priority, status, references }; const RATINGS = { D1, D2 }</pre>\n<h2>3. Mô hình dữ liệu</h2>\n<p><b>Allowed values</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>RISK.extents.*</code></td><td>string</td><td>extensive · broad · cursory · report bugs only</td></tr><tr><td><code>MONITOR.action</code></td><td>string</td><td>Re-prioritise tests · Change the test execution schedule · Re-evaluate the exit criteria with stakeholders · Add resources / ask for a fix</td></tr><tr><td><code>RATINGS.*</code></td><td>string</td><td>High severity · High priority · High severity · Low priority · Low severity · High priority · Low severity · Low priority</td></tr></tbody></table>\n<h2>4. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. A. Lịch thực thi <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Ưu tiên + phụ thuộc (K3).</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">test execution schedule</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. B. Phân tích rủi ro <span class=\"bi-diem\">2.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Mức, độ sâu, thứ tự, rủi ro dự án.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">risk-based testing</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. C. Giám sát và kiểm soát <span class=\"bi-diem\">2.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Năm con số, trạng thái, hành động.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">test monitoring</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. D. Quản lý lỗi <span class=\"bi-diem\">3 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Một defect report K3 và hai đánh giá.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">defect report</span></p>\n</div>\n<h2>5. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>SCHEDULE</code></td><td>answers/a-schedule.js</td></tr><tr><td><code>RISK</code></td><td>answers/b-risk.js</td></tr><tr><td><code>MONITOR</code></td><td>answers/c-monitor.js</td></tr><tr><td><code>REPORT · RATINGS</code></td><td>answers/d-defects.js</td></tr></tbody></table>\n<h2>6. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>A. Lịch thực thi</td><td>2</td></tr><tr><td>2</td><td>B. Phân tích rủi ro</td><td>2.5</td></tr><tr><td>3</td><td>C. Giám sát và kiểm soát</td><td>2.5</td></tr><tr><td>4</td><td>D. Quản lý lỗi</td><td>3</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Chạy T3 trước T1 vì ưu tiên 1 — phụ thuộc phải chạy trước.</li>\n  <li>Gọi bản chụp là AMBER vì “chỉ” chậm 16,67 điểm — lỗi Critical còn mở làm nó RED.</li>\n</ul>\n<h2>7. Nộp bài</h2>\n<p>Viết câu trả lời vào các tệp bên phải (giống template chính thức: mỗi test case / lỗi là một object JavaScript). Bấm <b>Chạy thử</b> để chạy kiểm hiện, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn). Điểm từng câu hiện trong bảng thang điểm.</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "Percentages are rounded to 2 decimals.|||Phần trăm làm tròn 2 chữ số.",
+      "examplesJson": [
+        {
+          "input": "R3 — likelihood 4, impact 4",
+          "output": "level 16 → extensive",
+          "explanation": "L × I, then the band.|||L × I rồi tra khoảng."
+        }
+      ],
+      "hintsJson": [
+        "A: mỗi bước chỉ xét test đã sẵn sàng (mọi phụ thuộc đã chạy).",
+        "B: bằng mức thì tác động cao hơn đứng trước; PR1, PR2 nói về nguồn lực ⇒ rủi ro dự án.",
+        "C: executedPct = 110/240; expectedPct = 150/240; DDP chỉ dùng 95 và 5.",
+        "D: báo cáo cần phiên bản, môi trường, giai đoạn, bước, mong đợi/thực tế, severity, priority, trạng thái, tham chiếu."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers/a-schedule.js",
+          "language": "javascript",
+          "code": "const SCHEDULE = ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8'];\n"
+        },
+        {
+          "name": "answers/b-risk.js",
+          "language": "javascript",
+          "code": "// extents: extensive | broad | cursory | report bugs only\nconst RISK = {\n  levels: { R1: 0, R2: 0, R3: 0, R4: 0, R5: 0, R6: 0 },\n  extents: { R1: '', R2: '', R3: '', R4: '', R5: '', R6: '' },\n  order: [],\n  projectRisks: [],\n};\n"
+        },
+        {
+          "name": "answers/c-monitor.js",
+          "language": "javascript",
+          "code": "// action: Re-prioritise tests | Change the test execution schedule | Re-evaluate the exit criteria with stakeholders | Add resources / ask for a fix\nconst MONITOR = { executedPct: 0, expectedPct: 0, passRate: 0, ddp: 0, density: 0, status: '', action: '' };\n"
+        },
+        {
+          "name": "answers/d-defects.js",
+          "language": "javascript",
+          "code": "const REPORT = {\n  id: '', title: '', date: '', author: '', testItem: '', version: '', environment: '', phase: '',\n  steps: [], expected: '', actual: '', severity: '', priority: '', status: '', references: [],\n};\n// High severity · High priority | High severity · Low priority | Low severity · High priority | Low severity · Low priority\nconst RATINGS = { D1: '', D2: '' };\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers/a-schedule.js",
+          "language": "javascript",
+          "code": "// Ready at start: T1(2) T2(3) T8(1) → T8. Then T1 → unlocks T3, T6, T7. T3(1) → unlocks T4, T5.\n// T4(1), then T5(2) and T7(2) (tie by id), then T2(3) and T6(3).\nconst SCHEDULE = ['T8', 'T1', 'T3', 'T4', 'T5', 'T7', 'T2', 'T6'];\n"
+        },
+        {
+          "name": "answers/b-risk.js",
+          "language": "javascript",
+          "code": "const RISK = {\n  levels: { R1: 12, R2: 10, R3: 16, R4: 15, R5: 2, R6: 6 },\n  extents: { R1: 'broad', R2: 'broad', R3: 'extensive', R4: 'extensive', R5: 'report bugs only', R6: 'cursory' },\n  order: ['R3', 'R4', 'R1', 'R2', 'R6', 'R5'],\n  projectRisks: ['PR1', 'PR2'],\n};\n"
+        },
+        {
+          "name": "answers/c-monitor.js",
+          "language": "javascript",
+          "code": "// executed 110/240 = 45.83 %, expected 150/240 = 62.5 % (16.67 points behind);\n// pass rate 88/110 = 80 %; DDP 95/(95+5) = 95 %; density 64/20 = 3.2 per KLOC.\n// An open Critical defect → RED. It blocks 30 tests → ask for a fix (and resources).\nconst MONITOR = {\n  executedPct: 45.83,\n  expectedPct: 62.5,\n  passRate: 80,\n  ddp: 95,\n  density: 3.2,\n  status: 'RED',\n  action: 'Add resources / ask for a fix',\n};\n"
+        },
+        {
+          "name": "answers/d-defects.js",
+          "language": "javascript",
+          "code": "const REPORT = {\n  id: 'DEF-74',\n  title: 'Closing a lab leaves its PENDING bookings active (no cancellation, no e-mail)',\n  date: '2026-11-04',\n  author: 'Test lead, LabBook test team',\n  testItem: 'LabBook lab-management service',\n  version: '2.1.0',\n  environment: 'Firefox 131, test server stg-1, seed data D7',\n  phase: 'System testing',\n  steps: [\n    'As student1 and student3 book LAB01 on 2026-11-05 at 09:00 (both CONFIRMED: LAB01 has 2 seats)',\n    'As student2 book LAB01 on 2026-11-05 at 09:00 → BK0007 is PENDING',\n    'As manager close LAB01 (PATCH /api/labs/LAB01 { status: CLOSED })',\n    'Check BK0007 in the database and the outbox of student2',\n  ],\n  expected: 'BK0007 becomes CANCELLED and student2 receives \"Lab closed - booking cancelled\"',\n  actual: 'BK0007 stays PENDING and no e-mail is sent (3 of 3 runs)',\n  severity: 'High',\n  priority: 'High',\n  status: 'New',\n  references: ['ST-31', 'SRS: PATCH /api/labs closes CONFIRMED and PENDING bookings'],\n};\nconst RATINGS = {\n  D1: 'High severity · Low priority',\n  D2: 'Low severity · High priority',\n};\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>A.</b> T8, T1, T3, T4, T5, T7, T2, T6. <b>B.</b> 12, 10, 16, 15, 2, 6 → broad, broad, extensive, extensive, report bugs only, cursory; order R3, R4, R1, R2, R6, R5; project risks PR1, PR2. <b>C.</b> 45.83 · 62.5 · 80 · 95 · 3.2 · RED · ask for a fix. <b>D.</b> A complete report referencing ST-31 on 2.1.0; D1 high severity/low priority; D2 low severity/high priority.</p>",
+      "solutionExplanationHtmlVi": "<p>Xem đáp án từng phần ở bản tiếng Anh.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "answers/a-schedule.js",
+          "answers/b-risk.js",
+          "answers/c-monitor.js",
+          "answers/d-defects.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A — test execution schedule (priority + dependencies)",
+              "vi": "A — lịch thực thi (ưu tiên + phụ thuộc)"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (JSON.stringify(SCHEDULE)); } catch (e) { return 'JSON.stringify(SCHEDULE) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'JSON.stringify(SCHEDULE) is empty';\n  var chap = [\"[\\\"T8\\\",\\\"T1\\\",\\\"T3\\\",\\\"T4\\\",\\\"T5\\\",\\\"T7\\\",\\\"T2\\\",\\\"T6\\\"]\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet — each step: among the READY tests pick the highest priority (1 = highest), ties by id';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — the first three tests",
+              "vi": "A — ba test đầu"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>Array.isArray(SCHEDULE)&&SCHEDULE.slice(0,3).join(\",\")===\"T8,T1,T3\"?\"OK\":\"the first three are not right yet \\u2014 T3 (priority 1) needs T1 first\")))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "B — level of R1",
+              "vi": "B — mức rủi ro R1"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (RISK.levels.R1); } catch (e) { return 'RISK.levels.R1 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'RISK.levels.R1 is empty';\n  var chap = [12];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"so\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"so\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"so\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — level of R2",
+              "vi": "B — mức rủi ro R2"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (RISK.levels.R2); } catch (e) { return 'RISK.levels.R2 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'RISK.levels.R2 is empty';\n  var chap = [10];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"so\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"so\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"so\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — level of R3",
+              "vi": "B — mức rủi ro R3"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (RISK.levels.R3); } catch (e) { return 'RISK.levels.R3 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'RISK.levels.R3 is empty';\n  var chap = [16];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"so\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"so\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"so\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — level of R4",
+              "vi": "B — mức rủi ro R4"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (RISK.levels.R4); } catch (e) { return 'RISK.levels.R4 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'RISK.levels.R4 is empty';\n  var chap = [15];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"so\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"so\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"so\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — level of R5",
+              "vi": "B — mức rủi ro R5"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (RISK.levels.R5); } catch (e) { return 'RISK.levels.R5 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'RISK.levels.R5 is empty';\n  var chap = [2];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"so\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"so\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"so\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — level of R6",
+              "vi": "B — mức rủi ro R6"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (RISK.levels.R6); } catch (e) { return 'RISK.levels.R6 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'RISK.levels.R6 is empty';\n  var chap = [6];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"so\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"so\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"so\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — extent of testing per risk",
+              "vi": "B — độ sâu kiểm thử từng rủi ro"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (JSON.stringify([\"R1\",\"R2\",\"R3\",\"R4\",\"R5\",\"R6\"].map(function (k) { return String(RISK.extents[k]).toLowerCase(); }))); } catch (e) { return 'JSON.stringify([\"R1\",\"R2\",\"R3\",\"R4\",\"R5\",\"R6\"].map(function (k) { return String(RISK.extents[k]).toLowerCase(); })) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'JSON.stringify([\"R1\",\"R2\",\"R3\",\"R4\",\"R5\",\"R6\"].map(function (k) { return String(RISK.extents[k]).toLowerCase(); })) is empty';\n  var chap = [\"[\\\"broad\\\",\\\"broad\\\",\\\"extensive\\\",\\\"extensive\\\",\\\"report bugs only\\\",\\\"cursory\\\"]\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — product risks in test order (highest level first; ties: higher impact)",
+              "vi": "B — rủi ro sản phẩm theo thứ tự test (mức cao trước; bằng nhau: tác động cao trước)"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (JSON.stringify(RISK.order)); } catch (e) { return 'JSON.stringify(RISK.order) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'JSON.stringify(RISK.order) is empty';\n  var chap = [\"[\\\"R3\\\",\\\"R4\\\",\\\"R1\\\",\\\"R2\\\",\\\"R6\\\",\\\"R5\\\"]\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — which statements are project risks",
+              "vi": "B — câu nào là rủi ro dự án"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((RISK.projectRisks || []).map(String)); } catch (e) { return '(RISK.projectRisks || []).map(String) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(RISK.projectRisks || []).map(String) is empty';\n  var chap = [[\"PR1\",\"PR2\"]];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"tap\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"tap\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"tap\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "C — executedPct",
+              "vi": "C — executedPct"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (MONITOR.executedPct); } catch (e) { return 'MONITOR.executedPct is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'MONITOR.executedPct is empty';\n  var chap = [45.83];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"so\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"so\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 0.006; }); }\n  else if (\"so\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — expectedPct",
+              "vi": "C — expectedPct"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (MONITOR.expectedPct); } catch (e) { return 'MONITOR.expectedPct is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'MONITOR.expectedPct is empty';\n  var chap = [62.5];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"so\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"so\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 0.006; }); }\n  else if (\"so\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — passRate",
+              "vi": "C — passRate"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (MONITOR.passRate); } catch (e) { return 'MONITOR.passRate is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'MONITOR.passRate is empty';\n  var chap = [80];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"so\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"so\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 0.006; }); }\n  else if (\"so\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — ddp",
+              "vi": "C — ddp"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (MONITOR.ddp); } catch (e) { return 'MONITOR.ddp is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'MONITOR.ddp is empty';\n  var chap = [95];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"so\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"so\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 0.006; }); }\n  else if (\"so\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — density",
+              "vi": "C — density"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (MONITOR.density); } catch (e) { return 'MONITOR.density is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'MONITOR.density is empty';\n  var chap = [3.2];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"so\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"so\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 0.006; }); }\n  else if (\"so\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — status (RED / AMBER / GREEN)",
+              "vi": "C — trạng thái (RED / AMBER / GREEN)"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (MONITOR.status); } catch (e) { return 'MONITOR.status is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'MONITOR.status is empty';\n  var chap = [\"RED\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — control action",
+              "vi": "C — hành động kiểm soát"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (MONITOR.action); } catch (e) { return 'MONITOR.action is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'MONITOR.action is empty';\n  var chap = [\"Add resources / ask for a fix\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "D — report identification, version, environment, phase, reference",
+              "vi": "D — định danh, phiên bản, môi trường, giai đoạn, tham chiếu"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>typeof REPORT==\"object\"&&/\\d/.test(String(REPORT.id))&&String(REPORT.title).length>=15&&REPORT.version===\"2.1.0\"&&/firefox/i.test(REPORT.environment)&&/stg-1/i.test(REPORT.environment)&&/^system testing$/i.test(String(REPORT.phase).trim())&&Array.isArray(REPORT.references)&&REPORT.references.includes(\"ST-31\")?\"OK\":\"id, a real title, version 2.1.0, Firefox + stg-1, phase System testing and reference ST-31 are required\")))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "D — steps, expected and actual",
+              "vi": "D — các bước, mong đợi, thực tế"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>Array.isArray(REPORT.steps)&&REPORT.steps.length>=3&&/cancelled/i.test(REPORT.expected)&&/pending/i.test(REPORT.actual)&&/lab closed/i.test(REPORT.expected)?\"OK\":\"\\u2265 3 steps; expected: CANCELLED + the \\u201CLab closed\\u201D e-mail; actual: stays PENDING\")))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "D — severity, priority, status",
+              "vi": "D — severity, priority, trạng thái"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const i=[\"Critical\",\"High\",\"Medium\",\"Low\"];return i.includes(REPORT.severity)&&i.includes(REPORT.priority)&&REPORT.status===\"New\"?\"OK\":\"severity/priority in Critical, High, Medium, Low; status New\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "D — rating of D1",
+              "vi": "D — đánh giá D1"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (RATINGS.D1); } catch (e) { return 'RATINGS.D1 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'RATINGS.D1 is empty';\n  var chap = [\"High severity · Low priority\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "D — rating of D2",
+              "vi": "D — đánh giá D2"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (RATINGS.D2); } catch (e) { return 'RATINGS.D2 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'RATINGS.D2 is empty';\n  var chap = [\"Low severity · High priority\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. A. Execution schedule",
+            "diem": 2
+          },
+          {
+            "ma": "f2",
+            "ten": "2. B. Risk analysis",
+            "diem": 2.5
+          },
+          {
+            "ma": "f3",
+            "ten": "3. C. Monitoring and control",
+            "diem": 2.5
+          },
+          {
+            "ma": "f4",
+            "ten": "4. D. Defect management",
+            "diem": 3
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Đặt T3 trước T1."
+        },
+        {
+          "loi": "Tính DDP bằng 64 lỗi hiện tại."
+        },
+        {
+          "loi": "Thiếu tham chiếu ST-31 trong report."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "execution schedule",
+          "vi": "lịch thực thi"
+        },
+        {
+          "en": "DDP",
+          "vi": "tỉ lệ lỗi phát hiện trước phát hành"
+        },
+        {
+          "en": "defect density",
+          "vi": "mật độ lỗi"
+        },
+        {
+          "en": "RAG status",
+          "vi": "trạng thái đỏ/vàng/xanh"
+        }
+      ]
+    }
+  ]
+}

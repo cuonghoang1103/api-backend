@@ -1,0 +1,650 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-risk-based-testing",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-risk-based-testing"
+  },
+  "exercises": [
+    {
+      "title": "Risk 1 — Product risk or project risk?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "product and project risks"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>A product (quality) risk threatens the product — it may fail to satisfy the legitimate needs of users and stakeholders. A project risk threatens the project’s ability to achieve its objectives (time, cost, scope). Classify each LabBook risk.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Rủi ro sản phẩm (chất lượng) đe doạ sản phẩm — nó có thể không đáp ứng nhu cầu chính đáng của người dùng và các bên. Rủi ro dự án đe doạ khả năng dự án đạt mục tiêu (thời gian, chi phí, phạm vi). Phân loại từng rủi ro của LabBook.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Hỏi: nếu xảy ra, NGƯỜI DÙNG có thấy sản phẩm hỏng không? ⇒ sản phẩm.",
+        "Hỏi: nếu xảy ra, DỰ ÁN có trễ/vượt chi phí không? ⇒ dự án."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Risk 1 — Product risk or project risk?\n\nAnswer in the answer panel (no code needed).\n\n1. Risk → kindRủi ro → loại\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Risk 1 — Product risk or project risk? — answer key\n\n1. Risk → kindRủi ro → loại\n   - r0.k: Product risk\n   - r1.k: Project risk\n   - r2.k: Product risk\n   - r3.k: Project risk\n   - r4.k: Product risk\n   - r5.k: Project risk\n   - r6.k: Product risk\n   - r7.k: Project risk\n   Wrong calculations, poor performance, security and accessibility problems are product risks; people, environments, suppliers and changing requirements are project risks.VI: Tính sai, hiệu năng kém, bảo mật và khả năng tiếp cận là rủi ro sản phẩm; con người, môi trường, nhà cung cấp, yêu cầu thay đổi là rủi ro dự án.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>P · Pj · P · Pj · P · Pj · P · Pj.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Risk → kind</p><p style=\"opacity:.75;font-size:.92em\"><i>Rủi ro → loại</i></p>",
+            "cot": [
+              {
+                "ma": "r",
+                "ten": "Risk"
+              },
+              {
+                "ma": "k",
+                "ten": "Kind",
+                "luaChon": [
+                  "Product risk",
+                  "Project risk"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "r": "The weekly-limit calculation may count cancelled bookings"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "r": "The only tester may be ill during the exam weeks"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "r": "Booking at 07:00 on Monday may take longer than 3 seconds for 300 students"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "r": "The cloud test environment may be delivered two weeks late"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "r": "A student may see other students’ bookings (privacy leak)"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "r": "The e-mail supplier may not deliver the integration API on time"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "r": "Screen readers may not be able to read the booking form"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "r": "Requirements may keep changing because the department has not agreed on the rules"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Product risk",
+              "r1.k": "Project risk",
+              "r2.k": "Product risk",
+              "r3.k": "Project risk",
+              "r4.k": "Product risk",
+              "r5.k": "Project risk",
+              "r6.k": "Product risk",
+              "r7.k": "Project risk"
+            },
+            "giaiThich": "<p>Wrong calculations, poor performance, security and accessibility problems are product risks; people, environments, suppliers and changing requirements are project risks.</p><p><i>VI: Tính sai, hiệu năng kém, bảo mật và khả năng tiếp cận là rủi ro sản phẩm; con người, môi trường, nhà cung cấp, yêu cầu thay đổi là rủi ro dự án.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gán “nhà cung cấp giao API trễ” cho rủi ro sản phẩm."
+        },
+        {
+          "loi": "Gán “yêu cầu thay đổi liên tục” cho rủi ro sản phẩm."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "product (quality) risk",
+          "vi": "rủi ro sản phẩm (chất lượng)"
+        },
+        {
+          "en": "project risk",
+          "vi": "rủi ro dự án"
+        }
+      ]
+    },
+    {
+      "title": "Risk 2 — Fill the risk analysis template in code",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 16,
+      "points": 20,
+      "concepts": [
+        "risk level",
+        "risk-based testing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Lesson 7.5’s worked example rates likelihood (L) and impact (I) on a 5-point scale where <b>5 = very high</b>, computes <b>risk level = L × I</b> and maps it to the extent of testing: <b>15–25 extensive</b>, <b>8–14 broad</b>, <b>4–7 cursory</b>, <b>1–3 report bugs only</b>.</p>\n<p>Write <code>riskTable(risks)</code>: <code>risks</code> = <code>[{ id, name, likelihood, impact }]</code>. Return a new array of <code>{ id, level, extent }</code> sorted by level (highest first), ties by impact (highest first), then by id A→Z. Ratings outside 1–5 or non-integers make the function throw a <code>RangeError</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>extent is one of the strings <code>extensive</code>, <code>broad</code>, <code>cursory</code>, <code>report bugs only</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ví dụ có lời giải của bài 7.5 chấm khả năng xảy ra (L) và tác động (I) theo thang 5 điểm với <b>5 = rất cao</b>, tính <b>mức rủi ro = L × I</b> và quy ra độ sâu kiểm thử: <b>15–25 extensive</b>, <b>8–14 broad</b>, <b>4–7 cursory</b>, <b>1–3 report bugs only</b>.</p><p>Viết <code>riskTable(risks)</code> như bản tiếng Anh: sắp theo mức (cao trước), bằng nhau thì theo tác động (cao trước), rồi theo id; điểm ngoài 1–5 hay không nguyên thì ném <code>RangeError</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>extent là một trong các chuỗi <code>extensive</code>, <code>broad</code>, <code>cursory</code>, <code>report bugs only</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "riskTable([{id:'R1',name:'Fee wrong',likelihood:3,impact:5},{id:'R4',name:'QR fails',likelihood:4,impact:4}])",
+          "output": "[{id:'R4',level:16,extent:'extensive'},{id:'R1',level:15,extent:'extensive'}]",
+          "explanation": "The two top rows of the e-wallet example.|||Hai dòng đầu của ví dụ ví điện tử."
+        }
+      ],
+      "hintsJson": [
+        "Kiểm đầu vào trước: Number.isInteger(x) && x >= 1 && x <= 5.",
+        "Sắp: (b.level − a.level) || (b.impact − a.impact) || id."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "risk.js",
+          "language": "javascript",
+          "code": "function riskTable(risks) {\n  return risks.map((r) => ({ id: r.id, level: 0, extent: '' }));\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "risk.js",
+          "language": "javascript",
+          "code": "function riskTable(risks) {\n  const ok = (x) => Number.isInteger(x) && x >= 1 && x <= 5;\n  const extent = (n) => (n >= 15 ? 'extensive' : n >= 8 ? 'broad' : n >= 4 ? 'cursory' : 'report bugs only');\n  for (const r of risks) if (!ok(r.likelihood) || !ok(r.impact)) throw new RangeError('rating of ' + r.id + ' must be an integer 1-5');\n  return risks\n    .map((r) => ({ id: r.id, level: r.likelihood * r.impact, impact: r.impact }))\n    .sort((a, b) => b.level - a.level || b.impact - a.impact || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0))\n    .map((r) => ({ id: r.id, level: r.level, extent: extent(r.level) }));\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Risk level drives thoroughness and order: extensive areas get formal techniques and run first; “report bugs only” areas get no planned tests at all.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "risk.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "the e-wallet example of the lesson",
+              "vi": "ví dụ ví điện tử của bài"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const i=riskTable([{id:\"R1\",name:\"fee\",likelihood:3,impact:5},{id:\"R2\",name:\"lockout\",likelihood:2,impact:5},{id:\"R3\",name:\"pdf\",likelihood:4,impact:3},{id:\"R4\",name:\"qr\",likelihood:4,impact:4},{id:\"R5\",name:\"theme\",likelihood:3,impact:1},{id:\"R6\",name:\"push\",likelihood:3,impact:2}]),e=[[\"R4\",16,\"extensive\"],[\"R1\",15,\"extensive\"],[\"R3\",12,\"broad\"],[\"R2\",10,\"broad\"],[\"R6\",6,\"cursory\"],[\"R5\",3,\"report bugs only\"]];return JSON.stringify(i)===JSON.stringify(e.map(([o,t,a])=>({id:o,level:t,extent:a})))?\"OK\":\"got \"+JSON.stringify(i)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "boundaries 15, 8, 4 and 3",
+              "vi": "biên 15, 8, 4 và 3"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const o=riskTable([{id:\"A\",likelihood:3,impact:5},{id:\"B\",likelihood:2,impact:4},{id:\"C\",likelihood:2,impact:2},{id:\"D\",likelihood:1,impact:3}]);return o.map(i=>i.extent).join(\"|\")===\"extensive|broad|cursory|report bugs only\"?\"OK\":\"got \"+o.map(i=>i.level+\":\"+i.extent).join(\", \")})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "ties: higher impact first, then id",
+              "vi": "bằng nhau: tác động cao trước, rồi id"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const o=riskTable([{id:\"Z\",likelihood:4,impact:3},{id:\"Y\",likelihood:3,impact:4},{id:\"X\",likelihood:3,impact:4}]);return o.map(i=>i.id).join(\"\")===\"XYZ\"?\"OK\":\"got \"+o.map(i=>i.id).join(\"\")})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "invalid ratings throw RangeError",
+              "vi": "điểm không hợp lệ ném RangeError"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const r=i=>{try{return riskTable([i]),!1}catch(t){return t instanceof RangeError}};return r({id:\"a\",likelihood:0,impact:3})&&r({id:\"b\",likelihood:3,impact:6})&&r({id:\"c\",likelihood:2.5,impact:3})?\"OK\":\"ratings 0, 6 and 2.5 must throw RangeError\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "the input array is not reordered",
+              "vi": "không sắp lại mảng đầu vào"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const i=[{id:\"low\",likelihood:1,impact:1},{id:\"high\",likelihood:5,impact:5}];return riskTable(i),i[0].id===\"low\"?\"OK\":\"the input array was sorted in place\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm thang: ở thang fst4 1 mới là “rất cao” — bài này dùng 5 = rất cao."
+        },
+        {
+          "loi": "Biên 15 thuộc extensive, 8 thuộc broad, 4 thuộc cursory."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "likelihood",
+          "vi": "khả năng xảy ra"
+        },
+        {
+          "en": "impact",
+          "vi": "tác động / thiệt hại"
+        },
+        {
+          "en": "risk level",
+          "vi": "mức rủi ro"
+        },
+        {
+          "en": "extent of testing",
+          "vi": "độ sâu kiểm thử"
+        }
+      ]
+    },
+    {
+      "title": "Risk 3 — How does risk change the test approach?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "risk-based testing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>LO-5.5.3: product risk analysis influences the thoroughness and scope of testing — which techniques, which levels and types, how much, in what order. For each planned approach, decide which extent of testing it belongs to.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>LO-5.5.3: phân tích rủi ro sản phẩm ảnh hưởng độ kỹ lưỡng và phạm vi kiểm thử — kỹ thuật nào, cấp và loại nào, bao nhiêu, theo thứ tự nào. Với mỗi cách tiếp cận dự kiến, xác định nó thuộc độ sâu nào.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Nhiều kỹ thuật + chạy trước ⇒ extensive.",
+        "Chỉ khám phá ⇒ cursory."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Risk 3 — How does risk change the test approach?\n\nAnswer in the answer panel (no code needed).\n\n1. Approach → extentCách tiếp cận → độ sâu\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Risk 3 — How does risk change the test approach? — answer key\n\n1. Approach → extentCách tiếp cận → độ sâu\n   - r0.e: Extensive\n   - r1.e: Broad\n   - r2.e: Cursory\n   - r3.e: Report bugs only\n   Higher risk ⇒ more formal techniques, more coverage, earlier execution; low risk ⇒ light or no testing.VI: Rủi ro cao ⇒ kỹ thuật hình thức hơn, độ phủ cao hơn, chạy sớm hơn; rủi ro thấp ⇒ test nhẹ hoặc không test.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Extensive · Broad · Cursory · Report bugs only.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Approach → extent</p><p style=\"opacity:.75;font-size:.92em\"><i>Cách tiếp cận → độ sâu</i></p>",
+            "cot": [
+              {
+                "ma": "a",
+                "ten": "Planned approach"
+              },
+              {
+                "ma": "e",
+                "ten": "Extent",
+                "luaChon": [
+                  "Extensive",
+                  "Broad",
+                  "Cursory",
+                  "Report bugs only"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "a": "EP + BVA on every band, decision tables, code review of the formula, decision coverage, run first in every cycle"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "a": "EP on the main inputs and a use-case test of the main scenario, run after the extensive areas"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "a": "One exploratory session per release, no scripted tests"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "a": "No planned tests; if a tester happens to see a problem, it is reported"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.e": "Extensive",
+              "r1.e": "Broad",
+              "r2.e": "Cursory",
+              "r3.e": "Report bugs only"
+            },
+            "giaiThich": "<p>Higher risk ⇒ more formal techniques, more coverage, earlier execution; low risk ⇒ light or no testing.</p><p><i>VI: Rủi ro cao ⇒ kỹ thuật hình thức hơn, độ phủ cao hơn, chạy sớm hơn; rủi ro thấp ⇒ test nhẹ hoặc không test.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng rủi ro chỉ ảnh hưởng SỐ LƯỢNG test, không ảnh hưởng thứ tự và kỹ thuật."
+        },
+        {
+          "loi": "Gán “một phiên khám phá” cho broad."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "thoroughness",
+          "vi": "độ kỹ lưỡng"
+        }
+      ]
+    },
+    {
+      "title": "Risk 4 — Exam questions on risk (K1–K2)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "risk-based testing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Six FE-style questions on SWT5 slides 79–88: the definition of risk level, risk-based testing, what to do with project risks and who should take part in a risk analysis.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sáu câu kiểu FE về slide SWT5 79–88: định nghĩa mức rủi ro, risk-based testing, xử lý rủi ro dự án và ai nên tham gia phân tích rủi ro.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Rủi ro sản phẩm ⇒ test; rủi ro dự án ⇒ quản lý.",
+        "Mức rủi ro = L × I."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Risk 4 — Exam questions on risk (K1–K2)\n\nAnswer in the answer panel (no code needed).\n\n1. The level of risk is determined by…Mức rủi ro được xác định bởi…\n2. Which is the best description of risk-based testing?Mô tả đúng nhất về risk-based testing?\n3. How are project risks typically handled?Rủi ro dự án thường được xử lý thế nào?\n4. Who should take part in a product-risk analysis?Ai nên tham gia phân tích rủi ro sản phẩm?\n5. After testing, residual risk is…Sau khi test, rủi ro còn lại là…\n6. Which is an example of a project risk that testers themselves may cause?Đâu là ví dụ rủi ro dự án do chính tester gây ra?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Risk 4 — Exam questions on risk (K1–K2) — answer key\n\n1. The level of risk is determined by…Mức rủi ro được xác định bởi…\n   Answer: b) the likelihood of the event and its impact (harm)\n   Risk level = likelihood × impact.VI: Mức rủi ro = khả năng × tác động.\n\n2. Which is the best description of risk-based testing?Mô tả đúng nhất về risk-based testing?\n   Answer: b) Using product-risk analysis to select, prioritise and decide the thoroughness of test activities, to reduce the risk level\n   Identify, assess, mitigate — and keep re-assessing.VI: Nhận diện, đánh giá, giảm thiểu — và đánh giá lại liên tục.\n\n3. How are project risks typically handled?Rủi ro dự án thường được xử lý thế nào?\n   Answer: b) By project-management actions — mitigation, contingency plans, transfer or acceptance — recorded in the test plan\n   Testing mitigates product risks; project risks need management actions.VI: Kiểm thử giảm rủi ro sản phẩm; rủi ro dự án cần hành động quản lý.\n\n4. Who should take part in a product-risk analysis?Ai nên tham gia phân tích rủi ro sản phẩm?\n   Answer: b) A broad range of stakeholders — business people (impact) and technical people (likelihood) among them\n   The worked example: business gave impact, developers gave likelihood.VI: Ví dụ mẫu: nghiệp vụ cho tác động, developer cho khả năng xảy ra.\n\n5. After testing, residual risk is…Sau khi test, rủi ro còn lại là…\n   Answer: b) the risk that remains; it is reported so stakeholders can decide to release\n   Testing reduces, never removes, risk; the summary report states residual risk.VI: Kiểm thử giảm, không xoá rủi ro; báo cáo tổng kết nêu rủi ro còn lại.\n\n6. Which is an example of a project risk that testers themselves may cause?Đâu là ví dụ rủi ro dự án do chính tester gây ra?\n   Answer: b) Low quality of the test design or poor communication of test results\n   Technical/organisational issues include skills, communication and test-environment problems.VI: Vấn đề kỹ thuật/tổ chức gồm kỹ năng, giao tiếp và môi trường test.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · b · b · b · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>The level of risk is determined by…</p><p style=\"opacity:.75;font-size:.92em\"><i>Mức rủi ro được xác định bởi…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the number of test cases"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the likelihood of the event and its impact (harm)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the experience of the tester"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the size of the code"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Risk level = likelihood × impact.</p><p><i>VI: Mức rủi ro = khả năng × tác động.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Which is the best description of risk-based testing?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mô tả đúng nhất về risk-based testing?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Testing only the riskiest feature"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Using product-risk analysis to select, prioritise and decide the thoroughness of test activities, to reduce the risk level"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Testing after a failure in production"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Testing with random data"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Identify, assess, mitigate — and keep re-assessing.</p><p><i>VI: Nhận diện, đánh giá, giảm thiểu — và đánh giá lại liên tục.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>How are project risks typically handled?</p><p style=\"opacity:.75;font-size:.92em\"><i>Rủi ro dự án thường được xử lý thế nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "By more test cases"
+              },
+              {
+                "ma": "b",
+                "noiDung": "By project-management actions — mitigation, contingency plans, transfer or acceptance — recorded in the test plan"
+              },
+              {
+                "ma": "c",
+                "noiDung": "They are ignored"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only by the developers"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Testing mitigates product risks; project risks need management actions.</p><p><i>VI: Kiểm thử giảm rủi ro sản phẩm; rủi ro dự án cần hành động quản lý.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Who should take part in a product-risk analysis?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ai nên tham gia phân tích rủi ro sản phẩm?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Only the testers"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A broad range of stakeholders — business people (impact) and technical people (likelihood) among them"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only the customer"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only the project manager"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The worked example: business gave impact, developers gave likelihood.</p><p><i>VI: Ví dụ mẫu: nghiệp vụ cho tác động, developer cho khả năng xảy ra.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>After testing, residual risk is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau khi test, rủi ro còn lại là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "always zero"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the risk that remains; it is reported so stakeholders can decide to release"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the number of passed tests"
+              },
+              {
+                "ma": "d",
+                "noiDung": "not reported"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Testing reduces, never removes, risk; the summary report states residual risk.</p><p><i>VI: Kiểm thử giảm, không xoá rủi ro; báo cáo tổng kết nêu rủi ro còn lại.</i></p>"
+          },
+          {
+            "ma": "q6",
+            "de": "<p>Which is an example of a project risk that testers themselves may cause?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đâu là ví dụ rủi ro dự án do chính tester gây ra?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A security hole in the product"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Low quality of the test design or poor communication of test results"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Slow response time"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A wrong calculation"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Technical/organisational issues include skills, communication and test-environment problems.</p><p><i>VI: Vấn đề kỹ thuật/tổ chức gồm kỹ năng, giao tiếp và môi trường test.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng risk-based testing là chỉ test phần rủi ro nhất."
+        },
+        {
+          "loi": "Cho rằng sau khi test thì không còn rủi ro."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "mitigation",
+          "vi": "giảm thiểu"
+        },
+        {
+          "en": "contingency",
+          "vi": "phương án dự phòng"
+        },
+        {
+          "en": "residual risk",
+          "vi": "rủi ro còn lại"
+        }
+      ]
+    }
+  ]
+}

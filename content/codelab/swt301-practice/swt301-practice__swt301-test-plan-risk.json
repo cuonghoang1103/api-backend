@@ -1,0 +1,819 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-test-plan-risk",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-test-plan-risk"
+  },
+  "exercises": [
+    {
+      "title": "Planning 1 — Which of the seven test strategies?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "test strategies"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>A test strategy says where tests come from. Match each LabBook decision to one of the seven strategy types (analytical, model-based, methodical, process/standard-compliant, directed, regression-averse, reactive).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chiến lược test cho biết test lấy từ đâu. Ghép mỗi quyết định của LabBook với một trong bảy loại chiến lược.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "“Theo danh sách có sẵn” ⇒ methodical; “theo chuẩn bắt buộc” ⇒ process-compliant.",
+        "Exploratory là ví dụ điển hình của reactive."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Planning 1 — Which of the seven test strategies?\n\nAnswer in the answer panel (no code needed).\n\n1. Decision → strategyQuyết định → chiến lược\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Planning 1 — Which of the seven test strategies? — answer key\n\n1. Decision → strategyQuyết định → chiến lược\n   - r0.s: Analytical\n   - r1.s: Model-based\n   - r2.s: Methodical\n   - r3.s: Process-compliant\n   - r4.s: Directed (consultative)\n   - r5.s: Regression-averse\n   - r6.s: Reactive\n   Risk analysis = analytical; models = model-based; a predefined list = methodical; external standard = process-compliant; expert advice = directed; avoiding regression = regression-averse; reacting to the delivered system = reactive.VI: Phân tích rủi ro = analytical; mô hình = model-based; danh sách định sẵn = methodical; chuẩn bên ngoài = process-compliant; lời khuyên chuyên gia = directed; tránh hồi quy = regression-averse; phản ứng với hệ thống đã giao = reactive.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Analytical · Model-based · Methodical · Process-compliant · Directed · Regression-averse · Reactive.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Decision → strategy</p><p style=\"opacity:.75;font-size:.92em\"><i>Quyết định → chiến lược</i></p>",
+            "cot": [
+              {
+                "ma": "d",
+                "ten": "Decision"
+              },
+              {
+                "ma": "s",
+                "ten": "Strategy",
+                "luaChon": [
+                  "Analytical",
+                  "Model-based",
+                  "Methodical",
+                  "Process-compliant",
+                  "Directed (consultative)",
+                  "Regression-averse",
+                  "Reactive"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "d": "Test effort is distributed according to a product-risk analysis of each feature"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "d": "Tests are derived from the state diagram of a booking and from the business-process model of semester set-up"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "d": "Every release is checked against the ISO/IEC 25010 quality characteristics, one by one"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "d": "The team follows ISO/IEC/IEEE 29119 because the university contract requires it"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "d": "The security consultant decides which attacks must be tested"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "d": "All passing tests of previous releases are automated and re-run on every build"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "d": "No tests are designed in advance for the beta; testers explore it as soon as it is deployed"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.s": "Analytical",
+              "r1.s": "Model-based",
+              "r2.s": "Methodical",
+              "r3.s": "Process-compliant",
+              "r4.s": "Directed (consultative)",
+              "r5.s": "Regression-averse",
+              "r6.s": "Reactive"
+            },
+            "giaiThich": "<p>Risk analysis = analytical; models = model-based; a predefined list = methodical; external standard = process-compliant; expert advice = directed; avoiding regression = regression-averse; reacting to the delivered system = reactive.</p><p><i>VI: Phân tích rủi ro = analytical; mô hình = model-based; danh sách định sẵn = methodical; chuẩn bên ngoài = process-compliant; lời khuyên chuyên gia = directed; tránh hồi quy = regression-averse; phản ứng với hệ thống đã giao = reactive.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm methodical với process-compliant."
+        },
+        {
+          "loi": "Gán risk-based cho directed."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "test strategy",
+          "vi": "chiến lược test"
+        },
+        {
+          "en": "test approach",
+          "vi": "cách tiếp cận test — chiến lược áp vào một dự án"
+        }
+      ]
+    },
+    {
+      "title": "Planning 2 — Entry or exit criterion?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "entry and exit criteria"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Entry criteria (definition of ready) say when a test activity may start; exit criteria (definition of done) say when it may stop. Classify each criterion of the LabBook system-test plan.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Entry criteria (definition of ready) cho biết khi nào một hoạt động test được bắt đầu; exit criteria (definition of done) cho biết khi nào được dừng. Phân loại từng tiêu chí trong kế hoạch system test LabBook.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "“Có sẵn / sẵn sàng” ⇒ entry; “đã chạy / đã phủ / còn lại” ⇒ exit.",
+        "Hạng mục đã qua cấp trước là tiêu chí VÀO của cấp này."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Planning 2 — Entry or exit criterion?\n\nAnswer in the answer panel (no code needed).\n\n1. Criterion → kindTiêu chí → loại\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Planning 2 — Entry or exit criterion? — answer key\n\n1. Criterion → kindTiêu chí → loại\n   - r0.k: Entry criterion\n   - r1.k: Exit criterion\n   - r2.k: Entry criterion\n   - r3.k: Exit criterion\n   - r4.k: Entry criterion\n   - r5.k: Exit criterion\n   - r6.k: Entry criterion\n   Entry: availability of environment, data, tools, testable requirements, test items that met the exit criteria of the previous level. Exit: planned tests executed, coverage reached, defects below limits, residual risk evaluated, budget/time.VI: Entry: có môi trường, dữ liệu, công cụ, yêu cầu test được, hạng mục đã qua tiêu chí ra của cấp trước. Exit: chạy xong test dự kiến, đạt độ phủ, lỗi dưới ngưỡng, đã đánh giá rủi ro còn lại, ngân sách/thời gian.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Entry · Exit · Entry · Exit · Entry · Exit · Entry.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Criterion → kind</p><p style=\"opacity:.75;font-size:.92em\"><i>Tiêu chí → loại</i></p>",
+            "cot": [
+              {
+                "ma": "c",
+                "ten": "Criterion"
+              },
+              {
+                "ma": "k",
+                "ten": "Kind",
+                "luaChon": [
+                  "Entry criterion",
+                  "Exit criterion"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "c": "The test environment and the seed data are available and the smoke test passes"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "c": "All planned tests have been run and 100% of high-risk requirements are covered"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "c": "The test items have passed component and integration testing"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "c": "No open Critical or Major defect; the number of open Minor defects is below 10"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "c": "Testable requirements and user stories are available"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "c": "The estimated residual risk has been accepted by the product owner"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "c": "The test tools are installed and licensed"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Entry criterion",
+              "r1.k": "Exit criterion",
+              "r2.k": "Entry criterion",
+              "r3.k": "Exit criterion",
+              "r4.k": "Entry criterion",
+              "r5.k": "Exit criterion",
+              "r6.k": "Entry criterion"
+            },
+            "giaiThich": "<p>Entry: availability of environment, data, tools, testable requirements, test items that met the exit criteria of the previous level. Exit: planned tests executed, coverage reached, defects below limits, residual risk evaluated, budget/time.</p><p><i>VI: Entry: có môi trường, dữ liệu, công cụ, yêu cầu test được, hạng mục đã qua tiêu chí ra của cấp trước. Exit: chạy xong test dự kiến, đạt độ phủ, lỗi dưới ngưỡng, đã đánh giá rủi ro còn lại, ngân sách/thời gian.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gán “đã qua integration testing” cho exit."
+        },
+        {
+          "loi": "Gán rủi ro còn lại được chấp nhận cho entry."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "entry criteria (definition of ready)",
+          "vi": "tiêu chí vào"
+        },
+        {
+          "en": "exit criteria (definition of done)",
+          "vi": "tiêu chí ra"
+        },
+        {
+          "en": "residual risk",
+          "vi": "rủi ro còn lại"
+        }
+      ]
+    },
+    {
+      "title": "Planning 3 — Build the test execution schedule (K3)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "test execution schedule"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>LO-5.2.4 (K3) — the rule of slide 40, word for word: <i>“Ideally, test cases are ordered by their priority levels. If a test case with a higher priority depends on a test case with a lower priority, the lower-priority test case must be executed first.”</i></p>\n<p>Write <code>schedule(tests)</code>. Each test is <code>{ id, priority, dependsOn: [ids] }</code> where priority <b>1 is the highest</b>. Return the ids in execution order: at each step choose, among the tests whose dependencies have all been executed, the one with the highest priority (smallest number); ties by id A→Z. If some tests can never run (cyclic or missing dependency), return <code>null</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Do not modify the input.</li>\n</ul>",
+      "problemHtmlVi": "<p>LO-5.2.4 (K3) — luật của slide 40: <i>“Lý tưởng là sắp test case theo mức ưu tiên. Nếu test case ưu tiên cao phụ thuộc test case ưu tiên thấp hơn, test case ưu tiên thấp phải chạy trước.”</i></p>\n<p>Viết <code>schedule(tests)</code>. Mỗi test là <code>{ id, priority, dependsOn: [ids] }</code>, priority <b>1 là cao nhất</b>. Trả các id theo thứ tự chạy: mỗi bước chọn, trong các test đã chạy xong mọi phụ thuộc, test ưu tiên cao nhất (số nhỏ nhất); bằng nhau thì theo id A→Z. Nếu có test không bao giờ chạy được (phụ thuộc vòng hoặc phụ thuộc không tồn tại) thì trả <code>null</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Không sửa đầu vào.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "schedule([{id:'TC1',priority:2,dependsOn:[]},{id:'TC2',priority:1,dependsOn:['TC3']},{id:'TC3',priority:3,dependsOn:[]}])",
+          "output": "['TC1','TC3','TC2']",
+          "explanation": "TC2 (priority 1) waits for TC3; TC1 (priority 2) is the best test available first.|||TC2 (ưu tiên 1) phải chờ TC3; lúc đầu TC1 (ưu tiên 2) là test tốt nhất đang chạy được."
+        }
+      ],
+      "hintsJson": [
+        "Giữ tập “đã chạy”; mỗi vòng lọc các test chưa chạy có mọi dependsOn trong tập đó.",
+        "Sắp ứng viên theo (priority, id) và lấy phần tử đầu.",
+        "Không còn ứng viên mà vẫn còn test ⇒ null."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "schedule.js",
+          "language": "javascript",
+          "code": "function schedule(tests) {\n  return tests.map((t) => t.id);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "schedule.js",
+          "language": "javascript",
+          "code": "function schedule(tests) {\n  const done = new Set();\n  const order = [];\n  const rest = tests.slice();\n  while (rest.length) {\n    const ready = rest.filter((t) => (t.dependsOn || []).every((d) => done.has(d)));\n    if (!ready.length) return null;\n    ready.sort((a, b) => a.priority - b.priority || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));\n    const next = ready[0];\n    order.push(next.id);\n    done.add(next.id);\n    rest.splice(rest.indexOf(next), 1);\n  }\n  return order;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A greedy topological order: always run the highest-priority test that is ready. This is exactly how exam questions on slide 41–44 are solved by hand.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "schedule.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "the example",
+              "vi": "ví dụ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const i=schedule([{id:\"TC1\",priority:2,dependsOn:[]},{id:\"TC2\",priority:1,dependsOn:[\"TC3\"]},{id:\"TC3\",priority:3,dependsOn:[]}]);return JSON.stringify(i)==='[\"TC1\",\"TC3\",\"TC2\"]'?\"OK\":\"got \"+JSON.stringify(i)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "no dependencies: pure priority, ties by id",
+              "vi": "không phụ thuộc: theo ưu tiên, bằng nhau theo id"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const i=schedule([{id:\"B\",priority:2,dependsOn:[]},{id:\"A\",priority:2,dependsOn:[]},{id:\"C\",priority:1,dependsOn:[]}]);return JSON.stringify(i)==='[\"C\",\"A\",\"B\"]'?\"OK\":\"got \"+JSON.stringify(i)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "a chain of dependencies",
+              "vi": "chuỗi phụ thuộc"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const i=schedule([{id:\"T4\",priority:1,dependsOn:[\"T3\"]},{id:\"T3\",priority:3,dependsOn:[\"T2\"]},{id:\"T2\",priority:3,dependsOn:[]},{id:\"T1\",priority:2,dependsOn:[]}]);return JSON.stringify(i)==='[\"T1\",\"T2\",\"T3\",\"T4\"]'?\"OK\":\"got \"+JSON.stringify(i)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "slide-style exam question (LabBook login → book → cancel)",
+              "vi": "câu kiểu slide (đăng nhập → đặt → huỷ)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const i=schedule([{id:\"TC-cancel\",priority:1,dependsOn:[\"TC-book\"]},{id:\"TC-report\",priority:3,dependsOn:[]},{id:\"TC-book\",priority:2,dependsOn:[\"TC-login\"]},{id:\"TC-login\",priority:3,dependsOn:[]},{id:\"TC-search\",priority:2,dependsOn:[]}]);return JSON.stringify(i)==='[\"TC-search\",\"TC-login\",\"TC-book\",\"TC-cancel\",\"TC-report\"]'?\"OK\":\"got \"+JSON.stringify(i)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "cyclic or missing dependency ⇒ null",
+              "vi": "phụ thuộc vòng hoặc thiếu ⇒ null"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const n=schedule([{id:\"X\",priority:1,dependsOn:[\"Y\"]},{id:\"Y\",priority:2,dependsOn:[\"X\"]}]),i=schedule([{id:\"X\",priority:1,dependsOn:[\"Z\"]}]);return n===null&&i===null?\"OK\":\"got \"+JSON.stringify(n)+\" and \"+JSON.stringify(i)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "input is not modified",
+              "vi": "không sửa đầu vào"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const i=[{id:\"B\",priority:1,dependsOn:[]},{id:\"A\",priority:2,dependsOn:[\"B\"]}],n=JSON.stringify(i);return schedule(i),JSON.stringify(i)===n?\"OK\":\"the input array was modified\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Sắp một lần theo priority rồi “đẩy” phụ thuộc lên trước — có thể chạy sớm một test ưu tiên thấp chưa cần."
+        },
+        {
+          "loi": "Lặp vô hạn khi có phụ thuộc vòng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "test execution schedule",
+          "vi": "lịch thực thi test"
+        },
+        {
+          "en": "dependency",
+          "vi": "phụ thuộc kỹ thuật hoặc logic"
+        }
+      ]
+    },
+    {
+      "title": "Planning 4 — Estimate the test effort: metrics-based and three-point",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "test estimation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>LO-5.2.6 distinguishes <b>metrics-based</b> estimation (from historical data) and <b>expert-based</b> estimation (Wideband Delphi, planning poker, three-point). Write:</p>\n<ol><li><code>metricsBased(history, newCases)</code> — <code>history</code> is <code>[{ cases, hours }]</code> of past releases. Hours per case = Σhours ÷ Σcases; return newCases × that, rounded to 1 decimal.</li>\n<li><code>threePoint(a, m, b)</code> — optimistic, most likely, pessimistic. Return <code>{ estimate: (a + 4m + b) / 6, sd: (b − a) / 6 }</code>, both rounded to 2 decimals.</li>\n<li><code>withRetests(hours, cycles, retestRatio)</code> — the 2023 deck’s warning: an estimate must include several fix-and-retest cycles. Each extra cycle costs <code>retestRatio</code> × the first run. Return hours × (1 + cycles × retestRatio), rounded to 1 decimal.</li></ol>\n<h4>Requirements</h4>\n<ul>\n  <li>Round with <code>Math.round(x * 10) / 10</code> or <code>Math.round(x * 100) / 100</code> at the end only.</li>\n</ul>",
+      "problemHtmlVi": "<p>LO-5.2.6 phân biệt ước lượng <b>dựa số liệu</b> (từ dữ liệu lịch sử) và <b>dựa chuyên gia</b> (Wideband Delphi, planning poker, ba điểm). Viết ba hàm như bản tiếng Anh: <code>metricsBased</code> (giờ/test case lịch sử × số case mới, làm tròn 1 chữ số), <code>threePoint</code> ((a + 4m + b)/6 và (b − a)/6, làm tròn 2 chữ số), <code>withRetests</code> (cộng các chu kỳ sửa–test lại, mỗi chu kỳ tốn retestRatio × lần chạy đầu, làm tròn 1 chữ số).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Làm tròn bằng <code>Math.round(x * 10) / 10</code> hoặc <code>Math.round(x * 100) / 100</code>, chỉ ở cuối.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "metricsBased([{cases:120,hours:60},{cases:80,hours:44}], 150)",
+          "output": "78",
+          "explanation": "104 h ÷ 200 cases = 0.52 h/case × 150.|||104 giờ ÷ 200 case = 0,52 giờ/case × 150."
+        },
+        {
+          "input": "threePoint(20, 30, 52)",
+          "output": "{ estimate: 32, sd: 5.33 }",
+          "explanation": "(20 + 120 + 52) ÷ 6 = 32.|||(20 + 120 + 52) ÷ 6 = 32."
+        }
+      ],
+      "hintsJson": [
+        "metricsBased: cộng tổng giờ và tổng case trước, rồi mới chia (không lấy trung bình của các tỉ lệ).",
+        "withRetests(78, 2, 0.3) = 78 × 1.6 = 124.8."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "estimate.js",
+          "language": "javascript",
+          "code": "function metricsBased(history, newCases) {\n  return 0;\n}\n\nfunction threePoint(a, m, b) {\n  return { estimate: 0, sd: 0 };\n}\n\nfunction withRetests(hours, cycles, retestRatio) {\n  return hours;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "estimate.js",
+          "language": "javascript",
+          "code": "function metricsBased(history, newCases) {\n  const h = history.reduce((s, x) => s + x.hours, 0);\n  const c = history.reduce((s, x) => s + x.cases, 0);\n  return Math.round((newCases * h / c) * 10) / 10;\n}\n\nfunction threePoint(a, m, b) {\n  const r2 = (x) => Math.round(x * 100) / 100;\n  return { estimate: r2((a + 4 * m + b) / 6), sd: r2((b - a) / 6) };\n}\n\nfunction withRetests(hours, cycles, retestRatio) {\n  return Math.round(hours * (1 + cycles * retestRatio) * 10) / 10;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Metrics-based estimation scales history; three-point (PERT) weights the most likely value four times; the 2023 deck reminds you that the first run is never the last — budget the fix-and-retest cycles from history too.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "estimate.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "metricsBased — the example",
+              "vi": "metricsBased — ví dụ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const s=metricsBased([{cases:120,hours:60},{cases:80,hours:44}],150);return s===78?\"OK\":\"expected 78, got \"+s})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "metricsBased — weighted, not an average of ratios",
+              "vi": "metricsBased — có trọng số, không lấy trung bình tỉ lệ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const s=metricsBased([{cases:10,hours:10},{cases:90,hours:45}],100);return s===55?\"OK\":\"expected 55 (55 h / 100 cases), got \"+s})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "threePoint — the example",
+              "vi": "threePoint — ví dụ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const t=threePoint(20,30,52);return t&&t.estimate===32&&t.sd===5.33?\"OK\":\"got \"+JSON.stringify(t)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "withRetests",
+              "vi": "withRetests"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const t=withRetests(78,2,.3),s=withRetests(40,0,.5);return t===124.8&&s===40?\"OK\":\"got \"+t+\" and \"+s})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "threePoint — rounding",
+              "vi": "threePoint — làm tròn"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const t=threePoint(3,5,10);return t&&t.estimate===5.5&&t.sd===1.17?\"OK\":\"got \"+JSON.stringify(t)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "metricsBased — rounding to 1 decimal",
+              "vi": "metricsBased — làm tròn 1 chữ số"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const e=metricsBased([{cases:30,hours:10}],7);return e===2.3?\"OK\":\"expected 2.3, got \"+e})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Lấy trung bình các tỉ lệ giờ/case của từng bản (trọng số sai)."
+        },
+        {
+          "loi": "Dùng (a + m + b)/3 thay cho trọng số PERT."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "metrics-based estimation",
+          "vi": "ước lượng dựa số liệu"
+        },
+        {
+          "en": "expert-based estimation",
+          "vi": "ước lượng dựa chuyên gia"
+        },
+        {
+          "en": "three-point estimation",
+          "vi": "ước lượng ba điểm (PERT)"
+        },
+        {
+          "en": "Wideband Delphi",
+          "vi": "chuyên gia ước lượng độc lập rồi hội tụ"
+        }
+      ]
+    },
+    {
+      "title": "Planning 5 — Test plan, effort factors and estimation (exam)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "test planning",
+        "test estimation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Six FE-style questions on SWT5 slides 25–58: what a test plan contains and how it changes, the factors that influence test effort and the two families of estimation techniques.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sáu câu kiểu FE về slide SWT5 25–58: test plan chứa gì và thay đổi ra sao, các yếu tố ảnh hưởng công sức test và hai họ kỹ thuật ước lượng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Bốn nhóm yếu tố: sản phẩm, quy trình, con người, kết quả test.",
+        "Số liệu lịch sử ⇒ metrics-based; ý kiến người ⇒ expert-based."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Planning 5 — Test plan, effort factors and estimation (exam)\n\nAnswer in the answer panel (no code needed).\n\n1. Which statement about the test plan is TRUE?Phát biểu nào về test plan là ĐÚNG?\n2. Which is a PRODUCT characteristic that influences test effort?Đâu là đặc điểm SẢN PHẨM ảnh hưởng công sức test?\n3. Which is a TEST RESULTS factor?Đâu là yếu tố KẾT QUẢ TEST?\n4. Burndown charts and defect removal models from past projects are examples of…Biểu đồ burndown và mô hình loại bỏ lỗi từ dự án trước là ví dụ của…\n5. Planning poker in an Agile team is…Planning poker trong nhóm Agile là…\n6. Why should an estimate include fix-and-retest cycles (2023 deck)?Vì sao ước lượng phải tính các chu kỳ sửa–test lại (bộ slide 2023)?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Planning 5 — Test plan, effort factors and estimation (exam) — answer key\n\n1. Which statement about the test plan is TRUE?Phát biểu nào về test plan là ĐÚNG?\n   Answer: b) It is a continuous activity: feedback from test activities is used to update it\n   Planning is influenced by policy, strategy, lifecycle, scope, risks, constraints… and evolves.VI: Lập kế hoạch chịu ảnh hưởng của chính sách, chiến lược, vòng đời, phạm vi, rủi ro, ràng buộc… và thay đổi dần.\n\n2. Which is a PRODUCT characteristic that influences test effort?Đâu là đặc điểm SẢN PHẨM ảnh hưởng công sức test?\n   Answer: b) The complexity of the product domain and the quality of the test basis\n   Factor groups: product, development process, people, test results.VI: Nhóm yếu tố: sản phẩm, quy trình phát triển, con người, kết quả test.\n\n3. Which is a TEST RESULTS factor?Đâu là yếu tố KẾT QUẢ TEST?\n   Answer: a) The number and severity of defects found and the amount of rework required\n   More defects ⇒ more retests and regression.VI: Nhiều lỗi ⇒ nhiều test lại và hồi quy.\n\n4. Burndown charts and defect removal models from past projects are examples of…Biểu đồ burndown và mô hình loại bỏ lỗi từ dự án trước là ví dụ của…\n   Answer: b) metrics-based estimation\n   Planning poker and Wideband Delphi are expert-based.VI: Planning poker và Wideband Delphi là dựa chuyên gia.\n\n5. Planning poker in an Agile team is…Planning poker trong nhóm Agile là…\n   Answer: b) an expert-based technique\n   Team members estimate based on experience and converge.VI: Thành viên ước lượng theo kinh nghiệm rồi hội tụ.\n\n6. Why should an estimate include fix-and-retest cycles (2023 deck)?Vì sao ước lượng phải tính các chu kỳ sửa–test lại (bộ slide 2023)?\n   Answer: b) Because failures found in the first run lead to fixes, confirmation tests and regression runs that also take time\n   History tells how many cycles to expect.VI: Số liệu cũ cho biết cần dự trù bao nhiêu chu kỳ.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · a · b · b · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which statement about the test plan is TRUE?</p><p style=\"opacity:.75;font-size:.92em\"><i>Phát biểu nào về test plan là ĐÚNG?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It is written once and never changed"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It is a continuous activity: feedback from test activities is used to update it"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It contains the detailed test cases"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only the customer may change it"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Planning is influenced by policy, strategy, lifecycle, scope, risks, constraints… and evolves.</p><p><i>VI: Lập kế hoạch chịu ảnh hưởng của chính sách, chiến lược, vòng đời, phạm vi, rủi ro, ràng buộc… và thay đổi dần.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Which is a PRODUCT characteristic that influences test effort?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đâu là đặc điểm SẢN PHẨM ảnh hưởng công sức test?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The skills of the team"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The complexity of the product domain and the quality of the test basis"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Time pressure"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The test results"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Factor groups: product, development process, people, test results.</p><p><i>VI: Nhóm yếu tố: sản phẩm, quy trình phát triển, con người, kết quả test.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Which is a TEST RESULTS factor?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đâu là yếu tố KẾT QUẢ TEST?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The number and severity of defects found and the amount of rework required"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The tools used"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Team cohesion"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Legal requirements"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>More defects ⇒ more retests and regression.</p><p><i>VI: Nhiều lỗi ⇒ nhiều test lại và hồi quy.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Burndown charts and defect removal models from past projects are examples of…</p><p style=\"opacity:.75;font-size:.92em\"><i>Biểu đồ burndown và mô hình loại bỏ lỗi từ dự án trước là ví dụ của…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "expert-based estimation"
+              },
+              {
+                "ma": "b",
+                "noiDung": "metrics-based estimation"
+              },
+              {
+                "ma": "c",
+                "noiDung": "exploratory testing"
+              },
+              {
+                "ma": "d",
+                "noiDung": "risk analysis"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Planning poker and Wideband Delphi are expert-based.</p><p><i>VI: Planning poker và Wideband Delphi là dựa chuyên gia.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>Planning poker in an Agile team is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Planning poker trong nhóm Agile là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a metrics-based technique"
+              },
+              {
+                "ma": "b",
+                "noiDung": "an expert-based technique"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a test strategy"
+              },
+              {
+                "ma": "d",
+                "noiDung": "an exit criterion"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Team members estimate based on experience and converge.</p><p><i>VI: Thành viên ước lượng theo kinh nghiệm rồi hội tụ.</i></p>"
+          },
+          {
+            "ma": "q6",
+            "de": "<p>Why should an estimate include fix-and-retest cycles (2023 deck)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao ước lượng phải tính các chu kỳ sửa–test lại (bộ slide 2023)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Because tests always pass the first time"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Because failures found in the first run lead to fixes, confirmation tests and regression runs that also take time"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Because managers like large numbers"
+              },
+              {
+                "ma": "d",
+                "noiDung": "They should not"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>History tells how many cycles to expect.</p><p><i>VI: Số liệu cũ cho biết cần dự trù bao nhiêu chu kỳ.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng test plan cố định."
+        },
+        {
+          "loi": "Xếp planning poker vào metrics-based vì có con số."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "burndown chart",
+          "vi": "biểu đồ công việc còn lại"
+        },
+        {
+          "en": "planning poker",
+          "vi": "ước lượng bằng bài theo nhóm"
+        }
+      ]
+    }
+  ]
+}

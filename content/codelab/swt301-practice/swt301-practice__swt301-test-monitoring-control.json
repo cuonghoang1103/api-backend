@@ -1,0 +1,604 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-test-monitoring-control",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-test-monitoring-control"
+  },
+  "exercises": [
+    {
+      "title": "Monitoring 1 — Progress report or summary report?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "test reports"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>A <b>test progress report</b> is produced regularly during a test activity and leads to control actions; a <b>test summary report</b> is produced at the end and supports release and completion decisions. Some content appears in both. Classify each item.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Báo cáo tiến độ</b> được làm định kỳ trong lúc test và dẫn tới hành động kiểm soát; <b>báo cáo tổng kết</b> làm ở cuối và hỗ trợ quyết định phát hành, hoàn tất. Một số nội dung có ở cả hai. Phân loại từng mục.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "“Kỳ tới”, “đang cản trở” ⇒ tiến độ.",
+        "“Rủi ro còn lại, tái dùng, đánh giá tổng thể” ⇒ tổng kết."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Monitoring 1 — Progress report or summary report?\n\nAnswer in the answer panel (no code needed).\n\n1. Item → reportMục → báo cáo\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Monitoring 1 — Progress report or summary report? — answer key\n\n1. Item → reportMục → báo cáo\n   - r0.r: Test progress report\n   - r1.r: Test progress report\n   - r2.r: Test summary report\n   - r3.r: Both\n   - r4.r: Both\n   - r5.r: Test summary report\n   Only progress reports: next period, current impediments. Only summary reports: residual risks, reusable work products, overall evaluation. Both: status vs plan, metrics, deviations.VI: Chỉ báo cáo tiến độ: kỳ tới, trở ngại hiện tại. Chỉ báo cáo tổng kết: rủi ro còn lại, sản phẩm tái dùng, đánh giá tổng thể. Cả hai: tình trạng so với kế hoạch, số đo, sai lệch.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Progress · Progress · Summary · Both · Both · Summary.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Item → report</p><p style=\"opacity:.75;font-size:.92em\"><i>Mục → báo cáo</i></p>",
+            "cot": [
+              {
+                "ma": "i",
+                "ten": "Item"
+              },
+              {
+                "ma": "r",
+                "ten": "Report",
+                "luaChon": [
+                  "Test progress report",
+                  "Test summary report",
+                  "Both"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "i": "Testing planned for the next reporting period"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "i": "Factors impeding progress right now (the test server is down every afternoon)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "i": "Residual risks for go-live and reusable test work products"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "i": "Status of test activities and progress against the test plan"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "i": "Metrics of defects, test cases, coverage and effort"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "i": "Overall evaluation of the product quality to support the release decision"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.r": "Test progress report",
+              "r1.r": "Test progress report",
+              "r2.r": "Test summary report",
+              "r3.r": "Both",
+              "r4.r": "Both",
+              "r5.r": "Test summary report"
+            },
+            "giaiThich": "<p>Only progress reports: next period, current impediments. Only summary reports: residual risks, reusable work products, overall evaluation. Both: status vs plan, metrics, deviations.</p><p><i>VI: Chỉ báo cáo tiến độ: kỳ tới, trở ngại hiện tại. Chỉ báo cáo tổng kết: rủi ro còn lại, sản phẩm tái dùng, đánh giá tổng thể. Cả hai: tình trạng so với kế hoạch, số đo, sai lệch.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gán số đo chỉ cho báo cáo tổng kết."
+        },
+        {
+          "loi": "Gán “kế hoạch kỳ tới” cho tổng kết."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "test progress report (status report)",
+          "vi": "báo cáo tiến độ test"
+        },
+        {
+          "en": "test summary report (completion report)",
+          "vi": "báo cáo tổng kết test"
+        }
+      ]
+    },
+    {
+      "title": "Monitoring 2 — Choose the control action",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "test control"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Test control takes action when monitoring shows a deviation. The syllabus names: re-prioritising tests when an identified risk occurs, changing the execution schedule because of availability of the test environment or resources, re-evaluating whether an item meets an exit criterion after rework. Pick the most appropriate action.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Kiểm soát test hành động khi giám sát thấy sai lệch. Syllabus nêu: sắp lại ưu tiên khi rủi ro đã nhận diện xảy ra, đổi lịch chạy vì môi trường hay nguồn lực, đánh giá lại tiêu chí ra sau khi sửa. Chọn hành động phù hợp nhất.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Môi trường/nguồn lực ⇒ đổi lịch.",
+        "Lỗi chặn nhiều test ⇒ xin sửa gấp."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Monitoring 2 — Choose the control action\n\nAnswer in the answer panel (no code needed).\n\n1. Situation → control actionTình huống → hành động kiểm soát\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Monitoring 2 — Choose the control action — answer key\n\n1. Situation → control actionTình huống → hành động kiểm soát\n   - r0.a: Re-prioritise tests\n   - r1.a: Change the test execution schedule\n   - r2.a: Re-evaluate the exit criteria with stakeholders\n   - r3.a: Add resources / ask for a fix\n   A risk materialises → re-prioritise; environment unavailable → reschedule; criteria questioned → re-evaluate with stakeholders; a blocking defect → ask for a fix (and resources).VI: Rủi ro xảy ra → sắp lại ưu tiên; môi trường không có → đổi lịch; tiêu chí bị chất vấn → đánh giá lại với các bên; lỗi chặn → xin sửa gấp (và nguồn lực).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Re-prioritise · Reschedule · Re-evaluate · Fix/resources.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Situation → control action</p><p style=\"opacity:.75;font-size:.92em\"><i>Tình huống → hành động kiểm soát</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Situation"
+              },
+              {
+                "ma": "a",
+                "ten": "Action",
+                "luaChon": [
+                  "Re-prioritise tests",
+                  "Change the test execution schedule",
+                  "Re-evaluate the exit criteria with stakeholders",
+                  "Add resources / ask for a fix"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "The payment gateway (a known high risk) failed in production at another university last week"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "The load-test server is booked by another project until Thursday"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The PO asks whether release 2.1 can go live with 3 open Minor defects instead of 0"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "The cancellation module blocks 40% of the planned tests because of one crash"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.a": "Re-prioritise tests",
+              "r1.a": "Change the test execution schedule",
+              "r2.a": "Re-evaluate the exit criteria with stakeholders",
+              "r3.a": "Add resources / ask for a fix"
+            },
+            "giaiThich": "<p>A risk materialises → re-prioritise; environment unavailable → reschedule; criteria questioned → re-evaluate with stakeholders; a blocking defect → ask for a fix (and resources).</p><p><i>VI: Rủi ro xảy ra → sắp lại ưu tiên; môi trường không có → đổi lịch; tiêu chí bị chất vấn → đánh giá lại với các bên; lỗi chặn → xin sửa gấp (và nguồn lực).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đổi tiêu chí ra một mình mà không có các bên liên quan."
+        },
+        {
+          "loi": "Bỏ qua test bị chặn thay vì xin sửa lỗi chặn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "test control",
+          "vi": "kiểm soát test — hành động điều chỉnh"
+        },
+        {
+          "en": "blocking defect",
+          "vi": "lỗi chặn — làm nhiều test không chạy được"
+        }
+      ]
+    },
+    {
+      "title": "Monitoring 3 — Compute the weekly progress report",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 18,
+      "points": 20,
+      "concepts": [
+        "test metrics",
+        "test monitoring"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Write <code>progress(p)</code> for the LabBook weekly report. Input:</p>\n<pre>{ planned, plannedByNow, executed, passed, failed, blocked,\n  defects: [ { severity: 'Critical'|'Major'|'Minor', open: true|false } ],\n  foundBefore, foundAfterRelease, kloc }</pre>\n<p>Return (percentages and densities rounded to 2 decimals):</p>\n<ul>\n<li><code>executedPct</code> = executed ÷ planned × 100; <code>expectedPct</code> = plannedByNow ÷ planned × 100;</li>\n<li><code>passRate</code> = passed ÷ executed × 100 (0 if nothing executed);</li>\n<li><code>openCritical</code>, <code>openMajor</code> — open defects of that severity;</li>\n<li><code>density</code> = all defects ÷ kloc (defects per thousand lines of code);</li>\n<li><code>ddp</code> = defect detection percentage = foundBefore ÷ (foundBefore + foundAfterRelease) × 100 (null if both 0);</li>\n<li><code>status</code> = <code>'RED'</code> if an open Critical exists or executed is more than 20 percentage points behind expected; else <code>'AMBER'</code> if behind at all or passRate &lt; 90; else <code>'GREEN'</code>.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>executedPct − expectedPct is the deviation; “more than 20 points behind” means expectedPct − executedPct &gt; 20.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>progress(p)</code> cho báo cáo tuần của LabBook với đầu vào và đầu ra như khối trên: % đã chạy, % lẽ ra phải chạy tới giờ, tỉ lệ đạt, số lỗi Critical/Major còn mở, mật độ lỗi trên KLOC, DDP (tỉ lệ phát hiện lỗi trước phát hành), và trạng thái RED/AMBER/GREEN theo luật trên.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>executedPct − expectedPct là sai lệch; “chậm hơn 20 điểm” nghĩa là expectedPct − executedPct &gt; 20.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "progress({ planned: 200, plannedByNow: 100, executed: 70, passed: 52, failed: 15, blocked: 3, defects: [{severity:'Major',open:true},{severity:'Minor',open:false}], foundBefore: 180, foundAfterRelease: 20, kloc: 12.5 })",
+          "output": "{ executedPct: 35, expectedPct: 50, passRate: 74.29, openCritical: 0, openMajor: 1, density: 0.16, ddp: 90, status: 'AMBER' }",
+          "explanation": "15 points behind (not > 20) but behind ⇒ AMBER.|||Chậm 15 điểm (không > 20) nhưng vẫn chậm ⇒ AMBER."
+        }
+      ],
+      "hintsJson": [
+        "Tính các con số trước, xét trạng thái sau: RED trước, rồi AMBER, cuối cùng GREEN.",
+        "DDP chỉ dùng hai số foundBefore và foundAfterRelease."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "progress.js",
+          "language": "javascript",
+          "code": "function progress(p) {\n  return { executedPct: 0, expectedPct: 0, passRate: 0, openCritical: 0, openMajor: 0, density: 0, ddp: null, status: 'GREEN' };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "progress.js",
+          "language": "javascript",
+          "code": "function progress(p) {\n  const r2 = (x) => Math.round(x * 100) / 100;\n  const executedPct = r2((p.executed / p.planned) * 100);\n  const expectedPct = r2((p.plannedByNow / p.planned) * 100);\n  const passRate = p.executed ? r2((p.passed / p.executed) * 100) : 0;\n  const open = (s) => p.defects.filter((d) => d.open && d.severity === s).length;\n  const openCritical = open('Critical');\n  const openMajor = open('Major');\n  const density = r2(p.defects.length / p.kloc);\n  const tong = p.foundBefore + p.foundAfterRelease;\n  const ddp = tong ? r2((p.foundBefore / tong) * 100) : null;\n  const behind = expectedPct - executedPct;\n  let status = 'GREEN';\n  if (openCritical > 0 || behind > 20) status = 'RED';\n  else if (behind > 0 || passRate < 90) status = 'AMBER';\n  return { executedPct, expectedPct, passRate, openCritical, openMajor, density, ddp, status };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>These are the metrics of LO-5.3.1: progress against plan, test-case results, defect information (severity, density, DDP) — and a simple traffic light that tells the reader where control is needed.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "progress.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "the example",
+              "vi": "ví dụ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const e=progress({planned:200,plannedByNow:100,executed:70,passed:52,failed:15,blocked:3,defects:[{severity:\"Major\",open:!0},{severity:\"Minor\",open:!1}],foundBefore:180,foundAfterRelease:20,kloc:12.5}),t={executedPct:35,expectedPct:50,passRate:74.29,openCritical:0,openMajor:1,density:.16,ddp:90,status:\"AMBER\"};return JSON.stringify(e)===JSON.stringify(t)?\"OK\":\"got \"+JSON.stringify(e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "an open Critical makes it RED",
+              "vi": "còn Critical mở thì RED"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const e=progress({planned:100,plannedByNow:50,executed:60,passed:59,failed:1,blocked:0,defects:[{severity:\"Critical\",open:!0}],foundBefore:10,foundAfterRelease:0,kloc:10});return e.status===\"RED\"&&e.openCritical===1?\"OK\":\"got \"+JSON.stringify(e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "GREEN when on plan and passRate ≥ 90",
+              "vi": "GREEN khi đúng kế hoạch và passRate ≥ 90"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const e=progress({planned:100,plannedByNow:50,executed:50,passed:45,failed:5,blocked:0,defects:[{severity:\"Critical\",open:!1}],foundBefore:0,foundAfterRelease:0,kloc:4});return e.status===\"GREEN\"&&e.passRate===90&&e.ddp===null&&e.density===.25?\"OK\":\"got \"+JSON.stringify(e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "exactly 20 points behind is AMBER, 21 is RED",
+              "vi": "chậm đúng 20 điểm là AMBER, 21 là RED"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const e=progress({planned:100,plannedByNow:60,executed:40,passed:40,failed:0,blocked:0,defects:[],foundBefore:1,foundAfterRelease:1,kloc:1}),s=progress({planned:100,plannedByNow:61,executed:40,passed:40,failed:0,blocked:0,defects:[],foundBefore:1,foundAfterRelease:1,kloc:1});return e.status===\"AMBER\"&&s.status===\"RED\"?\"OK\":\"got \"+e.status+\" and \"+s.status})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "nothing executed",
+              "vi": "chưa chạy gì"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const e=progress({planned:80,plannedByNow:0,executed:0,passed:0,failed:0,blocked:0,defects:[],foundBefore:3,foundAfterRelease:1,kloc:2});return e.passRate===0&&e.status===\"AMBER\"&&e.ddp===75?\"OK\":\"got \"+JSON.stringify(e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Tính passRate trên số test dự kiến thay vì số đã chạy."
+        },
+        {
+          "loi": "Cho RED khi chậm đúng 20 điểm."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "defect density",
+          "vi": "mật độ lỗi — lỗi trên nghìn dòng mã"
+        },
+        {
+          "en": "DDP (defect detection percentage)",
+          "vi": "tỉ lệ lỗi phát hiện trước khi phát hành"
+        },
+        {
+          "en": "RAG status",
+          "vi": "trạng thái đỏ/vàng/xanh"
+        }
+      ]
+    },
+    {
+      "title": "Monitoring 4 — Metrics and audiences (exam)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "test metrics",
+        "test reports"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Five FE-style questions on SWT5 slides 59–73: the purposes of test metrics, the common metrics, and how the audience changes the content of a report.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu kiểu FE về slide SWT5 59–73: mục đích của số đo, các số đo thường gặp và đối tượng đọc làm thay đổi nội dung báo cáo thế nào.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Số đo dùng để cải tiến và quyết định, không để đổ lỗi.",
+        "Báo cáo theo người đọc."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Monitoring 4 — Metrics and audiences (exam)\n\nAnswer in the answer panel (no code needed).\n\n1. Which is NOT a typical purpose of test metrics?Đâu KHÔNG phải mục đích điển hình của số đo test?\n2. Which is a metric of defect information?Đâu là số đo về thông tin lỗi?\n3. How should a report for the university’s board differ from one for the test team?Báo cáo cho ban giám hiệu nên khác báo cáo cho nhóm test thế nào?\n4. Monitoring is to control as…Monitoring so với control giống như…\n5. Which standard names these reports “test status report” and “test completion report”?Chuẩn nào gọi hai báo cáo là “test status report” và “test completion report”?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Monitoring 4 — Metrics and audiences (exam) — answer key\n\n1. Which is NOT a typical purpose of test metrics?Đâu KHÔNG phải mục đích điển hình của số đo test?\n   Answer: c) Rank developers by the number of defects they caused\n   Using defect counts to blame people destroys trust (lesson 1.5).VI: Dùng số lỗi để đổ lỗi cho người phá hỏng niềm tin (bài 1.5).\n\n2. Which is a metric of defect information?Đâu là số đo về thông tin lỗi?\n   Answer: b) Defect density, defects found and fixed, failure rate, confirmation test results\n   The syllabus groups metrics: progress, defect information, coverage, cost.VI: Syllabus nhóm số đo: tiến độ, thông tin lỗi, độ phủ, chi phí.\n\n3. How should a report for the university’s board differ from one for the test team?Báo cáo cho ban giám hiệu nên khác báo cáo cho nhóm test thế nào?\n   Answer: b) A short summary of status, residual risk and the decision needed; detailed defect data goes to the team\n   The content of a report varies with its audience and the project context.VI: Nội dung báo cáo thay đổi theo người đọc và ngữ cảnh dự án.\n\n4. Monitoring is to control as…Monitoring so với control giống như…\n   Answer: a) looking is to acting\n   Monitoring looks, control acts.VI: Giám sát là nhìn, kiểm soát là hành động.\n\n5. Which standard names these reports “test status report” and “test completion report”?Chuẩn nào gọi hai báo cáo là “test status report” và “test completion report”?\n   Answer: b) ISO/IEC/IEEE 29119-3\n   29119-3 covers test documentation.VI: 29119-3 là phần về tài liệu test.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: c · b · b · a · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which is NOT a typical purpose of test metrics?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đâu KHÔNG phải mục đích điển hình của số đo test?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Assess progress against the schedule and budget"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Determine the current quality of the test object"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Rank developers by the number of defects they caused"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Assess the effectiveness of the test approach"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Using defect counts to blame people destroys trust (lesson 1.5).</p><p><i>VI: Dùng số lỗi để đổ lỗi cho người phá hỏng niềm tin (bài 1.5).</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Which is a metric of defect information?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đâu là số đo về thông tin lỗi?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Percentage of the test environment prepared"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Defect density, defects found and fixed, failure rate, confirmation test results"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Hours of test effort"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Number of test cases designed"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The syllabus groups metrics: progress, defect information, coverage, cost.</p><p><i>VI: Syllabus nhóm số đo: tiến độ, thông tin lỗi, độ phủ, chi phí.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>How should a report for the university’s board differ from one for the test team?</p><p style=\"opacity:.75;font-size:.92em\"><i>Báo cáo cho ban giám hiệu nên khác báo cáo cho nhóm test thế nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It should be identical"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A short summary of status, residual risk and the decision needed; detailed defect data goes to the team"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It should contain all test logs"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It should hide all problems"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The content of a report varies with its audience and the project context.</p><p><i>VI: Nội dung báo cáo thay đổi theo người đọc và ngữ cảnh dự án.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Monitoring is to control as…</p><p style=\"opacity:.75;font-size:.92em\"><i>Monitoring so với control giống như…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "looking is to acting"
+              },
+              {
+                "ma": "b",
+                "noiDung": "planning is to designing"
+              },
+              {
+                "ma": "c",
+                "noiDung": "testing is to debugging"
+              },
+              {
+                "ma": "d",
+                "noiDung": "they are the same"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Monitoring looks, control acts.</p><p><i>VI: Giám sát là nhìn, kiểm soát là hành động.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>Which standard names these reports “test status report” and “test completion report”?</p><p style=\"opacity:.75;font-size:.92em\"><i>Chuẩn nào gọi hai báo cáo là “test status report” và “test completion report”?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "ISO/IEC 25010"
+              },
+              {
+                "ma": "b",
+                "noiDung": "ISO/IEC/IEEE 29119-3"
+              },
+              {
+                "ma": "c",
+                "noiDung": "IEEE 829 only"
+              },
+              {
+                "ma": "d",
+                "noiDung": "ISO 9001"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>29119-3 covers test documentation.</p><p><i>VI: 29119-3 là phần về tài liệu test.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gửi toàn bộ log cho ban lãnh đạo."
+        },
+        {
+          "loi": "Nhầm 29119 với 25010."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "audience",
+          "vi": "người đọc / đối tượng nhận báo cáo"
+        }
+      ]
+    }
+  ]
+}

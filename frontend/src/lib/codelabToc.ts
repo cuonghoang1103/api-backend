@@ -24,6 +24,7 @@ export type CapDoToc = 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED';
 export const KHOA_CUA_TRACK: Readonly<Record<string, string>> = Object.freeze({
   'web-foundations-practice': 'web-foundations',
   'fer202-practice': 'front-end-web-development-with-react',
+  'swt301-practice': 'software-testing',
 });
 
 /**
@@ -65,6 +66,19 @@ export const TEN_CHUONG: Readonly<Record<string, Readonly<Record<number, string>
     12: 'Kiến trúc Flux & Redux',
     13: 'Luyện PE — đề thực hành có đồng hồ',
     14: 'Nâng cao: hiệu năng, kiểm thử, TypeScript',
+  },
+  'swt301-practice': {
+    1: 'Nền tảng kiểm thử',
+    2: 'Kiểm thử trong vòng đời phần mềm',
+    3: 'Kiểm thử tĩnh (Static testing)',
+    4: 'Kỹ thuật hộp đen (Black-box)',
+    5: 'Kỹ thuật hộp trắng (White-box)',
+    6: 'Kỹ thuật dựa kinh nghiệm',
+    7: 'Quản lý kiểm thử',
+    8: 'Công cụ & tự động hoá',
+    9: 'Kiểm thử trong Agile',
+    10: 'Lab trường — Report 5.1 / 5.2 / 5.3',
+    11: 'Luyện PE — đề thực hành có đồng hồ',
   },
 });
 

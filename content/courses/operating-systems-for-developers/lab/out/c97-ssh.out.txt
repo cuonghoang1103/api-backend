@@ -1,0 +1,15 @@
+$ ssh -V
+OpenSSH_9.2p1 Debian-2+deb12u10, OpenSSL 3.0.22 25 Aug 2026
+$ ssh-keygen -q -t ed25519 -N '' -C deploy@cuongthai -f /tmp/deploy_key; ls -l /tmp/deploy_key*
+-rw------- 1 node node 411 Oct 28 12:59 /tmp/deploy_key
+-rw-r--r-- 1 node node  98 Oct 28 12:59 /tmp/deploy_key.pub
+$ chmod 644 /tmp/deploy_key; ssh-keygen -y -f /tmp/deploy_key
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@         WARNING: UNPROTECTED PRIVATE KEY FILE!          @
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+Permissions 0644 for '/tmp/deploy_key' are too open.
+It is required that your private key files are NOT accessible by others.
+This private key will be ignored.
+Load key "/tmp/deploy_key": bad permissions
+$ chmod 600 /tmp/deploy_key; ssh-keygen -y -f /tmp/deploy_key | cut -c1-60
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHAQ0DwCLKbZf6hZrOV3VIqW

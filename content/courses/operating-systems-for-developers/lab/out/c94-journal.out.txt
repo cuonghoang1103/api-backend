@@ -1,0 +1,97 @@
+$ dumpe2fs -h /tmp/vps.img 2>/dev/null | grep -E '^(Filesystem features|Total journal size|Journal sequence)'
+Filesystem features:      has_journal ext_attr resize_inode dir_index orphan_file filetype needs_recovery extent 64bit flex_bg metadata_csum_seed sparse_super large_file huge_file dir_nlink extra_isize metadata_csum orphan_present
+Total journal size:       4096k
+Journal sequence:         0x00000001
+$ grep -E '^(data=|commit=|barrier|journal_checksum|auto_da_alloc)' /proc/fs/ext4/$(basename $(findmnt -no SOURCE /srv/data))/options | tr '\n' ' '; echo
+journal_checksum barrier auto_da_alloc commit=5 data=ordered 
+$ dumpe2fs /tmp/vps.img 2>/dev/null | grep -E '^ +(Primary superblock|Reserved GDT|Block bitmap at|Inode bitmap at|Inode table at)' | head -5
+  Primary superblock at 0, Group descriptors at 1-1
+  Reserved GDT blocks at 2-4
+  Block bitmap at 5 (+5), csum 0xca1de8dd
+  Inode bitmap at 21 (+21), csum 0x57477e6c
+  Inode table at 37-548 (+37)
+$ mkdir /srv/data/uploads; for i in 1 2 3; do echo "photo $i" > /srv/data/uploads/p$i.jpg; done
+$ sleep 7; cp /tmp/vps.img /tmp/crash.img
+$ debugfs -R 'ls /' /tmp/crash.img 2>/dev/null
+ 2  (12) .    2  (12) ..    11  (4060) lost+found   
+$ dumpe2fs -h /tmp/crash.img 2>/dev/null | grep -o needs_recovery
+needs_recovery
+$ debugfs -R 'logdump -a' /tmp/crash.img 2>/dev/null | grep -v '^  [0-9a-f]\{4\}' | grep -v '^$'
+Journal starts at block 1, transaction 2
+Found expected sequence 2, type 1 (descriptor block) at block 1
+Dumping descriptor block, sequence 2, at block 1:
+  FS block 21 logged at journal block 2 (flags 0x0)
+  FS block 1 logged at journal block 3 (flags 0x2)
+  FS block 37 logged at journal block 4 (flags 0x2)
+  FS block 5 logged at journal block 5 (flags 0x2)
+  FS block 1581 logged at journal block 6 (flags 0x2)
+  FS block 6 logged at journal block 7 (flags 0x2)
+  FS block 0 logged at journal block 8 (flags 0xa)
+Found expected sequence 2, type 2 (commit block) at block 9
+No magic number at block 10: end of journal.
+$ mount -o loop /tmp/crash.img /mnt/crash; dmesg | grep 'recovery complete' | tail -1 | sed 's/^\[[ 0-9.]*\] //'; ls -l /mnt/crash/uploads
+EXT4-fs (loop1): recovery complete
+total 0
+-rw-r--r-- 1 root root 0 Oct 28 19:30 p1.jpg
+-rw-r--r-- 1 root root 0 Oct 28 19:30 p2.jpg
+-rw-r--r-- 1 root root 0 Oct 28 19:30 p3.jpg
+$ debugfs -R 'icheck 6 1581' /tmp/crash.img 2>/dev/null; debugfs -R 'imap /uploads/p1.jpg' /tmp/crash.img 2>/dev/null
+Block	Inode number
+6	2
+1581	13
+Inode 14 is part of block group 0
+	located at block 37, offset 0x0d00
+$ D=$(basename $(findmnt -no SOURCE /srv/data)); python3 -c "import os; fd = os.open('/srv/data/events.log', os.O_WRONLY | os.O_CREAT | os.O_APPEND); [(os.write(fd, b'payment ok\n'), os.fsync(fd)) for _ in range(500)]"; head -9 /proc/fs/jbd2/$D-8/info
+501 transactions (500 requested), each up to 341 blocks
+average: 
+  0ms waiting for transaction
+  0ms request delay
+  10ms running transaction
+  0ms transaction was being locked
+  0ms flushing data (in ordered mode)
+  1ms logging transaction
+  471us average transaction commit time
+$ truncate -s 8M /tmp/old.img && mkfs.ext2 -q -b 1024 /tmp/old.img && mount -o loop /tmp/old.img /mnt/old
+$ echo "invoice 2026-10-28: total 1,250,000 VND" > /mnt/old/invoice.txt
+$ echo "DB_PASSWORD=hunter2 (another user's file)" > /mnt/old/old-secret.txt; sync
+$ B=$(debugfs -R 'bmap /old-secret.txt 0' /tmp/old.img 2>/dev/null); echo "old-secret.txt lives in block $B"; rm /mnt/old/old-secret.txt; umount /mnt/old
+old-secret.txt lives in block 7170
+$ debugfs -w -R "sif /invoice.txt size 2048" /tmp/old.img 2>/dev/null; debugfs -w -R "sif /invoice.txt blocks 4" /tmp/old.img 2>/dev/null; debugfs -w -R "sif /invoice.txt block[1] $B" /tmp/old.img 2>/dev/null
+$ mount -o loop,ro /tmp/old.img /mnt/old; strings /mnt/old/invoice.txt; umount /mnt/old
+invoice 2026-10-28: total 1,250,000 VND
+DB_PASSWORD=hunter2 (another user's file)
+$ e2fsck -fn /tmp/old.img
+e2fsck 1.47.2 (1-Jan-2025)
+Pass 1: Checking inodes, blocks, and sizes
+Pass 2: Checking directory structure
+Pass 3: Checking directory connectivity
+Pass 4: Checking reference counts
+Pass 5: Checking group summary information
+Block bitmap differences:  +7170
+Fix? no
+
+
+/tmp/old.img: ********** WARNING: Filesystem still has errors **********
+
+/tmp/old.img: 12/2048 files (0.0% non-contiguous), 563/8192 blocks
+$ for mode in ordered writeback journal; do rm -f /tmp/m.img; truncate -s 128M /tmp/m.img; mkfs.ext4 -q /tmp/m.img; mount -o loop,data=$mode /tmp/m.img /srv/data; d=$(basename $(findmnt -no SOURCE /srv/data)); sync; a=$(cat /sys/fs/ext4/$d/session_write_kbytes); head -c 32M /dev/urandom > /srv/data/f; sync; b=$(cat /sys/fs/ext4/$d/session_write_kbytes); echo "data=$mode: app wrote 32768 KiB, the disk received $((b-a)) KiB"; umount /srv/data; done
+data=ordered: app wrote 32768 KiB, the disk received 32828 KiB
+data=writeback: app wrote 32768 KiB, the disk received 32828 KiB
+data=journal: app wrote 32768 KiB, the disk received 65864 KiB
+$ ( for i in $(seq 1 6000); do mkdir -p /srv/data/d$((i%80)); echo "file $i" > /srv/data/d$((i%80))/f$i; done ) & W=$!; ( while kill -0 $W 2>/dev/null; do sync; done ) & for k in $(seq 1 12); do sleep 0.25; cp /tmp/live.img /tmp/copy$k.img; done; wait
+$ for k in $(seq 1 12); do e2fsck -fy /tmp/copy$k.img > /tmp/fsck$k.txt 2>&1; echo "copy $k: $(grep -cE '^(Entry|Inode [0-9]+ (was|has|is|ref)|Unattached|Block bitmap differences|Inode bitmap differences|Multiply)' /tmp/fsck$k.txt) real errors after journal replay"; done
+copy 1: 0 real errors after journal replay
+copy 2: 5 real errors after journal replay
+copy 3: 0 real errors after journal replay
+copy 4: 0 real errors after journal replay
+copy 5: 17 real errors after journal replay
+copy 6: 7 real errors after journal replay
+copy 7: 29 real errors after journal replay
+copy 8: 15 real errors after journal replay
+copy 9: 37 real errors after journal replay
+copy 10: 17 real errors after journal replay
+copy 11: 21 real errors after journal replay
+copy 12: 0 real errors after journal replay
+$ grep -hE '^Entry' /tmp/fsck*.txt | head -2
+Entry 'f1735' in /d55 (121) references inode 1827 found in group 0's unused inodes area.
+Entry 'f1735' in /d55 (121) has an incorrect filetype (was 1, should be 0).

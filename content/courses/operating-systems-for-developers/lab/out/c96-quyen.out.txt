@@ -1,0 +1,70 @@
+$ id dev; id bob
+uid=1001(dev) gid=1001(dev) groups=1001(dev),2000(team)
+uid=1002(bob) gid=1002(bob) groups=1002(bob),2000(team)
+$ ls -l /srv/app/.env; stat -c '%A = %a  owner=%U group=%G  %n' /srv/app/.env
+-rw-r--r-- 1 root root 19 Oct 28 19:18 /srv/app/.env
+-rw-r--r-- = 644  owner=root group=root  /srv/app/.env
+$ umask
+0022
+$ umask 077; touch /srv/app/secret.key; mkdir /srv/app/private; umask 022
+$ stat -c '%A %a %n' /srv/app/secret.key /srv/app/private
+-rw------- 600 /srv/app/secret.key
+drwx------ 700 /srv/app/private
+$ node -e "require('fs').writeFileSync('/srv/app/token.json', '{}', { mode: 0o666 })"; stat -c '%A %a %n' /srv/app/token.json
+-rw-r--r-- 644 /srv/app/token.json
+$ ls -l /tmp/own.txt
+----rwxrwx 1 dev dev 6 Oct 28 19:18 /tmp/own.txt
+$ runuser -u dev -- cat /tmp/own.txt
+cat: /tmp/own.txt: Permission denied
+$ runuser -u bob -- cat /tmp/own.txt
+hello
+$ chmod 744 /srv/box; ls -ld /srv/box; runuser -u dev -- ls -l /srv/box; runuser -u dev -- cat /srv/box/q3.txt
+drwxr--r-- 2 root root 4096 Oct 28 19:18 /srv/box
+total 0
+-????????? ? ? ? ?            ? q3.txt
+cat: /srv/box/q3.txt: Permission denied
+$ chmod 711 /srv/box; ls -ld /srv/box; runuser -u dev -- ls /srv/box; runuser -u dev -- cat /srv/box/q3.txt
+drwx--x--x 2 root root 4096 Oct 28 19:18 /srv/box
+ls: cannot open directory '/srv/box': Permission denied
+report
+$ ls -l /srv/devdir/owned-by-root; runuser -u dev -- rm -f /srv/devdir/owned-by-root; ls /srv/devdir
+-r--r--r-- 1 root root 0 Oct 28 19:18 /srv/devdir/owned-by-root
+$ ls -ld /srv/app; ls -l /srv/app/dev-notes.txt; runuser -u dev -- rm -f /srv/app/dev-notes.txt
+drwxr-xr-x 3 root root 4096 Oct 28 19:18 /srv/app
+-rw-r--r-- 1 dev root 0 Oct 28 19:18 /srv/app/dev-notes.txt
+rm: cannot remove '/srv/app/dev-notes.txt': Permission denied
+$ ls -ld /tmp; runuser -u bob -- touch /tmp/bob-session; runuser -u dev -- rm -f /tmp/bob-session
+drwxrwxrwt 1 root root 4096 Oct 28 19:18 /tmp
+rm: cannot remove '/tmp/bob-session': Operation not permitted
+$ mkdir -m 777 /srv/drop; runuser -u bob -- touch /srv/drop/bob-session; runuser -u dev -- rm -f /srv/drop/bob-session; ls /srv/drop
+$ mkdir /srv/team; chgrp team /srv/team; chmod 2775 /srv/team; ls -ld /srv/team
+drwxrwsr-x 2 root team 4096 Oct 28 19:18 /srv/team
+$ runuser -u dev -- touch /srv/team/plan.md; runuser -u bob -- touch /srv/team/notes.md; ls -l /srv/team
+total 0
+-rw-r--r-- 1 bob team 0 Oct 28 19:18 notes.md
+-rw-r--r-- 1 dev team 0 Oct 28 19:18 plan.md
+$ ls -l /usr/bin/passwd /usr/bin/su
+-rwsr-xr-x 1 root root 142552 Feb  3  2026 /usr/bin/passwd
+-rwsr-xr-x 1 root root  68024 Aug 19 21:23 /usr/bin/su
+$ chmod 600 /srv/app/.env; runuser -u dev -- ids
+real uid=1001  effective uid=1001  real gid=1001  effective gid=1001
+open /srv/app/.env: Permission denied
+$ chmod u+s /usr/local/bin/ids; ls -l /usr/local/bin/ids; runuser -u dev -- ids
+-rwsr-xr-x 1 root root 70664 Oct 28 19:18 /usr/local/bin/ids
+real uid=1001  effective uid=0  real gid=1001  effective gid=1001
+open /srv/app/.env: OK
+$ find / -xdev -perm -4000 -type f 2>/dev/null | sort
+/usr/bin/chfn
+/usr/bin/chsh
+/usr/bin/gpasswd
+/usr/bin/mount
+/usr/bin/passwd
+/usr/bin/su
+/usr/bin/sudo.ws
+/usr/bin/umount
+/usr/local/bin/ids
+$ chmod 000 /srv/app/.env; ls -l /srv/app/.env; cat /srv/app/.env
+---------- 1 root root 19 Oct 28 19:18 /srv/app/.env
+DB_PASSWORD=s3cret
+$ printf '#!/bin/sh\necho deploy\n' > /srv/app/deploy.sh; chmod 644 /srv/app/deploy.sh; env /srv/app/deploy.sh
+env: '/srv/app/deploy.sh': Permission denied

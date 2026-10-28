@@ -1,0 +1,84 @@
+$ grep -E '^Cap(Eff|Bnd)' /proc/self/status
+CapEff:	00000000a80425fb
+CapBnd:	00000000a80425fb
+$ capsh --decode=$(awk '/^CapEff/ {print $2}' /proc/self/status)
+0x00000000a80425fb=cap_chown,cap_dac_override,cap_fowner,cap_fsetid,cap_kill,cap_setgid,cap_setuid,cap_setpcap,cap_net_bind_service,cap_net_raw,cap_sys_chroot,cap_mknod,cap_audit_write,cap_setfcap
+$ runuser -u dev -- grep CapEff /proc/self/status
+CapEff:	0000000000000000
+$ ls -l /srv/app/.env; cat /srv/app/.env; capsh --drop=cap_dac_override -- -c 'cat /srv/app/.env'
+-rw------- 1 dev dev 19 Oct 28 19:36 /srv/app/.env
+DB_PASSWORD=s3cret
+cat: /srv/app/.env: Permission denied
+$ sysctl net.ipv4.ip_unprivileged_port_start
+net.ipv4.ip_unprivileged_port_start = 1024
+$ runuser -u dev -- node -e "require('net').createServer().listen(80).on('error', (e) => console.log(e.code, e.syscall, e.port))"
+EACCES listen 80
+$ cp $(which node) /usr/local/bin/node-web; setcap cap_net_bind_service=+ep /usr/local/bin/node-web; getcap /usr/local/bin/node-web
+/usr/local/bin/node-web cap_net_bind_service=ep
+$ runuser -u dev -- node-web -e "require('net').createServer().listen(80, function () { console.log('listening on :80 as', require('os').userInfo().username); this.close() })"
+listening on :80 as dev
+$ getcap /usr/bin/ping; ls -l /usr/bin/ping; getfattr -d -m - /usr/bin/ping 2>/dev/null
+/usr/bin/ping cap_net_raw=ep
+-rwxr-xr-x+ 1 root root 212672 Oct 31  2025 /usr/bin/ping
+# file: usr/bin/ping
+security.capability=0sAQAAAgAgAAAAAAAAAAAAAAAAAAA=
+
+$ runuser -u dev -- ping -c1 -W1 127.0.0.1 | head -2
+PING 127.0.0.1 (127.0.0.1) 56(84) bytes of data.
+64 bytes from 127.0.0.1: icmp_seq=1 ttl=64 time=0.999 ms
+$ cp /usr/bin/ping /tmp/ping-copy; getcap /tmp/ping-copy; runuser -u dev -- /tmp/ping-copy -c1 -W1 127.0.0.1 | head -2
+PING 127.0.0.1 (127.0.0.1) 56(84) bytes of data.
+64 bytes from 127.0.0.1: icmp_seq=1 ttl=64 time=0.026 ms
+$ sysctl net.ipv4.ping_group_range
+net.ipv4.ping_group_range = 0	2147483647
+$ runuser -u www-data -- cat /srv/app/uploads/a.jpg
+cat: /srv/app/uploads/a.jpg: Permission denied
+$ namei -l /srv/app/uploads/a.jpg
+f: /srv/app/uploads/a.jpg
+drwxr-xr-x root root /
+drwxr-xr-x root root srv
+drwxr-xr-x root root app
+drwx------ dev  dev  uploads
+-rw------- dev  dev  a.jpg
+$ setfacl -m u:www-data:x /srv/app/uploads; setfacl -m u:www-data:r /srv/app/uploads/a.jpg; ls -ld /srv/app/uploads /srv/app/uploads/a.jpg
+drwx--x---+ 2 dev dev 4096 Oct 28 19:36 /srv/app/uploads
+-rw-r-----+ 1 dev dev   11 Oct 28 19:36 /srv/app/uploads/a.jpg
+$ getfacl -p /srv/app/uploads/a.jpg
+# file: /srv/app/uploads/a.jpg
+# owner: dev
+# group: dev
+user::rw-
+user:www-data:r--
+group::---
+mask::r--
+other::---
+
+$ runuser -u www-data -- cat /srv/app/uploads/a.jpg
+jpeg bytes
+$ runuser -u www-data -- ls /srv/app/uploads
+ls: cannot open directory '/srv/app/uploads': Permission denied
+$ setfacl -d -m u:www-data:r /srv/app/uploads; runuser -u dev -- sh -c 'echo png > /srv/app/uploads/b.png'; getfacl -p /srv/app/uploads/b.png | grep -E 'www-data|mask'; runuser -u www-data -- cat /srv/app/uploads/b.png
+user:www-data:r--
+mask::r--
+png
+$ chmod 600 /srv/app/uploads/a.jpg; getfacl -p /srv/app/uploads/a.jpg | grep -E 'www-data|mask'; runuser -u www-data -- cat /srv/app/uploads/a.jpg
+user:www-data:r--	#effective:---
+mask::---
+cat: /srv/app/uploads/a.jpg: Permission denied
+$ runuser -u dev -- node -e "require('fs').appendFileSync('/var/log/app/app.log', 'started\n')" 2>&1 | grep -E '^Error'
+Error: ENOENT: no such file or directory, open '/var/log/app/app.log'
+$ mkdir -p /var/log/app; ls -ld /var/log/app; runuser -u dev -- node -e "require('fs').appendFileSync('/var/log/app/app.log', 'started\n')" 2>&1 | grep -E '^Error'
+drwxr-xr-x 2 root root 4096 Oct 28 19:36 /var/log/app
+Error: EACCES: permission denied, open '/var/log/app/app.log'
+$ install -d -o dev -g dev -m 750 /var/log/app; ls -ld /var/log/app; runuser -u dev -- node -e "require('fs').appendFileSync('/var/log/app/app.log', 'started\n')"; ls -l /var/log/app
+drwxr-x--- 2 dev dev 4096 Oct 28 19:36 /var/log/app
+total 4
+-rw-r--r-- 1 dev dev 8 Oct 28 19:36 app.log
+$ find /srv -name '.env*' -type f -perm -o=r -printf '%M %u:%g %p\n'
+-rw-r--r-- root:root /srv/api/.env
+-rw-r--r-- dev:dev /srv/app/.env
+$ runuser -u bob -- cat /srv/app/.env
+DB_PASSWORD=s3cret
+$ chown dev:dev /srv/app/.env /srv/api/.env; chmod 600 /srv/app/.env /srv/api/.env; find /srv -name '.env*' -type f -perm -o=r -printf '%M %u:%g %p\n' | wc -l; runuser -u bob -- cat /srv/app/.env
+0
+cat: /srv/app/.env: Permission denied

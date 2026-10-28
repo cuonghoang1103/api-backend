@@ -1,0 +1,63 @@
+$ findmnt -lo TARGET,SOURCE,FSTYPE | grep -E '^/etc/(hosts|hostname|resolv.conf) ' | sed -E 's#containers/[0-9a-f]{12}[0-9a-f]+#containers/<id>#'
+/etc/hostname    /dev/vda1[/docker/containers/<id>/hostname]    ext4
+/etc/hosts       /dev/vda1[/docker/containers/<id>/hosts]       ext4
+/etc/resolv.conf /dev/vda1[/docker/containers/<id>/resolv.conf] ext4
+$ grep ' /etc/hosts ' /proc/self/mountinfo | sed -E 's#containers/[0-9a-f]{12}[0-9a-f]+#containers/<id>#'
+406 363 254:1 /docker/containers/<id>/hosts /etc/hosts rw,relatime - ext4 /dev/vda1 rw,discard
+$ mkdir -p /srv/uploads; echo "uploaded while the data disk was NOT mounted" > /srv/uploads/avatar-17.txt; ls /srv/uploads
+avatar-17.txt
+$ mount -o loop /tmp/data.img /srv/uploads; ls /srv/uploads; findmnt /srv/uploads
+lost+found
+TARGET       SOURCE     FSTYPE OPTIONS
+/srv/uploads /dev/loop1 ext4   rw,relatime
+$ mkdir -p /tmp/rootview; mount --bind / /tmp/rootview; ls -l /tmp/rootview/srv/uploads; umount /tmp/rootview
+total 4
+-rw-r--r-- 1 root root 45 Oct 28 19:16 avatar-17.txt
+$ umount /srv/uploads
+$ mkdir -p /host/nginx /ctr/conf.d /ctr/etc; echo 'worker_connections 512;' > /host/nginx/nginx.conf; touch /ctr/etc/nginx.conf
+$ mount --bind /host/nginx /ctr/conf.d
+$ mount --bind /host/nginx/nginx.conf /ctr/etc/nginx.conf
+$ findmnt -lo TARGET,SOURCE | grep /ctr/
+/ctr/conf.d         overlay[/host/nginx]
+/ctr/etc/nginx.conf overlay[/host/nginx/nginx.conf]
+$ stat -c '%n  inode=%i' /host/nginx/nginx.conf /ctr/conf.d/nginx.conf /ctr/etc/nginx.conf
+/host/nginx/nginx.conf  inode=396552
+/ctr/conf.d/nginx.conf  inode=396552
+/ctr/etc/nginx.conf  inode=396552
+$ echo 'worker_connections 1024;' > /host/nginx/nginx.conf; cat /ctr/etc/nginx.conf
+worker_connections 1024;
+$ strace -f -e trace=openat,rename,renameat,renameat2 sed -i 's/1024/4096/' /host/nginx/nginx.conf 2>&1 | grep -E 'nginx|sed[A-Za-z0-9]{6}' | grep -v ENOENT
+openat(AT_FDCWD, "/host/nginx/nginx.conf", O_RDONLY) = 3
+openat(AT_FDCWD, "/host/nginx/sedEwm4hl", O_RDWR|O_CREAT|O_EXCL, 0600) = 4
+renameat(AT_FDCWD, "/host/nginx/sedEwm4hl", AT_FDCWD, "/host/nginx/nginx.conf") = 0
+$ stat -c '%n  inode=%i' /host/nginx/nginx.conf /ctr/conf.d/nginx.conf /ctr/etc/nginx.conf
+/host/nginx/nginx.conf  inode=396554
+/ctr/conf.d/nginx.conf  inode=396554
+/ctr/etc/nginx.conf  inode=396552
+$ cat /host/nginx/nginx.conf /ctr/conf.d/nginx.conf /ctr/etc/nginx.conf
+worker_connections 4096;
+worker_connections 4096;
+worker_connections 1024;
+$ grep '/ctr/etc/nginx.conf' /proc/self/mountinfo | awk '{print $4, $5}'
+/host/nginx/nginx.conf//deleted /ctr/etc/nginx.conf
+$ echo 'worker_connections 8192;' > /host/nginx/nginx.conf; cat /ctr/etc/nginx.conf
+worker_connections 1024;
+$ umount /ctr/etc/nginx.conf; mount --bind /host/nginx/nginx.conf /ctr/etc/nginx.conf; cat /ctr/etc/nginx.conf
+worker_connections 8192;
+$ vi -es -c 's/8192/2048/' -c 'wq' /host/nginx/nginx.conf; stat -c '%n  inode=%i' /host/nginx/nginx.conf /ctr/etc/nginx.conf; cat /ctr/etc/nginx.conf
+/host/nginx/nginx.conf  inode=396554
+/ctr/etc/nginx.conf  inode=396554
+worker_connections 2048;
+$ mount --bind -o ro /host/nginx /ctr/conf.d; touch /ctr/conf.d/new.conf; grep ' /ctr/conf.d ' /proc/self/mountinfo | tail -1 | awk '{print $5, $6}'
+touch: cannot touch '/ctr/conf.d/new.conf': Read-only file system
+/ctr/conf.d ro,relatime
+$ mkdir -p /srv/public-uploads; mount -t tmpfs -o size=4m,noexec,nosuid,nodev tmpfs /srv/public-uploads
+$ printf '#!/bin/sh\necho "attacker code runs as $(id -un)"\n' > /srv/public-uploads/shell.sh; chmod +x /srv/public-uploads/shell.sh; ls -l /srv/public-uploads/shell.sh
+-rwxr-xr-x 1 root root 49 Oct 28 19:16 /srv/public-uploads/shell.sh
+$ env /srv/public-uploads/shell.sh
+env: '/srv/public-uploads/shell.sh': Permission denied
+$ sh /srv/public-uploads/shell.sh
+attacker code runs as root
+$ findmnt -lo TARGET,FSTYPE,OPTIONS /srv/public-uploads
+TARGET              FSTYPE OPTIONS
+/srv/public-uploads tmpfs  rw,nosuid,nodev,noexec,relatime,size=4096k

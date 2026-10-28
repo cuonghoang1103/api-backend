@@ -1,0 +1,72 @@
+$ ls -l /proc/$$/fd
+total 0
+lrwx------ 1 root root 64 Oct 28 19:19 0 -> /dev/null
+l-wx------ 1 root root 64 Oct 28 19:19 1 -> pipe:[1041921]
+l-wx------ 1 root root 64 Oct 28 19:19 2 -> pipe:[1041921]
+lr-x------ 1 root root 64 Oct 28 19:19 255 -> /usr/local/bin/phien
+$ exec 3< /tmp/users.txt
+$ read -r first <&3; echo "first line: $first"
+first line: alice:x:1001
+$ cat /proc/$$/fdinfo/3
+pos:	13
+flags:	0400000
+mnt_id:	289
+ino:	367120
+$ ls -l /proc/$$/fd/3
+lr-x------ 1 root root 64 Oct 28 19:19 /proc/6/fd/3 -> /tmp/users.txt
+$ read -r second <&3; echo "second line: $second"; grep pos /proc/$$/fdinfo/3
+second line: bob:x:1002
+pos:	24
+$ exec 3<&-
+$ ./ofd dup /tmp/log.txt; cat /tmp/log.txt
+  A       fd 3  pos:	39
+  B       fd 4  pos:	39
+worker A: order 1001 paid
+worker B: hi
+$ ./ofd twice /tmp/log.txt; cat /tmp/log.txt
+  A       fd 3  pos:	26
+  B       fd 4  pos:	13
+worker B: hi
+er 1001 paid
+$ ./ofd append /tmp/log.txt; cat /tmp/log.txt
+  A       fd 3  pos:	26
+  B       fd 4  pos:	39
+worker A: order 1001 paid
+worker B: hi
+$ ./ofd fork /tmp/log.txt; cat /tmp/log.txt
+  child   fd 3  pos:	28
+  parent  fd 3  pos:	42
+child  line 1
+child  line 2
+parent line 3
+$ strace -f -e trace=openat,dup2,dup3,close,execve bash -c 'ls /nope > /tmp/out.txt 2>&1' 2>&1 | grep -E 'out.txt|dup|execve\("/usr/bin/ls' | grep -v ENOENT
+execve("/usr/bin/bash", ["bash", "-c", "ls /nope > /tmp/out.txt 2>&1"], 0xffffc584d1d8 /* 14 vars */) = 0
+[pid    62] openat(AT_FDCWD, "/tmp/out.txt", O_WRONLY|O_CREAT|O_TRUNC, 0666) = 3
+[pid    62] dup3(3, 1, 0)               = 1
+[pid    62] dup3(1, 2, 0)               = 2
+[pid    62] execve("/usr/bin/ls", ["ls", "/nope"], 0xaaaacddf2ff0 /* 14 vars */) = 0
+$ ls /nope > /tmp/out.txt 2>&1; echo "file: $(cat /tmp/out.txt)"
+file: ls: cannot access '/nope': No such file or directory
+$ ls /nope 2>&1 > /tmp/out.txt; echo "file: [$(cat /tmp/out.txt)]"
+ls: cannot access '/nope': No such file or directory
+file: []
+$ ./leak
+total 0
+lrwx------ 1 root root 64 Oct 28 19:19 0 -> /dev/null
+l-wx------ 1 root root 64 Oct 28 19:19 1 -> pipe:[1041921]
+l-wx------ 1 root root 64 Oct 28 19:19 2 -> pipe:[1041921]
+lr-x------ 1 root root 64 Oct 28 19:19 3 -> /tmp/app/.env
+lr-x------ 1 root root 64 Oct 28 19:19 4 -> /proc/73/fd
+$ ./leak cloexec
+total 0
+lrwx------ 1 root root 64 Oct 28 19:19 0 -> /dev/null
+l-wx------ 1 root root 64 Oct 28 19:19 1 -> pipe:[1041921]
+l-wx------ 1 root root 64 Oct 28 19:19 2 -> pipe:[1041921]
+lr-x------ 1 root root 64 Oct 28 19:19 3 -> /proc/76/fd
+$ node -e "require('fs').openSync('/tmp/app/.env'); console.log(require('child_process').execSync('ls -l /proc/self/fd').toString())"
+total 0
+lrwx------+ 1 root root 64 Oct 28 19:19 0 -> socket:[1047582]
+lrwx------+ 1 root root 64 Oct 28 19:19 1 -> socket:[1047584]
+lrwx------+ 1 root root 64 Oct 28 19:19 2 -> socket:[1047586]
+lr-x------  1 root root 64 Oct 28 19:19 3 -> /proc/87/fd
+

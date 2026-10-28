@@ -34,6 +34,7 @@ import s05 from './operating-systems-for-developers/s05-dong-bo.mjs';
 import s07 from './operating-systems-for-developers/s07-bo-nho-ao.mjs';
 import s06 from './operating-systems-for-developers/s06-deadlock.mjs';
 import s08 from './operating-systems-for-developers/s08-ap-luc-bo-nho.mjs';
+import s09 from './operating-systems-for-developers/s09-file-quyen.mjs';
 import s13 from './operating-systems-for-developers/s13-bao-mat.mjs';
 
 /*
@@ -166,6 +167,7 @@ sections[5] = s05;
 sections[7] = s07;
 sections[6] = s06;
 sections[8] = s08;
+sections[9] = s09;
 sections[13] = s13;
 
 export default {

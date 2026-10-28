@@ -1,0 +1,123 @@
+$ findmnt -lo TARGET,FSTYPE,SOURCE | grep -E '^(/|/proc|/sys/fs/cgroup|/dev/shm|/etc/hosts|/mnt/lab) ' | sed -E 's#containers/[0-9a-f]{64}#containers/<id>#'
+/                overlay  overlay
+/proc            proc     proc
+/sys/fs/cgroup   cgroup2  cgroup
+/dev/shm         tmpfs    shm
+/etc/hosts       ext4     /dev/vda1[/docker/containers/<id>/hosts]
+/mnt/lab         ext4     /dev/loop0
+$ strace -e trace=openat,read,close -P /proc/loadavg -P /dev/shm/status.txt -P /mnt/lab/status.txt ./vfs /proc/loadavg /dev/shm/status.txt /mnt/lab/status.txt /etc/os-release 2>&1 | grep -v '^+++'
+openat(AT_FDCWD, "/proc/loadavg", O_RDONLY) = 3
+read(3, "1.48 0.96 0.77 2/672 33\n", 63) = 24
+close(3)                                = 0
+openat(AT_FDCWD, "/dev/shm/status.txt", O_RDONLY) = 3
+read(3, "cache line\n", 63)             = 11
+close(3)                                = 0
+openat(AT_FDCWD, "/mnt/lab/status.txt", O_RDONLY) = 3
+read(3, "load 0.42\n", 63)              = 10
+close(3)                                = 0
+/proc/loadavg          f_type=0x9fa0 (proc)  first bytes: 1.48 0.96 0.
+/dev/shm/status.txt    f_type=0x1021994 (tmpfs)  first bytes: cache line 
+/mnt/lab/status.txt    f_type=0xef53 (ext4)  first bytes: load 0.42 
+/etc/os-release        f_type=0x794c7630 (overlay)  first bytes: PRETTY_NAME=
+$ cd /mnt/lab
+$ echo "PORT=3000" > app.env
+$ ls -li app.env
+14 -rw-r--r-- 1 root root 10 Oct 28 19:19 app.env
+$ stat app.env
+  File: app.env
+  Size: 10        	Blocks: 8          IO Block: 4096   regular file
+Device: 7,0	Inode: 14          Links: 1
+Access: (0644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+Access: 2026-10-28 19:19:11.860118000 +0700
+Modify: 2026-10-28 19:19:11.860118000 +0700
+Change: 2026-10-28 19:19:11.860118000 +0700
+ Birth: 2026-10-28 19:19:11.860118000 +0700
+$ ln app.env app.env.bak
+$ ln -s app.env current.env
+$ ls -li
+total 28
+14 -rw-r--r-- 2 root root    10 Oct 28 19:19 app.env
+14 -rw-r--r-- 2 root root    10 Oct 28 19:19 app.env.bak
+15 lrwxrwxrwx 1 root root     7 Oct 28 19:19 current.env -> app.env
+11 drwx------ 2 root root 16384 Oct 28 19:19 lost+found
+13 -rw-r--r-- 1 root root    10 Oct 28 19:19 status.txt
+$ mkdir -p releases/v1 releases/v2
+$ stat -c '%n  inode=%i  links=%h' . releases releases/v1
+.  inode=2  links=4
+releases  inode=16  links=4
+releases/v1  inode=17  links=2
+$ rm app.env
+$ cat app.env.bak
+PORT=3000
+$ cat current.env
+cat: current.env: No such file or directory
+$ ls -l current.env
+lrwxrwxrwx 1 root root 7 Oct 28 19:19 current.env -> app.env
+$ debugfs -R 'ls -l /' /tmp/disk.img
+debugfs 1.47.2 (1-Jan-2025)
+      2   40755 (2)      0      0    4096 28-Oct-2026 19:19 .
+      2   40755 (2)      0      0    4096 28-Oct-2026 19:19 ..
+     11   40700 (2)      0      0   16384 28-Oct-2026 19:19 lost+found
+     13  100644 (1)      0      0      10 28-Oct-2026 19:19 status.txt
+     14  100644 (1)      0      0      10 28-Oct-2026 19:19 app.env.bak
+     15  120777 (7)      0      0       7 28-Oct-2026 19:19 current.env
+     16   40755 (2)      0      0    4096 28-Oct-2026 19:19 releases
+
+$ debugfs -R 'stat /app.env.bak' /tmp/disk.img
+debugfs 1.47.2 (1-Jan-2025)
+Inode: 14   Type: regular    Mode:  0644   Flags: 0x80000
+Generation: 3126969488    Version: 0x00000000:00000001
+User:     0   Group:     0   Project:     0   Size: 10
+File ACL: 0
+Links: 1   Blockcount: 8
+Fragment:  Address: 0    Number: 0    Size: 0
+ ctime: 0x6ae1e83f:d5e3bcc0 -- Wed Oct 28 19:19:11 2026
+ atime: 0x6ae1e83f:d69ad7c0 -- Wed Oct 28 19:19:11 2026
+ mtime: 0x6ae1e83f:cd116fc0 -- Wed Oct 28 19:19:11 2026
+crtime: 0x6ae1e83f:cd116fc0 -- Wed Oct 28 19:19:11 2026
+Size of extra inode fields: 32
+Inode checksum: 0x2fc7457d
+EXTENTS:
+(0):1071
+$ debugfs -R 'stat /current.env' /tmp/disk.img
+debugfs 1.47.2 (1-Jan-2025)
+Inode: 15   Type: symlink    Mode:  0777   Flags: 0x0
+Generation: 734779420    Version: 0x00000000:00000001
+User:     0   Group:     0   Project:     0   Size: 7
+File ACL: 0
+Links: 1   Blockcount: 0
+Fragment:  Address: 0    Number: 0    Size: 0
+ ctime: 0x6ae1e83f:d25035c0 -- Wed Oct 28 19:19:11 2026
+ atime: 0x6ae1e83f:d30750c0 -- Wed Oct 28 19:19:11 2026
+ mtime: 0x6ae1e83f:d25035c0 -- Wed Oct 28 19:19:11 2026
+crtime: 0x6ae1e83f:d25035c0 -- Wed Oct 28 19:19:11 2026
+Size of extra inode fields: 32
+Inode checksum: 0xbd1c939f
+Fast link dest: "app.env"
+$ debugfs -R 'blocks /' /tmp/disk.img
+debugfs 1.47.2 (1-Jan-2025)
+3 
+$ debugfs -R "bd $(debugfs -R 'blocks /' /tmp/disk.img 2>/dev/null)" /tmp/disk.img 2>/dev/null | head -8
+0000  0200 0000 0c00 0102 2e00 0000 0200 0000  ................
+0020  0c00 0202 2e2e 0000 0b00 0000 1400 0a02  ................
+0040  6c6f 7374 2b66 6f75 6e64 0000 0d00 0000  lost+found......
+0060  2400 0a01 7374 6174 7573 2e74 7874 0000  $...status.txt..
+0100  0000 0000 0000 0000 0000 0000 0000 0000  ................
+0120  0e00 0000 1400 0b01 6170 702e 656e 762e  ........app.env.
+0140  6261 6b00 0f00 0000 1400 0b07 6375 7272  bak.........curr
+0160  656e 742e 656e 7600 1000 0000 7c0f 0802  ent.env.....|...
+$ ln /mnt/lab/app.env.bak /tmp/app.env
+ln: failed to create hard link '/mnt/lab/app.env.bak' => '/tmp/app.env': Invalid cross-device link
+$ ln /mnt/lab/releases /mnt/lab/releases-link
+ln: /mnt/lab/releases: hard link not allowed for directory
+$ strace -e trace=rename,renameat,renameat2 mv /mnt/lab/app.env.bak /tmp/ 2>&1 | head -2
+renameat2(AT_FDCWD, "/mnt/lab/app.env.bak", AT_FDCWD, "/tmp/", RENAME_NOREPLACE) = -1 EXDEV (Invalid cross-device link)
+renameat2(AT_FDCWD, "/mnt/lab/app.env.bak", 3, "app.env.bak", RENAME_NOREPLACE) = -1 EXDEV (Invalid cross-device link)
+$ rm /mnt/lab/current.env; touch /mnt/lab/new.txt; ls -i /mnt/lab/new.txt
+14 /mnt/lab/new.txt
+$ cat /proc/sys/fs/dentry-state
+239976	224092	45	0	48950	0
+$ grep -E '^(dentry|ext4_inode_cache|proc_inode_cache) ' /proc/slabinfo | awk '{print $1, $2, "objects of", $4, "bytes"}'
+ext4_inode_cache 172872 objects of 1128 bytes
+proc_inode_cache 1316 objects of 688 bytes
+dentry 240480 objects of 192 bytes

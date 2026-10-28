@@ -1,0 +1,84 @@
+$ sysctl vm.dirty_expire_centisecs vm.dirty_writeback_centisecs vm.dirty_background_ratio vm.dirty_ratio
+vm.dirty_expire_centisecs = 3000
+vm.dirty_writeback_centisecs = 1500
+vm.dirty_background_ratio = 10
+vm.dirty_ratio = 20
+$ grep -E '^(Dirty|Writeback):' /proc/meminfo
+Dirty:                 4 kB
+Writeback:             0 kB
+$ head -c 24M /dev/urandom > /srv/data/upload.bin; sleep 1; grep -E '^(Dirty|Writeback):' /proc/meminfo
+Dirty:             24584 kB
+Writeback:             0 kB
+$ time sync; grep -E '^(Dirty|Writeback):' /proc/meminfo
+
+real	0m0.017s
+user	0m0.000s
+sys	0m0.002s
+Dirty:                 0 kB
+Writeback:            52 kB
+$ ./wbench /srv/data/bench.dat 2000
+buffered          2000 writes       3.6 ms       1.8 us/write
+fsync-each        2000 writes    1915.8 ms     957.9 us/write
+fdatasync-each    2000 writes    1293.3 ms     646.6 us/write
+O_DSYNC           2000 writes    1453.5 ms     726.7 us/write
+O_DIRECT          2000 writes      96.3 ms      48.1 us/write
+O_DIRECT+fdsync   2000 writes    1716.9 ms     858.5 us/write
+O_DIRECT, buffer at an odd address: Invalid argument
+$ for run in 1 2 3; do ./wbench /srv/data/bench.dat 2000 2>/dev/null | awk '{printf "%s %s  ", $1, $6} END {print "(us/write)"}'; done
+buffered 1.8  fsync-each 883.7  fdatasync-each 1071.1  O_DSYNC 1096.6  O_DIRECT 44.1  O_DIRECT+fdsync 895.3  (us/write)
+buffered 1.8  fsync-each 937.8  fdatasync-each 856.9  O_DSYNC 919.5  O_DIRECT 47.9  O_DIRECT+fdsync 846.8  (us/write)
+buffered 1.7  fsync-each 905.8  fdatasync-each 1035.8  O_DSYNC 1075.2  O_DIRECT 54.8  O_DIRECT+fdsync 1127.7  (us/write)
+$ ./wbench /dev/shm/bench.dat 2000 2>&1 | head -2
+buffered          2000 writes       2.1 ms       1.0 us/write
+fsync-each        2000 writes       2.9 ms       1.4 us/write
+$ head -c 8M /dev/urandom > /srv/data/a.bin; ./incore /srv/data/a.bin
+/srv/data/a.bin: 8 MiB, 2048 of 2048 pages in page cache (100%)
+$ gnudd if=/dev/zero of=/srv/data/b.bin bs=1M count=8 oflag=direct status=none; ./incore /srv/data/b.bin
+/srv/data/b.bin: 8 MiB, 0 of 2048 pages in page cache (0%)
+$ dd --version | head -1; dd if=/dev/zero of=/srv/data/c.bin bs=1M count=8 oflag=direct status=none; ./incore /srv/data/c.bin
+dd (uutils coreutils) 0.10.0
+/srv/data/c.bin: 8 MiB, 2048 of 2048 pages in page cache (100%)
+$ strace -e trace=write,fcntl dd if=/dev/zero of=/srv/data/c.bin bs=1M count=1 oflag=direct status=none 2>&1 | grep -E 'EINVAL|F_SETFL' | head -3
+write(4, "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 1048576) = -1 EINVAL (Invalid argument)
+fcntl(4, F_SETFL, O_WRONLY|O_LARGEFILE) = 0
+fcntl(4, F_SETFL, O_WRONLY|O_DIRECT|O_LARGEFILE) = 0
+$ cat crash.sh
+#!/bin/bash
+# crash.sh <ảnh đĩa> <file…> — "rút điện" an toàn: chép NGAY ảnh đĩa đang gắn (= đúng những gì đã thật sự nằm trên
+# đĩa lúc này; thứ còn trong page cache thì KHÔNG có), gắn bản chép (nhân phát lại journal y như khi khởi động lại sau
+# mất điện) rồi in các file. Bản gốc vẫn chạy tiếp, không hề bị đụng.
+cp "$1" /tmp/crash.img
+mkdir -p /mnt/crash && mount -o loop /tmp/crash.img /mnt/crash
+shift
+for f in "$@"; do
+  if [ -e "/mnt/crash/$f" ]; then printf '  after crash: %-12s %3s bytes  "%s"\n' "$f" "$(stat -c %s "/mnt/crash/$f")" "$(cat "/mnt/crash/$f")"
+  else printf '  after crash: %-12s (no such file)\n' "$f"; fi
+done
+umount /mnt/crash; rm -f /tmp/crash.img
+$ echo "order #1001 paid" > /srv/data/orders.log; ./crash.sh /tmp/vps.img orders.log
+  after crash: orders.log   (no such file)
+$ sleep 6; ./crash.sh /tmp/vps.img orders.log
+  after crash: orders.log     0 bytes  ""
+$ sleep 34; ./crash.sh /tmp/vps.img orders.log
+  after crash: orders.log    17 bytes  "order #1001 paid"
+$ echo "order #1002 paid" > /srv/data/o2.log; sync /srv/data/o2.log; ./crash.sh /tmp/vps.img o2.log
+  after crash: o2.log        17 bytes  "order #1002 paid"
+$ node luu.js rename /srv/data/config.json '{"v":2}'; ./crash.sh /tmp/vps.img config.json
+saved (rename) 7 bytes
+  after crash: config.json    8 bytes  "{"v":1}"
+$ sleep 6; ./crash.sh /tmp/vps.img config.json
+  after crash: config.json    7 bytes  "{"v":2}"
+$ mount -o remount,noauto_da_alloc /srv/data
+$ node luu.js rename /srv/data/config.json '{"v":2}'; sleep 9; ./crash.sh /tmp/vps.img config.json
+saved (rename) 7 bytes
+  after crash: config.json    0 bytes  ""
+$ sleep 30; ./crash.sh /tmp/vps.img config.json
+  after crash: config.json    7 bytes  "{"v":2}"
+$ node luu.js safe /srv/data/config.json '{"v":2}'; ./crash.sh /tmp/vps.img config.json
+saved (safe) 7 bytes
+  after crash: config.json    7 bytes  "{"v":2}"
+$ mount -o remount,auto_da_alloc /srv/data
+$ node doc-ghi.js inplace 5000
+inplace: 5000 writes, 386000 reads, 374998 empty, 165 broken JSON
+$ node doc-ghi.js rename 5000
+rename: 5000 writes, 38200 reads, 0 empty, 0 broken JSON

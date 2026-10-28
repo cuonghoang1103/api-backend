@@ -718,6 +718,18 @@
       "description": "PE luyện định dạng FA25/SU25: trang bìa SRS, context diagram, use case + hai bảng, ERD khái niệm với bẫy loại thiết bị ↔ từng chiếc (serial), thực thể kết hợp Loan × Unit mang tình trạng lúc trả, bảo trì theo từng chiếc."
     },
     {
+      "slug": "swr302-11-pe-4-skillswap-peer-tutoring",
+      "name": "PE Practice 4 — SkillSwap peer tutoring (context · use case · state machine)",
+      "level": "ADVANCED",
+      "description": "PE luyện định dạng SU26: trang bìa SRS, context diagram 10 thực thể, use case + hai bảng (include kiểm điều kiện tutor, extend đặt phòng / tạo link họp), sơ đồ chuyển trạng thái của Tutoring Session với năm sự kiện thời gian có guard và quyết định của moderator — tình huống mới, chấm sâu hơn đề thật."
+    },
+    {
+      "slug": "swr302-11-pe-5-greenride-scooters",
+      "name": "PE Practice 5 — GreenRide e-scooter sharing (context · use case · ERD)",
+      "level": "ADVANCED",
+      "description": "PE luyện định dạng SP26/FA25: trang bìa SRS, context diagram 7 thực thể, use case + hai bảng (include tính giá, extend chấp nhận nội quy / trả tiền chuyến), ERD khái niệm 9 thực thể với hai quan hệ trạm–chuyến, vé tháng phủ chuyến, giá theo khu — tình huống mới, chấm sâu hơn đề thật."
+    },
+    {
       "slug": "swr302-21e-1-ch21-gap-analysis",
       "name": "12.1 Enhancement and replacement projects: gap analysis",
       "level": "BEGINNER",

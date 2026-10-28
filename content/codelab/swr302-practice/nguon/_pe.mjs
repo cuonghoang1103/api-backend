@@ -48,7 +48,7 @@ function kiemBia(duAn) {
  *   so, slug, tieuDe, ten, phu:{en,vi}, baiHoc, maDe (vd 'SWR302_PE_P1'), duAn (tên hệ thống),
  *   boiCanh:{en,vi} (HTML), q2:{ cfg, giai }, q3:{ cfg, giaiUC, giaiActors, giaiUCs },
  *   q4:{ loai:'erd'|'state', de:{en,vi}, cfg, giai, giaiBang, cfgBang? },
- *   truDiem[], goiY[], loiHayGap[], giaiThich:{en,vi} (thêm sau phần hình), boYeu[]
+ *   truDiem[], goiY[], loiHayGap[], giaiThich:{en,vi} (thêm sau phần hình), boYeu[], kiemThem[] (kiểm riêng của đề)
  * }
  */
 export function deThiPE(pe) {
@@ -69,6 +69,7 @@ export function deThiPE(pe) {
         ...kiemState({ ...q4.cfg, bien: 'STATE_DIAGRAM', nhom: { cuPhap: 'f8', thanhPhan: 'f9', chuyen: 'f9' } }),
         ...kiemBangState({ bien: 'STATE_DIAGRAM', bienBang: 'STATES', nhom: 'f10' }),
       ]),
+    ...(pe.kiemThem || []),
   ];
   // kiểm ẩn: nửa sau của các kiểm phủ use case + quan hệ (như đề thật: chấm khi nộp)
   const an = new Set();

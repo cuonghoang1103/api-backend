@@ -489,4 +489,116 @@ export const OS2_TOURS: Tour[] = [
       answer: 0, why: ['They share one network namespace — one set of ports — so only one socket can bind :8000.', 'Chúng dùng chung một network namespace — một bộ cổng — nên chỉ một socket được nghe :8000.'],
     },
   },
+  // ───────────────────────── overlay ─────────────────────────
+  {
+    id: 'overlay-copyup', ns: 'os-lab', sim: 'overlay', presets: ['layers', 'copyup', 'whiteout', 'opaque', 'image'],
+    title: ['How a container writes to a read-only image', 'Container ghi vào image chỉ-đọc ra sao'],
+    summary: ['Layers stacked into one view; the first write to a lower file copies the whole file up; deleting leaves a whiteout.', 'Các lớp chồng thành một góc nhìn; lần ghi đầu vào tệp lớp dưới chép nguyên tệp lên; xoá để lại một whiteout.'],
+    steps: [
+      {
+        target: 'ov-stack', do: [{ a: 'ov.preset', v: 'copyup' }, { a: 'player.seek', v: 0 }],
+        title: ['Layers are just directories', 'Mỗi lớp chỉ là một thư mục'],
+        body: ['base/ and app/ are the image\'s layers — read-only. upper/ is empty and writable. They are ordinary folders on the host\'s disk.', 'base/ và app/ là các lớp của image — chỉ đọc. upper/ trống và ghi được. Chúng là những thư mục bình thường trên đĩa của máy chủ.'],
+      },
+      {
+        target: 'step',
+        title: ['Your turn: mount them', 'Đến lượt bạn: mount chúng'],
+        body: ['Press Step once: mount -t overlay stacks them.', 'Bấm Bước một lần: mount -t overlay xếp chồng chúng.'],
+        task: { text: ['Mount the overlay.', 'Mount overlay.'], until: (s) => s.ov?.preset === 'copyup' && s.ov?.mounted === true, solve: [step(1, 600)] },
+      },
+      {
+        target: 'ov-merged',
+        title: ['One merged view', 'Một góc nhìn ghép'],
+        body: ['merged shows the union. etc/app.conf exists in both app and base — the higher layer wins, so the container sees port=8080. The base copy (port=80) is hidden, not deleted.', 'merged hiện phần hợp. etc/app.conf có ở cả app lẫn base — lớp cao hơn thắng, nên container thấy port=8080. Bản của base (port=80) bị che, không bị xoá.'],
+      },
+      {
+        target: 'step',
+        title: ['Your turn: touch the big file', 'Đến lượt bạn: đụng vào tệp lớn'],
+        body: ['Press Step until the container appends ONE byte to big.db (200 MB, in base).', 'Bấm Bước tới khi container nối MỘT byte vào big.db (200 MB, nằm trong base).'],
+        task: { text: ['Step until big.db is copied up.', 'Bấm Bước tới khi big.db được copy-up.'], until: (s) => s.ov?.preset === 'copyup' && s.ov?.copied === 200, solve: [step(3, 700)] },
+      },
+      {
+        target: 'ov-copyup',
+        title: ['0.93 s for one byte', '0,93 s cho một byte'],
+        body: ['Copy-up: the kernel copied the WHOLE 200 MB file into upper before writing — upper grew from 1 to 201 MB. That is why databases and logs belong in a volume, not in the container\'s filesystem.', 'Copy-up: nhân chép NGUYÊN tệp 200 MB lên upper trước khi ghi — upper phình từ 1 lên 201 MB. Vì thế cơ sở dữ liệu và log phải nằm trong volume, không nằm trong hệ thống tệp của container.'],
+      },
+      {
+        target: 'step',
+        title: ['Your turn: write again', 'Đến lượt bạn: ghi lần nữa'],
+        body: ['Press Step once more: a second byte to big.db.', 'Bấm Bước thêm lần nữa: thêm một byte vào big.db.'],
+        task: { text: ['Step once more.', 'Bấm Bước thêm một lần.'], until: (s) => s.ov?.preset === 'copyup' && ((s.ov?.i as number) ?? 0) >= 5, solve: [step(1, 600)] },
+      },
+      {
+        target: 'ov-copyup',
+        title: ['1 ms: paid only once', '1 ms: chỉ trả một lần'],
+        body: ['big.db already lives in upper, so the write goes straight there. Copy-up is a one-time cost per file.', 'big.db đã nằm trong upper nên lần ghi đi thẳng vào đó. Copy-up là chi phí một lần cho mỗi tệp.'],
+      },
+      {
+        target: 'ov-preset',
+        title: ['Your turn: delete a file', 'Đến lượt bạn: xoá một tệp'],
+        body: ['Choose "whiteout" and run it to the end.', 'Chọn "whiteout" và chạy tới cuối.'],
+        task: { text: ['Run the whiteout scenario to the end.', 'Chạy kịch bản whiteout tới cuối.'], until: (s) => s.ov?.preset === 'whiteout' && s.ov?.atEnd === true, solve: [{ a: 'ov.preset', v: 'whiteout', delay: 300 }, { a: 'player.end', delay: 400 }] },
+      },
+      {
+        target: 'ov-term',
+        title: ['A whiteout, not a deletion', 'Một whiteout, không phải xoá thật'],
+        body: ['upper/etc/legacy.conf is now a character device 0,0 — a marker meaning "hide this name". base still holds the file. A secret deleted in a later Dockerfile step is still inside the image.', 'upper/etc/legacy.conf giờ là thiết bị ký tự 0,0 — một dấu hiệu "che tên này". base vẫn giữ tệp. Bí mật bị xoá ở một bước Dockerfile sau vẫn nằm trong image.'],
+      },
+    ],
+    quiz: {
+      q: ['A Dockerfile copies .env in one step and deletes it in a later step. Is the secret in the image?', 'Một Dockerfile chép .env ở một bước rồi xoá ở bước sau. Bí mật còn trong image không?'],
+      options: [['Yes — the later layer only adds a whiteout', 'Còn — lớp sau chỉ thêm một whiteout'], ['No, deleted files are removed from all layers', 'Không, tệp bị xoá được gỡ khỏi mọi lớp'], ['Only if the image is pushed', 'Chỉ khi image được đẩy lên registry']],
+      answer: 0, why: ['Lower layers are read-only; deleting only hides the name in a higher layer. Use multi-stage builds or build secrets.', 'Lớp dưới là chỉ đọc; xoá chỉ che tên ở lớp trên. Hãy dùng multi-stage build hoặc build secret.'],
+    },
+  },
+  {
+    id: 'overlay-cache', ns: 'os-lab', sim: 'overlay', presets: ['cache'],
+    title: ['Why your Docker build is slow', 'Vì sao docker build của bạn chậm'],
+    summary: ['Each Dockerfile step is a cached layer; a change rebuilds that step and everything after it — order matters.', 'Mỗi bước Dockerfile là một lớp được cache; một thay đổi làm dựng lại bước đó và mọi bước sau — thứ tự rất quan trọng.'],
+    steps: [
+      {
+        target: 'ov-stack', do: [{ a: 'ov.preset', v: 'cache' }, { a: 'player.seek', v: 0 }],
+        title: ['Five steps, five layers', 'Năm bước, năm lớp'],
+        body: ['The first build runs everything; npm ci takes 3 s. Each result is stored as a layer keyed by the instruction and the files it copied.', 'Lần build đầu chạy hết; npm ci mất 3 s. Kết quả mỗi bước được lưu thành một lớp, khoá theo câu lệnh và các tệp nó chép vào.'],
+      },
+      {
+        target: 'step',
+        title: ['Your turn: edit server.js', 'Đến lượt bạn: sửa server.js'],
+        body: ['Press Step until the scenario edits server.js and rebuilds.', 'Bấm Bước tới khi kịch bản sửa server.js rồi build lại.'],
+        task: { text: ['Step to the server.js edit.', 'Bấm Bước tới lần sửa server.js.'], until: (s) => s.ov?.preset === 'cache' && s.ov?.change === 'server', solve: [step(2, 700)] },
+      },
+      {
+        target: 'ov-copyup',
+        title: ['One step, 0.1 s', 'Một bước, 0,1 s'],
+        body: ['Only step 5 (COPY server.js) runs. npm ci stays CACHED because package.json — the only file step 3 copies — did not change. Exactly the lab output.', 'Chỉ bước 5 (COPY server.js) chạy. npm ci vẫn CACHED vì package.json — tệp duy nhất bước 3 chép — không đổi. Đúng output của lab.'],
+      },
+      {
+        target: 'step',
+        title: ['Your turn: edit package.json', 'Đến lượt bạn: sửa package.json'],
+        body: ['Press Step: now a dependency changes.', 'Bấm Bước: giờ một thư viện thay đổi.'],
+        task: { text: ['Step to the package.json edit.', 'Bấm Bước tới lần sửa package.json.'], until: (s) => s.ov?.preset === 'cache' && s.ov?.change === 'package', solve: [step(1, 600)] },
+      },
+      {
+        target: 'ov-stack',
+        title: ['Everything after it rebuilds', 'Mọi thứ sau nó đều dựng lại'],
+        body: ['Step 3 changed, so steps 3, 4 and 5 rebuild: 3.2 s. A layer is built ON TOP of the previous one, so it cannot be reused once something below it changed.', 'Bước 3 đổi, nên bước 3, 4 và 5 dựng lại: 3,2 s. Một lớp được dựng CHỒNG lên lớp trước, nên không dùng lại được khi thứ bên dưới đã đổi.'],
+      },
+      {
+        target: 'ov-ops',
+        title: ['Your turn: the classic mistake', 'Đến lượt bạn: lỗi kinh điển'],
+        body: ['Switch the Dockerfile to "COPY . . first" and choose "server.js" as your edit.', 'Đổi Dockerfile sang "COPY . . trước" và chọn sửa "server.js".'],
+        task: { text: ['Bad order + edit server.js.', 'Thứ tự sai + sửa server.js.'], until: (s) => s.ov?.order === 'bad' && s.ov?.change === 'server', solve: [{ a: 'ov.order', v: 'bad', delay: 300 }, { a: 'ov.change', v: 'server', delay: 300 }] },
+      },
+      {
+        target: 'ov-copyup',
+        title: ['A one-line edit reinstalls everything', 'Sửa một dòng là cài lại tất cả'],
+        body: ['COPY . . copies server.js too, so its layer changes and npm ci runs again on every code edit. Copy the dependency manifest first, install, then copy the code.', 'COPY . . chép cả server.js, nên lớp của nó đổi và npm ci chạy lại sau mỗi lần sửa code. Hãy chép tệp khai báo thư viện trước, cài đặt, rồi mới chép code.'],
+      },
+    ],
+    quiz: {
+      q: ['Which Dockerfile order keeps builds fast when you edit your code?', 'Thứ tự Dockerfile nào giữ build nhanh khi bạn sửa code?'],
+      options: [['COPY package.json → RUN npm ci → COPY . .', 'COPY package.json → RUN npm ci → COPY . .'], ['COPY . . → RUN npm ci', 'COPY . . → RUN npm ci'], ['The order makes no difference', 'Thứ tự không ảnh hưởng gì']],
+      answer: 0, why: ['A change rebuilds its step and all steps after it, so put rarely changing things first.', 'Một thay đổi làm dựng lại bước của nó và mọi bước sau, nên đặt thứ ít đổi lên trước.'],
+    },
+  },
 ];

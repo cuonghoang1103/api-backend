@@ -36,6 +36,7 @@ export const SIMS = {
   perm: ['owner', 'dirx', 'sticky', 'setgid', 'setuid', 'caps', 'acl'],
   fdtable: ['twice', 'dup', 'append', 'fork', 'deleted', 'emfile', 'links', 'redirect'],
   nslayers: ['docker', 'unshare', 'userns', 'pod'],
+  overlay: ['layers', 'copyup', 'whiteout', 'opaque', 'image', 'cache'],
   latency: ['default'],
 };
 
@@ -58,6 +59,7 @@ export const TOURS = {
   perm: ['perm-check', 'perm-acl', 'perm-start'],
   fdtable: ['fdtable-offsets', 'fdtable-deleted', 'fdtable-start'],
   nslayers: ['nslayers-views', 'nslayers-pod', 'nslayers-start'],
+  overlay: ['overlay-copyup', 'overlay-cache', 'overlay-start'],
   latency: ['latency-start'],
 };
 

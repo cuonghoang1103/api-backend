@@ -132,6 +132,13 @@ export const OS_LABS: Record<string, OsLabDef> = {
     presets: ['docker', 'unshare', 'userns', 'pod'],
     load: () => import('./NsSim'),
   },
+  overlay: {
+    en: 'OverlayFS: image layers', vi: 'OverlayFS: các lớp image', chapterEn: 'Chapter 12', chapterVi: 'Chương 12',
+    descEn: 'lowerdirs, upperdir and the merged view; copy-up of a 200 MB file (0.93 s), whiteouts, opaque directories, 13 + 1 image layers, docker diff, and which build steps a one-file change rebuilds.',
+    descVi: 'lowerdir, upperdir và góc nhìn merged; copy-up tệp 200 MB (0,93 s), whiteout, thư mục opaque, 13 + 1 lớp image, docker diff, và đổi một tệp thì bước build nào phải dựng lại.',
+    presets: ['layers', 'copyup', 'whiteout', 'opaque', 'image', 'cache'],
+    load: () => import('./OverlaySim'),
+  },
   latency: {
     en: 'Latency ladder', vi: 'Thang độ trễ', chapterEn: 'Section 0', chapterVi: 'Mục 0',
     descEn: 'Registers → caches → RAM → SSD → disk → network, on a human time scale.',

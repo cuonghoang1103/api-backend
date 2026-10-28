@@ -131,6 +131,8 @@ const FINAL: Record<string, (s: Record<string, Record<string, unknown> | undefin
   'fdtable-deleted': (s) => s.fd?.preset === 'emfile' && (s.fd?.fds as number) >= 1024 && String(s.fd?.term).includes('EMFILE'),
   'nslayers-views': (s) => s.ns?.user === true && s.ns?.insidePid === 1,
   'nslayers-pod': (s) => s.ns?.podNet === true && s.ns?.podPid === true && s.ns?.curlOk === true,
+  'overlay-copyup': (s) => s.ov?.preset === 'whiteout' && (s.ov?.whiteouts as number) >= 1,
+  'overlay-cache': (s) => s.ov?.order === 'bad' && s.ov?.change === 'server' && (s.ov?.buildSec as number) >= 3,
   'syscall-errno': (s) => s.sys?.kind === 'clone3' && s.sys?.raw === -38 && s.sys?.atEnd === true,
 };
 

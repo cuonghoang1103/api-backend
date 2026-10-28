@@ -10,88 +10,46 @@
   "description": "Bộ luyện môn FER202 (Front-End Web Development with React) — mỗi bài học một bộ đề từ dễ đến khó có máy chấm React, mỗi chương một Lab trình bày như đề trường, cuối môn PE luyện có đồng hồ.",
   "modules": [
     {
-      "slug": "fer202-8-lab-movie-hooks",
-      "name": "Lab 8 — Movie Management System (React Hooks)",
-      "level": "INTERMEDIATE",
-      "description": "Lab chương 8 (Hooks): ứng dụng quản lý phim đủ 8 chức năng — useState, useEffect, useRef, useMemo, useContext + custom hook useLocalStorage. Chấm tự động theo thang điểm 10 như PE."
+      "slug": "fer202-1-1-fullstack-react",
+      "name": "1.1 Full-stack & React",
+      "level": "EASY",
+      "description": "Tầng front-end/back-end/database, SPA và React giải quyết gì."
     },
     {
-      "slug": "fer202-13-pe-1-library-loans",
-      "name": "PE Practice 1 — Library Loan System",
-      "level": "ADVANCED",
-      "description": "Đề luyện PE 85 phút dạng SP26/SU26: json-server + React Router (route param, query param) + React-Bootstrap + form 7 luật nghiệp vụ + POST/PATCH. Thang 10, chấm tự động từng chức năng."
+      "slug": "fer202-1-2-git-node-npm",
+      "name": "1.2 Git, Node & npm",
+      "level": "EASY",
+      "description": "semver ^ ~ bằng JS, bảng lệnh npm, quy trình Git hằng ngày."
     },
     {
-      "slug": "fer202-13-pe-2-gadget-store",
-      "name": "PE Practice 2 — Gadget Store Management",
-      "level": "ADVANCED",
-      "description": "Đề luyện PE 85 phút dạng PE17 (SU26): Vite .env, route có mã sinh viên, axios CRUD, bảng quản lý ảnh 70×70 + xoá có xác nhận, form thêm/sửa dùng chung 6 luật kiểm."
+      "slug": "fer202-1-ex1-nodejs",
+      "name": "Exercise 1 — Install Node.js",
+      "level": "EASY",
+      "description": "Các bước cài Node LTS và đọc kết quả terminal."
     },
     {
-      "slug": "fer202-13-pe-3-event-tickets",
-      "name": "PE Practice 3 — Event Ticketing System",
-      "level": "ADVANCED",
-      "description": "Đề luyện PE 85 phút dạng SP25 Shopping System: giỏ vé toàn cục Context + useReducer + localStorage, giới hạn vé, thanh toán POST/PATCH, lịch sử đơn tổng tính từ dòng."
+      "slug": "fer202-1-ex2-first-app",
+      "name": "Exercise 2 — Your first React app",
+      "level": "EASY",
+      "description": "Tạo app, dọn App.js, hiển thị dữ liệu và danh sách."
     },
     {
-      "slug": "fer202-5-lab-task-board",
-      "name": "Lab 5 — Kanban Task Board (components, props, state)",
-      "level": "INTERMEDIATE",
-      "description": "Lab chương 5 dạng đề trường: bảng Kanban 8 chức năng — tách component, props, nâng state, cập nhật bất biến, PropTypes, class component, children. Thang 10."
+      "slug": "fer202-1-ex3-git",
+      "name": "Exercise 3 — Git & GitHub",
+      "level": "EASY",
+      "description": "Lần đẩy đầu lên GitHub, lệnh Git theo tình huống, xử lý sự cố."
     },
     {
-      "slug": "fer202-6-lab-registration-form",
-      "name": "Lab 6 — Workshop Registration Form (events & forms)",
-      "level": "INTERMEDIATE",
-      "description": "Lab chương 6: form đăng ký đủ loại ô controlled, chip kỹ năng bằng Enter/Backspace, kiểm hợp lệ trực tiếp sau lần gửi đầu, gửi không tải lại, bẫy state snapshot. Thang 10."
+      "slug": "fer202-1-3-slot1-slides",
+      "name": "1.3 Slide check — Slot 1",
+      "level": "EASY",
+      "description": "Trắc nghiệm 34 slide Slot 1."
     },
     {
-      "slug": "fer202-9-lab-course-portal",
-      "name": "Lab 9 — Online Course Portal (React Router)",
-      "level": "INTERMEDIATE",
-      "description": "Lab chương 9: cổng khoá học 8 chức năng — bảng route tách module + useRoutes, query params, route lồng + Outlet, điều hướng bằng mã, tham số tuỳ chọn, route bảo vệ quay lại trang cũ, 404. Thang 10."
-    },
-    {
-      "slug": "fer202-11-lab-contact-manager",
-      "name": "Lab 11 — Contact Manager (axios + json-server)",
-      "level": "INTERMEDIATE",
-      "description": "Lab chương 11: danh bạ trên json-server — tầng service axios, đang tải/lỗi/thử lại, Promise.all + nối bảng, CRUD đủ động từ, kiểm trùng email trên máy chủ, cập nhật lạc quan có hoàn tác. Thang 10."
-    },
-    {
-      "slug": "fer202-12-lab-redux-bookstore",
-      "name": "Lab 12 — Book Store with Redux Toolkit",
-      "level": "ADVANCED",
-      "description": "Lab chương 12: cửa hàng sách Redux Toolkit — 5 slice, createAsyncThunk (tải + thanh toán), createSelector, middleware logger + lưu giỏ, preloadedState, addMatcher. Thang 10."
-    },
-    {
-      "slug": "fer202-7-lab-team-dashboard",
-      "name": "Lab 7 — Team Dashboard (Context · render props)",
-      "level": "INTERMEDIATE",
-      "description": "Lab chương 7: ba Context (theme, ngôn ngữ có dự phòng, đăng nhập + chặn vai trò), custom hook, ghép Provider + useMemo, render props và children-as-function. Thang 10."
-    },
-    {
-      "slug": "fer202-3-lab-report-card",
-      "name": "Lab 3 — Class Report Card (JSX rendering)",
-      "level": "BEGINNER",
-      "description": "Lab chương 3: bảng điểm lớp chỉ bằng render — biểu thức JSX, danh sách + key, render có điều kiện, Fragment, map/filter/reduce/sort, style object, chữ an toàn. Thang 10."
-    },
-    {
-      "slug": "fer202-4-lab-cafe-landing",
-      "name": "Lab 4 — Café Landing Page (React-Bootstrap)",
-      "level": "BEGINNER",
-      "description": "Lab chương 4: trang quán cà phê bằng React-Bootstrap — navbar thu gọn, lưới responsive row-cols, Card, pills lọc, Modal form kiểm hợp lệ kiểu Bootstrap, Accordion, Table, ListGroup. Thang 10."
-    },
-    {
-      "slug": "fer202-10-lab-lazy-dashboard",
-      "name": "Lab 10 — Admin Dashboard (lazy & Suspense)",
-      "level": "INTERMEDIATE",
-      "description": "Lab chương 10: tách mã bảng quản trị — lazy theo route, Suspense trong layout, độ trễ giả, Suspense lồng, Error Boundary, tải trước khi rê/focus, named export, khung Help tải theo yêu cầu. Thang 10."
-    },
-    {
-      "slug": "fer202-2-lab-es6-toolkit",
-      "name": "Lab 2 — Student Data Toolkit (ES6+)",
-      "level": "BEGINNER",
-      "description": "Lab chương 2: 13 hàm thuần ES6+ — destructuring/mặc định, map+spread bất biến, rest, groupBy bằng reduce, sort bản sao, gộp object, Promise.all/race/allSettled, ?. và ??. Thang 10."
+      "slug": "fer202-1-interview-tooling",
+      "name": "Interview corner — React overview & tooling",
+      "level": "MEDIUM",
+      "description": "Câu hỏi phỏng vấn về React, npm và Git."
     },
     {
       "slug": "fer202-2-1-es6-basics",
@@ -112,6 +70,24 @@
       "description": "10 câu trắc nghiệm kiểm tra slide Slot 2–3: const, spread/rest, arrow, template literal, import/export, map, Promise.all, ??."
     },
     {
+      "slug": "fer202-2-lab-es6-toolkit",
+      "name": "Lab 2 — Student Data Toolkit (ES6+)",
+      "level": "BEGINNER",
+      "description": "Lab chương 2: 13 hàm thuần ES6+ — destructuring/mặc định, map+spread bất biến, rest, groupBy bằng reduce, sort bản sao, gộp object, Promise.all/race/allSettled, ?. và ??. Thang 10."
+    },
+    {
+      "slug": "fer202-2-deep-utility-library",
+      "name": "Deep Lab 2 — Utility Library (closures · timers · async control)",
+      "level": "ADVANCED",
+      "description": "Deep lab chương 2: pipe/curry, memoize LRU, debounce/throttle, EventEmitter, isEqual, cây đệ quy, asyncPool, retry. Thang 10."
+    },
+    {
+      "slug": "fer202-2-project-ctbooking-m2",
+      "name": "CT Booking · Milestone 2 — Booking rules (ES6)",
+      "level": "INTERMEDIATE",
+      "description": "Dự án xuyên suốt CT Booking, mốc 2: lõi nghiệp vụ thuần (giờ, chồng giờ, kiểm hợp lệ, ô trống, reduce). Thang 10."
+    },
+    {
       "slug": "fer202-2-interview-es6",
       "name": "Interview corner — ES6 for React",
       "level": "BEGINNER",
@@ -130,16 +106,34 @@
       "description": "5 bài: return sớm, bẫy && với số 0, bảng tra thay ?: lồng, Fragment trong bảng, 4 trạng thái giao diện."
     },
     {
+      "slug": "fer202-3-ex4-jsx-es6",
+      "name": "3.4 Exercise 4 — JSX & ES6 array methods",
+      "level": "BEGINNER",
+      "description": "5 bài theo Exercise 4 của trường: filter/map, sort bản sao, reduce tổng kết, find/some/every, nhóm theo tháng."
+    },
+    {
       "slug": "fer202-3-3-slot3-jsx-slides",
       "name": "3.3 Slide check — Rendering with JSX",
       "level": "BEGINNER",
       "description": "10 câu trắc nghiệm kiểm tra slide Slot 2–3 phần JSX."
     },
     {
-      "slug": "fer202-3-ex4-jsx-es6",
-      "name": "3.4 Exercise 4 — JSX & ES6 array methods",
+      "slug": "fer202-3-lab-report-card",
+      "name": "Lab 3 — Class Report Card (JSX rendering)",
       "level": "BEGINNER",
-      "description": "5 bài theo Exercise 4 của trường: filter/map, sort bản sao, reduce tổng kết, find/some/every, nhóm theo tháng."
+      "description": "Lab chương 3: bảng điểm lớp chỉ bằng render — biểu thức JSX, danh sách + key, render có điều kiện, Fragment, map/filter/reduce/sort, style object, chữ an toàn. Thang 10."
+    },
+    {
+      "slug": "fer202-3-deep-invoice-renderer",
+      "name": "Deep Lab 3 — Invoice Renderer (advanced JSX)",
+      "level": "ADVANCED",
+      "description": "Deep lab chương 3: bảng nhóm bằng Fragment có key, giảm giá, coupon + VAT suy ra, nhánh trạng thái, trạng thái rỗng. Thang 10."
+    },
+    {
+      "slug": "fer202-3-project-ctbooking-m3",
+      "name": "CT Booking · Milestone 3 — Today's rooms (JSX)",
+      "level": "INTERMEDIATE",
+      "description": "Dự án CT Booking mốc 3: trang phòng + lịch hôm nay bằng JSX từ lõi nghiệp vụ mốc 2. Thang 10."
     },
     {
       "slug": "fer202-3-interview-jsx",
@@ -152,12 +146,6 @@
       "name": "4.1 Bootstrap grid & React-Bootstrap",
       "level": "BEGINNER",
       "description": "4 bài: Container/Row/Col, Button/Badge variant, lưới responsive theo mốc, class tiện ích flex/spacing/text."
-    },
-    {
-      "slug": "fer202-4-3-slot4-bootstrap-slides",
-      "name": "4.2 Slide check — Bootstrap layout & components",
-      "level": "BEGINNER",
-      "description": "10 câu trắc nghiệm slide Slot 4–5: lưới, container, mốc, offset, gutter, component."
     },
     {
       "slug": "fer202-4-ex5-bootstrap-setup",
@@ -184,16 +172,40 @@
       "description": "4 bài: Form.Group + nhãn, select/radio/checkbox/switch controlled, InputGroup + FloatingLabel, phản hồi kiểm hợp lệ isInvalid."
     },
     {
+      "slug": "fer202-4-ex10-react-bootstrap",
+      "name": "4.9 Exercise 10 — React-Bootstrap components",
+      "level": "BEGINNER",
+      "description": "4 bài: Alert đóng/mở bằng state, Table có dòng tổng, Tabs controlled, Modal xác nhận xoá."
+    },
+    {
+      "slug": "fer202-4-3-slot4-bootstrap-slides",
+      "name": "4.2 Slide check — Bootstrap layout & components",
+      "level": "BEGINNER",
+      "description": "10 câu trắc nghiệm slide Slot 4–5: lưới, container, mốc, offset, gutter, component."
+    },
+    {
       "slug": "fer202-4-4-slot7-react-bootstrap-slides",
       "name": "4.8 Slide check — React-Bootstrap",
       "level": "BEGINNER",
       "description": "8 câu trắc nghiệm slide Slot 7 React-Bootstrap."
     },
     {
-      "slug": "fer202-4-ex10-react-bootstrap",
-      "name": "4.9 Exercise 10 — React-Bootstrap components",
+      "slug": "fer202-4-lab-cafe-landing",
+      "name": "Lab 4 — Café Landing Page (React-Bootstrap)",
       "level": "BEGINNER",
-      "description": "4 bài: Alert đóng/mở bằng state, Table có dòng tổng, Tabs controlled, Modal xác nhận xoá."
+      "description": "Lab chương 4: trang quán cà phê bằng React-Bootstrap — navbar thu gọn, lưới responsive row-cols, Card, pills lọc, Modal form kiểm hợp lệ kiểu Bootstrap, Accordion, Table, ListGroup. Thang 10."
+    },
+    {
+      "slug": "fer202-4-deep-admin-dashboard",
+      "name": "Deep Lab 4 — Bootstrap Admin Dashboard (React-Bootstrap)",
+      "level": "ADVANCED",
+      "description": "Deep lab chương 4: navbar thu gọn, lưới thống kê đáp ứng, bảng + badge, lọc, Pagination, Modal + validation Bootstrap, Toast. Thang 10."
+    },
+    {
+      "slug": "fer202-4-project-ctbooking-m4",
+      "name": "CT Booking · Milestone 4 — Responsive layout (React-Bootstrap)",
+      "level": "INTERMEDIATE",
+      "description": "Dự án CT Booking mốc 4: chuyển sang React-Bootstrap, lưới đáp ứng 1/2/3 cột. Thang 10."
     },
     {
       "slug": "fer202-4-interview-bootstrap",
@@ -214,12 +226,6 @@
       "description": "5 bài: useState có giới hạn, class + this.setState, chuyển class sang hooks, state object một handler, state tối thiểu vs giá trị suy ra."
     },
     {
-      "slug": "fer202-5-3-slot6-component-slides",
-      "name": "5.3 Slide check — All about Components",
-      "level": "BEGINNER",
-      "description": "10 câu trắc nghiệm slide Slot 6."
-    },
-    {
       "slug": "fer202-5-ex9-component-1",
       "name": "5.4 Exercise 9 — React Component 1",
       "level": "BEGINNER",
@@ -232,16 +238,40 @@
       "description": "5 bài theo Exercise 11 + nâng cao: to-do theo id, máy tính chặn chia 0, lọc tìm kiếm suy ra, to-do có bộ lọc/đếm, tô sáng từ khoá an toàn."
     },
     {
+      "slug": "fer202-5-ex19-proptypes",
+      "name": "5.7 Exercise 19 — PropTypes",
+      "level": "INTERMEDIATE",
+      "description": "3 bài: Animal (Exercise 19) đủ PropTypes, oneOf/oneOfType + mặc định, validator tự viết (máy chấm JS)."
+    },
+    {
+      "slug": "fer202-5-3-slot6-component-slides",
+      "name": "5.3 Slide check — All about Components",
+      "level": "BEGINNER",
+      "description": "10 câu trắc nghiệm slide Slot 6."
+    },
+    {
       "slug": "fer202-5-4-slot13-proptypes-slides",
       "name": "5.6 Slide check — PropTypes",
       "level": "BEGINNER",
       "description": "8 câu trắc nghiệm slide Slot 13 PropTypes."
     },
     {
-      "slug": "fer202-5-ex19-proptypes",
-      "name": "5.7 Exercise 19 — PropTypes",
+      "slug": "fer202-5-lab-task-board",
+      "name": "Lab 5 — Kanban Task Board (components, props, state)",
       "level": "INTERMEDIATE",
-      "description": "3 bài: Animal (Exercise 19) đủ PropTypes, oneOf/oneOfType + mặc định, validator tự viết (máy chấm JS)."
+      "description": "Lab chương 5 dạng đề trường: bảng Kanban 8 chức năng — tách component, props, nâng state, cập nhật bất biến, PropTypes, class component, children. Thang 10."
+    },
+    {
+      "slug": "fer202-5-deep-ui-kit",
+      "name": "Deep Lab 5 — mini UI Kit (reusable component APIs)",
+      "level": "ADVANCED",
+      "description": "Deep lab chương 5: Button chuyển tiếp props, Rating điều khiển, DataTable theo cấu hình + sắp xếp, Accordion controlled/uncontrolled, Stepper class, PropTypes. Thang 10."
+    },
+    {
+      "slug": "fer202-5-project-ctbooking-m5",
+      "name": "CT Booking · Milestone 5 — Components, props & selection",
+      "level": "INTERMEDIATE",
+      "description": "Dự án CT Booking mốc 5: tách component có PropTypes, state chọn phòng + ô, SlotPicker điều khiển. Thang 10."
     },
     {
       "slug": "fer202-5-interview-components",
@@ -254,12 +284,6 @@
       "name": "6.1 Event handlers, synthetic events & forms",
       "level": "INTERMEDIATE",
       "description": "6 bài: truyền hàm không gọi, ô controlled + bộ đếm, onSubmit + preventDefault, phím Enter/Escape, ủy quyền sự kiện data-*, form góp ý hợp lệ suy ra."
-    },
-    {
-      "slug": "fer202-6-2-slot11-events-slides",
-      "name": "6.2 Slide check — Events, render & snapshot",
-      "level": "BEGINNER",
-      "description": "10 câu trắc nghiệm slide Slot 11–12."
     },
     {
       "slug": "fer202-6-ex16-event-handling",
@@ -278,6 +302,30 @@
       "name": "6.5 Exercise 18 — State as a snapshot",
       "level": "INTERMEDIATE",
       "description": "6 câu đoán kết quả + bài sửa nút +3, +5 rồi +1, log trễ đọc ảnh chụp."
+    },
+    {
+      "slug": "fer202-6-2-slot11-events-slides",
+      "name": "6.2 Slide check — Events, render & snapshot",
+      "level": "BEGINNER",
+      "description": "10 câu trắc nghiệm slide Slot 11–12."
+    },
+    {
+      "slug": "fer202-6-lab-registration-form",
+      "name": "Lab 6 — Workshop Registration Form (events & forms)",
+      "level": "INTERMEDIATE",
+      "description": "Lab chương 6: form đăng ký đủ loại ô controlled, chip kỹ năng bằng Enter/Backspace, kiểm hợp lệ trực tiếp sau lần gửi đầu, gửi không tải lại, bẫy state snapshot. Thang 10."
+    },
+    {
+      "slug": "fer202-6-deep-checkout-wizard",
+      "name": "Deep Lab 6 — Multi-step Checkout Wizard (events & forms)",
+      "level": "ADVANCED",
+      "description": "Deep lab chương 6: wizard bốn bước, kiểm theo bước + thời điểm lỗi, một state/một handler, mảng mặt hàng động, Enter = Next. Thang 10."
+    },
+    {
+      "slug": "fer202-6-project-ctbooking-m6",
+      "name": "CT Booking · Milestone 6 — Booking form",
+      "level": "INTERMEDIATE",
+      "description": "Dự án CT Booking mốc 6: form đặt phòng, lỗi theo ô + luật nghiệp vụ, thêm lượt vào state. Thang 10."
     },
     {
       "slug": "fer202-6-interview-events",
@@ -302,6 +350,24 @@
       "name": "7.3 Slide check — Props, State & Context",
       "level": "BEGINNER",
       "description": "10 câu trắc nghiệm slide Slot 8."
+    },
+    {
+      "slug": "fer202-7-lab-team-dashboard",
+      "name": "Lab 7 — Team Dashboard (Context · render props)",
+      "level": "INTERMEDIATE",
+      "description": "Lab chương 7: ba Context (theme, ngôn ngữ có dự phòng, đăng nhập + chặn vai trò), custom hook, ghép Provider + useMemo, render props và children-as-function. Thang 10."
+    },
+    {
+      "slug": "fer202-7-deep-permissions-center",
+      "name": "Deep Lab 7 — Permissions & Notifications Center (Context in depth)",
+      "level": "ADVANCED",
+      "description": "Deep lab chương 7: Context + useReducer, tách state/dispatch, ma trận quyền + <Can> + HOC, cờ tính năng lồng, trung tâm thông báo. Thang 10."
+    },
+    {
+      "slug": "fer202-7-project-ctbooking-m7",
+      "name": "CT Booking · Milestone 7 — Shared state with Context",
+      "level": "ADVANCED",
+      "description": "Dự án CT Booking mốc 7: BookingContext + StudentContext, đăng nhập, form điền sẵn, My bookings có huỷ. Thang 10."
     },
     {
       "slug": "fer202-7-interview-context",
@@ -352,6 +418,24 @@
       "description": "Trắc nghiệm Slot 9–10: luật hooks, năm hook chính, vòng đời effect."
     },
     {
+      "slug": "fer202-8-lab-movie-hooks",
+      "name": "Lab 8 — Movie Management System (React Hooks)",
+      "level": "INTERMEDIATE",
+      "description": "Lab chương 8 (Hooks): ứng dụng quản lý phim đủ 8 chức năng — useState, useEffect, useRef, useMemo, useContext + custom hook useLocalStorage. Chấm tự động theo thang điểm 10 như PE."
+    },
+    {
+      "slug": "fer202-8-deep-custom-hooks",
+      "name": "Deep Lab 8 — Custom Hooks Library (Crypto Watchlist)",
+      "level": "ADVANCED",
+      "description": "Deep lab chương 8: useFetch cache dùng chung, useDebounce, useInterval mẫu ref, usePrevious, useLocalStorage, useOnClickOutside trên json-server. Thang 10."
+    },
+    {
+      "slug": "fer202-8-project-ctbooking-m8",
+      "name": "CT Booking · Milestone 8 — Hooks: reducer, persistence, custom hook",
+      "level": "ADVANCED",
+      "description": "Dự án CT Booking mốc 8: useReducer, lưu localStorage, custom hook useFreeSlots, focus bằng useRef. Thang 10."
+    },
+    {
       "slug": "fer202-8-interview-hooks",
       "name": "Interview corner — React Hooks",
       "level": "MEDIUM",
@@ -388,6 +472,24 @@
       "description": "Trắc nghiệm Slot 14: SPA, cài đặt v6, route, params, Outlet, điều hướng."
     },
     {
+      "slug": "fer202-9-lab-course-portal",
+      "name": "Lab 9 — Online Course Portal (React Router)",
+      "level": "INTERMEDIATE",
+      "description": "Lab chương 9: cổng khoá học 8 chức năng — bảng route tách module + useRoutes, query params, route lồng + Outlet, điều hướng bằng mã, tham số tuỳ chọn, route bảo vệ quay lại trang cũ, 404. Thang 10."
+    },
+    {
+      "slug": "fer202-9-deep-data-router",
+      "name": "Deep Lab 9 — Course Catalog (React Router loaders · actions · fetchers)",
+      "level": "ADVANCED",
+      "description": "Deep lab chương 9: data router — loader, action + redirect, errorElement 404, useActionData, useFetcher, useNavigation trên json-server. Thang 10."
+    },
+    {
+      "slug": "fer202-9-project-ctbooking-m9",
+      "name": "CT Booking · Milestone 9 — Pages with React Router",
+      "level": "ADVANCED",
+      "description": "Dự án CT Booking mốc 9: /rooms, /rooms/:id, /my-bookings, 404, navigate kèm state. Thang 10."
+    },
+    {
       "slug": "fer202-9-interview-router",
       "name": "Interview corner — React Router",
       "level": "MEDIUM",
@@ -412,6 +514,24 @@
       "description": "Trắc nghiệm Slot 15: bundle, import() động, React.lazy, Suspense, cái giá của lazy quá nhiều."
     },
     {
+      "slug": "fer202-10-lab-lazy-dashboard",
+      "name": "Lab 10 — Admin Dashboard (lazy & Suspense)",
+      "level": "INTERMEDIATE",
+      "description": "Lab chương 10: tách mã bảng quản trị — lazy theo route, Suspense trong layout, độ trễ giả, Suspense lồng, Error Boundary, tải trước khi rê/focus, named export, khung Help tải theo yêu cầu. Thang 10."
+    },
+    {
+      "slug": "fer202-10-deep-widget-dashboard",
+      "name": "Deep Lab 10 — Widget Dashboard (lazy registry · transitions)",
+      "level": "ADVANCED",
+      "description": "Deep lab chương 10: sổ đăng ký widget tải lười, Suspense + error boundary từng widget có thử lại, bố cục lưu, useTransition, tải trước. Thang 10."
+    },
+    {
+      "slug": "fer202-10-project-ctbooking-m10",
+      "name": "CT Booking · Milestone 10 — Code splitting the pages",
+      "level": "ADVANCED",
+      "description": "Dự án CT Booking mốc 10: tải lười trang, Suspense trong layout, tải trước. Thang 10."
+    },
+    {
       "slug": "fer202-10-interview-lazy",
       "name": "Interview corner — Code splitting",
       "level": "MEDIUM",
@@ -430,6 +550,18 @@
       "description": "axios GET/POST/PATCH/DELETE với json-server, confirm khi xoá, axios.create + params + phân trang phía server."
     },
     {
+      "slug": "fer202-11-ex26-json-server",
+      "name": "Exercise 26 — json-server",
+      "level": "EASY",
+      "description": "Các bước dựng json-server, đoán kết quả request từ db.json, quan hệ _expand/_embed trong React."
+    },
+    {
+      "slug": "fer202-11-ex27-axios",
+      "name": "Exercise 27 — axios",
+      "level": "MEDIUM",
+      "description": "AxiosDemo ba trạng thái + tải lại, custom hook useAxios có refetch và so params theo nội dung."
+    },
+    {
       "slug": "fer202-11-3-slot18-http-rest-slides",
       "name": "11.3 Slide check — HTTP & REST",
       "level": "EASY",
@@ -442,16 +574,22 @@
       "description": "Trắc nghiệm Slot 19 + sắp thứ tự in ra của vòng lặp sự kiện."
     },
     {
-      "slug": "fer202-11-ex26-json-server",
-      "name": "Exercise 26 — json-server",
-      "level": "EASY",
-      "description": "Các bước dựng json-server, đoán kết quả request từ db.json, quan hệ _expand/_embed trong React."
+      "slug": "fer202-11-lab-contact-manager",
+      "name": "Lab 11 — Contact Manager (axios + json-server)",
+      "level": "INTERMEDIATE",
+      "description": "Lab chương 11: danh bạ trên json-server — tầng service axios, đang tải/lỗi/thử lại, Promise.all + nối bảng, CRUD đủ động từ, kiểm trùng email trên máy chủ, cập nhật lạc quan có hoàn tác. Thang 10."
     },
     {
-      "slug": "fer202-11-ex27-axios",
-      "name": "Exercise 27 — axios",
-      "level": "MEDIUM",
-      "description": "AxiosDemo ba trạng thái + tải lại, custom hook useAxios có refetch và so params theo nội dung."
+      "slug": "fer202-11-deep-optimistic-todos",
+      "name": "Deep Lab 11 — Team Todos (HTTP layer · optimistic UI)",
+      "level": "ADVANCED",
+      "description": "Deep lab chương 11: lớp http.js (.env, token, ApiError), Load more, sửa/thêm lạc quan có hoàn tác, xoá có Undo, cache stale-while-revalidate. Thang 10."
+    },
+    {
+      "slug": "fer202-11-project-ctbooking-m11",
+      "name": "CT Booking · Milestone 11 — Bookings on a REST API",
+      "level": "ADVANCED",
+      "description": "Dự án CT Booking mốc 11: json-server + axios — tải/lỗi/thử lại, POST, DELETE. Thang 10."
     },
     {
       "slug": "fer202-11-interview-http",
@@ -490,52 +628,46 @@
       "description": "Trắc nghiệm Slot 16–17: Flux, ba nguyên tắc, RTK, react-redux, middleware, thunk."
     },
     {
+      "slug": "fer202-12-lab-redux-bookstore",
+      "name": "Lab 12 — Book Store with Redux Toolkit",
+      "level": "ADVANCED",
+      "description": "Lab chương 12: cửa hàng sách Redux Toolkit — 5 slice, createAsyncThunk (tải + thanh toán), createSelector, middleware logger + lưu giỏ, preloadedState, addMatcher. Thang 10."
+    },
+    {
+      "slug": "fer202-12-deep-issue-tracker",
+      "name": "Deep Lab 12 — Issue Tracker (entity adapter · listener middleware)",
+      "level": "ADVANCED",
+      "description": "Deep lab chương 12: createEntityAdapter, createSelector nối + nhóm cột, thunk lạc quan hoàn tác từ meta.arg, createListenerMiddleware cho nhật ký và lưu bộ lọc. Thang 10."
+    },
+    {
+      "slug": "fer202-12-project-ctbooking-m12",
+      "name": "CT Booking · Milestone 12 — Migrating to Redux Toolkit",
+      "level": "ADVANCED",
+      "description": "Dự án CT Booking mốc 12: Redux Toolkit — slice + thunk, hook mặt tiền, selector ghi nhớ. Thang 10."
+    },
+    {
       "slug": "fer202-12-interview-redux",
       "name": "Interview corner — Redux",
       "level": "MEDIUM",
       "description": "Câu hỏi phỏng vấn về Redux/RTK kèm câu trả lời mẫu."
     },
     {
-      "slug": "fer202-1-1-fullstack-react",
-      "name": "1.1 Full-stack & React",
-      "level": "EASY",
-      "description": "Tầng front-end/back-end/database, SPA và React giải quyết gì."
+      "slug": "fer202-13-pe-1-library-loans",
+      "name": "PE Practice 1 — Library Loan System",
+      "level": "ADVANCED",
+      "description": "Đề luyện PE 85 phút dạng SP26/SU26: json-server + React Router (route param, query param) + React-Bootstrap + form 7 luật nghiệp vụ + POST/PATCH. Thang 10, chấm tự động từng chức năng."
     },
     {
-      "slug": "fer202-1-2-git-node-npm",
-      "name": "1.2 Git, Node & npm",
-      "level": "EASY",
-      "description": "semver ^ ~ bằng JS, bảng lệnh npm, quy trình Git hằng ngày."
+      "slug": "fer202-13-pe-2-gadget-store",
+      "name": "PE Practice 2 — Gadget Store Management",
+      "level": "ADVANCED",
+      "description": "Đề luyện PE 85 phút dạng PE17 (SU26): Vite .env, route có mã sinh viên, axios CRUD, bảng quản lý ảnh 70×70 + xoá có xác nhận, form thêm/sửa dùng chung 6 luật kiểm."
     },
     {
-      "slug": "fer202-1-3-slot1-slides",
-      "name": "1.3 Slide check — Slot 1",
-      "level": "EASY",
-      "description": "Trắc nghiệm 34 slide Slot 1."
-    },
-    {
-      "slug": "fer202-1-ex1-nodejs",
-      "name": "Exercise 1 — Install Node.js",
-      "level": "EASY",
-      "description": "Các bước cài Node LTS và đọc kết quả terminal."
-    },
-    {
-      "slug": "fer202-1-ex2-first-app",
-      "name": "Exercise 2 — Your first React app",
-      "level": "EASY",
-      "description": "Tạo app, dọn App.js, hiển thị dữ liệu và danh sách."
-    },
-    {
-      "slug": "fer202-1-ex3-git",
-      "name": "Exercise 3 — Git & GitHub",
-      "level": "EASY",
-      "description": "Lần đẩy đầu lên GitHub, lệnh Git theo tình huống, xử lý sự cố."
-    },
-    {
-      "slug": "fer202-1-interview-tooling",
-      "name": "Interview corner — React overview & tooling",
-      "level": "MEDIUM",
-      "description": "Câu hỏi phỏng vấn về React, npm và Git."
+      "slug": "fer202-13-pe-3-event-tickets",
+      "name": "PE Practice 3 — Event Ticketing System",
+      "level": "ADVANCED",
+      "description": "Đề luyện PE 85 phút dạng SP25 Shopping System: giỏ vé toàn cục Context + useReducer + localStorage, giới hạn vé, thanh toán POST/PATCH, lịch sử đơn tổng tính từ dòng."
     },
     {
       "slug": "fer202-a1-1-performance",
@@ -554,138 +686,6 @@
       "name": "14.3 TypeScript & Next.js (advanced)",
       "level": "ADVANCED",
       "description": "Đọc kiểu TypeScript cho React, ánh xạ tệp app router Next.js sang URL."
-    },
-    {
-      "slug": "fer202-2-deep-utility-library",
-      "name": "Deep Lab 2 — Utility Library (closures · timers · async control)",
-      "level": "ADVANCED",
-      "description": "Deep lab chương 2: pipe/curry, memoize LRU, debounce/throttle, EventEmitter, isEqual, cây đệ quy, asyncPool, retry. Thang 10."
-    },
-    {
-      "slug": "fer202-3-deep-invoice-renderer",
-      "name": "Deep Lab 3 — Invoice Renderer (advanced JSX)",
-      "level": "ADVANCED",
-      "description": "Deep lab chương 3: bảng nhóm bằng Fragment có key, giảm giá, coupon + VAT suy ra, nhánh trạng thái, trạng thái rỗng. Thang 10."
-    },
-    {
-      "slug": "fer202-4-deep-admin-dashboard",
-      "name": "Deep Lab 4 — Bootstrap Admin Dashboard (React-Bootstrap)",
-      "level": "ADVANCED",
-      "description": "Deep lab chương 4: navbar thu gọn, lưới thống kê đáp ứng, bảng + badge, lọc, Pagination, Modal + validation Bootstrap, Toast. Thang 10."
-    },
-    {
-      "slug": "fer202-5-deep-ui-kit",
-      "name": "Deep Lab 5 — mini UI Kit (reusable component APIs)",
-      "level": "ADVANCED",
-      "description": "Deep lab chương 5: Button chuyển tiếp props, Rating điều khiển, DataTable theo cấu hình + sắp xếp, Accordion controlled/uncontrolled, Stepper class, PropTypes. Thang 10."
-    },
-    {
-      "slug": "fer202-6-deep-checkout-wizard",
-      "name": "Deep Lab 6 — Multi-step Checkout Wizard (events & forms)",
-      "level": "ADVANCED",
-      "description": "Deep lab chương 6: wizard bốn bước, kiểm theo bước + thời điểm lỗi, một state/một handler, mảng mặt hàng động, Enter = Next. Thang 10."
-    },
-    {
-      "slug": "fer202-7-deep-permissions-center",
-      "name": "Deep Lab 7 — Permissions & Notifications Center (Context in depth)",
-      "level": "ADVANCED",
-      "description": "Deep lab chương 7: Context + useReducer, tách state/dispatch, ma trận quyền + <Can> + HOC, cờ tính năng lồng, trung tâm thông báo. Thang 10."
-    },
-    {
-      "slug": "fer202-8-deep-custom-hooks",
-      "name": "Deep Lab 8 — Custom Hooks Library (Crypto Watchlist)",
-      "level": "ADVANCED",
-      "description": "Deep lab chương 8: useFetch cache dùng chung, useDebounce, useInterval mẫu ref, usePrevious, useLocalStorage, useOnClickOutside trên json-server. Thang 10."
-    },
-    {
-      "slug": "fer202-9-deep-data-router",
-      "name": "Deep Lab 9 — Course Catalog (React Router loaders · actions · fetchers)",
-      "level": "ADVANCED",
-      "description": "Deep lab chương 9: data router — loader, action + redirect, errorElement 404, useActionData, useFetcher, useNavigation trên json-server. Thang 10."
-    },
-    {
-      "slug": "fer202-10-deep-widget-dashboard",
-      "name": "Deep Lab 10 — Widget Dashboard (lazy registry · transitions)",
-      "level": "ADVANCED",
-      "description": "Deep lab chương 10: sổ đăng ký widget tải lười, Suspense + error boundary từng widget có thử lại, bố cục lưu, useTransition, tải trước. Thang 10."
-    },
-    {
-      "slug": "fer202-11-deep-optimistic-todos",
-      "name": "Deep Lab 11 — Team Todos (HTTP layer · optimistic UI)",
-      "level": "ADVANCED",
-      "description": "Deep lab chương 11: lớp http.js (.env, token, ApiError), Load more, sửa/thêm lạc quan có hoàn tác, xoá có Undo, cache stale-while-revalidate. Thang 10."
-    },
-    {
-      "slug": "fer202-12-deep-issue-tracker",
-      "name": "Deep Lab 12 — Issue Tracker (entity adapter · listener middleware)",
-      "level": "ADVANCED",
-      "description": "Deep lab chương 12: createEntityAdapter, createSelector nối + nhóm cột, thunk lạc quan hoàn tác từ meta.arg, createListenerMiddleware cho nhật ký và lưu bộ lọc. Thang 10."
-    },
-    {
-      "slug": "fer202-2-project-ctbooking-m2",
-      "name": "CT Booking · Milestone 2 — Booking rules (ES6)",
-      "level": "INTERMEDIATE",
-      "description": "Dự án xuyên suốt CT Booking, mốc 2: lõi nghiệp vụ thuần (giờ, chồng giờ, kiểm hợp lệ, ô trống, reduce). Thang 10."
-    },
-    {
-      "slug": "fer202-3-project-ctbooking-m3",
-      "name": "CT Booking · Milestone 3 — Today's rooms (JSX)",
-      "level": "INTERMEDIATE",
-      "description": "Dự án CT Booking mốc 3: trang phòng + lịch hôm nay bằng JSX từ lõi nghiệp vụ mốc 2. Thang 10."
-    },
-    {
-      "slug": "fer202-4-project-ctbooking-m4",
-      "name": "CT Booking · Milestone 4 — Responsive layout (React-Bootstrap)",
-      "level": "INTERMEDIATE",
-      "description": "Dự án CT Booking mốc 4: chuyển sang React-Bootstrap, lưới đáp ứng 1/2/3 cột. Thang 10."
-    },
-    {
-      "slug": "fer202-5-project-ctbooking-m5",
-      "name": "CT Booking · Milestone 5 — Components, props & selection",
-      "level": "INTERMEDIATE",
-      "description": "Dự án CT Booking mốc 5: tách component có PropTypes, state chọn phòng + ô, SlotPicker điều khiển. Thang 10."
-    },
-    {
-      "slug": "fer202-6-project-ctbooking-m6",
-      "name": "CT Booking · Milestone 6 — Booking form",
-      "level": "INTERMEDIATE",
-      "description": "Dự án CT Booking mốc 6: form đặt phòng, lỗi theo ô + luật nghiệp vụ, thêm lượt vào state. Thang 10."
-    },
-    {
-      "slug": "fer202-7-project-ctbooking-m7",
-      "name": "CT Booking · Milestone 7 — Shared state with Context",
-      "level": "ADVANCED",
-      "description": "Dự án CT Booking mốc 7: BookingContext + StudentContext, đăng nhập, form điền sẵn, My bookings có huỷ. Thang 10."
-    },
-    {
-      "slug": "fer202-8-project-ctbooking-m8",
-      "name": "CT Booking · Milestone 8 — Hooks: reducer, persistence, custom hook",
-      "level": "ADVANCED",
-      "description": "Dự án CT Booking mốc 8: useReducer, lưu localStorage, custom hook useFreeSlots, focus bằng useRef. Thang 10."
-    },
-    {
-      "slug": "fer202-9-project-ctbooking-m9",
-      "name": "CT Booking · Milestone 9 — Pages with React Router",
-      "level": "ADVANCED",
-      "description": "Dự án CT Booking mốc 9: /rooms, /rooms/:id, /my-bookings, 404, navigate kèm state. Thang 10."
-    },
-    {
-      "slug": "fer202-10-project-ctbooking-m10",
-      "name": "CT Booking · Milestone 10 — Code splitting the pages",
-      "level": "ADVANCED",
-      "description": "Dự án CT Booking mốc 10: tải lười trang, Suspense trong layout, tải trước. Thang 10."
-    },
-    {
-      "slug": "fer202-11-project-ctbooking-m11",
-      "name": "CT Booking · Milestone 11 — Bookings on a REST API",
-      "level": "ADVANCED",
-      "description": "Dự án CT Booking mốc 11: json-server + axios — tải/lỗi/thử lại, POST, DELETE. Thang 10."
-    },
-    {
-      "slug": "fer202-12-project-ctbooking-m12",
-      "name": "CT Booking · Milestone 12 — Migrating to Redux Toolkit",
-      "level": "ADVANCED",
-      "description": "Dự án CT Booking mốc 12: Redux Toolkit — slice + thunk, hook mặt tiền, selector ghi nhớ. Thang 10."
     }
   ]
 }

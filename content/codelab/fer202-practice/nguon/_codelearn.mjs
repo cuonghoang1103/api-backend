@@ -174,8 +174,10 @@ function docCay(thuMuc, goc = thuMuc) {
 }
 const TEP = docCay(GOC).map((ten) => {
   const src = fs.readFileSync(path.join(GOC, ten), 'utf8');
-  const m = /^\/\/@from F(\d+)\s*$/m.exec(src.split('\n')[0]);
-  return { ten, src, tu: m ? Number(m[1]) : 0 };
+  const dau = src.split('\n')[0];
+  const m = /^\/\/@from F(\d+)\s*$/.exec(dau);
+  const den = /^\/\/@until F(\d+)\s*$/.exec(dau);   // tệp giữ chỗ (.gitkeep) chỉ có TRƯỚC F<n>
+  return { ten, src, tu: m ? Number(m[1]) : 0, den: den ? Number(den[1]) : Infinity };
 });
 
 /** Cắt một tệp ở mức k (0..11). */
@@ -185,7 +187,7 @@ function cat(src, k, ten) {
   for (const dong of src.split('\n')) {
     const t = dong.trim();
     let m;
-    if (/^\/\/@from F\d+$/.test(t)) continue;
+    if (/^\/\/@(from|until) F\d+$/.test(t)) continue;
     if ((m = /^\/\/#(<)?F(\d+)$/.exec(t))) { ngan.push(m[1] ? k < Number(m[2]) : k >= Number(m[2])); continue; }
     if (t === '//#end') { if (!ngan.length) throw new Error(`${ten}: //#end thừa`); ngan.pop(); continue; }
     if (t.startsWith('//#') || t.startsWith('//@')) throw new Error(`${ten}: chỉ thị lạ "${t}"`);
@@ -200,7 +202,7 @@ const CHUNG = { 'package.json': PACKAGE_JSON, '.env': ENV, 'db.json': DB_JSON, '
 /** Lời giải sau chức năng k (k = 0: khung starter của cả dự án). */
 export function phienBan(k) {
   const out = { ...CHUNG };
-  for (const t of TEP) if (k >= t.tu) out[t.ten] = cat(t.src, k, t.ten);
+  for (const t of TEP) if (k >= t.tu && k < t.den) out[t.ten] = cat(t.src, k, t.ten);
   return out;
 }
 
@@ -371,7 +373,7 @@ export const bang = (cot, hang) => `<table><thead><tr>${cot.map((c) => `<th>${c}
  */
 export function banInF(o) {
   const doi = Object.fromEntries(tepDoi(o.k).map(([t, loai]) => [t, loai === 'NEW' ? `NEW in F${o.k}` : `EDIT in F${o.k}`]));
-  const cay = veCay(Object.keys(phienBan(o.k)).filter((t) => !t.startsWith('public/') || t === 'public/index.html'), doi);
+  const cay = veCay(Object.keys(phienBan(o.k)).filter((t) => !t.endsWith('/.gitkeep')), doi);
   const trich = (o.bangDuLieu ?? []).map((b) => `"${b}": ${JSON.stringify(DB[b].slice(0, o.soDong ?? 3), null, 2).replace(/\n/g, '\n  ')}${DB[b].length > (o.soDong ?? 3) ? ` /* … ${DB[b].length} rows in db.json */` : ''}`).join(',\n');
   return {
     tieuDe: { en: `CODELEARN · F${o.k} — ${TEN_F[o.k].en.toUpperCase()}`, vi: `CODELEARN · F${o.k} — ${TEN_F[o.k].vi.toUpperCase()}` },

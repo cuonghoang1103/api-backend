@@ -1,0 +1,2 @@
+//@until F2
+# src/pages/admin/ — keeps this folder in the starter. Will hold: admin pages, nested under /admin (AdminLayout in F2, CRUD pages in F9–F11)

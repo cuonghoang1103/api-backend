@@ -1,0 +1,432 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-9-lab-agile-backlog-clubhub",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-9-1-agile-requirements"
+  },
+  "exercises": [
+    {
+      "title": "Lab 9 — Agile Requirements: the ClubHub Backlog",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 45,
+      "points": 100,
+      "concepts": [
+        "user story",
+        "INVEST",
+        "acceptance criteria",
+        "Definition of Ready",
+        "Definition of Done",
+        "product backlog"
+      ],
+      "prerequisites": [
+        "SWR302 Chapter 9 (agile requirements)"
+      ],
+      "tags": [
+        "swr302",
+        "lab"
+      ],
+      "problemHtml": "<h1>Lab 9 — Agile Requirements: the ClubHub Backlog</h1>\n<p class=\"bi-phu\">Chapter 9 lab · user stories, INVEST, acceptance criteria, Definition of Ready and Done, agile requirements · 10 marks</p>\n<h2>1. Overview</h2>\n<p><b>ClubHub</b> manages the student clubs of the university. A <b>student</b> joins a club and pays its yearly fee online, becoming a <b>member</b>. A <b>club leader</b> creates events with a maximum number of seats and posts announcements to the members. A member registers for an event; registration closes 24 hours before the event, and when an event is full the member can join its waitlist. A <b>treasurer</b> submits expense claims with a photo of the receipt; the <b>student affairs officer</b> approves the club budgets and every expense claim above 2,000,000 VND. The team works in two-week sprints with a product owner from the student affairs office.</p>\n<p><b>A.</b> Write at least five user stories for the product backlog.</p>\n<p><b>B. Stories that break INVEST</b>:</p><ul><li><b>B1</b> — As a member, I want the whole club management system so that I can manage my clubs.</li><li><b>B2</b> — As a developer, I want to rename the database tables in camelCase so that the code looks tidier.</li><li><b>B3</b> — As a club leader, I want the event page to look nice so that members like it.</li><li><b>B4</b> — As a member, I want to pay my yearly fee on the payment screen that story #12 must build first, so that I can join a club.</li><li><b>B5</b> — As a treasurer, I want the expense report as a 3-column CSV with Arial 10 pt headers exactly as in mock-up v7, with no change allowed, so that I can file it.</li><li><b>B6</b> — As a club leader, I want an AI to predict which future events will be popular so that I plan better — nobody on the team has done this before and there is no data yet.</li></ul>\n<p><b>C.</b> Write the acceptance criteria of the story <i>\"As a member, I want to register for an event so that a seat is kept for me.\"</i></p>\n<p><b>D. Checklist items</b> — Definition of Ready or Definition of Done?</p><ul><li><b>D1</b> — Acceptance criteria are written and agreed with the product owner.</li><li><b>D2</b> — The code is reviewed and merged into the main branch.</li><li><b>D3</b> — The team has estimated the story.</li><li><b>D4</b> — All acceptance tests of the story pass.</li><li><b>D5</b> — The story is small enough to finish within one sprint.</li><li><b>D6</b> — The product owner accepted the story at the sprint review.</li></ul>\n<p><b>E. Statements</b>:</p><ul><li><b>T1</b> — Agile projects skip requirements documentation entirely.</li><li><b>T2</b> — The product owner decides the order of the product backlog.</li><li><b>T3</b> — Details of a story are elaborated just in time, shortly before the iteration that implements it.</li><li><b>T4</b> — An epic is planned so that it is finished inside a single sprint.</li><li><b>T5</b> — Acceptance tests are a form of requirements in agile projects.</li><li><b>T6</b> — A well-written user story removes the need to talk with the users.</li></ul>\n<h3>Main features</h3>\n<ul>\n  <li>A. Five user stories.</li>\n  <li>B. INVEST violations.</li>\n  <li>C. Acceptance criteria.</li>\n  <li>D. Definition of Ready vs Done.</li>\n  <li>E. Requirements on agile projects.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>Stories are written from the point of view of a user role of the case — never \"As the system\" or \"As a developer\".</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>answers/\n├── a-stories.js      ← const STORIES = ['As a …, I want … so that …', …]\n├── b-invest.js       ← const INVEST_VIOLATIONS = { B1: '…', … }\n├── c-acceptance.js   ← const ACCEPTANCE = [ { given, when, then } ]\n├── d-ready-done.js   ← const READY_OR_DONE = { D1: 'DOR' | 'DOD', … }\n└── e-truths.js       ← const AGILE_TRUTHS = { T1: 'TRUE' | 'FALSE', … }</pre>\n<h2>3. Data model</h2>\n<p><b>Allowed values</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>STORIES[i]</code></td><td>string</td><td>\"As a <role>, I want <goal> so that <benefit>\"</td></tr><tr><td><code>INVEST_VIOLATIONS.*</code></td><td>string</td><td>INDEPENDENT · NEGOTIABLE · VALUABLE · ESTIMABLE · SMALL · TESTABLE</td></tr><tr><td><code>ACCEPTANCE[i]</code></td><td>{ given, when, then }</td><td>one scenario per object</td></tr></tbody></table>\n<h2>4. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. A. User stories <span class=\"bi-diem\">3 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Form, roles of the case, a benefit, testable goals, coverage of the case.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">user story</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. B. INVEST <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>The criterion each bad story breaks.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">INVEST</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. C. Acceptance criteria <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Success, full event, closed registration — each as Given/When/Then.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">Given/When/Then</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. D. Ready and Done <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Before entering a sprint vs before shipping.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">Definition of Done</span></p>\n</div>\n<div class=\"bi-cn\"><h3>5. E. Agile requirements <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>What agile changes and what it does not.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">product backlog</span></p>\n</div>\n<h2>5. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>STORIES</code></td><td>answers/a-stories.js</td></tr><tr><td><code>INVEST_VIOLATIONS</code></td><td>answers/b-invest.js</td></tr><tr><td><code>ACCEPTANCE</code></td><td>answers/c-acceptance.js</td></tr><tr><td><code>READY_OR_DONE</code></td><td>answers/d-ready-done.js</td></tr><tr><td><code>AGILE_TRUTHS</code></td><td>answers/e-truths.js</td></tr></tbody></table>\n<h2>6. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>A. User stories</td><td>3</td></tr><tr><td>2</td><td>B. INVEST</td><td>2</td></tr><tr><td>3</td><td>C. Acceptance criteria</td><td>2</td></tr><tr><td>4</td><td>D. Ready and Done</td><td>1.5</td></tr><tr><td>5</td><td>E. Agile requirements</td><td>1.5</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>\"As the system, I want to send reminders…\" — the system is not a user role.</li>\n  <li>A story with \"and\" joining two goals, or with UI details that belong in acceptance criteria.</li>\n  <li>Acceptance criteria that only cover the happy path.</li>\n</ul>\n<h2>7. Submission</h2>\n<p>Write your answers in the files of <code>answers/</code> on the right. Diagrams are written as text in the syntax of a real tool (Mermaid or PlantUML — paste them into <a href=\"https://mermaid.live\" target=\"_blank\" rel=\"noopener\">mermaid.live</a> or <a href=\"https://www.plantuml.com/plantuml\" target=\"_blank\" rel=\"noopener\">plantuml.com</a> to SEE the picture); tables are JavaScript arrays, one object per row of the school template. Press <b>Run</b> for the visible checks and <b>Submit</b> for full grading, hidden checks included. Your mark per question appears in the rubric table.</p>",
+      "problemHtmlVi": "<h1>Lab 9 — Agile Requirements: the ClubHub Backlog</h1>\n<p class=\"bi-phu\">Lab chương 9 · user story, INVEST, tiêu chí chấp nhận, Definition of Ready và Done, yêu cầu agile · 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p><b>ClubHub</b> quản lý câu lạc bộ sinh viên. <b>Sinh viên</b> tham gia CLB và đóng phí năm trực tuyến, trở thành <b>thành viên</b>. <b>Trưởng CLB</b> tạo sự kiện có số chỗ tối đa và đăng thông báo cho thành viên. Thành viên đăng ký sự kiện; đăng ký đóng 24 giờ trước sự kiện, sự kiện đầy thì thành viên vào danh sách chờ. <b>Thủ quỹ</b> gửi đề nghị thanh toán chi phí kèm ảnh hoá đơn; <b>cán bộ công tác sinh viên</b> duyệt ngân sách CLB và mọi đề nghị trên 2.000.000 đ. Đội làm sprint hai tuần với product owner từ phòng công tác sinh viên.</p>\n<p><b>A.</b> Viết ít nhất năm user story. <b>B.</b> Sáu story B1–B6 vi phạm tiêu chí INVEST nào? <b>C.</b> Viết tiêu chí chấp nhận cho story đăng ký sự kiện. <b>D.</b> Sáu mục D1–D6: Definition of Ready hay Done? <b>E.</b> Sáu phát biểu T1–T6: đúng hay sai?</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>A. Năm user story.</li>\n  <li>B. Vi phạm INVEST.</li>\n  <li>C. Tiêu chí chấp nhận.</li>\n  <li>D. Definition of Ready vs Done.</li>\n  <li>E. Yêu cầu trong dự án agile.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Story viết từ góc nhìn một vai người dùng trong đề — không bao giờ \"As the system\" hay \"As a developer\".</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>answers/\n├── a-stories.js      ← const STORIES = ['As a …, I want … so that …', …]\n├── b-invest.js       ← const INVEST_VIOLATIONS = { B1: '…', … }\n├── c-acceptance.js   ← const ACCEPTANCE = [ { given, when, then } ]\n├── d-ready-done.js   ← const READY_OR_DONE = { D1: 'DOR' | 'DOD', … }\n└── e-truths.js       ← const AGILE_TRUTHS = { T1: 'TRUE' | 'FALSE', … }</pre>\n<h2>3. Mô hình dữ liệu</h2>\n<p><b>Allowed values</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>STORIES[i]</code></td><td>string</td><td>\"As a <vai trò>, I want <mục tiêu> so that <lợi ích>\"</td></tr><tr><td><code>INVEST_VIOLATIONS.*</code></td><td>string</td><td>INDEPENDENT · NEGOTIABLE · VALUABLE · ESTIMABLE · SMALL · TESTABLE</td></tr><tr><td><code>ACCEPTANCE[i]</code></td><td>{ given, when, then }</td><td>mỗi object một kịch bản</td></tr></tbody></table>\n<h2>4. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. A. User story <span class=\"bi-diem\">3 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Đúng khuôn, vai trò trong đề, có lợi ích, mục tiêu kiểm chứng được, phủ đề.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">user story</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. B. INVEST <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Tiêu chí mỗi story tồi vi phạm.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">INVEST</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. C. Tiêu chí chấp nhận <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Thành công, sự kiện đầy, hết hạn đăng ký — mỗi cái dạng Given/When/Then.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">Given/When/Then</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. D. Ready và Done <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Trước khi vào sprint vs trước khi giao.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">Definition of Done</span></p>\n</div>\n<div class=\"bi-cn\"><h3>5. E. Yêu cầu agile <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Agile thay đổi gì và không thay đổi gì.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">product backlog</span></p>\n</div>\n<h2>5. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>STORIES</code></td><td>answers/a-stories.js</td></tr><tr><td><code>INVEST_VIOLATIONS</code></td><td>answers/b-invest.js</td></tr><tr><td><code>ACCEPTANCE</code></td><td>answers/c-acceptance.js</td></tr><tr><td><code>READY_OR_DONE</code></td><td>answers/d-ready-done.js</td></tr><tr><td><code>AGILE_TRUTHS</code></td><td>answers/e-truths.js</td></tr></tbody></table>\n<h2>6. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>A. User story</td><td>3</td></tr><tr><td>2</td><td>B. INVEST</td><td>2</td></tr><tr><td>3</td><td>C. Tiêu chí chấp nhận</td><td>2</td></tr><tr><td>4</td><td>D. Ready và Done</td><td>1.5</td></tr><tr><td>5</td><td>E. Yêu cầu agile</td><td>1.5</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>\"As the system, I want to send reminders…\" — hệ thống không phải vai người dùng.</li>\n  <li>Story nối hai mục tiêu bằng \"and\", hoặc chứa chi tiết giao diện thuộc về tiêu chí chấp nhận.</li>\n  <li>Tiêu chí chấp nhận chỉ có đường thuận.</li>\n</ul>\n<h2>7. Nộp bài</h2>\n<p>Viết câu trả lời vào các tệp trong <code>answers/</code> bên phải. Sơ đồ viết bằng chữ theo cú pháp của công cụ thật (Mermaid hoặc PlantUML — dán vào <a href=\"https://mermaid.live\" target=\"_blank\" rel=\"noopener\">mermaid.live</a> hoặc <a href=\"https://www.plantuml.com/plantuml\" target=\"_blank\" rel=\"noopener\">plantuml.com</a> để XEM hình); bảng là mảng JavaScript, mỗi object là một dòng của template trường. Bấm <b>Chạy thử</b> để chạy kiểm hiện, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn). Điểm từng câu hiện trong bảng thang điểm.</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "Stories are written from the point of view of a user role of the case — never \"As the system\" or \"As a developer\".|||Story viết từ góc nhìn một vai người dùng trong đề — không bao giờ \"As the system\" hay \"As a developer\".",
+      "examplesJson": [
+        {
+          "input": "answers/*.js — one object per row of the template",
+          "output": "Rubric table: marks per question (e.g. B. 2.5/3)",
+          "explanation": "Every rubric line is checked separately; hidden checks run on Submit.|||Mỗi dòng rubric được kiểm riêng; kiểm ẩn chạy khi Nộp."
+        }
+      ],
+      "hintsJson": [
+        "A: lấy vai trò từ đề (student, member, club leader, treasurer, student affairs officer); mỗi việc đề nêu là một story.",
+        "B: epic ⇒ Small; không có giá trị cho người dùng ⇒ Valuable; \"nice\" ⇒ Testable; phụ thuộc story khác ⇒ Independent; cố định tới từng chi tiết ⇒ Negotiable; không ai ước lượng nổi ⇒ Estimable.",
+        "C: luật nằm trong đề — số chỗ tối đa (đầy ⇒ danh sách chờ) và đóng đăng ký 24 giờ trước."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers/a-stories.js",
+          "language": "javascript",
+          "code": "// A. At least 5 user stories: 'As a <role>, I want <goal> so that <benefit>'.\nconst STORIES = [\n  'As a …, I want … so that …',\n];\n"
+        },
+        {
+          "name": "answers/b-invest.js",
+          "language": "javascript",
+          "code": "// B. INDEPENDENT | NEGOTIABLE | VALUABLE | ESTIMABLE | SMALL | TESTABLE\nconst INVEST_VIOLATIONS = {\n  B1: '',\n  B2: '',\n  B3: '',\n  B4: '',\n  B5: '',\n  B6: '',\n};\n"
+        },
+        {
+          "name": "answers/c-acceptance.js",
+          "language": "javascript",
+          "code": "// C. Acceptance criteria of 'As a member, I want to register for an event so that a seat is kept for me'.\nconst ACCEPTANCE = [\n  { given: '', when: '', then: '' },\n];\n"
+        },
+        {
+          "name": "answers/d-ready-done.js",
+          "language": "javascript",
+          "code": "// D. DOR | DOD\nconst READY_OR_DONE = {\n  D1: '',\n  D2: '',\n  D3: '',\n  D4: '',\n  D5: '',\n  D6: '',\n};\n"
+        },
+        {
+          "name": "answers/e-truths.js",
+          "language": "javascript",
+          "code": "// E. TRUE | FALSE\nconst AGILE_TRUTHS = {\n  T1: '',\n  T2: '',\n  T3: '',\n  T4: '',\n  T5: '',\n  T6: '',\n};\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers/a-stories.js",
+          "language": "javascript",
+          "code": "// A. Roles of the case, one goal per story, a real benefit, no vague words.\nconst STORIES = [\n  'As a student, I want to pay a club\\'s yearly fee online so that I become a member without queuing at the club desk.',\n  'As a member, I want to register for an event so that a seat is kept for me.',\n  'As a member, I want to join the waitlist of a full event so that I get a seat if someone cancels.',\n  'As a club leader, I want to post an announcement to all members of my club so that they learn about events in time.',\n  'As a treasurer, I want to submit an expense claim with a photo of the receipt so that the club is reimbursed.',\n  'As a student affairs officer, I want to approve or reject expense claims above 2,000,000 VND so that club money is spent according to the rules.',\n];\n"
+        },
+        {
+          "name": "answers/b-invest.js",
+          "language": "javascript",
+          "code": "// B. Independent · Negotiable · Valuable · Estimable · Small · Testable.\nconst INVEST_VIOLATIONS = {\n  B1: 'SMALL',\n  B2: 'VALUABLE',\n  B3: 'TESTABLE',\n  B4: 'INDEPENDENT',\n  B5: 'NEGOTIABLE',\n  B6: 'ESTIMABLE',\n};\n"
+        },
+        {
+          "name": "answers/c-acceptance.js",
+          "language": "javascript",
+          "code": "// C. Success, full event (⇒ waitlist), closed 24 hours before.\nconst ACCEPTANCE = [\n  { given: 'an event with 50 seats has 49 registrations and starts in 3 days', when: 'a member registers for it', then: 'the registration is confirmed and the event shows 0 seats left' },\n  { given: 'an event with 50 seats already has 50 registrations', when: 'a member tries to register', then: 'the registration is refused and the member is offered the waitlist' },\n  { given: 'an event starts in 20 hours', when: 'a member tries to register', then: 'the registration is refused with the message \"Registration closed 24 hours before the event\"' },\n];\n"
+        },
+        {
+          "name": "answers/d-ready-done.js",
+          "language": "javascript",
+          "code": "// D. Ready = the story can enter a sprint; Done = the story can be shipped.\nconst READY_OR_DONE = {\n  D1: 'DOR',\n  D2: 'DOD',\n  D3: 'DOR',\n  D4: 'DOD',\n  D5: 'DOR',\n  D6: 'DOD',\n};\n"
+        },
+        {
+          "name": "answers/e-truths.js",
+          "language": "javascript",
+          "code": "// E. Wiegers Ch.20 — agile changes WHEN and HOW MUCH you write, not WHETHER.\nconst AGILE_TRUTHS = {\n  T1: 'FALSE',\n  T2: 'TRUE',\n  T3: 'TRUE',\n  T4: 'FALSE',\n  T5: 'TRUE',\n  T6: 'FALSE',\n};\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>B.</b> B1 SMALL · B2 VALUABLE · B3 TESTABLE · B4 INDEPENDENT · B5 NEGOTIABLE · B6 ESTIMABLE. <b>D.</b> D1 DOR · D2 DOD · D3 DOR · D4 DOD · D5 DOR · D6 DOD. <b>E.</b> T1 FALSE · T2 TRUE · T3 TRUE · T4 FALSE · T5 TRUE · T6 FALSE. Stories and acceptance criteria: see the solution files — the stories use the five roles of the case; the acceptance criteria test both rules (capacity ⇒ waitlist, 24 hours ⇒ closed) and the success path.</p>",
+      "solutionExplanationHtmlVi": "<p><b>B.</b> B1 SMALL · B2 VALUABLE · B3 TESTABLE · B4 INDEPENDENT · B5 NEGOTIABLE · B6 ESTIMABLE. <b>D.</b> D1 DOR · D2 DOD · D3 DOR · D4 DOD · D5 DOR · D6 DOD. <b>E.</b> T1 FALSE · T2 TRUE · T3 TRUE · T4 FALSE · T5 TRUE · T6 FALSE. Story và tiêu chí chấp nhận: xem tệp lời giải — story dùng năm vai trong đề; tiêu chí kiểm cả hai luật (hết chỗ ⇒ chờ, 24 giờ ⇒ đóng) và đường thành công.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "answers/a-stories.js",
+          "answers/b-invest.js",
+          "answers/c-acceptance.js",
+          "answers/d-ready-done.js",
+          "answers/e-truths.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A — at least 5 stories in the form \"As a <role>, I want <goal> so that <benefit>\"",
+              "vi": "A — ít nhất 5 story dạng \"As a <vai trò>, I want <mục tiêu> so that <lợi ích>\""
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof STORIES==\"undefined\"||!Array.isArray(STORIES))return\"STORIES is missing\";if(STORIES.length<5)return\"write at least 5 stories\";for(var t=0;t<STORIES.length;t++){var r=String(STORIES[t]).trim(),e=/^as an? (.+?),? i (?:want|need|would like) (.+?),? so that (.+)$/i.exec(r);if(!e)return\"STORIES[\"+t+'] is not \"As a <role>, I want <goal> so that <benefit>\"';if(/system|developer|programmer|database|team|admin of the server/i.test(e[1]))return\"STORIES[\"+t+']: the role is \"'+e[1]+'\" \\u2014 stories are written from the point of view of a USER of the case';if(e[3].trim().split(/\\s+/).length<3)return\"STORIES[\"+t+']: the \"so that\" part must state a real benefit';if(r.split(/\\s+/).length>45)return\"STORIES[\"+t+\"] is too long \\u2014 keep a story short; details go to acceptance criteria\"}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — the roles are the roles of the case",
+              "vi": "A — vai trò là vai trò trong đề"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof STORIES==\"undefined\"||!Array.isArray(STORIES))return\"STORIES is missing\";var r=STORIES.map(function(e){var a=/^as an? (.+?),? i /i.exec(String(e).trim());return a?a[1].toLowerCase():\"\"}),t=r.filter(function(e){return!/student|member|club leader|leader|treasurer|officer/.test(e)});if(t.length)return'unknown role \"'+t[0]+'\" \\u2014 use student, member, club leader, treasurer, student affairs officer';var n={};return r.forEach(function(e){n[e.replace(/^(the|a|an) /,\"\")]=1}),Object.keys(n).length>=3?\"OK\":\"the backlog serves at least three different roles of the case\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — the stories cover the case: events, waitlist, announcements, expenses, approval",
+              "vi": "A — các story phủ đề: sự kiện, danh sách chờ, thông báo, chi phí, phê duyệt"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof STORIES==\"undefined\"||!Array.isArray(STORIES))return\"STORIES is missing\";var t=STORIES.join(\" | \").toLowerCase(),i=[[\"event\",/event/],[\"waitlist\",/wait ?list|waiting list/],[\"announcement\",/announce|post|notify/],[\"expense claim\",/expense|claim|reimburs|receipt/],[\"approval of large claims\",/approv/]],e=i.filter(function(n){return!n[1].test(t)});return e.length?\"no story about: \"+e.map(function(n){return n[0]}).join(\", \"):\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — goals are testable (no vague words such as easy, nice, fast, user-friendly)",
+              "vi": "A — mục tiêu kiểm chứng được (không easy, nice, fast, user-friendly…)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof STORIES==\"undefined\"||!Array.isArray(STORIES))return\"STORIES is missing\";var i=STORIES.filter(function(e){return/\\b(easy|easily|nice|nicer|beautiful|fast|quickly|user[- ]friendly|better|good|etc)\\b/i.test(String(e).split(/so that/i)[0])});return i.length?'vague goal in: \"'+String(i[0]).slice(0,60)+'\\u2026\"':\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "B — INVEST criterion broken by B1",
+              "vi": "B — tiêu chí INVEST bị vi phạm ở B1"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (INVEST_VIOLATIONS[\"B1\"]); } catch (e) { return 'INVEST_VIOLATIONS[\"B1\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'INVEST_VIOLATIONS[\"B1\"] is empty';\n  var chap = [\"SMALL\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet — it is an epic';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — INVEST criterion broken by B2",
+              "vi": "B — tiêu chí INVEST bị vi phạm ở B2"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (INVEST_VIOLATIONS[\"B2\"]); } catch (e) { return 'INVEST_VIOLATIONS[\"B2\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'INVEST_VIOLATIONS[\"B2\"] is empty';\n  var chap = [\"VALUABLE\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — INVEST criterion broken by B3",
+              "vi": "B — tiêu chí INVEST bị vi phạm ở B3"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (INVEST_VIOLATIONS[\"B3\"]); } catch (e) { return 'INVEST_VIOLATIONS[\"B3\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'INVEST_VIOLATIONS[\"B3\"] is empty';\n  var chap = [\"TESTABLE\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — INVEST criterion broken by B4",
+              "vi": "B — tiêu chí INVEST bị vi phạm ở B4"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (INVEST_VIOLATIONS[\"B4\"]); } catch (e) { return 'INVEST_VIOLATIONS[\"B4\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'INVEST_VIOLATIONS[\"B4\"] is empty';\n  var chap = [\"INDEPENDENT\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet — it cannot be done before another story';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — INVEST criterion broken by B5",
+              "vi": "B — tiêu chí INVEST bị vi phạm ở B5"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (INVEST_VIOLATIONS[\"B5\"]); } catch (e) { return 'INVEST_VIOLATIONS[\"B5\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'INVEST_VIOLATIONS[\"B5\"] is empty';\n  var chap = [\"NEGOTIABLE\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet — a contract, not a conversation';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — INVEST criterion broken by B6",
+              "vi": "B — tiêu chí INVEST bị vi phạm ở B6"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (INVEST_VIOLATIONS[\"B6\"]); } catch (e) { return 'INVEST_VIOLATIONS[\"B6\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'INVEST_VIOLATIONS[\"B6\"] is empty';\n  var chap = [\"ESTIMABLE\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "C — acceptance criteria: at least 3 scenarios, each with given, when and then",
+              "vi": "C — tiêu chí chấp nhận: ít nhất 3 kịch bản, mỗi cái có given, when, then"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof ACCEPTANCE==\"undefined\"||!Array.isArray(ACCEPTANCE))return\"ACCEPTANCE is missing\";if(ACCEPTANCE.length<3)return\"write at least 3 scenarios: success, full event, registration closed\";for(var n=0;n<ACCEPTANCE.length;n++){var e=ACCEPTANCE[n]||{};if(!String(e.given||\"\").trim()||!String(e.when||\"\").trim()||!String(e.then||\"\").trim())return\"scenario \"+(n+1)+\" needs given, when and then\"}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — the scenarios test the rules: capacity reached ⇒ waitlist; less than 24 hours ⇒ closed",
+              "vi": "C — kịch bản kiểm các luật: hết chỗ ⇒ danh sách chờ; còn dưới 24 giờ ⇒ đóng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof ACCEPTANCE==\"undefined\"||!Array.isArray(ACCEPTANCE))return\"ACCEPTANCE is missing\";var t=ACCEPTANCE.map(function(e){return[e.given,e.when,e.then].join(\" \").toLowerCase()});return t.some(function(e){return/full|all \\d+ seats|capacity|\\b(\\d+) registrations/.test(e)&&/wait ?list|waiting list/.test(e)})?t.some(function(e){return/24|twenty-four/.test(e)&&/refus|closed|cannot|reject|not allowed/.test(e)})?t.some(function(e){return/confirm|registered|success|kept|reserved/.test(e)&&!/refus|reject/.test(e)})?\"OK\":\"one scenario: the successful registration\":\"one scenario: less than 24 hours before the event \\u21D2 registration refused\":\"one scenario: the event is full \\u21D2 the member is offered the waitlist\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "D — D1: Definition of Ready or Done",
+              "vi": "D — D1: Definition of Ready hay Done"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (READY_OR_DONE[\"D1\"]); } catch (e) { return 'READY_OR_DONE[\"D1\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'READY_OR_DONE[\"D1\"] is empty';\n  var chap = [\"DOR\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "D — D2: Definition of Ready or Done",
+              "vi": "D — D2: Definition of Ready hay Done"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (READY_OR_DONE[\"D2\"]); } catch (e) { return 'READY_OR_DONE[\"D2\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'READY_OR_DONE[\"D2\"] is empty';\n  var chap = [\"DOD\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "D — D3: Definition of Ready or Done",
+              "vi": "D — D3: Definition of Ready hay Done"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (READY_OR_DONE[\"D3\"]); } catch (e) { return 'READY_OR_DONE[\"D3\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'READY_OR_DONE[\"D3\"] is empty';\n  var chap = [\"DOR\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "D — D4: Definition of Ready or Done",
+              "vi": "D — D4: Definition of Ready hay Done"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (READY_OR_DONE[\"D4\"]); } catch (e) { return 'READY_OR_DONE[\"D4\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'READY_OR_DONE[\"D4\"] is empty';\n  var chap = [\"DOD\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "D — D5: Definition of Ready or Done",
+              "vi": "D — D5: Definition of Ready hay Done"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (READY_OR_DONE[\"D5\"]); } catch (e) { return 'READY_OR_DONE[\"D5\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'READY_OR_DONE[\"D5\"] is empty';\n  var chap = [\"DOR\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "D — D6: Definition of Ready or Done",
+              "vi": "D — D6: Definition of Ready hay Done"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (READY_OR_DONE[\"D6\"]); } catch (e) { return 'READY_OR_DONE[\"D6\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'READY_OR_DONE[\"D6\"] is empty';\n  var chap = [\"DOD\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "E — statement T1",
+              "vi": "E — phát biểu T1"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (AGILE_TRUTHS[\"T1\"]); } catch (e) { return 'AGILE_TRUTHS[\"T1\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'AGILE_TRUTHS[\"T1\"] is empty';\n  var chap = [\"FALSE\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f5"
+          },
+          {
+            "moTa": {
+              "en": "E — statement T2",
+              "vi": "E — phát biểu T2"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (AGILE_TRUTHS[\"T2\"]); } catch (e) { return 'AGILE_TRUTHS[\"T2\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'AGILE_TRUTHS[\"T2\"] is empty';\n  var chap = [\"TRUE\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f5"
+          },
+          {
+            "moTa": {
+              "en": "E — statement T3",
+              "vi": "E — phát biểu T3"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (AGILE_TRUTHS[\"T3\"]); } catch (e) { return 'AGILE_TRUTHS[\"T3\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'AGILE_TRUTHS[\"T3\"] is empty';\n  var chap = [\"TRUE\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f5"
+          },
+          {
+            "moTa": {
+              "en": "E — statement T4",
+              "vi": "E — phát biểu T4"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (AGILE_TRUTHS[\"T4\"]); } catch (e) { return 'AGILE_TRUTHS[\"T4\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'AGILE_TRUTHS[\"T4\"] is empty';\n  var chap = [\"FALSE\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f5"
+          },
+          {
+            "moTa": {
+              "en": "E — statement T5",
+              "vi": "E — phát biểu T5"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (AGILE_TRUTHS[\"T5\"]); } catch (e) { return 'AGILE_TRUTHS[\"T5\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'AGILE_TRUTHS[\"T5\"] is empty';\n  var chap = [\"TRUE\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f5"
+          },
+          {
+            "moTa": {
+              "en": "E — statement T6",
+              "vi": "E — phát biểu T6"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (AGILE_TRUTHS[\"T6\"]); } catch (e) { return 'AGILE_TRUTHS[\"T6\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'AGILE_TRUTHS[\"T6\"] is empty';\n  var chap = [\"FALSE\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f5"
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. A. User stories",
+            "diem": 3
+          },
+          {
+            "ma": "f2",
+            "ten": "2. B. INVEST",
+            "diem": 2
+          },
+          {
+            "ma": "f3",
+            "ten": "3. C. Acceptance criteria",
+            "diem": 2
+          },
+          {
+            "ma": "f4",
+            "ten": "4. D. Ready and Done",
+            "diem": 1.5
+          },
+          {
+            "ma": "f5",
+            "ten": "5. E. Agile requirements",
+            "diem": 1.5
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Viết story \"As a user\" chung chung — đề có năm vai khác nhau."
+        },
+        {
+          "loi": "Phần \"so that\" lặp lại mục tiêu thay vì nêu lợi ích."
+        },
+        {
+          "loi": "Xếp \"story đã ước lượng\" vào Definition of Done."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "user story",
+          "vi": "câu chuyện người dùng — \"As a <role>, I want <goal> so that <benefit>\""
+        },
+        {
+          "en": "INVEST",
+          "vi": "Independent · Negotiable · Valuable · Estimable · Small · Testable — tiêu chí story tốt"
+        },
+        {
+          "en": "epic",
+          "vi": "story lớn, phải tách thành nhiều story"
+        },
+        {
+          "en": "product backlog",
+          "vi": "danh sách việc của sản phẩm, xếp theo ưu tiên"
+        },
+        {
+          "en": "acceptance criteria",
+          "vi": "tiêu chí chấp nhận — điều kiện để khách nhận một yêu cầu/story (Given/When/Then)"
+        },
+        {
+          "en": "Definition of Ready / Done",
+          "vi": "điều kiện để story được đưa vào sprint / được coi là xong"
+        },
+        {
+          "en": "product owner",
+          "vi": "người chịu trách nhiệm thứ tự backlog và nghiệm thu story"
+        }
+      ]
+    }
+  ]
+}

@@ -10,6 +10,18 @@
   "description": "Bộ luyện môn SWR302 (Software Requirements) theo giáo trình Wiegers & Beatty và slide trường — đề tiếng Anh kèm bản Việt và bảng thuật ngữ; mỗi bài học một bộ đề từ dễ đến khó có máy chấm thật (phân loại yêu cầu, MoSCoW/Wiegers, RTM, RACI, CRUD, bảng quyết định; sơ đồ viết bằng Mermaid/PlantUML được chấm theo thuộc tính: context diagram, DFD, use case, ERD, state, swimlane; đặc tả use case theo template), mỗi chương một Lab + Deep Lab dạng bản in, PE luyện đúng định dạng SP26/SU26 và dự án xuyên suốt ClinicCare.",
   "modules": [
     {
+      "slug": "swr302-1-lab-essentials-studyhub",
+      "name": "Lab 1 — Essentials: the Requirements of StudyHub",
+      "level": "ADVANCED",
+      "description": "Lab chương 1: phân loại 14 phát biểu theo Hình 1-1 của Wiegers, tài liệu chứa từng loại, yêu cầu sản phẩm vs dự án, xếp 8 việc vào năm hoạt động kỹ nghệ yêu cầu, gọi tên sáu vấn đề yêu cầu kinh điển."
+    },
+    {
+      "slug": "swr302-2-lab-vision-scope-parksmart",
+      "name": "Lab 2 — Customer, Vision & Scope: ParkSmart Campus Parking",
+      "level": "ADVANCED",
+      "description": "Lab chương 2: xếp 13 phát biểu vào mục tài liệu Vision & Scope, chọn mục tiêu nghiệp vụ SMART, viết tuyên bố tầm nhìn theo khuôn Moore, lưới quyền lực–quan tâm và lớp người dùng ưu tiên/không mong muốn/bỏ qua, quyền và trách nhiệm của khách hàng."
+    },
+    {
       "slug": "swr302-3-lab-elicitation-canteengo",
       "name": "Lab 3 — Elicitation: CanteenGo Pre-Order Canteen",
       "level": "ADVANCED",
@@ -44,6 +56,24 @@
       "name": "Lab 6 — Validation: Inspecting the SRS of TutorMatch",
       "level": "ADVANCED",
       "description": "Lab chương 6: thanh tra trích đoạn SRS 16 dòng của TutorMatch — liệt kê lỗi (dòng, loại, mức, cách sửa) chấm theo ghép cặp, có lỗi nghiêm trọng bắt buộc và trừ khẳng định sai; năm giai đoạn và vai trò inspection; tiêu chí chấp nhận Given/When/Then; verification hay validation."
+    },
+    {
+      "slug": "swr302-7-lab-change-control-libranet",
+      "name": "Lab 7 — Requirements Management: a Change Request in LibraNet",
+      "level": "ADVANCED",
+      "description": "Lab chương 7: máy trạng thái Change Request (Submitted → Evaluated → Approved/Rejected → Change Made → Verified → Closed, Canceled), phân tích ảnh hưởng bằng RTM và ước lượng giờ công, trạng thái yêu cầu và tỉ lệ, chính sách kiểm soát thay đổi, bốn hướng truy vết và phần tử mồ côi."
+    },
+    {
+      "slug": "swr302-8-lab-prototyping-bikeshare",
+      "name": "Lab 8 — Prototyping and Design: CampusBike",
+      "level": "ADVANCED",
+      "description": "Lab chương 8: chọn loại prototype (mock-up/proof of concept, throwaway/evolutionary, giấy/điện tử), dialog map các màn hình thuê xe có guard và không ngõ cụt, review wireframe so với yêu cầu, rủi ro và yếu tố thành công của prototyping, phân tích danh từ/động từ thành lớp, thuộc tính, thao tác."
+    },
+    {
+      "slug": "swr302-9-lab-agile-backlog-clubhub",
+      "name": "Lab 9 — Agile Requirements: the ClubHub Backlog",
+      "level": "ADVANCED",
+      "description": "Lab chương 9: viết 5 user story đúng khuôn, đúng vai trò, phủ đề; vi phạm INVEST của 6 story tồi; tiêu chí chấp nhận Given/When/Then kiểm luật sức chứa và hạn 24 giờ; Definition of Ready vs Done; đúng/sai về yêu cầu trong agile."
     },
     {
       "slug": "swr302-10-lab-prioritization-campusride",

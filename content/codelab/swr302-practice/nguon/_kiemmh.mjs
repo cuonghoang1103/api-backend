@@ -431,17 +431,17 @@ function stDoc(L, C, A) {
 
 export function kiemState(cfg) {
   const { bien = 'STATE_DIAGRAM', nhom = {}, an = [], tenDoiTuong = 'the object' } = cfg;
-  const C = { bien, st: cfg.st || [], ch: cfg.ch || [], toiThieu: cfg.toiThieu || 0, guardToiThieu: cfg.guardToiThieu || 0, tenDoiTuong };
+  const C = { bien, st: cfg.st || [], ch: cfg.ch || [], toiThieu: cfg.toiThieu || 0, guardToiThieu: cfg.guardToiThieu || 0, tenDoiTuong, canCuoi: cfg.canCuoi !== false };
   const DOC = stDoc.toString();
   const boc = (than) => new Function('L', 'C', 'A', `var stDoc = ${DOC}; var d = stDoc(L, C, A); if (d.loi) return d.loi; var p = d.p; ${than}`);
-  const C0 = { bien, tenDoiTuong };
+  const C0 = { bien, tenDoiTuong, canCuoi: C.canCuoi };
   const opt = (k, ten, Cx = C0) => ({ C: Cx, bien: [bien], phan: ['state'], nhom: nh(nhom, k), an: an.includes(ten) });
   const ds = [];
   ds.push(kiemMH({ en: 'State diagram — valid syntax; one initial pseudostate, at least one final state', vi: 'Sơ đồ trạng thái — đúng cú pháp; một trạng thái đầu, ít nhất một trạng thái kết thúc' }, boc(`
     if (p.loi.length) return p.loi[0] + (p.loi.length > 1 ? ' (+' + (p.loi.length - 1) + ')' : '');
     var dau = p.ch.filter(function (c) { return c.tu === '[*]'; }), cuoi = p.ch.filter(function (c) { return c.den === '[*]'; });
     if (dau.length !== 1) return L.m(dau.length ? 'more than one initial transition [*] --> … — the object is born in ONE state' : 'no initial pseudostate — add [*] --> FirstState', dau.length ? 'nhiều hơn một chuyển từ [*] — đối tượng sinh ra ở MỘT trạng thái' : 'chưa có trạng thái đầu — thêm [*] --> TrạngTháiĐầu');
-    if (!cuoi.length) return L.m('no final state — add LastState --> [*]', 'chưa có trạng thái kết thúc — thêm TrạngTháiCuối --> [*]');
+    if (!cuoi.length && C.canCuoi) return L.m('no final state — add LastState --> [*]', 'chưa có trạng thái kết thúc — thêm TrạngTháiCuối --> [*]');
     return 'OK';`), opt('cuPhap', 'cuphap')));
   ds.push(kiemMH({ en: 'State diagram — every transition is labelled with an event; every state is reachable and has a way out', vi: 'Sơ đồ trạng thái — mọi chuyển có sự kiện; mọi trạng thái tới được và có lối ra' }, boc(`
     var x = p.ch.filter(function (c) { return c.tu !== '[*]' && c.den !== '[*]' && !c.suKien && !c.guard; });
@@ -453,7 +453,7 @@ export function kiemState(cfg) {
     var cut = p.st.filter(function (s) { return !p.ch.some(function (c) { return c.tu === s.id; }); });
     if (cut.length) return L.m('state ' + L.ds(cut.map(function (s) { return s.ten; })) + ' has no outgoing transition — if it is an end, add ' + cut[0].id + ' --> [*]', 'trạng thái ' + L.ds(cut.map(function (s) { return s.ten; })) + ' không có lối ra — nếu là điểm kết thúc, thêm ' + cut[0].id + ' --> [*]');
     return 'OK';`), opt('cuPhap', 'toiduoc')));
-  ds.push(kiemMH({ en: 'State diagram — states are conditions (adjective / past participle), not activities', vi: 'Sơ đồ trạng thái — trạng thái là tình trạng (tính từ / quá khứ phân từ), không phải hoạt động' }, boc(`
+  if (cfg.kiemTen !== false) ds.push(kiemMH({ en: 'State diagram — states are conditions (adjective / past participle), not activities', vi: 'Sơ đồ trạng thái — trạng thái là tình trạng (tính từ / quá khứ phân từ), không phải hoạt động' }, boc(`
     var x = d.that.filter(function (s) { var t = L.tu(s.ten); return t.length && (L.laHoatDongIng(t[0]) || (L.laHanhDong(t[0]) && !/(ed|en)$/.test(t[0]))); });
     if (x.length) return L.m('"' + x[0].ten + '" is an activity — name where ' + C.tenDoiTuong + ' SITS, e.g. "Submitted", "Under Review", "Paid"', '"' + x[0].ten + '" là hoạt động — đặt tên chỗ đối tượng NẰM YÊN, vd "Submitted", "Under Review", "Paid"');
     return 'OK';`), opt('cuPhap', 'tinhtrang')));

@@ -562,7 +562,10 @@ export type AiAction =
   | { type: 'draft_page'; title: string; markdown: string; parent?: number | null }
   | { type: 'update_page_section'; number: number; heading: string; markdown: string; mode?: 'replace' | 'append' | null }
   // Đợt 3C — lệnh GHI của registry dùng chung (cùng bộ với MCP + agent dựng sẵn): Apply ⇒ chạy bằng quyền người bấm.
-  | { type: 'command'; command: string; args: Record<string, unknown>; summary?: string | null };
+  // 28/10/2026: title / danger / recordsResults do SERVER điền khi lưu đề xuất (chỉ để hiển thị; server tính lại khi Apply).
+  | { type: 'command'; command: string; args: Record<string, unknown>; summary?: string | null; title?: string | null; danger?: 'delete' | null; recordsResults?: boolean | null };
+/** 28/10/2026: trợ lý được hỏi từ đâu — đổi câu "việc trên máy bạn" (app desktop ⇒ chỉ tới AI Code trong app). */
+export type AiClient = 'web' | 'desktop' | 'ctwork-desktop';
 export interface AiAnswer {
   reply: string; actions: AiAction[]; quota: AiQuota;
   /** Hội thoại đã lưu ở server (trả về từ chat/quick). */
@@ -991,7 +994,7 @@ export const workApi = {
   aiChat: (pid: number, body: { message: string; history?: Array<{ role: 'user' | 'assistant'; content: string }>; issueNumber?: number | null }) =>
     d<AiAnswer>(api.post(`${B}/projects/${pid}/ai/chat`, body, { timeout: AI_CHO_MS })),
   /** Như aiChat nhưng huỷ được (nút Cancel trong khung AI). */
-  aiChatAbortable: (pid: number, body: { message: string; history?: Array<{ role: 'user' | 'assistant'; content: string }>; issueNumber?: number | null; threadId?: number | null; attachments?: AiFileRef[] | null }, signal?: AbortSignal) =>
+  aiChatAbortable: (pid: number, body: { message: string; history?: Array<{ role: 'user' | 'assistant'; content: string }>; issueNumber?: number | null; threadId?: number | null; attachments?: AiFileRef[] | null; client?: AiClient }, signal?: AbortSignal) =>
     d<AiAnswer>(api.post(`${B}/projects/${pid}/ai/chat`, body, { timeout: AI_CHO_MS, signal })),
   // Hội thoại AI lưu ở server, dùng chung trong dự án
   aiThreads: (pid: number, params: { scope?: 'all' | 'mine'; q?: string }) =>
@@ -1006,8 +1009,9 @@ export const workApi = {
     d<AiThread>(api.patch(`${B}/projects/${pid}/ai/threads/${tid}`, body)),
   aiDeleteThread: (pid: number, tid: number) => d<{ ok: true }>(api.delete(`${B}/projects/${pid}/ai/threads/${tid}`)),
   aiRetry: (pid: number, mid: number) => d<AiAnswer>(api.post(`${B}/projects/${pid}/ai/messages/${mid}/retry`, {}, { timeout: AI_CHO_MS })),
-  aiApplyStored: (pid: number, mid: number, idx: number, action?: AiAction) =>
-    d<AiStoredAction>(api.post(`${B}/projects/${pid}/ai/messages/${mid}/actions/${idx}/apply`, action ? { action } : {})),
+  /** `confirmRan` = người bấm tick "Tôi đã chạy các test này" (bắt buộc với đề xuất ghi kết quả chạy test). */
+  aiApplyStored: (pid: number, mid: number, idx: number, action?: AiAction, confirmRan?: boolean) =>
+    d<AiStoredAction>(api.post(`${B}/projects/${pid}/ai/messages/${mid}/actions/${idx}/apply`, { ...(action ? { action } : {}), ...(confirmRan ? { confirmRan: true } : {}) })),
   aiSetStoredStatus: (pid: number, mid: number, idx: number, status: 'dismissed' | 'pending') =>
     d<AiStoredAction>(api.patch(`${B}/projects/${pid}/ai/messages/${mid}/actions/${idx}`, { status })),
   // Lần chạy đầu: dữ liệu mẫu + danh sách Getting started
@@ -1017,7 +1021,7 @@ export const workApi = {
   aiQuick: (pid: number, body: { task: AiQuickTask; issueNumber?: number | null; pageNumber?: number | null; text?: string | null; threadId?: number | null; label?: string | null }) =>
     d<AiAnswer>(api.post(`${B}/projects/${pid}/ai/quick`, body, { timeout: AI_CHO_MS })),
   aiFilter: (pid: number, question: string) => d<AiFilterResult>(api.post(`${B}/projects/${pid}/ai/filter`, { question }, { timeout: 60_000 })),
-  aiApply: (pid: number, action: AiAction) => d<{ summary: string; number?: number }>(api.post(`${B}/projects/${pid}/ai/apply`, { action })),
+  aiApply: (pid: number, action: AiAction, confirmRan?: boolean) => d<{ summary: string; number?: number }>(api.post(`${B}/projects/${pid}/ai/apply`, { action, ...(confirmRan ? { confirmRan: true } : {}) })),
   aiWeeklyReport: (pid: number, body: { audience: 'teacher' | 'client' | 'team'; language?: 'en' | 'vi' }) =>
     d<{ report: string; facts: string; quota: AiQuota }>(api.post(`${B}/projects/${pid}/ai/weekly-report`, body, { timeout: 120_000 })),
   insights: (pid: number) => d<InsightsData>(api.get(`${B}/projects/${pid}/insights`)),

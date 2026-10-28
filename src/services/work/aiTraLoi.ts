@@ -47,7 +47,7 @@ export function khuonTraLoi(o: { reads: boolean; actions: boolean; docs?: boolea
     'OUTPUT FORMAT',
     '- Write your answer for the user directly as Markdown text. Do NOT wrap it in JSON and do NOT put the whole answer in a code fence.',
   ];
-  if (o.reads) dong.push(`- Need more project data first? Call the read tools (${o.docs ? 'read_command / read_page / search_pages' : 'read_command'}) BEFORE writing any answer text — several calls in one turn are fine. You get the results, then you answer. Do not write "let me check" text in that turn.`);
+  if (o.reads) dong.push(`- Need more project data (or a command's arguments) first? Call the tools (${o.docs ? 'read_command / find_commands / read_page / search_pages' : 'read_command / find_commands'}) BEFORE writing any answer text — several calls in one turn are fine. You get the results, then you answer. Do not write "let me check" text in that turn.`);
   dong.push('- Tool calls go ONLY through the tool interface. Never write a tool call as text (no XML, DSML, <invoke>, <tool_call> or JSON function calls) — the user would see it.');
   if (o.actions) {
     dong.push(`- Proposed actions (only when there are any): AFTER the whole answer add ONE block and nothing after it:
@@ -65,14 +65,25 @@ ${DONG_DE_XUAT}
 export function congCuDoc(o: { docs: boolean }): LLMTool[] {
   const tools: LLMTool[] = [{
     name: 'read_command',
-    description: 'Run ONE read command from the "READ commands" list in the instructions (issues, files, resources, test matrices, meetings, risks, sprint, member work…) and get its result. Call it several times in one turn to read several things.',
+    description: 'Run ONE read command (from the READ commands or the command index in the instructions — issues, files, resources, test matrices, meetings, risks, sprint, member work…) with the user\'s own permissions and get its result. Call it several times in one turn to read several things.',
     parameters: {
       type: 'object',
       properties: {
         name: { type: 'string', description: 'Exact read command name, e.g. read_issue' },
-        args: { type: 'object', description: 'Arguments as documented for that command. "project" is filled in for you — never pass it.', additionalProperties: true },
+        args: { type: 'object', description: 'Arguments as documented for that command (find_commands shows them). "project" is filled in for you — never pass it.', additionalProperties: true },
       },
       required: ['name'],
+    },
+  }, {
+    // 28/10/2026: nạp lệnh ĐỘNG — prompt chỉ có tên của phần lớn lệnh; tool này trả mô tả + tham số khi cần.
+    name: 'find_commands',
+    description: 'Look up CT Work commands: their description and exact arguments. Pass exact names from the command index, or English keywords (e.g. "unit test rows", "meeting minutes", "delete risk"). Use it before reading or proposing any command whose arguments you have not seen. Reads no project data.',
+    parameters: {
+      type: 'object',
+      properties: {
+        names: { type: 'array', items: { type: 'string' }, description: 'Exact command names (up to 10)' },
+        query: { type: 'string', description: 'Keywords when you do not know the name' },
+      },
     },
   }];
   if (o.docs) {
@@ -99,6 +110,7 @@ export function readsTuToolCalls(calls: LLMToolCall[] | undefined): unknown[] {
     if (c.name === 'read_page') return { tool: 'read_page', number: i.number };
     if (c.name === 'search_pages') return { tool: 'search_pages', query: i.query };
     if (c.name === 'read_command') return { tool: 'command', name: i.name, args: i.args ?? null };
+    if (c.name === 'find_commands') return { tool: 'find', names: i.names ?? null, query: i.query ?? null };
     return { tool: 'command', name: c.name, args: i };
   });
 }

@@ -32,6 +32,7 @@ import { cn } from '@/lib/utils';
 import { wk } from '../hooks';
 import { Dialog, relativeTime, Spinner, UserAvatar, WorkPortal } from '../ui';
 import { ActionGroup, type ActionItem } from './ActionCard';
+import { laAppCtWork, trongAppDesktop } from '@/lib/appDesktop';
 import UpgradeDialog from './UpgradeDialog';
 import { openAiPanel, useAiPanel, type AiQuickRequest } from './store';
 import { inAppPath, isModifiedClick } from './links';
@@ -339,7 +340,9 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
     let tid: number | null = threadId;
     try {
       tid = await ensureThread(message);
-      const a = await workApi.aiChatAbortable(pid, { message, issueNumber, threadId: tid, ...(attachments.length ? { attachments } : {}) }, ctrl.signal);
+      // 28/10/2026: báo trợ lý đang ở vỏ nào — việc trên máy người dùng thì app desktop chỉ tới AI Code ngay trong app.
+      const client = trongAppDesktop() ? (laAppCtWork() ? 'ctwork-desktop' as const : 'desktop' as const) : 'web' as const;
+      const a = await workApi.aiChatAbortable(pid, { message, issueNumber, threadId: tid, client, ...(attachments.length ? { attachments } : {}) }, ctrl.signal);
       onQuota(a.quota);
       for (const f of sentFiles) if (f.preview) URL.revokeObjectURL(f.preview);
     } catch (err) {
@@ -657,7 +660,7 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
                             const idx = Number(it.id.split(':')[1]);
                             const edited = overlay[it.id]?.action;
                             try {
-                              const r = await workApi.aiApplyStored(pid, m.id, idx, edited);
+                              const r = await workApi.aiApplyStored(pid, m.id, idx, edited, it.confirmRan);
                               return { summary: r.byName ? wt('ai.appliedBy', { s: r.summary ?? wt('ai.applied'), name: r.byName }) : r.summary ?? wt('ai.applied'), number: r.number };
                             } finally {
                               refresh(m.threadId);

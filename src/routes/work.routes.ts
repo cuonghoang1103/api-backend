@@ -1049,6 +1049,8 @@ router.post('/projects/:pid/ai/chat', asyncHandler(async (req, res) => {
     issueNumber: id.nullable().optional(),
     threadId: id.nullable().optional(),
     attachments: z.array(tepRefSchema).max(MAX_AI_FILES).nullable().optional(),
+    /** 28/10/2026: hỏi từ trình duyệt / app CuongThai / app CT Work — đổi câu "việc trên máy bạn" (aiTroLyWeb.ts). */
+    client: z.enum(['web', 'desktop', 'ctwork-desktop']).nullable().optional(),
   }), req.body);
   ok(res, await ai.chat(callerId(req), idParam(req, 'pid'), body));
 }));
@@ -1079,6 +1081,8 @@ router.post('/projects/:pid/ai/chat/stream', asyncHandler(async (req, res) => {
     retryMessageId: id.nullable().optional(),
     /** 22/10/2026: ảnh/tệp đã tải lên qua POST /projects/:pid/ai/files. */
     attachments: z.array(tepRefSchema).max(MAX_AI_FILES).nullable().optional(),
+    /** 28/10/2026: hỏi từ trình duyệt / app CuongThai / app CT Work — đổi câu "việc trên máy bạn" (aiTroLyWeb.ts). */
+    client: z.enum(['web', 'desktop', 'ctwork-desktop']).nullable().optional(),
   }), req.body);
   const uid = callerId(req);
   const pid = idParam(req, 'pid');
@@ -1161,8 +1165,9 @@ router.post('/projects/:pid/ai/messages/:mid/retry', asyncHandler(async (req, re
 }));
 router.post('/projects/:pid/ai/messages/:mid/actions/:idx/apply', asyncHandler(async (req, res) => {
   const idx = parse(z.coerce.number().int().min(0).max(49), req.params.idx);
-  const { action } = parse(z.object({ action: ai.actionSchema.optional() }), req.body ?? {});
-  ok(res, await ai.applyStoredAction(callerId(req), idParam(req, 'pid'), idParam(req, 'mid'), idx, action));
+  // 28/10/2026: confirmRan = người bấm tick "Tôi đã chạy các test này" (bắt buộc với đề xuất ghi kết quả chạy test).
+  const { action, confirmRan } = parse(z.object({ action: ai.actionSchema.optional(), confirmRan: z.boolean().optional() }), req.body ?? {});
+  ok(res, await ai.applyStoredAction(callerId(req), idParam(req, 'pid'), idParam(req, 'mid'), idx, action, { confirmRan }));
 }));
 router.patch('/projects/:pid/ai/messages/:mid/actions/:idx', asyncHandler(async (req, res) => {
   const idx = parse(z.coerce.number().int().min(0).max(49), req.params.idx);
@@ -1174,8 +1179,8 @@ router.post('/projects/:pid/ai/filter', asyncHandler(async (req, res) => {
   ok(res, await ai.naturalFilter(callerId(req), idParam(req, 'pid'), question));
 }));
 router.post('/projects/:pid/ai/apply', asyncHandler(async (req, res) => {
-  const { action } = parse(z.object({ action: ai.actionSchema }), req.body);
-  ok(res, await ai.applyAction(callerId(req), idParam(req, 'pid'), action));
+  const { action, confirmRan } = parse(z.object({ action: ai.actionSchema, confirmRan: z.boolean().optional() }), req.body);
+  ok(res, await ai.applyAction(callerId(req), idParam(req, 'pid'), action, { confirmRan }));
 }));
 router.post('/projects/:pid/ai/weekly-report', asyncHandler(async (req, res) => {
   const body = parse(z.object({ audience: z.enum(['teacher', 'client', 'team']).default('team'), language: z.enum(['en', 'vi']).optional() }), req.body ?? {});

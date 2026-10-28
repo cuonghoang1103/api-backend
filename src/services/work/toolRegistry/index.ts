@@ -62,6 +62,24 @@ export const mcpCommands = (): ToolDef[] => COMMANDS.filter((t) => onSurface(t, 
 export const askCommands = (): ToolDef[] => COMMANDS.filter((t) => onSurface(t, 'ask') && !t.agentOnly && 'project' in t.input.shape);
 export const builtinCommands = (): ToolDef[] => COMMANDS.filter((t) => onSurface(t, 'builtin') && !t.personOnly && 'project' in t.input.shape);
 
+/**
+ * 28/10/2026 — lệnh MCP mà trợ lý web vẫn KHÔNG dùng (dù token người dùng được):
+ *   - comment / update_issue / create_issue: trợ lý có hành động riêng tương đương (thẻ xem trước đẹp hơn);
+ *   - attach_file / attach_complete: tải tệp base64 — việc của máy người dùng, không phải của model;
+ *   - gdoc_images / attach_from_url: máy chủ tải từ URL — model đọc nội dung untrusted có thể bị dụ gọi URL lạ;
+ *   - ask_lead / request_review: vòng làm việc của AGENT (người dùng tự nhắn trưởng nhóm / tự chuyển Review).
+ * Lệnh không nhận `project` (lớp học, bảng tin, danh sách dự án…) không vào được: trợ lý luôn đứng trong MỘT dự án.
+ */
+export const WEB_EXCLUDE = new Set(['comment', 'update_issue', 'create_issue', 'attach_file', 'attach_complete', 'gdoc_images', 'attach_from_url', 'ask_lead', 'request_review']);
+
+/**
+ * 28/10/2026 — MỌI lệnh trợ lý web (Ask AI, cả trong app desktop) với tới được: lệnh đường Ask + lệnh MCP của token
+ * NGƯỜI (trước đây `mcpOnly`), trừ WEB_EXCLUDE. Prompt KHÔNG mang hết tham số của chúng — model nạp động qua
+ * `find_commands` (timLenh.ts). Quyền không đổi: vẫn `run` của lệnh dưới quyền người hỏi/người bấm; lệnh xoá vẫn thành yêu
+ * cầu chờ trưởng nhóm duyệt (runGuarded); lệnh personOnly vẫn chặn agent ở `run`.
+ */
+export const webCommands = (): ToolDef[] => COMMANDS.filter((t) => (onSurface(t, 'ask') || onSurface(t, 'mcp')) && !t.agentOnly && 'project' in t.input.shape && !WEB_EXCLUDE.has(t.name));
+
 // ─── Mục lục lệnh cho prompt (Ask AI + agent BUILTIN) ─────────────
 
 function typeOf(t: z.ZodTypeAny, depth = 0): string {
@@ -130,7 +148,8 @@ export function parseArgs(t: ToolDef, args: unknown, projectRef: string): Record
  */
 export async function runForPerson(userId: number, projectId: number, name: string, args: unknown, mode: 'read' | 'apply'): Promise<{ text: string; output: ToolOutput }> {
   const t = commandByName(name);
-  if (!t || !askCommands().includes(t)) throw new BadRequestError(`Unknown command "${name}"`, 'WORK_AI_BAD_COMMAND');
+  // 28/10/2026: mọi lệnh web (webCommands), không chỉ bộ "đường Ask" cũ — cùng `run`, cùng quyền người.
+  if (!t || !webCommands().includes(t)) throw new BadRequestError(`Unknown command "${name}"`, 'WORK_AI_BAD_COMMAND');
   if (mode === 'read' && t.write) throw new BadRequestError(`${name} changes data — propose it as an action instead`, 'WORK_AI_BAD_COMMAND');
   if (mode === 'apply' && !t.write) throw new BadRequestError(`${name} only reads data`, 'WORK_AI_BAD_COMMAND');
   const ref = await projectRefOf(projectId);

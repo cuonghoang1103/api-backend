@@ -101,6 +101,8 @@ iOS báo, hỏi lại đôi khi được vì lần sau model lại viết JSON. 
 - Câu trả lời là **Markdown thường, viết trước** — mỗi mẩu token của cổng đi thẳng thành `delta`.
 - Đề xuất thao tác (nếu có) nằm **sau**, trong một khối `<ctw-actions>[…]</ctw-actions>` — không bao giờ hiện ra client
   (kể cả lúc mới tới nửa thẻ). Khối cụt/hỏng ⇒ giữ các đề xuất còn nguyên, **chữ trả lời không bao giờ mất**.
+- 28/10/2026: thêm tool gốc `find_commands` — tra mô tả + tham số của lệnh chỉ có TÊN trong prompt (nạp lệnh động; xem
+  `docs/cuongmini-ctwork-parity.md` mục 7). Hiện ở `progress reading` với nhãn `Commands: …`. Vòng chỉ tra lệnh không ăn trần vòng đọc.
 - Xin **đọc** dữ liệu ⇒ **tool gốc** của cổng (`read_command` / `read_page` / `search_pages`; Anthropic `tool_use`,
   OpenAI `tool_calls`) thay cho `{"reply":"","reads":[…]}`. Lượt có tool đọc: máy chủ giữ ~320 ký tự đầu trước khi phát
   (Sonnet hay viết "Tôi cần đọc thêm… 1. … 2. …" rồi mới gọi tool — không giữ thì đoạn đó hiện ra rồi bị `reset`).

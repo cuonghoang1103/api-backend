@@ -3,6 +3,10 @@
 Cập nhật 21/10/2026 — đợt 1, 2, 3 cùng ngày (nhánh `ctw-mcp-full`). Sau đợt 3: **mọi tuyến ghi không thuộc diện "chỉ người" đều có lệnh** (0 thiếu). Bảng đầy đủ mọi tuyến GHI ở cuối file được sinh từ router thật
 (`work.routes.ts` + các router con) đối chiếu với registry lệnh (`src/services/work/toolRegistry/*`, `src/mcp/tools/*`).
 
+> **28/10/2026 — trợ lý WEB (Ask AI, cả trong hai app desktop) cũng ngang quyền người** — xem mục 7. Trước đó trợ lý web
+> chỉ dùng ~145 lệnh "đường Ask" (119 lệnh của ba đợt dưới đây là `mcpOnly`), nên khi chủ dự án SWT301/SS nhờ điền phần
+> của mình trong Report 5.1/5.2/5.3 nó trả lời "chỉ đọc được, không có lệnh ghi".
+
 ## 1. CuongMini đăng nhập CT Work bằng gì?
 
 - App CuongMini (desktop · CLI · VS Code — cùng lõi `desktop/src/main/agent`) nối CT Work bằng **token cá nhân của chính
@@ -28,7 +32,8 @@ ma trận bằng `PUT …/matrix`) chỉ có trên web. Thêm vào đó luật p
 |---|---|---|
 | **Người** (CuongMini, Claude Code, Cursor… với token cá nhân) | Mọi việc vai của người đó làm được trên web, kể cả sửa/xoá | Lệnh xoá khai `destructive` ⇒ MCP `annotations.destructiveHint: true` ⇒ app CuongMini **luôn hỏi** (kể cả `tu-ghi on` / "Bỏ qua hết"), thẻ duyệt mở đầu `⚠ XOÁ ·`. Mô tả lệnh bắt đầu bằng `DESTRUCTIVE:`. Thẻ và trang Docs vào thùng rác, khôi phục được (`issue_restore`, `docs_page_restore`). |
 | **Agent thành viên** (`kind = AGENT`, scope `agent`) | Như trước: làm thẻ của mình, ghi kết quả test, bình luận… | Lệnh xoá `personOnly` (không có trong `tools/list`) + `requirePerson` (gọi thẳng ⇒ `WORK_AGENT_FORBIDDEN`) + `AGENT_DENIED_ROUTES` thêm `DELETE` của sheet test 5.1/5.2/5.3 + Record of change, trang Docs, RAID, họp, Q&A, sơ đồ, test cycle, Resources, mục SRS; đợt 2: mục SWR302, Change Request, review, test plan, test design; đợt 3: dashboard, bộ lọc, baseline, phiên thăm dò, problem service desk, nhóm Resources, báo cáo tuần + AI usage (REST cũng 403). |
-| **Ask AI trên web / agent BUILTIN** | Như trước | 119 lệnh mới của ba đợt chỉ ở MCP (`mcpOnly`): mục lục lệnh GHI của Ask AI đã ~17k ký tự/câu hỏi, web có nút riêng — không thêm tiền prompt ở đó. |
+| **Ask AI trên web** (28/10/2026) | Mọi lệnh của token người có tham số `project` (262 lệnh, `webCommands()`), trừ `WEB_EXCLUDE` — đọc chạy ngay, ghi thành thẻ Apply | Cùng `run` + cùng quyền như MCP. Xoá ⇒ thẻ đỏ ⚠ XOÁ hai bước ⇒ chỉ tạo yêu cầu xoá chờ trưởng nhóm. Ghi kết quả chạy test ⇒ phải tick "Tôi đã chạy" (server `WORK_AI_CONFIRM_RAN`). Mục 7. |
+| **Agent BUILTIN** | Như trước | `mcpOnly` vẫn đúng với BUILTIN: không lệnh xoá / personOnly / lệnh mới mở cho web (test `aiTroLyWeb.test.ts` › A). |
 
 ### Chỉ người (cố ý KHÔNG có lệnh, kể cả với token người)
 
@@ -1457,3 +1462,54 @@ Không còn tuyến ghi nào thiếu lệnh (ngoài danh sách "chỉ người")
 | PUT | `/projects/:pid/workflows/:wfId/order` | 👤 | project configuration / membership |
 | PUT | `/projects/:pid/workflows/:wfId/transitions` | 👤 | project configuration / membership |
 | PUT | `/projects/:pid/workflows/:wfId/layout` | 👤 | project configuration / membership |
+
+
+## 7. Trợ lý WEB ngang quyền người (28/10/2026)
+
+**Vì sao.** Chủ dự án hỏi trợ lý trên web (dự án SWT301/SS) điền phần của mình trong Report 5.1/5.2/5.3 ⇒ trợ lý trả lời
+"chỉ đọc được, không có lệnh ghi". Đúng thế: các lệnh sửa/xoá 5.1, 5.2/5.3, họp, RAID, sprint, thành viên… là `mcpOnly` —
+cố ý giữ khỏi prompt web vì mục lục tham số đã ~35k ký tự lệnh ghi + ~6k ký tự lệnh xoá MỖI câu hỏi.
+
+**Thiết kế — nạp lệnh động, không thêm đường quyền nào:**
+
+| Phần | Chỗ | Ghi chú |
+|---|---|---|
+| Bộ lệnh web | `toolRegistry/index.ts › webCommands()` | Lệnh đường Ask + lệnh MCP của token người, có `project`, trừ `WEB_EXCLUDE` (comment/update_issue/create_issue — đã có hành động riêng; attach_file/attach_complete — tải base64; gdoc_images/attach_from_url — máy chủ tải URL, model đọc nội dung untrusted có thể bị dụ; ask_lead/request_review — vòng của agent). `runForPerson` nhận cả bộ này. |
+| (a) Tìm | tool gốc `find_commands` (`aiTraLoi.ts › congCuDoc`, `toolRegistry/timLenh.ts`) | Tên chính xác hoặc từ khoá (tiếng Anh / tiếng Việt có hoặc không dấu: "xoá dòng 5.1", "biên bản họp") ⇒ mô tả đầy đủ + từng tham số (lồng sâu) của ≤ 8 lệnh, theo ĐÚNG bộ lệnh vai người hỏi được dùng. Vòng chỉ tra lệnh không ăn trần 3 vòng đọc (tối đa 2 vòng như thế — `ASK_LIMITS.findRounds`). Không phải lệnh MCP ⇒ mục lục MCP vẫn 279/280. |
+| (b) Đọc | `read_command` (sẵn có) | Chạy ngay mọi lệnh ĐỌC của bộ web, quyền người hỏi. |
+| (c) Đề xuất | khối `<ctw-actions>` `{"type":"command"}` (sẵn có) | Mọi lệnh GHI của bộ web (chỉ khi người hỏi có `issue.edit`; Docs theo quyền Docs; `code_review` theo luật review). Server điền `title` (tên lệnh), `danger: 'delete'`, `recordsResults` — model viết gì vào các trường đó cũng bị ghi đè; lúc Apply server tính lại từ registry. |
+| Prompt | `ai.service.ts › commandsDoc` | ~30 lệnh hay dùng KÈM tham số (5.1/5.2/5.3, transition, log_work, Docs, RAID, họp…) + MỤC LỤC TÊN mọi lệnh khác theo nhóm (`*` ghi, `!` xoá). Lệnh xoá không còn in tham số (`xoaDoc` còn một đoạn luật). |
+
+**Thẻ Apply (web + hai app desktop — cùng `ActionCard.tsx`):**
+- Lệnh xoá ⇒ thẻ viền đỏ, đầu thẻ `⚠ XOÁ ·`, nút "Gửi yêu cầu xoá" bấm HAI lần; không bao giờ nằm trong "Apply all".
+  Apply chỉ tạo yêu cầu xoá chờ trưởng nhóm duyệt trên web (thùng rác 30 ngày) — như MCP từ 22/10.
+- Đề xuất hàng loạt (tham số là mảng ≥ 2 đối tượng: dòng, UTCID, case, kết quả…) ⇒ bảng xem trước có ô chọn từng mục; bỏ tick
+  ⇒ đề xuất được sửa (gửi kèm khi Apply, lưu lại để cả nhóm thấy đúng thứ đã áp). Luôn giữ ≥ 1 mục.
+- Ghi KẾT QUẢ CHẠY test (`aiTroLyWeb.ts › ghiKetQuaChay`: P/F, ngày chạy, Executed By, trạng thái vòng, actual, evidence,
+  kết quả test run) ⇒ ô "Tôi đã thật sự chạy các test này" bắt buộc; thiếu ⇒ `409 WORK_AI_CONFIRM_RAN` (cả `/ai/apply`).
+  Không bao giờ nằm trong "Apply all". Soạn case/UTCID KHÔNG kèm kết quả thì không cần tick.
+
+**Không bịa dữ liệu.** System prompt có khối `KHOI_KET_QUA_THAT`: được soạn case, dòng, "O", procedure, expected từ yêu cầu,
+code đọc được (`code_read`), dữ liệu CT Work hay người dùng đưa; KHÔNG tự điền kết quả chạy. Bị nhờ "điền kết quả" mà không
+có dữ liệu ⇒ nói rõ vì sao + hai lựa chọn: soạn case để trống cột kết quả, hoặc chạy bằng AI Code / CuongMini CLI.
+
+**Việc trên máy người dùng** (chạy JUnit/Playwright/SQL, sửa code local, git commit/pull/push, đọc tệp ngoài CT Work) — một chỗ:
+`aiTroLyWeb.ts › cauMayCucBo(vo)` + khối system prompt `khoiMayCucBo` + bộ nhận diện `laViecMayCucBo` (thêm một dòng nhắc vào
+câu hỏi). Web gửi `client: 'web' | 'desktop' | 'ctwork-desktop'` (`lib/appDesktop.ts`); iOS/app cũ không gửi ⇒ `web`.
+- Trình duyệt / app CT Work riêng (không có AI Code): "Phần này mình không làm được trên web vì code nằm trên máy bạn — bạn mở
+  **app desktop CuongThai (mục AI Code)** hoặc **CuongMini CLI** rồi kết nối CT Work (`/ctwork`) nhé."
+- App CuongThai: "… — bạn mở **AI Code** ngay trong app này (thanh bên trái) rồi kết nối CT Work (`/ctwork`) nhé."
+- Sau câu chuẩn: khối lệnh cần gõ — `/ctwork` rồi MỘT yêu cầu dán được, nêu dự án `slug/KEY` + đúng hàm/sheet/thẻ.
+
+**Trợ lý web vẫn KHÔNG làm** (ngoài mục 2 "chỉ người"): tải tệp từ URL/Google Doc vào thẻ (gdoc_images, attach_from_url),
+tải tệp base64, lệnh không gắn dự án (lớp học, bảng tin cá nhân, tạo dự án), mọi thứ trên máy người dùng (câu chuẩn ở trên).
+
+**Đo prompt** (system prompt, MEMBER, Docs bật, cùng dự án test — `work.aiTroLyWeb.db.test.ts` › S8; "trước" = thay đúng
+các khối đã đổi bằng bản cũ): câu hỏi có ghi **49.301 ⇒ 23.518 ký tự** (≈ 13,7k ⇒ 6,5k token); câu hỏi chỉ để hiểu
+**20.408 ⇒ 13.366 ký tự**. Riêng mục lục lệnh: 35.129 ⇒ 12.903 (lệnh xoá 6.195 ⇒ 484). Định nghĩa tool gửi kèm: 1.086 ⇒ 1.721
+ký tự (thêm `find_commands`). Phạm vi: 145 ⇒ 262 lệnh. Mỗi lần model tra lệnh tốn thêm một lượt gọi (kết quả ≤ 14k ký tự).
+
+**Test:** `npx tsx --test src/services/work/aiTroLyWeb.test.ts` (22: bộ lệnh, tìm, prompt đủ tên, câu máy cục bộ, kết quả
+thật, agent không đổi) · `WORK_DB_TEST=1 npx tsx --test src/routes/work.aiTroLyWeb.db.test.ts` (9: tra ⇒ đọc ⇒ đề xuất 4 UTCID
+⇒ bỏ tick 1 ⇒ Apply ⇒ đúng 3 UTCID; xác nhận đã chạy; xoá ⇒ yêu cầu; MEMBER đề xuất việc trưởng nhóm ⇒ 403; lệnh ngoài bộ
+bị loại; câu máy cục bộ theo vỏ; agent vẫn bị chặn; đo prompt).

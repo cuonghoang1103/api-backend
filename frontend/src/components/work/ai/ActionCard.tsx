@@ -10,7 +10,7 @@ import { docTruyVan } from '@/components/sach-hoc/moiTruong';
 import { useCallback, useState, type ReactNode } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
-import { ArrowRight, Check, CheckCheck, CornerDownRight, ExternalLink, FileText, FlaskConical, MessageSquare, Pencil, X } from 'lucide-react';
+import { AlertTriangle, ArrowRight, Check, CheckCheck, CornerDownRight, ExternalLink, FileText, FlaskConical, MessageSquare, Pencil, X } from 'lucide-react';
 import { workApi, workError, type AiAction, type ProjectConfig } from '@/lib/work-api';
 import { cn } from '@/lib/utils';
 import { IssueTypeIcon, PRIORITIES, PriorityIcon, Spinner, UserAvatar } from '../ui';
@@ -26,7 +26,14 @@ export interface ActionItem {
   summary?: string;
   number?: number;
   error?: string;
+  /** 28/10/2026: người dùng đã tick "Tôi đã chạy các test này" (đề xuất ghi kết quả chạy test). */
+  confirmRan?: boolean;
 }
+
+/** Đề xuất XOÁ (thẻ đỏ, xác nhận hai bước) — server điền `danger` khi lưu đề xuất. */
+const laXoa = (a: AiAction) => a.type === 'command' && a.danger === 'delete';
+/** Đề xuất GHI KẾT QUẢ CHẠY test — chỉ áp dụng khi người dùng xác nhận đã chạy thật. */
+const ghiKetQua = (a: AiAction) => a.type === 'command' && !!a.recordsResults;
 
 // ─── Quyền ───────────────────────────────────────────────────────
 
@@ -111,7 +118,7 @@ export function ActionGroup({ config, items, onUpdate, applyFn, dismissFn }: {
   const applyOne = useCallback(async (item: ActionItem): Promise<boolean> => {
     onUpdate(item.id, { status: 'applying', error: undefined });
     try {
-      const r = applyFn ? await applyFn(item) : await workApi.aiApply(pid, item.action);
+      const r = applyFn ? await applyFn(item) : await workApi.aiApply(pid, item.action, item.confirmRan);
       onUpdate(item.id, { status: 'done', summary: r.summary, number: r.number });
       return true;
     } catch (err) {
@@ -129,7 +136,8 @@ export function ActionGroup({ config, items, onUpdate, applyFn, dismissFn }: {
     refresh();
   };
 
-  const applicable = items.filter((i) => (i.status === 'pending' || i.status === 'error') && !blockedReason(i.action, config));
+  // 28/10/2026: xoá và ghi kết quả chạy test KHÔNG BAO GIỜ đi theo "Apply all" — từng thẻ phải được xác nhận riêng.
+  const applicable = items.filter((i) => (i.status === 'pending' || i.status === 'error') && !blockedReason(i.action, config) && !laXoa(i.action) && !ghiKetQua(i.action));
   const applyAll = async () => {
     setBulk(true);
     // Tuần tự: thẻ con cần thẻ cha, và thứ tự tạo nên khớp thứ tự đề xuất.
@@ -167,6 +175,7 @@ export function ActionGroup({ config, items, onUpdate, applyFn, dismissFn }: {
           item={it}
           busy={bulk}
           onEdit={(action) => onUpdate(it.id, { action })}
+          onConfirmRan={(v) => onUpdate(it.id, { confirmRan: v })}
           onApply={() => apply(it)}
           onDismiss={() => {
             if (!dismissFn) { onUpdate(it.id, { status: 'dismissed' }); return; }
@@ -215,13 +224,15 @@ const COMMAND_LABEL: Record<string, string> = {
   get log_work() { return wt('ai.cLogWork'); },
   get code_review() { return wt('code.aiReview'); },
 };
-const commandLabel = (c: string) => COMMAND_LABEL[c] ?? c.replace(/_/g, ' ');
+/** Nhãn lệnh: bản dịch có sẵn ⇒ tiêu đề registry do server điền ⇒ tên lệnh. */
+const commandLabel = (c: string, title?: string | null) => COMMAND_LABEL[c] ?? title ?? c.replace(/_/g, ' ');
 
-export function ActionCard({ config, item, busy, onEdit, onApply, onDismiss, onOpen }: {
+export function ActionCard({ config, item, busy, onEdit, onConfirmRan, onApply, onDismiss, onOpen }: {
   config: ProjectConfig;
   item: ActionItem;
   busy?: boolean;
   onEdit: (action: AiAction) => void;
+  onConfirmRan?: (v: boolean) => void;
   onApply: () => void;
   onDismiss: () => void;
   onOpen: () => void;
@@ -230,22 +241,43 @@ export function ActionCard({ config, item, busy, onEdit, onApply, onDismiss, onO
   const blocked = blockedReason(action, config);
   const locked = status === 'applying' || status === 'done';
   const k = (n: number) => `${config.key}-${n}`;
+  const xoa = laXoa(action);
+  const canXacNhanChay = ghiKetQua(action);
+  // Xoá: bấm lần 1 ⇒ "bấm lần nữa để xác nhận"; lần 2 mới gửi yêu cầu xoá.
+  const [armed, setArmed] = useState(false);
+  const chuaXacNhanChay = canXacNhanChay && !item.confirmRan;
 
   return (
     <div
       className={cn(
         'rounded-[8px] border bg-[var(--w-panel)] text-[13px]',
-        status === 'done' ? 'border-[color-mix(in_srgb,var(--w-green)_40%,transparent)]' : status === 'error' ? 'border-[color-mix(in_srgb,var(--w-red)_45%,transparent)]' : 'border-[var(--w-border-strong)]',
+        status === 'done' ? 'border-[color-mix(in_srgb,var(--w-green)_40%,transparent)]'
+          : status === 'error' || xoa ? 'border-[color-mix(in_srgb,var(--w-red)_55%,transparent)]' : 'border-[var(--w-border-strong)]',
       )}
     >
-      <div className="flex items-center gap-1.5 border-b border-[var(--w-border)] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.03em] text-[var(--w-text-3)]">
-        {action.type === 'command' ? commandLabel(action.command) : TITLES[action.type]}
+      <div className={cn('flex items-center gap-1.5 border-b px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.03em]', xoa ? 'border-[color-mix(in_srgb,var(--w-red)_35%,transparent)] bg-[color-mix(in_srgb,var(--w-red)_10%,transparent)] text-[var(--w-red)]' : 'border-[var(--w-border)] text-[var(--w-text-3)]')}>
+        {xoa ? <><AlertTriangle size={12} className="shrink-0" />{wt('ai.deleteTag')} ·</> : null}
+        {action.type === 'command' ? commandLabel(action.command, action.title) : TITLES[action.type]}
         {action.type === 'update_issue' || action.type === 'add_comment' ? <span className="font-mono normal-case text-[var(--w-text-2)]">{k(action.number)}</span> : null}
         {action.type === 'update_page_section' ? <span className="font-mono normal-case text-[var(--w-text-2)]">#{action.number}</span> : null}
       </div>
 
       <div className="px-3 py-2.5">
         <ActionBody config={config} action={action} editable={!locked} onEdit={onEdit} />
+        {xoa && status !== 'done' ? (
+          <div className="mt-2 rounded-[6px] border border-[color-mix(in_srgb,var(--w-red)_35%,transparent)] bg-[color-mix(in_srgb,var(--w-red)_8%,transparent)] px-2.5 py-1.5 text-[12px] text-[var(--w-red)]">
+            {wt('ai.deleteNote')}
+          </div>
+        ) : null}
+        {canXacNhanChay && status !== 'done' ? (
+          <label className="mt-2 flex cursor-pointer items-start gap-2 rounded-[6px] border border-[color-mix(in_srgb,var(--w-orange)_40%,transparent)] bg-[color-mix(in_srgb,var(--w-orange)_8%,transparent)] px-2.5 py-1.5 text-[12px]">
+            <input type="checkbox" className="mt-[2px]" checked={!!item.confirmRan} disabled={locked} onChange={(e) => onConfirmRan?.(e.target.checked)} />
+            <span>
+              <span className="font-medium">{wt('ai.ranConfirm')}</span>
+              <span className="block text-[11.5px] text-[var(--w-text-3)]">{wt('ai.ranNote')}</span>
+            </span>
+          </label>
+        ) : null}
       </div>
 
       <div className="flex min-h-[40px] flex-wrap items-center gap-2 border-t border-[var(--w-border)] px-3 py-1.5">
@@ -264,19 +296,23 @@ export function ActionCard({ config, item, busy, onEdit, onApply, onDismiss, onO
         ) : (
           <>
             <span className="min-w-0 flex-1 text-[12px] text-[var(--w-red)]">{status === 'error' ? item.error : ''}</span>
-            <button type="button" className="w-btn w-btn-sm w-btn-ghost" onClick={onDismiss} disabled={status === 'applying' || busy}>
+            <button type="button" className="w-btn w-btn-sm w-btn-ghost" onClick={() => { setArmed(false); onDismiss(); }} disabled={status === 'applying' || busy}>
               {wt('ai.dismiss')}
             </button>
-            <span title={blocked ?? undefined}>
+            <span title={blocked ?? (chuaXacNhanChay ? wt('ai.ranConfirm') : undefined)}>
               <button
                 type="button"
-                className="w-btn w-btn-sm w-btn-primary"
-                onClick={onApply}
-                disabled={!!blocked || status === 'applying' || busy}
+                className={cn('w-btn w-btn-sm', xoa ? 'w-btn-danger' : 'w-btn-primary')}
+                onClick={() => {
+                  if (xoa && !armed) { setArmed(true); return; }
+                  setArmed(false);
+                  onApply();
+                }}
+                disabled={!!blocked || chuaXacNhanChay || status === 'applying' || busy}
                 aria-label={blocked ? `${wt('common.apply')} (${blocked})` : undefined}
               >
-                {status === 'applying' ? <Spinner size={12} /> : <Check size={13} />}
-                {status === 'error' ? wt('ai.retry') : wt('common.apply')}
+                {status === 'applying' ? <Spinner size={12} /> : xoa ? <AlertTriangle size={13} /> : <Check size={13} />}
+                {xoa ? (armed ? wt('ai.deleteConfirm') : wt('ai.deleteApply')) : status === 'error' ? wt('ai.retry') : wt('common.apply')}
               </button>
             </span>
           </>
@@ -483,12 +519,19 @@ function ActionBody({ config, action, editable, onEdit }: { config: ProjectConfi
         </div>
       );
 
-    case 'command':
+    case 'command': {
+      // 28/10/2026: mảng đối tượng ≥ 2 mục (dòng, UTCID, case, kết quả…) ⇒ bảng xem trước có ô chọn từng mục.
+      const entries = Object.entries(action.args ?? {});
+      const batch = entries.filter(([, v]) => laBatch(v));
+      const rest = entries.filter(([, v]) => !laBatch(v));
       return (
         <div className="space-y-1.5">
           {action.summary ? <div className="px-1.5 text-[13px] font-medium">{action.summary}</div> : null}
+          {batch.map(([k]) => (
+            <BatchTable key={k} name={k} action={action} editable={editable} onEdit={onEdit} />
+          ))}
           <div className="px-1.5">
-            {Object.entries(action.args ?? {}).slice(0, 12).map(([k, v]) => (
+            {rest.slice(0, 12).map(([k, v]) => (
               <Row key={k} label={k}>
                 {typeof v === 'string' || typeof v === 'number' || typeof v === 'boolean'
                   ? <span className="whitespace-pre-wrap">{String(v)}</span>
@@ -499,8 +542,70 @@ function ActionBody({ config, action, editable, onEdit }: { config: ProjectConfi
           <div className="px-1.5 text-[11.5px] text-[var(--w-text-3)]">{wt('ai.cmdNoteA')}<span className="font-mono">{action.command}</span>{wt('ai.cmdNoteB')}</div>
         </div>
       );
+    }
 
     default:
       return <span className="text-[12px] text-[var(--w-text-3)]"><X size={12} className="inline" /> {wt('ai.unsupported')}</span>;
   }
+}
+
+// ─── Đề xuất hàng loạt: bảng xem trước + bỏ chọn từng mục (28/10/2026) ───
+
+type Muc = Record<string, unknown>;
+/** Tham số là mảng đối tượng ≥ 2 mục ⇒ hiện thành bảng chọn được. */
+const laBatch = (v: unknown): v is Muc[] => Array.isArray(v) && v.length >= 2 && v.every((x) => !!x && typeof x === 'object' && !Array.isArray(x));
+
+function oNgan(v: unknown): string {
+  if (v === null || v === undefined || v === '') return '';
+  if (typeof v === 'string') return v.length > 80 ? `${v.slice(0, 80)}…` : v;
+  if (typeof v === 'number' || typeof v === 'boolean') return String(v);
+  const j = JSON.stringify(v);
+  return j.length > 80 ? `${j.slice(0, 80)}…` : j;
+}
+
+/**
+ * Bảng xem trước của MỘT tham số mảng (vd. `cases` của fpt_unit_add_cases). Bỏ tick một mục ⇒ đề xuất được SỬA (bỏ mục
+ * đó khỏi args) — bản sửa được gửi kèm khi Apply và lưu lại để cả nhóm thấy đúng thứ đã áp. Luôn giữ ít nhất một mục.
+ */
+function BatchTable({ name, action, editable, onEdit }: { name: string; action: Extract<AiAction, { type: 'command' }>; editable: boolean; onEdit: (a: AiAction) => void }) {
+  // Danh sách GỐC chụp lúc hiện thẻ — bỏ tick rồi tick lại vẫn lấy lại được mục đó.
+  const [goc] = useState<Muc[]>(() => (action.args[name] as Muc[]) ?? []);
+  const [bo, setBo] = useState<Set<number>>(() => new Set());
+  const cot = [...new Set(goc.flatMap((m) => Object.keys(m)))].slice(0, 6);
+  const doi = (i: number) => {
+    const next = new Set(bo);
+    if (next.has(i)) next.delete(i); else next.add(i);
+    if (next.size >= goc.length) return; // giữ ít nhất 1 mục
+    setBo(next);
+    onEdit({ ...action, args: { ...action.args, [name]: goc.filter((_, j) => !next.has(j)) } });
+  };
+  return (
+    <div className="px-1.5">
+      <div className="mb-1 text-[11px] font-semibold uppercase tracking-[0.03em] text-[var(--w-text-3)]">
+        {name} · {wt('ai.batchN', { n: goc.length - bo.size, total: goc.length })}
+      </div>
+      <div className="max-h-[260px] overflow-auto rounded-[6px] border border-[var(--w-border)]">
+        <table className="w-full border-collapse text-[11.5px]">
+          <thead className="sticky top-0 bg-[var(--w-sunken)] text-left text-[var(--w-text-3)]">
+            <tr>
+              <th className="w-[26px] px-1.5 py-1" aria-label={wt('ai.keepItem')} />
+              <th className="px-1.5 py-1">#</th>
+              {cot.map((c) => <th key={c} className="px-1.5 py-1 font-medium">{c}</th>)}
+            </tr>
+          </thead>
+          <tbody>
+            {goc.map((m, i) => (
+              <tr key={i} className={cn('border-t border-[var(--w-border)] align-top', bo.has(i) && 'opacity-45 line-through')}>
+                <td className="px-1.5 py-1">
+                  <input type="checkbox" aria-label={wt('ai.keepItem')} checked={!bo.has(i)} disabled={!editable} onChange={() => doi(i)} />
+                </td>
+                <td className="px-1.5 py-1 text-[var(--w-text-3)]">{i + 1}</td>
+                {cot.map((c) => <td key={c} className="max-w-[220px] break-words px-1.5 py-1 text-[var(--w-text-2)]">{oNgan(m[c])}</td>)}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
 }

@@ -12,6 +12,7 @@ export default function CpuLabGallery() {
       links: [
         ['CSI104 · Start from zero', 'CSI104 · Bắt đầu từ số 0', '/courses/introduction-to-computer-science/learn?lessonSlug=csi104-0-5-bat-dau-tu-so-0'],
         ['CEA201', 'CEA201', '/courses/computer-organization-and-architecture'],
+        ['3D journey into the computer', 'Hành trình 3D vào máy tính', '/cpu-lab/3d'],
       ],
       first: 'bits',
       numbered: true,

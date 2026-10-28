@@ -328,6 +328,12 @@
       "description": "Lab chương 7: máy trạng thái Change Request (Submitted → Evaluated → Approved/Rejected → Change Made → Verified → Closed, Canceled), phân tích ảnh hưởng bằng RTM và ước lượng giờ công, trạng thái yêu cầu và tỉ lệ, chính sách kiểm soát thay đổi, bốn hướng truy vết và phần tử mồ côi."
     },
     {
+      "slug": "swr302-7-deep-rtm-engine",
+      "name": "Deep Lab 7 — Traceability engine with suspect links",
+      "level": "ADVANCED",
+      "description": "Deep Lab chương 7: tự viết động cơ truy vết — dựng RTM cho FR/NFR, độ phủ test và yêu cầu mồ côi, liên kết nghi vấn (suspect) khi mục phía trên đổi phiên bản, phân tích ảnh hưởng nhóm theo loại (có chu trình), xoá nghi vấn sau khi rà — chấm mẫu ClinicCare + dữ liệu ẩn."
+    },
+    {
       "slug": "swr302-8-1-oo-design-prototyping",
       "name": "8.1 From requirements to an OO design",
       "level": "INTERMEDIATE",
@@ -416,6 +422,12 @@
       "name": "Lab 10 — Prioritization: CampusRide Release 1",
       "level": "ADVANCED",
       "description": "Lab chương 10: bảng value/cost/risk của Wiegers (value%, cost%, risk%, priority, xếp hạng) cho 6 tính năng, MoSCoW từ lời bên liên quan, phạm vi bản 1 theo năng lực, thang ba mức quan trọng × khẩn cấp, phép thử $100."
+    },
+    {
+      "slug": "swr302-10-deep-priority-engine",
+      "name": "Deep Lab 10 — Prioritisation engine",
+      "level": "ADVANCED",
+      "description": "Deep Lab chương 10: tự viết bảng value/cost/risk của Wiegers thành hàm (loại điểm sai, làm tròn, hoà theo id), lập phạm vi bản phát hành (Must trước, rồi theo priority, báo vượt năng lực) và phân tích độ nhạy trọng số — chấm mẫu ClinicCare + dữ liệu ẩn."
     },
     {
       "slug": "swr302-11-pe-1-freshbox-meal-kit",

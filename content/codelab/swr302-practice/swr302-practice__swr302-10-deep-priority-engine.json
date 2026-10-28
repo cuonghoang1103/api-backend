@@ -1,0 +1,332 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-10-deep-priority-engine",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-10-4-ch16-scales-matrix"
+  },
+  "exercises": [
+    {
+      "title": "Deep Lab 10 — Prioritisation engine (value, cost, risk)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 90,
+      "points": 100,
+      "concepts": [
+        "value/cost/risk prioritization",
+        "release planning",
+        "sensitivity analysis"
+      ],
+      "prerequisites": [
+        "Lab 10",
+        "SWR302 lessons 10.1 and 10.4"
+      ],
+      "tags": [
+        "swr302",
+        "deep-lab"
+      ],
+      "problemHtml": "<h1>Deep Lab 10 — Prioritisation engine (value, cost, risk)</h1>\n<p class=\"bi-phu\">Chapter 10 deep lab · Table 16-1 as code, release packing, sensitivity · 10 marks · hidden data on Submit</p>\n<h2>1. Overview</h2>\n<p>In Lab 10 you filled Wiegers’ prioritisation spreadsheet by hand. Here you build it as an engine the ClinicCare team can rerun every time a score changes — and you test how much the result depends on the weights.</p>\n<p><b>A–C. <code>priorityTable(features, weights)</code></b>. Each feature has integer scores 1–9 for <code>benefit</code>, <code>penalty</code>, <code>cost</code> and <code>risk</code>. A feature with any score that is not an integer from 1 to 9 is <b>invalid</b>: list its id in <code>invalid</code> (sorted) and leave it out of everything else, including the totals. For valid features: <code>value = weights.benefit·benefit + weights.penalty·penalty</code>; <code>valuePct = value ÷ total value × 100</code>; <code>costPct</code> and <code>riskPct</code> likewise; <code>priority = valuePct ÷ (costPct·weights.cost + riskPct·weights.risk)</code>. Round the percentages to 2 decimals and the priority to 3 <b>for output only</b> (compute from unrounded numbers). Return <code>{ rows, invalid }</code>, rows sorted by priority (highest first), ties by id.</p>\n<p><b>D. <code>planRelease(features, weights, capacity, musts)</code></b>. All valid Musts go in first (in ranking order). If they already exceed the capacity return <code>{ ok: false, release: musts, used, slack }</code> (slack negative). Otherwise walk the ranking and add each remaining feature whose cost still fits — skipping, not stopping, when one does not fit. Unknown or invalid ids in <code>musts</code> are ignored. Return <code>{ ok, release, used, slack }</code>.</p>\n<p><b>E. <code>sensitivity(features, weights, field, values)</code></b>. For each value, copy the weights, replace <code>weights[field]</code>, and record the ranking (ids). Return <code>{ rankings: { '&lt;value&gt;': [ids] }, stableTop3 }</code> where <code>stableTop3</code> is true when the first three ids are the same, in the same order, for every value. Never modify the caller’s objects.</p>\n<p><b>Sample data</b> (ClinicCare release 2):</p><pre><code>const FEATURES = [\n  {\"id\": \"F1\", \"name\": \"Online booking\", \"benefit\": 9, \"penalty\": 9, \"cost\": 6, \"risk\": 4},\n  {\"id\": \"F2\", \"name\": \"SMS reminders\", \"benefit\": 6, \"penalty\": 5, \"cost\": 2, \"risk\": 1},\n  {\"id\": \"F3\", \"name\": \"Video consultation\", \"benefit\": 7, \"penalty\": 3, \"cost\": 9, \"risk\": 8},\n  {\"id\": \"F4\", \"name\": \"Online payment\", \"benefit\": 7, \"penalty\": 6, \"cost\": 5, \"risk\": 6},\n  {\"id\": \"F5\", \"name\": \"Lab results portal\", \"benefit\": 8, \"penalty\": 4, \"cost\": 4, \"risk\": 3},\n  {\"id\": \"F6\", \"name\": \"Family accounts\", \"benefit\": 4, \"penalty\": 2, \"cost\": 3, \"risk\": 2},\n  {\"id\": \"F7\", \"name\": \"Doctor ratings\", \"benefit\": 3, \"penalty\": 1, \"cost\": 2, \"risk\": 5},\n  {\"id\": \"F8\", \"name\": \"Insurance e-claims\", \"benefit\": 6, \"penalty\": 7, \"cost\": 7, \"risk\": 7}\n];</code></pre><pre><code>const WEIGHTS = {\n  benefit: 2,\n  penalty: 1,\n  cost: 1,\n  risk: 0.5\n};</code></pre>\n<h3>Main features</h3>\n<ul>\n  <li>A. Value and percentages.</li>\n  <li>B. Priority and ranking.</li>\n  <li>C. Invalid scores.</li>\n  <li>D. Release packing.</li>\n  <li>E. Weight sensitivity.</li>\n  <li>F. Robustness.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>Pure functions; round only for output; ties by id.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>answers/\n├── sample-data.js        ← FEATURES, WEIGHTS (read-only)\n├── priority-table.js     ← function priorityTable(features, weights)\n├── plan-release.js       ← function planRelease(features, weights, capacity, musts)\n└── sensitivity.js        ← function sensitivity(features, weights, field, values)</pre>\n<h2>3. Data model</h2>\n<p><b>Data shapes</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>feature</code></td><td>{ id, name, benefit, penalty, cost, risk }</td><td>integers 1–9</td></tr><tr><td><code>weights</code></td><td>{ benefit, penalty, cost, risk }</td><td>Wiegers default 2, 1, 1, 0.5</td></tr><tr><td><code>row</code></td><td>{ id, value, valuePct, costPct, riskPct, priority }</td><td>2 / 2 / 2 / 3 decimals</td></tr></tbody></table>\n<h2>4. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. A. Value and % <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Weighted value; % of valid totals.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">Wiegers Table 16-1</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. B. Priority and ranking <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>From unrounded numbers; ties by id.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">priority formula</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. C. Invalid scores <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Excluded from totals.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">validation</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. D. planRelease <span class=\"bi-diem\">2.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Musts first; skip-and-continue; over-capacity report.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">release planning</span></p>\n</div>\n<div class=\"bi-cn\"><h3>5. E. sensitivity <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Rankings per weight value; stable top 3.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">sensitivity analysis</span></p>\n</div>\n<div class=\"bi-cn\"><h3>6. F. Robustness <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Empty input; no mutation.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">defensive code</span></p>\n</div>\n<h2>5. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>priorityTable</code></td><td>answers/priority-table.js</td></tr><tr><td><code>planRelease</code></td><td>answers/plan-release.js</td></tr><tr><td><code>sensitivity</code></td><td>answers/sensitivity.js</td></tr></tbody></table>\n<h2>6. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>A. Value and %</td><td>2</td></tr><tr><td>2</td><td>B. Priority and ranking</td><td>2</td></tr><tr><td>3</td><td>C. Invalid scores</td><td>1</td></tr><tr><td>4</td><td>D. planRelease</td><td>2.5</td></tr><tr><td>5</td><td>E. sensitivity</td><td>1.5</td></tr><tr><td>6</td><td>F. Robustness</td><td>1</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Rounding the percentages before computing the priority — the ranking can change.</li>\n  <li>Stopping the release at the first feature that does not fit.</li>\n  <li>Changing weights[field] in place inside sensitivity().</li>\n</ul>\n<h2>7. Submission</h2>\n<p>Write your answers in the files of <code>answers/</code> on the right. Diagrams are written as text in the syntax of a real tool (Mermaid or PlantUML — paste them into <a href=\"https://mermaid.live\" target=\"_blank\" rel=\"noopener\">mermaid.live</a> or <a href=\"https://www.plantuml.com/plantuml\" target=\"_blank\" rel=\"noopener\">plantuml.com</a> to SEE the picture); tables are JavaScript arrays, one object per row of the school template. Press <b>Run</b> for the visible checks and <b>Submit</b> for full grading, hidden checks included. Your mark per question appears in the rubric table.</p>",
+      "problemHtmlVi": "<h1>Deep Lab 10 — Prioritisation engine (value, cost, risk)</h1>\n<p class=\"bi-phu\">Deep lab chương 10 · bảng 16-1 thành mã, xếp bản phát hành, độ nhạy · 10 điểm · dữ liệu ẩn khi Nộp</p>\n<h2>1. Tổng quan</h2>\n<p>Ở Lab 10 bạn điền bảng ưu tiên bằng tay. Ở đây bạn dựng nó thành \"động cơ\" để đội ClinicCare chạy lại mỗi khi điểm thay đổi — và kiểm kết quả phụ thuộc trọng số tới đâu.</p>\n<p><b>A–C. <code>priorityTable</code></b>: điểm nguyên 1–9; tính năng có điểm sai ⇒ <code>invalid</code> (sắp xếp) và bị loại khỏi mọi phép tính kể cả tổng. value = w.benefit·benefit + w.penalty·penalty; các % theo tổng; priority = value% ÷ (cost%·w.cost + risk%·w.risk). Làm tròn % 2 chữ số, priority 3 chữ số <b>chỉ khi xuất</b>. rows giảm dần theo priority, hoà theo id.</p>\n<p><b>D. <code>planRelease</code></b>: Must hợp lệ vào trước (theo thứ tự xếp hạng); Must vượt năng lực ⇒ <code>ok: false</code>, slack âm; còn lại đi theo xếp hạng, mục không vừa thì bỏ qua và xét tiếp; id Must lạ bị bỏ qua.</p>\n<p><b>E. <code>sensitivity</code></b>: với mỗi giá trị, sao chép trọng số, thay <code>weights[field]</code>, ghi xếp hạng; <code>stableTop3</code> = ba id đầu giống nhau ở mọi giá trị. Không sửa object của người gọi.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>A. Value và phần trăm.</li>\n  <li>B. Priority và xếp hạng.</li>\n  <li>C. Điểm không hợp lệ.</li>\n  <li>D. Xếp bản phát hành.</li>\n  <li>E. Độ nhạy trọng số.</li>\n  <li>F. Độ bền.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Hàm thuần; chỉ làm tròn khi xuất; hoà theo id.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>answers/\n├── sample-data.js        ← FEATURES, WEIGHTS (read-only)\n├── priority-table.js     ← function priorityTable(features, weights)\n├── plan-release.js       ← function planRelease(features, weights, capacity, musts)\n└── sensitivity.js        ← function sensitivity(features, weights, field, values)</pre>\n<h2>3. Mô hình dữ liệu</h2>\n<p><b>Data shapes</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>feature</code></td><td>{ id, name, benefit, penalty, cost, risk }</td><td>số nguyên 1–9</td></tr><tr><td><code>weights</code></td><td>{ benefit, penalty, cost, risk }</td><td>mặc định Wiegers 2, 1, 1, 0.5</td></tr><tr><td><code>row</code></td><td>{ id, value, valuePct, costPct, riskPct, priority }</td><td>2 / 2 / 2 / 3 chữ số</td></tr></tbody></table>\n<h2>4. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. A. Value và % <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Value có trọng số; % trên tổng hợp lệ.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">Wiegers Table 16-1</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. B. Priority và xếp hạng <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Tính từ số chưa làm tròn; hoà theo id.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">priority formula</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. C. Điểm sai <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Loại khỏi tổng.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">validation</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. D. planRelease <span class=\"bi-diem\">2.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Must trước; bỏ qua và xét tiếp; báo vượt năng lực.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">release planning</span></p>\n</div>\n<div class=\"bi-cn\"><h3>5. E. sensitivity <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Xếp hạng theo từng trọng số; top 3 ổn định.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">sensitivity analysis</span></p>\n</div>\n<div class=\"bi-cn\"><h3>6. F. Độ bền <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Đầu vào rỗng; không sửa đầu vào.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">defensive code</span></p>\n</div>\n<h2>5. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>priorityTable</code></td><td>answers/priority-table.js</td></tr><tr><td><code>planRelease</code></td><td>answers/plan-release.js</td></tr><tr><td><code>sensitivity</code></td><td>answers/sensitivity.js</td></tr></tbody></table>\n<h2>6. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>A. Value và %</td><td>2</td></tr><tr><td>2</td><td>B. Priority và xếp hạng</td><td>2</td></tr><tr><td>3</td><td>C. Điểm sai</td><td>1</td></tr><tr><td>4</td><td>D. planRelease</td><td>2.5</td></tr><tr><td>5</td><td>E. sensitivity</td><td>1.5</td></tr><tr><td>6</td><td>F. Độ bền</td><td>1</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Làm tròn % trước khi tính priority — xếp hạng có thể đổi.</li>\n  <li>Dừng xếp bản phát hành ở tính năng đầu tiên không vừa.</li>\n  <li>Sửa trực tiếp weights[field] trong sensitivity().</li>\n</ul>\n<h2>7. Nộp bài</h2>\n<p>Viết câu trả lời vào các tệp trong <code>answers/</code> bên phải. Sơ đồ viết bằng chữ theo cú pháp của công cụ thật (Mermaid hoặc PlantUML — dán vào <a href=\"https://mermaid.live\" target=\"_blank\" rel=\"noopener\">mermaid.live</a> hoặc <a href=\"https://www.plantuml.com/plantuml\" target=\"_blank\" rel=\"noopener\">plantuml.com</a> để XEM hình); bảng là mảng JavaScript, mỗi object là một dòng của template trường. Bấm <b>Chạy thử</b> để chạy kiểm hiện, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn). Điểm từng câu hiện trong bảng thang điểm.</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "Pure functions; round only for output; ties by id.|||Hàm thuần; chỉ làm tròn khi xuất; hoà theo id.",
+      "examplesJson": [
+        {
+          "input": "answers/*.js — one object per row of the template",
+          "output": "Rubric table: marks per question (e.g. B. 2.5/3)",
+          "explanation": "Every rubric line is checked separately; hidden checks run on Submit.|||Mỗi dòng rubric được kiểm riêng; kiểm ẩn chạy khi Nộp."
+        }
+      ],
+      "hintsJson": [
+        "A: lọc hợp lệ trước, tính tổng trên danh sách đã lọc; giữ priority chưa làm tròn trong một trường tạm để sắp.",
+        "D: dùng lại priorityTable để lấy thứ tự; bảng cost theo \"#\"+id.",
+        "E: sao chép trọng số bằng vòng lặp/Object.assign({}, weights) trước khi thay."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers/sample-data.js",
+          "language": "javascript",
+          "code": "// Sample data (read-only). The grader also uses hidden feature lists.\nconst FEATURES = [\n {\n  \"id\": \"F1\",\n  \"name\": \"Online booking\",\n  \"benefit\": 9,\n  \"penalty\": 9,\n  \"cost\": 6,\n  \"risk\": 4\n },\n {\n  \"id\": \"F2\",\n  \"name\": \"SMS reminders\",\n  \"benefit\": 6,\n  \"penalty\": 5,\n  \"cost\": 2,\n  \"risk\": 1\n },\n {\n  \"id\": \"F3\",\n  \"name\": \"Video consultation\",\n  \"benefit\": 7,\n  \"penalty\": 3,\n  \"cost\": 9,\n  \"risk\": 8\n },\n {\n  \"id\": \"F4\",\n  \"name\": \"Online payment\",\n  \"benefit\": 7,\n  \"penalty\": 6,\n  \"cost\": 5,\n  \"risk\": 6\n },\n {\n  \"id\": \"F5\",\n  \"name\": \"Lab results portal\",\n  \"benefit\": 8,\n  \"penalty\": 4,\n  \"cost\": 4,\n  \"risk\": 3\n },\n {\n  \"id\": \"F6\",\n  \"name\": \"Family accounts\",\n  \"benefit\": 4,\n  \"penalty\": 2,\n  \"cost\": 3,\n  \"risk\": 2\n },\n {\n  \"id\": \"F7\",\n  \"name\": \"Doctor ratings\",\n  \"benefit\": 3,\n  \"penalty\": 1,\n  \"cost\": 2,\n  \"risk\": 5\n },\n {\n  \"id\": \"F8\",\n  \"name\": \"Insurance e-claims\",\n  \"benefit\": 6,\n  \"penalty\": 7,\n  \"cost\": 7,\n  \"risk\": 7\n }\n];\nconst WEIGHTS = {\"benefit\":2,\"penalty\":1,\"cost\":1,\"risk\":0.5};\n"
+        },
+        {
+          "name": "answers/priority-table.js",
+          "language": "javascript",
+          "code": "// A–C. Wiegers Table 16-1 as a function.\nfunction priorityTable(features, weights) {\n  // TODO: { rows: [{ id, value, valuePct, costPct, riskPct, priority }], invalid: [ids] }\n  return { rows: [], invalid: [] };\n}\n"
+        },
+        {
+          "name": "answers/plan-release.js",
+          "language": "javascript",
+          "code": "// D. Musts first, then by priority while the cost fits.\nfunction planRelease(features, weights, capacity, musts) {\n  // TODO: { ok, release, used, slack }\n  return { ok: false, release: [], used: 0, slack: capacity };\n}\n"
+        },
+        {
+          "name": "answers/sensitivity.js",
+          "language": "javascript",
+          "code": "// E. How does the ranking react when one weight changes?\nfunction sensitivity(features, weights, field, values) {\n  // TODO: { rankings: { '<value>': [ids] }, stableTop3 }\n  return { rankings: {}, stableTop3: false };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers/sample-data.js",
+          "language": "javascript",
+          "code": "// Sample data (read-only). The grader also uses hidden feature lists.\nconst FEATURES = [\n {\n  \"id\": \"F1\",\n  \"name\": \"Online booking\",\n  \"benefit\": 9,\n  \"penalty\": 9,\n  \"cost\": 6,\n  \"risk\": 4\n },\n {\n  \"id\": \"F2\",\n  \"name\": \"SMS reminders\",\n  \"benefit\": 6,\n  \"penalty\": 5,\n  \"cost\": 2,\n  \"risk\": 1\n },\n {\n  \"id\": \"F3\",\n  \"name\": \"Video consultation\",\n  \"benefit\": 7,\n  \"penalty\": 3,\n  \"cost\": 9,\n  \"risk\": 8\n },\n {\n  \"id\": \"F4\",\n  \"name\": \"Online payment\",\n  \"benefit\": 7,\n  \"penalty\": 6,\n  \"cost\": 5,\n  \"risk\": 6\n },\n {\n  \"id\": \"F5\",\n  \"name\": \"Lab results portal\",\n  \"benefit\": 8,\n  \"penalty\": 4,\n  \"cost\": 4,\n  \"risk\": 3\n },\n {\n  \"id\": \"F6\",\n  \"name\": \"Family accounts\",\n  \"benefit\": 4,\n  \"penalty\": 2,\n  \"cost\": 3,\n  \"risk\": 2\n },\n {\n  \"id\": \"F7\",\n  \"name\": \"Doctor ratings\",\n  \"benefit\": 3,\n  \"penalty\": 1,\n  \"cost\": 2,\n  \"risk\": 5\n },\n {\n  \"id\": \"F8\",\n  \"name\": \"Insurance e-claims\",\n  \"benefit\": 6,\n  \"penalty\": 7,\n  \"cost\": 7,\n  \"risk\": 7\n }\n];\nconst WEIGHTS = {\"benefit\":2,\"penalty\":1,\"cost\":1,\"risk\":0.5};\n"
+        },
+        {
+          "name": "answers/priority-table.js",
+          "language": "javascript",
+          "code": "function __hopLe(f) {\n  return ['benefit', 'penalty', 'cost', 'risk'].every(function (k) { var v = f[k]; return typeof v === 'number' && v >= 1 && v <= 9 && Math.floor(v) === v; });\n}\nfunction __r(x, n) { var m = Math.pow(10, n); return Math.round(x * m) / m; }\n\nfunction priorityTable(features, weights) {\n  var ok = [], invalid = [];\n  features.forEach(function (f) { (__hopLe(f) ? ok : invalid).push(f); });\n  var vals = ok.map(function (f) { return weights.benefit * f.benefit + weights.penalty * f.penalty; });\n  var tv = vals.reduce(function (s, x) { return s + x; }, 0);\n  var tc = ok.reduce(function (s, f) { return s + f.cost; }, 0);\n  var tr = ok.reduce(function (s, f) { return s + f.risk; }, 0);\n  var rows = ok.map(function (f, i) {\n    var vp = tv ? vals[i] / tv * 100 : 0, cp = tc ? f.cost / tc * 100 : 0, rp = tr ? f.risk / tr * 100 : 0;\n    var den = cp * weights.cost + rp * weights.risk;\n    return { id: f.id, value: vals[i], valuePct: __r(vp, 2), costPct: __r(cp, 2), riskPct: __r(rp, 2), priority: __r(den ? vp / den : 0, 3), __p: den ? vp / den : 0 };\n  });\n  rows.sort(function (a, b) { return b.__p - a.__p || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0); });\n  rows.forEach(function (r) { delete r.__p; });\n  return { rows: rows, invalid: invalid.map(function (f) { return f.id; }).sort() };\n}\n"
+        },
+        {
+          "name": "answers/plan-release.js",
+          "language": "javascript",
+          "code": "function planRelease(features, weights, capacity, musts) {\n  var t = priorityTable(features, weights);\n  var cost = {};\n  features.forEach(function (f) { cost['#' + f.id] = f.cost; });\n  var known = t.rows.map(function (r) { return r.id; });\n  var mustIds = known.filter(function (id) { return (musts || []).indexOf(id) >= 0; });\n  var used = mustIds.reduce(function (s, id) { return s + cost['#' + id]; }, 0);\n  if (used > capacity) return { ok: false, release: mustIds, used: used, slack: capacity - used };\n  var release = mustIds.slice();\n  known.forEach(function (id) {\n    if (release.indexOf(id) >= 0) return;\n    if (used + cost['#' + id] <= capacity) { release.push(id); used += cost['#' + id]; }\n  });\n  return { ok: true, release: release, used: used, slack: capacity - used };\n}\n"
+        },
+        {
+          "name": "answers/sensitivity.js",
+          "language": "javascript",
+          "code": "function sensitivity(features, weights, field, values) {\n  var rankings = {}, tops = [];\n  values.forEach(function (v) {\n    var w = {}; Object.keys(weights).forEach(function (k) { w[k] = weights[k]; });\n    w[field] = v;\n    var ids = priorityTable(features, w).rows.map(function (r) { return r.id; });\n    rankings[String(v)] = ids;\n    tops.push(ids.slice(0, 3).join(','));\n  });\n  return { rankings: rankings, stableTop3: tops.every(function (x) { return x === tops[0]; }) };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the answer files. On the sample, F2 (SMS reminders) and F5 (lab results portal) lead: modest value but cheap and low-risk; F1 (online booking) has the highest value but is expensive. With capacity 20 and Musts F1 and F4 (11 points), the engine adds F2, F5 and F6 in ranking order while they fit. The sensitivity check shows whether the top three survive a change of the risk weight — if not, the team must discuss risk explicitly before committing.</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham chiếu ở các tệp đáp án. Trên mẫu, F2 (nhắc lịch SMS) và F5 (cổng kết quả xét nghiệm) dẫn đầu: value vừa phải nhưng rẻ và ít rủi ro; F1 value cao nhất nhưng tốn kém. Năng lực 20 với Must F1, F4 (11 điểm), động cơ thêm F2, F5, F6 theo xếp hạng khi còn vừa. Phân tích độ nhạy cho biết top 3 có giữ nguyên khi đổi trọng số rủi ro không — nếu không, đội phải bàn rõ về rủi ro trước khi chốt.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "answers/sample-data.js",
+          "answers/priority-table.js",
+          "answers/plan-release.js",
+          "answers/sensitivity.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "priorityTable: hand-checked two-feature table",
+              "vi": "priorityTable: bảng hai tính năng tính tay"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var e;try{e=priorityTable([{id:\"A\",benefit:2,penalty:1,cost:1,risk:1},{id:\"B\",benefit:1,penalty:1,cost:1,risk:1}],{benefit:2,penalty:1,cost:1,risk:.5})}catch(i){return(i&&i.name===\"ReferenceError\"?\"missing: \":\"error: \")+(i&&i.message)}var t=JSON.stringify(e===void 0?null:e),r='{\"rows\":[{\"id\":\"A\",\"value\":5,\"valuePct\":62.5,\"costPct\":50,\"riskPct\":50,\"priority\":0.833},{\"id\":\"B\",\"value\":3,\"valuePct\":37.5,\"costPct\":50,\"riskPct\":50,\"priority\":0.5}],\"invalid\":[]}';return t===r?\"OK\":'expected {\"rows\":[{\"id\":\"A\",\"value\":5,\"valuePct\":62.5,\"costPct\":50,\"riskPct\":50,\"priority\":0.833},{\"id\":\"B\",\"value\":3,\"valuePct\":37.5,\"costPct\":50,\"riskPct\":50,\"priority\":0.5}],\"invalid\":[]}, got '+(t.length>220?t.slice(0,220)+\"\\u2026\":t)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "priorityTable: value and percentages on the ClinicCare sample",
+              "vi": "priorityTable: value và phần trăm trên mẫu ClinicCare"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var r;try{r=priorityTable(FEATURES,WEIGHTS).rows.map(function(e){return[e.id,e.value,e.valuePct,e.costPct,e.riskPct]}).sort()}catch(e){return(e&&e.name===\"ReferenceError\"?\"missing: \":\"error: \")+(e&&e.message)}var t=JSON.stringify(r===void 0?null:r),n='[[\"F1\",27,19.71,15.79,11.11],[\"F2\",17,12.41,5.26,2.78],[\"F3\",17,12.41,23.68,22.22],[\"F4\",20,14.6,13.16,16.67],[\"F5\",20,14.6,10.53,8.33],[\"F6\",10,7.3,7.89,5.56],[\"F7\",7,5.11,5.26,13.89],[\"F8\",19,13.87,18.42,19.44]]';return t===n?\"OK\":'value = 2\\xB7benefit + 1\\xB7penalty; each % uses the totals of the valid features \\u2014 expected [[\"F1\",27,19.71,15.79,11.11],[\"F2\",17,12.41,5.26,2.78],[\"F3\",17,12.41,23.68,22.22],[\"F4\",20,14.6,13.16,16.67],[\"F5\",20,14.6,10.53,8.33],[\"F6\",10,7.3,7.89,5.56],[\"F7\",7,5.11,5.26,13.89],[\"F8\",19,13.87,18.42,19.44]], got '+(t.length>220?t.slice(0,220)+\"\\u2026\":t)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "priorityTable: priorities on the sample",
+              "vi": "priorityTable: priority trên mẫu"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var n;try{n=priorityTable(FEATURES,WEIGHTS).rows.map(function(r){return[r.id,r.priority]}).sort()}catch(r){return(r&&r.name===\"ReferenceError\"?\"missing: \":\"error: \")+(r&&r.message)}var e=JSON.stringify(n===void 0?null:n),t='[[\"F1\",0.923],[\"F2\",1.865],[\"F3\",0.357],[\"F4\",0.679],[\"F5\",0.994],[\"F6\",0.684],[\"F7\",0.419],[\"F8\",0.493]]';return e===t?\"OK\":'priority = value% \\xF7 (cost%\\xB7cost weight + risk%\\xB7risk weight), computed from unrounded percentages \\u2014 expected [[\"F1\",0.923],[\"F2\",1.865],[\"F3\",0.357],[\"F4\",0.679],[\"F5\",0.994],[\"F6\",0.684],[\"F7\",0.419],[\"F8\",0.493]], got '+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "priorityTable: ranking order on the sample",
+              "vi": "priorityTable: thứ tự xếp hạng trên mẫu"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var n;try{n=priorityTable(FEATURES,WEIGHTS).rows.map(function(r){return r.id})}catch(r){return(r&&r.name===\"ReferenceError\"?\"missing: \":\"error: \")+(r&&r.message)}var e=JSON.stringify(n===void 0?null:n),F='[\"F2\",\"F5\",\"F1\",\"F6\",\"F4\",\"F8\",\"F7\",\"F3\"]';return e===F?\"OK\":'expected [\"F2\",\"F5\",\"F1\",\"F6\",\"F4\",\"F8\",\"F7\",\"F3\"], got '+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "priorityTable (hidden): ties broken by id",
+              "vi": "priorityTable (ẩn): hoà thì theo id"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var r;try{r=priorityTable([{id:\"K2\",benefit:4,penalty:2,cost:3,risk:3},{id:\"K1\",benefit:4,penalty:2,cost:3,risk:3},{id:\"K3\",benefit:1,penalty:1,cost:1,risk:1}],{benefit:2,penalty:1,cost:1,risk:.5}).rows.map(function(e){return e.id})}catch(e){return(e&&e.name===\"ReferenceError\"?\"missing: \":\"error: \")+(e&&e.message)}var n=JSON.stringify(r===void 0?null:r),t='[\"K1\",\"K2\",\"K3\"]';return n===t?\"OK\":\"got \"+(n.length>220?n.slice(0,220)+\"\\u2026\":n)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "priorityTable: invalid scores are excluded from the totals",
+              "vi": "priorityTable: điểm sai bị loại khỏi tổng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var i;try{i=priorityTable([{id:\"F1\",name:\"Online booking\",benefit:9,penalty:9,cost:6,risk:4},{id:\"F2\",name:\"SMS reminders\",benefit:6,penalty:5,cost:2,risk:1},{id:\"F3\",name:\"Video consultation\",benefit:7,penalty:3,cost:9,risk:8},{id:\"F4\",name:\"Online payment\",benefit:7,penalty:6,cost:5,risk:6},{id:\"X1\",benefit:10,penalty:1,cost:1,risk:1},{id:\"X2\",benefit:5,penalty:2.5,cost:3,risk:3},{id:\"X0\",benefit:5,penalty:2,cost:0,risk:3}],{benefit:2,penalty:1,cost:1,risk:.5}).invalid}catch(n){return(n&&n.name===\"ReferenceError\"?\"missing: \":\"error: \")+(n&&n.message)}var e=JSON.stringify(i===void 0?null:i),t='[\"X0\",\"X1\",\"X2\"]';return e===t?\"OK\":'expected [\"X0\",\"X1\",\"X2\"], got '+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "priorityTable (hidden): totals ignore invalid features",
+              "vi": "priorityTable (ẩn): tổng bỏ qua tính năng sai"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var i;try{i=priorityTable([{id:\"F1\",name:\"Online booking\",benefit:9,penalty:9,cost:6,risk:4},{id:\"F2\",name:\"SMS reminders\",benefit:6,penalty:5,cost:2,risk:1},{id:\"F3\",name:\"Video consultation\",benefit:7,penalty:3,cost:9,risk:8},{id:\"F4\",name:\"Online payment\",benefit:7,penalty:6,cost:5,risk:6},{id:\"X1\",benefit:10,penalty:1,cost:1,risk:1},{id:\"X2\",benefit:5,penalty:2.5,cost:3,risk:3},{id:\"X0\",benefit:5,penalty:2,cost:0,risk:3}],{benefit:2,penalty:1,cost:1,risk:.5}).rows}catch(t){return(t&&t.name===\"ReferenceError\"?\"missing: \":\"error: \")+(t&&t.message)}var e=JSON.stringify(i===void 0?null:i),n='[{\"id\":\"F2\",\"value\":17,\"valuePct\":20.99,\"costPct\":9.09,\"riskPct\":5.26,\"priority\":1.79},{\"id\":\"F1\",\"value\":27,\"valuePct\":33.33,\"costPct\":27.27,\"riskPct\":21.05,\"priority\":0.882},{\"id\":\"F4\",\"value\":20,\"valuePct\":24.69,\"costPct\":22.73,\"riskPct\":31.58,\"priority\":0.641},{\"id\":\"F3\",\"value\":17,\"valuePct\":20.99,\"costPct\":40.91,\"riskPct\":42.11,\"priority\":0.339}]';return e===n?\"OK\":\"got \"+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "planRelease: capacity 20 with Musts F1 and F4",
+              "vi": "planRelease: năng lực 20, Must F1 và F4"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var n;try{n=planRelease(FEATURES,WEIGHTS,20,[\"F1\",\"F4\"])}catch(r){return(r&&r.name===\"ReferenceError\"?\"missing: \":\"error: \")+(r&&r.message)}var e=JSON.stringify(n===void 0?null:n),s='{\"ok\":true,\"release\":[\"F1\",\"F4\",\"F2\",\"F5\",\"F6\"],\"used\":20,\"slack\":0}';return e===s?\"OK\":'expected {\"ok\":true,\"release\":[\"F1\",\"F4\",\"F2\",\"F5\",\"F6\"],\"used\":20,\"slack\":0}, got '+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "planRelease: Musts that do not fit ⇒ ok = false",
+              "vi": "planRelease: Must không vừa ⇒ ok = false"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var n;try{n=planRelease(FEATURES,WEIGHTS,10,[\"F1\",\"F3\"])}catch(r){return(r&&r.name===\"ReferenceError\"?\"missing: \":\"error: \")+(r&&r.message)}var e=JSON.stringify(n===void 0?null:n),s='{\"ok\":false,\"release\":[\"F1\",\"F3\"],\"used\":15,\"slack\":-5}';return e===s?\"OK\":'expected {\"ok\":false,\"release\":[\"F1\",\"F3\"],\"used\":15,\"slack\":-5}, got '+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "planRelease (hidden): no Musts, skip what does not fit and keep going",
+              "vi": "planRelease (ẩn): không Must, bỏ mục không vừa và xét tiếp"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var n;try{n=planRelease(FEATURES,WEIGHTS,9,[])}catch(r){return(r&&r.name===\"ReferenceError\"?\"missing: \":\"error: \")+(r&&r.message)}var e=JSON.stringify(n===void 0?null:n),a='{\"ok\":true,\"release\":[\"F2\",\"F5\",\"F6\"],\"used\":9,\"slack\":0}';return e===a?\"OK\":\"got \"+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "planRelease (hidden): unknown Must ids are ignored",
+              "vi": "planRelease (ẩn): id Must lạ bị bỏ qua"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var n;try{n=planRelease(FEATURES,WEIGHTS,12,[\"F9\",\"F2\"])}catch(r){return(r&&r.name===\"ReferenceError\"?\"missing: \":\"error: \")+(r&&r.message)}var e=JSON.stringify(n===void 0?null:n),a='{\"ok\":true,\"release\":[\"F2\",\"F5\",\"F1\"],\"used\":12,\"slack\":0}';return e===a?\"OK\":\"got \"+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "sensitivity: risk weight 0, 0.5, 1",
+              "vi": "sensitivity: trọng số risk 0, 0.5, 1"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var r;try{r=sensitivity(FEATURES,WEIGHTS,\"risk\",[0,.5,1])}catch(e){return(e&&e.name===\"ReferenceError\"?\"missing: \":\"error: \")+(e&&e.message)}var F=JSON.stringify(r===void 0?null:r),n='{\"rankings\":{\"0\":[\"F2\",\"F5\",\"F1\",\"F4\",\"F7\",\"F6\",\"F8\",\"F3\"],\"1\":[\"F2\",\"F5\",\"F1\",\"F6\",\"F4\",\"F8\",\"F3\",\"F7\"],\"0.5\":[\"F2\",\"F5\",\"F1\",\"F6\",\"F4\",\"F8\",\"F7\",\"F3\"]},\"stableTop3\":true}';return F===n?\"OK\":'expected {\"rankings\":{\"0\":[\"F2\",\"F5\",\"F1\",\"F4\",\"F7\",\"F6\",\"F8\",\"F3\"],\"1\":[\"F2\",\"F5\",\"F1\",\"F6\",\"F4\",\"F8\",\"F3\",\"F7\"],\"0.5\":[\"F2\",\"F5\",\"F1\",\"F6\",\"F4\",\"F8\",\"F7\",\"F3\"]},\"stableTop3\":true}, got '+(F.length>220?F.slice(0,220)+\"\\u2026\":F)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f5"
+          },
+          {
+            "moTa": {
+              "en": "sensitivity (hidden): benefit weight 1 vs 3",
+              "vi": "sensitivity (ẩn): trọng số benefit 1 vs 3"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var r;try{r=sensitivity(FEATURES,WEIGHTS,\"benefit\",[1,3])}catch(n){return(n&&n.name===\"ReferenceError\"?\"missing: \":\"error: \")+(n&&n.message)}var e=JSON.stringify(r===void 0?null:r),F='{\"rankings\":{\"1\":[\"F2\",\"F1\",\"F5\",\"F4\",\"F6\",\"F8\",\"F7\",\"F3\"],\"3\":[\"F2\",\"F5\",\"F1\",\"F6\",\"F4\",\"F8\",\"F7\",\"F3\"]},\"stableTop3\":false}';return e===F?\"OK\":\"got \"+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f5",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "sensitivity does not change the weights object",
+              "vi": "sensitivity không sửa object trọng số"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var r;try{r=(function(){var e={benefit:2,penalty:1,cost:1,risk:.5};return sensitivity(FEATURES,e,\"cost\",[3]),e})()}catch(e){return(e&&e.name===\"ReferenceError\"?\"missing: \":\"error: \")+(e&&e.message)}var n=JSON.stringify(r===void 0?null:r),t='{\"benefit\":2,\"penalty\":1,\"cost\":1,\"risk\":0.5}';return n===t?\"OK\":'expected {\"benefit\":2,\"penalty\":1,\"cost\":1,\"risk\":0.5}, got '+(n.length>220?n.slice(0,220)+\"\\u2026\":n)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f6"
+          },
+          {
+            "moTa": {
+              "en": "empty list ⇒ empty table and empty release",
+              "vi": "danh sách rỗng ⇒ bảng rỗng, bản phát hành rỗng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var n;try{n=[priorityTable([],WEIGHTS),planRelease([],WEIGHTS,5,[])]}catch(r){return(r&&r.name===\"ReferenceError\"?\"missing: \":\"error: \")+(r&&r.message)}var e=JSON.stringify(n===void 0?null:n),a='[{\"rows\":[],\"invalid\":[]},{\"ok\":true,\"release\":[],\"used\":0,\"slack\":5}]';return e===a?\"OK\":'expected [{\"rows\":[],\"invalid\":[]},{\"ok\":true,\"release\":[],\"used\":0,\"slack\":5}], got '+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f6"
+          },
+          {
+            "moTa": {
+              "en": "hidden: input features are not modified",
+              "vi": "ẩn: không sửa danh sách tính năng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var n;try{n=(function(){var r=JSON.stringify(FEATURES);return priorityTable(FEATURES,WEIGHTS),planRelease(FEATURES,WEIGHTS,20,[\"F1\"]),r===JSON.stringify(FEATURES)})()}catch(r){return(r&&r.name===\"ReferenceError\"?\"missing: \":\"error: \")+(r&&r.message)}var e=JSON.stringify(n===void 0?null:n),i=\"true\";return e===i?\"OK\":\"got \"+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f6",
+            "an": true
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. A. Value and %",
+            "diem": 2
+          },
+          {
+            "ma": "f2",
+            "ten": "2. B. Priority and ranking",
+            "diem": 2
+          },
+          {
+            "ma": "f3",
+            "ten": "3. C. Invalid scores",
+            "diem": 1
+          },
+          {
+            "ma": "f4",
+            "ten": "4. D. planRelease",
+            "diem": 2.5
+          },
+          {
+            "ma": "f5",
+            "ten": "5. E. sensitivity",
+            "diem": 1.5
+          },
+          {
+            "ma": "f6",
+            "ten": "6. F. Robustness",
+            "diem": 1
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "deep-lab",
+      "mistakesJson": [
+        {
+          "loi": "Tính tổng cost/risk cả tính năng sai."
+        },
+        {
+          "loi": "Dùng giá trị đã làm tròn để sắp."
+        },
+        {
+          "loi": "Đưa id Must lạ vào release."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "value / cost / risk prioritization",
+          "vi": "xếp ưu tiên kiểu Wiegers: priority = value% ÷ (cost% × trọng số + risk% × trọng số)"
+        },
+        {
+          "en": "MoSCoW",
+          "vi": "Must / Should / Could / Won’t (this time) — thang ưu tiên"
+        },
+        {
+          "en": "sensitivity analysis",
+          "vi": "phân tích độ nhạy — kết quả đổi thế nào khi một tham số đổi"
+        }
+      ]
+    }
+  ]
+}

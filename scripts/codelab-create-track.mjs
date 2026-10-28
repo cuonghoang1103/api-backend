@@ -36,6 +36,10 @@ function slugify(text) {
 }
 
 const def = JSON.parse(fs.readFileSync(FILE, 'utf8'));
+// CodeLevel chỉ có BEGINNER/INTERMEDIATE/ADVANCED. Bộ luyện 28/10 khai nhầm độ khó đề (EASY/MEDIUM/HARD) cho module
+// ⇒ Prisma ném giữa chừng, các module sau không được tạo (deploy 42). Quy đổi thay vì chết.
+const CAP = { EASY: 'BEGINNER', MEDIUM: 'INTERMEDIATE', HARD: 'ADVANCED', EXPERT: 'ADVANCED' };
+const capDo = (x) => { const v = String(x || 'BEGINNER').toUpperCase(); return CAP[v] || (['BEGINNER', 'INTERMEDIATE', 'ADVANCED'].includes(v) ? v : 'BEGINNER'); };
 const tSlug = def.slug || slugify(def.name);
 console.log(`── create-track ${tSlug} : ${APPLY ? 'APPLY' : 'DRY'} ──`);
 
@@ -53,7 +57,7 @@ if (track) {
     data: {
       groupId: group.id, name: def.name, slug: tSlug, language: def.language,
       color: def.color || '#336791', docsUrl: def.docsUrl || null,
-      level: def.level || 'BEGINNER', sortOrder, status: def.status || 'DRAFT',
+      level: capDo(def.level), sortOrder, status: def.status || 'DRAFT',
       description: def.description || null,
     },
   });
@@ -73,9 +77,9 @@ if (track) {
     if (existing) { console.log(`    = module ${i}: ${m.name}`); continue; }
     mCreated++;
     const sortOrder = nextOrder++;
-    console.log(`    + module @${sortOrder}: ${m.name} [${m.level || 'BEGINNER'}]`);
+    console.log(`    + module @${sortOrder}: ${m.name} [${capDo(m.level)}]`);
     if (APPLY) await prisma.codeModule.create({
-      data: { trackId: track.id, name: m.name, slug: mSlug, level: m.level || 'BEGINNER', sortOrder, description: m.description || null },
+      data: { trackId: track.id, name: m.name, slug: mSlug, level: capDo(m.level), sortOrder, description: m.description || null },
     });
   }
 }

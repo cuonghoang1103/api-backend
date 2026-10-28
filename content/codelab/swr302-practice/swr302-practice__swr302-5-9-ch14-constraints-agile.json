@@ -457,6 +457,135 @@
           "vi": "câu chuyện người dùng — \"As a <role>, I want <goal> so that <benefit>\""
         }
       ]
+    },
+    {
+      "title": "Constraints 4 — where does the constraint come from?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "constraints"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Constraints restrict the developers’ options. They come from: <b>technology</b> (mandated languages, platforms, components), <b>standards and regulations</b>, the <b>organisation</b> (company policies, existing systems), or the <b>business</b> (budget, interoperability with partners, delivery dates). Classify the source.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ràng buộc đến từ công nghệ, chuẩn/quy định, tổ chức, hoặc nghiệp vụ.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Luật/nghị định/chuẩn ngành ⇒ standards and regulations.",
+        "Chính sách công ty ⇒ tổ chức."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Constraints 4 — where does the constraint come from?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Constraints 4 — where does the constraint come from? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Technology\n   - r1.k: Standards and regulations\n   - r2.k: Organisation\n   - r3.k: Business\n   - r4.k: Standards and regulations\n   Knowing the source tells you who can relax a constraint — often nobody, if it is a law.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Knowing the source tells you who can relax a constraint — often nobody, if it is a law.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Source",
+                "luaChon": [
+                  "Technology",
+                  "Standards and regulations",
+                  "Organisation",
+                  "Business"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Must be written in Java 21 to reuse the company’s libraries."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Health data must follow the Ministry of Health’s HL7 FHIR profile."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "All apps must use the corporate single sign-on."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "The partner pharmacy chain only accepts orders through its existing EDI format."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Personal data must stay on servers in Vietnam (Decree 13)."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Technology",
+              "r1.k": "Standards and regulations",
+              "r2.k": "Organisation",
+              "r3.k": "Business",
+              "r4.k": "Standards and regulations"
+            },
+            "giaiThich": "<p><p>Knowing the source tells you who can relax a constraint — often nobody, if it is a law.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Coi luật là ràng buộc công nghệ."
+        },
+        {
+          "loi": "Coi chính sách SSO là quality attribute."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "design / implementation constraint",
+          "vi": "ràng buộc thiết kế/hiện thực — giới hạn lựa chọn của đội phát triển (ngôn ngữ, nền tảng, chuẩn)"
+        }
+      ]
     }
   ]
 }

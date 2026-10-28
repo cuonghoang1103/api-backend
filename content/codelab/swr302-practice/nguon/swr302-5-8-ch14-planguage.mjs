@@ -97,9 +97,24 @@ const E3 = baiJs({
   boYeu: [{ ten: 'GOAL 100% + so chuỗi', tep: { 'planguage.js': "const PL={TAG:'Avail',AMBITION:'Always up',SCALE:'uptime',METER:'we check',GOAL:'100%',STRETCH:'100%'};\nfunction meets(pl,m){ return String(m)+'%'===pl.STRETCH?'stretch':String(m)+'%'===pl.GOAL?'goal':'fail'; }\n" } }],
 });
 
+const E4 = tracNghiem({
+  tieuDe: 'Planguage 4 — trade-offs between quality attributes',
+  doKho: 'MEDIUM', phut: 5,
+  moTa: { en: '<p>Quality attributes interact (Wiegers Figure 14-2): improving one may help or hurt others. Planguage targets (GOAL/STRETCH) must be set with these trade-offs in mind, and stakeholders must agree which attribute wins in a conflict.</p>', vi: '<p>Các thuộc tính chất lượng tác động lẫn nhau; đặt mục tiêu Planguage phải tính tới đánh đổi.</p>' },
+  cau: [
+    { en: 'Raising the security GOAL (encryption everywhere, 2-factor login) usually affects…', vi: 'Nâng GOAL bảo mật (mã hoá mọi nơi, đăng nhập 2 lớp) thường ảnh hưởng…', lc: [['a', 'performance and usability negatively'], ['b', 'nothing'], ['c', 'portability positively'], ['d', 'only the price']], dap: 'a', giai: ['Classic trade-off.', 'Đánh đổi kinh điển.'] },
+    { en: 'Increasing robustness (more input checking and recovery) tends to…', vi: 'Tăng độ bền (kiểm đầu vào, phục hồi nhiều hơn) có xu hướng…', lc: [['a', 'help reliability and availability, but cost some efficiency'], ['b', 'reduce reliability'], ['c', 'have no effect'], ['d', 'reduce safety']], dap: 'a', giai: ['Positive and negative effects.', 'Có tác động tốt và xấu.'] },
+  ],
+  goiY: ['Bảo mật ↔ hiệu năng, khả dụng.', 'Bền ⇒ tin cậy, sẵn sàng tốt hơn, tốn hiệu suất.'],
+  loiHayGap: ['Đặt GOAL cao cho mọi thuộc tính cùng lúc.', 'Không thống nhất thuộc tính nào thắng.'],
+  giaiThich: '<p>Answers: a · a.</p>',
+  thuatNgu: tn('qualityAttr', 'planguage'),
+  khaiNiem: ['quality trade-offs'],
+});
+
 export default moDun({
   slug: 'swr302-5-8-ch14-planguage',
-  ten: '5.7 Specifying quality requirements with Planguage',
+  ten: '5.8 Specifying quality requirements with Planguage',
   moTaModule: 'Từ khoá Planguage (TAG, AMBITION, SCALE, METER, GOAL, STRETCH, WISH, PAST, DEFINED), đọc yêu cầu Planguage để quyết định đạt/không, tự viết yêu cầu sẵn sàng bằng Planguage và hàm kiểm mức đạt.',
-  de: [E1, E2, E3],
+  de: [E1, E2, E3, E4],
 });

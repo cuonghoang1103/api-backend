@@ -474,6 +474,126 @@
           "vi": "mơ hồ — hiểu được nhiều cách"
         }
       ]
+    },
+    {
+      "title": "Review tips 4 — informal or formal review?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "review types"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Informal reviews (peer desk-check, pass-around, walkthrough) are quick and cheap; the inspection is the most formal, with roles, entry/exit criteria and recorded data, and finds the most defects. Choose the more suitable review for each situation.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Review không chính thức nhanh, rẻ; inspection chính thức nhất, tìm nhiều lỗi nhất. Chọn loại phù hợp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Rủi ro cao, sắp baseline ⇒ inspection.",
+        "Phản hồi sớm, nhanh ⇒ không chính thức."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Review tips 4 — informal or formal review?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Review tips 4 — informal or formal review? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Informal review\n   - r1.k: Inspection\n   - r2.k: Informal review\n   - r3.k: Inspection\n   Match the rigour to the risk: inspect what is critical; use light reviews early and often for everything else.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Match the rigour to the risk: inspect what is critical; use light reviews early and often for everything else.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Review",
+                "luaChon": [
+                  "Informal review",
+                  "Inspection"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "A colleague glances at two new user stories before sprint planning."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "The safety requirements of an insulin pump before certification."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The BA walks three users through a draft use case to get early feedback."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "The payment and refund section of a banking SRS that will be baselined in a fixed-price contract."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Informal review",
+              "r1.k": "Inspection",
+              "r2.k": "Informal review",
+              "r3.k": "Inspection"
+            },
+            "giaiThich": "<p><p>Match the rigour to the risk: inspect what is critical; use light reviews early and often for everything else.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Inspection mọi story nhỏ."
+        },
+        {
+          "loi": "Chỉ review lướt yêu cầu an toàn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "inspection",
+          "vi": "thanh tra — loại review hình thức nhất, có vai trò và quy trình"
+        }
+      ]
     }
   ]
 }

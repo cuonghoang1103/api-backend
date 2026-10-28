@@ -96,9 +96,24 @@ const E3 = baiJs({
   boYeu: [{ ten: 'không kiểm loại đích', tep: { 'check.js': "function check(items){ var ids={}; items.forEach(function(x){ids[x.id]=1;}); var o=[],u=[],c=[],b=[]; items.forEach(function(x){ (x.from||[]).forEach(function(t){ if(!ids[t]) b.push(x.id+'->'+t); }); if(x.type==='FR'){ if(!(x.from||[]).length) o.push(x.id); if(!items.some(function(y){return y.type==='TC'&&(y.from||[]).indexOf(x.id)>=0;})) u.push(x.id);} if(x.type==='UR'&&!items.some(function(y){return (y.from||[]).indexOf(x.id)>=0;})) c.push(x.id); }); return {orphanFR:o.sort(),untestedFR:u.sort(),uncoveredUR:c.sort(),brokenLinks:b.sort()}; }\n" } }],
 });
 
+const E4 = tracNghiem({
+  tieuDe: 'Traceability 4 — reading an RTM row',
+  doKho: 'MEDIUM', phut: 5,
+  moTa: { en: '<p>RTM row (Table 29-1 style): <b>UC-28</b> · <b>FR-28.1</b> · design: class CatalogQuery · code: catalog.query() · tests: <i>(none)</i>. Another row: — · <b>FR-31</b> · design: class ThemeManager · code: theme.apply() · tests: TC-90.</p>', vi: '<p>Đọc hai dòng RTM ở trên.</p>' },
+  cau: [
+    { en: 'What does the first row tell you?', vi: 'Dòng đầu cho biết gì?', lc: [['a', 'FR-28.1 is implemented but has no test — it may ship unverified'], ['b', 'Everything is complete'], ['c', 'FR-28.1 is gold plating'], ['d', 'UC-28 should be deleted']], dap: 'a', giai: ['Missing forward link to tests.', 'Thiếu liên kết xuôi tới test.'] },
+    { en: 'What does the second row suggest?', vi: 'Dòng thứ hai gợi ý gì?', lc: [['a', 'FR-31 has no use case or business requirement behind it — possible gold plating'], ['b', 'It is perfect'], ['c', 'TC-90 is missing'], ['d', 'The design is missing']], dap: 'a', giai: ['Missing backward link.', 'Thiếu liên kết ngược.'] },
+  ],
+  goiY: ['Ô test trống ⇒ chưa kiểm.', 'Ô nguồn trống ⇒ nghi mạ vàng.'],
+  loiHayGap: ['Bỏ qua ô trống.', 'Kết luận "đủ" khi còn ô trống.'],
+  giaiThich: '<p>Answers: a · a.</p>',
+  thuatNgu: tn('rtm', 'goldPlating'),
+  khaiNiem: ['reading an RTM'],
+});
+
 export default moDun({
   slug: 'swr302-7-2-traceability',
   ten: '7.2 Requirements traceability',
   moTaModule: 'Bốn hướng truy vết (Hình 29-1), lợi ích của truy vết, tự viết bộ kiểm RTM: FR mồ côi, FR chưa test, UR chưa phủ, liên kết gãy — chấm trên RTM ẩn.',
-  de: [E1, E2, E3],
+  de: [E1, E2, E3, E4],
 });

@@ -1,0 +1,482 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-7-8-ch29-rtm-procedure",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-7-8-ch29-rtm-procedure"
+  },
+  "exercises": [
+    {
+      "title": "RTM procedure 1 — the nine-step tracing procedure",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "tracing procedure"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers’ procedure for tracing requirements. Put the steps in order.</p><p>Drag the items into the right order; the explanation appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Quy trình truy vết yêu cầu của Wiegers. Sắp các bước đúng thứ tự.</p><p>Kéo các mục về đúng thứ tự; giải thích hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Bắt đầu bằng giáo dục đội.",
+        "Kết thúc bằng kiểm định kỳ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# RTM procedure 1 — the nine-step tracing procedure\n\nAnswer in the answer panel (no code needed).\n\n1. Order the stepsSắp các bước\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# RTM procedure 1 — the nine-step tracing procedure — answer key\n\n1. Order the stepsSắp các bước\n   Answer: a) Educate the team about tracing  →  b) Select the link relationships to define  →  c) Choose the matrix style and storage  →  d) Identify which parts of the product to trace  →  e) Identify who supplies each link type  →  f) Modify development procedures to update links  →  g) Define labeling conventions  →  h) Supply trace information as work is completed  →  i) Audit the trace information periodically\n   Decide what and how, assign who, then collect and audit.VI: Quyết định cái gì và thế nào, giao ai, rồi thu thập và kiểm.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>1 educate · 2 select links · 3 matrix style and storage · 4 what to trace · 5 who supplies · 6 update procedures · 7 labeling · 8 supply as you go · 9 audit.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Order the steps</p><p style=\"opacity:.75;font-size:.92em\"><i>Sắp các bước</i></p>",
+            "muc": [
+              {
+                "ma": "g",
+                "noiDung": "Define labeling conventions"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Choose the matrix style and storage"
+              },
+              {
+                "ma": "i",
+                "noiDung": "Audit the trace information periodically"
+              },
+              {
+                "ma": "a",
+                "noiDung": "Educate the team about tracing"
+              },
+              {
+                "ma": "e",
+                "noiDung": "Identify who supplies each link type"
+              },
+              {
+                "ma": "h",
+                "noiDung": "Supply trace information as work is completed"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Select the link relationships to define"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Identify which parts of the product to trace"
+              },
+              {
+                "ma": "f",
+                "noiDung": "Modify development procedures to update links"
+              }
+            ],
+            "dapAn": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e",
+              "f",
+              "g",
+              "h",
+              "i"
+            ],
+            "giaiThich": "<p>Decide what and how, assign who, then collect and audit.</p><p><i>VI: Quyết định cái gì và thế nào, giao ai, rồi thu thập và kiểm.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thu thập liên kết trước khi chọn kiểu liên kết."
+        },
+        {
+          "loi": "Bỏ bước kiểm định kỳ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "requirements traceability matrix (RTM)",
+          "vi": "ma trận truy vết yêu cầu — nối nguồn ↔ yêu cầu ↔ thiết kế ↔ mã ↔ test"
+        }
+      ]
+    },
+    {
+      "title": "RTM procedure 2 — link cardinality",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "link cardinality"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Trace links can be <b>one-to-one</b> (one design element → one code module), <b>one-to-many</b> (one requirement verified by several tests) or <b>many-to-many</b> (use cases ↔ functional requirements, some requirements shared by several use cases).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bản số của liên kết truy vết.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Một yêu cầu nhiều test ⇒ một-nhiều.",
+        "Chia sẻ hai chiều ⇒ nhiều-nhiều."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# RTM procedure 2 — link cardinality\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# RTM procedure 2 — link cardinality — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: One-to-many\n   - r1.k: Many-to-many\n   - r2.k: One-to-one\n   Many-to-many links are realistic but the hardest to maintain — tools help.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Many-to-many links are realistic but the hardest to maintain — tools help.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Cardinality",
+                "luaChon": [
+                  "One-to-one",
+                  "One-to-many",
+                  "Many-to-many"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "FR-12 is verified by TC-30, TC-31 and TC-32; each of them tests only FR-12."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Use cases UC-2 and UC-4 both need FR-5, and each use case needs several FRs."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Design class InvoicePrinter is implemented by exactly one file invoice-printer.ts and nothing else."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "One-to-many",
+              "r1.k": "Many-to-many",
+              "r2.k": "One-to-one"
+            },
+            "giaiThich": "<p><p>Many-to-many links are realistic but the hardest to maintain — tools help.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gọi FR dùng chung là một-nhiều."
+        },
+        {
+          "loi": "Nghĩ mọi liên kết là một-một."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "requirements traceability matrix (RTM)",
+          "vi": "ma trận truy vết yêu cầu — nối nguồn ↔ yêu cầu ↔ thiết kế ↔ mã ↔ test"
+        },
+        {
+          "en": "cardinality",
+          "vi": "bản số — một-một, một-nhiều, nhiều-nhiều (và tuỳ chọn 0 hay bắt buộc 1)"
+        }
+      ]
+    },
+    {
+      "title": "RTM procedure 3 — a pairwise matrix",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "traceability matrix"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Table 29-2 is a two-way matrix of use cases ↔ functional requirements. Write <code>function matrix(ucs, frs, links)</code> returning a 2-D array: one row per use case (in the order of <code>ucs</code>), one column per FR (order of <code>frs</code>), each cell <code>true</code> if the link exists. Then write <code>function shared(links)</code> returning the sorted FRs used by more than one use case, and <code>function emptyRows(ucs, links)</code> returning the use cases with no FR (in the order of <code>ucs</code>).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Links are [uc, fr] pairs; ignore duplicates.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>matrix</code> (ma trận UC × FR), <code>shared</code> (FR dùng bởi hơn một UC, sắp xếp) và <code>emptyRows</code> (UC không có FR).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Liên kết là cặp [uc, fr]; bỏ trùng.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "shared(LINKS)",
+          "output": "[\"FR-5\"]",
+          "explanation": "FR-5 is reused by UC-2 and UC-4.|||FR-5 được UC-2 và UC-4 dùng chung."
+        }
+      ],
+      "hintsJson": [
+        "Đếm số UC KHÁC NHAU cho mỗi FR.",
+        "Ma trận: map hàng theo ucs, cột theo frs."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "matrix.js",
+          "language": "javascript",
+          "code": "const LINKS = [[\"UC-1\",\"FR-1\"],[\"UC-1\",\"FR-2\"],[\"UC-2\",\"FR-3\"],[\"UC-2\",\"FR-5\"],[\"UC-4\",\"FR-5\"],[\"UC-4\",\"FR-6\"],[\"UC-3\",\"FR-9\"]];\nfunction matrix(ucs, frs, links) { return []; }\nfunction shared(links) { return []; }\nfunction emptyRows(ucs, links) { return []; }\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "matrix.js",
+          "language": "javascript",
+          "code": "const LINKS = [[\"UC-1\",\"FR-1\"],[\"UC-1\",\"FR-2\"],[\"UC-2\",\"FR-3\"],[\"UC-2\",\"FR-5\"],[\"UC-4\",\"FR-5\"],[\"UC-4\",\"FR-6\"],[\"UC-3\",\"FR-9\"]];\nfunction matrix(ucs, frs, links) {\n  return ucs.map(function (u) { return frs.map(function (f) { return links.some(function (l) { return l[0] === u && l[1] === f; }); }); });\n}\nfunction shared(links) {\n  var by = {};\n  links.forEach(function (l) { by['#' + l[1]] = by['#' + l[1]] || {}; by['#' + l[1]][l[0]] = true; });\n  return Object.keys(by).filter(function (k) { return Object.keys(by[k]).length > 1; }).map(function (k) { return k.slice(1); }).sort();\n}\nfunction emptyRows(ucs, links) {\n  return ucs.filter(function (u) { return !links.some(function (l) { return l[0] === u; }); });\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A pairwise matrix makes reuse (shared FR-5) and gaps (a use case with no functional requirement) visible at a glance.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "matrix.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "matrix for UC-1, UC-2 × FR-1, FR-3, FR-5",
+              "vi": "ma trận UC-1, UC-2 × FR-1, FR-3, FR-5"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof matrix!=\"function\")return\"matrix is not a function\";var t=matrix([\"UC-1\",\"UC-2\"],[\"FR-1\",\"FR-3\",\"FR-5\"],LINKS);return JSON.stringify(t)===\"[[true,false,false],[false,true,true]]\"?\"OK\":\"got \"+JSON.stringify(t)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "shared FRs",
+              "vi": "FR dùng chung"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof shared!=\"function\")return\"shared is not a function\";var n=shared(LINKS);return JSON.stringify(n)==='[\"FR-5\"]'?\"OK\":'expected [\"FR-5\"], got '+JSON.stringify(n)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "use cases without FRs",
+              "vi": "use case không có FR"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof emptyRows!=\"function\")return\"emptyRows is not a function\";var t=emptyRows([\"UC-1\",\"UC-2\",\"UC-5\",\"UC-3\"],LINKS);return JSON.stringify(t)==='[\"UC-5\"]'?\"OK\":'expected [\"UC-5\"], got '+JSON.stringify(t)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "hidden: duplicate links are not \"sharing\"",
+              "vi": "ẩn: liên kết trùng không phải \"dùng chung\""
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof shared!=\"function\")return\"shared is not a function\";var n=shared([[\"A\",\"F1\"],[\"A\",\"F1\"],[\"B\",\"F2\"],[\"C\",\"F2\"],[\"C\",\"F10\"]]);return JSON.stringify(n)==='[\"F2\"]'?\"OK\":'expected [\"F2\"], got '+JSON.stringify(n)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đếm liên kết trùng hai lần."
+        },
+        {
+          "loi": "Đảo hàng/cột."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "requirements traceability matrix (RTM)",
+          "vi": "ma trận truy vết yêu cầu — nối nguồn ↔ yêu cầu ↔ thiết kế ↔ mã ↔ test"
+        }
+      ]
+    },
+    {
+      "title": "RTM procedure 4 — storage and auditing",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "tracing procedure"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Store trace data in a text table, a spreadsheet or — much better — a requirements management tool. Start tracing with critical core functions, high-risk portions or high-maintenance areas. Audit periodically: if a requirement is \"implemented and verified\" yet its trace data is incomplete, the process is not working.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lưu dữ liệu truy vết; bắt đầu từ phần quan trọng; kiểm định kỳ.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Phần cốt lõi, rủi ro cao trước.",
+        "\"Verified\" mà không có liên kết test ⇒ quy trình hỏng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# RTM procedure 4 — storage and auditing\n\nAnswer in the answer panel (no code needed).\n\n1. Where should a team start tracing on a large legacy replacement?Dự án thay thế hệ thống cũ lớn nên bắt đầu truy vết ở đâu?\n2. An audit finds FR-20 marked \"verified\" but with no link to any test. This shows…Kiểm tra thấy FR-20 \"verified\" mà không có liên kết test nào. Điều này cho thấy…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# RTM procedure 4 — storage and auditing — answer key\n\n1. Where should a team start tracing on a large legacy replacement?Dự án thay thế hệ thống cũ lớn nên bắt đầu truy vết ở đâu?\n   Answer: a) Critical core functions, high-risk and high-maintenance parts\n   Start where tracing pays most.VI: Bắt đầu nơi truy vết có lợi nhất.\n\n2. An audit finds FR-20 marked \"verified\" but with no link to any test. This shows…Kiểm tra thấy FR-20 \"verified\" mà không có liên kết test nào. Điều này cho thấy…\n   Answer: b) the tracing process is not working and must be fixed\n   Audit signal.VI: Tín hiệu từ kiểm tra.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Where should a team start tracing on a large legacy replacement?</p><p style=\"opacity:.75;font-size:.92em\"><i>Dự án thay thế hệ thống cũ lớn nên bắt đầu truy vết ở đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Critical core functions, high-risk and high-maintenance parts"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The login page only"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Nowhere"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Everything at once"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Start where tracing pays most.</p><p><i>VI: Bắt đầu nơi truy vết có lợi nhất.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>An audit finds FR-20 marked \"verified\" but with no link to any test. This shows…</p><p style=\"opacity:.75;font-size:.92em\"><i>Kiểm tra thấy FR-20 \"verified\" mà không có liên kết test nào. Điều này cho thấy…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the tester is always wrong"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the tracing process is not working and must be fixed"
+              },
+              {
+                "ma": "c",
+                "noiDung": "everything is fine"
+              },
+              {
+                "ma": "d",
+                "noiDung": "FR-20 should be deleted"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Audit signal.</p><p><i>VI: Tín hiệu từ kiểm tra.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Truy vết mọi thứ ngay từ đầu."
+        },
+        {
+          "loi": "Bỏ qua kiểm định kỳ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "requirements traceability matrix (RTM)",
+          "vi": "ma trận truy vết yêu cầu — nối nguồn ↔ yêu cầu ↔ thiết kế ↔ mã ↔ test"
+        }
+      ]
+    }
+  ]
+}

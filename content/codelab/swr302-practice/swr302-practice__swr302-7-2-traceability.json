@@ -463,6 +463,131 @@
           "vi": "mạ vàng — dev tự thêm chức năng không ai yêu cầu"
         }
       ]
+    },
+    {
+      "title": "Traceability 4 — reading an RTM row",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "reading an RTM"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>RTM row (Table 29-1 style): <b>UC-28</b> · <b>FR-28.1</b> · design: class CatalogQuery · code: catalog.query() · tests: <i>(none)</i>. Another row: — · <b>FR-31</b> · design: class ThemeManager · code: theme.apply() · tests: TC-90.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đọc hai dòng RTM ở trên.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ô test trống ⇒ chưa kiểm.",
+        "Ô nguồn trống ⇒ nghi mạ vàng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Traceability 4 — reading an RTM row\n\nAnswer in the answer panel (no code needed).\n\n1. What does the first row tell you?Dòng đầu cho biết gì?\n2. What does the second row suggest?Dòng thứ hai gợi ý gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Traceability 4 — reading an RTM row — answer key\n\n1. What does the first row tell you?Dòng đầu cho biết gì?\n   Answer: a) FR-28.1 is implemented but has no test — it may ship unverified\n   Missing forward link to tests.VI: Thiếu liên kết xuôi tới test.\n\n2. What does the second row suggest?Dòng thứ hai gợi ý gì?\n   Answer: c) FR-31 has no use case or business requirement behind it — possible gold plating\n   Missing backward link.VI: Thiếu liên kết ngược.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · c.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>What does the first row tell you?</p><p style=\"opacity:.75;font-size:.92em\"><i>Dòng đầu cho biết gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "FR-28.1 is implemented but has no test — it may ship unverified"
+              },
+              {
+                "ma": "b",
+                "noiDung": "FR-28.1 is gold plating"
+              },
+              {
+                "ma": "c",
+                "noiDung": "UC-28 should be deleted"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Everything is complete"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Missing forward link to tests.</p><p><i>VI: Thiếu liên kết xuôi tới test.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>What does the second row suggest?</p><p style=\"opacity:.75;font-size:.92em\"><i>Dòng thứ hai gợi ý gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "TC-90 is missing"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The design is missing"
+              },
+              {
+                "ma": "c",
+                "noiDung": "FR-31 has no use case or business requirement behind it — possible gold plating"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It is perfect"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Missing backward link.</p><p><i>VI: Thiếu liên kết ngược.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Bỏ qua ô trống."
+        },
+        {
+          "loi": "Kết luận \"đủ\" khi còn ô trống."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "requirements traceability matrix (RTM)",
+          "vi": "ma trận truy vết yêu cầu — nối nguồn ↔ yêu cầu ↔ thiết kế ↔ mã ↔ test"
+        },
+        {
+          "en": "gold plating",
+          "vi": "mạ vàng — dev tự thêm chức năng không ai yêu cầu"
+        }
+      ]
     }
   ]
 }

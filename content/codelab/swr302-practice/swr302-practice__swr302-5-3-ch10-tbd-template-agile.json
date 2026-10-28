@@ -1,0 +1,555 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-5-3-ch10-tbd-template-agile",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-5-3-ch10-tbd-template-agile"
+  },
+  "exercises": [
+    {
+      "title": "TBD 1 — proceeding with TBDs",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "TBDs"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Resolve all TBDs before implementing a set of requirements: leftover uncertainty makes developers and testers guess (and they often guess rather than track down the originator). If you must proceed with TBDs, either <b>defer</b> those requirements or <b>design that part to be easily modifiable</b> when the TBD is resolved — and log each TBD as an issue with an owner.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Giải quyết TBD trước khi hiện thực; nếu buộc phải làm tiếp thì hoãn phần đó hoặc thiết kế phần đó dễ sửa khi TBD được giải.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Hoãn, hoặc thiết kế để dễ đổi.",
+        "TBD phải có người phụ trách và hạn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# TBD 1 — proceeding with TBDs\n\nAnswer in the answer panel (no code needed).\n\n1. The late fee is TBD but the sprint starts tomorrow. Best option?Phí trễ còn TBD nhưng sprint bắt đầu ngày mai. Phương án tốt nhất?\n2. Why are unresolved TBDs dangerous at implementation time?Vì sao TBD chưa giải nguy hiểm lúc hiện thực?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# TBD 1 — proceeding with TBDs — answer key\n\n1. The late fee is TBD but the sprint starts tomorrow. Best option?Phí trễ còn TBD nhưng sprint bắt đầu ngày mai. Phương án tốt nhất?\n   Answer: a) Build the late-fee calculation with the fee as a configurable value, and log the TBD with an owner and date\n   Design for easy change; track the TBD.VI: Thiết kế dễ đổi; theo dõi TBD.\n\n2. Why are unresolved TBDs dangerous at implementation time?Vì sao TBD chưa giải nguy hiểm lúc hiện thực?\n   Answer: a) Developers and testers will guess, often differently from what the customer wants\n   Guessing produces wrong behaviour.VI: Đoán ⇒ hành vi sai.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>The late fee is TBD but the sprint starts tomorrow. Best option?</p><p style=\"opacity:.75;font-size:.92em\"><i>Phí trễ còn TBD nhưng sprint bắt đầu ngày mai. Phương án tốt nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Build the late-fee calculation with the fee as a configurable value, and log the TBD with an owner and date"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Remove late fees forever"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Hard-code 10,000 VND and forget it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Let the developer guess a fee"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Design for easy change; track the TBD.</p><p><i>VI: Thiết kế dễ đổi; theo dõi TBD.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Why are unresolved TBDs dangerous at implementation time?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao TBD chưa giải nguy hiểm lúc hiện thực?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Developers and testers will guess, often differently from what the customer wants"
+              },
+              {
+                "ma": "b",
+                "noiDung": "They slow the compiler"
+              },
+              {
+                "ma": "c",
+                "noiDung": "They are not dangerous"
+              },
+              {
+                "ma": "d",
+                "noiDung": "They make the SRS longer"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Guessing produces wrong behaviour.</p><p><i>VI: Đoán ⇒ hành vi sai.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Để dev đoán giá trị."
+        },
+        {
+          "loi": "Hard-code giá trị tạm rồi quên."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "TBD (to be determined)",
+          "vi": "chỗ chưa quyết, đánh dấu để theo dõi tới khi đóng"
+        }
+      ]
+    },
+    {
+      "title": "TBD 2 — screens in the SRS: benefit or risk?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "UI in the SRS"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Putting UI designs in the SRS has trade-offs. Benefits: mock-ups and wireframes make requirements tangible. Risks: screens describe solutions, may not be true requirements, bloat the document, and change often; screen layouts do not replace written requirements — developers should not have to deduce functionality and data from screenshots.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đưa thiết kế giao diện vào SRS: lợi và hại.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Làm yêu cầu cụ thể, dễ hiểu ⇒ lợi.",
+        "Thay thế yêu cầu viết, làm phình tài liệu ⇒ hại."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# TBD 2 — screens in the SRS: benefit or risk?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# TBD 2 — screens in the SRS: benefit or risk? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Benefit\n   - r1.k: Risk\n   - r2.k: Risk\n   - r3.k: Benefit\n   - r4.k: Risk\n   If specific screens are genuinely required (e.g. a regulated form), state them as requirements; otherwise keep layouts in a separate UI specification or prototype and reference them.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>If specific screens are genuinely required (e.g. a regulated form), state them as requirements; otherwise keep layouts in a separate UI specification or prototype and reference them.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Effect",
+                "luaChon": [
+                  "Benefit",
+                  "Risk"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Users understand the requirements faster when they see a wireframe."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Developers build exactly the pixels shown and miss the validation rules nobody wrote down."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Every small layout change forces a new SRS version through change control."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "A mock-up reveals a missing field during the review."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "The screenshots double the size of the document."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Benefit",
+              "r1.k": "Risk",
+              "r2.k": "Risk",
+              "r3.k": "Benefit",
+              "r4.k": "Risk"
+            },
+            "giaiThich": "<p><p>If specific screens are genuinely required (e.g. a regulated form), state them as requirements; otherwise keep layouts in a separate UI specification or prototype and reference them.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thay toàn bộ yêu cầu bằng ảnh chụp màn hình."
+        },
+        {
+          "loi": "Cấm mọi mock-up."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "wireframe / mock-up",
+          "vi": "khung giao diện / bản mô phỏng màn hình"
+        },
+        {
+          "en": "Software Requirements Specification (SRS)",
+          "vi": "tài liệu đặc tả yêu cầu phần mềm"
+        }
+      ]
+    },
+    {
+      "title": "TBD 3 — where in Figure 10-2?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "SRS template"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Figure 10-2 organises the SRS: 1 Introduction (purpose, conventions, scope, references) · 2 Overall description (perspective, user classes, environment, constraints, documentation, assumptions) · 3 System features (each with description, priority, functional requirements) · 4 Data requirements · 5 External interfaces (user, software, hardware, communications) · 6 Quality attributes · 7 Internationalization · 8 Other · Appendix A Glossary · Appendix B Analysis models. Where does each item go?</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi mục thuộc phần nào của Hình 10-2?</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Định nghĩa thuật ngữ ⇒ Glossary.",
+        "Giao thức truyền thông ⇒ 5.4; thiết bị ⇒ 5.3."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# TBD 3 — where in Figure 10-2?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# TBD 3 — where in Figure 10-2? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: 1.2 Document conventions\n   - r1.k: 1.4 References\n   - r2.k: 2.6 User documentation\n   - r3.k: 3.x Feature: description and priority\n   - r4.k: 5.3 Hardware interfaces\n   - r5.k: 5.4 Communications interfaces\n   - r6.k: 7 Internationalization and localization\n   - r7.k: Appendix A Glossary\n   - r8.k: Appendix B Analysis models\n   Knowing the template by heart is a common exam requirement; it is also a checklist of information to elicit.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Knowing the template by heart is a common exam requirement; it is also a checklist of information to elicit.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Section",
+                "luaChon": [
+                  "1.2 Document conventions",
+                  "1.4 References",
+                  "2.6 User documentation",
+                  "3.x Feature: description and priority",
+                  "5.3 Hardware interfaces",
+                  "5.4 Communications interfaces",
+                  "7 Internationalization and localization",
+                  "Appendix A Glossary",
+                  "Appendix B Analysis models"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "\"Bold text marks requirements still under review.\""
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Link to the Vision and Scope document v1.2 and the ISO 29148 standard."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "An online help system and a printed quick-start guide will be delivered."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "\"Online booking — High priority: lets patients book any free slot of the next 14 days.\""
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "The kiosk reads NFC wristbands through the vendor’s USB reader."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "All messages to the SMS gateway use HTTPS with TLS 1.3."
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "Prices are shown in VND, dates as dd/mm/yyyy; the UI exists in Vietnamese and English."
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "s": "\"No-show: a booked patient who has not checked in 15 minutes after the start.\""
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "s": "The state diagram of an appointment."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "1.2 Document conventions",
+              "r1.k": "1.4 References",
+              "r2.k": "2.6 User documentation",
+              "r3.k": "3.x Feature: description and priority",
+              "r4.k": "5.3 Hardware interfaces",
+              "r5.k": "5.4 Communications interfaces",
+              "r6.k": "7 Internationalization and localization",
+              "r7.k": "Appendix A Glossary",
+              "r8.k": "Appendix B Analysis models"
+            },
+            "giaiThich": "<p><p>Knowing the template by heart is a common exam requirement; it is also a checklist of information to elicit.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt sơ đồ trạng thái vào section 3."
+        },
+        {
+          "loi": "Đặt định dạng tiền tệ vào quality attributes."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Software Requirements Specification (SRS)",
+          "vi": "tài liệu đặc tả yêu cầu phần mềm"
+        }
+      ]
+    },
+    {
+      "title": "TBD 4 — more or less formal specification on an agile project?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "specification on agile projects"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>How much written specification an agile team needs depends on: whether just-in-time conversation can supply the details; whether informal communication keeps the team synchronised across time and space; whether requirements knowledge must be retained for maintenance, verification, audit, certification or contracts; and whether acceptance tests can serve as the detailed requirements. For each situation, does it push toward <b>more</b> or <b>less</b> written detail?</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi tình huống đẩy về phía tài liệu chi tiết hơn hay ít hơn?</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Xa nhau, kiểm định, bàn giao bảo trì ⇒ nhiều hơn.",
+        "PO ngồi cạnh, test chấp nhận rõ ⇒ ít hơn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# TBD 4 — more or less formal specification on an agile project?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# TBD 4 — more or less formal specification on an agile project? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Less written detail\n   - r1.k: More written detail\n   - r2.k: More written detail\n   - r3.k: Less written detail\n   - r4.k: More written detail\n   Agile is not \"no documentation\": it is the minimum that guides the team, plus whatever the context (distance, regulation, maintenance) demands.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Agile is not \"no documentation\": it is the minimum that guides the team, plus whatever the context (distance, regulation, maintenance) demands.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Pushes toward",
+                "luaChon": [
+                  "More written detail",
+                  "Less written detail"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "The product owner sits with the team every day."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "The team is split between Hanoi and Berlin."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The medical device must be certified by a regulator."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Automated acceptance tests describe each story precisely."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Another company will maintain the system for ten years."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Less written detail",
+              "r1.k": "More written detail",
+              "r2.k": "More written detail",
+              "r3.k": "Less written detail",
+              "r4.k": "More written detail"
+            },
+            "giaiThich": "<p><p>Agile is not \"no documentation\": it is the minimum that guides the team, plus whatever the context (distance, regulation, maintenance) demands.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng agile luôn ít tài liệu bất kể bối cảnh."
+        },
+        {
+          "loi": "Viết tài liệu dày chỉ vì \"quy định công ty\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "acceptance criteria",
+          "vi": "tiêu chí chấp nhận — điều kiện để khách nhận một yêu cầu/story (Given/When/Then)"
+        },
+        {
+          "en": "user story",
+          "vi": "câu chuyện người dùng — \"As a <role>, I want <goal> so that <benefit>\""
+        }
+      ]
+    }
+  ]
+}

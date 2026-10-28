@@ -394,38 +394,44 @@
       "description": "Ba cách đánh nhãn yêu cầu (số thứ tự, số phân cấp, thẻ chữ phân cấp) và điểm mạnh/yếu, không tái sử dụng nhãn, cách ghi TBD, mức chi tiết giao diện trong SRS."
     },
     {
+      "slug": "swr302-5-3-ch10-tbd-template-agile",
+      "name": "5.3 TBDs, UI, the SRS template and agile",
+      "level": "BEGINNER",
+      "description": "Xử lý TBD khi buộc phải làm tiếp, lợi/hại của đưa màn hình vào SRS, xếp 9 mục vào Hình 10-2 (conventions, references, giao diện phần cứng/truyền thông, i18n, phụ lục), mức tài liệu cho đội agile."
+    },
+    {
       "slug": "swr302-5-4-ch11-characteristics",
-      "name": "5.3 Characteristics of excellent requirements",
+      "name": "5.4 Characteristics of excellent requirements",
       "level": "BEGINNER",
       "description": "Đặc tính của từng yêu cầu (đầy đủ, đúng, khả thi, cần thiết, có ưu tiên, không mơ hồ, kiểm chứng được) và của tập yêu cầu (đầy đủ, nhất quán, sửa được, truy vết được); gọi tên đặc tính bị vi phạm; chọn yêu cầu tốt hơn."
     },
     {
       "slug": "swr302-5-5-ch11-writing",
-      "name": "5.4 Guidelines for writing requirements",
+      "name": "5.5 Guidelines for writing requirements",
       "level": "INTERMEDIATE",
       "description": "Góc nhìn hệ thống/người dùng, thể chủ động, mỗi câu một yêu cầu, tránh chi tiết thiết kế, từ mơ hồ và phủ định kép, mức chi tiết nhất quán; tự viết lại ba yêu cầu tồi có chấm."
     },
     {
       "slug": "swr302-5-6-ch11-ambiguity",
-      "name": "5.5 Avoiding ambiguity",
+      "name": "5.6 Avoiding ambiguity",
       "level": "INTERMEDIATE",
       "description": "Từ mơ hồ (bảng 11-2), giá trị biên chồng lấn/bỏ trống, thiếu nhánh else, trộn and/or, câu phủ định; tự viết luật nộp trễ không mơ hồ và hàm penalty đúng mọi biên."
     },
     {
       "slug": "swr302-5-7-ch14-quality-attributes",
-      "name": "5.6 Quality attributes",
+      "name": "5.7 Quality attributes",
       "level": "INTERMEDIATE",
       "description": "Thuộc tính chất lượng bên ngoài/bên trong (Wiegers Ch.14), gọi tên thuộc tính của 12 yêu cầu bệnh viện, đánh đổi giữa các thuộc tính, quy trình khám phá; tự viết 3 yêu cầu chất lượng đo được."
     },
     {
       "slug": "swr302-5-8-ch14-planguage",
-      "name": "5.7 Specifying quality requirements with Planguage",
+      "name": "5.8 Specifying quality requirements with Planguage",
       "level": "INTERMEDIATE",
       "description": "Từ khoá Planguage (TAG, AMBITION, SCALE, METER, GOAL, STRETCH, WISH, PAST, DEFINED), đọc yêu cầu Planguage để quyết định đạt/không, tự viết yêu cầu sẵn sàng bằng Planguage và hàm kiểm mức đạt."
     },
     {
       "slug": "swr302-5-9-ch14-constraints-agile",
-      "name": "5.8 Constraints and quality requirements in agile",
+      "name": "5.9 Constraints and quality requirements in agile",
       "level": "BEGINNER",
       "description": "Phân biệt ràng buộc / thuộc tính chất lượng / yêu cầu chức năng, yêu cầu chất lượng biến thành kiến trúc và yêu cầu chức năng phái sinh, đặt yêu cầu chất lượng vào DoD hay tiêu chí chấp nhận trong agile."
     },
@@ -502,10 +508,52 @@
       "description": "Bốn hoạt động quản lý yêu cầu (version control, change control, status tracking, tracing), baseline và thuộc tính yêu cầu, tự viết báo cáo trạng thái yêu cầu (Proposed…Rejected) chấm trên dữ liệu ẩn."
     },
     {
+      "slug": "swr302-7-4-ch27-issues-agile",
+      "name": "7.4 Requirements issues, effort and agile management",
+      "level": "BEGINNER",
+      "description": "Bốn loại vấn đề yêu cầu, công sức phát triển vs quản lý yêu cầu, tự viết dự báo từ biểu đồ burndown (phát hiện phạm vi phình), story mới giữa sprint."
+    },
+    {
+      "slug": "swr302-7-5-ch28-change-control",
+      "name": "7.5 Change control: policy, process and the CCB",
+      "level": "BEGINNER",
+      "description": "Vì sao quản lý thay đổi, điều khoản chính sách, bốn thành phần của mô tả quy trình (entry/tasks/verification/exit), điều lệ CCB, thương lượng lại cam kết."
+    },
+    {
       "slug": "swr302-7-6-ch28-impact-analysis",
-      "name": "7.4 Change impact analysis",
+      "name": "7.6 Change impact analysis",
       "level": "INTERMEDIATE",
       "description": "Checklist câu hỏi phân tích ảnh hưởng, xác định sản phẩm bị ảnh hưởng bởi CR-14 (PetCare), tự viết hàm tìm mọi mục bị ảnh hưởng trên đồ thị truy vết (có chu trình) và ước lượng công."
+    },
+    {
+      "slug": "swr302-7-7-ch29-tracing-concepts",
+      "name": "7.7 Requirements tracing: concepts and motivations",
+      "level": "BEGINNER",
+      "description": "Chín lý do truy vết, truy vết bao nhiêu là đủ (chi phí–lợi ích), ai cung cấp liên kết nào (BA/dev/tester), truy vết yêu cầu phi chức năng."
+    },
+    {
+      "slug": "swr302-7-8-ch29-rtm-procedure",
+      "name": "7.8 The traceability matrix and tracing procedure",
+      "level": "BEGINNER",
+      "description": "Chín bước của quy trình truy vết, bản số liên kết, tự viết ma trận UC × FR (FR dùng chung, UC không có FR) có chấm, lưu trữ và kiểm định kỳ."
+    },
+    {
+      "slug": "swr302-18r-1-ch18-why-dimensions",
+      "name": "7.9 Requirements reuse: why, and its three dimensions",
+      "level": "BEGINNER",
+      "description": "Ba chiều của tái sử dụng (mức độ, sửa đổi, cơ chế), sao chép vs tham chiếu, lợi ích, loại thông tin yêu cầu nên tái dùng."
+    },
+    {
+      "slug": "swr302-18r-2-ch18-patterns",
+      "name": "7.10 Reuse scenarios and requirement patterns",
+      "level": "BEGINNER",
+      "description": "Tính năng chung/tuỳ chọn/biến thể trong dòng sản phẩm, tái dùng từ hệ thống cũ, các phần của requirement pattern, tự viết hàm điền template pattern có chấm."
+    },
+    {
+      "slug": "swr302-18r-3-ch18-barriers-success",
+      "name": "7.11 Reuse barriers and success factors",
+      "level": "BEGINNER",
+      "description": "Rào cản (thiếu yêu cầu, NIH/NAH, văn phong, tổ chức không nhất quán, loại dự án, quyền sở hữu) và yếu tố thành công (kho, chất lượng, liên kết, thuật ngữ, văn hoá) của tái sử dụng yêu cầu."
     },
     {
       "slug": "swr302-7-lab-change-control-libranet",

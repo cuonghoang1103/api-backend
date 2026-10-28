@@ -1,0 +1,498 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-18r-2-ch18-patterns",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-18r-2-ch18-patterns"
+  },
+  "exercises": [
+    {
+      "title": "Reuse scenarios 1 — common, optional or variant?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "product lines"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>In a software product line, classify features as <b>common</b> (in all members), <b>optional</b> (in some members) or <b>variant</b> (different versions in different members). A tax-filing product line has Free, Basic, Deluxe and Business editions.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trong dòng sản phẩm: tính năng chung, tuỳ chọn, biến thể.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Có ở mọi phiên bản ⇒ common.",
+        "Có ở mọi phiên bản nhưng khác nhau ⇒ variant."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Reuse scenarios 1 — common, optional or variant?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Reuse scenarios 1 — common, optional or variant? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Common\n   - r1.k: Optional\n   - r2.k: Variant\n   - r3.k: Common\n   - r4.k: Optional\n   Common features offer the most reuse — requirements, architecture, design, code and tests.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Common features offer the most reuse — requirements, architecture, design, code and tests.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Feature kind",
+                "luaChon": [
+                  "Common",
+                  "Optional",
+                  "Variant"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Every edition calculates personal income tax."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Only Deluxe and Business import stock-trading records."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Each edition has its own limit on the number of dependants it can handle."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Every edition files the return electronically."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Only the Business edition handles payroll."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Common",
+              "r1.k": "Optional",
+              "r2.k": "Variant",
+              "r3.k": "Common",
+              "r4.k": "Optional"
+            },
+            "giaiThich": "<p><p>Common features offer the most reuse — requirements, architecture, design, code and tests.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm variant với optional."
+        },
+        {
+          "loi": "Coi tính năng chỉ có ở một bản là common."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "product line",
+          "vi": "dòng sản phẩm"
+        }
+      ]
+    },
+    {
+      "title": "Reuse scenarios 2 — reengineered and replacement systems",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "reengineering"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Replacement systems always reuse some requirements of the original, even if they were never written. When reverse-engineering requirements from an old system, raise your thinking to a higher level of abstraction to escape implementation details; harvest the business rules embedded in the old code.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hệ thống thay thế luôn tái dùng một phần yêu cầu của hệ thống cũ.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Bỏ chi tiết cài đặt, giữ nhu cầu.",
+        "Luật nghiệp vụ trong mã cũ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Reuse scenarios 2 — reengineered and replacement systems\n\nAnswer in the answer panel (no code needed).\n\n1. The old system \"writes record type 07 to file TRX.DAT at midnight\". The reusable requirement is…Hệ thống cũ \"ghi bản ghi loại 07 vào tệp TRX.DAT lúc nửa đêm\". Yêu cầu tái dùng được là…\n2. A valuable thing to harvest from legacy code is…Thứ đáng thu hoạch từ mã cũ là…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Reuse scenarios 2 — reengineered and replacement systems — answer key\n\n1. The old system \"writes record type 07 to file TRX.DAT at midnight\". The reusable requirement is…Hệ thống cũ \"ghi bản ghi loại 07 vào tệp TRX.DAT lúc nửa đêm\". Yêu cầu tái dùng được là…\n   Answer: c) The system shall send the day’s transactions to the accounting system once a day.\n   Lift to the business need.VI: Nâng lên nhu cầu nghiệp vụ.\n\n2. A valuable thing to harvest from legacy code is…Thứ đáng thu hoạch từ mã cũ là…\n   Answer: c) the business rules embedded in it\n   Rules live on.VI: Luật vẫn còn giá trị.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: c · c.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>The old system \"writes record type 07 to file TRX.DAT at midnight\". The reusable requirement is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Hệ thống cũ \"ghi bản ghi loại 07 vào tệp TRX.DAT lúc nửa đêm\". Yêu cầu tái dùng được là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Nothing"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The system shall use files."
+              },
+              {
+                "ma": "c",
+                "noiDung": "The system shall send the day’s transactions to the accounting system once a day."
+              },
+              {
+                "ma": "d",
+                "noiDung": "The system shall write record type 07 to TRX.DAT."
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Lift to the business need.</p><p><i>VI: Nâng lên nhu cầu nghiệp vụ.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>A valuable thing to harvest from legacy code is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Thứ đáng thu hoạch từ mã cũ là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "its indentation style"
+              },
+              {
+                "ma": "b",
+                "noiDung": "its bugs"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the business rules embedded in it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "its variable names"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Rules live on.</p><p><i>VI: Luật vẫn còn giá trị.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chép nguyên chi tiết cài đặt cũ."
+        },
+        {
+          "loi": "Bỏ qua luật trong mã cũ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "business rule",
+          "vi": "quy tắc nghiệp vụ — chính sách, luật, chuẩn, công thức tồn tại NGOÀI phần mềm"
+        }
+      ]
+    },
+    {
+      "title": "Reuse scenarios 3 — sections of a requirement pattern",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "requirement patterns"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>A requirement pattern (Withall 2007) makes requirements of one type reusable. Its sections: <b>Guidance</b> (basics, when it applies, how to write it), <b>Content</b> (what such a requirement must convey, item by item), <b>Template</b> (fill-in-the-blanks with placeholders), <b>Examples</b>, <b>Extra requirements</b> (additional or more detailed requirements), and <b>Considerations for development and testing</b>. Classify each fragment of a \"report requirement\" pattern.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các phần của một requirement pattern. Phân loại từng đoạn của pattern \"yêu cầu báo cáo\".</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Có chỗ trống «…» ⇒ template.",
+        "\"Khi nào dùng\" ⇒ guidance."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Reuse scenarios 3 — sections of a requirement pattern\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Reuse scenarios 3 — sections of a requirement pattern — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Template\n   - r1.k: Guidance\n   - r2.k: Content\n   - r3.k: Examples\n   - r4.k: Extra requirements\n   - r5.k: Considerations for development and testing\n   A pattern turns hard-won experience about one kind of requirement into a reusable checklist and template.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A pattern turns hard-won experience about one kind of requirement into a reusable checklist and template.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Pattern section",
+                "luaChon": [
+                  "Guidance",
+                  "Content",
+                  "Template",
+                  "Examples",
+                  "Extra requirements",
+                  "Considerations for development and testing"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "\"The system shall produce a «report name» showing «content» for «audience», «frequency».\""
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "\"Use this pattern for any report a user reads regularly; not for ad-hoc queries.\""
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "\"State: the report’s name, its purpose, its audience, its data, its sort order, its frequency.\""
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "\"The system shall produce a Daily Appointments report showing each doctor’s bookings for receptionists, every morning at 07:00.\""
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "\"Also specify who may see the report and how long it is kept.\""
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "\"Testers should check the report with zero rows and with more rows than fit on one page.\""
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Template",
+              "r1.k": "Guidance",
+              "r2.k": "Content",
+              "r3.k": "Examples",
+              "r4.k": "Extra requirements",
+              "r5.k": "Considerations for development and testing"
+            },
+            "giaiThich": "<p><p>A pattern turns hard-won experience about one kind of requirement into a reusable checklist and template.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm content với template."
+        },
+        {
+          "loi": "Nhầm example với template."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "requirement pattern",
+          "vi": "mẫu yêu cầu (pattern)"
+        }
+      ]
+    },
+    {
+      "title": "Reuse scenarios 4 — apply a pattern template",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "requirement patterns"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Pattern template: \"<i>The system shall produce a «name» report showing «content» for «audience», «frequency».</i>\" Write <code>function fill(template, values)</code> that replaces every <code>«key»</code> with <code>values[key]</code>, and returns <code>null</code> if any placeholder has no value (or an empty value). Then write <code>REPORT</code>: the template filled for a monthly no-show report for the clinic manager.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Placeholders use the characters « and ».</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>fill(template, values)</code> thay mọi «key» bằng values[key], trả null nếu thiếu giá trị; rồi viết REPORT cho báo cáo no-show hằng tháng gửi quản lý phòng khám.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Chỗ trống dùng ký tự « và ».</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "fill('Hi «who»!', { who: 'An' })",
+          "output": "'Hi An!'",
+          "explanation": "|||"
+        }
+      ],
+      "hintsJson": [
+        "replace với /«([^»]+)»/g và hàm thay thế.",
+        "Dùng hasOwnProperty để \"toString\" không lọt."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "pattern.js",
+          "language": "javascript",
+          "code": "const TEMPLATE = 'The system shall produce a «name» report showing «content» for «audience», «frequency».';\nfunction fill(template, values) {\n  return null;\n}\nconst REPORT = '';\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "pattern.js",
+          "language": "javascript",
+          "code": "const TEMPLATE = 'The system shall produce a «name» report showing «content» for «audience», «frequency».';\nfunction fill(template, values) {\n  var thieu = false;\n  var out = template.replace(/«([^»]+)»/g, function (_, k) {\n    var v = Object.prototype.hasOwnProperty.call(values, k) ? String(values[k]).trim() : '';\n    if (!v) thieu = true;\n    return v;\n  });\n  return thieu ? null : out;\n}\nconst REPORT = fill(TEMPLATE, { name: 'Monthly No-show', content: 'the number and rate of no-shows per doctor and per service', audience: 'the clinic manager', frequency: 'on the first day of each month' });\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Filling a pattern template guarantees that every requirement of that type states the same essential items.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "pattern.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "fill replaces every placeholder",
+              "vi": "fill thay mọi chỗ trống"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof fill!=\"function\")return\"fill is not a function\";var n=fill(\"A \\xABx\\xBB and \\xABy\\xBB and \\xABx\\xBB.\",{x:\"1\",y:\"2\"});return n===\"A 1 and 2 and 1.\"?\"OK\":\"got \"+JSON.stringify(n)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "fill returns null when a value is missing or empty",
+              "vi": "fill trả null khi thiếu hoặc rỗng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){return typeof fill!=\"function\"?\"fill is not a function\":fill(\"\\xABa\\xBB \\xABb\\xBB\",{a:\"x\"})===null&&fill(\"\\xABa\\xBB\",{a:\"  \"})===null&&fill(\"\\xABtoString\\xBB\",{})===null?\"OK\":\"missing, empty or inherited keys (toString) \\u21D2 null\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "REPORT is a complete requirement for the no-show report",
+              "vi": "REPORT là yêu cầu đầy đủ cho báo cáo no-show"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){return typeof REPORT!=\"string\"||/«|»/.test(REPORT)?\"fill every placeholder\":/^the system shall produce a/i.test(REPORT)?/no-?show/i.test(REPORT)&&/manager/i.test(REPORT)&&/month/i.test(REPORT)?\"OK\":\"the report is about no-shows, for the clinic manager, monthly\":\"use the template\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chỉ thay chỗ trống đầu tiên."
+        },
+        {
+          "loi": "Không kiểm giá trị rỗng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "requirement pattern",
+          "vi": "mẫu yêu cầu"
+        }
+      ]
+    }
+  ]
+}

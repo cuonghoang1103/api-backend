@@ -57,9 +57,28 @@ const E3 = tracNghiem({
   khaiNiem: ['quality requirements in agile'],
 });
 
+const E4 = phanLoai({
+  tieuDe: 'Constraints 4 — where does the constraint come from?',
+  doKho: 'MEDIUM', phut: 5,
+  moTa: { en: '<p>Constraints restrict the developers’ options. They come from: <b>technology</b> (mandated languages, platforms, components), <b>standards and regulations</b>, the <b>organisation</b> (company policies, existing systems), or the <b>business</b> (budget, interoperability with partners, delivery dates). Classify the source.</p>', vi: '<p>Ràng buộc đến từ công nghệ, chuẩn/quy định, tổ chức, hoặc nghiệp vụ.</p>' },
+  cot: 'Source', luaChon: ['Technology', 'Standards and regulations', 'Organisation', 'Business'],
+  hang: [
+    ['Must be written in Java 21 to reuse the company’s libraries.', 'Technology'],
+    ['Health data must follow the Ministry of Health’s HL7 FHIR profile.', 'Standards and regulations'],
+    ['All apps must use the corporate single sign-on.', 'Organisation'],
+    ['The partner pharmacy chain only accepts orders through its existing EDI format.', 'Business'],
+    ['Personal data must stay on servers in Vietnam (Decree 13).', 'Standards and regulations'],
+  ],
+  giaiThich: '<p>Knowing the source tells you who can relax a constraint — often nobody, if it is a law.</p>',
+  goiY: ['Luật/nghị định/chuẩn ngành ⇒ standards and regulations.', 'Chính sách công ty ⇒ tổ chức.'],
+  loiHayGap: ['Coi luật là ràng buộc công nghệ.', 'Coi chính sách SSO là quality attribute.'],
+  thuatNgu: tn('constraint'),
+  khaiNiem: ['constraints'],
+});
+
 export default moDun({
   slug: 'swr302-5-9-ch14-constraints-agile',
-  ten: '5.8 Constraints and quality requirements in agile',
+  ten: '5.9 Constraints and quality requirements in agile',
   moTaModule: 'Phân biệt ràng buộc / thuộc tính chất lượng / yêu cầu chức năng, yêu cầu chất lượng biến thành kiến trúc và yêu cầu chức năng phái sinh, đặt yêu cầu chất lượng vào DoD hay tiêu chí chấp nhận trong agile.',
-  de: [E1, E2, E3],
+  de: [E1, E2, E3, E4],
 });

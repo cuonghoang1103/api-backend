@@ -1,0 +1,539 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-7-7-ch29-tracing-concepts",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-7-7-ch29-tracing-concepts"
+  },
+  "exercises": [
+    {
+      "title": "Tracing 1 — which motivation for tracing?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "motivations for tracing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers’ motivations for tracing: finding missing requirements · finding unnecessary requirements · certification and compliance · change impact analysis · maintenance · project tracking · reengineering · reuse · testing. Name the motivation behind each use of the trace data.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các lý do để truy vết. Gọi tên lý do đằng sau từng cách dùng dữ liệu truy vết.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Không có con ⇒ thiếu yêu cầu; không có cha ⇒ yêu cầu thừa.",
+        "Thiếu liên kết tới code ⇒ việc chưa làm (theo dõi dự án)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Tracing 1 — which motivation for tracing?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Tracing 1 — which motivation for tracing? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Finding missing requirements\n   - r1.k: Finding unnecessary requirements\n   - r2.k: Certification and compliance\n   - r3.k: Maintenance\n   - r4.k: Project tracking\n   - r5.k: Reengineering\n   - r6.k: Testing\n   - r7.k: Reuse\n   The same links serve many purposes — which is why tracing pays off when done consistently.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The same links serve many purposes — which is why tracing pays off when done consistently.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Motivation",
+                "luaChon": [
+                  "Finding missing requirements",
+                  "Finding unnecessary requirements",
+                  "Certification and compliance",
+                  "Change impact analysis",
+                  "Maintenance",
+                  "Project tracking",
+                  "Reengineering",
+                  "Reuse",
+                  "Testing"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "A business requirement traces to no user requirement."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "A functional requirement traces to no user or business requirement."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The auditor asks to see that every safety requirement is implemented and tested."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "A tax rule changes; the team finds every design element and code module that handles it."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Links from requirements to code are missing for 12 requirements — that work is not done yet."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "The functions of the 1998 system are listed and traced into the new system’s requirements."
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "A test fails; the team identifies which requirement is not satisfied."
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "s": "The team takes the payment requirements, design and code of one product into another."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Finding missing requirements",
+              "r1.k": "Finding unnecessary requirements",
+              "r2.k": "Certification and compliance",
+              "r3.k": "Maintenance",
+              "r4.k": "Project tracking",
+              "r5.k": "Reengineering",
+              "r6.k": "Testing",
+              "r7.k": "Reuse"
+            },
+            "giaiThich": "<p><p>The same links serve many purposes — which is why tracing pays off when done consistently.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm maintenance với change impact."
+        },
+        {
+          "loi": "Nhầm reuse với reengineering."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "requirements traceability matrix (RTM)",
+          "vi": "ma trận truy vết yêu cầu — nối nguồn ↔ yêu cầu ↔ thiết kế ↔ mã ↔ test"
+        }
+      ]
+    },
+    {
+      "title": "Tracing 2 — how much tracing?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "tracing scope"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Figure 29-2 shows many possible trace relationships — you do not need them all. Do a cost-benefit analysis: often most of the benefit comes from a few links (e.g. system tests back to functional or user requirements). Each requirement must have a unique, persistent label for tracing to work.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Không cần mọi liên kết — phân tích chi phí–lợi ích.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Bắt đầu từ liên kết giá trị cao.",
+        "Nhãn duy nhất, bền vững."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Tracing 2 — how much tracing?\n\nAnswer in the answer panel (no code needed).\n\n1. A small team asks whether to trace every requirement to every artefact. Best answer?Một đội nhỏ hỏi có cần truy mọi yêu cầu tới mọi sản phẩm không. Trả lời tốt nhất?\n2. What must exist before any tracing can work?Điều gì phải có trước khi truy vết được?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Tracing 2 — how much tracing? — answer key\n\n1. A small team asks whether to trace every requirement to every artefact. Best answer?Một đội nhỏ hỏi có cần truy mọi yêu cầu tới mọi sản phẩm không. Trả lời tốt nhất?\n   Answer: c) No — choose the links that give most value (e.g. tests ↔ requirements, core high-risk functions first)\n   Cost-benefit.VI: Chi phí–lợi ích.\n\n2. What must exist before any tracing can work?Điều gì phải có trước khi truy vết được?\n   Answer: a) Unique, persistent labels for requirements\n   You cannot link what you cannot name.VI: Không gọi tên được thì không nối được.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: c · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>A small team asks whether to trace every requirement to every artefact. Best answer?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một đội nhỏ hỏi có cần truy mọi yêu cầu tới mọi sản phẩm không. Trả lời tốt nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "No tracing at all"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Yes, always all links"
+              },
+              {
+                "ma": "c",
+                "noiDung": "No — choose the links that give most value (e.g. tests ↔ requirements, core high-risk functions first)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only trace the glossary"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Cost-benefit.</p><p><i>VI: Chi phí–lợi ích.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>What must exist before any tracing can work?</p><p style=\"opacity:.75;font-size:.92em\"><i>Điều gì phải có trước khi truy vết được?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Unique, persistent labels for requirements"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A finished system"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A 3D model"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A burndown chart"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>You cannot link what you cannot name.</p><p><i>VI: Không gọi tên được thì không nối được.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Truy vết mọi thứ rồi bỏ cuộc."
+        },
+        {
+          "loi": "Truy vết khi yêu cầu chưa có nhãn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "requirements traceability matrix (RTM)",
+          "vi": "ma trận truy vết yêu cầu — nối nguồn ↔ yêu cầu ↔ thiết kế ↔ mã ↔ test"
+        }
+      ]
+    },
+    {
+      "title": "Tracing 3 — who supplies the trace links?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "trace link sources"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Trace links should be defined by whoever has the knowledge (Table 29-3): the <b>BA</b> knows links between needs and requirements; <b>developers</b> know links between requirements and design/code; <b>testers</b> know links between requirements and tests.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ai nắm thông tin thì người đó ghi liên kết.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Nhu cầu/luật → yêu cầu ⇒ BA.",
+        "Yêu cầu → code ⇒ dev; yêu cầu → test ⇒ tester."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Tracing 3 — who supplies the trace links?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Tracing 3 — who supplies the trace links? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Business analyst\n   - r1.k: Developer\n   - r2.k: Tester\n   - r3.k: Business analyst\n   - r4.k: Developer\n   A coordinator (usually the BA) makes sure each role supplies its links as work is completed.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A coordinator (usually the BA) makes sure each role supplies its links as work is completed.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Supplied by",
+                "luaChon": [
+                  "Business analyst",
+                  "Developer",
+                  "Tester"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "UC-04 → FR-12"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "FR-12 → booking.service.ts"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "FR-12 → TC-33"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "BR-07 → FR-15"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "FR-15 → class FeeCalculator"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Business analyst",
+              "r1.k": "Developer",
+              "r2.k": "Tester",
+              "r3.k": "Business analyst",
+              "r4.k": "Developer"
+            },
+            "giaiThich": "<p><p>A coordinator (usually the BA) makes sure each role supplies its links as work is completed.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Để BA tự ghi cả liên kết tới code."
+        },
+        {
+          "loi": "Không ai phụ trách liên kết tới test."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "requirements traceability matrix (RTM)",
+          "vi": "ma trận truy vết yêu cầu — nối nguồn ↔ yêu cầu ↔ thiết kế ↔ mã ↔ test"
+        }
+      ]
+    },
+    {
+      "title": "Tracing 4 — tracing nonfunctional requirements",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "tracing nonfunctional requirements"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Nonfunctional requirements often do not trace to one piece of code: a response-time requirement may dictate hardware, algorithms, database structure or architecture; a portability requirement may restrict language features. Some quality attributes do produce code (e.g. security functions such as login lock-out) — trace those to it.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Yêu cầu phi chức năng thường không truy về một đoạn code cụ thể.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Hiệu năng ⇒ kiến trúc, thiết kế, test hiệu năng.",
+        "Chức năng bảo mật cụ thể ⇒ code."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Tracing 4 — tracing nonfunctional requirements\n\nAnswer in the answer panel (no code needed).\n\n1. \"95% of searches in under 2 seconds\" most likely traces to…\"95% lượt tìm dưới 2 giây\" nhiều khả năng truy tới…\n2. \"Lock the account after 5 failed logins\" traces to…\"Khoá tài khoản sau 5 lần đăng nhập sai\" truy tới…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Tracing 4 — tracing nonfunctional requirements — answer key\n\n1. \"95% of searches in under 2 seconds\" most likely traces to…\"95% lượt tìm dưới 2 giây\" nhiều khả năng truy tới…\n   Answer: d) architecture and design decisions (indexes, caching, hardware) and performance tests\n   Quality → architecture + tests.VI: Chất lượng → kiến trúc + test.\n\n2. \"Lock the account after 5 failed logins\" traces to…\"Khoá tài khoản sau 5 lần đăng nhập sai\" truy tới…\n   Answer: d) specific code (the lock-out function) and its tests\n   This quality requirement produces code.VI: Yêu cầu chất lượng này sinh ra code.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: d · d.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>\"95% of searches in under 2 seconds\" most likely traces to…</p><p style=\"opacity:.75;font-size:.92em\"><i>\"95% lượt tìm dưới 2 giây\" nhiều khả năng truy tới…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "nothing"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the glossary"
+              },
+              {
+                "ma": "c",
+                "noiDung": "one function named search()"
+              },
+              {
+                "ma": "d",
+                "noiDung": "architecture and design decisions (indexes, caching, hardware) and performance tests"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Quality → architecture + tests.</p><p><i>VI: Chất lượng → kiến trúc + test.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>\"Lock the account after 5 failed logins\" traces to…</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Khoá tài khoản sau 5 lần đăng nhập sai\" truy tới…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "only the hardware"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the vision statement only"
+              },
+              {
+                "ma": "c",
+                "noiDung": "nothing"
+              },
+              {
+                "ma": "d",
+                "noiDung": "specific code (the lock-out function) and its tests"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>This quality requirement produces code.</p><p><i>VI: Yêu cầu chất lượng này sinh ra code.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đòi mọi NFR phải trỏ tới một hàm."
+        },
+        {
+          "loi": "Bỏ NFR khỏi truy vết."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "nonfunctional requirement (NFR)",
+          "vi": "yêu cầu phi chức năng — thuộc tính chất lượng, giao diện ngoài, ràng buộc"
+        },
+        {
+          "en": "requirements traceability matrix (RTM)",
+          "vi": "ma trận truy vết yêu cầu — nối nguồn ↔ yêu cầu ↔ thiết kế ↔ mã ↔ test"
+        }
+      ]
+    }
+  ]
+}

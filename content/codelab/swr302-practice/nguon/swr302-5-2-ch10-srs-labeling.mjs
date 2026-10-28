@@ -49,9 +49,28 @@ const E3 = tracNghiem({
   khaiNiem: ['TBDs', 'UI in the SRS'],
 });
 
+const E4 = phanLoai({
+  tieuDe: 'Labeling 4 — is this label scheme robust?',
+  doKho: 'MEDIUM', phut: 5,
+  moTa: { en: '<p>A good labeling convention gives every requirement a unique, persistent id that survives additions, deletions and moves, so traces and test cases keep pointing at the right requirement. Judge each team practice.</p>', vi: '<p>Quy ước đánh nhãn tốt: duy nhất, bền vững qua thêm/xoá/di chuyển. Đánh giá từng cách làm.</p>' },
+  cot: 'Practice', luaChon: ['Robust', 'Fragile'],
+  hang: [
+    ['Ids are the paragraph numbers that Word generates automatically.', 'Fragile'],
+    ['A deleted requirement keeps its id, marked Deleted; the id is never reused.', 'Robust'],
+    ['When a requirement moves to another section, its textual tag Booking.Cancel.Deadline stays the same.', 'Robust'],
+    ['After deleting FR-7, the team renumbers FR-8…FR-40 to close the gap.', 'Fragile'],
+    ['A requirements tool assigns an id at creation that never changes.', 'Robust'],
+  ],
+  giaiThich: '<p>Anything that renumbers on edit breaks traceability; ids assigned once and never reused are robust.</p>',
+  goiY: ['Đánh số tự động theo đoạn ⇒ dễ vỡ.', 'Không tái dùng id ⇒ bền.'],
+  loiHayGap: ['Đánh số lại để "cho đẹp".', 'Dùng số trang làm nhãn.'],
+  thuatNgu: [{ en: 'persistent label', vi: 'nhãn bền vững' }],
+  khaiNiem: ['labeling requirements'],
+});
+
 export default moDun({
   slug: 'swr302-5-2-ch10-srs-labeling',
   ten: '5.2 Labeling requirements, TBDs and UI in the SRS',
   moTaModule: 'Ba cách đánh nhãn yêu cầu (số thứ tự, số phân cấp, thẻ chữ phân cấp) và điểm mạnh/yếu, không tái sử dụng nhãn, cách ghi TBD, mức chi tiết giao diện trong SRS.',
-  de: [E1, E2, E3],
+  de: [E1, E2, E3, E4],
 });

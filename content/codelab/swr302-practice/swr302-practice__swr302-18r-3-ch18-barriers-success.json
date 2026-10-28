@@ -1,0 +1,524 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-18r-3-ch18-barriers-success",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-18r-3-ch18-barriers-success"
+  },
+  "exercises": [
+    {
+      "title": "Reuse barriers 1 — barrier or success factor?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "reuse barriers and success factors"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Barriers: missing or poor requirements · NIH (\"not invented here\") and NAH (\"not applicable here\") · writing style · inconsistent organisation · project type · ownership. Success factors: repository · quality · interactions (trace links) · terminology · organisational culture. Classify.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Rào cản và yếu tố thành công của tái sử dụng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "NIH/NAH, tài liệu thiếu, văn phong lộn xộn ⇒ rào cản.",
+        "Kho tìm được, chất lượng, thuật ngữ, văn hoá ⇒ thành công."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Reuse barriers 1 — barrier or success factor?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Reuse barriers 1 — barrier or success factor? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Success factor\n   - r1.k: Barrier\n   - r2.k: Barrier\n   - r3.k: Success factor\n   - r4.k: Barrier\n   - r5.k: Success factor\n   You cannot reuse what you cannot find, do not trust, or do not understand.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>You cannot reuse what you cannot find, do not trust, or do not understand.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Kind",
+                "luaChon": [
+                  "Barrier",
+                  "Success factor"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "A searchable repository of past requirements with keywords"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "\"We don’t use other departments’ requirements, ours are special.\""
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Previous projects never wrote their requirements down"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Management rewards teams that contribute reusable requirements"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Every BA used a different notation and level of detail"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "A shared glossary so requirements use consistent terms"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Success factor",
+              "r1.k": "Barrier",
+              "r2.k": "Barrier",
+              "r3.k": "Success factor",
+              "r4.k": "Barrier",
+              "r5.k": "Success factor"
+            },
+            "giaiThich": "<p><p>You cannot reuse what you cannot find, do not trust, or do not understand.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Coi \"yêu cầu của mình đặc biệt\" là lý do chính đáng."
+        },
+        {
+          "loi": "Bỏ qua thuật ngữ thống nhất."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "NIH (not invented here)",
+          "vi": "tâm lý \"không phải do mình làm ra\""
+        }
+      ]
+    },
+    {
+      "title": "Reuse barriers 2 — name the barrier",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "reuse barriers"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Name the barrier each situation shows.</p><p>Each row is graded on its own; the explanation of every answer appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Gọi tên rào cản trong từng tình huống.</p><p>Mỗi dòng được chấm riêng; giải thích từng đáp án hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "\"Không áp dụng được ở đây\" ⇒ NAH.",
+        "Khách hàng sở hữu yêu cầu ⇒ ownership."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Reuse barriers 2 — name the barrier\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Reuse barriers 2 — name the barrier — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Missing or poor requirements\n   - r1.k: NIH and NAH\n   - r2.k: Writing style\n   - r3.k: Inconsistent organization\n   - r4.k: Project type\n   - r5.k: Ownership\n   Some barriers are cultural (NIH/NAH), some technical (style, organisation), some legal (ownership).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Some barriers are cultural (NIH/NAH), some technical (style, organisation), some legal (ownership).</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Barrier",
+                "luaChon": [
+                  "Missing or poor requirements",
+                  "NIH and NAH",
+                  "Writing style",
+                  "Inconsistent organization",
+                  "Project type",
+                  "Ownership"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "The old requirements exist but are obsolete — nobody updated them as the app evolved."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "\"That library is from the banking division; it can’t apply to insurance.\""
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Requirements are buried in long narrative paragraphs mixed with design notes."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Each project stores requirements in a different structure, so nobody can search across them."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "The app is tied to a specific device platform, so its requirements fit nowhere else."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "The product was built for one client, who owns its requirements."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Missing or poor requirements",
+              "r1.k": "NIH and NAH",
+              "r2.k": "Writing style",
+              "r3.k": "Inconsistent organization",
+              "r4.k": "Project type",
+              "r5.k": "Ownership"
+            },
+            "giaiThich": "<p><p>Some barriers are cultural (NIH/NAH), some technical (style, organisation), some legal (ownership).</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm writing style với inconsistent organization."
+        },
+        {
+          "loi": "Bỏ qua vấn đề sở hữu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "NAH (not applicable here)",
+          "vi": "tâm lý \"không áp dụng được ở đây\""
+        }
+      ]
+    },
+    {
+      "title": "Reuse barriers 3 — making reuse work",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "reuse success factors"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Success factors: a searchable repository; quality (no one reuses junk — improve a requirement when you reuse it); interactions (trace links show what you take along); consistent terminology; and an organisational culture that rewards both contributing and reusing.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Làm cho tái sử dụng thành công.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Sửa bản gốc, không chỉ bản của mình.",
+        "Liên kết cho biết phụ thuộc."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Reuse barriers 3 — making reuse work\n\nAnswer in the answer panel (no code needed).\n\n1. You reuse a requirement and notice it is ambiguous. What should you do?Bạn tái dùng một yêu cầu và thấy nó mơ hồ. Nên làm gì?\n2. Why check trace links before reusing a requirement?Vì sao xem liên kết truy vết trước khi tái dùng?\n3. In a reuse culture, a BA starting a new feature first…Trong văn hoá tái sử dụng, BA bắt đầu tính năng mới sẽ trước tiên…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Reuse barriers 3 — making reuse work — answer key\n\n1. You reuse a requirement and notice it is ambiguous. What should you do?Bạn tái dùng một yêu cầu và thấy nó mơ hồ. Nên làm gì?\n   Answer: c) Improve it in the shared repository so the next reuser gets a better version\n   Raise its reuse potential.VI: Nâng giá trị tái dùng.\n\n2. Why check trace links before reusing a requirement?Vì sao xem liên kết truy vết trước khi tái dùng?\n   Answer: a) To see which other requirements, rules and tests it depends on\n   Know what you take along.VI: Biết mình mang theo những gì.\n\n3. In a reuse culture, a BA starting a new feature first…Trong văn hoá tái sử dụng, BA bắt đầu tính năng mới sẽ trước tiên…\n   Answer: c) searches the repository for existing requirements\n   Look before you write.VI: Tìm trước khi viết.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: c · a · c.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>You reuse a requirement and notice it is ambiguous. What should you do?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bạn tái dùng một yêu cầu và thấy nó mơ hồ. Nên làm gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Copy it and fix only your copy"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Use it as it is"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Improve it in the shared repository so the next reuser gets a better version"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Delete it from the repository"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Raise its reuse potential.</p><p><i>VI: Nâng giá trị tái dùng.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Why check trace links before reusing a requirement?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao xem liên kết truy vết trước khi tái dùng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "To see which other requirements, rules and tests it depends on"
+              },
+              {
+                "ma": "b",
+                "noiDung": "To find the author’s phone number"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It is not needed"
+              },
+              {
+                "ma": "d",
+                "noiDung": "To count words"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Know what you take along.</p><p><i>VI: Biết mình mang theo những gì.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>In a reuse culture, a BA starting a new feature first…</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong văn hoá tái sử dụng, BA bắt đầu tính năng mới sẽ trước tiên…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "asks developers to code"
+              },
+              {
+                "ma": "b",
+                "noiDung": "writes everything from scratch"
+              },
+              {
+                "ma": "c",
+                "noiDung": "searches the repository for existing requirements"
+              },
+              {
+                "ma": "d",
+                "noiDung": "skips elicitation"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Look before you write.</p><p><i>VI: Tìm trước khi viết.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Sửa riêng bản sao."
+        },
+        {
+          "loi": "Viết lại từ đầu dù đã có sẵn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "requirements traceability matrix (RTM)",
+          "vi": "ma trận truy vết yêu cầu — nối nguồn ↔ yêu cầu ↔ thiết kế ↔ mã ↔ test"
+        }
+      ]
+    },
+    {
+      "title": "Reuse barriers 4 — terminology",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 3,
+      "points": 10,
+      "concepts": [
+        "terminology"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>You may overlook a reusable requirement simply because its terms differ from your stakeholders’ (\"client\" vs \"customer\" vs \"account holder\"). Consistent terminology and glossaries make reuse findable.</p><p>Each question is graded on its own; the explanation appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Thuật ngữ khác nhau làm bỏ sót yêu cầu tái dùng được.</p><p>Mỗi câu được chấm riêng; giải thích hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Glossary có từ đồng nghĩa.",
+        "Gắn từ khoá cho mục trong kho."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Reuse barriers 4 — terminology\n\nAnswer in the answer panel (no code needed).\n\n1. Searching the repository for \"patient\" finds nothing, but \"client record\" requirements exist. The fix is…Tìm \"patient\" không ra, nhưng có yêu cầu về \"client record\". Cách sửa là…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Reuse barriers 4 — terminology — answer key\n\n1. Searching the repository for \"patient\" finds nothing, but \"client record\" requirements exist. The fix is…Tìm \"patient\" không ra, nhưng có yêu cầu về \"client record\". Cách sửa là…\n   Answer: b) a shared glossary with synonyms, and keywords on repository items\n   Glossary + keywords.VI: Glossary + từ khoá.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Searching the repository for \"patient\" finds nothing, but \"client record\" requirements exist. The fix is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Tìm \"patient\" không ra, nhưng có yêu cầu về \"client record\". Cách sửa là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "stop searching"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a shared glossary with synonyms, and keywords on repository items"
+              },
+              {
+                "ma": "c",
+                "noiDung": "nothing"
+              },
+              {
+                "ma": "d",
+                "noiDung": "rename all patients"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Glossary + keywords.</p><p><i>VI: Glossary + từ khoá.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Bỏ cuộc khi tìm không ra."
+        },
+        {
+          "loi": "Đổi tên lung tung."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "glossary",
+          "vi": "bảng thuật ngữ"
+        }
+      ]
+    }
+  ]
+}

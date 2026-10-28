@@ -71,9 +71,29 @@ const E3 = baiJs({
   boYeu: [{ ten: 'mẫu số tính cả Deleted', tep: { 'status.js': "function statusReport(reqs){ var c={Proposed:0,Approved:0,Implemented:0,Verified:0,Deleted:0,Rejected:0}, inv=[]; reqs.forEach(function(r){ var s=r.status.charAt(0).toUpperCase()+r.status.slice(1); if(c.hasOwnProperty(s)) c[s]++; else inv.push(r.id); }); return {counts:c, percentDone: reqs.length? Math.round(c.Verified*100/reqs.length):0, invalid:inv.sort()}; }\n" } }],
 });
 
+const E4 = phanLoai({
+  tieuDe: 'RM 4 — useful requirement attributes',
+  doKho: 'EASY', phut: 5,
+  moTa: { en: '<p>Requirement attributes Wiegers suggests storing: date created, current version, author, priority, status, origin or source, rationale, release number, stakeholders to contact, validation method. Which attribute answers each question?</p>', vi: '<p>Thuộc tính nào trả lời từng câu hỏi?</p>' },
+  cot: 'Attribute', luaChon: ['Origin / source', 'Rationale', 'Release number', 'Status', 'Validation method', 'Priority'],
+  hang: [
+    ['"Who asked for this requirement?"', 'Origin / source'],
+    ['"Why do we need it?"', 'Rationale'],
+    ['"Will it ship in version 2.0 or 3.0?"', 'Release number'],
+    ['"Has it been verified yet?"', 'Status'],
+    ['"Will we check it by test, inspection, demonstration or analysis?"', 'Validation method'],
+    ['"Should we build it before FR-20?"', 'Priority'],
+  ],
+  giaiThich: '<p>Attributes turn a list of statements into manageable records.</p>',
+  goiY: ['Ai đề xuất ⇒ origin; vì sao ⇒ rationale.', 'Kiểm bằng cách nào ⇒ validation method.'],
+  loiHayGap: ['Nhầm origin với rationale.', 'Nhầm status với release.'],
+  thuatNgu: tn('baseline'),
+  khaiNiem: ['requirement attributes'],
+});
+
 export default moDun({
   slug: 'swr302-7-3-ch27-rm-process',
   ten: '7.3 Requirements management practices',
   moTaModule: 'Bốn hoạt động quản lý yêu cầu (version control, change control, status tracking, tracing), baseline và thuộc tính yêu cầu, tự viết báo cáo trạng thái yêu cầu (Proposed…Rejected) chấm trên dữ liệu ẩn.',
-  de: [E1, E2, E3],
+  de: [E1, E2, E3, E4],
 });

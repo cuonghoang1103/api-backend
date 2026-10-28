@@ -1,0 +1,518 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-18r-1-ch18-why-dimensions",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-18r-1-ch18-why-dimensions"
+  },
+  "exercises": [
+    {
+      "title": "Reuse 1 — which dimension of reuse?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "dimensions of reuse"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers Table 18-1 describes any reuse situation along three dimensions: the <b>extent of reuse</b> (how much material: one requirement, with its attributes, or with associated artefacts), the <b>extent of modification</b> (unchanged, attributes changed, or the requirement tweaked) and the <b>reuse mechanism</b> (copy vs reference). Which dimension does each statement describe?</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ba chiều của tái sử dụng: mức độ tái dùng, mức độ sửa đổi, cơ chế (sao chép vs tham chiếu).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "\"Lấy cùng test và luật\" ⇒ mức độ tái dùng.",
+        "\"Trỏ tới thư viện chung\" vs \"chép\" ⇒ cơ chế."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Reuse 1 — which dimension of reuse?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Reuse 1 — which dimension of reuse? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Extent of reuse\n   - r1.k: Extent of modification\n   - r2.k: Reuse mechanism\n   - r3.k: Extent of reuse\n   - r4.k: Extent of modification\n   - r5.k: Reuse mechanism\n   How much, how changed, and by copy or by reference — together these describe any reuse.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>How much, how changed, and by copy or by reference — together these describe any reuse.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Dimension",
+                "luaChon": [
+                  "Extent of reuse",
+                  "Extent of modification",
+                  "Reuse mechanism"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "We take the password requirements together with their acceptance tests and business rules."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "The requirement text stays the same, but its priority is High in the new system."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The SRS points to requirement SEC-04 in the shared library instead of pasting it."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "We reuse just one functional requirement about printing receipts."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "The kiosk and the website share identical check-in requirements."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "The BA copies three requirements from last year’s Word file."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Extent of reuse",
+              "r1.k": "Extent of modification",
+              "r2.k": "Reuse mechanism",
+              "r3.k": "Extent of reuse",
+              "r4.k": "Extent of modification",
+              "r5.k": "Reuse mechanism"
+            },
+            "giaiThich": "<p><p>How much, how changed, and by copy or by reference — together these describe any reuse.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm \"giữ nguyên văn\" (mức sửa đổi) với cơ chế."
+        },
+        {
+          "loi": "Coi chép–dán là cơ chế tốt nhất."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "requirements reuse",
+          "vi": "tái sử dụng yêu cầu"
+        }
+      ]
+    },
+    {
+      "title": "Reuse 2 — copy or reference?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "reuse mechanisms"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Copy-and-paste is the crudest reuse: no history of origin, the copies can be edited independently, and copying within a project bloats the specification. Reuse by reference is usually better: collect reusable items in a shared location, give each a unique id, and insert the id (and a link) in your document. The master must be accessible and persistent.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sao chép thô sơ nhất; tham chiếu thường tốt hơn nhưng bản gốc phải truy cập được và bền vững.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Bản sao trôi dạt khỏi nhau.",
+        "Tham chiếu cần kho chung có id."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Reuse 2 — copy or reference?\n\nAnswer in the answer panel (no code needed).\n\n1. Why is copy-and-paste risky?Vì sao chép–dán rủi ro?\n2. What does reuse by reference require?Tái sử dụng bằng tham chiếu cần gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Reuse 2 — copy or reference? — answer key\n\n1. Why is copy-and-paste risky?Vì sao chép–dán rủi ro?\n   Answer: b) Copies drift apart when one is edited, and nobody knows where they came from\n   Divergence and lost origin.VI: Lệch nhau và mất nguồn gốc.\n\n2. What does reuse by reference require?Tái sử dụng bằng tham chiếu cần gì?\n   Answer: a) A shared, persistent repository where each reusable item has a unique id\n   Accessible, persistent master.VI: Bản gốc truy cập được, bền vững.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Why is copy-and-paste risky?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao chép–dán rủi ro?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It is illegal"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Copies drift apart when one is edited, and nobody knows where they came from"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It is too slow"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It uses too much paper"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Divergence and lost origin.</p><p><i>VI: Lệch nhau và mất nguồn gốc.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>What does reuse by reference require?</p><p style=\"opacity:.75;font-size:.92em\"><i>Tái sử dụng bằng tham chiếu cần gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A shared, persistent repository where each reusable item has a unique id"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A new tool for every project"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Printing the master"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nothing"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Accessible, persistent master.</p><p><i>VI: Bản gốc truy cập được, bền vững.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chép cùng một yêu cầu vào nhiều chỗ trong một SRS."
+        },
+        {
+          "loi": "Tham chiếu tới tệp sẽ bị xoá."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "reuse by reference",
+          "vi": "tái sử dụng bằng tham chiếu"
+        }
+      ]
+    },
+    {
+      "title": "Reuse 3 — benefits of reuse",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 4,
+      "points": 10,
+      "concepts": [
+        "benefits of reuse"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Benefits of reusing requirements: faster delivery, lower cost, consistency within and across applications, higher productivity, fewer defects and less rework; trusted requirements save review and test time and improve estimation; users see consistent functionality.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lợi ích của tái sử dụng yêu cầu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ít review/test lại, ước lượng tốt hơn.",
+        "Người dùng thấy hành vi nhất quán."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Reuse 3 — benefits of reuse\n\nAnswer in the answer panel (no code needed).\n\n1. Which is a benefit of reusing a well-tested requirement set?Đâu là lợi ích khi tái dùng bộ yêu cầu đã được kiểm kỹ?\n2. From the user’s point of view, reuse mainly brings…Từ góc người dùng, tái sử dụng chủ yếu đem lại…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Reuse 3 — benefits of reuse — answer key\n\n1. Which is a benefit of reusing a well-tested requirement set?Đâu là lợi ích khi tái dùng bộ yêu cầu đã được kiểm kỹ?\n   Answer: d) Less review and testing effort, and better estimates from past data\n   Trusted requirements save time.VI: Yêu cầu đáng tin tiết kiệm thời gian.\n\n2. From the user’s point of view, reuse mainly brings…Từ góc người dùng, tái sử dụng chủ yếu đem lại…\n   Answer: a) consistent behaviour across the organisation’s applications\n   Consistency.VI: Nhất quán.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: d · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which is a benefit of reusing a well-tested requirement set?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đâu là lợi ích khi tái dùng bộ yêu cầu đã được kiểm kỹ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Guaranteed zero defects"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Longer documents"
+              },
+              {
+                "ma": "c",
+                "noiDung": "No need to talk to users ever again"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Less review and testing effort, and better estimates from past data"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Trusted requirements save time.</p><p><i>VI: Yêu cầu đáng tin tiết kiệm thời gian.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>From the user’s point of view, reuse mainly brings…</p><p style=\"opacity:.75;font-size:.92em\"><i>Từ góc người dùng, tái sử dụng chủ yếu đem lại…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "consistent behaviour across the organisation’s applications"
+              },
+              {
+                "ma": "b",
+                "noiDung": "more screens"
+              },
+              {
+                "ma": "c",
+                "noiDung": "higher prices"
+              },
+              {
+                "ma": "d",
+                "noiDung": "nothing"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Consistency.</p><p><i>VI: Nhất quán.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nghĩ tái dùng thay được khai thác."
+        },
+        {
+          "loi": "Nghĩ tái dùng bảo đảm không lỗi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "requirements reuse",
+          "vi": "tái sử dụng yêu cầu"
+        }
+      ]
+    },
+    {
+      "title": "Reuse 4 — what can be reused?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 4,
+      "points": 10,
+      "concepts": [
+        "reusable requirements information"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Table 18-2: reusable requirements information goes far beyond functional requirements — user-class descriptions, glossary and data-dictionary entries, business rules, quality attributes, constraints, use cases, acceptance tests and analysis models. Is each item a good reuse candidate for another project in the same organisation?</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Thông tin yêu cầu có thể tái dùng rộng hơn yêu cầu chức năng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Thông tin ổn định giữa các dự án ⇒ ứng viên tốt.",
+        "Thông tin chỉ thuộc một dự án ⇒ kém."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Reuse 4 — what can be reused?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Reuse 4 — what can be reused? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Good candidate\n   - r1.k: Good candidate\n   - r2.k: Good candidate\n   - r3.k: Poor candidate\n   - r4.k: Poor candidate\n   The most reusable assets are often the supporting ones — glossaries, rules, user classes — not only the functional requirements.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The most reusable assets are often the supporting ones — glossaries, rules, user classes — not only the functional requirements.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Reuse candidate?",
+                "luaChon": [
+                  "Good candidate",
+                  "Poor candidate"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "The glossary of hospital terms"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "The accessibility requirements mandated by law"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The user-class description of \"pharmacist\""
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "A sprint burndown of last year’s project"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "The meeting minutes of one project’s kick-off"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Good candidate",
+              "r1.k": "Good candidate",
+              "r2.k": "Good candidate",
+              "r3.k": "Poor candidate",
+              "r4.k": "Poor candidate"
+            },
+            "giaiThich": "<p><p>The most reusable assets are often the supporting ones — glossaries, rules, user classes — not only the functional requirements.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chỉ nghĩ tới yêu cầu chức năng."
+        },
+        {
+          "loi": "Tái dùng biên bản họp."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "data dictionary",
+          "vi": "từ điển dữ liệu — định nghĩa mọi phần tử dữ liệu (thành phần, kiểu, độ dài, giá trị hợp lệ)"
+        },
+        {
+          "en": "business rule",
+          "vi": "quy tắc nghiệp vụ — chính sách, luật, chuẩn, công thức tồn tại NGOÀI phần mềm"
+        }
+      ]
+    }
+  ]
+}

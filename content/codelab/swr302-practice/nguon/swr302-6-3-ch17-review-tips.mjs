@@ -63,9 +63,27 @@ const E3 = phanLoai({
   khaiNiem: ['inspecting requirements'],
 });
 
+const E4 = phanLoai({
+  tieuDe: 'Review tips 4 — informal or formal review?',
+  doKho: 'EASY', phut: 5,
+  moTa: { en: '<p>Informal reviews (peer desk-check, pass-around, walkthrough) are quick and cheap; the inspection is the most formal, with roles, entry/exit criteria and recorded data, and finds the most defects. Choose the more suitable review for each situation.</p>', vi: '<p>Review không chính thức nhanh, rẻ; inspection chính thức nhất, tìm nhiều lỗi nhất. Chọn loại phù hợp.</p>' },
+  cot: 'Review', luaChon: ['Informal review', 'Inspection'],
+  hang: [
+    ['A colleague glances at two new user stories before sprint planning.', 'Informal review'],
+    ['The safety requirements of an insulin pump before certification.', 'Inspection'],
+    ['The BA walks three users through a draft use case to get early feedback.', 'Informal review'],
+    ['The payment and refund section of a banking SRS that will be baselined in a fixed-price contract.', 'Inspection'],
+  ],
+  giaiThich: '<p>Match the rigour to the risk: inspect what is critical; use light reviews early and often for everything else.</p>',
+  goiY: ['Rủi ro cao, sắp baseline ⇒ inspection.', 'Phản hồi sớm, nhanh ⇒ không chính thức.'],
+  loiHayGap: ['Inspection mọi story nhỏ.', 'Chỉ review lướt yêu cầu an toàn.'],
+  thuatNgu: tn('inspection'),
+  khaiNiem: ['review types'],
+});
+
 export default moDun({
   slug: 'swr302-6-3-ch17-review-tips',
   ten: '6.3 Review challenges and tips',
   moTaModule: 'Thách thức khi review yêu cầu (tài liệu lớn, nhóm đông, ở xa, không chuẩn bị) và cách xử lý, review theo góc nhìn (user/dev/tester/maintainer), tự inspect trích đoạn SRS PetCare có cả dòng không lỗi.',
-  de: [E1, E2, E3],
+  de: [E1, E2, E3, E4],
 });

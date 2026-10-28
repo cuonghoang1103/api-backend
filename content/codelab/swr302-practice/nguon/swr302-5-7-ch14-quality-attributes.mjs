@@ -115,7 +115,7 @@ const E4 = baiJs({
 
 export default moDun({
   slug: 'swr302-5-7-ch14-quality-attributes',
-  ten: '5.6 Quality attributes',
+  ten: '5.7 Quality attributes',
   moTaModule: 'Thuộc tính chất lượng bên ngoài/bên trong (Wiegers Ch.14), gọi tên thuộc tính của 12 yêu cầu bệnh viện, đánh đổi giữa các thuộc tính, quy trình khám phá; tự viết 3 yêu cầu chất lượng đo được.',
   de: [E1, E2, E3, E4],
 });

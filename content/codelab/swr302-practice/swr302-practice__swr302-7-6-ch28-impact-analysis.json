@@ -443,6 +443,131 @@
           "vi": "ma trận truy vết yêu cầu — nối nguồn ↔ yêu cầu ↔ thiết kế ↔ mã ↔ test"
         }
       ]
+    },
+    {
+      "title": "Impact 4 — measuring change activity",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "measuring change activity"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Measuring change activity helps judge requirements stability: count change requests by status, by origin and over time; track how many changes affect baselined requirements; and watch the trend — many late changes signal unstable or poorly elicited requirements. Tools track requests, but the policy and the CCB make the decisions.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đo hoạt động thay đổi để đánh giá độ ổn định của yêu cầu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Thay đổi muộn tăng ⇒ yêu cầu chưa ổn định.",
+        "Công cụ không quyết định."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Impact 4 — measuring change activity\n\nAnswer in the answer panel (no code needed).\n\n1. The number of change requests on baselined requirements keeps rising near the release. This suggests…Số yêu cầu thay đổi trên yêu cầu đã baseline tăng dần gần ngày phát hành. Điều này gợi ý…\n2. A change-tracking tool…Công cụ theo dõi thay đổi…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Impact 4 — measuring change activity — answer key\n\n1. The number of change requests on baselined requirements keeps rising near the release. This suggests…Số yêu cầu thay đổi trên yêu cầu đã baseline tăng dần gần ngày phát hành. Điều này gợi ý…\n   Answer: b) unstable requirements — elicitation or validation was not thorough enough\n   Late churn is a warning sign.VI: Thay đổi muộn là dấu hiệu cảnh báo.\n\n2. A change-tracking tool…Công cụ theo dõi thay đổi…\n   Answer: a) records and routes requests; people still decide through the CCB and the policy\n   Tools support, people decide.VI: Công cụ hỗ trợ, con người quyết.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>The number of change requests on baselined requirements keeps rising near the release. This suggests…</p><p style=\"opacity:.75;font-size:.92em\"><i>Số yêu cầu thay đổi trên yêu cầu đã baseline tăng dần gần ngày phát hành. Điều này gợi ý…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the tool is broken"
+              },
+              {
+                "ma": "b",
+                "noiDung": "unstable requirements — elicitation or validation was not thorough enough"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the team is very productive"
+              },
+              {
+                "ma": "d",
+                "noiDung": "nothing"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Late churn is a warning sign.</p><p><i>VI: Thay đổi muộn là dấu hiệu cảnh báo.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>A change-tracking tool…</p><p style=\"opacity:.75;font-size:.92em\"><i>Công cụ theo dõi thay đổi…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "records and routes requests; people still decide through the CCB and the policy"
+              },
+              {
+                "ma": "b",
+                "noiDung": "replaces impact analysis"
+              },
+              {
+                "ma": "c",
+                "noiDung": "decides which changes to accept"
+              },
+              {
+                "ma": "d",
+                "noiDung": "is not useful"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Tools support, people decide.</p><p><i>VI: Công cụ hỗ trợ, con người quyết.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Coi nhiều thay đổi là năng suất cao."
+        },
+        {
+          "loi": "Để công cụ tự quyết."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "change control board (CCB)",
+          "vi": "hội đồng kiểm soát thay đổi — người quyết định chấp nhận/từ chối thay đổi"
+        },
+        {
+          "en": "baseline",
+          "vi": "đường cơ sở — bộ yêu cầu đã thống nhất, từ đó mọi thay đổi phải qua kiểm soát"
+        }
+      ]
     }
   ]
 }

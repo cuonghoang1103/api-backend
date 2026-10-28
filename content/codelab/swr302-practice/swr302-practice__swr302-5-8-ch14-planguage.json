@@ -433,6 +433,131 @@
           "vi": "ngôn ngữ của Tom Gilb để viết yêu cầu chất lượng đo được (TAG, SCALE, METER, GOAL…)"
         }
       ]
+    },
+    {
+      "title": "Planguage 4 — trade-offs between quality attributes",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "quality trade-offs"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Quality attributes interact (Wiegers Figure 14-2): improving one may help or hurt others. Planguage targets (GOAL/STRETCH) must be set with these trade-offs in mind, and stakeholders must agree which attribute wins in a conflict.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các thuộc tính chất lượng tác động lẫn nhau; đặt mục tiêu Planguage phải tính tới đánh đổi.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Bảo mật ↔ hiệu năng, khả dụng.",
+        "Bền ⇒ tin cậy, sẵn sàng tốt hơn, tốn hiệu suất."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Planguage 4 — trade-offs between quality attributes\n\nAnswer in the answer panel (no code needed).\n\n1. Raising the security GOAL (encryption everywhere, 2-factor login) usually affects…Nâng GOAL bảo mật (mã hoá mọi nơi, đăng nhập 2 lớp) thường ảnh hưởng…\n2. Increasing robustness (more input checking and recovery) tends to…Tăng độ bền (kiểm đầu vào, phục hồi nhiều hơn) có xu hướng…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Planguage 4 — trade-offs between quality attributes — answer key\n\n1. Raising the security GOAL (encryption everywhere, 2-factor login) usually affects…Nâng GOAL bảo mật (mã hoá mọi nơi, đăng nhập 2 lớp) thường ảnh hưởng…\n   Answer: a) performance and usability negatively\n   Classic trade-off.VI: Đánh đổi kinh điển.\n\n2. Increasing robustness (more input checking and recovery) tends to…Tăng độ bền (kiểm đầu vào, phục hồi nhiều hơn) có xu hướng…\n   Answer: d) help reliability and availability, but cost some efficiency\n   Positive and negative effects.VI: Có tác động tốt và xấu.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · d.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Raising the security GOAL (encryption everywhere, 2-factor login) usually affects…</p><p style=\"opacity:.75;font-size:.92em\"><i>Nâng GOAL bảo mật (mã hoá mọi nơi, đăng nhập 2 lớp) thường ảnh hưởng…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "performance and usability negatively"
+              },
+              {
+                "ma": "b",
+                "noiDung": "nothing"
+              },
+              {
+                "ma": "c",
+                "noiDung": "portability positively"
+              },
+              {
+                "ma": "d",
+                "noiDung": "only the price"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Classic trade-off.</p><p><i>VI: Đánh đổi kinh điển.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Increasing robustness (more input checking and recovery) tends to…</p><p style=\"opacity:.75;font-size:.92em\"><i>Tăng độ bền (kiểm đầu vào, phục hồi nhiều hơn) có xu hướng…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "have no effect"
+              },
+              {
+                "ma": "b",
+                "noiDung": "reduce safety"
+              },
+              {
+                "ma": "c",
+                "noiDung": "reduce reliability"
+              },
+              {
+                "ma": "d",
+                "noiDung": "help reliability and availability, but cost some efficiency"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Positive and negative effects.</p><p><i>VI: Có tác động tốt và xấu.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt GOAL cao cho mọi thuộc tính cùng lúc."
+        },
+        {
+          "loi": "Không thống nhất thuộc tính nào thắng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "quality attribute",
+          "vi": "thuộc tính chất lượng — các \"-ility\": performance, usability, security, availability…"
+        },
+        {
+          "en": "Planguage",
+          "vi": "ngôn ngữ của Tom Gilb để viết yêu cầu chất lượng đo được (TAG, SCALE, METER, GOAL…)"
+        }
+      ]
     }
   ]
 }

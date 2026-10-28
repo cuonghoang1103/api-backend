@@ -99,9 +99,24 @@ const E3 = baiJs({
   boYeu: [{ ten: 'chỉ con trực tiếp', tep: { 'impact.js': "function impacted(links, c){ var s=Array.isArray(c)?c:[c]; var o=[]; links.forEach(function(l){ if(s.indexOf(l[0])>=0&&o.indexOf(l[1])<0) o.push(l[1]); }); return o.sort(); }\nfunction effort(items,h){ return items.reduce(function(s,i){ return s+(h[i.split('-')[0]]||1); },0); }\n" } }],
 });
 
+const E4 = tracNghiem({
+  tieuDe: 'Impact 4 — measuring change activity',
+  doKho: 'MEDIUM', phut: 5,
+  moTa: { en: '<p>Measuring change activity helps judge requirements stability: count change requests by status, by origin and over time; track how many changes affect baselined requirements; and watch the trend — many late changes signal unstable or poorly elicited requirements. Tools track requests, but the policy and the CCB make the decisions.</p>', vi: '<p>Đo hoạt động thay đổi để đánh giá độ ổn định của yêu cầu.</p>' },
+  cau: [
+    { en: 'The number of change requests on baselined requirements keeps rising near the release. This suggests…', vi: 'Số yêu cầu thay đổi trên yêu cầu đã baseline tăng dần gần ngày phát hành. Điều này gợi ý…', lc: [['a', 'unstable requirements — elicitation or validation was not thorough enough'], ['b', 'the team is very productive'], ['c', 'nothing'], ['d', 'the tool is broken']], dap: 'a', giai: ['Late churn is a warning sign.', 'Thay đổi muộn là dấu hiệu cảnh báo.'] },
+    { en: 'A change-tracking tool…', vi: 'Công cụ theo dõi thay đổi…', lc: [['a', 'records and routes requests; people still decide through the CCB and the policy'], ['b', 'decides which changes to accept'], ['c', 'replaces impact analysis'], ['d', 'is not useful']], dap: 'a', giai: ['Tools support, people decide.', 'Công cụ hỗ trợ, con người quyết.'] },
+  ],
+  goiY: ['Thay đổi muộn tăng ⇒ yêu cầu chưa ổn định.', 'Công cụ không quyết định.'],
+  loiHayGap: ['Coi nhiều thay đổi là năng suất cao.', 'Để công cụ tự quyết.'],
+  giaiThich: '<p>Answers: a · a.</p>',
+  thuatNgu: tn('ccb', 'baseline'),
+  khaiNiem: ['measuring change activity'],
+});
+
 export default moDun({
   slug: 'swr302-7-6-ch28-impact-analysis',
-  ten: '7.4 Change impact analysis',
+  ten: '7.6 Change impact analysis',
   moTaModule: 'Checklist câu hỏi phân tích ảnh hưởng, xác định sản phẩm bị ảnh hưởng bởi CR-14 (PetCare), tự viết hàm tìm mọi mục bị ảnh hưởng trên đồ thị truy vết (có chu trình) và ước lượng công.',
-  de: [E1, E2, E3],
+  de: [E1, E2, E3, E4],
 });

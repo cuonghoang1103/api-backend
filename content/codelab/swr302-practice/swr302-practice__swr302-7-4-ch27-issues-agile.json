@@ -1,0 +1,486 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-7-4-ch27-issues-agile",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-7-4-ch27-issues-agile"
+  },
+  "exercises": [
+    {
+      "title": "Issues 1 — what kind of requirements issue?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "requirements issues"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Early in a project nearly all logged issues relate to requirements: <b>requests for clarification</b>, <b>scope decisions</b>, <b>feasibility questions</b> and <b>to-do items</b> on the requirements. Categorising them helps route each to the right owner and spot patterns (many feasibility questions may signal over-ambitious requirements).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các loại vấn đề yêu cầu thường gặp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "\"Trong hay ngoài bản này\" ⇒ scope.",
+        "\"Có làm được không\" ⇒ feasibility."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Issues 1 — what kind of requirements issue?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Issues 1 — what kind of requirements issue? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Request for clarification\n   - r1.k: Scope decision\n   - r2.k: Feasibility question\n   - r3.k: To-do item\n   - r4.k: Scope decision\n   Each type has a natural owner: clarifications → the BA and the source stakeholder; scope → the decision makers; feasibility → developers; to-dos → the author.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each type has a natural owner: clarifications → the BA and the source stakeholder; scope → the decision makers; feasibility → developers; to-dos → the author.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Issue type",
+                "luaChon": [
+                  "Request for clarification",
+                  "Scope decision",
+                  "Feasibility question",
+                  "To-do item"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "\"What does ‘active member’ mean in FR-14?\""
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "\"Is the loyalty programme in release 1 or not?\""
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "\"Can the old database really return 10,000 rows in one second?\""
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "\"Add the missing exception flow to UC-07.\""
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "\"Should the mobile app support tablets in this release?\""
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Request for clarification",
+              "r1.k": "Scope decision",
+              "r2.k": "Feasibility question",
+              "r3.k": "To-do item",
+              "r4.k": "Scope decision"
+            },
+            "giaiThich": "<p><p>Each type has a natural owner: clarifications → the BA and the source stakeholder; scope → the decision makers; feasibility → developers; to-dos → the author.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm câu hỏi phạm vi với câu hỏi làm rõ."
+        },
+        {
+          "loi": "Để vấn đề không có người phụ trách."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "issue tracking",
+          "vi": "theo dõi vấn đề"
+        }
+      ]
+    },
+    {
+      "title": "Issues 2 — development or management effort?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "measuring requirements effort"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Track the effort spent on requirements. <b>Requirements development</b> effort: planning requirements activities, workshops and interviews, analysis, writing, reviews, prototypes. <b>Requirements management</b> effort: configuring an RM tool, submitting and evaluating changes, updating the repository, communicating changes, tracking and reporting status, creating trace information.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Công sức phát triển yêu cầu vs quản lý yêu cầu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Tạo ra yêu cầu ⇒ phát triển.",
+        "Giữ, đổi, theo dõi yêu cầu ⇒ quản lý."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Issues 2 — development or management effort?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Issues 2 — development or management effort? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Requirements development\n   - r1.k: Requirements management\n   - r2.k: Requirements development\n   - r3.k: Requirements management\n   - r4.k: Requirements development\n   - r5.k: Requirements management\n   Management effort is an investment in project success, not overhead: it protects the agreed requirements and makes change affordable.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Management effort is an investment in project success, not overhead: it protects the agreed requirements and makes change affordable.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Effort type",
+                "luaChon": [
+                  "Requirements development",
+                  "Requirements management"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Running two elicitation workshops"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Performing impact analysis of a change request"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Writing the use case specifications"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Updating trace links after a change"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Inspecting the SRS"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Reporting how many requirements are verified"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Requirements development",
+              "r1.k": "Requirements management",
+              "r2.k": "Requirements development",
+              "r3.k": "Requirements management",
+              "r4.k": "Requirements development",
+              "r5.k": "Requirements management"
+            },
+            "giaiThich": "<p><p>Management effort is an investment in project success, not overhead: it protects the agreed requirements and makes change affordable.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Coi inspection là quản lý."
+        },
+        {
+          "loi": "Coi công quản lý là lãng phí."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "impact analysis",
+          "vi": "phân tích ảnh hưởng — thay đổi này chạm tới yêu cầu, thiết kế, mã, test nào, tốn bao nhiêu"
+        },
+        {
+          "en": "requirements traceability matrix (RTM)",
+          "vi": "ma trận truy vết yêu cầu — nối nguồn ↔ yêu cầu ↔ thiết kế ↔ mã ↔ test"
+        }
+      ]
+    },
+    {
+      "title": "Issues 3 — read an iteration burndown",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "burndown chart"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>A burndown chart shows the story points <b>remaining</b> in the backlog after each iteration — which, unlike \"percent done\", also reveals scope growth. Write <code>function forecastEnd(remaining)</code>: given the points remaining after each completed iteration (e.g. <code>[120, 100, 85, 60]</code>, the first value is the starting backlog), compute the average burn per iteration over all completed iterations and return how many <b>more</b> iterations are needed to reach zero (rounded up); return <code>Infinity</code> if the average burn is 0 or negative (scope is growing as fast as work is done). Also set <code>SCOPE_GREW</code> to <code>true</code> if any iteration ended with more points than the previous one, for the sample <code>BURNDOWN</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>forecastEnd([120, 100, 85, 60]) = 3 (average burn 20 per iteration).</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>forecastEnd(remaining)</code>: tốc độ \"đốt\" trung bình mỗi vòng, số vòng CÒN cần (làm tròn lên), Infinity nếu không giảm; và <code>SCOPE_GREW</code> cho dữ liệu mẫu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>forecastEnd([120, 100, 85, 60]) = 3 (trung bình 20 điểm/vòng).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "forecastEnd([50, 50])",
+          "output": "Infinity",
+          "explanation": "No progress.|||Không tiến triển."
+        }
+      ],
+      "hintsJson": [
+        "Tốc độ trung bình = (đầu − cuối) ÷ số vòng đã xong.",
+        "Số vòng còn = ceil(còn lại ÷ tốc độ)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "burndown.js",
+          "language": "javascript",
+          "code": "const BURNDOWN = [140, 118, 125, 101, 80];\nfunction forecastEnd(remaining) {\n  return 0;\n}\nconst SCOPE_GREW = false;\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "burndown.js",
+          "language": "javascript",
+          "code": "const BURNDOWN = [140, 118, 125, 101, 80];\nfunction forecastEnd(remaining) {\n  var n = remaining.length - 1;\n  if (n < 1) return Infinity;\n  var burn = (remaining[0] - remaining[n]) / n;\n  if (burn <= 0) return Infinity;\n  return Math.ceil(remaining[n] / burn);\n}\nconst SCOPE_GREW = BURNDOWN.some(function (v, i) { return i > 0 && v > BURNDOWN[i - 1]; });\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Because the chart tracks work remaining, scope growth shows up as a flatter slope — the \"90% done\" syndrome becomes visible.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "burndown.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "forecastEnd on regular data",
+              "vi": "forecastEnd với dữ liệu thường"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){return typeof forecastEnd!=\"function\"?\"forecastEnd is not a function\":forecastEnd([120,100,85,60])!==3?\"forecastEnd([120, 100, 85, 60]) should be 3\":forecastEnd([100,70])===3?\"OK\":\"forecastEnd([100, 70]) should be 3 (70 / 30 rounded up)\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "no progress ⇒ Infinity",
+              "vi": "không tiến triển ⇒ Infinity"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){return typeof forecastEnd!=\"function\"?\"forecastEnd is not a function\":forecastEnd([50,50])===1/0&&forecastEnd([40,45])===1/0&&forecastEnd([30])===1/0?\"OK\":\"flat, growing, or a single value \\u21D2 Infinity\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "SCOPE_GREW for the sample burndown",
+              "vi": "SCOPE_GREW cho dữ liệu mẫu"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){return typeof SCOPE_GREW==\"undefined\"?\"SCOPE_GREW is missing\":SCOPE_GREW===!0?\"OK\":\"iteration 2 ended with more points (125) than iteration 1 (118)\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "hidden: zero remaining ⇒ 0 more iterations",
+              "vi": "ẩn: còn 0 điểm ⇒ 0 vòng nữa"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){return typeof forecastEnd!=\"function\"?\"forecastEnd is not a function\":forecastEnd([30,10,0])===0?\"OK\":\"nothing left \\u21D2 0\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chia cho độ dài mảng thay vì số vòng."
+        },
+        {
+          "loi": "Không xử lý trường hợp không giảm."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "burndown chart",
+          "vi": "biểu đồ burndown — điểm còn lại theo thời gian"
+        },
+        {
+          "en": "story point",
+          "vi": "điểm story"
+        }
+      ]
+    },
+    {
+      "title": "Issues 4 — managing requirements on agile projects",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 4,
+      "points": 10,
+      "concepts": [
+        "agile requirements management"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Agile accommodates change through iterations and a dynamic product backlog: new stories that arrive mid-iteration are prioritised against the remaining backlog and allocated to future iterations; the team always works on the highest-priority stories.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Agile đón thay đổi qua backlog động: story mới giữa vòng được xếp ưu tiên và đưa vào các vòng sau.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Story mới ⇒ backlog.",
+        "Sprint hiện tại giữ nguyên."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Issues 4 — managing requirements on agile projects\n\nAnswer in the answer panel (no code needed).\n\n1. A new story arrives in the middle of a sprint. What normally happens?Một story mới tới giữa sprint. Bình thường xử lý thế nào?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Issues 4 — managing requirements on agile projects — answer key\n\n1. A new story arrives in the middle of a sprint. What normally happens?Một story mới tới giữa sprint. Bình thường xử lý thế nào?\n   Answer: a) It is added to the backlog, prioritised, and planned into a future iteration\n   The current sprint’s commitment is protected.VI: Cam kết của sprint hiện tại được bảo vệ.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>A new story arrives in the middle of a sprint. What normally happens?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một story mới tới giữa sprint. Bình thường xử lý thế nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It is added to the backlog, prioritised, and planned into a future iteration"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It is rejected"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The team starts it immediately"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The sprint is cancelled"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The current sprint’s commitment is protected.</p><p><i>VI: Cam kết của sprint hiện tại được bảo vệ.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Làm ngay story mới chen ngang."
+        },
+        {
+          "loi": "Từ chối mọi story mới."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "product backlog",
+          "vi": "danh sách việc của sản phẩm, xếp theo ưu tiên"
+        }
+      ]
+    }
+  ]
+}

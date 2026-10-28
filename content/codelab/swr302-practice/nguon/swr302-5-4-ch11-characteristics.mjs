@@ -61,9 +61,22 @@ const E3 = tracNghiem({
   khaiNiem: ['writing excellent requirements'],
 });
 
+const E4 = phanLoai({
+  tieuDe: 'Characteristics 4 — a property of each requirement or of the set?',
+  doKho: 'EASY', phut: 4,
+  moTa: { en: '<p>Wiegers: each requirement should be complete, correct, feasible, necessary, prioritized, unambiguous and verifiable; the set of requirements should be complete, consistent, modifiable and traceable. Classify each characteristic as stated in the slides.</p>', vi: '<p>Đặc tính của từng yêu cầu hay của tập yêu cầu?</p>' },
+  cot: 'Applies to', luaChon: ['Each requirement', 'The set of requirements'],
+  hang: [['Feasible', 'Each requirement'], ['Consistent', 'The set of requirements'], ['Verifiable', 'Each requirement'], ['Modifiable', 'The set of requirements'], ['Prioritized', 'Each requirement'], ['Traceable', 'The set of requirements']],
+  giaiThich: '<p>"Complete" appears in both lists: each requirement must be complete in itself, and the set must contain all requirements.</p>',
+  goiY: ['Nhất quán, sửa được, truy vết được ⇒ tập.', 'Khả thi, kiểm được, có ưu tiên ⇒ từng yêu cầu.'],
+  loiHayGap: ['Xếp "consistent" cho từng yêu cầu.', 'Xếp "prioritized" cho tập.'],
+  thuatNgu: tn('verifiable'),
+  khaiNiem: ['characteristics of excellent requirements'],
+});
+
 export default moDun({
   slug: 'swr302-5-4-ch11-characteristics',
-  ten: '5.3 Characteristics of excellent requirements',
+  ten: '5.4 Characteristics of excellent requirements',
   moTaModule: 'Đặc tính của từng yêu cầu (đầy đủ, đúng, khả thi, cần thiết, có ưu tiên, không mơ hồ, kiểm chứng được) và của tập yêu cầu (đầy đủ, nhất quán, sửa được, truy vết được); gọi tên đặc tính bị vi phạm; chọn yêu cầu tốt hơn.',
-  de: [E1, E3, E2],
+  de: [E1, E3, E2, E4],
 });

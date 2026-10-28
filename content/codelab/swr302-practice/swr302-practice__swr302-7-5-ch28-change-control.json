@@ -1,0 +1,541 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-7-5-ch28-change-control",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-7-5-ch28-change-control"
+  },
+  "exercises": [
+    {
+      "title": "Change process 1 — why manage changes?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "change control policy"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>A serious organisation ensures that proposed changes are evaluated before commitment; the appropriate people make informed business decisions; change activity is visible to affected stakeholders; approved changes are communicated to all affected participants; and changes are incorporated consistently.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Vì sao phải quản lý thay đổi.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Kiểm soát ≠ cấm.",
+        "Không qua quy trình ⇒ không xét."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Change process 1 — why manage changes?\n\nAnswer in the answer panel (no code needed).\n\n1. Which is NOT a goal of change control?Đâu KHÔNG phải mục tiêu của kiểm soát thay đổi?\n2. Under a typical change control policy, a request not submitted through the process is…Theo chính sách điển hình, yêu cầu không gửi qua quy trình thì…\n3. Before a change is approved, developers may…Trước khi thay đổi được duyệt, dev có thể…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Change process 1 — why manage changes? — answer key\n\n1. Which is NOT a goal of change control?Đâu KHÔNG phải mục tiêu của kiểm soát thay đổi?\n   Answer: a) Preventing every change to the requirements\n   Change control manages change; it does not forbid it.VI: Kiểm soát thay đổi là quản lý, không phải cấm.\n\n2. Under a typical change control policy, a request not submitted through the process is…Theo chính sách điển hình, yêu cầu không gửi qua quy trình thì…\n   Answer: a) not considered\n   One door for all changes.VI: Một cửa cho mọi thay đổi.\n\n3. Before a change is approved, developers may…Trước khi thay đổi được duyệt, dev có thể…\n   Answer: c) explore its feasibility, but not design or implement it\n   Feasibility exploration only.VI: Chỉ thăm dò khả thi.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · a · c.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which is NOT a goal of change control?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đâu KHÔNG phải mục tiêu của kiểm soát thay đổi?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Preventing every change to the requirements"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Making change activity visible"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Evaluating changes before committing to them"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Communicating approved changes to everyone affected"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Change control manages change; it does not forbid it.</p><p><i>VI: Kiểm soát thay đổi là quản lý, không phải cấm.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Under a typical change control policy, a request not submitted through the process is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Theo chính sách điển hình, yêu cầu không gửi qua quy trình thì…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "not considered"
+              },
+              {
+                "ma": "b",
+                "noiDung": "approved automatically"
+              },
+              {
+                "ma": "c",
+                "noiDung": "implemented first"
+              },
+              {
+                "ma": "d",
+                "noiDung": "given top priority"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>One door for all changes.</p><p><i>VI: Một cửa cho mọi thay đổi.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Before a change is approved, developers may…</p><p style=\"opacity:.75;font-size:.92em\"><i>Trước khi thay đổi được duyệt, dev có thể…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "deploy it to production"
+              },
+              {
+                "ma": "b",
+                "noiDung": "nothing at all"
+              },
+              {
+                "ma": "c",
+                "noiDung": "explore its feasibility, but not design or implement it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "implement it to save time"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Feasibility exploration only.</p><p><i>VI: Chỉ thăm dò khả thi.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho dev làm trước rồi xin duyệt."
+        },
+        {
+          "loi": "Nghĩ mục tiêu là chặn mọi thay đổi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "change control board (CCB)",
+          "vi": "hội đồng kiểm soát thay đổi — người quyết định chấp nhận/từ chối thay đổi"
+        }
+      ]
+    },
+    {
+      "title": "Change process 2 — the four components of a process description",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "process description"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Any process description should contain: <b>entry criteria</b> (conditions before the process can begin), <b>tasks</b> (with the responsible role and participants), <b>verification steps</b> (confirm the tasks were done correctly) and <b>exit criteria</b> (conditions indicating successful completion). Classify each line of a change control process description.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bốn thành phần của mô tả quy trình. Phân loại từng dòng của mô tả quy trình kiểm soát thay đổi.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Điều kiện để bắt đầu ⇒ entry.",
+        "Điều kiện để kết thúc ⇒ exit."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Change process 2 — the four components of a process description\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Change process 2 — the four components of a process description — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Entry criteria\n   - r1.k: Tasks\n   - r2.k: Verification\n   - r3.k: Exit criteria\n   - r4.k: Tasks\n   These four make a process repeatable rather than heroic (Wiegers Figure 28-1).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>These four make a process repeatable rather than heroic (Wiegers Figure 28-1).</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Component",
+                "luaChon": [
+                  "Entry criteria",
+                  "Tasks",
+                  "Verification",
+                  "Exit criteria"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "A change request has been submitted with all required fields filled."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "The evaluator performs an impact analysis; the CCB chair schedules the decision."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The tester confirms the change works and the affected tests pass."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "The request status is Closed or Rejected, and the originator has been notified."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "The modifier updates the requirements, design, code and trace links."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Entry criteria",
+              "r1.k": "Tasks",
+              "r2.k": "Verification",
+              "r3.k": "Exit criteria",
+              "r4.k": "Tasks"
+            },
+            "giaiThich": "<p><p>These four make a process repeatable rather than heroic (Wiegers Figure 28-1).</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm verification với exit criteria."
+        },
+        {
+          "loi": "Quên entry criteria."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "entry / exit criteria",
+          "vi": "tiêu chí vào / ra"
+        }
+      ]
+    },
+    {
+      "title": "Change process 3 — the CCB charter",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "CCB charter"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>A CCB charter covers <b>purpose</b>, <b>scope of authority</b> (what it decides vs escalates), <b>membership</b>, <b>operating procedures</b> (meeting frequency, triggers for special meetings) and the <b>decision process</b> (quorum, decision rules, whether the chair can overrule, whether management must ratify). Classify each clause.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Điều lệ CCB gồm mục đích, phạm vi quyền hạn, thành viên, thủ tục vận hành, quy trình ra quyết định.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Cái gì phải chuyển lên cấp trên ⇒ phạm vi quyền hạn.",
+        "Túc số, quy tắc quyết định ⇒ decision process."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Change process 3 — the CCB charter\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Change process 3 — the CCB charter — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Scope of authority\n   - r1.k: Operating procedures\n   - r2.k: Membership\n   - r3.k: Decision process\n   - r4.k: Purpose\n   Every project has a de facto group making these calls; the charter makes its composition, authority and procedures explicit.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Every project has a de facto group making these calls; the charter makes its composition, authority and procedures explicit.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Charter section",
+                "luaChon": [
+                  "Purpose",
+                  "Scope of authority",
+                  "Membership",
+                  "Operating procedures",
+                  "Decision process"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "\"Changes over 40 hours of effort are escalated to the steering committee.\""
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "\"The board meets every Tuesday; any member can call an urgent meeting for production defects.\""
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "\"Members: product owner (chair), lead developer, test lead, clinic manager.\""
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "\"Three members including the chair form a quorum; decisions are by consensus, otherwise the chair decides.\""
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "\"The board decides which proposed changes to requirements and baselined documents are accepted.\""
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Scope of authority",
+              "r1.k": "Operating procedures",
+              "r2.k": "Membership",
+              "r3.k": "Decision process",
+              "r4.k": "Purpose"
+            },
+            "giaiThich": "<p><p>Every project has a de facto group making these calls; the charter makes its composition, authority and procedures explicit.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm thủ tục họp với quy trình quyết định."
+        },
+        {
+          "loi": "Không ghi quyền hạn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "change control board (CCB)",
+          "vi": "hội đồng kiểm soát thay đổi — người quyết định chấp nhận/từ chối thay đổi"
+        }
+      ]
+    },
+    {
+      "title": "Change process 4 — renegotiating commitments",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "renegotiating commitments"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Stakeholders cannot keep adding functionality to a project with fixed schedule, staff, budget and quality and still succeed. Before accepting a significant change, renegotiate commitments — more time, or defer lower-priority requirements. If no adjustment is granted, document the threat to success in the risk list.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trước khi nhận thay đổi lớn, thương lượng lại cam kết; không được thì ghi rủi ro.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Thêm việc ⇒ thêm thời gian hoặc bớt việc khác.",
+        "Không thương lượng được ⇒ ghi rủi ro."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Change process 4 — renegotiating commitments\n\nAnswer in the answer panel (no code needed).\n\n1. The CCB approves a large change but management refuses to move the date. What should the PM do?CCB duyệt một thay đổi lớn nhưng quản lý không cho dời ngày. PM nên làm gì?\n2. Saying yes to a change without adjusting commitments usually leads to…Nhận thay đổi mà không điều chỉnh cam kết thường dẫn tới…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Change process 4 — renegotiating commitments — answer key\n\n1. The CCB approves a large change but management refuses to move the date. What should the PM do?CCB duyệt một thay đổi lớn nhưng quản lý không cho dời ngày. PM nên làm gì?\n   Answer: b) Propose deferring lower-priority requirements; if refused, record the threat in the risk list\n   Make the trade-off visible.VI: Làm sự đánh đổi hiện rõ.\n\n2. Saying yes to a change without adjusting commitments usually leads to…Nhận thay đổi mà không điều chỉnh cam kết thường dẫn tới…\n   Answer: b) a project that quietly fails its schedule, budget or quality\n   How projects quietly fail.VI: Cách dự án âm thầm thất bại.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>The CCB approves a large change but management refuses to move the date. What should the PM do?</p><p style=\"opacity:.75;font-size:.92em\"><i>CCB duyệt một thay đổi lớn nhưng quản lý không cho dời ngày. PM nên làm gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Ignore the change"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Propose deferring lower-priority requirements; if refused, record the threat in the risk list"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Silently ask the team to work weekends"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Lower the quality without telling anyone"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Make the trade-off visible.</p><p><i>VI: Làm sự đánh đổi hiện rõ.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Saying yes to a change without adjusting commitments usually leads to…</p><p style=\"opacity:.75;font-size:.92em\"><i>Nhận thay đổi mà không điều chỉnh cam kết thường dẫn tới…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "fewer defects"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a project that quietly fails its schedule, budget or quality"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a happier team"
+              },
+              {
+                "ma": "d",
+                "noiDung": "nothing"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>How projects quietly fail.</p><p><i>VI: Cách dự án âm thầm thất bại.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Ép đội làm thêm giờ âm thầm."
+        },
+        {
+          "loi": "Hạ chất lượng mà không nói."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "change control board (CCB)",
+          "vi": "hội đồng kiểm soát thay đổi — người quyết định chấp nhận/từ chối thay đổi"
+        },
+        {
+          "en": "scope creep (creeping requirements)",
+          "vi": "phạm vi phình dần ngoài kiểm soát"
+        }
+      ]
+    }
+  ]
+}

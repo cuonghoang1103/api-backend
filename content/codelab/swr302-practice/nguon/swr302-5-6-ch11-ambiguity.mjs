@@ -106,7 +106,7 @@ const E4 = baiJs({
 
 export default moDun({
   slug: 'swr302-5-6-ch11-ambiguity',
-  ten: '5.5 Avoiding ambiguity',
+  ten: '5.6 Avoiding ambiguity',
   moTaModule: 'Từ mơ hồ (bảng 11-2), giá trị biên chồng lấn/bỏ trống, thiếu nhánh else, trộn and/or, câu phủ định; tự viết luật nộp trễ không mơ hồ và hàm penalty đúng mọi biên.',
   de: [E1, E2, E3, E4],
 });

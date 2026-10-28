@@ -78,9 +78,24 @@ const E3 = baiJs({
   boYeu: [{ ten: 'giữ bị động + phủ định', tep: { 'rewrites.js': "const REWRITES = { R1: 'The invoice shall be generated monthly for contracts.', R2: 'The system shall not fail to notify landlords after 5 days.', R3: ['The system shall let tenants report problems, upload photos and chat.'] };\n" } }],
 });
 
+const E4 = tracNghiem({
+  tieuDe: 'Writing 4 — level of detail and redundancy',
+  doKho: 'MEDIUM', phut: 5,
+  moTa: { en: '<p>Write requirements at a consistent level of detail (siblings under one feature should be similarly granular), avoid redundancy (state each requirement once and refer to it), and write complete sentences with correct grammar. Lists and tables can replace long, repetitive sentences.</p>', vi: '<p>Mức chi tiết nhất quán, tránh trùng lặp, câu đầy đủ; dùng danh sách/bảng thay câu dài lặp lại.</p>' },
+  cau: [
+    { en: 'The same rule "fee = service fee + 10% VAT" appears in five requirements. Better?', vi: 'Cùng luật "phí = phí dịch vụ + 10% VAT" xuất hiện ở năm yêu cầu. Tốt hơn là?', lc: [['a', 'State it once (e.g. as BR-04) and refer to it from the five requirements'], ['b', 'Keep all five copies'], ['c', 'Delete the rule'], ['d', 'Put it only in the code']], dap: 'a', giai: ['One statement, many references.', 'Một phát biểu, nhiều tham chiếu.'] },
+    { en: 'Twelve requirements say "The system shall let a manager export report X to CSV" for twelve reports. Better?', vi: 'Mười hai yêu cầu "cho quản lý xuất báo cáo X ra CSV" cho mười hai báo cáo. Tốt hơn là?', lc: [['a', 'One requirement with a table of the twelve reports'], ['b', 'Keep twelve sentences'], ['c', 'Remove the export'], ['d', 'Write it as a user story only']], dap: 'a', giai: ['Tables reduce repetition.', 'Bảng giảm lặp.'] },
+  ],
+  goiY: ['Viết một lần, tham chiếu nhiều lần.', 'Bảng thay câu lặp.'],
+  loiHayGap: ['Chép luật vào nhiều yêu cầu.', 'Mỗi biến thể một câu dài.'],
+  giaiThich: '<p>Answers: a · a.</p>',
+  thuatNgu: tn('businessRule'),
+  khaiNiem: ['writing guidelines'],
+});
+
 export default moDun({
   slug: 'swr302-5-5-ch11-writing',
-  ten: '5.4 Guidelines for writing requirements',
+  ten: '5.5 Guidelines for writing requirements',
   moTaModule: 'Góc nhìn hệ thống/người dùng, thể chủ động, mỗi câu một yêu cầu, tránh chi tiết thiết kế, từ mơ hồ và phủ định kép, mức chi tiết nhất quán; tự viết lại ba yêu cầu tồi có chấm.',
-  de: [E1, E2, E3],
+  de: [E1, E2, E3, E4],
 });

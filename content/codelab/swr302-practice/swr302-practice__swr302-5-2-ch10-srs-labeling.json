@@ -439,6 +439,133 @@
           "vi": "tài liệu đặc tả yêu cầu phần mềm"
         }
       ]
+    },
+    {
+      "title": "Labeling 4 — is this label scheme robust?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "labeling requirements"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>A good labeling convention gives every requirement a unique, persistent id that survives additions, deletions and moves, so traces and test cases keep pointing at the right requirement. Judge each team practice.</p><p>Each row is graded on its own; the explanation of every answer appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Quy ước đánh nhãn tốt: duy nhất, bền vững qua thêm/xoá/di chuyển. Đánh giá từng cách làm.</p><p>Mỗi dòng được chấm riêng; giải thích từng đáp án hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Đánh số tự động theo đoạn ⇒ dễ vỡ.",
+        "Không tái dùng id ⇒ bền."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Labeling 4 — is this label scheme robust?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Labeling 4 — is this label scheme robust? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Fragile\n   - r1.k: Robust\n   - r2.k: Robust\n   - r3.k: Fragile\n   - r4.k: Robust\n   Anything that renumbers on edit breaks traceability; ids assigned once and never reused are robust.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Anything that renumbers on edit breaks traceability; ids assigned once and never reused are robust.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Practice",
+                "luaChon": [
+                  "Robust",
+                  "Fragile"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Ids are the paragraph numbers that Word generates automatically."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "A deleted requirement keeps its id, marked Deleted; the id is never reused."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "When a requirement moves to another section, its textual tag Booking.Cancel.Deadline stays the same."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "After deleting FR-7, the team renumbers FR-8…FR-40 to close the gap."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "A requirements tool assigns an id at creation that never changes."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Fragile",
+              "r1.k": "Robust",
+              "r2.k": "Robust",
+              "r3.k": "Fragile",
+              "r4.k": "Robust"
+            },
+            "giaiThich": "<p><p>Anything that renumbers on edit breaks traceability; ids assigned once and never reused are robust.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đánh số lại để \"cho đẹp\"."
+        },
+        {
+          "loi": "Dùng số trang làm nhãn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "persistent label",
+          "vi": "nhãn bền vững"
+        }
+      ]
     }
   ]
 }

@@ -1,0 +1,882 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-junit-hands-on",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-junit-hands-on"
+  },
+  "exercises": [
+    {
+      "title": "JUnit practice 1 — Migrate a JUnit 4 test class to JUnit 5",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "JUnit 5"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>The course kit runs JUnit 4.13.2 (<code>junit-4.13.2.jar</code> + <code>hamcrest-core-1.3.jar</code>). Modern projects use JUnit 5 (Jupiter) with Maven. Give the JUnit 5 replacement of each JUnit 4 construct.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bộ công cụ của môn chạy JUnit 4.13.2 (<code>junit-4.13.2.jar</code> + <code>hamcrest-core-1.3.jar</code>). Dự án hiện đại dùng JUnit 5 (Jupiter) với Maven. Cho bản thay thế JUnit 5 của từng cấu trúc JUnit 4.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Before/After → BeforeEach/AfterEach; BeforeClass/AfterClass → BeforeAll/AfterAll.",
+        "Message của assert ở JUnit 5 nằm cuối."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# JUnit practice 1 — Migrate a JUnit 4 test class to JUnit 5\n\nAnswer in the answer panel (no code needed).\n\n1. JUnit 4 → JUnit 5JUnit 4 → JUnit 5\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# JUnit practice 1 — Migrate a JUnit 4 test class to JUnit 5 — answer key\n\n1. JUnit 4 → JUnit 5JUnit 4 → JUnit 5\n   - r0.j5: @BeforeEach\n   - r1.j5: @AfterEach\n   - r2.j5: @BeforeAll\n   - r3.j5: @AfterAll\n   - r4.j5: @Disabled\n   - r5.j5: assertThrows(...)\n   - r6.j5: @ParameterizedTest + @CsvSource\n   - r7.j5: @Tag\n   - r8.j5: Assertions.assertEquals(expected, actual, message)\n   JUnit 5 renames the lifecycle annotations, replaces @Ignore with @Disabled, @Category with @Tag, the expected attribute with assertThrows (which also lets you check the message), the Parameterized runner with @ParameterizedTest, and moves the message to the LAST argument.VI: JUnit 5 đổi tên các annotation vòng đời, thay @Ignore bằng @Disabled, @Category bằng @Tag, thuộc tính expected bằng assertThrows (kiểm được cả message), runner Parameterized bằng @ParameterizedTest, và chuyển message xuống tham số CUỐI.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Rows map in the order of the list.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>JUnit 4 → JUnit 5</p><p style=\"opacity:.75;font-size:.92em\"><i>JUnit 4 → JUnit 5</i></p>",
+            "cot": [
+              {
+                "ma": "j4",
+                "ten": "JUnit 4"
+              },
+              {
+                "ma": "j5",
+                "ten": "JUnit 5",
+                "luaChon": [
+                  "@BeforeEach",
+                  "@AfterEach",
+                  "@BeforeAll",
+                  "@AfterAll",
+                  "@Disabled",
+                  "assertThrows(...)",
+                  "@ParameterizedTest + @CsvSource",
+                  "@Tag",
+                  "Assertions.assertEquals(expected, actual, message)"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "j4": "@Before"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "j4": "@After"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "j4": "@BeforeClass (static, once per class)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "j4": "@AfterClass"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "j4": "@Ignore"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "j4": "@Test(expected = IllegalArgumentException.class)"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "j4": "@RunWith(Parameterized.class) with a @Parameters method"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "j4": "@Category(SlowTests.class)"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "j4": "Assert.assertEquals(message, expected, actual)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.j5": "@BeforeEach",
+              "r1.j5": "@AfterEach",
+              "r2.j5": "@BeforeAll",
+              "r3.j5": "@AfterAll",
+              "r4.j5": "@Disabled",
+              "r5.j5": "assertThrows(...)",
+              "r6.j5": "@ParameterizedTest + @CsvSource",
+              "r7.j5": "@Tag",
+              "r8.j5": "Assertions.assertEquals(expected, actual, message)"
+            },
+            "giaiThich": "<p>JUnit 5 renames the lifecycle annotations, replaces @Ignore with @Disabled, @Category with @Tag, the expected attribute with assertThrows (which also lets you check the message), the Parameterized runner with @ParameterizedTest, and moves the message to the LAST argument.</p><p><i>VI: JUnit 5 đổi tên các annotation vòng đời, thay @Ignore bằng @Disabled, @Category bằng @Tag, thuộc tính expected bằng assertThrows (kiểm được cả message), runner Parameterized bằng @ParameterizedTest, và chuyển message xuống tham số CUỐI.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Giữ @Ignore trong JUnit 5 — engine Jupiter không xét nó, test vẫn chạy."
+        },
+        {
+          "loi": "Để message ở đầu assertEquals của JUnit 5 — nó sẽ bị hiểu là giá trị mong đợi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "JUnit Jupiter",
+          "vi": "engine/API của JUnit 5"
+        },
+        {
+          "en": "lifecycle annotation",
+          "vi": "annotation vòng đời test"
+        }
+      ]
+    },
+    {
+      "title": "JUnit practice 2 — What does “ant jacoco-report” run, in which order?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 4,
+      "points": 10,
+      "concepts": [
+        "build tools"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>The course’s <code>build.xml</code> declares these targets:</p><pre>&lt;target name=\"clean\"&gt;\n&lt;target name=\"compile\" depends=\"clean\"&gt;\n&lt;target name=\"compile-tests\" depends=\"compile\"&gt;\n&lt;target name=\"test-with-jacoco\" depends=\"compile-tests\"&gt;\n&lt;target name=\"jacoco-report\" depends=\"test-with-jacoco\"&gt;</pre><p>Ant runs every dependency first. Put the targets executed by <code>ant jacoco-report</code> in order.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>build.xml</code> của môn khai báo các target như trên. Ant chạy mọi phụ thuộc trước. Sắp các target được chạy bởi <code>ant jacoco-report</code> theo thứ tự.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Mỗi target chạy phụ thuộc của nó trước.",
+        "clean luôn chạy đầu tiên."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# JUnit practice 2 — What does “ant jacoco-report” run, in which order?\n\nAnswer in the answer panel (no code needed).\n\n1. Execution orderThứ tự chạy\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# JUnit practice 2 — What does “ant jacoco-report” run, in which order? — answer key\n\n1. Execution orderThứ tự chạy\n   Answer: a) clean — delete build/ and report/  →  b) compile — javac src → build/classes  →  c) compile-tests — javac test (JUnit on the classpath)  →  d) test-with-jacoco — run **/*Test with the JaCoCo agent (jacoco.exec)  →  e) jacoco-report — HTML/CSV/XML coverage report\n   Follow the depends chain backwards from jacoco-report.VI: Lần ngược chuỗi depends từ jacoco-report.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>clean → compile → compile-tests → test-with-jacoco → jacoco-report.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>Execution order</p><p style=\"opacity:.75;font-size:.92em\"><i>Thứ tự chạy</i></p>",
+            "muc": [
+              {
+                "ma": "d",
+                "noiDung": "test-with-jacoco — run **/*Test with the JaCoCo agent (jacoco.exec)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "compile — javac src → build/classes"
+              },
+              {
+                "ma": "e",
+                "noiDung": "jacoco-report — HTML/CSV/XML coverage report"
+              },
+              {
+                "ma": "a",
+                "noiDung": "clean — delete build/ and report/"
+              },
+              {
+                "ma": "c",
+                "noiDung": "compile-tests — javac test (JUnit on the classpath)"
+              }
+            ],
+            "dapAn": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e"
+            ],
+            "giaiThich": "<p>Follow the depends chain backwards from jacoco-report.</p><p><i>VI: Lần ngược chuỗi depends từ jacoco-report.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng chỉ target được gọi mới chạy."
+        },
+        {
+          "loi": "Đặt compile-tests trước compile."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Ant target",
+          "vi": "mục tiêu build của Ant"
+        },
+        {
+          "en": "JaCoCo agent",
+          "vi": "tác tử đo coverage gắn vào JVM"
+        }
+      ]
+    },
+    {
+      "title": "JUnit practice 3 — Read a JUnit failure report",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "JUnit"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Running the course suite printed:</p><pre>There was 1 failure:\n1) refundIsHalfBetween2And24Hours(RefundCalculatorTest)\njava.lang.AssertionError: expected:&lt;50000&gt; but was:&lt;0&gt;\n    at org.junit.Assert.assertEquals(Assert.java:647)\n    at RefundCalculatorTest.refundIsHalfBetween2And24Hours(RefundCalculatorTest.java:19)\n\nFAILURES!!!\nTests run: 6,  Failures: 1</pre><p>Five questions about this report.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chạy bộ test của môn in ra như trên. Năm câu hỏi về báo cáo này.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "“expected:<A> but was:<B>” — B là thực tế.",
+        "Tìm dòng đầu tiên thuộc lớp test của bạn trong stack trace."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# JUnit practice 3 — Read a JUnit failure report\n\nAnswer in the answer panel (no code needed).\n\n1. Which value did the code under test return?Mã đang test trả về giá trị nào?\n2. Where is the failing assertion?Assertion trượt nằm ở đâu?\n3. How many tests passed?Bao nhiêu test đạt?\n4. A failure differs from an error in JUnit 4 because…Failure khác error trong JUnit 4 vì…\n5. What should the tester do first?Tester nên làm gì trước?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# JUnit practice 3 — Read a JUnit failure report — answer key\n\n1. Which value did the code under test return?Mã đang test trả về giá trị nào?\n   Answer: b) 0\n   assertEquals(expected, actual): “but was” is the actual value.VI: assertEquals(expected, actual): “but was” là giá trị thực tế.\n\n2. Where is the failing assertion?Assertion trượt nằm ở đâu?\n   Answer: b) RefundCalculatorTest.java line 19\n   The first frame in YOUR code; Assert.java is the library.VI: Khung đầu tiên trong mã CỦA BẠN; Assert.java là thư viện.\n\n3. How many tests passed?Bao nhiêu test đạt?\n   Answer: b) 5\n   6 run, 1 failure, 0 errors.VI: 6 chạy, 1 failure, 0 error.\n\n4. A failure differs from an error in JUnit 4 because…Failure khác error trong JUnit 4 vì…\n   Answer: b) a failure is an assertion that did not hold; an error is an unexpected exception thrown by the test or the code\n   Both make the build red; the cause differs.VI: Cả hai làm build đỏ; nguyên nhân khác nhau.\n\n5. What should the tester do first?Tester nên làm gì trước?\n   Answer: b) Check the expected value against the specification (2–24 h → 50%), then report the defect with this evidence\n   Expected results come from the specification, never from the code.VI: Kết quả mong đợi lấy từ đặc tả, không bao giờ từ mã.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · b · b · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which value did the code under test return?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mã đang test trả về giá trị nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "50000"
+              },
+              {
+                "ma": "b",
+                "noiDung": "0"
+              },
+              {
+                "ma": "c",
+                "noiDung": "19"
+              },
+              {
+                "ma": "d",
+                "noiDung": "647"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>assertEquals(expected, actual): “but was” is the actual value.</p><p><i>VI: assertEquals(expected, actual): “but was” là giá trị thực tế.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Where is the failing assertion?</p><p style=\"opacity:.75;font-size:.92em\"><i>Assertion trượt nằm ở đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Assert.java line 647"
+              },
+              {
+                "ma": "b",
+                "noiDung": "RefundCalculatorTest.java line 19"
+              },
+              {
+                "ma": "c",
+                "noiDung": "RefundCalculator.java line 19"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Unknown"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The first frame in YOUR code; Assert.java is the library.</p><p><i>VI: Khung đầu tiên trong mã CỦA BẠN; Assert.java là thư viện.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>How many tests passed?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bao nhiêu test đạt?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "6"
+              },
+              {
+                "ma": "b",
+                "noiDung": "5"
+              },
+              {
+                "ma": "c",
+                "noiDung": "1"
+              },
+              {
+                "ma": "d",
+                "noiDung": "0"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>6 run, 1 failure, 0 errors.</p><p><i>VI: 6 chạy, 1 failure, 0 error.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>A failure differs from an error in JUnit 4 because…</p><p style=\"opacity:.75;font-size:.92em\"><i>Failure khác error trong JUnit 4 vì…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "they are the same"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a failure is an assertion that did not hold; an error is an unexpected exception thrown by the test or the code"
+              },
+              {
+                "ma": "c",
+                "noiDung": "errors are warnings"
+              },
+              {
+                "ma": "d",
+                "noiDung": "failures are compile errors"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Both make the build red; the cause differs.</p><p><i>VI: Cả hai làm build đỏ; nguyên nhân khác nhau.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>What should the tester do first?</p><p style=\"opacity:.75;font-size:.92em\"><i>Tester nên làm gì trước?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Change the expected value to 0"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Check the expected value against the specification (2–24 h → 50%), then report the defect with this evidence"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Delete the test"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Mark it @Ignore"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Expected results come from the specification, never from the code.</p><p><i>VI: Kết quả mong đợi lấy từ đặc tả, không bao giờ từ mã.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đọc nhầm dòng của Assert.java."
+        },
+        {
+          "loi": "Sửa giá trị mong đợi cho test “xanh”."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "stack trace",
+          "vi": "vết ngăn xếp lời gọi"
+        },
+        {
+          "en": "failure vs error",
+          "vi": "assertion trượt vs ngoại lệ ngoài dự kiến"
+        }
+      ]
+    },
+    {
+      "title": "JUnit practice 4 — Parameterised boundary tests for refund (kill the mutants)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 18,
+      "points": 20,
+      "concepts": [
+        "unit testing",
+        "mutation testing",
+        "assertion"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>LabBook refunds a cancelled booking: ≥ 24 hours before the start → 100%; 2 to under 24 hours → 50% (rounded down); under 2 hours → 0. The price must be a non-negative integer and hoursBefore must not be negative, otherwise a <code>RangeError</code> (<code>INVALID_PRICE</code> / <code>ALREADY_STARTED</code>).</p><pre>function refund(price, hoursBefore) {\n  if (!Number.isInteger(price) || price &lt; 0) throw new RangeError('INVALID_PRICE');\n  if (typeof hoursBefore !== 'number' || hoursBefore &lt; 0) throw new RangeError('ALREADY_STARTED');\n  if (hoursBefore &gt;= 24) return price;\n  if (hoursBefore &gt;= 2) return Math.floor(price / 2);\n  return 0;\n}</pre><p>Write the tests in <code>tests.js</code> with <code>test.each</code> (the JavaScript twin of <code>@ParameterizedTest @CsvSource</code>) and <code>expect(...).toThrow(RangeError)</code> (twin of <code>assertThrows</code>). The solution also shows the JUnit 5 version.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Cover both boundaries (24 and 2) from both sides, the rounding and both exceptions.</li>\n</ul>",
+      "problemHtmlVi": "<p>LabBook hoàn tiền khi huỷ: ≥ 24 giờ trước → 100%; từ 2 tới dưới 24 giờ → 50% (làm tròn xuống); dưới 2 giờ → 0. Giá phải là số nguyên không âm và hoursBefore không âm, nếu không ném <code>RangeError</code>. Viết test trong <code>tests.js</code> bằng <code>test.each</code> (bản JS của <code>@ParameterizedTest @CsvSource</code>) và <code>toThrow(RangeError)</code> (bản JS của <code>assertThrows</code>). Lời giải có kèm bản JUnit 5.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Phủ cả hai biên (24 và 2) từ hai phía, phép làm tròn và cả hai ngoại lệ.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "refund(50001, 2)",
+          "output": "25000",
+          "explanation": "Exactly 2 hours is still 50%, rounded down.|||Đúng 2 giờ vẫn được 50%, làm tròn xuống."
+        }
+      ],
+      "hintsJson": [
+        "Biên 24: 24 → 100%, 23.99 → 50%. Biên 2: 2 → 50%, 1.99 → 0.",
+        "Giá lẻ để bắt làm tròn: 50001 → 25000.",
+        "Ngoại lệ: giá âm, giá 10.5, hoursBefore −1."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "tests.js",
+          "language": "javascript",
+          "code": "// RefundCalculator — parameterised boundary tests (JUnit 5: @ParameterizedTest @CsvSource).\ntest.each([\n  [100000, 48, 100000],\n])('refund(%p, %p) = %p', (price, hours, expected) => {\n  expect(refund(price, hours)).toBe(expected);\n});\n"
+        },
+        {
+          "name": "lib/testkit.js",
+          "language": "javascript",
+          "code": "/* lib/testkit.js — a tiny Jest-compatible test kit (describe · test/it · test.each · beforeEach/afterEach ·\n * expect(...).toBe/toEqual/toBeCloseTo/toThrow/toContain/toMatch/… · .not · .resolves/.rejects · jest.fn()).\n * Loaded BEFORE tests.js. DO NOT EDIT — the grader relies on it.\n * Bộ test nhỏ tương thích Jest, nạp trước tests.js. KHÔNG SỬA tệp này — máy chấm dùng nó.\n */\n(function (G) {\n  if (G.__KIT_DA_NAP__) return; G.__KIT_DA_NAP__ = true;\n  var REG = G.__REG__ = [];\n  var GOC = { ten: null, be: [], ae: [] };\n  var CHONG = [GOC];\n  function show(v) {\n    if (typeof v === 'string') return JSON.stringify(v);\n    if (typeof v === 'function') return '[Function]';\n    if (v instanceof Error) return v.name + ': ' + v.message;\n    if (typeof v === 'number' && !isFinite(v)) return String(v);\n    if (v === undefined) return 'undefined';\n    try { var s = JSON.stringify(v); return s && s.length > 140 ? s.slice(0, 137) + '...' : s; } catch (e) { return String(v); }\n  }\n  function deepEq(a, b) {\n    if (Object.is(a, b)) return true;\n    if (typeof a !== 'object' || typeof b !== 'object' || a === null || b === null) return false;\n    if (a instanceof Date && b instanceof Date) return a.getTime() === b.getTime();\n    if (Array.isArray(a) !== Array.isArray(b)) return false;\n    if (a instanceof Map && b instanceof Map) { if (a.size !== b.size) return false; var ok = true; a.forEach(function (v, k) { if (!b.has(k) || !deepEq(v, b.get(k))) ok = false; }); return ok; }\n    if (a instanceof Set && b instanceof Set) { if (a.size !== b.size) return false; var ok2 = true; a.forEach(function (v) { if (!b.has(v)) ok2 = false; }); return ok2; }\n    var ka = Object.keys(a).filter(function (k) { return a[k] !== undefined; });\n    var kb = Object.keys(b).filter(function (k) { return b[k] !== undefined; });\n    if (ka.length !== kb.length) return false;\n    for (var i = 0; i < ka.length; i++) if (!Object.prototype.hasOwnProperty.call(b, ka[i]) || !deepEq(a[ka[i]], b[ka[i]])) return false;\n    return true;\n  }\n  function Loi(m) { var e = new Error(m); e.name = 'AssertionError'; return e; }\n  function khopLoi(err, x) {\n    if (x === undefined) return true;\n    var msg = err && err.message !== undefined ? String(err.message) : String(err);\n    if (typeof x === 'string') return msg.indexOf(x) >= 0;\n    if (x instanceof RegExp) return x.test(msg);\n    if (typeof x === 'function') return err instanceof x || (err && err.name === x.name);\n    if (x && typeof x === 'object' && 'message' in x) return msg === String(x.message);\n    return false;\n  }\n  function make(actual, neg) {\n    var m = {};\n    function chk(pass, msg) { if (!!pass === neg) throw Loi('expected ' + (neg ? 'NOT ' : '') + msg); }\n    function laMock(f) { if (!f || !f.__laMock) throw Loi('this matcher needs a jest.fn() mock, got ' + show(f)); }\n    m.toBe = function (e) { chk(Object.is(actual, e), show(actual) + ' to be ' + show(e)); };\n    m.toEqual = m.toStrictEqual = function (e) { chk(deepEq(actual, e), show(actual) + ' to equal ' + show(e)); };\n    m.toBeCloseTo = function (e, d) { d = d == null ? 2 : d; chk(typeof actual === 'number' && Math.abs(actual - e) < Math.pow(10, -d) / 2, show(actual) + ' to be close to ' + show(e)); };\n    m.toBeTruthy = function () { chk(!!actual, show(actual) + ' to be truthy'); };\n    m.toBeFalsy = function () { chk(!actual, show(actual) + ' to be falsy'); };\n    m.toBeNull = function () { chk(actual === null, show(actual) + ' to be null'); };\n    m.toBeUndefined = function () { chk(actual === undefined, show(actual) + ' to be undefined'); };\n    m.toBeDefined = function () { chk(actual !== undefined, show(actual) + ' to be defined'); };\n    m.toBeNaN = function () { chk(Number.isNaN(actual), show(actual) + ' to be NaN'); };\n    m.toBeGreaterThan = function (n) { chk(actual > n, show(actual) + ' > ' + show(n)); };\n    m.toBeGreaterThanOrEqual = function (n) { chk(actual >= n, show(actual) + ' >= ' + show(n)); };\n    m.toBeLessThan = function (n) { chk(actual < n, show(actual) + ' < ' + show(n)); };\n    m.toBeLessThanOrEqual = function (n) { chk(actual <= n, show(actual) + ' <= ' + show(n)); };\n    m.toContain = function (x) { chk(actual != null && (typeof actual === 'string' ? actual.indexOf(x) >= 0 : Array.prototype.some.call(actual, function (y) { return Object.is(y, x); })), show(actual) + ' to contain ' + show(x)); };\n    m.toContainEqual = function (x) { chk(actual != null && Array.prototype.some.call(actual, function (y) { return deepEq(y, x); }), show(actual) + ' to contain an item equal to ' + show(x)); };\n    m.toHaveLength = function (n) { chk(actual != null && actual.length === n, show(actual) + ' to have length ' + n); };\n    m.toMatch = function (r) { chk(typeof actual === 'string' && (r instanceof RegExp ? r.test(actual) : actual.indexOf(r) >= 0), show(actual) + ' to match ' + String(r)); };\n    m.toHaveProperty = function (p, v) {\n      var ds = Array.isArray(p) ? p : String(p).split('.'); var o = actual, co = true;\n      for (var i = 0; i < ds.length; i++) { if (o == null || !(ds[i] in Object(o))) { co = false; break; } o = o[ds[i]]; }\n      chk(co && (arguments.length < 2 || deepEq(o, v)), show(actual) + ' to have property ' + String(p) + (arguments.length < 2 ? '' : ' = ' + show(v)));\n    };\n    m.toThrow = m.toThrowError = function (x) {\n      if (typeof actual !== 'function') throw Loi('toThrow() needs a function: write expect(() => fn(...)).toThrow()');\n      var threw = false, err;\n      try { actual(); } catch (e) { threw = true; err = e; }\n      chk(threw && khopLoi(err, x), 'the function to throw' + (x === undefined ? '' : ' ' + (typeof x === 'function' ? x.name : show(x instanceof RegExp ? String(x) : x))) + (threw ? ' (it threw ' + show(err) + ')' : ' (it returned normally)'));\n    };\n    m.toHaveBeenCalled = function () { laMock(actual); chk(actual.mock.calls.length > 0, 'the mock to have been called'); };\n    m.toHaveBeenCalledTimes = function (n) { laMock(actual); chk(actual.mock.calls.length === n, 'the mock to be called ' + n + ' time(s), it was called ' + actual.mock.calls.length); };\n    m.toHaveBeenCalledWith = function () { laMock(actual); var a = Array.prototype.slice.call(arguments); chk(actual.mock.calls.some(function (c) { return deepEq(c, a); }), 'the mock to have been called with ' + show(a) + ' — calls: ' + show(actual.mock.calls)); };\n    m.toHaveBeenLastCalledWith = function () { laMock(actual); var a = Array.prototype.slice.call(arguments); var c = actual.mock.calls[actual.mock.calls.length - 1]; chk(!!c && deepEq(c, a), 'the last call to be ' + show(a)); };\n    return m;\n  }\n  function boc(p, neg, laTuChoi) {\n    var mau = make(undefined, false), o = {};\n    Object.keys(mau).forEach(function (k) {\n      o[k] = function () {\n        var args = arguments;\n        return Promise.resolve(p).then(function (v) {\n          if (laTuChoi) throw Loi('expected the promise to reject, it resolved with ' + show(v));\n          return make(v, neg)[k].apply(null, args);\n        }, function (e) {\n          if (!laTuChoi) throw Loi('expected the promise to resolve, it rejected with ' + show(e));\n          return make(k === 'toThrow' || k === 'toThrowError' ? function () { throw e; } : e, neg)[k].apply(null, args);\n        });\n      };\n    });\n    return o;\n  }\n  G.expect = function (actual) {\n    G.__soExpect = (G.__soExpect || 0) + 1;\n    var o = make(actual, false); o.not = make(actual, true);\n    o.resolves = boc(actual, false, false); o.resolves.not = boc(actual, true, false);\n    o.rejects = boc(actual, false, true); o.rejects.not = boc(actual, true, true);\n    return o;\n  };\n  function fn(impl) {\n    var f = function () {\n      var args = Array.prototype.slice.call(arguments); f.mock.calls.push(args);\n      try {\n        var g = f.__mot.length ? f.__mot.shift() : f.__impl;\n        var r = g ? g.apply(this, args) : f.__tra;\n        f.mock.results.push({ type: 'return', value: r }); return r;\n      } catch (e) { f.mock.results.push({ type: 'throw', value: e }); throw e; }\n    };\n    f.__laMock = true; f.mock = { calls: [], results: [] }; f.__impl = impl || null; f.__mot = []; f.__tra = undefined;\n    f.mockReturnValue = function (v) { f.__impl = null; f.__tra = v; return f; };\n    f.mockReturnValueOnce = function (v) { f.__mot.push(function () { return v; }); return f; };\n    f.mockImplementation = function (g) { f.__impl = g; return f; };\n    f.mockImplementationOnce = function (g) { f.__mot.push(g); return f; };\n    f.mockResolvedValue = function (v) { f.__impl = function () { return Promise.resolve(v); }; return f; };\n    f.mockRejectedValue = function (v) { f.__impl = function () { return Promise.reject(v); }; return f; };\n    f.mockClear = f.mockReset = function () { f.mock.calls = []; f.mock.results = []; return f; };\n    return f;\n  }\n  G.jest = { fn: fn, spyOn: function (obj, ten) { var goc = obj[ten]; var s = fn(function () { return goc.apply(this, arguments); }); obj[ten] = s; s.mockRestore = function () { obj[ten] = goc; }; return s; } };\n  G.describe = function (ten, f) { var k = { ten: String(ten), be: [], ae: [] }; CHONG.push(k); try { f(); } finally { CHONG.pop(); } };\n  G.beforeEach = function (f) { CHONG[CHONG.length - 1].be.push(f); };\n  G.afterEach = function (f) { CHONG[CHONG.length - 1].ae.push(f); };\n  G.test = G.it = function (ten, f) {\n    if (typeof f !== 'function') throw new Error('test(\"' + ten + '\") needs a function body');\n    var duong = CHONG.slice(1).map(function (k) { return k.ten; }).concat([String(ten)]).join(' > ');\n    REG.push({ ten: duong, fn: f, khung: CHONG.slice() });\n  };\n  function dinhDang(ten, args, i) {\n    var j = 0;\n    var s = String(ten).replace(/%[sdipjfo#%]/g, function (m) {\n      if (m === '%%') return '%'; if (m === '%#') return String(i);\n      var v = args[j++]; return m === '%p' || m === '%j' || m === '%o' ? show(v) : String(v);\n    });\n    if (args.length === 1 && args[0] && typeof args[0] === 'object' && !Array.isArray(args[0])) s = s.replace(/\\$([A-Za-z_][A-Za-z0-9_]*)/g, function (m, k) { return k in args[0] ? String(args[0][k]) : m; });\n    return s;\n  }\n  G.test.each = G.it.each = function (rows) {\n    return function (ten, f) {\n      rows.forEach(function (r, i) {\n        var args = Array.isArray(r) ? r : [r];\n        G.test(dinhDang(ten, args, i), function () { return f.apply(null, args); });\n      });\n    };\n  };\n  G.test.skip = G.it.skip = function () {};\n  G.describe.skip = function () {};\n  /** Máy chấm: chạy mọi test đã đăng ký sau khi gán các tên toàn cục trong gan. */\n  G.__chayBo = async function (gan) {\n    for (var k in gan) G[k] = gan[k];\n    var kq = { tong: REG.length, dat: [], truot: [] };\n    for (var i = 0; i < REG.length; i++) {\n      var t = REG[i]; G.__soExpect = 0;\n      try {\n        var be = [], ae = [];\n        t.khung.forEach(function (fr) { be = be.concat(fr.be); ae = fr.ae.concat(ae); });\n        for (var a = 0; a < be.length; a++) await be[a]();\n        await t.fn();\n        for (var b = 0; b < ae.length; b++) await ae[b]();\n        if (!G.__soExpect) kq.truot.push({ ten: t.ten, loi: 'no expect() in this test', rong: true });\n        else kq.dat.push(t.ten);\n      } catch (e) {\n        kq.truot.push({ ten: t.ten, loi: e && e.message !== undefined ? (e.name === 'AssertionError' ? '' : e.name + ': ') + e.message : String(e) });\n      }\n    }\n    return kq;\n  };\n})(globalThis);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "tests.js",
+          "language": "javascript",
+          "code": "// RefundCalculator — parameterised boundary tests (JUnit 5: @ParameterizedTest @CsvSource).\ntest.each([\n  [100000, 48, 100000],\n  [100000, 24, 100000],     // boundary: exactly 24 h → 100 %\n  [100000, 23.99, 50000],   // just below 24 h → 50 %\n  [100000, 2, 50000],       // boundary: exactly 2 h → 50 %\n  [100000, 1.99, 0],        // just below 2 h → 0\n  [100000, 1, 0],\n  [50001, 2, 25000],        // odd price: 50 % is rounded DOWN\n  [0, 30, 0],               // a free lab\n])('refund(%p, %p) = %p', (price, hours, expected) => {\n  expect(refund(price, hours)).toBe(expected);\n});\n\n// JUnit 5: assertThrows(IllegalArgumentException.class, () -> calc.refund(-1, 30));\ntest.each([[-1, 30], [10.5, 30]])('price %p is rejected', (price, hours) => {\n  expect(() => refund(price, hours)).toThrow(RangeError);\n});\n\ntest('a booking that already started cannot be refunded', () => {\n  expect(() => refund(100000, -1)).toThrow(RangeError);\n});\n"
+        },
+        {
+          "name": "lib/testkit.js",
+          "language": "javascript",
+          "code": "/* lib/testkit.js — a tiny Jest-compatible test kit (describe · test/it · test.each · beforeEach/afterEach ·\n * expect(...).toBe/toEqual/toBeCloseTo/toThrow/toContain/toMatch/… · .not · .resolves/.rejects · jest.fn()).\n * Loaded BEFORE tests.js. DO NOT EDIT — the grader relies on it.\n * Bộ test nhỏ tương thích Jest, nạp trước tests.js. KHÔNG SỬA tệp này — máy chấm dùng nó.\n */\n(function (G) {\n  if (G.__KIT_DA_NAP__) return; G.__KIT_DA_NAP__ = true;\n  var REG = G.__REG__ = [];\n  var GOC = { ten: null, be: [], ae: [] };\n  var CHONG = [GOC];\n  function show(v) {\n    if (typeof v === 'string') return JSON.stringify(v);\n    if (typeof v === 'function') return '[Function]';\n    if (v instanceof Error) return v.name + ': ' + v.message;\n    if (typeof v === 'number' && !isFinite(v)) return String(v);\n    if (v === undefined) return 'undefined';\n    try { var s = JSON.stringify(v); return s && s.length > 140 ? s.slice(0, 137) + '...' : s; } catch (e) { return String(v); }\n  }\n  function deepEq(a, b) {\n    if (Object.is(a, b)) return true;\n    if (typeof a !== 'object' || typeof b !== 'object' || a === null || b === null) return false;\n    if (a instanceof Date && b instanceof Date) return a.getTime() === b.getTime();\n    if (Array.isArray(a) !== Array.isArray(b)) return false;\n    if (a instanceof Map && b instanceof Map) { if (a.size !== b.size) return false; var ok = true; a.forEach(function (v, k) { if (!b.has(k) || !deepEq(v, b.get(k))) ok = false; }); return ok; }\n    if (a instanceof Set && b instanceof Set) { if (a.size !== b.size) return false; var ok2 = true; a.forEach(function (v) { if (!b.has(v)) ok2 = false; }); return ok2; }\n    var ka = Object.keys(a).filter(function (k) { return a[k] !== undefined; });\n    var kb = Object.keys(b).filter(function (k) { return b[k] !== undefined; });\n    if (ka.length !== kb.length) return false;\n    for (var i = 0; i < ka.length; i++) if (!Object.prototype.hasOwnProperty.call(b, ka[i]) || !deepEq(a[ka[i]], b[ka[i]])) return false;\n    return true;\n  }\n  function Loi(m) { var e = new Error(m); e.name = 'AssertionError'; return e; }\n  function khopLoi(err, x) {\n    if (x === undefined) return true;\n    var msg = err && err.message !== undefined ? String(err.message) : String(err);\n    if (typeof x === 'string') return msg.indexOf(x) >= 0;\n    if (x instanceof RegExp) return x.test(msg);\n    if (typeof x === 'function') return err instanceof x || (err && err.name === x.name);\n    if (x && typeof x === 'object' && 'message' in x) return msg === String(x.message);\n    return false;\n  }\n  function make(actual, neg) {\n    var m = {};\n    function chk(pass, msg) { if (!!pass === neg) throw Loi('expected ' + (neg ? 'NOT ' : '') + msg); }\n    function laMock(f) { if (!f || !f.__laMock) throw Loi('this matcher needs a jest.fn() mock, got ' + show(f)); }\n    m.toBe = function (e) { chk(Object.is(actual, e), show(actual) + ' to be ' + show(e)); };\n    m.toEqual = m.toStrictEqual = function (e) { chk(deepEq(actual, e), show(actual) + ' to equal ' + show(e)); };\n    m.toBeCloseTo = function (e, d) { d = d == null ? 2 : d; chk(typeof actual === 'number' && Math.abs(actual - e) < Math.pow(10, -d) / 2, show(actual) + ' to be close to ' + show(e)); };\n    m.toBeTruthy = function () { chk(!!actual, show(actual) + ' to be truthy'); };\n    m.toBeFalsy = function () { chk(!actual, show(actual) + ' to be falsy'); };\n    m.toBeNull = function () { chk(actual === null, show(actual) + ' to be null'); };\n    m.toBeUndefined = function () { chk(actual === undefined, show(actual) + ' to be undefined'); };\n    m.toBeDefined = function () { chk(actual !== undefined, show(actual) + ' to be defined'); };\n    m.toBeNaN = function () { chk(Number.isNaN(actual), show(actual) + ' to be NaN'); };\n    m.toBeGreaterThan = function (n) { chk(actual > n, show(actual) + ' > ' + show(n)); };\n    m.toBeGreaterThanOrEqual = function (n) { chk(actual >= n, show(actual) + ' >= ' + show(n)); };\n    m.toBeLessThan = function (n) { chk(actual < n, show(actual) + ' < ' + show(n)); };\n    m.toBeLessThanOrEqual = function (n) { chk(actual <= n, show(actual) + ' <= ' + show(n)); };\n    m.toContain = function (x) { chk(actual != null && (typeof actual === 'string' ? actual.indexOf(x) >= 0 : Array.prototype.some.call(actual, function (y) { return Object.is(y, x); })), show(actual) + ' to contain ' + show(x)); };\n    m.toContainEqual = function (x) { chk(actual != null && Array.prototype.some.call(actual, function (y) { return deepEq(y, x); }), show(actual) + ' to contain an item equal to ' + show(x)); };\n    m.toHaveLength = function (n) { chk(actual != null && actual.length === n, show(actual) + ' to have length ' + n); };\n    m.toMatch = function (r) { chk(typeof actual === 'string' && (r instanceof RegExp ? r.test(actual) : actual.indexOf(r) >= 0), show(actual) + ' to match ' + String(r)); };\n    m.toHaveProperty = function (p, v) {\n      var ds = Array.isArray(p) ? p : String(p).split('.'); var o = actual, co = true;\n      for (var i = 0; i < ds.length; i++) { if (o == null || !(ds[i] in Object(o))) { co = false; break; } o = o[ds[i]]; }\n      chk(co && (arguments.length < 2 || deepEq(o, v)), show(actual) + ' to have property ' + String(p) + (arguments.length < 2 ? '' : ' = ' + show(v)));\n    };\n    m.toThrow = m.toThrowError = function (x) {\n      if (typeof actual !== 'function') throw Loi('toThrow() needs a function: write expect(() => fn(...)).toThrow()');\n      var threw = false, err;\n      try { actual(); } catch (e) { threw = true; err = e; }\n      chk(threw && khopLoi(err, x), 'the function to throw' + (x === undefined ? '' : ' ' + (typeof x === 'function' ? x.name : show(x instanceof RegExp ? String(x) : x))) + (threw ? ' (it threw ' + show(err) + ')' : ' (it returned normally)'));\n    };\n    m.toHaveBeenCalled = function () { laMock(actual); chk(actual.mock.calls.length > 0, 'the mock to have been called'); };\n    m.toHaveBeenCalledTimes = function (n) { laMock(actual); chk(actual.mock.calls.length === n, 'the mock to be called ' + n + ' time(s), it was called ' + actual.mock.calls.length); };\n    m.toHaveBeenCalledWith = function () { laMock(actual); var a = Array.prototype.slice.call(arguments); chk(actual.mock.calls.some(function (c) { return deepEq(c, a); }), 'the mock to have been called with ' + show(a) + ' — calls: ' + show(actual.mock.calls)); };\n    m.toHaveBeenLastCalledWith = function () { laMock(actual); var a = Array.prototype.slice.call(arguments); var c = actual.mock.calls[actual.mock.calls.length - 1]; chk(!!c && deepEq(c, a), 'the last call to be ' + show(a)); };\n    return m;\n  }\n  function boc(p, neg, laTuChoi) {\n    var mau = make(undefined, false), o = {};\n    Object.keys(mau).forEach(function (k) {\n      o[k] = function () {\n        var args = arguments;\n        return Promise.resolve(p).then(function (v) {\n          if (laTuChoi) throw Loi('expected the promise to reject, it resolved with ' + show(v));\n          return make(v, neg)[k].apply(null, args);\n        }, function (e) {\n          if (!laTuChoi) throw Loi('expected the promise to resolve, it rejected with ' + show(e));\n          return make(k === 'toThrow' || k === 'toThrowError' ? function () { throw e; } : e, neg)[k].apply(null, args);\n        });\n      };\n    });\n    return o;\n  }\n  G.expect = function (actual) {\n    G.__soExpect = (G.__soExpect || 0) + 1;\n    var o = make(actual, false); o.not = make(actual, true);\n    o.resolves = boc(actual, false, false); o.resolves.not = boc(actual, true, false);\n    o.rejects = boc(actual, false, true); o.rejects.not = boc(actual, true, true);\n    return o;\n  };\n  function fn(impl) {\n    var f = function () {\n      var args = Array.prototype.slice.call(arguments); f.mock.calls.push(args);\n      try {\n        var g = f.__mot.length ? f.__mot.shift() : f.__impl;\n        var r = g ? g.apply(this, args) : f.__tra;\n        f.mock.results.push({ type: 'return', value: r }); return r;\n      } catch (e) { f.mock.results.push({ type: 'throw', value: e }); throw e; }\n    };\n    f.__laMock = true; f.mock = { calls: [], results: [] }; f.__impl = impl || null; f.__mot = []; f.__tra = undefined;\n    f.mockReturnValue = function (v) { f.__impl = null; f.__tra = v; return f; };\n    f.mockReturnValueOnce = function (v) { f.__mot.push(function () { return v; }); return f; };\n    f.mockImplementation = function (g) { f.__impl = g; return f; };\n    f.mockImplementationOnce = function (g) { f.__mot.push(g); return f; };\n    f.mockResolvedValue = function (v) { f.__impl = function () { return Promise.resolve(v); }; return f; };\n    f.mockRejectedValue = function (v) { f.__impl = function () { return Promise.reject(v); }; return f; };\n    f.mockClear = f.mockReset = function () { f.mock.calls = []; f.mock.results = []; return f; };\n    return f;\n  }\n  G.jest = { fn: fn, spyOn: function (obj, ten) { var goc = obj[ten]; var s = fn(function () { return goc.apply(this, arguments); }); obj[ten] = s; s.mockRestore = function () { obj[ten] = goc; }; return s; } };\n  G.describe = function (ten, f) { var k = { ten: String(ten), be: [], ae: [] }; CHONG.push(k); try { f(); } finally { CHONG.pop(); } };\n  G.beforeEach = function (f) { CHONG[CHONG.length - 1].be.push(f); };\n  G.afterEach = function (f) { CHONG[CHONG.length - 1].ae.push(f); };\n  G.test = G.it = function (ten, f) {\n    if (typeof f !== 'function') throw new Error('test(\"' + ten + '\") needs a function body');\n    var duong = CHONG.slice(1).map(function (k) { return k.ten; }).concat([String(ten)]).join(' > ');\n    REG.push({ ten: duong, fn: f, khung: CHONG.slice() });\n  };\n  function dinhDang(ten, args, i) {\n    var j = 0;\n    var s = String(ten).replace(/%[sdipjfo#%]/g, function (m) {\n      if (m === '%%') return '%'; if (m === '%#') return String(i);\n      var v = args[j++]; return m === '%p' || m === '%j' || m === '%o' ? show(v) : String(v);\n    });\n    if (args.length === 1 && args[0] && typeof args[0] === 'object' && !Array.isArray(args[0])) s = s.replace(/\\$([A-Za-z_][A-Za-z0-9_]*)/g, function (m, k) { return k in args[0] ? String(args[0][k]) : m; });\n    return s;\n  }\n  G.test.each = G.it.each = function (rows) {\n    return function (ten, f) {\n      rows.forEach(function (r, i) {\n        var args = Array.isArray(r) ? r : [r];\n        G.test(dinhDang(ten, args, i), function () { return f.apply(null, args); });\n      });\n    };\n  };\n  G.test.skip = G.it.skip = function () {};\n  G.describe.skip = function () {};\n  /** Máy chấm: chạy mọi test đã đăng ký sau khi gán các tên toàn cục trong gan. */\n  G.__chayBo = async function (gan) {\n    for (var k in gan) G[k] = gan[k];\n    var kq = { tong: REG.length, dat: [], truot: [] };\n    for (var i = 0; i < REG.length; i++) {\n      var t = REG[i]; G.__soExpect = 0;\n      try {\n        var be = [], ae = [];\n        t.khung.forEach(function (fr) { be = be.concat(fr.be); ae = fr.ae.concat(ae); });\n        for (var a = 0; a < be.length; a++) await be[a]();\n        await t.fn();\n        for (var b = 0; b < ae.length; b++) await ae[b]();\n        if (!G.__soExpect) kq.truot.push({ ten: t.ten, loi: 'no expect() in this test', rong: true });\n        else kq.dat.push(t.ten);\n      } catch (e) {\n        kq.truot.push({ ten: t.ten, loi: e && e.message !== undefined ? (e.name === 'AssertionError' ? '' : e.name + ': ') + e.message : String(e) });\n      }\n    }\n    return kq;\n  };\n})(globalThis);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Boundary rows kill the off-by-one mutants; the odd price kills the rounding mutant; the two toThrow tests kill the validation mutants. JUnit 5:</p><pre>@ParameterizedTest\n@CsvSource({\"100000,24,100000\", \"100000,23.99,50000\", \"100000,2,50000\", \"100000,1.99,0\", \"50001,2,25000\"})\nvoid refundByHours(int price, double hours, int expected) {\n    assertEquals(expected, calc.refund(price, hours));\n}\n\n@Test\nvoid negativePriceIsRejected() {\n    IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -&gt; calc.refund(-1, 30));\n    assertEquals(\"INVALID_PRICE\", e.getMessage());\n}</pre>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "lib/testkit.js",
+          "tests.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Every test passes against the CORRECT implementation (your expected values are right)",
+              "vi": "Mọi test ĐẠT trên bản cài đặt ĐÚNG (giá trị mong đợi của bạn đúng)"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction refund(price, hoursBefore) {\n  if (!Number.isInteger(price) || price < 0) throw new RangeError('INVALID_PRICE');\n  if (typeof hoursBefore !== 'number' || hoursBefore < 0) throw new RangeError('ALREADY_STARTED');\n  if (hoursBefore >= 24) return price;\n  if (hoursBefore >= 2) return Math.floor(price / 2);\n  return 0;\n}\nreturn { \"refund\": refund };\n})();\nconst r = await __chayBo(__DUNG);\nif (typeof refund !== 'undefined' && refund !== globalThis[\"refund\"]) return 'tests.js must not declare refund itself (let/const/class/copy of the code) — call the global refund that the grader provides';\nif (!r.tong) return 'No tests found — write test(...) blocks in tests.js';\nif (r.truot.length) return r.truot.length + ' of ' + r.tong + ' test(s) FAIL on the correct code: ' + r.truot.slice(0, 3).map(function (x) { return '\"' + x.ten + '\" — ' + x.loi; }).join(' | ');\nreturn 'OK';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "The suite has at least 8 tests, each with at least one expect()",
+              "vi": "Bộ test có ít nhất 8 test, mỗi test có ít nhất một expect()"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction refund(price, hoursBefore) {\n  if (!Number.isInteger(price) || price < 0) throw new RangeError('INVALID_PRICE');\n  if (typeof hoursBefore !== 'number' || hoursBefore < 0) throw new RangeError('ALREADY_STARTED');\n  if (hoursBefore >= 24) return price;\n  if (hoursBefore >= 2) return Math.floor(price / 2);\n  return 0;\n}\nreturn { \"refund\": refund };\n})();\nconst r = await __chayBo(__DUNG);\nconst rong = r.truot.filter(function (x) { return x.rong; });\nif (rong.length) return 'test without any expect(): \"' + rong[0].ten + '\"';\nif (r.tong < 8) return 'only ' + r.tong + ' test(s) — write at least 8';\nreturn 'OK';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M1: exactly 24 hours gives only 50%",
+              "vi": "Giết mutant M1: đúng 24 giờ chỉ được 50%"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction refund(price, hoursBefore) {\n  if (!Number.isInteger(price) || price < 0) throw new RangeError('INVALID_PRICE');\n  if (typeof hoursBefore !== 'number' || hoursBefore < 0) throw new RangeError('ALREADY_STARTED');\n  if (hoursBefore >= 24) return price;\n  if (hoursBefore >= 2) return Math.floor(price / 2);\n  return 0;\n}\nreturn { \"refund\": refund };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction refund(price, hoursBefore) {\n  if (!Number.isInteger(price) || price < 0) throw new RangeError('INVALID_PRICE');\n  if (typeof hoursBefore !== 'number' || hoursBefore < 0) throw new RangeError('ALREADY_STARTED');\n  if (hoursBefore > 24) return price;\n  if (hoursBefore >= 2) return Math.floor(price / 2);\n  return 0;\n}\nreturn { \"refund\": refund };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M2: exactly 2 hours gives 0",
+              "vi": "Giết mutant M2: đúng 2 giờ được 0"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction refund(price, hoursBefore) {\n  if (!Number.isInteger(price) || price < 0) throw new RangeError('INVALID_PRICE');\n  if (typeof hoursBefore !== 'number' || hoursBefore < 0) throw new RangeError('ALREADY_STARTED');\n  if (hoursBefore >= 24) return price;\n  if (hoursBefore >= 2) return Math.floor(price / 2);\n  return 0;\n}\nreturn { \"refund\": refund };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction refund(price, hoursBefore) {\n  if (!Number.isInteger(price) || price < 0) throw new RangeError('INVALID_PRICE');\n  if (typeof hoursBefore !== 'number' || hoursBefore < 0) throw new RangeError('ALREADY_STARTED');\n  if (hoursBefore > 24) return price;\n  if (hoursBefore >= 2) return Math.floor(price / 2);\n  return 0;\n}\nreturn { \"refund\": refund };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M3: half is rounded up",
+              "vi": "Giết mutant M3: nửa giá làm tròn lên"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction refund(price, hoursBefore) {\n  if (!Number.isInteger(price) || price < 0) throw new RangeError('INVALID_PRICE');\n  if (typeof hoursBefore !== 'number' || hoursBefore < 0) throw new RangeError('ALREADY_STARTED');\n  if (hoursBefore >= 24) return price;\n  if (hoursBefore >= 2) return Math.floor(price / 2);\n  return 0;\n}\nreturn { \"refund\": refund };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction refund(price, hoursBefore) {\n  if (!Number.isInteger(price) || price < 0) throw new RangeError('INVALID_PRICE');\n  if (typeof hoursBefore !== 'number' || hoursBefore < 0) throw new RangeError('ALREADY_STARTED');\n  if (hoursBefore >= 24) return price;\n  if (hoursBefore >= 2) return Math.ceil(price / 2);\n  return 0;\n}\nreturn { \"refund\": refund };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M4: a negative price is accepted",
+              "vi": "Giết mutant M4: nhận giá âm"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction refund(price, hoursBefore) {\n  if (!Number.isInteger(price) || price < 0) throw new RangeError('INVALID_PRICE');\n  if (typeof hoursBefore !== 'number' || hoursBefore < 0) throw new RangeError('ALREADY_STARTED');\n  if (hoursBefore >= 24) return price;\n  if (hoursBefore >= 2) return Math.floor(price / 2);\n  return 0;\n}\nreturn { \"refund\": refund };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction refund(price, hoursBefore) {\n  if (!Number.isInteger(price) ) throw new RangeError('INVALID_PRICE');\n  if (typeof hoursBefore !== 'number' || hoursBefore < 0) throw new RangeError('ALREADY_STARTED');\n  if (hoursBefore >= 24) return price;\n  if (hoursBefore >= 2) return Math.floor(price / 2);\n  return 0;\n}\nreturn { \"refund\": refund };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M5: a negative hoursBefore returns 0 instead of throwing",
+              "vi": "Giết mutant M5: hoursBefore âm trả 0 thay vì ném lỗi"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction refund(price, hoursBefore) {\n  if (!Number.isInteger(price) || price < 0) throw new RangeError('INVALID_PRICE');\n  if (typeof hoursBefore !== 'number' || hoursBefore < 0) throw new RangeError('ALREADY_STARTED');\n  if (hoursBefore >= 24) return price;\n  if (hoursBefore >= 2) return Math.floor(price / 2);\n  return 0;\n}\nreturn { \"refund\": refund };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction refund(price, hoursBefore) {\n  if (!Number.isInteger(price) || price < 0) throw new RangeError('INVALID_PRICE');\n    if (hoursBefore >= 24) return price;\n  if (hoursBefore >= 2) return Math.floor(price / 2);\n  return 0;\n}\nreturn { \"refund\": refund };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED"
+          },
+          {
+            "moTa": {
+              "en": "Hidden mutant M6 is killed",
+              "vi": "Mutant ẩn M6 bị giết"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction refund(price, hoursBefore) {\n  if (!Number.isInteger(price) || price < 0) throw new RangeError('INVALID_PRICE');\n  if (typeof hoursBefore !== 'number' || hoursBefore < 0) throw new RangeError('ALREADY_STARTED');\n  if (hoursBefore >= 24) return price;\n  if (hoursBefore >= 2) return Math.floor(price / 2);\n  return 0;\n}\nreturn { \"refund\": refund };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction refund(price, hoursBefore) {\n  if (typeof price !== 'number' || price < 0) throw new RangeError('INVALID_PRICE');\n  if (typeof hoursBefore !== 'number' || hoursBefore < 0) throw new RangeError('ALREADY_STARTED');\n  if (hoursBefore >= 24) return price;\n  if (hoursBefore >= 2) return Math.floor(price / 2);\n  return 0;\n}\nreturn { \"refund\": refund };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden mutant M7 is killed",
+              "vi": "Mutant ẩn M7 bị giết"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction refund(price, hoursBefore) {\n  if (!Number.isInteger(price) || price < 0) throw new RangeError('INVALID_PRICE');\n  if (typeof hoursBefore !== 'number' || hoursBefore < 0) throw new RangeError('ALREADY_STARTED');\n  if (hoursBefore >= 24) return price;\n  if (hoursBefore >= 2) return Math.floor(price / 2);\n  return 0;\n}\nreturn { \"refund\": refund };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction refund(price, hoursBefore) {\n  if (!Number.isInteger(price) || price < 0) throw new RangeError('INVALID_PRICE');\n  if (typeof hoursBefore !== 'number' || hoursBefore < 0) throw new RangeError('ALREADY_STARTED');\n  if (hoursBefore >= 14) return price;\n  if (hoursBefore >= 2) return Math.floor(price / 2);\n  return 0;\n}\nreturn { \"refund\": refund };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chỉ test giá trị giữa khoảng (48 giờ, 10 giờ, 1 giờ) — mutant lệch biên sống sót."
+        },
+        {
+          "loi": "Dùng giá chẵn nên không thấy lỗi làm tròn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "mutant",
+          "vi": "bản đột biến — bản mã cố ý cài một lỗi nhỏ để thử độ mạnh của bộ test"
+        },
+        {
+          "en": "kill a mutant",
+          "vi": "\"giết\" mutant — có test đạt trên mã đúng nhưng trượt trên mutant"
+        },
+        {
+          "en": "assertion",
+          "vi": "phép khẳng định (expect/assertEquals) — so thực tế với mong đợi"
+        },
+        {
+          "en": "Arrange–Act–Assert (AAA)",
+          "vi": "mẫu viết test 3 bước: chuẩn bị – gọi – khẳng định"
+        },
+        {
+          "en": "parameterized test",
+          "vi": "test tham số hoá — một thân test, nhiều bộ dữ liệu (@ParameterizedTest / test.each)"
+        },
+        {
+          "en": "expected result",
+          "vi": "kết quả mong đợi — lấy từ ĐẶC TẢ, không lấy từ mã"
+        },
+        {
+          "en": "@ParameterizedTest",
+          "vi": "test tham số hoá của JUnit 5"
+        },
+        {
+          "en": "assertThrows",
+          "vi": "khẳng định có ném ngoại lệ"
+        }
+      ]
+    },
+    {
+      "title": "JUnit practice 5 — A fresh fixture per test: unit-test the WaitList",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 16,
+      "points": 20,
+      "concepts": [
+        "unit testing",
+        "mutation testing",
+        "assertion"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>LabBook keeps the waiting list of a full lab in a <code>WaitList</code>: <code>add(id)</code> appends a student and returns the new size (a student already waiting → <code>Error('DUPLICATE')</code>); <code>promote()</code> removes and returns the <b>first</b> student (FIFO), or <code>null</code> when empty; <code>position(id)</code> is 1-based, −1 if absent; <code>remove(id)</code> returns true/false; <code>size</code> is the number waiting.</p><pre>class WaitList {\n  constructor() { this.items = []; }\n  add(id) {\n    if (this.items.includes(id)) throw new Error('DUPLICATE');\n    this.items.push(id);\n    return this.items.length;\n  }\n  promote() {\n    return this.items.length ? this.items.shift() : null;\n  }\n  position(id) {\n    const i = this.items.indexOf(id);\n    return i &lt; 0 ? -1 : i + 1;\n  }\n  remove(id) {\n    const i = this.items.indexOf(id);\n    if (i &lt; 0) return false;\n    this.items.splice(i, 1);\n    return true;\n  }\n  get size() { return this.items.length; }\n}</pre><p>Use <code>beforeEach</code> (JUnit 5: <code>@BeforeEach</code>) to create a fresh list with three students before every test, so the tests stay independent.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Each test must work alone — never rely on the order in which tests run.</li>\n</ul>",
+      "problemHtmlVi": "<p>LabBook giữ danh sách chờ của phòng đầy trong <code>WaitList</code> với các hàm như mô tả và mã ở trên (FIFO, vị trí tính từ 1, trùng thì ném DUPLICATE, rỗng thì promote trả null). Dùng <code>beforeEach</code> (JUnit 5: <code>@BeforeEach</code>) tạo danh sách mới có ba sinh viên trước mỗi test để các test độc lập.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Mỗi test phải tự chạy được — không dựa vào thứ tự chạy test.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "w.add('s1'); w.add('s2'); w.promote()",
+          "output": "'s1'",
+          "explanation": "First come, first served.|||Ai đến trước được trước."
+        }
+      ],
+      "hintsJson": [
+        "beforeEach: w = new WaitList(); w.add(\"s1\"); w.add(\"s2\"); w.add(\"s3\");",
+        "Kiểm promote lần lượt trả s1 rồi s2; position sau khi remove phải dịch lên.",
+        "Rỗng: promote() === null, không ném lỗi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "tests.js",
+          "language": "javascript",
+          "code": "// WaitList tests — JUnit 5: @BeforeEach creates the fixture.\nlet w;\nbeforeEach(() => {\n  w = new WaitList();\n  w.add('s1');\n  w.add('s2');\n  w.add('s3');\n});\n\ntest('three students are waiting', () => {\n  expect(w.size).toBe(3);\n});\n"
+        },
+        {
+          "name": "lib/testkit.js",
+          "language": "javascript",
+          "code": "/* lib/testkit.js — a tiny Jest-compatible test kit (describe · test/it · test.each · beforeEach/afterEach ·\n * expect(...).toBe/toEqual/toBeCloseTo/toThrow/toContain/toMatch/… · .not · .resolves/.rejects · jest.fn()).\n * Loaded BEFORE tests.js. DO NOT EDIT — the grader relies on it.\n * Bộ test nhỏ tương thích Jest, nạp trước tests.js. KHÔNG SỬA tệp này — máy chấm dùng nó.\n */\n(function (G) {\n  if (G.__KIT_DA_NAP__) return; G.__KIT_DA_NAP__ = true;\n  var REG = G.__REG__ = [];\n  var GOC = { ten: null, be: [], ae: [] };\n  var CHONG = [GOC];\n  function show(v) {\n    if (typeof v === 'string') return JSON.stringify(v);\n    if (typeof v === 'function') return '[Function]';\n    if (v instanceof Error) return v.name + ': ' + v.message;\n    if (typeof v === 'number' && !isFinite(v)) return String(v);\n    if (v === undefined) return 'undefined';\n    try { var s = JSON.stringify(v); return s && s.length > 140 ? s.slice(0, 137) + '...' : s; } catch (e) { return String(v); }\n  }\n  function deepEq(a, b) {\n    if (Object.is(a, b)) return true;\n    if (typeof a !== 'object' || typeof b !== 'object' || a === null || b === null) return false;\n    if (a instanceof Date && b instanceof Date) return a.getTime() === b.getTime();\n    if (Array.isArray(a) !== Array.isArray(b)) return false;\n    if (a instanceof Map && b instanceof Map) { if (a.size !== b.size) return false; var ok = true; a.forEach(function (v, k) { if (!b.has(k) || !deepEq(v, b.get(k))) ok = false; }); return ok; }\n    if (a instanceof Set && b instanceof Set) { if (a.size !== b.size) return false; var ok2 = true; a.forEach(function (v) { if (!b.has(v)) ok2 = false; }); return ok2; }\n    var ka = Object.keys(a).filter(function (k) { return a[k] !== undefined; });\n    var kb = Object.keys(b).filter(function (k) { return b[k] !== undefined; });\n    if (ka.length !== kb.length) return false;\n    for (var i = 0; i < ka.length; i++) if (!Object.prototype.hasOwnProperty.call(b, ka[i]) || !deepEq(a[ka[i]], b[ka[i]])) return false;\n    return true;\n  }\n  function Loi(m) { var e = new Error(m); e.name = 'AssertionError'; return e; }\n  function khopLoi(err, x) {\n    if (x === undefined) return true;\n    var msg = err && err.message !== undefined ? String(err.message) : String(err);\n    if (typeof x === 'string') return msg.indexOf(x) >= 0;\n    if (x instanceof RegExp) return x.test(msg);\n    if (typeof x === 'function') return err instanceof x || (err && err.name === x.name);\n    if (x && typeof x === 'object' && 'message' in x) return msg === String(x.message);\n    return false;\n  }\n  function make(actual, neg) {\n    var m = {};\n    function chk(pass, msg) { if (!!pass === neg) throw Loi('expected ' + (neg ? 'NOT ' : '') + msg); }\n    function laMock(f) { if (!f || !f.__laMock) throw Loi('this matcher needs a jest.fn() mock, got ' + show(f)); }\n    m.toBe = function (e) { chk(Object.is(actual, e), show(actual) + ' to be ' + show(e)); };\n    m.toEqual = m.toStrictEqual = function (e) { chk(deepEq(actual, e), show(actual) + ' to equal ' + show(e)); };\n    m.toBeCloseTo = function (e, d) { d = d == null ? 2 : d; chk(typeof actual === 'number' && Math.abs(actual - e) < Math.pow(10, -d) / 2, show(actual) + ' to be close to ' + show(e)); };\n    m.toBeTruthy = function () { chk(!!actual, show(actual) + ' to be truthy'); };\n    m.toBeFalsy = function () { chk(!actual, show(actual) + ' to be falsy'); };\n    m.toBeNull = function () { chk(actual === null, show(actual) + ' to be null'); };\n    m.toBeUndefined = function () { chk(actual === undefined, show(actual) + ' to be undefined'); };\n    m.toBeDefined = function () { chk(actual !== undefined, show(actual) + ' to be defined'); };\n    m.toBeNaN = function () { chk(Number.isNaN(actual), show(actual) + ' to be NaN'); };\n    m.toBeGreaterThan = function (n) { chk(actual > n, show(actual) + ' > ' + show(n)); };\n    m.toBeGreaterThanOrEqual = function (n) { chk(actual >= n, show(actual) + ' >= ' + show(n)); };\n    m.toBeLessThan = function (n) { chk(actual < n, show(actual) + ' < ' + show(n)); };\n    m.toBeLessThanOrEqual = function (n) { chk(actual <= n, show(actual) + ' <= ' + show(n)); };\n    m.toContain = function (x) { chk(actual != null && (typeof actual === 'string' ? actual.indexOf(x) >= 0 : Array.prototype.some.call(actual, function (y) { return Object.is(y, x); })), show(actual) + ' to contain ' + show(x)); };\n    m.toContainEqual = function (x) { chk(actual != null && Array.prototype.some.call(actual, function (y) { return deepEq(y, x); }), show(actual) + ' to contain an item equal to ' + show(x)); };\n    m.toHaveLength = function (n) { chk(actual != null && actual.length === n, show(actual) + ' to have length ' + n); };\n    m.toMatch = function (r) { chk(typeof actual === 'string' && (r instanceof RegExp ? r.test(actual) : actual.indexOf(r) >= 0), show(actual) + ' to match ' + String(r)); };\n    m.toHaveProperty = function (p, v) {\n      var ds = Array.isArray(p) ? p : String(p).split('.'); var o = actual, co = true;\n      for (var i = 0; i < ds.length; i++) { if (o == null || !(ds[i] in Object(o))) { co = false; break; } o = o[ds[i]]; }\n      chk(co && (arguments.length < 2 || deepEq(o, v)), show(actual) + ' to have property ' + String(p) + (arguments.length < 2 ? '' : ' = ' + show(v)));\n    };\n    m.toThrow = m.toThrowError = function (x) {\n      if (typeof actual !== 'function') throw Loi('toThrow() needs a function: write expect(() => fn(...)).toThrow()');\n      var threw = false, err;\n      try { actual(); } catch (e) { threw = true; err = e; }\n      chk(threw && khopLoi(err, x), 'the function to throw' + (x === undefined ? '' : ' ' + (typeof x === 'function' ? x.name : show(x instanceof RegExp ? String(x) : x))) + (threw ? ' (it threw ' + show(err) + ')' : ' (it returned normally)'));\n    };\n    m.toHaveBeenCalled = function () { laMock(actual); chk(actual.mock.calls.length > 0, 'the mock to have been called'); };\n    m.toHaveBeenCalledTimes = function (n) { laMock(actual); chk(actual.mock.calls.length === n, 'the mock to be called ' + n + ' time(s), it was called ' + actual.mock.calls.length); };\n    m.toHaveBeenCalledWith = function () { laMock(actual); var a = Array.prototype.slice.call(arguments); chk(actual.mock.calls.some(function (c) { return deepEq(c, a); }), 'the mock to have been called with ' + show(a) + ' — calls: ' + show(actual.mock.calls)); };\n    m.toHaveBeenLastCalledWith = function () { laMock(actual); var a = Array.prototype.slice.call(arguments); var c = actual.mock.calls[actual.mock.calls.length - 1]; chk(!!c && deepEq(c, a), 'the last call to be ' + show(a)); };\n    return m;\n  }\n  function boc(p, neg, laTuChoi) {\n    var mau = make(undefined, false), o = {};\n    Object.keys(mau).forEach(function (k) {\n      o[k] = function () {\n        var args = arguments;\n        return Promise.resolve(p).then(function (v) {\n          if (laTuChoi) throw Loi('expected the promise to reject, it resolved with ' + show(v));\n          return make(v, neg)[k].apply(null, args);\n        }, function (e) {\n          if (!laTuChoi) throw Loi('expected the promise to resolve, it rejected with ' + show(e));\n          return make(k === 'toThrow' || k === 'toThrowError' ? function () { throw e; } : e, neg)[k].apply(null, args);\n        });\n      };\n    });\n    return o;\n  }\n  G.expect = function (actual) {\n    G.__soExpect = (G.__soExpect || 0) + 1;\n    var o = make(actual, false); o.not = make(actual, true);\n    o.resolves = boc(actual, false, false); o.resolves.not = boc(actual, true, false);\n    o.rejects = boc(actual, false, true); o.rejects.not = boc(actual, true, true);\n    return o;\n  };\n  function fn(impl) {\n    var f = function () {\n      var args = Array.prototype.slice.call(arguments); f.mock.calls.push(args);\n      try {\n        var g = f.__mot.length ? f.__mot.shift() : f.__impl;\n        var r = g ? g.apply(this, args) : f.__tra;\n        f.mock.results.push({ type: 'return', value: r }); return r;\n      } catch (e) { f.mock.results.push({ type: 'throw', value: e }); throw e; }\n    };\n    f.__laMock = true; f.mock = { calls: [], results: [] }; f.__impl = impl || null; f.__mot = []; f.__tra = undefined;\n    f.mockReturnValue = function (v) { f.__impl = null; f.__tra = v; return f; };\n    f.mockReturnValueOnce = function (v) { f.__mot.push(function () { return v; }); return f; };\n    f.mockImplementation = function (g) { f.__impl = g; return f; };\n    f.mockImplementationOnce = function (g) { f.__mot.push(g); return f; };\n    f.mockResolvedValue = function (v) { f.__impl = function () { return Promise.resolve(v); }; return f; };\n    f.mockRejectedValue = function (v) { f.__impl = function () { return Promise.reject(v); }; return f; };\n    f.mockClear = f.mockReset = function () { f.mock.calls = []; f.mock.results = []; return f; };\n    return f;\n  }\n  G.jest = { fn: fn, spyOn: function (obj, ten) { var goc = obj[ten]; var s = fn(function () { return goc.apply(this, arguments); }); obj[ten] = s; s.mockRestore = function () { obj[ten] = goc; }; return s; } };\n  G.describe = function (ten, f) { var k = { ten: String(ten), be: [], ae: [] }; CHONG.push(k); try { f(); } finally { CHONG.pop(); } };\n  G.beforeEach = function (f) { CHONG[CHONG.length - 1].be.push(f); };\n  G.afterEach = function (f) { CHONG[CHONG.length - 1].ae.push(f); };\n  G.test = G.it = function (ten, f) {\n    if (typeof f !== 'function') throw new Error('test(\"' + ten + '\") needs a function body');\n    var duong = CHONG.slice(1).map(function (k) { return k.ten; }).concat([String(ten)]).join(' > ');\n    REG.push({ ten: duong, fn: f, khung: CHONG.slice() });\n  };\n  function dinhDang(ten, args, i) {\n    var j = 0;\n    var s = String(ten).replace(/%[sdipjfo#%]/g, function (m) {\n      if (m === '%%') return '%'; if (m === '%#') return String(i);\n      var v = args[j++]; return m === '%p' || m === '%j' || m === '%o' ? show(v) : String(v);\n    });\n    if (args.length === 1 && args[0] && typeof args[0] === 'object' && !Array.isArray(args[0])) s = s.replace(/\\$([A-Za-z_][A-Za-z0-9_]*)/g, function (m, k) { return k in args[0] ? String(args[0][k]) : m; });\n    return s;\n  }\n  G.test.each = G.it.each = function (rows) {\n    return function (ten, f) {\n      rows.forEach(function (r, i) {\n        var args = Array.isArray(r) ? r : [r];\n        G.test(dinhDang(ten, args, i), function () { return f.apply(null, args); });\n      });\n    };\n  };\n  G.test.skip = G.it.skip = function () {};\n  G.describe.skip = function () {};\n  /** Máy chấm: chạy mọi test đã đăng ký sau khi gán các tên toàn cục trong gan. */\n  G.__chayBo = async function (gan) {\n    for (var k in gan) G[k] = gan[k];\n    var kq = { tong: REG.length, dat: [], truot: [] };\n    for (var i = 0; i < REG.length; i++) {\n      var t = REG[i]; G.__soExpect = 0;\n      try {\n        var be = [], ae = [];\n        t.khung.forEach(function (fr) { be = be.concat(fr.be); ae = fr.ae.concat(ae); });\n        for (var a = 0; a < be.length; a++) await be[a]();\n        await t.fn();\n        for (var b = 0; b < ae.length; b++) await ae[b]();\n        if (!G.__soExpect) kq.truot.push({ ten: t.ten, loi: 'no expect() in this test', rong: true });\n        else kq.dat.push(t.ten);\n      } catch (e) {\n        kq.truot.push({ ten: t.ten, loi: e && e.message !== undefined ? (e.name === 'AssertionError' ? '' : e.name + ': ') + e.message : String(e) });\n      }\n    }\n    return kq;\n  };\n})(globalThis);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "tests.js",
+          "language": "javascript",
+          "code": "// WaitList tests — JUnit 5: @BeforeEach creates a fresh fixture for every test.\nlet w;\nbeforeEach(() => {\n  w = new WaitList();\n  w.add('s1');\n  w.add('s2');\n  w.add('s3');\n});\n\ntest('three students are waiting', () => {\n  expect(w.size).toBe(3);\n});\n\ntest('add returns the new size', () => {\n  expect(w.add('s4')).toBe(4);\n});\n\ntest('promote is first come, first served', () => {\n  expect(w.promote()).toBe('s1');\n  expect(w.promote()).toBe('s2');\n  expect(w.size).toBe(1);\n});\n\ntest('a student cannot wait twice', () => {\n  expect(() => w.add('s2')).toThrow('DUPLICATE');\n  expect(w.size).toBe(3);\n});\n\ntest('positions are 1-based; absent is -1', () => {\n  expect(w.position('s1')).toBe(1);\n  expect(w.position('s3')).toBe(3);\n  expect(w.position('nobody')).toBe(-1);\n});\n\ntest('remove takes the student out and the others move up', () => {\n  expect(w.remove('s2')).toBe(true);\n  expect(w.position('s3')).toBe(2);\n  expect(w.size).toBe(2);\n  expect(w.remove('s2')).toBe(false);\n});\n\ntest('promote on an empty list returns null', () => {\n  const empty = new WaitList();\n  expect(empty.promote()).toBeNull();\n});\n"
+        },
+        {
+          "name": "lib/testkit.js",
+          "language": "javascript",
+          "code": "/* lib/testkit.js — a tiny Jest-compatible test kit (describe · test/it · test.each · beforeEach/afterEach ·\n * expect(...).toBe/toEqual/toBeCloseTo/toThrow/toContain/toMatch/… · .not · .resolves/.rejects · jest.fn()).\n * Loaded BEFORE tests.js. DO NOT EDIT — the grader relies on it.\n * Bộ test nhỏ tương thích Jest, nạp trước tests.js. KHÔNG SỬA tệp này — máy chấm dùng nó.\n */\n(function (G) {\n  if (G.__KIT_DA_NAP__) return; G.__KIT_DA_NAP__ = true;\n  var REG = G.__REG__ = [];\n  var GOC = { ten: null, be: [], ae: [] };\n  var CHONG = [GOC];\n  function show(v) {\n    if (typeof v === 'string') return JSON.stringify(v);\n    if (typeof v === 'function') return '[Function]';\n    if (v instanceof Error) return v.name + ': ' + v.message;\n    if (typeof v === 'number' && !isFinite(v)) return String(v);\n    if (v === undefined) return 'undefined';\n    try { var s = JSON.stringify(v); return s && s.length > 140 ? s.slice(0, 137) + '...' : s; } catch (e) { return String(v); }\n  }\n  function deepEq(a, b) {\n    if (Object.is(a, b)) return true;\n    if (typeof a !== 'object' || typeof b !== 'object' || a === null || b === null) return false;\n    if (a instanceof Date && b instanceof Date) return a.getTime() === b.getTime();\n    if (Array.isArray(a) !== Array.isArray(b)) return false;\n    if (a instanceof Map && b instanceof Map) { if (a.size !== b.size) return false; var ok = true; a.forEach(function (v, k) { if (!b.has(k) || !deepEq(v, b.get(k))) ok = false; }); return ok; }\n    if (a instanceof Set && b instanceof Set) { if (a.size !== b.size) return false; var ok2 = true; a.forEach(function (v) { if (!b.has(v)) ok2 = false; }); return ok2; }\n    var ka = Object.keys(a).filter(function (k) { return a[k] !== undefined; });\n    var kb = Object.keys(b).filter(function (k) { return b[k] !== undefined; });\n    if (ka.length !== kb.length) return false;\n    for (var i = 0; i < ka.length; i++) if (!Object.prototype.hasOwnProperty.call(b, ka[i]) || !deepEq(a[ka[i]], b[ka[i]])) return false;\n    return true;\n  }\n  function Loi(m) { var e = new Error(m); e.name = 'AssertionError'; return e; }\n  function khopLoi(err, x) {\n    if (x === undefined) return true;\n    var msg = err && err.message !== undefined ? String(err.message) : String(err);\n    if (typeof x === 'string') return msg.indexOf(x) >= 0;\n    if (x instanceof RegExp) return x.test(msg);\n    if (typeof x === 'function') return err instanceof x || (err && err.name === x.name);\n    if (x && typeof x === 'object' && 'message' in x) return msg === String(x.message);\n    return false;\n  }\n  function make(actual, neg) {\n    var m = {};\n    function chk(pass, msg) { if (!!pass === neg) throw Loi('expected ' + (neg ? 'NOT ' : '') + msg); }\n    function laMock(f) { if (!f || !f.__laMock) throw Loi('this matcher needs a jest.fn() mock, got ' + show(f)); }\n    m.toBe = function (e) { chk(Object.is(actual, e), show(actual) + ' to be ' + show(e)); };\n    m.toEqual = m.toStrictEqual = function (e) { chk(deepEq(actual, e), show(actual) + ' to equal ' + show(e)); };\n    m.toBeCloseTo = function (e, d) { d = d == null ? 2 : d; chk(typeof actual === 'number' && Math.abs(actual - e) < Math.pow(10, -d) / 2, show(actual) + ' to be close to ' + show(e)); };\n    m.toBeTruthy = function () { chk(!!actual, show(actual) + ' to be truthy'); };\n    m.toBeFalsy = function () { chk(!actual, show(actual) + ' to be falsy'); };\n    m.toBeNull = function () { chk(actual === null, show(actual) + ' to be null'); };\n    m.toBeUndefined = function () { chk(actual === undefined, show(actual) + ' to be undefined'); };\n    m.toBeDefined = function () { chk(actual !== undefined, show(actual) + ' to be defined'); };\n    m.toBeNaN = function () { chk(Number.isNaN(actual), show(actual) + ' to be NaN'); };\n    m.toBeGreaterThan = function (n) { chk(actual > n, show(actual) + ' > ' + show(n)); };\n    m.toBeGreaterThanOrEqual = function (n) { chk(actual >= n, show(actual) + ' >= ' + show(n)); };\n    m.toBeLessThan = function (n) { chk(actual < n, show(actual) + ' < ' + show(n)); };\n    m.toBeLessThanOrEqual = function (n) { chk(actual <= n, show(actual) + ' <= ' + show(n)); };\n    m.toContain = function (x) { chk(actual != null && (typeof actual === 'string' ? actual.indexOf(x) >= 0 : Array.prototype.some.call(actual, function (y) { return Object.is(y, x); })), show(actual) + ' to contain ' + show(x)); };\n    m.toContainEqual = function (x) { chk(actual != null && Array.prototype.some.call(actual, function (y) { return deepEq(y, x); }), show(actual) + ' to contain an item equal to ' + show(x)); };\n    m.toHaveLength = function (n) { chk(actual != null && actual.length === n, show(actual) + ' to have length ' + n); };\n    m.toMatch = function (r) { chk(typeof actual === 'string' && (r instanceof RegExp ? r.test(actual) : actual.indexOf(r) >= 0), show(actual) + ' to match ' + String(r)); };\n    m.toHaveProperty = function (p, v) {\n      var ds = Array.isArray(p) ? p : String(p).split('.'); var o = actual, co = true;\n      for (var i = 0; i < ds.length; i++) { if (o == null || !(ds[i] in Object(o))) { co = false; break; } o = o[ds[i]]; }\n      chk(co && (arguments.length < 2 || deepEq(o, v)), show(actual) + ' to have property ' + String(p) + (arguments.length < 2 ? '' : ' = ' + show(v)));\n    };\n    m.toThrow = m.toThrowError = function (x) {\n      if (typeof actual !== 'function') throw Loi('toThrow() needs a function: write expect(() => fn(...)).toThrow()');\n      var threw = false, err;\n      try { actual(); } catch (e) { threw = true; err = e; }\n      chk(threw && khopLoi(err, x), 'the function to throw' + (x === undefined ? '' : ' ' + (typeof x === 'function' ? x.name : show(x instanceof RegExp ? String(x) : x))) + (threw ? ' (it threw ' + show(err) + ')' : ' (it returned normally)'));\n    };\n    m.toHaveBeenCalled = function () { laMock(actual); chk(actual.mock.calls.length > 0, 'the mock to have been called'); };\n    m.toHaveBeenCalledTimes = function (n) { laMock(actual); chk(actual.mock.calls.length === n, 'the mock to be called ' + n + ' time(s), it was called ' + actual.mock.calls.length); };\n    m.toHaveBeenCalledWith = function () { laMock(actual); var a = Array.prototype.slice.call(arguments); chk(actual.mock.calls.some(function (c) { return deepEq(c, a); }), 'the mock to have been called with ' + show(a) + ' — calls: ' + show(actual.mock.calls)); };\n    m.toHaveBeenLastCalledWith = function () { laMock(actual); var a = Array.prototype.slice.call(arguments); var c = actual.mock.calls[actual.mock.calls.length - 1]; chk(!!c && deepEq(c, a), 'the last call to be ' + show(a)); };\n    return m;\n  }\n  function boc(p, neg, laTuChoi) {\n    var mau = make(undefined, false), o = {};\n    Object.keys(mau).forEach(function (k) {\n      o[k] = function () {\n        var args = arguments;\n        return Promise.resolve(p).then(function (v) {\n          if (laTuChoi) throw Loi('expected the promise to reject, it resolved with ' + show(v));\n          return make(v, neg)[k].apply(null, args);\n        }, function (e) {\n          if (!laTuChoi) throw Loi('expected the promise to resolve, it rejected with ' + show(e));\n          return make(k === 'toThrow' || k === 'toThrowError' ? function () { throw e; } : e, neg)[k].apply(null, args);\n        });\n      };\n    });\n    return o;\n  }\n  G.expect = function (actual) {\n    G.__soExpect = (G.__soExpect || 0) + 1;\n    var o = make(actual, false); o.not = make(actual, true);\n    o.resolves = boc(actual, false, false); o.resolves.not = boc(actual, true, false);\n    o.rejects = boc(actual, false, true); o.rejects.not = boc(actual, true, true);\n    return o;\n  };\n  function fn(impl) {\n    var f = function () {\n      var args = Array.prototype.slice.call(arguments); f.mock.calls.push(args);\n      try {\n        var g = f.__mot.length ? f.__mot.shift() : f.__impl;\n        var r = g ? g.apply(this, args) : f.__tra;\n        f.mock.results.push({ type: 'return', value: r }); return r;\n      } catch (e) { f.mock.results.push({ type: 'throw', value: e }); throw e; }\n    };\n    f.__laMock = true; f.mock = { calls: [], results: [] }; f.__impl = impl || null; f.__mot = []; f.__tra = undefined;\n    f.mockReturnValue = function (v) { f.__impl = null; f.__tra = v; return f; };\n    f.mockReturnValueOnce = function (v) { f.__mot.push(function () { return v; }); return f; };\n    f.mockImplementation = function (g) { f.__impl = g; return f; };\n    f.mockImplementationOnce = function (g) { f.__mot.push(g); return f; };\n    f.mockResolvedValue = function (v) { f.__impl = function () { return Promise.resolve(v); }; return f; };\n    f.mockRejectedValue = function (v) { f.__impl = function () { return Promise.reject(v); }; return f; };\n    f.mockClear = f.mockReset = function () { f.mock.calls = []; f.mock.results = []; return f; };\n    return f;\n  }\n  G.jest = { fn: fn, spyOn: function (obj, ten) { var goc = obj[ten]; var s = fn(function () { return goc.apply(this, arguments); }); obj[ten] = s; s.mockRestore = function () { obj[ten] = goc; }; return s; } };\n  G.describe = function (ten, f) { var k = { ten: String(ten), be: [], ae: [] }; CHONG.push(k); try { f(); } finally { CHONG.pop(); } };\n  G.beforeEach = function (f) { CHONG[CHONG.length - 1].be.push(f); };\n  G.afterEach = function (f) { CHONG[CHONG.length - 1].ae.push(f); };\n  G.test = G.it = function (ten, f) {\n    if (typeof f !== 'function') throw new Error('test(\"' + ten + '\") needs a function body');\n    var duong = CHONG.slice(1).map(function (k) { return k.ten; }).concat([String(ten)]).join(' > ');\n    REG.push({ ten: duong, fn: f, khung: CHONG.slice() });\n  };\n  function dinhDang(ten, args, i) {\n    var j = 0;\n    var s = String(ten).replace(/%[sdipjfo#%]/g, function (m) {\n      if (m === '%%') return '%'; if (m === '%#') return String(i);\n      var v = args[j++]; return m === '%p' || m === '%j' || m === '%o' ? show(v) : String(v);\n    });\n    if (args.length === 1 && args[0] && typeof args[0] === 'object' && !Array.isArray(args[0])) s = s.replace(/\\$([A-Za-z_][A-Za-z0-9_]*)/g, function (m, k) { return k in args[0] ? String(args[0][k]) : m; });\n    return s;\n  }\n  G.test.each = G.it.each = function (rows) {\n    return function (ten, f) {\n      rows.forEach(function (r, i) {\n        var args = Array.isArray(r) ? r : [r];\n        G.test(dinhDang(ten, args, i), function () { return f.apply(null, args); });\n      });\n    };\n  };\n  G.test.skip = G.it.skip = function () {};\n  G.describe.skip = function () {};\n  /** Máy chấm: chạy mọi test đã đăng ký sau khi gán các tên toàn cục trong gan. */\n  G.__chayBo = async function (gan) {\n    for (var k in gan) G[k] = gan[k];\n    var kq = { tong: REG.length, dat: [], truot: [] };\n    for (var i = 0; i < REG.length; i++) {\n      var t = REG[i]; G.__soExpect = 0;\n      try {\n        var be = [], ae = [];\n        t.khung.forEach(function (fr) { be = be.concat(fr.be); ae = fr.ae.concat(ae); });\n        for (var a = 0; a < be.length; a++) await be[a]();\n        await t.fn();\n        for (var b = 0; b < ae.length; b++) await ae[b]();\n        if (!G.__soExpect) kq.truot.push({ ten: t.ten, loi: 'no expect() in this test', rong: true });\n        else kq.dat.push(t.ten);\n      } catch (e) {\n        kq.truot.push({ ten: t.ten, loi: e && e.message !== undefined ? (e.name === 'AssertionError' ? '' : e.name + ': ') + e.message : String(e) });\n      }\n    }\n    return kq;\n  };\n})(globalThis);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A fresh fixture per test (beforeEach / @BeforeEach) keeps tests independent; FIFO, 1-based positions, duplicates and the empty case each kill one mutant.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "lib/testkit.js",
+          "tests.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Every test passes against the CORRECT implementation (your expected values are right)",
+              "vi": "Mọi test ĐẠT trên bản cài đặt ĐÚNG (giá trị mong đợi của bạn đúng)"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nclass WaitList {\n  constructor() { this.items = []; }\n  add(id) {\n    if (this.items.includes(id)) throw new Error('DUPLICATE');\n    this.items.push(id);\n    return this.items.length;\n  }\n  promote() {\n    return this.items.length ? this.items.shift() : null;\n  }\n  position(id) {\n    const i = this.items.indexOf(id);\n    return i < 0 ? -1 : i + 1;\n  }\n  remove(id) {\n    const i = this.items.indexOf(id);\n    if (i < 0) return false;\n    this.items.splice(i, 1);\n    return true;\n  }\n  get size() { return this.items.length; }\n}\nreturn { \"WaitList\": WaitList };\n})();\nconst r = await __chayBo(__DUNG);\nif (typeof WaitList !== 'undefined' && WaitList !== globalThis[\"WaitList\"]) return 'tests.js must not declare WaitList itself (let/const/class/copy of the code) — call the global WaitList that the grader provides';\nif (!r.tong) return 'No tests found — write test(...) blocks in tests.js';\nif (r.truot.length) return r.truot.length + ' of ' + r.tong + ' test(s) FAIL on the correct code: ' + r.truot.slice(0, 3).map(function (x) { return '\"' + x.ten + '\" — ' + x.loi; }).join(' | ');\nreturn 'OK';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "The suite has at least 7 tests, each with at least one expect()",
+              "vi": "Bộ test có ít nhất 7 test, mỗi test có ít nhất một expect()"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nclass WaitList {\n  constructor() { this.items = []; }\n  add(id) {\n    if (this.items.includes(id)) throw new Error('DUPLICATE');\n    this.items.push(id);\n    return this.items.length;\n  }\n  promote() {\n    return this.items.length ? this.items.shift() : null;\n  }\n  position(id) {\n    const i = this.items.indexOf(id);\n    return i < 0 ? -1 : i + 1;\n  }\n  remove(id) {\n    const i = this.items.indexOf(id);\n    if (i < 0) return false;\n    this.items.splice(i, 1);\n    return true;\n  }\n  get size() { return this.items.length; }\n}\nreturn { \"WaitList\": WaitList };\n})();\nconst r = await __chayBo(__DUNG);\nconst rong = r.truot.filter(function (x) { return x.rong; });\nif (rong.length) return 'test without any expect(): \"' + rong[0].ten + '\"';\nif (r.tong < 7) return 'only ' + r.tong + ' test(s) — write at least 7';\nreturn 'OK';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M1: promote takes the LAST student (LIFO)",
+              "vi": "Giết mutant M1: promote lấy người CUỐI (LIFO)"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nclass WaitList {\n  constructor() { this.items = []; }\n  add(id) {\n    if (this.items.includes(id)) throw new Error('DUPLICATE');\n    this.items.push(id);\n    return this.items.length;\n  }\n  promote() {\n    return this.items.length ? this.items.shift() : null;\n  }\n  position(id) {\n    const i = this.items.indexOf(id);\n    return i < 0 ? -1 : i + 1;\n  }\n  remove(id) {\n    const i = this.items.indexOf(id);\n    if (i < 0) return false;\n    this.items.splice(i, 1);\n    return true;\n  }\n  get size() { return this.items.length; }\n}\nreturn { \"WaitList\": WaitList };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nclass WaitList {\n  constructor() { this.items = []; }\n  add(id) {\n    if (this.items.includes(id)) throw new Error('DUPLICATE');\n    this.items.push(id);\n    return this.items.length;\n  }\n  promote() {\n    return this.items.length ? this.items.pop() : null;\n  }\n  position(id) {\n    const i = this.items.indexOf(id);\n    return i < 0 ? -1 : i + 1;\n  }\n  remove(id) {\n    const i = this.items.indexOf(id);\n    if (i < 0) return false;\n    this.items.splice(i, 1);\n    return true;\n  }\n  get size() { return this.items.length; }\n}\nreturn { \"WaitList\": WaitList };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M2: duplicates are accepted",
+              "vi": "Giết mutant M2: nhận trùng"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nclass WaitList {\n  constructor() { this.items = []; }\n  add(id) {\n    if (this.items.includes(id)) throw new Error('DUPLICATE');\n    this.items.push(id);\n    return this.items.length;\n  }\n  promote() {\n    return this.items.length ? this.items.shift() : null;\n  }\n  position(id) {\n    const i = this.items.indexOf(id);\n    return i < 0 ? -1 : i + 1;\n  }\n  remove(id) {\n    const i = this.items.indexOf(id);\n    if (i < 0) return false;\n    this.items.splice(i, 1);\n    return true;\n  }\n  get size() { return this.items.length; }\n}\nreturn { \"WaitList\": WaitList };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nclass WaitList {\n  constructor() { this.items = []; }\n  add(id) {\n    this.items.push(id);\n    return this.items.length;\n  }\n  promote() {\n    return this.items.length ? this.items.shift() : null;\n  }\n  position(id) {\n    const i = this.items.indexOf(id);\n    return i < 0 ? -1 : i + 1;\n  }\n  remove(id) {\n    const i = this.items.indexOf(id);\n    if (i < 0) return false;\n    this.items.splice(i, 1);\n    return true;\n  }\n  get size() { return this.items.length; }\n}\nreturn { \"WaitList\": WaitList };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M3: position is 0-based",
+              "vi": "Giết mutant M3: vị trí tính từ 0"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nclass WaitList {\n  constructor() { this.items = []; }\n  add(id) {\n    if (this.items.includes(id)) throw new Error('DUPLICATE');\n    this.items.push(id);\n    return this.items.length;\n  }\n  promote() {\n    return this.items.length ? this.items.shift() : null;\n  }\n  position(id) {\n    const i = this.items.indexOf(id);\n    return i < 0 ? -1 : i + 1;\n  }\n  remove(id) {\n    const i = this.items.indexOf(id);\n    if (i < 0) return false;\n    this.items.splice(i, 1);\n    return true;\n  }\n  get size() { return this.items.length; }\n}\nreturn { \"WaitList\": WaitList };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nclass WaitList {\n  constructor() { this.items = []; }\n  add(id) {\n    if (this.items.includes(id)) throw new Error('DUPLICATE');\n    this.items.push(id);\n    return this.items.length;\n  }\n  promote() {\n    return this.items.length ? this.items.shift() : null;\n  }\n  position(id) {\n    const i = this.items.indexOf(id);\n    return i < 0 ? -1 : i;\n  }\n  remove(id) {\n    const i = this.items.indexOf(id);\n    if (i < 0) return false;\n    this.items.splice(i, 1);\n    return true;\n  }\n  get size() { return this.items.length; }\n}\nreturn { \"WaitList\": WaitList };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M4: promote on an empty list throws",
+              "vi": "Giết mutant M4: promote khi rỗng ném lỗi"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nclass WaitList {\n  constructor() { this.items = []; }\n  add(id) {\n    if (this.items.includes(id)) throw new Error('DUPLICATE');\n    this.items.push(id);\n    return this.items.length;\n  }\n  promote() {\n    return this.items.length ? this.items.shift() : null;\n  }\n  position(id) {\n    const i = this.items.indexOf(id);\n    return i < 0 ? -1 : i + 1;\n  }\n  remove(id) {\n    const i = this.items.indexOf(id);\n    if (i < 0) return false;\n    this.items.splice(i, 1);\n    return true;\n  }\n  get size() { return this.items.length; }\n}\nreturn { \"WaitList\": WaitList };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nclass WaitList {\n  constructor() { this.items = []; }\n  add(id) {\n    if (this.items.includes(id)) throw new Error('DUPLICATE');\n    this.items.push(id);\n    return this.items.length;\n  }\n  promote() {\n    if (!this.items.length) throw new Error('EMPTY');\n    return this.items.shift();\n  }\n  position(id) {\n    const i = this.items.indexOf(id);\n    return i < 0 ? -1 : i + 1;\n  }\n  remove(id) {\n    const i = this.items.indexOf(id);\n    if (i < 0) return false;\n    this.items.splice(i, 1);\n    return true;\n  }\n  get size() { return this.items.length; }\n}\nreturn { \"WaitList\": WaitList };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M5: remove never removes but answers true",
+              "vi": "Giết mutant M5: remove không xoá nhưng trả true"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nclass WaitList {\n  constructor() { this.items = []; }\n  add(id) {\n    if (this.items.includes(id)) throw new Error('DUPLICATE');\n    this.items.push(id);\n    return this.items.length;\n  }\n  promote() {\n    return this.items.length ? this.items.shift() : null;\n  }\n  position(id) {\n    const i = this.items.indexOf(id);\n    return i < 0 ? -1 : i + 1;\n  }\n  remove(id) {\n    const i = this.items.indexOf(id);\n    if (i < 0) return false;\n    this.items.splice(i, 1);\n    return true;\n  }\n  get size() { return this.items.length; }\n}\nreturn { \"WaitList\": WaitList };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nclass WaitList {\n  constructor() { this.items = []; }\n  add(id) {\n    if (this.items.includes(id)) throw new Error('DUPLICATE');\n    this.items.push(id);\n    return this.items.length;\n  }\n  promote() {\n    return this.items.length ? this.items.shift() : null;\n  }\n  position(id) {\n    const i = this.items.indexOf(id);\n    return i < 0 ? -1 : i + 1;\n  }\n  remove(id) {\n    const i = this.items.indexOf(id);\n    if (i < 0) return false;\n    return true;\n  }\n  get size() { return this.items.length; }\n}\nreturn { \"WaitList\": WaitList };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED"
+          },
+          {
+            "moTa": {
+              "en": "Hidden mutant M6 is killed",
+              "vi": "Mutant ẩn M6 bị giết"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nclass WaitList {\n  constructor() { this.items = []; }\n  add(id) {\n    if (this.items.includes(id)) throw new Error('DUPLICATE');\n    this.items.push(id);\n    return this.items.length;\n  }\n  promote() {\n    return this.items.length ? this.items.shift() : null;\n  }\n  position(id) {\n    const i = this.items.indexOf(id);\n    return i < 0 ? -1 : i + 1;\n  }\n  remove(id) {\n    const i = this.items.indexOf(id);\n    if (i < 0) return false;\n    this.items.splice(i, 1);\n    return true;\n  }\n  get size() { return this.items.length; }\n}\nreturn { \"WaitList\": WaitList };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nclass WaitList {\n  constructor() { this.items = []; }\n  add(id) {\n    if (this.items.includes(id)) throw new Error('DUPLICATE');\n    const n = this.items.length;\n    this.items.push(id);\n    return n;\n  }\n  promote() {\n    return this.items.length ? this.items.shift() : null;\n  }\n  position(id) {\n    const i = this.items.indexOf(id);\n    return i < 0 ? -1 : i + 1;\n  }\n  remove(id) {\n    const i = this.items.indexOf(id);\n    if (i < 0) return false;\n    this.items.splice(i, 1);\n    return true;\n  }\n  get size() { return this.items.length; }\n}\nreturn { \"WaitList\": WaitList };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden mutant M7 is killed",
+              "vi": "Mutant ẩn M7 bị giết"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nclass WaitList {\n  constructor() { this.items = []; }\n  add(id) {\n    if (this.items.includes(id)) throw new Error('DUPLICATE');\n    this.items.push(id);\n    return this.items.length;\n  }\n  promote() {\n    return this.items.length ? this.items.shift() : null;\n  }\n  position(id) {\n    const i = this.items.indexOf(id);\n    return i < 0 ? -1 : i + 1;\n  }\n  remove(id) {\n    const i = this.items.indexOf(id);\n    if (i < 0) return false;\n    this.items.splice(i, 1);\n    return true;\n  }\n  get size() { return this.items.length; }\n}\nreturn { \"WaitList\": WaitList };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nclass WaitList {\n  constructor() { this.items = []; }\n  add(id) {\n    if (this.items.includes(id)) throw new Error('DUPLICATE');\n    this.items.push(id);\n    return this.items.length;\n  }\n  promote() {\n    return this.items.length ? this.items.shift() : null;\n  }\n  position(id) {\n    const i = this.items.indexOf(id);\n    return i < 0 ? -1 : i + 1;\n  }\n  remove(id) {\n    const i = this.items.indexOf(id);\n    if (i < 0) return true;\n    this.items.splice(i, 1);\n    return true;\n  }\n  get size() { return this.items.length; }\n}\nreturn { \"WaitList\": WaitList };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng chung một danh sách cho mọi test — test sau phụ thuộc test trước."
+        },
+        {
+          "loi": "Chỉ kiểm size mà không kiểm AI được nâng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "mutant",
+          "vi": "bản đột biến — bản mã cố ý cài một lỗi nhỏ để thử độ mạnh của bộ test"
+        },
+        {
+          "en": "kill a mutant",
+          "vi": "\"giết\" mutant — có test đạt trên mã đúng nhưng trượt trên mutant"
+        },
+        {
+          "en": "assertion",
+          "vi": "phép khẳng định (expect/assertEquals) — so thực tế với mong đợi"
+        },
+        {
+          "en": "Arrange–Act–Assert (AAA)",
+          "vi": "mẫu viết test 3 bước: chuẩn bị – gọi – khẳng định"
+        },
+        {
+          "en": "parameterized test",
+          "vi": "test tham số hoá — một thân test, nhiều bộ dữ liệu (@ParameterizedTest / test.each)"
+        },
+        {
+          "en": "expected result",
+          "vi": "kết quả mong đợi — lấy từ ĐẶC TẢ, không lấy từ mã"
+        },
+        {
+          "en": "fixture",
+          "vi": "trạng thái dựng sẵn cho test"
+        },
+        {
+          "en": "FIFO",
+          "vi": "vào trước ra trước"
+        }
+      ]
+    }
+  ]
+}

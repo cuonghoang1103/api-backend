@@ -1,0 +1,738 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-tools-pyramid",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-tools-pyramid"
+  },
+  "exercises": [
+    {
+      "title": "Tools 1 — Put each tool in its ISTQB group",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "tool classification"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>The syllabus classifies tools by the test activity they support, in six groups. Place each tool used around LabBook.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Syllabus phân loại công cụ theo hoạt động kiểm thử mà chúng hỗ trợ, thành sáu nhóm. Xếp từng công cụ dùng quanh LabBook.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "CI nằm ở nhóm QUẢN LÝ (nhóm 1), không phải thực thi.",
+        "Phát hiện rò bộ nhớ khi chạy = phân tích động (nhóm 5)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Tools 1 — Put each tool in its ISTQB group\n\nAnswer in the answer panel (no code needed).\n\n1. Tool → groupCông cụ → nhóm\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Tools 1 — Put each tool in its ISTQB group — answer key\n\n1. Tool → groupCông cụ → nhóm\n   - r0.g: 1 · Management of testing & testware\n   - r1.g: 2 · Static testing\n   - r2.g: 3 · Test design & implementation\n   - r3.g: 4 · Test execution & logging\n   - r4.g: 5 · Performance & dynamic analysis\n   - r5.g: 6 · Specialised testing needs\n   - r6.g: 1 · Management of testing & testware\n   - r7.g: 3 · Test design & implementation\n   - r8.g: 5 · Performance & dynamic analysis\n   - r9.g: 6 · Specialised testing needs\n   Test/defect management and CI = group 1; static analysis = 2; MBT and test data preparation = 3; unit frameworks and coverage = 4; load testing and dynamic analysis (memory leaks) = 5; accessibility and localisation = 6.VI: Quản lý test/lỗi và CI = nhóm 1; phân tích tĩnh = 2; MBT và chuẩn bị dữ liệu = 3; unit framework và coverage = 4; test tải và phân tích động (rò bộ nhớ) = 5; khả năng tiếp cận và bản địa hoá = 6.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>1 · 2 · 3 · 4 · 5 · 6 · 1 · 3 · 5 · 6.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Tool → group</p><p style=\"opacity:.75;font-size:.92em\"><i>Công cụ → nhóm</i></p>",
+            "cot": [
+              {
+                "ma": "t",
+                "ten": "Tool"
+              },
+              {
+                "ma": "g",
+                "ten": "Group",
+                "luaChon": [
+                  "1 · Management of testing & testware",
+                  "2 · Static testing",
+                  "3 · Test design & implementation",
+                  "4 · Test execution & logging",
+                  "5 · Performance & dynamic analysis",
+                  "6 · Specialised testing needs"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "t": "Jira with Xray: test cases, test cycles, defects and traceability"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "t": "SonarQube: code smells, complexity and coding-standard violations"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "t": "A model-based testing tool that generates tests from the booking state diagram"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "t": "JUnit 5 and JaCoCo running in the build"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "t": "JMeter simulating 300 students booking at 07:00"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "t": "An accessibility checker (WCAG) for the booking form"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "t": "Jenkins running the pipeline on every push"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "t": "A test-data generator that creates 10,000 realistic bookings"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "t": "A memory-leak detector attached to the running server"
+                }
+              },
+              {
+                "ma": "r9",
+                "o": {
+                  "t": "A tool that checks the Vietnamese and English translations of every screen"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.g": "1 · Management of testing & testware",
+              "r1.g": "2 · Static testing",
+              "r2.g": "3 · Test design & implementation",
+              "r3.g": "4 · Test execution & logging",
+              "r4.g": "5 · Performance & dynamic analysis",
+              "r5.g": "6 · Specialised testing needs",
+              "r6.g": "1 · Management of testing & testware",
+              "r7.g": "3 · Test design & implementation",
+              "r8.g": "5 · Performance & dynamic analysis",
+              "r9.g": "6 · Specialised testing needs"
+            },
+            "giaiThich": "<p>Test/defect management and CI = group 1; static analysis = 2; MBT and test data preparation = 3; unit frameworks and coverage = 4; load testing and dynamic analysis (memory leaks) = 5; accessibility and localisation = 6.</p><p><i>VI: Quản lý test/lỗi và CI = nhóm 1; phân tích tĩnh = 2; MBT và chuẩn bị dữ liệu = 3; unit framework và coverage = 4; test tải và phân tích động (rò bộ nhớ) = 5; khả năng tiếp cận và bản địa hoá = 6.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Xếp Jenkins vào nhóm thực thi."
+        },
+        {
+          "loi": "Xếp công cụ sinh dữ liệu test vào nhóm thực thi — nó thuộc thiết kế & triển khai."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "ALM",
+          "vi": "quản lý vòng đời ứng dụng"
+        },
+        {
+          "en": "dynamic analysis",
+          "vi": "phân tích động — khi chạy (rò bộ nhớ, con trỏ)"
+        },
+        {
+          "en": "localisation",
+          "vi": "bản địa hoá"
+        }
+      ]
+    },
+    {
+      "title": "Tools 2 — Which tools carry the (D)?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "tool classification"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>On the SWT6 slides a <b>(D)</b> marks tools “more likely to be used by developers”, mostly at component and component-integration level. Mark each tool.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trên slide SWT6, chữ <b>(D)</b> đánh dấu công cụ “thường do developer dùng”, chủ yếu ở cấp component và component integration. Đánh dấu từng công cụ.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Công cụ làm việc trực tiếp với mã nguồn hay bên trong chương trình ⇒ (D).",
+        "Review support do mọi người review dùng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Tools 2 — Which tools carry the (D)?\n\nAnswer in the answer panel (no code needed).\n\n1. Tool → userCông cụ → người dùng\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Tools 2 — Which tools carry the (D)? — answer key\n\n1. Tool → userCông cụ → người dùng\n   - r0.u: (D) — mostly used by developers\n   - r1.u: Used by testers / the whole team\n   - r2.u: (D) — mostly used by developers\n   - r3.u: (D) — mostly used by developers\n   - r4.u: Used by testers / the whole team\n   - r5.u: (D) — mostly used by developers\n   - r6.u: Used by testers / the whole team\n   - r7.u: (D) — mostly used by developers\n   (D): static analysis, TDD, unit test frameworks, coverage, test harnesses, performance, dynamic analysis, CI. Management, requirements and review support tools are used by the whole team.VI: (D): phân tích tĩnh, TDD, unit test framework, coverage, test harness, hiệu năng, phân tích động, CI. Công cụ quản lý, yêu cầu và hỗ trợ review do cả đội dùng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>D · team · D · D · team · D · team · D.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Tool → user</p><p style=\"opacity:.75;font-size:.92em\"><i>Công cụ → người dùng</i></p>",
+            "cot": [
+              {
+                "ma": "t",
+                "ten": "Tool type"
+              },
+              {
+                "ma": "u",
+                "ten": "Typical user",
+                "luaChon": [
+                  "(D) — mostly used by developers",
+                  "Used by testers / the whole team"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "t": "Static analysis tools"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "t": "Test management tools"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "t": "Unit test frameworks"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "t": "Coverage tools"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "t": "Requirements management tools"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "t": "Test harnesses"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "t": "Review support tools"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "t": "Dynamic analysis tools"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.u": "(D) — mostly used by developers",
+              "r1.u": "Used by testers / the whole team",
+              "r2.u": "(D) — mostly used by developers",
+              "r3.u": "(D) — mostly used by developers",
+              "r4.u": "Used by testers / the whole team",
+              "r5.u": "(D) — mostly used by developers",
+              "r6.u": "Used by testers / the whole team",
+              "r7.u": "(D) — mostly used by developers"
+            },
+            "giaiThich": "<p>(D): static analysis, TDD, unit test frameworks, coverage, test harnesses, performance, dynamic analysis, CI. Management, requirements and review support tools are used by the whole team.</p><p><i>VI: (D): phân tích tĩnh, TDD, unit test framework, coverage, test harness, hiệu năng, phân tích động, CI. Công cụ quản lý, yêu cầu và hỗ trợ review do cả đội dùng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gắn (D) cho công cụ hỗ trợ review."
+        },
+        {
+          "loi": "Không gắn (D) cho test harness."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "test harness",
+          "vi": "khung chạy test gồm stub và driver"
+        }
+      ]
+    },
+    {
+      "title": "Tools 3 — Intrusive tools and the probe effect",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "probe effect"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>An <b>intrusive</b> tool has to get inside the system under test and may change its behaviour; the difference it causes is the <b>probe effect</b>. Five questions, including the teacher’s “Heisenbug” note.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Công cụ <b>xâm lấn</b> phải đi vào bên trong hệ thống đang test và có thể làm thay đổi hành vi của nó; sự khác biệt do nó gây ra là <b>probe effect</b>. Năm câu, kể cả ghi chú “Heisenbug” của thầy/cô.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Xâm lấn = công cụ; probe effect = hậu quả lên SUT.",
+        "Heisenbug: lỗi đổi khi quan sát."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Tools 3 — Intrusive tools and the probe effect\n\nAnswer in the answer panel (no code needed).\n\n1. Which tool is typically intrusive?Công cụ nào thường xâm lấn?\n2. A performance tool stores timestamps for every transaction, which adds a little to the response time it measures. This is…Công cụ hiệu năng lưu mốc thời gian cho mọi giao dịch, làm cộng thêm chút thời gian vào chính thời gian phản hồi nó đo. Đây là…\n3. A race condition disappears when the developer adds a println to investigate it. This is called…Một race condition biến mất khi developer thêm println để điều tra. Hiện tượng này gọi là…\n4. Which is a purpose of tool support named by the syllabus?Đâu là mục đích dùng công cụ mà syllabus nêu?\n5. Tools can be classified by…Công cụ có thể phân loại theo…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Tools 3 — Intrusive tools and the probe effect — answer key\n\n1. Which tool is typically intrusive?Công cụ nào thường xâm lấn?\n   Answer: b) A coverage tool that inserts probes into the bytecode\n   Instrumentation changes the program you measure (and slows it).VI: Gắn đo làm thay đổi chương trình bạn đang đo (và làm chậm nó).\n\n2. A performance tool stores timestamps for every transaction, which adds a little to the response time it measures. This is…Công cụ hiệu năng lưu mốc thời gian cho mọi giao dịch, làm cộng thêm chút thời gian vào chính thời gian phản hồi nó đo. Đây là…\n   Answer: b) the probe effect\n   The measuring disturbs the measured.VI: Việc đo làm xáo trộn thứ được đo.\n\n3. A race condition disappears when the developer adds a println to investigate it. This is called…Một race condition biến mất khi developer thêm println để điều tra. Hiện tượng này gọi là…\n   Answer: a) a Heisenbug\n   The teacher’s note: a bug that changes when you study it — timing changed.VI: Ghi chú của thầy/cô: lỗi thay đổi khi bạn soi nó — vì thời điểm thay đổi.\n\n4. Which is a purpose of tool support named by the syllabus?Đâu là mục đích dùng công cụ mà syllabus nêu?\n   Answer: b) Improve efficiency by automating repetitive tasks, and automate activities that need many resources when done manually (e.g. performance testing)\n   Also: improve quality by more consistent testing, automate what cannot be done manually, increase reliability of testing.VI: Ngoài ra: tăng chất lượng nhờ nhất quán, tự động hoá việc không làm tay được, tăng độ tin cậy của việc test.\n\n5. Tools can be classified by…Công cụ có thể phân loại theo…\n   Answer: b) purpose, pricing and licensing model, technology — the syllabus uses the test activity they support\n   Some tools support one activity, others several.VI: Có công cụ hỗ trợ một hoạt động, có công cụ hỗ trợ nhiều.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · a · b · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which tool is typically intrusive?</p><p style=\"opacity:.75;font-size:.92em\"><i>Công cụ nào thường xâm lấn?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A requirements management tool"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A coverage tool that inserts probes into the bytecode"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A review support tool"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A spreadsheet"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Instrumentation changes the program you measure (and slows it).</p><p><i>VI: Gắn đo làm thay đổi chương trình bạn đang đo (và làm chậm nó).</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>A performance tool stores timestamps for every transaction, which adds a little to the response time it measures. This is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Công cụ hiệu năng lưu mốc thời gian cho mọi giao dịch, làm cộng thêm chút thời gian vào chính thời gian phản hồi nó đo. Đây là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the pesticide paradox"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the probe effect"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a false negative"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a regression"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The measuring disturbs the measured.</p><p><i>VI: Việc đo làm xáo trộn thứ được đo.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>A race condition disappears when the developer adds a println to investigate it. This is called…</p><p style=\"opacity:.75;font-size:.92em\"><i>Một race condition biến mất khi developer thêm println để điều tra. Hiện tượng này gọi là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a Heisenbug"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a cosmetic defect"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a deferred defect"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a false positive"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The teacher’s note: a bug that changes when you study it — timing changed.</p><p><i>VI: Ghi chú của thầy/cô: lỗi thay đổi khi bạn soi nó — vì thời điểm thay đổi.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Which is a purpose of tool support named by the syllabus?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đâu là mục đích dùng công cụ mà syllabus nêu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Replace all testers"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Improve efficiency by automating repetitive tasks, and automate activities that need many resources when done manually (e.g. performance testing)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Remove the need for test design"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Guarantee zero defects"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Also: improve quality by more consistent testing, automate what cannot be done manually, increase reliability of testing.</p><p><i>VI: Ngoài ra: tăng chất lượng nhờ nhất quán, tự động hoá việc không làm tay được, tăng độ tin cậy của việc test.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>Tools can be classified by…</p><p style=\"opacity:.75;font-size:.92em\"><i>Công cụ có thể phân loại theo…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "their colour"
+              },
+              {
+                "ma": "b",
+                "noiDung": "purpose, pricing and licensing model, technology — the syllabus uses the test activity they support"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the number of users only"
+              },
+              {
+                "ma": "d",
+                "noiDung": "their vendor only"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Some tools support one activity, others several.</p><p><i>VI: Có công cụ hỗ trợ một hoạt động, có công cụ hỗ trợ nhiều.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đảo nghĩa “intrusive” và “probe effect”."
+        },
+        {
+          "loi": "Chọn “thay thế tester” cho câu mục đích."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "intrusive tool",
+          "vi": "công cụ xâm lấn"
+        },
+        {
+          "en": "probe effect",
+          "vi": "hiệu ứng thăm dò"
+        },
+        {
+          "en": "Heisenbug",
+          "vi": "lỗi biến đổi khi bị quan sát"
+        }
+      ]
+    },
+    {
+      "title": "Tools 4 — Exam questions on tool classification (K2)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "tool classification"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Five FE-style “which tool supports…?” questions, the only K2 objective of the tools chapter.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu kiểu FE “công cụ nào hỗ trợ…?”, chuẩn đầu ra K2 duy nhất của chương công cụ.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Không chạy ⇒ tĩnh; khi chạy ⇒ động.",
+        "Stub + driver = harness."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Tools 4 — Exam questions on tool classification (K2)\n\nAnswer in the answer panel (no code needed).\n\n1. Which tool helps to find defects in the code WITHOUT executing it?Công cụ nào giúp tìm lỗi trong mã MÀ KHÔNG chạy nó?\n2. Which tool records which requirements are covered by which tests?Công cụ nào ghi yêu cầu nào được test nào phủ?\n3. Which tool simulates the environment in which a component runs (stubs and drivers)?Công cụ nào mô phỏng môi trường component chạy (stub và driver)?\n4. Which tool helps detect memory leaks and dangling pointers?Công cụ nào giúp phát hiện rò bộ nhớ và con trỏ treo?\n5. Which tool is best for repeating the same 500 regression tests on every build?Công cụ nào hợp nhất để chạy lại cùng 500 test hồi quy mỗi build?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Tools 4 — Exam questions on tool classification (K2) — answer key\n\n1. Which tool helps to find defects in the code WITHOUT executing it?Công cụ nào giúp tìm lỗi trong mã MÀ KHÔNG chạy nó?\n   Answer: b) Static analysis tool\n   Static testing group.VI: Nhóm kiểm thử tĩnh.\n\n2. Which tool records which requirements are covered by which tests?Công cụ nào ghi yêu cầu nào được test nào phủ?\n   Answer: a) Test management / requirements management tool\n   Traceability lives in management tools.VI: Truy vết nằm ở công cụ quản lý.\n\n3. Which tool simulates the environment in which a component runs (stubs and drivers)?Công cụ nào mô phỏng môi trường component chạy (stub và driver)?\n   Answer: a) Test harness\n   Test harnesses (D), execution group.VI: Test harness (D), nhóm thực thi.\n\n4. Which tool helps detect memory leaks and dangling pointers?Công cụ nào giúp phát hiện rò bộ nhớ và con trỏ treo?\n   Answer: a) Dynamic analysis tool\n   Defects only visible while the software runs.VI: Lỗi chỉ thấy khi phần mềm chạy.\n\n5. Which tool is best for repeating the same 500 regression tests on every build?Công cụ nào hợp nhất để chạy lại cùng 500 test hồi quy mỗi build?\n   Answer: a) Test execution tool (run by CI)\n   Reduction of repetitive work is the first benefit of automation.VI: Bớt việc lặp lại là lợi ích đầu tiên của tự động hoá.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · a · a · a · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which tool helps to find defects in the code WITHOUT executing it?</p><p style=\"opacity:.75;font-size:.92em\"><i>Công cụ nào giúp tìm lỗi trong mã MÀ KHÔNG chạy nó?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Coverage tool"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Static analysis tool"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Performance tool"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Test execution tool"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Static testing group.</p><p><i>VI: Nhóm kiểm thử tĩnh.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Which tool records which requirements are covered by which tests?</p><p style=\"opacity:.75;font-size:.92em\"><i>Công cụ nào ghi yêu cầu nào được test nào phủ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Test management / requirements management tool"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Dynamic analysis tool"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Debugger"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Compiler"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Traceability lives in management tools.</p><p><i>VI: Truy vết nằm ở công cụ quản lý.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Which tool simulates the environment in which a component runs (stubs and drivers)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Công cụ nào mô phỏng môi trường component chạy (stub và driver)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Test harness"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Review tool"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Monitoring tool"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Defect management tool"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Test harnesses (D), execution group.</p><p><i>VI: Test harness (D), nhóm thực thi.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Which tool helps detect memory leaks and dangling pointers?</p><p style=\"opacity:.75;font-size:.92em\"><i>Công cụ nào giúp phát hiện rò bộ nhớ và con trỏ treo?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Dynamic analysis tool"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Static analysis tool"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Test design tool"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Review tool"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Defects only visible while the software runs.</p><p><i>VI: Lỗi chỉ thấy khi phần mềm chạy.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>Which tool is best for repeating the same 500 regression tests on every build?</p><p style=\"opacity:.75;font-size:.92em\"><i>Công cụ nào hợp nhất để chạy lại cùng 500 test hồi quy mỗi build?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Test execution tool (run by CI)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Review tool"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Requirements tool"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Usability lab"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Reduction of repetitive work is the first benefit of automation.</p><p><i>VI: Bớt việc lặp lại là lợi ích đầu tiên của tự động hoá.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm dynamic analysis với performance testing."
+        },
+        {
+          "loi": "Chọn coverage tool cho câu 1."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "dangling pointer",
+          "vi": "con trỏ treo — trỏ vào vùng nhớ đã giải phóng"
+        }
+      ]
+    }
+  ]
+}

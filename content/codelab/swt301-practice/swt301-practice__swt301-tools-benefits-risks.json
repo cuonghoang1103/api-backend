@@ -1,0 +1,784 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-tools-benefits-risks",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-tools-benefits-risks"
+  },
+  "exercises": [
+    {
+      "title": "Automation 1 — Benefit or risk?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "benefits and risks of automation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Slide 38 lists four potential benefits of tools; slides 39–40 list the risks. The word <i>potential</i> matters: benefits come only if the risks are managed. Classify each statement.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 38 nêu bốn lợi ích tiềm năng; slide 39–40 nêu các rủi ro. Chữ <i>tiềm năng</i> là điểm chính: lợi ích chỉ đến khi quản lý được rủi ro. Phân loại từng phát biểu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Bốn lợi ích: bớt lặp lại, nhất quán, khách quan, dễ lấy thông tin.",
+        "“Kỳ vọng”, “chưa ước lượng”, “tin tuyệt đối”, “ngừng hỗ trợ” ⇒ rủi ro."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Automation 1 — Benefit or risk?\n\nAnswer in the answer panel (no code needed).\n\n1. Statement → benefit or riskPhát biểu → lợi ích hay rủi ro\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Automation 1 — Benefit or risk? — answer key\n\n1. Statement → benefit or riskPhát biểu → lợi ích hay rủi ro\n   - r0.k: Potential benefit\n   - r1.k: Risk\n   - r2.k: Potential benefit\n   - r3.k: Risk\n   - r4.k: Potential benefit\n   - r5.k: Risk\n   - r6.k: Risk\n   - r7.k: Potential benefit\n   - r8.k: Risk\n   - r9.k: Risk\n   Benefits: less repetitive work, consistency and repeatability, objective assessment, easy access to information. Risks: unrealistic expectations, underestimated effort (introduction, maintenance), over-reliance, vendor or open-source project ending, incompatibility with platforms, and more.VI: Lợi ích: bớt việc lặp, nhất quán và lặp lại được, đánh giá khách quan, dễ lấy thông tin. Rủi ro: kỳ vọng phi thực tế, đánh giá thấp công sức (đưa vào, bảo trì), phụ thuộc quá mức, nhà cung cấp hay dự án mã nguồn mở ngừng, không tương thích nền tảng…\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>B · R · B · R · B · R · R · B · R · R.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Statement → benefit or risk</p><p style=\"opacity:.75;font-size:.92em\"><i>Phát biểu → lợi ích hay rủi ro</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Kind",
+                "luaChon": [
+                  "Potential benefit",
+                  "Risk"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "The 500 regression tests run every night without anyone typing the same data again"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Management expects the tool to halve the test effort in the first month"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Coverage is reported as a number produced by a tool, not someone’s impression"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "The effort to maintain the UI scripts after every redesign was never estimated"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Tests are executed in the same order with the same data every time"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "The vendor goes out of business and the tool is no longer supported"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "Testers stop thinking and trust every green tick of the tool"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "s": "Progress, defect trends and performance are visible on a dashboard at any time"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "s": "The open-source project behind the tool is abandoned"
+                }
+              },
+              {
+                "ma": "r9",
+                "o": {
+                  "s": "The tool is not compatible with the new version of the browser used in production"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Potential benefit",
+              "r1.k": "Risk",
+              "r2.k": "Potential benefit",
+              "r3.k": "Risk",
+              "r4.k": "Potential benefit",
+              "r5.k": "Risk",
+              "r6.k": "Risk",
+              "r7.k": "Potential benefit",
+              "r8.k": "Risk",
+              "r9.k": "Risk"
+            },
+            "giaiThich": "<p>Benefits: less repetitive work, consistency and repeatability, objective assessment, easy access to information. Risks: unrealistic expectations, underestimated effort (introduction, maintenance), over-reliance, vendor or open-source project ending, incompatibility with platforms, and more.</p><p><i>VI: Lợi ích: bớt việc lặp, nhất quán và lặp lại được, đánh giá khách quan, dễ lấy thông tin. Rủi ro: kỳ vọng phi thực tế, đánh giá thấp công sức (đưa vào, bảo trì), phụ thuộc quá mức, nhà cung cấp hay dự án mã nguồn mở ngừng, không tương thích nền tảng…</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Coi kỳ vọng giảm một nửa công sức là lợi ích."
+        },
+        {
+          "loi": "Quên rủi ro “phụ thuộc quá mức vào công cụ”."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "over-reliance",
+          "vi": "phụ thuộc quá mức"
+        },
+        {
+          "en": "unrealistic expectations",
+          "vi": "kỳ vọng phi thực tế"
+        }
+      ]
+    },
+    {
+      "title": "Automation 2 — Which scripting approach?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "test execution tools"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Four approaches to test execution tools (slides 42–45). Name the approach in each LabBook situation.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bốn cách dùng công cụ thực thi test (slide 42–45). Gọi tên cách làm trong từng tình huống LabBook.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Chỉ đổi dữ liệu ⇒ data-driven; đổi cả bước mà không viết code ⇒ keyword-driven.",
+        "Ghi lại thao tác ⇒ capture/replay."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Automation 2 — Which scripting approach?\n\nAnswer in the answer panel (no code needed).\n\n1. Situation → approachTình huống → cách làm\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Automation 2 — Which scripting approach? — answer key\n\n1. Situation → approachTình huống → cách làm\n   - r0.a: Capture/replay\n   - r1.a: Data-driven\n   - r2.a: Keyword-driven\n   - r3.a: Model-based\n   - r4.a: Keyword-driven\n   - r5.a: Capture/replay\n   Recording = capture/replay (brittle, but an audit trail); same steps, many data rows = data-driven; action words + data = keyword-driven (non-programmers change steps); model → generated tests = model-based.VI: Ghi lại = capture/replay (dễ gãy, nhưng là vết kiểm toán); cùng bước, nhiều dòng dữ liệu = data-driven; từ khoá hành động + dữ liệu = keyword-driven (người không lập trình đổi được bước); mô hình → sinh test = model-based.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Capture/replay · Data-driven · Keyword-driven · Model-based · Keyword-driven · Capture/replay.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Situation → approach</p><p style=\"opacity:.75;font-size:.92em\"><i>Tình huống → cách làm</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Situation"
+              },
+              {
+                "ma": "a",
+                "ten": "Approach",
+                "luaChon": [
+                  "Capture/replay",
+                  "Data-driven",
+                  "Keyword-driven",
+                  "Model-based"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "A recorder saves every click of the tester into a linear script; it breaks when a button is renamed"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "One login script reads 40 rows of e-mail, password and expected result from a spreadsheet"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Business testers write tests as rows “Login | student1”, “Book | LAB01 | 9 | 2”, “Check status | CONFIRMED”"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Testers draw the booking state diagram; the tool generates the test cases and expected results"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "A new rule changes the steps of the booking scenario, not only its data; a non-programmer adds the new step without code"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "The auditor wants an audit trail of the exploratory session the tester just did"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.a": "Capture/replay",
+              "r1.a": "Data-driven",
+              "r2.a": "Keyword-driven",
+              "r3.a": "Model-based",
+              "r4.a": "Keyword-driven",
+              "r5.a": "Capture/replay"
+            },
+            "giaiThich": "<p>Recording = capture/replay (brittle, but an audit trail); same steps, many data rows = data-driven; action words + data = keyword-driven (non-programmers change steps); model → generated tests = model-based.</p><p><i>VI: Ghi lại = capture/replay (dễ gãy, nhưng là vết kiểm toán); cùng bước, nhiều dòng dữ liệu = data-driven; từ khoá hành động + dữ liệu = keyword-driven (người không lập trình đổi được bước); mô hình → sinh test = model-based.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gán dòng 5 cho data-driven — data-driven chỉ đổi dữ liệu, không đổi bước."
+        },
+        {
+          "loi": "Cho rằng capture/replay vô dụng — nó cho vết kiểm toán của phiên khám phá."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "capture/replay",
+          "vi": "ghi lại và phát lại"
+        },
+        {
+          "en": "data-driven",
+          "vi": "hướng dữ liệu"
+        },
+        {
+          "en": "keyword-driven",
+          "vi": "hướng từ khoá (action word)"
+        }
+      ]
+    },
+    {
+      "title": "Automation 3 — Write a data-driven test runner",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "data-driven testing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>In data-driven testing one generic script reads many rows of inputs and expected results. Write <code>runDataDriven(fn, table)</code>: <code>table</code> is <code>[{ id, args: [...], expected }]</code>. For each row call <code>fn(...args)</code> and compare the result with <code>expected</code> using deep equality (compare <code>JSON.stringify</code> of both). If <code>expected</code> is the string <code>'THROWS'</code>, the row passes only if <code>fn</code> throws. An unexpected exception makes the row fail with actual <code>'THROWS: ' + message</code>.</p>\n<p>Return <code>{ passed: [ids], failed: [{ id, expected, actual }] }</code> in table order.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>One row failing must not stop the others.</li>\n</ul>",
+      "problemHtmlVi": "<p>Kiểm thử hướng dữ liệu: một script chung đọc nhiều dòng đầu vào và kết quả mong đợi. Viết <code>runDataDriven(fn, table)</code> như bản tiếng Anh: so sánh sâu bằng <code>JSON.stringify</code>; <code>'THROWS'</code> nghĩa là phải ném lỗi; ngoại lệ ngoài dự kiến làm dòng trượt với actual <code>'THROWS: ' + message</code>. Trả <code>{ passed, failed }</code> theo thứ tự bảng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Một dòng trượt không được dừng các dòng khác.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "runDataDriven((h) => h * 60, [{ id: 'r1', args: [2], expected: 120 }, { id: 'r2', args: [3], expected: 200 }])",
+          "output": "{ passed: ['r1'], failed: [{ id: 'r2', expected: 200, actual: 180 }] }",
+          "explanation": "The second row has a wrong expected result — the runner reports it.|||Dòng hai có kết quả mong đợi sai — runner báo nó."
+        }
+      ],
+      "hintsJson": [
+        "try { actual = fn(...row.args) } catch (e) { … } cho từng dòng.",
+        "Dòng THROWS: đạt khi bắt được lỗi; nếu không ném thì trượt với actual là giá trị trả về."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "runner.js",
+          "language": "javascript",
+          "code": "function runDataDriven(fn, table) {\n  return { passed: [], failed: [] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "runner.js",
+          "language": "javascript",
+          "code": "function runDataDriven(fn, table) {\n  const passed = [];\n  const failed = [];\n  for (const row of table) {\n    let actual;\n    let threw = null;\n    try { actual = fn(...row.args); } catch (e) { threw = e; }\n    if (row.expected === 'THROWS') {\n      if (threw) passed.push(row.id);\n      else failed.push({ id: row.id, expected: 'THROWS', actual });\n    } else if (threw) {\n      failed.push({ id: row.id, expected: row.expected, actual: 'THROWS: ' + (threw && threw.message) });\n    } else if (JSON.stringify(actual) === JSON.stringify(row.expected)) {\n      passed.push(row.id);\n    } else {\n      failed.push({ id: row.id, expected: row.expected, actual });\n    }\n  }\n  return { passed, failed };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is the generic script of the data-driven approach: testers only add rows. JUnit 5 does the same with <code>@ParameterizedTest @CsvFileSource</code>.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "runner.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "the example",
+              "vi": "ví dụ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const e=runDataDriven(r=>r*60,[{id:\"r1\",args:[2],expected:120},{id:\"r2\",args:[3],expected:200}]);return JSON.stringify(e)==='{\"passed\":[\"r1\"],\"failed\":[{\"id\":\"r2\",\"expected\":200,\"actual\":180}]}'?\"OK\":\"got \"+JSON.stringify(e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "deep equality for objects",
+              "vi": "so sánh sâu cho object"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const s=runDataDriven((t,e)=>({sum:t+e,list:[t,e]}),[{id:\"x\",args:[1,2],expected:{sum:3,list:[1,2]}}]);return JSON.stringify(s.passed)==='[\"x\"]'?\"OK\":\"equal objects must pass \\u2014 got \"+JSON.stringify(s)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "expected THROWS",
+              "vi": "mong đợi THROWS"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const t=r=>{if(r>3)throw new Error(\"INVALID_HOURS\");return r},e=runDataDriven(t,[{id:\"a\",args:[4],expected:\"THROWS\"},{id:\"b\",args:[2],expected:\"THROWS\"}]);return JSON.stringify(e)==='{\"passed\":[\"a\"],\"failed\":[{\"id\":\"b\",\"expected\":\"THROWS\",\"actual\":2}]}'?\"OK\":\"got \"+JSON.stringify(e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "an unexpected exception fails the row, the run continues",
+              "vi": "ngoại lệ ngoài dự kiến làm dòng trượt, vẫn chạy tiếp"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const t=r=>{if(r===0)throw new Error(\"boom\");return 10/r},e=runDataDriven(t,[{id:\"z\",args:[0],expected:0},{id:\"y\",args:[5],expected:2}]);return JSON.stringify(e)==='{\"passed\":[\"y\"],\"failed\":[{\"id\":\"z\",\"expected\":0,\"actual\":\"THROWS: boom\"}]}'?\"OK\":\"got \"+JSON.stringify(e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "empty table",
+              "vi": "bảng rỗng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>JSON.stringify(runDataDriven(()=>1,[]))==='{\"passed\":[],\"failed\":[]}'?\"OK\":\"expected empty lists\")))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "So sánh object bằng === nên kết quả đúng vẫn trượt."
+        },
+        {
+          "loi": "Để ngoại lệ của một dòng làm dừng cả bộ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "data table",
+          "vi": "bảng dữ liệu test"
+        },
+        {
+          "en": "deep equality",
+          "vi": "so sánh sâu"
+        }
+      ]
+    },
+    {
+      "title": "Automation 4 — Write a keyword-driven interpreter",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "keyword-driven testing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>In keyword-driven testing, engineers implement <b>keywords</b> (action words) once; testers write tests as tables. Write <code>runKeywordTest(test, library)</code> and <code>runSuite(tests, library)</code>.</p>\n<ul><li><code>test</code> = <code>{ id, rows: [[keyword, ...args], …] }</code>; <code>library</code> = <code>{ Keyword: (ctx, ...args) => … }</code>. Each test gets a fresh context object <code>ctx = {}</code> shared by its rows.</li>\n<li>Rows run in order. A keyword that throws an error whose <code>name</code> is <code>'AssertionError'</code> makes the test <code>'FAIL'</code>; an unknown keyword gives <code>'ERROR'</code> with message <code>'UNKNOWN_KEYWORD ' + name</code>; any other exception gives <code>'ERROR'</code> with its message. The test stops at the first failing row.</li>\n<li><code>runKeywordTest</code> returns <code>{ id, status: 'PASS' | 'FAIL' | 'ERROR', step, message }</code> — <code>step</code> is the 0-based index of the failing row (null on PASS), <code>message</code> null on PASS.</li>\n<li><code>runSuite</code> returns <code>{ passed, failed, errors, results }</code> (counts + the list of results in order).</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Contexts must not leak between tests.</li>\n</ul>",
+      "problemHtmlVi": "<p>Kiểm thử hướng từ khoá: kỹ sư cài <b>từ khoá</b> (action word) một lần; tester viết test dạng bảng. Viết <code>runKeywordTest(test, library)</code> và <code>runSuite(tests, library)</code> như bản tiếng Anh: mỗi test có ngữ cảnh <code>ctx = {}</code> riêng; lỗi có name <code>AssertionError</code> ⇒ FAIL; từ khoá lạ ⇒ ERROR <code>UNKNOWN_KEYWORD …</code>; lỗi khác ⇒ ERROR; dừng ở dòng hỏng đầu tiên.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Ngữ cảnh không được rò giữa các test.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "runKeywordTest({ id: 'K1', rows: [['Book', 2], ['Book', 3], ['CheckHours', 5]] }, LIB)",
+          "output": "{ id: 'K1', status: 'PASS', step: null, message: null }",
+          "explanation": "LIB.Book adds hours to ctx; LIB.CheckHours asserts the total.|||LIB.Book cộng giờ vào ctx; LIB.CheckHours kiểm tổng."
+        }
+      ],
+      "hintsJson": [
+        "for (let i = 0; i < rows.length; i++) { const [k, ...args] = rows[i]; … library[k](ctx, ...args) }",
+        "Phân biệt FAIL (AssertionError) với ERROR (lỗi khác, từ khoá lạ)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "keywords.js",
+          "language": "javascript",
+          "code": "function runKeywordTest(test, library) {\n  return { id: test.id, status: 'PASS', step: null, message: null };\n}\n\nfunction runSuite(tests, library) {\n  return { passed: 0, failed: 0, errors: 0, results: [] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "keywords.js",
+          "language": "javascript",
+          "code": "function runKeywordTest(test, library) {\n  const ctx = {};\n  for (let i = 0; i < test.rows.length; i++) {\n    const [name, ...args] = test.rows[i];\n    const kw = Object.prototype.hasOwnProperty.call(library, name) ? library[name] : null;\n    if (typeof kw !== 'function') return { id: test.id, status: 'ERROR', step: i, message: 'UNKNOWN_KEYWORD ' + name };\n    try {\n      kw(ctx, ...args);\n    } catch (e) {\n      const fail = e && e.name === 'AssertionError';\n      return { id: test.id, status: fail ? 'FAIL' : 'ERROR', step: i, message: e && e.message };\n    }\n  }\n  return { id: test.id, status: 'PASS', step: null, message: null };\n}\n\nfunction runSuite(tests, library) {\n  const results = tests.map((t) => runKeywordTest(t, library));\n  return {\n    passed: results.filter((r) => r.status === 'PASS').length,\n    failed: results.filter((r) => r.status === 'FAIL').length,\n    errors: results.filter((r) => r.status === 'ERROR').length,\n    results,\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The interpreter is the part engineers build once; afterwards testers write new tests — including new step sequences — without code. That is the main strength of keyword-driven testing; the keyword library is the upfront and maintenance cost.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "keywords.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "a passing keyword test",
+              "vi": "test từ khoá đạt"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const n=r=>{const o=new Error(r);return o.name=\"AssertionError\",o},t={Book:(r,o)=>{if(o>3)throw new Error(\"INVALID_HOURS\");r.hours=(r.hours||0)+o},CheckHours:(r,o)=>{if((r.hours||0)!==o)throw n(\"expected \"+o+\" hours, got \"+(r.hours||0))}},s=runKeywordTest({id:\"K1\",rows:[[\"Book\",2],[\"Book\",3],[\"CheckHours\",5]]},t);return JSON.stringify(s)===JSON.stringify({id:\"K1\",status:\"PASS\",step:null,message:null})?\"OK\":\"got \"+JSON.stringify(s)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "an AssertionError makes the test FAIL at that step",
+              "vi": "AssertionError làm test FAIL ở bước đó"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const e=r=>{const o=new Error(r);return o.name=\"AssertionError\",o},t={Book:(r,o)=>{if(o>3)throw new Error(\"INVALID_HOURS\");r.hours=(r.hours||0)+o},CheckHours:(r,o)=>{if((r.hours||0)!==o)throw e(\"expected \"+o+\" hours, got \"+(r.hours||0))}},s=runKeywordTest({id:\"K2\",rows:[[\"Book\",2],[\"CheckHours\",3],[\"Book\",1]]},t);return s.status===\"FAIL\"&&s.step===1&&s.message===\"expected 3 hours, got 2\"?\"OK\":\"got \"+JSON.stringify(s)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "an unknown keyword is an ERROR",
+              "vi": "từ khoá lạ là ERROR"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const e=r=>{const o=new Error(r);return o.name=\"AssertionError\",o},n={Book:(r,o)=>{if(o>3)throw new Error(\"INVALID_HOURS\");r.hours=(r.hours||0)+o},CheckHours:(r,o)=>{if((r.hours||0)!==o)throw e(\"expected \"+o+\" hours, got \"+(r.hours||0))}},s=runKeywordTest({id:\"K3\",rows:[[\"Book\",1],[\"Cancel\",\"BK1\"]]},n);return s.status===\"ERROR\"&&s.step===1&&s.message===\"UNKNOWN_KEYWORD Cancel\"?\"OK\":\"got \"+JSON.stringify(s)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "another exception is an ERROR, not a FAIL",
+              "vi": "ngoại lệ khác là ERROR, không phải FAIL"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const t=r=>{const o=new Error(r);return o.name=\"AssertionError\",o},e={Book:(r,o)=>{if(o>3)throw new Error(\"INVALID_HOURS\");r.hours=(r.hours||0)+o},CheckHours:(r,o)=>{if((r.hours||0)!==o)throw t(\"expected \"+o+\" hours, got \"+(r.hours||0))}},s=runKeywordTest({id:\"K4\",rows:[[\"Book\",5]]},e);return s.status===\"ERROR\"&&s.step===0&&s.message===\"INVALID_HOURS\"?\"OK\":\"got \"+JSON.stringify(s)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "runSuite counts and contexts do not leak",
+              "vi": "runSuite đếm đúng và ngữ cảnh không rò"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const e=o=>{const r=new Error(o);return r.name=\"AssertionError\",r},n={Book:(o,r)=>{if(r>3)throw new Error(\"INVALID_HOURS\");o.hours=(o.hours||0)+r},CheckHours:(o,r)=>{if((o.hours||0)!==r)throw e(\"expected \"+r+\" hours, got \"+(o.hours||0))}},s=runSuite([{id:\"a\",rows:[[\"Book\",2],[\"CheckHours\",2]]},{id:\"b\",rows:[[\"CheckHours\",0]]},{id:\"c\",rows:[[\"Nope\"]]},{id:\"d\",rows:[[\"CheckHours\",9]]}],n);return s.passed===2&&s.failed===1&&s.errors===1&&s.results.map(o=>o.id).join(\"\")===\"abcd\"?\"OK\":\"got \"+JSON.stringify(s)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "library keys inherited from Object are unknown keywords",
+              "vi": "khoá kế thừa từ Object là từ khoá lạ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const s=o=>{const r=new Error(o);return r.name=\"AssertionError\",r},n={Book:(o,r)=>{if(r>3)throw new Error(\"INVALID_HOURS\");o.hours=(o.hours||0)+r},CheckHours:(o,r)=>{if((o.hours||0)!==r)throw s(\"expected \"+r+\" hours, got \"+(o.hours||0))}},t=runKeywordTest({id:\"K5\",rows:[[\"toString\"]]},n);return t.status===\"ERROR\"&&t.message===\"UNKNOWN_KEYWORD toString\"?\"OK\":\"got \"+JSON.stringify(t)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "an empty test passes",
+              "vi": "test rỗng đạt"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const t=o=>{const r=new Error(o);return r.name=\"AssertionError\",r},n={Book:(o,r)=>{if(r>3)throw new Error(\"INVALID_HOURS\");o.hours=(o.hours||0)+r},CheckHours:(o,r)=>{if((o.hours||0)!==r)throw t(\"expected \"+r+\" hours, got \"+(o.hours||0))}},s=runKeywordTest({id:\"E\",rows:[]},n);return s.status===\"PASS\"?\"OK\":\"got \"+JSON.stringify(s)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng chung một ctx cho mọi test."
+        },
+        {
+          "loi": "Chạy tiếp sau dòng hỏng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "keyword library",
+          "vi": "thư viện từ khoá"
+        },
+        {
+          "en": "interpreter",
+          "vi": "bộ thông dịch"
+        }
+      ]
+    },
+    {
+      "title": "Automation 5 — Special considerations (K1)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "test execution tools"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Five FE-style questions on SWT6 slides 42–47: what each scripting approach needs, and the special considerations for test management tools.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu kiểu FE về slide SWT6 42–47: mỗi cách viết script cần gì và lưu ý đặc biệt cho công cụ quản lý test.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Mỗi cách có một điểm yếu riêng.",
+        "Công cụ quản lý test cần tích hợp với công cụ khác."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Automation 5 — Special considerations (K1)\n\nAnswer in the answer panel (no code needed).\n\n1. Why is capture/replay alone not a good automation strategy?Vì sao chỉ capture/replay không phải chiến lược tự động hoá tốt?\n2. What is a key advantage of keyword-driven testing?Ưu điểm chính của keyword-driven testing?\n3. Which is a special consideration for test management tools?Đâu là lưu ý đặc biệt cho công cụ quản lý test?\n4. A data-driven approach is most appropriate when…Cách hướng dữ liệu hợp nhất khi…\n5. Which skill does model-based testing require?Model-based testing đòi kỹ năng gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Automation 5 — Special considerations (K1) — answer key\n\n1. Why is capture/replay alone not a good automation strategy?Vì sao chỉ capture/replay không phải chiến lược tự động hoá tốt?\n   Answer: b) The recorded scripts are brittle, hard to maintain and contain no expected results unless added\n   Scripts may be unstable when unexpected events occur.VI: Script dễ hỏng khi có sự kiện ngoài dự kiến.\n\n2. What is a key advantage of keyword-driven testing?Ưu điểm chính của keyword-driven testing?\n   Answer: b) Testers who are not programmers can write tests using keywords, once the keywords have been implemented\n   The keyword library is the upfront investment.VI: Thư viện từ khoá là khoản đầu tư ban đầu.\n\n3. Which is a special consideration for test management tools?Đâu là lưu ý đặc biệt cho công cụ quản lý test?\n   Answer: b) They often need to interface with other tools or spreadsheets to produce useful information in the format the organisation needs\n   Integration with requirements, defects, CI and reporting.VI: Tích hợp với yêu cầu, lỗi, CI và báo cáo.\n\n4. A data-driven approach is most appropriate when…Cách hướng dữ liệu hợp nhất khi…\n   Answer: a) the steps stay the same but many combinations of input data must be tested\n   Testers add rows; the script stays.VI: Tester thêm dòng; script giữ nguyên.\n\n5. Which skill does model-based testing require?Model-based testing đòi kỹ năng gì?\n   Answer: b) Modelling: the generated tests are only as good as the model\n   A wrong model produces wrong tests.VI: Mô hình sai sinh test sai.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · b · a · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Why is capture/replay alone not a good automation strategy?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao chỉ capture/replay không phải chiến lược tự động hoá tốt?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It is too expensive to buy"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The recorded scripts are brittle, hard to maintain and contain no expected results unless added"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It cannot replay"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It needs a model"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Scripts may be unstable when unexpected events occur.</p><p><i>VI: Script dễ hỏng khi có sự kiện ngoài dự kiến.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>What is a key advantage of keyword-driven testing?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ưu điểm chính của keyword-driven testing?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "No upfront effort"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Testers who are not programmers can write tests using keywords, once the keywords have been implemented"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It needs no data"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It is the same as capture/replay"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The keyword library is the upfront investment.</p><p><i>VI: Thư viện từ khoá là khoản đầu tư ban đầu.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Which is a special consideration for test management tools?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đâu là lưu ý đặc biệt cho công cụ quản lý test?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "They must be used alone"
+              },
+              {
+                "ma": "b",
+                "noiDung": "They often need to interface with other tools or spreadsheets to produce useful information in the format the organisation needs"
+              },
+              {
+                "ma": "c",
+                "noiDung": "They run tests"
+              },
+              {
+                "ma": "d",
+                "noiDung": "They need no configuration"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Integration with requirements, defects, CI and reporting.</p><p><i>VI: Tích hợp với yêu cầu, lỗi, CI và báo cáo.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>A data-driven approach is most appropriate when…</p><p style=\"opacity:.75;font-size:.92em\"><i>Cách hướng dữ liệu hợp nhất khi…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the steps stay the same but many combinations of input data must be tested"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the steps change every week"
+              },
+              {
+                "ma": "c",
+                "noiDung": "there is no data"
+              },
+              {
+                "ma": "d",
+                "noiDung": "only one test is needed"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Testers add rows; the script stays.</p><p><i>VI: Tester thêm dòng; script giữ nguyên.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>Which skill does model-based testing require?</p><p style=\"opacity:.75;font-size:.92em\"><i>Model-based testing đòi kỹ năng gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "None"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Modelling: the generated tests are only as good as the model"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only recording"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only SQL"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A wrong model produces wrong tests.</p><p><i>VI: Mô hình sai sinh test sai.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng keyword-driven không tốn công ban đầu."
+        },
+        {
+          "loi": "Chọn data-driven khi các bước thay đổi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "brittle",
+          "vi": "dễ gãy"
+        }
+      ]
+    }
+  ]
+}

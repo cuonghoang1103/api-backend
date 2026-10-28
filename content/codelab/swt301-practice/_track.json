@@ -322,6 +322,60 @@
       "description": "Dự án LabBook — mốc chương 7: kế hoạch theo rủi ro (mức, ưu tiên, thứ tự chạy có phụ thuộc), ba defect report chạy được tái hiện failure của bản rc2 (mất booking, 500 thay 422, đóng phòng bỏ sót PENDING), quyết định go/no-go; kèm góc phỏng vấn 7."
     },
     {
+      "slug": "swt301-tools-pyramid",
+      "name": "8.1 Why tools? Classification and the probe effect",
+      "level": "BEGINNER",
+      "description": "Sáu nhóm công cụ theo hoạt động kiểm thử trên các công cụ thật quanh LabBook, công cụ (D) của developer, công cụ xâm lấn và probe effect, Heisenbug, câu thi “công cụ nào hỗ trợ…”."
+    },
+    {
+      "slug": "swt301-tools-by-activity",
+      "name": "8.2 Tool support for each test activity",
+      "level": "INTERMEDIATE",
+      "description": "Chọn loại công cụ cho 14 nhu cầu của nhóm LabBook, đặt công cụ lên mô hình chữ V, câu thi về CI, dữ liệu test, MBT, coverage, giám sát, sắp các bước của pipeline CI."
+    },
+    {
+      "slug": "swt301-tools-benefits-risks",
+      "name": "8.3 Benefits and risks of test automation",
+      "level": "BEGINNER",
+      "description": "Lợi ích và rủi ro của tự động hoá, bốn cách viết script (capture/replay, data-driven, keyword-driven, model-based), tự viết runner hướng dữ liệu và bộ thông dịch hướng từ khoá, lưu ý đặc biệt."
+    },
+    {
+      "slug": "swt301-tools-selection-pilot",
+      "name": "8.4 Effective use of tools: selection, pilot, success factors",
+      "level": "BEGINNER",
+      "description": "Phân biệt nguyên tắc chọn, mục tiêu pilot và yếu tố thành công, câu thi, viết code luận chứng chi phí–lợi ích (điểm hoà vốn, ROI của tự động hoá), sắp các bước đưa công cụ vào."
+    },
+    {
+      "slug": "swt301-junit-hands-on",
+      "name": "8.5 Hands-on: JUnit 4 kit → JUnit 5",
+      "level": "BEGINNER",
+      "description": "Chuyển JUnit 4 sang JUnit 5, thứ tự target của build.xml (Ant + JaCoCo), đọc báo cáo failure, viết test tham số hoá biên + assertThrows cho refund và test có fixture @BeforeEach cho WaitList (chấm bằng mutant, kèm bản JUnit 5)."
+    },
+    {
+      "slug": "swt301-ci-automation",
+      "name": "8.6 Test pyramid, continuous integration and Selenium",
+      "level": "BEGINNER",
+      "description": "Đặt test LabBook vào tầng kim tự tháp, viết code kiểm hình dạng bộ test và thời gian pipeline hỏng sớm, phát hiện test chập chờn và cách ly, câu hỏi về CI, Selenium, Page Object."
+    },
+    {
+      "slug": "swt301-8-lab-tools-reminder-service",
+      "name": "Lab 8 — Tools and Automation for LabBook Reminders",
+      "level": "ADVANCED",
+      "description": "Lab chương 8: unit test dùng mock kiểu Mockito cho ReminderService (chấm bằng 8 mutant tương tác), tầng kim tự tháp + stage CI của bốn bộ test, loại công cụ cho sáu nhu cầu, luận chứng hoà vốn/ROI của tự động hoá."
+    },
+    {
+      "slug": "swt301-8-deep-mini-test-framework",
+      "name": "Deep Lab 8 — Build Your Own Unit Test Framework",
+      "level": "ADVANCED",
+      "description": "Deep Lab chương 8: tự viết createFramework() — describe lồng nhau, test, beforeEach/afterEach đúng thứ tự và phạm vi, expect toBe/toEqual/toThrow/.not, runner cô lập lỗi, chạy lại được; đối chiếu JUnit 5."
+    },
+    {
+      "slug": "swt301-8-project-labbook-keyword-regression",
+      "name": "LabBook Project 8 — Automate the Regression Suite with Keywords",
+      "level": "INTERMEDIATE",
+      "description": "Dự án LabBook — mốc chương 8: viết bộ regression hướng từ khoá (Book, Cancel, SetLab, CheckBooking, CheckMail, Login, Lock) chạy trên LabBook và 8 bản build lỗi (FIFO, thư nâng hạng, chỗ PENDING, phòng đóng/mở lại, bộ đếm đăng nhập…), mô tả tổ chức tự động hoá; kèm góc phỏng vấn 8."
+    },
+    {
       "slug": "swt301-10-lab2-unit-test-report51",
       "name": "Lab 2 Practice — Unit Test Report 5.1 (reserveSeat)",
       "level": "ADVANCED",

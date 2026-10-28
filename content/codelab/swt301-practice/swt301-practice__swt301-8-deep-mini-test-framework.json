@@ -1,0 +1,295 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-8-deep-mini-test-framework",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-junit-hands-on"
+  },
+  "exercises": [
+    {
+      "title": "Deep Lab 8 — Build Your Own Unit Test Framework",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 120,
+      "points": 100,
+      "concepts": [
+        "unit test framework",
+        "test fixtures",
+        "assertions"
+      ],
+      "prerequisites": [
+        "SWT301 lesson 8.5",
+        "JavaScript closures"
+      ],
+      "tags": [
+        "swt301",
+        "deep-lab",
+        "test-framework"
+      ],
+      "problemHtml": "<h1>Deep Lab 8 — Build Your Own Unit Test Framework</h1>\n<p class=\"bi-phu\">Chapter 8 deep lab · a (D) tool from the inside: suites, hooks, matchers, isolated failures · 10 marks</p>\n<h2>1. Overview</h2>\n<p>Unit test frameworks (JUnit, NUnit, Jest) are the most used developer test tools — group 4 of the classification. Build a small one, to understand exactly what <code>@BeforeEach</code>, <code>assertEquals</code> and <code>assertThrows</code> do.</p>\n<pre>const fw = createFramework();\nfw.describe(name, fn)        // suites can be nested; fn registers tests and hooks\nfw.test(name, fn)            // fn is synchronous\nfw.beforeEach(fn) / fw.afterEach(fn)\nfw.expect(actual).toBe(v) | .toEqual(v) | .toThrow(expected?) ; fw.expect(actual).not.&lt;matcher&gt;\nfw.run()  →  { passed, failed, results: [ { name: 'Suite &gt; Inner &gt; test', status: 'passed' | 'failed', error } ] }</pre>\n<ul>\n<li><b>toBe</b> uses <code>Object.is</code>; <b>toEqual</b> compares deeply (arrays in order, objects with any key order, arrays ≠ objects); <b>toThrow</b> receives a function and passes if it throws — with a string argument the message must contain it, with a class the error must be an instance of it. <b>.not</b> inverts. A failing matcher throws an <code>Error</code>.</li>\n<li><b>run</b> executes tests in declaration order (tests and nested suites interleaved as written). For each test: every <code>beforeEach</code> from the outermost suite inwards, then the test, then every <code>afterEach</code> from the innermost outwards — afterEach hooks run even if the test (or a beforeEach) failed. If a beforeEach throws, the test body is not run. Any exception fails the test; <code>error</code> is the message of the first exception (null when passed).</li>\n<li>Hooks apply to the tests of their suite and its nested suites only. Tests never stop the run; frameworks never share state; <code>run()</code> can be called again.</li></ul>\n<h3>Main features</h3>\n<ul>\n  <li>f1 Matchers: toBe, toEqual, toThrow, .not.</li>\n  <li>f2 Registration, nested names, results.</li>\n  <li>f3 beforeEach / afterEach order and scope.</li>\n  <li>f4 Robustness: failing hooks, isolation, re-run.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>No async support is required. Do not use the global test/expect of the grader — everything must come from your createFramework().</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>src/\n└── mini-framework.js   ← function createFramework()</pre>\n<h2>3. Data model</h2>\n<p><b>JUnit 5 ↔ your framework</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>@Nested class</code></td><td>describe(name, fn)</td><td>a suite inside a suite</td></tr><tr><td><code>@BeforeEach / @AfterEach</code></td><td>beforeEach / afterEach</td><td>outer first / inner first</td></tr><tr><td><code>assertEquals / assertSame / assertThrows</code></td><td>toEqual / toBe / toThrow</td><td>deep equality / identity / exception</td></tr></tbody></table>\n<h2>4. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. f1 Matchers <span class=\"bi-diem\">3 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Five checks.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">unit test framework</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. f2 Runner <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Three checks.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">test execution</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. f3 Hooks <span class=\"bi-diem\">3 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Five checks.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">fixtures</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. f4 Robustness <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Three checks.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">test isolation</span></p>\n</div>\n<h2>5. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>createFramework()</code></td><td>src/mini-framework.js</td></tr></tbody></table>\n<h2>6. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>f1 Matchers</td><td>3</td></tr><tr><td>2</td><td>f2 Runner</td><td>2</td></tr><tr><td>3</td><td>f3 Hooks</td><td>3</td></tr><tr><td>4</td><td>f4 Robustness</td><td>2</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Skipping afterEach when a test fails — resources leak into the next test.</li>\n  <li>Module-level arrays of tests — two frameworks (or two runs) then share state.</li>\n</ul>\n<h2>7. Submission</h2>\n<p>Write your answers in the answer files on the right (they mirror the official template: one JavaScript object per test case / issue). Press <b>Run</b> for the visible checks and <b>Submit</b> for full grading, hidden checks included. Your score per question appears in the rubric table.</p>",
+      "problemHtmlVi": "<h1>Deep Lab 8 — Build Your Own Unit Test Framework</h1>\n<p class=\"bi-phu\">Deep Lab chương 8 · một công cụ (D) nhìn từ bên trong: suite, hook, matcher, cô lập lỗi · 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p>Unit test framework (JUnit, NUnit, Jest) là công cụ test được developer dùng nhiều nhất — nhóm 4 của cách phân loại. Tự dựng một cái nhỏ để hiểu chính xác <code>@BeforeEach</code>, <code>assertEquals</code>, <code>assertThrows</code> làm gì. API và luật như bản tiếng Anh: toBe dùng Object.is, toEqual so sâu, toThrow nhận hàm (chuỗi = một phần message, lớp = instanceof), .not đảo; run chạy theo thứ tự khai báo, beforeEach từ ngoài vào, afterEach từ trong ra và vẫn chạy khi test trượt, beforeEach lỗi thì không chạy thân test; hook chỉ áp cho suite của nó và suite con; một test trượt không dừng cả bộ.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>f1 Matcher: toBe, toEqual, toThrow, .not.</li>\n  <li>f2 Đăng ký, tên lồng nhau, kết quả.</li>\n  <li>f3 Thứ tự và phạm vi beforeEach / afterEach.</li>\n  <li>f4 Bền vững: hook lỗi, cô lập, chạy lại.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Không cần hỗ trợ bất đồng bộ. Không dùng test/expect toàn cục của máy chấm — mọi thứ phải đến từ createFramework() của bạn.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>src/\n└── mini-framework.js   ← function createFramework()</pre>\n<h2>3. Mô hình dữ liệu</h2>\n<p><b>JUnit 5 ↔ your framework</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>@Nested class</code></td><td>describe(name, fn)</td><td>suite trong suite</td></tr><tr><td><code>@BeforeEach / @AfterEach</code></td><td>beforeEach / afterEach</td><td>ngoài trước / trong trước</td></tr><tr><td><code>assertEquals / assertSame / assertThrows</code></td><td>toEqual / toBe / toThrow</td><td>bằng nhau sâu / đồng nhất / ngoại lệ</td></tr></tbody></table>\n<h2>4. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. f1 Matcher <span class=\"bi-diem\">3 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Năm kiểm.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">unit test framework</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. f2 Runner <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Ba kiểm.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">test execution</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. f3 Hook <span class=\"bi-diem\">3 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Năm kiểm.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">fixtures</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. f4 Bền vững <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Ba kiểm.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">test isolation</span></p>\n</div>\n<h2>5. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>createFramework()</code></td><td>src/mini-framework.js</td></tr></tbody></table>\n<h2>6. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>f1 Matcher</td><td>3</td></tr><tr><td>2</td><td>f2 Runner</td><td>2</td></tr><tr><td>3</td><td>f3 Hook</td><td>3</td></tr><tr><td>4</td><td>f4 Bền vững</td><td>2</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Bỏ afterEach khi test trượt — tài nguyên rò sang test sau.</li>\n  <li>Mảng test ở cấp module — hai framework (hay hai lần chạy) dùng chung trạng thái.</li>\n</ul>\n<h2>7. Nộp bài</h2>\n<p>Viết câu trả lời vào các tệp bên phải (giống template chính thức: mỗi test case / lỗi là một object JavaScript). Bấm <b>Chạy thử</b> để chạy kiểm hiện, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn). Điểm từng câu hiện trong bảng thang điểm.</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "No async support is required. Do not use the global test/expect of the grader — everything must come from your createFramework().|||Không cần hỗ trợ bất đồng bộ. Không dùng test/expect toàn cục của máy chấm — mọi thứ phải đến từ createFramework() của bạn.",
+      "examplesJson": [
+        {
+          "input": "describe('Booking', () => { beforeEach(...); test('cancel', ...) }); fw.run()",
+          "output": "{ passed: 1, failed: 0, results: [{ name: 'Booking > cancel', status: 'passed', error: null }] }",
+          "explanation": "Nested names, hooks and results like a real framework.|||Tên lồng nhau, hook và kết quả như framework thật."
+        }
+      ],
+      "hintsJson": [
+        "Lưu cây suite: mỗi suite có tests (theo thứ tự, gồm cả suite con), before, after, parent.",
+        "run: đi cây; với mỗi test lấy chuỗi suite từ gốc tới nó: before từ ngoài vào, after từ trong ra.",
+        "Bọc thân test trong try/catch; afterEach mỗi cái một try/catch riêng.",
+        "expect(x).not = matchers(x, true): cùng hàm kiểm, đảo điều kiện."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/mini-framework.js",
+          "language": "javascript",
+          "code": "// Deep Lab 8 — implement createFramework() as described on the left.\nfunction createFramework() {\n  const tests = [];\n  return {\n    describe(name, fn) { fn(); },\n    test(name, fn) { tests.push({ name, fn }); },\n    beforeEach(fn) {},\n    afterEach(fn) {},\n    expect(actual) {\n      return { toBe(e) { if (actual !== e) throw new Error('not equal'); }, toEqual() {}, toThrow() {}, not: { toBe() {}, toEqual() {}, toThrow() {} } };\n    },\n    run() {\n      const results = tests.map((t) => { try { t.fn(); return { name: t.name, status: 'passed', error: null }; } catch (e) { return { name: t.name, status: 'failed', error: e.message }; } });\n      return { passed: results.filter((r) => r.status === 'passed').length, failed: results.filter((r) => r.status === 'failed').length, results };\n    },\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/mini-framework.js",
+          "language": "javascript",
+          "code": "// Deep Lab 8 — a mini unit-test framework (what JUnit / Jest do inside).\nfunction createFramework() {\n  const root = { name: null, parent: null, tests: [], children: [], before: [], after: [] };\n  let current = root;\n\n  function describe(name, fn) {\n    const suite = { name, parent: current, tests: [], children: [], before: [], after: [] };\n    current.children.push(suite);\n    current.tests.push({ suite });           // keep declaration order between tests and suites\n    const saved = current;\n    current = suite;\n    try { fn(); } finally { current = saved; }\n  }\n  function test(name, fn) { current.tests.push({ name, fn }); }\n  function beforeEach(fn) { current.before.push(fn); }\n  function afterEach(fn) { current.after.push(fn); }\n\n  function deepEqual(a, b) {\n    if (a === b) return true;\n    if (typeof a !== 'object' || typeof b !== 'object' || a === null || b === null) return Number.isNaN(a) && Number.isNaN(b);\n    if (Array.isArray(a) !== Array.isArray(b)) return false;\n    const ka = Object.keys(a), kb = Object.keys(b);\n    if (ka.length !== kb.length) return false;\n    return ka.every((k) => Object.prototype.hasOwnProperty.call(b, k) && deepEqual(a[k], b[k]));\n  }\n  const show = (v) => { try { return JSON.stringify(v); } catch (e) { return String(v); } };\n\n  function matchers(actual, negate) {\n    const check = (ok, msg) => { if (negate ? ok : !ok) throw new Error((negate ? 'not: ' : '') + msg); };\n    return {\n      toBe(expected) { check(Object.is(actual, expected), 'expected ' + show(expected) + ' but got ' + show(actual)); },\n      toEqual(expected) { check(deepEqual(actual, expected), 'expected ' + show(expected) + ' to equal ' + show(actual)); },\n      toThrow(expected) {\n        if (typeof actual !== 'function') throw new Error('toThrow needs a function');\n        let thrown = null;\n        try { actual(); } catch (e) { thrown = e; }\n        let ok = thrown !== null;\n        if (ok && typeof expected === 'string') ok = String(thrown && thrown.message).includes(expected);\n        else if (ok && typeof expected === 'function') ok = thrown instanceof expected;\n        check(ok, 'expected the function to throw' + (expected ? ' ' + (expected.name || show(expected)) : ''));\n      },\n    };\n  }\n  function expect(actual) {\n    const m = matchers(actual, false);\n    m.not = matchers(actual, true);\n    return m;\n  }\n\n  function chain(suite) { const out = []; for (let s = suite; s; s = s.parent) out.unshift(s); return out; }\n\n  function run() {\n    const results = [];\n    function walk(suite) {\n      for (const item of suite.tests) {\n        if (item.suite) { walk(item.suite); continue; }\n        const suites = chain(suite);\n        const name = suites.map((s) => s.name).filter((n) => n !== null).concat(item.name).join(' > ');\n        let error = null;\n        try {\n          for (const s of suites) for (const h of s.before) h();\n          item.fn();\n        } catch (e) { error = e; }\n        for (const s of suites.slice().reverse()) for (const h of s.after) {\n          try { h(); } catch (e) { if (!error) error = e; }\n        }\n        results.push({ name, status: error ? 'failed' : 'passed', error: error ? String(error && error.message) : null });\n      }\n    }\n    walk(root);\n    return { passed: results.filter((r) => r.status === 'passed').length, failed: results.filter((r) => r.status === 'failed').length, results };\n  }\n\n  return { describe, test, beforeEach, afterEach, expect, run };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A framework is a tree of suites plus a runner: hooks are collected along the path from the root to the test, before-hooks outside-in, after-hooks inside-out and always executed; matchers throw on failure; the runner catches every exception so one test never stops the others. JUnit 5 and Jest do exactly this (plus async, reporting and parallelism).</p>",
+      "solutionExplanationHtmlVi": "<p>Framework là một cây suite cộng một runner: hook gom theo đường từ gốc tới test, before từ ngoài vào, after từ trong ra và luôn chạy; matcher ném lỗi khi trượt; runner bắt mọi ngoại lệ để một test không dừng các test khác. JUnit 5 và Jest làm đúng như vậy (cộng bất đồng bộ, báo cáo và chạy song song).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "src/mini-framework.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "f1 — toBe passes and fails correctly",
+              "vi": "f1 — toBe đạt và trượt đúng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const e=createFramework(),{describe:f,test:t,beforeEach:u,afterEach:i,expect:s}=e,n=r=>r.results.map(a=>a.status[0]).join(\"\");t(\"a\",()=>s(2).toBe(2)),t(\"b\",()=>s(\"6\").toBe(6));const o=e.run();return n(o)===\"pf\"?\"OK\":\"expected passed, failed \\u2014 got \"+JSON.stringify(o.results)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "f1 — toEqual compares deeply (key order does not matter, arrays do)",
+              "vi": "f1 — toEqual so sâu (thứ tự khoá không quan trọng, mảng thì có)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const o=createFramework(),{describe:u,test:t,beforeEach:b,afterEach:f,expect:a}=o,c=n=>n.results.map(s=>s.status[0]).join(\"\");t(\"a\",()=>a({a:1,b:[1,{c:2}]}).toEqual({b:[1,{c:2}],a:1})),t(\"b\",()=>a([1,2]).toEqual([2,1])),t(\"c\",()=>a({a:1}).toEqual({a:1,b:2}));const e=o.run();return c(e)===\"pff\"?\"OK\":\"got \"+c(e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "f1 — toThrow with no argument, a message part and an error class",
+              "vi": "f1 — toThrow không đối số, một phần message và một lớp lỗi"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const e=createFramework(),{describe:h,test:o,beforeEach:f,afterEach:T,expect:r}=e,n=c=>c.results.map(a=>a.status[0]).join(\"\"),t=()=>{throw new RangeError(\"INVALID_HOURS\")};o(\"a\",()=>r(t).toThrow()),o(\"b\",()=>r(t).toThrow(\"HOURS\")),o(\"c\",()=>r(t).toThrow(RangeError)),o(\"d\",()=>r(t).toThrow(TypeError)),o(\"e\",()=>r(()=>1).toThrow()),o(\"f\",()=>r(t).toThrow(\"DAYS\"));const s=e.run();return n(s)===\"pppfff\"?\"OK\":\"got \"+n(s)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "f1 — .not inverts every matcher",
+              "vi": "f1 — .not đảo mọi matcher"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const n=createFramework(),{describe:u,test:t,beforeEach:f,afterEach:w,expect:o}=n,r=s=>s.results.map(c=>c.status[0]).join(\"\");t(\"a\",()=>o(1).not.toBe(2)),t(\"b\",()=>o([1]).not.toEqual([1])),t(\"c\",()=>o(()=>1).not.toThrow()),t(\"d\",()=>o(()=>{throw new Error(\"x\")}).not.toThrow());const e=n.run();return r(e)===\"pfpf\"?\"OK\":\"got \"+r(e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "f1 — toBe uses identity (two equal objects are not the same)",
+              "vi": "f1 — toBe so đồng nhất (hai object bằng nhau không phải là một)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const o=createFramework(),{describe:i,test:t,beforeEach:u,afterEach:f,expect:e}=o,a=n=>n.results.map(r=>r.status[0]).join(\"\"),s={a:1};t(\"a\",()=>e(s).toBe(s)),t(\"b\",()=>e({a:1}).toBe({a:1})),t(\"c\",()=>e(NaN).toBe(NaN));const c=o.run();return a(c)===\"pfp\"?\"OK\":\"got \"+a(c)+\" (NaN is NaN with Object.is)\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "f2 — run reports counts and results in declaration order",
+              "vi": "f2 — run báo số lượng và kết quả theo thứ tự khai báo"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const o=createFramework(),{describe:a,test:r,beforeEach:c,afterEach:u,expect:i}=o,l=t=>t.results.map(s=>s.status[0]).join(\"\");r(\"one\",()=>{}),r(\"two\",()=>{throw new Error(\"bad\")}),r(\"three\",()=>{});const e=o.run();return e.passed===2&&e.failed===1&&e.results.map(t=>t.name).join(\",\")===\"one,two,three\"&&e.results[1].error===\"bad\"&&e.results[0].error===null?\"OK\":\"got \"+JSON.stringify(e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "f2 — nested describe names are joined with \" > \"",
+              "vi": "f2 — tên describe lồng nhau nối bằng \" > \""
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const e=createFramework(),{describe:t,test:o,beforeEach:r,afterEach:i,expect:u}=e,m=n=>n.results.map(c=>c.status[0]).join(\"\");t(\"Booking\",()=>{o(\"a\",()=>{}),t(\"cancel\",()=>{o(\"b\",()=>{})}),o(\"c\",()=>{})}),o(\"d\",()=>{});const a=e.run();return a.results.map(n=>n.name).join(\"|\")===\"Booking > a|Booking > cancel > b|Booking > c|d\"?\"OK\":\"got \"+a.results.map(n=>n.name).join(\"|\")})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "f2 — a failing test does not stop the others",
+              "vi": "f2 — một test trượt không dừng các test khác"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const e=createFramework(),{describe:u,test:t,beforeEach:f,afterEach:_,expect:o}=e,n=c=>c.results.map(r=>r.status[0]).join(\"\");t(\"a\",()=>o(1).toBe(2)),t(\"b\",()=>{null.x}),t(\"c\",()=>o(3).toBe(3));const s=e.run();return n(s)===\"ffp\"?\"OK\":\"got \"+n(s)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "f3 — beforeEach runs before every test of its describe, outer first",
+              "vi": "f3 — beforeEach chạy trước mọi test của describe, ngoài trước"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const n=createFramework(),{describe:r,test:o,beforeEach:s,afterEach:a,expect:h}=n,p=e=>e.results.map(u=>u.status[0]).join(\"\"),t=[];return s(()=>t.push(\"root\")),r(\"S\",()=>{s(()=>t.push(\"S\")),o(\"t1\",()=>t.push(\"t1\")),r(\"N\",()=>{s(()=>t.push(\"N\")),o(\"t2\",()=>t.push(\"t2\"))})}),o(\"t3\",()=>t.push(\"t3\")),n.run(),t.join(\",\")===\"root,S,t1,root,S,N,t2,root,t3\"?\"OK\":\"got \"+t.join(\",\")})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "f3 — afterEach runs after every test, inner first, even when the test failed",
+              "vi": "f3 — afterEach chạy sau mọi test, trong trước, kể cả khi test trượt"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const o=createFramework(),{describe:n,test:s,beforeEach:f,afterEach:r,expect:i}=o,e=u=>u.results.map(a=>a.status[0]).join(\"\"),t=[];r(()=>t.push(\"A-root\")),n(\"S\",()=>{r(()=>t.push(\"A-S\")),s(\"t1\",()=>{throw t.push(\"t1\"),new Error(\"x\")})});const c=o.run();return t.join(\",\")===\"t1,A-S,A-root\"&&e(c)===\"f\"?\"OK\":\"got \"+t.join(\",\")})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "f3 — a fresh fixture per test thanks to beforeEach",
+              "vi": "f3 — mỗi test có fixture mới nhờ beforeEach"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const e=createFramework(),{describe:h,test:s,beforeEach:a,afterEach:l,expect:o}=e,n=c=>c.results.map(u=>u.status[0]).join(\"\");let t;a(()=>{t=[]}),s(\"a\",()=>{t.push(1),o(t.length).toBe(1)}),s(\"b\",()=>{t.push(2),o(t).toEqual([2])});const r=e.run();return n(r)===\"pp\"?\"OK\":\"got \"+n(r)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "f3 — a failing beforeEach fails the test without running its body",
+              "vi": "f3 — beforeEach lỗi làm test trượt và không chạy thân test"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const e=createFramework(),{describe:o,test:s,beforeEach:n,afterEach:b,expect:i}=e,a=c=>c.results.map(u=>u.status[0]).join(\"\");let r=!1;o(\"S\",()=>{n(()=>{throw new Error(\"setup broke\")}),s(\"t\",()=>{r=!0})});const t=e.run();return a(t)===\"f\"&&!r&&t.results[0].error===\"setup broke\"?\"OK\":\"got \"+JSON.stringify(t)+\", body ran: \"+r})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "f3 — hooks of a sibling describe do not apply",
+              "vi": "f3 — hook của describe anh em không áp dụng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const o=createFramework(),{describe:n,test:s,beforeEach:e,afterEach:u,expect:b}=o,i=c=>c.results.map(r=>r.status[0]).join(\"\"),t=[];return n(\"A\",()=>{e(()=>t.push(\"A\")),s(\"a\",()=>{})}),n(\"B\",()=>{s(\"b\",()=>t.push(\"b\"))}),o.run(),t.join(\",\")===\"A,b\"?\"OK\":\"got \"+t.join(\",\")})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "f4 — an error thrown by afterEach fails a passing test",
+              "vi": "f4 — lỗi trong afterEach làm test đang đạt thành trượt"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const r=createFramework(),{describe:u,test:t,beforeEach:f,afterEach:n,expect:i}=r,o=s=>s.results.map(a=>a.status[0]).join(\"\");n(()=>{throw new Error(\"cleanup failed\")}),t(\"t\",()=>{});const e=r.run();return o(e)===\"f\"&&e.results[0].error===\"cleanup failed\"?\"OK\":\"got \"+JSON.stringify(e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "f4 — two frameworks do not share tests",
+              "vi": "f4 — hai framework không dùng chung test"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const e=createFramework(),{describe:c,test:r,beforeEach:a,afterEach:u,expect:f}=e,h=s=>s.results.map(n=>n.status[0]).join(\"\");createFramework().test(\"x\",()=>{}),r(\"y\",()=>{});const t=e.run();return t.results.length===1&&t.results[0].name===\"y\"?\"OK\":\"got \"+JSON.stringify(t)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "f4 — run can be called twice with the same result",
+              "vi": "f4 — gọi run hai lần cho cùng kết quả"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const t=createFramework(),{describe:_,test:c,beforeEach:r,afterEach:b,expect:a}=t,n=u=>u.results.map(f=>f.status[0]).join(\"\");let e=0;r(()=>{e=0}),c(\"t\",()=>{e++,a(e).toBe(1)});const o=n(t.run()),s=n(t.run());return o===\"p\"&&s===\"p\"?\"OK\":\"got \"+o+\" then \"+s})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4",
+            "an": true
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. f1 Matchers",
+            "diem": 3
+          },
+          {
+            "ma": "f2",
+            "ten": "2. f2 Runner",
+            "diem": 2
+          },
+          {
+            "ma": "f3",
+            "ten": "3. f3 Hooks",
+            "diem": 3
+          },
+          {
+            "ma": "f4",
+            "ten": "4. f4 Robustness",
+            "diem": 2
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "deep-lab",
+      "mistakesJson": [
+        {
+          "loi": "Chạy afterEach theo thứ tự ngoài trước."
+        },
+        {
+          "loi": "Áp hook của suite anh em."
+        },
+        {
+          "loi": "toEqual so bằng JSON.stringify nên phụ thuộc thứ tự khoá."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "matcher / assertion",
+          "vi": "hàm khẳng định"
+        },
+        {
+          "en": "hook",
+          "vi": "hàm móc chạy trước/sau test"
+        },
+        {
+          "en": "suite",
+          "vi": "nhóm test"
+        },
+        {
+          "en": "Object.is",
+          "vi": "so đồng nhất (NaN bằng NaN)"
+        }
+      ]
+    }
+  ]
+}

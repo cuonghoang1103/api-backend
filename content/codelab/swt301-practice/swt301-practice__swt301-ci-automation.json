@@ -1,0 +1,601 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-ci-automation",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-ci-automation"
+  },
+  "exercises": [
+    {
+      "title": "CI 1 — Which layer of the test pyramid?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "test pyramid"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>The test pyramid says: many fast unit tests at the bottom, some integration/API tests in the middle, few slow UI end-to-end tests at the top. Place each automated LabBook test.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Kim tự tháp test: nhiều unit test nhanh ở đáy, vừa phải test tích hợp/API ở giữa, ít test UI đầu-cuối chậm ở đỉnh. Đặt từng test tự động của LabBook.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Có trình duyệt (Selenium, Playwright) ⇒ đỉnh.",
+        "Có HTTP/API hay CSDL thật ⇒ giữa."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# CI 1 — Which layer of the test pyramid?\n\nAnswer in the answer panel (no code needed).\n\n1. Test → layerTest → tầng\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# CI 1 — Which layer of the test pyramid? — answer key\n\n1. Test → layerTest → tầng\n   - r0.l: Unit / component\n   - r1.l: Integration / API\n   - r2.l: UI / end-to-end\n   - r3.l: Integration / API\n   - r4.l: Unit / component\n   - r5.l: UI / end-to-end\n   One class or function in isolation = unit; an API or a real database between components = integration; a browser driving the whole system = UI end-to-end.VI: Một lớp/hàm cô lập = unit; API hay CSDL thật giữa các thành phần = tích hợp; trình duyệt điều khiển cả hệ thống = UI đầu-cuối.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Unit · Integration · UI · Integration · Unit · UI.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Test → layer</p><p style=\"opacity:.75;font-size:.92em\"><i>Test → tầng</i></p>",
+            "cot": [
+              {
+                "ma": "t",
+                "ten": "Automated test"
+              },
+              {
+                "ma": "l",
+                "ten": "Layer",
+                "luaChon": [
+                  "Unit / component",
+                  "Integration / API",
+                  "UI / end-to-end"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "t": "JUnit + Mockito: calcRefund returns 50% at exactly 2 hours (runs in 3 ms)"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "t": "REST Assured: POST /api/bookings with a full lab answers 201 PENDING"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "t": "Selenium WebDriver: a student logs in, books LAB01 in Chrome and sees the confirmation page"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "t": "Spring test with Testcontainers: BookingRepository saves and reads a booking from a real PostgreSQL"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "t": "Jest: the WaitList class promotes first come, first served"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "t": "Playwright: the manager closes a lab and the student’s booking list shows CANCELLED"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.l": "Unit / component",
+              "r1.l": "Integration / API",
+              "r2.l": "UI / end-to-end",
+              "r3.l": "Integration / API",
+              "r4.l": "Unit / component",
+              "r5.l": "UI / end-to-end"
+            },
+            "giaiThich": "<p>One class or function in isolation = unit; an API or a real database between components = integration; a browser driving the whole system = UI end-to-end.</p><p><i>VI: Một lớp/hàm cô lập = unit; API hay CSDL thật giữa các thành phần = tích hợp; trình duyệt điều khiển cả hệ thống = UI đầu-cuối.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Xếp test repository với CSDL thật vào unit."
+        },
+        {
+          "loi": "Cho rằng nhiều test UI là tốt — chúng chậm và dễ gãy."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "test pyramid",
+          "vi": "kim tự tháp test"
+        },
+        {
+          "en": "end-to-end test",
+          "vi": "test đầu-cuối"
+        },
+        {
+          "en": "Testcontainers",
+          "vi": "thư viện chạy CSDL thật trong container khi test"
+        }
+      ]
+    },
+    {
+      "title": "CI 2 — Check the shape of the pyramid and the pipeline time",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 16,
+      "points": 20,
+      "concepts": [
+        "test pyramid",
+        "continuous integration"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Write <code>pipelineReport(tests, workers)</code>. <code>tests</code> = <code>[{ id, layer: 'unit' | 'integration' | 'ui', seconds, fails }]</code>; <code>workers</code> = <code>{ unit, integration, ui }</code> — how many tests of that layer run in parallel.</p>\n<ul><li><code>counts</code> = <code>{ unit, integration, ui }</code>; <code>shape</code> = <code>'PYRAMID'</code> if unit &gt; integration &gt; ui, <code>'ICE_CREAM_CONE'</code> if ui &gt; integration &gt; unit, otherwise <code>'OTHER'</code>.</li>\n<li>Stages run in order unit → integration → ui. A stage lasts <code>ceil(Σ seconds of its tests ÷ workers)</code> seconds (0 if the layer has no test). <b>Fail fast</b>: if any test of a stage <code>fails</code>, the following stages do not run.</li>\n<li><code>stagesRun</code> = the layers that ran; <code>pipelineMinutes</code> = total seconds of the stages that ran ÷ 60, rounded to 1 decimal; <code>firstFailure</code> = the id of the first failing test in the order of <code>tests</code> within the first failing stage, or null.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Do not modify the input.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>pipelineReport(tests, workers)</code> như bản tiếng Anh: đếm theo tầng và nhận dạng hình dạng (PYRAMID / ICE_CREAM_CONE / OTHER); các stage chạy theo thứ tự unit → integration → ui, mỗi stage kéo dài ceil(tổng giây ÷ số worker); hỏng sớm: stage nào có test trượt thì các stage sau không chạy; trả các stage đã chạy, số phút của pipeline (1 chữ số) và id test trượt đầu tiên.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Không sửa đầu vào.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "pipelineReport([{id:'u1',layer:'unit',seconds:2,fails:false},{id:'u2',layer:'unit',seconds:3,fails:false},{id:'a1',layer:'integration',seconds:30,fails:true},{id:'e1',layer:'ui',seconds:120,fails:false}], {unit:2,integration:1,ui:1})",
+          "output": "{ counts: {unit:2,integration:1,ui:1}, shape: 'OTHER', stagesRun: ['unit','integration'], pipelineMinutes: 0.6, firstFailure: 'a1' }",
+          "explanation": "unit ceil(5/2)=3 s, integration 30 s, ui skipped (fail fast): 33 s = 0.55 min → 0.6.|||unit ceil(5/2)=3 giây, integration 30 giây, ui bị bỏ (hỏng sớm): 33 giây = 0,55 phút → 0,6."
+        }
+      ],
+      "hintsJson": [
+        "Duyệt ba tầng theo thứ tự cố định; cộng thời gian; gặp stage có test trượt thì dừng.",
+        "shape: so sánh chặt (>), bằng nhau thì OTHER."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "pipeline.js",
+          "language": "javascript",
+          "code": "function pipelineReport(tests, workers) {\n  return { counts: { unit: 0, integration: 0, ui: 0 }, shape: 'OTHER', stagesRun: [], pipelineMinutes: 0, firstFailure: null };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "pipeline.js",
+          "language": "javascript",
+          "code": "function pipelineReport(tests, workers) {\n  const LAYERS = ['unit', 'integration', 'ui'];\n  const counts = { unit: 0, integration: 0, ui: 0 };\n  for (const t of tests) counts[t.layer]++;\n  const shape = counts.unit > counts.integration && counts.integration > counts.ui ? 'PYRAMID'\n    : counts.ui > counts.integration && counts.integration > counts.unit ? 'ICE_CREAM_CONE' : 'OTHER';\n  const stagesRun = [];\n  let seconds = 0;\n  let firstFailure = null;\n  for (const layer of LAYERS) {\n    const mine = tests.filter((t) => t.layer === layer);\n    stagesRun.push(layer);\n    const sum = mine.reduce((s, t) => s + t.seconds, 0);\n    seconds += mine.length ? Math.ceil(sum / workers[layer]) : 0;\n    const bad = mine.find((t) => t.fails);\n    if (bad) { firstFailure = bad.id; break; }\n  }\n  return { counts, shape, stagesRun, pipelineMinutes: Math.round((seconds / 60) * 10) / 10, firstFailure };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Fail-fast ordering and a pyramid-shaped suite keep feedback fast: cheap unit tests run on every push and stop the pipeline before the slow UI tests start.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "pipeline.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "the example",
+              "vi": "ví dụ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const i=pipelineReport([{id:\"u1\",layer:\"unit\",seconds:2,fails:!1},{id:\"u2\",layer:\"unit\",seconds:3,fails:!1},{id:\"a1\",layer:\"integration\",seconds:30,fails:!0},{id:\"e1\",layer:\"ui\",seconds:120,fails:!1}],{unit:2,integration:1,ui:1});return JSON.stringify(i)===JSON.stringify({counts:{unit:2,integration:1,ui:1},shape:\"OTHER\",stagesRun:[\"unit\",\"integration\"],pipelineMinutes:.6,firstFailure:\"a1\"})?\"OK\":\"got \"+JSON.stringify(i)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "a healthy pyramid, all green",
+              "vi": "kim tự tháp khoẻ, tất cả xanh"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const n=[];for(let i=0;i<6;i++)n.push({id:\"u\"+i,layer:\"unit\",seconds:1,fails:!1});for(let i=0;i<3;i++)n.push({id:\"a\"+i,layer:\"integration\",seconds:20,fails:!1});n.push({id:\"e0\",layer:\"ui\",seconds:90,fails:!1});const e=pipelineReport(n,{unit:3,integration:3,ui:1});return e.shape===\"PYRAMID\"&&e.stagesRun.join(\",\")===\"unit,integration,ui\"&&e.pipelineMinutes===1.9&&e.firstFailure===null?\"OK\":\"got \"+JSON.stringify(e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "an ice-cream cone",
+              "vi": "kem ốc quế ngược"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const e=[{id:\"u\",layer:\"unit\",seconds:1,fails:!1},{id:\"a\",layer:\"integration\",seconds:1,fails:!1},{id:\"b\",layer:\"integration\",seconds:1,fails:!1},...[1,2,3].map(s=>({id:\"e\"+s,layer:\"ui\",seconds:60,fails:!1}))],i=pipelineReport(e,{unit:1,integration:1,ui:1});return i.shape===\"ICE_CREAM_CONE\"&&i.pipelineMinutes===3.1?\"OK\":\"got \"+JSON.stringify(i)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "a unit failure stops the pipeline at once",
+              "vi": "unit trượt thì dừng pipeline ngay"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const i=pipelineReport([{id:\"u1\",layer:\"unit\",seconds:4,fails:!1},{id:\"u2\",layer:\"unit\",seconds:4,fails:!0},{id:\"u3\",layer:\"unit\",seconds:4,fails:!0},{id:\"e1\",layer:\"ui\",seconds:600,fails:!1}],{unit:4,integration:1,ui:1});return i.stagesRun.join(\",\")===\"unit\"&&i.firstFailure===\"u2\"&&i.pipelineMinutes===.1?\"OK\":\"got \"+JSON.stringify(i)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "a layer without tests takes 0 s and still counts as run",
+              "vi": "tầng không có test mất 0 giây và vẫn tính là đã chạy"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const i=pipelineReport([{id:\"e1\",layer:\"ui\",seconds:59,fails:!1}],{unit:2,integration:2,ui:1});return i.stagesRun.join(\",\")===\"unit,integration,ui\"&&i.pipelineMinutes===1?\"OK\":\"got \"+JSON.stringify(i)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Vẫn chạy stage UI sau khi stage API trượt."
+        },
+        {
+          "loi": "Quên chia cho số worker."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "ice-cream cone",
+          "vi": "kem ốc quế ngược — nhiều UI test, ít unit test (phản mẫu)"
+        },
+        {
+          "en": "stage",
+          "vi": "giai đoạn của pipeline"
+        },
+        {
+          "en": "fail fast",
+          "vi": "hỏng sớm"
+        }
+      ]
+    },
+    {
+      "title": "CI 3 — Find the flaky tests",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "continuous integration",
+        "flaky tests"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>A <b>flaky</b> test passes and fails on the <i>same</i> code — usually because of timing, shared state or the environment (a UI test that clicks before the page is ready). Flaky tests destroy trust in CI (risk: “testers stop trusting the results”).</p>\n<p>Write <code>flaky(runs, threshold)</code>: <code>runs</code> = <code>[{ test, commit, result: 'PASS' | 'FAIL' }]</code>. A test is flaky if on at least one commit it has both a PASS and a FAIL. Return <code>{ flaky: [tests sorted A→Z], rate: { test: % of its runs that failed (1 decimal) for each flaky test }, quarantine: [flaky tests whose fail rate ≥ threshold, sorted] }</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>A test that always fails on a commit is NOT flaky — it is a real failure.</li>\n</ul>",
+      "problemHtmlVi": "<p>Test <b>chập chờn</b> đạt rồi trượt trên CÙNG một mã — thường do thời điểm, trạng thái dùng chung hay môi trường (test UI bấm trước khi trang tải xong). Chúng phá niềm tin vào CI. Viết <code>flaky(runs, threshold)</code> như bản tiếng Anh: test chập chờn là test có cả PASS và FAIL trên ít nhất một commit; trả danh sách, tỉ lệ trượt từng test (1 chữ số) và danh sách cách ly (tỉ lệ trượt ≥ ngưỡng).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Test luôn trượt trên một commit KHÔNG phải chập chờn — đó là lỗi thật.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "flaky([{test:'ui-book',commit:'c1',result:'PASS'},{test:'ui-book',commit:'c1',result:'FAIL'},{test:'api-cancel',commit:'c1',result:'FAIL'},{test:'api-cancel',commit:'c2',result:'PASS'}], 40)",
+          "output": "{ flaky: ['ui-book'], rate: { 'ui-book': 50 }, quarantine: ['ui-book'] }",
+          "explanation": "api-cancel failed on c1 and passed on c2 — different code, so it is not flaky.|||api-cancel trượt ở c1 và đạt ở c2 — khác mã nên không chập chờn."
+        }
+      ],
+      "hintsJson": [
+        "Gom theo test + commit thành tập kết quả; có đủ PASS và FAIL ⇒ chập chờn.",
+        "Tỉ lệ trượt tính trên MỌI lần chạy của test đó (mọi commit)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "flaky.js",
+          "language": "javascript",
+          "code": "function flaky(runs, threshold) {\n  return { flaky: [], rate: {}, quarantine: [] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "flaky.js",
+          "language": "javascript",
+          "code": "function flaky(runs, threshold) {\n  const byKey = {};\n  const total = {};\n  const fails = {};\n  for (const r of runs) {\n    const k = r.test + '@' + r.commit;\n    (byKey[k] = byKey[k] || new Set()).add(r.result);\n    total[r.test] = (total[r.test] || 0) + 1;\n    if (r.result === 'FAIL') fails[r.test] = (fails[r.test] || 0) + 1;\n  }\n  const set = new Set();\n  for (const [k, s] of Object.entries(byKey)) if (s.has('PASS') && s.has('FAIL')) set.add(k.slice(0, k.lastIndexOf('@')));\n  const list = [...set].sort();\n  const rate = {};\n  for (const t of list) rate[t] = Math.round(((fails[t] || 0) / total[t]) * 1000) / 10;\n  return { flaky: list, rate, quarantine: list.filter((t) => rate[t] >= threshold) };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Quarantining flaky tests (and fixing waits, isolating data) keeps the pipeline trustworthy; real failures stay visible.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "flaky.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "the example",
+              "vi": "ví dụ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const t=flaky([{test:\"ui-book\",commit:\"c1\",result:\"PASS\"},{test:\"ui-book\",commit:\"c1\",result:\"FAIL\"},{test:\"api-cancel\",commit:\"c1\",result:\"FAIL\"},{test:\"api-cancel\",commit:\"c2\",result:\"PASS\"}],40);return JSON.stringify(t)===JSON.stringify({flaky:[\"ui-book\"],rate:{\"ui-book\":50},quarantine:[\"ui-book\"]})?\"OK\":\"got \"+JSON.stringify(t)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "rate over all runs, threshold applied",
+              "vi": "tỉ lệ trên mọi lần chạy, áp ngưỡng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const a=[],t=(S,n,r)=>a.push({test:S,commit:n,result:r});t(\"b\",\"c1\",\"PASS\"),t(\"b\",\"c1\",\"FAIL\"),t(\"b\",\"c2\",\"PASS\"),t(\"b\",\"c2\",\"PASS\"),t(\"a\",\"c1\",\"FAIL\"),t(\"a\",\"c1\",\"PASS\"),t(\"a\",\"c1\",\"FAIL\");const c=flaky(a,30);return JSON.stringify(c)===JSON.stringify({flaky:[\"a\",\"b\"],rate:{a:66.7,b:25},quarantine:[\"a\"]})?\"OK\":\"got \"+JSON.stringify(c)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "always failing on a commit is a real failure",
+              "vi": "luôn trượt trên một commit là lỗi thật"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const t=flaky([{test:\"x\",commit:\"c1\",result:\"FAIL\"},{test:\"x\",commit:\"c1\",result:\"FAIL\"}],0);return t.flaky.length===0&&t.quarantine.length===0?\"OK\":\"got \"+JSON.stringify(t)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "test names containing @ are handled",
+              "vi": "tên test có @ vẫn xử lý đúng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const t=flaky([{test:\"ui@login\",commit:\"c9\",result:\"PASS\"},{test:\"ui@login\",commit:\"c9\",result:\"FAIL\"}],100);return JSON.stringify(t.flaky)==='[\"ui@login\"]'&&t.quarantine.length===0?\"OK\":\"got \"+JSON.stringify(t)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gọi test trượt ở commit này, đạt ở commit sau là chập chờn."
+        },
+        {
+          "loi": "Tính tỉ lệ chỉ trên commit bị chập chờn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "flaky test",
+          "vi": "test chập chờn"
+        },
+        {
+          "en": "quarantine",
+          "vi": "cách ly — tạm tách khỏi cổng chặn"
+        }
+      ]
+    },
+    {
+      "title": "CI 4 — Pyramid, CI and Selenium (exam-style)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "continuous integration",
+        "Selenium"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Five questions linking the pyramid, CI and test execution tools such as Selenium WebDriver to the syllabus ideas of chapters 2, 6 and 8.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu nối kim tự tháp, CI và công cụ thực thi như Selenium WebDriver với các ý của chương 2, 6 và 8.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "CI = phản hồi nhanh cho mỗi thay đổi.",
+        "Page Object gom locator một chỗ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# CI 4 — Pyramid, CI and Selenium (exam-style)\n\nAnswer in the answer panel (no code needed).\n\n1. Why should most automated tests be unit tests?Vì sao phần lớn test tự động nên là unit test?\n2. A Selenium test sometimes fails because it clicks before the page has loaded. The best fix is…Test Selenium đôi khi trượt vì bấm trước khi trang tải xong. Cách sửa tốt nhất là…\n3. Which test type does a CI server mostly run on every change?CI server chủ yếu chạy loại test nào mỗi khi có thay đổi?\n4. Which pattern keeps Selenium tests maintainable when the UI changes?Mẫu nào giúp test Selenium dễ bảo trì khi UI đổi?\n5. Which statement about automation and exploratory testing is TRUE?Phát biểu nào về tự động hoá và exploratory testing là ĐÚNG?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# CI 4 — Pyramid, CI and Selenium (exam-style) — answer key\n\n1. Why should most automated tests be unit tests?Vì sao phần lớn test tự động nên là unit test?\n   Answer: b) They are fast, stable and pinpoint the failing line, so they can run on every push\n   Fast feedback is the point of CI.VI: Phản hồi nhanh là mục đích của CI.\n\n2. A Selenium test sometimes fails because it clicks before the page has loaded. The best fix is…Test Selenium đôi khi trượt vì bấm trước khi trang tải xong. Cách sửa tốt nhất là…\n   Answer: b) an explicit wait for the element to be clickable\n   Fixed sleeps make suites slow and still flaky.VI: Ngủ cố định làm bộ test chậm mà vẫn chập chờn.\n\n3. Which test type does a CI server mostly run on every change?CI server chủ yếu chạy loại test nào mỗi khi có thay đổi?\n   Answer: b) Automated regression tests (change-related testing)\n   Regression suites are the prime candidates for automation (lesson 2.4).VI: Bộ hồi quy là ứng viên số một cho tự động hoá (bài 2.4).\n\n4. Which pattern keeps Selenium tests maintainable when the UI changes?Mẫu nào giúp test Selenium dễ bảo trì khi UI đổi?\n   Answer: b) The Page Object pattern: one class per page owns its locators and actions\n   A UI change is fixed in one place — the risk “underestimated maintenance” is reduced.VI: Đổi UI chỉ sửa một chỗ — giảm rủi ro “đánh giá thấp công bảo trì”.\n\n5. Which statement about automation and exploratory testing is TRUE?Phát biểu nào về tự động hoá và exploratory testing là ĐÚNG?\n   Answer: b) Automation checks known expectations; exploratory testing still finds the unexpected — teams need both\n   Automated checks vs human exploration.VI: Kiểm tự động và khám phá của con người bổ sung nhau.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · b · b · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Why should most automated tests be unit tests?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao phần lớn test tự động nên là unit test?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "They test the UI"
+              },
+              {
+                "ma": "b",
+                "noiDung": "They are fast, stable and pinpoint the failing line, so they can run on every push"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Users like them"
+              },
+              {
+                "ma": "d",
+                "noiDung": "They need no maintenance"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Fast feedback is the point of CI.</p><p><i>VI: Phản hồi nhanh là mục đích của CI.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>A Selenium test sometimes fails because it clicks before the page has loaded. The best fix is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Test Selenium đôi khi trượt vì bấm trước khi trang tải xong. Cách sửa tốt nhất là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Thread.sleep(10000) everywhere"
+              },
+              {
+                "ma": "b",
+                "noiDung": "an explicit wait for the element to be clickable"
+              },
+              {
+                "ma": "c",
+                "noiDung": "deleting the test"
+              },
+              {
+                "ma": "d",
+                "noiDung": "running it twice and accepting any pass"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Fixed sleeps make suites slow and still flaky.</p><p><i>VI: Ngủ cố định làm bộ test chậm mà vẫn chập chờn.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Which test type does a CI server mostly run on every change?</p><p style=\"opacity:.75;font-size:.92em\"><i>CI server chủ yếu chạy loại test nào mỗi khi có thay đổi?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Exploratory sessions"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Automated regression tests (change-related testing)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Acceptance by users"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Reviews"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Regression suites are the prime candidates for automation (lesson 2.4).</p><p><i>VI: Bộ hồi quy là ứng viên số một cho tự động hoá (bài 2.4).</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Which pattern keeps Selenium tests maintainable when the UI changes?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mẫu nào giúp test Selenium dễ bảo trì khi UI đổi?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Copying locators into every test"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The Page Object pattern: one class per page owns its locators and actions"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Capture/replay only"
+              },
+              {
+                "ma": "d",
+                "noiDung": "XPath with absolute paths everywhere"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A UI change is fixed in one place — the risk “underestimated maintenance” is reduced.</p><p><i>VI: Đổi UI chỉ sửa một chỗ — giảm rủi ro “đánh giá thấp công bảo trì”.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>Which statement about automation and exploratory testing is TRUE?</p><p style=\"opacity:.75;font-size:.92em\"><i>Phát biểu nào về tự động hoá và exploratory testing là ĐÚNG?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Automation makes exploratory testing unnecessary"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Automation checks known expectations; exploratory testing still finds the unexpected — teams need both"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Exploratory tests should all be automated"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Neither is needed with CI"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Automated checks vs human exploration.</p><p><i>VI: Kiểm tự động và khám phá của con người bổ sung nhau.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng sleep cố định để chữa test chập chờn."
+        },
+        {
+          "loi": "Cho rằng tự động hoá thay thế khám phá."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "explicit wait",
+          "vi": "chờ tường minh tới khi điều kiện đúng"
+        },
+        {
+          "en": "Page Object pattern",
+          "vi": "mẫu đối tượng trang"
+        }
+      ]
+    }
+  ]
+}

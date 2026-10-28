@@ -1,0 +1,635 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-tools-selection-pilot",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-tools-selection-pilot"
+  },
+  "exercises": [
+    {
+      "title": "Tool introduction 1 — Select, pilot or deploy?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "tool selection",
+        "pilot project"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Introducing a tool is a change-management project: <b>select</b> it against real needs, prove it in a <b>pilot</b>, then <b>deploy</b> it with the success factors in place. Each item comes from one of the three lists of slides 49–54.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đưa công cụ vào là một dự án quản lý thay đổi: <b>chọn</b> theo nhu cầu thật, chứng minh trong <b>pilot</b>, rồi <b>triển khai</b> với đủ yếu tố thành công. Mỗi mục thuộc một trong ba danh sách của slide 49–54.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Trước khi mua ⇒ selection; một dự án nhỏ ⇒ pilot; toàn tổ chức ⇒ success factors.",
+        "“Cách dùng chuẩn” được QUYẾT ĐỊNH trong pilot; “hướng dẫn sử dụng” được ÁP DỤNG khi triển khai."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Tool introduction 1 — Select, pilot or deploy?\n\nAnswer in the answer panel (no code needed).\n\n1. Item → listMục → danh sách\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Tool introduction 1 — Select, pilot or deploy? — answer key\n\n1. Item → listMục → danh sách\n   - r0.l: Selection principle\n   - r1.l: Pilot project objective\n   - r2.l: Success factor for deployment\n   - r3.l: Selection principle\n   - r4.l: Pilot project objective\n   - r5.l: Success factor for deployment\n   - r6.l: Selection principle\n   - r7.l: Pilot project objective\n   - r8.l: Success factor for deployment\n   - r9.l: Selection principle\n   - r10.l: Pilot project objective\n   - r11.l: Success factor for deployment\n   Selection: maturity, needs, technology, compatibility, vendor, licensing, cost-benefit, proof of concept. Pilot: knowledge of the tool, fit with processes, standard ways of use, benefits at reasonable cost, metrics. Deployment success factors: incremental roll-out, adapted processes, training, guidelines, monitoring, support, lessons learned.VI: Chọn: độ trưởng thành, nhu cầu, công nghệ, tương thích, nhà cung cấp, giấy phép, chi phí–lợi ích, chứng minh khái niệm. Pilot: hiểu công cụ, độ khớp quy trình, cách dùng chuẩn, lợi ích với chi phí hợp lý, số liệu. Yếu tố thành công: triển khai từng bước, chỉnh quy trình, đào tạo, hướng dẫn, giám sát, hỗ trợ, bài học.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>S · P · D · S · P · D · S · P · D · S · P · D.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Item → list</p><p style=\"opacity:.75;font-size:.92em\"><i>Mục → danh sách</i></p>",
+            "cot": [
+              {
+                "ma": "i",
+                "ten": "Item"
+              },
+              {
+                "ma": "l",
+                "ten": "List",
+                "luaChon": [
+                  "Selection principle",
+                  "Pilot project objective",
+                  "Success factor for deployment"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "i": "Assess the maturity of the organisation, its strengths and weaknesses"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "i": "Gain in-depth knowledge about the tool, its strengths and weaknesses"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "i": "Roll the tool out to the rest of the organisation incrementally"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "i": "Understand the technologies used by the test objects, to choose a compatible tool"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "i": "Evaluate how the tool fits with existing processes and practices, and what would need to change"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "i": "Provide training, coaching and mentoring for new users"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "i": "Evaluate the vendor (training, support, commercial aspects) or the support of an open-source tool"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "i": "Decide standard ways of using, managing, storing and maintaining the tool and the test assets"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "i": "Monitor tool use and benefits; gather lessons learned from all users"
+                }
+              },
+              {
+                "ma": "r9",
+                "o": {
+                  "i": "Do a cost-benefit analysis based on a concrete business case"
+                }
+              },
+              {
+                "ma": "r10",
+                "o": {
+                  "i": "Assess whether the benefits will be achieved at reasonable cost"
+                }
+              },
+              {
+                "ma": "r11",
+                "o": {
+                  "i": "Define usage guidelines and adapt the processes to fit the tool"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.l": "Selection principle",
+              "r1.l": "Pilot project objective",
+              "r2.l": "Success factor for deployment",
+              "r3.l": "Selection principle",
+              "r4.l": "Pilot project objective",
+              "r5.l": "Success factor for deployment",
+              "r6.l": "Selection principle",
+              "r7.l": "Pilot project objective",
+              "r8.l": "Success factor for deployment",
+              "r9.l": "Selection principle",
+              "r10.l": "Pilot project objective",
+              "r11.l": "Success factor for deployment"
+            },
+            "giaiThich": "<p>Selection: maturity, needs, technology, compatibility, vendor, licensing, cost-benefit, proof of concept. Pilot: knowledge of the tool, fit with processes, standard ways of use, benefits at reasonable cost, metrics. Deployment success factors: incremental roll-out, adapted processes, training, guidelines, monitoring, support, lessons learned.</p><p><i>VI: Chọn: độ trưởng thành, nhu cầu, công nghệ, tương thích, nhà cung cấp, giấy phép, chi phí–lợi ích, chứng minh khái niệm. Pilot: hiểu công cụ, độ khớp quy trình, cách dùng chuẩn, lợi ích với chi phí hợp lý, số liệu. Yếu tố thành công: triển khai từng bước, chỉnh quy trình, đào tạo, hướng dẫn, giám sát, hỗ trợ, bài học.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đưa “phân tích chi phí–lợi ích” vào pilot."
+        },
+        {
+          "loi": "Đưa “đào tạo người dùng mới” vào selection."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "pilot project",
+          "vi": "dự án thử điểm"
+        },
+        {
+          "en": "proof of concept",
+          "vi": "chứng minh khái niệm"
+        },
+        {
+          "en": "roll-out",
+          "vi": "triển khai rộng"
+        }
+      ]
+    },
+    {
+      "title": "Tool introduction 2 — Exam questions (K1)",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "tool introduction"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Five FE-style questions on SWT6 slides 48–54 about selecting a tool, running a pilot project and making the roll-out succeed.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu kiểu FE về slide SWT6 48–54: chọn công cụ, chạy dự án pilot và triển khai thành công.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Pilot = học và đánh giá độ khớp; triển khai = từng bước + đào tạo + giám sát.",
+        "Mã nguồn mở vẫn có rủi ro."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Tool introduction 2 — Exam questions (K1)\n\nAnswer in the answer panel (no code needed).\n\n1. What is the main objective of a pilot project for a test tool?Mục tiêu chính của dự án pilot cho công cụ test là gì?\n2. Which is a principle of tool selection?Đâu là nguyên tắc chọn công cụ?\n3. Which is a success factor when deploying a tool?Đâu là yếu tố thành công khi triển khai công cụ?\n4. Why should licensing and support of an open-source tool be evaluated?Vì sao phải đánh giá giấy phép và hỗ trợ của công cụ mã nguồn mở?\n5. A proof of concept during selection is used to…Proof of concept trong lúc chọn công cụ dùng để…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Tool introduction 2 — Exam questions (K1) — answer key\n\n1. What is the main objective of a pilot project for a test tool?Mục tiêu chính của dự án pilot cho công cụ test là gì?\n   Answer: b) To learn the tool in practice and see how it fits the existing processes before deciding a wide roll-out\n   Plus deciding standard ways of use and assessing benefits vs cost.VI: Cùng với quyết định cách dùng chuẩn và đánh giá lợi ích so với chi phí.\n\n2. Which is a principle of tool selection?Đâu là nguyên tắc chọn công cụ?\n   Answer: b) Identify opportunities for an improved test process supported by tools, against clear requirements and objective criteria\n   Needs first, tool second.VI: Nhu cầu trước, công cụ sau.\n\n3. Which is a success factor when deploying a tool?Đâu là yếu tố thành công khi triển khai công cụ?\n   Answer: b) Roll it out incrementally, provide training and support, and monitor its use and benefits\n   Change management, not a purchase.VI: Quản lý thay đổi, không phải mua hàng.\n\n4. Why should licensing and support of an open-source tool be evaluated?Vì sao phải đánh giá giấy phép và hỗ trợ của công cụ mã nguồn mở?\n   Answer: b) Because the project may be abandoned and the licence may restrict use or modification\n   One of the risks of lesson 8.3.VI: Một rủi ro của bài 8.3.\n\n5. A proof of concept during selection is used to…Proof of concept trong lúc chọn công cụ dùng để…\n   Answer: a) show the tool works with the software under test and the current infrastructure\n   It reduces the risk of buying a tool that cannot work in your context.VI: Giảm rủi ro mua công cụ không chạy được trong bối cảnh của mình.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · b · b · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>What is the main objective of a pilot project for a test tool?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mục tiêu chính của dự án pilot cho công cụ test là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "To negotiate a lower price"
+              },
+              {
+                "ma": "b",
+                "noiDung": "To learn the tool in practice and see how it fits the existing processes before deciding a wide roll-out"
+              },
+              {
+                "ma": "c",
+                "noiDung": "To test the vendor’s software for free"
+              },
+              {
+                "ma": "d",
+                "noiDung": "To replace the test team"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Plus deciding standard ways of use and assessing benefits vs cost.</p><p><i>VI: Cùng với quyết định cách dùng chuẩn và đánh giá lợi ích so với chi phí.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Which is a principle of tool selection?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đâu là nguyên tắc chọn công cụ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Choose the most popular tool"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Identify opportunities for an improved test process supported by tools, against clear requirements and objective criteria"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Buy first, decide later"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Let the vendor decide"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Needs first, tool second.</p><p><i>VI: Nhu cầu trước, công cụ sau.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Which is a success factor when deploying a tool?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đâu là yếu tố thành công khi triển khai công cụ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Roll it out to everybody on the same day"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Roll it out incrementally, provide training and support, and monitor its use and benefits"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Avoid changing any process"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Skip guidelines"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Change management, not a purchase.</p><p><i>VI: Quản lý thay đổi, không phải mua hàng.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Why should licensing and support of an open-source tool be evaluated?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao phải đánh giá giấy phép và hỗ trợ của công cụ mã nguồn mở?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Open source is always free of risk"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Because the project may be abandoned and the licence may restrict use or modification"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It does not need to be"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only for paid tools"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>One of the risks of lesson 8.3.</p><p><i>VI: Một rủi ro của bài 8.3.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>A proof of concept during selection is used to…</p><p style=\"opacity:.75;font-size:.92em\"><i>Proof of concept trong lúc chọn công cụ dùng để…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "show the tool works with the software under test and the current infrastructure"
+              },
+              {
+                "ma": "b",
+                "noiDung": "train all users"
+              },
+              {
+                "ma": "c",
+                "noiDung": "replace the pilot"
+              },
+              {
+                "ma": "d",
+                "noiDung": "write the test plan"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>It reduces the risk of buying a tool that cannot work in your context.</p><p><i>VI: Giảm rủi ro mua công cụ không chạy được trong bối cảnh của mình.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng pilot để mặc cả giá."
+        },
+        {
+          "loi": "Triển khai cho mọi người cùng lúc."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "change management",
+          "vi": "quản lý thay đổi"
+        }
+      ]
+    },
+    {
+      "title": "Tool introduction 3 — The business case: when does automation pay off?",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "cost-benefit analysis"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Selection needs a cost-benefit analysis. Model one regression suite:</p>\n<ul><li>Manual: <code>manualPerRun</code> minutes each run.</li>\n<li>Automated: <code>buildCost</code> minutes once (scripting), then <code>autoPerRun</code> minutes per run (start, analyse results) plus <code>maintenancePerRun</code> minutes of script maintenance per run.</li></ul>\n<p>Write <code>breakEven(c)</code> — the smallest number of runs <i>n</i> ≥ 1 for which the total automated cost is <b>less than or equal to</b> the total manual cost, or <code>null</code> if automation never pays off (automated cost per run ≥ manual cost per run). Then <code>roi(c, runs)</code> = (manual total − automated total) ÷ automated total × 100, rounded to 1 decimal.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Use integer arithmetic for break-even: compute it directly, do not loop to infinity.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chọn công cụ cần phân tích chi phí–lợi ích. Mô hình một bộ regression: chạy tay tốn <code>manualPerRun</code> phút mỗi lần; tự động hoá tốn <code>buildCost</code> phút một lần, rồi mỗi lần chạy tốn <code>autoPerRun</code> + <code>maintenancePerRun</code> phút. Viết <code>breakEven(c)</code> — số lần chạy nhỏ nhất <i>n</i> ≥ 1 để tổng chi phí tự động ≤ tổng chi phí tay, hoặc <code>null</code> nếu không bao giờ hoà vốn; và <code>roi(c, runs)</code> = (tổng tay − tổng tự động) ÷ tổng tự động × 100, làm tròn 1 chữ số.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Tính hoà vốn trực tiếp, không lặp vô hạn.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "breakEven({ manualPerRun: 240, buildCost: 3000, autoPerRun: 20, maintenancePerRun: 40 })",
+          "output": "17",
+          "explanation": "3000 + 60n ≤ 240n ⇔ n ≥ 16.67 → 17 runs (about 4 months of weekly runs).|||3000 + 60n ≤ 240n ⇔ n ≥ 16,67 → 17 lần (khoảng 4 tháng nếu chạy hằng tuần)."
+        }
+      ],
+      "hintsJson": [
+        "buildCost + (auto + maint)·n ≤ manual·n ⇔ n ≥ buildCost ÷ (manual − auto − maint).",
+        "Math.ceil, rồi tối thiểu là 1."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "business-case.js",
+          "language": "javascript",
+          "code": "function breakEven(c) {\n  return 1;\n}\n\nfunction roi(c, runs) {\n  return 0;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "business-case.js",
+          "language": "javascript",
+          "code": "function breakEven(c) {\n  const saving = c.manualPerRun - c.autoPerRun - c.maintenancePerRun;\n  if (saving <= 0) return null;\n  return Math.max(1, Math.ceil(c.buildCost / saving));\n}\n\nfunction roi(c, runs) {\n  const manual = c.manualPerRun * runs;\n  const auto = c.buildCost + (c.autoPerRun + c.maintenancePerRun) * runs;\n  return Math.round(((manual - auto) / auto) * 100 * 10) / 10;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The model shows why automation pays off only for tests that run many times — and why underestimating maintenance (a risk of lesson 8.3) can push the break-even point beyond the life of the product.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "business-case.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "breakEven — the example",
+              "vi": "breakEven — ví dụ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const e=breakEven({manualPerRun:240,buildCost:3e3,autoPerRun:20,maintenancePerRun:40});return e===17?\"OK\":\"expected 17, got \"+e})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "breakEven — exact division and ≤",
+              "vi": "breakEven — chia hết và ≤"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const e=breakEven({manualPerRun:100,buildCost:500,autoPerRun:0,maintenancePerRun:0});return e===5?\"OK\":\"expected 5 (500 \\u2264 500), got \"+e})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "breakEven — never pays off",
+              "vi": "breakEven — không bao giờ hoà vốn"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const n=breakEven({manualPerRun:60,buildCost:100,autoPerRun:20,maintenancePerRun:40}),e=breakEven({manualPerRun:60,buildCost:100,autoPerRun:50,maintenancePerRun:30});return n===null&&e===null?\"OK\":\"expected null and null, got \"+n+\" and \"+e})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "roi after 52 weekly runs",
+              "vi": "roi sau 52 lần chạy hằng tuần"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const n=roi({manualPerRun:240,buildCost:3e3,autoPerRun:20,maintenancePerRun:40},52);return n===103.9?\"OK\":\"expected (12480 \\u2212 6120) \\xF7 6120 \\xD7 100 = 103.9, got \"+n})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "breakEven — no build cost gives 1",
+              "vi": "breakEven — không tốn dựng thì là 1"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>breakEven({manualPerRun:10,buildCost:0,autoPerRun:1,maintenancePerRun:1})===1?\"OK\":\"expected 1\")))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "roi can be negative",
+              "vi": "roi có thể âm"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const n=roi({manualPerRun:240,buildCost:3e3,autoPerRun:20,maintenancePerRun:40},5);return n===-63.6?\"OK\":\"expected (1200 \\u2212 3300) \\xF7 3300 \\xD7 100 = \\u221263.6, got \"+n})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên chi phí bảo trì — lý do phổ biến nhất khiến tự động hoá không hoà vốn (rủi ro “đánh giá thấp công bảo trì”)."
+        },
+        {
+          "loi": "Chia cho 0 khi chi phí mỗi lần bằng nhau."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "break-even",
+          "vi": "điểm hoà vốn"
+        },
+        {
+          "en": "ROI",
+          "vi": "tỉ suất hoàn vốn"
+        },
+        {
+          "en": "business case",
+          "vi": "luận chứng kinh doanh"
+        }
+      ]
+    },
+    {
+      "title": "Tool introduction 4 — Put the introduction of a tool in order",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 4,
+      "points": 10,
+      "concepts": [
+        "tool introduction"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>The LabBook team wants a test management tool. Order the steps of introducing it the way SWT6 recommends.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Nhóm LabBook muốn có công cụ quản lý test. Sắp các bước đưa công cụ vào theo khuyến nghị của SWT6.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Nhu cầu luôn đi trước công cụ.",
+        "Giám sát và bài học là bước cuối (và liên tục)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Tool introduction 4 — Put the introduction of a tool in order\n\nAnswer in the answer panel (no code needed).\n\n1. First to lastTừ đầu tới cuối\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Tool introduction 4 — Put the introduction of a tool in order — answer key\n\n1. First to lastTừ đầu tới cuối\n   Answer: a) Analyse the needs and the maturity of the test process  →  b) Evaluate candidate tools against criteria, with a proof of concept  →  c) Run a pilot on the LabBook 2.1 release and decide standard ways of use  →  d) Roll out incrementally with training and guidelines  →  e) Monitor use and benefits, gather lessons learned\n   Needs → selection → pilot → incremental deployment → monitoring and continuous improvement.VI: Nhu cầu → chọn → pilot → triển khai từng bước → giám sát và cải tiến liên tục.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a → b → c → d → e.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>First to last</p><p style=\"opacity:.75;font-size:.92em\"><i>Từ đầu tới cuối</i></p>",
+            "muc": [
+              {
+                "ma": "c",
+                "noiDung": "Run a pilot on the LabBook 2.1 release and decide standard ways of use"
+              },
+              {
+                "ma": "a",
+                "noiDung": "Analyse the needs and the maturity of the test process"
+              },
+              {
+                "ma": "e",
+                "noiDung": "Monitor use and benefits, gather lessons learned"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Evaluate candidate tools against criteria, with a proof of concept"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Roll out incrementally with training and guidelines"
+              }
+            ],
+            "dapAn": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e"
+            ],
+            "giaiThich": "<p>Needs → selection → pilot → incremental deployment → monitoring and continuous improvement.</p><p><i>VI: Nhu cầu → chọn → pilot → triển khai từng bước → giám sát và cải tiến liên tục.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chọn công cụ trước khi phân tích nhu cầu."
+        },
+        {
+          "loi": "Triển khai rộng trước pilot."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "incremental roll-out",
+          "vi": "triển khai từng bước"
+        }
+      ]
+    }
+  ]
+}

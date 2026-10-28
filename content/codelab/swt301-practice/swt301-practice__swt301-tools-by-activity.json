@@ -1,0 +1,687 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-tools-by-activity",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-tools-by-activity"
+  },
+  "exercises": [
+    {
+      "title": "Tools by activity 1 — Which tool type does the team need?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "tool support by activity"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>The exam question is almost always “which tool supports …?”. For each need of the LabBook team, pick the tool type from slides 9–34.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu thi gần như luôn là “công cụ nào hỗ trợ …?”. Với mỗi nhu cầu của nhóm LabBook, chọn loại công cụ trong slide 9–34.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "“Phiên bản yêu cầu + liên kết test” ⇒ requirements management; “build nào, dữ liệu nào” ⇒ configuration management.",
+        "Ẩn danh hoá dữ liệu thật ⇒ test data preparation."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Tools by activity 1 — Which tool type does the team need?\n\nAnswer in the answer panel (no code needed).\n\n1. Need → tool typeNhu cầu → loại công cụ\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Tools by activity 1 — Which tool type does the team need? — answer key\n\n1. Need → tool typeNhu cầu → loại công cụ\n   - r0.t: Requirements management tool\n   - r1.t: Defect management tool\n   - r2.t: Configuration management tool\n   - r3.t: Continuous integration tool\n   - r4.t: Review support tool\n   - r5.t: Static analysis tool\n   - r6.t: Test design tool\n   - r7.t: Test data preparation tool\n   - r8.t: Test execution tool\n   - r9.t: Coverage tool\n   - r10.t: Performance testing tool\n   - r11.t: Monitoring tool\n   - r12.t: Security testing tool\n   - r13.t: Unit test framework\n   Each row names the main function of one tool type of SWT6 slides 9–34.VI: Mỗi dòng nêu chức năng chính của một loại công cụ trong slide SWT6 9–34.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Requirements · Defect · CM · CI · Review · Static analysis · Test design · Test data · Execution · Coverage · Performance · Monitoring · Security · Unit framework.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Need → tool type</p><p style=\"opacity:.75;font-size:.92em\"><i>Nhu cầu → loại công cụ</i></p>",
+            "cot": [
+              {
+                "ma": "n",
+                "ten": "Need"
+              },
+              {
+                "ma": "t",
+                "ten": "Tool type",
+                "luaChon": [
+                  "Test management tool",
+                  "Requirements management tool",
+                  "Defect management tool",
+                  "Configuration management tool",
+                  "Continuous integration tool",
+                  "Review support tool",
+                  "Static analysis tool",
+                  "Test design tool",
+                  "Model-based testing tool",
+                  "Test data preparation tool",
+                  "Test execution tool",
+                  "Coverage tool",
+                  "Test harness",
+                  "Unit test framework",
+                  "Performance testing tool",
+                  "Monitoring tool",
+                  "Dynamic analysis tool",
+                  "Security testing tool"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "n": "Store user stories with their versions and link each one to its tests"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "n": "Record a defect, assign it, track it through New → Fixed → Closed"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "n": "Know exactly which build and which seed data were used in yesterday’s run"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "n": "Build and run all tests automatically after every push to the main branch"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "n": "Collect comments of five reviewers on the SRS and track their resolution"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "n": "Find unreachable code and variables used before they are defined, without running the code"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "n": "Generate test inputs automatically from the decision table of refunds"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "n": "Anonymise a copy of production bookings for the test environment"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "n": "Replay 200 scripted UI tests on Chrome and Firefox and compare results"
+                }
+              },
+              {
+                "ma": "r9",
+                "o": {
+                  "n": "Measure which branches of BookingService the JUnit tests executed"
+                }
+              },
+              {
+                "ma": "r10",
+                "o": {
+                  "n": "Find which pages respond slowly when 500 users book at once"
+                }
+              },
+              {
+                "ma": "r11",
+                "o": {
+                  "n": "Watch CPU, memory and error rates of the production server and alert on spikes"
+                }
+              },
+              {
+                "ma": "r12",
+                "o": {
+                  "n": "Try SQL injection and broken authentication attacks against the API"
+                }
+              },
+              {
+                "ma": "r13",
+                "o": {
+                  "n": "Write and run JUnit tests with assertions in the IDE"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.t": "Requirements management tool",
+              "r1.t": "Defect management tool",
+              "r2.t": "Configuration management tool",
+              "r3.t": "Continuous integration tool",
+              "r4.t": "Review support tool",
+              "r5.t": "Static analysis tool",
+              "r6.t": "Test design tool",
+              "r7.t": "Test data preparation tool",
+              "r8.t": "Test execution tool",
+              "r9.t": "Coverage tool",
+              "r10.t": "Performance testing tool",
+              "r11.t": "Monitoring tool",
+              "r12.t": "Security testing tool",
+              "r13.t": "Unit test framework"
+            },
+            "giaiThich": "<p>Each row names the main function of one tool type of SWT6 slides 9–34.</p><p><i>VI: Mỗi dòng nêu chức năng chính của một loại công cụ trong slide SWT6 9–34.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm monitoring (giám sát vận hành) với performance testing (tạo tải)."
+        },
+        {
+          "loi": "Nhầm test design tool (sinh đầu vào) với test execution tool."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "anonymise",
+          "vi": "ẩn danh hoá dữ liệu"
+        },
+        {
+          "en": "SQL injection",
+          "vi": "tấn công chèn SQL"
+        }
+      ]
+    },
+    {
+      "title": "Tools by activity 2 — Tools on the V-model (slide 35)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "tool support by activity"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Slide 35 places the tools on the V-model. Some tools sit at one level, management tools span the whole lifecycle. Where does each tool mainly belong?</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 35 đặt các công cụ lên mô hình chữ V. Có công cụ thuộc một cấp, công cụ quản lý trải suốt vòng đời. Mỗi công cụ chủ yếu thuộc đâu?</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Công cụ quản lý trải suốt vòng đời.",
+        "Harness với stub/driver giữa các component ⇒ integration."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Tools by activity 2 — Tools on the V-model (slide 35)\n\nAnswer in the answer panel (no code needed).\n\n1. Tool → levelCông cụ → cấp\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Tools by activity 2 — Tools on the V-model (slide 35) — answer key\n\n1. Tool → levelCông cụ → cấp\n   - r0.l: Component testing\n   - r1.l: Integration testing\n   - r2.l: System testing\n   - r3.l: All levels\n   - r4.l: Acceptance testing\n   Developer tools sit low on the V; performance tools at system level; usability at acceptance; management tools everywhere.VI: Công cụ của developer nằm thấp trên chữ V; công cụ hiệu năng ở system; khả dụng ở acceptance; công cụ quản lý ở mọi nơi.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Component · Integration · System · All levels · Acceptance.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Tool → level</p><p style=\"opacity:.75;font-size:.92em\"><i>Công cụ → cấp</i></p>",
+            "cot": [
+              {
+                "ma": "t",
+                "ten": "Tool"
+              },
+              {
+                "ma": "l",
+                "ten": "Level",
+                "luaChon": [
+                  "Component testing",
+                  "Integration testing",
+                  "System testing",
+                  "Acceptance testing",
+                  "All levels"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "t": "Unit test framework and coverage tool"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "t": "Test harness with stubs and drivers between components"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "t": "Load and performance testing tool"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "t": "Test management and defect management tools"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "t": "Usability measurement during a pilot with real users"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.l": "Component testing",
+              "r1.l": "Integration testing",
+              "r2.l": "System testing",
+              "r3.l": "All levels",
+              "r4.l": "Acceptance testing"
+            },
+            "giaiThich": "<p>Developer tools sit low on the V; performance tools at system level; usability at acceptance; management tools everywhere.</p><p><i>VI: Công cụ của developer nằm thấp trên chữ V; công cụ hiệu năng ở system; khả dụng ở acceptance; công cụ quản lý ở mọi nơi.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt test harness ở system."
+        },
+        {
+          "loi": "Đặt công cụ quản lý test ở một cấp duy nhất."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "V-model",
+          "vi": "mô hình chữ V"
+        }
+      ]
+    },
+    {
+      "title": "Tools by activity 3 — Exam questions on specific tools",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "tool support by activity"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Six FE-style questions on SWT6 slides 9–34: CI, test data preparation, model-based testing, coverage, monitoring and specialised tools.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sáu câu kiểu FE về slide SWT6 9–34: CI, chuẩn bị dữ liệu, model-based testing, coverage, giám sát và công cụ chuyên biệt.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Mỗi câu ứng với chức năng chính của một loại công cụ.",
+        "Độ phủ không chứng minh tính đúng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Tools by activity 3 — Exam questions on specific tools\n\nAnswer in the answer panel (no code needed).\n\n1. Which is a benefit of a continuous integration tool?Đâu là lợi ích của công cụ CI?\n2. A test data preparation tool is used to…Công cụ chuẩn bị dữ liệu test dùng để…\n3. Model-based testing tools…Công cụ model-based testing…\n4. A coverage tool reports 100% statement coverage. What does it NOT tell you?Công cụ coverage báo 100% statement coverage. Nó KHÔNG cho biết điều gì?\n5. Which is a specialised tool of group 6?Đâu là công cụ chuyên biệt của nhóm 6?\n6. Which tool type continuously checks the system in operation and warns about problems?Loại công cụ nào liên tục theo dõi hệ thống đang vận hành và cảnh báo vấn đề?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Tools by activity 3 — Exam questions on specific tools — answer key\n\n1. Which is a benefit of a continuous integration tool?Đâu là lợi ích của công cụ CI?\n   Answer: b) It builds and tests every change automatically, giving fast feedback and early detection of integration defects\n   CI tools (D) are in the management group.VI: Công cụ CI (D) thuộc nhóm quản lý.\n\n2. A test data preparation tool is used to…Công cụ chuẩn bị dữ liệu test dùng để…\n   Answer: b) select, generate, manipulate or anonymise data in databases and files for testing\n   Including protecting personal data.VI: Kể cả bảo vệ dữ liệu cá nhân.\n\n3. Model-based testing tools…Công cụ model-based testing…\n   Answer: b) generate test cases (inputs and expected results) from a model such as a state diagram\n   When the model changes, the tests are regenerated.VI: Khi mô hình đổi, test được sinh lại.\n\n4. A coverage tool reports 100% statement coverage. What does it NOT tell you?Công cụ coverage báo 100% statement coverage. Nó KHÔNG cho biết điều gì?\n   Answer: b) Whether the expected results of the tests were correct or requirements are missing\n   Coverage measures execution, not correctness (chapter 5).VI: Độ phủ đo việc chạy, không đo tính đúng (chương 5).\n\n5. Which is a specialised tool of group 6?Đâu là công cụ chuyên biệt của nhóm 6?\n   Answer: a) Data conversion and migration testing tool\n   Also data quality, usability, accessibility, localisation, security, portability.VI: Còn có chất lượng dữ liệu, khả dụng, tiếp cận, bản địa hoá, bảo mật, khả chuyển.\n\n6. Which tool type continuously checks the system in operation and warns about problems?Loại công cụ nào liên tục theo dõi hệ thống đang vận hành và cảnh báo vấn đề?\n   Answer: a) Monitoring tool\n   Group 5 — performance measurement & dynamic analysis.VI: Nhóm 5 — đo hiệu năng & phân tích động.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · b · b · a · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which is a benefit of a continuous integration tool?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đâu là lợi ích của công cụ CI?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It removes the need for unit tests"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It builds and tests every change automatically, giving fast feedback and early detection of integration defects"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It writes requirements"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It replaces code reviews"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>CI tools (D) are in the management group.</p><p><i>VI: Công cụ CI (D) thuộc nhóm quản lý.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>A test data preparation tool is used to…</p><p style=\"opacity:.75;font-size:.92em\"><i>Công cụ chuẩn bị dữ liệu test dùng để…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "execute tests"
+              },
+              {
+                "ma": "b",
+                "noiDung": "select, generate, manipulate or anonymise data in databases and files for testing"
+              },
+              {
+                "ma": "c",
+                "noiDung": "measure performance"
+              },
+              {
+                "ma": "d",
+                "noiDung": "track defects"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Including protecting personal data.</p><p><i>VI: Kể cả bảo vệ dữ liệu cá nhân.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Model-based testing tools…</p><p style=\"opacity:.75;font-size:.92em\"><i>Công cụ model-based testing…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "draw UML for developers"
+              },
+              {
+                "ma": "b",
+                "noiDung": "generate test cases (inputs and expected results) from a model such as a state diagram"
+              },
+              {
+                "ma": "c",
+                "noiDung": "only measure coverage"
+              },
+              {
+                "ma": "d",
+                "noiDung": "replace testers"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>When the model changes, the tests are regenerated.</p><p><i>VI: Khi mô hình đổi, test được sinh lại.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>A coverage tool reports 100% statement coverage. What does it NOT tell you?</p><p style=\"opacity:.75;font-size:.92em\"><i>Công cụ coverage báo 100% statement coverage. Nó KHÔNG cho biết điều gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Which statements were executed"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Whether the expected results of the tests were correct or requirements are missing"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The percentage covered"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Which lines were never run"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Coverage measures execution, not correctness (chapter 5).</p><p><i>VI: Độ phủ đo việc chạy, không đo tính đúng (chương 5).</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>Which is a specialised tool of group 6?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đâu là công cụ chuyên biệt của nhóm 6?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Data conversion and migration testing tool"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Unit test framework"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Requirements management tool"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Review tool"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Also data quality, usability, accessibility, localisation, security, portability.</p><p><i>VI: Còn có chất lượng dữ liệu, khả dụng, tiếp cận, bản địa hoá, bảo mật, khả chuyển.</i></p>"
+          },
+          {
+            "ma": "q6",
+            "de": "<p>Which tool type continuously checks the system in operation and warns about problems?</p><p style=\"opacity:.75;font-size:.92em\"><i>Loại công cụ nào liên tục theo dõi hệ thống đang vận hành và cảnh báo vấn đề?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Monitoring tool"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Test design tool"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Review tool"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Static analysis tool"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Group 5 — performance measurement & dynamic analysis.</p><p><i>VI: Nhóm 5 — đo hiệu năng & phân tích động.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng CI thay thế unit test."
+        },
+        {
+          "loi": "Cho rằng 100% coverage nghĩa là không còn lỗi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "continuous integration",
+          "vi": "tích hợp liên tục"
+        }
+      ]
+    },
+    {
+      "title": "Tools by activity 4 — Assemble the LabBook tool chain",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "continuous integration"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Order the tool-supported steps that happen after a developer pushes a change to LabBook’s main branch, as in a typical CI pipeline.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sắp các bước có công cụ hỗ trợ diễn ra sau khi developer đẩy thay đổi lên nhánh chính của LabBook, như một pipeline CI điển hình.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Kiểm nhanh, rẻ đặt trước (fail fast).",
+        "Phải triển khai rồi mới chạy test API/UI."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Tools by activity 4 — Assemble the LabBook tool chain\n\nAnswer in the answer panel (no code needed).\n\n1. From push to reportTừ lúc đẩy mã tới báo cáo\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Tools by activity 4 — Assemble the LabBook tool chain — answer key\n\n1. From push to reportTừ lúc đẩy mã tới báo cáo\n   Answer: a) The CI server checks out the commit (configuration management)  →  b) Compile and build the artefact  →  c) Run static analysis (SonarQube quality gate)  →  d) Run the unit tests and measure coverage (JUnit + JaCoCo)  →  e) Deploy to the test environment and run API and UI tests  →  f) Publish results to the test management tool and open defects for failures\n   Checkout → build → static analysis → unit tests + coverage → deploy and higher-level tests → report. Cheap, fast checks come first so the pipeline fails fast.VI: Lấy mã → build → phân tích tĩnh → unit test + coverage → triển khai và test cấp cao → báo cáo. Kiểm rẻ, nhanh đi trước để pipeline hỏng sớm.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a → b → c → d → e → f.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>From push to report</p><p style=\"opacity:.75;font-size:.92em\"><i>Từ lúc đẩy mã tới báo cáo</i></p>",
+            "muc": [
+              {
+                "ma": "d",
+                "noiDung": "Run the unit tests and measure coverage (JUnit + JaCoCo)"
+              },
+              {
+                "ma": "a",
+                "noiDung": "The CI server checks out the commit (configuration management)"
+              },
+              {
+                "ma": "f",
+                "noiDung": "Publish results to the test management tool and open defects for failures"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Compile and build the artefact"
+              },
+              {
+                "ma": "e",
+                "noiDung": "Deploy to the test environment and run API and UI tests"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Run static analysis (SonarQube quality gate)"
+              }
+            ],
+            "dapAn": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e",
+              "f"
+            ],
+            "giaiThich": "<p>Checkout → build → static analysis → unit tests + coverage → deploy and higher-level tests → report. Cheap, fast checks come first so the pipeline fails fast.</p><p><i>VI: Lấy mã → build → phân tích tĩnh → unit test + coverage → triển khai và test cấp cao → báo cáo. Kiểm rẻ, nhanh đi trước để pipeline hỏng sớm.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chạy UI test trước unit test."
+        },
+        {
+          "loi": "Báo cáo trước khi chạy xong."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "quality gate",
+          "vi": "cổng chất lượng — điều kiện để pipeline đi tiếp"
+        },
+        {
+          "en": "fail fast",
+          "vi": "hỏng sớm"
+        }
+      ]
+    }
+  ]
+}

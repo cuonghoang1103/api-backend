@@ -1,0 +1,479 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-8-lab-tools-reminder-service",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-junit-hands-on"
+  },
+  "exercises": [
+    {
+      "title": "Lab 8 — Tools and Automation for LabBook Reminders",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 80,
+      "points": 100,
+      "concepts": [
+        "test doubles",
+        "unit test framework",
+        "test pyramid",
+        "continuous integration",
+        "tool classification",
+        "cost-benefit"
+      ],
+      "prerequisites": [
+        "SWT301 chapter 8"
+      ],
+      "tags": [
+        "swt301",
+        "lab",
+        "tools"
+      ],
+      "problemHtml": "<h1>Lab 8 — Tools and Automation for LabBook Reminders</h1>\n<p class=\"bi-phu\">Chapter 8 lab · unit tests with mocks (Mockito style), pyramid and CI stages, tool types, automation business case · 10 marks</p>\n<h2>1. Overview</h2>\n<p><b>A. Unit tests with mocks.</b> Every hour a job calls <code>ReminderService.sendReminders()</code>: it asks the repository for bookings starting 23–25 hours from now, e-mails each CONFIRMED booking that was not reminded yet (“Reminder: your lab starts tomorrow”, with the booking code) and marks it as reminded; it returns the number of reminders sent. <code>HOUR</code> is given in <code>lib/sut.js</code>.</p><pre>class ReminderService {\n  constructor(repo, mailer, clock) {\n    this.repo = repo;\n    this.mailer = mailer;\n    this.clock = clock;\n  }\n\n  // Sends \"Reminder: your lab starts tomorrow\" for bookings starting 23–25 hours from now.\n  sendReminders() {\n    const now = this.clock.now();\n    const due = this.repo.findStartingBetween(now + 23 * HOUR, now + 25 * HOUR);\n    let sent = 0;\n    for (const b of due) {\n      if (b.status !== 'CONFIRMED' || b.reminded) continue;\n      this.mailer.send(b.email, 'Reminder: your lab starts tomorrow', b.code);\n      this.repo.markReminded(b.code);\n      sent++;\n    }\n    return sent;\n  }\n}</pre><p>Write <code>tests.js</code> with mocks of the repository, the mailer and the clock (JUnit 5 + Mockito in Java; <code>jest.fn()</code> here). The grader kills 8 faulty versions (5 listed, 3 hidden).</p>\n<p><b>B. Pyramid and pipeline.</b> <b>S1</b> JUnit tests of ReminderService with mocks (2 s in total) · <b>S2</b> REST Assured tests of the booking API against a test database (4 min) · <b>S3</b> Selenium journeys “book → cancel → promoted” in three browsers (55 min) · <b>S4</b> Jest tests of the WaitList and refund functions (1 s). Give each suite its pyramid layer and its CI stage (the pre-merge gate must stay under 10 minutes).</p>\n<p><b>C. Tools.</b> <b>N1</b> Know which branches of ReminderService the tests executed · <b>N2</b> Generate 50,000 anonymised bookings for a load test · <b>N3</b> Simulate 300 students booking at 07:00 on Monday · <b>N4</b> Block a merge when new code has a critical code smell · <b>N5</b> Run S1, S2 and S4 automatically on every push · <b>N6</b> Alert the team when the production error rate jumps.</p>\n<p><b>D. Business case</b> for automating S3: manual run 300 min; scripting 3,000 min once; each automated run 30 min of supervision + 40 min of script maintenance. Compute the break-even number of runs and the ROI after 50 runs (1 decimal), and name the risk that most often breaks such a business case.</p>\n<h3>Main features</h3>\n<ul>\n  <li>A. A mock-based unit test suite for ReminderService.</li>\n  <li>B. Layer and stage of four suites.</li>\n  <li>C. Tool type for six needs.</li>\n  <li>D. Break-even, ROI and the main risk.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>Do not declare ReminderService or HOUR in tests.js — the grader provides them.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>lib/testkit.js           ← Jest-like runner (do not edit)\nlib/sut.js               ← const HOUR\ntests.js                 ← Part A\nanswers/b-pipeline.js    ← const PIPELINE = { S1: { layer, stage }, … }\nanswers/c-tools.js       ← const TOOLS = { N1: '…', … }\nanswers/d-business.js    ← const BUSINESS = { breakEven, roi50, mainRisk }</pre>\n<h2>3. Data model</h2>\n<p><b>Allowed values</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>PIPELINE.*.layer · stage</code></td><td>string</td><td>Unit / component · Integration / API · UI / end-to-end — Every push (pre-merge) · Nightly</td></tr><tr><td><code>TOOLS.*</code></td><td>string</td><td>Test management tool · Static analysis tool · Test data preparation tool · Coverage tool · Performance testing tool · Monitoring tool · Continuous integration tool</td></tr><tr><td><code>BUSINESS.mainRisk</code></td><td>string</td><td>Underestimated maintenance effort · Too many testers · Too few test cases</td></tr></tbody></table>\n<h2>4. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. A1 Mocks — listed defects <span class=\"bi-diem\">4 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>A valid suite (≥ 7 tests) that kills M1–M5.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">test doubles</span> <span class=\"bi-hook\">unit test framework</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. A2 Mocks — hidden defects <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Three more interaction defects.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">test doubles</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. B–C. Pipeline and tools <span class=\"bi-diem\">3 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Eight + six values.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">test pyramid</span> <span class=\"bi-hook\">tool classification</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. D. Business case <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Break-even, ROI, main risk.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">cost-benefit</span></p>\n</div>\n<h2>5. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>tests.js</code></td><td>tests.js</td></tr><tr><td><code>PIPELINE</code></td><td>answers/b-pipeline.js</td></tr><tr><td><code>TOOLS</code></td><td>answers/c-tools.js</td></tr><tr><td><code>BUSINESS</code></td><td>answers/d-business.js</td></tr></tbody></table>\n<h2>6. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>A1 Mocks — listed defects</td><td>4</td></tr><tr><td>2</td><td>A2 Mocks — hidden defects</td><td>1</td></tr><tr><td>3</td><td>B–C. Pipeline and tools</td><td>3</td></tr><tr><td>4</td><td>D. Business case</td><td>2</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Asserting only the returned count — a version that never marks bookings as reminded returns the same count.</li>\n  <li>Putting the 55-minute Selenium suite in the pre-merge gate.</li>\n</ul>\n<h2>7. Submission</h2>\n<p>Write your answers in the answer files on the right (they mirror the official template: one JavaScript object per test case / issue). Press <b>Run</b> for the visible checks and <b>Submit</b> for full grading, hidden checks included. Your score per question appears in the rubric table.</p>",
+      "problemHtmlVi": "<h1>Lab 8 — Tools and Automation for LabBook Reminders</h1>\n<p class=\"bi-phu\">Lab chương 8 · unit test có mock (kiểu Mockito), kim tự tháp và stage CI, loại công cụ, luận chứng tự động hoá · 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p><b>A.</b> Mỗi giờ một job gọi <code>ReminderService.sendReminders()</code>: hỏi repository các booking bắt đầu sau 23–25 giờ, gửi thư nhắc cho booking CONFIRMED chưa được nhắc (kèm mã) và đánh dấu đã nhắc; trả số thư đã gửi. Viết <code>tests.js</code> với mock của repository, mailer và clock (Java: JUnit 5 + Mockito). Máy chấm giết 8 phiên bản lỗi (5 công khai, 3 ẩn). <b>B.</b> Tầng kim tự tháp và stage CI cho S1–S4 (cổng trước khi merge phải dưới 10 phút). <b>C.</b> Loại công cụ cho N1–N6. <b>D.</b> Luận chứng tự động hoá S3: chạy tay 300 phút; viết script 3.000 phút một lần; mỗi lần chạy tự động 30 phút giám sát + 40 phút bảo trì script — tính số lần hoà vốn, ROI sau 50 lần (1 chữ số) và rủi ro hay phá luận chứng nhất.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>A. Bộ unit test dùng mock cho ReminderService.</li>\n  <li>B. Tầng và stage của bốn bộ test.</li>\n  <li>C. Loại công cụ cho sáu nhu cầu.</li>\n  <li>D. Hoà vốn, ROI và rủi ro chính.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Không khai báo ReminderService hay HOUR trong tests.js — máy chấm cung cấp.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>lib/testkit.js           ← Jest-like runner (do not edit)\nlib/sut.js               ← const HOUR\ntests.js                 ← Part A\nanswers/b-pipeline.js    ← const PIPELINE = { S1: { layer, stage }, … }\nanswers/c-tools.js       ← const TOOLS = { N1: '…', … }\nanswers/d-business.js    ← const BUSINESS = { breakEven, roi50, mainRisk }</pre>\n<h2>3. Mô hình dữ liệu</h2>\n<p><b>Allowed values</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>PIPELINE.*.layer · stage</code></td><td>string</td><td>Unit / component · Integration / API · UI / end-to-end — Every push (pre-merge) · Nightly</td></tr><tr><td><code>TOOLS.*</code></td><td>string</td><td>Test management tool · Static analysis tool · Test data preparation tool · Coverage tool · Performance testing tool · Monitoring tool · Continuous integration tool</td></tr><tr><td><code>BUSINESS.mainRisk</code></td><td>string</td><td>Underestimated maintenance effort · Too many testers · Too few test cases</td></tr></tbody></table>\n<h2>4. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. A1 Mock — lỗi công khai <span class=\"bi-diem\">4 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Bộ test hợp lệ (≥ 7 test) giết M1–M5.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">test doubles</span> <span class=\"bi-hook\">unit test framework</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. A2 Mock — lỗi ẩn <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Ba lỗi tương tác nữa.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">test doubles</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. B–C. Pipeline và công cụ <span class=\"bi-diem\">3 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Tám + sáu giá trị.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">test pyramid</span> <span class=\"bi-hook\">tool classification</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. D. Luận chứng <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Hoà vốn, ROI, rủi ro chính.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">cost-benefit</span></p>\n</div>\n<h2>5. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>tests.js</code></td><td>tests.js</td></tr><tr><td><code>PIPELINE</code></td><td>answers/b-pipeline.js</td></tr><tr><td><code>TOOLS</code></td><td>answers/c-tools.js</td></tr><tr><td><code>BUSINESS</code></td><td>answers/d-business.js</td></tr></tbody></table>\n<h2>6. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>A1 Mock — lỗi công khai</td><td>4</td></tr><tr><td>2</td><td>A2 Mock — lỗi ẩn</td><td>1</td></tr><tr><td>3</td><td>B–C. Pipeline và công cụ</td><td>3</td></tr><tr><td>4</td><td>D. Luận chứng</td><td>2</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Chỉ kiểm số trả về — bản không đánh dấu đã nhắc trả cùng số.</li>\n  <li>Đặt bộ Selenium 55 phút vào cổng trước khi merge.</li>\n</ul>\n<h2>7. Nộp bài</h2>\n<p>Viết câu trả lời vào các tệp bên phải (giống template chính thức: mỗi test case / lỗi là một object JavaScript). Bấm <b>Chạy thử</b> để chạy kiểm hiện, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn). Điểm từng câu hiện trong bảng thang điểm.</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "Do not declare ReminderService or HOUR in tests.js — the grader provides them.|||Không khai báo ReminderService hay HOUR trong tests.js — máy chấm cung cấp.",
+      "examplesJson": [
+        {
+          "input": "expect(d.repo.markReminded).toHaveBeenCalledWith('BK1')",
+          "output": "kills M3 (never marked → students get the reminder every hour)",
+          "explanation": "Verifying an interaction, like Mockito’s verify().|||Kiểm một tương tác, như verify() của Mockito."
+        }
+      ],
+      "hintsJson": [
+        "A: tạo mock MỚI trong mỗi test; đồng hồ trả một thời điểm cố định NOW.",
+        "A: kiểm cả lời gọi repository (cửa sổ 23–25 giờ), thư gửi (người nhận, tiêu đề, mã) và markReminded.",
+        "B: test nhanh chạy mỗi lần push; bộ UI dài chạy ban đêm.",
+        "D: hoà vốn = ceil(xây ÷ (tay − tự động − bảo trì))."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "tests.js",
+          "language": "javascript",
+          "code": "// ReminderService — unit tests with mocks (JUnit 5 + Mockito in Java; jest.fn() here).\nfunction deps(bookings) {\n  const repo = { findStartingBetween: jest.fn(() => bookings), markReminded: jest.fn() };\n  const mailer = { send: jest.fn() };\n  const clock = { now: jest.fn(() => 0) };\n  return { repo, mailer, clock, svc: new ReminderService(repo, mailer, clock) };\n}\n\ntest('a confirmed booking tomorrow gets a reminder', () => {\n  const d = deps([{ code: 'BK1', email: 'an@fpt.edu.vn', status: 'CONFIRMED', reminded: false }]);\n  expect(d.svc.sendReminders()).toBe(1);\n});\n"
+        },
+        {
+          "name": "lib/testkit.js",
+          "language": "javascript",
+          "code": "/* lib/testkit.js — a tiny Jest-compatible test kit (describe · test/it · test.each · beforeEach/afterEach ·\n * expect(...).toBe/toEqual/toBeCloseTo/toThrow/toContain/toMatch/… · .not · .resolves/.rejects · jest.fn()).\n * Loaded BEFORE tests.js. DO NOT EDIT — the grader relies on it.\n * Bộ test nhỏ tương thích Jest, nạp trước tests.js. KHÔNG SỬA tệp này — máy chấm dùng nó.\n */\n(function (G) {\n  if (G.__KIT_DA_NAP__) return; G.__KIT_DA_NAP__ = true;\n  var REG = G.__REG__ = [];\n  var GOC = { ten: null, be: [], ae: [] };\n  var CHONG = [GOC];\n  function show(v) {\n    if (typeof v === 'string') return JSON.stringify(v);\n    if (typeof v === 'function') return '[Function]';\n    if (v instanceof Error) return v.name + ': ' + v.message;\n    if (typeof v === 'number' && !isFinite(v)) return String(v);\n    if (v === undefined) return 'undefined';\n    try { var s = JSON.stringify(v); return s && s.length > 140 ? s.slice(0, 137) + '...' : s; } catch (e) { return String(v); }\n  }\n  function deepEq(a, b) {\n    if (Object.is(a, b)) return true;\n    if (typeof a !== 'object' || typeof b !== 'object' || a === null || b === null) return false;\n    if (a instanceof Date && b instanceof Date) return a.getTime() === b.getTime();\n    if (Array.isArray(a) !== Array.isArray(b)) return false;\n    if (a instanceof Map && b instanceof Map) { if (a.size !== b.size) return false; var ok = true; a.forEach(function (v, k) { if (!b.has(k) || !deepEq(v, b.get(k))) ok = false; }); return ok; }\n    if (a instanceof Set && b instanceof Set) { if (a.size !== b.size) return false; var ok2 = true; a.forEach(function (v) { if (!b.has(v)) ok2 = false; }); return ok2; }\n    var ka = Object.keys(a).filter(function (k) { return a[k] !== undefined; });\n    var kb = Object.keys(b).filter(function (k) { return b[k] !== undefined; });\n    if (ka.length !== kb.length) return false;\n    for (var i = 0; i < ka.length; i++) if (!Object.prototype.hasOwnProperty.call(b, ka[i]) || !deepEq(a[ka[i]], b[ka[i]])) return false;\n    return true;\n  }\n  function Loi(m) { var e = new Error(m); e.name = 'AssertionError'; return e; }\n  function khopLoi(err, x) {\n    if (x === undefined) return true;\n    var msg = err && err.message !== undefined ? String(err.message) : String(err);\n    if (typeof x === 'string') return msg.indexOf(x) >= 0;\n    if (x instanceof RegExp) return x.test(msg);\n    if (typeof x === 'function') return err instanceof x || (err && err.name === x.name);\n    if (x && typeof x === 'object' && 'message' in x) return msg === String(x.message);\n    return false;\n  }\n  function make(actual, neg) {\n    var m = {};\n    function chk(pass, msg) { if (!!pass === neg) throw Loi('expected ' + (neg ? 'NOT ' : '') + msg); }\n    function laMock(f) { if (!f || !f.__laMock) throw Loi('this matcher needs a jest.fn() mock, got ' + show(f)); }\n    m.toBe = function (e) { chk(Object.is(actual, e), show(actual) + ' to be ' + show(e)); };\n    m.toEqual = m.toStrictEqual = function (e) { chk(deepEq(actual, e), show(actual) + ' to equal ' + show(e)); };\n    m.toBeCloseTo = function (e, d) { d = d == null ? 2 : d; chk(typeof actual === 'number' && Math.abs(actual - e) < Math.pow(10, -d) / 2, show(actual) + ' to be close to ' + show(e)); };\n    m.toBeTruthy = function () { chk(!!actual, show(actual) + ' to be truthy'); };\n    m.toBeFalsy = function () { chk(!actual, show(actual) + ' to be falsy'); };\n    m.toBeNull = function () { chk(actual === null, show(actual) + ' to be null'); };\n    m.toBeUndefined = function () { chk(actual === undefined, show(actual) + ' to be undefined'); };\n    m.toBeDefined = function () { chk(actual !== undefined, show(actual) + ' to be defined'); };\n    m.toBeNaN = function () { chk(Number.isNaN(actual), show(actual) + ' to be NaN'); };\n    m.toBeGreaterThan = function (n) { chk(actual > n, show(actual) + ' > ' + show(n)); };\n    m.toBeGreaterThanOrEqual = function (n) { chk(actual >= n, show(actual) + ' >= ' + show(n)); };\n    m.toBeLessThan = function (n) { chk(actual < n, show(actual) + ' < ' + show(n)); };\n    m.toBeLessThanOrEqual = function (n) { chk(actual <= n, show(actual) + ' <= ' + show(n)); };\n    m.toContain = function (x) { chk(actual != null && (typeof actual === 'string' ? actual.indexOf(x) >= 0 : Array.prototype.some.call(actual, function (y) { return Object.is(y, x); })), show(actual) + ' to contain ' + show(x)); };\n    m.toContainEqual = function (x) { chk(actual != null && Array.prototype.some.call(actual, function (y) { return deepEq(y, x); }), show(actual) + ' to contain an item equal to ' + show(x)); };\n    m.toHaveLength = function (n) { chk(actual != null && actual.length === n, show(actual) + ' to have length ' + n); };\n    m.toMatch = function (r) { chk(typeof actual === 'string' && (r instanceof RegExp ? r.test(actual) : actual.indexOf(r) >= 0), show(actual) + ' to match ' + String(r)); };\n    m.toHaveProperty = function (p, v) {\n      var ds = Array.isArray(p) ? p : String(p).split('.'); var o = actual, co = true;\n      for (var i = 0; i < ds.length; i++) { if (o == null || !(ds[i] in Object(o))) { co = false; break; } o = o[ds[i]]; }\n      chk(co && (arguments.length < 2 || deepEq(o, v)), show(actual) + ' to have property ' + String(p) + (arguments.length < 2 ? '' : ' = ' + show(v)));\n    };\n    m.toThrow = m.toThrowError = function (x) {\n      if (typeof actual !== 'function') throw Loi('toThrow() needs a function: write expect(() => fn(...)).toThrow()');\n      var threw = false, err;\n      try { actual(); } catch (e) { threw = true; err = e; }\n      chk(threw && khopLoi(err, x), 'the function to throw' + (x === undefined ? '' : ' ' + (typeof x === 'function' ? x.name : show(x instanceof RegExp ? String(x) : x))) + (threw ? ' (it threw ' + show(err) + ')' : ' (it returned normally)'));\n    };\n    m.toHaveBeenCalled = function () { laMock(actual); chk(actual.mock.calls.length > 0, 'the mock to have been called'); };\n    m.toHaveBeenCalledTimes = function (n) { laMock(actual); chk(actual.mock.calls.length === n, 'the mock to be called ' + n + ' time(s), it was called ' + actual.mock.calls.length); };\n    m.toHaveBeenCalledWith = function () { laMock(actual); var a = Array.prototype.slice.call(arguments); chk(actual.mock.calls.some(function (c) { return deepEq(c, a); }), 'the mock to have been called with ' + show(a) + ' — calls: ' + show(actual.mock.calls)); };\n    m.toHaveBeenLastCalledWith = function () { laMock(actual); var a = Array.prototype.slice.call(arguments); var c = actual.mock.calls[actual.mock.calls.length - 1]; chk(!!c && deepEq(c, a), 'the last call to be ' + show(a)); };\n    return m;\n  }\n  function boc(p, neg, laTuChoi) {\n    var mau = make(undefined, false), o = {};\n    Object.keys(mau).forEach(function (k) {\n      o[k] = function () {\n        var args = arguments;\n        return Promise.resolve(p).then(function (v) {\n          if (laTuChoi) throw Loi('expected the promise to reject, it resolved with ' + show(v));\n          return make(v, neg)[k].apply(null, args);\n        }, function (e) {\n          if (!laTuChoi) throw Loi('expected the promise to resolve, it rejected with ' + show(e));\n          return make(k === 'toThrow' || k === 'toThrowError' ? function () { throw e; } : e, neg)[k].apply(null, args);\n        });\n      };\n    });\n    return o;\n  }\n  G.expect = function (actual) {\n    G.__soExpect = (G.__soExpect || 0) + 1;\n    var o = make(actual, false); o.not = make(actual, true);\n    o.resolves = boc(actual, false, false); o.resolves.not = boc(actual, true, false);\n    o.rejects = boc(actual, false, true); o.rejects.not = boc(actual, true, true);\n    return o;\n  };\n  function fn(impl) {\n    var f = function () {\n      var args = Array.prototype.slice.call(arguments); f.mock.calls.push(args);\n      try {\n        var g = f.__mot.length ? f.__mot.shift() : f.__impl;\n        var r = g ? g.apply(this, args) : f.__tra;\n        f.mock.results.push({ type: 'return', value: r }); return r;\n      } catch (e) { f.mock.results.push({ type: 'throw', value: e }); throw e; }\n    };\n    f.__laMock = true; f.mock = { calls: [], results: [] }; f.__impl = impl || null; f.__mot = []; f.__tra = undefined;\n    f.mockReturnValue = function (v) { f.__impl = null; f.__tra = v; return f; };\n    f.mockReturnValueOnce = function (v) { f.__mot.push(function () { return v; }); return f; };\n    f.mockImplementation = function (g) { f.__impl = g; return f; };\n    f.mockImplementationOnce = function (g) { f.__mot.push(g); return f; };\n    f.mockResolvedValue = function (v) { f.__impl = function () { return Promise.resolve(v); }; return f; };\n    f.mockRejectedValue = function (v) { f.__impl = function () { return Promise.reject(v); }; return f; };\n    f.mockClear = f.mockReset = function () { f.mock.calls = []; f.mock.results = []; return f; };\n    return f;\n  }\n  G.jest = { fn: fn, spyOn: function (obj, ten) { var goc = obj[ten]; var s = fn(function () { return goc.apply(this, arguments); }); obj[ten] = s; s.mockRestore = function () { obj[ten] = goc; }; return s; } };\n  G.describe = function (ten, f) { var k = { ten: String(ten), be: [], ae: [] }; CHONG.push(k); try { f(); } finally { CHONG.pop(); } };\n  G.beforeEach = function (f) { CHONG[CHONG.length - 1].be.push(f); };\n  G.afterEach = function (f) { CHONG[CHONG.length - 1].ae.push(f); };\n  G.test = G.it = function (ten, f) {\n    if (typeof f !== 'function') throw new Error('test(\"' + ten + '\") needs a function body');\n    var duong = CHONG.slice(1).map(function (k) { return k.ten; }).concat([String(ten)]).join(' > ');\n    REG.push({ ten: duong, fn: f, khung: CHONG.slice() });\n  };\n  function dinhDang(ten, args, i) {\n    var j = 0;\n    var s = String(ten).replace(/%[sdipjfo#%]/g, function (m) {\n      if (m === '%%') return '%'; if (m === '%#') return String(i);\n      var v = args[j++]; return m === '%p' || m === '%j' || m === '%o' ? show(v) : String(v);\n    });\n    if (args.length === 1 && args[0] && typeof args[0] === 'object' && !Array.isArray(args[0])) s = s.replace(/\\$([A-Za-z_][A-Za-z0-9_]*)/g, function (m, k) { return k in args[0] ? String(args[0][k]) : m; });\n    return s;\n  }\n  G.test.each = G.it.each = function (rows) {\n    return function (ten, f) {\n      rows.forEach(function (r, i) {\n        var args = Array.isArray(r) ? r : [r];\n        G.test(dinhDang(ten, args, i), function () { return f.apply(null, args); });\n      });\n    };\n  };\n  G.test.skip = G.it.skip = function () {};\n  G.describe.skip = function () {};\n  /** Máy chấm: chạy mọi test đã đăng ký sau khi gán các tên toàn cục trong gan. */\n  G.__chayBo = async function (gan) {\n    for (var k in gan) G[k] = gan[k];\n    var kq = { tong: REG.length, dat: [], truot: [] };\n    for (var i = 0; i < REG.length; i++) {\n      var t = REG[i]; G.__soExpect = 0;\n      try {\n        var be = [], ae = [];\n        t.khung.forEach(function (fr) { be = be.concat(fr.be); ae = fr.ae.concat(ae); });\n        for (var a = 0; a < be.length; a++) await be[a]();\n        await t.fn();\n        for (var b = 0; b < ae.length; b++) await ae[b]();\n        if (!G.__soExpect) kq.truot.push({ ten: t.ten, loi: 'no expect() in this test', rong: true });\n        else kq.dat.push(t.ten);\n      } catch (e) {\n        kq.truot.push({ ten: t.ten, loi: e && e.message !== undefined ? (e.name === 'AssertionError' ? '' : e.name + ': ') + e.message : String(e) });\n      }\n    }\n    return kq;\n  };\n})(globalThis);\n"
+        },
+        {
+          "name": "lib/sut.js",
+          "language": "javascript",
+          "code": "const HOUR = 3600000; // one hour in milliseconds\n"
+        },
+        {
+          "name": "answers/b-pipeline.js",
+          "language": "javascript",
+          "code": "// layer: Unit / component | Integration / API | UI / end-to-end\n// stage: Every push (pre-merge) | Nightly\nconst PIPELINE = {\n  S1: { layer: '', stage: '' },\n  S2: { layer: '', stage: '' },\n  S3: { layer: '', stage: '' },\n  S4: { layer: '', stage: '' },\n};\n"
+        },
+        {
+          "name": "answers/c-tools.js",
+          "language": "javascript",
+          "code": "// Test management tool | Static analysis tool | Test data preparation tool | Coverage tool | Performance testing tool | Monitoring tool | Continuous integration tool\nconst TOOLS = { N1: '', N2: '', N3: '', N4: '', N5: '', N6: '' };\n"
+        },
+        {
+          "name": "answers/d-business.js",
+          "language": "javascript",
+          "code": "const BUSINESS = { breakEven: 0, roi50: 0, mainRisk: '' };\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "tests.js",
+          "language": "javascript",
+          "code": "// ReminderService — unit tests with mocks.\n// Java: @ExtendWith(MockitoExtension.class), @Mock BookingRepository repo, verify(mailer).send(...), verify(repo, never()).markReminded(...)\nconst NOW = 1000 * HOUR;\nfunction deps(bookings) {\n  const repo = { findStartingBetween: jest.fn(() => bookings), markReminded: jest.fn() };\n  const mailer = { send: jest.fn() };\n  const clock = { now: jest.fn(() => NOW) };\n  return { repo, mailer, clock, svc: new ReminderService(repo, mailer, clock) };\n}\nconst bk = (code, status, reminded) => ({ code, email: code.toLowerCase() + '@fpt.edu.vn', status, reminded });\n\ntest('asks the repository for bookings starting 23–25 hours from now', () => {\n  const d = deps([]);\n  d.svc.sendReminders();\n  expect(d.repo.findStartingBetween).toHaveBeenCalledWith(NOW + 23 * HOUR, NOW + 25 * HOUR);\n});\n\ntest('reads the clock once per run', () => {\n  const d = deps([bk('BK1', 'CONFIRMED', false), bk('BK2', 'CONFIRMED', false)]);\n  d.svc.sendReminders();\n  expect(d.clock.now).toHaveBeenCalledTimes(1);\n});\n\ntest('a confirmed booking gets a reminder with its code and is marked', () => {\n  const d = deps([bk('BK1', 'CONFIRMED', false)]);\n  expect(d.svc.sendReminders()).toBe(1);\n  expect(d.mailer.send).toHaveBeenCalledWith('bk1@fpt.edu.vn', 'Reminder: your lab starts tomorrow', 'BK1');\n  expect(d.repo.markReminded).toHaveBeenCalledWith('BK1');\n});\n\ntest.each([['CANCELLED'], ['PENDING']])('a %s booking gets no reminder', (status) => {\n  const d = deps([bk('BK2', status, false)]);\n  expect(d.svc.sendReminders()).toBe(0);\n  expect(d.mailer.send).not.toHaveBeenCalled();\n  expect(d.repo.markReminded).not.toHaveBeenCalled();\n});\n\ntest('a booking already reminded is not reminded twice', () => {\n  const d = deps([bk('BK3', 'CONFIRMED', true)]);\n  expect(d.svc.sendReminders()).toBe(0);\n  expect(d.mailer.send).not.toHaveBeenCalled();\n});\n\ntest('the count is the number of reminders actually sent', () => {\n  const d = deps([bk('BK1', 'CONFIRMED', false), bk('BK2', 'CANCELLED', false), bk('BK3', 'CONFIRMED', true), bk('BK4', 'CONFIRMED', false)]);\n  expect(d.svc.sendReminders()).toBe(2);\n  expect(d.mailer.send).toHaveBeenCalledTimes(2);\n  expect(d.repo.markReminded).toHaveBeenCalledTimes(2);\n});\n"
+        },
+        {
+          "name": "lib/testkit.js",
+          "language": "javascript",
+          "code": "/* lib/testkit.js — a tiny Jest-compatible test kit (describe · test/it · test.each · beforeEach/afterEach ·\n * expect(...).toBe/toEqual/toBeCloseTo/toThrow/toContain/toMatch/… · .not · .resolves/.rejects · jest.fn()).\n * Loaded BEFORE tests.js. DO NOT EDIT — the grader relies on it.\n * Bộ test nhỏ tương thích Jest, nạp trước tests.js. KHÔNG SỬA tệp này — máy chấm dùng nó.\n */\n(function (G) {\n  if (G.__KIT_DA_NAP__) return; G.__KIT_DA_NAP__ = true;\n  var REG = G.__REG__ = [];\n  var GOC = { ten: null, be: [], ae: [] };\n  var CHONG = [GOC];\n  function show(v) {\n    if (typeof v === 'string') return JSON.stringify(v);\n    if (typeof v === 'function') return '[Function]';\n    if (v instanceof Error) return v.name + ': ' + v.message;\n    if (typeof v === 'number' && !isFinite(v)) return String(v);\n    if (v === undefined) return 'undefined';\n    try { var s = JSON.stringify(v); return s && s.length > 140 ? s.slice(0, 137) + '...' : s; } catch (e) { return String(v); }\n  }\n  function deepEq(a, b) {\n    if (Object.is(a, b)) return true;\n    if (typeof a !== 'object' || typeof b !== 'object' || a === null || b === null) return false;\n    if (a instanceof Date && b instanceof Date) return a.getTime() === b.getTime();\n    if (Array.isArray(a) !== Array.isArray(b)) return false;\n    if (a instanceof Map && b instanceof Map) { if (a.size !== b.size) return false; var ok = true; a.forEach(function (v, k) { if (!b.has(k) || !deepEq(v, b.get(k))) ok = false; }); return ok; }\n    if (a instanceof Set && b instanceof Set) { if (a.size !== b.size) return false; var ok2 = true; a.forEach(function (v) { if (!b.has(v)) ok2 = false; }); return ok2; }\n    var ka = Object.keys(a).filter(function (k) { return a[k] !== undefined; });\n    var kb = Object.keys(b).filter(function (k) { return b[k] !== undefined; });\n    if (ka.length !== kb.length) return false;\n    for (var i = 0; i < ka.length; i++) if (!Object.prototype.hasOwnProperty.call(b, ka[i]) || !deepEq(a[ka[i]], b[ka[i]])) return false;\n    return true;\n  }\n  function Loi(m) { var e = new Error(m); e.name = 'AssertionError'; return e; }\n  function khopLoi(err, x) {\n    if (x === undefined) return true;\n    var msg = err && err.message !== undefined ? String(err.message) : String(err);\n    if (typeof x === 'string') return msg.indexOf(x) >= 0;\n    if (x instanceof RegExp) return x.test(msg);\n    if (typeof x === 'function') return err instanceof x || (err && err.name === x.name);\n    if (x && typeof x === 'object' && 'message' in x) return msg === String(x.message);\n    return false;\n  }\n  function make(actual, neg) {\n    var m = {};\n    function chk(pass, msg) { if (!!pass === neg) throw Loi('expected ' + (neg ? 'NOT ' : '') + msg); }\n    function laMock(f) { if (!f || !f.__laMock) throw Loi('this matcher needs a jest.fn() mock, got ' + show(f)); }\n    m.toBe = function (e) { chk(Object.is(actual, e), show(actual) + ' to be ' + show(e)); };\n    m.toEqual = m.toStrictEqual = function (e) { chk(deepEq(actual, e), show(actual) + ' to equal ' + show(e)); };\n    m.toBeCloseTo = function (e, d) { d = d == null ? 2 : d; chk(typeof actual === 'number' && Math.abs(actual - e) < Math.pow(10, -d) / 2, show(actual) + ' to be close to ' + show(e)); };\n    m.toBeTruthy = function () { chk(!!actual, show(actual) + ' to be truthy'); };\n    m.toBeFalsy = function () { chk(!actual, show(actual) + ' to be falsy'); };\n    m.toBeNull = function () { chk(actual === null, show(actual) + ' to be null'); };\n    m.toBeUndefined = function () { chk(actual === undefined, show(actual) + ' to be undefined'); };\n    m.toBeDefined = function () { chk(actual !== undefined, show(actual) + ' to be defined'); };\n    m.toBeNaN = function () { chk(Number.isNaN(actual), show(actual) + ' to be NaN'); };\n    m.toBeGreaterThan = function (n) { chk(actual > n, show(actual) + ' > ' + show(n)); };\n    m.toBeGreaterThanOrEqual = function (n) { chk(actual >= n, show(actual) + ' >= ' + show(n)); };\n    m.toBeLessThan = function (n) { chk(actual < n, show(actual) + ' < ' + show(n)); };\n    m.toBeLessThanOrEqual = function (n) { chk(actual <= n, show(actual) + ' <= ' + show(n)); };\n    m.toContain = function (x) { chk(actual != null && (typeof actual === 'string' ? actual.indexOf(x) >= 0 : Array.prototype.some.call(actual, function (y) { return Object.is(y, x); })), show(actual) + ' to contain ' + show(x)); };\n    m.toContainEqual = function (x) { chk(actual != null && Array.prototype.some.call(actual, function (y) { return deepEq(y, x); }), show(actual) + ' to contain an item equal to ' + show(x)); };\n    m.toHaveLength = function (n) { chk(actual != null && actual.length === n, show(actual) + ' to have length ' + n); };\n    m.toMatch = function (r) { chk(typeof actual === 'string' && (r instanceof RegExp ? r.test(actual) : actual.indexOf(r) >= 0), show(actual) + ' to match ' + String(r)); };\n    m.toHaveProperty = function (p, v) {\n      var ds = Array.isArray(p) ? p : String(p).split('.'); var o = actual, co = true;\n      for (var i = 0; i < ds.length; i++) { if (o == null || !(ds[i] in Object(o))) { co = false; break; } o = o[ds[i]]; }\n      chk(co && (arguments.length < 2 || deepEq(o, v)), show(actual) + ' to have property ' + String(p) + (arguments.length < 2 ? '' : ' = ' + show(v)));\n    };\n    m.toThrow = m.toThrowError = function (x) {\n      if (typeof actual !== 'function') throw Loi('toThrow() needs a function: write expect(() => fn(...)).toThrow()');\n      var threw = false, err;\n      try { actual(); } catch (e) { threw = true; err = e; }\n      chk(threw && khopLoi(err, x), 'the function to throw' + (x === undefined ? '' : ' ' + (typeof x === 'function' ? x.name : show(x instanceof RegExp ? String(x) : x))) + (threw ? ' (it threw ' + show(err) + ')' : ' (it returned normally)'));\n    };\n    m.toHaveBeenCalled = function () { laMock(actual); chk(actual.mock.calls.length > 0, 'the mock to have been called'); };\n    m.toHaveBeenCalledTimes = function (n) { laMock(actual); chk(actual.mock.calls.length === n, 'the mock to be called ' + n + ' time(s), it was called ' + actual.mock.calls.length); };\n    m.toHaveBeenCalledWith = function () { laMock(actual); var a = Array.prototype.slice.call(arguments); chk(actual.mock.calls.some(function (c) { return deepEq(c, a); }), 'the mock to have been called with ' + show(a) + ' — calls: ' + show(actual.mock.calls)); };\n    m.toHaveBeenLastCalledWith = function () { laMock(actual); var a = Array.prototype.slice.call(arguments); var c = actual.mock.calls[actual.mock.calls.length - 1]; chk(!!c && deepEq(c, a), 'the last call to be ' + show(a)); };\n    return m;\n  }\n  function boc(p, neg, laTuChoi) {\n    var mau = make(undefined, false), o = {};\n    Object.keys(mau).forEach(function (k) {\n      o[k] = function () {\n        var args = arguments;\n        return Promise.resolve(p).then(function (v) {\n          if (laTuChoi) throw Loi('expected the promise to reject, it resolved with ' + show(v));\n          return make(v, neg)[k].apply(null, args);\n        }, function (e) {\n          if (!laTuChoi) throw Loi('expected the promise to resolve, it rejected with ' + show(e));\n          return make(k === 'toThrow' || k === 'toThrowError' ? function () { throw e; } : e, neg)[k].apply(null, args);\n        });\n      };\n    });\n    return o;\n  }\n  G.expect = function (actual) {\n    G.__soExpect = (G.__soExpect || 0) + 1;\n    var o = make(actual, false); o.not = make(actual, true);\n    o.resolves = boc(actual, false, false); o.resolves.not = boc(actual, true, false);\n    o.rejects = boc(actual, false, true); o.rejects.not = boc(actual, true, true);\n    return o;\n  };\n  function fn(impl) {\n    var f = function () {\n      var args = Array.prototype.slice.call(arguments); f.mock.calls.push(args);\n      try {\n        var g = f.__mot.length ? f.__mot.shift() : f.__impl;\n        var r = g ? g.apply(this, args) : f.__tra;\n        f.mock.results.push({ type: 'return', value: r }); return r;\n      } catch (e) { f.mock.results.push({ type: 'throw', value: e }); throw e; }\n    };\n    f.__laMock = true; f.mock = { calls: [], results: [] }; f.__impl = impl || null; f.__mot = []; f.__tra = undefined;\n    f.mockReturnValue = function (v) { f.__impl = null; f.__tra = v; return f; };\n    f.mockReturnValueOnce = function (v) { f.__mot.push(function () { return v; }); return f; };\n    f.mockImplementation = function (g) { f.__impl = g; return f; };\n    f.mockImplementationOnce = function (g) { f.__mot.push(g); return f; };\n    f.mockResolvedValue = function (v) { f.__impl = function () { return Promise.resolve(v); }; return f; };\n    f.mockRejectedValue = function (v) { f.__impl = function () { return Promise.reject(v); }; return f; };\n    f.mockClear = f.mockReset = function () { f.mock.calls = []; f.mock.results = []; return f; };\n    return f;\n  }\n  G.jest = { fn: fn, spyOn: function (obj, ten) { var goc = obj[ten]; var s = fn(function () { return goc.apply(this, arguments); }); obj[ten] = s; s.mockRestore = function () { obj[ten] = goc; }; return s; } };\n  G.describe = function (ten, f) { var k = { ten: String(ten), be: [], ae: [] }; CHONG.push(k); try { f(); } finally { CHONG.pop(); } };\n  G.beforeEach = function (f) { CHONG[CHONG.length - 1].be.push(f); };\n  G.afterEach = function (f) { CHONG[CHONG.length - 1].ae.push(f); };\n  G.test = G.it = function (ten, f) {\n    if (typeof f !== 'function') throw new Error('test(\"' + ten + '\") needs a function body');\n    var duong = CHONG.slice(1).map(function (k) { return k.ten; }).concat([String(ten)]).join(' > ');\n    REG.push({ ten: duong, fn: f, khung: CHONG.slice() });\n  };\n  function dinhDang(ten, args, i) {\n    var j = 0;\n    var s = String(ten).replace(/%[sdipjfo#%]/g, function (m) {\n      if (m === '%%') return '%'; if (m === '%#') return String(i);\n      var v = args[j++]; return m === '%p' || m === '%j' || m === '%o' ? show(v) : String(v);\n    });\n    if (args.length === 1 && args[0] && typeof args[0] === 'object' && !Array.isArray(args[0])) s = s.replace(/\\$([A-Za-z_][A-Za-z0-9_]*)/g, function (m, k) { return k in args[0] ? String(args[0][k]) : m; });\n    return s;\n  }\n  G.test.each = G.it.each = function (rows) {\n    return function (ten, f) {\n      rows.forEach(function (r, i) {\n        var args = Array.isArray(r) ? r : [r];\n        G.test(dinhDang(ten, args, i), function () { return f.apply(null, args); });\n      });\n    };\n  };\n  G.test.skip = G.it.skip = function () {};\n  G.describe.skip = function () {};\n  /** Máy chấm: chạy mọi test đã đăng ký sau khi gán các tên toàn cục trong gan. */\n  G.__chayBo = async function (gan) {\n    for (var k in gan) G[k] = gan[k];\n    var kq = { tong: REG.length, dat: [], truot: [] };\n    for (var i = 0; i < REG.length; i++) {\n      var t = REG[i]; G.__soExpect = 0;\n      try {\n        var be = [], ae = [];\n        t.khung.forEach(function (fr) { be = be.concat(fr.be); ae = fr.ae.concat(ae); });\n        for (var a = 0; a < be.length; a++) await be[a]();\n        await t.fn();\n        for (var b = 0; b < ae.length; b++) await ae[b]();\n        if (!G.__soExpect) kq.truot.push({ ten: t.ten, loi: 'no expect() in this test', rong: true });\n        else kq.dat.push(t.ten);\n      } catch (e) {\n        kq.truot.push({ ten: t.ten, loi: e && e.message !== undefined ? (e.name === 'AssertionError' ? '' : e.name + ': ') + e.message : String(e) });\n      }\n    }\n    return kq;\n  };\n})(globalThis);\n"
+        },
+        {
+          "name": "lib/sut.js",
+          "language": "javascript",
+          "code": "const HOUR = 3600000; // one hour in milliseconds\n"
+        },
+        {
+          "name": "answers/b-pipeline.js",
+          "language": "javascript",
+          "code": "const PIPELINE = {\n  S1: { layer: 'Unit / component', stage: 'Every push (pre-merge)' },\n  S2: { layer: 'Integration / API', stage: 'Every push (pre-merge)' },\n  S3: { layer: 'UI / end-to-end', stage: 'Nightly' },\n  S4: { layer: 'Unit / component', stage: 'Every push (pre-merge)' },\n};\n"
+        },
+        {
+          "name": "answers/c-tools.js",
+          "language": "javascript",
+          "code": "const TOOLS = {\n  N1: 'Coverage tool',\n  N2: 'Test data preparation tool',\n  N3: 'Performance testing tool',\n  N4: 'Static analysis tool',\n  N5: 'Continuous integration tool',\n  N6: 'Monitoring tool',\n};\n"
+        },
+        {
+          "name": "answers/d-business.js",
+          "language": "javascript",
+          "code": "// saving per run = 300 − 30 − 40 = 230 min; 13 runs save 2,990 < 3,000, 14 runs save 3,220 ≥ 3,000 → 14.\n// ROI after 50 runs: manual 15000; automated 3000 + 70 × 50 = 6500; (15000 − 6500) / 6500 = 130.8 %.\nconst BUSINESS = { breakEven: 14, roi50: 130.8, mainRisk: 'Underestimated maintenance effort' };\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A: interaction checks (window, recipient, subject, code, markReminded, never for CANCELLED/PENDING/already reminded, count of sent mails, one clock read). B: S1 unit/push · S2 integration/push · S3 UI/nightly · S4 unit/push. C: coverage · test data · performance · static analysis · CI · monitoring. D: break-even 14 runs (3,000 ÷ 230 = 13.04 → 14); ROI after 50 runs (15,000 − 6,500) ÷ 6,500 = 130.8%; the usual killer is underestimated maintenance.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "lib/testkit.js",
+          "lib/sut.js",
+          "tests.js",
+          "answers/b-pipeline.js",
+          "answers/c-tools.js",
+          "answers/d-business.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Every test passes against the CORRECT implementation (your expected values are right)",
+              "vi": "Mọi test ĐẠT trên bản cài đặt ĐÚNG (giá trị mong đợi của bạn đúng)"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nclass ReminderService {\n  constructor(repo, mailer, clock) {\n    this.repo = repo;\n    this.mailer = mailer;\n    this.clock = clock;\n  }\n\n  // Sends \"Reminder: your lab starts tomorrow\" for bookings starting 23–25 hours from now.\n  sendReminders() {\n    const now = this.clock.now();\n    const due = this.repo.findStartingBetween(now + 23 * HOUR, now + 25 * HOUR);\n    let sent = 0;\n    for (const b of due) {\n      if (b.status !== 'CONFIRMED' || b.reminded) continue;\n      this.mailer.send(b.email, 'Reminder: your lab starts tomorrow', b.code);\n      this.repo.markReminded(b.code);\n      sent++;\n    }\n    return sent;\n  }\n}\nreturn { \"ReminderService\": ReminderService };\n})();\nconst r = await __chayBo(__DUNG);\nif (typeof ReminderService !== 'undefined' && ReminderService !== globalThis[\"ReminderService\"]) return 'tests.js must not declare ReminderService itself (let/const/class/copy of the code) — call the global ReminderService that the grader provides';\nif (!r.tong) return 'No tests found — write test(...) blocks in tests.js';\nif (r.truot.length) return r.truot.length + ' of ' + r.tong + ' test(s) FAIL on the correct code: ' + r.truot.slice(0, 3).map(function (x) { return '\"' + x.ten + '\" — ' + x.loi; }).join(' | ');\nreturn 'OK';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "The suite has at least 7 tests, each with at least one expect()",
+              "vi": "Bộ test có ít nhất 7 test, mỗi test có ít nhất một expect()"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nclass ReminderService {\n  constructor(repo, mailer, clock) {\n    this.repo = repo;\n    this.mailer = mailer;\n    this.clock = clock;\n  }\n\n  // Sends \"Reminder: your lab starts tomorrow\" for bookings starting 23–25 hours from now.\n  sendReminders() {\n    const now = this.clock.now();\n    const due = this.repo.findStartingBetween(now + 23 * HOUR, now + 25 * HOUR);\n    let sent = 0;\n    for (const b of due) {\n      if (b.status !== 'CONFIRMED' || b.reminded) continue;\n      this.mailer.send(b.email, 'Reminder: your lab starts tomorrow', b.code);\n      this.repo.markReminded(b.code);\n      sent++;\n    }\n    return sent;\n  }\n}\nreturn { \"ReminderService\": ReminderService };\n})();\nconst r = await __chayBo(__DUNG);\nconst rong = r.truot.filter(function (x) { return x.rong; });\nif (rong.length) return 'test without any expect(): \"' + rong[0].ten + '\"';\nif (r.tong < 7) return 'only ' + r.tong + ' test(s) — write at least 7';\nreturn 'OK';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M1: the window is 0–24 hours instead of 23–25",
+              "vi": "Giết mutant M1: cửa sổ 0–24 giờ thay vì 23–25"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nclass ReminderService {\n  constructor(repo, mailer, clock) {\n    this.repo = repo;\n    this.mailer = mailer;\n    this.clock = clock;\n  }\n\n  // Sends \"Reminder: your lab starts tomorrow\" for bookings starting 23–25 hours from now.\n  sendReminders() {\n    const now = this.clock.now();\n    const due = this.repo.findStartingBetween(now + 23 * HOUR, now + 25 * HOUR);\n    let sent = 0;\n    for (const b of due) {\n      if (b.status !== 'CONFIRMED' || b.reminded) continue;\n      this.mailer.send(b.email, 'Reminder: your lab starts tomorrow', b.code);\n      this.repo.markReminded(b.code);\n      sent++;\n    }\n    return sent;\n  }\n}\nreturn { \"ReminderService\": ReminderService };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nclass ReminderService {\n  constructor(repo, mailer, clock) {\n    this.repo = repo;\n    this.mailer = mailer;\n    this.clock = clock;\n  }\n\n  // Sends \"Reminder: your lab starts tomorrow\" for bookings starting 23–25 hours from now.\n  sendReminders() {\n    const now = this.clock.now();\n    const due = this.repo.findStartingBetween(now, now + 24 * HOUR);\n    let sent = 0;\n    for (const b of due) {\n      if (b.status !== 'CONFIRMED' || b.reminded) continue;\n      this.mailer.send(b.email, 'Reminder: your lab starts tomorrow', b.code);\n      this.repo.markReminded(b.code);\n      sent++;\n    }\n    return sent;\n  }\n}\nreturn { \"ReminderService\": ReminderService };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M2: cancelled bookings also get a reminder",
+              "vi": "Giết mutant M2: booking đã huỷ cũng nhận nhắc"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nclass ReminderService {\n  constructor(repo, mailer, clock) {\n    this.repo = repo;\n    this.mailer = mailer;\n    this.clock = clock;\n  }\n\n  // Sends \"Reminder: your lab starts tomorrow\" for bookings starting 23–25 hours from now.\n  sendReminders() {\n    const now = this.clock.now();\n    const due = this.repo.findStartingBetween(now + 23 * HOUR, now + 25 * HOUR);\n    let sent = 0;\n    for (const b of due) {\n      if (b.status !== 'CONFIRMED' || b.reminded) continue;\n      this.mailer.send(b.email, 'Reminder: your lab starts tomorrow', b.code);\n      this.repo.markReminded(b.code);\n      sent++;\n    }\n    return sent;\n  }\n}\nreturn { \"ReminderService\": ReminderService };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nclass ReminderService {\n  constructor(repo, mailer, clock) {\n    this.repo = repo;\n    this.mailer = mailer;\n    this.clock = clock;\n  }\n\n  // Sends \"Reminder: your lab starts tomorrow\" for bookings starting 23–25 hours from now.\n  sendReminders() {\n    const now = this.clock.now();\n    const due = this.repo.findStartingBetween(now + 23 * HOUR, now + 25 * HOUR);\n    let sent = 0;\n    for (const b of due) {\n      if (b.reminded) continue;\n      this.mailer.send(b.email, 'Reminder: your lab starts tomorrow', b.code);\n      this.repo.markReminded(b.code);\n      sent++;\n    }\n    return sent;\n  }\n}\nreturn { \"ReminderService\": ReminderService };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M3: the booking is never marked as reminded",
+              "vi": "Giết mutant M3: không đánh dấu đã nhắc"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nclass ReminderService {\n  constructor(repo, mailer, clock) {\n    this.repo = repo;\n    this.mailer = mailer;\n    this.clock = clock;\n  }\n\n  // Sends \"Reminder: your lab starts tomorrow\" for bookings starting 23–25 hours from now.\n  sendReminders() {\n    const now = this.clock.now();\n    const due = this.repo.findStartingBetween(now + 23 * HOUR, now + 25 * HOUR);\n    let sent = 0;\n    for (const b of due) {\n      if (b.status !== 'CONFIRMED' || b.reminded) continue;\n      this.mailer.send(b.email, 'Reminder: your lab starts tomorrow', b.code);\n      this.repo.markReminded(b.code);\n      sent++;\n    }\n    return sent;\n  }\n}\nreturn { \"ReminderService\": ReminderService };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nclass ReminderService {\n  constructor(repo, mailer, clock) {\n    this.repo = repo;\n    this.mailer = mailer;\n    this.clock = clock;\n  }\n\n  // Sends \"Reminder: your lab starts tomorrow\" for bookings starting 23–25 hours from now.\n  sendReminders() {\n    const now = this.clock.now();\n    const due = this.repo.findStartingBetween(now + 23 * HOUR, now + 25 * HOUR);\n    let sent = 0;\n    for (const b of due) {\n      if (b.status !== 'CONFIRMED' || b.reminded) continue;\n      this.mailer.send(b.email, 'Reminder: your lab starts tomorrow', b.code);\n      sent++;\n    }\n    return sent;\n  }\n}\nreturn { \"ReminderService\": ReminderService };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M4: a booking already reminded is reminded again",
+              "vi": "Giết mutant M4: booking đã nhắc bị nhắc lại"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nclass ReminderService {\n  constructor(repo, mailer, clock) {\n    this.repo = repo;\n    this.mailer = mailer;\n    this.clock = clock;\n  }\n\n  // Sends \"Reminder: your lab starts tomorrow\" for bookings starting 23–25 hours from now.\n  sendReminders() {\n    const now = this.clock.now();\n    const due = this.repo.findStartingBetween(now + 23 * HOUR, now + 25 * HOUR);\n    let sent = 0;\n    for (const b of due) {\n      if (b.status !== 'CONFIRMED' || b.reminded) continue;\n      this.mailer.send(b.email, 'Reminder: your lab starts tomorrow', b.code);\n      this.repo.markReminded(b.code);\n      sent++;\n    }\n    return sent;\n  }\n}\nreturn { \"ReminderService\": ReminderService };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nclass ReminderService {\n  constructor(repo, mailer, clock) {\n    this.repo = repo;\n    this.mailer = mailer;\n    this.clock = clock;\n  }\n\n  // Sends \"Reminder: your lab starts tomorrow\" for bookings starting 23–25 hours from now.\n  sendReminders() {\n    const now = this.clock.now();\n    const due = this.repo.findStartingBetween(now + 23 * HOUR, now + 25 * HOUR);\n    let sent = 0;\n    for (const b of due) {\n      if (b.status !== 'CONFIRMED') continue;\n      this.mailer.send(b.email, 'Reminder: your lab starts tomorrow', b.code);\n      this.repo.markReminded(b.code);\n      sent++;\n    }\n    return sent;\n  }\n}\nreturn { \"ReminderService\": ReminderService };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M5: the reminder carries no booking code",
+              "vi": "Giết mutant M5: thư nhắc không có mã booking"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nclass ReminderService {\n  constructor(repo, mailer, clock) {\n    this.repo = repo;\n    this.mailer = mailer;\n    this.clock = clock;\n  }\n\n  // Sends \"Reminder: your lab starts tomorrow\" for bookings starting 23–25 hours from now.\n  sendReminders() {\n    const now = this.clock.now();\n    const due = this.repo.findStartingBetween(now + 23 * HOUR, now + 25 * HOUR);\n    let sent = 0;\n    for (const b of due) {\n      if (b.status !== 'CONFIRMED' || b.reminded) continue;\n      this.mailer.send(b.email, 'Reminder: your lab starts tomorrow', b.code);\n      this.repo.markReminded(b.code);\n      sent++;\n    }\n    return sent;\n  }\n}\nreturn { \"ReminderService\": ReminderService };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nclass ReminderService {\n  constructor(repo, mailer, clock) {\n    this.repo = repo;\n    this.mailer = mailer;\n    this.clock = clock;\n  }\n\n  // Sends \"Reminder: your lab starts tomorrow\" for bookings starting 23–25 hours from now.\n  sendReminders() {\n    const now = this.clock.now();\n    const due = this.repo.findStartingBetween(now + 23 * HOUR, now + 25 * HOUR);\n    let sent = 0;\n    for (const b of due) {\n      if (b.status !== 'CONFIRMED' || b.reminded) continue;\n      this.mailer.send(b.email, 'Reminder: your lab starts tomorrow', undefined);\n      this.repo.markReminded(b.code);\n      sent++;\n    }\n    return sent;\n  }\n}\nreturn { \"ReminderService\": ReminderService };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "Hidden mutant M6 is killed",
+              "vi": "Mutant ẩn M6 bị giết"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nclass ReminderService {\n  constructor(repo, mailer, clock) {\n    this.repo = repo;\n    this.mailer = mailer;\n    this.clock = clock;\n  }\n\n  // Sends \"Reminder: your lab starts tomorrow\" for bookings starting 23–25 hours from now.\n  sendReminders() {\n    const now = this.clock.now();\n    const due = this.repo.findStartingBetween(now + 23 * HOUR, now + 25 * HOUR);\n    let sent = 0;\n    for (const b of due) {\n      if (b.status !== 'CONFIRMED' || b.reminded) continue;\n      this.mailer.send(b.email, 'Reminder: your lab starts tomorrow', b.code);\n      this.repo.markReminded(b.code);\n      sent++;\n    }\n    return sent;\n  }\n}\nreturn { \"ReminderService\": ReminderService };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nclass ReminderService {\n  constructor(repo, mailer, clock) {\n    this.repo = repo;\n    this.mailer = mailer;\n    this.clock = clock;\n  }\n\n  // Sends \"Reminder: your lab starts tomorrow\" for bookings starting 23–25 hours from now.\n  sendReminders() {\n    const now = this.clock.now();\n    const due = this.repo.findStartingBetween(now + 23 * HOUR, now + 25 * HOUR);\n    let sent = 0;\n    for (const b of due) {\n      if (b.status !== 'CONFIRMED' || b.reminded) continue;\n      this.mailer.send(b.email, 'Reminder: your lab starts tomorrow', b.code);\n      this.repo.markReminded(b.code);\n      sent++;\n    }\n    return due.length;\n  }\n}\nreturn { \"ReminderService\": ReminderService };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED",
+            "an": true,
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "Hidden mutant M7 is killed",
+              "vi": "Mutant ẩn M7 bị giết"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nclass ReminderService {\n  constructor(repo, mailer, clock) {\n    this.repo = repo;\n    this.mailer = mailer;\n    this.clock = clock;\n  }\n\n  // Sends \"Reminder: your lab starts tomorrow\" for bookings starting 23–25 hours from now.\n  sendReminders() {\n    const now = this.clock.now();\n    const due = this.repo.findStartingBetween(now + 23 * HOUR, now + 25 * HOUR);\n    let sent = 0;\n    for (const b of due) {\n      if (b.status !== 'CONFIRMED' || b.reminded) continue;\n      this.mailer.send(b.email, 'Reminder: your lab starts tomorrow', b.code);\n      this.repo.markReminded(b.code);\n      sent++;\n    }\n    return sent;\n  }\n}\nreturn { \"ReminderService\": ReminderService };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nclass ReminderService {\n  constructor(repo, mailer, clock) {\n    this.repo = repo;\n    this.mailer = mailer;\n    this.clock = clock;\n  }\n\n  // Sends \"Reminder: your lab starts tomorrow\" for bookings starting 23–25 hours from now.\n  sendReminders() {\n    const now = this.clock.now();\n    const due = this.repo.findStartingBetween(now + 23 * HOUR, now + 25 * HOUR);\n    let sent = 0;\n    for (const b of due) {\n      if (b.status === 'CANCELLED' || b.reminded) continue;\n      this.mailer.send(b.email, 'Reminder: your lab starts tomorrow', b.code);\n      this.repo.markReminded(b.code);\n      sent++;\n    }\n    return sent;\n  }\n}\nreturn { \"ReminderService\": ReminderService };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED",
+            "an": true,
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "Hidden mutant M8 is killed",
+              "vi": "Mutant ẩn M8 bị giết"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nclass ReminderService {\n  constructor(repo, mailer, clock) {\n    this.repo = repo;\n    this.mailer = mailer;\n    this.clock = clock;\n  }\n\n  // Sends \"Reminder: your lab starts tomorrow\" for bookings starting 23–25 hours from now.\n  sendReminders() {\n    const now = this.clock.now();\n    const due = this.repo.findStartingBetween(now + 23 * HOUR, now + 25 * HOUR);\n    let sent = 0;\n    for (const b of due) {\n      if (b.status !== 'CONFIRMED' || b.reminded) continue;\n      this.mailer.send(b.email, 'Reminder: your lab starts tomorrow', b.code);\n      this.repo.markReminded(b.code);\n      sent++;\n    }\n    return sent;\n  }\n}\nreturn { \"ReminderService\": ReminderService };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nclass ReminderService {\n  constructor(repo, mailer, clock) {\n    this.repo = repo;\n    this.mailer = mailer;\n    this.clock = clock;\n  }\n\n  // Sends \"Reminder: your lab starts tomorrow\" for bookings starting 23–25 hours from now.\n  sendReminders() {\n    const now = this.clock.now();\n    const due = this.repo.findStartingBetween(this.clock.now() + 23 * HOUR, this.clock.now() + 25 * HOUR);\n    let sent = 0;\n    for (const b of due) {\n      if (b.status !== 'CONFIRMED' || b.reminded) continue;\n      this.mailer.send(b.email, 'Reminder: your lab starts tomorrow', b.code);\n      this.repo.markReminded(b.code);\n      sent++;\n    }\n    return sent;\n  }\n}\nreturn { \"ReminderService\": ReminderService };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED",
+            "an": true,
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — pyramid layer of S1",
+              "vi": "B — tầng kim tự tháp của S1"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((PIPELINE.S1 || {}).layer); } catch (e) { return '(PIPELINE.S1 || {}).layer is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(PIPELINE.S1 || {}).layer is empty';\n  var chap = [\"Unit / component\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "B — CI stage of S1",
+              "vi": "B — stage CI của S1"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((PIPELINE.S1 || {}).stage); } catch (e) { return '(PIPELINE.S1 || {}).stage is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(PIPELINE.S1 || {}).stage is empty';\n  var chap = [\"Every push (pre-merge)\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "B — pyramid layer of S2",
+              "vi": "B — tầng kim tự tháp của S2"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((PIPELINE.S2 || {}).layer); } catch (e) { return '(PIPELINE.S2 || {}).layer is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(PIPELINE.S2 || {}).layer is empty';\n  var chap = [\"Integration / API\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "B — CI stage of S2",
+              "vi": "B — stage CI của S2"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((PIPELINE.S2 || {}).stage); } catch (e) { return '(PIPELINE.S2 || {}).stage is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(PIPELINE.S2 || {}).stage is empty';\n  var chap = [\"Every push (pre-merge)\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "B — pyramid layer of S3",
+              "vi": "B — tầng kim tự tháp của S3"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((PIPELINE.S3 || {}).layer); } catch (e) { return '(PIPELINE.S3 || {}).layer is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(PIPELINE.S3 || {}).layer is empty';\n  var chap = [\"UI / end-to-end\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "B — CI stage of S3",
+              "vi": "B — stage CI của S3"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((PIPELINE.S3 || {}).stage); } catch (e) { return '(PIPELINE.S3 || {}).stage is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(PIPELINE.S3 || {}).stage is empty';\n  var chap = [\"Nightly\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "B — pyramid layer of S4",
+              "vi": "B — tầng kim tự tháp của S4"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((PIPELINE.S4 || {}).layer); } catch (e) { return '(PIPELINE.S4 || {}).layer is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(PIPELINE.S4 || {}).layer is empty';\n  var chap = [\"Unit / component\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "B — CI stage of S4",
+              "vi": "B — stage CI của S4"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((PIPELINE.S4 || {}).stage); } catch (e) { return '(PIPELINE.S4 || {}).stage is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(PIPELINE.S4 || {}).stage is empty';\n  var chap = [\"Every push (pre-merge)\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — tool type for N1",
+              "vi": "C — loại công cụ cho N1"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (TOOLS.N1); } catch (e) { return 'TOOLS.N1 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'TOOLS.N1 is empty';\n  var chap = [\"Coverage tool\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — tool type for N2",
+              "vi": "C — loại công cụ cho N2"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (TOOLS.N2); } catch (e) { return 'TOOLS.N2 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'TOOLS.N2 is empty';\n  var chap = [\"Test data preparation tool\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — tool type for N3",
+              "vi": "C — loại công cụ cho N3"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (TOOLS.N3); } catch (e) { return 'TOOLS.N3 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'TOOLS.N3 is empty';\n  var chap = [\"Performance testing tool\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — tool type for N4",
+              "vi": "C — loại công cụ cho N4"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (TOOLS.N4); } catch (e) { return 'TOOLS.N4 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'TOOLS.N4 is empty';\n  var chap = [\"Static analysis tool\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — tool type for N5",
+              "vi": "C — loại công cụ cho N5"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (TOOLS.N5); } catch (e) { return 'TOOLS.N5 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'TOOLS.N5 is empty';\n  var chap = [\"Continuous integration tool\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — tool type for N6",
+              "vi": "C — loại công cụ cho N6"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (TOOLS.N6); } catch (e) { return 'TOOLS.N6 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'TOOLS.N6 is empty';\n  var chap = [\"Monitoring tool\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "D — break-even (runs)",
+              "vi": "D — hoà vốn (số lần chạy)"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (BUSINESS.breakEven); } catch (e) { return 'BUSINESS.breakEven is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'BUSINESS.breakEven is empty';\n  var chap = [14];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"so\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"so\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"so\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "D — ROI after 50 runs (%)",
+              "vi": "D — ROI sau 50 lần chạy (%)"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (BUSINESS.roi50); } catch (e) { return 'BUSINESS.roi50 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'BUSINESS.roi50 is empty';\n  var chap = [130.8];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"so\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"so\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 0.06; }); }\n  else if (\"so\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "D — what most often breaks the business case",
+              "vi": "D — điều thường phá luận chứng nhất"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (BUSINESS.mainRisk); } catch (e) { return 'BUSINESS.mainRisk is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'BUSINESS.mainRisk is empty';\n  var chap = [\"Underestimated maintenance effort\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. A1 Mocks — listed defects",
+            "diem": 4
+          },
+          {
+            "ma": "f2",
+            "ten": "2. A2 Mocks — hidden defects",
+            "diem": 1
+          },
+          {
+            "ma": "f3",
+            "ten": "3. B–C. Pipeline and tools",
+            "diem": 3
+          },
+          {
+            "ma": "f4",
+            "ten": "4. D. Business case",
+            "diem": 2
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Chỉ kiểm số trả về — mutant không đánh dấu đã nhắc vẫn trả 1."
+        },
+        {
+          "loi": "Đặt bộ Selenium 55 phút vào cổng mỗi lần push."
+        },
+        {
+          "loi": "Quên chi phí bảo trì khi tính hoà vốn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "mutant",
+          "vi": "bản đột biến — bản mã cố ý cài một lỗi nhỏ để thử độ mạnh của bộ test"
+        },
+        {
+          "en": "kill a mutant",
+          "vi": "\"giết\" mutant — có test đạt trên mã đúng nhưng trượt trên mutant"
+        },
+        {
+          "en": "assertion",
+          "vi": "phép khẳng định (expect/assertEquals) — so thực tế với mong đợi"
+        },
+        {
+          "en": "Arrange–Act–Assert (AAA)",
+          "vi": "mẫu viết test 3 bước: chuẩn bị – gọi – khẳng định"
+        },
+        {
+          "en": "parameterized test",
+          "vi": "test tham số hoá — một thân test, nhiều bộ dữ liệu (@ParameterizedTest / test.each)"
+        },
+        {
+          "en": "expected result",
+          "vi": "kết quả mong đợi — lấy từ ĐẶC TẢ, không lấy từ mã"
+        },
+        {
+          "en": "mock",
+          "vi": "đối tượng giả có kiểm tương tác"
+        },
+        {
+          "en": "verify",
+          "vi": "kiểm một lời gọi đã xảy ra (Mockito)"
+        },
+        {
+          "en": "nightly build",
+          "vi": "bản build chạy ban đêm"
+        }
+      ]
+    }
+  ]
+}

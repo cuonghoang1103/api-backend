@@ -409,3 +409,490 @@ export default function App() {
   );
 }
 `;
+
+// ─────────────────────────── MỐC 6 (form · sự kiện) ───────────────────────────
+export const BOOKING_FORM_M6 = `// src/components/BookingForm.js — form đặt phòng: một state object, một handler, lỗi theo ô + luật nghiệp vụ
+import { useState } from 'react';
+import PropTypes from 'prop-types';
+import { Button, Form } from 'react-bootstrap';
+import { addMinutes, validateBooking } from '../domain/booking';
+
+const EMPTY = { name: '', student: '', duration: '60', purpose: '' };
+
+export function fieldErrors(values, slot) {
+  const e = {};
+  if (!slot) e.slot = 'Choose a start time first';
+  if (values.name.trim().length < 2) e.name = 'Name is required';
+  if (!/^[A-Z]{2}\\d{6}$/.test(values.student.trim())) e.student = 'Student code looks like HE180001';
+  if (values.purpose.trim().length < 5) e.purpose = 'Purpose needs at least 5 characters';
+  return e;
+}
+
+export default function BookingForm({ room, slot, bookings, onBook, initial = EMPTY }) {
+  const [values, setValues] = useState({ ...EMPTY, ...initial });
+  const [errors, setErrors] = useState({});
+  const [ruleErrors, setRuleErrors] = useState([]);
+
+  const handleChange = (e) => setValues((v) => ({ ...v, [e.target.name]: e.target.value }));
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const fe = fieldErrors(values, slot);
+    setErrors(fe);
+    setRuleErrors([]);
+    if (Object.keys(fe).length > 0) return;
+    const booking = {
+      roomId: room.id,
+      student: values.student.trim(),
+      name: values.name.trim(),
+      start: slot,
+      end: addMinutes(slot, Number(values.duration)),
+      purpose: values.purpose.trim(),
+    };
+    const rules = validateBooking(booking, bookings);
+    if (rules.length > 0) {
+      setRuleErrors(rules);
+      return;
+    }
+    onBook(booking);
+    setValues({ ...EMPTY, ...initial });
+  };
+
+  return (
+    <Form id="booking-form" noValidate onSubmit={handleSubmit}>
+      {errors.slot && <p className="error" id="err-slot">{errors.slot}</p>}
+      <Form.Group className="mb-2" controlId="name">
+        <Form.Label>Name</Form.Label>
+        <Form.Control name="name" value={values.name} onChange={handleChange} isInvalid={!!errors.name} />
+        {errors.name && <p className="error" id="err-name">{errors.name}</p>}
+      </Form.Group>
+      <Form.Group className="mb-2" controlId="student">
+        <Form.Label>Student code</Form.Label>
+        <Form.Control name="student" value={values.student} onChange={handleChange} isInvalid={!!errors.student} />
+        {errors.student && <p className="error" id="err-student">{errors.student}</p>}
+      </Form.Group>
+      <Form.Group className="mb-2" controlId="duration">
+        <Form.Label>Duration</Form.Label>
+        <Form.Select name="duration" value={values.duration} onChange={handleChange}>
+          <option value="30">30 min</option>
+          <option value="60">60 min</option>
+          <option value="90">90 min</option>
+          <option value="120">120 min</option>
+        </Form.Select>
+      </Form.Group>
+      <Form.Group className="mb-2" controlId="purpose">
+        <Form.Label>Purpose</Form.Label>
+        <Form.Control name="purpose" value={values.purpose} onChange={handleChange} isInvalid={!!errors.purpose} />
+        {errors.purpose && <p className="error" id="err-purpose">{errors.purpose}</p>}
+      </Form.Group>
+      {ruleErrors.map((m) => <p key={m} className="error rule-error">{m}</p>)}
+      <Button id="btn-book" type="submit">Book {room.name}</Button>
+    </Form>
+  );
+}
+
+BookingForm.propTypes = {
+  room: PropTypes.shape({ id: PropTypes.number.isRequired, name: PropTypes.string.isRequired }).isRequired,
+  slot: PropTypes.string,
+  bookings: PropTypes.array.isRequired,
+  onBook: PropTypes.func.isRequired,
+  initial: PropTypes.object,
+};
+`;
+
+export const APP_M6 = `// src/App.js — mốc 6: bookings thành state; form đặt phòng thêm lượt mới (cập nhật thẻ, lịch, ô trống)
+import { useState } from 'react';
+import { Button, Card, Col, Container, Navbar, Row } from 'react-bootstrap';
+import RoomCard from './components/RoomCard';
+import SlotPicker from './components/SlotPicker';
+import BookingForm from './components/BookingForm';
+import { BOOKINGS, ROOMS } from './data/seed';
+import { addMinutes, formatRange, freeSlots, sortBookings } from './domain/booking';
+
+export default function App() {
+  const [bookings, setBookings] = useState(BOOKINGS);
+  const [selectedRoomId, setSelectedRoomId] = useState(null);
+  const [selectedSlot, setSelectedSlot] = useState(null);
+  const [message, setMessage] = useState('');
+  const sorted = sortBookings(bookings);
+  const selectedRoom = ROOMS.find((r) => r.id === selectedRoomId) ?? null;
+
+  const selectRoom = (id) => {
+    setSelectedRoomId(id);
+    setSelectedSlot(null);
+    setMessage('');
+  };
+
+  const book = (booking) => {
+    const id = Math.max(0, ...bookings.map((b) => b.id)) + 1;
+    const saved = { ...booking, id };
+    setBookings((list) => [...list, saved]);
+    setSelectedSlot(null);
+    setMessage(´Booked @{selectedRoom.name} @{formatRange(saved).split(' (')[0]} for @{saved.name}´);
+  };
+
+  return (
+    <>
+      <Navbar bg="primary" variant="dark" expand="md" id="app-nav">
+        <Container>
+          <Navbar.Brand id="title">CT Booking</Navbar.Brand>
+          <Navbar.Text id="summary" className="text-white">{ROOMS.length} rooms · {bookings.length} bookings today</Navbar.Text>
+        </Container>
+      </Navbar>
+      <Container className="py-4">
+        {message && <p id="booking-success" className="success">{message}</p>}
+        <Row className="g-3">
+          {ROOMS.map((room) => {
+            const free = freeSlots(room.id, bookings);
+            return (
+              <Col key={room.id} xs={12} md={6} lg={4}>
+                <RoomCard
+                  room={room}
+                  bookings={sorted.filter((b) => b.roomId === room.id)}
+                  freeCount={free.length}
+                  firstFree={free[0]}
+                  selected={room.id === selectedRoomId}
+                  onSelect={selectRoom}
+                />
+              </Col>
+            );
+          })}
+        </Row>
+        {selectedRoom && (
+          <Card className="mt-4" id="selected-panel">
+            <Card.Body>
+              <Card.Title id="selected-room">Selected: {selectedRoom.name}</Card.Title>
+              <SlotPicker slots={freeSlots(selectedRoom.id, bookings)} value={selectedSlot} onChange={setSelectedSlot} />
+              <p id="selected-slot" className="mt-2 mb-2">
+                {selectedSlot ? ´Selected slot: @{selectedSlot}–@{addMinutes(selectedSlot, 30)}´ : 'Choose a start time'}
+              </p>
+              <BookingForm key={selectedRoom.id} room={selectedRoom} slot={selectedSlot} bookings={bookings} onBook={book} />
+              <Button id="clear-selection" variant="link" onClick={() => selectRoom(null)}>Clear selection</Button>
+            </Card.Body>
+          </Card>
+        )}
+      </Container>
+    </>
+  );
+}
+`;
+
+// ─────────────────────────── MỐC 7 (Context) ───────────────────────────
+export const M7_FILES = {
+  'src/context/BookingContext.js': `// src/context/BookingContext.js — bookings dùng chung cả app (thay cho props truyền nhiều tầng)
+import { createContext, useContext, useMemo, useState } from 'react';
+import { BOOKINGS } from '../data/seed';
+
+const BookingContext = createContext(null);
+
+export function BookingProvider({ children }) {
+  const [bookings, setBookings] = useState(BOOKINGS);
+
+  const value = useMemo(() => {
+    const addBooking = (booking) => {
+      const saved = { ...booking, id: Math.max(0, ...bookings.map((b) => b.id)) + 1 };
+      setBookings((list) => [...list, saved]);
+      return saved;
+    };
+    const cancelBooking = (id) => setBookings((list) => list.filter((b) => b.id !== id));
+    return { bookings, addBooking, cancelBooking };
+  }, [bookings]);
+
+  return <BookingContext.Provider value={value}>{children}</BookingContext.Provider>;
+}
+
+export function useBookings() {
+  const ctx = useContext(BookingContext);
+  if (!ctx) throw new Error('useBookings must be used inside BookingProvider');
+  return ctx;
+}
+`,
+  'src/context/StudentContext.js': `// src/context/StudentContext.js — sinh viên đang đăng nhập
+import { createContext, useContext, useMemo, useState } from 'react';
+
+const StudentContext = createContext(null);
+
+export function StudentProvider({ children }) {
+  const [student, setStudent] = useState(null);
+  const value = useMemo(
+    () => ({ student, login: (name, code) => setStudent({ name, code }), logout: () => setStudent(null) }),
+    [student],
+  );
+  return <StudentContext.Provider value={value}>{children}</StudentContext.Provider>;
+}
+
+export function useStudent() {
+  const ctx = useContext(StudentContext);
+  if (!ctx) throw new Error('useStudent must be used inside StudentProvider');
+  return ctx;
+}
+`,
+  'src/components/StudentArea.js': `// src/components/StudentArea.js — đăng nhập nhanh bằng tên + mã SV (đọc/ghi qua context)
+import { useState } from 'react';
+import { Button, Form } from 'react-bootstrap';
+import { useStudent } from '../context/StudentContext';
+
+export default function StudentArea() {
+  const { student, login, logout } = useStudent();
+  const [name, setName] = useState('');
+  const [code, setCode] = useState('');
+
+  if (student) {
+    return (
+      <div className="d-flex align-items-center gap-2 text-white">
+        <span id="current-student">{student.name} ({student.code})</span>
+        <Button id="logout" size="sm" variant="light" onClick={logout}>Log out</Button>
+      </div>
+    );
+  }
+  const submit = (e) => {
+    e.preventDefault();
+    if (name.trim() && /^[A-Z]{2}\\d{6}$/.test(code.trim())) login(name.trim(), code.trim());
+  };
+  return (
+    <Form id="login-form" className="d-flex gap-2" onSubmit={submit}>
+      <Form.Control id="login-name" size="sm" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
+      <Form.Control id="login-code" size="sm" placeholder="HE180001" value={code} onChange={(e) => setCode(e.target.value)} />
+      <Button id="login" size="sm" variant="light" type="submit">Log in</Button>
+    </Form>
+  );
+}
+`,
+  'src/components/MyBookings.js': `// src/components/MyBookings.js — lượt đặt của sinh viên đang đăng nhập, có huỷ
+import { Button, Card, ListGroup } from 'react-bootstrap';
+import { useBookings } from '../context/BookingContext';
+import { useStudent } from '../context/StudentContext';
+import { ROOMS } from '../data/seed';
+import { formatRange, sortBookings } from '../domain/booking';
+
+export default function MyBookings() {
+  const { student } = useStudent();
+  const { bookings, cancelBooking } = useBookings();
+  if (!student) return <p id="my-bookings" className="text-muted">Log in to see your bookings</p>;
+  const mine = sortBookings(bookings.filter((b) => b.student === student.code));
+  return (
+    <Card id="my-bookings" className="mt-4">
+      <Card.Header>My bookings ({mine.length})</Card.Header>
+      {mine.length === 0 ? (
+        <Card.Body className="text-muted">You have no bookings today</Card.Body>
+      ) : (
+        <ListGroup variant="flush">
+          {mine.map((b) => (
+            <ListGroup.Item key={b.id} className="my-booking d-flex justify-content-between">
+              <span className="my-booking-text">{ROOMS.find((r) => r.id === b.roomId)?.name} · {formatRange(b)}</span>
+              <Button size="sm" variant="outline-danger" className="btn-cancel" onClick={() => cancelBooking(b.id)}>Cancel</Button>
+            </ListGroup.Item>
+          ))}
+        </ListGroup>
+      )}
+    </Card>
+  );
+}
+`,
+};
+
+export const APP_M7 = `// src/App.js — mốc 7: Provider bọc app; component đọc bookings/student từ Context
+import { useState } from 'react';
+import { Button, Card, Col, Container, Navbar, Row } from 'react-bootstrap';
+import RoomCard from './components/RoomCard';
+import SlotPicker from './components/SlotPicker';
+import BookingForm from './components/BookingForm';
+import StudentArea from './components/StudentArea';
+import MyBookings from './components/MyBookings';
+import { BookingProvider, useBookings } from './context/BookingContext';
+import { StudentProvider, useStudent } from './context/StudentContext';
+import { ROOMS } from './data/seed';
+import { addMinutes, formatRange, freeSlots, sortBookings } from './domain/booking';
+
+function Shell() {
+  const { bookings, addBooking } = useBookings();
+  const { student } = useStudent();
+  const [selectedRoomId, setSelectedRoomId] = useState(null);
+  const [selectedSlot, setSelectedSlot] = useState(null);
+  const [message, setMessage] = useState('');
+  const sorted = sortBookings(bookings);
+  const selectedRoom = ROOMS.find((r) => r.id === selectedRoomId) ?? null;
+
+  const selectRoom = (id) => {
+    setSelectedRoomId(id);
+    setSelectedSlot(null);
+    setMessage('');
+  };
+
+  const book = (booking) => {
+    const saved = addBooking(booking);
+    setSelectedSlot(null);
+    setMessage(´Booked @{selectedRoom.name} @{formatRange(saved).split(' (')[0]} for @{saved.name}´);
+  };
+
+  return (
+    <>
+      <Navbar bg="primary" variant="dark" expand="md" id="app-nav">
+        <Container>
+          <Navbar.Brand id="title">CT Booking</Navbar.Brand>
+          <Navbar.Text id="summary" className="text-white me-3">{ROOMS.length} rooms · {bookings.length} bookings today</Navbar.Text>
+          <StudentArea />
+        </Container>
+      </Navbar>
+      <Container className="py-4">
+        {message && <p id="booking-success" className="success">{message}</p>}
+        <Row className="g-3">
+          {ROOMS.map((room) => {
+            const free = freeSlots(room.id, bookings);
+            return (
+              <Col key={room.id} xs={12} md={6} lg={4}>
+                <RoomCard room={room} bookings={sorted.filter((b) => b.roomId === room.id)} freeCount={free.length} firstFree={free[0]} selected={room.id === selectedRoomId} onSelect={selectRoom} />
+              </Col>
+            );
+          })}
+        </Row>
+        {selectedRoom && (
+          <Card className="mt-4" id="selected-panel">
+            <Card.Body>
+              <Card.Title id="selected-room">Selected: {selectedRoom.name}</Card.Title>
+              <SlotPicker slots={freeSlots(selectedRoom.id, bookings)} value={selectedSlot} onChange={setSelectedSlot} />
+              <p id="selected-slot" className="mt-2 mb-2">
+                {selectedSlot ? ´Selected slot: @{selectedSlot}–@{addMinutes(selectedSlot, 30)}´ : 'Choose a start time'}
+              </p>
+              <BookingForm
+                key={´@{selectedRoom.id}-@{student?.code ?? 'guest'}´}
+                room={selectedRoom}
+                slot={selectedSlot}
+                bookings={bookings}
+                onBook={book}
+                initial={student ? { name: student.name, student: student.code } : undefined}
+              />
+              <Button id="clear-selection" variant="link" onClick={() => selectRoom(null)}>Clear selection</Button>
+            </Card.Body>
+          </Card>
+        )}
+        <MyBookings />
+      </Container>
+    </>
+  );
+}
+
+export default function App() {
+  return (
+    <StudentProvider>
+      <BookingProvider>
+        <Shell />
+      </BookingProvider>
+    </StudentProvider>
+  );
+}
+`;
+
+// ─────────────────────────── MỐC 8 (Hooks) ───────────────────────────
+export const M8_FILES = {
+  'src/context/BookingContext.js': `// src/context/BookingContext.js — mốc 8: useReducer + lưu localStorage "ctb-bookings"
+import { createContext, useContext, useEffect, useMemo, useReducer } from 'react';
+import { BOOKINGS } from '../data/seed';
+
+const BookingContext = createContext(null);
+const KEY = 'ctb-bookings';
+
+export function bookingsReducer(state, action) {
+  switch (action.type) {
+    case 'ADD':
+      return [...state, action.booking];
+    case 'CANCEL':
+      return state.filter((b) => b.id !== action.id);
+    default:
+      return state;
+  }
+}
+
+function loadBookings() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(KEY));
+    return Array.isArray(saved) ? saved : BOOKINGS;
+  } catch {
+    return BOOKINGS;
+  }
+}
+
+export function BookingProvider({ children }) {
+  const [bookings, dispatch] = useReducer(bookingsReducer, undefined, loadBookings);
+
+  useEffect(() => {
+    localStorage.setItem(KEY, JSON.stringify(bookings));
+  }, [bookings]);
+
+  const value = useMemo(() => {
+    const addBooking = (booking) => {
+      const saved = { ...booking, id: Math.max(0, ...bookings.map((b) => b.id)) + 1 };
+      dispatch({ type: 'ADD', booking: saved });
+      return saved;
+    };
+    const cancelBooking = (id) => dispatch({ type: 'CANCEL', id });
+    return { bookings, addBooking, cancelBooking };
+  }, [bookings]);
+
+  return <BookingContext.Provider value={value}>{children}</BookingContext.Provider>;
+}
+
+export function useBookings() {
+  const ctx = useContext(BookingContext);
+  if (!ctx) throw new Error('useBookings must be used inside BookingProvider');
+  return ctx;
+}
+`,
+  'src/context/StudentContext.js': `// src/context/StudentContext.js — mốc 8: nhớ sinh viên qua localStorage "ctb-student"
+import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+
+const StudentContext = createContext(null);
+const KEY = 'ctb-student';
+
+export function StudentProvider({ children }) {
+  const [student, setStudent] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem(KEY));
+    } catch {
+      return null;
+    }
+  });
+
+  useEffect(() => {
+    if (student) localStorage.setItem(KEY, JSON.stringify(student));
+    else localStorage.removeItem(KEY);
+  }, [student]);
+
+  const value = useMemo(
+    () => ({ student, login: (name, code) => setStudent({ name, code }), logout: () => setStudent(null) }),
+    [student],
+  );
+  return <StudentContext.Provider value={value}>{children}</StudentContext.Provider>;
+}
+
+export function useStudent() {
+  const ctx = useContext(StudentContext);
+  if (!ctx) throw new Error('useStudent must be used inside StudentProvider');
+  return ctx;
+}
+`,
+  'src/hooks/useFreeSlots.js': `// src/hooks/useFreeSlots.js — custom hook: ô trống của một phòng, chỉ tính lại khi bookings/phòng đổi
+import { useMemo } from 'react';
+import { useBookings } from '../context/BookingContext';
+import { freeSlots } from '../domain/booking';
+
+export function useFreeSlots(roomId) {
+  const { bookings } = useBookings();
+  return useMemo(() => (roomId == null ? [] : freeSlots(roomId, bookings)), [roomId, bookings]);
+}
+`,
+};
+
+// BookingForm mốc 8: focus ô Purpose khi người dùng vừa chọn ô giờ (useRef + useEffect)
+export const BOOKING_FORM_M8 = BOOKING_FORM_M6
+  .replace("// src/components/BookingForm.js — form đặt phòng: một state object, một handler, lỗi theo ô + luật nghiệp vụ\nimport { useState } from 'react';",
+    "// src/components/BookingForm.js — mốc 8: thêm useRef + useEffect focus ô Purpose khi vừa chọn giờ\nimport { useEffect, useRef, useState } from 'react';")
+  .replace("  const [ruleErrors, setRuleErrors] = useState([]);\n",
+    "  const [ruleErrors, setRuleErrors] = useState([]);\n  const purposeRef = useRef(null);\n\n  useEffect(() => {\n    if (slot && purposeRef.current) purposeRef.current.focus(); // vừa chọn giờ ⇒ gõ mục đích ngay\n  }, [slot]);\n")
+  .replace('<Form.Control name="purpose" value={values.purpose}', '<Form.Control ref={purposeRef} name="purpose" value={values.purpose}');
+
+export const APP_M8 = APP_M7
+  .replace('// src/App.js — mốc 7: Provider bọc app; component đọc bookings/student từ Context', '// src/App.js — mốc 8: dùng custom hook useFreeSlots cho bảng chọn ô')
+  .replace("import { ROOMS } from './data/seed';", "import { ROOMS } from './data/seed';\nimport { useFreeSlots } from './hooks/useFreeSlots';")
+  .replace("  const selectedRoom = ROOMS.find((r) => r.id === selectedRoomId) ?? null;\n", "  const selectedRoom = ROOMS.find((r) => r.id === selectedRoomId) ?? null;\n  const selectedFree = useFreeSlots(selectedRoomId);\n")
+  .replace('<SlotPicker slots={freeSlots(selectedRoom.id, bookings)}', '<SlotPicker slots={selectedFree}');

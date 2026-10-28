@@ -644,6 +644,24 @@
       "name": "CT Booking · Milestone 5 — Components, props & selection",
       "level": "INTERMEDIATE",
       "description": "Dự án CT Booking mốc 5: tách component có PropTypes, state chọn phòng + ô, SlotPicker điều khiển. Thang 10."
+    },
+    {
+      "slug": "fer202-6-project-ctbooking-m6",
+      "name": "CT Booking · Milestone 6 — Booking form",
+      "level": "INTERMEDIATE",
+      "description": "Dự án CT Booking mốc 6: form đặt phòng, lỗi theo ô + luật nghiệp vụ, thêm lượt vào state. Thang 10."
+    },
+    {
+      "slug": "fer202-7-project-ctbooking-m7",
+      "name": "CT Booking · Milestone 7 — Shared state with Context",
+      "level": "ADVANCED",
+      "description": "Dự án CT Booking mốc 7: BookingContext + StudentContext, đăng nhập, form điền sẵn, My bookings có huỷ. Thang 10."
+    },
+    {
+      "slug": "fer202-8-project-ctbooking-m8",
+      "name": "CT Booking · Milestone 8 — Hooks: reducer, persistence, custom hook",
+      "level": "ADVANCED",
+      "description": "Dự án CT Booking mốc 8: useReducer, lưu localStorage, custom hook useFreeSlots, focus bằng useRef. Thang 10."
     }
   ]
 }

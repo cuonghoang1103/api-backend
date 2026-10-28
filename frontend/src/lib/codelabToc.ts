@@ -67,6 +67,7 @@ export const TEN_CHUONG: Readonly<Record<string, Readonly<Record<number, string>
     12: 'Kiến trúc Flux & Redux',
     13: 'Luyện PE — đề thực hành có đồng hồ',
     14: 'Nâng cao: hiệu năng, kiểm thử, TypeScript',
+    15: 'Assignment — CodeLearn (dự án cuối kỳ)',
   },
   'swt301-practice': {
     1: 'Nền tảng kiểm thử',

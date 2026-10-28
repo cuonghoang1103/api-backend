@@ -686,6 +686,84 @@
       "name": "14.3 TypeScript & Next.js (advanced)",
       "level": "ADVANCED",
       "description": "Đọc kiểu TypeScript cho React, ánh xạ tệp app router Next.js sang URL."
+    },
+    {
+      "slug": "fer202-15-0-codelearn-brief",
+      "name": "15.0 CodeLearn — Assignment brief, starter & live demo",
+      "level": "ADVANCED",
+      "description": "Đề tổng assignment cuối kỳ CodeLearn (mini LMS): bối cảnh, cây thư mục CRA, wireframe, db.json 8 bảng, vai trò, 11 chức năng, thang 10 theo chức năng + tiêu chí GV; starter khung + live demo; kiểm tích hợp app hoàn chỉnh."
+    },
+    {
+      "slug": "fer202-15-1-setup-routing",
+      "name": "15.1 F1 — Setup, layout, routing & 404",
+      "level": "MEDIUM",
+      "description": "CRA + json-server 0.17.4 + concurrently, .env + axiosClient, layout route (navbar/Outlet/footer), NavLink active, trang 404."
+    },
+    {
+      "slug": "fer202-15-2-auth-roles",
+      "name": "15.2 F2 — Login, register & protected routes",
+      "level": "ADVANCED",
+      "description": "Đăng nhập/đăng ký trên users (kiểm dữ liệu, email trùng, tài khoản khoá), slice auth + localStorage qua store.subscribe, ProtectedRoute + 403 admin, quay lại trang định vào."
+    },
+    {
+      "slug": "fer202-15-3-course-list",
+      "name": "15.3 F3 — Course list: filter, search, sort, paginate",
+      "level": "ADVANCED",
+      "description": "Danh sách khoá đã xuất bản qua thunk; lọc danh mục/cấp độ/giá, tìm, sắp xếp, 6 khoá/trang — tất cả trên URL (useSearchParams); đang tải/lỗi/rỗng."
+    },
+    {
+      "slug": "fer202-15-4-course-detail",
+      "name": "15.4 F4 — Course detail & curriculum",
+      "level": "MEDIUM",
+      "description": "Route /courses/:id, chương ▸ bài qua _embed (tự sắp theo order), tổng bài/phút, khoá nháp và id lạ ⇒ Course not found."
+    },
+    {
+      "slug": "fer202-15-5-enroll-my-courses",
+      "name": "15.5 F5 — Enroll & My Courses",
+      "level": "ADVANCED",
+      "description": "Ghi danh không trùng (condition + kiểm máy chủ), khách ⇒ đăng nhập rồi quay lại, admin không ghi danh; My Courses với _expand=course; reset khi logout."
+    },
+    {
+      "slug": "fer202-15-6-learn-progress",
+      "name": "15.6 F6 — Learn page, mark complete & progress",
+      "level": "ADVANCED",
+      "description": "Trang học: học tiếp bài dở, nhúng YouTube /embed/, đánh dấu hoàn thành bằng PATCH completedLessons, tiến độ %, trước/sau xuyên chương, chỉ người đã ghi danh."
+    },
+    {
+      "slug": "fer202-15-7-chapter-quiz",
+      "name": "15.7 F7 — Chapter quiz",
+      "level": "ADVANCED",
+      "description": "Quiz cuối chương: radio controlled, bắt trả lời hết, chấm ≥ 70% đạt, lưu results, xem lại đúng/sai + giải thích, làm lại."
+    },
+    {
+      "slug": "fer202-15-8-progress-dashboard",
+      "name": "15.8 F8 — My Progress dashboard",
+      "level": "MEDIUM",
+      "description": "Năm con số tổng suy ra từ dữ liệu, tiến độ + quiz tốt nhất từng khoá, lịch sử quiz _expand=chapter, trạng thái rỗng."
+    },
+    {
+      "slug": "fer202-15-9-admin-courses",
+      "name": "15.9 F9 — Admin: courses, chapters & lessons",
+      "level": "ADVANCED",
+      "description": "Route lồng /admin, bảng mọi khoá, một form thêm/sửa có kiểm dữ liệu + tên không trùng, không xoá khoá đã có học viên, quản lý chương & bài."
+    },
+    {
+      "slug": "fer202-15-10-admin-questions-users",
+      "name": "15.10 F10 — Admin: quiz questions & users",
+      "level": "ADVANCED",
+      "description": "CRUD câu hỏi quiz (khoá ▸ chương, 4 phương án khác nhau, answerIndex số) + quản lý người dùng (tìm, khoá, vai trò, xoá kèm dữ liệu, không tự hại mình)."
+    },
+    {
+      "slug": "fer202-15-11-admin-stats",
+      "name": "15.11 F11 — Admin statistics",
+      "level": "ADVANCED",
+      "description": "Thống kê bằng hàm thuần: tổng, doanh thu, tỉ lệ đạt, top khoá phổ biến, biểu đồ cột SVG theo khoá / tháng / danh mục; kiểm cả với dữ liệu khác."
+    },
+    {
+      "slug": "fer202-15-interview-codelearn",
+      "name": "Interview corner — CodeLearn assignment defence",
+      "level": "MEDIUM",
+      "description": "Câu giảng viên hỏi khi bảo vệ assignment CodeLearn, kèm câu trả lời mẫu EN + VI."
     }
   ]
 }

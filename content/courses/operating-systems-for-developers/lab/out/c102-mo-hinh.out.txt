@@ -1,0 +1,44 @@
+$ for m in m1-block m2-nonblock m3-poll m4-sigio m5-aio; do gcc -O2 -Wall -o $m $m.c || break; done; gcc -O2 -Wall -o m5-uring m5-uring.c -luring && echo built
+built
+$ ./m1-block & P=$!; sleep 0.5; ./peek.sh $P; wait $P
+  tid 42   m1-block       state S  wchan anon_pipe_read
+1 blocking      6 bytes after 1000 ms | CPU user    1 ms, sys    0 ms | 1 calls
+$ ./m2-nonblock & P=$!; sleep 0.5; ./peek.sh $P; wait $P
+  tid 51   m2-nonblock    state R  wchan 0
+2 non-blocking  6 bytes after 1004 ms | CPU user  254 ms, sys  750 ms | 4874269 calls
+$ ./m3-poll & P=$!; sleep 0.5; ./peek.sh $P; wait $P
+  tid 60   m3-poll        state S  wchan poll_schedule_timeout.constprop.0
+3 poll          6 bytes after 1008 ms | CPU user    0 ms, sys    1 ms | 2 calls
+$ ./m4-sigio & P=$!; sleep 0.5; ./peek.sh $P; wait $P
+  tid 69   m4-sigio       state S  wchan __arm64_sys_rt_sigsuspend
+4 signal (SIGIO) 6 bytes after 1010 ms | CPU user    0 ms, sys    1 ms | 2 calls
+$ ./m5-aio & P=$!; sleep 0.5; ./peek.sh $P; wait $P
+  tid 78   m5-aio         state S  wchan futex_do_wait
+  tid 81   m5-aio         state S  wchan anon_pipe_read
+5 POSIX aio     6 bytes after 1009 ms | CPU user    0 ms, sys    1 ms | 2 calls
+$ strace -f -qq -o aio.txt -e trace=clone,clone3,read,futex ./m5-aio > /dev/null; grep -v ELF aio.txt | sed -E 's/flags=[A-Z_|]+/flags=…/; s/child_stack=0x[0-9a-f]+, //; s/, child_tid=[^}]*\}/, …}/' | head -6 | cut -c1-130
+93    clone(child_stack=NULL, flags=…, child_tidptr=0xffff9dee6010) = 94
+93    clone3({flags=…, …}, 88) = -1 ENOSYS (Function not implemented)
+93    clone(flags=…, parent_tid=[95], tls=0xffff9dcdf000, child_tidptr=0xffff9dcded08) = 95
+93    futex(0xfffff2a5199c, FUTEX_WAIT_BITSET_PRIVATE, 1, NULL, FUTEX_BITSET_MATCH_ANY <unfinished ...>
+95    read(3, "hello\n", 64)            = 6
+93    <... futex resumed>)              = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+$ ./m5-uring
+io_uring_queue_init: Operation not permitted
+$ strace -qq -e trace=io_uring_setup ./m5-uring
+io_uring_setup(8, {flags=IORING_SETUP_NO_SQARRAY, sq_thread_cpu=0, sq_thread_idle=0}) = -1 EPERM (Operation not permitted)
+io_uring_queue_init: Operation not permitted
+$ strace -qq -o sigio.txt -e trace=fcntl,read,rt_sigsuspend,rt_sigreturn ./m4-sigio > /dev/null; grep -v ELF sigio.txt | cut -c1-150
+fcntl(3, F_SETOWN, 114)                 = 0
+fcntl(3, F_SETFL, O_RDONLY|O_NONBLOCK|FASYNC) = 0
+rt_sigsuspend([], 8)                    = ? ERESTARTNOHAND (To be restarted if no handler)
+--- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=115, si_uid=0, si_status=0, si_utime=0, si_stime=0} ---
+--- SIGIO {si_signo=SIGIO, si_code=SI_KERNEL} ---
+rt_sigreturn({mask=[IO]})               = -1 EINTR (Interrupted system call)
+read(3, "hello\n", 64)                  = 6
+$ strace -c -qq ./m2-nonblock 2>&1 | head -5
+2 non-blocking  6 bytes after 1001 ms | CPU user   12 ms, sys  249 ms | 24123 calls
+% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+ 99.96    0.121067           5     24124     24122 read
+  0.02    0.000022           7         3           brk

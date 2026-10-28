@@ -1,0 +1,46 @@
+$ cat /sys/fs/cgroup/io.max
+254:0 rbps=52428800 wbps=max riops=max wiops=max
+$ ./filepoll /tmp/data
+epoll_ctl(ADD, regular file) = -1 Operation not permitted
+poll(regular file) = 1, revents = POLLIN ("ready")
+$ ./evict /tmp/data; ./incache /tmp/data
+/tmp/data: 0 of 16384 pages in page cache (0%)
+$ ./randread /tmp/data 500
+500 random 4 KiB reads: p50 21.8 us  p99 53.0 us  max 66.4 us
+$ ./incache /tmp/data
+/tmp/data: 490 of 16384 pages in page cache (3%)
+$ ./randread /tmp/data 500
+500 random 4 KiB reads: p50 0.7 us  p99 1.2 us  max 4.8 us
+$ ./evict /tmp/data; TIMEFORMAT='%R s'; time cat /tmp/data > /dev/null
+1.304 s
+$ time cat /tmp/data > /dev/null
+0.002 s
+$ node threads.js
+threads at start: 7
+threads after first fs.readFile: 11
+$ strace -f -qq -e trace=openat,read -e signal=none -o nodefs.txt node -e "require('fs').readFile('/etc/hostname', () => {})"; echo "main thread: $(head -1 nodefs.txt | cut -d' ' -f1)"; sed -n '/"\/etc\/hostname"/,$p' nodefs.txt | grep -E 'hostname|read\(1[67],' | head -5 | cut -c1-100
+main thread: 937
+944   openat(AT_FDCWD, "/etc/hostname", O_RDONLY|O_CLOEXEC) = 17
+937   read(16, "\1\0\0\0\0\0\0\0", 1024) = 8
+937   read(16, "\1\0\0\0\0\0\0\0", 1024) = 8
+946   read(17, "oslab\n", 6)            = 6
+937   read(16, "\1\0\0\0\0\0\0\0", 1024) = 8
+$ node loop-lag.js sync
+sync: 16 requests start reading 16 cold 4 MiB files at 207 ms
+sync: all files read at 1461 ms
+worst delay (ms): event loop  1256 | net echo     1 | dns.lookup     2 | fs.stat     2
+$ node loop-lag.js async
+async: 16 requests start reading 16 cold 4 MiB files at 206 ms
+async: all files read at 1457 ms
+worst delay (ms): event loop    16 | net echo     3 | dns.lookup   944 | fs.stat   479
+$ UV_THREADPOOL_SIZE=64 node loop-lag.js async
+async: 16 requests start reading 16 cold 4 MiB files at 206 ms
+async: all files read at 1438 ms
+worst delay (ms): event loop    27 | net echo     2 | dns.lookup     3 | fs.stat     3
+$ UV_USE_IO_URING=1 strace -f -qq -e trace=io_uring_setup -o ur.txt node -e "require('fs').readFile('/etc/hostname', () => {})"; cat ur.txt
+1061  io_uring_setup(256, {flags=IORING_SETUP_NO_SQARRAY, sq_thread_cpu=0, sq_thread_idle=0}) = -1 EPERM (Operation not permitted)
+1062  io_uring_setup(256, {flags=IORING_SETUP_NO_SQARRAY, sq_thread_cpu=0, sq_thread_idle=0}) = -1 EPERM (Operation not permitted)
+1061  io_uring_setup(256, {flags=IORING_SETUP_NO_SQARRAY, sq_thread_cpu=0, sq_thread_idle=0}) = -1 EPERM (Operation not permitted)
+$ ./evict /tmp/small*; ./gofile
+threads before: 4
+32 cold files read in 1.245s; peak threads during reads: 38

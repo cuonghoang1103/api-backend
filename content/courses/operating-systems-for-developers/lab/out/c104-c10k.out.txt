@@ -1,0 +1,92 @@
+$ gcc -O2 -Wall -o tai tai.c && gcc -O2 -Wall -o echo-epoll echo-epoll.c && gcc -O2 -Wall -pthread -o echo-thread echo-thread.c && echo built
+built
+$ nproc; free -m | head -2
+10
+               total        used        free      shared  buff/cache   available
+Mem:            7934        2960        2651         156        2677        4973
+# Busy load: every connection sends 64 bytes 10 times a second ||| Tải bận: mỗi kết nối gửi 64 byte 10 lần mỗi giây
+$ ./c10k.sh echo-thread 1000 100
+[echo-thread]  threads=1001 fds=1004 rss=13.4 MiB cpu=1.02 s ctx-switches=31318
+[echo-thread] kernel stacks: +15 MiB
+[echo-thread] opened 1000/1000 connections in 11 ms (0 failed)
+[echo-thread] 4 s: sent 39999, echoed 39995, closed by server 0, late sends 228
+[echo-thread] round trip: p50 0.11 ms  p99 2.95 ms  max 22.22 ms
+[echo-thread] load generator CPU: 0.97 s
+$ ./c10k.sh echo-epoll 1000 100
+[echo-epoll]  threads=1 fds=1005 rss=5.8 MiB cpu=0.45 s ctx-switches=4001
+[echo-epoll] kernel stacks: +0 MiB
+[echo-epoll] opened 1000/1000 connections in 9 ms (0 failed)
+[echo-epoll] 4 s: sent 39996, echoed 39996, closed by server 0, late sends 399
+[echo-epoll] round trip: p50 0.09 ms  p99 2.51 ms  max 21.28 ms
+[echo-epoll] load generator CPU: 0.84 s
+$ ./c10k.sh echo-thread 5000 100
+[echo-thread]  threads=5001 fds=5004 rss=63.3 MiB cpu=2.72 s ctx-switches=153346
+[echo-thread] kernel stacks: +78 MiB
+[echo-thread] opened 5000/5000 connections in 42 ms (0 failed)
+[echo-thread] 4 s: sent 200000, echoed 200000, closed by server 0, late sends 866
+[echo-thread] round trip: p50 0.05 ms  p99 24.50 ms  max 68.33 ms
+[echo-thread] load generator CPU: 2.52 s
+$ ./c10k.sh echo-epoll 5000 100
+[echo-epoll]  threads=1 fds=5005 rss=22.1 MiB cpu=0.96 s ctx-switches=48135
+[echo-epoll] kernel stacks: +0 MiB
+[echo-epoll] opened 5000/5000 connections in 41 ms (0 failed)
+[echo-epoll] 4 s: sent 200000, echoed 200000, closed by server 0, late sends 0
+[echo-epoll] round trip: p50 0.04 ms  p99 0.23 ms  max 8.69 ms
+[echo-epoll] load generator CPU: 1.61 s
+$ ./c10k.sh echo-thread 10000 100
+[echo-thread]  threads=10001 fds=10004 rss=121.8 MiB cpu=3.06 s ctx-switches=206518
+[echo-thread] kernel stacks: +156 MiB
+[echo-thread] opened 10000/10000 connections in 1131 ms (0 failed)
+[echo-thread] 4 s: sent 399842, echoed 391890, closed by server 0, late sends 61800
+[echo-thread] round trip: p50 95.09 ms  p99 321.67 ms  max 392.94 ms
+[echo-thread] load generator CPU: 4.10 s
+$ ./c10k.sh echo-epoll 10000 100
+[echo-epoll]  threads=1 fds=10005 rss=41.7 MiB cpu=1.33 s ctx-switches=44092
+[echo-epoll] kernel stacks: +0 MiB
+[echo-epoll] opened 10000/10000 connections in 81 ms (0 failed)
+[echo-epoll] 4 s: sent 399999, echoed 399999, closed by server 0, late sends 0
+[echo-epoll] round trip: p50 0.05 ms  p99 0.38 ms  max 2.72 ms
+[echo-epoll] load generator CPU: 2.35 s
+# Light load ("chat app"): every connection sends 64 bytes once a second ||| Tải nhẹ ("ứng dụng chat"): mỗi kết nối gửi 64 byte mỗi giây một lần
+$ ./c10k.sh echo-thread 1000 1000
+[echo-thread]  threads=1001 fds=1004 rss=13.4 MiB cpu=0.22 s ctx-switches=4222
+[echo-thread] kernel stacks: +15 MiB
+[echo-thread] opened 1000/1000 connections in 9 ms (0 failed)
+[echo-thread] 4 s: sent 4000, echoed 4000, closed by server 0, late sends 19
+[echo-thread] round trip: p50 0.12 ms  p99 2.39 ms  max 8.38 ms
+[echo-thread] load generator CPU: 0.29 s
+$ ./c10k.sh echo-epoll 1000 1000
+[echo-epoll]  threads=1 fds=1005 rss=5.6 MiB cpu=0.14 s ctx-switches=2426
+[echo-epoll] kernel stacks: +0 MiB
+[echo-epoll] opened 1000/1000 connections in 8 ms (0 failed)
+[echo-epoll] 4 s: sent 4000, echoed 4000, closed by server 0, late sends 22
+[echo-epoll] round trip: p50 0.10 ms  p99 1.64 ms  max 15.63 ms
+[echo-epoll] load generator CPU: 0.27 s
+$ ./c10k.sh echo-thread 5000 1000
+[echo-thread]  threads=5001 fds=5004 rss=63.3 MiB cpu=0.81 s ctx-switches=21122
+[echo-thread] kernel stacks: +78 MiB
+[echo-thread] opened 5000/5000 connections in 51 ms (0 failed)
+[echo-thread] 4 s: sent 19991, echoed 19991, closed by server 0, late sends 18
+[echo-thread] round trip: p50 0.16 ms  p99 2.92 ms  max 16.49 ms
+[echo-thread] load generator CPU: 0.66 s
+$ ./c10k.sh echo-epoll 5000 1000
+[echo-epoll]  threads=1 fds=5005 rss=21.2 MiB cpu=0.28 s ctx-switches=3910
+[echo-epoll] kernel stacks: +0 MiB
+[echo-epoll] opened 5000/5000 connections in 42 ms (0 failed)
+[echo-epoll] 4 s: sent 19997, echoed 19997, closed by server 0, late sends 436
+[echo-epoll] round trip: p50 0.10 ms  p99 3.02 ms  max 26.36 ms
+[echo-epoll] load generator CPU: 0.47 s
+$ ./c10k.sh echo-thread 10000 1000
+[echo-thread]  threads=10001 fds=10004 rss=122.6 MiB cpu=1.02 s ctx-switches=32136
+[echo-thread] kernel stacks: +156 MiB
+[echo-thread] opened 10000/10000 connections in 1114 ms (0 failed)
+[echo-thread] 4 s: sent 39999, echoed 39999, closed by server 0, late sends 0
+[echo-thread] round trip: p50 0.11 ms  p99 1.92 ms  max 8.07 ms
+[echo-thread] load generator CPU: 0.96 s
+$ ./c10k.sh echo-epoll 10000 1000
+[echo-epoll]  threads=1 fds=10005 rss=40.9 MiB cpu=0.41 s ctx-switches=5956
+[echo-epoll] kernel stacks: +0 MiB
+[echo-epoll] opened 10000/10000 connections in 598 ms (0 failed)
+[echo-epoll] 4 s: sent 39999, echoed 39999, closed by server 0, late sends 0
+[echo-epoll] round trip: p50 0.10 ms  p99 1.36 ms  max 9.50 ms
+[echo-epoll] load generator CPU: 1.27 s

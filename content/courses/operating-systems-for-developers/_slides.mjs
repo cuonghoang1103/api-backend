@@ -16,7 +16,9 @@
  * rồi bài chèn `${G}` ở ĐẦU content. rows phải phủ đủ mọi slide của deck, đúng một lần mỗi số.
  */
 export const CDN_ROOT = 'https://media.cuongthai.com/images/academy/OS';
-const VER = {};
+const VER = {
+  'os-10-1': 'v2', // 28/10: ảnh 001 của v1 bị Cloudflare giữ 404 (bị dò trước khi đẩy) ⇒ đẩy lại cả deck sang v2
+};
 const pad = (n) => String(n).padStart(3, '0');
 const attr = (s) => String(s).replace(/<[^>]+>/g, '').replace(/&/g, '&amp;').replace(/"/g, '&quot;');
 export const img = (deck, n) => `${CDN_ROOT}/${VER[deck] || 'v1'}/${deck}/${pad(n)}.webp`;

@@ -1,0 +1,141 @@
+$ node --version; python3 --version; java -version 2>&1 | head -1; go version; nginx -v
+v22.23.4
+Python 3.14.4
+openjdk version "21.0.12.1" 2026-08-18 LTS
+go version go1.27.3 linux/arm64
+nginx version: nginx/1.28.3 (Ubuntu)
+$ node echo.js 7301 & NODE=$!
+$ python3 echo_async.py 7302 & PY=$!
+$ java -cp /tmp/jc EchoNio 7303 & NIO=$!
+$ java -cp "/tmp/jc:/opt/netty/*" EchoNetty 7304 & NETTY=$!
+$ ./echo-go 7305 & GO=$!
+$ ./echo-go-copy 7306 & GOC=$!
+$ strace -f -qq -o ngx.txt -e trace=epoll_create1,epoll_ctl,epoll_wait,epoll_pwait,accept4,recvfrom,writev,close nginx -c /lab/ch10/nginx-min.conf -g 'daemon off;' & sleep 3
+echo-node: libuv 1.51.0
+echo-go: one goroutine per connection
+echo-go-copy: io.Copy per connection
+echo-nio: sun.nio.ch.EPollSelectorImpl
+echo-asyncio: EpollSelector
+echo-netty: native epoll available = true
+$ strace -f -qq -e signal=none -e $T -p $NODE -o node.txt & ST=$!; sleep 1; printf 'hi\n' | nc -N 127.0.0.1 7301; sleep 0.3; kill -INT $ST; wait $ST; cut -c1-118 node.txt
+hi
+1040  epoll_pwait(9 <unfinished ...>
+1034  epoll_pwait(13, [{events=EPOLLIN, data=0x12}], 1024, -1, NULL, 8) = 1
+1034  accept4(18, NULL, NULL, SOCK_CLOEXEC|SOCK_NONBLOCK) = 19
+1034  epoll_ctl(13, EPOLL_CTL_ADD, 19, {events=EPOLLIN, data=0x13}) = 0
+1034  epoll_pwait(13, [{events=EPOLLIN, data=0x13}], 1024, 0, NULL, 8) = 1
+1034  read(19, "hi\n", 65536)           = 3
+1034  write(19, "hi\n", 3)              = 3
+1034  epoll_pwait(13, [{events=EPOLLIN, data=0x13}], 1024, 0, NULL, 8) = 1
+1034  read(19, "", 65536)               = 0
+1034  epoll_ctl(13, EPOLL_CTL_DEL, 19, 0xfffff9d5d110) = 0
+1034  epoll_pwait(13, [], 1024, 0, NULL, 8) = 0
+1034  epoll_pwait(13 <detached ...>
+$ strace -f -qq -e signal=none -e $T -p $PY -o py.txt & ST=$!; sleep 1; printf 'hi\n' | nc -N 127.0.0.1 7302; sleep 0.3; kill -INT $ST; wait $ST; cut -c1-118 py.txt
+hi
+1037  epoll_pwait(3, [{events=EPOLLIN, data=0x17000000000006}], 3, -1, NULL, 8) = 1
+1037  accept4(6, {sa_family=AF_INET, sin_port=htons(50926), sin_addr=inet_addr("127.0.0.1")}, [16], SOCK_CLOEXEC) = 8
+1037  accept4(6, 0xffffc8ee63e8, [16], SOCK_CLOEXEC) = -1 EAGAIN (Resource temporarily unavailable)
+1037  epoll_pwait(3, [], 3, 0, NULL, 8) = 0
+1037  epoll_pwait(3, [], 3, 0, NULL, 8) = 0
+1037  epoll_ctl(3, EPOLL_CTL_ADD, 8, {events=EPOLLIN, data=0x8}) = 0
+1037  epoll_pwait(3, [{events=EPOLLIN, data=0x8}], 4, 0, NULL, 8) = 1
+1037  recvfrom(8, "hi\n", 262144, 0, NULL, NULL) = 3
+1037  epoll_pwait(3, [{events=EPOLLIN, data=0x8}], 4, 0, NULL, 8) = 1
+1037  sendto(8, "hi\n", 3, 0, NULL, 0)  = 3
+1037  recvfrom(8, "", 262144, 0, NULL, NULL) = 0
+1037  epoll_ctl(3, EPOLL_CTL_DEL, 8, 0xffffc8ee6490) = 0
+1037  epoll_pwait(3, [], 3, 0, NULL, 8) = 0
+1037  epoll_pwait(3, [], 3, 0, NULL, 8) = 0
+1037  epoll_pwait(3 <detached ...>
+$ strace -f -qq -e signal=none -e $T -p $NIO -o nio.txt & ST=$!; sleep 1; printf 'hi\n' | nc -N 127.0.0.1 7303; sleep 0.3; kill -INT $ST; wait $ST; cut -c1-118 nio.txt
+hi
+1051  epoll_pwait(4, [{events=EPOLLIN, data=0xffff00000007}], 1024, -1, NULL, 8) = 1
+1051  accept(7, {sa_family=AF_INET6, sin6_port=htons(40896), sin6_flowinfo=htonl(0), inet_pton(AF_INET6, "::ffff:127.0
+1051  accept(7, 0xffffa713e0c8, [28])   = -1 EAGAIN (Resource temporarily unavailable)
+1051  epoll_ctl(4, EPOLL_CTL_ADD, 8, {events=EPOLLIN, data=0xffff00000008}) = 0
+1051  epoll_pwait(4, [{events=EPOLLIN, data=0xffff00000008}], 1024, -1, NULL, 8) = 1
+1051  read(8, "hi\n", 4096)             = 3
+1051  write(8, "hi\n", 3)               = 3
+1051  epoll_pwait(4, [{events=EPOLLIN, data=0xffff00000008}], 1024, -1, NULL, 8) = 1
+1051  read(8, "", 4096)                 = 0
+1051  epoll_ctl(4, EPOLL_CTL_DEL, 8, 0xffffa713ded0) = 0
+1051  epoll_pwait(4 <detached ...>
+$ strace -f -qq -e signal=none -e $T -p $NETTY -o netty.txt & ST=$!; sleep 1; printf 'hi\n' | nc -N 127.0.0.1 7304; sleep 0.3; kill -INT $ST; wait $ST; grep -v 'epoll_pwait2(.*= 0$' netty.txt | cut -c1-118
+hi
+1130  epoll_pwait2(16 <unfinished ...>
+1107  epoll_pwait2(11 <unfinished ...>
+1130  <... epoll_pwait2 resumed>, [], 4096, {tv_sec=0, tv_nsec=27304542}, NULL, 8) = 0
+1107  <... epoll_pwait2 resumed>, [], 4096, {tv_sec=0, tv_nsec=27261083}, NULL, 8) = 0
+1130  epoll_pwait2(16 <unfinished ...>
+1107  epoll_pwait2(11, [{events=EPOLLIN, data=0x13}], 4096, {tv_sec=1, tv_nsec=0}, NULL, 8) = 1
+1107  accept4(19, {sa_family=AF_INET6, sin6_port=htons(56216), sin6_flowinfo=htonl(0), inet_pton(AF_INET6, "::ffff:127
+1107  epoll_ctl(11, EPOLL_CTL_ADD, 20, {events=EPOLLRDHUP, data=0x14}) = 0
+1107  epoll_ctl(11, EPOLL_CTL_MOD, 20, {events=EPOLLIN|EPOLLRDHUP, data=0x14}) = 0
+1107  epoll_pwait2(11, [{events=EPOLLIN|EPOLLRDHUP, data=0x14}], 4096, {tv_sec=1, tv_nsec=0}, NULL, 8) = 1
+1107  recvfrom(20, "hi\n", 2048, 0, NULL, NULL) = 3
+1107  sendto(20, "hi\n", 3, 0, NULL, 0) = 3
+1107  recvfrom(20, "", 2048, 0, NULL, NULL) = 0
+1107  epoll_ctl(11, EPOLL_CTL_DEL, 20, 0xffff4bbe15f0) = 0
+1107  epoll_pwait2(11 <unfinished ...>
+1130  <... epoll_pwait2 resumed>, [], 4096, {tv_sec=1, tv_nsec=0}, NULL, 8) = 0
+1130  epoll_pwait2(16 <detached ...>
+$ strace -f -qq -e signal=none -e $T -p $GO -o go.txt & ST=$!; sleep 1; printf 'hi\n' | nc -N 127.0.0.1 7305; sleep 0.3; kill -INT $ST; wait $ST; cut -c1-118 go.txt
+hi
+1076  epoll_pwait(6, [{events=EPOLLIN, data=0x7fffdd23ed000002}], 128, -1, NULL, 0) = 1
+1076  accept4(4, {sa_family=AF_INET6, sin6_port=htons(58040), sin6_flowinfo=htonl(0), inet_pton(AF_INET6, "::ffff:127.
+1076  epoll_ctl(6, EPOLL_CTL_ADD, 5, {events=EPOLLIN|EPOLLOUT|EPOLLRDHUP|EPOLLET, data=0x7fffdd23ec000004}) = 0
+1076  accept4(4, 0x4c953fba2b5c, [112], SOCK_CLOEXEC|SOCK_NONBLOCK) = -1 EAGAIN (Resource temporarily unavailable)
+1076  epoll_pwait(6, [{events=EPOLLIN|EPOLLOUT|EPOLLRDHUP, data=0x7fffdd23ec000004}], 128, 0, NULL, 0) = 1
+1075  epoll_pwait(6 <unfinished ...>
+1052  read(5, "hi\n", 4096)             = 3
+1052  write(5, "hi\n", 3)               = 3
+1052  read(5, "", 4096)                 = 0
+1052  epoll_ctl(6, EPOLL_CTL_DEL, 5, 0x4c953fb20df0) = 0
+$ curl -s http://127.0.0.1:8080/hello; sleep 0.3; grep -E 'EPOLLEXCLUSIVE' ngx.txt | cut -c1-118; grep -A8 'accept4(4' ngx.txt | grep -v EAGAIN | cut -c1-118
+hello from nginx
+1104  epoll_ctl(7, EPOLL_CTL_ADD, 4, {events=EPOLLIN|EPOLLEXCLUSIVE, data=0xffffa41a5010}) = 0
+1105  epoll_ctl(9, EPOLL_CTL_ADD, 4, {events=EPOLLIN|EPOLLEXCLUSIVE, data=0xffffa41a5010}) = 0
+1104  epoll_ctl(7, EPOLL_CTL_ADD, 4, {events=EPOLLIN|EPOLLEXCLUSIVE, data=0xffffa41a5010}) = 0
+1104  accept4(4, {sa_family=AF_INET, sin_port=htons(56640), sin_addr=inet_addr("127.0.0.1")}, [112 => 16], SOCK_NONBLO
+1104  epoll_ctl(7, EPOLL_CTL_ADD, 9, {events=EPOLLIN|EPOLLRDHUP|EPOLLET, data=0xffffa41a5200}) = 0
+1104  epoll_ctl(7, EPOLL_CTL_DEL, 4, 0xffffdfd9d018) = 0
+1104  epoll_ctl(7, EPOLL_CTL_ADD, 4, {events=EPOLLIN|EPOLLEXCLUSIVE, data=0xffffa41a5010}) = 0
+1104  epoll_pwait(7, [{events=EPOLLIN, data=0xffffa41a5200}], 512, 60000, NULL, 8) = 1
+1104  recvfrom(9, "GET /hello HTTP/1.1\r\nHost: 127.0"..., 1024, 0, NULL, NULL) = 83
+1104  writev(9, [{iov_base="HTTP/1.1 200 OK\r\nServer: nginx/1"..., iov_len=148}, {iov_base="hello from nginx\n", iov_
+1104  epoll_pwait(7, [{events=EPOLLIN|EPOLLRDHUP, data=0xffffa41a5200}], 512, 75000, NULL, 8) = 1
+1104  recvfrom(9, "", 1024, 0, NULL, NULL) = 0
+$ for p in $NODE $PY $NIO $NETTY $GO; do echo "$(cat /proc/$p/comm) ($(ls /proc/$p/task | wc -l) threads): $(cat /proc/$p/task/*/comm | sort | uniq -c | sort -rn | awk '{printf "%s×%s ", $1, $2}')"; done
+node (7 threads): 6×node 1×DelayedTaskSche 
+python3 (2 threads): 1×python3 1×asyncio_0 
+java (18 threads): 2×java 1×VM 1×VM 1×Signal 1×Service 1×Reference 1×Notification 1×Monitor 1×GC 1×G1 1×G1 1×G1 1×G1 1×Finalizer 1×Common-Cleaner 1×C2 1×C1 
+java (20 threads): 2×multiThreadIoEv 2×java 1×VM 1×VM 1×Signal 1×Service 1×Reference 1×Notification 1×Monitor 1×GC 1×G1 1×G1 1×G1 1×G1 1×Finalizer 1×Common-Cleaner 1×C2 1×C1 
+echo-go (5 threads): 5×echo-go 
+# Same load for everyone: 2,000 connections, each sends 64 bytes 10 times a second (20,000 messages/s, 3 s) ||| Cùng một tải cho tất cả: 2.000 kết nối, mỗi kết nối gửi 64 byte 10 lần mỗi giây (20.000 tin/giây, 3 giây)
+$ ./do-tai.sh node 7301 $NODE
+node      threads=7 fds=2019 rss=73.5 MiB cpu=0.99s | p50 0.09 ms  p99 0.56 ms  max 4.64 ms
+$ ./do-tai.sh python 7302 $PY
+python    threads=2 fds=2008 rss=36.9 MiB cpu=1.26s | p50 0.07 ms  p99 23.27 ms  max 48.12 ms
+$ ./do-tai.sh java-nio 7303 $NIO
+java-nio  threads=18 fds=2008 rss=80.0 MiB cpu=0.80s | p50 0.07 ms  p99 2.38 ms  max 19.88 ms
+$ ./do-tai.sh netty 7304 $NETTY
+netty     threads=25 fds=2020 rss=165.8 MiB cpu=1.67s | p50 0.07 ms  p99 3.22 ms  max 10.77 ms
+$ ./do-tai.sh go 7305 $GO
+go        threads=15 fds=2007 rss=22.2 MiB cpu=4.39s | p50 0.11 ms  p99 2.52 ms  max 44.78 ms
+$ ./do-tai.sh go-copy 7306 $GOC
+go-copy   threads=15 fds=6007 rss=19.3 MiB cpu=3.84s | p50 0.11 ms  p99 9.76 ms  max 30.13 ms
+$ strace -f -qq -c -p $GOC -o goc.txt & ST=$!; sleep 0.5; ./tai 7306 200 1 100 > /dev/null; kill -INT $ST; wait $ST; head -7 goc.txt
+% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ------------------
+ 59.32    1.280473         262      4875       199 futex
+ 15.05    0.324847          54      6006      2001 splice
+ 12.04    0.259835         159      1628           nanosleep
+  9.87    0.213143          95      2222         1 epoll_pwait
+  1.44    0.031089          30      1023           sched_yield
+$ ./tai 8080 2000 3 0 & T=$!; sleep 2; for w in $(pgrep -f 'nginx: worker'); do ./xem.sh $w; done; wait $T
+opened 2000/2000 connections in 21 ms (0 failed)
+pid 1212: threads=1 fds=973 rss=13.7 MiB cpu=0.00 s ctx-switches=433
+pid 1213: threads=1 fds=1045 rss=13.7 MiB cpu=0.00 s ctx-switches=412
+held 2000 idle connections for 3 s, closed by server 0
+load generator CPU: 0.02 s

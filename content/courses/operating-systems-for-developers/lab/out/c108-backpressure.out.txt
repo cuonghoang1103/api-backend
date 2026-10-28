@@ -1,0 +1,77 @@
+$ cat /proc/sys/net/ipv4/tcp_wmem /proc/sys/net/ipv4/tcp_rmem
+4096	16384	4194304
+4096	131072	33554432
+$ ./sndbuf
+default SO_SNDBUF = 16384 bytes
+write #42: Resource temporarily unavailable after 2625024 bytes accepted
+SO_SNDBUF after filling: 2626560
+ESTAB 0 2592283 127.0.0.1:49252 127.0.0.1:7500
+skmem:(r0,rb131072,t0,tb2626560,f357,w2641563,o0,bl0,d0)    
+ESTAB 113152 0 127.0.0.1:7500 127.0.0.1:49252
+skmem:(r116736,rb131072,t0,tb2626560,f2048,w0,o0,bl0,d0)    
+$ ./sndbuf 4096
+default SO_SNDBUF = 16384 bytes
+setsockopt(SO_SNDBUF, 4096) -> kernel reports 8192
+write #3: Resource temporarily unavailable after 80357 bytes accepted
+SO_SNDBUF after filling: 8192
+ESTAB 80357 0 127.0.0.1:7500 127.0.0.1:49256
+skmem:(r81253,rb131072,t0,tb2626560,f4763,w0,o0,bl0,d0)    
+ESTAB 0 47616 127.0.0.1:49256 127.0.0.1:7500
+skmem:(r0,rb131072,t0,tb8192,f640,w48512,o0,bl0,d0)    
+$ node flood.js ignore & sleep 0.5; python3 slow.py 7600; wait
+flood (ignore) listening on 7600, highWaterMark 65536 bytes
+ignore t=1.0s  queued in Node:  254 MiB  RSS:  315 MiB  chunks written: 4096
+ignore t=2.0s  queued in Node:  253 MiB  RSS:  315 MiB  chunks written: 4096
+ignore t=3.0s  queued in Node:  253 MiB  RSS:  315 MiB  chunks written: 4096
+$ node flood.js respect & sleep 0.5; python3 slow.py 7600; wait
+flood (respect) listening on 7600, highWaterMark 65536 bytes
+respect t=1.0s  queued in Node:    0 MiB  RSS:   50 MiB  chunks written: 41
+respect t=2.0s  queued in Node:    0 MiB  RSS:   50 MiB  chunks written: 56
+respect t=3.0s  queued in Node:    0 MiB  RSS:   50 MiB  chunks written: 70
+$ ./pool-http none & P=$!; sleep 0.3
+pool-http (none): 8 worker threads on port 7700
+$ python3 slowloris.py 7700 8 6 & L=$!; sleep 1
+$ curl -s -m 4 -o /dev/null -w 'normal request: HTTP %{http_code} after %{time_total} s\n' http://127.0.0.1:7700/; echo "curl exit=$?"
+normal request: HTTP 000 after 4.007598 s
+curl exit=28
+$ wait $L; kill $P
+slowloris: 8/8 slow connections still open after 6 s
+$ ./pool-http idle & P=$!; sleep 0.3
+pool-http (idle): 8 worker threads on port 7700
+$ python3 slowloris.py 7700 8 6 & L=$!; sleep 1
+$ curl -s -m 4 -o /dev/null -w 'normal request: HTTP %{http_code} after %{time_total} s\n' http://127.0.0.1:7700/; echo "curl exit=$?"
+normal request: HTTP 000 after 4.002216 s
+curl exit=28
+$ wait $L; kill $P
+slowloris: 8/8 slow connections still open after 6 s
+$ ./pool-http deadline & P=$!; sleep 0.3
+pool-http (deadline): 8 worker threads on port 7700
+$ python3 slowloris.py 7700 8 6 & L=$!; sleep 1
+$ curl -s -m 4 -o /dev/null -w 'normal request: HTTP %{http_code} after %{time_total} s\n' http://127.0.0.1:7700/; echo "curl exit=$?"
+normal request: HTTP 200 after 1.000746 s
+curl exit=0
+$ wait $L; kill $P
+slowloris: 0/8 slow connections still open after 6 s, server closed the first one after ~3 s
+$ node slow-node.js & N=$!; sleep 0.5
+node: headersTimeout 2000 ms, requestTimeout 5000 ms, keepAliveTimeout 5000 ms, checking every 30000 ms
+$ python3 slowloris.py 7800 1000 8 & L=$!; sleep 1
+$ curl -s -o /dev/null -w 'normal request to Node: HTTP %{http_code} after %{time_total} s\n' http://127.0.0.1:7800/
+normal request to Node: HTTP 200 after 0.003124 s
+$ wait $L; kill $N; sleep 0.3
+slowloris: 1000/1000 slow connections still open after 8 s
+$ CHECK=500 node slow-node.js & N=$!; sleep 0.5
+node: headersTimeout 2000 ms, requestTimeout 5000 ms, keepAliveTimeout 5000 ms, checking every 500 ms
+$ python3 slowloris.py 7800 1 5
+slowloris: 0/1 slow connections still open after 5 s, server closed the first one after ~3 s
+$ cat /proc/sys/net/ipv4/tcp_syn_retries
+2
+$ TIMEFORMAT='%R s'; time python3 -c "import socket; socket.create_connection(('10.255.255.1', 5432))" 2>&1 | tail -1
+TimeoutError: [Errno 110] Connection timed out
+7.218 s
+$ time python3 -c "import socket; socket.create_connection(('10.255.255.1', 5432), timeout=1)" 2>&1 | tail -1
+TimeoutError: timed out
+1.039 s
+$ sysctl net.ipv4.tcp_keepalive_time net.ipv4.tcp_keepalive_intvl net.ipv4.tcp_keepalive_probes
+net.ipv4.tcp_keepalive_time = 7200
+net.ipv4.tcp_keepalive_intvl = 75
+net.ipv4.tcp_keepalive_probes = 9

@@ -1,0 +1,23 @@
+$ cat /sys/fs/cgroup/memory.max
+201326592
+$ ./echo-thread 7001 > /dev/null & S=$!; sleep 0.3
+$ ./tai 7001 10000 2 1000
+connect #4625 failed: Connection refused
+opened 4624/10000 connections in 1102 ms (5376 failed)
+2 s: sent 1, echoed 0, closed by server 4624, late sends 0
+load generator CPU: 0.15 s
+/usr/local/bin/phien: line 47:    30 Killed                     ./echo-thread 7001 > /dev/null
+$ wait $S; echo "echo-thread exit=$?"
+echo-thread exit=137
+$ grep -E '^(oom|oom_kill) ' /sys/fs/cgroup/memory.events
+oom 2
+oom_kill 1
+$ ./echo-epoll 7000 > /dev/null & S=$!; sleep 0.3
+$ ./tai 7000 10000 2 1000
+opened 10000/10000 connections in 82 ms (0 failed)
+2 s: sent 19992, echoed 19992, closed by server 0, late sends 2
+round trip: p50 0.13 ms  p99 1.49 ms  max 9.13 ms
+load generator CPU: 0.39 s
+$ grep -E '^(oom|oom_kill) ' /sys/fs/cgroup/memory.events
+oom 2
+oom_kill 1

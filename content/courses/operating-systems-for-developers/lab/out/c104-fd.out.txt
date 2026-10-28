@@ -1,0 +1,23 @@
+$ ulimit -Sn 1024; ulimit -Sn
+1024
+$ ./echo-epoll 7000 > /dev/null & S=$!; sleep 0.3
+$ ./tai 7000 2000 6 1000 & T=$!; sleep 2
+opened 2000/2000 connections in 19 ms (0 failed)
+$ ./xem.sh $S
+pid 23: threads=1 fds=1024 rss=7.3 MiB cpu=1.97 s ctx-switches=3956
+$ timeout 0.5 strace -qq -p $S -e trace=accept4,epoll_pwait 2>&1 | head -4
+epoll_pwait(4, [{events=EPOLLIN, data=0x3}], 256, -1, NULL, 8) = 1
+accept4(3, NULL, NULL, SOCK_NONBLOCK)   = -1 EMFILE (Too many open files)
+epoll_pwait(4, [{events=EPOLLIN, data=0x3}], 256, -1, NULL, 8) = 1
+accept4(3, NULL, NULL, SOCK_NONBLOCK)   = -1 EMFILE (Too many open files)
+$ strace -qq -c -p $S -o spin.txt & ST=$!; sleep 1; kill -INT $ST; wait $ST; head -6 spin.txt
+% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+ 43.14    0.053868           5      9360           epoll_pwait
+ 40.01    0.049952           5      9359      9359 accept4
+ 11.11    0.013877          13      1021           write
+  5.74    0.007164           7      1021           read
+$ wait $T
+6 s: sent 11998, echoed 6114, closed by server 0, late sends 0
+round trip: p50 0.01 ms  p99 0.59 ms  max 3.14 ms
+load generator CPU: 0.10 s

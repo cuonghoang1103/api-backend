@@ -1,0 +1,17 @@
+$ cat /sys/fs/cgroup/pids.max
+1000
+$ ./echo-thread 7001 > srv.log & S=$!; sleep 0.3
+$ ./tai 7001 3000 2 1000
+opened 3000/3000 connections in 31 ms (0 failed)
+2 s: sent 1992, echoed 1992, closed by server 2004, late sends 0
+round trip: p50 0.10 ms  p99 1.56 ms  max 2.51 ms
+load generator CPU: 0.11 s
+$ cat srv.log
+echo-thread pid 30: port 7001, one thread per connection
+pthread_create failed at connection 997: Resource temporarily unavailable
+$ ./echo-epoll 7000 > /dev/null & S=$!; sleep 0.3
+$ ./tai 7000 3000 2 1000
+opened 3000/3000 connections in 45 ms (0 failed)
+2 s: sent 6000, echoed 6000, closed by server 0, late sends 0
+round trip: p50 0.08 ms  p99 0.58 ms  max 1.54 ms
+load generator CPU: 0.19 s

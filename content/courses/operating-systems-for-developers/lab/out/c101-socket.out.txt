@@ -1,0 +1,78 @@
+$ gcc -O2 -Wall -o echo1 echo1.c && gcc -O2 -Wall -o noaccept noaccept.c && gcc -O2 -Wall -o dial dial.c && echo built
+built
+$ strace -qq -e trace=socket,setsockopt,bind,listen,accept,read,write,close -o echo1.txt ./echo1 7000 & sleep 0.5
+echo1 pid 42 listening on fd 3, port 7000
+$ printf 'hello\n' | nc -N 127.0.0.1 7000
+hello
+$ sed -n '/^socket/,$p' echo1.txt; echo
+socket(AF_INET, SOCK_STREAM, IPPROTO_IP) = 3
+setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
+bind(3, {sa_family=AF_INET, sin_port=htons(7000), sin_addr=inet_addr("0.0.0.0")}, 16) = 0
+listen(3, 128)                          = 0
+write(1, "echo1 pid 42 listening on fd 3, "..., 42) = 42
+accept(3, NULL, NULL)                   = 4
+read(4, "hello\n", 4096)                = 6
+write(4, "hello\n", 6)                  = 6
+read(4, "", 4096)                       = 0
+close(4)                                = 0
+accept(3, NULL, NULL
+$ E=$(pgrep -x echo1); (printf 'first\n'; sleep 3) | nc 127.0.0.1 7000 & sleep 0.5
+first
+$ ls -l /proc/$E/fd | awk 'NR>1 {print $9, $10, $11}'
+0 -> /dev/null
+1 -> pipe:[2031606]
+2 -> pipe:[2031606]
+3 -> socket:[2059022]
+4 -> socket:[2059028]
+$ ss -tnp '( sport = :7000 )' | cut -c1-120
+State Recv-Q Send-Q Local Address:Port Peer Address:Port Process                       
+ESTAB 0      0          127.0.0.1:7000    127.0.0.1:35450 users:(("echo1",pid=42,fd=4))
+$ printf 'second\n' | timeout 1 nc 127.0.0.1 7000; echo "second client: exit=$? (no echo)"
+second client: exit=124 (no echo)
+$ ss -ltn '( sport = :7000 )'
+State  Recv-Q Send-Q Local Address:Port Peer Address:Port
+LISTEN 1      128          0.0.0.0:7000      0.0.0.0:*   
+$ ./noaccept 4 & sleep 0.3
+listening on 7100 with backlog 4, never calling accept()
+$ ./dial 7100 8 1500
+connection  1: connected                          after    0.0 ms
+connection  2: connected                          after    0.0 ms
+connection  3: connected                          after    0.0 ms
+connection  4: connected                          after    0.0 ms
+connection  5: connected                          after    0.0 ms
+connection  6: still waiting (SYN not answered)   after 1502.2 ms
+connection  7: still waiting (SYN not answered)   after 1502.2 ms
+connection  8: still waiting (SYN not answered)   after 1502.0 ms
+$ ss -ltn '( sport = :7100 )'
+State  Recv-Q Send-Q Local Address:Port Peer Address:Port
+LISTEN 5      4            0.0.0.0:7100      0.0.0.0:*   
+$ nstat -az TcpExtListenOverflows TcpExtListenDrops
+#kernel
+TcpExtListenOverflows           10                 0.0
+TcpExtListenDrops               10                 0.0
+$ ss -ltnp | awk 'NR==1 || /:720[1-3]|:8080/' | cut -c1-110
+State  Recv-Q Send-Q Local Address:Port Peer Address:PortProcess                         
+LISTEN 0      5            0.0.0.0:7203      0.0.0.0:*    users:(("python3",pid=98,fd=3))
+LISTEN 0      511          0.0.0.0:8080      0.0.0.0:*    users:(("nginx",pid=99,fd=4))  
+LISTEN 0      50                 *:7202            *:*    users:(("java",pid=97,fd=5))   
+LISTEN 0      511                *:7201            *:*    users:(("node",pid=96,fd=18))  
+$ cat /proc/sys/net/core/somaxconn
+4096
+$ ./echo-epoll 7000 > /dev/null & S=$!; sleep 0.3
+$ grep -E '^(TCP|sockets)' /proc/net/sockstat; grep -E '^(Slab|SUnreclaim):' /proc/meminfo
+sockets: used 2
+TCP: inuse 1 orphan 0 tw 2 alloc 86 mem 1047
+Slab:             425552 kB
+SUnreclaim:       108096 kB
+$ ./tai 7000 10000 3 0 & T=$!; sleep 1.5
+opened 10000/10000 connections in 90 ms (0 failed)
+$ grep -E '^(TCP|sockets)' /proc/net/sockstat; grep -E '^(Slab|SUnreclaim):' /proc/meminfo
+sockets: used 20002
+TCP: inuse 20001 orphan 0 tw 0 alloc 20086 mem 1047
+Slab:             490848 kB
+SUnreclaim:       161728 kB
+$ ./xem.sh $S
+pid 146: threads=1 fds=10005 rss=41.6 MiB cpu=0.03 s ctx-switches=2722
+$ wait $T
+held 10000 idle connections for 3 s, closed by server 0
+load generator CPU: 0.09 s

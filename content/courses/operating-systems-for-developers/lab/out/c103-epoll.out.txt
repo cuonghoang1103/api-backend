@@ -1,0 +1,85 @@
+$ gcc -O2 -o sel1024 sel1024.c && ./sel1024; echo "exit=$?"
+FD_SETSIZE = 1024, sizeof(fd_set) = 128 bytes
+newest fd = 1102, now FD_SET(1102, &set) ...
+*** bit out of range 0 - FD_SETSIZE on fd_set ***: terminated
+/usr/local/bin/phien: line 24:    27 Aborted                    ./sel1024
+exit=134
+$ gcc -O2 -Wall -o pollbench pollbench.c && for n in 10 100 1000 10000; do for m in select poll epoll; do ./pollbench $m $n; done; done
+select N=   10:     1.39 us per wake-up
+poll   N=   10:     1.33 us per wake-up
+epoll  N=   10:     0.70 us per wake-up
+select N=  100:     6.68 us per wake-up
+poll   N=  100:     6.76 us per wake-up
+epoll  N=  100:     0.71 us per wake-up
+select N= 1000:    64.33 us per wake-up
+poll   N= 1000:    64.52 us per wake-up
+epoll  N= 1000:     0.72 us per wake-up
+select N=10000: impossible, fd 10002 >= FD_SETSIZE
+poll   N=10000:   676.02 us per wake-up
+epoll  N=10000:     0.72 us per wake-up
+$ ./echo-epoll 7000 & S=$!; sleep 0.3
+echo-epoll pid 49: port 7000, one thread, epoll fd 4
+$ for i in 1 2 3; do (sleep 2) | nc 127.0.0.1 7000 & done; sleep 0.3
+$ ls -l /proc/$S/fd | awk 'NR>1 {print $9, $10, $11}'
+0 -> /dev/null
+1 -> pipe:[2107904]
+2 -> pipe:[2107904]
+3 -> socket:[2108795]
+4 -> anon_inode:[eventpoll]
+5 -> socket:[2108803]
+6 -> socket:[2108804]
+7 -> socket:[2108806]
+$ cat /proc/$S/fdinfo/4
+pos:	0
+flags:	02
+mnt_id:	19
+ino:	1046
+tfd:        7 events:       19 data:                7  pos:0 ino:202d86 sdev:a
+tfd:        5 events:       19 data:                5  pos:0 ino:202d83 sdev:a
+tfd:        6 events:       19 data:                6  pos:0 ino:202d84 sdev:a
+tfd:        3 events:       19 data:                3  pos:0 ino:202d7b sdev:a
+$ strace -qq -p $S -e trace=epoll_pwait,epoll_ctl,accept4,read,write,close -o one.txt & ST=$!; sleep 0.5
+$ printf 'hi\n' | nc -N 127.0.0.1 7000; sleep 0.2; kill -INT $ST; wait $ST
+hi
+$ cat one.txt
+epoll_pwait(4, [{events=EPOLLIN, data=0x3}], 256, -1, NULL, 8) = 1
+accept4(3, NULL, NULL, SOCK_NONBLOCK)   = 8
+epoll_ctl(4, EPOLL_CTL_ADD, 8, {events=EPOLLIN, data=0x8}) = 0
+accept4(3, NULL, NULL, SOCK_NONBLOCK)   = -1 EAGAIN (Resource temporarily unavailable)
+epoll_pwait(4, [{events=EPOLLIN, data=0x8}], 256, -1, NULL, 8) = 1
+read(8, "hi\n", 4096)                   = 3
+write(8, "hi\n", 3)                     = 3
+epoll_pwait(4, [{events=EPOLLIN, data=0x8}], 256, -1, NULL, 8) = 1
+read(8, "", 4096)                       = 0
+close(8)                                = 0
+epoll_pwait(4 <detached ...>
+$ gcc -O2 -Wall -o trigger trigger.c && for m in lt et et-drain; do echo "[$m]"; ./trigger $m; done
+[lt]
+  wake-up 1: read 4 bytes
+  wake-up 2: read 4 bytes
+  wake-up 3: read 2 bytes
+  all 10 bytes read
+[et]
+  wake-up 1: read 4 bytes
+  epoll_wait: timeout after 500 ms, 6 bytes still unread
+[et-drain]
+  wake-up 1: read 10 bytes (then EAGAIN)
+  all 10 bytes read
+$ gcc -O2 -Wall -pthread -o oneshot oneshot.c && for m in lt et oneshot; do echo "[$m]"; ./oneshot $m; done
+[lt]
+   0 ms  thread 4 woke for the connection
+   0 ms  thread 3 woke for the connection  <-- another thread is ALREADY handling it
+   0 ms  thread 2 woke for the connection  <-- another thread is ALREADY handling it
+   0 ms  thread 1 woke for the connection  <-- another thread is ALREADY handling it
+ 107 ms  thread 3 read 28 bytes
+ 107 ms  thread 4 read nothing: Resource temporarily unavailable (another thread took the data)
+ 107 ms  thread 2 read nothing: Resource temporarily unavailable (another thread took the data)
+ 107 ms  thread 1 read nothing: Resource temporarily unavailable (another thread took the data)
+[et]
+   5 ms  thread 4 woke for the connection
+  56 ms  thread 3 woke for the connection  <-- another thread is ALREADY handling it
+ 115 ms  thread 4 read 28 bytes
+ 162 ms  thread 3 read nothing: Resource temporarily unavailable (another thread took the data)
+[oneshot]
+   3 ms  thread 4 woke for the connection
+ 106 ms  thread 4 read 28 bytes

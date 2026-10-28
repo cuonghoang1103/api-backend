@@ -1,0 +1,6 @@
+# Ảnh phụ CHỈ cho Chương 10 (I/O models): os-lab + nginx, liburing, wrk. Dựng: docker build -t os-lab-ch10 -f Dockerfile.ch10 .
+# (giữ ảnh os-lab chung không đổi; xoá ảnh này khi soạn xong: docker rmi os-lab-ch10)
+FROM os-lab
+RUN apt-get update && apt-get install -y --no-install-recommends nginx-light liburing-dev wrk \
+ && (apt-get install -y --no-install-recommends liburing-dev || true) \
+ && rm -rf /var/lib/apt/lists/*

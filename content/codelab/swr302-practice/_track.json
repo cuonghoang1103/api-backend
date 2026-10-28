@@ -208,6 +208,12 @@
       "description": "Lab chương 4A: use case GymPass — sơ đồ, hai bảng, đặc tả Book a Class, business rule, FR."
     },
     {
+      "slug": "swr302-4-deep-model-checker",
+      "name": "Deep Lab 4 — Model consistency checker",
+      "level": "ADVANCED",
+      "description": "Deep Lab chương 4: tự viết công cụ kiểm mô hình — cân bằng DFD (context ↔ mức 0, so như đa tập), luật DFD (hố đen, phép màu, luồng sai luật, kho chỉ ghi/chỉ đọc, thiếu nhãn) và độ đầy đủ bảng quyết định (tổ hợp thiếu, mâu thuẫn, trùng) — chấm trên mẫu MediLab và dữ liệu ẩn."
+    },
+    {
       "slug": "swr302-5-1-srs-ieee-830",
       "name": "5.1 The SRS: template, sections and audiences",
       "level": "BEGINNER",

@@ -1,0 +1,361 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-4-deep-model-checker",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-4-8-ch12-flow-models"
+  },
+  "exercises": [
+    {
+      "title": "Deep Lab 4 — Model consistency checker (DFD balancing, DFD rules, decision tables)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 90,
+      "points": 100,
+      "concepts": [
+        "DFD balancing",
+        "DFD rules",
+        "decision table completeness"
+      ],
+      "prerequisites": [
+        "SWR302 lessons 4.8 (flow models) and 4.9 (decision models)"
+      ],
+      "tags": [
+        "swr302",
+        "deep-lab"
+      ],
+      "problemHtml": "<h1>Deep Lab 4 — Model consistency checker (DFD balancing, DFD rules, decision tables)</h1>\n<p class=\"bi-phu\">Chapter 4 deep lab · build the checks a modelling tool runs · 10 marks · hidden models on Submit</p>\n<h2>1. Overview</h2>\n<p>Analysis models are only useful when they are consistent. In this deep lab you build the checks a requirements-modelling tool runs automatically, then run them on <b>MediLab</b>, a hospital laboratory system. The grader runs your functions on the sample below <b>and on hidden models</b>.</p>\n<p><b>A. <code>balance(context, level0)</code></b> — Wiegers: a level-0 DFD must be <i>balanced</i> with its context diagram: the flows between external entities and the system must be the same. Turn every context flow that enters the system into the key <code>'IN &lt;Entity&gt;: &lt;label&gt;'</code> and every flow leaving it into <code>'OUT &lt;Entity&gt;: &lt;label&gt;'</code>; do the same for level-0 flows between an external entity and a <b>process</b> (ignore every other flow). Labels are trimmed, inner spaces collapsed to one, lower-cased. Compare the two lists as <b>multisets</b> (a flow listed twice must appear twice). Return <code>{ balanced, missing, extra }</code> — <code>missing</code>: in the context but not in level 0; <code>extra</code>: the other way; both sorted.</p>\n<p><b>B. <code>dfdRules(dfd)</code></b> — return the <b>sorted, duplicate-free</b> list of problem codes:</p>\n<ul><li><code>UNLABELED:from-&gt;to</code> — a flow whose label is empty or only spaces;</li><li><code>UNKNOWN:name</code> — an endpoint that is not an entity, process id or store id;</li><li><code>ENTITY_TO_ENTITY:from-&gt;to</code>, <code>ENTITY_STORE:from-&gt;to</code> (either direction), <code>STORE_TO_STORE:from-&gt;to</code> — data must pass through a process;</li><li>for each process: <code>BLACK_HOLE:id</code> (inputs, no outputs), <code>MIRACLE:id</code> (outputs, no inputs), <code>ISOLATED:id</code> (neither);</li><li>for each store: <code>WRITE_ONLY:id</code>, <code>READ_ONLY:id</code>, <code>ISOLATED:id</code>.</li></ul>\n<p>Count every flow (legal or not) when deciding inputs and outputs.</p>\n<p><b>C/D. <code>checkTable(conditions, rules)</code></b> — a decision table is complete when every combination of condition values is covered by exactly one rule. Enumerate the combinations with the first condition varying slowest and values in listed order; name a combination <code>'Member=Y, Total=&lt;500k, Coupon=Y'</code>. A rule matches a combination when each condition in its <code>when</code> equals the value, is <code>'-'</code>, or is absent. A rule that names an unknown condition or an unknown value is <b>invalid</b> (listed by id, sorted, and ignored). Return <code>{ missing, conflicts, redundant, invalid }</code>: combinations with no rule; with two or more rules giving different actions; with two or more rules giving the same action. With no conditions there are no combinations.</p>\n<p><b>Sample data</b> (also in <code>answers/sample-data.js</code>):</p><pre><code>const CONTEXT = {\n  system: \"MediLab\",\n  entities: [\"Doctor\", \"Patient\", \"Lab Analyzer\", \"Insurer\"],\n  flows: [\n    {\"from\": \"Doctor\", \"to\": \"MediLab\", \"label\": \"test order\"},\n    {\"from\": \"MediLab\", \"to\": \"Doctor\", \"label\": \"test result\"},\n    {\"from\": \"Patient\", \"to\": \"MediLab\", \"label\": \"sample\"},\n    {\"from\": \"MediLab\", \"to\": \"Patient\", \"label\": \"result notification\"},\n    {\"from\": \"MediLab\", \"to\": \"Lab Analyzer\", \"label\": \"analysis request\"},\n    {\"from\": \"Lab Analyzer\", \"to\": \"MediLab\", \"label\": \"measurement\"},\n    {\"from\": \"MediLab\", \"to\": \"Insurer\", \"label\": \"claim\"}\n  ]\n};</code></pre><pre><code>const LEVEL0 = {\n  entities: [\"Doctor\", \"Patient\", \"Lab Analyzer\", \"Insurer\"],\n  processes: [\n    {\"id\": \"P1\", \"name\": \"Register order\"},\n    {\"id\": \"P2\", \"name\": \"Run analysis\"},\n    {\"id\": \"P3\", \"name\": \"Report results\"},\n    {\"id\": \"P4\", \"name\": \"Bill insurer\"},\n    {\"id\": \"P5\", \"name\": \"Archive samples\"}\n  ],\n  stores: [\n    {\"id\": \"D1\", \"name\": \"Orders\"},\n    {\"id\": \"D2\", \"name\": \"Results\"},\n    {\"id\": \"D3\", \"name\": \"Price list\"}\n  ],\n  flows: [\n    {\"from\": \"Doctor\", \"to\": \"P1\", \"label\": \"test order\"},\n    {\"from\": \"P1\", \"to\": \"D1\", \"label\": \"order\"},\n    {\"from\": \"Patient\", \"to\": \"P2\", \"label\": \"sample\"},\n    {\"from\": \"D1\", \"to\": \"P2\", \"label\": \"order\"},\n    {\"from\": \"P2\", \"to\": \"Lab Analyzer\", \"label\": \"analysis request\"},\n    {\"from\": \"Lab Analyzer\", \"to\": \"P2\", \"label\": \"Measurement\"},\n    {\"from\": \"P2\", \"to\": \"D2\", \"label\": \"result\"},\n    {\"from\": \"D2\", \"to\": \"P3\", \"label\": \"result\"},\n    {\"from\": \"P3\", \"to\": \"Doctor\", \"label\": \"test  result\"},\n    {\"from\": \"P3\", \"to\": \"Patient\", \"label\": \"SMS\"},\n    {\"from\": \"D1\", \"to\": \"P4\", \"label\": \"order\"},\n    {\"from\": \"P4\", \"to\": \"Insurer\", \"label\": \"claim\"},\n    {\"from\": \"Insurer\", \"to\": \"P4\", \"label\": \"claim decision\"},\n    {\"from\": \"Patient\", \"to\": \"P5\", \"label\": \"sample\"},\n    {\"from\": \"Doctor\", \"to\": \"D1\", \"label\": \"order note\"},\n    {\"from\": \"D3\", \"to\": \"D1\", \"label\": \"\"}\n  ]\n};</code></pre><pre><code>const CONDITIONS = [\n  {\"name\": \"Member\", \"values\": [\"Y\", \"N\"]},\n  {\"name\": \"Total\", \"values\": [\"&lt;500k\", \"500k-1M\", \"&gt;1M\"]},\n  {\"name\": \"Coupon\", \"values\": [\"Y\", \"N\"]}\n];</code></pre><pre><code>const RULES = [\n  {\"id\": \"R1\", \"when\": {\"Member\": \"Y\", \"Total\": \"&gt;1M\"}, \"action\": \"10% off\"},\n  {\"id\": \"R2\", \"when\": {\"Member\": \"Y\", \"Total\": \"500k-1M\"}, \"action\": \"5% off\"},\n  {\"id\": \"R3\", \"when\": {\"Member\": \"N\", \"Coupon\": \"Y\"}, \"action\": \"3% off\"},\n  {\"id\": \"R4\", \"when\": {\"Member\": \"N\", \"Total\": \"&gt;1M\", \"Coupon\": \"Y\"}, \"action\": \"5% off\"},\n  {\"id\": \"R5\", \"when\": {\"Member\": \"N\", \"Total\": \"&lt;500k\", \"Coupon\": \"N\"}, \"action\": \"no discount\"},\n  {\"id\": \"R6\", \"when\": {\"Member\": \"Y\", \"Total\": \"&gt;1M\", \"Coupon\": \"Y\"}, \"action\": \"10% off\"},\n  {\"id\": \"R7\", \"when\": {\"Member\": \"Maybe\"}, \"action\": \"ask\"}\n];</code></pre>\n<h3>Main features</h3>\n<ul>\n  <li>A. DFD balancing between the context diagram and level 0.</li>\n  <li>B. DFD rule checker.</li>\n  <li>C. Decision-table gaps.</li>\n  <li>D. Decision-table conflicts, redundancy and invalid rules.</li>\n  <li>E. Robustness: empty models, untouched inputs, tricky names.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>Pure functions: do not modify the inputs; do not rely on the sample data inside your functions.</li>\n  <li>Ids such as \"constructor\" or \"toString\" must work — use Object.create(null), a prefix, or hasOwnProperty.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>answers/\n├── sample-data.js      ← CONTEXT, LEVEL0, CONDITIONS, RULES (read-only)\n├── balance.js          ← function balance(context, level0)\n├── dfd-rules.js        ← function dfdRules(dfd)\n└── decision-table.js   ← function checkTable(conditions, rules)</pre>\n<h2>3. Data model</h2>\n<p><b>Data shapes</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>context</code></td><td>{ system, entities[], flows[{from,to,label}] }</td><td>flows touch the system name</td></tr><tr><td><code>level0 / dfd</code></td><td>{ entities[], processes[{id}], stores[{id}], flows[] }</td><td>flows use entity names and ids</td></tr><tr><td><code>conditions</code></td><td>[{ name, values[] }]</td><td>order matters for enumeration</td></tr><tr><td><code>rules</code></td><td>[{ id, when: { cond: value | '-' }, action }]</td><td>absent condition = any value</td></tr></tbody></table>\n<h2>4. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. A. balance() <span class=\"bi-diem\">2.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Multiset comparison of normalised external flows.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">DFD balancing</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. B. dfdRules() <span class=\"bi-diem\">3 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>All rule codes, sorted, no duplicates.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">DFD rules</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. C. Gaps <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Every uncovered combination, in enumeration order.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">decision table</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. D. Conflicts, redundancy, invalid <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Different actions ⇒ conflict; same action ⇒ redundant.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">decision table</span></p>\n</div>\n<div class=\"bi-cn\"><h3>5. E. Robustness <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Empty inputs, no mutation, tricky ids.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">defensive code</span></p>\n</div>\n<h2>5. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>balance</code></td><td>answers/balance.js</td></tr><tr><td><code>dfdRules</code></td><td>answers/dfd-rules.js</td></tr><tr><td><code>checkTable</code></td><td>answers/decision-table.js</td></tr></tbody></table>\n<h2>6. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>A. balance()</td><td>2.5</td></tr><tr><td>2</td><td>B. dfdRules()</td><td>3</td></tr><tr><td>3</td><td>C. Gaps</td><td>2</td></tr><tr><td>4</td><td>D. Conflicts, redundancy, invalid</td><td>1.5</td></tr><tr><td>5</td><td>E. Robustness</td><td>1</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Comparing flows as sets: a flow drawn twice in the context but once in level 0 is still a balancing error.</li>\n  <li>Counting only legal flows when deciding black holes — the rules are independent.</li>\n  <li>Treating \"-\" as a literal value instead of \"any value\".</li>\n</ul>\n<h2>7. Submission</h2>\n<p>Write your answers in the files of <code>answers/</code> on the right. Diagrams are written as text in the syntax of a real tool (Mermaid or PlantUML — paste them into <a href=\"https://mermaid.live\" target=\"_blank\" rel=\"noopener\">mermaid.live</a> or <a href=\"https://www.plantuml.com/plantuml\" target=\"_blank\" rel=\"noopener\">plantuml.com</a> to SEE the picture); tables are JavaScript arrays, one object per row of the school template. Press <b>Run</b> for the visible checks and <b>Submit</b> for full grading, hidden checks included. Your mark per question appears in the rubric table.</p>",
+      "problemHtmlVi": "<h1>Deep Lab 4 — Model consistency checker (DFD balancing, DFD rules, decision tables)</h1>\n<p class=\"bi-phu\">Deep lab chương 4 · tự viết bộ kiểm mà công cụ mô hình hoá chạy · 10 điểm · mô hình ẩn khi Nộp</p>\n<h2>1. Tổng quan</h2>\n<p>Mô hình phân tích chỉ hữu ích khi nhất quán. Deep lab này: tự viết các phép kiểm mà công cụ mô hình hoá chạy, rồi chạy trên <b>MediLab</b> (phòng xét nghiệm bệnh viện). Máy chấm chạy hàm của bạn trên dữ liệu mẫu <b>và mô hình ẩn</b>.</p>\n<p><b>A. <code>balance(context, level0)</code></b> — DFD mức 0 phải <i>cân bằng</i> với sơ đồ ngữ cảnh. Mỗi luồng vào hệ thống thành khoá <code>'IN &lt;Thực thể&gt;: &lt;nhãn&gt;'</code>, luồng ra thành <code>'OUT …'</code>; làm tương tự với luồng mức 0 giữa thực thể ngoài và <b>tiến trình</b> (bỏ qua luồng khác). Nhãn: cắt khoảng trắng hai đầu, gộp khoảng trắng giữa, chữ thường. So như <b>đa tập</b>. Trả <code>{ balanced, missing, extra }</code> (đã sắp).</p>\n<p><b>B. <code>dfdRules(dfd)</code></b> — danh sách mã lỗi đã sắp, không trùng: UNLABELED, UNKNOWN, ENTITY_TO_ENTITY, ENTITY_STORE, STORE_TO_STORE, BLACK_HOLE / MIRACLE / ISOLATED cho tiến trình, WRITE_ONLY / READ_ONLY / ISOLATED cho kho. Đếm mọi luồng (kể cả sai luật) khi xét vào/ra.</p>\n<p><b>C/D. <code>checkTable(conditions, rules)</code></b> — liệt kê mọi tổ hợp (điều kiện đầu thay đổi chậm nhất, giá trị theo thứ tự khai báo); luật khớp khi mỗi điều kiện bằng giá trị, là <code>'-'</code> hoặc vắng; luật có điều kiện/giá trị lạ là <b>invalid</b> (bị bỏ qua); không có điều kiện nào ⇒ không có tổ hợp nào. Trả <code>{ missing, conflicts, redundant, invalid }</code>.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>A. Cân bằng DFD giữa sơ đồ ngữ cảnh và mức 0.</li>\n  <li>B. Bộ kiểm luật DFD.</li>\n  <li>C. Lỗ hổng của bảng quyết định.</li>\n  <li>D. Mâu thuẫn, trùng lặp và luật không hợp lệ.</li>\n  <li>E. Độ bền: mô hình rỗng, không sửa đầu vào, tên đánh lừa.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Hàm thuần: không sửa đầu vào; không dựa vào dữ liệu mẫu bên trong hàm.</li>\n  <li>Id như \"constructor\" hay \"toString\" phải chạy đúng — dùng Object.create(null), tiền tố, hoặc hasOwnProperty.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>answers/\n├── sample-data.js      ← CONTEXT, LEVEL0, CONDITIONS, RULES (read-only)\n├── balance.js          ← function balance(context, level0)\n├── dfd-rules.js        ← function dfdRules(dfd)\n└── decision-table.js   ← function checkTable(conditions, rules)</pre>\n<h2>3. Mô hình dữ liệu</h2>\n<p><b>Data shapes</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>context</code></td><td>{ system, entities[], flows[{from,to,label}] }</td><td>luồng nối với tên hệ thống</td></tr><tr><td><code>level0 / dfd</code></td><td>{ entities[], processes[{id}], stores[{id}], flows[] }</td><td>luồng dùng tên thực thể và id</td></tr><tr><td><code>conditions</code></td><td>[{ name, values[] }]</td><td>thứ tự quyết định cách liệt kê</td></tr><tr><td><code>rules</code></td><td>[{ id, when: { cond: value | '-' }, action }]</td><td>vắng điều kiện = mọi giá trị</td></tr></tbody></table>\n<h2>4. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. A. balance() <span class=\"bi-diem\">2.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>So đa tập các luồng ngoài đã chuẩn hoá.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">DFD balancing</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. B. dfdRules() <span class=\"bi-diem\">3 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Đủ mã lỗi, đã sắp, không trùng.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">DFD rules</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. C. Lỗ hổng <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Mọi tổ hợp chưa phủ, đúng thứ tự.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">decision table</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. D. Mâu thuẫn, trùng, không hợp lệ <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Khác hành động ⇒ mâu thuẫn; cùng hành động ⇒ trùng.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">decision table</span></p>\n</div>\n<div class=\"bi-cn\"><h3>5. E. Độ bền <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Đầu vào rỗng, không sửa đầu vào, id đánh lừa.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">defensive code</span></p>\n</div>\n<h2>5. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>balance</code></td><td>answers/balance.js</td></tr><tr><td><code>dfdRules</code></td><td>answers/dfd-rules.js</td></tr><tr><td><code>checkTable</code></td><td>answers/decision-table.js</td></tr></tbody></table>\n<h2>6. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>A. balance()</td><td>2.5</td></tr><tr><td>2</td><td>B. dfdRules()</td><td>3</td></tr><tr><td>3</td><td>C. Lỗ hổng</td><td>2</td></tr><tr><td>4</td><td>D. Mâu thuẫn, trùng, không hợp lệ</td><td>1.5</td></tr><tr><td>5</td><td>E. Độ bền</td><td>1</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>So như tập: luồng vẽ hai lần ở ngữ cảnh mà một lần ở mức 0 vẫn là lỗi cân bằng.</li>\n  <li>Chỉ đếm luồng hợp lệ khi xét hố đen — các luật độc lập nhau.</li>\n  <li>Coi \"-\" là một giá trị thay vì \"mọi giá trị\".</li>\n</ul>\n<h2>7. Nộp bài</h2>\n<p>Viết câu trả lời vào các tệp trong <code>answers/</code> bên phải. Sơ đồ viết bằng chữ theo cú pháp của công cụ thật (Mermaid hoặc PlantUML — dán vào <a href=\"https://mermaid.live\" target=\"_blank\" rel=\"noopener\">mermaid.live</a> hoặc <a href=\"https://www.plantuml.com/plantuml\" target=\"_blank\" rel=\"noopener\">plantuml.com</a> để XEM hình); bảng là mảng JavaScript, mỗi object là một dòng của template trường. Bấm <b>Chạy thử</b> để chạy kiểm hiện, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn). Điểm từng câu hiện trong bảng thang điểm.</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "Pure functions: do not modify the inputs; do not rely on the sample data inside your functions.|||Hàm thuần: không sửa đầu vào; không dựa vào dữ liệu mẫu bên trong hàm.\nIds such as \"constructor\" or \"toString\" must work — use Object.create(null), a prefix, or hasOwnProperty.|||Id như \"constructor\" hay \"toString\" phải chạy đúng — dùng Object.create(null), tiền tố, hoặc hasOwnProperty.",
+      "examplesJson": [
+        {
+          "input": "answers/*.js — one object per row of the template",
+          "output": "Rubric table: marks per question (e.g. B. 2.5/3)",
+          "explanation": "Every rubric line is checked separately; hidden checks run on Submit.|||Mỗi dòng rubric được kiểm riêng; kiểm ẩn chạy khi Nộp."
+        }
+      ],
+      "hintsJson": [
+        "A: dựng hai mảng khoá rồi \"trừ đa tập\": với mỗi khoá của mảng này, xoá một bản khớp ở mảng kia (indexOf + splice).",
+        "B: lập bảng loại (E/P/S) theo tiền tố \"#\"+id để id \"constructor\" không đụng Object.prototype; đếm vào/ra cho mọi luồng.",
+        "C/D: sinh tổ hợp bằng vòng lặp lồng (bắt đầu [[]], mỗi điều kiện nhân với các giá trị); với mỗi tổ hợp lọc luật khớp."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers/sample-data.js",
+          "language": "javascript",
+          "code": "// Sample models (read-only). The grader also runs your functions on hidden models.\nconst CONTEXT = {\n \"system\": \"MediLab\",\n \"entities\": [\n  \"Doctor\",\n  \"Patient\",\n  \"Lab Analyzer\",\n  \"Insurer\"\n ],\n \"flows\": [\n  {\n   \"from\": \"Doctor\",\n   \"to\": \"MediLab\",\n   \"label\": \"test order\"\n  },\n  {\n   \"from\": \"MediLab\",\n   \"to\": \"Doctor\",\n   \"label\": \"test result\"\n  },\n  {\n   \"from\": \"Patient\",\n   \"to\": \"MediLab\",\n   \"label\": \"sample\"\n  },\n  {\n   \"from\": \"MediLab\",\n   \"to\": \"Patient\",\n   \"label\": \"result notification\"\n  },\n  {\n   \"from\": \"MediLab\",\n   \"to\": \"Lab Analyzer\",\n   \"label\": \"analysis request\"\n  },\n  {\n   \"from\": \"Lab Analyzer\",\n   \"to\": \"MediLab\",\n   \"label\": \"measurement\"\n  },\n  {\n   \"from\": \"MediLab\",\n   \"to\": \"Insurer\",\n   \"label\": \"claim\"\n  }\n ]\n};\nconst LEVEL0 = {\n \"entities\": [\n  \"Doctor\",\n  \"Patient\",\n  \"Lab Analyzer\",\n  \"Insurer\"\n ],\n \"processes\": [\n  {\n   \"id\": \"P1\",\n   \"name\": \"Register order\"\n  },\n  {\n   \"id\": \"P2\",\n   \"name\": \"Run analysis\"\n  },\n  {\n   \"id\": \"P3\",\n   \"name\": \"Report results\"\n  },\n  {\n   \"id\": \"P4\",\n   \"name\": \"Bill insurer\"\n  },\n  {\n   \"id\": \"P5\",\n   \"name\": \"Archive samples\"\n  }\n ],\n \"stores\": [\n  {\n   \"id\": \"D1\",\n   \"name\": \"Orders\"\n  },\n  {\n   \"id\": \"D2\",\n   \"name\": \"Results\"\n  },\n  {\n   \"id\": \"D3\",\n   \"name\": \"Price list\"\n  }\n ],\n \"flows\": [\n  {\n   \"from\": \"Doctor\",\n   \"to\": \"P1\",\n   \"label\": \"test order\"\n  },\n  {\n   \"from\": \"P1\",\n   \"to\": \"D1\",\n   \"label\": \"order\"\n  },\n  {\n   \"from\": \"Patient\",\n   \"to\": \"P2\",\n   \"label\": \"sample\"\n  },\n  {\n   \"from\": \"D1\",\n   \"to\": \"P2\",\n   \"label\": \"order\"\n  },\n  {\n   \"from\": \"P2\",\n   \"to\": \"Lab Analyzer\",\n   \"label\": \"analysis request\"\n  },\n  {\n   \"from\": \"Lab Analyzer\",\n   \"to\": \"P2\",\n   \"label\": \"Measurement\"\n  },\n  {\n   \"from\": \"P2\",\n   \"to\": \"D2\",\n   \"label\": \"result\"\n  },\n  {\n   \"from\": \"D2\",\n   \"to\": \"P3\",\n   \"label\": \"result\"\n  },\n  {\n   \"from\": \"P3\",\n   \"to\": \"Doctor\",\n   \"label\": \"test  result\"\n  },\n  {\n   \"from\": \"P3\",\n   \"to\": \"Patient\",\n   \"label\": \"SMS\"\n  },\n  {\n   \"from\": \"D1\",\n   \"to\": \"P4\",\n   \"label\": \"order\"\n  },\n  {\n   \"from\": \"P4\",\n   \"to\": \"Insurer\",\n   \"label\": \"claim\"\n  },\n  {\n   \"from\": \"Insurer\",\n   \"to\": \"P4\",\n   \"label\": \"claim decision\"\n  },\n  {\n   \"from\": \"Patient\",\n   \"to\": \"P5\",\n   \"label\": \"sample\"\n  },\n  {\n   \"from\": \"Doctor\",\n   \"to\": \"D1\",\n   \"label\": \"order note\"\n  },\n  {\n   \"from\": \"D3\",\n   \"to\": \"D1\",\n   \"label\": \"\"\n  }\n ]\n};\nconst CONDITIONS = [\n {\n  \"name\": \"Member\",\n  \"values\": [\n   \"Y\",\n   \"N\"\n  ]\n },\n {\n  \"name\": \"Total\",\n  \"values\": [\n   \"<500k\",\n   \"500k-1M\",\n   \">1M\"\n  ]\n },\n {\n  \"name\": \"Coupon\",\n  \"values\": [\n   \"Y\",\n   \"N\"\n  ]\n }\n];\nconst RULES = [\n {\n  \"id\": \"R1\",\n  \"when\": {\n   \"Member\": \"Y\",\n   \"Total\": \">1M\"\n  },\n  \"action\": \"10% off\"\n },\n {\n  \"id\": \"R2\",\n  \"when\": {\n   \"Member\": \"Y\",\n   \"Total\": \"500k-1M\"\n  },\n  \"action\": \"5% off\"\n },\n {\n  \"id\": \"R3\",\n  \"when\": {\n   \"Member\": \"N\",\n   \"Coupon\": \"Y\"\n  },\n  \"action\": \"3% off\"\n },\n {\n  \"id\": \"R4\",\n  \"when\": {\n   \"Member\": \"N\",\n   \"Total\": \">1M\",\n   \"Coupon\": \"Y\"\n  },\n  \"action\": \"5% off\"\n },\n {\n  \"id\": \"R5\",\n  \"when\": {\n   \"Member\": \"N\",\n   \"Total\": \"<500k\",\n   \"Coupon\": \"N\"\n  },\n  \"action\": \"no discount\"\n },\n {\n  \"id\": \"R6\",\n  \"when\": {\n   \"Member\": \"Y\",\n   \"Total\": \">1M\",\n   \"Coupon\": \"Y\"\n  },\n  \"action\": \"10% off\"\n },\n {\n  \"id\": \"R7\",\n  \"when\": {\n   \"Member\": \"Maybe\"\n  },\n  \"action\": \"ask\"\n }\n];\n"
+        },
+        {
+          "name": "answers/balance.js",
+          "language": "javascript",
+          "code": "// A. DFD balancing: compare the external flows of the context diagram with those of level 0.\n// Flow key: 'IN <Entity>: <label>' or 'OUT <Entity>: <label>' — label trimmed, spaces collapsed, lower case.\nfunction balance(context, level0) {\n  // TODO\n  return { balanced: false, missing: [], extra: [] };\n}\n"
+        },
+        {
+          "name": "answers/dfd-rules.js",
+          "language": "javascript",
+          "code": "// B. DFD rule checker — return the sorted list of problem codes.\nfunction dfdRules(dfd) {\n  // TODO\n  return [];\n}\n"
+        },
+        {
+          "name": "answers/decision-table.js",
+          "language": "javascript",
+          "code": "// C. Decision-table completeness: missing, conflicting and redundant combinations, invalid rules.\nfunction checkTable(conditions, rules) {\n  // TODO\n  return { missing: [], conflicts: [], redundant: [], invalid: [] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers/sample-data.js",
+          "language": "javascript",
+          "code": "// Sample models (read-only). The grader also runs your functions on hidden models.\nconst CONTEXT = {\n \"system\": \"MediLab\",\n \"entities\": [\n  \"Doctor\",\n  \"Patient\",\n  \"Lab Analyzer\",\n  \"Insurer\"\n ],\n \"flows\": [\n  {\n   \"from\": \"Doctor\",\n   \"to\": \"MediLab\",\n   \"label\": \"test order\"\n  },\n  {\n   \"from\": \"MediLab\",\n   \"to\": \"Doctor\",\n   \"label\": \"test result\"\n  },\n  {\n   \"from\": \"Patient\",\n   \"to\": \"MediLab\",\n   \"label\": \"sample\"\n  },\n  {\n   \"from\": \"MediLab\",\n   \"to\": \"Patient\",\n   \"label\": \"result notification\"\n  },\n  {\n   \"from\": \"MediLab\",\n   \"to\": \"Lab Analyzer\",\n   \"label\": \"analysis request\"\n  },\n  {\n   \"from\": \"Lab Analyzer\",\n   \"to\": \"MediLab\",\n   \"label\": \"measurement\"\n  },\n  {\n   \"from\": \"MediLab\",\n   \"to\": \"Insurer\",\n   \"label\": \"claim\"\n  }\n ]\n};\nconst LEVEL0 = {\n \"entities\": [\n  \"Doctor\",\n  \"Patient\",\n  \"Lab Analyzer\",\n  \"Insurer\"\n ],\n \"processes\": [\n  {\n   \"id\": \"P1\",\n   \"name\": \"Register order\"\n  },\n  {\n   \"id\": \"P2\",\n   \"name\": \"Run analysis\"\n  },\n  {\n   \"id\": \"P3\",\n   \"name\": \"Report results\"\n  },\n  {\n   \"id\": \"P4\",\n   \"name\": \"Bill insurer\"\n  },\n  {\n   \"id\": \"P5\",\n   \"name\": \"Archive samples\"\n  }\n ],\n \"stores\": [\n  {\n   \"id\": \"D1\",\n   \"name\": \"Orders\"\n  },\n  {\n   \"id\": \"D2\",\n   \"name\": \"Results\"\n  },\n  {\n   \"id\": \"D3\",\n   \"name\": \"Price list\"\n  }\n ],\n \"flows\": [\n  {\n   \"from\": \"Doctor\",\n   \"to\": \"P1\",\n   \"label\": \"test order\"\n  },\n  {\n   \"from\": \"P1\",\n   \"to\": \"D1\",\n   \"label\": \"order\"\n  },\n  {\n   \"from\": \"Patient\",\n   \"to\": \"P2\",\n   \"label\": \"sample\"\n  },\n  {\n   \"from\": \"D1\",\n   \"to\": \"P2\",\n   \"label\": \"order\"\n  },\n  {\n   \"from\": \"P2\",\n   \"to\": \"Lab Analyzer\",\n   \"label\": \"analysis request\"\n  },\n  {\n   \"from\": \"Lab Analyzer\",\n   \"to\": \"P2\",\n   \"label\": \"Measurement\"\n  },\n  {\n   \"from\": \"P2\",\n   \"to\": \"D2\",\n   \"label\": \"result\"\n  },\n  {\n   \"from\": \"D2\",\n   \"to\": \"P3\",\n   \"label\": \"result\"\n  },\n  {\n   \"from\": \"P3\",\n   \"to\": \"Doctor\",\n   \"label\": \"test  result\"\n  },\n  {\n   \"from\": \"P3\",\n   \"to\": \"Patient\",\n   \"label\": \"SMS\"\n  },\n  {\n   \"from\": \"D1\",\n   \"to\": \"P4\",\n   \"label\": \"order\"\n  },\n  {\n   \"from\": \"P4\",\n   \"to\": \"Insurer\",\n   \"label\": \"claim\"\n  },\n  {\n   \"from\": \"Insurer\",\n   \"to\": \"P4\",\n   \"label\": \"claim decision\"\n  },\n  {\n   \"from\": \"Patient\",\n   \"to\": \"P5\",\n   \"label\": \"sample\"\n  },\n  {\n   \"from\": \"Doctor\",\n   \"to\": \"D1\",\n   \"label\": \"order note\"\n  },\n  {\n   \"from\": \"D3\",\n   \"to\": \"D1\",\n   \"label\": \"\"\n  }\n ]\n};\nconst CONDITIONS = [\n {\n  \"name\": \"Member\",\n  \"values\": [\n   \"Y\",\n   \"N\"\n  ]\n },\n {\n  \"name\": \"Total\",\n  \"values\": [\n   \"<500k\",\n   \"500k-1M\",\n   \">1M\"\n  ]\n },\n {\n  \"name\": \"Coupon\",\n  \"values\": [\n   \"Y\",\n   \"N\"\n  ]\n }\n];\nconst RULES = [\n {\n  \"id\": \"R1\",\n  \"when\": {\n   \"Member\": \"Y\",\n   \"Total\": \">1M\"\n  },\n  \"action\": \"10% off\"\n },\n {\n  \"id\": \"R2\",\n  \"when\": {\n   \"Member\": \"Y\",\n   \"Total\": \"500k-1M\"\n  },\n  \"action\": \"5% off\"\n },\n {\n  \"id\": \"R3\",\n  \"when\": {\n   \"Member\": \"N\",\n   \"Coupon\": \"Y\"\n  },\n  \"action\": \"3% off\"\n },\n {\n  \"id\": \"R4\",\n  \"when\": {\n   \"Member\": \"N\",\n   \"Total\": \">1M\",\n   \"Coupon\": \"Y\"\n  },\n  \"action\": \"5% off\"\n },\n {\n  \"id\": \"R5\",\n  \"when\": {\n   \"Member\": \"N\",\n   \"Total\": \"<500k\",\n   \"Coupon\": \"N\"\n  },\n  \"action\": \"no discount\"\n },\n {\n  \"id\": \"R6\",\n  \"when\": {\n   \"Member\": \"Y\",\n   \"Total\": \">1M\",\n   \"Coupon\": \"Y\"\n  },\n  \"action\": \"10% off\"\n },\n {\n  \"id\": \"R7\",\n  \"when\": {\n   \"Member\": \"Maybe\"\n  },\n  \"action\": \"ask\"\n }\n];\n"
+        },
+        {
+          "name": "answers/balance.js",
+          "language": "javascript",
+          "code": "function __nhan(s) { return String(s == null ? '' : s).trim().replace(/\\s+/g, ' ').toLowerCase(); }\n\nfunction balance(context, level0) {\n  var sys = context.system;\n  var ctxFlows = [], l0Flows = [];\n  (context.flows || []).forEach(function (f) {\n    if (f.to === sys && f.from !== sys) ctxFlows.push('IN ' + String(f.from).trim() + ': ' + __nhan(f.label));\n    else if (f.from === sys && f.to !== sys) ctxFlows.push('OUT ' + String(f.to).trim() + ': ' + __nhan(f.label));\n  });\n  var ent = {}, pro = {};\n  (level0.entities || []).forEach(function (e) { ent['#' + e] = true; });\n  (level0.processes || []).forEach(function (p) { pro['#' + p.id] = true; });\n  (level0.flows || []).forEach(function (f) {\n    if (ent['#' + f.from] && pro['#' + f.to]) l0Flows.push('IN ' + String(f.from).trim() + ': ' + __nhan(f.label));\n    else if (pro['#' + f.from] && ent['#' + f.to]) l0Flows.push('OUT ' + String(f.to).trim() + ': ' + __nhan(f.label));\n  });\n  function tru(a, b) {\n    var con = b.slice(), out = [];\n    a.forEach(function (x) { var i = con.indexOf(x); if (i >= 0) con.splice(i, 1); else out.push(x); });\n    return out.sort();\n  }\n  var missing = tru(ctxFlows, l0Flows), extra = tru(l0Flows, ctxFlows);\n  return { balanced: missing.length === 0 && extra.length === 0, missing: missing, extra: extra };\n}\n"
+        },
+        {
+          "name": "answers/dfd-rules.js",
+          "language": "javascript",
+          "code": "function dfdRules(dfd) {\n  var kind = {};\n  (dfd.entities || []).forEach(function (e) { kind['#' + e] = 'E'; });\n  (dfd.processes || []).forEach(function (p) { kind['#' + p.id] = 'P'; });\n  (dfd.stores || []).forEach(function (s) { kind['#' + s.id] = 'S'; });\n  var out = {}, vao = {}, ra = {};\n  function add(c) { out[c] = true; }\n  (dfd.flows || []).forEach(function (f) {\n    var a = kind['#' + f.from], b = kind['#' + f.to], ten = f.from + '->' + f.to;\n    if (!String(f.label == null ? '' : f.label).trim()) add('UNLABELED:' + ten);\n    if (!a) add('UNKNOWN:' + f.from);\n    if (!b) add('UNKNOWN:' + f.to);\n    if (a === 'E' && b === 'E') add('ENTITY_TO_ENTITY:' + ten);\n    if ((a === 'E' && b === 'S') || (a === 'S' && b === 'E')) add('ENTITY_STORE:' + ten);\n    if (a === 'S' && b === 'S') add('STORE_TO_STORE:' + ten);\n    ra['#' + f.from] = (ra['#' + f.from] || 0) + 1;\n    vao['#' + f.to] = (vao['#' + f.to] || 0) + 1;\n  });\n  (dfd.processes || []).forEach(function (p) {\n    var i = vao['#' + p.id] || 0, o = ra['#' + p.id] || 0;\n    if (i && !o) add('BLACK_HOLE:' + p.id);\n    if (o && !i) add('MIRACLE:' + p.id);\n    if (!i && !o) add('ISOLATED:' + p.id);\n  });\n  (dfd.stores || []).forEach(function (s) {\n    var i = vao['#' + s.id] || 0, o = ra['#' + s.id] || 0;\n    if (i && !o) add('WRITE_ONLY:' + s.id);\n    if (o && !i) add('READ_ONLY:' + s.id);\n    if (!i && !o) add('ISOLATED:' + s.id);\n  });\n  return Object.keys(out).sort();\n}\n"
+        },
+        {
+          "name": "answers/decision-table.js",
+          "language": "javascript",
+          "code": "function checkTable(conditions, rules) {\n  var invalid = [], ok = [];\n  (rules || []).forEach(function (r) {\n    var w = r.when || {}, bad = false;\n    Object.keys(w).forEach(function (k) {\n      var c = conditions.filter(function (x) { return x.name === k; })[0];\n      if (!c || (w[k] !== '-' && c.values.indexOf(w[k]) < 0)) bad = true;\n    });\n    if (bad) invalid.push(r.id); else ok.push(r);\n  });\n  var combos = conditions.length ? [[]] : [];\n  conditions.forEach(function (c) {\n    var next = [];\n    combos.forEach(function (p) { c.values.forEach(function (v) { next.push(p.concat([v])); }); });\n    combos = next;\n  });\n  var missing = [], conflicts = [], redundant = [];\n  combos.forEach(function (combo) {\n    var hit = ok.filter(function (r) {\n      return conditions.every(function (c, i) { var v = (r.when || {})[c.name]; return v === undefined || v === '-' || v === combo[i]; });\n    });\n    var ten = conditions.map(function (c, i) { return c.name + '=' + combo[i]; }).join(', ');\n    if (!hit.length) missing.push(ten);\n    else if (hit.length > 1) {\n      var acts = {};\n      hit.forEach(function (r) { acts['#' + r.action] = true; });\n      (Object.keys(acts).length > 1 ? conflicts : redundant).push(ten);\n    }\n  });\n  return { missing: missing, conflicts: conflicts, redundant: redundant, invalid: invalid.sort() };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>MediLab findings.</b> Balancing: \"result notification\" to the Patient was renamed \"SMS\" in level 0, level 0 invented \"claim decision\" from the Insurer, and the sample now enters level 0 twice (P2 and P5) although the context shows it once — each must be fixed in one of the diagrams. DFD rules: P5 <i>Archive samples</i> is a black hole; the Doctor writes straight into D1 (entity → store) and D3 feeds D1 directly (store → store, unlabeled); D3 is read-only (no process ever maintains the price list). Decision table: four combinations have no rule (e.g. members under 500k); a non-member with a coupon over 1M is covered by R3 (3%) and R4 (5%) — a conflict; R1 and R6 overlap with the same action — redundant; R7 uses an unknown value. The reference solution is in the answer files.</p>",
+      "solutionExplanationHtmlVi": "<p><b>Kết quả MediLab.</b> Cân bằng: \"result notification\" tới bệnh nhân bị đổi thành \"SMS\" ở mức 0, mức 0 tự thêm \"claim decision\" từ Insurer, và mẫu bệnh phẩm vào mức 0 hai lần (P2 và P5) trong khi ngữ cảnh chỉ có một — phải sửa ở một trong hai sơ đồ. Luật DFD: P5 là hố đen; Doctor ghi thẳng vào D1 (thực thể → kho), D3 đổ thẳng vào D1 (kho → kho, thiếu nhãn); D3 chỉ đọc (không tiến trình nào cập nhật bảng giá). Bảng quyết định: bốn tổ hợp chưa có luật; khách không phải hội viên có coupon trên 1M bị R3 (3%) và R4 (5%) cùng phủ — mâu thuẫn; R1 và R6 trùng cùng hành động; R7 dùng giá trị lạ. Lời giải tham chiếu ở các tệp đáp án.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "answers/sample-data.js",
+          "answers/balance.js",
+          "answers/dfd-rules.js",
+          "answers/decision-table.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "balance: MediLab sample — missing flows",
+              "vi": "balance: mẫu MediLab — luồng thiếu"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var r;try{r=balance(CONTEXT,LEVEL0).missing}catch(n){return(n&&n.name===\"ReferenceError\"?\"missing: \":\"error: \")+(n&&n.message)}var e=JSON.stringify(r===void 0?null:r),t='[\"OUT Patient: result notification\"]';return e===t?\"OK\":'expected [\"OUT Patient: result notification\"], got '+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "balance: MediLab sample — extra flows",
+              "vi": "balance: mẫu MediLab — luồng thừa"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var r;try{r=balance(CONTEXT,LEVEL0).extra}catch(a){return(a&&a.name===\"ReferenceError\"?\"missing: \":\"error: \")+(a&&a.message)}var e=JSON.stringify(r===void 0?null:r),s='[\"IN Insurer: claim decision\",\"IN Patient: sample\",\"OUT Patient: sms\"]';return e===s?\"OK\":'labels are compared trimmed, spaces collapsed, lower case; flows are a multiset \\u2014 the sample also goes into P5 \\u2014 expected [\"IN Insurer: claim decision\",\"IN Patient: sample\",\"OUT Patient: sms\"], got '+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "balance: a balanced pair returns balanced = true",
+              "vi": "balance: cặp cân bằng ⇒ balanced = true"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var n;try{n=balance({system:\"S\",flows:[{from:\"U\",to:\"S\",label:\"a\"},{from:\"S\",to:\"U\",label:\"b\"}]},{entities:[\"U\"],processes:[{id:\"P1\"},{id:\"P2\"}],flows:[{from:\"U\",to:\"P1\",label:\"A \"},{from:\"P2\",to:\"U\",label:\"b\"},{from:\"P1\",to:\"P2\",label:\"x\"}]})}catch(r){return(r&&r.name===\"ReferenceError\"?\"missing: \":\"error: \")+(r&&r.message)}var e=JSON.stringify(n===void 0?null:n),t='{\"balanced\":true,\"missing\":[],\"extra\":[]}';return e===t?\"OK\":'expected {\"balanced\":true,\"missing\":[],\"extra\":[]}, got '+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "balance (hidden): duplicates count, entity–store flows ignored, tricky names",
+              "vi": "balance (ẩn): luồng lặp được đếm, luồng thực thể–kho bỏ qua, tên đánh lừa"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var o;try{o=balance({system:\"Shop\",entities:[\"Customer\",\"Bank\",\"constructor\"],flows:[{from:\"Customer\",to:\"Shop\",label:\"order\"},{from:\"Customer\",to:\"Shop\",label:\"order\"},{from:\"Shop\",to:\"Bank\",label:\"Payment  Request\"},{from:\"Bank\",to:\"Customer\",label:\"statement\"},{from:\"constructor\",to:\"Shop\",label:\"x\"}]},{entities:[\"Customer\",\"Bank\",\"constructor\"],processes:[{id:\"P1\",name:\"a\"},{id:\"P2\",name:\"b\"}],stores:[{id:\"D1\",name:\"s\"}],flows:[{from:\"Customer\",to:\"P1\",label:\" Order\"},{from:\"P2\",to:\"Bank\",label:\"payment request\"},{from:\"Customer\",to:\"D1\",label:\"order\"},{from:\"constructor\",to:\"P2\",label:\"X\"},{from:\"P1\",to:\"P2\",label:\"order\"}]})}catch(r){return(r&&r.name===\"ReferenceError\"?\"missing: \":\"error: \")+(r&&r.message)}var e=JSON.stringify(o===void 0?null:o),t='{\"balanced\":false,\"missing\":[\"IN Customer: order\"],\"extra\":[]}';return e===t?\"OK\":\"got \"+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "dfdRules: MediLab level 0 — process problems",
+              "vi": "dfdRules: mức 0 MediLab — lỗi tiến trình"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var n;try{n=dfdRules(LEVEL0).filter(function(e){return/^(BLACK_HOLE|MIRACLE|ISOLATED):P/.test(e)})}catch(e){return(e&&e.name===\"ReferenceError\"?\"missing: \":\"error: \")+(e&&e.message)}var r=JSON.stringify(n===void 0?null:n),t='[\"BLACK_HOLE:P5\"]';return r===t?\"OK\":'expected [\"BLACK_HOLE:P5\"], got '+(r.length>220?r.slice(0,220)+\"\\u2026\":r)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "dfdRules: MediLab level 0 — illegal flows",
+              "vi": "dfdRules: mức 0 MediLab — luồng sai luật"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var T;try{T=dfdRules(LEVEL0).filter(function(e){return/^(ENTITY_TO_ENTITY|ENTITY_STORE|STORE_TO_STORE)/.test(e)})}catch(e){return(e&&e.name===\"ReferenceError\"?\"missing: \":\"error: \")+(e&&e.message)}var r=JSON.stringify(T===void 0?null:T),n='[\"ENTITY_STORE:Doctor->D1\",\"STORE_TO_STORE:D3->D1\"]';return r===n?\"OK\":'expected [\"ENTITY_STORE:Doctor->D1\",\"STORE_TO_STORE:D3->D1\"], got '+(r.length>220?r.slice(0,220)+\"\\u2026\":r)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "dfdRules: MediLab level 0 — stores and labels",
+              "vi": "dfdRules: mức 0 MediLab — kho và nhãn"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var n;try{n=dfdRules(LEVEL0).filter(function(e){return/^(WRITE_ONLY|READ_ONLY|ISOLATED:D|UNLABELED)/.test(e)})}catch(e){return(e&&e.name===\"ReferenceError\"?\"missing: \":\"error: \")+(e&&e.message)}var r=JSON.stringify(n===void 0?null:n),t='[\"READ_ONLY:D3\",\"UNLABELED:D3->D1\"]';return r===t?\"OK\":'expected [\"READ_ONLY:D3\",\"UNLABELED:D3->D1\"], got '+(r.length>220?r.slice(0,220)+\"\\u2026\":r)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "dfdRules: full sorted list for MediLab",
+              "vi": "dfdRules: danh sách đầy đủ đã sắp cho MediLab"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var E;try{E=dfdRules(LEVEL0)}catch(r){return(r&&r.name===\"ReferenceError\"?\"missing: \":\"error: \")+(r&&r.message)}var e=JSON.stringify(E===void 0?null:E),D='[\"BLACK_HOLE:P5\",\"ENTITY_STORE:Doctor->D1\",\"READ_ONLY:D3\",\"STORE_TO_STORE:D3->D1\",\"UNLABELED:D3->D1\"]';return e===D?\"OK\":'expected [\"BLACK_HOLE:P5\",\"ENTITY_STORE:Doctor->D1\",\"READ_ONLY:D3\",\"STORE_TO_STORE:D3->D1\",\"UNLABELED:D3->D1\"], got '+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "dfdRules (hidden): unknown endpoints, isolated items, whitespace labels",
+              "vi": "dfdRules (ẩn): điểm lạ, mục cô lập, nhãn toàn khoảng trắng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var o;try{o=dfdRules({entities:[\"A\",\"B\"],processes:[{id:\"P1\"},{id:\"P2\"},{id:\"P3\"},{id:\"toString\"}],stores:[{id:\"S1\"},{id:\"S2\"}],flows:[{from:\"A\",to:\"B\",label:\"note\"},{from:\"A\",to:\"P1\",label:\"in\"},{from:\"P1\",to:\"S1\",label:\"w\"},{from:\"S2\",to:\"P2\",label:\"r\"},{from:\"P2\",to:\"A\",label:\"out\"},{from:\"P2\",to:\"Z9\",label:\"ghost\"},{from:\"S1\",to:\"S2\",label:\"   \"}]})}catch(r){return(r&&r.name===\"ReferenceError\"?\"missing: \":\"error: \")+(r&&r.message)}var e=JSON.stringify(o===void 0?null:o),t='[\"ENTITY_TO_ENTITY:A->B\",\"ISOLATED:P3\",\"ISOLATED:toString\",\"STORE_TO_STORE:S1->S2\",\"UNKNOWN:Z9\",\"UNLABELED:S1->S2\"]';return e===t?\"OK\":\"got \"+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "checkTable: missing combinations (enumeration order)",
+              "vi": "checkTable: tổ hợp còn thiếu (đúng thứ tự liệt kê)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var r;try{r=checkTable(CONDITIONS,RULES).missing}catch(o){return(o&&o.name===\"ReferenceError\"?\"missing: \":\"error: \")+(o&&o.message)}var e=JSON.stringify(r===void 0?null:r),n='[\"Member=Y, Total=<500k, Coupon=Y\",\"Member=Y, Total=<500k, Coupon=N\",\"Member=N, Total=500k-1M, Coupon=N\",\"Member=N, Total=>1M, Coupon=N\"]';return e===n?\"OK\":'expected [\"Member=Y, Total=<500k, Coupon=Y\",\"Member=Y, Total=<500k, Coupon=N\",\"Member=N, Total=500k-1M, Coupon=N\",\"Member=N, Total=>1M, Coupon=N\"], got '+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "checkTable: a complete table has no gaps",
+              "vi": "checkTable: bảng đủ không có lỗ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var i;try{i=checkTable([{name:\"X\",values:[\"Y\",\"N\"]}],[{id:\"A\",when:{X:\"Y\"},action:\"a\"},{id:\"B\",when:{X:\"N\"},action:\"b\"}])}catch(e){return(e&&e.name===\"ReferenceError\"?\"missing: \":\"error: \")+(e&&e.message)}var n=JSON.stringify(i===void 0?null:i),r='{\"missing\":[],\"conflicts\":[],\"redundant\":[],\"invalid\":[]}';return n===r?\"OK\":'expected {\"missing\":[],\"conflicts\":[],\"redundant\":[],\"invalid\":[]}, got '+(n.length>220?n.slice(0,220)+\"\\u2026\":n)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "checkTable (hidden): \"-\" and absent conditions mean \"any value\"",
+              "vi": "checkTable (ẩn): \"-\" và điều kiện vắng nghĩa là \"mọi giá trị\""
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var i;try{i=checkTable([{name:\"A\",values:[\"1\",\"2\"]},{name:\"B\",values:[\"x\",\"y\"]}],[{id:\"Q2\",when:{A:\"1\",B:\"-\"},action:\"go\"},{id:\"Q1\",when:{A:\"1\",B:\"x\"},action:\"go\"},{id:\"Q3\",when:{A:\"2\",B:\"y\"},action:\"stop\"},{id:\"Q4\",when:{B:\"y\"},action:\"wait\"},{id:\"Q0\",when:{C:\"1\"},action:\"go\"}]).missing}catch(e){return(e&&e.name===\"ReferenceError\"?\"missing: \":\"error: \")+(e&&e.message)}var n=JSON.stringify(i===void 0?null:i),a='[\"A=2, B=x\"]';return n===a?\"OK\":\"got \"+(n.length>220?n.slice(0,220)+\"\\u2026\":n)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "checkTable: conflicting combinations",
+              "vi": "checkTable: tổ hợp mâu thuẫn"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var n;try{n=checkTable(CONDITIONS,RULES).conflicts}catch(r){return(r&&r.name===\"ReferenceError\"?\"missing: \":\"error: \")+(r&&r.message)}var e=JSON.stringify(n===void 0?null:n),o='[\"Member=N, Total=>1M, Coupon=Y\"]';return e===o?\"OK\":'expected [\"Member=N, Total=>1M, Coupon=Y\"], got '+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "checkTable: redundant combinations and invalid rules",
+              "vi": "checkTable: tổ hợp trùng và luật không hợp lệ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var r;try{r=(function(){var n=checkTable(CONDITIONS,RULES);return{redundant:n.redundant,invalid:n.invalid}})()}catch(n){return(n&&n.name===\"ReferenceError\"?\"missing: \":\"error: \")+(n&&n.message)}var e=JSON.stringify(r===void 0?null:r),a='{\"redundant\":[\"Member=Y, Total=>1M, Coupon=Y\"],\"invalid\":[\"R7\"]}';return e===a?\"OK\":'expected {\"redundant\":[\"Member=Y, Total=>1M, Coupon=Y\"],\"invalid\":[\"R7\"]}, got '+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "checkTable (hidden): conflicts vs redundancy, unknown condition names",
+              "vi": "checkTable (ẩn): mâu thuẫn vs trùng, tên điều kiện lạ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var i;try{i=checkTable([{name:\"A\",values:[\"1\",\"2\"]},{name:\"B\",values:[\"x\",\"y\"]}],[{id:\"Q2\",when:{A:\"1\",B:\"-\"},action:\"go\"},{id:\"Q1\",when:{A:\"1\",B:\"x\"},action:\"go\"},{id:\"Q3\",when:{A:\"2\",B:\"y\"},action:\"stop\"},{id:\"Q4\",when:{B:\"y\"},action:\"wait\"},{id:\"Q0\",when:{C:\"1\"},action:\"go\"}])}catch(e){return(e&&e.name===\"ReferenceError\"?\"missing: \":\"error: \")+(e&&e.message)}var n=JSON.stringify(i===void 0?null:i),a='{\"missing\":[\"A=2, B=x\"],\"conflicts\":[\"A=1, B=y\",\"A=2, B=y\"],\"redundant\":[\"A=1, B=x\"],\"invalid\":[\"Q0\"]}';return n===a?\"OK\":\"got \"+(n.length>220?n.slice(0,220)+\"\\u2026\":n)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "empty models do not crash",
+              "vi": "mô hình rỗng không làm hỏng hàm"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var s;try{s=[balance({system:\"S\",flows:[]},{entities:[],processes:[],flows:[]}),dfdRules({entities:[],processes:[],stores:[],flows:[]}),checkTable([],[])]}catch(n){return(n&&n.name===\"ReferenceError\"?\"missing: \":\"error: \")+(n&&n.message)}var e=JSON.stringify(s===void 0?null:s),r='[{\"balanced\":true,\"missing\":[],\"extra\":[]},[],{\"missing\":[],\"conflicts\":[],\"redundant\":[],\"invalid\":[]}]';return e===r?\"OK\":'expected [{\"balanced\":true,\"missing\":[],\"extra\":[]},[],{\"missing\":[],\"conflicts\":[],\"redundant\":[],\"invalid\":[]}], got '+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f5"
+          },
+          {
+            "moTa": {
+              "en": "inputs are not modified",
+              "vi": "không sửa dữ liệu đầu vào"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var n;try{n=(function(){var e=JSON.stringify([CONTEXT,LEVEL0,CONDITIONS,RULES]);return balance(CONTEXT,LEVEL0),dfdRules(LEVEL0),checkTable(CONDITIONS,RULES),e===JSON.stringify([CONTEXT,LEVEL0,CONDITIONS,RULES])})()}catch(e){return(e&&e.name===\"ReferenceError\"?\"missing: \":\"error: \")+(e&&e.message)}var r=JSON.stringify(n===void 0?null:n),t=\"true\";return r===t?\"OK\":\"expected true, got \"+(r.length>220?r.slice(0,220)+\"\\u2026\":r)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f5"
+          },
+          {
+            "moTa": {
+              "en": "hidden: names like \"toString\" / \"constructor\" are handled",
+              "vi": "ẩn: tên như \"toString\" / \"constructor\" được xử lý đúng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var n;try{n=[dfdRules({entities:[\"constructor\"],processes:[{id:\"P1\"}],stores:[],flows:[{from:\"constructor\",to:\"P1\",label:\"a\"},{from:\"P1\",to:\"hasOwnProperty\",label:\"b\"}]}),checkTable([{name:\"toString\",values:[\"a\"]}],[{id:\"T\",when:{toString:\"a\"},action:\"x\"}])]}catch(e){return(e&&e.name===\"ReferenceError\"?\"missing: \":\"error: \")+(e&&e.message)}var r=JSON.stringify(n===void 0?null:n),t='[[\"UNKNOWN:hasOwnProperty\"],{\"missing\":[],\"conflicts\":[],\"redundant\":[],\"invalid\":[]}]';return r===t?\"OK\":\"got \"+(r.length>220?r.slice(0,220)+\"\\u2026\":r)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f5",
+            "an": true
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. A. balance()",
+            "diem": 2.5
+          },
+          {
+            "ma": "f2",
+            "ten": "2. B. dfdRules()",
+            "diem": 3
+          },
+          {
+            "ma": "f3",
+            "ten": "3. C. Gaps",
+            "diem": 2
+          },
+          {
+            "ma": "f4",
+            "ten": "4. D. Conflicts, redundancy, invalid",
+            "diem": 1.5
+          },
+          {
+            "ma": "f5",
+            "ten": "5. E. Robustness",
+            "diem": 1
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "deep-lab",
+      "mistakesJson": [
+        {
+          "loi": "Không chuẩn hoá nhãn ⇒ \"Measurement\" và \"measurement\" bị coi là khác."
+        },
+        {
+          "loi": "Coi luồng Doctor → D1 là đầu vào hợp lệ cho cân bằng (chỉ luồng thực thể ↔ tiến trình)."
+        },
+        {
+          "loi": "Báo luật R7 (Member = Maybe) là mâu thuẫn thay vì invalid."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "data flow diagram (DFD)",
+          "vi": "sơ đồ luồng dữ liệu — process, kho dữ liệu, thực thể ngoài, luồng"
+        },
+        {
+          "en": "balancing (levelling)",
+          "vi": "cân bằng giữa các mức DFD — luồng vào/ra của process cha phải khớp sơ đồ con"
+        },
+        {
+          "en": "black hole / miracle",
+          "vi": "process chỉ có vào không có ra / chỉ có ra không có vào — lỗi DFD"
+        },
+        {
+          "en": "data store",
+          "vi": "kho dữ liệu — nơi dữ liệu nằm lại (tên danh từ số nhiều)"
+        },
+        {
+          "en": "decision table",
+          "vi": "bảng quyết định — mọi tổ hợp điều kiện ⇒ hành động (n điều kiện ⇒ 2ⁿ cột)"
+        },
+        {
+          "en": "context diagram",
+          "vi": "sơ đồ ngữ cảnh — hệ thống là MỘT vòng tròn, các thực thể ngoài và luồng dữ liệu vào/ra"
+        },
+        {
+          "en": "multiset",
+          "vi": "đa tập — tập cho phép phần tử lặp"
+        }
+      ]
+    }
+  ]
+}

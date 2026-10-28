@@ -1,0 +1,572 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-3g-7-ch3-knowledge-pm",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-3g-7-ch3-knowledge-pm"
+  },
+  "exercises": [
+    {
+      "title": "Knowledge & PM 1 — knowledge or project management?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "knowledge and project-management practices"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Classify each practice: <b>Knowledge</b> (train BAs, educate stakeholders, educate developers about the domain, define an RE process, create a glossary) or <b>Project management</b> (life cycle, plan the approach, estimate effort, base plans on requirements, decision makers, renegotiate commitments, manage risks, track effort, lessons learned).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phân loại: nhóm Kiến thức hay nhóm Quản lý dự án.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Đào tạo, glossary, quy trình RE ⇒ Knowledge.",
+        "Ước lượng, rủi ro, cam kết, bài học ⇒ PM."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Knowledge & PM 1 — knowledge or project management?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Knowledge & PM 1 — knowledge or project management? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Knowledge\n   - r1.k: Project management\n   - r2.k: Knowledge\n   - r3.k: Project management\n   - r4.k: Knowledge\n   - r5.k: Project management\n   Knowledge practices build people’s capability; project-management practices plan and steer the requirements work within the project.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Knowledge practices build people’s capability; project-management practices plan and steer the requirements work within the project.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Group",
+                "luaChon": [
+                  "Knowledge",
+                  "Project management"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Create a glossary"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Estimate requirements effort"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Educate developers about the application domain"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Manage requirements-related risks"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Define a requirements engineering process"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Review lessons learned regarding requirements on other projects"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Knowledge",
+              "r1.k": "Project management",
+              "r2.k": "Knowledge",
+              "r3.k": "Project management",
+              "r4.k": "Knowledge",
+              "r5.k": "Project management"
+            },
+            "giaiThich": "<p><p>Knowledge practices build people’s capability; project-management practices plan and steer the requirements work within the project.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Xếp \"định nghĩa quy trình RE\" vào PM."
+        },
+        {
+          "loi": "Xếp \"bài học kinh nghiệm\" vào Knowledge."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "glossary",
+          "vi": "bảng thuật ngữ"
+        }
+      ]
+    },
+    {
+      "title": "Knowledge & PM 2 — which practice fits?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "knowledge and project-management practices"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Choose the practice that answers each situation.</p><p>Each row is graded on its own; the explanation of every answer appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chọn thực hành phù hợp với từng tình huống.</p><p>Mỗi dòng được chấm riêng; giải thích từng đáp án hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Thêm yêu cầu nhưng giữ hạn/ngân sách ⇒ thương lượng lại cam kết.",
+        "Dev đi theo người dùng ⇒ giáo dục dev về miền nghiệp vụ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Knowledge & PM 2 — which practice fits?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Knowledge & PM 2 — which practice fits? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Create a glossary\n   - r1.k: Educate developers about the application domain\n   - r2.k: Renegotiate project commitments when requirements change\n   - r3.k: Identify requirements decision makers\n   - r4.k: Estimate requirements effort\n   - r5.k: Select an appropriate development life cycle\n   - r6.k: Review lessons learned regarding requirements on other projects\n   - r7.k: Educate stakeholders about requirements\n   Glossary and domain education fight vocabulary confusion; renegotiating commitments keeps promises honest when scope grows; decision makers must be named before the first big decision.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Glossary and domain education fight vocabulary confusion; renegotiating commitments keeps promises honest when scope grows; decision makers must be named before the first big decision.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Practice",
+                "luaChon": [
+                  "Train business analysts",
+                  "Educate stakeholders about requirements",
+                  "Educate developers about the application domain",
+                  "Define a requirements engineering process",
+                  "Create a glossary",
+                  "Select an appropriate development life cycle",
+                  "Plan the requirements approach",
+                  "Estimate requirements effort",
+                  "Base project plans on requirements",
+                  "Identify requirements decision makers",
+                  "Renegotiate project commitments when requirements change",
+                  "Manage requirements-related risks",
+                  "Track the effort spent on requirements",
+                  "Review lessons learned regarding requirements on other projects"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "New developers keep confusing \"admission\", \"visit\" and \"encounter\"."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Developers spend a day shadowing nurses on the ward."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The sponsor adds 15 requirements but keeps the same deadline and budget."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Nobody knows who may approve conflicting requests from two departments."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "The PM asks what share of effort to reserve for requirements work."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Requirements are very uncertain, so the team chooses incremental delivery."
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "After the project, the team records what went wrong with requirements."
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "s": "Users get a one-day course on what requirements are and why they matter."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Create a glossary",
+              "r1.k": "Educate developers about the application domain",
+              "r2.k": "Renegotiate project commitments when requirements change",
+              "r3.k": "Identify requirements decision makers",
+              "r4.k": "Estimate requirements effort",
+              "r5.k": "Select an appropriate development life cycle",
+              "r6.k": "Review lessons learned regarding requirements on other projects",
+              "r7.k": "Educate stakeholders about requirements"
+            },
+            "giaiThich": "<p><p>Glossary and domain education fight vocabulary confusion; renegotiating commitments keeps promises honest when scope grows; decision makers must be named before the first big decision.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chấp nhận thêm yêu cầu mà không thương lượng lại."
+        },
+        {
+          "loi": "Nhầm giáo dục người dùng với giáo dục dev."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "scope creep (creeping requirements)",
+          "vi": "phạm vi phình dần ngoài kiểm soát"
+        }
+      ]
+    },
+    {
+      "title": "Knowledge & PM 3 — plans, estimates and risks",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "planning and estimation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Base project plans on requirements and refine them iteratively — early estimates from fuzzy requirements are uncertain. On agile, time-boxed iterations mean adjusting scope to fit fixed schedule and resources. Manage requirements risks: identify, document, mitigate and track them. Track the effort spent on requirements to improve future estimates.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lập kế hoạch dựa trên yêu cầu và tinh chỉnh dần; quản lý rủi ro yêu cầu; ghi công sức làm yêu cầu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ước lượng sớm không chắc chắn.",
+        "Agile: thời gian cố định, phạm vi linh hoạt."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Knowledge & PM 3 — plans, estimates and risks\n\nAnswer in the answer panel (no code needed).\n\n1. Early estimates made from a vague vision are…Ước lượng sớm từ một tầm nhìn mơ hồ thì…\n2. On an agile project with a fixed release date, what is adjusted when requirements grow?Dự án agile có ngày phát hành cố định, khi yêu cầu tăng thì điều chỉnh gì?\n3. Why record the effort spent on requirements?Vì sao ghi lại công sức làm yêu cầu?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Knowledge & PM 3 — plans, estimates and risks — answer key\n\n1. Early estimates made from a vague vision are…Ước lượng sớm từ một tầm nhìn mơ hồ thì…\n   Answer: d) highly uncertain; refine them as requirements become clearer\n   Plans evolve with understanding.VI: Kế hoạch thay đổi theo hiểu biết.\n\n2. On an agile project with a fixed release date, what is adjusted when requirements grow?Dự án agile có ngày phát hành cố định, khi yêu cầu tăng thì điều chỉnh gì?\n   Answer: a) The scope delivered in the time box\n   Time-boxes fix time; scope flexes.VI: Time-box cố định thời gian; phạm vi co giãn.\n\n3. Why record the effort spent on requirements?Vì sao ghi lại công sức làm yêu cầu?\n   Answer: d) To improve future estimates and judge the return on requirements work\n   Data for better planning.VI: Dữ liệu để lập kế hoạch tốt hơn.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: d · a · d.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Early estimates made from a vague vision are…</p><p style=\"opacity:.75;font-size:.92em\"><i>Ước lượng sớm từ một tầm nhìn mơ hồ thì…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "exact"
+              },
+              {
+                "ma": "b",
+                "noiDung": "useless, never estimate"
+              },
+              {
+                "ma": "c",
+                "noiDung": "binding contracts"
+              },
+              {
+                "ma": "d",
+                "noiDung": "highly uncertain; refine them as requirements become clearer"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Plans evolve with understanding.</p><p><i>VI: Kế hoạch thay đổi theo hiểu biết.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>On an agile project with a fixed release date, what is adjusted when requirements grow?</p><p style=\"opacity:.75;font-size:.92em\"><i>Dự án agile có ngày phát hành cố định, khi yêu cầu tăng thì điều chỉnh gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The scope delivered in the time box"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Nothing"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The length of the sprint, every time"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The quality bar"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Time-boxes fix time; scope flexes.</p><p><i>VI: Time-box cố định thời gian; phạm vi co giãn.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Why record the effort spent on requirements?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao ghi lại công sức làm yêu cầu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "To blame the BA"
+              },
+              {
+                "ma": "b",
+                "noiDung": "For payroll only"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It has no use"
+              },
+              {
+                "ma": "d",
+                "noiDung": "To improve future estimates and judge the return on requirements work"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Data for better planning.</p><p><i>VI: Dữ liệu để lập kế hoạch tốt hơn.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Hạ chất lượng để kịp hạn."
+        },
+        {
+          "loi": "Coi ước lượng ban đầu là cam kết cứng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "scope",
+          "vi": "phạm vi — phần nào của tầm nhìn dự án/phiên bản này sẽ làm"
+        }
+      ]
+    },
+    {
+      "title": "Knowledge & PM 4 — training and process",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 4,
+      "points": 10,
+      "concepts": [
+        "knowledge practices"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Anyone doing BA tasks, with or without the title, needs requirements training. A documented requirements engineering process gives consistent quality and helps plan each project’s requirements tasks, schedule and resources; the PM puts requirements activities into the plan as discrete tasks.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ai làm việc BA cũng cần đào tạo; quy trình RE được ghi lại giúp chất lượng nhất quán và dễ lập kế hoạch.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Làm việc BA ⇒ cần đào tạo BA.",
+        "Việc yêu cầu là task trong kế hoạch."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Knowledge & PM 4 — training and process\n\nAnswer in the answer panel (no code needed).\n\n1. A developer is asked to \"also write the requirements\". What does Wiegers recommend?Một dev được giao \"viết luôn yêu cầu\". Wiegers khuyên gì?\n2. Where should requirements activities appear in a project?Hoạt động yêu cầu nên xuất hiện ở đâu trong dự án?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Knowledge & PM 4 — training and process — answer key\n\n1. A developer is asked to \"also write the requirements\". What does Wiegers recommend?Một dev được giao \"viết luôn yêu cầu\". Wiegers khuyên gì?\n   Answer: c) Give them requirements training — anyone doing BA work needs it\n   Training for whoever does the role.VI: Đào tạo cho ai làm vai trò đó.\n\n2. Where should requirements activities appear in a project?Hoạt động yêu cầu nên xuất hiện ở đâu trong dự án?\n   Answer: b) As discrete tasks in the project plan, with effort and schedule\n   Plan them like any other work.VI: Lập kế hoạch như mọi việc khác.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: c · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>A developer is asked to \"also write the requirements\". What does Wiegers recommend?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một dev được giao \"viết luôn yêu cầu\". Wiegers khuyên gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Let them copy an old SRS"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Skip requirements"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Give them requirements training — anyone doing BA work needs it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nothing, developers know enough"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Training for whoever does the role.</p><p><i>VI: Đào tạo cho ai làm vai trò đó.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Where should requirements activities appear in a project?</p><p style=\"opacity:.75;font-size:.92em\"><i>Hoạt động yêu cầu nên xuất hiện ở đâu trong dự án?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Nowhere — they happen informally"
+              },
+              {
+                "ma": "b",
+                "noiDung": "As discrete tasks in the project plan, with effort and schedule"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only in the contract"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only in the final report"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Plan them like any other work.</p><p><i>VI: Lập kế hoạch như mọi việc khác.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Coi việc yêu cầu là \"tự nhiên sẽ xong\"."
+        },
+        {
+          "loi": "Giao việc BA mà không đào tạo."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "requirements engineering process",
+          "vi": "quy trình kỹ nghệ yêu cầu"
+        }
+      ]
+    }
+  ]
+}

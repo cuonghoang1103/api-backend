@@ -388,6 +388,133 @@
           "vi": "lớp người dùng — nhóm người dùng có cách dùng/nhu cầu giống nhau"
         }
       ]
+    },
+    {
+      "title": "User classes 4 — a user class or a market segment?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "user classes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Group users into classes by how they use the product: access level, tasks, features used, frequency, domain and computer expertise, platform, language, direct or indirect use. Location or company type alone defines <b>market segments</b>, not user classes. Classify each grouping for a banking app.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lớp người dùng nhóm theo cách dùng sản phẩm; nhóm theo vị trí hay loại công ty chỉ là phân khúc thị trường.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Theo nhiệm vụ / quyền / tần suất ⇒ lớp người dùng.",
+        "Theo vùng / quy mô công ty ⇒ phân khúc thị trường."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# User classes 4 — a user class or a market segment?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# User classes 4 — a user class or a market segment? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: User class\n   - r1.k: Market segment\n   - r2.k: User class\n   - r3.k: Market segment\n   - r4.k: User class\n   A user class is defined by what people do with the product and how; a market segment by who they are or where they are.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A user class is defined by what people do with the product and how; a market segment by who they are or where they are.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Grouping",
+                "luaChon": [
+                  "User class",
+                  "Market segment"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Tellers who process cash deposits many times a day"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Customers in the northern provinces"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Loan officers who approve credit applications"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Small companies with fewer than 50 employees"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Auditors with read-only access to transaction logs"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "User class",
+              "r1.k": "Market segment",
+              "r2.k": "User class",
+              "r3.k": "Market segment",
+              "r4.k": "User class"
+            },
+            "giaiThich": "<p><p>A user class is defined by what people do with the product and how; a market segment by who they are or where they are.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Lấy vùng miền làm lớp người dùng."
+        },
+        {
+          "loi": "Bỏ qua lớp chỉ đọc (kiểm toán)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "user class",
+          "vi": "lớp người dùng — nhóm người dùng có cách dùng/nhu cầu giống nhau"
+        }
+      ]
     }
   ]
 }

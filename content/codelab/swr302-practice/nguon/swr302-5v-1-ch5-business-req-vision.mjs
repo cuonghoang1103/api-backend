@@ -96,7 +96,7 @@ const E4 = baiJs({
 
 export default moDun({
   slug: 'swr302-5v-1-ch5-business-req-vision',
-  ten: '2.4 Business requirements and the vision statement',
+  ten: '2.16 Business requirements and the vision statement',
   moTaModule: 'Các phần của yêu cầu nghiệp vụ (cơ hội, mục tiêu, chỉ số thành công, tầm nhìn, rủi ro, giả định), mục tiêu SMART, khuôn tầm nhìn của Moore và tự viết tuyên bố tầm nhìn có chấm.',
   de: [E2, E3, E1, E4],
 });

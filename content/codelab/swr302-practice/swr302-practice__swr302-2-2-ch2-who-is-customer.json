@@ -1,0 +1,577 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-2-2-ch2-who-is-customer",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-2-2-ch2-who-is-customer"
+  },
+  "exercises": [
+    {
+      "title": "Customer 1 — stakeholder, customer or user?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "stakeholders, customers and users"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers Figure 2-1: <b>users</b> are a subset of <b>customers</b>, and customers are a subset of <b>stakeholders</b>. A customer derives direct or indirect benefit from the product (requests, pays for, selects, specifies, uses or receives its output). <b>Direct users</b> operate the product; <b>indirect users</b> receive its outputs without touching it. Some stakeholders are not customers at all. Place each party of a hospital pharmacy system in its smallest set.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hình 2-1: người dùng ⊂ khách hàng ⊂ bên liên quan. Người dùng trực tiếp thao tác sản phẩm; người dùng gián tiếp nhận đầu ra mà không chạm vào nó. Xếp mỗi bên vào tập nhỏ nhất của nó.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Có chạm vào hệ thống không? Có ⇒ người dùng trực tiếp.",
+        "Không hưởng lợi từ sản phẩm (kiểm toán, nhà cung cấp) ⇒ chỉ là bên liên quan."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Customer 1 — stakeholder, customer or user?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Customer 1 — stakeholder, customer or user? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Direct user\n   - r1.k: Indirect user\n   - r2.k: Customer (not a user)\n   - r3.k: Stakeholder (not a customer)\n   - r4.k: Direct user\n   - r5.k: Stakeholder (not a customer)\n   - r6.k: Customer (not a user)\n   Users supply user requirements; customers such as sponsors supply business requirements; other stakeholders bring constraints (regulations, contracts) but do not benefit from the product directly.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Users supply user requirements; customers such as sponsors supply business requirements; other stakeholders bring constraints (regulations, contracts) but do not benefit from the product directly.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Smallest set",
+                "luaChon": [
+                  "Direct user",
+                  "Indirect user",
+                  "Customer (not a user)",
+                  "Stakeholder (not a customer)"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Pharmacist who dispenses medicines with the system"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Head of pharmacy who only reads the weekly stock report e-mailed to her"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Hospital director who sponsors and pays for the project"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "External auditor who checks compliance with drug regulations"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Nurse who records doses given on the ward tablet"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Medicine supplier whose delivery schedule is affected"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "Procurement officer who selects the software vendor"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Direct user",
+              "r1.k": "Indirect user",
+              "r2.k": "Customer (not a user)",
+              "r3.k": "Stakeholder (not a customer)",
+              "r4.k": "Direct user",
+              "r5.k": "Stakeholder (not a customer)",
+              "r6.k": "Customer (not a user)"
+            },
+            "giaiThich": "<p><p>Users supply user requirements; customers such as sponsors supply business requirements; other stakeholders bring constraints (regulations, contracts) but do not benefit from the product directly.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Coi nhà tài trợ là người dùng."
+        },
+        {
+          "loi": "Bỏ sót người dùng gián tiếp nhận báo cáo."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "stakeholder",
+          "vi": "bên liên quan — người/tổ chức bị ảnh hưởng hoặc ảnh hưởng tới dự án"
+        },
+        {
+          "en": "user class",
+          "vi": "lớp người dùng — nhóm người dùng có cách dùng/nhu cầu giống nhau"
+        }
+      ]
+    },
+    {
+      "title": "Customer 2 — the expectation gap",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "expectation gap"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>The <b>expectation gap</b>: what the customer expects and what the team delivers diverge because needs were never fully shared or understood. Every practice of Chapter 2 exists to close it — through participation, clear communication and explicit agreement, not mind-reading.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Khoảng cách kỳ vọng</b>: điều khách mong đợi và điều đội giao lệch nhau vì nhu cầu chưa từng được chia sẻ/hiểu đầy đủ.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Khoảng cách kỳ vọng đóng lại nhờ tham gia và thống nhất, không nhờ đoán.",
+        "Quản lý không phải người dùng thật."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Customer 2 — the expectation gap\n\nAnswer in the answer panel (no code needed).\n\n1. What closes the expectation gap best?Điều gì thu hẹp khoảng cách kỳ vọng tốt nhất?\n2. Who typically provides the business requirements?Ai thường cung cấp yêu cầu nghiệp vụ?\n3. A manager offers to describe what the clerks need so you don’t \"waste their time\". Best response?Một quản lý đề nghị tự mô tả nhu cầu của nhân viên để \"khỏi phí thời gian của họ\". Trả lời tốt nhất?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Customer 2 — the expectation gap — answer key\n\n1. What closes the expectation gap best?Điều gì thu hẹp khoảng cách kỳ vọng tốt nhất?\n   Answer: c) Frequent customer participation and explicit agreement on requirements\n   Participation + communication + agreement.VI: Tham gia + giao tiếp + thống nhất.\n\n2. Who typically provides the business requirements?Ai thường cung cấp yêu cầu nghiệp vụ?\n   Answer: a) Customers such as the executive sponsor\n   Sponsors set the framework; users fill in the user requirements.VI: Nhà tài trợ đặt khung; người dùng bổ sung yêu cầu người dùng.\n\n3. A manager offers to describe what the clerks need so you don’t \"waste their time\". Best response?Một quản lý đề nghị tự mô tả nhu cầu của nhân viên để \"khỏi phí thời gian của họ\". Trả lời tốt nhất?\n   Answer: b) Thank them, and still talk to the real clerks — managers rarely know the details of the daily tasks\n   Reach the real users.VI: Tiếp cận người dùng thật.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: c · a · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>What closes the expectation gap best?</p><p style=\"opacity:.75;font-size:.92em\"><i>Điều gì thu hẹp khoảng cách kỳ vọng tốt nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Hiring faster developers"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A longer contract"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Frequent customer participation and explicit agreement on requirements"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Delivering everything at the end"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Participation + communication + agreement.</p><p><i>VI: Tham gia + giao tiếp + thống nhất.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Who typically provides the business requirements?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ai thường cung cấp yêu cầu nghiệp vụ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Customers such as the executive sponsor"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Developers"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Testers"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Direct users only"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Sponsors set the framework; users fill in the user requirements.</p><p><i>VI: Nhà tài trợ đặt khung; người dùng bổ sung yêu cầu người dùng.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>A manager offers to describe what the clerks need so you don’t \"waste their time\". Best response?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một quản lý đề nghị tự mô tả nhu cầu của nhân viên để \"khỏi phí thời gian của họ\". Trả lời tốt nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Ask developers to guess"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Thank them, and still talk to the real clerks — managers rarely know the details of the daily tasks"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Accept — managers know best"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Skip the clerks entirely"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Reach the real users.</p><p><i>VI: Tiếp cận người dùng thật.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chỉ nói chuyện với quản lý."
+        },
+        {
+          "loi": "Cho rằng hợp đồng chi tiết thay được sự tham gia."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "stakeholder",
+          "vi": "bên liên quan — người/tổ chức bị ảnh hưởng hoặc ảnh hưởng tới dự án"
+        },
+        {
+          "en": "business requirement",
+          "vi": "yêu cầu nghiệp vụ — VÌ SAO tổ chức làm hệ thống (mục tiêu, lợi ích); ghi trong Vision & Scope"
+        },
+        {
+          "en": "user requirement",
+          "vi": "yêu cầu người dùng — việc người dùng phải làm được (use case, user story)"
+        }
+      ]
+    },
+    {
+      "title": "Customer 3 — which kind of requirement does each party supply?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "sources of requirements"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Different parties supply different levels of requirements: sponsors and other customers set <b>business requirements</b>; users describe <b>user requirements</b> (tasks, outputs, quality expectations); regulators, legal staff and other non-customer stakeholders impose <b>constraints and business rules</b>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi bên cung cấp một cấp yêu cầu khác nhau.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Mục tiêu kinh doanh ⇒ yêu cầu nghiệp vụ.",
+        "Luật, quy định ⇒ ràng buộc / luật nghiệp vụ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Customer 3 — which kind of requirement does each party supply?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Customer 3 — which kind of requirement does each party supply? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Business requirements\n   - r1.k: User requirements\n   - r2.k: Constraints and business rules\n   - r3.k: User requirements\n   - r4.k: Constraints and business rules\n   Knowing who supplies what tells you whom to ask about each kind of requirement and who decides.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Knowing who supplies what tells you whom to ask about each kind of requirement and who decides.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Mainly supplies",
+                "luaChon": [
+                  "Business requirements",
+                  "User requirements",
+                  "Constraints and business rules"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Hospital director: \"Cut medicine waste by 20% this year.\""
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Pharmacist: \"I need to see which prescriptions are waiting, oldest first.\""
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Ministry of Health: \"Controlled drugs must be logged with two signatures.\""
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Nurse: \"I record doses at the bedside, often with gloves on.\""
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Legal department: \"Patient data must stay on servers in Vietnam.\""
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Business requirements",
+              "r1.k": "User requirements",
+              "r2.k": "Constraints and business rules",
+              "r3.k": "User requirements",
+              "r4.k": "Constraints and business rules"
+            },
+            "giaiThich": "<p><p>Knowing who supplies what tells you whom to ask about each kind of requirement and who decides.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Coi quy định của Bộ là yêu cầu người dùng."
+        },
+        {
+          "loi": "Coi mục tiêu cắt giảm lãng phí là yêu cầu chức năng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "business requirement",
+          "vi": "yêu cầu nghiệp vụ — VÌ SAO tổ chức làm hệ thống (mục tiêu, lợi ích); ghi trong Vision & Scope"
+        },
+        {
+          "en": "user requirement",
+          "vi": "yêu cầu người dùng — việc người dùng phải làm được (use case, user story)"
+        },
+        {
+          "en": "business rule",
+          "vi": "quy tắc nghiệp vụ — chính sách, luật, chuẩn, công thức tồn tại NGOÀI phần mềm"
+        },
+        {
+          "en": "design / implementation constraint",
+          "vi": "ràng buộc thiết kế/hiện thực — giới hạn lựa chọn của đội phát triển (ngôn ngữ, nền tảng, chuẩn)"
+        }
+      ]
+    },
+    {
+      "title": "Customer 4 — direct and indirect users",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 4,
+      "points": 20,
+      "concepts": [
+        "direct and indirect users"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Direct users operate the product hands-on; indirect users receive its outputs (reports, notifications, labels) without touching it. Both are users with needs: what an indirect user needs from the output is a user requirement too.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Người dùng trực tiếp và gián tiếp đều có nhu cầu cần khai thác.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Không chạm vào nhưng dùng đầu ra ⇒ gián tiếp.",
+        "Hỏi người dùng về công việc của họ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Customer 4 — direct and indirect users\n\nAnswer in the answer panel (no code needed).\n\n1. A warehouse manager never logs in but receives a daily activity report by e-mail. She is…Quản lý kho không đăng nhập nhưng nhận báo cáo hằng ngày qua e-mail. Cô ấy là…\n2. What can users usually describe well?Người dùng thường mô tả tốt điều gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Customer 4 — direct and indirect users — answer key\n\n1. A warehouse manager never logs in but receives a daily activity report by e-mail. She is…Quản lý kho không đăng nhập nhưng nhận báo cáo hằng ngày qua e-mail. Cô ấy là…\n   Answer: a) an indirect user whose needs for the report must be elicited\n   Indirect users depend on outputs.VI: Người dùng gián tiếp phụ thuộc vào đầu ra.\n\n2. What can users usually describe well?Người dùng thường mô tả tốt điều gì?\n   Answer: a) Their tasks, the outputs they need, and the quality characteristics they expect\n   Ask users about tasks, not designs.VI: Hỏi người dùng về công việc, không về thiết kế.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>A warehouse manager never logs in but receives a daily activity report by e-mail. She is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Quản lý kho không đăng nhập nhưng nhận báo cáo hằng ngày qua e-mail. Cô ấy là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "an indirect user whose needs for the report must be elicited"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the sponsor"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a direct user"
+              },
+              {
+                "ma": "d",
+                "noiDung": "not relevant"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Indirect users depend on outputs.</p><p><i>VI: Người dùng gián tiếp phụ thuộc vào đầu ra.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>What can users usually describe well?</p><p style=\"opacity:.75;font-size:.92em\"><i>Người dùng thường mô tả tốt điều gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Their tasks, the outputs they need, and the quality characteristics they expect"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The project budget"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The architecture"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The database design"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Ask users about tasks, not designs.</p><p><i>VI: Hỏi người dùng về công việc, không về thiết kế.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Bỏ qua người dùng gián tiếp."
+        },
+        {
+          "loi": "Hỏi người dùng về kiến trúc."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "user class",
+          "vi": "lớp người dùng — nhóm người dùng có cách dùng/nhu cầu giống nhau"
+        },
+        {
+          "en": "user requirement",
+          "vi": "yêu cầu người dùng — việc người dùng phải làm được (use case, user story)"
+        }
+      ]
+    }
+  ]
+}

@@ -450,6 +450,155 @@
           "vi": "kỹ năng điều phối nhóm"
         }
       ]
+    },
+    {
+      "title": "BA role 4 — which of the ten BA tasks?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "BA tasks"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers’ ten BA tasks: define business requirements · plan the requirements approach · identify stakeholders and user classes · elicit · analyze · document · communicate · lead validation · facilitate prioritization · manage requirements. Name the task each activity belongs to.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mười nhiệm vụ của BA. Mỗi hoạt động thuộc nhiệm vụ nào?</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Tầm nhìn ⇒ define business requirements.",
+        "Sau baseline ⇒ manage requirements."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# BA role 4 — which of the ten BA tasks?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# BA role 4 — which of the ten BA tasks? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Define business requirements\n   - r1.k: Plan the requirements approach\n   - r2.k: Analyze requirements\n   - r3.k: Lead requirements validation\n   - r4.k: Facilitate requirements prioritization\n   - r5.k: Manage requirements\n   - r6.k: Communicate requirements\n   The ten tasks cover the whole requirements life cycle — from the vision to managing changes after the baseline.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The ten tasks cover the whole requirements life cycle — from the vision to managing changes after the baseline.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Task",
+                "luaChon": [
+                  "Define business requirements",
+                  "Plan the requirements approach",
+                  "Identify stakeholders and user classes",
+                  "Elicit requirements",
+                  "Analyze requirements",
+                  "Document requirements",
+                  "Communicate requirements",
+                  "Lead requirements validation",
+                  "Facilitate requirements prioritization",
+                  "Manage requirements"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Help the sponsor write the vision statement."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Agree with the PM which elicitation techniques happen in which weeks."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Find derived and implicit requirements and check scope."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Run the inspection of the SRS."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Broker a negotiation on what goes into release 1."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Track status and change requests after the baseline."
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "Walk the developers through the state diagram and confirm they understood it."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Define business requirements",
+              "r1.k": "Plan the requirements approach",
+              "r2.k": "Analyze requirements",
+              "r3.k": "Lead requirements validation",
+              "r4.k": "Facilitate requirements prioritization",
+              "r5.k": "Manage requirements",
+              "r6.k": "Communicate requirements"
+            },
+            "giaiThich": "<p><p>The ten tasks cover the whole requirements life cycle — from the vision to managing changes after the baseline.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm communicate với document."
+        },
+        {
+          "loi": "Nhầm analyze với elicit."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "business analyst",
+          "vi": "chuyên viên phân tích nghiệp vụ"
+        }
+      ]
     }
   ]
 }

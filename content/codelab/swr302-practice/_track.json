@@ -16,20 +16,32 @@
       "description": "Hai định nghĩa kinh điển của requirement, phân biệt yêu cầu chức năng / thuộc tính chất lượng / ràng buộc, yêu cầu sản phẩm vs dự án, tìm yêu cầu thật trong lời bên liên quan."
     },
     {
+      "slug": "swr302-1-2-vi-sao-re-quan-trong",
+      "name": "1.2 Why requirements engineering matters",
+      "level": "BEGINNER",
+      "description": "Chi phí sửa lỗi yêu cầu tăng theo pha (1:10:100), tự tính chi phí và số giờ tiết kiệm nhờ review, bốn hậu quả khi coi nhẹ yêu cầu, lợi ích và bằng chứng từ ngành."
+    },
+    {
+      "slug": "swr302-1-3-ch1-why-and-defined",
+      "name": "1.3 What a requirement is",
+      "level": "BEGINNER",
+      "description": "Hai định nghĩa kinh điển (Lawrence; Sommerville & Sawyer), phân loại hành vi / thuộc tính / ràng buộc quy trình, yêu cầu sản phẩm vs yêu cầu dự án, phát triển vs quản lý yêu cầu."
+    },
+    {
       "slug": "swr302-1-4-ch1-levels-types",
-      "name": "1.2 Levels and types of requirements (Figure 1-1)",
+      "name": "1.4 Levels and types of requirements (Figure 1-1)",
       "level": "INTERMEDIATE",
       "description": "Hình 1-1 của Wiegers: ba cấp business → user → functional và bốn loại đi vào từ hai bên; phân loại yêu cầu kiosk check-in; sắp chuỗi từ \"vì sao\" tới \"làm gì\"; truy mỗi FR về yêu cầu người dùng để bắt gold plating."
     },
     {
       "slug": "swr302-1-5-ch1-process",
-      "name": "1.3 The requirements process: development and management",
+      "name": "1.5 The requirements process: development and management",
       "level": "BEGINNER",
       "description": "Hai nửa của kỹ nghệ yêu cầu: phát triển (khai thác, phân tích, đặc tả, thẩm định) và quản lý; gọi tên hoạt động của các việc điển hình; một lượt qua các hoạt động."
     },
     {
       "slug": "swr302-1-6-ch1-problems-benefits",
-      "name": "1.4 Requirements problems and the cost of bad requirements",
+      "name": "1.6 Requirements problems and the cost of bad requirements",
       "level": "INTERMEDIATE",
       "description": "Sáu vấn đề yêu cầu kinh điển (thiếu người dùng tham gia, lập kế hoạch sai, yêu cầu phình, mơ hồ, mạ vàng, bỏ sót bên liên quan), vì sao lỗi yêu cầu phát hiện muộn rất đắt, tính chi phí gỡ lỗi có và không có review."
     },
@@ -52,40 +64,124 @@
       "description": "Bên liên quan ⊃ khách hàng ⊃ người dùng (trực tiếp/gián tiếp), gom người dùng thành lớp theo cách dùng, chọn product champion và giải quyết xung đột giữa các lớp."
     },
     {
+      "slug": "swr302-2-2-ch2-who-is-customer",
+      "name": "2.2 The expectation gap and who the customer is",
+      "level": "BEGINNER",
+      "description": "Tập lồng nhau người dùng ⊂ khách hàng ⊂ bên liên quan, người dùng trực tiếp/gián tiếp, khoảng cách kỳ vọng, bên nào cung cấp cấp yêu cầu nào."
+    },
+    {
       "slug": "swr302-2-3-ch2-bill-of-rights",
-      "name": "2.2 Customer rights, responsibilities and reaching agreement",
+      "name": "2.3 The customer’s Bill of Rights",
       "level": "BEGINNER",
       "description": "Mười quyền và mười trách nhiệm của khách hàng theo Wiegers qua tình huống phòng khám MediBook, người ra quyết định, luật quyết định và baseline yêu cầu."
     },
     {
+      "slug": "swr302-2-4-ch2-bill-of-responsibilities",
+      "name": "2.4 The customer’s Bill of Responsibilities",
+      "level": "BEGINNER",
+      "description": "Mười trách nhiệm của khách hàng về yêu cầu: gọi tên trách nhiệm bị bỏ bê trong 9 tình huống, phân biệt quyền / trách nhiệm, viết lại yêu cầu cho khả thi, TBD và quy trình thay đổi."
+    },
+    {
+      "slug": "swr302-2-5-ch2-agreement",
+      "name": "2.5 Decision makers and reaching agreement",
+      "level": "BEGINNER",
+      "description": "Sáu quy tắc ra quyết định (leader, đa số, nhất trí, đồng thuận, uỷ quyền, phủ quyết), mỗi bên thống nhất điều gì, baseline và chữ ký, khi không đạt thống nhất, thống nhất trong agile."
+    },
+    {
+      "slug": "swr302-3g-1-ch3-overview",
+      "name": "2.6 Good practices: how they are organized",
+      "level": "BEGINNER",
+      "description": "Bảy nhóm thực hành tốt của Wiegers (Bảng 3-1), quy trình phát triển yêu cầu lặp, bước làm một lần vs lặp mỗi vòng."
+    },
+    {
+      "slug": "swr302-3g-2-ch3-elicitation",
+      "name": "2.7 Good practices: elicitation",
+      "level": "BEGINNER",
+      "description": "Mười ba thực hành khai thác: chọn đúng thực hành cho 8 tình huống, ba loại sự kiện (tín hiệu, thời gian, nghiệp vụ), tầm nhìn làm thước đo, phỏng vấn trước workshop, cái gì nên tái sử dụng."
+    },
+    {
+      "slug": "swr302-3g-3-ch3-analysis",
+      "name": "2.8 Good practices: analysis",
+      "level": "BEGINNER",
+      "description": "Tám thực hành phân tích: chọn thực hành cho 8 tình huống, phân bổ yêu cầu cho phần mềm/phần cứng/con người, khả thi và mô hình, context diagram vs ecosystem map."
+    },
+    {
+      "slug": "swr302-3g-4-ch3-specification",
+      "name": "2.9 Good practices: specification",
+      "level": "BEGINNER",
+      "description": "Năm thực hành đặc tả: template, nguồn gốc, nhãn duy nhất, luật nghiệp vụ, yêu cầu phi chức năng; vì sao mỗi thực hành quan trọng; bốn loại yêu cầu phi chức năng."
+    },
+    {
+      "slug": "swr302-3g-5-ch3-validation",
+      "name": "2.10 Good practices: validation",
+      "level": "BEGINNER",
+      "description": "Bốn thực hành thẩm định (review, test yêu cầu, tiêu chí chấp nhận, mô phỏng), bốn thành phần của tiêu chí chấp nhận, review đa góc nhìn, thẩm định trong agile."
+    },
+    {
+      "slug": "swr302-3g-6-ch3-management",
+      "name": "2.11 Good practices: requirements management",
+      "level": "BEGINNER",
+      "description": "Tám thực hành quản lý yêu cầu (kiểm soát thay đổi, phân tích ảnh hưởng, baseline, lịch sử, trạng thái, vấn đề, RTM, công cụ), tiến trình trạng thái, khi nào điền RTM, CCB."
+    },
+    {
+      "slug": "swr302-3g-7-ch3-knowledge-pm",
+      "name": "2.12 Good practices: knowledge and project management",
+      "level": "BEGINNER",
+      "description": "Năm thực hành kiến thức và chín thực hành quản lý dự án: phân nhóm, chọn thực hành cho 8 tình huống (glossary, thương lượng lại cam kết, người quyết định…), kế hoạch/ước lượng/rủi ro, đào tạo và quy trình RE."
+    },
+    {
       "slug": "swr302-4b-1-ch4-role-tasks",
-      "name": "2.3 The business analyst: role, tasks and skills",
+      "name": "2.13 The business analyst: role and tasks",
       "level": "BEGINNER",
       "description": "BA là vai trò cầu nối (không phải chức danh), mười việc điển hình của BA so với việc của vai khác, mười bốn kỹ năng thiết yếu qua tình huống thật."
     },
     {
+      "slug": "swr302-4b-2-ch4-skills",
+      "name": "2.14 The fourteen essential analyst skills",
+      "level": "BEGINNER",
+      "description": "Mười bốn kỹ năng BA: nhận ra kỹ năng trong 10 tình huống, phân tích và sáng tạo (không mạ vàng), học hỏi/giao tiếp/lãnh đạo, chọn mô hình cho từng người nghe."
+    },
+    {
+      "slug": "swr302-4b-3-ch4-knowledge-backgrounds",
+      "name": "2.15 Analyst knowledge, backgrounds and the agile BA",
+      "level": "BEGINNER",
+      "description": "Năm (sáu) xuất phát điểm của BA và điểm mạnh/điểm yếu, rủi ro khi SME làm BA, kiến thức thiết yếu, vai trò BA trong đội agile, trọng tâm sau baseline."
+    },
+    {
       "slug": "swr302-5v-1-ch5-business-req-vision",
-      "name": "2.4 Business requirements and the vision statement",
+      "name": "2.16 Business requirements and the vision statement",
       "level": "INTERMEDIATE",
       "description": "Các phần của yêu cầu nghiệp vụ (cơ hội, mục tiêu, chỉ số thành công, tầm nhìn, rủi ro, giả định), mục tiêu SMART, khuôn tầm nhìn của Moore và tự viết tuyên bố tầm nhìn có chấm."
     },
     {
       "slug": "swr302-5v-2-ch5-scope-context",
-      "name": "2.5 Scope and the context diagram",
+      "name": "2.17 Scope and the context diagram",
       "level": "INTERMEDIATE",
       "description": "Luật sơ đồ ngữ cảnh (một vòng tròn, không ruột, nhãn là dữ liệu, mỗi chiều một mũi tên), trong hay ngoài biên hệ thống, tự vẽ context diagram PrintPal và sửa một sơ đồ sai — chấm bằng máy đọc Mermaid."
     },
     {
       "slug": "swr302-5v-3-ch5-scope-techniques",
-      "name": "2.6 Scope techniques: ecosystem map, feature tree, event list",
+      "name": "2.18 Scope techniques: ecosystem map, feature tree, event list",
       "level": "BEGINNER",
       "description": "Bốn cách biểu diễn phạm vi (context diagram, ecosystem map, feature tree, event list), phân loại sự kiện nghiệp vụ / tín hiệu / thời gian, giữ phạm vi bằng tầm nhìn và mục tiêu nghiệp vụ."
     },
     {
       "slug": "swr302-6u-1-ch6-user-classes-personas",
-      "name": "2.7 User classes and personas",
+      "name": "2.19 User classes and personas",
       "level": "BEGINNER",
       "description": "Lớp người dùng ưu tiên / không mong muốn / bỏ qua, persona là gì và dùng thế nào, tự viết persona cho lớp Proctor của hệ thống thi trực tuyến."
+    },
+    {
+      "slug": "swr302-6u-2-ch6-product-champion",
+      "name": "2.20 Connecting with users: the product champion",
+      "level": "BEGINNER",
+      "description": "Chọn product champion tốt, ai viết tài liệu, quyền quyết định ở cấp yêu cầu người dùng, bẫy cần tránh, champion bên ngoài và nhiều champion, đường giao tiếp người dùng → dev."
+    },
+    {
+      "slug": "swr302-6u-3-ch6-agile-conflicts",
+      "name": "2.21 Users on agile projects and resolving conflicts",
+      "level": "BEGINNER",
+      "description": "Product owner vs product champion, quyền quyết định của champion và nhà tài trợ, giải xung đột theo mục tiêu nghiệp vụ và lớp ưu tiên, lớp người dùng được ưu tiên/không mong muốn/bị bỏ qua."
     },
     {
       "slug": "swr302-2-lab-vision-scope-parksmart",

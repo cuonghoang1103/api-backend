@@ -1,0 +1,554 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-3g-3-ch3-analysis",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-3g-3-ch3-analysis"
+  },
+  "exercises": [
+    {
+      "title": "Analysis practices 1 — which practice fits?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "analysis practices"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Choose the analysis practice that fits each situation.</p><p>Each row is graded on its own; the explanation of every answer appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chọn thực hành phân tích phù hợp với từng tình huống.</p><p>Mỗi dòng được chấm riêng; giải thích từng đáp án hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Nhiều hệ thống xung quanh ⇒ mô hình môi trường (context diagram, ecosystem map).",
+        "Phần cứng + phần mềm + con người ⇒ phân bổ cho phân hệ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Analysis practices 1 — which practice fits?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Analysis practices 1 — which practice fits? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Model the application environment\n   - r1.k: Create user interface and technical prototypes\n   - r2.k: Analyze requirement feasibility\n   - r3.k: Prioritize the requirements\n   - r4.k: Create a data dictionary\n   - r5.k: Analyze external interfaces\n   - r6.k: Allocate requirements to subsystems\n   - r7.k: Model the requirements\n   Analysis turns raw input into a consistent, feasible, prioritised set — models, prototypes and the data dictionary are its tools.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Analysis turns raw input into a consistent, feasible, prioritised set — models, prototypes and the data dictionary are its tools.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Practice",
+                "luaChon": [
+                  "Model the application environment",
+                  "Create user interface and technical prototypes",
+                  "Analyze requirement feasibility",
+                  "Prioritize the requirements",
+                  "Create a data dictionary",
+                  "Model the requirements",
+                  "Analyze external interfaces",
+                  "Allocate requirements to subsystems"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Nobody is sure how the new system connects to the hospital’s lab, billing and pharmacy systems."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Users cannot picture the new triage screen."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "A customer wants real-time GPS for 10,000 buses on a tiny budget."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "There is more work than one release can hold."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "\"Patient\", \"client\" and \"member\" are used for the same thing in three departments."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Data must be exchanged with the national health portal in a defined format."
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "A building access product has badges, door locks, cameras and guards."
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "s": "A state diagram of an order reveals that cancelled orders can still be shipped."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Model the application environment",
+              "r1.k": "Create user interface and technical prototypes",
+              "r2.k": "Analyze requirement feasibility",
+              "r3.k": "Prioritize the requirements",
+              "r4.k": "Create a data dictionary",
+              "r5.k": "Analyze external interfaces",
+              "r6.k": "Allocate requirements to subsystems",
+              "r7.k": "Model the requirements"
+            },
+            "giaiThich": "<p><p>Analysis turns raw input into a consistent, feasible, prioritised set — models, prototypes and the data dictionary are its tools.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gọi việc đặt tên thống nhất là glossary (Knowledge) thay vì data dictionary."
+        },
+        {
+          "loi": "Nhầm external interfaces với environment model."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "analysis",
+          "vi": "phân tích yêu cầu — làm rõ, mô hình hoá, phát hiện thiếu/xung đột"
+        },
+        {
+          "en": "data dictionary",
+          "vi": "từ điển dữ liệu — định nghĩa mọi phần tử dữ liệu (thành phần, kiểu, độ dài, giá trị hợp lệ)"
+        },
+        {
+          "en": "prototype",
+          "vi": "nguyên mẫu — bản thử để làm rõ yêu cầu (throwaway / evolutionary, mock-up / proof of concept)"
+        }
+      ]
+    },
+    {
+      "title": "Analysis practices 2 — allocate to subsystems",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "allocation to subsystems"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>For a secure-building access product, allocate each requirement to the subsystem that will satisfy it: <b>software</b>, <b>hardware</b> or <b>people</b> (guards, operators).</p><p>Each row is graded on its own; the explanation of every answer appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phân bổ mỗi yêu cầu của hệ thống kiểm soát ra vào cho phân hệ: <b>phần mềm</b>, <b>phần cứng</b> hay <b>con người</b>.</p><p>Mỗi dòng được chấm riêng; giải thích từng đáp án hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Quyết định theo luật ⇒ phần mềm.",
+        "Đọc, khoá vật lý ⇒ phần cứng; kiểm tra người, phản ứng báo động ⇒ con người."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Analysis practices 2 — allocate to subsystems\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Analysis practices 2 — allocate to subsystems — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Software\n   - r1.k: Hardware\n   - r2.k: People\n   - r3.k: Hardware\n   - r4.k: Software\n   - r5.k: People\n   Allocation makes each subsystem team responsible for a clear set of requirements, and shows interfaces between them.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Allocation makes each subsystem team responsible for a clear set of requirements, and shows interfaces between them.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Subsystem",
+                "luaChon": [
+                  "Software",
+                  "Hardware",
+                  "People"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Decide whether a badge is valid for this door at this time."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Read a badge from up to 10 cm away."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Check the identity of a visitor without a badge and escort them."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Keep the door locked during a power cut (fail-secure lock)."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Record every access attempt in the audit log."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Respond to an alarm within 3 minutes."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Software",
+              "r1.k": "Hardware",
+              "r2.k": "People",
+              "r3.k": "Hardware",
+              "r4.k": "Software",
+              "r5.k": "People"
+            },
+            "giaiThich": "<p><p>Allocation makes each subsystem team responsible for a clear set of requirements, and shows interfaces between them.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Giao mọi thứ cho phần mềm."
+        },
+        {
+          "loi": "Quên phân hệ con người."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "requirements allocation",
+          "vi": "phân bổ yêu cầu cho phân hệ"
+        }
+      ]
+    },
+    {
+      "title": "Analysis practices 3 — feasibility and models",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "feasibility",
+        "analysis models"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Analyse feasibility with developers to surface risks, conflicts and dependencies early; infeasible or costly requirements can often be simplified while still meeting the business objectives. Analysis models can reveal incorrect, inconsistent, missing or superfluous requirements.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phân tích khả thi cùng dev; mô hình lộ ra yêu cầu sai, mâu thuẫn, thiếu hoặc thừa.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Đắt ⇒ tìm phương án đơn giản hơn đạt cùng mục tiêu.",
+        "Mô hình giúp thấy chỗ thiếu."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Analysis practices 3 — feasibility and models\n\nAnswer in the answer panel (no code needed).\n\n1. A requirement turns out to be very expensive. The analyst should first…Một yêu cầu hoá ra rất đắt. BA nên trước tiên…\n2. Which defect can a model reveal that a text list hides?Model lộ ra lỗi nào mà danh sách văn bản che đi?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Analysis practices 3 — feasibility and models — answer key\n\n1. A requirement turns out to be very expensive. The analyst should first…Một yêu cầu hoá ra rất đắt. BA nên trước tiên…\n   Answer: c) look for a simpler version that still meets the business objective\n   Simplify while keeping the objective.VI: Đơn giản hoá mà giữ mục tiêu.\n\n2. Which defect can a model reveal that a text list hides?Model lộ ra lỗi nào mà danh sách văn bản che đi?\n   Answer: d) A missing transition, e.g. no way to reopen a closed ticket\n   Models expose gaps and inconsistencies.VI: Mô hình lộ lỗ hổng và mâu thuẫn.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: c · d.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>A requirement turns out to be very expensive. The analyst should first…</p><p style=\"opacity:.75;font-size:.92em\"><i>Một yêu cầu hoá ra rất đắt. BA nên trước tiên…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "keep it unchanged"
+              },
+              {
+                "ma": "b",
+                "noiDung": "ask testers"
+              },
+              {
+                "ma": "c",
+                "noiDung": "look for a simpler version that still meets the business objective"
+              },
+              {
+                "ma": "d",
+                "noiDung": "delete it silently"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Simplify while keeping the objective.</p><p><i>VI: Đơn giản hoá mà giữ mục tiêu.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Which defect can a model reveal that a text list hides?</p><p style=\"opacity:.75;font-size:.92em\"><i>Model lộ ra lỗi nào mà danh sách văn bản che đi?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A spelling mistake"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The author’s name"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The font size"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A missing transition, e.g. no way to reopen a closed ticket"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Models expose gaps and inconsistencies.</p><p><i>VI: Mô hình lộ lỗ hổng và mâu thuẫn.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Giữ nguyên yêu cầu bất khả thi."
+        },
+        {
+          "loi": "Coi mô hình chỉ để trang trí."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "analysis",
+          "vi": "phân tích yêu cầu — làm rõ, mô hình hoá, phát hiện thiếu/xung đột"
+        }
+      ]
+    },
+    {
+      "title": "Analysis practices 4 — environment and interfaces",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 4,
+      "points": 10,
+      "concepts": [
+        "environment models"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>A context diagram shows the boundary and the interfaces with users, devices and other systems; an ecosystem map shows the systems in the solution space and how they interconnect. Every system has external interfaces: user interfaces, data exchanges, hardware links, communication interfaces.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Context diagram và ecosystem map; mọi hệ thống đều có giao diện ngoài.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Nhiều hệ thống nối nhau ⇒ ecosystem map.",
+        "Giao diện ngoài phải xét sớm."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Analysis practices 4 — environment and interfaces\n\nAnswer in the answer panel (no code needed).\n\n1. Which model shows several systems and how they exchange data with each other, beyond your own system?Mô hình nào cho thấy nhiều hệ thống và cách chúng trao đổi dữ liệu với nhau, ngoài hệ thống của bạn?\n2. Why analyse external interfaces early?Vì sao phân tích giao diện ngoài sớm?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Analysis practices 4 — environment and interfaces — answer key\n\n1. Which model shows several systems and how they exchange data with each other, beyond your own system?Mô hình nào cho thấy nhiều hệ thống và cách chúng trao đổi dữ liệu với nhau, ngoài hệ thống của bạn?\n   Answer: a) Ecosystem map\n   The context diagram shows only your system’s direct neighbours.VI: Context diagram chỉ thấy hàng xóm trực tiếp.\n\n2. Why analyse external interfaces early?Vì sao phân tích giao diện ngoài sớm?\n   Answer: d) So the application fits smoothly into its environment; interface changes are costly later\n   Late interface surprises are expensive.VI: Bất ngờ về giao diện về sau rất đắt.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · d.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which model shows several systems and how they exchange data with each other, beyond your own system?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mô hình nào cho thấy nhiều hệ thống và cách chúng trao đổi dữ liệu với nhau, ngoài hệ thống của bạn?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Ecosystem map"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Context diagram"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Use case specification"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Data dictionary"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The context diagram shows only your system’s direct neighbours.</p><p><i>VI: Context diagram chỉ thấy hàng xóm trực tiếp.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Why analyse external interfaces early?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao phân tích giao diện ngoài sớm?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Because they are easy"
+              },
+              {
+                "ma": "b",
+                "noiDung": "They are not requirements"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only for embedded systems"
+              },
+              {
+                "ma": "d",
+                "noiDung": "So the application fits smoothly into its environment; interface changes are costly later"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Late interface surprises are expensive.</p><p><i>VI: Bất ngờ về giao diện về sau rất đắt.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm ecosystem map với context diagram."
+        },
+        {
+          "loi": "Coi giao diện ngoài là chuyện thiết kế."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "context diagram",
+          "vi": "sơ đồ ngữ cảnh — hệ thống là MỘT vòng tròn, các thực thể ngoài và luồng dữ liệu vào/ra"
+        },
+        {
+          "en": "external interface requirement",
+          "vi": "yêu cầu giao diện ngoài — giữa hệ thống với người dùng, phần cứng, hệ thống khác"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,562 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-2-5-ch2-agreement",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-2-5-ch2-agreement"
+  },
+  "exercises": [
+    {
+      "title": "Agreement 1 — which decision rule?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "decision rules"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Agree a decision rule before conflicts arise: the <b>leader decides</b> (with or without discussion); <b>majority vote</b>; <b>unanimous vote</b>; <b>consensus</b> (everyone can live with it and commits); the leader <b>delegates</b> to one person; or the group decides but someone holds a <b>veto</b>. Name the rule in each team charter.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Thống nhất quy tắc ra quyết định trước khi có xung đột. Gọi tên quy tắc trong từng điều lệ nhóm.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Consensus ≠ unanimous: \"có thể chấp nhận\", không phải \"ai cũng thích nhất\".",
+        "Một người được giao quyền ⇒ delegation."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agreement 1 — which decision rule?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agreement 1 — which decision rule? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Leader decides\n   - r1.k: Majority vote\n   - r2.k: Unanimous vote\n   - r3.k: Consensus\n   - r4.k: Delegation\n   - r5.k: Group decides with veto\n   Deciding how you will decide prevents deadlock later; consensus is not unanimity — it means everyone can live with the decision.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Deciding how you will decide prevents deadlock later; consensus is not unanimity — it means everyone can live with the decision.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Decision rule",
+                "luaChon": [
+                  "Leader decides",
+                  "Majority vote",
+                  "Unanimous vote",
+                  "Consensus",
+                  "Delegation",
+                  "Group decides with veto"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "\"The product manager hears everyone, then makes the call.\""
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "\"We count hands; more than half wins.\""
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "\"Every member must vote yes.\""
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "\"We talk until everyone can live with the option and commits to it, even if it was not their first choice.\""
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "\"The sponsor has asked the lead BA to decide every UI requirement.\""
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "\"The team decides, but the security officer can block anything that breaks policy.\""
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Leader decides",
+              "r1.k": "Majority vote",
+              "r2.k": "Unanimous vote",
+              "r3.k": "Consensus",
+              "r4.k": "Delegation",
+              "r5.k": "Group decides with veto"
+            },
+            "giaiThich": "<p><p>Deciding how you will decide prevents deadlock later; consensus is not unanimity — it means everyone can live with the decision.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm consensus với unanimous."
+        },
+        {
+          "loi": "Nhầm delegation với leader decides."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "decision rule",
+          "vi": "quy tắc ra quyết định"
+        },
+        {
+          "en": "consensus",
+          "vi": "đồng thuận — ai cũng chấp nhận được và cam kết"
+        }
+      ]
+    },
+    {
+      "title": "Agreement 2 — what each party agrees to",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "reaching agreement"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Reaching agreement on requirements means: <b>customers</b> agree they address their needs; <b>developers</b> agree they understand them and they are feasible; <b>testers</b> agree they are verifiable; <b>management</b> agrees they will achieve the business objectives. Match the statement to the party.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi bên thống nhất một điều khác nhau.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Tester quan tâm \"kiểm được không\".",
+        "Quản lý quan tâm mục tiêu nghiệp vụ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agreement 2 — what each party agrees to\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agreement 2 — what each party agrees to — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Customers\n   - r1.k: Developers\n   - r2.k: Testers\n   - r3.k: Management\n   A signature without this shared understanding is just a ritual.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A signature without this shared understanding is just a ritual.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Party",
+                "luaChon": [
+                  "Customers",
+                  "Developers",
+                  "Testers",
+                  "Management"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "\"Yes, this is what our clinic needs.\""
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "\"We understand it and can build it within the constraints.\""
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "\"We can write a pass/fail test for every requirement.\""
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "\"Delivering this will meet the objectives we funded.\""
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Customers",
+              "r1.k": "Developers",
+              "r2.k": "Testers",
+              "r3.k": "Management"
+            },
+            "giaiThich": "<p><p>A signature without this shared understanding is just a ritual.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Coi ký duyệt là đủ."
+        },
+        {
+          "loi": "Quên vai trò của tester khi thống nhất."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "baseline",
+          "vi": "đường cơ sở — bộ yêu cầu đã thống nhất, từ đó mọi thay đổi phải qua kiểm soát"
+        },
+        {
+          "en": "verifiable",
+          "vi": "kiểm chứng được — có cách test/đo để biết đạt hay không"
+        }
+      ]
+    },
+    {
+      "title": "Agreement 3 — baselines and sign-off",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "baseline",
+        "sign-off"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>More important than the sign-off ritual is the <b>baseline</b>: requirements reviewed and agreed at a point in time, the basis for further development; future changes go through the change process and may force renegotiating cost, resources and schedule. Don’t use sign-off as a weapon. If you cannot get agreement, find out why, record the risk, and proceed cautiously on the baseline.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Baseline quan trọng hơn nghi thức ký; không dùng chữ ký làm vũ khí; không đạt thống nhất thì tìm hiểu lý do, ghi rủi ro, thận trọng tiến lên.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Im lặng không phải đồng ý.",
+        "Baseline = hiểu biết tốt nhất hôm nay + quy trình thay đổi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agreement 3 — baselines and sign-off\n\nAnswer in the answer panel (no code needed).\n\n1. A BA e-mails \"If I don’t hear back by Friday I’ll assume you agree.\" This is…BA e-mail \"Không trả lời trước thứ Sáu thì coi như đồng ý.\" Đây là…\n2. Six months later the client says \"you made us sign, so now you cannot change anything\". What went wrong?Sáu tháng sau khách nói \"các anh bắt ký rồi nên không được đổi gì\". Sai ở đâu?\n3. What does a baseline imply for later changes?Baseline ngụ ý gì cho thay đổi về sau?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agreement 3 — baselines and sign-off — answer key\n\n1. A BA e-mails \"If I don’t hear back by Friday I’ll assume you agree.\" This is…BA e-mail \"Không trả lời trước thứ Sáu thì coi như đồng ý.\" Đây là…\n   Answer: c) not real agreement — find out why they are silent and record the risk\n   Silence ≠ agreement.VI: Im lặng ≠ đồng ý.\n\n2. Six months later the client says \"you made us sign, so now you cannot change anything\". What went wrong?Sáu tháng sau khách nói \"các anh bắt ký rồi nên không được đổi gì\". Sai ở đâu?\n   Answer: b) Sign-off was used as a weapon instead of a milestone with an agreed change process\n   The baseline subtext: changes go through change control.VI: Ý nghĩa baseline: thay đổi đi qua kiểm soát thay đổi.\n\n3. What does a baseline imply for later changes?Baseline ngụ ý gì cho thay đổi về sau?\n   Answer: c) They are possible but go through change control and may require renegotiating cost, resources and schedule\n   Wiegers’ baseline subtext.VI: Ý nghĩa baseline theo Wiegers.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: c · b · c.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>A BA e-mails \"If I don’t hear back by Friday I’ll assume you agree.\" This is…</p><p style=\"opacity:.75;font-size:.92em\"><i>BA e-mail \"Không trả lời trước thứ Sáu thì coi như đồng ý.\" Đây là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a valid sign-off"
+              },
+              {
+                "ma": "b",
+                "noiDung": "required by IEEE 830"
+              },
+              {
+                "ma": "c",
+                "noiDung": "not real agreement — find out why they are silent and record the risk"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the agile way"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Silence ≠ agreement.</p><p><i>VI: Im lặng ≠ đồng ý.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Six months later the client says \"you made us sign, so now you cannot change anything\". What went wrong?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sáu tháng sau khách nói \"các anh bắt ký rồi nên không được đổi gì\". Sai ở đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The SRS was too short"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Sign-off was used as a weapon instead of a milestone with an agreed change process"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Nothing"
+              },
+              {
+                "ma": "d",
+                "noiDung": "They signed too early"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The baseline subtext: changes go through change control.</p><p><i>VI: Ý nghĩa baseline: thay đổi đi qua kiểm soát thay đổi.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>What does a baseline imply for later changes?</p><p style=\"opacity:.75;font-size:.92em\"><i>Baseline ngụ ý gì cho thay đổi về sau?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "They are free"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Only developers may change it"
+              },
+              {
+                "ma": "c",
+                "noiDung": "They are possible but go through change control and may require renegotiating cost, resources and schedule"
+              },
+              {
+                "ma": "d",
+                "noiDung": "They are forbidden"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Wiegers’ baseline subtext.</p><p><i>VI: Ý nghĩa baseline theo Wiegers.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Coi chữ ký là bức tường chặn mọi thay đổi."
+        },
+        {
+          "loi": "Coi im lặng là đồng ý."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "baseline",
+          "vi": "đường cơ sở — bộ yêu cầu đã thống nhất, từ đó mọi thay đổi phải qua kiểm soát"
+        },
+        {
+          "en": "change control board (CCB)",
+          "vi": "hội đồng kiểm soát thay đổi — người quyết định chấp nhận/từ chối thay đổi"
+        }
+      ]
+    },
+    {
+      "title": "Agreement 4 — traditional or agile agreement?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "agreement on agile projects"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>On agile projects there is no formal up-front sign-off of the full scope: each iteration, the product owner and the team agree in planning which stories to build (by priority and velocity); that set is frozen for the iteration and new requests go to later iterations. The vision and business requirements are still set at the outset.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Agile không ký duyệt toàn bộ phạm vi từ đầu; mỗi vòng PO và đội thống nhất story sẽ làm và \"đóng băng\" trong vòng đó.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Tầm nhìn và yêu cầu nghiệp vụ ⇒ cả hai.",
+        "Đóng băng story trong sprint ⇒ agile."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agreement 4 — traditional or agile agreement?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agreement 4 — traditional or agile agreement? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Traditional\n   - r1.k: Agile\n   - r2.k: Both\n   - r3.k: Traditional\n   - r4.k: Agile\n   Agile changes when and how often agreement happens, not whether it happens.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Agile changes when and how often agreement happens, not whether it happens.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Approach",
+                "luaChon": [
+                  "Traditional",
+                  "Agile",
+                  "Both"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "The full SRS is baselined before design starts."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "The stories chosen in sprint planning are frozen for the sprint; new requests go to the backlog."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The vision and business requirements are agreed at the start."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Approvers sign a page explaining what the baseline means for future changes."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Agreement is reached again at every iteration planning session."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Traditional",
+              "r1.k": "Agile",
+              "r2.k": "Both",
+              "r3.k": "Traditional",
+              "r4.k": "Agile"
+            },
+            "giaiThich": "<p><p>Agile changes when and how often agreement happens, not whether it happens.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nghĩ agile không cần thống nhất gì."
+        },
+        {
+          "loi": "Nghĩ agile không có tầm nhìn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "product backlog",
+          "vi": "danh sách việc của sản phẩm, xếp theo ưu tiên"
+        },
+        {
+          "en": "baseline",
+          "vi": "đường cơ sở — bộ yêu cầu đã thống nhất, từ đó mọi thay đổi phải qua kiểm soát"
+        }
+      ]
+    }
+  ]
+}

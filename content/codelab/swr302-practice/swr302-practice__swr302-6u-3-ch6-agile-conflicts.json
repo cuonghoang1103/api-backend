@@ -1,0 +1,519 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-6u-3-ch6-agile-conflicts",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-6u-3-ch6-agile-conflicts"
+  },
+  "exercises": [
+    {
+      "title": "Agile users 1 — product owner vs product champion",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "product owner"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Some agile methods put a single <b>product owner</b> on the team as the voice of the customer: they define the vision and develop and prioritise the product backlog. Unlike a product champion (one user class, user-requirements level), the product owner spans all three requirement levels — business, user and functional — straddling the champion and BA roles.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Product owner trải cả ba cấp yêu cầu; product champion đại diện một lớp người dùng ở cấp yêu cầu người dùng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "PO = cả ba cấp + backlog.",
+        "Champion = một lớp người dùng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agile users 1 — product owner vs product champion\n\nAnswer in the answer panel (no code needed).\n\n1. The key difference between a product owner and a product champion is that the product owner…Khác biệt chính: product owner…\n2. On a Scrum team, who prioritises the product backlog?Trong Scrum, ai xếp ưu tiên product backlog?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agile users 1 — product owner vs product champion — answer key\n\n1. The key difference between a product owner and a product champion is that the product owner…Khác biệt chính: product owner…\n   Answer: b) spans business, user and functional requirements and prioritises the whole backlog\n   Three levels, whole backlog.VI: Ba cấp, cả backlog.\n\n2. On a Scrum team, who prioritises the product backlog?Trong Scrum, ai xếp ưu tiên product backlog?\n   Answer: b) The product owner\n   The PO owns the backlog.VI: PO sở hữu backlog.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>The key difference between a product owner and a product champion is that the product owner…</p><p style=\"opacity:.75;font-size:.92em\"><i>Khác biệt chính: product owner…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "only tests the product"
+              },
+              {
+                "ma": "b",
+                "noiDung": "spans business, user and functional requirements and prioritises the whole backlog"
+              },
+              {
+                "ma": "c",
+                "noiDung": "writes the code"
+              },
+              {
+                "ma": "d",
+                "noiDung": "represents one user class only"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Three levels, whole backlog.</p><p><i>VI: Ba cấp, cả backlog.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>On a Scrum team, who prioritises the product backlog?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong Scrum, ai xếp ưu tiên product backlog?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Each developer"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The product owner"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The Scrum Master"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The testers"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The PO owns the backlog.</p><p><i>VI: PO sở hữu backlog.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nghĩ Scrum Master xếp ưu tiên."
+        },
+        {
+          "loi": "Coi PO chỉ là champion đổi tên."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "product champion",
+          "vi": "người đại diện chính của một lớp người dùng, nói thay họ với BA"
+        },
+        {
+          "en": "product backlog",
+          "vi": "danh sách việc của sản phẩm, xếp theo ưu tiên"
+        }
+      ]
+    },
+    {
+      "title": "Agile users 2 — who decides?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "decision rights"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Separate business from user requirements: the product champion decides at the user-requirements level within the scope set by the business requirements; the sponsor keeps authority over vision, scope, priorities, schedule and budget. Who decides each question?</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Champion quyết ở cấp yêu cầu người dùng; nhà tài trợ giữ tầm nhìn, phạm vi, ưu tiên, lịch, ngân sách. Ai quyết từng câu hỏi?</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Nội dung nhiệm vụ của người dùng ⇒ champion.",
+        "Phạm vi, lịch, tiền ⇒ nhà tài trợ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agile users 2 — who decides?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agile users 2 — who decides? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Product champion of the user class\n   - r1.k: Executive sponsor\n   - r2.k: Product champion of the user class\n   - r3.k: Executive sponsor\n   - r4.k: Product champion of the user class\n   - r5.k: Executive sponsor\n   Clear decision rights make the champion model acceptable to management.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Clear decision rights make the champion model acceptable to management.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Decides",
+                "luaChon": [
+                  "Product champion of the user class",
+                  "Executive sponsor"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Which fields the nurses need on the medication screen."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Whether the pharmacy module is in release 1 or release 2."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The order of steps when a nurse records a dose."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Whether to add two months to the schedule."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Which report formats the pharmacists find useful."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "The budget for an extra integration."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Product champion of the user class",
+              "r1.k": "Executive sponsor",
+              "r2.k": "Product champion of the user class",
+              "r3.k": "Executive sponsor",
+              "r4.k": "Product champion of the user class",
+              "r5.k": "Executive sponsor"
+            },
+            "giaiThich": "<p><p>Clear decision rights make the champion model acceptable to management.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Để champion quyết phạm vi bản phát hành."
+        },
+        {
+          "loi": "Để nhà tài trợ quyết thứ tự các bước của y tá."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "product champion",
+          "vi": "người đại diện chính của một lớp người dùng, nói thay họ với BA"
+        },
+        {
+          "en": "business requirement",
+          "vi": "yêu cầu nghiệp vụ — VÌ SAO tổ chức làm hệ thống (mục tiêu, lợi ích); ghi trong Vision & Scope"
+        },
+        {
+          "en": "user requirement",
+          "vi": "yêu cầu người dùng — việc người dùng phải làm được (use case, user story)"
+        }
+      ]
+    },
+    {
+      "title": "Agile users 3 — resolving conflicting requirements",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "resolving conflicts"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>When representatives of different user classes disagree, the decision makers resolve it, guided by the business objectives and the <b>favored user classes</b>. Document the resolution and its rationale so it is not re-argued.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Xung đột giữa các lớp người dùng được giải theo mục tiêu nghiệp vụ và lớp người dùng được ưu tiên; ghi lại quyết định và lý do.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Mục tiêu nghiệp vụ + lớp được ưu tiên.",
+        "Ghi lại lý do."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agile users 3 — resolving conflicting requirements\n\nAnswer in the answer panel (no code needed).\n\n1. Doctors want a detailed screen; receptionists want a fast simple one. The business objective is shorter waiting times at the desk; receptionists are the favored class for check-in. Decision?Bác sĩ muốn màn hình chi tiết; lễ tân muốn màn hình nhanh, đơn giản. Mục tiêu: giảm chờ ở quầy; lễ tân là lớp được ưu tiên cho check-in. Quyết định?\n2. After the decision, the BA should…Sau quyết định, BA nên…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agile users 3 — resolving conflicting requirements — answer key\n\n1. Doctors want a detailed screen; receptionists want a fast simple one. The business objective is shorter waiting times at the desk; receptionists are the favored class for check-in. Decision?Bác sĩ muốn màn hình chi tiết; lễ tân muốn màn hình nhanh, đơn giản. Mục tiêu: giảm chờ ở quầy; lễ tân là lớp được ưu tiên cho check-in. Quyết định?\n   Answer: a) A fast, simple check-in screen for receptionists; details available elsewhere for doctors\n   Objectives and favored classes guide the decision.VI: Mục tiêu và lớp ưu tiên dẫn dắt quyết định.\n\n2. After the decision, the BA should…Sau quyết định, BA nên…\n   Answer: d) record the decision and its rationale\n   Avoid re-litigating.VI: Tránh tranh cãi lại.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · d.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Doctors want a detailed screen; receptionists want a fast simple one. The business objective is shorter waiting times at the desk; receptionists are the favored class for check-in. Decision?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bác sĩ muốn màn hình chi tiết; lễ tân muốn màn hình nhanh, đơn giản. Mục tiêu: giảm chờ ở quầy; lễ tân là lớp được ưu tiên cho check-in. Quyết định?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A fast, simple check-in screen for receptionists; details available elsewhere for doctors"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The doctors’ version everywhere"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Flip a coin"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Postpone forever"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Objectives and favored classes guide the decision.</p><p><i>VI: Mục tiêu và lớp ưu tiên dẫn dắt quyết định.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>After the decision, the BA should…</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau quyết định, BA nên…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "reopen it at every meeting"
+              },
+              {
+                "ma": "b",
+                "noiDung": "tell only the developers"
+              },
+              {
+                "ma": "c",
+                "noiDung": "keep it in her head"
+              },
+              {
+                "ma": "d",
+                "noiDung": "record the decision and its rationale"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Avoid re-litigating.</p><p><i>VI: Tránh tranh cãi lại.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chiều theo người có chức vụ cao nhất."
+        },
+        {
+          "loi": "Không ghi lại quyết định."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "user class",
+          "vi": "lớp người dùng — nhóm người dùng có cách dùng/nhu cầu giống nhau"
+        }
+      ]
+    },
+    {
+      "title": "Agile users 4 — favored, disfavored or ignored?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "favored user classes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>User classes differ in importance: <b>favored</b> classes (their satisfaction aligns most with the business objectives) win conflicts; <b>disfavored</b> classes should not use the product (for legal, security or safety reasons — you may add features to block them); <b>ignored</b> classes may use it but you do not build specifically for them. Classify for an online pharmacy.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lớp người dùng được ưu tiên, không mong muốn, bị bỏ qua. Phân loại cho nhà thuốc trực tuyến.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Mua thuốc kê đơn không có đơn ⇒ không mong muốn (luật).",
+        "Dùng được nhưng không thiết kế cho họ ⇒ bị bỏ qua."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agile users 4 — favored, disfavored or ignored?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agile users 4 — favored, disfavored or ignored? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Favored\n   - r1.k: Disfavored\n   - r2.k: Ignored\n   - r3.k: Disfavored\n   Disfavored classes generate requirements too — to keep them out.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Disfavored classes generate requirements too — to keep them out.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Class",
+                "luaChon": [
+                  "Favored",
+                  "Disfavored",
+                  "Ignored"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Patients ordering their prescribed medicines"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "People trying to buy prescription-only drugs without a prescription"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Students who browse the catalogue for a school project"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Bots scraping prices"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Favored",
+              "r1.k": "Disfavored",
+              "r2.k": "Ignored",
+              "r3.k": "Disfavored"
+            },
+            "giaiThich": "<p><p>Disfavored classes generate requirements too — to keep them out.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Coi lớp không mong muốn là không liên quan tới yêu cầu."
+        },
+        {
+          "loi": "Coi mọi người dùng như nhau."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "user class",
+          "vi": "lớp người dùng — nhóm người dùng có cách dùng/nhu cầu giống nhau"
+        }
+      ]
+    }
+  ]
+}

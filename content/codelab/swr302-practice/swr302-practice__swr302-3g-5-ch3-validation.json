@@ -1,0 +1,527 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-3g-5-ch3-validation",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-3g-5-ch3-validation"
+  },
+  "exercises": [
+    {
+      "title": "Validation practices 1 — which practice?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "validation practices"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Four validation practices: review the requirements, test the requirements, define acceptance criteria, simulate the requirements. Which one does each action apply?</p><p>Each row is graded on its own; the explanation of every answer appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bốn thực hành thẩm định. Mỗi hành động áp dụng thực hành nào?</p><p>Mỗi dòng được chấm riêng; giải thích từng đáp án hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Nhiều góc nhìn cùng soát tài liệu ⇒ review.",
+        "Mô hình chạy được trong công cụ ⇒ simulate."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Validation practices 1 — which practice?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Validation practices 1 — which practice? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Review the requirements\n   - r1.k: Test the requirements\n   - r2.k: Define acceptance criteria\n   - r3.k: Simulate the requirements\n   - r4.k: Test the requirements\n   Reviews and tests find defects in the requirements themselves; acceptance criteria define \"fit for use\"; simulation brings requirements to life before code.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Reviews and tests find defects in the requirements themselves; acceptance criteria define \"fit for use\"; simulation brings requirements to life before code.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Practice",
+                "luaChon": [
+                  "Review the requirements",
+                  "Test the requirements",
+                  "Define acceptance criteria",
+                  "Simulate the requirements"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "An analyst, a customer, a developer and a tester inspect section 3 of the SRS."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "The tester writes test cases from the use cases before any code exists."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The clinic manager states: \"We accept the release if all booking tests pass and the system holds 200 users.\""
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Users click through an executable model of the new ordering process built in a simulation tool."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "The team walks through tests with the customer to check that the expected results are right."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Review the requirements",
+              "r1.k": "Test the requirements",
+              "r2.k": "Define acceptance criteria",
+              "r3.k": "Simulate the requirements",
+              "r4.k": "Test the requirements"
+            },
+            "giaiThich": "<p><p>Reviews and tests find defects in the requirements themselves; acceptance criteria define \"fit for use\"; simulation brings requirements to life before code.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm simulation với prototype trên giấy."
+        },
+        {
+          "loi": "Nhầm acceptance criteria với test cases chi tiết."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "validation",
+          "vi": "thẩm định — xác nhận đúng THỨ cần làm (đúng nhu cầu)"
+        },
+        {
+          "en": "inspection",
+          "vi": "thanh tra — loại review hình thức nhất, có vai trò và quy trình"
+        },
+        {
+          "en": "acceptance criteria",
+          "vi": "tiêu chí chấp nhận — điều kiện để khách nhận một yêu cầu/story (Given/When/Then)"
+        }
+      ]
+    },
+    {
+      "title": "Validation practices 2 — what makes up acceptance criteria?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "acceptance criteria"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers: acceptance criteria may combine (1) passing <b>acceptance tests</b> based on user requirements, (2) satisfying specific <b>nonfunctional requirements</b>, (3) the state of <b>open defects and issues</b>, and (4) <b>infrastructure and training</b> ready for rollout. Classify each criterion.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tiêu chí chấp nhận có thể gồm: test chấp nhận, yêu cầu phi chức năng, tình trạng lỗi/vấn đề mở, hạ tầng và đào tạo sẵn sàng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Đào tạo, máy chủ ⇒ hạ tầng và đào tạo.",
+        "Ngưỡng lỗi còn mở ⇒ defects and issues."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Validation practices 2 — what makes up acceptance criteria?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Validation practices 2 — what makes up acceptance criteria? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Acceptance tests\n   - r1.k: Nonfunctional requirements\n   - r2.k: Open defects and issues\n   - r3.k: Infrastructure and training\n   - r4.k: Infrastructure and training\n   \"Done\" is more than passing functional tests: quality, residual defects and readiness count too.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>\"Done\" is more than passing functional tests: quality, residual defects and readiness count too.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Component",
+                "luaChon": [
+                  "Acceptance tests",
+                  "Nonfunctional requirements",
+                  "Open defects and issues",
+                  "Infrastructure and training"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "All 40 booking and cancellation scenarios pass."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "The system supports 200 concurrent users with 2-second responses."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "No open defect of severity \"critical\"; at most 5 \"minor\"."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "All receptionists have completed a 2-hour training."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "The production servers and backups are in place."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Acceptance tests",
+              "r1.k": "Nonfunctional requirements",
+              "r2.k": "Open defects and issues",
+              "r3.k": "Infrastructure and training",
+              "r4.k": "Infrastructure and training"
+            },
+            "giaiThich": "<p><p>\"Done\" is more than passing functional tests: quality, residual defects and readiness count too.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chỉ coi test chức năng là tiêu chí chấp nhận."
+        },
+        {
+          "loi": "Bỏ qua đào tạo người dùng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "acceptance criteria",
+          "vi": "tiêu chí chấp nhận — điều kiện để khách nhận một yêu cầu/story (Given/When/Then)"
+        }
+      ]
+    },
+    {
+      "title": "Validation practices 3 — reviews and tests",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "reviews",
+        "testing requirements"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Peer review — especially inspection — is one of the highest-value quality practices: a small team with different perspectives examines requirements and models for defects. Tests are an alternative view of the requirements: writing them forces you to think about how you would know the functionality is correct; map tests to functional requirements so none is overlooked.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Review (đặc biệt inspection) giá trị cao; test là góc nhìn khác của yêu cầu, ánh xạ test ↔ yêu cầu chức năng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Nhiều góc nhìn.",
+        "Ánh xạ test ↔ yêu cầu."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Validation practices 3 — reviews and tests\n\nAnswer in the answer panel (no code needed).\n\n1. Who should take part in a requirements review?Ai nên tham gia review yêu cầu?\n2. Why map tests to functional requirements?Vì sao ánh xạ test với yêu cầu chức năng?\n3. Simulation of requirements is…Mô phỏng yêu cầu là…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Validation practices 3 — reviews and tests — answer key\n\n1. Who should take part in a requirements review?Ai nên tham gia review yêu cầu?\n   Answer: d) A small team with different perspectives: analyst, customer, developer, tester\n   Different perspectives find different defects.VI: Góc nhìn khác nhau tìm lỗi khác nhau.\n\n2. Why map tests to functional requirements?Vì sao ánh xạ test với yêu cầu chức năng?\n   Answer: b) So no requirement is overlooked and every test has a purpose\n   Coverage both ways.VI: Phủ hai chiều.\n\n3. Simulation of requirements is…Mô phỏng yêu cầu là…\n   Answer: d) a supplement to elicitation and analysis, not a substitute\n   Wiegers: supplement, not substitute.VI: Wiegers: bổ trợ, không thay thế.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: d · b · d.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Who should take part in a requirements review?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ai nên tham gia review yêu cầu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Only the author"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Only managers"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The whole company"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A small team with different perspectives: analyst, customer, developer, tester"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Different perspectives find different defects.</p><p><i>VI: Góc nhìn khác nhau tìm lỗi khác nhau.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Why map tests to functional requirements?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao ánh xạ test với yêu cầu chức năng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "To count tests"
+              },
+              {
+                "ma": "b",
+                "noiDung": "So no requirement is overlooked and every test has a purpose"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It is not useful"
+              },
+              {
+                "ma": "d",
+                "noiDung": "To make the RTM look full"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Coverage both ways.</p><p><i>VI: Phủ hai chiều.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Simulation of requirements is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Mô phỏng yêu cầu là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the same as coding"
+              },
+              {
+                "ma": "b",
+                "noiDung": "only for games"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a replacement for requirements"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a supplement to elicitation and analysis, not a substitute"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Wiegers: supplement, not substitute.</p><p><i>VI: Wiegers: bổ trợ, không thay thế.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Để tác giả tự review."
+        },
+        {
+          "loi": "Coi mô phỏng thay được phân tích."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "inspection",
+          "vi": "thanh tra — loại review hình thức nhất, có vai trò và quy trình"
+        },
+        {
+          "en": "requirements traceability matrix (RTM)",
+          "vi": "ma trận truy vết yêu cầu — nối nguồn ↔ yêu cầu ↔ thiết kế ↔ mã ↔ test"
+        }
+      ]
+    },
+    {
+      "title": "Validation practices 4 — validation on agile projects",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 3,
+      "points": 10,
+      "concepts": [
+        "validation on agile projects"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Agile teams often use acceptance tests instead of detailed functional requirements: the tests flesh out the details of each user story and define when it is done.</p><p>Each question is graded on its own; the explanation appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Agile thường dùng test chấp nhận thay cho yêu cầu chức năng chi tiết.</p><p>Mỗi câu được chấm riêng; giải thích hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Story + acceptance tests.",
+        "Không phải \"không có gì\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Validation practices 4 — validation on agile projects\n\nAnswer in the answer panel (no code needed).\n\n1. On an agile project, the details of a user story are most often captured as…Trong agile, chi tiết của một user story thường được ghi thành…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Validation practices 4 — validation on agile projects — answer key\n\n1. On an agile project, the details of a user story are most often captured as…Trong agile, chi tiết của một user story thường được ghi thành…\n   Answer: a) acceptance tests / acceptance criteria\n   Tests as requirements.VI: Test như yêu cầu.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>On an agile project, the details of a user story are most often captured as…</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong agile, chi tiết của một user story thường được ghi thành…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "acceptance tests / acceptance criteria"
+              },
+              {
+                "ma": "b",
+                "noiDung": "code comments only"
+              },
+              {
+                "ma": "c",
+                "noiDung": "nothing"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a 50-page SRS"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Tests as requirements.</p><p><i>VI: Test như yêu cầu.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nghĩ agile không thẩm định."
+        },
+        {
+          "loi": "Viết SRS dày cho mỗi story."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "user story",
+          "vi": "câu chuyện người dùng — \"As a <role>, I want <goal> so that <benefit>\""
+        },
+        {
+          "en": "acceptance criteria",
+          "vi": "tiêu chí chấp nhận — điều kiện để khách nhận một yêu cầu/story (Given/When/Then)"
+        }
+      ]
+    }
+  ]
+}

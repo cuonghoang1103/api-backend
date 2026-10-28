@@ -64,9 +64,29 @@ const E3 = tracNghiem({
   khaiNiem: ['decision makers', 'requirements baseline'],
 });
 
+const E4 = phanLoai({
+  tieuDe: 'Rights 4 — which right is not respected?',
+  doKho: 'MEDIUM', phut: 8,
+  moTa: { en: '<p>Each complaint from a customer shows one of the ten rights of Wiegers’ Requirements Bill of Rights not being respected. Name it.</p>', vi: '<p>Mỗi lời phàn nàn của khách cho thấy một trong mười quyền không được tôn trọng. Gọi tên quyền đó.</p>' },
+  cot: 'Right', luaChon: ['1 Speak your language', '2 Learn your business and objectives', '3 Record requirements in an appropriate form', '4 Receive explanations of practices and deliverables', '5 Change your requirements', '6 An environment of mutual respect', '7 Hear ideas and alternatives', '8 Describe usability characteristics', '9 Hear about reuse options', '10 Receive a system that meets your needs'],
+  hang: [
+    ['"The analyst keeps talking about microservices and JSON; I just want to book rooms."', '1 Speak your language'],
+    ['"They sent a diagram full of symbols and nobody explained how to read it."', '4 Receive explanations of practices and deliverables'],
+    ['"They just automated our old paper process, even the steps we hate."', '7 Hear ideas and alternatives'],
+    ['"Nobody asked what ‘easy to use’ means for our staff."', '8 Describe usability characteristics'],
+    ['"Our notes are scattered over 40 e-mails; there is no document we can review."', '3 Record requirements in an appropriate form'],
+    ['"The team never watched how we work; they assumed they knew."', '2 Learn your business and objectives'],
+  ],
+  giaiThich: '<p>Rights 1–4 are about communication, 5–9 about the content and its evolution, and 10 is the conditional outcome of all of them.</p>',
+  goiY: ['Thuật ngữ kỹ thuật ⇒ quyền #1.', 'Tự động hoá quy trình cũ y nguyên ("paving the cow paths") ⇒ quyền #7.'],
+  loiHayGap: ['Nhầm #2 (học nghiệp vụ) với #1 (nói ngôn ngữ của khách).', 'Nhầm #3 (ghi lại) với #4 (giải thích).'],
+  thuatNgu: [{ en: 'Bill of Rights', vi: 'Bản quyền lợi của khách hàng về yêu cầu' }],
+  khaiNiem: ['customer rights'],
+});
+
 export default moDun({
   slug: 'swr302-2-3-ch2-bill-of-rights',
-  ten: '2.2 Customer rights, responsibilities and reaching agreement',
+  ten: '2.3 The customer\u2019s Bill of Rights',
   moTaModule: 'Mười quyền và mười trách nhiệm của khách hàng theo Wiegers qua tình huống phòng khám MediBook, người ra quyết định, luật quyết định và baseline yêu cầu.',
-  de: [E1, E2, E3],
+  de: [E1, E2, E3, E4],
 });

@@ -117,7 +117,7 @@ const E4 = baiJs({
 
 export default moDun({
   slug: 'swr302-5v-2-ch5-scope-context',
-  ten: '2.5 Scope and the context diagram',
+  ten: '2.17 Scope and the context diagram',
   moTaModule: 'Luật sơ đồ ngữ cảnh (một vòng tròn, không ruột, nhãn là dữ liệu, mỗi chiều một mũi tên), trong hay ngoài biên hệ thống, tự vẽ context diagram PrintPal và sửa một sơ đồ sai — chấm bằng máy đọc Mermaid.',
   de: [E1, E2, E3, E4],
 });

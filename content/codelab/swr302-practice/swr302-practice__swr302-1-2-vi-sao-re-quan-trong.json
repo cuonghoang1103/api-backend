@@ -1,0 +1,496 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-1-2-vi-sao-re-quan-trong",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-1-2-vi-sao-re-quan-trong"
+  },
+  "exercises": [
+    {
+      "title": "Why RE 1 — where a requirement defect costs the most",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 4,
+      "points": 10,
+      "concepts": [
+        "cost of requirements defects"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>The cost of fixing a requirement defect grows with every phase it survives undetected (Boehm’s \"1:10:100\" observation; the lesson uses ×1 requirements, ×5 design, ×10 coding, ×20 testing, ×100+ production). Order the phases from the cheapest to the most expensive place to fix the same defect.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chi phí sửa một lỗi yêu cầu tăng theo mỗi pha nó \"sống sót\" (quan sát 1:10:100 của Boehm). Sắp các pha từ nơi sửa rẻ nhất tới đắt nhất.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Lỗi càng phát hiện muộn càng nhiều thứ phải làm lại.",
+        "Sản xuất (production) là đắt nhất: vá nóng, hoàn tiền, mất uy tín."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Why RE 1 — where a requirement defect costs the most\n\nAnswer in the answer panel (no code needed).\n\n1. Cheapest → most expensiveRẻ nhất → đắt nhất\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Why RE 1 — where a requirement defect costs the most — answer key\n\n1. Cheapest → most expensiveRẻ nhất → đắt nhất\n   Answer: a) Requirements  →  b) Design  →  c) Coding  →  d) Testing  →  e) Production\n   Everything built on a wrong requirement must change too.VI: Mọi thứ xây trên yêu cầu sai cũng phải đổi theo.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Requirements → Design → Coding → Testing → Production.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Cheapest → most expensive</p><p style=\"opacity:.75;font-size:.92em\"><i>Rẻ nhất → đắt nhất</i></p>",
+            "muc": [
+              {
+                "ma": "e",
+                "noiDung": "Production"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Design"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Testing"
+              },
+              {
+                "ma": "a",
+                "noiDung": "Requirements"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Coding"
+              }
+            ],
+            "dapAn": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e"
+            ],
+            "giaiThich": "<p>Everything built on a wrong requirement must change too.</p><p><i>VI: Mọi thứ xây trên yêu cầu sai cũng phải đổi theo.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng sửa ở kiểm thử rẻ hơn ở code."
+        },
+        {
+          "loi": "Quên chi phí phi kỹ thuật ở production."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "requirements defect",
+          "vi": "lỗi yêu cầu"
+        },
+        {
+          "en": "rework",
+          "vi": "làm lại"
+        }
+      ]
+    },
+    {
+      "title": "Why RE 3 — when bad requirements happen to good people",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "consequences of poor requirements"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers lists what happens when requirements are neglected. Name the consequence each story shows.</p><p>Each row is graded on its own; the explanation of every answer appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Wiegers liệt kê hậu quả khi coi nhẹ yêu cầu. Gọi tên hậu quả trong từng câu chuyện.</p><p>Mỗi dòng được chấm riêng; giải thích từng đáp án hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "\"Đúng như tài liệu nhưng sai nhu cầu\" ⇒ sai sản phẩm.",
+        "\"Thêm một chút mỗi tuần\" ⇒ phình phạm vi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Why RE 3 — when bad requirements happen to good people\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Why RE 3 — when bad requirements happen to good people — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Wrong product\n   - r1.k: Scope creep and rework\n   - r2.k: Schedule and budget overrun\n   - r3.k: Frustrated users and a mistrustful client\n   All four come from requirements nobody agreed on, checked, or managed.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>All four come from requirements nobody agreed on, checked, or managed.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Consequence",
+                "luaChon": [
+                  "Scope creep and rework",
+                  "Wrong product",
+                  "Schedule and budget overrun",
+                  "Frustrated users and a mistrustful client"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "The app does exactly what the SRS says, but nurses needed something different and refuse to use it."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "\"Just one more report\" is added every week; the team keeps rebuilding the dashboard."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The 4-month project is in month 7 and 40% over budget."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "At the final demo the client sees the gap for the first time and stops trusting the team."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Wrong product",
+              "r1.k": "Scope creep and rework",
+              "r2.k": "Schedule and budget overrun",
+              "r3.k": "Frustrated users and a mistrustful client"
+            },
+            "giaiThich": "<p><p>All four come from requirements nobody agreed on, checked, or managed.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gọi mọi trễ hạn là phình phạm vi."
+        },
+        {
+          "loi": "Không phân biệt sai sản phẩm với lỗi code."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "scope creep (creeping requirements)",
+          "vi": "phạm vi phình dần ngoài kiểm soát"
+        }
+      ]
+    },
+    {
+      "title": "Why RE 2 — put a number on late defects",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "cost of requirements defects"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Use the multipliers of the lesson: requirements ×1, design ×5, coding ×10, testing ×20, production ×100. Fixing a defect during requirements costs <b>0.5 hour</b>. Write <code>function cost(foundIn)</code> that returns the hours to fix one requirement defect found in a phase (lower-case phase names; unknown phase ⇒ <code>null</code>), and <code>function totalCost(defects)</code> where <code>defects</code> is an object <code>{ phase: count }</code>; unknown phases are ignored.</p><p>Then set <code>SAVED_BY_REVIEW</code> to the hours saved if a 2-hour requirements review had found, during requirements, the 6 defects that a project later found in testing (4) and production (2) — review time included.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>cost(\"testing\") = 10; totalCost({ coding: 2, production: 1 }) = 60.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hệ số: requirements ×1, design ×5, coding ×10, testing ×20, production ×100; sửa ở pha yêu cầu tốn 0,5 giờ. Viết <code>cost(foundIn)</code> và <code>totalCost(defects)</code>; rồi tính <code>SAVED_BY_REVIEW</code>: số giờ tiết kiệm nếu một buổi review 2 giờ đã bắt ngay ở pha yêu cầu 6 lỗi mà dự án về sau mới thấy ở kiểm thử (4) và production (2) — đã trừ 2 giờ review.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>cost(\"testing\") = 10; totalCost({ coding: 2, production: 1 }) = 60.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "cost('production')",
+          "output": "50",
+          "explanation": "0.5 × 100|||0,5 × 100"
+        }
+      ],
+      "hintsJson": [
+        "Lập bảng hệ số; cost = 0,5 × hệ số.",
+        "Tiết kiệm = chi phí về sau − (giờ review + chi phí sửa ngay ở pha yêu cầu)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "cost.js",
+          "language": "javascript",
+          "code": "function cost(foundIn) {\n  return null;\n}\nfunction totalCost(defects) {\n  return 0;\n}\nconst SAVED_BY_REVIEW = 0;\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "cost.js",
+          "language": "javascript",
+          "code": "var MULT = { requirements: 1, design: 5, coding: 10, testing: 20, production: 100 };\nfunction cost(foundIn) {\n  return Object.prototype.hasOwnProperty.call(MULT, foundIn) ? 0.5 * MULT[foundIn] : null;\n}\nfunction totalCost(defects) {\n  return Object.keys(defects).reduce(function (s, p) { var c = cost(p); return c === null ? s : s + c * defects[p]; }, 0);\n}\n// Later: 4 × 10 + 2 × 50 = 140 h. With the review: 2 h + 6 × 0.5 h = 5 h. Saved: 135 h.\nconst SAVED_BY_REVIEW = totalCost({ testing: 4, production: 2 }) - (2 + totalCost({ requirements: 6 }));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>140 hours later versus 5 hours early: the review pays for itself 28 times. This is the economic argument for the whole discipline.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "cost.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "cost() for every phase",
+              "vi": "cost() cho mọi pha"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof cost!=\"function\")return\"cost is not a function\";for(var t=[[\"requirements\",.5],[\"design\",2.5],[\"coding\",5],[\"testing\",10],[\"production\",50]],n=0;n<t.length;n++)if(cost(t[n][0])!==t[n][1])return'cost(\"'+t[n][0]+'\") should be '+t[n][1];return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "cost() of an unknown phase is null",
+              "vi": "cost() của pha lạ là null"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){return typeof cost!=\"function\"?\"cost is not a function\":cost(\"maintenance\")===null&&cost(\"toString\")===null?\"OK\":'unknown phases (even \"toString\") \\u21D2 null'})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "totalCost() sums by phase",
+              "vi": "totalCost() cộng theo pha"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){return typeof totalCost!=\"function\"?\"totalCost is not a function\":totalCost({coding:2,production:1})!==60?\"totalCost({ coding: 2, production: 1 }) should be 60\":totalCost({requirements:4,alien:3})===2?\"OK\":\"ignore unknown phases\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "SAVED_BY_REVIEW",
+              "vi": "SAVED_BY_REVIEW"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){return typeof SAVED_BY_REVIEW==\"undefined\"?\"SAVED_BY_REVIEW is missing\":SAVED_BY_REVIEW===135?\"OK\":\"later: 4 \\xD7 10 + 2 \\xD7 50 hours; with the review: 2 + 6 \\xD7 0.5 hours \\u2014 got \"+SAVED_BY_REVIEW})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên trừ 2 giờ review."
+        },
+        {
+          "loi": "Dùng MULT[foundIn] mà không kiểm hasOwnProperty."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "cost of quality",
+          "vi": "chi phí chất lượng"
+        }
+      ]
+    },
+    {
+      "title": "Why RE 4 — benefits and evidence",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "benefits of requirements engineering"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Benefits of a high-quality requirements process: fewer defects, less rework, more accurate estimates, shared understanding between customer and team, and a baseline to test against. Industry studies (e.g. Standish CHAOS) consistently rank incomplete requirements, lack of user involvement and changing requirements among the top causes of project failure.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lợi ích của quy trình yêu cầu tốt và bằng chứng từ ngành.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "RE không làm chậm — bỏ qua RE mới làm chậm.",
+        "Không có quy trình nào bảo đảm 0 lỗi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Why RE 4 — benefits and evidence\n\nAnswer in the answer panel (no code needed).\n\n1. A manager says \"requirements work slows us down\". Best reply?Quản lý nói \"làm yêu cầu làm chậm dự án\". Trả lời tốt nhất?\n2. Which is NOT a benefit of good requirements practices?Đâu KHÔNG phải lợi ích của thực hành yêu cầu tốt?\n3. Industry studies rank which causes of project failure highest?Nghiên cứu ngành xếp nguyên nhân thất bại nào cao nhất?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Why RE 4 — benefits and evidence — answer key\n\n1. A manager says \"requirements work slows us down\". Best reply?Quản lý nói \"làm yêu cầu làm chậm dự án\". Trả lời tốt nhất?\n   Answer: c) Skipping it slows you down later: defects found late cost many times more and cause rework.\n   Rework is the hidden cost.VI: Làm lại là chi phí ẩn.\n\n2. Which is NOT a benefit of good requirements practices?Đâu KHÔNG phải lợi ích của thực hành yêu cầu tốt?\n   Answer: c) Guaranteed zero defects\n   They reduce defects, they do not eliminate them.VI: Giảm lỗi, không xoá hết lỗi.\n\n3. Industry studies rank which causes of project failure highest?Nghiên cứu ngành xếp nguyên nhân thất bại nào cao nhất?\n   Answer: a) Incomplete requirements, lack of user involvement, changing requirements\n   Fuzzy problems kill more projects than hard solutions.VI: Vấn đề mơ hồ giết nhiều dự án hơn lời giải khó.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: c · c · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>A manager says \"requirements work slows us down\". Best reply?</p><p style=\"opacity:.75;font-size:.92em\"><i>Quản lý nói \"làm yêu cầu làm chậm dự án\". Trả lời tốt nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Yes, skip it."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Only testers need requirements."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Skipping it slows you down later: defects found late cost many times more and cause rework."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only for big projects."
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Rework is the hidden cost.</p><p><i>VI: Làm lại là chi phí ẩn.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Which is NOT a benefit of good requirements practices?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đâu KHÔNG phải lợi ích của thực hành yêu cầu tốt?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Less rework"
+              },
+              {
+                "ma": "b",
+                "noiDung": "More accurate estimates"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Guaranteed zero defects"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A baseline to test against"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>They reduce defects, they do not eliminate them.</p><p><i>VI: Giảm lỗi, không xoá hết lỗi.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Industry studies rank which causes of project failure highest?</p><p style=\"opacity:.75;font-size:.92em\"><i>Nghiên cứu ngành xếp nguyên nhân thất bại nào cao nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Incomplete requirements, lack of user involvement, changing requirements"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The office location"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The colour of the UI"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The programming language"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Fuzzy problems kill more projects than hard solutions.</p><p><i>VI: Vấn đề mơ hồ giết nhiều dự án hơn lời giải khó.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Tin rằng RE tốt bảo đảm không lỗi."
+        },
+        {
+          "loi": "Đổ lỗi thất bại cho công nghệ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "requirement",
+          "vi": "yêu cầu — điều hệ thống phải làm/có, hoặc ràng buộc lên nó"
+        }
+      ]
+    }
+  ]
+}

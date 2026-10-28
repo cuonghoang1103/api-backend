@@ -475,6 +475,131 @@
           "vi": "tài liệu tầm nhìn & phạm vi — chứa business requirements"
         }
       ]
+    },
+    {
+      "title": "Scope techniques 4 — keeping the scope in focus",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "scope management"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>The vision and scope are the yardstick for every proposed requirement: if it does not serve the business objectives or lies outside the scope of the release, it is rejected or deferred — unless the decision makers deliberately change the scope (and the plan).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tầm nhìn và phạm vi là thước đo cho mọi yêu cầu đề xuất.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ngoài phạm vi ⇒ hoãn hoặc đổi phạm vi có chủ đích.",
+        "Phạm vi + giới hạn + quy trình thay đổi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Scope techniques 4 — keeping the scope in focus\n\nAnswer in the answer panel (no code needed).\n\n1. A new request is valuable but outside the release scope. Options?Một đề xuất có giá trị nhưng nằm ngoài phạm vi bản phát hành. Có những lựa chọn nào?\n2. Scope creep is best prevented by…Phình phạm vi được ngăn tốt nhất bằng…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Scope techniques 4 — keeping the scope in focus — answer key\n\n1. A new request is valuable but outside the release scope. Options?Một đề xuất có giá trị nhưng nằm ngoài phạm vi bản phát hành. Có những lựa chọn nào?\n   Answer: c) Defer it to a later release, or have the decision makers change the scope and renegotiate the plan\n   Explicit scope decisions.VI: Quyết định phạm vi tường minh.\n\n2. Scope creep is best prevented by…Phình phạm vi được ngăn tốt nhất bằng…\n   Answer: a) a clear scope statement, explicit limitations and a change process\n   Documented scope + change control.VI: Phạm vi có ghi + kiểm soát thay đổi.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: c · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>A new request is valuable but outside the release scope. Options?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một đề xuất có giá trị nhưng nằm ngoài phạm vi bản phát hành. Có những lựa chọn nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Reject every new idea"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Add it quietly"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Defer it to a later release, or have the decision makers change the scope and renegotiate the plan"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Let a developer decide"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Explicit scope decisions.</p><p><i>VI: Quyết định phạm vi tường minh.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Scope creep is best prevented by…</p><p style=\"opacity:.75;font-size:.92em\"><i>Phình phạm vi được ngăn tốt nhất bằng…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a clear scope statement, explicit limitations and a change process"
+              },
+              {
+                "ma": "b",
+                "noiDung": "more developers"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a longer schedule"
+              },
+              {
+                "ma": "d",
+                "noiDung": "avoiding stakeholders"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Documented scope + change control.</p><p><i>VI: Phạm vi có ghi + kiểm soát thay đổi.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Lặng lẽ thêm yêu cầu."
+        },
+        {
+          "loi": "Từ chối mọi ý tưởng mới."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "scope",
+          "vi": "phạm vi — phần nào của tầm nhìn dự án/phiên bản này sẽ làm"
+        },
+        {
+          "en": "scope creep (creeping requirements)",
+          "vi": "phạm vi phình dần ngoài kiểm soát"
+        }
+      ]
     }
   ]
 }

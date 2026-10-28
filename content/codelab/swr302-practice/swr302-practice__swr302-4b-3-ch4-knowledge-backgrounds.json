@@ -1,0 +1,491 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-4b-3-ch4-knowledge-backgrounds",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-4b-3-ch4-knowledge-backgrounds"
+  },
+  "exercises": [
+    {
+      "title": "BA backgrounds 1 — whose strength or gap?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "BA backgrounds"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers: BAs come from different backgrounds, each with strengths and pitfalls. Name the background each statement describes.</p><p>Each row is graded on its own; the explanation of every answer appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>BA đến từ nhiều xuất phát điểm khác nhau, mỗi loại có điểm mạnh và điểm yếu. Gọi tên xuất phát điểm.</p><p>Mỗi dòng được chấm riêng; giải thích từng đáp án hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Giỏi tìm ngoại lệ ⇒ từng là tester.",
+        "Biết \"as-is\" rõ nhưng khó hình dung \"to-be\" ⇒ chuyên gia nghiệp vụ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# BA backgrounds 1 — whose strength or gap?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# BA backgrounds 1 — whose strength or gap? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Former user\n   - r1.k: Former tester\n   - r2.k: Subject-matter expert\n   - r3.k: Former project manager\n   - r4.k: Rookie\n   - r5.k: Former developer\n   Every path into the role works if the BA consciously fills its typical gap.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Every path into the role works if the BA consciously fills its typical gap.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Background",
+                "luaChon": [
+                  "Former user",
+                  "Former developer",
+                  "Former tester",
+                  "Former project manager",
+                  "Subject-matter expert",
+                  "Rookie"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Speaks the users’ language and is trusted by former colleagues, but knows little about software engineering."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Thinks naturally about exceptions and how things break — great for finding gaps."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Knows the domain deeply but may specify to personal preferences and struggle to imagine the \"to-be\" system."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Strong at negotiation and organisation, but must shift focus from timelines and budget to business needs."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Has few preconceived notions; benefits most from mentoring."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Understands technical feasibility but may lack patience with users and domain knowledge."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Former user",
+              "r1.k": "Former tester",
+              "r2.k": "Subject-matter expert",
+              "r3.k": "Former project manager",
+              "r4.k": "Rookie",
+              "r5.k": "Former developer"
+            },
+            "giaiThich": "<p><p>Every path into the role works if the BA consciously fills its typical gap.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm SME với người dùng cũ."
+        },
+        {
+          "loi": "Nghĩ người mới (rookie) không có lợi thế nào."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "subject-matter expert (SME)",
+          "vi": "chuyên gia nghiệp vụ"
+        }
+      ]
+    },
+    {
+      "title": "BA backgrounds 2 — the SME risk and essential knowledge",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "BA knowledge"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>An SME hired as the analyst may specify to their own preferences rather than all user classes’ needs. Often better: a BA from the development team works with the SME as a key user representative or product champion. Essential BA knowledge: requirements practices across life cycles, when (and when not) to use each technique, project management, risk and quality, and enough domain knowledge to detect unstated assumptions.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Rủi ro khi SME làm BA; kiến thức thiết yếu của BA.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "SME là product champion tốt, BA giữ cái nhìn mọi lớp người dùng.",
+        "Biết khi nào KHÔNG dùng một kỹ thuật cũng là kiến thức."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# BA backgrounds 2 — the SME risk and essential knowledge\n\nAnswer in the answer panel (no code needed).\n\n1. The clinic wants its most senior doctor to write all the requirements alone. What do you suggest?Phòng khám muốn bác sĩ lâu năm nhất tự viết hết yêu cầu. Bạn đề xuất gì?\n2. Which is part of essential BA knowledge?Đâu là kiến thức thiết yếu của BA?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# BA backgrounds 2 — the SME risk and essential knowledge — answer key\n\n1. The clinic wants its most senior doctor to write all the requirements alone. What do you suggest?Phòng khám muốn bác sĩ lâu năm nhất tự viết hết yêu cầu. Bạn đề xuất gì?\n   Answer: d) Pair a BA with the doctor, who acts as product champion; the BA also hears other user classes\n   Avoid one person’s preferences becoming everyone’s requirements.VI: Tránh sở thích một người thành yêu cầu của mọi người.\n\n2. Which is part of essential BA knowledge?Đâu là kiến thức thiết yếu của BA?\n   Answer: c) Knowing when — and when not — to use each requirements technique\n   A toolkit plus judgement.VI: Bộ công cụ cộng óc phán đoán.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: d · c.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>The clinic wants its most senior doctor to write all the requirements alone. What do you suggest?</p><p style=\"opacity:.75;font-size:.92em\"><i>Phòng khám muốn bác sĩ lâu năm nhất tự viết hết yêu cầu. Bạn đề xuất gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Agree — nobody knows more"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Exclude the doctor"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Let developers decide"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Pair a BA with the doctor, who acts as product champion; the BA also hears other user classes"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Avoid one person’s preferences becoming everyone’s requirements.</p><p><i>VI: Tránh sở thích một người thành yêu cầu của mọi người.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Which is part of essential BA knowledge?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đâu là kiến thức thiết yếu của BA?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Network administration"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Expert-level coding in three languages"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Knowing when — and when not — to use each requirements technique"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Graphic design"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A toolkit plus judgement.</p><p><i>VI: Bộ công cụ cộng óc phán đoán.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Giao toàn bộ yêu cầu cho một chuyên gia."
+        },
+        {
+          "loi": "Nghĩ BA phải là lập trình viên giỏi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "product champion",
+          "vi": "người đại diện chính của một lớp người dùng, nói thay họ với BA"
+        }
+      ]
+    },
+    {
+      "title": "BA backgrounds 3 — the BA on an agile team",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "BA on agile projects"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>On agile projects the BA defines a lightweight, flexible requirements process; keeps documentation at the right level; decides how to document the backlog; facilitates frequent stakeholder conversations; validates that customer needs are in the backlog and helps prioritise it; and manages changing minds. Which statements fit an agile BA?</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu nào phù hợp với BA trong đội agile?</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Tài liệu vừa đủ.",
+        "Thay đổi giữa các sprint là bình thường."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# BA backgrounds 3 — the BA on an agile team\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# BA backgrounds 3 — the BA on an agile team — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Fits\n   - r1.k: Does not fit\n   - r2.k: Fits\n   - r3.k: Does not fit\n   - r4.k: Fits\n   The role does not disappear on agile — its timing and documentation style change.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The role does not disappear on agile — its timing and documentation style change.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Fits an agile BA?",
+                "luaChon": [
+                  "Fits",
+                  "Does not fit"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Keeps documentation \"just enough\" for developers and testers."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Writes a complete 200-page SRS before the first sprint."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Helps the product owner refine and prioritise the backlog."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Refuses any change once a sprint has started, and also between sprints."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Facilitates frequent conversations between users and the team."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Fits",
+              "r1.k": "Does not fit",
+              "r2.k": "Fits",
+              "r3.k": "Does not fit",
+              "r4.k": "Fits"
+            },
+            "giaiThich": "<p><p>The role does not disappear on agile — its timing and documentation style change.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng agile không cần BA."
+        },
+        {
+          "loi": "Viết SRS khổng lồ trước sprint 1."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "product backlog",
+          "vi": "danh sách việc của sản phẩm, xếp theo ưu tiên"
+        }
+      ]
+    },
+    {
+      "title": "BA backgrounds 4 — the BA’s tasks across the life cycle",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 4,
+      "points": 10,
+      "concepts": [
+        "BA tasks"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Whatever the background, the BA’s ten tasks span the whole life cycle — from defining business requirements to managing requirements after the baseline (status, changes, traceability).</p><p>Each question is graded on its own; the explanation appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mười nhiệm vụ của BA trải suốt vòng đời.</p><p>Mỗi câu được chấm riêng; giải thích hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "BA không biến mất sau baseline.",
+        "Quản lý yêu cầu là nhiệm vụ của BA."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# BA backgrounds 4 — the BA’s tasks across the life cycle\n\nAnswer in the answer panel (no code needed).\n\n1. After the baseline, the BA’s focus shifts to…Sau baseline, trọng tâm của BA chuyển sang…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# BA backgrounds 4 — the BA’s tasks across the life cycle — answer key\n\n1. After the baseline, the BA’s focus shifts to…Sau baseline, trọng tâm của BA chuyển sang…\n   Answer: d) tracking status, verifying satisfaction, managing changes and collecting traceability information\n   Task 10: manage requirements.VI: Nhiệm vụ 10: quản lý yêu cầu.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: d.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>After the baseline, the BA’s focus shifts to…</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau baseline, trọng tâm của BA chuyển sang…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "nothing — the BA leaves"
+              },
+              {
+                "ma": "b",
+                "noiDung": "writing code"
+              },
+              {
+                "ma": "c",
+                "noiDung": "only testing"
+              },
+              {
+                "ma": "d",
+                "noiDung": "tracking status, verifying satisfaction, managing changes and collecting traceability information"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Task 10: manage requirements.</p><p><i>VI: Nhiệm vụ 10: quản lý yêu cầu.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nghĩ BA chỉ làm ở đầu dự án."
+        },
+        {
+          "loi": "Nghĩ BA chuyển sang viết code."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "baseline",
+          "vi": "đường cơ sở — bộ yêu cầu đã thống nhất, từ đó mọi thay đổi phải qua kiểm soát"
+        }
+      ]
+    }
+  ]
+}

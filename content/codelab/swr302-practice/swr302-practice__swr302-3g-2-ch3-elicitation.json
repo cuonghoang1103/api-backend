@@ -1,0 +1,554 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-3g-2-ch3-elicitation",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-3g-2-ch3-elicitation"
+  },
+  "exercises": [
+    {
+      "title": "Elicitation practices 1 — which practice fits?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "elicitation practices"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Choose the elicitation practice that fits each situation.</p><p>Each row is graded on its own; the explanation of every answer appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chọn thực hành khai thác phù hợp với từng tình huống.</p><p>Mỗi dòng được chấm riêng; giải thích từng đáp án hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Nhiều người, phân tán ⇒ questionnaire.",
+        "Có quyền quyết ⇒ product champion; không có quyền quyết ⇒ focus group."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Elicitation practices 1 — which practice fits?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Elicitation practices 1 — which practice fits? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Distribute questionnaires\n   - r1.k: Examine problem reports for requirement ideas\n   - r2.k: Observe users performing their jobs\n   - r3.k: Reuse existing requirements\n   - r4.k: Hold facilitated elicitation workshops\n   - r5.k: Perform document analysis\n   - r6.k: Select a product champion for each user class\n   - r7.k: Conduct focus groups with typical users\n   Large, distributed populations ⇒ questionnaires; existing complaints ⇒ problem reports; tacit work ⇒ observation; shared rules ⇒ reuse; fast group agreement ⇒ workshops.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Large, distributed populations ⇒ questionnaires; existing complaints ⇒ problem reports; tacit work ⇒ observation; shared rules ⇒ reuse; fast group agreement ⇒ workshops.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Practice",
+                "luaChon": [
+                  "Define product vision and project scope",
+                  "Identify user classes and their characteristics",
+                  "Select a product champion for each user class",
+                  "Conduct focus groups with typical users",
+                  "Work with user representatives to identify user requirements",
+                  "Identify system events and responses",
+                  "Hold elicitation interviews",
+                  "Hold facilitated elicitation workshops",
+                  "Observe users performing their jobs",
+                  "Distribute questionnaires",
+                  "Perform document analysis",
+                  "Examine problem reports for requirement ideas",
+                  "Reuse existing requirements"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "20,000 students across 4 campuses must give input on a library app."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "The help desk has 300 complaints about the current system."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The team needs to understand how warehouse staff really pick orders."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "A new payroll module must follow the same tax rules as the old one."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Five departments must agree on one ordering process quickly."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "The old system’s manual and process documents are available."
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "Each user class needs one person who speaks and decides for it."
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "s": "A commercial product has thousands of users; you want feedback on its next version without giving them decision power."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Distribute questionnaires",
+              "r1.k": "Examine problem reports for requirement ideas",
+              "r2.k": "Observe users performing their jobs",
+              "r3.k": "Reuse existing requirements",
+              "r4.k": "Hold facilitated elicitation workshops",
+              "r5.k": "Perform document analysis",
+              "r6.k": "Select a product champion for each user class",
+              "r7.k": "Conduct focus groups with typical users"
+            },
+            "giaiThich": "<p><p>Large, distributed populations ⇒ questionnaires; existing complaints ⇒ problem reports; tacit work ⇒ observation; shared rules ⇒ reuse; fast group agreement ⇒ workshops.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Phỏng vấn từng người trong 20.000 người."
+        },
+        {
+          "loi": "Nhầm focus group với product champion."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "elicitation",
+          "vi": "khai thác yêu cầu — khám phá nhu cầu từ bên liên quan"
+        },
+        {
+          "en": "product champion",
+          "vi": "người đại diện chính của một lớp người dùng, nói thay họ với BA"
+        }
+      ]
+    },
+    {
+      "title": "Elicitation practices 2 — which kind of event?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "system events and responses"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>\"Identify system events and responses\": three classes of external events — <b>signal events</b> (control signals or data from hardware), <b>temporal events</b> (time-triggered), and <b>business events</b> (a user or another system starts something; they trigger use cases). An event-response table is a strong completeness check.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ba loại sự kiện ngoài: tín hiệu (từ phần cứng), thời gian (theo lịch), nghiệp vụ (người/hệ thống khởi động, kích hoạt use case).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Thiết bị phần cứng gửi tín hiệu ⇒ signal.",
+        "Theo đồng hồ/lịch ⇒ temporal."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Elicitation practices 2 — which kind of event?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Elicitation practices 2 — which kind of event? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Signal event\n   - r1.k: Temporal event\n   - r2.k: Business event\n   - r3.k: Signal event\n   - r4.k: Temporal event\n   - r5.k: Business event\n   For each event, the table lists the system’s response — gaps in the table are missing requirements.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>For each event, the table lists the system’s response — gaps in the table are missing requirements.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Event type",
+                "luaChon": [
+                  "Signal event",
+                  "Temporal event",
+                  "Business event"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "The barcode scanner sends a scanned code."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "At 02:00 every night the system exports the day’s sales."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "A customer places an order."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "The temperature sensor reports 9 °C in the vaccine fridge."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Rent becomes 5 days overdue."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "A supplier sends a delivery note through the EDI interface."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Signal event",
+              "r1.k": "Temporal event",
+              "r2.k": "Business event",
+              "r3.k": "Signal event",
+              "r4.k": "Temporal event",
+              "r5.k": "Business event"
+            },
+            "giaiThich": "<p><p>For each event, the table lists the system’s response — gaps in the table are missing requirements.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Coi \"quá hạn 5 ngày\" là business event."
+        },
+        {
+          "loi": "Coi đơn hàng của khách là signal."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "event-response table",
+          "vi": "bảng sự kiện – phản hồi"
+        }
+      ]
+    },
+    {
+      "title": "Elicitation practices 3 — vision, user classes, interviews",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "elicitation practices"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>The vision and scope are the reference against which every proposed requirement is judged. Interviews are efficient because each person discusses only what matters to them, and they are useful to gather views separately before a workshop resolves conflicts.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tầm nhìn và phạm vi là thước để xét mọi yêu cầu đề xuất; phỏng vấn hiệu quả và hữu ích trước một workshop.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Mọi yêu cầu so với tầm nhìn/phạm vi.",
+        "Phỏng vấn riêng tránh áp lực nhóm."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Elicitation practices 3 — vision, user classes, interviews\n\nAnswer in the answer panel (no code needed).\n\n1. A stakeholder proposes a feature. What do you compare it with first?Một bên liên quan đề xuất tính năng. So với cái gì trước tiên?\n2. Why interview people separately before a workshop?Vì sao phỏng vấn riêng trước workshop?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Elicitation practices 3 — vision, user classes, interviews — answer key\n\n1. A stakeholder proposes a feature. What do you compare it with first?Một bên liên quan đề xuất tính năng. So với cái gì trước tiên?\n   Answer: d) The vision and the scope of the current release\n   Vision and scope are the yardstick.VI: Tầm nhìn và phạm vi là thước đo.\n\n2. Why interview people separately before a workshop?Vì sao phỏng vấn riêng trước workshop?\n   Answer: b) To collect each view without group pressure, then resolve conflicts together in the workshop\n   Separate views, then joint resolution.VI: Ý kiến riêng, rồi giải quyết chung.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: d · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>A stakeholder proposes a feature. What do you compare it with first?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một bên liên quan đề xuất tính năng. So với cái gì trước tiên?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The database schema"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The test plan"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The team’s preferences"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The vision and the scope of the current release"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Vision and scope are the yardstick.</p><p><i>VI: Tầm nhìn và phạm vi là thước đo.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Why interview people separately before a workshop?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao phỏng vấn riêng trước workshop?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Workshops are forbidden"
+              },
+              {
+                "ma": "b",
+                "noiDung": "To collect each view without group pressure, then resolve conflicts together in the workshop"
+              },
+              {
+                "ma": "c",
+                "noiDung": "To shorten the project"
+              },
+              {
+                "ma": "d",
+                "noiDung": "To avoid writing anything down"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Separate views, then joint resolution.</p><p><i>VI: Ý kiến riêng, rồi giải quyết chung.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đưa tính năng vào mà không so với phạm vi."
+        },
+        {
+          "loi": "Mời mọi người vào workshop khi chưa nghe riêng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "vision and scope document",
+          "vi": "tài liệu tầm nhìn & phạm vi — chứa business requirements"
+        },
+        {
+          "en": "elicitation",
+          "vi": "khai thác yêu cầu — khám phá nhu cầu từ bên liên quan"
+        }
+      ]
+    },
+    {
+      "title": "Elicitation practices 4 — what to reuse",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 4,
+      "points": 20,
+      "concepts": [
+        "reuse"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Great reuse candidates: requirements that enforce business rules (security) or regulations (accessibility), glossaries, data models, stakeholder profiles, user-class descriptions and personas.</p><p>Each question is graded on its own; the explanation appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ứng viên tái sử dụng tốt: yêu cầu thực thi luật/quy định, glossary, mô hình dữ liệu, hồ sơ bên liên quan, mô tả lớp người dùng, persona.</p><p>Mỗi câu được chấm riêng; giải thích hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Yêu cầu theo luật/quy định thường tái dùng được.",
+        "Khách phải chấp nhận hành vi sẵn có."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Elicitation practices 4 — what to reuse\n\nAnswer in the answer panel (no code needed).\n\n1. Which is the best candidate for reuse in a new hospital app?Ứng viên tái sử dụng tốt nhất cho app bệnh viện mới?\n2. What must you check before reusing a requirement?Phải kiểm gì trước khi tái sử dụng một yêu cầu?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Elicitation practices 4 — what to reuse — answer key\n\n1. Which is the best candidate for reuse in a new hospital app?Ứng viên tái sử dụng tốt nhất cho app bệnh viện mới?\n   Answer: c) The accessibility requirements already approved for the hospital’s other apps\n   Regulatory requirements are stable across projects.VI: Yêu cầu theo quy định ổn định giữa các dự án.\n\n2. What must you check before reusing a requirement?Phải kiểm gì trước khi tái sử dụng một yêu cầu?\n   Answer: a) Whether the customers are flexible enough to accept the existing behaviour (or a small adaptation)\n   Reuse needs flexible requirements and customers.VI: Tái sử dụng cần yêu cầu và khách linh hoạt.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: c · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which is the best candidate for reuse in a new hospital app?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ứng viên tái sử dụng tốt nhất cho app bệnh viện mới?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The colour palette of a competitor"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A developer’s personal notes"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The accessibility requirements already approved for the hospital’s other apps"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Last year’s sprint plan"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Regulatory requirements are stable across projects.</p><p><i>VI: Yêu cầu theo quy định ổn định giữa các dự án.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>What must you check before reusing a requirement?</p><p style=\"opacity:.75;font-size:.92em\"><i>Phải kiểm gì trước khi tái sử dụng một yêu cầu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Whether the customers are flexible enough to accept the existing behaviour (or a small adaptation)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Only the font"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Nothing"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Whether it is long"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Reuse needs flexible requirements and customers.</p><p><i>VI: Tái sử dụng cần yêu cầu và khách linh hoạt.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Tái dùng mà không hỏi khách."
+        },
+        {
+          "loi": "Tái dùng thứ không phải yêu cầu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "requirements reuse",
+          "vi": "tái sử dụng yêu cầu"
+        }
+      ]
+    }
+  ]
+}

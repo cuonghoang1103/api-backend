@@ -90,7 +90,7 @@ const E4 = baiJs({
 
 export default moDun({
   slug: 'swr302-1-4-ch1-levels-types',
-  ten: '1.2 Levels and types of requirements (Figure 1-1)',
+  ten: '1.4 Levels and types of requirements (Figure 1-1)',
   moTaModule: 'Hình 1-1 của Wiegers: ba cấp business → user → functional và bốn loại đi vào từ hai bên; phân loại yêu cầu kiosk check-in; sắp chuỗi từ "vì sao" tới "làm gì"; truy mỗi FR về yêu cầu người dùng để bắt gold plating.',
   de: [E1, E2, E3, E4],
 });

@@ -85,7 +85,7 @@ const E3 = baiJs({
 
 export default moDun({
   slug: 'swr302-1-6-ch1-problems-benefits',
-  ten: '1.4 Requirements problems and the cost of bad requirements',
+  ten: '1.6 Requirements problems and the cost of bad requirements',
   moTaModule: 'Sáu vấn đề yêu cầu kinh điển (thiếu người dùng tham gia, lập kế hoạch sai, yêu cầu phình, mơ hồ, mạ vàng, bỏ sót bên liên quan), vì sao lỗi yêu cầu phát hiện muộn rất đắt, tính chi phí gỡ lỗi có và không có review.',
   de: [E1, E2, E4, E3],
 });

@@ -75,9 +75,28 @@ const E3 = baiJs({
   khaiNiem: ['personas'],
 });
 
+const E4 = phanLoai({
+  tieuDe: 'User classes 4 — a user class or a market segment?',
+  doKho: 'MEDIUM', phut: 5,
+  moTa: { en: '<p>Group users into classes by how they use the product: access level, tasks, features used, frequency, domain and computer expertise, platform, language, direct or indirect use. Location or company type alone defines <b>market segments</b>, not user classes. Classify each grouping for a banking app.</p>', vi: '<p>Lớp người dùng nhóm theo cách dùng sản phẩm; nhóm theo vị trí hay loại công ty chỉ là phân khúc thị trường.</p>' },
+  cot: 'Grouping', luaChon: ['User class', 'Market segment'],
+  hang: [
+    ['Tellers who process cash deposits many times a day', 'User class'],
+    ['Customers in the northern provinces', 'Market segment'],
+    ['Loan officers who approve credit applications', 'User class'],
+    ['Small companies with fewer than 50 employees', 'Market segment'],
+    ['Auditors with read-only access to transaction logs', 'User class'],
+  ],
+  giaiThich: '<p>A user class is defined by what people do with the product and how; a market segment by who they are or where they are.</p>',
+  goiY: ['Theo nhiệm vụ / quyền / tần suất ⇒ lớp người dùng.', 'Theo vùng / quy mô công ty ⇒ phân khúc thị trường.'],
+  loiHayGap: ['Lấy vùng miền làm lớp người dùng.', 'Bỏ qua lớp chỉ đọc (kiểm toán).'],
+  thuatNgu: tn('userClass'),
+  khaiNiem: ['user classes'],
+});
+
 export default moDun({
   slug: 'swr302-6u-1-ch6-user-classes-personas',
-  ten: '2.7 User classes and personas',
+  ten: '2.19 User classes and personas',
   moTaModule: 'Lớp người dùng ưu tiên / không mong muốn / bỏ qua, persona là gì và dùng thế nào, tự viết persona cho lớp Proctor của hệ thống thi trực tuyến.',
-  de: [E1, E2, E3],
+  de: [E1, E2, E3, E4],
 });

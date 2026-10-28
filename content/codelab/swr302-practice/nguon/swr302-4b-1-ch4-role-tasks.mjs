@@ -63,9 +63,30 @@ const E3 = phanLoai({
   khaiNiem: ['BA skills'],
 });
 
+const E4 = phanLoai({
+  tieuDe: 'BA role 4 — which of the ten BA tasks?',
+  doKho: 'MEDIUM', phut: 7,
+  moTa: { en: '<p>Wiegers’ ten BA tasks: define business requirements · plan the requirements approach · identify stakeholders and user classes · elicit · analyze · document · communicate · lead validation · facilitate prioritization · manage requirements. Name the task each activity belongs to.</p>', vi: '<p>Mười nhiệm vụ của BA. Mỗi hoạt động thuộc nhiệm vụ nào?</p>' },
+  cot: 'Task', luaChon: ['Define business requirements', 'Plan the requirements approach', 'Identify stakeholders and user classes', 'Elicit requirements', 'Analyze requirements', 'Document requirements', 'Communicate requirements', 'Lead requirements validation', 'Facilitate requirements prioritization', 'Manage requirements'],
+  hang: [
+    ['Help the sponsor write the vision statement.', 'Define business requirements'],
+    ['Agree with the PM which elicitation techniques happen in which weeks.', 'Plan the requirements approach'],
+    ['Find derived and implicit requirements and check scope.', 'Analyze requirements'],
+    ['Run the inspection of the SRS.', 'Lead requirements validation'],
+    ['Broker a negotiation on what goes into release 1.', 'Facilitate requirements prioritization'],
+    ['Track status and change requests after the baseline.', 'Manage requirements'],
+    ['Walk the developers through the state diagram and confirm they understood it.', 'Communicate requirements'],
+  ],
+  giaiThich: '<p>The ten tasks cover the whole requirements life cycle — from the vision to managing changes after the baseline.</p>',
+  goiY: ['Tầm nhìn ⇒ define business requirements.', 'Sau baseline ⇒ manage requirements.'],
+  loiHayGap: ['Nhầm communicate với document.', 'Nhầm analyze với elicit.'],
+  thuatNgu: [{ en: 'business analyst', vi: 'chuyên viên phân tích nghiệp vụ' }],
+  khaiNiem: ['BA tasks'],
+});
+
 export default moDun({
   slug: 'swr302-4b-1-ch4-role-tasks',
-  ten: '2.3 The business analyst: role, tasks and skills',
+  ten: '2.13 The business analyst: role and tasks',
   moTaModule: 'BA là vai trò cầu nối (không phải chức danh), mười việc điển hình của BA so với việc của vai khác, mười bốn kỹ năng thiết yếu qua tình huống thật.',
-  de: [E1, E2, E3],
+  de: [E1, E2, E3, E4],
 });

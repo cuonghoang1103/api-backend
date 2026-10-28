@@ -1,0 +1,537 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-6u-2-ch6-product-champion",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-6u-2-ch6-product-champion"
+  },
+  "exercises": [
+    {
+      "title": "Product champion 1 — who makes a good champion?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "product champion"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>A product champion is the primary interface between one user class and the BA — ideally an <b>actual user</b>, not a surrogate (sponsor, marketing, a manager, or a developer imagining being a user). Good champions have a clear vision of the system, are enthusiastic, respected by their peers, and have time and authority to decide at the user-requirements level.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Product champion là cầu nối giữa một lớp người dùng và BA — lý tưởng là người dùng thật.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Người dùng thật, không phải người đại diện thay.",
+        "Champion quyết ở cấp yêu cầu người dùng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Product champion 1 — who makes a good champion?\n\nAnswer in the answer panel (no code needed).\n\n1. Best champion for the \"pharmacist\" user class of a hospital app?Champion tốt nhất cho lớp \"dược sĩ\"?\n2. Who writes the requirements documents when champions are used?Khi có champion, ai viết tài liệu yêu cầu?\n3. At which level do champions make decisions?Champion ra quyết định ở cấp nào?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Product champion 1 — who makes a good champion? — answer key\n\n1. Best champion for the \"pharmacist\" user class of a hospital app?Champion tốt nhất cho lớp \"dược sĩ\"?\n   Answer: c) An experienced pharmacist respected by colleagues, with time allocated to the project\n   A real, respected user with time.VI: Người dùng thật, được tôn trọng, có thời gian.\n\n2. Who writes the requirements documents when champions are used?Khi có champion, ai viết tài liệu yêu cầu?\n   Answer: a) The BA — champions gather and reconcile input from their user class\n   Shared development, BA documents.VI: Cùng phát triển, BA viết tài liệu.\n\n3. At which level do champions make decisions?Champion ra quyết định ở cấp nào?\n   Answer: c) User requirements, within the scope set by the business requirements\n   The sponsor keeps vision, scope, priorities, schedule, budget.VI: Nhà tài trợ giữ tầm nhìn, phạm vi, ưu tiên, lịch, ngân sách.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: c · a · c.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Best champion for the \"pharmacist\" user class of a hospital app?</p><p style=\"opacity:.75;font-size:.92em\"><i>Champion tốt nhất cho lớp \"dược sĩ\"?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The hospital director"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The marketing manager"
+              },
+              {
+                "ma": "c",
+                "noiDung": "An experienced pharmacist respected by colleagues, with time allocated to the project"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A developer who once worked in a pharmacy for a week"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A real, respected user with time.</p><p><i>VI: Người dùng thật, được tôn trọng, có thời gian.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Who writes the requirements documents when champions are used?</p><p style=\"opacity:.75;font-size:.92em\"><i>Khi có champion, ai viết tài liệu yêu cầu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The BA — champions gather and reconcile input from their user class"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The developers"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Nobody"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Each champion writes their own SRS"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Shared development, BA documents.</p><p><i>VI: Cùng phát triển, BA viết tài liệu.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>At which level do champions make decisions?</p><p style=\"opacity:.75;font-size:.92em\"><i>Champion ra quyết định ở cấp nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Architecture"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Budget and schedule"
+              },
+              {
+                "ma": "c",
+                "noiDung": "User requirements, within the scope set by the business requirements"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Hiring"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The sponsor keeps vision, scope, priorities, schedule, budget.</p><p><i>VI: Nhà tài trợ giữ tầm nhìn, phạm vi, ưu tiên, lịch, ngân sách.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chọn quản lý làm champion."
+        },
+        {
+          "loi": "Để champion quyết ngân sách."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "product champion",
+          "vi": "người đại diện chính của một lớp người dùng, nói thay họ với BA"
+        },
+        {
+          "en": "user class",
+          "vi": "lớp người dùng — nhóm người dùng có cách dùng/nhu cầu giống nhau"
+        }
+      ]
+    },
+    {
+      "title": "Product champion 2 — trap or healthy practice?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "product champion traps"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Traps: managers overriding a duly authorised champion; a champion pushing only personal requirements; a champion without vision who defers everything to the BA; a senior user nominating a junior and then back-seat driving; anyone claiming to speak for a user class without really representing it. Classify each situation.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bẫy khi dùng product champion. Phân loại từng tình huống.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Bị cấp trên lấn quyền ⇒ bẫy.",
+        "Ghi rõ kỳ vọng với champion ⇒ thực hành tốt."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Product champion 2 — trap or healthy practice?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Product champion 2 — trap or healthy practice? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Trap\n   - r1.k: Healthy practice\n   - r2.k: Trap\n   - r3.k: Healthy practice\n   - r4.k: Trap\n   - r5.k: Healthy practice\n   The model works when champions understand their duties, have authority at the user-requirements level, and have time.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The model works when champions understand their duties, have authority at the user-requirements level, and have time.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Situation",
+                "luaChon": [
+                  "Trap",
+                  "Healthy practice"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "The department head overrules every decision of the nurses’ champion."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "The champion asks five colleagues on other wards before deciding."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The champion answers every question with \"whatever you think\"."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Champion responsibilities are written down and agreed with each champion."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "A senior pharmacist names a junior as champion, then re-decides everything behind the scenes."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "When the champions disagree, the BA brings the conflict to the agreed decision makers."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Trap",
+              "r1.k": "Healthy practice",
+              "r2.k": "Trap",
+              "r3.k": "Healthy practice",
+              "r4.k": "Trap",
+              "r5.k": "Healthy practice"
+            },
+            "giaiThich": "<p><p>The model works when champions understand their duties, have authority at the user-requirements level, and have time.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Coi champion \"dễ tính\" là tốt."
+        },
+        {
+          "loi": "Bỏ qua việc champion hỏi đồng nghiệp."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "product champion",
+          "vi": "người đại diện chính của một lớp người dùng, nói thay họ với BA"
+        }
+      ]
+    },
+    {
+      "title": "Product champion 3 — external and multiple champions",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "external and multiple champions"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>For commercial software, outside champions are hard to find: use close corporate customers, beta sites or internal SMEs. With a diverse customer base, first find the core requirements common to all, then add those specific to segments or user classes. One person rarely covers all users: set up a team of champions, possibly with backup teams (Don the chemist built a backup team of five chemists).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Champion bên ngoài và nhiều champion.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Lõi chung trước.",
+        "Champion + nhóm dự phòng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Product champion 3 — external and multiple champions\n\nAnswer in the answer panel (no code needed).\n\n1. With external champions from three big customers, what do you do first?Có champion từ ba khách hàng lớn, bạn làm gì trước?\n2. A user class has 400 users in 6 locations. How do you engage them without huge workshops?Một lớp người dùng có 400 người ở 6 nơi. Thu hút họ thế nào mà không cần workshop khổng lồ?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Product champion 3 — external and multiple champions — answer key\n\n1. With external champions from three big customers, what do you do first?Có champion từ ba khách hàng lớn, bạn làm gì trước?\n   Answer: b) Find the core requirements common to all, then add customer-specific ones\n   Common core first.VI: Lõi chung trước.\n\n2. A user class has 400 users in 6 locations. How do you engage them without huge workshops?Một lớp người dùng có 400 người ở 6 nơi. Thu hút họ thế nào mà không cần workshop khổng lồ?\n   Answer: d) A champion with a small backup team of users from other locations\n   Hierarchical champions.VI: Champion theo tầng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · d.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>With external champions from three big customers, what do you do first?</p><p style=\"opacity:.75;font-size:.92em\"><i>Có champion từ ba khách hàng lớn, bạn làm gì trước?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Ignore their input"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Find the core requirements common to all, then add customer-specific ones"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Build each customer’s wish list separately"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Follow the largest customer only"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Common core first.</p><p><i>VI: Lõi chung trước.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>A user class has 400 users in 6 locations. How do you engage them without huge workshops?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một lớp người dùng có 400 người ở 6 nơi. Thu hút họ thế nào mà không cần workshop khổng lồ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "One workshop with all 400"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Only e-mail the manager"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Skip them"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A champion with a small backup team of users from other locations"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Hierarchical champions.</p><p><i>VI: Champion theo tầng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chạy theo khách lớn nhất."
+        },
+        {
+          "loi": "Mời cả 400 người vào một phòng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "product champion",
+          "vi": "người đại diện chính của một lớp người dùng, nói thay họ với BA"
+        }
+      ]
+    },
+    {
+      "title": "Product champion 4 — communication pathways",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 4,
+      "points": 10,
+      "concepts": [
+        "user representatives"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>The most direct path from user to developer is a developer talking to users — workable only on very small projects. Every intervening layer adds miscommunication and delay, but a skilled BA adds value by collecting, evaluating, refining and organising input. Goal: as few, and as high-value, layers as possible. User representatives must be involved throughout the life cycle, not only at the start.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đường giao tiếp từ người dùng tới dev: càng ít tầng và tầng càng giá trị càng tốt.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Mỗi tầng trung gian là một chỗ méo thông tin.",
+        "Tham gia suốt vòng đời."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Product champion 4 — communication pathways\n\nAnswer in the answer panel (no code needed).\n\n1. Requests pass user → supervisor → department manager → IT liaison → BA → developer. The risk is…Yêu cầu đi qua người dùng → tổ trưởng → trưởng phòng → liên lạc IT → BA → dev. Rủi ro là…\n2. When should user representatives be involved?Khi nào cần đại diện người dùng tham gia?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Product champion 4 — communication pathways — answer key\n\n1. Requests pass user → supervisor → department manager → IT liaison → BA → developer. The risk is…Yêu cầu đi qua người dùng → tổ trưởng → trưởng phòng → liên lạc IT → BA → dev. Rủi ro là…\n   Answer: b) distortion and delay at every layer\n   Fewer, higher-value layers.VI: Ít tầng hơn, tầng có giá trị hơn.\n\n2. When should user representatives be involved?Khi nào cần đại diện người dùng tham gia?\n   Answer: a) Throughout the life cycle\n   Continuous involvement.VI: Tham gia liên tục.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Requests pass user → supervisor → department manager → IT liaison → BA → developer. The risk is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Yêu cầu đi qua người dùng → tổ trưởng → trưởng phòng → liên lạc IT → BA → dev. Rủi ro là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "none"
+              },
+              {
+                "ma": "b",
+                "noiDung": "distortion and delay at every layer"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the code gets faster"
+              },
+              {
+                "ma": "d",
+                "noiDung": "too much testing"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Fewer, higher-value layers.</p><p><i>VI: Ít tầng hơn, tầng có giá trị hơn.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>When should user representatives be involved?</p><p style=\"opacity:.75;font-size:.92em\"><i>Khi nào cần đại diện người dùng tham gia?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Throughout the life cycle"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Only at acceptance testing"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only at the kick-off"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Never"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Continuous involvement.</p><p><i>VI: Tham gia liên tục.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nghĩ thêm tầng là thêm kiểm soát."
+        },
+        {
+          "loi": "Chỉ mời người dùng lúc đầu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "user class",
+          "vi": "lớp người dùng — nhóm người dùng có cách dùng/nhu cầu giống nhau"
+        }
+      ]
+    }
+  ]
+}

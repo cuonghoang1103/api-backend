@@ -1,0 +1,563 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-1-3-ch1-why-and-defined",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-1-3-ch1-why-and-defined"
+  },
+  "exercises": [
+    {
+      "title": "Defined 1 — the two classic definitions",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "definition of a requirement"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Lawrence (1997): a requirement is \"<i>anything that drives design choices</i>\". Sommerville &amp; Sawyer (1997): requirements are \"<i>a specification of what should be implemented — descriptions of how the system should behave, or of a system property or attribute, or a constraint on the development process</i>\". About half of all defects originate in requirements (Martin &amp; Leffingwell).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hai định nghĩa kinh điển của Lawrence và Sommerville &amp; Sawyer; khoảng một nửa số lỗi bắt nguồn từ yêu cầu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Lawrence: \"drives design choices\".",
+        "Sommerville & Sawyer: hành vi + thuộc tính + ràng buộc quy trình."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Defined 1 — the two classic definitions\n\nAnswer in the answer panel (no code needed).\n\n1. Which definition says a requirement is \"anything that drives design choices\"?Định nghĩa nào nói yêu cầu là \"bất cứ thứ gì dẫn dắt lựa chọn thiết kế\"?\n2. According to Sommerville & Sawyer, which of these counts as a requirement?Theo Sommerville & Sawyer, cái nào là yêu cầu?\n3. Roughly what share of defects originates in requirements?Khoảng bao nhiêu phần lỗi bắt nguồn từ yêu cầu?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Defined 1 — the two classic definitions — answer key\n\n1. Which definition says a requirement is \"anything that drives design choices\"?Định nghĩa nào nói yêu cầu là \"bất cứ thứ gì dẫn dắt lựa chọn thiết kế\"?\n   Answer: a) Lawrence\n   Lawrence 1997.VI: Lawrence 1997.\n\n2. According to Sommerville & Sawyer, which of these counts as a requirement?Theo Sommerville & Sawyer, cái nào là yêu cầu?\n   Answer: c) Behaviour, a system property or attribute, and a constraint on the development process\n   Note the breadth of the definition.VI: Chú ý định nghĩa rất rộng.\n\n3. Roughly what share of defects originates in requirements?Khoảng bao nhiêu phần lỗi bắt nguồn từ yêu cầu?\n   Answer: c) About 50%\n   Martin & Leffingwell.VI: Martin & Leffingwell.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · c · c.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which definition says a requirement is \"anything that drives design choices\"?</p><p style=\"opacity:.75;font-size:.92em\"><i>Định nghĩa nào nói yêu cầu là \"bất cứ thứ gì dẫn dắt lựa chọn thiết kế\"?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Lawrence"
+              },
+              {
+                "ma": "b",
+                "noiDung": "IEEE 830"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Sommerville & Sawyer"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Boehm"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Lawrence 1997.</p><p><i>VI: Lawrence 1997.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>According to Sommerville & Sawyer, which of these counts as a requirement?</p><p style=\"opacity:.75;font-size:.92em\"><i>Theo Sommerville & Sawyer, cái nào là yêu cầu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Only what the user sees"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Only the database design"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Behaviour, a system property or attribute, and a constraint on the development process"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only behaviour"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Note the breadth of the definition.</p><p><i>VI: Chú ý định nghĩa rất rộng.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Roughly what share of defects originates in requirements?</p><p style=\"opacity:.75;font-size:.92em\"><i>Khoảng bao nhiêu phần lỗi bắt nguồn từ yêu cầu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Almost none"
+              },
+              {
+                "ma": "b",
+                "noiDung": "About 5%"
+              },
+              {
+                "ma": "c",
+                "noiDung": "About 50%"
+              },
+              {
+                "ma": "d",
+                "noiDung": "100%"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Martin & Leffingwell.</p><p><i>VI: Martin & Leffingwell.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng yêu cầu chỉ là chức năng."
+        },
+        {
+          "loi": "Nhầm tác giả hai định nghĩa."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "requirement",
+          "vi": "yêu cầu — điều hệ thống phải làm/có, hoặc ràng buộc lên nó"
+        }
+      ]
+    },
+    {
+      "title": "Defined 2 — behaviour, property or constraint?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "definition of a requirement"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Classify each statement with Sommerville &amp; Sawyer’s definition: a description of how the system should <b>behave</b>, a system <b>property or attribute</b>, or a <b>constraint on the development process</b>.</p><p>Each row is graded on its own; the explanation of every answer appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phân loại theo định nghĩa Sommerville &amp; Sawyer: <b>hành vi</b>, <b>thuộc tính hệ thống</b>, hay <b>ràng buộc lên quy trình phát triển</b>.</p><p>Mỗi dòng được chấm riêng; giải thích từng đáp án hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Hệ thống LÀM gì ⇒ hành vi.",
+        "Quy định cách LÀM RA hệ thống ⇒ ràng buộc quy trình."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Defined 2 — behaviour, property or constraint?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Defined 2 — behaviour, property or constraint? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Behaviour\n   - r1.k: Property or attribute\n   - r2.k: Development constraint\n   - r3.k: Behaviour\n   - r4.k: Property or attribute\n   - r5.k: Development constraint\n   Behaviour: what it does. Property: how well or what quality. Development constraint: rules on how it is built and delivered.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Behaviour: what it does. Property: how well or what quality. Development constraint: rules on how it is built and delivered.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Kind",
+                "luaChon": [
+                  "Behaviour",
+                  "Property or attribute",
+                  "Development constraint"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "The system shall e-mail a receipt after every payment."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "The system shall be available 99.5% of the time during opening hours."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The system must be developed following the bank’s secure-coding standard."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "The system shall lock an account after 5 failed logins."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Pages shall load within 2 seconds for 95% of requests."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Every release must pass an external security audit before go-live."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Behaviour",
+              "r1.k": "Property or attribute",
+              "r2.k": "Development constraint",
+              "r3.k": "Behaviour",
+              "r4.k": "Property or attribute",
+              "r5.k": "Development constraint"
+            },
+            "giaiThich": "<p><p>Behaviour: what it does. Property: how well or what quality. Development constraint: rules on how it is built and delivered.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Xếp \"khoá tài khoản sau 5 lần sai\" vào thuộc tính — đó là hành vi cụ thể."
+        },
+        {
+          "loi": "Bỏ qua ràng buộc quy trình khỏi khái niệm yêu cầu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "functional requirement (FR)",
+          "vi": "yêu cầu chức năng — hành vi hệ thống thể hiện trong điều kiện cụ thể (\"The system shall…\"); ghi trong SRS"
+        },
+        {
+          "en": "quality attribute",
+          "vi": "thuộc tính chất lượng — các \"-ility\": performance, usability, security, availability…"
+        },
+        {
+          "en": "design / implementation constraint",
+          "vi": "ràng buộc thiết kế/hiện thực — giới hạn lựa chọn của đội phát triển (ngôn ngữ, nền tảng, chuẩn)"
+        }
+      ]
+    },
+    {
+      "title": "Defined 3 — product requirement or project requirement?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "product vs project requirements"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers distinguishes <b>product requirements</b> (what the software must do or be) from <b>project requirements</b> (what the project needs: staffing, budget, schedule, training, infrastructure, documentation to deliver). Classify.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Wiegers phân biệt <b>yêu cầu sản phẩm</b> (phần mềm phải làm/có gì) và <b>yêu cầu dự án</b> (dự án cần gì: nhân sự, ngân sách, lịch, đào tạo, hạ tầng, tài liệu bàn giao).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Nói về phần mềm ⇒ sản phẩm.",
+        "Nói về người, tiền, lịch, đào tạo, máy chủ cho dự án ⇒ dự án."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Defined 3 — product requirement or project requirement?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Defined 3 — product requirement or project requirement? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Product requirement\n   - r1.k: Project requirement\n   - r2.k: Project requirement\n   - r3.k: Product requirement\n   - r4.k: Project requirement\n   - r5.k: Product requirement\n   Project requirements belong in the project plan; product requirements belong in the SRS.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Project requirements belong in the project plan; product requirements belong in the SRS.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Kind",
+                "luaChon": [
+                  "Product requirement",
+                  "Project requirement"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "The system shall show the patient’s next appointment on the home screen."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Two testers must join the team by March."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Receptionists must be trained before go-live."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "The system shall export monthly revenue to CSV."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "A staging server must be available from week 3."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "The system shall respond within 2 seconds for 95% of searches."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Product requirement",
+              "r1.k": "Project requirement",
+              "r2.k": "Project requirement",
+              "r3.k": "Product requirement",
+              "r4.k": "Project requirement",
+              "r5.k": "Product requirement"
+            },
+            "giaiThich": "<p><p>Project requirements belong in the project plan; product requirements belong in the SRS.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đưa lịch đào tạo vào SRS."
+        },
+        {
+          "loi": "Coi yêu cầu hiệu năng là yêu cầu dự án."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Software Requirements Specification (SRS)",
+          "vi": "tài liệu đặc tả yêu cầu phần mềm"
+        }
+      ]
+    },
+    {
+      "title": "Defined 4 — the four framings of Chapter 1",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 4,
+      "points": 10,
+      "concepts": [
+        "requirements development vs management"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Chapter 1’s objectives: understand the key terms; distinguish product from project requirements; distinguish requirements <b>development</b> (elicitation, analysis, specification, validation) from requirements <b>management</b> (baselines, change control, status, tracing); and recognise common requirements problems.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bốn mục tiêu của chương 1.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Phát triển = tạo ra yêu cầu; quản lý = giữ yêu cầu.",
+        "Baseline, thay đổi, trạng thái, truy vết ⇒ quản lý."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Defined 4 — the four framings of Chapter 1\n\nAnswer in the answer panel (no code needed).\n\n1. Which activity belongs to requirements management?Hoạt động nào thuộc quản lý yêu cầu?\n2. Which activity belongs to requirements development?Hoạt động nào thuộc phát triển yêu cầu?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Defined 4 — the four framings of Chapter 1 — answer key\n\n1. Which activity belongs to requirements management?Hoạt động nào thuộc quản lý yêu cầu?\n   Answer: c) Controlling changes to the baseline\n   Management keeps agreed requirements under control.VI: Quản lý giữ yêu cầu đã thống nhất trong kiểm soát.\n\n2. Which activity belongs to requirements development?Hoạt động nào thuộc phát triển yêu cầu?\n   Answer: a) Validating requirements with users\n   Elicitation, analysis, specification, validation.VI: Khai thác, phân tích, đặc tả, thẩm định.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: c · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which activity belongs to requirements management?</p><p style=\"opacity:.75;font-size:.92em\"><i>Hoạt động nào thuộc quản lý yêu cầu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Writing use cases"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Drawing a context diagram"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Controlling changes to the baseline"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Interviewing users"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Management keeps agreed requirements under control.</p><p><i>VI: Quản lý giữ yêu cầu đã thống nhất trong kiểm soát.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Which activity belongs to requirements development?</p><p style=\"opacity:.75;font-size:.92em\"><i>Hoạt động nào thuộc phát triển yêu cầu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Validating requirements with users"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Tracking requirement status"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Versioning the SRS"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Impact analysis of a change"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Elicitation, analysis, specification, validation.</p><p><i>VI: Khai thác, phân tích, đặc tả, thẩm định.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Xếp thẩm định vào quản lý."
+        },
+        {
+          "loi": "Xếp phân tích ảnh hưởng vào phát triển."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "elicitation",
+          "vi": "khai thác yêu cầu — khám phá nhu cầu từ bên liên quan"
+        },
+        {
+          "en": "validation",
+          "vi": "thẩm định — xác nhận đúng THỨ cần làm (đúng nhu cầu)"
+        },
+        {
+          "en": "baseline",
+          "vi": "đường cơ sở — bộ yêu cầu đã thống nhất, từ đó mọi thay đổi phải qua kiểm soát"
+        }
+      ]
+    }
+  ]
+}

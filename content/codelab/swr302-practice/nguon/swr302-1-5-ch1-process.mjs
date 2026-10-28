@@ -81,7 +81,7 @@ const E4 = phanLoai({
 
 export default moDun({
   slug: 'swr302-1-5-ch1-process',
-  ten: '1.3 The requirements process: development and management',
+  ten: '1.5 The requirements process: development and management',
   moTaModule: 'Hai nửa của kỹ nghệ yêu cầu: phát triển (khai thác, phân tích, đặc tả, thẩm định) và quản lý; gọi tên hoạt động của các việc điển hình; một lượt qua các hoạt động.',
   de: [E1, E3, E4, E2],
 });

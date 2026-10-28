@@ -1,0 +1,548 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-3g-6-ch3-management",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-3g-6-ch3-management"
+  },
+  "exercises": [
+    {
+      "title": "Management practices 1 — which practice?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "requirements management practices"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Eight requirements management practices. Which one does each action apply?</p><p>Each row is graded on its own; the explanation of every answer appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tám thực hành quản lý yêu cầu. Mỗi hành động áp dụng thực hành nào?</p><p>Mỗi dòng được chấm riêng; giải thích từng đáp án hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Quyết định thay đổi ⇒ change control; ước lượng ảnh hưởng ⇒ impact analysis.",
+        "Ai/khi nào/cái gì/vì sao ⇒ change history."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Management practices 1 — which practice?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Management practices 1 — which practice? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Establish a change control process\n   - r1.k: Perform impact analysis on requirements changes\n   - r2.k: Establish baselines and control versions of requirements sets\n   - r3.k: Maintain a history of requirements changes\n   - r4.k: Track the status of each requirement\n   - r5.k: Track requirements issues\n   - r6.k: Maintain a requirements traceability matrix\n   - r7.k: Use a requirements management tool\n   Change control decides; impact analysis informs the decision; baselines, history, status, issues and traceability keep the agreed set under control; a tool automates much of it.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Change control decides; impact analysis informs the decision; baselines, history, status, issues and traceability keep the agreed set under control; a tool automates much of it.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Practice",
+                "luaChon": [
+                  "Establish a change control process",
+                  "Perform impact analysis on requirements changes",
+                  "Establish baselines and control versions of requirements sets",
+                  "Maintain a history of requirements changes",
+                  "Track the status of each requirement",
+                  "Track requirements issues",
+                  "Maintain a requirements traceability matrix",
+                  "Use a requirements management tool"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "A CCB meets weekly to decide on proposed changes."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Before deciding, the team lists the design, code and tests a change would touch and estimates 30 hours."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The approved SRS for release 1 is tagged \"v1.0-baseline\"."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "For FR-12 the tool records who changed it, when, what and why."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "A dashboard shows 40 requirements Approved, 25 Implemented, 15 Verified."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Every open question has one owner and a due date in the issue tracker."
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "Each functional requirement is linked to its design, code and tests."
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "s": "The team stores all requirements and their attributes in Jira with an RM plug-in."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Establish a change control process",
+              "r1.k": "Perform impact analysis on requirements changes",
+              "r2.k": "Establish baselines and control versions of requirements sets",
+              "r3.k": "Maintain a history of requirements changes",
+              "r4.k": "Track the status of each requirement",
+              "r5.k": "Track requirements issues",
+              "r6.k": "Maintain a requirements traceability matrix",
+              "r7.k": "Use a requirements management tool"
+            },
+            "giaiThich": "<p><p>Change control decides; impact analysis informs the decision; baselines, history, status, issues and traceability keep the agreed set under control; a tool automates much of it.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm change history với version control."
+        },
+        {
+          "loi": "Nhầm status tracking với issue tracking."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "change control board (CCB)",
+          "vi": "hội đồng kiểm soát thay đổi — người quyết định chấp nhận/từ chối thay đổi"
+        },
+        {
+          "en": "impact analysis",
+          "vi": "phân tích ảnh hưởng — thay đổi này chạm tới yêu cầu, thiết kế, mã, test nào, tốn bao nhiêu"
+        },
+        {
+          "en": "baseline",
+          "vi": "đường cơ sở — bộ yêu cầu đã thống nhất, từ đó mọi thay đổi phải qua kiểm soát"
+        },
+        {
+          "en": "requirements traceability matrix (RTM)",
+          "vi": "ma trận truy vết yêu cầu — nối nguồn ↔ yêu cầu ↔ thiết kế ↔ mã ↔ test"
+        }
+      ]
+    },
+    {
+      "title": "Management practices 2 — the life of a requirement’s status",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 3,
+      "points": 10,
+      "concepts": [
+        "status tracking"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>\"Track the status of each requirement\": store a status attribute (proposed, approved, implemented, verified). Put the normal progression in order.</p><p>Drag the items into the right order; the explanation appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sắp tiến trình trạng thái bình thường của một yêu cầu.</p><p>Kéo các mục về đúng thứ tự; giải thích hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Được duyệt trước khi làm.",
+        "Kiểm chứng sau khi hiện thực."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Management practices 2 — the life of a requirement’s status\n\nAnswer in the answer panel (no code needed).\n\n1. Normal status progressionTiến trình trạng thái\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Management practices 2 — the life of a requirement’s status — answer key\n\n1. Normal status progressionTiến trình trạng thái\n   Answer: a) Proposed  →  b) Approved  →  c) Implemented  →  d) Verified\n   Counting requirements by status shows real progress.VI: Đếm yêu cầu theo trạng thái cho thấy tiến độ thật.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Proposed → Approved → Implemented → Verified (Deleted and Rejected are the other possible statuses).</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Normal status progression</p><p style=\"opacity:.75;font-size:.92em\"><i>Tiến trình trạng thái</i></p>",
+            "muc": [
+              {
+                "ma": "c",
+                "noiDung": "Implemented"
+              },
+              {
+                "ma": "a",
+                "noiDung": "Proposed"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Verified"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Approved"
+              }
+            ],
+            "dapAn": [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            "giaiThich": "<p>Counting requirements by status shows real progress.</p><p><i>VI: Đếm yêu cầu theo trạng thái cho thấy tiến độ thật.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt Verified trước Implemented."
+        },
+        {
+          "loi": "Bỏ qua Approved."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "requirement status",
+          "vi": "trạng thái yêu cầu"
+        }
+      ]
+    },
+    {
+      "title": "Management practices 3 — baselines, history and the RTM",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "baselines",
+        "traceability"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>A baseline is an agreed set of requirements (usually for a release); after it, change only through the change process; give every version a unique identifier. Keep each requirement’s change history. Populate the traceability matrix during development, not at the end.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Baseline, lịch sử thay đổi, RTM điền dần trong quá trình phát triển.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Bản nào hiện hành ⇒ baseline + định danh phiên bản.",
+        "Quay lại bản cũ ⇒ lịch sử thay đổi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Management practices 3 — baselines, history and the RTM\n\nAnswer in the answer panel (no code needed).\n\n1. Two teams argue about which SRS is current. Which practice was missing?Hai nhóm cãi nhau SRS nào là bản hiện hành. Thiếu thực hành nào?\n2. When should the traceability matrix be filled in?Khi nào điền ma trận truy vết?\n3. A requirement must be reverted to its earlier form. What makes this possible?Cần đưa một yêu cầu về dạng cũ. Điều gì giúp làm được?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Management practices 3 — baselines, history and the RTM — answer key\n\n1. Two teams argue about which SRS is current. Which practice was missing?Hai nhóm cãi nhau SRS nào là bản hiện hành. Thiếu thực hành nào?\n   Answer: c) Baselines and unique version identifiers\n   Version control of requirements sets.VI: Kiểm soát phiên bản tập yêu cầu.\n\n2. When should the traceability matrix be filled in?Khi nào điền ma trận truy vết?\n   Answer: a) During development, as work products are created\n   Late tracing is costly and inaccurate.VI: Truy vết muộn tốn và thiếu chính xác.\n\n3. A requirement must be reverted to its earlier form. What makes this possible?Cần đưa một yêu cầu về dạng cũ. Điều gì giúp làm được?\n   Answer: a) A history of requirements changes\n   Change history.VI: Lịch sử thay đổi.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: c · a · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Two teams argue about which SRS is current. Which practice was missing?</p><p style=\"opacity:.75;font-size:.92em\"><i>Hai nhóm cãi nhau SRS nào là bản hiện hành. Thiếu thực hành nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Prototyping"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Focus groups"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Baselines and unique version identifiers"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Glossary"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Version control of requirements sets.</p><p><i>VI: Kiểm soát phiên bản tập yêu cầu.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>When should the traceability matrix be filled in?</p><p style=\"opacity:.75;font-size:.92em\"><i>Khi nào điền ma trận truy vết?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "During development, as work products are created"
+              },
+              {
+                "ma": "b",
+                "noiDung": "At the end of the project"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only before audits"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Never"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Late tracing is costly and inaccurate.</p><p><i>VI: Truy vết muộn tốn và thiếu chính xác.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>A requirement must be reverted to its earlier form. What makes this possible?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cần đưa một yêu cầu về dạng cũ. Điều gì giúp làm được?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A history of requirements changes"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A questionnaire"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A prototype"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A product champion"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Change history.</p><p><i>VI: Lịch sử thay đổi.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Điền RTM vào cuối dự án."
+        },
+        {
+          "loi": "Lưu SRS không đánh phiên bản."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "baseline",
+          "vi": "đường cơ sở — bộ yêu cầu đã thống nhất, từ đó mọi thay đổi phải qua kiểm soát"
+        },
+        {
+          "en": "requirements traceability matrix (RTM)",
+          "vi": "ma trận truy vết yêu cầu — nối nguồn ↔ yêu cầu ↔ thiết kế ↔ mã ↔ test"
+        }
+      ]
+    },
+    {
+      "title": "Management practices 4 — issues and the CCB",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 4,
+      "points": 10,
+      "concepts": [
+        "issue tracking",
+        "change control"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>On complex projects open questions, gaps and review findings are easily lost: track them with one owner per issue. A Change Control Board of stakeholders decides which changes to accept and sets their priority and target release.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Theo dõi vấn đề với một người phụ trách mỗi vấn đề; CCB quyết thay đổi nào được nhận.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Một vấn đề — một người.",
+        "CCB quyết."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Management practices 4 — issues and the CCB\n\nAnswer in the answer panel (no code needed).\n\n1. How many owners should each requirements issue have?Mỗi vấn đề yêu cầu nên có mấy người phụ trách?\n2. Who decides whether a proposed change is accepted and in which release?Ai quyết thay đổi đề xuất có được nhận và vào bản nào?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Management practices 4 — issues and the CCB — answer key\n\n1. How many owners should each requirements issue have?Mỗi vấn đề yêu cầu nên có mấy người phụ trách?\n   Answer: c) Exactly one\n   Shared ownership is no ownership.VI: Ai cũng phụ trách là không ai phụ trách.\n\n2. Who decides whether a proposed change is accepted and in which release?Ai quyết thay đổi đề xuất có được nhận và vào bản nào?\n   Answer: a) The Change Control Board\n   The CCB.VI: CCB.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: c · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>How many owners should each requirements issue have?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mỗi vấn đề yêu cầu nên có mấy người phụ trách?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "None"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Two, to be safe"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Exactly one"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The whole team"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Shared ownership is no ownership.</p><p><i>VI: Ai cũng phụ trách là không ai phụ trách.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Who decides whether a proposed change is accepted and in which release?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ai quyết thay đổi đề xuất có được nhận và vào bản nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The Change Control Board"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The developer who receives the e-mail"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The tester"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Whoever asks first"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The CCB.</p><p><i>VI: CCB.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Để vấn đề không ai phụ trách."
+        },
+        {
+          "loi": "Để dev tự quyết thay đổi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "change control board (CCB)",
+          "vi": "hội đồng kiểm soát thay đổi — người quyết định chấp nhận/từ chối thay đổi"
+        }
+      ]
+    }
+  ]
+}

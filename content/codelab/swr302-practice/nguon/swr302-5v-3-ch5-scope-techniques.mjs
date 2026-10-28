@@ -62,9 +62,24 @@ const E3 = phanLoai({
   khaiNiem: ['scope management'],
 });
 
+const E4 = tracNghiem({
+  tieuDe: 'Scope techniques 4 — keeping the scope in focus',
+  doKho: 'MEDIUM', phut: 5,
+  moTa: { en: '<p>The vision and scope are the yardstick for every proposed requirement: if it does not serve the business objectives or lies outside the scope of the release, it is rejected or deferred — unless the decision makers deliberately change the scope (and the plan).</p>', vi: '<p>Tầm nhìn và phạm vi là thước đo cho mọi yêu cầu đề xuất.</p>' },
+  cau: [
+    { en: 'A new request is valuable but outside the release scope. Options?', vi: 'Một đề xuất có giá trị nhưng nằm ngoài phạm vi bản phát hành. Có những lựa chọn nào?', lc: [['a', 'Defer it to a later release, or have the decision makers change the scope and renegotiate the plan'], ['b', 'Add it quietly'], ['c', 'Reject every new idea'], ['d', 'Let a developer decide']], dap: 'a', giai: ['Explicit scope decisions.', 'Quyết định phạm vi tường minh.'] },
+    { en: 'Scope creep is best prevented by…', vi: 'Phình phạm vi được ngăn tốt nhất bằng…', lc: [['a', 'a clear scope statement, explicit limitations and a change process'], ['b', 'a longer schedule'], ['c', 'more developers'], ['d', 'avoiding stakeholders']], dap: 'a', giai: ['Documented scope + change control.', 'Phạm vi có ghi + kiểm soát thay đổi.'] },
+  ],
+  goiY: ['Ngoài phạm vi ⇒ hoãn hoặc đổi phạm vi có chủ đích.', 'Phạm vi + giới hạn + quy trình thay đổi.'],
+  loiHayGap: ['Lặng lẽ thêm yêu cầu.', 'Từ chối mọi ý tưởng mới.'],
+  giaiThich: '<p>Answers: a · a.</p>',
+  thuatNgu: tn('scope', 'scopeCreep'),
+  khaiNiem: ['scope management'],
+});
+
 export default moDun({
   slug: 'swr302-5v-3-ch5-scope-techniques',
-  ten: '2.6 Scope techniques: ecosystem map, feature tree, event list',
+  ten: '2.18 Scope techniques: ecosystem map, feature tree, event list',
   moTaModule: 'Bốn cách biểu diễn phạm vi (context diagram, ecosystem map, feature tree, event list), phân loại sự kiện nghiệp vụ / tín hiệu / thời gian, giữ phạm vi bằng tầm nhìn và mục tiêu nghiệp vụ.',
-  de: [E1, E2, E3],
+  de: [E1, E2, E3, E4],
 });

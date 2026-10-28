@@ -1,0 +1,539 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-3g-4-ch3-specification",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-3g-4-ch3-specification"
+  },
+  "exercises": [
+    {
+      "title": "Specification practices 1 — which practice?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "specification practices"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Five specification practices: adopt templates, identify requirement origins, uniquely label each requirement, record business rules, specify nonfunctional requirements. Which one does each action apply?</p><p>Each row is graded on its own; the explanation of every answer appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm thực hành đặc tả. Mỗi hành động áp dụng thực hành nào?</p><p>Mỗi dòng được chấm riêng; giải thích từng đáp án hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ghi nguồn gốc ⇒ identify origins.",
+        "Danh mục luật ở cấp doanh nghiệp ⇒ record business rules."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Specification practices 1 — which practice?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Specification practices 1 — which practice? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Uniquely label each requirement\n   - r1.k: Identify requirement origins\n   - r2.k: Adopt requirement document templates\n   - r3.k: Record business rules\n   - r4.k: Specify nonfunctional requirements\n   Templates remind you what to explore; origins tell why; labels enable tracing; rules outlive projects; nonfunctional requirements prevent \"it works but nobody likes it\".\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Templates remind you what to explore; origins tell why; labels enable tracing; rules outlive projects; nonfunctional requirements prevent \"it works but nobody likes it\".</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Practice",
+                "luaChon": [
+                  "Adopt requirement document templates",
+                  "Identify requirement origins",
+                  "Uniquely label each requirement",
+                  "Record business rules",
+                  "Specify nonfunctional requirements"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Every requirement gets an ID such as Booking.Cancel.Deadline."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "FR-12 records that it comes from UC-04 and BR-07."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The team starts the SRS from the Wiegers template."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "\"Refunds over 5 million VND need a manager’s approval\" is kept in the enterprise rules catalogue."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "The analyst asks how fast, how available and how secure the system must be."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Uniquely label each requirement",
+              "r1.k": "Identify requirement origins",
+              "r2.k": "Adopt requirement document templates",
+              "r3.k": "Record business rules",
+              "r4.k": "Specify nonfunctional requirements"
+            },
+            "giaiThich": "<p><p>Templates remind you what to explore; origins tell why; labels enable tracing; rules outlive projects; nonfunctional requirements prevent \"it works but nobody likes it\".</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm đánh nhãn với ghi nguồn gốc."
+        },
+        {
+          "loi": "Ghi luật nghiệp vụ như một yêu cầu của dự án."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "specification",
+          "vi": "đặc tả — ghi yêu cầu ra tài liệu có cấu trúc (SRS)"
+        },
+        {
+          "en": "business rule",
+          "vi": "quy tắc nghiệp vụ — chính sách, luật, chuẩn, công thức tồn tại NGOÀI phần mềm"
+        },
+        {
+          "en": "nonfunctional requirement (NFR)",
+          "vi": "yêu cầu phi chức năng — thuộc tính chất lượng, giao diện ngoài, ràng buộc"
+        }
+      ]
+    },
+    {
+      "title": "Specification practices 2 — why each practice matters",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "specification practices"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Business rules are an enterprise-level asset: they outlive any one project, so document them separately and link the requirements that enforce them. Unique labels must be robust to additions, deletions and changes — they are a prerequisite for traceability and change management.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Luật nghiệp vụ là tài sản cấp doanh nghiệp; nhãn duy nhất là tiền đề cho truy vết và quản lý thay đổi.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Luật sống lâu hơn dự án.",
+        "Nhãn ⇒ truy vết."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Specification practices 2 — why each practice matters\n\nAnswer in the answer panel (no code needed).\n\n1. Why keep business rules separate from a project’s requirements?Vì sao tách luật nghiệp vụ khỏi yêu cầu của dự án?\n2. Without unique, stable labels, which practices become impossible?Không có nhãn duy nhất, ổn định thì thực hành nào không làm được?\n3. A product does exactly what was asked but is slow and confusing. Which practice was neglected?Sản phẩm làm đúng điều được yêu cầu nhưng chậm và khó dùng. Thực hành nào bị bỏ?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Specification practices 2 — why each practice matters — answer key\n\n1. Why keep business rules separate from a project’s requirements?Vì sao tách luật nghiệp vụ khỏi yêu cầu của dự án?\n   Answer: d) They outlive the project and are shared by many systems; requirements that enforce them link back to them\n   Enterprise asset.VI: Tài sản doanh nghiệp.\n\n2. Without unique, stable labels, which practices become impossible?Không có nhãn duy nhất, ổn định thì thực hành nào không làm được?\n   Answer: a) Traceability and change tracking\n   You cannot trace what you cannot name.VI: Không gọi tên được thì không truy vết được.\n\n3. A product does exactly what was asked but is slow and confusing. Which practice was neglected?Sản phẩm làm đúng điều được yêu cầu nhưng chậm và khó dùng. Thực hành nào bị bỏ?\n   Answer: b) Specify nonfunctional requirements\n   Quality expectations were never captured.VI: Kỳ vọng chất lượng chưa từng được ghi.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: d · a · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Why keep business rules separate from a project’s requirements?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao tách luật nghiệp vụ khỏi yêu cầu của dự án?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "To make the SRS shorter"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Only lawyers read them"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Rules are not important"
+              },
+              {
+                "ma": "d",
+                "noiDung": "They outlive the project and are shared by many systems; requirements that enforce them link back to them"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Enterprise asset.</p><p><i>VI: Tài sản doanh nghiệp.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Without unique, stable labels, which practices become impossible?</p><p style=\"opacity:.75;font-size:.92em\"><i>Không có nhãn duy nhất, ổn định thì thực hành nào không làm được?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Traceability and change tracking"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Prototyping"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Interviews"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Workshops"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>You cannot trace what you cannot name.</p><p><i>VI: Không gọi tên được thì không truy vết được.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>A product does exactly what was asked but is slow and confusing. Which practice was neglected?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sản phẩm làm đúng điều được yêu cầu nhưng chậm và khó dùng. Thực hành nào bị bỏ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Record business rules"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Specify nonfunctional requirements"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Adopt templates"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Uniquely label requirements"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Quality expectations were never captured.</p><p><i>VI: Kỳ vọng chất lượng chưa từng được ghi.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Lặp lại cùng một luật trong nhiều SRS."
+        },
+        {
+          "loi": "Bỏ qua yêu cầu phi chức năng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "business rule",
+          "vi": "quy tắc nghiệp vụ — chính sách, luật, chuẩn, công thức tồn tại NGOÀI phần mềm"
+        },
+        {
+          "en": "nonfunctional requirement (NFR)",
+          "vi": "yêu cầu phi chức năng — thuộc tính chất lượng, giao diện ngoài, ràng buộc"
+        },
+        {
+          "en": "requirements traceability matrix (RTM)",
+          "vi": "ma trận truy vết yêu cầu — nối nguồn ↔ yêu cầu ↔ thiết kế ↔ mã ↔ test"
+        }
+      ]
+    },
+    {
+      "title": "Specification practices 3 — what kind of nonfunctional requirement?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "nonfunctional requirements"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>\"Specify nonfunctional requirements\" covers <b>quality attributes</b>, <b>external interfaces</b>, <b>constraints</b> and <b>internationalization</b>. Classify each.</p><p>Each row is graded on its own; the explanation of every answer appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phân loại yêu cầu phi chức năng: thuộc tính chất lượng, giao diện ngoài, ràng buộc, quốc tế hoá.</p><p>Mỗi dòng được chấm riêng; giải thích từng đáp án hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Định dạng ngày theo ngôn ngữ ⇒ i18n.",
+        "Bắt dùng CSDL có sẵn ⇒ ràng buộc."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Specification practices 3 — what kind of nonfunctional requirement?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Specification practices 3 — what kind of nonfunctional requirement? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Quality attribute\n   - r1.k: External interface\n   - r2.k: Constraint\n   - r3.k: Internationalization\n   - r4.k: Quality attribute\n   All four are \"nonfunctional\" in the broad sense and belong in sections 5–7 of the SRS template.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>All four are \"nonfunctional\" in the broad sense and belong in sections 5–7 of the SRS template.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Kind",
+                "luaChon": [
+                  "Quality attribute",
+                  "External interface",
+                  "Constraint",
+                  "Internationalization"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Search results appear within 2 seconds for 95% of searches."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Orders are sent to the courier’s API in JSON."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The system must run on the hospital’s existing Oracle database."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Dates are shown as dd/mm/yyyy in Vietnamese and mm/dd/yyyy in English."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "The app keeps working offline for up to 8 hours."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Quality attribute",
+              "r1.k": "External interface",
+              "r2.k": "Constraint",
+              "r3.k": "Internationalization",
+              "r4.k": "Quality attribute"
+            },
+            "giaiThich": "<p><p>All four are \"nonfunctional\" in the broad sense and belong in sections 5–7 of the SRS template.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Xếp định dạng ngày vào quality attribute."
+        },
+        {
+          "loi": "Xếp API của hãng vận chuyển vào ràng buộc."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "nonfunctional requirement (NFR)",
+          "vi": "yêu cầu phi chức năng — thuộc tính chất lượng, giao diện ngoài, ràng buộc"
+        },
+        {
+          "en": "quality attribute",
+          "vi": "thuộc tính chất lượng — các \"-ility\": performance, usability, security, availability…"
+        },
+        {
+          "en": "external interface requirement",
+          "vi": "yêu cầu giao diện ngoài — giữa hệ thống với người dùng, phần cứng, hệ thống khác"
+        },
+        {
+          "en": "design / implementation constraint",
+          "vi": "ràng buộc thiết kế/hiện thực — giới hạn lựa chọn của đội phát triển (ngôn ngữ, nền tảng, chuẩn)"
+        }
+      ]
+    },
+    {
+      "title": "Specification practices 4 — templates without big documents",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 3,
+      "points": 10,
+      "concepts": [
+        "templates"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Standard templates — Vision &amp; Scope, use case, SRS — give a consistent structure. Even on projects that do not write traditional documents, a template reminds you which kinds of requirements information to explore.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Template hữu ích kể cả khi không viết tài liệu truyền thống.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Template = danh sách nhắc việc.",
+        "Không cần tài liệu dày vẫn dùng được."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Specification practices 4 — templates without big documents\n\nAnswer in the answer panel (no code needed).\n\n1. An agile team writes no SRS. Is the SRS template still useful?Một đội agile không viết SRS. Template SRS còn hữu ích không?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Specification practices 4 — templates without big documents — answer key\n\n1. An agile team writes no SRS. Is the SRS template still useful?Một đội agile không viết SRS. Template SRS còn hữu ích không?\n   Answer: a) Yes — as a checklist of information to explore (quality, interfaces, constraints…)\n   A template is also a checklist.VI: Template cũng là checklist.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>An agile team writes no SRS. Is the SRS template still useful?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một đội agile không viết SRS. Template SRS còn hữu ích không?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Yes — as a checklist of information to explore (quality, interfaces, constraints…)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Only to print"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only for the testers"
+              },
+              {
+                "ma": "d",
+                "noiDung": "No, never"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>A template is also a checklist.</p><p><i>VI: Template cũng là checklist.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Bỏ template là bỏ luôn các mục cần khai thác."
+        },
+        {
+          "loi": "Nghĩ template chỉ để in."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Software Requirements Specification (SRS)",
+          "vi": "tài liệu đặc tả yêu cầu phần mềm"
+        }
+      ]
+    }
+  ]
+}

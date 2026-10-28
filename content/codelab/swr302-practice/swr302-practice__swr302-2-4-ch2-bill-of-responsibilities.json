@@ -1,0 +1,579 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-2-4-ch2-bill-of-responsibilities",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-2-4-ch2-bill-of-responsibilities"
+  },
+  "exercises": [
+    {
+      "title": "Responsibilities 2 — a right or a responsibility?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "rights and responsibilities"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Each statement comes from either the customer’s <b>Bill of Rights</b> (what the customer can expect from the BA and developers) or the <b>Bill of Responsibilities</b> (what the customer owes the project). Classify.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi phát biểu thuộc <b>Quyền</b> hoặc <b>Trách nhiệm</b> của khách hàng. Phân loại.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "\"Expect / receive / hear\" ⇒ quyền.",
+        "\"Dedicate / set / communicate\" ⇒ trách nhiệm."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Responsibilities 2 — a right or a responsibility?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Responsibilities 2 — a right or a responsibility? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Right\n   - r1.k: Responsibility\n   - r2.k: Right\n   - r3.k: Responsibility\n   - r4.k: Right\n   - r5.k: Responsibility\n   Note how they pair: the right to change requirements comes with the responsibility to communicate changes promptly through the change process.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Note how they pair: the right to change requirements comes with the responsibility to communicate changes promptly through the change process.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Bill",
+                "luaChon": [
+                  "Right",
+                  "Responsibility"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Expect BAs to speak your language."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Dedicate the time it takes to provide requirements."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Change your requirements."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Promptly communicate changes to the requirements."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Hear ideas and alternatives for your requirements."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Set realistic priorities."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Right",
+              "r1.k": "Responsibility",
+              "r2.k": "Right",
+              "r3.k": "Responsibility",
+              "r4.k": "Right",
+              "r5.k": "Responsibility"
+            },
+            "giaiThich": "<p><p>Note how they pair: the right to change requirements comes with the responsibility to communicate changes promptly through the change process.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Coi \"thay đổi yêu cầu\" là trách nhiệm."
+        },
+        {
+          "loi": "Coi \"đặt ưu tiên thực tế\" là quyền."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Bill of Rights",
+          "vi": "Bản quyền lợi của khách hàng về yêu cầu"
+        }
+      ]
+    },
+    {
+      "title": "Responsibilities 1 — which responsibility is neglected?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 9,
+      "points": 20,
+      "concepts": [
+        "customer responsibilities"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers’ ten customer responsibilities balance the ten rights. Each story shows a customer neglecting one of them. Name it.</p><p>Each row is graded on its own; the explanation of every answer appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mười trách nhiệm của khách hàng cân bằng mười quyền. Mỗi câu chuyện cho thấy khách bỏ bê một trách nhiệm. Gọi tên.</p><p>Mỗi dòng được chấm riêng; giải thích từng đáp án hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Không trả lời câu hỏi ⇒ quyết định không kịp thời.",
+        "Mọi thứ đều \"High\" ⇒ ưu tiên không thực tế."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Responsibilities 1 — which responsibility is neglected?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Responsibilities 1 — which responsibility is neglected? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: 2 Dedicate the time it takes\n   - r1.k: 6 Set realistic priorities\n   - r2.k: 9 Promptly communicate changes\n   - r3.k: 3 Be specific and precise\n   - r4.k: 5 Respect cost and feasibility assessments\n   - r5.k: 4 Make timely decisions\n   - r6.k: 7 Review requirements and evaluate prototypes\n   - r7.k: 8 Establish acceptance criteria\n   - r8.k: 1 Educate BAs about your business\n   Rights without responsibilities do not work: the customer must invest time, precision, decisions and reviews for the BA and developers to deliver what they need.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Rights without responsibilities do not work: the customer must invest time, precision, decisions and reviews for the BA and developers to deliver what they need.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Responsibility neglected",
+                "luaChon": [
+                  "1 Educate BAs about your business",
+                  "2 Dedicate the time it takes",
+                  "3 Be specific and precise",
+                  "4 Make timely decisions",
+                  "5 Respect cost and feasibility assessments",
+                  "6 Set realistic priorities",
+                  "7 Review requirements and evaluate prototypes",
+                  "8 Establish acceptance criteria",
+                  "9 Promptly communicate changes",
+                  "10 Respect the requirements process"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "The head nurse cancels three workshops in a row: \"too busy\"."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "The sponsor marks all 120 requirements as \"High\"."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The client decided a month ago to drop a feature but told nobody."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "\"Make it fast and nice\" — and the customer refuses to say more."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Developers estimate 6 weeks for a feature; the client insists \"it is a 2-day job\"."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "A question about the refund rule has waited three weeks for an answer; coding is blocked."
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "Nobody on the client side opens the prototype the team sent."
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "s": "The client cannot say how they will decide whether the release is acceptable."
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "s": "Staff use internal jargon and expect the BA to just know it."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "2 Dedicate the time it takes",
+              "r1.k": "6 Set realistic priorities",
+              "r2.k": "9 Promptly communicate changes",
+              "r3.k": "3 Be specific and precise",
+              "r4.k": "5 Respect cost and feasibility assessments",
+              "r5.k": "4 Make timely decisions",
+              "r6.k": "7 Review requirements and evaluate prototypes",
+              "r7.k": "8 Establish acceptance criteria",
+              "r8.k": "1 Educate BAs about your business"
+            },
+            "giaiThich": "<p><p>Rights without responsibilities do not work: the customer must invest time, precision, decisions and reviews for the BA and developers to deliver what they need.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm \"không dành thời gian\" với \"không review prototype\"."
+        },
+        {
+          "loi": "Nhầm \"đổi ý mà không báo\" với \"không cụ thể\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Bill of Responsibilities",
+          "vi": "Bản trách nhiệm của khách hàng về yêu cầu"
+        }
+      ]
+    },
+    {
+      "title": "Responsibilities 3 — making requirements attainable",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "customer responsibilities"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Responsibility #5: respect developers’ cost and feasibility assessments, and consider rewriting a requirement to make it attainable (e.g. \"instantaneously\" → \"within 50 ms\"). Responsibility #3: be specific — TBD markers may flag needed exploration, but must not hide a hard decision nobody will make.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tôn trọng đánh giá chi phí/khả thi và viết lại yêu cầu để đạt được; cụ thể, không để TBD che quyết định khó.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "\"Tức thì\" ⇒ đổi thành con số đạt được.",
+        "TBD cần người phụ trách và hạn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Responsibilities 3 — making requirements attainable\n\nAnswer in the answer panel (no code needed).\n\n1. Developers say \"update instantly\" is impossible over the hospital network. Best customer response?Dev nói \"cập nhật tức thì\" không khả thi trên mạng bệnh viện. Khách nên phản hồi thế nào?\n2. The SRS has had \"Refund policy: TBD\" for two months and nobody owns it. This violates…SRS ghi \"Chính sách hoàn tiền: TBD\" hai tháng, không ai phụ trách. Điều này vi phạm…\n3. Why should customers review requirements in small chunks throughout the project?Vì sao khách nên review yêu cầu từng phần nhỏ suốt dự án?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Responsibilities 3 — making requirements attainable — answer key\n\n1. Developers say \"update instantly\" is impossible over the hospital network. Best customer response?Dev nói \"cập nhật tức thì\" không khả thi trên mạng bệnh viện. Khách nên phản hồi thế nào?\n   Answer: a) Agree a measurable, attainable target such as \"within 2 seconds for 95% of updates\"\n   Rewrite to make it attainable and verifiable.VI: Viết lại cho khả thi và kiểm được.\n\n2. The SRS has had \"Refund policy: TBD\" for two months and nobody owns it. This violates…SRS ghi \"Chính sách hoàn tiền: TBD\" hai tháng, không ai phụ trách. Điều này vi phạm…\n   Answer: a) being specific and precise (and making timely decisions)\n   TBD must not hide an avoided decision.VI: TBD không được che một quyết định bị né.\n\n3. Why should customers review requirements in small chunks throughout the project?Vì sao khách nên review yêu cầu từng phần nhỏ suốt dự án?\n   Answer: b) Early, frequent reviews find defects when they are cheap; a giant tome at the end is rarely reviewed well\n   Responsibility #7.VI: Trách nhiệm #7.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · a · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Developers say \"update instantly\" is impossible over the hospital network. Best customer response?</p><p style=\"opacity:.75;font-size:.92em\"><i>Dev nói \"cập nhật tức thì\" không khả thi trên mạng bệnh viện. Khách nên phản hồi thế nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Agree a measurable, attainable target such as \"within 2 seconds for 95% of updates\""
+              },
+              {
+                "ma": "b",
+                "noiDung": "Drop the requirement silently"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Hire other developers"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Insist on \"instantly\""
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Rewrite to make it attainable and verifiable.</p><p><i>VI: Viết lại cho khả thi và kiểm được.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>The SRS has had \"Refund policy: TBD\" for two months and nobody owns it. This violates…</p><p style=\"opacity:.75;font-size:.92em\"><i>SRS ghi \"Chính sách hoàn tiền: TBD\" hai tháng, không ai phụ trách. Điều này vi phạm…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "being specific and precise (and making timely decisions)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "nothing — TBD is fine forever"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the right to change requirements"
+              },
+              {
+                "ma": "d",
+                "noiDung": "acceptance criteria only"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>TBD must not hide an avoided decision.</p><p><i>VI: TBD không được che một quyết định bị né.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Why should customers review requirements in small chunks throughout the project?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao khách nên review yêu cầu từng phần nhỏ suốt dự án?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It makes no difference"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Early, frequent reviews find defects when they are cheap; a giant tome at the end is rarely reviewed well"
+              },
+              {
+                "ma": "c",
+                "noiDung": "To slow the BA down"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Because the template says so"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Responsibility #7.</p><p><i>VI: Trách nhiệm #7.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Giữ yêu cầu bất khả thi."
+        },
+        {
+          "loi": "Để TBD trôi mãi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "TBD (to be determined)",
+          "vi": "chỗ chưa quyết, đánh dấu để theo dõi tới khi đóng"
+        },
+        {
+          "en": "verifiable",
+          "vi": "kiểm chứng được — có cách test/đo để biết đạt hay không"
+        }
+      ]
+    },
+    {
+      "title": "Responsibilities 4 — respecting the process",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 4,
+      "points": 10,
+      "concepts": [
+        "customer responsibilities"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Responsibility #10: respect the requirements process. Eliciting and specifying requirements is one of the hardest parts of software; there is a rationale behind the BA’s approach. Responsibility #9: route every change through the project’s change-control process.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tôn trọng quy trình yêu cầu; mọi thay đổi đi qua quy trình kiểm soát thay đổi.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Thay đổi nhỏ cũng phải qua quy trình.",
+        "Hỏi \"vì sao\" rồi hợp tác."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Responsibilities 4 — respecting the process\n\nAnswer in the answer panel (no code needed).\n\n1. The client e-mails a developer directly: \"add a field to the form, it’s tiny\". The developer should…Khách e-mail thẳng cho dev: \"thêm một trường vào form, nhỏ thôi\". Dev nên…\n2. A stakeholder asks why the BA needs so much detail about exceptions. The best attitude is…Một bên liên quan hỏi vì sao BA cần nhiều chi tiết về ngoại lệ. Thái độ đúng là…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Responsibilities 4 — respecting the process — answer key\n\n1. The client e-mails a developer directly: \"add a field to the form, it’s tiny\". The developer should…Khách e-mail thẳng cho dev: \"thêm một trường vào form, nhỏ thôi\". Dev nên…\n   Answer: c) Redirect it to the BA / change-control process so its impact is analysed and nothing is lost\n   Changes go through one consistent process.VI: Thay đổi đi qua một quy trình thống nhất.\n\n2. A stakeholder asks why the BA needs so much detail about exceptions. The best attitude is…Một bên liên quan hỏi vì sao BA cần nhiều chi tiết về ngoại lệ. Thái độ đúng là…\n   Answer: d) Ask the BA to explain the reason, then cooperate — much of the code handles exceptions\n   Mutual understanding makes the process work.VI: Hiểu nhau thì quy trình mới chạy.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: c · d.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>The client e-mails a developer directly: \"add a field to the form, it’s tiny\". The developer should…</p><p style=\"opacity:.75;font-size:.92em\"><i>Khách e-mail thẳng cho dev: \"thêm một trường vào form, nhỏ thôi\". Dev nên…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Add it immediately"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Reply that changes are forbidden"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Redirect it to the BA / change-control process so its impact is analysed and nothing is lost"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Ignore the e-mail"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Changes go through one consistent process.</p><p><i>VI: Thay đổi đi qua một quy trình thống nhất.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>A stakeholder asks why the BA needs so much detail about exceptions. The best attitude is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Một bên liên quan hỏi vì sao BA cần nhiều chi tiết về ngoại lệ. Thái độ đúng là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Refuse to answer"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Skip exceptions"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Let developers guess the exceptions"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Ask the BA to explain the reason, then cooperate — much of the code handles exceptions"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Mutual understanding makes the process work.</p><p><i>VI: Hiểu nhau thì quy trình mới chạy.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thêm thẳng thay đổi \"nhỏ\"."
+        },
+        {
+          "loi": "Bỏ qua ngoại lệ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "change control board (CCB)",
+          "vi": "hội đồng kiểm soát thay đổi — người quyết định chấp nhận/từ chối thay đổi"
+        }
+      ]
+    }
+  ]
+}

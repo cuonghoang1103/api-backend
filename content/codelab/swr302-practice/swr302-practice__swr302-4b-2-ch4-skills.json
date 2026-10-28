@@ -1,0 +1,599 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-4b-2-ch4-skills",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-4b-2-ch4-skills"
+  },
+  "exercises": [
+    {
+      "title": "BA skills 1 — which skill is at work?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 9,
+      "points": 20,
+      "concepts": [
+        "business analyst skills"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers lists fourteen essential skills of a business analyst. Name the main skill each BA is using.</p><p>Each row is graded on its own; the explanation of every answer appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Wiegers liệt kê mười bốn kỹ năng thiết yếu của BA. Gọi tên kỹ năng chính mà mỗi BA đang dùng.</p><p>Mỗi dòng được chấm riêng; giải thích từng đáp án hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Nhắc lại, đọc giữa các dòng ⇒ lắng nghe.",
+        "Thấy điều người dùng không nói khi quan sát ⇒ observational."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# BA skills 1 — which skill is at work?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# BA skills 1 — which skill is at work? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Listening\n   - r1.k: Interviewing and questioning\n   - r2.k: Thinking on your feet\n   - r3.k: Systems thinking\n   - r4.k: Facilitation\n   - r5.k: Observational\n   - r6.k: Organizational\n   - r7.k: Modeling\n   - r8.k: Creativity\n   - r9.k: Communication\n   A BA uses many skills at once; the exam usually asks you to recognise the dominant one from the behaviour described.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A BA uses many skills at once; the exam usually asks you to recognise the dominant one from the behaviour described.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Skill",
+                "luaChon": [
+                  "Listening",
+                  "Interviewing and questioning",
+                  "Thinking on your feet",
+                  "Analytical",
+                  "Systems thinking",
+                  "Learning",
+                  "Facilitation",
+                  "Leadership",
+                  "Observational",
+                  "Communication",
+                  "Organizational",
+                  "Modeling",
+                  "Interpersonal",
+                  "Creativity"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Lan restates what the head nurse said and notices the nurse hesitated when talking about night shifts."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Minh asks: \"And what happens if the scanner cannot read the wristband?\""
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "In the middle of a meeting, Hoa spots that the new request contradicts what finance said yesterday."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Tuan checks whether changing the discount rule in the shop affects the accounting and loyalty systems."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Thu runs a workshop of 12 people from 4 departments and keeps it neutral and on track."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Watching cashiers, Nam sees them write customer phone numbers on paper — something nobody mentioned."
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "Linh turns 300 sticky notes, e-mails and interview notes into a structured requirements repository."
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "s": "An draws a state diagram so developers see every status of an order."
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "s": "Khoa proposes a \"repeat last order\" feature that customers had never thought of, and asks them first."
+                }
+              },
+              {
+                "ma": "r9",
+                "o": {
+                  "s": "Mai writes a one-page summary for executives and a detailed version for developers."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Listening",
+              "r1.k": "Interviewing and questioning",
+              "r2.k": "Thinking on your feet",
+              "r3.k": "Systems thinking",
+              "r4.k": "Facilitation",
+              "r5.k": "Observational",
+              "r6.k": "Organizational",
+              "r7.k": "Modeling",
+              "r8.k": "Creativity",
+              "r9.k": "Communication"
+            },
+            "giaiThich": "<p><p>A BA uses many skills at once; the exam usually asks you to recognise the dominant one from the behaviour described.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm systems thinking với analytical."
+        },
+        {
+          "loi": "Nhầm facilitation với leadership."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "active listening",
+          "vi": "lắng nghe chủ động"
+        },
+        {
+          "en": "systems thinking",
+          "vi": "tư duy hệ thống"
+        }
+      ]
+    },
+    {
+      "title": "BA skills 2 — analytical skill and creativity",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "analytical skills",
+        "creativity"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Analytical skill: move between high and low levels of abstraction, reconcile conflicting information, separate wants from real needs, and distinguish solution ideas from requirements. Creativity: invent potential requirements for customers to consider — but avoid gold plating: never add requirements without customer approval.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Kỹ năng phân tích và sáng tạo — nhưng không mạ vàng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ý tưởng mới ⇒ đề xuất, chờ duyệt.",
+        "Hỏi \"để làm gì\" để tìm nhu cầu thật."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# BA skills 2 — analytical skill and creativity\n\nAnswer in the answer panel (no code needed).\n\n1. A BA has a great idea for a feature nobody asked for. What should she do?BA có ý tưởng hay cho một tính năng không ai yêu cầu. Cô ấy nên làm gì?\n2. One user says \"I want a button to export to Excel.\" The analytical BA asks…Một người dùng nói \"Tôi muốn nút xuất Excel.\" BA có tư duy phân tích sẽ hỏi…\n3. Generalising one user’s request into a requirement for a whole user class uses…Khái quát yêu cầu của một người thành yêu cầu cho cả lớp người dùng là dùng…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# BA skills 2 — analytical skill and creativity — answer key\n\n1. A BA has a great idea for a feature nobody asked for. What should she do?BA có ý tưởng hay cho một tính năng không ai yêu cầu. Cô ấy nên làm gì?\n   Answer: d) Propose it to the customers and add it only if they approve\n   Creativity yes, gold plating no.VI: Sáng tạo có, mạ vàng không.\n\n2. One user says \"I want a button to export to Excel.\" The analytical BA asks…Một người dùng nói \"Tôi muốn nút xuất Excel.\" BA có tư duy phân tích sẽ hỏi…\n   Answer: b) \"What do you do with the data afterwards?\" — to find the real need behind the solution\n   Separate solution ideas from needs.VI: Tách ý tưởng giải pháp khỏi nhu cầu.\n\n3. Generalising one user’s request into a requirement for a whole user class uses…Khái quát yêu cầu của một người thành yêu cầu cho cả lớp người dùng là dùng…\n   Answer: d) analytical skill (moving between levels of abstraction)\n   High and low levels of abstraction.VI: Các mức trừu tượng cao và thấp.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: d · b · d.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>A BA has a great idea for a feature nobody asked for. What should she do?</p><p style=\"opacity:.75;font-size:.92em\"><i>BA có ý tưởng hay cho một tính năng không ai yêu cầu. Cô ấy nên làm gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Add it to the SRS — it is a good idea"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Ask a developer to build it quietly"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Forget it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Propose it to the customers and add it only if they approve"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Creativity yes, gold plating no.</p><p><i>VI: Sáng tạo có, mạ vàng không.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>One user says \"I want a button to export to Excel.\" The analytical BA asks…</p><p style=\"opacity:.75;font-size:.92em\"><i>Một người dùng nói \"Tôi muốn nút xuất Excel.\" BA có tư duy phân tích sẽ hỏi…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "\"Can it be a PDF?\""
+              },
+              {
+                "ma": "b",
+                "noiDung": "\"What do you do with the data afterwards?\" — to find the real need behind the solution"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Nothing; writes it down"
+              },
+              {
+                "ma": "d",
+                "noiDung": "\"Which Excel version?\""
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Separate solution ideas from needs.</p><p><i>VI: Tách ý tưởng giải pháp khỏi nhu cầu.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Generalising one user’s request into a requirement for a whole user class uses…</p><p style=\"opacity:.75;font-size:.92em\"><i>Khái quát yêu cầu của một người thành yêu cầu cho cả lớp người dùng là dùng…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "listening only"
+              },
+              {
+                "ma": "b",
+                "noiDung": "interpersonal skill"
+              },
+              {
+                "ma": "c",
+                "noiDung": "modeling only"
+              },
+              {
+                "ma": "d",
+                "noiDung": "analytical skill (moving between levels of abstraction)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>High and low levels of abstraction.</p><p><i>VI: Các mức trừu tượng cao và thấp.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Tự thêm tính năng \"hay\"."
+        },
+        {
+          "loi": "Ghi giải pháp thành yêu cầu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "gold plating",
+          "vi": "mạ vàng — dev tự thêm chức năng không ai yêu cầu"
+        }
+      ]
+    },
+    {
+      "title": "BA skills 3 — learning, interpersonal, leadership",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "business analyst skills"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Learning: absorb new domains fast and be honest about what you do not know — not knowing is fine, hiding ignorance is not. Interpersonal: get people with competing interests to work as a team, speak the audience’s language. Leadership: influence stakeholders toward a common goal, negotiate and resolve conflicts.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Học hỏi, giao tiếp liên cá nhân, lãnh đạo.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Không biết thì hỏi.",
+        "Tránh thuật ngữ kỹ thuật với người nghiệp vụ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# BA skills 3 — learning, interpersonal, leadership\n\nAnswer in the answer panel (no code needed).\n\n1. A doctor uses a medical term the BA does not know. Best behaviour?Bác sĩ dùng thuật ngữ y khoa BA không biết. Cách cư xử tốt nhất?\n2. With business people, the BA should avoid…Với người nghiệp vụ, BA nên tránh…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# BA skills 3 — learning, interpersonal, leadership — answer key\n\n1. A doctor uses a medical term the BA does not know. Best behaviour?Bác sĩ dùng thuật ngữ y khoa BA không biết. Cách cư xử tốt nhất?\n   Answer: a) Ask what it means and add it to the glossary\n   Be honest about what you do not know.VI: Thành thật về điều mình chưa biết.\n\n2. With business people, the BA should avoid…Với người nghiệp vụ, BA nên tránh…\n   Answer: c) technical jargon such as \"REST endpoint\" or \"foreign key\"\n   Speak the audience’s language.VI: Nói ngôn ngữ của người nghe.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · c.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>A doctor uses a medical term the BA does not know. Best behaviour?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bác sĩ dùng thuật ngữ y khoa BA không biết. Cách cư xử tốt nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Ask what it means and add it to the glossary"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Pretend to know"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Change the topic"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nod and look it up later, maybe"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Be honest about what you do not know.</p><p><i>VI: Thành thật về điều mình chưa biết.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>With business people, the BA should avoid…</p><p style=\"opacity:.75;font-size:.92em\"><i>Với người nghiệp vụ, BA nên tránh…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "examples"
+              },
+              {
+                "ma": "b",
+                "noiDung": "diagrams"
+              },
+              {
+                "ma": "c",
+                "noiDung": "technical jargon such as \"REST endpoint\" or \"foreign key\""
+              },
+              {
+                "ma": "d",
+                "noiDung": "the business vocabulary"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Speak the audience’s language.</p><p><i>VI: Nói ngôn ngữ của người nghe.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Giả vờ hiểu."
+        },
+        {
+          "loi": "Nói chuyện bằng thuật ngữ lập trình với khách."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "interpersonal skills",
+          "vi": "kỹ năng giao tiếp liên cá nhân"
+        }
+      ]
+    },
+    {
+      "title": "BA skills 4 — which model for which audience?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "modeling skill"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Modeling skill: some models help communicate with users, others with developers, others only support the analyst’s own analysis. Choose the most suitable model for each purpose.</p><p>Each row is graded on its own; the explanation of every answer appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chọn mô hình phù hợp nhất cho từng mục đích.</p><p>Mỗi dòng được chấm riêng; giải thích từng đáp án hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "\"Ai làm gì, theo thứ tự\" ⇒ swimlane.",
+        "\"Mọi tổ hợp điều kiện\" ⇒ bảng quyết định."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# BA skills 4 — which model for which audience?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# BA skills 4 — which model for which audience? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Swimlane / process flow\n   - r1.k: Use case diagram\n   - r2.k: State-transition diagram\n   - r3.k: Entity-relationship diagram\n   - r4.k: Decision table\n   Pick the model that answers the question the audience has — and teach them how to read it.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Pick the model that answers the question the audience has — and teach them how to read it.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Model",
+                "luaChon": [
+                  "Swimlane / process flow",
+                  "Use case diagram",
+                  "State-transition diagram",
+                  "Entity-relationship diagram",
+                  "Decision table"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Show clerks who does each step of the refund process, in order."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Show the sponsor which users get which capabilities."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Show developers every status of a loan application and what moves it."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Agree with the data team what information the system stores and how it relates."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Check that every combination of member type and order size has a discount rule."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Swimlane / process flow",
+              "r1.k": "Use case diagram",
+              "r2.k": "State-transition diagram",
+              "r3.k": "Entity-relationship diagram",
+              "r4.k": "Decision table"
+            },
+            "giaiThich": "<p><p>Pick the model that answers the question the audience has — and teach them how to read it.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng ERD để giải thích quy trình."
+        },
+        {
+          "loi": "Dùng use case diagram để thể hiện thứ tự bước."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "swimlane (activity) diagram",
+          "vi": "sơ đồ làn bơi — ai làm gì, theo thứ tự nào; lộ điểm bàn giao"
+        },
+        {
+          "en": "state-transition diagram",
+          "vi": "sơ đồ chuyển trạng thái — đời sống của MỘT đối tượng"
+        },
+        {
+          "en": "entity-relationship diagram (ERD)",
+          "vi": "sơ đồ thực thể – quan hệ"
+        },
+        {
+          "en": "decision table",
+          "vi": "bảng quyết định — mọi tổ hợp điều kiện ⇒ hành động (n điều kiện ⇒ 2ⁿ cột)"
+        }
+      ]
+    }
+  ]
+}

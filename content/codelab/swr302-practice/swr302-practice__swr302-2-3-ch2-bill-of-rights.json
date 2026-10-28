@@ -448,6 +448,148 @@
           "vi": "hội đồng kiểm soát thay đổi — người quyết định chấp nhận/từ chối thay đổi"
         }
       ]
+    },
+    {
+      "title": "Rights 4 — which right is not respected?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "customer rights"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Each complaint from a customer shows one of the ten rights of Wiegers’ Requirements Bill of Rights not being respected. Name it.</p><p>Each row is graded on its own; the explanation of every answer appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi lời phàn nàn của khách cho thấy một trong mười quyền không được tôn trọng. Gọi tên quyền đó.</p><p>Mỗi dòng được chấm riêng; giải thích từng đáp án hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Thuật ngữ kỹ thuật ⇒ quyền #1.",
+        "Tự động hoá quy trình cũ y nguyên (\"paving the cow paths\") ⇒ quyền #7."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Rights 4 — which right is not respected?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Rights 4 — which right is not respected? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: 1 Speak your language\n   - r1.k: 4 Receive explanations of practices and deliverables\n   - r2.k: 7 Hear ideas and alternatives\n   - r3.k: 8 Describe usability characteristics\n   - r4.k: 3 Record requirements in an appropriate form\n   - r5.k: 2 Learn your business and objectives\n   Rights 1–4 are about communication, 5–9 about the content and its evolution, and 10 is the conditional outcome of all of them.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Rights 1–4 are about communication, 5–9 about the content and its evolution, and 10 is the conditional outcome of all of them.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Right",
+                "luaChon": [
+                  "1 Speak your language",
+                  "2 Learn your business and objectives",
+                  "3 Record requirements in an appropriate form",
+                  "4 Receive explanations of practices and deliverables",
+                  "5 Change your requirements",
+                  "6 An environment of mutual respect",
+                  "7 Hear ideas and alternatives",
+                  "8 Describe usability characteristics",
+                  "9 Hear about reuse options",
+                  "10 Receive a system that meets your needs"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "\"The analyst keeps talking about microservices and JSON; I just want to book rooms.\""
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "\"They sent a diagram full of symbols and nobody explained how to read it.\""
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "\"They just automated our old paper process, even the steps we hate.\""
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "\"Nobody asked what ‘easy to use’ means for our staff.\""
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "\"Our notes are scattered over 40 e-mails; there is no document we can review.\""
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "\"The team never watched how we work; they assumed they knew.\""
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "1 Speak your language",
+              "r1.k": "4 Receive explanations of practices and deliverables",
+              "r2.k": "7 Hear ideas and alternatives",
+              "r3.k": "8 Describe usability characteristics",
+              "r4.k": "3 Record requirements in an appropriate form",
+              "r5.k": "2 Learn your business and objectives"
+            },
+            "giaiThich": "<p><p>Rights 1–4 are about communication, 5–9 about the content and its evolution, and 10 is the conditional outcome of all of them.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm #2 (học nghiệp vụ) với #1 (nói ngôn ngữ của khách)."
+        },
+        {
+          "loi": "Nhầm #3 (ghi lại) với #4 (giải thích)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Bill of Rights",
+          "vi": "Bản quyền lợi của khách hàng về yêu cầu"
+        }
+      ]
     }
   ]
 }

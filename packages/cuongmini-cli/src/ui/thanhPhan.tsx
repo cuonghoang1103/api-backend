@@ -377,6 +377,14 @@ export function luaChonDuyet(d: ChoDuyet): LuaChonDuyet[] {
       return ds;
     }
     case 'xinPhepGit': {
+      /* 28/10/2026: xin quyền thư mục ngoài dự án — mặc định CHỈ ĐỌC; "đọc + sửa" là nút riêng (không có phím tắt "luôn"). */
+      if (d.viec === 'thuMuc' || d.viec === 'thuMucDoc') {
+        return [
+          { q: 'choPhep', nhan: L('Cho phép đọc', 'Allow read') },
+          ...(d.viec === 'thuMuc' ? [{ q: 'choPhepCaFile' as const, nhan: L('Cho phép đọc + sửa (mỗi lần sửa vẫn hỏi)', 'Allow read + edit (each edit still asks)') }] : []),
+          { q: 'tuChoi', nhan: L('Không (esc)', 'No (esc)') },
+        ];
+      }
       const nhan = d.viec === 'commit' ? 'Commit' : d.viec === 'pr' ? L('Đẩy và mở PR', 'Push and open PR') : d.viec === 'day' ? L('Đẩy lên GitHub', 'Push to GitHub') : d.viec === 'cai' ? L('Cài', 'Install') : d.viec === 'gop' ? L('Gộp vào dự án', 'Merge into the project') : L('Đồng ý', 'Yes');
       return [{ q: 'choPhep', nhan }, tuChoi];
     }

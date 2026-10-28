@@ -97,7 +97,7 @@ describe('CT Work làm ngầm trong vòng lặp agent', () => {
     await loop.chayLuot(id, 'đính kèm', { goc: null }, (e) => sk.push(e));
     expect(sk.some((e) => e.loai === 'xinPhepMcp')).toBe(false);
     expect(daGoiMcp).toEqual([]);
-    expect(daGui[1]!.messages.find((m: any) => m.role === 'tool').content).toMatch(/KÉO file/);
+    expect(daGui[1]!.messages.find((m: any) => m.role === 'tool').content).toMatch(/xin_quyen_thu_muc/);
   });
 
   it('ảnh dán ⇒ lưu ra dinh-kem/ + ghi chú đường dẫn; phạm vi "tất cả" ⇒ tool CT Work có mặt không cần thư mục, ghi chú phạm vi MỘT lần', async () => {

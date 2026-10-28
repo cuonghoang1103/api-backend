@@ -233,18 +233,40 @@ export function dsThuMucDocNgoai(goc: string): string[] {
   return [...(docNgoai.get(path.resolve(goc)) ?? [])];
 }
 
+/*
+ * ── 28/10/2026: QUYỀN SỬA thư mục ngoài (`xin_quyen_thu_muc`, người dùng bấm "Cho phép đọc + sửa") ──
+ * Chỉ CỘNG THÊM vào quyền đọc ở trên (cùng chốt `lyDoKhongCapNgoai`), cũng theo dự án và chỉ trong lần chạy này.
+ * `edit_file`/`create_file` với đường TUYỆT ĐỐI trong thư mục này đi qua `moTrongNguc(thư mục đó, …)` — danh sách chặn
+ * + chốt symlink giữ nguyên — và MỖI lần sửa vẫn có thẻ duyệt (luôn hỏi, kể cả chế độ tự sửa / "Bỏ qua hết").
+ */
+const ghiNgoai = new Map<string, string[]>();
+
+/** Cấp ĐỌC + SỬA (ném lỗi kèm lý do như `capQuyenDocNgoai`). */
+export function capQuyenGhiNgoai(goc: string, thuMuc: string): string {
+  const t = capQuyenDocNgoai(goc, thuMuc);
+  const k = path.resolve(goc);
+  const ds = (ghiNgoai.get(k) ?? []).filter((x) => x !== t);
+  ds.push(t);
+  ghiNgoai.set(k, ds.slice(-MAX_THU_MUC_NGOAI));
+  return t;
+}
+
+export function dsThuMucGhiNgoai(goc: string): string[] {
+  return [...(ghiNgoai.get(path.resolve(goc)) ?? [])];
+}
+
 /** Chỉ để kiểm thử. */
-export function _xoaQuyenDocNgoai(): void { docNgoai.clear(); }
+export function _xoaQuyenDocNgoai(): void { docNgoai.clear(); ghiNgoai.clear(); }
 
 /**
  * Đường dẫn TUYỆT ĐỐI → (thư mục được cấp chứa nó, phần tương đối bên trong).
  * Không thuộc thư mục nào đã cấp ⇒ `null`. Chọn thư mục được cấp SÂU NHẤT khi
  * lồng nhau, để `tienTo` hiển thị gần với thứ model đã hỏi nhất.
  */
-export function timThuMucNgoai(goc: string, duongTuyetDoi: string): { goc: string; tuongDoi: string } | null {
+export function timThuMucNgoai(goc: string, duongTuyetDoi: string, chiGhi = false): { goc: string; tuongDoi: string } | null {
   const d = path.resolve(duongTuyetDoi);
   let tot: { goc: string; tuongDoi: string } | null = null;
-  for (const r of dsThuMucDocNgoai(goc)) {
+  for (const r of chiGhi ? dsThuMucGhiNgoai(goc) : dsThuMucDocNgoai(goc)) {
     const rel = path.relative(r, d);
     if (rel.startsWith('..') || path.isAbsolute(rel)) continue;
     if (!tot || r.length > tot.goc.length) tot = { goc: r, tuongDoi: rel };
@@ -258,6 +280,19 @@ export function loiNgoaiChuaCap(duong: string, goc: string): LoiNguc {
   return new LoiNguc(
     `"${duong}" nằm ngoài dự án và CHƯA được cấp quyền đọc. `
     + (ds.length ? `Thư mục ngoài đang được đọc: ${ds.join(', ')}. ` : '')
-    + 'Trong dự án thì dùng đường dẫn TƯƠNG ĐỐI. Cần đọc chỗ khác thì nhờ người dùng KÉO thư mục đó vào khung chat.',
+    + 'Trong dự án thì dùng đường dẫn TƯƠNG ĐỐI. Cần đọc chỗ khác thì GỌI TOOL `xin_quyen_thu_muc` '
+    + '(path = thư mục TUYỆT ĐỐI cần đọc, ly_do = một câu) — người dùng bấm cho phép ngay trên thẻ. '
+    + 'ĐỪNG đọc vòng qua shell (cat/ls/run_command), và đừng bắt người dùng tự kéo thư mục vào.',
+  );
+}
+
+/** Ghi vào thư mục ngoài mà mới được cấp ĐỌC (hoặc chưa cấp gì) — dạy model đường đúng. */
+export function loiNgoaiChuaCapGhi(duong: string, goc: string): LoiNguc {
+  const doc = timThuMucNgoai(goc, duong);
+  return new LoiNguc(
+    `"${duong}" nằm ngoài dự án và CHƯA được cấp quyền SỬA`
+    + (doc ? ` (thư mục ${doc.goc} mới được cấp ĐỌC)` : '')
+    + '. Cần sửa ở đó thì gọi `xin_quyen_thu_muc` với quyen="ghi" (người dùng chọn "Cho phép đọc + sửa"); '
+    + 'không thì dùng `ghi_file_ngoai` cho MỘT tệp cấu hình. Đừng ghi vòng qua shell.',
   );
 }

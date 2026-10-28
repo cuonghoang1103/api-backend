@@ -16,7 +16,7 @@
  *     Đây là chỗ đổi chác giữa phiền và an toàn, và nó nghiêng theo cách người
  *     ta thật sự làm việc: sửa sâu vài file, không rải khắp dự án.
  */
-import { AlertTriangle, Check, CheckCheck, FilePlus2, Infinity, FilePen, GitCommitHorizontal, GitPullRequest, NotebookPen, Plug, Terminal, X } from 'lucide-react';
+import { AlertTriangle, Check, CheckCheck, FilePlus2, Infinity, FilePen, FolderOpen, GitCommitHorizontal, GitPullRequest, NotebookPen, Plug, Terminal, X } from 'lucide-react';
 import hljs from 'highlight.js/lib/common';
 import type { AgentDiff, AgentPhanLoaiLenh, AgentQuyetDinh } from '../../../shared/ipc';
 import { useDich } from '../../i18n';
@@ -411,11 +411,39 @@ export function XinPhepGit({
   traLoi,
 }: {
   id: string;
-  viec: 'commit' | 'pr' | 'day' | 'cai' | 'gop';
+  viec: 'commit' | 'pr' | 'day' | 'cai' | 'gop' | 'thuMuc' | 'thuMucDoc';
   chiTiet: string;
   traLoi: (id: string, q: AgentQuyetDinh) => void;
 }) {
   const { dich } = useDich();
+  /* 28/10/2026: `xin_quyen_thu_muc` — xin truy cập thư mục NGOÀI dự án (đi chung kênh thẻ git). Mặc định CHỈ ĐỌC; "đọc + sửa"
+     là nút riêng, và mỗi lần sửa vẫn có thẻ duyệt. */
+  if (viec === 'thuMuc' || viec === 'thuMucDoc') {
+    return (
+      <div className="ct-xinphep" data-muc="cankiem">
+        <div className="ct-xinphep-dau">
+          <FolderOpen size={14} aria-hidden />
+          <span>{dich('Truy cập thư mục ngoài dự án')}</span>
+        </div>
+        <pre className="ct-mcp-args">{chiTiet}</pre>
+        <div className="ct-xinphep-nut">
+          <button type="button" className="ct-btn" onClick={() => traLoi(id, 'choPhep')}>
+            <Check size={14} aria-hidden />
+            {dich('Cho phép đọc')}
+          </button>
+          {viec === 'thuMuc' && (
+            <button type="button" className="ct-btn ct-btn-ghost" onClick={() => traLoi(id, 'choPhepCaFile')}>
+              {dich('Cho phép đọc + sửa')}
+            </button>
+          )}
+          <button type="button" className="ct-btn ct-btn-ghost ct-xinphep-tuchoi" onClick={() => traLoi(id, 'tuChoi')}>
+            <X size={14} aria-hidden />
+            {dich('Không')}
+          </button>
+        </div>
+      </div>
+    );
+  }
   const laPr = viec === 'pr';
   const laGop = viec === 'gop';
   /* `day` = đẩy lên GitHub / đưa dự án lên lần đầu · `cai` = tự cài git/gh (16/10/2026). */

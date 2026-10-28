@@ -780,6 +780,8 @@ export function tenViecGit(viec: string | undefined): string {
     case 'day': return L('Đẩy lên GitHub', 'Push to GitHub');
     case 'cai': return L('Cài công cụ', 'Install tool');
     case 'gop': return L('Gộp thay đổi của agent phụ vào dự án', 'Merge the subagent\'s changes into the project');
+    /* 28/10/2026: `xin_quyen_thu_muc` — xin truy cập thư mục NGOÀI dự án (đi chung kênh thẻ git). */
+    case 'thuMuc': case 'thuMucDoc': return L('📁 Truy cập thư mục ngoài dự án', '📁 Access a folder outside the project');
     default: return 'Git';
   }
 }

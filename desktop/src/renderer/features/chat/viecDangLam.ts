@@ -73,6 +73,7 @@ export function viecCuaTool(ten: string): string {
     web_mo: 'đang mở trang…',
     web_doc: 'đang đọc trang…',
     web_lien_ket: 'đang lấy danh sách liên kết…',
+    xin_quyen_thu_muc: 'đang xin quyền thư mục ngoài dự án…',
     web_tai: 'đang tải file…',
     web_tai_nhieu: 'đang tải cả lô file…',
     web_anh: 'đang chụp màn hình trang…',

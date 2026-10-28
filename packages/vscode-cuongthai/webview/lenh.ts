@@ -13,6 +13,8 @@ import {
 } from 'ct-lenh';
 // Đợt 5: bộ lệnh CT Work chung ba nơi (`/ctwork` menu đánh số, `/issue`, `/sprint`, `/viec`).
 import { hanhDongMcp, lamHanhDongMcp, lenhCtwork, moCtworkTuMcp, trangThaiMcpChu, type GiaoDienCtw, type TheChonCtw } from '../../../desktop/src/renderer/features/chat/ctworkLenh';
+// 28/10/2026: đồng bộ git ↔ GitHub ↔ repo dự án — chung ba nơi (thanh trạng thái của extension tự kiểm lúc mở).
+import { lenhDongBo } from '../../../desktop/src/renderer/features/chat/gitDongBoLenh';
 
 /** Đợt 4 — chữ hai thứ tiếng theo ngôn ngữ giao diện VS Code. */
 const Lv = (vi: string, en: string): string => (/^vi/i.test(navigator.language || 'vi') ? vi : en);
@@ -264,6 +266,10 @@ async function chay(ten: string, thamSo: string, goc: string, b: BoiCanhLenh): P
     case '/ctwork': case '/issue': case '/sprint': case '/viec':
       /* Đợt 5: bộ lệnh CT Work CHUNG ba nơi — menu đánh số (nút), thẻ xem trước khi ghi. */
       await lenhCtwork(ten, thamSo, giaoDienCtwVsc(b));
+      return;
+    case '/dong-bo':
+      /* 28/10/2026: kiểm ngay + hỏi pull (ff) / rebase / merge — không bao giờ ép. */
+      await lenhDongBo(thamSo, giaoDienCtwVsc(b));
       return;
 
     case '/cost':

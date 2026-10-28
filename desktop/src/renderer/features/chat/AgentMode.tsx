@@ -37,6 +37,7 @@ import {
   moTaDsCauHoi, moTaDsPhien, moTaNguCanh, moTaTrangThai, moTaTroGiup, moTaUsage, promptPlan, promptReview,
   tachLenh, tenFileXuat, timMuc, timTheoChu, xuatMarkdown,
 } from './lenhGach';
+import { hoiDongBoGit, lenhDongBo } from './gitDongBoLenh';
 import { hanhDongMcp, lamHanhDongMcp, trangThaiMcpChu, hoiGanDoan, homNay as homNayCtw, hoiCtworkMotLan, kiemTinCtw, laLoiXacThucCtw, lenhCtwork, moCtworkTuMcp, veDongCtw, xongViec as xongViecCtw, type DongCtw, type GiaoDienCtw, type TheChonCtw } from './ctworkLenh';
 import { useAppState } from '../../app-state';
 import { useMoRieng } from '../../components/moRieng';
@@ -658,7 +659,9 @@ export function AgentMode({
       if (daHoiCtworkLanNay) return;
       daHoiCtworkLanNay = true;
       /* Đợt 6: không có gì để hỏi (đã nối + đã gắn) ⇒ "Hôm nay" (lõi: một lần mỗi ngày mỗi thư mục). */
-      void hoiCtworkMotLan(gdCtw()).then((coHoi) => { if (!coHoi) void homNayCtw(gdCtwRef.current(), { tuDong: true }).catch(() => undefined); }).catch(() => undefined);
+      void hoiCtworkMotLan(gdCtw()).then((coHoi) => { if (!coHoi) void homNayCtw(gdCtwRef.current(), { tuDong: true }).catch(() => undefined); }).catch(() => undefined)
+        /* 28/10/2026: repo git ⇒ fetch lặng lẽ, nhánh đang sau GitHub thì hỏi pull (`gitDongBoLenh.ts`). */
+        .finally(() => { void hoiDongBoGit(gdCtwRef.current(), { tuDong: true }).catch(() => undefined); });
     }, 1500);
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -849,6 +852,10 @@ export function AgentMode({
       case '/ctwork': case '/issue': case '/sprint': case '/viec':
         /* Đợt 5: bộ lệnh CT Work CHUNG ba nơi — menu đánh số, thẻ xem trước khi ghi. */
         await lenhCtwork(ten, thamSo, gdCtw());
+        return;
+      case '/dong-bo':
+        /* 28/10/2026: đồng bộ git ↔ GitHub ↔ repo dự án — chung ba nơi (`gitDongBoLenh.ts`). */
+        await lenhDongBo(thamSo, gdCtw());
         return;
       case '/hen': {
         const d = thamSo.split(/\s+/).filter(Boolean);
@@ -1828,7 +1835,7 @@ export function AgentMode({
               return (
                 <div key={i} className="ct-agent-tool" data-vong="may" data-xong={m.xong}>
                   {m.xong === 'dongY' ? <Check size={12} aria-hidden /> : <X size={12} aria-hidden />}
-                  <code>{m.viec === 'pr' ? 'mở PR' : m.viec === 'gop' ? 'gộp agent phụ' : 'commit'}</code>
+                  <code>{m.viec === 'pr' ? 'mở PR' : m.viec === 'gop' ? 'gộp agent phụ' : m.viec === 'thuMuc' || m.viec === 'thuMucDoc' ? 'thư mục ngoài' : 'commit'}</code>
                   <span className="ct-agent-tool-tomtat">
                     {m.xong === 'dongY' ? 'đã duyệt' : 'đã từ chối'}
                   </span>
@@ -3378,6 +3385,7 @@ function IconTool({ ten, vong }: { ten: string; vong: 'may' | 'notes' }) {
     case 'tim_web': return <Search {...p} />;
     case 'web_doc': return <FileCode2 {...p} />;
     case 'web_lien_ket': return <Link2 {...p} />;
+    case 'xin_quyen_thu_muc': return <FolderOpen {...p} />;
     case 'web_tai': return <Download {...p} />;
     case 'web_tai_nhieu': return <Download {...p} />;
     case 'web_anh': return <Camera {...p} />;

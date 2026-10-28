@@ -192,11 +192,14 @@ export async function hoiCtworkMotLan(g: GiaoDienCtw): Promise<boolean> {
  * Hỏi MỘT lần "Gắn thư mục này với dự án KEY?" — đoán từ AGENTS.md (`agents`) hoặc vì người dùng nhắc `KEY-123`
  * (`key`, đợt 8A). "Không" ⇒ lõi nhớ cho thư mục đó, không hỏi lại. Không bao giờ tự gắn im lặng.
  */
-export function hoiGanDoan(g: GiaoDienCtw, d: NonNullable<RaCtw['doan']>, nguon: 'agents' | 'key' = 'agents'): void {
+export function hoiGanDoan(g: GiaoDienCtw, d: NonNullable<RaCtw['doan']>, nguon: 'agents' | 'key' | 'remote' = 'agents'): void {
   const L = Lg(g);
   g.chon({
     tieuDe: L(`Gắn thư mục này với dự án CT Work ${d.key}${d.projectId ? ` (id ${d.projectId})` : ''}?`, `Bind this folder to CT Work project ${d.key}${d.projectId ? ` (id ${d.projectId})` : ''}?`),
-    moTa: nguon === 'key'
+    moTa: nguon === 'remote'
+      ? L(`Remote git của thư mục này khớp repo của dự án ${d.key} (\`project_repos\`). Gắn rồi thì dòng trạng thái hiện sprint/thẻ, /dong-bo so với nhánh mặc định của dự án. Gỡ: /ctwork bo-gan.`,
+        `This folder's git remote matches a repository of project ${d.key} (\`project_repos\`). Once bound, the status line shows the sprint/issue and /sync compares with the project's default branch. Unbind: /ctwork unbind.`)
+      : nguon === 'key'
       ? L(`Bạn vừa nhắc ${d.key}-… và ${d.key} là một dự án của bạn. Gắn rồi thì dòng trạng thái hiện sprint/thẻ, gõ ${d.key}-123 là CuongMini tự đọc thẻ đó. Gỡ: /ctwork bo-gan.`,
         `You mentioned ${d.key}-… and ${d.key} is one of your projects. Once bound, the status line shows the sprint/issue and typing ${d.key}-123 makes CuongMini read it. Unbind: /ctwork unbind.`)
       : L(`Đoán từ AGENTS.md${d.workspace ? ` · không gian "${d.workspace}"` : ''}. Gắn rồi thì dòng trạng thái hiện sprint/thẻ, và gõ ${d.key}-123 là CuongMini tự đọc thẻ đó.`,

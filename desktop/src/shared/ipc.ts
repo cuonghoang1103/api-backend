@@ -302,6 +302,11 @@ export const settingKeySchema = z.enum([
    * (CLI mở ở ~). ⛔ Chỉ main ghi (`agent:ctworkHe` viec `macDinh`).
    */
   'ctworkMacDinh',
+  /**
+   * 28/10/2026 — mở CuongMini trong repo git thì tự `git fetch` lặng lẽ + báo nhánh đang sau/trước GitHub (hỏi pull).
+   * MẶC ĐỊNH BẬT (chỉ `false` mới tắt) — `/dong-bo off`. Kéo về luôn hỏi, không có cờ nào bỏ qua.
+   */
+  'gitDongBoTuDong',
 ]);
 export type SettingKey = z.infer<typeof settingKeySchema>;
 
@@ -1685,7 +1690,7 @@ export type AgentUiEvent = { cuocId: string } & (
    * sách file, lời nhắn (commit) hoặc nhánh + tiêu đề + mô tả (PR). Một thẻ chỉ
    * ghi "agent muốn commit" thì không ai duyệt được gì cả.
    */
-  | { loai: 'xinPhepGit'; id: string; viec: 'commit' | 'pr' | 'day' | 'cai' | 'gop'; chiTiet: string; phuId?: string }
+  | { loai: 'xinPhepGit'; id: string; viec: 'commit' | 'pr' | 'day' | 'cai' | 'gop' | 'thuMuc' | 'thuMucDoc'; chiTiet: string; phuId?: string }
   /** Xin phép GHI vào sổ ghi chú. `chiTiet` là nội dung sắp ghi — người dùng phải ĐỌC nó. */
   | { loai: 'xinPhepNote'; id: string; viec: 'tao' | 'ghi'; chiTiet: string }
   /** Đầu ra của lệnh, chảy ra khi nó còn đang chạy. */
@@ -1779,6 +1784,8 @@ export const agentCtworkHeSchema = z.object({
     'homNay', 'huongDan', 'goiYSau', 'xemTruocGoiY', 'lamGoiY', 'kiemTin', 'theoDoi', 'tongQuan', 'guiTinNhom', 'hoiQna', 'mauFpt', 'huongDanNhom',
     /* 20/10/2026: phạm vi CT Work mặc định của máy (tất cả · một workspace · một dự án) — đặt / xoá. */
     'macDinh',
+    /* 28/10/2026 (đợt 2 code): đồng bộ git với GitHub + repo dự án — kiểm · kéo về (SAU thẻ đồng ý) · xem commit · bật/tắt tự kiểm. */
+    'dongBoGit', 'keoGit', 'xemCommitGit', 'dongBoBat',
   ]),
   ngonNgu: z.enum(['vi', 'en']).optional(),
   key: z.string().max(40).optional(),
@@ -1802,6 +1809,14 @@ export const agentCtworkHeSchema = z.object({
   quyen: z.enum(['doc', 'ghi']).optional(),
   /** Đợt 6: gắn THEO PHIÊN (thư mục không phải repo — không ghi file). */
   theoPhien: z.boolean().optional(),
+  /** 28/10/2026 (`keoGit`): cách kéo — `ff` mặc định; `rebase`/`merge` chỉ khi người dùng chọn trên thẻ. */
+  cach: z.enum(['ff', 'rebase', 'merge']).optional(),
+  /** 28/10/2026 (`keoGit`/`xemCommitGit`): kéo từ upstream của nhánh hay từ nhánh mặc định (origin/main). */
+  mucTieu: z.enum(['upstream', 'macDinh']).optional(),
+  /** 28/10/2026 (`keoGit`): nhánh người dùng đã thấy trên thẻ — lõi kiểm lại, đổi nhánh rồi thì không làm gì. */
+  tenNhanh: z.string().max(200).optional(),
+  /** 28/10/2026 (`dongBoGit`): thư mục chưa gắn ⇒ dò ngược dự án theo remote (chỉ khi người dùng gõ lệnh). */
+  timDuAn: z.boolean().optional(),
   /** 20/10/2026 (`macDinh`): phạm vi mặc định — `null` = xoá. */
   macDinh: z.union([
     z.object({ tatCa: z.literal(true) }),
@@ -1829,6 +1844,18 @@ export interface AgentCtworkHeRa {
     sprint: { ten: string; conNgay: number | null; laFocus: boolean; tong: number } | null;
     the: string | null; theTen: string | null; theTrangThai: string | null;
   } | null;
+  /** 28/10/2026 (`dongBoGit`): trạng thái đồng bộ git + câu thông báo/câu hỏi đã dựng sẵn (vi/en). */
+  dongBo?: {
+    laKho: boolean; muc: 'im' | 'info' | 'hoi'; dong: string[];
+    hoi: { loai: 'keo' | 'phanKy' | 'capNhatMacDinh'; cauHoi: string; moTa: string; luaChon: Array<{ giaTri: string; nhan: string; mo?: string }> } | null;
+    nhanh: string | null; upstream: string | null; macDinh: string | null;
+    soVoiUpstream: { truoc: number; sau: number } | null; soVoiMacDinh: { truoc: number; sau: number } | null;
+    banChuaCommit: number; fetchOk: boolean; key: string | null; khop: boolean | null;
+  };
+  /** 28/10/2026: `dongBoGit` lúc mở mà người dùng đã tắt tự kiểm (`/dong-bo off`). */
+  tat?: boolean;
+  /** 28/10/2026 (`keoGit`): file xung đột (đã --abort, repo về như trước). */
+  xungDot?: string[];
   duong?: string; goiYGitignore?: string | null;
   key?: string; tieuDe?: string; trangThai?: string | null; chuyenDuoc?: string[];
   nhanh?: string; nhanhCo?: boolean; nhanhNay?: string | null; den?: string | null;

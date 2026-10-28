@@ -11,6 +11,7 @@ import { appendFileSync, readFileSync } from 'node:fs';
 import { Box, Static, measureElement, useApp, useInput, useStdout, type DOMElement } from 'ink';
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore, type MutableRefObject } from 'react';
 import { chuanHoa, dsCauHoi, locPhien, type MucGhi, type PhienCu } from 'ct-lenh';
+import { hoiDongBoGit } from '../../../../desktop/src/renderer/features/chat/gitDongBoLenh';
 import { homNay as homNayCtw, hoiCtworkMotLan, hoiGanDoan, kiemTinCtw, laLoiXacThucCtw, moCtworkTuMcp, veDongCtw, xongViec as xongViecCtw, type DongCtw, type GiaoDienCtw } from '../../../../desktop/src/renderer/features/chat/ctworkLenh';
 import { docAnhDataUrl, guiThangDuoc, tachAnh } from '../anh';
 import { danAnhTuClipboard } from '../anhDan';
@@ -1014,7 +1015,9 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
       if (hopRef.current || S.dangChay || dangGo()) { if (++lan < 60) t2 = setTimeout(hoi, 3000); return; }
       daHoiCtw.current = true;
       /* Đợt 6: không có gì để hỏi (đã nối + đã gắn) ⇒ "Hôm nay" — việc của tôi + nên làm gì trước (lõi: một lần/ngày/thư mục). */
-      void hoiCtworkMotLan(giaoDienCtwTuBat()).then((coHoi) => { if (!coHoi) void homNayCtw(giaoDienCtwTuBat(), { tuDong: true }).catch(() => undefined); }).catch(() => undefined);
+      void hoiCtworkMotLan(giaoDienCtwTuBat()).then((coHoi) => { if (!coHoi) void homNayCtw(giaoDienCtwTuBat(), { tuDong: true }).catch(() => undefined); }).catch(() => undefined)
+        /* 28/10/2026: repo git ⇒ fetch lặng lẽ (≤ 8 s), nhánh đang sau GitHub / phân kỳ ⇒ thẻ hỏi pull (chờ lúc rảnh như thẻ CT Work). */
+        .finally(() => { if (process.env.CUONGMINI_KHONG_DONG_BO !== '1') void hoiDongBoGit(giaoDienCtwTuBat(), { tuDong: true }).catch(() => undefined); });
     };
     hoiLaiCtw.current = () => { if (++lan < 60) hoi(); };
     const t = setTimeout(() => {
@@ -1547,7 +1550,9 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
       const traLoi = (q: string) => { lucDuyet.current = Date.now(); void kn.goi('agent:traLoiXinPhep', { id: d.id, quyetDinh: q, ...(q === 'tuChoi' ? { dung: true } : {}) }).catch((e: Error) => kho.thongBao(e.message, 'loi')); };
       if (key.upArrow) { setChonDuyet((c) => (c - 1 + lc.length) % lc.length); return; }
       // Đợt 4: shift+tab trên thẻ = "Có, và không hỏi lại" (như Claude Code) nếu thẻ có lựa chọn đó; không thì lùi lên.
-      if (key.tab && key.shift) { const luon = lc.find((x) => x.q === 'choPhepCaFile' || x.q === 'choPhepTienTo'); if (luon) traLoi(luon.q); else setChonDuyet((c) => (c - 1 + lc.length) % lc.length); return; }
+      /* 28/10/2026: thẻ xin quyền thư mục — "đọc + sửa" phải chọn tay, shift+tab KHÔNG nhảy thẳng vào nó. */
+      const laThuMuc = d.loai === 'xinPhepGit' && (d.viec === 'thuMuc' || d.viec === 'thuMucDoc');
+      if (key.tab && key.shift) { const luon = laThuMuc ? undefined : lc.find((x) => x.q === 'choPhepCaFile' || x.q === 'choPhepTienTo'); if (luon) traLoi(luon.q); else setChonDuyet((c) => (c - 1 + lc.length) % lc.length); return; }
       if (key.downArrow || key.tab) { setChonDuyet((c) => (c + 1) % lc.length); return; }
       if (key.return) { traLoi(lc[chonDuyet]!.q); return; }
       if (/^[1-9]$/.test(input) && Number(input) <= lc.length) { traLoi(lc[Number(input) - 1]!.q); return; }

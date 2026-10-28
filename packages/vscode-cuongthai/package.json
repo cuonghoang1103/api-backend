@@ -2,7 +2,7 @@
   "name": "cuongthai-ai-code",
   "displayName": "CuongMini Code — AI lập trình của CuongThai",
   "description": "CuongMini Code — AI lập trình của CuongThai ngay trong VS Code — chat, sửa code, chạy lệnh, skill, MCP, GitHub. Cài là dùng: đăng nhập bằng tài khoản cuongthai.com (có app desktop thì tự chạy qua app).",
-  "version": "0.8.4",
+  "version": "0.8.5",
   "publisher": "cuongthai",
   "license": "UNLICENSED",
   "private": true,
@@ -41,7 +41,8 @@
       { "command": "cuongthai.batTatMayTinh", "title": "Bật/tắt điều khiển máy tính (chụp màn hình, chuột, phím)", "category": "CuongMini" },
       { "command": "cuongthai.hienTrinhDuyet", "title": "Hiện trình duyệt AI (để tự đăng nhập) / Show AI browser", "category": "CuongMini", "icon": "$(globe)" },
       { "command": "cuongthai.anTrinhDuyet", "title": "Ẩn trình duyệt AI — chạy ngầm / Hide AI browser", "category": "CuongMini" },
-      { "command": "cuongthai.ketNoiFigma", "title": "Kết nối Figma (token chỉ đọc) / Connect Figma", "category": "CuongMini" }
+      { "command": "cuongthai.ketNoiFigma", "title": "Kết nối Figma (token chỉ đọc) / Connect Figma", "category": "CuongMini" },
+      { "command": "cuongthai.dongBoGit", "title": "Đồng bộ git với GitHub (pull an toàn) / Git sync", "category": "CuongMini", "icon": "$(sync)" }
     ],
     "menus": {
       "view/title": [
@@ -83,6 +84,11 @@
           "type": "boolean",
           "default": true,
           "description": "Tự gửi kèm tên file đang mở và đoạn đang chọn làm ngữ cảnh cho AI."
+        },
+        "cuongthai.dongBoGit": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Thanh trạng thái **đồng bộ git**: tự `git fetch` lặng lẽ (lúc mở, mỗi 5 phút), báo nhánh đang sau/trước GitHub bao nhiêu commit và hỏi có **pull (fast-forward)** không. Rebase/merge chỉ khi bạn chọn; không bao giờ đẩy ép hay vứt thay đổi. / Git sync status item: quiet fetch, behind/ahead counts, asks before pulling."
         },
         "cuongthai.dieuKhienMayTinh": {
           "type": "boolean",

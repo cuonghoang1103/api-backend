@@ -27,7 +27,7 @@ import path from 'node:path';
 import { promisify } from 'node:util';
 
 import { soSanhDong, type KetQuaDiff } from './diff';
-import { capQuyenDocNgoai, fileBiCam, LoiNguc, loiNgoaiChuaCap, moTrongNguc, thuMucBiCam, timThuMucNgoai, TRAN_BYTE_FILE } from './jail';
+import { capQuyenDocNgoai, fileBiCam, LoiNguc, loiNgoaiChuaCap, loiNgoaiChuaCapGhi, moTrongNguc, thuMucBiCam, timThuMucNgoai, TRAN_BYTE_FILE } from './jail';
 import { dinhDangTheoTen, napAnh, suaAnh } from './anh';
 import { chuanHoaAnh, docHuongExif, DUOI_ANH_LA, LOAI_CONG_NHAN, nhanDangAnh, TRAN_BYTE_VAO } from './anhLa';
 import { hienKhoangTrang, timGanDung } from './ganDung';
@@ -430,6 +430,13 @@ export async function chayToolAgent(
         // hội thoại chứ không im lặng bỏ qua: model cần biết để nói lại với
         // người dùng, thay vì tưởng đã sửa xong.
         if (!ghi) return { noiDung: 'LỖI: phiên này không bật quyền sửa file.', tomTat: 'không có quyền' };
+        /* 28/10/2026: thư mục NGOÀI đã được cho "đọc + sửa" — vẫn qua ngục (gốc = thư mục đó) và LUÔN có thẻ duyệt. */
+        const ngoaiGhi = chuyenSangNgoaiGhi(goc, args);
+        if (ngoaiGhi) {
+          return ten === 'edit_file'
+            ? await toolEditFile(ngoaiGhi.goc, ngoaiGhi.args, ghi, ngoaiGhi.hien)
+            : await toolCreateFile(ngoaiGhi.goc, ngoaiGhi.args, ghi, ngoaiGhi.hien);
+        }
         return ten === 'edit_file'
           ? await toolEditFile(goc, args, ghi)
           : await toolCreateFile(goc, args, ghi);
@@ -517,6 +524,19 @@ function chuyenSangNgoai(
   const n = timThuMucNgoai(goc, p);
   if (!n) throw loiNgoaiChuaCap(p, goc);
   return { goc: n.goc, args: { ...args, path: n.tuongDoi || '.' } };
+}
+
+/**
+ * 28/10/2026 — `edit_file`/`create_file` với đường TUYỆT ĐỐI trong thư mục ngoài người dùng đã cho "đọc + sửa"
+ * (`xin_quyen_thu_muc`) ⇒ (gốc = thư mục đó, đường tương đối, đường hiển thị tuyệt đối). Tuyệt đối mà chưa cấp sửa ⇒ lỗi
+ * dạy model xin quyền. Tương đối ⇒ `null` (chạy trong dự án như cũ).
+ */
+function chuyenSangNgoaiGhi(goc: string, args: Record<string, unknown>): { goc: string; args: Record<string, unknown>; hien: string } | null {
+  const p = typeof args.path === 'string' ? args.path.trim() : '';
+  if (!p || !path.isAbsolute(p)) return null;
+  const n = timThuMucNgoai(goc, p, true);
+  if (!n || !n.tuongDoi) throw loiNgoaiChuaCapGhi(p, goc);
+  return { goc: n.goc, args: { ...args, path: n.tuongDoi }, hien: path.join(n.goc, n.tuongDoi) };
 }
 
 /** Đường hiển thị: thêm tiền tố tuyệt đối khi đang đọc thư mục ngoài. */
@@ -913,15 +933,17 @@ function loiTuChoi(viec: string): KetQuaTool {
   };
 }
 
-async function toolEditFile(goc: string, args: Record<string, unknown>, ghi: BoiCanhGhi): Promise<KetQuaTool> {
-  const tuongDoi = String(args.path ?? '');
+async function toolEditFile(goc: string, args: Record<string, unknown>, ghi: BoiCanhGhi, ngoai?: string): Promise<KetQuaTool> {
+  /* `ngoai` = đường TUYỆT ĐỐI hiển thị khi sửa trong thư mục ngoài được cấp — người duyệt phải thấy file nằm ở ĐÂU. */
+  const tuongDoi = ngoai ?? String(args.path ?? '');
+  const duongNguc = String(args.path ?? '');
   const cu = typeof args.old_text === 'string' ? args.old_text : '';
   const moi = typeof args.new_text === 'string' ? args.new_text : '';
   if (!tuongDoi) return { noiDung: 'LỖI: thiếu "path".', tomTat: 'thiếu đường dẫn' };
   if (!cu) return { noiDung: 'LỖI: "old_text" rỗng. Muốn tạo file mới thì dùng create_file.', tomTat: 'thiếu old_text' };
   if (cu === moi) return { noiDung: 'LỖI: old_text và new_text giống hệt nhau, không có gì để sửa.', tomTat: 'không đổi' };
 
-  const dich = await moTrongNguc(goc, tuongDoi, { phaiCoThat: true });
+  const dich = await moTrongNguc(goc, duongNguc, { phaiCoThat: true });
   const st = await fs.stat(dich);
   if (st.isDirectory()) return { noiDung: `LỖI: "${tuongDoi}" là thư mục.`, tomTat: 'là thư mục' };
   if (st.size > TRAN_BYTE_FILE) return { noiDung: 'LỖI: file quá lớn để sửa (trần 2MB).', tomTat: 'quá lớn' };
@@ -977,9 +999,9 @@ async function toolEditFile(goc: string, args: Record<string, unknown>, ghi: Boi
   }
 
   const diff = soSanhDong(noiDung, noiDungMoi);
-  const tuDong = daChoPhepCaFile(ghi.so.quyenDaCap, tuongDoi);
+  const tuDong = !ngoai && daChoPhepCaFile(ghi.so.quyenDaCap, tuongDoi);
   const quyet = await hoiNguoiDung(
-    { ten: 'edit_file', duongDan: tuongDoi, tuDuyet: ghi.tuDuyet === true },
+    { ten: 'edit_file', duongDan: tuongDoi, ...(ngoai ? { luonHoi: true } : { tuDuyet: ghi.tuDuyet === true }) },
     (y) => ghi.xinPhep({ ...y, diff, taoMoi: false }),
     ghi.signal,
     ghi.so,
@@ -1298,8 +1320,9 @@ async function toolGhiFileNgoai(args: Record<string, unknown>, ghi: BoiCanhGhi):
   };
 }
 
-async function toolCreateFile(goc: string, args: Record<string, unknown>, ghi: BoiCanhGhi): Promise<KetQuaTool> {
-  const tuongDoi = String(args.path ?? '');
+async function toolCreateFile(goc: string, args: Record<string, unknown>, ghi: BoiCanhGhi, ngoai?: string): Promise<KetQuaTool> {
+  const tuongDoi = ngoai ?? String(args.path ?? '');
+  const duongNguc = String(args.path ?? '');
   const noiDung = typeof args.content === 'string' ? args.content : '';
   if (!tuongDoi) return { noiDung: 'LỖI: thiếu "path".', tomTat: 'thiếu đường dẫn' };
   if (Buffer.byteLength(noiDung, 'utf8') > TRAN_BYTE_GHI) {
@@ -1314,7 +1337,8 @@ async function toolCreateFile(goc: string, args: Record<string, unknown>, ghi: B
   // agent không tạo nổi `.env.test` toàn giá trị giả — người dùng gặp thật
   // 15/09/2026. Đọc và sửa `.env` thì vẫn cấm tuyệt đối, và file đã tồn tại
   // thì bị chặn ở ngay dưới nên `.env` thật không bao giờ bị ghi đè.
-  const dich = await moTrongNguc(goc, tuongDoi, { choTaoEnv: true });
+  // Thư mục ngoài: KHÔNG mở khe `.env*` (khe đó chỉ dành cho dự án đang mở).
+  const dich = await moTrongNguc(goc, duongNguc, { choTaoEnv: !ngoai });
   const daCo = await fs.stat(dich).then(() => true).catch(() => false);
   if (daCo) {
     return {
@@ -1329,7 +1353,7 @@ async function toolCreateFile(goc: string, args: Record<string, unknown>, ghi: B
 
   const diff = soSanhDong('', noiDung);
   const quyet = await hoiNguoiDung(
-    { ten: 'create_file', duongDan: tuongDoi, tuDuyet: ghi.tuDuyet === true },
+    { ten: 'create_file', duongDan: tuongDoi, ...(ngoai ? { luonHoi: true } : { tuDuyet: ghi.tuDuyet === true }) },
     (y) => ghi.xinPhep({ ...y, diff, taoMoi: true }),
     ghi.signal,
     ghi.so,

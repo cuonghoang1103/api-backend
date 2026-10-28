@@ -103,8 +103,64 @@ export class ViecVsc {
     return { chen, anh };
   }
 
+  /**
+   * 28/10/2026 — THƯ MỤC kéo từ Finder/Explorer của hệ điều hành. Webview của VS Code chỉ thấy một `File` 0 byte mang
+   * TÊN thư mục (Chromium không lộ đường dẫn thật cho trang web) ⇒ trước đây "đính kèm" nó và hỏng. Nay: dò thư mục cùng
+   * tên ở các chỗ hay để (thư mục cha của workspace, Documents, Desktop, Downloads, nhà — sâu 2 tầng); thấy ĐÚNG MỘT thì
+   * hỏi xác nhận, không thì mở hộp chọn thư mục. Cấp qua `agent:themDuong` — đúng đường kéo-thả / `/add-dir` /
+   * `xin_quyen_thu_muc`: CHỈ ĐỌC, chặn .env/khoá/.ssh, không cấp thư mục nhà/ổ đĩa, chỉ trong phiên.
+   */
+  private async timThuMucTheoTen(ten: string): Promise<string[]> {
+    const sach = ten.replace(/[\\/]/g, '').trim();
+    if (!sach || sach === '.' || sach === '..') return [];
+    const nha = os.homedir();
+    const goc = this.goc();
+    const re = [goc ? path.dirname(goc) : '', path.join(nha, 'Documents'), path.join(nha, 'Desktop'), path.join(nha, 'Downloads'), nha].filter(Boolean);
+    const thay = new Set<string>();
+    const laThuMuc = async (p: string) => { try { return ((await vscode.workspace.fs.stat(vscode.Uri.file(p))).type & vscode.FileType.Directory) !== 0; } catch { return false; } };
+    for (const r of re) {
+      if (await laThuMuc(path.join(r, sach))) thay.add(path.join(r, sach));
+      if (r === nha) continue;
+      let con: [string, vscode.FileType][] = [];
+      try { con = await vscode.workspace.fs.readDirectory(vscode.Uri.file(r)); } catch { /* không đọc được */ }
+      for (const [c, loai] of con.slice(0, 200)) {
+        if (!(loai & vscode.FileType.Directory) || c.startsWith('.')) continue;
+        if (await laThuMuc(path.join(r, c, sach))) thay.add(path.join(r, c, sach));
+        if (thay.size > 3) break;
+      }
+    }
+    return [...thay];
+  }
+
+  private async capThuMucNgoai(ten: string | null): Promise<{ chen: string[]; anh: string[] }> {
+    const rut = (p: string) => (p.startsWith(os.homedir()) ? `~${p.slice(os.homedir().length)}` : p);
+    let chon: string | null = null;
+    const ung = ten ? await this.timThuMucTheoTen(ten) : [];
+    if (ung.length === 1) {
+      const c = await vscode.window.showInformationMessage(
+        `CuongMini: cho ĐỌC thư mục ${rut(ung[0]!)}?`,
+        { modal: true, detail: 'Chỉ đọc (xem, tìm, đọc file) — file bí mật (.env, khoá, .ssh) vẫn bị chặn, quyền chỉ sống trong phiên này. Cần sửa ở đó thì CuongMini sẽ xin thêm.' },
+        'Cho phép đọc', 'Chọn thư mục khác…',
+      );
+      if (c === 'Cho phép đọc') chon = ung[0]!;
+      else if (!c) return { chen: [], anh: [] };
+    }
+    if (!chon) {
+      const r = await vscode.window.showOpenDialog({
+        canSelectFiles: false, canSelectFolders: true, canSelectMany: false, openLabel: 'Cho phép đọc',
+        title: ten ? `Chọn thư mục "${ten}" bạn vừa thả (VS Code không cho biết đường dẫn thật của thư mục kéo từ Finder)` : 'Chọn thư mục ngoài dự án cho CuongMini ĐỌC',
+        defaultUri: vscode.Uri.file(ung[0] ? path.dirname(ung[0]) : path.join(os.homedir(), 'Documents')),
+      });
+      if (!r?.[0]) return { chen: [], anh: [] };
+      chon = r[0].fsPath;
+    }
+    return { chen: [await this.chenCho(chon)], anh: [] };
+  }
+
   async xuLy(kenh: string, d: Record<string, unknown>): Promise<unknown> {
     switch (kenh) {
+      case 'vsc:thaThuMuc': return this.capThuMucNgoai(typeof d.ten === 'string' ? d.ten.slice(0, 255) : null);
+      case 'vsc:chonThuMucNgoai': return this.capThuMucNgoai(null);
       case 'vsc:timNhac': return this.timNhac(String(d.q ?? ''));
       case 'vsc:thaUri': {
         const ds = (Array.isArray(d.uris) ? d.uris : []).map(String).map((u) => {

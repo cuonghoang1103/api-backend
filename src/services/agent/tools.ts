@@ -130,7 +130,9 @@ export type AgentCapability =
    */
   | 'trinh_duyet_hien'
   /** Máy có token Figma CHỈ ĐỌC trong kho bí mật (`/ket-noi figma`) ⇒ `figma_doc` đọc cây frame + chữ + bình luận. */
-  | 'figma';
+  | 'figma'
+  /** 28/10/2026 — `xin_quyen_thu_muc`: xin đọc (hoặc đọc + sửa) một thư mục NGOÀI dự án bằng thẻ quyền. App cũ không khai. */
+  | 'thu_muc_ngoai';
 
 export interface AgentToolDef {
   name: string;
@@ -701,6 +703,28 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
         },
       },
       required: ['id'],
+    },
+  },
+
+  // ─── 28/10/2026: xin quyền thư mục NGOÀI dự án ──────────────────
+  {
+    name: 'xin_quyen_thu_muc',
+    ring: 'client',
+    capability: 'thu_muc_ngoai',
+    description:
+      'Xin người dùng quyền ĐỌC một THƯ MỤC NẰM NGOÀI dự án đang mở (vd repo thật ở ~/Documents/SWT301-SportShop, thư mục tài liệu môn học). '
+      + 'Người dùng thấy thẻ "CuongMini muốn ĐỌC thư mục … — lý do: …" và bấm Cho phép đọc / Cho phép đọc + sửa / Không. '
+      + 'Được cho phép ⇒ dùng ĐƯỜNG TUYỆT ĐỐI với list_dir/read_file/grep/glob (và edit_file/create_file nếu được cho sửa — mỗi lần sửa vẫn hỏi). '
+      + 'GỌI TOOL NÀY khi gặp lỗi "nằm ngoài dự án và CHƯA được cấp", THAY VÌ bảo người dùng kéo thư mục vào, và KHÔNG BAO GIỜ đọc vòng qua shell. '
+      + 'Xin đúng thư mục cần (không xin thư mục nhà, ổ đĩa). Bị từ chối thì đừng thử đường khác — hỏi người dùng.',
+    parameters: {
+      type: 'object',
+      properties: {
+        path: { type: 'string', description: 'Đường TUYỆT ĐỐI tới THƯ MỤC (được dùng ~/…).' },
+        ly_do: { type: 'string', description: 'Một câu: cần thư mục này để làm gì (người dùng đọc trên thẻ).' },
+        quyen: { type: 'string', enum: ['doc', 'ghi'], description: 'doc (mặc định) — chỉ đọc; ghi — cần sửa file ở đó (người dùng vẫn quyết).' },
+      },
+      required: ['path', 'ly_do'],
     },
   },
 
@@ -1752,6 +1776,8 @@ export const ALL_CAPABILITIES: readonly AgentCapability[] = [
   'notes_write', 'browser', 'ky_nang', 'anh_sua', 'terminal', 'bo_nho', 'cong_cu', 'github', 'xuat_so_do',
   'phu_ghi', 'hoi', 'cho', 'hen', 'phien',
   'may_tinh', 'lsp', 'notebook_chay',
+  /* 28/10/2026 — xin quyền thư mục ngoài dự án (`xin_quyen_thu_muc`). */
+  'thu_muc_ngoai',
   /* Đợt 6 — nạp tool MCP theo nhu cầu (`nap_tool_mcp`). ⚠️ thiếu ở đây = vứt im lặng (xem chú thích trên). */
   'mcp_nap',
   /* 19/10/2026 — trình duyệt ngầm hiện được cửa sổ (`trinh_duyet_hien`) + Figma bằng token trên máy (`figma_doc`). */

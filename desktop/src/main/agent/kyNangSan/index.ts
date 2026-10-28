@@ -43,6 +43,8 @@ import blender3d from '../../../../../src/services/agent/kyNangSan/blender-3d.md
 import iosXcode from '../../../../../src/services/agent/kyNangSan/ios-xcode.md?raw';
 import android from '../../../../../src/services/agent/kyNangSan/android.md?raw';
 import suaLoiMay from '../../../../../src/services/agent/kyNangSan/sua-loi-may.md?raw';
+/* 28/10/2026 — luồng git của nhóm dự án CT Work (nhánh theo thẻ, commit có key, PR nối thẻ, đồng bộ an toàn). */
+import gitCtwork from '../../../../../src/services/agent/kyNangSan/git-ctwork.md?raw';
 
 /** Nội dung thô (có phần đầu YAML) của từng kỹ năng — bản đóng gói. */
 export const KY_NANG_SAN_THO: readonly string[] = [
@@ -53,4 +55,5 @@ export const KY_NANG_SAN_THO: readonly string[] = [
   phongThuMayChu,
   docker, mayAo, vpsSshDeploy, video,
   blender3d, iosXcode, android, suaLoiMay,
+  gitCtwork,
 ];

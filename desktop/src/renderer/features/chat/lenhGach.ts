@@ -20,6 +20,8 @@ import type { MucHienThi } from './useAgent';
 
 /* Đợt 5 (18/10/2026): lệnh CT Work dùng chung ba nơi — `/ctwork` menu đánh số, `/issue`, `/sprint`, `/viec`. */
 export * from './ctworkLenh';
+/* 28/10/2026: đồng bộ git chung ba nơi — `/dong-bo` + kiểm lúc mở. */
+export * from './gitDongBoLenh';
 
 export type NhomLenh = 'co-ban' | 'phien' | 'lam-viec' | 'cong-cu';
 
@@ -68,6 +70,8 @@ export const LENH_AGENT: LenhGach[] = [
   { ten: '/issue', mo: 'Mở một thẻ CT Work: tiêu đề, trạng thái, người làm, mô tả gọn, "Tự kiểm", bình luận gần nhất', khac: ['/the'], thamSo: '<LF-18>', nhom: 'cong-cu' },
   { ten: '/sprint', mo: 'Sprint CT Work đang chạy (hoặc sprint trọng tâm) — bảng thẻ theo cột trạng thái', nhom: 'cong-cu' },
   { ten: '/viec', mo: 'Việc CT Work của tôi — hạn gần lên đầu', khac: ['/mywork'], nhom: 'cong-cu' },
+  /* 28/10/2026 — đồng bộ git ↔ GitHub ↔ repo dự án CT Work (`gitDongBoLenh.ts`). */
+  { ten: '/dong-bo', mo: 'Đồng bộ git với GitHub: nhánh đang sau/trước bao nhiêu commit, có khớp repo dự án CT Work không — hỏi pull (fast-forward) hoặc rebase/merge an toàn, không bao giờ ép', khac: ['/sync', '/dongbo', '/git-sync'], thamSo: '[on|off]', nhom: 'lam-viec' },
   { ten: '/hen', mo: 'Việc đang CHỜ và các HẸN quay lại của agent — xem / huỷ / chạy bù hẹn đã lỡ lúc tắt', khac: ['/schedule', '/cho'], thamSo: '[huy [id] | chay-bu | bo-lo]', nhom: 'lam-viec' },
   /* Đợt 4 (18/10/2026) */
   { ten: '/may', mo: 'Bật/tắt cho agent ĐIỀU KHIỂN MÁY TÍNH (chụp màn hình, chuột, phím) — mọi thao tác vẫn hỏi duyệt', khac: ['/computer', '/maytinh'], thamSo: '[on|off]', nhom: 'cong-cu' },

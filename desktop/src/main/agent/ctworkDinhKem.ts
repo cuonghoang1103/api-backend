@@ -82,7 +82,7 @@ export async function timTepDinhKem(p: string, o: { goc: string | null; thuMucTa
     }
     if (!dich) {
       throw new LoiNguc(`"${p}" nằm ngoài các thư mục CuongMini được đọc (dự án đang mở, thư mục người dùng đã kéo vào, thư mục tải, ảnh dán trong chat). `
-        + 'Nhờ người dùng KÉO file (hoặc thư mục chứa nó) vào khung chat rồi gọi lại — đừng bảo họ tự tải lên web.');
+        + 'Gọi `xin_quyen_thu_muc` cho THƯ MỤC chứa nó (người dùng bấm cho phép trên thẻ) rồi gọi lại — đừng bảo họ tự tải lên web.');
     }
   }
   const st = await fs.stat(dich);

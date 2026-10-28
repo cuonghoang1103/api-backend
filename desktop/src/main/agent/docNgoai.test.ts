@@ -83,10 +83,10 @@ describe('docOffice — file do LibreOffice thật xuất ra', () => {
 });
 
 describe('thư mục ngoài — cấp quyền CHỈ ĐỌC', () => {
-  it('chưa cấp ⇒ đường tuyệt đối bị từ chối, kèm hướng dẫn kéo thư mục vào', async () => {
+  it('chưa cấp ⇒ đường tuyệt đối bị từ chối, kèm hướng dẫn gọi xin_quyen_thu_muc (28/10: không bắt kéo tay)', async () => {
     const kq = await chayToolAgent(goc, 'list_dir', { path: ngoai });
     expect(kq.noiDung).toMatch(/CHƯA được cấp quyền đọc/);
-    expect(kq.noiDung).toMatch(/KÉO/);
+    expect(kq.noiDung).toMatch(/xin_quyen_thu_muc/);
   });
 
   it('cấp rồi ⇒ list_dir / read_file (pptx, md) / grep / glob đều chạy, đường in ra là TUYỆT ĐỐI', async () => {

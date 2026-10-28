@@ -68,6 +68,7 @@ import { canCapLai, capLaiCtwork, docBiMat, ketNoiCtwork, napDemBiMat, ngatCtwor
 import * as ctw from '../agent/ctworkHe';
 import { nguCanhChoModel } from '../agent/ctworkHe';
 import * as ctwDd from '../agent/ctworkDanDuong';
+import * as ctwGit from '../agent/ctworkGit';
 import { datNgonNgu as datNgonNguCtw } from '../agent/ctworkVe';
 import { cauDanhThuc, datBoChayHen, huyCho, huyHen } from '../agent/choHen';
 import { doiTen as doiTenPhienMang, dsPhienSong, toiLa } from '../agent/phienMang';
@@ -1309,6 +1310,16 @@ export function registerAgentHandlers(): void {
       case 'hoiQna': return ctwDd.hoiQna(goc, v.noiDung ?? '');
       case 'mauFpt': { const r = await ctwDd.mauFpt(goc); return { ok: r.ok, ...(r.md ? { md: r.md } : {}), ...(r.loi ? { loi: r.loi } : {}), ...(r.ds ? { mau: r.ds } : {}) }; }
       case 'huongDanNhom': { const n = await ctwDd.huongDanNhom(goc); return n ? { ok: true, md: n.noiDung, nguon: n.nguon, laAgents: n.laAgents } : { ok: true }; }
+      /* ── 28/10/2026: đồng bộ git ↔ GitHub ↔ repo dự án (`agent/ctworkGit.ts`). `keoGit` GHI vào repo — giao diện chỉ
+         gọi SAU thẻ hỏi + đồng ý; lõi kiểm lại nhánh, chỉ fast-forward trừ khi người dùng chọn rebase/merge. ── */
+      case 'dongBoGit': return ctwGit.dongBoGit(goc, { ngonNgu: v.ngonNgu === 'en' ? 'en' : 'vi', tuDong: v.tuDong === true, timDuAn: v.timDuAn === true });
+      case 'keoGit':
+        if (!v.tenNhanh) return { ok: false, loi: 'Thiếu nhánh.' };
+        return ctwGit.keoGit(goc, { cach: v.cach ?? 'ff', mucTieu: v.mucTieu ?? 'upstream', nhanh: v.tenNhanh, ngonNgu: v.ngonNgu === 'en' ? 'en' : 'vi' });
+      case 'xemCommitGit': return ctwGit.xemCommitGit(goc, v.mucTieu ?? 'upstream', v.ngonNgu === 'en' ? 'en' : 'vi');
+      case 'dongBoBat':
+        if (typeof v.bat === 'boolean') setSetting('gitDongBoTuDong', v.bat);
+        return { ok: true, bat: ctwGit.tuDongBat() };
       case 'tuGhi':
         /* ⛔ Chỉ main ghi (`KHOA_CHI_MAIN`): bật là agent GHI lên CT Work không hỏi. */
         if (typeof v.bat === 'boolean') setSetting('ctworkTuGhi', v.bat);

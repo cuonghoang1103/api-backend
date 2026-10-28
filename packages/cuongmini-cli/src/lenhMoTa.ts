@@ -57,6 +57,7 @@ export const LENH_EN: Record<string, { mo: string; thamSo?: string }> = {
   '/rename': { mo: 'Name this session (other sessions see this name)', thamSo: '<name>' },
   '/worktree': { mo: 'Work in a separate git worktree (branch agent/…) — leaves your tree alone', thamSo: '[name | list | remove <path>]' },
   '/ctwork': { mo: 'CT Work: menu sprint · my work · open/start an issue · log work · evidence comment · weekly report · meetings · pick project (one-tap connect with your signed-in account)', thamSo: '[project | sprint | work | issue <KEY> | start <KEY> | log <KEY> <time> | comment | report | meetings | auto-write on|off | connect | off]' },
+  '/dong-bo': { mo: 'Sync git with GitHub: how many commits your branch is behind/ahead, whether it matches the CT Work project repo — asks to pull (fast-forward) or rebase/merge safely, never forces', thamSo: '[on|off]' },
   '/issue': { mo: 'Open a CT Work issue: title, status, assignee, short description, self-check, latest comment', thamSo: '<LF-18>' },
   '/sprint': { mo: 'The running (or focus) CT Work sprint — issues grouped by status column' },
   '/viec': { mo: 'My CT Work issues — nearest due date first' },

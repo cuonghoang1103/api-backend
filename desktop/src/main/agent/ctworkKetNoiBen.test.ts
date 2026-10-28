@@ -217,7 +217,7 @@ describe('attach_file { path } — CuongMini tự đọc file', () => {
     expect((await D.timTepDinhKem(path.join(goc, 'docs', 'erd.png'), { goc })).ten).toBe('erd.png');
     const [anh] = await D.luuAnhChat(['data:image/png;base64,iVBORw0KGgo='], path.join(THU_MUC, 'dinh-kem'));
     expect((await D.timTepDinhKem(anh!, { goc: null })).loai).toBe('image/png');
-    await expect(D.timTepDinhKem('/etc/hosts', { goc })).rejects.toThrow(/KÉO file/);
+    await expect(D.timTepDinhKem('/etc/hosts', { goc })).rejects.toThrow(/xin_quyen_thu_muc/);
     await expect(D.timTepDinhKem('.env', { goc })).rejects.toThrow(/khoá hoặc mật khẩu/);
     await expect(D.timTepDinhKem('../x.png', { goc })).rejects.toThrow(/ngoài thư mục dự án/);
   });

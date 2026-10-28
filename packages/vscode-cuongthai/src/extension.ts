@@ -20,6 +20,7 @@ import type { KetNoi } from './ketNoi';
 import { API_ORIGIN } from '../../cuongmini-core/src/dangNhap';
 import { batDauGhiAm, nhanDang, type PhienGhiAm } from '../../cuongmini-core/src/ghiAm';
 import { ViecVsc } from './viecVsc';
+import { ThanhDongBo } from './dongBoVsc';
 
 const KHOA_CUOC = 'cuongthai.cuocId';
 
@@ -439,6 +440,8 @@ class SuaLoiBangAI implements vscode.CodeActionProvider {
 
 export function activate(ctx: vscode.ExtensionContext): void {
   const khung = new KhungChat(ctx);
+  /* 28/10/2026: thanh trạng thái đồng bộ git (lõi thuần `gitDongBo.ts`, chung với CLI/app) — hỏi pull khi nhánh sau GitHub. */
+  ctx.subscriptions.push(new ThanhDongBo((cauHoi) => khung.dienCauHoi(cauHoi)));
   ctx.subscriptions.push(
     vscode.window.registerWebviewViewProvider('cuongthai.chat', khung, { webviewOptions: { retainContextWhenHidden: true } }),
     vscode.commands.registerCommand('cuongthai.moChat', () => vscode.commands.executeCommand('cuongthai.chat.focus')),

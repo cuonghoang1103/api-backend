@@ -72,7 +72,7 @@ export type MucHienThi =
   /** Thẻ duyệt LỆNH. Khác thẻ sửa file: hiện chuỗi lệnh + lý do nguy hiểm. */
   | { kieu: 'xinPhepLenh'; id: string; lenh: string; phanLoai: AgentPhanLoaiLenh; xong?: 'dongY' | 'tuChoi'; tienTo?: string; phuId?: string }
   | { kieu: 'xinPhepMcp'; id: string; server: string; tool: string; args: string; xong?: 'dongY' | 'tuChoi'; xemTruoc?: { the: string | null; viec: string; noiDung: string } }
-  | { kieu: 'xinPhepGit'; id: string; viec: 'commit' | 'pr' | 'day' | 'cai' | 'gop'; chiTiet: string; xong?: 'dongY' | 'tuChoi'; phuId?: string }
+  | { kieu: 'xinPhepGit'; id: string; viec: 'commit' | 'pr' | 'day' | 'cai' | 'gop' | 'thuMuc' | 'thuMucDoc'; chiTiet: string; xong?: 'dongY' | 'tuChoi'; phuId?: string }
   /** Đợt 3: agent hỏi bằng lựa chọn. `xong` = tóm tắt câu trả lời (đã trả lời). */
   | { kieu: 'hoi'; id: string; cauHoi: AgentCauHoi[]; xong?: string }
   /** Đợt 3: khối agent phụ (đọc / ghi) — cập nhật tại chỗ theo `phuId`. */

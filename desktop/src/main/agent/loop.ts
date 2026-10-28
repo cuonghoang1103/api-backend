@@ -44,6 +44,7 @@ import {
 } from './phien';
 import type { PhanLoaiLenh } from './lenh';
 import { chayToolAgent, soFileDaSua, demFileSeLui} from './tools';
+import { xinQuyenThuMuc } from './thuMucNgoai';
 import { taoSoCuoc, type SoCuoc } from './so';
 import { napQuyenLau, themQuyenLau, xoaQuyenLau } from './quyenLau';
 import { khoaTienTo, laLenhDon } from './tienTo';
@@ -182,7 +183,7 @@ export type SuKienAgent =
   | { loai: 'traChen'; ds: string[] }
   /** Xin phép COMMIT hoặc MỞ PR. `chiTiet` là thứ người dùng phải ĐỌC trước khi bấm. */
   /** `gop` (đợt 3): gộp thay đổi của agent phụ ghi vào dự án. */
-  | { loai: 'xinPhepGit'; id: string; viec: 'commit' | 'pr' | 'day' | 'cai' | 'gop'; chiTiet: string; phuId?: string }
+  | { loai: 'xinPhepGit'; id: string; viec: 'commit' | 'pr' | 'day' | 'cai' | 'gop' | 'thuMuc' | 'thuMucDoc'; chiTiet: string; phuId?: string }
   /** Xin phép GHI vào sổ ghi chú. `chiTiet` là nội dung sắp ghi — người dùng phải ĐỌC. */
   | { loai: 'xinPhepNote'; id: string; viec: 'tao' | 'ghi'; chiTiet: string }
   | { loai: 'lenhRa'; mau: string }
@@ -497,7 +498,7 @@ function baoHookThongBao(goc: string | null, e: SuKienAgent): void {
   const chu = e.loai === 'xinPhep' ? `Cần duyệt sửa ${e.duongDan}`
     : e.loai === 'xinPhepLenh' ? `Cần duyệt: ${e.lenh.slice(0, 200)}`
       : e.loai === 'xinPhepMcp' ? `Cần duyệt MCP ${e.server}:${e.tool}`
-        : e.loai === 'xinPhepGit' ? `Cần duyệt git (${e.viec})`
+        : e.loai === 'xinPhepGit' ? (e.viec === 'thuMuc' || e.viec === 'thuMucDoc' ? `Xin quyền thư mục: ${e.chiTiet.split('\n')[0] ?? ''}` : `Cần duyệt git (${e.viec})`)
           : e.loai === 'xinPhepNote' ? 'Cần duyệt ghi chú'
             : e.loai === 'hoiLuaChon' ? `Agent hỏi: ${e.cauHoi.map((q) => q.cauHoi).join(' / ').slice(0, 200)}` : '';
   if (!chu) return;
@@ -1311,6 +1312,9 @@ export async function chayLuot(
     if (boiCanh.choSua && boiCanh.choChayLenh) capabilities.push('cong_cu', 'github');
     /* ĐỢT 3: agent phụ GHI (khu riêng + thẻ duyệt) — cần quyền sửa. */
     if (boiCanh.choSua) capabilities.push('phu_ghi');
+    /* 28/10/2026: `xin_quyen_thu_muc` — xin đọc thư mục NGOÀI dự án bằng thẻ quyền (thay cho bắt người dùng kéo tay).
+       Khả năng RIÊNG ⇒ máy chủ không mời bản app cũ gọi tool nó không có. */
+    capabilities.push('thu_muc_ngoai');
   }
   /* ĐỢT 3 (18/10/2026) — khả năng RIÊNG để bản cũ không bao giờ được mời:
      hỏi bằng lựa chọn, chờ điều kiện / hẹn quay lại, nhắn giữa phiên. Không
@@ -1712,6 +1716,12 @@ export async function chayLuot(
           kq = await chayToolAgent('', goi.name, goi.args, undefined, boiCanhLenh);
         } else if (!boiCanh.goc) {
           kq = { noiDung: 'LỖI: người dùng chưa chọn thư mục dự án nào.', tomTat: 'chưa mở dự án' };
+        } else if (goi.name === 'xin_quyen_thu_muc') {
+          /* 28/10/2026: xin đọc (hoặc đọc + sửa) một thư mục NGOÀI dự án — thẻ quyền LUÔN hỏi, cấp qua đúng đường kéo-thả. */
+          kq = await xinQuyenThuMuc(boiCanh.goc, goi.args ?? {}, {
+            so: c.so, signal: dieuKhien.signal, choGhi: boiCanh.choSua === true,
+            phat: (y) => phat({ loai: 'xinPhepGit', id: y.id, viec: y.viec, chiTiet: y.chiTiet }),
+          });
         } else if (goi.name === 'giao_viec_phu') {
           kq = await chayViecPhu(c, goi.args, boiCanh, phien.sessionToken, dieuKhien.signal, phat, goi.id);
         } else if (goi.name === 'giao_viec_ghi') {

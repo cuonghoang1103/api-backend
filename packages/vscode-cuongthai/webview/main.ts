@@ -70,7 +70,7 @@ const NHAN_TOOL: Record<string, string> = {
   read_file: 'Đọc', list_dir: 'Thư mục', grep: 'Tìm', glob: 'Tìm file', edit_file: 'Sửa', create_file: 'Tạo',
   sua_nhieu_cho: 'Sửa', xoa_file: 'Xoá', doi_ten_file: 'Đổi tên', run_command: 'Lệnh', chay_lenh_nen: 'Lệnh nền',
   git_status: 'Git', git_diff: 'Diff', git_commit: 'Commit', git_day: 'Đẩy GitHub', tao_pr: 'Pull Request',
-  github_ket_noi: 'GitHub', github_dang_du_an: 'Lên GitHub', cai_cong_cu: 'Cài công cụ', web_mo: 'Mở web',
+  github_ket_noi: 'GitHub', github_dang_du_an: 'Lên GitHub', cai_cong_cu: 'Cài công cụ', xin_quyen_thu_muc: 'Xin quyền thư mục', web_mo: 'Mở web',
   web_doc: 'Đọc web', tim_web: 'Tìm web', doc_web: 'Đọc web', giao_viec_phu: 'Agent phụ', dung_ky_nang: 'Skill',
   cap_nhat_ke_hoach: 'Kế hoạch', ghi_nho: 'Ghi nhớ',
   // Đủ MỌI tool (18/10/2026 — trước đây lộ tên thô `web_lien_ket`, `web_anh`…)
@@ -168,7 +168,7 @@ goc.innerHTML = `
     <div id="anh" class="anh-dai"></div>
     <textarea id="o" rows="1" placeholder="Hỏi hoặc giao việc cho CuongMini…"></textarea>
     <div class="thanh-duoi">
-      <button id="nutKep" class="icon nho" title="Đính kèm file, thư mục, ảnh">${ICON.kep}</button>
+      <button id="nutKep" class="icon nho" title="Đính kèm file, thư mục, ảnh — hoặc kéo vào khung chat, GIỮ Shift khi thả">${ICON.kep}</button>
       <button id="nutGach" class="icon nho" title="Lệnh  (gõ /)">${ICON.gach}</button>
       <button id="nutA" class="icon nho" title="Nhắc file / thư mục / hàm  (gõ @)">${ICON.a}</button>
       <button id="nutModel" class="chip-chon" title="Model và mức nỗ lực"></button>
@@ -180,7 +180,7 @@ goc.innerHTML = `
     </div>
   </div>
   <div id="dongCtw" class="dong-ctw" hidden title="CT Work"></div>
-  <div class="meo">Enter gửi · Shift+Enter xuống dòng · <b>/</b> lệnh · <b>@</b> nhắc file · Esc dừng</div>
+  <div class="meo">Enter gửi · Shift+Enter xuống dòng · <b>/</b> lệnh · <b>@</b> nhắc file · Esc dừng · Kéo file/thư mục từ Finder hay Explorer: giữ <b>Shift</b> khi thả</div>
 </footer>
 <div id="keoTha" class="keo-tha" hidden><div>📎 Thả vào để AI đọc<br><span class="phu">Kéo từ Explorer: giữ <b>Shift</b> khi thả</span></div></div>`;
 
@@ -665,6 +665,15 @@ function xuLy(e: SuKien): void {
     }
     case 'xinPhepGit': {
       ketThucTraLoi();
+      /* 28/10/2026: `xin_quyen_thu_muc` — xin truy cập thư mục NGOÀI dự án. Mặc định CHỈ ĐỌC; "đọc + sửa" là nút riêng. */
+      if (e.viec === 'thuMuc' || e.viec === 'thuMucDoc') {
+        theDuyet(e.id, `${NHAN_PHU(e.phuId)}📁 Truy cập thư mục ngoài dự án`, `<pre class="chitiet">${esc(e.chiTiet)}</pre>`, [
+          ['choPhep', 'Cho phép đọc', 'chinh'],
+          ...(e.viec === 'thuMuc' ? [['choPhepCaFile', 'Cho phép đọc + sửa (mỗi lần sửa vẫn hỏi)'] as [string, string]] : []),
+          ['tuChoi', 'Không', 'phu2'],
+        ], 'cankiem');
+        break;
+      }
       const tieu = NHAN_PHU(e.phuId) + ({ commit: '🌿 Commit', pr: '🔀 Đẩy nhánh + mở Pull Request', day: '⬆️ Đẩy lên GitHub', cai: '🧰 Cài công cụ', gop: '🔀 Gộp thay đổi của agent phụ vào dự án' }[e.viec as string] ?? 'Git');
       const nhan = { commit: 'Commit', pr: 'Đẩy và mở PR', day: 'Đẩy lên GitHub', cai: 'Cài', gop: 'Gộp vào dự án' }[e.viec as string] ?? 'Đồng ý';
       theDuyet(e.id, tieu, `<pre class="chitiet">${esc(e.chiTiet)}</pre>`, [['choPhep', nhan, 'chinh'], ['tuChoi', 'Từ chối', 'phu2']],
@@ -1443,6 +1452,10 @@ function moBangLenh(): void {
 function moMenuThem(): void {
   moMenu([
     ...ghimDs.map((g) => ({ nhom: `Đã ghim (${ghimDs.length})`, ten: `📌 ${g.chu.replace(/\s+/g, ' ').slice(0, 60)}`, lam: () => { g.el.scrollIntoView({ behavior: 'smooth', block: 'center' }); } })),
+    /* 28/10/2026: kéo thả trong VS Code cần giữ Shift (VS Code phủ lớp chặn lên webview khi đang kéo) — nói ngay ở đây. */
+    { nhom: 'Tệp', ten: 'Đính kèm file / thư mục / ảnh…', lam: () => void dinhKemFile() },
+    { nhom: 'Tệp', ten: 'Cho CuongMini đọc một thư mục ngoài dự án…', lam: () => void chonThuMucNgoai() },
+    { nhom: 'Tệp', ten: 'Kéo từ Finder/Explorer: giữ Shift khi thả', lam: () => thongBao('VS Code phủ một lớp lên khung chat khi bạn đang kéo, nên phải GIỮ Shift lúc thả thì file mới vào được đây (giới hạn của VS Code, extension không tắt được). Thư mục kéo vào được cấp quyền CHỈ ĐỌC.') },
     { nhom: 'Việc', ten: 'Lịch sử việc', lam: () => void moLichSu() },
     { nhom: 'Việc', ten: 'Xuất hội thoại (Markdown)', lam: () => void chayLenh('/export', boiCanh()) },
     { nhom: 'Việc', ten: 'Ngữ cảnh đã dùng', lam: () => void chayLenh('/context', boiCanh()) },
@@ -1643,6 +1656,16 @@ function themAnhTuFile(f: File): void {
   r.readAsDataURL(f);
 }
 
+/** 28/10/2026: chọn một thư mục NGOÀI dự án ⇒ cấp quyền CHỈ ĐỌC (đúng đường kéo-thả) ⇒ chèn `@đường/`. */
+async function chonThuMucNgoai(ten: string | null = null): Promise<void> {
+  try {
+    const kq = await goi<{ chen: string[]; anh: string[] }>(ten ? 'vsc:thaThuMuc' : 'vsc:chonThuMucNgoai', ten ? { ten } : {});
+    if (kq.chen.length) { chenVaoO(`${kq.chen.join(' ')} `); thongBao(`Đã cho CuongMini ĐỌC ${kq.chen.join(', ')} (chỉ đọc, chỉ phiên này).`); }
+  } catch (e) {
+    thongBao((e as Error).message, true);
+  }
+}
+
 async function dinhKemFile(): Promise<void> {
   try {
     const kq = await goi<{ chen: string[]; anh: string[] }>('vsc:dinhKem');
@@ -1811,7 +1834,16 @@ async function thaVao(dt: DataTransfer | null): Promise<void> {
   }
   // Từ Finder/Explorer của hệ điều hành: nội dung file.
   const files = [...dt.files];
-  for (const f of files.slice(0, 10)) {
+  /* 28/10/2026: THƯ MỤC từ Finder đến dưới dạng File 0 byte, không đường dẫn ⇒ đừng "đính kèm" (hỏng); xin cấp quyền
+     CHỈ ĐỌC qua extension (dò thư mục cùng tên hoặc hộp chọn thư mục). */
+  const laThuMuc = (i: number): boolean => {
+    const it = dt.items?.[i] as (DataTransferItem & { webkitGetAsEntry?: () => { isDirectory: boolean } | null }) | undefined;
+    const en = it?.webkitGetAsEntry?.();
+    return en ? en.isDirectory : (files[i]!.size === 0 && !files[i]!.type && !/\.[a-z0-9]{1,8}$/i.test(files[i]!.name));
+  };
+  const thuMuc = files.map((f, i) => (laThuMuc(i) ? f.name : null));
+  for (const [i, f] of files.slice(0, 10).entries()) {
+    if (thuMuc[i]) { await chonThuMucNgoai(thuMuc[i]!); continue; }
     if (f.type.startsWith('image/')) { themAnhTuFile(f); continue; }
     if (f.size > 20 * 1024 * 1024) { thongBao(`${f.name} quá lớn (> 20MB).`, true); continue; }
     const b64 = await new Promise<string>((ok) => { const r = new FileReader(); r.onload = () => ok(String(r.result).split(',')[1] ?? ''); r.readAsDataURL(f); });

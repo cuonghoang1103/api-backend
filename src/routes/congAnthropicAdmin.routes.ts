@@ -385,6 +385,53 @@ router.get('/chan', boc(async (req, res) => {
   res.json({ success: true, data: await dsChan(laPhamViChan(p) ? p : undefined) });
 }));
 
+/**
+ * Tìm/duyệt NGƯỜI DÙNG để chặn (28/10/2026 — trước đó ô chặn chỉ nhận đúng nguyên email/username, gõ một phần
+ * hay gõ tên thật thì không ra ai). `q` khớp một phần (không phân biệt hoa thường) username/email/họ tên/tên hiển thị
+ * hoặc đúng id; bỏ trống = mọi người. Trả kèm cờ đã bị chặn ở phạm vi đang xem. Người đăng nhập gần nhất lên đầu.
+ */
+router.get('/chan/nguoi-dung', boc(async (req, res) => {
+  const q = String(req.query.q ?? '').trim().slice(0, 100);
+  const p = laPhamViChan(req.query.phamVi) ? req.query.phamVi : 'AI_CODE';
+  const trang = Math.max(1, Math.min(10_000, Number(req.query.trang) || 1));
+  const co = Math.max(1, Math.min(100, Number(req.query.co) || 30));
+  const id = /^\d+$/.test(q) ? Number(q) : null;
+  const where = {
+    kind: { not: 'AGENT' },
+    ...(q ? {
+      OR: [
+        { username: { contains: q, mode: 'insensitive' as const } },
+        { email: { contains: q, mode: 'insensitive' as const } },
+        { fullName: { contains: q, mode: 'insensitive' as const } },
+        { displayName: { contains: q, mode: 'insensitive' as const } },
+        ...(id ? [{ id }] : []),
+      ],
+    } : {}),
+  };
+  const [tong, rows] = await Promise.all([
+    prisma.user.count({ where }),
+    prisma.user.findMany({
+      where,
+      orderBy: [{ lastLoginAt: { sort: 'desc', nulls: 'last' } }, { id: 'desc' }],
+      skip: (trang - 1) * co, take: co,
+      select: { id: true, username: true, email: true, fullName: true, displayName: true, avatarUrl: true, isPro: true, lastLoginAt: true, createdAt: true },
+    }),
+  ]);
+  const chan = rows.length
+    ? new Set((await prisma.cuongMiniChan.findMany({ where: { phamVi: p, userId: { in: rows.map((r) => r.id) } }, select: { userId: true } })).map((r) => r.userId))
+    : new Set<number>();
+  res.json({
+    success: true,
+    data: {
+      tong, trang, co,
+      ds: rows.map((r) => ({
+        id: r.id, username: r.username, email: r.email, ten: r.fullName || r.displayName || null, avatarUrl: r.avatarUrl,
+        isPro: r.isPro, lastLoginAt: r.lastLoginAt?.toISOString() ?? null, createdAt: r.createdAt.toISOString(), daChan: chan.has(r.id),
+      })),
+    },
+  });
+}));
+
 /** Body: { userId | q (email/username), phamVi, lyDo? } */
 router.post('/chan', boc(async (req, res) => {
   const b = (req.body ?? {}) as { userId?: unknown; q?: unknown; phamVi?: unknown; lyDo?: unknown };

@@ -1,0 +1,116 @@
+$ uptime
+ 03:21:54 up 17:21,  0 users,  load average: 0.40, 0.55, 1.29
+$ dmesg | tail -3
+dmesg: read kernel buffer failed: Operation not permitted
+$ vmstat 1 5
+procs -----------memory---------- ---swap-- -----io---- -system-- -------cpu-------
+ r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st gu
+ 3  1      0 1406696 1096540 2161252   89  118  6986  5353 4558    6  2  1 97  0  0  0
+ 1  1      0 1387720 1096540 2181752    0    0     0 20475 4988 5469 10  2 78 10  0  0
+ 1  1      0 1431460 1096540 2138748    0    0     0 58364 3811 3680 10  2 78 10  0  0
+ 3  1      0 1431460 1096540 2117248    0    0     0     0 3969 3900 10  1 79 10  0  0
+ 3  1      0 1470892 1096540 2098816    0    0     0  3071 3926 3838 10  1 78 10  0  0
+$ mpstat -P ALL 1 1 | head -16
+Linux 7.0.12-linuxkit (oslab) 	10/29/26 	_aarch64_	(10 CPU)
+
+03:21:58     CPU    %usr   %nice    %sys %iowait    %irq   %soft  %steal  %guest  %gnice   %idle
+03:21:59     all   10.29    0.00    0.30    9.79    0.00    1.29    0.00    0.00    0.00   78.34
+03:21:59       0    1.82    0.00    0.91    0.00    0.00   10.00    0.00    0.00    0.00   87.27
+03:21:59       1   99.01    0.00    0.99    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+03:21:59       2    0.00    0.00    0.00    0.00    0.00    1.98    0.00    0.00    0.00   98.02
+03:21:59       3    1.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00   99.00
+03:21:59       4    1.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00   99.00
+03:21:59       5    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00  100.00
+03:21:59       6    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00  100.00
+03:21:59       7    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00  100.00
+03:21:59       8    0.00    0.00    1.00   99.00    0.00    0.00    0.00    0.00    0.00    0.00
+03:21:59       9    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00  100.00
+
+Average:     CPU    %usr   %nice    %sys %iowait    %irq   %soft  %steal  %guest  %gnice   %idle
+$ pidstat 1 1 | sed -n '3,$p'
+03:21:59      UID       PID    %usr %system  %guest   %wait    %CPU   CPU  Command
+03:22:00        0        11  101.00    0.00    0.00    0.00  101.00     1  node
+03:22:00        0        14    3.00    0.00    0.00    0.00    3.00     0  node
+03:22:00        0        17    1.00    0.00    0.00    0.00    1.00     0  node
+03:22:00        0        62    0.00    1.00    0.00    0.00    1.00     9  dd
+
+Average:      UID       PID    %usr %system  %guest   %wait    %CPU   CPU  Command
+Average:        0        11  101.00    0.00    0.00    0.00  101.00     -  node
+Average:        0        14    3.00    0.00    0.00    0.00    3.00     -  node
+Average:        0        17    1.00    0.00    0.00    0.00    1.00     -  node
+Average:        0        62    0.00    1.00    0.00    0.00    1.00     -  dd
+$ iostat -dx vda 1 2 | awk '/^Device|^vda/ {printf "%-7s %8s %9s %8s %7s %6s\n", $1, $8, $9, $12, $(NF-1), $NF}' | tail -2
+Device       w/s     wkB/s  w_await  aqu-sz  %util
+vda         0.00      0.00     0.00    0.00   0.00
+$ free -m
+               total        used        free      shared  buff/cache   available
+Mem:            7934        3735        1373         156        3180        4198
+Swap:           1023           0        1023
+$ sar -n DEV 1 1 | grep -E 'IFACE|eth0|lo' | head -3
+03:22:01        IFACE   rxpck/s   txpck/s    rxkB/s    txkB/s   rxcmp/s   txcmp/s  rxmcst/s   %ifutil
+03:22:02           lo    390.10    390.10     71.74     71.74      0.00      0.00      0.00      0.00
+03:22:02         eth0      0.00      0.00      0.00      0.00      0.00      0.00      0.00      0.00
+$ sar -n TCP,ETCP 1 1 | head -7
+Linux 7.0.12-linuxkit (oslab) 	10/29/26 	_aarch64_	(10 CPU)
+
+03:22:02     active/s passive/s    iseg/s    oseg/s
+03:22:03         2.00      2.00    379.00    379.00
+
+03:22:02     atmptf/s  estres/s retrseg/s isegerr/s   orsts/s
+03:22:03         0.00      0.00      0.00      0.00      0.00
+$ top -bn1 -w 110 | head -14
+top - 03:22:03 up 17:22,  0 users,  load average: 0.64, 0.60, 1.30
+Tasks:  13 total,   3 running,   8 sleeping,   0 stopped,   2 zombie
+%Cpu(s):  9.5 us,  1.0 sy,  0.0 ni, 78.1 id,  9.5 wa,  0.0 hi,  1.9 si,  0.0 st 
+MiB Mem :   7934.1 total,   1352.0 free,   3752.3 used,   3184.7 buff/cache     
+MiB Swap:   1024.0 total,   1024.0 free,      0.0 used.   4181.8 avail Mem 
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+     11 root      20   0 1053680  83400  45624 R  90.9   1.0   0:15.35 node
+      1 root      20   0   16436   6520   5328 S   0.0   0.1   0:00.01 timeout
+      7 root      20   0    9568   3472   3224 S   0.0   0.0   0:00.00 bash
+      8 root      20   0    8576   4160   3280 S   0.0   0.1   0:00.00 phien
+     14 root      20   0  752456  68892  44032 R   0.0   0.8   0:00.50 node
+     17 root      20   0  749044  66844  44036 S   0.0   0.8   0:00.28 node
+     25 root      20   0  632788 623624   5860 S   0.0   7.7   0:00.09 python3
+$ cat /sys/fs/cgroup/cpu.max; grep -E 'usage|throttled' /sys/fs/cgroup/cpu.stat
+200000 100000
+usage_usec 16473022
+nr_throttled 1
+throttled_usec 29084
+$ for r in cpu memory io; do echo "$r: $(head -1 /sys/fs/cgroup/$r.pressure)"; done
+cpu: some avg10=0.00 avg60=0.00 avg300=0.00 total=19032
+memory: some avg10=0.00 avg60=0.00 avg300=0.00 total=0
+io: some avg10=33.21 avg60=9.24 avg300=2.09 total=6958136
+$ pidstat -t -p $NODE 1 1 | sed -n '3,$p' | head -10
+03:22:03      UID      TGID       TID    %usr %system  %guest   %wait    %CPU   CPU  Command
+03:22:04        0        11         -  100.00    0.00    0.00    0.00  100.00     1  node
+03:22:04        0         -        11  100.00    0.00    0.00    0.00  100.00     1  |__node
+03:22:04        0         -        20    0.00    0.00    0.00    0.00    0.00     9  |__DelayedTaskSche
+03:22:04        0         -        21    0.00    0.00    0.00    0.00    0.00     7  |__node
+03:22:04        0         -        22    0.00    0.00    0.00    0.00    0.00     5  |__node
+03:22:04        0         -        23    0.00    0.00    0.00    0.00    0.00     9  |__node
+03:22:04        0         -        24    0.00    0.00    0.00    0.00    0.00     8  |__node
+03:22:04        0         -        45    0.00    0.00    0.00    0.00    0.00     1  |__node
+03:22:04        0         -        48    0.00    0.00    0.00    0.00    0.00     8  |__libuv-worker
+$ python3 use.py 3
+USE over 3 s — cgroup 0::/
+resource              utilization                    saturation                                  errors
+CPU (container)       1.05 of 2 CPUs = 52%           throttled 0/30 periods; PSI cpu some 0.0%   -
+CPU (one thread)      node pid 11: 100% of one core  one thread can use at most 1 of the 2 CPUs  -
+memory                739 MiB of 1024 MiB = 72%      PSI memory some 0.0%                        oom_kill 0, max hits 0
+disk vda (whole VM)   busy 1% of the time            avg queue 0.0; PSI io some 38.1%            -
+network (this netns)  0.1 MB/s                       listen overflows 0                          retrans 0, in errors 0
+fds (max process)     pid 11: 68 open of 1048576     -                                           EMFILE: only in app logs
+pids                  34 of max                      -                                           -
+$ python3 red.py /tmp/access.log
+endpoint        rate   errors      p50      p95      p99      max   (duration measured INSIDE the server)
+/health       19.6/s     0.0%    0.0ms    0.0ms    0.1ms    0.7ms
+/report       97.9/s     0.0%   10.1ms   10.7ms   10.9ms   23.8ms
+$ cat /tmp/report.txt /tmp/health.txt
+open loop, 100 req/s scheduled: 4499 ok, 1 errors in 46.0 s = 98 req/s
+latency from intended start  p50  400.2  p95  644.9  p99 2250.7  max 9359.2 ms
+latency from actual send     p50  399.8  p95  643.9  p99 2250.4  max 9357.8 ms
+open loop, 20 req/s scheduled: 899 ok, 1 errors in 45.9 s = 20 req/s
+latency from intended start  p50  566.7  p95 1200.9  p99 7215.5  max 10077.0 ms
+latency from actual send     p50  565.7  p95 1200.1  p99 7215.0  max 10075.9 ms

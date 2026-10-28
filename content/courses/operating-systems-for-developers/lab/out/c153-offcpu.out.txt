@@ -1,0 +1,81 @@
+$ gcc -O2 -g -fno-omit-frame-pointer -pthread wait.c -o wait
+$ time ./wait inside
+8 threads x 150 orders, audit inside the lock: wall 1621 ms, CPU 626 ms (0.39 cores busy on average)
+
+real	0m1.622s
+user	0m0.612s
+sys	0m0.015s
+$ ./wait inside 600 > /dev/null & W=$!; sleep 0.5
+$ profile-libbpf -F 499 -f -p $W 3 > on.folded 2>/dev/null; python3 folded.py on.folded 4
+574 samples in 15 distinct stacks
+  SELF (top of the stack)         share
+  price_order                      96.7%
+  try_to_wake_up                    0.9%
+  _raw_spin_unlock_irqrestore       0.5%
+  finish_task_switch.isra.0         0.5%
+  TOTAL (anywhere in the stack)   share
+  price_order                      96.7%
+  worker                            3.0%
+  el0_svc                           2.6%
+  el0t_64_sync                      2.6%
+$ ./wait inside 300 > /dev/null & W=$!; sleep 0.5; pidstat -wt -p $W 1 1 | sed -n '3,8p'
+03:24:08      UID      TGID       TID   cswch/s nvcswch/s  Command
+03:24:09        0       140         -      0.00      0.00  wait
+03:24:09        0         -       140      0.00      0.00  |__wait
+03:24:09        0         -       142    176.24      0.00  |__wait
+03:24:09        0         -       143    171.29      0.00  |__wait
+03:24:09        0         -       144    173.27      0.00  |__wait
+$ ./wait inside 600 > /dev/null & W=$!; sleep 0.5
+$ G=$(bpftrace -q -e 'tracepoint:syscalls:sys_enter_futex /comm == "wait"/ { printf("%d\n", curtask->tgid); exit(); }'); echo "pid $W in the container = pid $G for the kernel"
+pid 156 in the container = pid 74736 for the kernel
+$ offcputime-libbpf -p $G 3 > off.txt 2>/dev/null; awk 'BEGIN{RS=""} /futex_do_wait/ {print; exit}' off.txt | grep -v bpf
+Tracing off-CPU time (us) of PID [74736] for 3 secs.
+    __schedule
+    schedule
+    futex_do_wait
+    __futex_wait
+    futex_wait
+    do_futex
+    __arm64_sys_futex
+    invoke_syscall.constprop.0
+    do_el0_svc
+    el0_svc
+    el0t_64_sync_handler
+    el0t_64_sync
+    -                wait (74743)
+        2490444
+$ python3 offcpu2folded.py < off.txt > off.folded; python3 folded.py off.folded 3 --us
+22558071 us off-CPU in 2 distinct stacks
+  SELF (top of the stack)         share
+  futex_do_wait                    87.8%
+  do_nanosleep                     12.2%
+  TOTAL (anywhere in the stack)   share
+  futex_wait                       87.8%
+  do_futex                         87.8%
+  futex_do_wait                    87.8%
+$ python3 pmp.py $W 5 0.2
+5 snapshots, 45 thread-stacks
+   33   73.3%  futex_wait <- lll_mutex_lock_optimized <- ___pthread_mutex_lock <- worker
+    5   11.1%  __syscall_cancel_arch <- usleep <- write_audit <- worker
+    5   11.1%  __syscall_cancel_arch <- __futex_abstimed_wait_common64 <- __futex_abstimed_wait_common <- __pthread_clockjoin_ex
+    2    4.4%  price_order <- worker
+$ perl /tools/flamegraph.pl --title "wait.c: on-CPU (profile)" --width 1200 on.folded > /lab/ch15/fg/wait-on.svg
+$ perl /tools/flamegraph.pl --title "wait.c: off-CPU time (offcputime)" --colors io --countname us --width 1200 off.folded > /lab/ch15/fg/wait-off.svg; ls /lab/ch15/fg | grep wait
+wait-off.svg
+wait-on.svg
+$ time ./wait outside
+8 threads x 150 orders, audit OUTSIDE the lock: wall 250 ms, CPU 482 ms (1.93 cores busy on average)
+
+real	0m0.251s
+user	0m0.481s
+sys	0m0.003s
+$ ./wait outside 3000 > /dev/null & W=$!; sleep 0.5
+$ G=$(bpftrace -q -e 'tracepoint:syscalls:sys_enter_futex /comm == "wait"/ { printf("%d\n", curtask->tgid); exit(); }'); offcputime-libbpf -p $G 2 2>/dev/null | python3 offcpu2folded.py > off2.folded; python3 folded.py off2.folded 3 --us
+12109025 us off-CPU in 2 distinct stacks
+  SELF (top of the stack)         share
+  do_nanosleep                    100.0%
+  exit_to_user_mode_loop            0.0%
+  TOTAL (anywhere in the stack)   share
+  exit_to_user_mode_loop            0.0%
+  el0_interrupt                     0.0%
+  el0t_64_irq                       0.0%

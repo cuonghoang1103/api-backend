@@ -1,0 +1,124 @@
+$ node orders.js 8081 & N=$!; sleep 0.5
+orders.js pid 19 on :8081 (array includes)
+$ node tai.js http://127.0.0.1:8081/report --closed 1 --duration 5
+closed loop, 1 connection(s): 467 ok, 0 errors in 5.0 s = 93 req/s
+latency from intended start  p50   10.6  p95   11.4  p99   13.6  max   19.2 ms
+$ node --cpu-prof --cpu-prof-dir=prof orders.js 8082 & N=$!; sleep 0.5
+orders.js pid 40 on :8082 (array includes)
+$ node tai.js http://127.0.0.1:8082/report --closed 1 --duration 5 > /dev/null; kill -INT $N; wait $N; ls prof
+CPU.20261029.032429.40.0.001.cpuprofile
+$ node cpuprofile.js prof/*.cpuprofile 4
+5.5 s profiled, 4278 samples (631 ms idle)
+  SELF
+  report orders.js:22                            4590 ms  83.2%
+  (idle)                                          631 ms  11.4%
+  totals orders.js:16                              83 ms   1.5%
+  uniqueCustomers orders.js:10                     38 ms   0.7%
+  HOT LINES (ticks per source line)
+  orders.js:24    91.3%  const customers = uniqueCustomers(list);
+  orders.js:26     3.3%  const top = [...t.entries()].sort((a, b) => b[1] - a[1]).slice(0, 5).m
+  orders.js:18     1.7%  for (const o of list) t.set(o.customer, (t.get(o.customer) || 0) + o.c
+$ node --prof orders.js 8083 & N=$!; sleep 0.5
+orders.js pid 70 on :8083 (array includes)
+$ node tai.js http://127.0.0.1:8083/report --closed 1 --duration 5 > /dev/null; kill -INT $N; wait $N; ls isolate*.log
+isolate-0x25300000-70-v8.log
+$ node --prof-process isolate*.log 2>/dev/null | sed -n '/Bottom up/,$p' | sed -n '6,10p'
+   ticks parent  name
+   3661   94.1%  /usr/local/bin/node
+   3323   90.8%    JS: ^report /tmp/orders.js:22:16
+   3323  100.0%      JS: ^<anonymous> /tmp/orders.js:34:19
+   3237   97.4%        JS: ^emit node:events:466:44
+$ FIX=1 node orders.js 8084 & N=$!; sleep 0.5
+orders.js pid 128 on :8084 (FIX=1: Set)
+$ node tai.js http://127.0.0.1:8084/report --closed 1 --duration 5
+closed loop, 1 connection(s): 5259 ok, 0 errors in 5.0 s = 1052 req/s
+latency from intended start  p50    0.9  p95    1.1  p99    1.2  max    7.9 ms
+$ java -XX:StartFlightRecording=filename=/tmp/orders.jfr,settings=profile Orders.java 8085 > /tmp/java.log 2>&1 & J=$!; sleep 6; tail -1 /tmp/java.log
+Orders.java pid 149 on :8085 (ArrayList.contains)
+$ node tai.js http://127.0.0.1:8085/report --closed 1 --duration 3 > /dev/null
+$ C0=$(cpu $J); node tai.js http://127.0.0.1:8085/report --closed 1 --duration 5; echo "JVM CPU time during those 5 s: $(( $(cpu $J) - C0 )) ms"
+closed loop, 1 connection(s): 96 ok, 0 errors in 5.0 s = 19 req/s
+latency from intended start  p50   51.7  p95   56.9  p99   67.8  max   67.8 ms
+JVM CPU time during those 5 s: 1170 ms
+$ node tai.js http://127.0.0.1:8085/report --closed 1 --duration 6 > /dev/null & T=$!; sleep 1
+$ asprof -d 4 -e cpu -i 1ms -o collapsed -f /tmp/java.folded $J; python3 folded.py /tmp/java.folded 4
+Profiling for 4 seconds
+Done
+853 samples in 149 distinct stacks
+  SELF (top of the stack)                             share
+  java/util/ArrayList.indexOfRange                     81.1%
+  java/util/HashMap.merge                               0.8%
+  java/util/TimSort.mergeHi                             0.6%
+  java/util/TimSort.mergeLo                             0.5%
+  TOTAL (anywhere in the stack)                       share
+  java/lang/Thread.runWith                             93.8%
+  java/lang/Thread.run                                 93.8%
+  java/util/concurrent/ThreadPoolExecutor.runWorker    91.2%
+  java/util/concurrent/ThreadPoolExecutor$Worker.run   91.2%
+$ jcmd $J JFR.dump filename=/tmp/orders.jfr > /dev/null; jfr view --width 100 hot-methods /tmp/orders.jfr | sed -n '3,8p'
+
+Method                                                                              Samples Percent
+----------------------------------------------------------------------------------- ------- -------
+java.util.ArrayList.indexOfRange(Object, int, int)                                      189  93.10%
+java.lang.String.<init>(StringBuilder)                                                    1   0.49%
+java.util.HashMap.resize()                                                                1   0.49%
+$ perl /tools/flamegraph.pl --title "Orders.java (async-profiler -e cpu)" --width 1200 /tmp/java.folded > /lab/ch15/fg/java.svg
+$ java -Dsun.net.httpserver.nodelay=true Orders.java 8086 > /tmp/java2.log 2>&1 & J=$!; sleep 6
+$ node tai.js http://127.0.0.1:8086/report --closed 1 --duration 3 > /dev/null
+$ C0=$(cpu $J); node tai.js http://127.0.0.1:8086/report --closed 1 --duration 5; echo "JVM CPU time during those 5 s: $(( $(cpu $J) - C0 )) ms"
+closed loop, 1 connection(s): 493 ok, 0 errors in 5.0 s = 98 req/s
+latency from intended start  p50   10.1  p95   10.6  p99   11.3  max   15.6 ms
+JVM CPU time during those 5 s: 5060 ms
+$ FIX=1 java -Dsun.net.httpserver.nodelay=true Orders.java 8087 > /tmp/java3.log 2>&1 & J=$!; sleep 6
+$ node tai.js http://127.0.0.1:8087/report --closed 1 --duration 3 > /dev/null
+$ node tai.js http://127.0.0.1:8087/report --closed 1 --duration 5
+closed loop, 1 connection(s): 6770 ok, 0 errors in 5.0 s = 1354 req/s
+latency from intended start  p50    0.7  p95    0.9  p99    1.1  max    5.7 ms
+$ python3 -c "import cProfile, orders; cProfile.run('for _ in range(30): orders.report(4000)', sort='tottime')" | sed -n '1,10p' | cut -c1-110
+         390603 function calls in 1.118 seconds
+
+   Ordered by: internal time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+       30    1.020    0.034    1.030    0.034 orders.py:9(unique_customers)
+       30    0.028    0.001    0.042    0.001 orders.py:18(totals)
+       30    0.016    0.001    0.022    0.001 {built-in method builtins.sorted}
+   120000    0.015    0.000    0.015    0.000 {method 'get' of 'dict' objects}
+       30    0.011    0.000    0.021    0.001 {built-in method builtins.sum}
+$ python3 orders.py 8088 & P=$!; sleep 1
+orders.py pid 416 on :8088 (list in)
+$ C0=$(cpu $P); node tai.js http://127.0.0.1:8088/report --closed 1 --duration 5; echo "Python CPU time during those 5 s: $(( $(cpu $P) - C0 )) ms"
+closed loop, 1 connection(s): 66 ok, 0 errors in 5.1 s = 13 req/s
+latency from intended start  p50   77.0  p95   78.7  p99   82.3  max   82.3 ms
+Python CPU time during those 5 s: 2340 ms
+$ node tai.js http://127.0.0.1:8088/report --closed 1 --duration 6 > /dev/null & T=$!; sleep 1
+$ py-spy dump --pid $P | grep -B1 -A3 'active'
+    <module> (orders.py:53)
+Thread 440 (active+gil): "Thread-2 (process_request_thread)"
+    unique_customers (orders.py:14)
+    report (orders.py:29)
+    do_GET (orders.py:43)
+$ py-spy record -d 4 -r 99 -p $P -f raw -o /tmp/py.folded 2>&1 | tail -1; python3 folded.py /tmp/py.folded 4
+py-spy> You can use the flamegraph.pl script from https://github.com/brendangregg/flamegraph to generate a SVG
+204 samples in 5 distinct stacks
+  SELF (top of the stack)         share
+  unique_customers                 81.9%
+  readinto                         15.7%
+  totals                            1.5%
+  parse_request                     1.0%
+  TOTAL (anywhere in the stack)   share
+  report                           83.3%
+  do_GET                           83.3%
+  unique_customers                 81.9%
+  readinto                         15.7%
+$ perl /tools/flamegraph.pl --title "orders.py (py-spy)" --width 1200 /tmp/py.folded > /lab/ch15/fg/python.svg
+$ NODELAY=1 python3 orders.py 8089 & P=$!; sleep 1
+orders.py pid 459 on :8089 (list in)
+$ node tai.js http://127.0.0.1:8089/report --closed 1 --duration 5
+closed loop, 1 connection(s): 142 ok, 0 errors in 5.0 s = 28 req/s
+latency from intended start  p50   35.3  p95   36.1  p99   37.5  max   40.2 ms
+$ NODELAY=1 FIX=1 python3 orders.py 8090 & P=$!; sleep 1
+orders.py pid 475 on :8090 (FIX=1: set)
+$ node tai.js http://127.0.0.1:8090/report --closed 1 --duration 5
+closed loop, 1 connection(s): 3519 ok, 0 errors in 5.0 s = 704 req/s
+latency from intended start  p50    1.4  p95    1.6  p99    1.8  max    5.8 ms

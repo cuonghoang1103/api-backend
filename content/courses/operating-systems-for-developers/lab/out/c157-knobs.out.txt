@@ -1,0 +1,52 @@
+$ sysctl -a 2>/dev/null | wc -l
+1845
+$ sysctl net.core.somaxconn net.ipv4.tcp_max_syn_backlog net.ipv4.tcp_syncookies net.ipv4.ip_local_port_range
+net.core.somaxconn = 4096
+net.ipv4.tcp_max_syn_backlog = 512
+net.ipv4.tcp_syncookies = 1
+net.ipv4.ip_local_port_range = 32768	60999
+$ sysctl -w net.core.somaxconn=128
+net.core.somaxconn = 128
+$ python3 slowaccept.py 9000 1024 & A=$!; sleep 0.3; ss -lnt 'sport = :9000'
+listening on :9000, listen(backlog=1024); not accepting for 3 s
+State  Recv-Q Send-Q Local Address:Port Peer Address:Port
+LISTEN 0      128        127.0.0.1:9000      0.0.0.0:*   
+$ nstat -n; python3 burst.py 9000 600; nstat -z TcpExtListenOverflows TcpExtListenDrops | tail -2
+600 connects: 600 ok, errors 0; connect time p50 3099.2 ms, p99 3112 ms, max 3112 ms; waited >= 1 s: 471
+TcpExtListenOverflows           1717               0.0
+TcpExtListenDrops               1717               0.0
+$ sysctl -w net.core.somaxconn=4096
+net.core.somaxconn = 4096
+$ python3 slowaccept.py 9001 1024 & A=$!; sleep 0.3; ss -lnt 'sport = :9001'
+listening on :9001, listen(backlog=1024); not accepting for 3 s
+State  Recv-Q Send-Q Local Address:Port Peer Address:Port
+LISTEN 0      1024       127.0.0.1:9001      0.0.0.0:*   
+$ nstat -n; python3 burst.py 9001 600; nstat -z TcpExtListenOverflows TcpExtListenDrops | tail -2
+600 connects: 600 ok, errors 0; connect time p50 18.3 ms, p99 25 ms, max 25 ms; waited >= 1 s: 0
+TcpExtListenOverflows           0                  0.0
+TcpExtListenDrops               0                  0.0
+$ (ulimit -n 1024; exec node hold.js 9100) & H=$!; sleep 0.5; python3 burst.py 9100 2000 4; ss -lnt 'sport = :9100'
+hold.js pid 53: ulimit -n says 1024
+2000 connects: 2000 ok, errors 0; connect time p50 70.8 ms, p99 97 ms, max 98 ms; waited >= 1 s: 0
+State  Recv-Q Send-Q Local Address:Port Peer Address:Port
+LISTEN 0      511                *:9100            *:*   
+held at peak: 1002 connections, server errors: {}
+$ (ulimit -n 65536; exec node hold.js 9101) & H=$!; sleep 0.5; python3 burst.py 9101 2000 4
+hold.js pid 68: ulimit -n says 65536
+2000 connects: 2000 ok, errors 0; connect time p50 61.3 ms, p99 87 ms, max 87 ms; waited >= 1 s: 0
+held at peak: 2000 connections, server errors: {}
+$ sysctl vm.swappiness vm.overcommit_memory vm.dirty_ratio vm.dirty_background_ratio vm.max_map_count fs.file-max
+vm.swappiness = 60
+vm.overcommit_memory = 1
+vm.dirty_ratio = 20
+vm.dirty_background_ratio = 10
+vm.max_map_count = 1048576
+fs.file-max = 9223372036854775807
+$ cat /sys/kernel/mm/transparent_hugepage/enabled
+[always] madvise never
+$ ls /sys/devices/system/cpu/cpu0/cpufreq 2>&1; ls /sys/devices/system/cpu/cpu0/ | head -8 | tr '\n' ' '; echo
+ls: cannot access '/sys/devices/system/cpu/cpu0/cpufreq': No such file or directory
+cache cpu_capacity of_node regs subsystem topology uevent 
+$ lscpu | grep -E 'NUMA|^CPU\(s\)'; ls /sys/devices/system/node/
+CPU(s):                                  10
+ls: cannot access '/sys/devices/system/node/': No such file or directory

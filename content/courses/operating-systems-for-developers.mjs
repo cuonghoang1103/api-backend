@@ -41,6 +41,7 @@ import s11 from './operating-systems-for-developers/s11-loi-goi-he-thong.mjs';
 import s12 from './operating-systems-for-developers/s12-container.mjs';
 import s13 from './operating-systems-for-developers/s13-bao-mat.mjs';
 import s14 from './operating-systems-for-developers/s14-windows-macos.mjs';
+import s15 from './operating-systems-for-developers/s15-quan-sat-tinh-chinh.mjs';
 import s16 from './operating-systems-for-developers/s16-thi-cu-phong-van.mjs';
 import s17 from './operating-systems-for-developers/s17-du-an-cuoi-khoa.mjs';
 
@@ -181,6 +182,7 @@ sections[11] = s11;
 sections[12] = s12;
 sections[13] = s13;
 sections[14] = s14;
+sections[15] = s15;
 sections[16] = s16;
 sections[17] = s17;
 

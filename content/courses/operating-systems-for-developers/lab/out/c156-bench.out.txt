@@ -1,0 +1,58 @@
+$ java Warm.java
+round  1:  158.2 ms
+round  2:   76.6 ms
+round  3:   63.2 ms
+round  4:   76.5 ms
+round  5:   49.8 ms
+round  6:   59.3 ms
+round  7:   47.2 ms
+round  8:   45.5 ms
+round  9:   70.0 ms
+round 10:   63.5 ms
+$ hyperfine --warmup 2 --runs 15 './hot 20000' './hot 20000 table'
+Benchmark 1: ./hot 20000
+  Time (mean ± σ):     398.5 ms ±  12.8 ms    [User: 396.6 ms, System: 0.6 ms]
+  Range (min … max):   385.4 ms … 432.3 ms    15 runs
+ 
+Benchmark 2: ./hot 20000 table
+  Time (mean ± σ):     150.6 ms ±  11.5 ms    [User: 146.2 ms, System: 1.7 ms]
+  Range (min … max):   135.4 ms … 174.9 ms    15 runs
+ 
+Summary
+  ./hot 20000 table ran
+    2.65 ± 0.22 times faster than ./hot 20000
+$ for i in $(seq 30); do ./hot 20000; done | python3 stats.py "quiet"
+quiet          n=30  best 371  median 380  mean 384 ± 13  p90 399  worst 439  (ms)
+$ taskset -c 3 stress-ng --cpu 1 --timeout 6 -q & S=$!; for i in $(seq 30); do taskset -c 3 ./hot 20000; done | python3 stats.py "noisy core"; wait $S
+noisy core     n=30  best 369  median 377  mean 475 ± 169  p90 752  worst 757  (ms)
+$ node stall.js 8090 & ST=$!; sleep 0.5
+stall.js on :8090: 200 ms stall every 1000 ms
+$ wrk -t1 -c1 -d8s --latency http://127.0.0.1:8090/ | grep -E 'Latency|50%|90%|99%|requests in|Requests/sec'
+    Latency    16.47ms   43.72ms 200.19ms   88.50%
+  Latency Distribution
+     50%   56.00us
+     90%   78.28ms
+     99%  187.31ms
+  123200 requests in 8.02s, 14.69MB read
+Requests/sec:  15355.08
+$ hey -z 8s -c 1 http://127.0.0.1:8090/ | grep -E 'Requests/sec|Average|50%|95%|99%'
+  Average:	0.0001 secs
+  Requests/sec:	8388.7075
+  50% in 0.0001 secs
+  95% in 0.0001 secs
+  99% in 0.0001 secs
+$ node tai.js http://127.0.0.1:8090/ --closed 1 --duration 8
+closed loop, 1 connection(s): 59031 ok, 0 errors in 8.0 s = 7379 req/s
+latency from intended start  p50    0.1  p95    0.1  p99    0.2  max  200.2 ms
+$ node tai.js http://127.0.0.1:8090/ --rate 100 --duration 8 --conns 1
+open loop, 100 req/s scheduled: 800 ok, 0 errors in 8.0 s = 100 req/s
+latency from intended start  p50    1.3  p95  150.0  p99  189.3  max  199.1 ms
+latency from actual send     p50    0.2  p95    0.9  p99    6.4  max  198.6 ms
+$ k6 run -q --no-color k6-open.js 2>&1 | grep -E 'http_req_duration|iterations|dropped|vus_max' | sed 's/^ *//'
+http_req_duration..............: p(50)=432.75µs p(95)=149.95ms p(99)=189.15ms max=199.67ms
+iterations.....................: 801    100.115874/s
+vus_max........................: 50     min=50       max=50
+$ node tai.js http://127.0.0.1:8090/ --rate 100 --duration 8
+open loop, 100 req/s scheduled: 800 ok, 0 errors in 8.0 s = 100 req/s
+latency from intended start  p50    1.3  p95  150.9  p99  190.8  max  200.8 ms
+latency from actual send     p50    0.3  p95  150.1  p99  190.0  max  199.8 ms

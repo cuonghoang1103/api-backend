@@ -1,0 +1,84 @@
+$ echo "254:0 wiops=300" > /sys/fs/cgroup/io.max; cat /sys/fs/cgroup/io.max
+254:0 rbps=max wbps=max riops=max wiops=300
+$ LOG=sync node checkout.js 8080 & C=$!; sleep 0.5
+checkout.js pid 107 LOG=sync UV_THREADPOOL_SIZE=4
+$ node tai.js http://127.0.0.1:8080/checkout --rate 200 --duration 8
+open loop, 200 req/s scheduled: 1600 ok, 0 errors in 8.0 s = 200 req/s
+latency from intended start  p50    2.2  p95    4.0  p99    6.4  max   18.7 ms
+latency from actual send     p50    1.4  p95    2.8  p99    4.3  max   17.4 ms
+$ node tai.js http://127.0.0.1:8080/checkout --rate 400 --duration 10 > /tmp/sale.txt & T=$!; sleep 3
+$ python3 use.py 2
+USE over 2 s — cgroup 0::/
+resource              utilization                   saturation                                   errors
+CPU (container)       0.16 of 10 CPUs = 2%          throttled 0/0 periods; PSI cpu some 0.0%     -
+CPU (one thread)      node pid 130: 8% of one core  one thread can use at most 1 of the 10 CPUs  -
+memory                240 MiB of no limit           PSI memory some 0.0%                         oom_kill 0, max hits 0
+disk vda (whole VM)   busy 9% of the time           avg queue 0.1; PSI io some 16.7%             -
+network (this netns)  0.3 MB/s                      listen overflows 0                           retrans 0, in errors 0
+fds (max process)     pid 130: 277 open of 1048576  -                                            EMFILE: only in app logs
+pids                  22 of max                     -                                            -
+$ pidstat -p $C 1 2 | sed -n '3,4p;6p'
+03:35:47      UID       PID    %usr %system  %guest   %wait    %CPU   CPU  Command
+03:35:48        0       107    6.00    2.00    0.00    0.00    8.00     2  node
+Average:        0       107    6.00    1.00    0.00    0.00    7.00     -  node
+$ G=$(gpid $C); echo "pid $C in the container = pid $G for the kernel"; offcputime-libbpf -t $G 2 2>/dev/null | python3 offcpu2folded.py > off.folded; python3 folded.py off.folded 4 --us
+pid 107 in the container = pid 82983 for the kernel
+1772218 us off-CPU in 3 distinct stacks
+  SELF (top of the stack)         share
+  io_schedule                      90.0%
+  jbd2_log_wait_commit             10.0%
+  futex_do_wait                     0.0%
+  TOTAL (anywhere in the stack)   share
+  __filemap_fdatawait_range        90.0%
+  folio_wait_bit_common            90.0%
+  file_write_and_wait_range        90.0%
+  folio_wait_bit                   90.0%
+$ sort -t' ' -k2 -nr off.folded | head -1 | tr ';' '\n' | tail -10
+do_fsync
+ovl_fsync
+vfs_fsync_range
+ext4_sync_file
+file_write_and_wait_range
+__filemap_fdatawait_range
+folio_wait_writeback
+folio_wait_bit
+folio_wait_bit_common
+io_schedule 1595630
+$ cat /tmp/sale.txt; curl -s localhost:8080/stats
+open loop, 400 req/s scheduled: 4000 ok, 0 errors in 13.4 s = 298 req/s
+latency from intended start  p50 1169.3  p95 3312.1  p99 11340.8  max 11614.0 ms
+latency from actual send     p50  205.6  p95 3310.9  p99 11340.0  max 11613.0 ms
+{"mode":"sync","served":5600,"fsyncs":5600}
+$ UV_THREADPOOL_SIZE=64 LOG=sync node checkout.js 8080 & C=$!; sleep 0.5
+checkout.js pid 187 LOG=sync UV_THREADPOOL_SIZE=64
+$ node tai.js http://127.0.0.1:8080/checkout --rate 400 --duration 10
+open loop, 400 req/s scheduled: 4000 ok, 0 errors in 13.7 s = 292 req/s
+latency from intended start  p50 1523.9  p95 4577.3  p99 12722.4  max 12980.5 ms
+latency from actual send     p50  204.5  p95 4576.7  p99 12721.5  max 12980.3 ms
+$ LOG=async node checkout.js 8080 & C=$!; sleep 0.5
+checkout.js pid 273 LOG=async UV_THREADPOOL_SIZE=4
+$ node tai.js http://127.0.0.1:8080/checkout --rate 400 --duration 10; curl -s localhost:8080/stats
+open loop, 400 req/s scheduled: 4000 ok, 0 errors in 12.8 s = 312 req/s
+latency from intended start  p50 1430.3  p95 2643.2  p99 2754.5  max 2821.3 ms
+latency from actual send     p50  799.8  p95  899.2  p99  903.9  max 1004.2 ms
+{"mode":"async","served":4000,"fsyncs":4000}
+$ LOG=group node checkout.js 8080 & C=$!; sleep 0.5
+checkout.js pid 300 LOG=group UV_THREADPOOL_SIZE=4
+$ node tai.js http://127.0.0.1:8080/checkout --rate 400 --duration 10; curl -s localhost:8080/stats
+open loop, 400 req/s scheduled: 4000 ok, 0 errors in 10.0 s = 400 req/s
+latency from intended start  p50    2.3  p95   28.9  p99   32.9  max   40.6 ms
+latency from actual send     p50    1.2  p95   28.1  p99   32.2  max   39.3 ms
+{"mode":"group","served":4000,"fsyncs":2941}
+$ node tai.js http://127.0.0.1:8080/checkout --rate 800 --duration 10; curl -s localhost:8080/stats
+open loop, 800 req/s scheduled: 8000 ok, 0 errors in 10.0 s = 800 req/s
+latency from intended start  p50   18.1  p95   62.4  p99   68.1  max   74.7 ms
+latency from actual send     p50   17.1  p95   61.6  p99   67.0  max   74.5 ms
+{"mode":"group","served":12000,"fsyncs":5849}
+$ node tai.js http://127.0.0.1:8080/checkout --rate 200 --duration 8
+open loop, 200 req/s scheduled: 1600 ok, 0 errors in 8.0 s = 200 req/s
+latency from intended start  p50    2.7  p95    4.7  p99    8.6  max   29.7 ms
+latency from actual send     p50    1.8  p95    3.0  p99    6.1  max   27.2 ms
+$ tail -2 /var/tmp/audit.log; wc -l < /var/tmp/audit.log
+2026-10-28T20:36:51.782Z order=13599 cart=676f4b3f status=PAID
+2026-10-28T20:36:51.786Z order=13600 cart=65e34340 status=PAID
+13600

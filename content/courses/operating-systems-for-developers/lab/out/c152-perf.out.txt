@@ -1,0 +1,168 @@
+$ gcc -O2 -g -fno-omit-frame-pointer hot.c -o hot
+$ ./hot 50000
+50000 requests, crc=bitwise: 921 ms (18.4 us/request), logged 13600000 bytes
+$ perf stat -e task-clock,context-switches,page-faults ./hot 50000 2>&1 | grep -E 'requests|task-clock|switches|faults|elapsed'
+50000 requests, crc=bitwise: 913 ms (18.3 us/request), logged 13600000 bytes
+            913.32 msec task-clock                                                            
+                 4      context-switches                                                      
+                52      page-faults                                                           
+       0.913907959 seconds time elapsed
+$ perf record -F 999 -g -o hot.data ./hot 50000 2>&1 | grep -v schedstat
+50000 requests, crc=bitwise: 916 ms (18.3 us/request), logged 13600000 bytes
+[ perf record: Woken up 1 times to write data ]
+[ perf record: Captured and wrote 0.104 MB hot.data (915 samples) ]
+$ perf report -i hot.data --stdio --no-children --sort symbol 2>/dev/null | grep -E '^ +[0-9.]+%' | awk '{printf "%8s  %s %s\n", $1, $2, $3}' | head -7
+  86.89%  [.] crc_bitwise
+   4.81%  [.] __printf_buffer
+   2.30%  [.] parse_headers
+   1.86%  [.] _itoa_word
+   0.98%  [.] __printf_buffer_write
+   0.77%  [.] __vsprintf_internal
+   0.66%  [.] __sprintf_chk
+$ perf report -i hot.data --stdio --no-children --sort symbol --symbols crc_bitwise -G 2>/dev/null | grep -vE '^#|^$' | sed 's/[[:space:]-]*$//' | head -9
+    86.89%
+            |
+            ---__libc_start_main@@GLIBC_2.34
+               call_init (inlined)
+               __libc_start_call_main
+               main
+               handle
+               crc_bitwise
+$ perf script -i hot.data -F comm,pid,tid,ip,sym,dso 2>/dev/null | head -8
+hot      33/33      
+	    aaaabc2e0e2c crc_bitwise (/tmp/hot)
+	    aaaabc2e1027 handle (/tmp/hot)
+	    aaaabc2e0b34 main (/tmp/hot)
+	    ffff85852f1c __libc_start_call_main (/usr/lib/aarch64-linux-gnu/libc.so.6)
+	    ffff8585305c call_init (inlined)
+	    ffff8585305c __libc_start_main@@GLIBC_2.34 (/usr/lib/aarch64-linux-gnu/libc.so.6)
+	    aaaabc2e0c70 _start (/tmp/hot)
+$ perf script -i hot.data -F comm,pid,tid,ip,sym,dso 2>/dev/null | perl /tools/stackcollapse-perf.pl > hot.folded; wc -l < hot.folded
+17
+$ sort -t' ' -k2 -nr hot.folded | head -3 | sed 's/^hot;_start;__libc_start_main@@GLIBC_2.34;call_init;__libc_start_call_main;/…;/'
+…;main;handle;crc_bitwise 795
+…;main;handle;render_json;__sprintf_chk;__vsprintf_internal;__printf_buffer 39
+…;main;handle;parse_headers 21
+$ python3 folded.py hot.folded 5
+915 samples in 17 distinct stacks
+  SELF (top of the stack)         share
+  crc_bitwise                      86.9%
+  __printf_buffer                   4.5%
+  parse_headers                     2.3%
+  _itoa_word                        1.9%
+  __printf_buffer_write             1.0%
+  TOTAL (anywhere in the stack)   share
+  crc_bitwise                      86.9%
+  render_json                      10.2%
+  __sprintf_chk                     9.9%
+  __vsprintf_internal               9.3%
+  __printf_buffer                   8.0%
+$ perl /tools/flamegraph.pl --title "hot.c: crc bitwise (before)" --width 1200 hot.folded > /lab/ch15/fg/hot.svg; ls -l /lab/ch15/fg/hot.svg | awk '{print $5, $9}'
+18654 /lab/ch15/fg/hot.svg
+$ perf annotate -i hot.data --stdio -s crc_bitwise 2>/dev/null | grep -E '^ +[0-9]+\.[0-9]+ ' | sort -rn | head -6
+   75.85 :   e2c:    sbfx    x1, x2, #0, #1
+   12.83 :   e3c:    b.ne    e2c <crc_bitwise+0x2c>  // b.any
+    5.03 :   e40:    add     x0, x0, #0x1
+    3.02 :   e30:    subs    w3, w3, #0x1
+    1.01 :   e44:    cmp     x0, x5
+    1.01 :   e38:    eor     w2, w1, w2, lsr #1
+$ ./hot 50000 table
+50000 requests, crc=table: 313 ms (6.3 us/request), logged 13600000 bytes
+$ perf record -F 999 -g -o fixed.data ./hot 50000 table 2>&1 | grep -v schedstat
+50000 requests, crc=table: 310 ms (6.2 us/request), logged 13600000 bytes
+[ perf record: Woken up 1 times to write data ]
+[ perf record: Captured and wrote 0.039 MB fixed.data (309 samples) ]
+$ perf script -i fixed.data -F comm,pid,tid,ip,sym,dso 2>/dev/null | perl /tools/stackcollapse-perf.pl > fixed.folded; python3 folded.py fixed.folded 4
+309 samples in 19 distinct stacks
+  SELF (top of the stack)         share
+  crc_table                        64.4%
+  __printf_buffer                   8.7%
+  parse_headers                     8.4%
+  _itoa_word                        6.5%
+  TOTAL (anywhere in the stack)   share
+  crc_table                        64.4%
+  render_json                      24.9%
+  __sprintf_chk                    24.6%
+  __vsprintf_internal              23.6%
+$ perl /tools/flamegraph.pl --title "hot.c: crc table (after)" --width 1200 fixed.folded > /lab/ch15/fg/hot-fixed.svg
+$ perl /tools/difffolded.pl -n hot.folded fixed.folded | perl /tools/flamegraph.pl --title "differential: before -> after" --width 1200 > /lab/ch15/fg/hot-diff.svg; ls /lab/ch15/fg
+hot-diff.svg
+hot-fixed.svg
+hot.svg
+java.svg
+node.svg
+python.svg
+wait-off.svg
+wait-on.svg
+$ gcc -O2 hot.c -o hot-stripped -s; perf record -q -F 999 -g -o s.data ./hot-stripped 50000 > /dev/null; perf report -i s.data --stdio --no-children --sort symbol 2>/dev/null | grep -E '^ +[0-9.]+%' | awk '{printf "%8s  %s %s\n", $1, $2, $3}' | head -4
+  68.56%  [.] 0x0000000000000e2c
+  10.37%  [.] 0x0000000000000e3c
+   3.82%  [.] 0x0000000000000e40
+   3.38%  [.] __printf_buffer
+$ gcc -O2 -g hot.c -o hot-nofp; perf record -q -F 999 -g -o nofp.data ./hot-nofp 50000 > /dev/null; perf script -i nofp.data -F comm,pid,tid,ip,sym,dso 2>/dev/null | perl /tools/stackcollapse-perf.pl | sort -t' ' -k2 -nr | head -2 | cut -c1-120
+hot-nofp;_start;__libc_start_main@@GLIBC_2.34;call_init;__libc_start_call_main;main;handle;crc_bitwise 781
+hot-nofp;_start;__libc_start_main@@GLIBC_2.34;call_init;__libc_start_call_main;main;handle;render_json;__sprintf_chk;__v
+$ perf record -q -F 999 --call-graph dwarf -o dwarf.data ./hot 50000 > /dev/null; ls -l hot.data dwarf.data | awk '{print $5, $9}'
+7789082 dwarf.data
+123762 hot.data
+$ node --perf-basic-prof orders.js 8081 & N=$!; sleep 0.5
+orders.js pid 176 on :8081 (array includes)
+$ node tai.js http://127.0.0.1:8081/report --closed 1 --duration 7 > /tmp/load.txt & sleep 1
+$ perf record -F 499 -g -p $N -o node.data -- sleep 4 2>&1 | grep -v schedstat
+[ perf record: Woken up 3 times to write data ]
+[ perf record: Captured and wrote 0.567 MB node.data (1975 samples) ]
+$ perf report -i node.data --stdio --no-children --sort symbol 2>/dev/null | grep -E '^ +[0-9.]+%' | awk '{printf "%8s  %s %s\n", $1, $2, $3}' | head -6
+  93.27%  [.] Builtins_ArrayIncludesSmiOrObject
+   0.76%  [.] Builtins_ArrayTimSort
+   0.46%  [.] Builtins_FindOrderedHashMapEntry
+   0.41%  [.] Builtins_MergeAt
+   0.41%  [.] JS:*
+   0.30%  [.] Builtins_StringEqual
+$ ls /tmp/perf-$N.map && wc -l < /tmp/perf-$N.map && grep -m3 -E 'JS:.*(report|uniqueCustomers)' /tmp/perf-$N.map
+/tmp/perf-176.map
+2871
+1714cb0a1d18 a5 JS:~report /tmp/orders.js:22:16
+1714cb0a1ee8 b9 JS:~uniqueCustomers /tmp/orders.js:10:25
+ffffa400c7e0 5d8 JS:^uniqueCustomers /tmp/orders.js:10:25
+$ perf script -i node.data -F comm,pid,tid,ip,sym,dso 2>/dev/null | perl /tools/stackcollapse-perf.pl > node.folded; python3 folded.py node.folded 5
+1975 samples in 82 distinct stacks
+  SELF (top of the stack)            share
+  Builtins_ArrayIncludesSmiOrObject   93.3%
+  Builtins_ArrayTimSort                0.8%
+  Builtins_FindOrderedHashMapEntry     0.5%
+  Builtins_MergeAt                     0.4%
+  JS:* /tmp/orders.js:26:37            0.4%
+  TOTAL (anywhere in the stack)      share
+  JS:^report /tmp/orders.js:22:16     97.7%
+  Builtins_ArrayIncludesSmiOrObject   93.3%
+  JS:^emit node:events:466:44         85.4%
+  JS:*emit node:events:466:44         13.5%
+  Builtins_ArrayTimSort                2.2%
+$ awk '{n = $NF; $NF = ""; print n, $0}' node.folded | sort -nr | head -1 | tr ';' '\n' | tail -6
+JS:^parserOnHeadersComplete node:_http_common:77:33
+JS:^parserOnIncoming node:_http_server:1073:26
+JS:^emit node:events:466:44
+JS:^ /tmp/orders.js:34:19
+JS:^report /tmp/orders.js:22:16
+Builtins_ArrayIncludesSmiOrObject 
+$ perl /tools/flamegraph.pl --title "orders.js under load (perf + --perf-basic-prof)" --width 1200 node.folded > /lab/ch15/fg/node.svg
+$ node orders.js 8082 & N=$!; sleep 0.5
+orders.js pid 244 on :8082 (array includes)
+$ node tai.js http://127.0.0.1:8082/report --closed 1 --duration 5 > /dev/null & sleep 1
+$ perf record -q -F 499 -g -p $N -o nomap.data -- sleep 3; perf script -i nomap.data -F comm,pid,tid,ip,sym,dso 2>/dev/null | perl /tools/stackcollapse-perf.pl > nomap.folded; python3 folded.py nomap.folded 3
+1482 samples in 62 distinct stacks
+  SELF (top of the stack)            share
+  Builtins_ArrayIncludesSmiOrObject   93.7%
+  [perf-244.map]                       1.1%
+  Builtins_FindOrderedHashMapEntry     0.5%
+  TOTAL (anywhere in the stack)      share
+  Builtins_ArrayIncludesSmiOrObject   93.7%
+  Builtins_ArrayPrototypeSort          1.8%
+  Builtins_ArrayTimSort                1.8%
+$ awk '{n = $NF; $NF = ""; print n, $0}' nomap.folded | sort -nr | head -1 | tr ';' '\n' | tail -6
+[perf-244.map]
+[perf-244.map]
+[perf-244.map]
+[perf-244.map]
+[perf-244.map]
+Builtins_ArrayIncludesSmiOrObject 

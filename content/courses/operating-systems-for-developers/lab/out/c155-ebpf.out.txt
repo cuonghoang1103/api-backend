@@ -1,0 +1,130 @@
+$ bpftrace --version; ls -l /sys/kernel/btf/vmlinux | awk '{print $5, $9}'
+bpftrace v0.25.0
+6710304 /sys/kernel/btf/vmlinux
+$ FIX=1 node orders.js 8080 > /dev/null & N=$!; sleep 0.5
+$ hey -z 4s -c 2 http://127.0.0.1:8080/report > /dev/null & H=$!; sleep 0.5
+$ bpftrace -q -e 'tracepoint:raw_syscalls:sys_enter /cgroup == cgroupid("/sys/fs/cgroup")/ { @[comm] = count(); } interval:s:2 { exit(); }'
+
+
+@[bpftrace]: 31
+@[node]: 10402
+@[hey]: 33273
+$ bpftrace -q -e 'tracepoint:syscalls:sys_exit_read /comm == "node" && cgroup == cgroupid("/sys/fs/cgroup")/ { @bytes = hist(args.ret); } interval:s:2 { exit(); }'
+
+
+@bytes:
+[0]                    2 |                                                    |
+[1]                    0 |                                                    |
+[2, 4)                 0 |                                                    |
+[4, 8)                 0 |                                                    |
+[8, 16)              134 |@@@@@                                               |
+[16, 32)               0 |                                                    |
+[32, 64)               0 |                                                    |
+[64, 128)           1209 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
+
+$ ./healthcheck.sh & HC=$!; sleep 1
+$ top -bn1 -w 100 | sed -n '7,12p'
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+    158 root      20   0    8152   3496   3224 S   9.1   0.0   0:00.01 healthcheck.sh
+      1 root      20   0   17168   6524   5332 S   0.0   0.1   0:00.01 timeout
+      7 root      20   0    8500   3464   3220 S   0.0   0.0   0:00.00 bash
+      8 root      20   0    9216   4172   3276 S   0.0   0.1   0:00.00 phien
+    113 root      20   0  767156  83888  45528 S   0.0   1.0   0:04.17 node
+$ execsnoop-libbpf -c /sys/fs/cgroup > exec.txt & E=$!; sleep 2; kill -INT $E; wait $E
+$ head -8 exec.txt; echo "...$(( $(wc -l < exec.txt) - 1 )) processes started in 2 s"
+PCOMM            PID    PPID   RET ARGS
+cat              76427  76426    0 /usr/bin/cat /proc/loadavg 
+awk              76428  76426    0 /usr/bin/awk {print $1} 
+curl             76429  76350    0 /usr/bin/curl -s -o /dev/null -w %{http_code} http://127.0.0.1:8080/health 
+date             76430  76350    0 /usr/bin/date +%s 
+sleep            76431  76350    0 /usr/bin/sleep 0.1 
+cat              76433  76432    0 /usr/bin/cat /proc/loadavg 
+awk              76434  76432    0 /usr/bin/awk {print $1} 
+...80 processes started in 2 s
+$ awk 'NR > 1 {print $1}' exec.txt | sort | uniq -c | sort -rn
+     16 sleep
+     16 date
+     16 curl
+     16 cat
+     16 awk
+$ ./cfgload
+config: not found, using built-in defaults (port 8080, pool 4)
+config: not found, using built-in defaults (port 8080, pool 4)
+config: not found, using built-in defaults (port 8080, pool 4)
+$ opensnoop-libbpf -x -n cfgload > open.txt & O=$!; sleep 1; ./cfgload > /dev/null; kill -INT $O; wait $O; cat open.txt
+PID    COMM              FD ERR PATH
+76630  cfgload           -1   2 /etc/orders/config.yaml
+76630  cfgload           -1   2 /root/.config/orders/config.yaml
+76630  cfgload           -1   2 ./config.yml
+76630  cfgload           -1   2 /etc/orders/config.yaml
+76630  cfgload           -1   2 /root/.config/orders/config.yaml
+76630  cfgload           -1   2 ./config.yml
+76630  cfgload           -1   2 /etc/orders/config.yaml
+76630  cfgload           -1   2 /root/.config/orders/config.yaml
+76630  cfgload           -1   2 ./config.yml
+$ biolatency-libbpf -c /sys/fs/cgroup 3 1 > bio.txt 2>&1 & B=$!; sleep 0.5; dd if=/dev/zero of=/var/tmp/sync.bin bs=4k count=1500 oflag=dsync 2>&1 | tail -1; wait $B; cat bio.txt
+6144000 bytes (6.1 MB, 5.9 MiB) copied, 0.778149 s, 7.9 MB/s
+Tracing block device I/O... Hit Ctrl-C to end.
+
+$ bpftrace -q -e 'tracepoint:block:block_rq_issue /cgroup == cgroupid("/sys/fs/cgroup")/ { @start[args.dev, args.sector] = nsecs; } tracepoint:block:block_rq_complete /@start[args.dev, args.sector]/ { @usecs = hist((nsecs - @start[args.dev, args.sector]) / 1000); @start[args.dev, args.sector] = 0; } interval:s:3 { clear(@start); exit(); }' & BT=$!; sleep 0.5; dd if=/dev/zero of=/var/tmp/sync.bin bs=4k count=1500 oflag=dsync 2>&1 | tail -1; wait $BT
+6144000 bytes (6.1 MB, 5.9 MiB) copied, 0.629974 s, 9.8 MB/s
+
+
+@usecs:
+[16, 32)            1170 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
+[32, 64)             282 |@@@@@@@@@@@@                                        |
+[64, 128)             41 |@                                                   |
+[128, 256)             5 |                                                    |
+[256, 512)             1 |                                                    |
+[512, 1K)              0 |                                                    |
+[1K, 2K)               0 |                                                    |
+[2K, 4K)               0 |                                                    |
+[4K, 8K)               1 |                                                    |
+
+$ bpftrace -q -e 'kprobe:vfs_fsync_range /cgroup == cgroupid("/sys/fs/cgroup")/ { @s[tid] = nsecs; } kretprobe:vfs_fsync_range /@s[tid]/ { @fsync_us = hist((nsecs - @s[tid]) / 1000); @s[tid] = 0; } interval:s:3 { clear(@s); exit(); }' & BT=$!; sleep 0.5; dd if=/dev/zero of=/var/tmp/sync.bin bs=4k count=1000 oflag=dsync 2>&1 | tail -1; wait $BT
+4096000 bytes (4.1 MB, 3.9 MiB) copied, 0.571151 s, 7.2 MB/s
+
+
+@fsync_us:
+[128, 256)           182 |@@@@@@@@@@@@                                        |
+[256, 512)           742 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
+[512, 1K)             26 |@                                                   |
+[1K, 2K)               2 |                                                    |
+[2K, 4K)              17 |@                                                   |
+[4K, 8K)              27 |@                                                   |
+[8K, 16K)              2 |                                                    |
+[16K, 32K)             1 |                                                    |
+[32K, 64K)             1 |                                                    |
+
+$ taskset -c 0,1 stress-ng --cpu 2 --timeout 4 -q & S=$!; sleep 0.5; runqlat-libbpf -m -c /sys/fs/cgroup 3 1 | grep -v ' 0 *|'; wait $S
+Tracing run queue latency... Hit Ctrl-C to end.
+
+     msecs               : count    distribution
+         0 -> 1          : 34       |****************************************|
+$ taskset -c 0,1 stress-ng --cpu 8 --timeout 4 -q & S=$!; sleep 0.5; runqlat-libbpf -m -c /sys/fs/cgroup 3 1 | grep -v ' 0 *|'; wait $S
+Tracing run queue latency... Hit Ctrl-C to end.
+
+     msecs               : count    distribution
+         0 -> 1          : 916      |*************************************   |
+         2 -> 3          : 186      |*******                                 |
+         4 -> 7          : 607      |************************                |
+         8 -> 15         : 989      |****************************************|
+        16 -> 31         : 16       |                                        |
+$ tcplife-libbpf -L 8080 > life1.txt & T=$!; sleep 1; hey -n 200 -c 4 -disable-keepalive http://127.0.0.1:8080/report | grep -E 'Requests/sec|Average'; sleep 0.5; kill -INT $T; wait $T
+  Average:	0.0048 secs
+  Requests/sec:	810.4064
+$ head -4 life1.txt; echo "... $(( $(wc -l < life1.txt) - 1 )) connections"
+PID     COMM             LADDR           LPORT RADDR           RPORT TX_KB  RX_KB  MS
+76888   hey              ::ffff:127.0.0.1 8080  ::ffff:127.0.0.1 49572 0.40   0.13   1.64
+76888   hey              ::ffff:127.0.0.1 8080  ::ffff:127.0.0.1 49562 0.40   0.13   2.59
+76888   hey              ::ffff:127.0.0.1 8080  ::ffff:127.0.0.1 49588 0.40   0.13   3.52
+... 200 connections
+$ tcplife-libbpf -L 8080 > life2.txt & T=$!; sleep 1; hey -n 200 -c 4 http://127.0.0.1:8080/report | grep -E 'Requests/sec|Average'; sleep 0.5; kill $N; sleep 0.5; kill -INT $T; wait $T
+  Average:	0.0052 secs
+  Requests/sec:	645.8857
+$ cat life2.txt
+PID     COMM             LADDR           LPORT RADDR           RPORT TX_KB  RX_KB  MS
+76285   node             ::ffff:127.0.0.1 8080  ::ffff:127.0.0.1 51308 21.29  5.71   309.79
+76285   node             ::ffff:127.0.0.1 8080  ::ffff:127.0.0.1 51294 21.29  5.71   310.02
+76285   node             ::ffff:127.0.0.1 8080  ::ffff:127.0.0.1 51286 21.29  5.71   310.11
+76285   node             ::ffff:127.0.0.1 8080  ::ffff:127.0.0.1 51282 21.29  5.71   310.82

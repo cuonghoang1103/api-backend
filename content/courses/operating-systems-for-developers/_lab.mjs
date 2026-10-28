@@ -37,6 +37,7 @@ export const SIMS = {
   fdtable: ['twice', 'dup', 'append', 'fork', 'deleted', 'emfile', 'links', 'redirect'],
   nslayers: ['docker', 'unshare', 'userns', 'pod'],
   overlay: ['layers', 'copyup', 'whiteout', 'opaque', 'image', 'cache'],
+  epoll: ['ready', 'scan', 'trigger', 'oneshot', 'c10k', 'walls'],
   latency: ['default'],
 };
 
@@ -60,6 +61,7 @@ export const TOURS = {
   fdtable: ['fdtable-offsets', 'fdtable-deleted', 'fdtable-start'],
   nslayers: ['nslayers-views', 'nslayers-pod', 'nslayers-start'],
   overlay: ['overlay-copyup', 'overlay-cache', 'overlay-start'],
+  epoll: ['epoll-ready', 'epoll-trigger', 'epoll-c10k', 'epoll-start'],
   latency: ['latency-start'],
 };
 

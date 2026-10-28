@@ -139,6 +139,13 @@ export const OS_LABS: Record<string, OsLabDef> = {
     presets: ['layers', 'copyup', 'whiteout', 'opaque', 'image', 'cache'],
     load: () => import('./OverlaySim'),
   },
+  epoll: {
+    en: 'epoll: one thread, thousands of connections', vi: 'epoll: một luồng, hàng nghìn kết nối', chapterEn: 'Chapter 10', chapterVi: 'Chương 10',
+    descEn: 'Interest list vs ready list, the cost of one wake-up (select/poll/epoll at 10–10 000 fds), level vs edge triggering, EPOLLONESHOT, thread-per-connection vs event loop under load, and the pids/memory/ulimit walls.',
+    descVi: 'Danh sách quan tâm vs danh sách sẵn sàng, giá một lần thức (select/poll/epoll ở 10–10 000 fd), theo mức vs theo cạnh, EPOLLONESHOT, mỗi-kết-nối-một-luồng vs event loop khi tải tăng, và các bức tường pids/bộ nhớ/ulimit.',
+    presets: ['ready', 'scan', 'trigger', 'oneshot', 'c10k', 'walls'],
+    load: () => import('./EpollSim'),
+  },
   latency: {
     en: 'Latency ladder', vi: 'Thang độ trễ', chapterEn: 'Section 0', chapterVi: 'Mục 0',
     descEn: 'Registers → caches → RAM → SSD → disk → network, on a human time scale.',

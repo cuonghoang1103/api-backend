@@ -601,4 +601,166 @@ export const OS2_TOURS: Tour[] = [
       answer: 0, why: ['A change rebuilds its step and all steps after it, so put rarely changing things first.', 'Một thay đổi làm dựng lại bước của nó và mọi bước sau, nên đặt thứ ít đổi lên trước.'],
     },
   },
+  // ───────────────────────── epoll ─────────────────────────
+  {
+    id: 'epoll-ready', ns: 'os-lab', sim: 'epoll', presets: ['ready', 'scan'],
+    title: ['How one thread watches thousands of sockets', 'Một luồng canh hàng nghìn socket ra sao'],
+    summary: ['Register once (interest list), let the kernel collect what is ready (ready list), wake only for those — and why that beats poll().', 'Đăng ký một lần (danh sách quan tâm), để nhân gom những gì sẵn sàng (danh sách sẵn sàng), chỉ thức vì chúng — và vì sao như thế hơn poll().'],
+    steps: [
+      {
+        target: 'ep-lists', do: [{ a: 'ep.preset', v: 'ready' }, { a: 'player.seek', v: 0 }],
+        title: ['Two lists inside the kernel', 'Hai danh sách trong nhân'],
+        body: ['An epoll instance keeps an INTEREST list (which fds you care about) and a READY list (which of them have something to read right now).', 'Một thực thể epoll giữ danh sách QUAN TÂM (bạn để ý những fd nào) và danh sách SẴN SÀNG (fd nào trong số đó đang có thứ để đọc).'],
+      },
+      {
+        target: 'step',
+        title: ['Your turn: accept some clients', 'Đến lượt bạn: nhận vài khách'],
+        body: ['Press Step until 9 fds are registered.', 'Bấm Bước tới khi có 9 fd được đăng ký.'],
+        task: { text: ['Step until the interest list has 9 fds.', 'Bấm Bước tới khi danh sách quan tâm có 9 fd.'], until: (s) => s.ep?.preset === 'ready' && s.ep?.interest === 9, solve: [step(6, 650)] },
+      },
+      {
+        target: 'ep-cost', do: [{ a: 'player.step', delay: 300 }],
+        title: ['Idle costs nothing', 'Rảnh thì không tốn gì'],
+        body: ['The thread sleeps inside epoll_wait. Nine idle connections use no CPU at all — no thread per connection, nothing scanning in a loop.', 'Luồng ngủ trong epoll_wait. Chín kết nối rảnh không tốn chút CPU nào — không luồng riêng cho từng kết nối, không ai quét vòng vòng.'],
+      },
+      {
+        target: 'step',
+        title: ['Your turn: data arrives', 'Đến lượt bạn: dữ liệu tới'],
+        body: ['Press Step until epoll_wait returns.', 'Bấm Bước tới khi epoll_wait trả về.'],
+        task: { text: ['Step until epoll_wait returns 2 events.', 'Bấm Bước tới khi epoll_wait trả về 2 sự kiện.'], until: (s) => s.ep?.preset === 'ready' && s.ep?.returned === 2, solve: [step(3, 650)] },
+      },
+      {
+        target: 'ep-cost',
+        title: ['2 instead of 9', '2 thay vì 9'],
+        body: ['The kernel had already put fd 7 and fd 11 on the ready list when their packets arrived, so epoll_wait hands back just those two. poll() would copy all 9 fds in and check each one.', 'Nhân đã đẩy fd 7 và fd 11 vào danh sách sẵn sàng ngay khi gói tin tới, nên epoll_wait chỉ trao lại hai cái đó. poll() sẽ phải chép cả 9 fd vào và kiểm từng cái.'],
+      },
+      {
+        target: 'ep-preset',
+        title: ['Your turn: scale it up', 'Đến lượt bạn: tăng quy mô'],
+        body: ['Choose "cost per wake" and run it to N = 10 000.', 'Chọn "giá mỗi lần thức" và chạy tới N = 10 000.'],
+        task: { text: ['Run the cost scenario to the end.', 'Chạy kịch bản giá tới cuối.'], until: (s) => s.ep?.preset === 'scan' && s.ep?.n === 10000, solve: [{ a: 'ep.preset', v: 'scan', delay: 300 }, { a: 'player.end', delay: 400 }] },
+      },
+      {
+        target: 'ep-cost',
+        title: ['676 µs vs 0.72 µs', '676 µs so với 0,72 µs'],
+        body: ['With 10 000 connections and one active, poll costs 676 µs per wake-up and epoll 0.72 µs — the same as with 10. select() cannot even hold fd 10 002: FD_SETSIZE is 1024.', 'Với 10 000 kết nối mà chỉ một cái hoạt động, poll tốn 676 µs mỗi lần thức còn epoll 0,72 µs — y như khi có 10. select() thậm chí không chứa nổi fd 10 002: FD_SETSIZE là 1024.'],
+      },
+    ],
+    quiz: {
+      q: ['What does epoll_wait give back?', 'epoll_wait trả lại cái gì?'],
+      options: [['Only the fds that are ready', 'Chỉ các fd đã sẵn sàng'], ['Every fd in the interest list, with a flag', 'Mọi fd trong danh sách quan tâm, kèm cờ'], ['One fd at a time, in order', 'Từng fd một, theo thứ tự']],
+      answer: 0, why: ['That is the whole point: its cost depends on how many are ready, not on how many you watch.', 'Đó chính là mấu chốt: giá của nó phụ thuộc số fd sẵn sàng, không phụ thuộc số fd bạn canh.'],
+    },
+  },
+  {
+    id: 'epoll-trigger', ns: 'os-lab', sim: 'epoll', presets: ['trigger', 'oneshot'],
+    title: ['Level vs edge: the bug that hangs connections', 'Theo mức vs theo cạnh: lỗi làm treo kết nối'],
+    summary: ['LT keeps reminding you, ET tells you once — so with ET you must read until EAGAIN. Plus: four threads on one epoll.', 'LT cứ nhắc mãi, ET chỉ báo một lần — nên với ET phải đọc tới EAGAIN. Thêm: bốn luồng trên một epoll.'],
+    steps: [
+      {
+        target: 'ep-bytes', do: [{ a: 'ep.preset', v: 'trigger' }, { a: 'ep.trig', v: 'lt' }, { a: 'player.seek', v: 0 }],
+        title: ['10 bytes, read 4 at a time', '10 byte, mỗi lần đọc 4'],
+        body: ['One packet brings 10 bytes. Our handler reads only 4 bytes per wake-up (a small buffer).', 'Một gói tin mang 10 byte. Hàm xử lý của ta mỗi lần thức chỉ đọc 4 byte (bộ đệm nhỏ).'],
+      },
+      {
+        target: 'play',
+        title: ['Your turn: level-triggered', 'Đến lượt bạn: theo mức'],
+        body: ['Press Play.', 'Bấm Chạy.'],
+        task: { text: ['Play to the end in LT mode.', 'Chạy tới cuối ở chế độ LT.'], until: (s) => s.ep?.trig === 'lt' && s.ep?.done === true, solve: [{ a: 'player.speed', v: 4 }, { a: 'player.play', delay: 200 }] },
+      },
+      {
+        target: 'ep-bytes',
+        title: ['4 + 4 + 2', '4 + 4 + 2'],
+        body: ['Level-triggered: as long as data is LEFT, epoll_wait returns again. Three wake-ups, everything read. Forgiving.', 'Theo mức: chừng nào CÒN dữ liệu, epoll_wait còn trả về. Ba lần thức, đọc hết. Dễ tính.'],
+      },
+      {
+        target: 'ep-opts',
+        title: ['Your turn: edge-triggered', 'Đến lượt bạn: theo cạnh'],
+        body: ['Switch to "edge (ET)" and run it to the end.', 'Chuyển sang "theo cạnh (ET)" và chạy tới cuối.'],
+        task: { text: ['ET mode, run to the end.', 'Chế độ ET, chạy tới cuối.'], until: (s) => s.ep?.trig === 'et' && s.ep?.stuck === true, solve: [{ a: 'ep.trig', v: 'et', delay: 300 }, { a: 'player.end', delay: 400 }] },
+      },
+      {
+        target: 'ep-bytes',
+        title: ['6 bytes stuck forever', '6 byte kẹt mãi mãi'],
+        body: ['There was one edge (empty → has data) and it was reported once. 6 bytes remain, no new packet comes, so epoll never wakes for them — the client waits forever for a reply.', 'Chỉ có một cạnh (trống → có dữ liệu) và nó đã được báo một lần. Còn 6 byte, không có gói mới, nên epoll không bao giờ thức vì chúng — khách chờ câu trả lời mãi mãi.'],
+      },
+      {
+        target: 'ep-opts',
+        title: ['Your turn: the ET rule', 'Đến lượt bạn: luật của ET'],
+        body: ['Choose "ET + read until EAGAIN" and run it.', 'Chọn "ET + đọc tới EAGAIN" và chạy.'],
+        task: { text: ['ET + drain, run to the end.', 'ET + vét, chạy tới cuối.'], until: (s) => s.ep?.trig === 'drain' && s.ep?.done === true, solve: [{ a: 'ep.trig', v: 'drain', delay: 300 }, { a: 'player.end', delay: 400 }] },
+      },
+      {
+        target: 'ep-lanes', do: [{ a: 'ep.preset', v: 'oneshot' }, { a: 'ep.share', v: 'lt' }, { a: 'player.end', delay: 300 }],
+        title: ['Four threads, one epoll', 'Bốn luồng, một epoll'],
+        body: ['Now 4 worker threads wait on the same epoll. With LT, ONE new connection wakes ALL FOUR; three of them find nothing (EAGAIN). Wasted wake-ups.', 'Giờ 4 luồng worker cùng chờ trên một epoll. Với LT, MỘT kết nối mới đánh thức CẢ BỐN; ba luồng chẳng thấy gì (EAGAIN). Thức dậy vô ích.'],
+      },
+      {
+        target: 'ep-opts',
+        title: ['Your turn: EPOLLONESHOT', 'Đến lượt bạn: EPOLLONESHOT'],
+        body: ['Choose EPOLLONESHOT and run to the end.', 'Chọn EPOLLONESHOT và chạy tới cuối.'],
+        task: { text: ['EPOLLONESHOT, run to the end.', 'EPOLLONESHOT, chạy tới cuối.'], until: (s) => s.ep?.share === 'oneshot' && s.ep?.atEnd === true, solve: [{ a: 'ep.share', v: 'oneshot', delay: 300 }, { a: 'player.end', delay: 400 }] },
+      },
+    ],
+    quiz: {
+      q: ['With edge-triggered epoll, how much should you read when woken?', 'Với epoll theo cạnh, khi được đánh thức bạn nên đọc bao nhiêu?'],
+      options: [['Until read() returns EAGAIN', 'Tới khi read() trả EAGAIN'], ['Exactly one buffer', 'Đúng một bộ đệm'], ['Nothing — wait for the next edge', 'Không đọc — chờ cạnh kế tiếp']],
+      answer: 0, why: ['ET reports a change only once; anything left in the socket will not trigger another wake-up.', 'ET chỉ báo một lần khi có thay đổi; thứ còn sót trong socket sẽ không gây ra lần thức nào nữa.'],
+    },
+  },
+  {
+    id: 'epoll-c10k', ns: 'os-lab', sim: 'epoll', presets: ['c10k', 'walls'],
+    title: ['10 000 connections: threads vs one event loop', '10 000 kết nối: luồng vs một event loop'],
+    summary: ['Measured in the lab: what thread-per-connection costs in memory, context switches and tail latency, and which limits break it first.', 'Đo thật trong lab: mỗi-kết-nối-một-luồng tốn bao nhiêu bộ nhớ, đổi ngữ cảnh và độ trễ đuôi, và giới hạn nào làm nó gãy trước.'],
+    steps: [
+      {
+        target: 'ep-c10k', do: [{ a: 'ep.preset', v: 'c10k' }, { a: 'ep.load', v: 'busy' }, { a: 'player.seek', v: 0 }],
+        title: ['1 000 connections: a tie', '1 000 kết nối: hoà'],
+        body: ['Each connection sends 10 messages a second. At 1 000 connections both servers answer in about 0.1 ms; the thread server just uses 1 001 threads to do it.', 'Mỗi kết nối gửi 10 tin mỗi giây. Ở 1 000 kết nối cả hai máy chủ đều trả lời trong khoảng 0,1 ms; máy chủ luồng chỉ là dùng tới 1 001 luồng để làm việc đó.'],
+      },
+      {
+        target: 'play',
+        title: ['Your turn: add load', 'Đến lượt bạn: tăng tải'],
+        body: ['Press Play to go to 5 000 and 10 000 connections.', 'Bấm Chạy để lên 5 000 rồi 10 000 kết nối.'],
+        task: { text: ['Play to 10 000 connections.', 'Chạy tới 10 000 kết nối.'], until: (s) => s.ep?.preset === 'c10k' && s.ep?.n === 10000, solve: [{ a: 'player.speed', v: 4 }, { a: 'player.play', delay: 200 }] },
+      },
+      {
+        target: 'ep-c10k',
+        title: ['p99: 322 ms vs 0.38 ms', 'p99: 322 ms so với 0,38 ms'],
+        body: ['10 001 threads fight over 10 cores: 206 518 context switches, p50 95 ms, p99 322 ms, 61 800 late sends — and 156 MiB of kernel stacks that RSS does not even show. One epoll thread: p99 0.38 ms in 41.7 MiB.', '10 001 luồng tranh 10 lõi: 206 518 lần đổi ngữ cảnh, p50 95 ms, p99 322 ms, 61 800 lần gửi trễ — cộng 156 MiB stack nhân mà RSS còn không hiện. Một luồng epoll: p99 0,38 ms trong 41,7 MiB.'],
+      },
+      {
+        target: 'ep-opts',
+        title: ['Your turn: a chat app', 'Đến lượt bạn: một ứng dụng chat'],
+        body: ['Switch to the light load: 1 message per second per connection.', 'Chuyển sang tải nhẹ: mỗi kết nối 1 tin mỗi giây.'],
+        task: { text: ['Choose the light load.', 'Chọn tải nhẹ.'], until: (s) => s.ep?.load === 'light', solve: [{ a: 'ep.load', v: 'light', delay: 300 }] },
+      },
+      {
+        target: 'ep-c10k',
+        title: ['Latency fine, memory not', 'Độ trễ ổn, bộ nhớ thì không'],
+        body: ['With little traffic the threads mostly sleep, so latency is fine (p99 1.92 ms). But 10 000 sleeping threads still cost 122.6 MiB + 156 MiB of kernel stacks, against 40.9 MiB.', 'Ít lưu lượng thì các luồng chủ yếu ngủ, nên độ trễ ổn (p99 1,92 ms). Nhưng 10 000 luồng đang ngủ vẫn tốn 122,6 MiB + 156 MiB stack nhân, so với 40,9 MiB.'],
+      },
+      {
+        target: 'ep-walls', do: [{ a: 'ep.preset', v: 'walls' }, { a: 'player.seek', v: 0 }],
+        title: ['Wall 1: pids.max', 'Bức tường 1: pids.max'],
+        body: ['In a container with pids.max = 1000 every thread counts. Thread 997 cannot be created.', 'Trong container có pids.max = 1000, luồng nào cũng bị đếm. Luồng thứ 997 không tạo được.'],
+      },
+      {
+        target: 'step',
+        title: ['Your turn: the next walls', 'Đến lượt bạn: các bức tường tiếp theo'],
+        body: ['Press Step twice: the memory limit, then the fd limit.', 'Bấm Bước hai lần: giới hạn bộ nhớ, rồi giới hạn fd.'],
+        task: { text: ['Step to the ulimit -n wall.', 'Bấm Bước tới bức tường ulimit -n.'], until: (s) => s.ep?.wall === 'nofile', solve: [step(2, 700)] },
+      },
+      {
+        target: 'ep-walls',
+        title: ['Every connection is an fd', 'Kết nối nào cũng là một fd'],
+        body: ['ulimit -n stops BOTH models. With level-triggered epoll the full server even spins at 100% CPU on failing accept4 calls. Close what you open, and raise LimitNOFILE deliberately.', 'ulimit -n chặn CẢ HAI mô hình. Với epoll theo mức, máy chủ đầy còn quay 100% CPU vì accept4 cứ thất bại. Hãy đóng thứ đã mở, và chủ động nâng LimitNOFILE.'],
+      },
+    ],
+    quiz: {
+      q: ['Why does a thread-per-connection server use far more memory than RSS shows?', 'Vì sao máy chủ mỗi-kết-nối-một-luồng tốn bộ nhớ hơn nhiều so với RSS hiển thị?'],
+      options: [['Each thread also has a kernel stack (16 KiB) outside RSS', 'Mỗi luồng còn có một stack nhân (16 KiB) nằm ngoài RSS'], ['RSS is measured once a minute', 'RSS chỉ được đo mỗi phút một lần'], ['Threads share no memory at all', 'Các luồng không dùng chung bộ nhớ nào']],
+      answer: 0, why: ['10 000 threads × 16 KiB = 156 MiB of kernel memory that ps/top RSS does not count — it still counts against the cgroup.', '10 000 luồng × 16 KiB = 156 MiB bộ nhớ nhân mà RSS của ps/top không tính — nhưng cgroup vẫn tính.'],
+    },
+  },
 ];

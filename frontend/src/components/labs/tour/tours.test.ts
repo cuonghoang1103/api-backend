@@ -133,6 +133,9 @@ const FINAL: Record<string, (s: Record<string, Record<string, unknown> | undefin
   'nslayers-pod': (s) => s.ns?.podNet === true && s.ns?.podPid === true && s.ns?.curlOk === true,
   'overlay-copyup': (s) => s.ov?.preset === 'whiteout' && (s.ov?.whiteouts as number) >= 1,
   'overlay-cache': (s) => s.ov?.order === 'bad' && s.ov?.change === 'server' && (s.ov?.buildSec as number) >= 3,
+  'epoll-ready': (s) => s.ep?.preset === 'scan' && s.ep?.n === 10000,
+  'epoll-trigger': (s) => s.ep?.share === 'oneshot' && s.ep?.atEnd === true,
+  'epoll-c10k': (s) => s.ep?.wall === 'nofile',
   'syscall-errno': (s) => s.sys?.kind === 'clone3' && s.sys?.raw === -38 && s.sys?.atEnd === true,
 };
 

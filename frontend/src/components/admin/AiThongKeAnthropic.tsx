@@ -23,10 +23,13 @@ const CAU_HOI = [
   { id: 'key', nhan: '🔑 Các key còn bao nhiêu, đủ tới cuối tháng không?' },
 ] as const;
 
+/** Lần THỬ hỏng chia theo mã — `tuXuLy` = cổng tự thử lại thành công, `that` = người dùng có thể đã thấy lỗi. */
+interface MaLoi { ma: string; nhan: string; tong: number; tuXuLy: number; that: number }
 interface Han { daNgay: number; tranNgay: number | null; daThang: number; tranThang: number | null; nguon: string }
 interface Dong {
   userId: number | null; ten: string; email: string | null; goi: string;
-  usdHomNay: number; usdHomQua: number; tbNgay7: number; usdThang: number; luot: number; loi: number; viecChinh: string;
+  usdHomNay: number; usdHomQua: number; tbNgay7: number; usdThang: number; luot: number; viecChinh: string;
+  loi: number; loiTuXuLy?: number; loiThat?: number; tiLeLoiThatPct?: number | null; loiTheoMa?: MaLoi[];
   han: null | { free: Han; cao: Han };
 }
 interface HanhDong {
@@ -36,7 +39,10 @@ interface HanhDong {
 interface KetQua {
   cauHoiId: string | null; traLoi: string | null; hanhDong: HanhDong[]; loi: string | null; model: string; usdLuotNay: number;
   soLieu: {
-    homNay: { usd: number; luot: number; loi: number; duBaoCaNgayUsd: number | null };
+    homNay: {
+      usd: number; luot: number; loi: number; duBaoCaNgayUsd: number | null;
+      loiTuXuLy?: number; loiThat?: number; tiLeLoiThatPct?: number | null; loiTheoMa?: MaLoi[];
+    };
     homQua: { usd: number }; tb7NgayTruoc: { usdMoiNgay: number };
     theoViec: Array<{ viec: string; usd: number; luot: number }>;
     theoModel: Array<{ model: string; hang: string; usd: number; luot: number }>;
@@ -45,6 +51,16 @@ interface KetQua {
 }
 
 const usd = (n: number | null | undefined, d = 2) => (n == null ? '∞' : `$${n.toLocaleString('en-US', { maximumFractionDigits: d })}`);
+
+/** Chú thích khi rê chuột vào ô Lượt/Lỗi: chia theo mã lỗi. */
+function chuThichLoi(l: { loi: number; loiTuXuLy?: number; loiThat?: number; loiTheoMa?: MaLoi[] }): string {
+  if (!l.loi) return 'Không có lần thử nào hỏng.';
+  const dong = [
+    `${l.loi} lần thử hỏng: ${l.loiTuXuLy ?? 0} thử lại tự động thành công, ${l.loiThat ?? l.loi} lỗi người dùng thấy.`,
+    ...(l.loiTheoMa ?? []).map((m) => `• ${m.ma === 'KHONG_MA' ? 'Không mã' : m.ma}: ${m.tong} (${m.tuXuLy} tự xử lý, ${m.that} thật) — ${m.nhan}`),
+  ];
+  return dong.join('\n');
+}
 
 async function goi<T>(duong: string, init?: RequestInit): Promise<T> {
   const r = await fetch(`${API}${duong}`, { credentials: 'include', ...init, headers: { 'Content-Type': 'application/json', ...(init?.headers ?? {}) } });
@@ -154,13 +170,39 @@ export default function AiThongKeAnthropic() {
             </div>
           )}
 
+          {kq.soLieu.homNay.loi > 0 && (
+            <details className="p-2 rounded-lg bg-darkbg border border-darkborder text-xs text-text-primary">
+              <summary className="cursor-pointer">
+                Lỗi hôm nay: <b>{kq.soLieu.homNay.loiThat ?? kq.soLieu.homNay.loi}</b> lỗi người dùng thấy
+                {kq.soLieu.homNay.tiLeLoiThatPct != null ? ` (${kq.soLieu.homNay.tiLeLoiThatPct}%)` : ''}
+                {' · '}{kq.soLieu.homNay.loiTuXuLy ?? 0} lần thử lại tự động thành công
+                <span className="text-text-muted"> — tổng {kq.soLieu.homNay.loi} lần thử hỏng, bấm để xem theo mã</span>
+              </summary>
+              <table className="w-full mt-1">
+                <thead><tr className="text-text-muted text-left"><th className="pr-2">Mã</th><th className="pr-2 text-right">Lần</th><th className="pr-2 text-right">Thử lại tự động</th><th className="pr-2 text-right">Người dùng thấy</th><th>Nguyên nhân</th></tr></thead>
+                <tbody>
+                  {(kq.soLieu.homNay.loiTheoMa ?? []).map((m) => (
+                    <tr key={m.ma} className="border-t border-darkborder">
+                      <td className="pr-2 font-mono">{m.ma === 'KHONG_MA' ? '—' : m.ma}</td>
+                      <td className="pr-2 text-right">{m.tong}</td>
+                      <td className="pr-2 text-right">{m.tuXuLy}</td>
+                      <td className="pr-2 text-right">{m.that}</td>
+                      <td className="text-text-muted">{m.nhan}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <p className="mt-1 text-text-muted">“Thử lại tự động” = cổng tự chuyển key / gửi lại bản tối giản và thành công trong ~2 phút, người dùng không thấy lỗi. Ước đoán theo cùng người + cùng việc (sổ không có mã lượt).</p>
+            </details>
+          )}
+
           <div className="overflow-x-auto">
             <b className="text-text-primary">🏆 Xếp hạng hôm nay (số do mã tính)</b>
             <table className="w-full text-xs mt-1">
               <thead>
                 <tr className="text-text-muted text-left">
                   <th className="py-1 pr-2">#</th><th className="pr-2">Người</th><th className="pr-2">Gói</th><th className="pr-2 text-right">Hôm nay</th>
-                  <th className="pr-2 text-right">TB 7 ngày</th><th className="pr-2 text-right">Tháng</th><th className="pr-2 text-right">Lượt/lỗi</th>
+                  <th className="pr-2 text-right">TB 7 ngày</th><th className="pr-2 text-right">Tháng</th><th className="pr-2 text-right" title="Lượt = số dòng sổ (gồm cả lần thử hỏng) · lỗi = lần thử hỏng (trong ngoặc: lỗi người dùng thấy). Rê chuột vào từng ô để xem theo mã.">Lượt / lỗi (thật)</th>
                   <th className="pr-2">Việc chính</th><th className="text-right">Trần free (ngày)</th>
                 </tr>
               </thead>
@@ -175,7 +217,12 @@ export default function AiThongKeAnthropic() {
                       <td className="pr-2 text-right font-semibold">{usd(x.usdHomNay, 3)}{vot !== null && vot >= 3 ? ' 🔺' : ''}</td>
                       <td className="pr-2 text-right text-text-muted">{usd(x.tbNgay7, 3)}</td>
                       <td className="pr-2 text-right">{usd(x.usdThang)}</td>
-                      <td className="pr-2 text-right">{x.luot}/{x.loi}</td>
+                      <td className="pr-2 text-right whitespace-nowrap" title={chuThichLoi(x)}>
+                        {x.luot} / {x.loi}
+                        {x.loi > 0 && x.loiThat !== undefined && (
+                          <span className={x.loiThat > 0 ? 'text-amber-300' : 'text-text-muted'}> ({x.loiThat} thật)</span>
+                        )}
+                      </td>
                       <td className="pr-2">{x.viecChinh}</td>
                       <td className="text-right">{x.han ? `${usd(x.han.free.daNgay)}/${usd(x.han.free.tranNgay)}` : '—'}</td>
                     </tr>

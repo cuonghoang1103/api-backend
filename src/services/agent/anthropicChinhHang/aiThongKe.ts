@@ -19,11 +19,11 @@ import { goiVanBanChinhHang } from './dinhTuyen.js';
 export const MODEL_THONG_KE = 'claude-sonnet-5-5';
 
 export const CAU_HOI_SAN = [
-  { id: 'tong', nhan: 'Hôm nay đã tiêu bao nhiêu $?', y: 'Tóm tắt tổng chi hôm nay (USD, số lượt, tỉ lệ lỗi), so với hôm qua và trung bình 7 ngày trước; nói rõ nhanh hay chậm hơn bình thường.' },
+  { id: 'tong', nhan: 'Hôm nay đã tiêu bao nhiêu $?', y: 'Tóm tắt tổng chi hôm nay (USD, số lượt, lỗi người dùng thấy — tách khỏi lần thử lại tự động), so với hôm qua và trung bình 7 ngày trước; nói rõ nhanh hay chậm hơn bình thường.' },
   { id: 'nguon', nhan: 'Tiền hôm nay đến từ đâu, việc gì, model nào?', y: 'Chia tiền hôm nay theo VIỆC (AI Code, thi, CT Work…), theo MODEL và theo KEY; chỉ ra khoản lớn nhất và vì sao đáng chú ý.' },
   { id: 'xep-hang', nhan: 'Xếp hạng người dùng nhiều nhất hôm nay', y: 'Nêu top người dùng chi nhiều nhất hôm nay từ cao xuống thấp (tên, gói, USD, việc chính), và nhận xét ai đáng lo.' },
   { id: 'gan-tran', nhan: 'Ai sắp chạm trần?', y: 'Liệt kê người đã/sắp chạm trần ngày hoặc tháng (so đã dùng với trần), kèm mức đã dùng %.' },
-  { id: 'bat-thuong', nhan: 'Có gì bất thường không?', y: 'Tìm bất thường: người chi vọt so với 7 ngày trước, tỉ lệ lỗi cao, một việc/model tăng đột biến, lượt đắt bất thường.' },
+  { id: 'bat-thuong', nhan: 'Có gì bất thường không?', y: 'Tìm bất thường: người chi vọt so với 7 ngày trước, tỉ lệ lỗi THẬT cao (không tính lần cổng tự thử lại thành công; nêu nguyên nhân theo mã lỗi), một việc/model tăng đột biến, lượt đắt bất thường.' },
   { id: 'de-xuat', nhan: 'Đề xuất giới hạn / tăng hạn mức từng người', y: 'Đề xuất đặt hoặc nới trần ngày/tháng cho từng người đáng xét (hạ người dùng quá tay, nới người dùng hợp lý). Mỗi đề xuất phải có lý do dựa trên số liệu và đưa vào `hanhDong`.' },
   { id: 'key', nhan: 'Các key còn bao nhiêu, đủ tới cuối tháng không?', y: 'Đánh giá từng key: đã dùng/ngân sách, còn lại, và dự báo (chi trung bình/ngày × số ngày còn lại) có đủ tới cuối chu kỳ không.' },
 ] as const;
@@ -35,6 +35,100 @@ const TEN_VIEC: Record<string, string> = {
   work_ai: 'Trợ lý CT Work', admin_thong_ke: 'AI thống kê (chính admin)',
 };
 const lamTron = (n: number, d = 4) => Math.round(n * 10 ** d) / 10 ** d;
+
+/* ── LỖI: lần THỬ hỏng ≠ lỗi người dùng thấy (28/10/2026) ─────────────────────────────────────────────
+ * `goi.ts › guiChinhHang` ghi MỘT dòng `thanhCong: false` cho MỖI lần thử hỏng TRƯỚC khi luồng mở (`MANG`,
+ * `HTTP_<mã>`), kể cả khi nó tự thử key kế (429/529/5xx/401/403/hết credit) hoặc gửi lại bản tối giản cùng key
+ * (400 vì tham số beta/thinking) rồi THÀNH CÔNG — người dùng không thấy gì. Sổ không có mã lượt/yêu cầu để nối các
+ * lần thử với nhau, nên dùng ước đoán: lần thử hỏng TRƯỚC luồng được coi là "đã tự xử lý" khi CÙNG người + CÙNG
+ * việc có một lượt thành công BẮT ĐẦU trong `CUA_SO_TU_XU_LY_MS` sau nó (bắt đầu = createdAt − thoiGianMs, vì dòng
+ * thành công chỉ được ghi khi luồng xong). Luồng đứt giữa chừng (`LUONG_GAY` / không mã) thì cổng KHÔNG gửi lại
+ * (chữ đã chảy tới người dùng) ⇒ luôn tính là lỗi thật. */
+export const CUA_SO_TU_XU_LY_MS = 120_000;
+/** Lần thử lại bắt đầu ngay sau khi dòng hỏng được ghi (ghi không chờ) — cho lệch vài giây. */
+const LECH_TRUOC_MS = 5_000;
+
+/** Mã lỗi xảy ra TRƯỚC khi luồng mở — loại cổng tự thử lại được. */
+export function laLoiTruocLuong(ma: string | null): boolean {
+  return ma === 'MANG' || /^HTTP_\d{3}$/.test(ma ?? '');
+}
+
+/** Nhãn tiếng Việt cho một mã lỗi trong sổ. */
+export function nhanMaLoi(ma: string | null): string {
+  if (!ma || ma === 'LUONG_GAY') return 'Luồng trả lời đứt giữa chừng (có thể do người dùng bấm Dừng hoặc rớt mạng)';
+  if (ma === 'MANG') return 'Mất kết nối mạng tới Anthropic';
+  const m = /^HTTP_(\d{3})$/.exec(ma);
+  if (!m) return ma;
+  const s = Number(m[1]);
+  if (s === 429) return 'Bị giới hạn tốc độ (rate limit) — cổng thử key kế';
+  if (s === 529) return 'Anthropic quá tải (overloaded) — cổng thử key kế';
+  if (s === 402) return 'Key hết credit — cổng thử key kế';
+  if (s === 401 || s === 403) return 'Key sai / bị khoá — cổng thử key kế';
+  if (s === 400) return 'Yêu cầu bị từ chối: tham số beta/thinking (cổng tự gửi lại bản tối giản), key hết credit, hoặc yêu cầu sai';
+  if (s === 408 || s === 409) return 'Anthropic hết thời gian / xung đột — cổng thử key kế';
+  if (s >= 500) return `Anthropic lỗi máy chủ (${s}) — cổng thử key kế`;
+  return `HTTP ${s}`;
+}
+
+export interface DongLoiSo { userId: number | null; viec: string; maLoi: string | null; createdAt: Date }
+export interface DongOkSo { userId: number | null; viec: string; createdAt: Date; thoiGianMs: number }
+export interface MaLoiDem { ma: string; nhan: string; tong: number; tuXuLy: number; that: number }
+export interface TomTatLoi {
+  /** Tổng lần THỬ hỏng ghi sổ. */
+  tong: number;
+  /** Cổng tự thử lại (key kế / bản tối giản) và thành công — người dùng không thấy lỗi. */
+  tuXuLy: number;
+  /** Không thấy lần thử lại nào thành công — người dùng có thể đã thấy lỗi (hoặc được lùi sang cổng khác). */
+  that: number;
+  theoMa: MaLoiDem[];
+}
+
+const khoaCap = (userId: number | null, viec: string) => `${userId ?? 'null'}|${viec}`;
+
+/** Phân loại từng lần thử hỏng: đã tự xử lý hay lỗi thật; gom chung + theo người + theo mã. Thuần, để test. */
+export function phanTichLoi(loi: DongLoiSo[], ok: DongOkSo[], cuaSoMs = CUA_SO_TU_XU_LY_MS): {
+  chung: TomTatLoi; theoNguoi: Map<number | null, TomTatLoi>;
+} {
+  const batDauOk = new Map<string, number[]>();
+  for (const r of ok) {
+    const k = khoaCap(r.userId, r.viec);
+    const ds = batDauOk.get(k) ?? [];
+    ds.push(r.createdAt.getTime() - Math.max(0, r.thoiGianMs));
+    batDauOk.set(k, ds);
+  }
+  const moi = (): { tong: number; tuXuLy: number; that: number; ma: Map<string, MaLoiDem> } => ({ tong: 0, tuXuLy: 0, that: 0, ma: new Map() });
+  const chung = moi();
+  const nguoi = new Map<number | null, ReturnType<typeof moi>>();
+  const cong = (g: ReturnType<typeof moi>, ma: string, tuXuLy: boolean) => {
+    g.tong++;
+    if (tuXuLy) g.tuXuLy++; else g.that++;
+    const d = g.ma.get(ma) ?? { ma, nhan: nhanMaLoi(ma === 'KHONG_MA' ? null : ma), tong: 0, tuXuLy: 0, that: 0 };
+    d.tong++;
+    if (tuXuLy) d.tuXuLy++; else d.that++;
+    g.ma.set(ma, d);
+  };
+  for (const r of loi) {
+    const t = r.createdAt.getTime();
+    const tuXuLy = laLoiTruocLuong(r.maLoi)
+      && (batDauOk.get(khoaCap(r.userId, r.viec)) ?? []).some((b) => b >= t - LECH_TRUOC_MS && b <= t + cuaSoMs);
+    const ma = r.maLoi || 'KHONG_MA';
+    cong(chung, ma, tuXuLy);
+    const g = nguoi.get(r.userId) ?? moi();
+    cong(g, ma, tuXuLy);
+    nguoi.set(r.userId, g);
+  }
+  const ra = (g: ReturnType<typeof moi>): TomTatLoi => ({
+    tong: g.tong, tuXuLy: g.tuXuLy, that: g.that,
+    theoMa: [...g.ma.values()].sort((a, b) => b.tong - a.tong || a.ma.localeCompare(b.ma)),
+  });
+  return { chung: ra(chung), theoNguoi: new Map([...nguoi.entries()].map(([k, v]) => [k, ra(v)])) };
+}
+
+/** % lỗi người dùng thấy trên số yêu cầu ước tính (lượt thành công + lỗi thật). */
+export function tiLeLoiThat(luot: number, l: Pick<TomTatLoi, 'tong' | 'that'>): number | null {
+  const yeuCau = luot - l.tong + l.that;
+  return yeuCau > 0 ? Math.round((l.that / yeuCau) * 1000) / 10 : null;
+}
 
 export interface HanhDongDeXuat {
   loai: 'dat_tran' | 'xoa_tran';
@@ -49,7 +143,11 @@ export interface HanhDongDeXuat {
 
 export interface DongXepHang {
   userId: number | null; ten: string; email: string | null; goi: string;
-  usdHomNay: number; usdHomQua: number; tbNgay7: number; usdThang: number; luot: number; loi: number;
+  usdHomNay: number; usdHomQua: number; tbNgay7: number; usdThang: number;
+  /** Số dòng sổ hôm nay — GỒM cả lần thử hỏng. */
+  luot: number;
+  /** Tổng lần THỬ hỏng (giữ tên cũ); tách ra ở `loiTuXuLy` + `loiThat`. */
+  loi: number; loiTuXuLy: number; loiThat: number; tiLeLoiThatPct: number | null; loiTheoMa: MaLoiDem[];
   viecChinh: string; viecTheoTien: Array<{ viec: string; usd: number }>;
   han: null | {
     free: { daNgay: number; tranNgay: number | null; daThang: number; tranThang: number | null; nguon: string };
@@ -65,9 +163,12 @@ export async function gomSoLieu(luc = new Date()) {
   const tongNgay = (tu: Date, den?: Date) => prisma.anthropicUsage.aggregate({
     where: { createdAt: { gte: tu, ...(den ? { lt: den } : {}) } }, _sum: { costUsd: true }, _count: true,
   });
-  const [homNay, homQua, bay, loiHn, theoViec, theoModel, theoKey, nguoiViec, nguoiHqRaw, nguoi7Raw, nguoiThangRaw, loiNguoiRaw, keys] = await Promise.all([
+  const [homNay, homQua, bay, dongLoi, theoViec, theoModel, theoKey, nguoiViec, nguoiHqRaw, nguoi7Raw, nguoiThangRaw, keys] = await Promise.all([
     tongNgay(dau), tongNgay(hqDau, dau), tongNgay(b7Dau, dau),
-    prisma.anthropicUsage.count({ where: { createdAt: { gte: dau }, thanhCong: false } }),
+    prisma.anthropicUsage.findMany({
+      where: { createdAt: { gte: dau }, thanhCong: false },
+      select: { userId: true, viec: true, maLoi: true, createdAt: true }, take: 20_000,
+    }),
     prisma.anthropicUsage.groupBy({ by: ['viec'], where: { createdAt: { gte: dau } }, _sum: { costUsd: true }, _count: true }),
     prisma.anthropicUsage.groupBy({ by: ['model', 'hang'], where: { createdAt: { gte: dau } }, _sum: { costUsd: true }, _count: true }),
     prisma.anthropicUsage.groupBy({ by: ['keyId'], where: { createdAt: { gte: dau } }, _sum: { costUsd: true }, _count: true }),
@@ -75,9 +176,17 @@ export async function gomSoLieu(luc = new Date()) {
     prisma.anthropicUsage.groupBy({ by: ['userId'], where: { createdAt: { gte: hqDau, lt: dau } }, _sum: { costUsd: true } }),
     prisma.anthropicUsage.groupBy({ by: ['userId'], where: { createdAt: { gte: b7Dau, lt: dau } }, _sum: { costUsd: true } }),
     prisma.anthropicUsage.groupBy({ by: ['userId'], where: { createdAt: { gte: dauT } }, _sum: { costUsd: true } }),
-    prisma.anthropicUsage.groupBy({ by: ['userId'], where: { createdAt: { gte: dau }, thanhCong: false }, _count: true }),
     dsKeyAdmin(luc).catch(() => []),
   ]);
+  /* Lượt thành công của đúng các cặp (người, việc) có lần thử hỏng TRƯỚC luồng — để biết lần nào đã tự xử lý. */
+  const capCanXet = [...new Map(dongLoi.filter((r) => laLoiTruocLuong(r.maLoi))
+    .map((r) => [khoaCap(r.userId, r.viec), { userId: r.userId, viec: r.viec }])).values()].slice(0, 300);
+  const dongOk = capCanXet.length ? await prisma.anthropicUsage.findMany({
+    where: { createdAt: { gte: dau }, thanhCong: true, OR: capCanXet },
+    select: { userId: true, viec: true, createdAt: true, thoiGianMs: true }, take: 50_000,
+  }) : [];
+  const loiPhanTich = phanTichLoi(dongLoi, dongOk);
+  const KHONG_LOI: TomTatLoi = { tong: 0, tuXuLy: 0, that: 0, theoMa: [] };
 
   const g = new Map<number | null, { usd: number; luot: number; viec: Array<{ viec: string; usd: number }> }>();
   for (const r of nguoiViec) {
@@ -108,7 +217,8 @@ export async function gomSoLieu(luc = new Date()) {
     return {
       userId: id, ten: id === null ? 'Hệ thống / không gắn người' : u?.fullName || u?.username || `#${id}`, email: u?.email ?? null, goi,
       usdHomNay: lamTron(v.usd), usdHomQua: lamTron(lay(nguoiHqRaw, id)), tbNgay7: lamTron(lay(nguoi7Raw, id) / 7), usdThang: lamTron(lay(nguoiThangRaw, id), 2),
-      luot: v.luot, loi: loiNguoiRaw.find((r) => r.userId === id)?._count ?? 0,
+      luot: v.luot,
+      ...((l) => ({ loi: l.tong, loiTuXuLy: l.tuXuLy, loiThat: l.that, tiLeLoiThatPct: tiLeLoiThat(v.luot, l), loiTheoMa: l.theoMa }))(loiPhanTich.theoNguoi.get(id) ?? KHONG_LOI),
       viecChinh: viec[0]?.viec ?? '—', viecTheoTien: viec.slice(0, 4), han,
     };
   }));
@@ -119,8 +229,12 @@ export async function gomSoLieu(luc = new Date()) {
   return {
     luc: luc.toISOString(),
     ghiChu: 'USD là số tự đo (usage Anthropic trả × bảng giá trong mã), không phải số dư thật. Ngày tính theo lịch giờ Việt Nam.',
+    ghiChuLoi: '`luot` = số dòng sổ, GỒM cả lần thử hỏng. `loi` = tổng lần THỬ hỏng; `loiTuXuLy` = cổng tự thử key kế / gửi lại bản tối giản và thành công trong ~2 phút (người dùng KHÔNG thấy lỗi); `loiThat` = phần còn lại, người dùng có thể đã thấy lỗi (hoặc được lùi sang cổng khác). `tiLeLoiThatPct` = loiThat ÷ (lượt thành công + loiThat). `loiTheoMa` chia theo mã lỗi kèm nhãn nguyên nhân. Key chạm ngân sách tháng thì bị bỏ qua TRƯỚC khi gọi nên không sinh dòng lỗi.',
     homNay: {
-      usd: lamTron(tong), luot: homNay._count, loi: loiHn, gioDaQua: lamTron(gioVn, 1),
+      usd: lamTron(tong), luot: homNay._count,
+      loi: loiPhanTich.chung.tong, loiTuXuLy: loiPhanTich.chung.tuXuLy, loiThat: loiPhanTich.chung.that,
+      tiLeLoiThatPct: tiLeLoiThat(homNay._count, loiPhanTich.chung), loiTheoMa: loiPhanTich.chung.theoMa,
+      gioDaQua: lamTron(gioVn, 1),
       duBaoCaNgayUsd: gioVn >= 1 ? lamTron((tong / gioVn) * 24, 2) : null,
     },
     homQua: { usd: lamTron(homQua._sum.costUsd ?? 0), luot: homQua._count },
@@ -181,6 +295,7 @@ const HE_THONG = [
   'Trả về DUY NHẤT một JSON hợp lệ (không chữ ngoài JSON): {"traLoi": "<markdown ngắn: tối đa ~14 dòng, dùng gạch đầu dòng và **đậm** cho số quan trọng>", "hanhDong": [ ... ]}.',
   '`hanhDong` là mảng đề xuất đổi trần, CHỈ khi câu hỏi yêu cầu giới hạn/nới hạn mức, hoặc khi có người rõ ràng cần xử lý; không thì []. Mỗi phần tử: {"loai":"dat_tran"|"xoa_tran","userId":<số trong xepHang>,"hang":"free"|"cao","ngayUsd":<số|null>,"thangUsd":<số|null>,"lyDo":"<1 câu dựa trên số liệu>"}. `free` = CuongMini Free (Sonic/Heshin 5.5), `cao` = model Claude cao.',
   'Đề xuất hợp lý: hạ trần người dùng vọt so với trung bình 7 ngày, nới trần người dùng đều đặn gần chạm trần. Tối đa 8 đề xuất.',
+  'LỖI: đọc `ghiChuLoi`. Lần thử hỏng đã được cổng tự xử lý (`loiTuXuLy`) KHÔNG phải lỗi người dùng thấy — không gọi đó là "tỉ lệ lỗi cao", chỉ nhắc ngắn là cổng đã tự thử lại. Chỉ đánh giá tỉ lệ lỗi bằng `loiThat` / `tiLeLoiThatPct`. Khi nói về lỗi, nêu nguyên nhân theo `loiTheoMa` (vd: 429 = giới hạn tốc độ, 529 = Anthropic quá tải, 400 = tham số beta/thinking hoặc key hết credit, MANG = mất mạng, luồng đứt = có thể người dùng bấm Dừng). Không đề xuất hạ trần chỉ vì lỗi.',
 ].join('\n');
 
 export async function traLoiThongKe(adminId: number, o: { id?: string; cauHoi?: string }, luc = new Date()) {

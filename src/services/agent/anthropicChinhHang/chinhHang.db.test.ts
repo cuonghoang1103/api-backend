@@ -519,3 +519,32 @@ test('agent phụ: mucModelPhu "nhanh" ⇒ haiku-5-5 trên cổng chính hãng; 
   await chay({ userId: ad, model: 'cl-opus-5-5', laPhu: true });
   assert.equal(daGoi.find((x) => x.duong === '/v1/messages')!.body.model, 'claude-opus-5-5', 'mặc định kế thừa');
 });
+
+test('AI thống kê: lần thử 429 cổng tự chuyển key thành công ⇒ "đã tự xử lý"; lỗi không ai cứu ⇒ "lỗi thật"; chia theo mã', { skip: !BAT }, async () => {
+  const { prisma } = await import('../../../config/database.js');
+  const { goiVanBanChinhHang } = await import('./dinhTuyen.js');
+  const { gomSoLieu } = await import('./aiThongKe.js');
+  const [k429] = await themKeys(['r', '429'], ['s', 'ok']);
+  const ad = await taoNguoi('tk-ad', { admin: true });
+  const an = await taoNguoi('tk-an');
+  // Đường THẬT: key đầu 429 ⇒ ghi một dòng HTTP_429, key kế trả lời ⇒ một dòng thành công.
+  const r = await goiVanBanChinhHang({
+    system: 'x', messages: [{ role: 'user', content: 'hi' }], model: 'claude-sonnet-5-5', hang: 'free', maxTokens: 50,
+    userId: ad, viec: 'agent_code', signal: AbortSignal.timeout(10_000),
+  });
+  assert.match(r.text, /Xin chào/);
+  await new Promise((res) => setTimeout(res, 150)); // dòng hỏng ghi không chờ
+  // Người khác: 529 không có lượt thành công nào sau + luồng đứt (cả hai là lỗi người dùng thấy).
+  await prisma.anthropicUsage.createMany({ data: [
+    { keyId: k429!, userId: an, viec: 'exam_tutor', model: 'claude-sonnet-5-5', thanhCong: false, maLoi: 'HTTP_529' },
+    { keyId: k429!, userId: an, viec: 'exam_tutor', model: 'claude-sonnet-5-5', thanhCong: false, maLoi: 'LUONG_GAY' },
+  ] });
+  const so = await gomSoLieu();
+  assert.deepEqual([so.homNay.loi, so.homNay.loiTuXuLy, so.homNay.loiThat], [3, 1, 2]);
+  assert.deepEqual(so.homNay.loiTheoMa.map((m) => [m.ma, m.tuXuLy, m.that]).sort(), [['HTTP_429', 1, 0], ['HTTP_529', 0, 1], ['LUONG_GAY', 0, 1]]);
+  const dAd = so.xepHang.find((x) => x.userId === ad)!;
+  assert.deepEqual([dAd.luot, dAd.loi, dAd.loiTuXuLy, dAd.loiThat, dAd.tiLeLoiThatPct], [2, 1, 1, 0, 0]);
+  const dAn = so.xepHang.find((x) => x.userId === an)!;
+  assert.deepEqual([dAn.loi, dAn.loiThat, dAn.tiLeLoiThatPct], [2, 2, 100]);
+  assert.match(so.ghiChuLoi, /tự thử key kế/);
+});

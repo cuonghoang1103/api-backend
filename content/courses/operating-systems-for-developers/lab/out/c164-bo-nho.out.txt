@@ -1,0 +1,106 @@
+# Drill M1 — one reference string, four algorithms, 3 frames ||| Bài M1 — một chuỗi tham chiếu, bốn thuật toán, 3 khung
+$ python3 osgcalc.py page fifo 3 "7 2 7 3 1 2 4 2 7 3 2 1 5 2"
+== FIFO, 3 frames, 14 references ==
+ref       7   2   7   3   1   2   4   2   7   3   2   1   5   2
+frame0    7   7   7   7   1   1   1   1   7   7   7   7   5   5
+frame1    -   2   2   2   2   2   4   4   4   3   3   3   3   2
+frame2    -   -   -   3   3   3   3   2   2   2   2   1   1   1
+fault     F   F       F   F       F   F   F   F       F   F   F
+out                       7       2   3   1   4       2   7   3
+page faults = 11, hits = 3, fault rate = 11/14 = 79%
+$ python3 osgcalc.py page lru 3 "7 2 7 3 1 2 4 2 7 3 2 1 5 2"
+== LRU, 3 frames, 14 references ==
+ref       7   2   7   3   1   2   4   2   7   3   2   1   5   2
+frame0    7   7   7   7   7   2   2   2   2   2   2   2   2   2
+frame1    -   2   2   2   1   1   1   1   7   7   7   1   1   1
+frame2    -   -   -   3   3   3   4   4   4   3   3   3   5   5
+fault     F   F       F   F   F   F       F   F       F   F    
+out                       2   7   3       1   4       7   3    
+page faults = 10, hits = 4, fault rate = 10/14 = 71%
+$ python3 osgcalc.py page opt 3 "7 2 7 3 1 2 4 2 7 3 2 1 5 2"
+== OPT, 3 frames, 14 references ==
+ref       7   2   7   3   1   2   4   2   7   3   2   1   5   2
+frame0    7   7   7   7   7   7   7   7   7   3   3   1   5   5
+frame1    -   2   2   2   2   2   2   2   2   2   2   2   2   2
+frame2    -   -   -   3   1   1   4   4   4   4   4   4   4   4
+fault     F   F       F   F       F           F       F   F    
+out                       3       1           7       3   1    
+page faults = 8, hits = 6, fault rate = 8/14 = 57%
+$ python3 osgcalc.py page clock 3 "7 2 7 3 1 2 4 2 7 3 2 1 5 2"
+== CLOCK, 3 frames, 14 references ==
+ref       7   2   7   3   1   2   4   2   7   3   2   1   5   2
+frame0    7   7   7   7   1   1   1   1   7   7   7   1   1   1
+frame1    -   2   2   2   2   2   2   2   2   3   3   3   5   5
+frame2    -   -   -   3   3   3   4   4   4   4   2   2   2   2
+fault     F   F       F   F       F       F   F   F   F   F    
+out                       7       3       1   2   4   7   3    
+page faults = 10, hits = 4, fault rate = 10/14 = 71%
+$ python3 osgcalc.py page lru 4 "7 2 7 3 1 2 4 2 7 3 2 1 5 2"
+== LRU, 4 frames, 14 references ==
+ref       7   2   7   3   1   2   4   2   7   3   2   1   5   2
+frame0    7   7   7   7   7   7   4   4   4   4   4   1   1   1
+frame1    -   2   2   2   2   2   2   2   2   2   2   2   2   2
+frame2    -   -   -   3   3   3   3   3   7   7   7   7   5   5
+frame3    -   -   -   -   1   1   1   1   1   3   3   3   3   3
+fault     F   F       F   F       F       F   F       F   F    
+out                               7       3   1       4   7    
+page faults = 9, hits = 5, fault rate = 9/14 = 64%
+$ python3 osgcalc.py page fifo 4 "7 2 7 3 1 2 4 2 7 3 2 1 5 2" | tail -1
+page faults = 8, hits = 6, fault rate = 8/14 = 57%
+# Drill M2 — Belady's anomaly: more frames, more faults (FIFO only) ||| Bài M2 — nghịch lý Belady: thêm khung, thêm lỗi trang (chỉ FIFO)
+$ python3 osgcalc.py page fifo 3 "1 2 3 4 1 2 5 1 2 3 4 5" | tail -1
+page faults = 9, hits = 3, fault rate = 9/12 = 75%
+$ python3 osgcalc.py page fifo 4 "1 2 3 4 1 2 5 1 2 3 4 5" | tail -1
+page faults = 10, hits = 2, fault rate = 10/12 = 83%
+$ python3 osgcalc.py page lru 4 "1 2 3 4 1 2 5 1 2 3 4 5" | tail -1
+page faults = 8, hits = 4, fault rate = 8/12 = 67%
+# Drill M3 — which page is evicted? ||| Bài M3 — trang nào bị đuổi?
+$ python3 osgcalc.py victim "0:126:279:0:0 1:230:260:1:0 2:120:272:1:1 3:160:280:1:1"
+page  loaded  last ref  R  M   NRU class
+   0     126       279  0  0   0
+   1     230       260  1  0   2
+   2     120       272  1  1   3
+   3     160       280  1  1   3
+FIFO evicts page 2 (loaded earliest, t=120)
+LRU evicts page 1 (last used earliest, t=260)
+NRU evicts page 0 (lowest class 0 = R0M0)
+Second chance evicts page 0 (oldest with R = 0)
+# Drill M4 — address arithmetic ||| Bài M4 — tính địa chỉ
+$ python3 osgcalc.py addr bits=10,10,12 0x12345678
+VA = 0x12345678 = 0001 0010 0011 0100 0101 0110 0111 1000 (32 bits)
+  PT1     10 bits    0001001000  = 72
+  PT2     10 bits    1101000101  = 837
+  offset  12 bits  011001111000  = 1656  (0x678)
+page size = 2^12 = 4096 bytes (4 KiB)
+pages in the address space = 2^20 = 1,048,576
+$ python3 osgcalc.py addr bits=9,11,12 0x00C02ABC
+VA = 0x00C02ABC = 0000 0000 1100 0000 0010 1010 1011 1100 (32 bits)
+  PT1      9 bits     000000001  = 1
+  PT2     11 bits   10000000010  = 1026
+  offset  12 bits  101010111100  = 2748  (0xabc)
+page size = 2^12 = 4096 bytes (4 KiB)
+pages in the address space = 2^20 = 1,048,576
+$ python3 osgcalc.py pagesize 32 8192 4
+offset bits = log2(8192) = 13; page-number bits = 32 - 13 = 19
+pages = 2^19 = 524,288; single-level table = 524,288 x 4 B = 2,097,152 B = 2 MiB
+$ python3 osgcalc.py loglen 128 8192
+page number: log2(128) = 7 bits; offset: log2(8192) = 13 bits; logical address = 7 + 13 = 20 bits
+$ python3 osgcalc.py seg "2100:500 3800:120 900:300 5000:750" 2 250
+segment 2: base = 900, limit = 300; offset = 250
+  250 < 300 -> physical = 900 + 250 = 1150
+$ python3 osgcalc.py seg "2100:500 3800:120 900:300 5000:750" 1 130
+segment 1: base = 3800, limit = 120; offset = 130
+  130 >= 120 -> TRAP: segmentation fault (addressing error)
+# Drill M5 — effective access time with a TLB ||| Bài M5 — thời gian truy cập hiệu dụng có TLB
+$ python3 osgcalc.py eat 10 80 0.95
+hit:  TLB 10 + memory 80 = 90 ns
+miss: TLB 10 + 1 page-table read(s) 80 x 1 + memory 80 = 170 ns
+EAT = 0.95 x 90 + 0.05 x 170 = 94 ns (vs 80 ns with no paging)
+$ python3 osgcalc.py eat 10 80 0.95 4
+hit:  TLB 10 + memory 80 = 90 ns
+miss: TLB 10 + 4 page-table read(s) 80 x 4 + memory 80 = 410 ns
+EAT = 0.95 x 90 + 0.05 x 410 = 106 ns (vs 80 ns with no paging)
+$ python3 osgcalc.py eat 10 80 0.80 4
+hit:  TLB 10 + memory 80 = 90 ns
+miss: TLB 10 + 4 page-table read(s) 80 x 4 + memory 80 = 410 ns
+EAT = 0.8 x 90 + 0.2 x 410 = 154 ns (vs 80 ns with no paging)

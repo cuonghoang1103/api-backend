@@ -1,0 +1,8 @@
+$ KEEP=1 ./check.sh
+running services/ under traffic for 75s ...
+FAIL  1 shop-api: no OOM kill, no restart, RSS < 150 MiB  0/2  restarts: 3, oom events: 3; stats: {"cached":2096,"rssMiB":197}
+FAIL  2 report: fds stay low, /report answers 200     0/2  open fds of PID 1: 255; /report: 500
+FAIL  3 worker: log disk < 50%, no deleted-open files  0/2  df 100%, deleted-but-open: 1; health: ok=8701 failed=4756 last_error=[Errno 28] No space left on device
+FAIL  4 billing: 100 opposite transfers finish, money kept  0/2  finished 0/100 in 10 s; total = no answer
+FAIL  5 audit: median store < 10 ms, no corrupted lines  0/2  median 41.4 ms; malformed lines: 36
+SCORE 0/10

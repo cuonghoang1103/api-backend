@@ -1,0 +1,110 @@
+# Q1 — FCFS ||| Câu 1 — FCFS
+$ python3 osgcalc.py sched fcfs "A:0:5 B:0:9 C:0:2 D:0:4"
+== FCFS ==
+|     A     |         B         |  C  |    D    |
+0           5                   14    16        20
+job   arrive  burst  finish  turnaround  waiting  response
+A          0      5       5           5        0         0
+B          0      9      14          14        5         5
+C          0      2      16          16       14        14
+D          0      4      20          20       16        16
+average turnaround = 55/4 = 13.75
+average waiting    = 35/4 = 8.75
+context switches (job→another job) = 3
+# Q2 — round robin, quantum 3 ||| Câu 2 — round robin, quantum 3
+$ python3 osgcalc.py sched rr "P1:0:6 P2:1:4 P3:2:2" q=3
+== Round robin, quantum = 3 ==
+|  P1   |  P2   | P3  |  P1   | P2 |
+0       3       6     8       11   12
+job   arrive  burst  finish  turnaround  waiting  response
+P1         0      6      11          11        5         0
+P2         1      4      12          11        7         2
+P3         2      2       8           6        4         4
+average turnaround = 28/3 = 9.33
+average waiting    = 16/3 = 5.33
+context switches (job→another job) = 4
+# Q3 — SRTF ||| Câu 3 — SRTF
+$ python3 osgcalc.py sched srtf "P1:0:6 P2:2:2 P3:3:8 P4:5:3"
+== SRTF (preemptive SJF) ==
+| P1  | P2  |   P1    |  P4   |       P3        |
+0     2     4         8       11                19
+job   arrive  burst  finish  turnaround  waiting  response
+P1         0      6       8           8        2         0
+P2         2      2       4           2        0         0
+P3         3      8      19          16        8         8
+P4         5      3      11           6        3         3
+average turnaround = 32/4 = 8
+average waiting    = 13/4 = 3.25
+context switches (job→another job) = 4
+# Q4–Q5 — page replacement ||| Câu 4–5 — thay trang
+$ python3 osgcalc.py page lru 4 "1 3 5 2 3 1 4 5 2 3 6 2"
+== LRU, 4 frames, 12 references ==
+ref       1   3   5   2   3   1   4   5   2   3   6   2
+frame0    1   1   1   1   1   1   1   1   1   3   3   3
+frame1    -   3   3   3   3   3   3   3   2   2   2   2
+frame2    -   -   5   5   5   5   4   4   4   4   6   6
+frame3    -   -   -   2   2   2   2   5   5   5   5   5
+fault     F   F   F   F           F   F   F   F   F    
+out                               5   2   3   1   4    
+page faults = 9, hits = 3, fault rate = 9/12 = 75%
+$ python3 osgcalc.py page opt 3 "1 3 5 2 3 1 4 5 2 3 6 2"
+== OPT, 3 frames, 12 references ==
+ref       1   3   5   2   3   1   4   5   2   3   6   2
+frame0    1   1   1   1   1   1   4   5   5   5   6   6
+frame1    -   3   3   3   3   3   3   3   3   3   3   3
+frame2    -   -   5   2   2   2   2   2   2   2   2   2
+fault     F   F   F   F           F   F           F    
+out                   5           1   4           5    
+page faults = 7, hits = 5, fault rate = 7/12 = 58%
+# Q6–Q8 — addresses ||| Câu 6–8 — địa chỉ
+$ python3 osgcalc.py addr bits=8,12,12 0xABCDE123
+VA = 0xABCDE123 = 1010 1011 1100 1101 1110 0001 0010 0011 (32 bits)
+  PT1      8 bits      10101011  = 171
+  PT2     12 bits  110011011110  = 3294
+  offset  12 bits  000100100011  = 291  (0x123)
+page size = 2^12 = 4096 bytes (4 KiB)
+pages in the address space = 2^20 = 1,048,576
+$ python3 osgcalc.py pagesize 32 4096 4
+offset bits = log2(4096) = 12; page-number bits = 32 - 12 = 20
+pages = 2^20 = 1,048,576; single-level table = 1,048,576 x 4 B = 4,194,304 B = 4 MiB
+$ python3 osgcalc.py eat 5 50 0.9 2
+hit:  TLB 5 + memory 50 = 55 ns
+miss: TLB 5 + 2 page-table read(s) 50 x 2 + memory 50 = 155 ns
+EAT = 0.9 x 55 + 0.1 x 155 = 65 ns (vs 50 ns with no paging)
+# Q9 — Banker, two resource types ||| Câu 9 — Banker, hai loại tài nguyên
+$ python3 osgcalc.py banker "1,2 2,0 0,1 1,1" "3,3 2,2 2,2 1,3" "1,1"
+Total = (5,5)   Available = (1,1)
+     Allocation  Max         Need = Max - Allocation
+P0   (1,2)       (3,3)       (2,1)
+P1   (2,0)       (2,2)       (0,2)
+P2   (0,1)       (2,2)       (2,1)
+P3   (1,1)       (1,3)       (0,2)
+  UNSAFE: P0, P1, P2, P3 can never be guaranteed to finish
+# Q10 — SSTF ||| Câu 10 — SSTF
+$ python3 osgcalc.py disk sstf 50 "82 170 43 140 24 16 190"
+== SSTF (shortest seek first), head at 50 ==
+order: 50 -> 43 -> 24 -> 16 -> 82 -> 140 -> 170 -> 190
+moves: 7 + 19 + 8 + 66 + 58 + 30 + 20 = 208 cylinders
+$ python3 osgcalc.py disk fcfs 50 "82 170 43 140 24 16 190"
+== FCFS, head at 50 ==
+order: 50 -> 82 -> 170 -> 43 -> 140 -> 24 -> 16 -> 190
+moves: 32 + 88 + 127 + 97 + 116 + 8 + 174 = 642 cylinders
+$ python3 osgcalc.py disk look 50 "82 170 43 140 24 16 190"
+== LOOK (elevator, turn at last request), head at 50, moving up ==
+order: 50 -> 82 -> 140 -> 170 -> 190 -> 43 -> 24 -> 16
+moves: 32 + 58 + 30 + 20 + 147 + 19 + 8 = 314 cylinders
+# Q6 trap — the same address split 10/10/12 ||| Câu 6, cái bẫy — cùng địa chỉ đó tách 10/10/12
+$ python3 osgcalc.py addr bits=10,10,12 0xABCDE123
+VA = 0xABCDE123 = 1010 1011 1100 1101 1110 0001 0010 0011 (32 bits)
+  PT1     10 bits    1010101111  = 687
+  PT2     10 bits    0011011110  = 222
+  offset  12 bits  000100100011  = 291  (0x123)
+page size = 2^12 = 4096 bytes (4 KiB)
+pages in the address space = 2^20 = 1,048,576
+# Q1 and Q4 distractors — SJF and LRU vs FIFO with 4 frames ||| Phương án nhiễu Câu 1 và 4 — SJF, và LRU so với FIFO khi có 4 khung
+$ python3 osgcalc.py sched sjf "A:0:5 B:0:9 C:0:2 D:0:4" | tail -3
+average turnaround = 39/4 = 9.75
+average waiting    = 19/4 = 4.75
+context switches (job→another job) = 3
+$ python3 osgcalc.py page fifo 4 "1 3 5 2 3 1 4 5 2 3 6 2" | tail -1
+page faults = 6, hits = 6, fault rate = 6/12 = 50%

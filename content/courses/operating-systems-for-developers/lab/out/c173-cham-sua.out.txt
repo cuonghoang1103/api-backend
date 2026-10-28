@@ -1,0 +1,10 @@
+$ ./check.sh fixed
+running fixed/ under traffic for 75s ...
+PASS  1 shop-api: no OOM kill, no restart, RSS < 150 MiB +2   restarts: 0, oom events: 0; stats: {"cached":50,"rssMiB":68}
+PASS  2 report: fds stay low, /report answers 200    +2   open fds of PID 1: 19; /report: 200
+PASS  3 worker: log disk < 50%, no deleted-open files +2   df 1%, deleted-but-open: 0; health: ok=32117 failed=0 last_error=
+PASS  4 billing: 100 opposite transfers finish, money kept +2   finished 100/100 in 10 s; total = 4000000
+PASS  5 audit: median store < 10 ms, no corrupted lines +2   median 0.7 ms; malformed lines: 0
+SCORE 10/10
+$ docker ps -a --filter label=com.docker.compose.project=os17 --format '{{.Names}}' | wc -l
+       0

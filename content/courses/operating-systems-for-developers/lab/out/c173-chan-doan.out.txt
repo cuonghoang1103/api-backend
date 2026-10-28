@@ -1,0 +1,98 @@
+# Step 0 — triage: which containers are unhealthy right now? ||| Bước 0 — phân loại: container nào đang không khoẻ?
+$ docker ps -a --filter label=com.docker.compose.project=os17 --format 'table {{.Names}}\t{{.Status}}'
+NAMES           STATUS
+os-17-traffic   Up About a minute
+os-17-billing   Up About a minute
+os-17-audit     Up About a minute
+os-17-worker    Up About a minute
+os-17-report    Up About a minute
+os-17-shop      Up 10 seconds
+$ docker stats --no-stream --format 'table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.PIDs}}' os-17-shop os-17-report os-17-worker os-17-billing os-17-audit
+NAME            CPU %     MEM USAGE / LIMIT     PIDS
+os-17-shop      4.05%     126.5MiB / 192MiB     7
+os-17-report    0.70%     24.8MiB / 7.748GiB    7
+os-17-worker    76.19%    89.79MiB / 7.748GiB   4
+os-17-billing   0.06%     163.5MiB / 7.748GiB   39
+os-17-audit     3.44%     16.49MiB / 7.748GiB   2
+# Incident 1 — shop-api keeps restarting ||| Sự cố 1 — shop-api cứ khởi động lại
+$ docker inspect -f '{{.Name}} restarts={{.RestartCount}} OOMKilled={{.State.OOMKilled}} started={{.State.StartedAt}}' os-17-shop
+/os-17-shop restarts=4 OOMKilled=false started=2026-10-28T19:58:35.826852966Z
+$ docker events --since 3m --until "$(date +%s)" --filter container=os-17-shop --format '{{.Action}} exitCode={{index .Actor.Attributes "exitCode"}}' | grep -E '^(oom|die)' | tail -4
+oom exitCode=
+die exitCode=137
+oom exitCode=
+die exitCode=137
+$ for i in 1 2 3; do docker exec os-17-traffic curl -s shop-api:3000/stats; sleep 2; done
+{"cached":1660,"rssMiB":169}
+{"cached":1951,"rssMiB":187}
+{"cached":2244,"rssMiB":206}
+$ docker exec os-17-shop cat /sys/fs/cgroup/memory.max
+201326592
+# Incident 2 — report answers 500 ||| Sự cố 2 — report trả lời 500
+$ docker logs --tail 2 os-17-report
+2026-10-28T19:58:54.302Z report failed: EMFILE EMFILE: too many open files, open '/app/template.html'
+2026-10-28T19:58:54.409Z report failed: EMFILE EMFILE: too many open files, open '/app/template.html'
+$ docker exec os-17-report sh -c 'ulimit -n; ls /proc/1/fd | wc -l; ls -l /proc/1/fd | grep -c template.html'
+256
+255
+236
+# Incident 3 — worker jobs fail: the disk is full, but du says it is almost empty ||| Sự cố 3 — việc của worker lỗi: đĩa đầy, mà du bảo gần như trống
+$ docker exec os-17-traffic curl -s worker:3002/
+ok=8701 failed=6894 last_error=[Errno 28] No space left on device
+$ docker exec os-17-worker sh -c 'df -h /var/log/app | tail -1; du -sh /var/log/app'
+tmpfs            64M   64M     0 100% /var/log/app
+400K	/var/log/app
+$ docker exec os-17-worker sh -c 'ls -l /proc/[0-9]*/fd 2>/dev/null | grep "(deleted)" | sed -E "s/.* ([0-9]+) -> /fd \1 -> /"'
+fd 3 -> /var/log/app/worker.log.1 (deleted)
+$ docker exec os-17-worker sh -c 'ls /var/log/app; P=$(pgrep -x python3); stat -Lc "fd 3 of python3 (PID $P): %s bytes" /proc/$P/fd/3; head -c 150 /proc/$P/fd/3; echo'
+results
+fd 3 of python3 (PID 1): 66699264 bytes
+2026-10-29 02:57:15,658 DEBUG jobs job=1 step=0 payload=9aeb562f228af1962110fe2a8ff9327f1919af335a9e9c1d1ff1467349aca6c8 state=xxxxxxxxxxxxxxxxxxxxxxx
+# Incident 4 — transfers hang, CPU is idle ||| Sự cố 4 — lệnh chuyển tiền treo, CPU lại rảnh
+$ docker exec os-17-traffic curl -s -m 3 -o /dev/null -w '%{http_code} after %{time_total}s\n' 'billing:3003/transfer?from=0&to=1'; echo "curl exit=$?"
+000 after 3.002549s
+curl exit=28
+$ docker exec os-17-billing sh -c 'jstack 1 | sed -n "/Found one Java-level deadlock/,/^Found [0-9]* deadlock/p" | grep -vE "^\s*$" | head -24'
+Found one Java-level deadlock:
+=============================
+"pool-1-thread-1":
+  waiting to lock monitor 0x0000ffff1800a5b0 (object 0x000000008b695d98, a Billing$Account),
+  which is held by "pool-1-thread-2"
+"pool-1-thread-2":
+  waiting to lock monitor 0x0000ffff1000a790 (object 0x000000008b695d68, a Billing$Account),
+  which is held by "pool-1-thread-1"
+Java stack information for the threads listed above:
+===================================================
+"pool-1-thread-1":
+	at Billing.transfer(Billing.java:14)
+	- waiting to lock <0x000000008b695d98> (a Billing$Account)
+	- locked <0x000000008b695d68> (a Billing$Account)
+	at Billing.lambda$main$2(Billing.java:31)
+	at Billing$$Lambda/0x0000008001158c40.handle(Unknown Source)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(jdk.httpserver@21.0.12.1/Filter.java:98)
+	at sun.net.httpserver.AuthFilter.doFilter(jdk.httpserver@21.0.12.1/AuthFilter.java:82)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(jdk.httpserver@21.0.12.1/Filter.java:101)
+	at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(jdk.httpserver@21.0.12.1/ServerImpl.java:932)
+	at com.sun.net.httpserver.Filter$Chain.doFilter(jdk.httpserver@21.0.12.1/Filter.java:98)
+	at sun.net.httpserver.ServerImpl$Exchange.run(jdk.httpserver@21.0.12.1/ServerImpl.java:908)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(java.base@21.0.12.1/ThreadPoolExecutor.java:1144)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(java.base@21.0.12.1/ThreadPoolExecutor.java:642)
+# Incident 5 — audit is slow ||| Sự cố 5 — audit chậm
+$ docker exec os-17-traffic sh -c 'for i in 1 2 3; do curl -s "audit:3004/event?id=$i"; done'
+stored in 26.3 ms
+stored in 28.3 ms
+stored in 23.4 ms
+$ docker run --rm --label oslab=1 --name os-17-debug --pid=container:os-17-audit --cap-add SYS_PTRACE os-lab sh -c 'timeout -s INT 4 strace -qq -c -f -p 1 -o /tmp/s.txt; head -8 /tmp/s.txt'
+% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ------------------
+ 55.78    0.192205        4687        41           ppoll
+ 24.66    0.084970          30      2795           fsync
+  9.86    0.033983          12      2795           write
+  4.35    0.014987          39       378        90 futex
+  1.09    0.003748          44        84           sendto
+  0.79    0.002733          66        41           clone
+$ docker exec os-17-audit sh -c "wc -l < /data/audit.log; grep -cvE '^[0-9]+\.[0-9]{6} /event\?id=[0-9]+ user=42 action=transfer amount=1$' /data/audit.log; grep -vE '^[0-9]+\.[0-9]{6} /event' /data/audit.log | head -2 | cut -c1-70"
+1213
+39
+er=42 action=transfer amount=1
+7524.5364581 7/9e3v2e1n7t5?24id.5=4252550537  /uesveern=t4?2i da=c3t i

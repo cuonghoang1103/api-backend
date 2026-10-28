@@ -1,0 +1,128 @@
+# Drill B1 — Banker: is the state safe, and can the requests be granted? ||| Bài B1 — Banker: trạng thái có an toàn không, có cấp được yêu cầu không?
+$ python3 osgcalc.py banker "1,0,1 2,1,1 0,1,0 1,2,0 0,0,2" "4,2,3 3,2,2 2,3,1 1,3,2 3,1,4" "2,1,1" P4=1,0,1 P1=1,0,0
+Total = (6,5,5)   Available = (2,1,1)
+     Allocation  Max         Need = Max - Allocation
+P0   (1,0,1)     (4,2,3)     (3,2,2)
+P1   (2,1,1)     (3,2,2)     (1,1,1)
+P2   (0,1,0)     (2,3,1)     (2,2,1)
+P3   (1,2,0)     (1,3,2)     (0,1,2)
+P4   (0,0,2)     (3,1,4)     (3,1,2)
+  step 1: P1 Need (1,1,1) <= Work (2,1,1) -> finishes, Work = (4,2,2)
+  step 2: P2 Need (2,2,1) <= Work (4,2,2) -> finishes, Work = (4,3,2)
+  step 3: P3 Need (0,1,2) <= Work (4,3,2) -> finishes, Work = (5,5,2)
+  step 4: P4 Need (3,1,2) <= Work (5,5,2) -> finishes, Work = (5,5,4)
+  step 5: P0 Need (3,2,2) <= Work (5,5,4) -> finishes, Work = (6,5,5)
+  SAFE, safe sequence <P1, P2, P3, P4, P0>
+Request P4 (1,0,1):
+  pretend to grant: Allocation[P4] = (1,0,3), Need[P4] = (2,1,1), Available = (1,1,0)
+  -> unsafe (P0, P1, P2, P3, P4 stuck): DENY, P4 must wait
+Request P1 (1,0,0):
+  pretend to grant: Allocation[P1] = (3,1,1), Need[P1] = (0,1,1), Available = (1,1,1)
+  step 1: P1 Need (0,1,1) <= Work (1,1,1) -> finishes, Work = (4,2,2)
+  step 2: P2 Need (2,2,1) <= Work (4,2,2) -> finishes, Work = (4,3,2)
+  step 3: P3 Need (0,1,2) <= Work (4,3,2) -> finishes, Work = (5,5,2)
+  step 4: P4 Need (3,1,2) <= Work (5,5,2) -> finishes, Work = (5,5,4)
+  step 5: P0 Need (3,2,2) <= Work (5,5,4) -> finishes, Work = (6,5,5)
+  -> still safe <P1, P2, P3, P4, P0>: GRANT
+# Drill B2 — the smallest x that makes the state safe ||| Bài B2 — x nhỏ nhất để trạng thái an toàn
+$ python3 osgcalc.py banker-x "1,0,1 2,1,1 0,1,0 1,2,0 0,0,2" "4,2,3 3,2,2 2,3,1 1,3,2 3,1,4" "1,x,1"
+x = 0: Available = (1,0,1)
+  stuck: P0, P1, P2, P3, P4 -> unsafe
+x = 1: Available = (1,1,1)
+  step 1: P1 Need (1,1,1) <= Work (1,1,1) -> finishes, Work = (3,2,2)
+  step 2: P2 Need (2,2,1) <= Work (3,2,2) -> finishes, Work = (3,3,2)
+  step 3: P3 Need (0,1,2) <= Work (3,3,2) -> finishes, Work = (4,5,2)
+  step 4: P4 Need (3,1,2) <= Work (4,5,2) -> finishes, Work = (4,5,4)
+  step 5: P0 Need (3,2,2) <= Work (4,5,4) -> finishes, Work = (5,5,5)
+  SAFE <P1, P2, P3, P4, P0>  => smallest x = 1
+# Drill B3 — one resource type, Has/Max tables ||| Bài B3 — một loại tài nguyên, bảng Has/Max
+$ python3 osgcalc.py banker "2 1 3 2" "7 4 5 8" "2"
+Total = (10)   Available = (2)
+     Allocation  Max         Need = Max - Allocation
+P0   (2)         (7)         (5)
+P1   (1)         (4)         (3)
+P2   (3)         (5)         (2)
+P3   (2)         (8)         (6)
+  step 1: P2 Need (2) <= Work (2) -> finishes, Work = (5)
+  step 2: P0 Need (5) <= Work (5) -> finishes, Work = (7)
+  step 3: P1 Need (3) <= Work (7) -> finishes, Work = (8)
+  step 4: P3 Need (6) <= Work (8) -> finishes, Work = (10)
+  SAFE, safe sequence <P2, P0, P1, P3>
+$ python3 osgcalc.py banker "2 1 3 2" "7 4 5 8" "1"
+Total = (9)   Available = (1)
+     Allocation  Max         Need = Max - Allocation
+P0   (2)         (7)         (5)
+P1   (1)         (4)         (3)
+P2   (3)         (5)         (2)
+P3   (2)         (8)         (6)
+  UNSAFE: P0, P1, P2, P3 can never be guaranteed to finish
+# Drill B4 — deadlock DETECTION with a Request matrix ||| Bài B4 — PHÁT HIỆN deadlock bằng ma trận Request
+$ python3 osgcalc.py detect "1,0,1 0,1,0 1,1,0 0,0,1" "0,1,0 1,0,1 0,0,1 1,0,0" "0,0,0"
+     Allocation  Request     
+P0   (1,0,1)     (0,1,0)     
+P1   (0,1,0)     (1,0,1)     
+P2   (1,1,0)     (0,0,1)     
+P3   (0,0,1)     (1,0,0)     
+Available = (0,0,0)
+  DEADLOCKED: P0, P1, P2, P3
+$ python3 osgcalc.py detect "1,0,1 0,1,0 1,1,0 0,0,1" "0,1,0 1,0,1 0,0,1 1,0,0" "0,1,0"
+     Allocation  Request     
+P0   (1,0,1)     (0,1,0)     
+P1   (0,1,0)     (1,0,1)     
+P2   (1,1,0)     (0,0,1)     
+P3   (0,0,1)     (1,0,0)     
+Available = (0,1,0)
+  step 1: P0 Request (0,1,0) <= Work (0,1,0) -> finishes, Work = (1,1,1)
+  step 2: P1 Request (1,0,1) <= Work (1,1,1) -> finishes, Work = (1,2,1)
+  step 3: P2 Request (0,0,1) <= Work (1,2,1) -> finishes, Work = (2,3,1)
+  step 4: P3 Request (1,0,0) <= Work (2,3,1) -> finishes, Work = (2,3,2)
+  no deadlock, every process can finish <P0, P1, P2, P3>
+# Drill K1 — disk arm scheduling, cylinders 0-199, head at 80 moving up ||| Bài K1 — lập lịch tay đĩa, trụ 0-199, đầu đọc ở 80 đang đi lên
+$ python3 osgcalc.py disk fcfs 80 "45 132 12 98 181 67 140 30"
+== FCFS, head at 80 ==
+order: 80 -> 45 -> 132 -> 12 -> 98 -> 181 -> 67 -> 140 -> 30
+moves: 35 + 87 + 120 + 86 + 83 + 114 + 73 + 110 = 708 cylinders
+$ python3 osgcalc.py disk sstf 80 "45 132 12 98 181 67 140 30" ms=2
+== SSTF (shortest seek first), head at 80 ==
+order: 80 -> 67 -> 45 -> 30 -> 12 -> 98 -> 132 -> 140 -> 181
+moves: 13 + 22 + 15 + 18 + 86 + 34 + 8 + 41 = 237 cylinders
+seek time = 237 x 2 ms = 474 ms
+$ python3 osgcalc.py disk scan 80 "45 132 12 98 181 67 140 30"
+== SCAN (elevator, to the edge), head at 80, moving up ==
+order: 80 -> 98 -> 132 -> 140 -> 181 -> 199 -> 67 -> 45 -> 30 -> 12
+moves: 18 + 34 + 8 + 41 + 18 + 132 + 22 + 15 + 18 = 306 cylinders
+$ python3 osgcalc.py disk look 80 "45 132 12 98 181 67 140 30"
+== LOOK (elevator, turn at last request), head at 80, moving up ==
+order: 80 -> 98 -> 132 -> 140 -> 181 -> 67 -> 45 -> 30 -> 12
+moves: 18 + 34 + 8 + 41 + 114 + 22 + 15 + 18 = 270 cylinders
+$ python3 osgcalc.py disk cscan 80 "45 132 12 98 181 67 140 30"
+== C-SCAN (to the edge, jump back to 0), head at 80, moving up ==
+order: 80 -> 98 -> 132 -> 140 -> 181 -> 199 -> 0 -> 12 -> 30 -> 45 -> 67
+moves: 18 + 34 + 8 + 41 + 18 + 199 + 12 + 18 + 15 + 22 = 385 cylinders
+  (the return jump from the edge to 0 is counted here; some books leave it out - say which rule you use)
+$ python3 osgcalc.py disk clook 80 "45 132 12 98 181 67 140 30"
+== C-LOOK (jump back to lowest request), head at 80, moving up ==
+order: 80 -> 98 -> 132 -> 140 -> 181 -> 12 -> 30 -> 45 -> 67
+moves: 18 + 34 + 8 + 41 + 169 + 18 + 15 + 22 = 325 cylinders
+$ python3 osgcalc.py disk look 80 "45 132 12 98 181 67 140 30" down
+== LOOK (elevator, turn at last request), head at 80, moving down ==
+order: 80 -> 67 -> 45 -> 30 -> 12 -> 98 -> 132 -> 140 -> 181
+moves: 13 + 22 + 15 + 18 + 86 + 34 + 8 + 41 = 237 cylinders
+# Drill K2 — cylinder skew ||| Bài K2 — độ lệch trụ
+$ python3 osgcalc.py skew 7200 1 300
+one rotation = 60000 / 7200 = 8.3333 ms; one sector passes in 8.3333 / 300 = 0.02778 ms
+sectors passing during a 1 ms track-to-track seek = 36.00 -> skew = 36 sectors
+# Drill Y1 — which outputs can three processes with two semaphores print? ||| Bài Y1 — ba tiến trình với hai semaphore in ra được những gì?
+$ python3 osgcalc.py sem
+S = 1, T = 0
+  P1: wait(S); print A; signal(T); print B
+  P2: wait(T); print C; signal(S)
+  P3: wait(S); print D
+complete outputs (3): ABCD, ACBD, ACDB
+runs that block forever (1): D
+  ACBD: possible
+  ABCD: possible
+  DACB: impossible
+  ACDB: possible
+  CABD: impossible
+  ABDC: impossible

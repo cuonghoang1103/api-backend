@@ -41,6 +41,8 @@ import s11 from './operating-systems-for-developers/s11-loi-goi-he-thong.mjs';
 import s12 from './operating-systems-for-developers/s12-container.mjs';
 import s13 from './operating-systems-for-developers/s13-bao-mat.mjs';
 import s14 from './operating-systems-for-developers/s14-windows-macos.mjs';
+import s16 from './operating-systems-for-developers/s16-thi-cu-phong-van.mjs';
+import s17 from './operating-systems-for-developers/s17-du-an-cuoi-khoa.mjs';
 
 /*
  * Đề cương đầy đủ (redesigned 28/10/2026). Mục 0 và Chương 1 ở đây chỉ là KHUNG dự phòng — hai section THẬT (s00, s01)
@@ -179,6 +181,8 @@ sections[11] = s11;
 sections[12] = s12;
 sections[13] = s13;
 sections[14] = s14;
+sections[16] = s16;
+sections[17] = s17;
 
 export default {
   category: { slug: 'cs-fundamentals', name: 'Nền tảng khoa học máy tính', icon: 'Cpu', sortOrder: 9 },

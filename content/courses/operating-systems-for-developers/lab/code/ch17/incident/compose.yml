@@ -1,0 +1,48 @@
+# compose.yml — phòng lab "chẩn đoán sự cố cài sẵn" (dự án 17.3). Năm dịch vụ + một máy tạo tải, đều dựng từ ảnh os-lab.
+#   docker compose -p os17 up -d --build            # bật (khoảng 1 phút sau là các sự cố bắt đầu lộ ra)
+#   SRC=fixed docker compose -p os17 up -d --build  # bật bản ĐÃ SỬA (lời giải mẫu) — cùng cấu hình, chỉ khác mã nguồn
+#   docker compose -p os17 down -v                  # tắt và dọn sạch
+# Mã nguồn gắn CHỈ-ĐỌC từ ./${SRC:-services}: sửa file trong services/ rồi `docker compose -p os17 restart <dịch vụ>`.
+x-common: &common
+  image: os-17-incident
+  build: { context: ., dockerfile: Dockerfile }
+  labels: { oslab: "1" }
+  restart: unless-stopped
+  volumes: ["./${SRC:-services}:/app:ro"]
+  init: false
+
+services:
+  shop-api:
+    <<: *common
+    container_name: os-17-shop
+    command: node /app/shop-api.js
+    mem_limit: 192m
+    memswap_limit: 192m
+  report:
+    <<: *common
+    container_name: os-17-report
+    command: node /app/report.js
+    ulimits: { nofile: { soft: 256, hard: 256 } }
+  worker:
+    <<: *common
+    container_name: os-17-worker
+    command: sh -c "/app/rotate.sh & exec python3 /app/worker.py"
+    tmpfs: ["/var/log/app:size=64m"]
+  billing:
+    <<: *common
+    container_name: os-17-billing
+    command: java /app/Billing.java
+  audit:
+    <<: *common
+    container_name: os-17-audit
+    command: python3 /app/audit.py
+    volumes: ["./${SRC:-services}:/app:ro", "audit-data:/data"]
+  traffic:
+    <<: *common
+    container_name: os-17-traffic
+    command: bash /app/traffic.sh
+    depends_on: [shop-api, report, worker, billing, audit]
+
+volumes:
+  audit-data:
+    labels: { oslab: "1" }

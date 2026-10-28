@@ -1,0 +1,72 @@
+# The starting point: ctsh.c from Chapter 1 scores almost nothing on the acceptance tests ||| Điểm xuất phát: ctsh.c của Chương 1 gần như trượt hết bộ kiểm nghiệm thu
+$ shell/test-shell.sh /tmp/start | grep -E '^(PASS|FAIL)|^SCORE' | cut -c1-72
+FAIL M1   run a program with arguments                          0 / 0.5
+FAIL M1   exit status: $? after a failing command               0 / 0.5
+FAIL M1   unknown command: message + 127                        0 / 0.5
+FAIL M1   cd changes the shell's own directory                  0 / 0.5
+FAIL M2   > creates/truncates, < reads, >> appends              0 / 0.5
+FAIL M2   2> sends only stderr to a file                        0 / 0.5
+FAIL M2   2>&1 merges stderr into a pipe                        0 / 0.5
+FAIL M3   two-stage pipe with quoted argument                   0 / 0.5
+FAIL M3   five-stage pipe, exit status of the last              0 / 0.5
+FAIL M3   yes | head -3 terminates (write ends closed)          0 / 0.5
+FAIL M3   children inherit only fds 0 1 2                       0 / 0.5
+FAIL M4   background job, jobs, Done, no zombie                 0 / 2
+FAIL M5   SIGINT kills the job's group, not the shell           0 / 1.5
+FAIL M6   exit 3 returns 3                                      0 / 0.5
+FAIL M6   no fd leak in the shell after 200 pipes               0 / 0.5
+SCORE 0/10.0
+# The reference solution passes every milestone ||| Lời giải mẫu qua mọi mốc
+$ wc -l shell/msh.c
+221 shell/msh.c
+$ shell/test-shell.sh
+PASS M1   run a program with arguments                         +0.5
+PASS M1   exit status: $? after a failing command              +0.5
+PASS M1   unknown command: message + 127                       +0.5
+PASS M1   cd changes the shell's own directory                 +0.5
+PASS M2   > creates/truncates, < reads, >> appends             +0.5
+PASS M2   2> sends only stderr to a file                       +0.5
+PASS M2   2>&1 merges stderr into a pipe                       +0.5
+PASS M3   two-stage pipe with quoted argument                  +0.5
+PASS M3   five-stage pipe, exit status of the last             +0.5
+PASS M3   yes | head -3 terminates (write ends closed)         +0.5
+PASS M3   children inherit only fds 0 1 2                      +0.5
+PASS M4   background job, jobs, Done, no zombie                +2
+PASS M5   SIGINT kills the job's group, not the shell          +1.5
+PASS M6   exit 3 returns 3                                     +0.5
+PASS M6   no fd leak in the shell after 200 pipes              +0.5
+SCORE 10.0/10.0
+# One planted bug: the parent forgets to close the write end of each pipe ||| Cài MỘT lỗi: tiến trình cha quên đóng đầu ghi của mỗi ống
+$ sed 's|if (pfd\[1\] >= 0) close(pfd\[1\]);|/* forgot to close pfd[1] */|' shell/msh.c > /tmp/bug/msh.c; diff shell/msh.c /tmp/bug/msh.c
+145c145
+<         if (pfd[1] >= 0) close(pfd[1]);
+---
+>         /* forgot to close pfd[1] */
+$ shell/test-shell.sh /tmp/bug 2>&1 | grep -E 'FAIL|SCORE'
+FAIL M3   five-stage pipe, exit status of the last              0 / 0.5
+FAIL M6   no fd leak in the shell after 200 pipes               0 / 0.5
+SCORE 9.0/10.0
+# Watching the reference shell build a pipeline, system call by system call ||| Xem shell mẫu dựng một ống dẫn, từng lời gọi hệ thống
+$ echo 'seq 3 | wc -l' | strace -ff -o /tmp/tr -e trace=pipe2,setpgid,dup2,dup3,close,execve,wait4 -e status=successful /tmp/msh
+3
+$ for f in $(ls /tmp/tr.* | sort -t. -k2 -n); do echo "== process ${f##*.}"; grep -vE '^(close\([0-9]+\)|--- SIG|\+\+\+)' "$f" | sed -E 's/execve\("([^"]+)", \[([^]]*)\].*/execve("\1", [\2], ...) = 0/'; done
+== process 1922
+execve("/tmp/msh", ["/tmp/msh"], ...) = 0
+pipe2([3, 4], O_CLOEXEC)                = 0
+setpgid(1923, 1923)                     = 0
+setpgid(1924, 1923)                     = 0
+wait4(1923, [{WIFEXITED(s) && WEXITSTATUS(s) == 0}], 0, NULL) = 1923
+wait4(1924, [{WIFEXITED(s) && WEXITSTATUS(s) == 0}], 0, NULL) = 1924
+== process 1923
+setpgid(0, 0)                           = 0
+dup3(4, 1, 0)                           = 1
+execve("/usr/bin/seq", ["seq", "3"], ...) = 0
+== process 1924
+setpgid(0, 1923)                        = 0
+dup3(3, 0, 0)                           = 0
+execve("/usr/bin/wc", ["wc", "-l"], ...) = 0
+$ printf 'sleep 0.2 &\nsleep 0.1 | sleep 0.1\njobs\nsleep 0.3\necho done\n' | /tmp/msh
+[1] 1951
+[1] Running	sleep 0.2 &
+[1] Done (0)	sleep 0.2 &
+done

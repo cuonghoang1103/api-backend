@@ -1,0 +1,63 @@
+# The reference solution passes the acceptance tests ||| Lời giải mẫu qua bộ kiểm nghiệm thu
+$ wc -l server/tpserver.c server/loadgen.c
+  163 server/tpserver.c
+   70 server/loadgen.c
+  233 total
+$ server/test-server.sh
+PASS S1   GET / = 200 hello, /healthz = 200, unknown = 404           +1
+PASS S2   exactly --threads workers (+ the accept thread)            +1
+PASS S2   8 x 500 ms requests on 4 threads take two waves (~1 s)     +1.5
+PASS S3   2 threads + queue 2: 4 served, 6 rejected with 503 at once +2
+PASS S4   silent client gets 408 after ~1 s, the only worker is free again +1.5
+PASS S5   after SIGTERM new connections are refused                  +0.5
+PASS S5   the in-flight 1.5 s request still completes with 200       +1
+PASS S5   server exits 0 once drained (within 3 s)                   +0.5
+PASS S6   open fds unchanged after thousands of requests             +1
+SCORE 10.0/10.0
+# Two planted bugs, each caught by exactly the test written for it ||| Hai lỗi cài sẵn, mỗi lỗi bị đúng ca kiểm của nó bắt
+$ sed 's|        close(fd);  |        /* forgot close(fd) */|' server/tpserver.c > /tmp/b1/tpserver.c; /tmp/b1/test-server.sh | grep -E 'FAIL|SCORE'
+FAIL S6   open fds unchanged after thousands of requests              0 / 1   (fds before=6 after=54)
+SCORE 9.0/10.0
+$ sed 's|    pthread_sigmask(SIG_BLOCK, &ss, NULL); |    /* no signal handling: SIGTERM kills at once */|' server/tpserver.c > /tmp/b2/tpserver.c; /tmp/b2/test-server.sh | grep -E 'FAIL|SCORE'
+FAIL S5   the in-flight 1.5 s request still completes with 200        0 / 1   (in-flight got 000)
+FAIL S5   server exits 0 once drained (within 3 s)                    0 / 0.5   (exit=143 after 236 ms)
+SCORE 8.5/10.0
+# Measuring it: 4 threads, each request "waits for the database" 10 ms ||| Đo: 4 luồng, mỗi request "chờ CSDL" 10 ms
+$ /tmp/lg 127.0.0.1 8001 '/work?ms=10' 4 3
+/work?ms=10  4 conns  3.0 s: 200=1004 (334/s) 503=0 408=0 other=0 conn-errors=0
+latency of 200s, ms: p50 11.3  p95 15.7  p99 22.3  max 35.8
+$ /tmp/lg 127.0.0.1 8001 '/work?ms=10' 16 3
+/work?ms=10  16 conns  3.0 s: 200=1043 (342/s) 503=0 408=0 other=0 conn-errors=0
+latency of 200s, ms: p50 44.9  p95 56.8  p99 70.0  max 72.7
+$ /tmp/lg 127.0.0.1 8001 '/work?ms=10' 64 3
+/work?ms=10  64 conns  3.2 s: 200=1105 (347/s) 503=0 408=0 other=0 conn-errors=0
+latency of 200s, ms: p50 182.2  p95 196.8  p99 204.4  max 210.0
+# Same 64 clients, but the queue holds only 8: shed load instead of making everyone wait ||| Vẫn 64 khách, nhưng hàng đợi chỉ chứa 8: cắt tải thay vì bắt mọi người chờ
+$ /tmp/lg 127.0.0.1 8002 '/work?ms=10' 64 3
+/work?ms=10  64 conns  3.0 s: 200=1193 (393/s) 503=211271 408=0 other=0 conn-errors=0
+latency of 200s, ms: p50 31.1  p95 31.4  p99 32.3  max 40.8
+# More threads help when requests WAIT; they do not help when requests COMPUTE ||| Thêm luồng có ích khi request CHỜ; vô ích khi request TÍNH
+$ /tmp/lg 127.0.0.1 8003 '/work?ms=10' 64 3
+/work?ms=10  64 conns  3.0 s: 200=8651 (2865/s) 503=0 408=0 other=0 conn-errors=0
+latency of 200s, ms: p50 21.4  p95 27.5  p99 35.7  max 43.6
+$ nproc
+4
+$ for t in 1 4 16; do echo "threads=$t"; /tmp/lg 127.0.0.1 801$t '/cpu?n=2' 16 3; done
+threads=1
+/cpu?n=2  16 conns  3.1 s: 200=584 (190/s) 503=0 408=0 other=0 conn-errors=0
+latency of 200s, ms: p50 83.3  p95 85.7  p99 90.0  max 105.4
+threads=4
+/cpu?n=2  16 conns  3.0 s: 200=2196 (727/s) 503=0 408=0 other=0 conn-errors=0
+latency of 200s, ms: p50 21.8  p95 23.4  p99 25.4  max 38.8
+threads=16
+/cpu?n=2  16 conns  3.0 s: 200=1909 (634/s) 503=0 408=0 other=0 conn-errors=0
+latency of 200s, ms: p50 11.7  p95 75.6  p99 81.9  max 93.1
+# Graceful shutdown, seen from the server's log ||| Tắt êm, nhìn từ log của máy chủ
+$ (for i in 1 2 3; do curl -s "localhost:8020/work?ms=800" & done; wait) & sleep 0.2; kill -TERM $GP; wait $GP; echo "exit=$?"; sleep 1; cat /tmp/g.log
+worked 800 ms
+worked 800 ms
+worked 800 ms
+exit=0
+tpserver: port 8020, 2 threads, queue 8, timeout 2000 ms, pid 1255
+tpserver: got signal 15, draining
+tpserver: drained (1 queued at signal) in 1397 ms; served 3, rejected 0, timeouts 0; exit 0

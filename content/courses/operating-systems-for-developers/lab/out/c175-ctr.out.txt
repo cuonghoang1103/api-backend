@@ -1,0 +1,60 @@
+# The acceptance tests against the reference runtime ||| Bộ kiểm nghiệm thu chạy trên runtime mẫu
+$ wc -l ctr/minictr.c
+117 ctr/minictr.c
+$ ctr/test-ctr.sh
+PASS C1   PID namespace: the command is PID 1                      +1.5
+PASS C2   UTS namespace: own hostname, host unchanged              +1
+PASS C3   pivot_root: only the rootfs is visible inside            +1.5
+PASS C3   mount namespace: host mount table unchanged              +0.5
+PASS C4   network namespace: no eth0, no routes, nothing UP        +1
+PASS C5   memory.max 32M: memory hog is killed, exit 137, oom_kill reported +1.5
+PASS C6   pids.max 10: a fork storm is capped and reported         +1
+PASS C7   capabilities: CAP_SYS_ADMIN gone, mount is refused       +1
+PASS C8   exit code of the command is passed through               +0.5
+PASS C8   every cgroup removed after the containers exit           +0.5
+SCORE 10.0/10.0
+# Same rootfs, by hand: a busybox root file system on a tmpfs ||| Cùng rootfs đó, tự tay: một hệ thống file gốc busybox trên tmpfs
+$ ls /box/bin | wc -l; du -sh /box
+276
+1.9M	/box
+$ minictr --hostname shop-01 --mem 48M --pids 16 /box /bin/sh -c 'hostname; echo "my PID: $$"; ps; cat /proc/self/cgroup; ls /'
+shop-01
+my PID: 1
+PID   USER     COMMAND
+    1 0        /bin/sh -c hostname; echo "my PID: $$"; ps; cat /proc/self/cgroup; ls /
+    3 0        {ps} /bin/sh -c hostname; echo "my PID: $$"; ps; cat /proc/self/cgroup; ls /
+0::/
+bin
+dev
+proc
+tmp
+$ grep -E 'CapBnd' /proc/self/status; minictr /box /bin/sh -c 'grep CapBnd /proc/self/status; mount -t tmpfs x /tmp; echo "mount exit=$?"'
+CapBnd:	000001ffffffffff
+CapBnd:	000001fdb414efff
+mount: permission denied (are you root?)
+mount exit=1
+$ minictr --mem 32M /box /bin/sh -c 'head -c 104857600 /dev/zero | tail > /dev/null'; echo "exit=$?"
+Killed
+Killed
+minictr: memory.max (32M) exceeded: oom_kill 2
+exit=137
+$ dmesg | grep -E 'Memory cgroup out of memory' | tail -1 | sed 's/^\[[ 0-9.]*\] //' | cut -c1-80
+Memory cgroup out of memory: Killed process 61465 (head) total-vm:2228kB, anon-r
+# The runtime, as seen from the host while a box is running ||| Runtime nhìn từ máy chủ trong lúc một hộp đang chạy
+$ minictr /box /bin/sleep 30 & sleep 0.5; P=$(pgrep -x sleep | head -1); echo "the box's sleep is host PID $P"
+the box's sleep is host PID 768
+$ grep NSpid /proc/$P/status; cat /proc/$P/cgroup; ls /sys/fs/cgroup | grep minictr; cat /sys/fs/cgroup/minictr-*/memory.max /sys/fs/cgroup/minictr-*/pids.max
+NSpid:	768	1
+0::/minictr-766
+minictr-766
+67108864
+32
+$ for ns in pid mnt uts net ipc cgroup; do echo "$ns: host $(readlink /proc/1/ns/$ns) box $(readlink /proc/$P/ns/$ns)"; done
+pid: host pid:[4026533378] box pid:[4026533514]
+mnt: host mnt:[4026533375] box mnt:[4026533511]
+uts: host uts:[4026533376] box uts:[4026533512]
+net: host net:[4026533380] box net:[4026533515]
+ipc: host ipc:[4026533377] box ipc:[4026533513]
+cgroup: host cgroup:[4026533379] box cgroup:[4026533643]
+$ kill $P; wait; ls /sys/fs/cgroup | grep -c minictr
+0

@@ -195,3 +195,49 @@ export function withSolutionFlags<T extends Record<string, unknown>>(
   void _drop;
   return { ...rest, hasSolution, solutionLocked: false };
 }
+
+// ─── Lời giải / starter MỞ SAU KHI ĐẠT (assignment CodeLearn, 28/10/2026) ───────────────
+//
+// Đề khai trong testsJson (cột JSON sẵn có — KHÔNG migration):
+//   loiGiaiSauKhiDat: true            ⇒ lời giải (code + giải thích) chỉ trả cho người đã SOLVED đề này.
+//                                       SOLVED chỉ đến từ một lượt Nộp đạt 100% (upsertProgress chặn tự đánh dấu
+//                                       với đề có máy chấm).
+//   khoiDauSauKhiDat: '<module slug>' ⇒ starter chỉ trả cho người đã SOLVED ít nhất một đề của module đó (cùng
+//                                       track) — dự án làm dần: starter của Fk chính là lời giải F(k−1).
+// Admin/editor luôn thấy đủ. Đây là khoá TỰ GIÁC cho người học (máy chấm chạy ở trình duyệt nên kết quả Nộp do
+// client báo), đủ để lời giải không nằm sẵn trước mắt — không phải cơ chế bảo mật.
+
+export interface ChotLoiGiai {
+  sauKhiDat: boolean;
+  khoiDauSau: string | null;
+}
+
+export function chotLoiGiai(testsJson: unknown): ChotLoiGiai {
+  const tj = testsJson && typeof testsJson === 'object' && !Array.isArray(testsJson) ? (testsJson as Record<string, unknown>) : {};
+  const k = tj.khoiDauSauKhiDat;
+  return { sauKhiDat: tj.loiGiaiSauKhiDat === true, khoiDauSau: typeof k === 'string' && k.trim() ? k.trim() : null };
+}
+
+/** Starter thay thế khi người học chưa đạt bước trước (editor mở tệp này, nút ⬇ Starter tải tệp này). */
+export function starterBiKhoa(moduleSlug: string) {
+  return [{
+    name: 'README.md',
+    language: 'text',
+    code: `# Starter locked\n\nThis starter is the reference solution of the previous step (${moduleSlug}).\n`
+      + 'It unlocks after an Accepted submission of that step.\n'
+      + 'Keep building on YOUR OWN code from the previous step — paste your files here to run the checks.\n\n'
+      + `Starter đang khoá: nó chính là lời giải của bước trước (${moduleSlug}).\n`
+      + 'Nộp bước trước đạt 100% (Accepted) thì mở. Cứ làm tiếp trên code của chính bạn — dán tệp vào đây để chạy kiểm.\n',
+  }];
+}
+
+/**
+ * Áp khoá lên payload một đề (đã qua withSolutionFlags / withoutSolution).
+ * daDat: người xem đã SOLVED đề này · daDatTruoc: đã SOLVED module `khoiDauSau`.
+ */
+export function apChotLoiGiai<T extends Record<string, unknown>>(ex: T, chot: ChotLoiGiai, daDat: boolean, daDatTruoc: boolean): Record<string, unknown> {
+  let out: Record<string, unknown> = ex;
+  if (chot.sauKhiDat && !daDat) out = { ...withoutSolution(out), solutionGate: 'accepted' };
+  if (chot.khoiDauSau && !daDatTruoc) out = { ...out, starterCodeJson: starterBiKhoa(chot.khoiDauSau), starterGate: { moduleSlug: chot.khoiDauSau } };
+  return out;
+}

@@ -315,4 +315,66 @@ describe('Code Lab đợt 1 (HTTP + DB thật)', { skip: !RUN ? 'không có CSDL
     assert.equal((await call(null, `/practice/${tag}c/a%20b`)).status, 400);
     assert.equal((await call(null, `/practice/-bad/${tag}-1`)).status, 400);
   });
+
+  // Assignment CodeLearn (28/10/2026): testsJson.loiGiaiSauKhiDat / khoiDauSauKhiDat — lời giải mở sau lượt Nộp
+  // đạt 100% (SOLVED), starter (= lời giải bước trước) mở khi đã SOLVED module trước.
+  it('đề "mở sau khi đạt": giấu lời giải + khoá starter tới khi SOLVED; admin luôn thấy đủ', async () => {
+    const truoc = await mkModule(ids.pubTrack, `${tag}-15-1-prev`);
+    const nay = await mkModule(ids.pubTrack, `${tag}-15-2-cur`);
+    const exTruoc = await mkEx(truoc.id, ids.pubTrack, { withSolution: true });
+    const ex = await prisma.codeExercise.create({
+      data: {
+        moduleId: nay.id, trackId: ids.pubTrack, slug: `${tag}-gate`, title: `${tag} gate`, language: 'javascript', difficulty: 'HARD',
+        status: 'PUBLISHED', problemHtml: `<p>${tag} gate</p>`,
+        starterCodeJson: [{ name: 'src/App.js', language: 'javascript', code: 'lời giải bước trước' }],
+        solutionCodeJson: [{ name: 'src/App.js', language: 'javascript', code: 'lời giải bước này' }],
+        solutionExplanationHtml: '<p>vì sao</p>',
+        testsJson: { loai: 'react', kiem: [{ kiem: 'ton-tai', selector: '#x' }], loiGiaiSauKhiDat: true, khoiDauSauKhiDat: truoc.slug },
+        gradeKind: 'react',
+      },
+    });
+    const loiGiaiApi = async (u: U) => {
+      const res = await fetch(`${base}/api/v1/code-lab/exercises/${ex.id}/solution`, { headers: { Authorization: `Bearer ${u.token}` } });
+      return { status: res.status, body: (await res.json()) as any };
+    };
+
+    // chưa đạt gì
+    const a = await call(user, `/exercises/${ex.slug}`);
+    assert.equal(a.status, 200);
+    assert.equal('solutionCodeJson' in a.data, false);
+    assert.equal('solutionExplanationHtml' in a.data, false);
+    assert.equal(a.data.solutionGate, 'accepted');
+    assert.equal(a.data.hasSolution, true);
+    assert.equal(a.data.starterCodeJson[0].name, 'README.md');
+    assert.deepEqual(a.data.starterGate, { moduleSlug: truoc.slug });
+    const s1 = await loiGiaiApi(user);
+    assert.equal(s1.status, 403);
+    assert.equal(s1.body.code, 'CODELAB_LOI_GIAI_CAN_DAT');
+    // khách: cũng không có starter thật
+    const anon = await call(null, `/exercises/${ex.slug}`);
+    assert.equal(anon.data.starterCodeJson[0].name, 'README.md');
+    // admin: đủ
+    const adm = await call(admin, `/exercises/${ex.slug}`);
+    assert.equal(adm.data.solutionCodeJson[0].code, 'lời giải bước này');
+    assert.equal(adm.data.starterCodeJson[0].code, 'lời giải bước trước');
+    assert.equal((await loiGiaiApi(admin)).status, 200);
+
+    // đạt bước trước ⇒ starter thật, lời giải vẫn khoá
+    await prisma.codeProgress.create({ data: { userId: user.id, exerciseId: exTruoc.id, status: 'SOLVED', solvedAt: new Date() } });
+    const b = await call(user, `/exercises/${ex.slug}`);
+    assert.equal(b.data.starterCodeJson[0].code, 'lời giải bước trước');
+    assert.equal('starterGate' in b.data, false);
+    assert.equal(b.data.solutionGate, 'accepted');
+
+    // IN_PROGRESS chưa đủ; SOLVED (lượt Nộp đạt 100%) ⇒ mở lời giải
+    await prisma.codeProgress.create({ data: { userId: user.id, exerciseId: ex.id, status: 'IN_PROGRESS' } });
+    assert.equal((await loiGiaiApi(user)).status, 403);
+    await prisma.codeProgress.update({ where: { uk_code_progress_user_exercise: { userId: user.id, exerciseId: ex.id } }, data: { status: 'SOLVED', solvedAt: new Date() } });
+    const c = await call(user, `/exercises/${ex.slug}`);
+    assert.equal(c.data.solutionCodeJson[0].code, 'lời giải bước này');
+    assert.equal('solutionGate' in c.data, false);
+    const s2 = await loiGiaiApi(user);
+    assert.equal(s2.status, 200);
+    assert.equal(s2.body.data.solutionCodeJson[0].code, 'lời giải bước này');
+  });
 });

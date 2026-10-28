@@ -206,7 +206,7 @@ router.get('/exercises/:slug/meta', async (req, res: Response<ApiResponse>, next
 // GET /exercises/:slug — full exercise
 router.get('/exercises/:slug', optionalAuth, async (req, res: Response<ApiResponse>, next) => {
   try {
-    const data = await codeLab.getExerciseBySlug(req.params.slug, { admin: isEditor(req), signedIn: !!req.user?.userId });
+    const data = await codeLab.getExerciseBySlug(req.params.slug, { admin: isEditor(req), signedIn: !!req.user?.userId, userId: req.user?.userId ?? null });
     res.json({ success: true, data });
   } catch (e) { next(e); }
 });
@@ -215,7 +215,7 @@ router.get('/exercises/:slug', optionalAuth, async (req, res: Response<ApiRespon
 // Payload đề cho khách không còn mang lời giải (cờ `solutionLocked`).
 router.get('/exercises/:id(\\d+)/solution', authenticate, async (req, res: Response<ApiResponse>, next) => {
   try {
-    const data = await codeLab.getExerciseSolution(parseInt(req.params.id, 10), { admin: isEditor(req) });
+    const data = await codeLab.getExerciseSolution(parseInt(req.params.id, 10), { admin: isEditor(req), userId: req.user!.userId });
     res.set('Cache-Control', 'private, no-store');
     res.json({ success: true, data });
   } catch (e) { next(e); }

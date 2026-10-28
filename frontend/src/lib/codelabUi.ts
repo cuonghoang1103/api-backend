@@ -57,6 +57,10 @@ export type DiffFilter = 'all' | CodeDifficulty;
 export interface SolutionFlags {
   hasSolution?: boolean;
   solutionLocked?: boolean;
+  /** Đề "lời giải mở sau khi đạt" (testsJson.loiGiaiSauKhiDat): chưa có lượt Nộp đạt 100% ⇒ 'accepted'. */
+  solutionGate?: 'accepted';
+  /** Starter = lời giải bước trước, đang khoá tới khi đạt module này (testsJson.khoiDauSauKhiDat). */
+  starterGate?: { moduleSlug: string };
 }
 
 // ─── Gọi mạng (nạp `./api` lười) ───────────────────────────────────────

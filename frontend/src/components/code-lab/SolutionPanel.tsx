@@ -14,6 +14,10 @@
  * Người đã đăng nhập vẫn nhận lời giải trong payload (tương thích app desktop đã
  * phát hành). Payload thiếu mà `hasSolution` ⇒ lấy riêng qua
  * `GET /code-lab/exercises/:id/solution` lúc mở (layLoiGiaiUi).
+ *
+ * 3. KHOÁ THEO KẾT QUẢ (28/10/2026, assignment CodeLearn): đề khai `testsJson.loiGiaiSauKhiDat` ⇒ backend không
+ *    gửi lời giải (cờ `solutionGate: 'accepted'`) tới khi người học có một lượt Nộp đạt 100%; API lời giải trả
+ *    403 `CODELAB_LOI_GIAI_CAN_DAT`. Vừa Nộp đạt trong phiên này thì bấm mở là lấy được (không cần tải lại trang).
  */
 import { useState } from 'react';
 import Link from 'next/link';
@@ -34,20 +38,22 @@ interface Props {
   hasSolution: boolean;
   /** Khách chưa đăng nhập ⇒ chỉ hiện nút đăng nhập. */
   needLogin: boolean;
+  /** Lời giải chỉ mở sau một lượt Nộp đạt 100% (cờ `solutionGate` của backend). */
+  gate?: 'accepted';
   loginHref: string;
   revealed: boolean;
   onReveal: (v: boolean) => void;
 }
 
 export function SolutionPanel({
-  exerciseId, lang, solution, explanationHtml, explanationHtmlVi, hasSolution, needLogin, loginHref, revealed, onReveal,
+  exerciseId, lang, solution, explanationHtml, explanationHtmlVi, hasSolution, needLogin, gate, loginHref, revealed, onReveal,
 }: Props) {
   const [confirming, setConfirming] = useState(false);
   const [active, setActive] = useState(0);
   // Lời giải lấy riêng (payload đề không mang theo).
   const [fetched, setFetched] = useState<{ code: CodeBlock[]; html: string | null; htmlVi: string | null } | null>(null);
   const [busy, setBusy] = useState(false);
-  const [loi, setLoi] = useState<'login' | 'other' | null>(null);
+  const [loi, setLoi] = useState<'login' | 'gate' | 'other' | null>(null);
 
   const code = fetched?.code ?? solution;
   const html = fetched ? fetched.html : explanationHtml;
@@ -67,8 +73,8 @@ export function SolutionPanel({
           htmlVi: d.solutionExplanationHtmlVi,
         });
       } catch (e: unknown) {
-        const st = (e as { response?: { status?: number } })?.response?.status;
-        setLoi(st === 401 || st === 403 ? 'login' : 'other');
+        const r = (e as { response?: { status?: number; data?: { code?: string } } })?.response;
+        setLoi(r?.data?.code === 'CODELAB_LOI_GIAI_CAN_DAT' ? 'gate' : r?.status === 401 || r?.status === 403 ? 'login' : 'other');
         setBusy(false);
         return;
       }
@@ -100,6 +106,36 @@ export function SolutionPanel({
             <Link href={loginHref} className="cl-btn cl-btn-run mt-3">
               <LogIn size={14} /> Đăng nhập để xem lời giải
             </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Khoá theo kết quả: chưa có lượt Nộp đạt 100% (payload không mang lời giải). Không hỏi xác nhận —
+  // bấm là thử lấy; vừa đạt trong phiên này thì máy chủ trả lời giải ngay.
+  if (gate === 'accepted' && !coSan && !revealed) {
+    return (
+      <div className="cl-pcard cl-pcard-body">
+        <div className="flex items-start gap-3">
+          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl" style={{ background: '#fef3c7', color: '#92400e' }}>
+            <Lock size={18} />
+          </span>
+          <div className="min-w-0">
+            <h3 className="text-[15px] font-semibold" style={{ color: 'var(--text-primary)' }}>Lời giải mở sau khi bạn đạt</h3>
+            <p className="mt-1 text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+              Đây là bài làm dần (dự án / assignment): lời giải tham chiếu chỉ mở khi bạn <b>Nộp</b> và đạt <b>100% (Accepted)</b>.
+              Trong lúc làm, dùng <b>Gợi ý</b> và tab <b>Lỗi hay gặp</b> ở phần Đề.
+            </p>
+            <button type="button" onClick={() => void moLoiGiai()} disabled={busy} className="cl-btn cl-btn-ghost mt-3">
+              {busy ? <Loader2 size={14} className="animate-spin" /> : <Eye size={14} />} Tôi đã đạt — mở lời giải
+            </button>
+            {loi === 'gate' && (
+              <p className="mt-2 text-xs" style={{ color: '#b45309' }}>Chưa có lượt Nộp nào đạt 100% cho bài này.</p>
+            )}
+            {loi === 'other' && (
+              <p className="mt-2 text-xs" style={{ color: '#b91c1c' }}>Không tải được lời giải — thử lại sau.</p>
+            )}
           </div>
         </div>
       </div>

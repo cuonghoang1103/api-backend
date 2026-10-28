@@ -8,7 +8,9 @@ import { describe, it } from 'node:test';
 
 import {
   PRACTICE_TRACK_BY_COURSE,
+  apChotLoiGiai,
   chapterPrefixOf,
+  chotLoiGiai,
   countByDifficulty,
   estimateMinutes,
   fallbackTrackFor,
@@ -153,5 +155,46 @@ describe('withoutSolution / withSolutionFlags', () => {
     assert.equal('aiExplanationJson' in out, false);
     assert.equal(out.hasSolution, true);
     assert.equal(out.solutionLocked, false);
+  });
+});
+
+describe('chotLoiGiai / apChotLoiGiai — lời giải & starter mở sau khi đạt (CodeLearn)', () => {
+  const de = {
+    id: 7,
+    title: 'F6',
+    starterCodeJson: [{ name: 'src/App.js', language: 'javascript', code: 'lời giải F5' }],
+    solutionCodeJson: [{ name: 'src/App.js', language: 'javascript', code: 'lời giải F6' }],
+    solutionExplanationHtml: '<p>vì sao</p>',
+  };
+  const chot = chotLoiGiai({ loai: 'react', loiGiaiSauKhiDat: true, khoiDauSauKhiDat: 'fer202-15-5-enroll-my-courses' });
+
+  it('đọc cờ từ testsJson; thiếu / sai kiểu ⇒ không khoá', () => {
+    assert.deepEqual(chot, { sauKhiDat: true, khoiDauSau: 'fer202-15-5-enroll-my-courses' });
+    assert.deepEqual(chotLoiGiai(null), { sauKhiDat: false, khoiDauSau: null });
+    assert.deepEqual(chotLoiGiai({ loiGiaiSauKhiDat: 'true', khoiDauSauKhiDat: '  ' }), { sauKhiDat: false, khoiDauSau: null });
+  });
+  it('chưa đạt gì ⇒ bỏ lời giải (cờ solutionGate) và thay starter bằng README khoá', () => {
+    const out = apChotLoiGiai(withSolutionFlags(de), chot, false, false);
+    assert.equal('solutionCodeJson' in out, false);
+    assert.equal('solutionExplanationHtml' in out, false);
+    assert.equal(out.hasSolution, true);
+    assert.equal(out.solutionLocked, true);
+    assert.equal(out.solutionGate, 'accepted');
+    const starter = out.starterCodeJson as Array<{ name: string; code: string }>;
+    assert.equal(starter.length, 1);
+    assert.equal(starter[0].name, 'README.md');
+    assert.match(starter[0].code, /fer202-15-5-enroll-my-courses/);
+    assert.doesNotMatch(starter[0].code, /lời giải F5/);
+  });
+  it('đã đạt bước trước ⇒ starter thật; đã đạt đề này ⇒ lời giải thật', () => {
+    const out = apChotLoiGiai(withSolutionFlags(de), chot, true, true);
+    assert.deepEqual(out.solutionCodeJson, de.solutionCodeJson);
+    assert.deepEqual(out.starterCodeJson, de.starterCodeJson);
+    assert.equal('solutionGate' in out, false);
+    assert.equal('starterGate' in out, false);
+  });
+  it('đề không khai cờ ⇒ payload giữ nguyên', () => {
+    const p = withSolutionFlags(de);
+    assert.deepEqual(apChotLoiGiai(p, chotLoiGiai({ loai: 'react' }), false, false), p);
   });
 });

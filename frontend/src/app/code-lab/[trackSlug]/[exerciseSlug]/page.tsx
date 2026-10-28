@@ -538,6 +538,7 @@ export default function ExerciseDetailPage() {
                 explanationHtmlVi={ex.solutionExplanationHtmlVi}
                 hasSolution={hasSolution}
                 needLogin={!!flags.solutionLocked && !isAuthed}
+                gate={isAuthed ? flags.solutionGate : undefined}
                 loginHref={loginHref}
                 revealed={solutionShown}
                 onReveal={setSolutionShown}

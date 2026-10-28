@@ -14,10 +14,12 @@
 import { Prisma, type CodeLevel, type CodeDifficulty, type CodeStatus } from '@prisma/client';
 import { prisma } from '../config/database.js';
 import { sanitizeMermaid } from '../utils/mermaid.js';
-import { BadRequestError, NotFoundError } from '../middleware/errorHandler.js';
+import { AppError, BadRequestError, NotFoundError } from '../middleware/errorHandler.js';
 import {
   SOLUTION_FIELDS,
+  apChotLoiGiai,
   chapterPrefixOf,
+  chotLoiGiai,
   countByDifficulty,
   estimateMinutes,
   fallbackTrackFor,
@@ -721,7 +723,7 @@ export async function listSitemapEntries(): Promise<SitemapEntries> {
  *   bản app desktop đã phát hành không mất lời giải; lấy riêng qua
  *   `GET /exercises/:id/solution`.
  */
-export async function getExerciseBySlug(slug: string, opts: { admin?: boolean; signedIn?: boolean } = {}) {
+export async function getExerciseBySlug(slug: string, opts: { admin?: boolean; signedIn?: boolean; userId?: number | null } = {}) {
   const exercise = await prisma.codeExercise.findUnique({
     where: { slug },
     include: EXERCISE_DETAIL_INCLUDE,
@@ -733,11 +735,38 @@ export async function getExerciseBySlug(slug: string, opts: { admin?: boolean; s
   // Best-effort view counter (don't block on it).
   prisma.codeExercise.update({ where: { id: exercise.id }, data: { viewCount: { increment: 1 } } }).catch(() => {});
   const ex = choNguoiHoc(exercise);
-  return opts.admin || opts.signedIn ? withSolutionFlags(ex) : withoutSolution(ex);
+  const payload = opts.admin || opts.signedIn ? withSolutionFlags(ex) : withoutSolution(ex);
+  // Đề "mở sau khi đạt" (testsJson.loiGiaiSauKhiDat / khoiDauSauKhiDat — xem codeLab.practice.ts)
+  const chot = chotLoiGiai(exercise.testsJson);
+  if (opts.admin || (!chot.sauKhiDat && !chot.khoiDauSau)) return payload;
+  const uid = opts.userId ?? null;
+  const [daDat, daDatTruoc] = await Promise.all([
+    chot.sauKhiDat && uid ? daGiaiDe(uid, exercise.id) : false,
+    chot.khoiDauSau && uid ? daGiaiModule(uid, exercise.trackId, chot.khoiDauSau) : false,
+  ]);
+  return apChotLoiGiai(payload, chot, daDat, daDatTruoc);
+}
+
+/** Người học đã SOLVED đề (chỉ có được qua một lượt Nộp đạt 100% với đề có máy chấm). */
+async function daGiaiDe(userId: number, exerciseId: number): Promise<boolean> {
+  const p = await prisma.codeProgress.findUnique({
+    where: { uk_code_progress_user_exercise: { userId, exerciseId } },
+    select: { status: true },
+  });
+  return p?.status === 'SOLVED';
+}
+
+/** Người học đã SOLVED ít nhất một đề của module `moduleSlug` trong track. */
+async function daGiaiModule(userId: number, trackId: number, moduleSlug: string): Promise<boolean> {
+  const p = await prisma.codeProgress.findFirst({
+    where: { userId, status: 'SOLVED', exercise: { trackId, module: { slug: moduleSlug } } },
+    select: { id: true },
+  });
+  return !!p;
 }
 
 /** Lời giải chính thức của một bài — chỉ gọi sau `authenticate`. Bài/track nháp ⇒ 404 (trừ admin). */
-export async function getExerciseSolution(id: number, opts: { admin?: boolean } = {}) {
+export async function getExerciseSolution(id: number, opts: { admin?: boolean; userId?: number | null } = {}) {
   const ex = await prisma.codeExercise.findUnique({
     where: { id },
     select: {
@@ -747,12 +776,17 @@ export async function getExerciseSolution(id: number, opts: { admin?: boolean } 
       solutionCodeJson: true,
       solutionExplanationHtml: true,
       solutionExplanationHtmlVi: true,
+      testsJson: true,
       track: { select: { status: true } },
     },
   });
   if (!ex) throw new NotFoundError('Exercise not found.');
   if (!opts.admin && (ex.status !== 'PUBLISHED' || ex.track?.status !== 'PUBLISHED')) {
     throw new NotFoundError('Exercise not found.');
+  }
+  // Đề "lời giải mở sau khi đạt": chưa có lượt Nộp đạt 100% ⇒ 403 có mã riêng (giao diện báo đúng lý do)
+  if (!opts.admin && chotLoiGiai(ex.testsJson).sauKhiDat && !(opts.userId && (await daGiaiDe(opts.userId, ex.id)))) {
+    throw new AppError('The official solution of this exercise unlocks after an Accepted submission.', 403, 'CODELAB_LOI_GIAI_CAN_DAT');
   }
   return {
     id: ex.id,

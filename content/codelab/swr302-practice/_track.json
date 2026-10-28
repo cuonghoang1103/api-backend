@@ -262,6 +262,30 @@
       "description": "Lab chương 5: đặt 13 phát biểu vào đúng mục template SRS Wiegers, chẩn đoán và viết lại 8 yêu cầu tồi (mơ hồ, không kiểm chứng, ghép, thiết kế, thiếu, mâu thuẫn), 8 thuộc tính chất lượng, viết 3 NFR đo được, một yêu cầu bằng Planguage."
     },
     {
+      "slug": "swr302-6-1-tham-dinh",
+      "name": "6.1 Validation vs verification and validation techniques",
+      "level": "BEGINNER",
+      "description": "Phân biệt validation và verification, chọn kỹ thuật thẩm định (review, inspection, prototype, test yêu cầu, tiêu chí chấp nhận, mô phỏng), cấp yêu cầu ↔ cấp kiểm thử, vì sao thẩm định sớm."
+    },
+    {
+      "slug": "swr302-6-2-ch17-inspection",
+      "name": "6.2 The inspection process",
+      "level": "INTERMEDIATE",
+      "description": "Các bước inspection (Planning → Preparation → Meeting → Rework → Follow-up), vai trò Author/Moderator/Reader/Recorder/Inspector, tiêu chí vào/ra; tự viết công cụ soát trước checklist (NO_SHALL, MULTI, VAGUE, PASSIVE, TBD) chấm trên dữ liệu ẩn."
+    },
+    {
+      "slug": "swr302-6-3-ch17-review-tips",
+      "name": "6.3 Review challenges and tips",
+      "level": "INTERMEDIATE",
+      "description": "Thách thức khi review yêu cầu (tài liệu lớn, nhóm đông, ở xa, không chuẩn bị) và cách xử lý, review theo góc nhìn (user/dev/tester/maintainer), tự inspect trích đoạn SRS PetCare có cả dòng không lỗi."
+    },
+    {
+      "slug": "swr302-6-4-ch17-testing-acceptance",
+      "name": "6.4 Testing the requirements and acceptance criteria",
+      "level": "INTERMEDIATE",
+      "description": "Test khái niệm lộ ra lỗi yêu cầu, tự suy ra test biên từ yêu cầu giảm giá, viết tiêu chí chấp nhận Given/When/Then có kịch bản từ chối, phân biệt tiêu chí chấp nhận / acceptance test / DoD."
+    },
+    {
       "slug": "swr302-6-lab-inspection-tutormatch",
       "name": "Lab 6 — Validation: Inspecting the SRS of TutorMatch",
       "level": "ADVANCED",

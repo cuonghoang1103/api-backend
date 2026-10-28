@@ -1,0 +1,479 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-6-3-ch17-review-tips",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-6-3-ch17-review-tips"
+  },
+  "exercises": [
+    {
+      "title": "Review tips 1 — review challenges and remedies",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "review challenges"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers lists challenges for requirements reviews: <b>large requirements documents</b>, <b>large inspection teams</b>, <b>geographically separated reviewers</b> and <b>unprepared reviewers</b>. Tips include: review early and incrementally, use checklists, give each reviewer a perspective, focus on high-risk parts, and keep the team small.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Wiegers nêu các thách thức: tài liệu lớn, nhóm inspection đông, người review ở xa nhau, người review không chuẩn bị. Mẹo: review sớm và từng phần, dùng checklist, mỗi người một góc nhìn, tập trung phần rủi ro cao, giữ nhóm nhỏ.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Tài liệu lớn ⇒ chia nhỏ, review sớm, theo rủi ro.",
+        "Không chuẩn bị ⇒ hoãn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Review tips 1 — review challenges and remedies\n\nAnswer in the answer panel (no code needed).\n\n1. The SRS is 300 pages. Best approach?SRS dày 300 trang. Cách tốt nhất?\n2. 15 stakeholders want to attend the inspection. What do you do?15 bên liên quan muốn dự inspection. Làm gì?\n3. Several inspectors arrive without having read the document. What does the moderator do?Vài inspector tới mà chưa đọc tài liệu. Moderator làm gì?\n4. Reviewers are in Hanoi, HCMC and Tokyo. Wiegers suggests…Người review ở Hà Nội, TP.HCM và Tokyo. Wiegers gợi ý…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Review tips 1 — review challenges and remedies — answer key\n\n1. The SRS is 300 pages. Best approach?SRS dày 300 trang. Cách tốt nhất?\n   Answer: a) Review it incrementally as sections are written, focusing on high-risk parts\n   Small chunks, early, risk-based.VI: Từng phần nhỏ, sớm, theo rủi ro.\n\n2. 15 stakeholders want to attend the inspection. What do you do?15 bên liên quan muốn dự inspection. Làm gì?\n   Answer: b) Keep the meeting small; pick representatives of each perspective; let others review offline\n   Large teams slow decisions; choose perspectives.VI: Nhóm đông chậm quyết định; chọn đại diện góc nhìn.\n\n3. Several inspectors arrive without having read the document. What does the moderator do?Vài inspector tới mà chưa đọc tài liệu. Moderator làm gì?\n   Answer: a) Reschedule; preparation is essential\n   Most defects are found during preparation.VI: Phần lớn lỗi được tìm ra lúc chuẩn bị.\n\n4. Reviewers are in Hanoi, HCMC and Tokyo. Wiegers suggests…Người review ở Hà Nội, TP.HCM và Tokyo. Wiegers gợi ý…\n   Answer: a) collaborative review tools and asynchronous comments, with a short online meeting for disputed issues\n   Use tools and asynchronous review.VI: Dùng công cụ và review bất đồng bộ.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · b · a · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>The SRS is 300 pages. Best approach?</p><p style=\"opacity:.75;font-size:.92em\"><i>SRS dày 300 trang. Cách tốt nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Review it incrementally as sections are written, focusing on high-risk parts"
+              },
+              {
+                "ma": "b",
+                "noiDung": "One 8-hour meeting at the end"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Skip the review"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Let only the author read it"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Small chunks, early, risk-based.</p><p><i>VI: Từng phần nhỏ, sớm, theo rủi ro.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>15 stakeholders want to attend the inspection. What do you do?</p><p style=\"opacity:.75;font-size:.92em\"><i>15 bên liên quan muốn dự inspection. Làm gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Invite all 15 to the meeting"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Keep the meeting small; pick representatives of each perspective; let others review offline"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Cancel"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Invite only developers"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Large teams slow decisions; choose perspectives.</p><p><i>VI: Nhóm đông chậm quyết định; chọn đại diện góc nhìn.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Several inspectors arrive without having read the document. What does the moderator do?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vài inspector tới mà chưa đọc tài liệu. Moderator làm gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Reschedule; preparation is essential"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Read it together for the first time in the meeting"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Proceed; they will catch up"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Blame the author"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Most defects are found during preparation.</p><p><i>VI: Phần lớn lỗi được tìm ra lúc chuẩn bị.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Reviewers are in Hanoi, HCMC and Tokyo. Wiegers suggests…</p><p style=\"opacity:.75;font-size:.92em\"><i>Người review ở Hà Nội, TP.HCM và Tokyo. Wiegers gợi ý…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "collaborative review tools and asynchronous comments, with a short online meeting for disputed issues"
+              },
+              {
+                "ma": "b",
+                "noiDung": "no review"
+              },
+              {
+                "ma": "c",
+                "noiDung": "flying everyone to one city every week"
+              },
+              {
+                "ma": "d",
+                "noiDung": "e-mail the whole document without guidance"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Use tools and asynchronous review.</p><p><i>VI: Dùng công cụ và review bất đồng bộ.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Mời tất cả mọi người vào buổi họp."
+        },
+        {
+          "loi": "Đọc tài liệu lần đầu ngay trong buổi họp."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "inspection",
+          "vi": "thanh tra — loại review hình thức nhất, có vai trò và quy trình"
+        }
+      ]
+    },
+    {
+      "title": "Review tips 2 — perspectives",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "review perspectives"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Giving each reviewer a <b>perspective</b> finds more defects: a <b>user</b> checks that tasks are possible; a <b>developer</b> checks that requirements can be designed and built; a <b>tester</b> checks that each requirement is verifiable; a <b>maintainer</b> checks clarity and modifiability. Which perspective is most likely to raise each comment?</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Giao cho mỗi người review một <b>góc nhìn</b> giúp tìm nhiều lỗi hơn. Góc nhìn nào dễ nêu từng nhận xét nhất?</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "\"Làm sao kiểm?\" ⇒ tester.",
+        "\"Trùng lặp, khó sửa\" ⇒ maintainer."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Review tips 2 — perspectives\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Review tips 2 — perspectives — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Tester\n   - r1.k: User\n   - r2.k: Developer\n   - r3.k: Maintainer\n   - r4.k: Tester\n   - r5.k: User\n   Testers ask \"how do I verify it?\"; users ask \"can I do my job?\"; developers ask \"can we build it?\"; maintainers ask \"can we change it safely?\".\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Testers ask \"how do I verify it?\"; users ask \"can I do my job?\"; developers ask \"can we build it?\"; maintainers ask \"can we change it safely?\".</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Perspective",
+                "luaChon": [
+                  "User",
+                  "Developer",
+                  "Tester",
+                  "Maintainer"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "\"How would I check ‘the page loads quickly’? There is no number.\""
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "\"I can’t book for my child — there is no way to choose another patient.\""
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "\"FR-30 needs real-time data from the lab system, which has no API.\""
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "\"The same discount rule is written in three places; changing it will be error-prone.\""
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "\"What is the expected result when the slot is already taken?\""
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "\"Nurses work with gloves on; tiny buttons won’t work for us.\""
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Tester",
+              "r1.k": "User",
+              "r2.k": "Developer",
+              "r3.k": "Maintainer",
+              "r4.k": "Tester",
+              "r5.k": "User"
+            },
+            "giaiThich": "<p><p>Testers ask \"how do I verify it?\"; users ask \"can I do my job?\"; developers ask \"can we build it?\"; maintainers ask \"can we change it safely?\".</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gán mọi nhận xét kỹ thuật cho developer."
+        },
+        {
+          "loi": "Quên góc nhìn người bảo trì."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "inspection",
+          "vi": "thanh tra — loại review hình thức nhất, có vai trò và quy trình"
+        },
+        {
+          "en": "verifiable",
+          "vi": "kiểm chứng được — có cách test/đo để biết đạt hay không"
+        }
+      ]
+    },
+    {
+      "title": "Review tips 3 — inspect an SRS excerpt",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 12,
+      "points": 30,
+      "concepts": [
+        "inspecting requirements"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Excerpt from the SRS of <b>PetCare</b>, a veterinary-clinic booking app. Inspect each line with the checklist and record the main defect type. Some lines are fine — mark them <b>No defect</b> (a false claim costs as much as a miss).</p><ul><li>L1 The system shall let a pet owner book a check-up for a registered pet.</li><li>L2 The system shall send reminders in a timely manner.</li><li>L3 A booking shall be cancelled up to 2 hours before the appointment. (Elsewhere, FR-40: up to 24 hours.)</li><li>L4 The system shall let a vet record a diagnosis for</li><li>L5 The system shall respond to every request within 0.001 ms on 3G.</li><li>L6 The system shall show the vet’s schedule for the next 14 days.</li><li>L7 The system shall store pet photos in an S3 bucket using the AWS SDK v3.</li><li>L8 The system shall generate a monthly revenue report for the clinic owner.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trích SRS của <b>PetCare</b> (đặt lịch phòng khám thú y). Soát từng dòng theo checklist, ghi loại lỗi chính. Dòng không lỗi ⇒ <b>No defect</b>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "So từng dòng với các yêu cầu khác (L3 ↔ FR-40).",
+        "Không phải dòng nào cũng có lỗi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Review tips 3 — inspect an SRS excerpt\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Review tips 3 — inspect an SRS excerpt — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: No defect\n   - r1.k: Ambiguous\n   - r2.k: Inconsistent\n   - r3.k: Incomplete\n   - r4.k: Infeasible\n   - r5.k: No defect\n   - r6.k: Design, not requirement\n   - r7.k: No defect\n   L2 \"in a timely manner\" — when exactly? L3 contradicts FR-40. L4 stops mid-sentence. L5 is physically impossible on 3G. L7 prescribes the storage design. L1, L6 and L8 are clear, complete and verifiable.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>L2 \"in a timely manner\" — when exactly? L3 contradicts FR-40. L4 stops mid-sentence. L5 is physically impossible on 3G. L7 prescribes the storage design. L1, L6 and L8 are clear, complete and verifiable.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Defect",
+                "luaChon": [
+                  "No defect",
+                  "Ambiguous",
+                  "Inconsistent",
+                  "Incomplete",
+                  "Infeasible",
+                  "Design, not requirement"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "L1"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "L2"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "L3"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "L4"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "L5"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "L6"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "L7"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "s": "L8"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "No defect",
+              "r1.k": "Ambiguous",
+              "r2.k": "Inconsistent",
+              "r3.k": "Incomplete",
+              "r4.k": "Infeasible",
+              "r5.k": "No defect",
+              "r6.k": "Design, not requirement",
+              "r7.k": "No defect"
+            },
+            "giaiThich": "<p><p>L2 \"in a timely manner\" — when exactly? L3 contradicts FR-40. L4 stops mid-sentence. L5 is physically impossible on 3G. L7 prescribes the storage design. L1, L6 and L8 are clear, complete and verifiable.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đánh dấu lỗi cho mọi dòng (khẳng định sai)."
+        },
+        {
+          "loi": "Gọi L2 là \"incomplete\" — vấn đề là \"timely\" mơ hồ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "inspection",
+          "vi": "thanh tra — loại review hình thức nhất, có vai trò và quy trình"
+        },
+        {
+          "en": "ambiguous",
+          "vi": "mơ hồ — hiểu được nhiều cách"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,534 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-6-2-ch17-inspection",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-6-2-ch17-inspection"
+  },
+  "exercises": [
+    {
+      "title": "Inspection 1 — the stages",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 4,
+      "points": 10,
+      "concepts": [
+        "inspection stages"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers Figure 17-3: the inspection stages. Put them in order.</p><p>Drag the items into the right order; the explanation appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hình 17-3 của Wiegers: các bước inspection. Sắp đúng thứ tự.</p><p>Kéo các mục về đúng thứ tự; giải thích hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Inspector tìm lỗi TRƯỚC buổi họp (preparation).",
+        "Sửa lỗi (rework) diễn ra sau buổi họp."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Inspection 1 — the stages\n\nAnswer in the answer panel (no code needed).\n\n1. Order the stagesSắp các bước\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Inspection 1 — the stages — answer key\n\n1. Order the stagesSắp các bước\n   Answer: a) Planning  →  b) Preparation  →  c) Inspection meeting  →  d) Rework  →  e) Follow-up\n   Plan → each inspector prepares alone → meeting logs issues → author reworks → moderator follows up.VI: Lập kế hoạch → tự chuẩn bị → họp ghi lỗi → tác giả sửa → moderator theo dõi.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Planning → Preparation → Inspection meeting → Rework → Follow-up.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Order the stages</p><p style=\"opacity:.75;font-size:.92em\"><i>Sắp các bước</i></p>",
+            "muc": [
+              {
+                "ma": "d",
+                "noiDung": "Rework"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Preparation"
+              },
+              {
+                "ma": "e",
+                "noiDung": "Follow-up"
+              },
+              {
+                "ma": "a",
+                "noiDung": "Planning"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Inspection meeting"
+              }
+            ],
+            "dapAn": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e"
+            ],
+            "giaiThich": "<p>Plan → each inspector prepares alone → meeting logs issues → author reworks → moderator follows up.</p><p><i>VI: Lập kế hoạch → tự chuẩn bị → họp ghi lỗi → tác giả sửa → moderator theo dõi.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt Rework trước buổi họp."
+        },
+        {
+          "loi": "Bỏ qua Follow-up."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "inspection",
+          "vi": "thanh tra — loại review hình thức nhất, có vai trò và quy trình"
+        }
+      ]
+    },
+    {
+      "title": "Inspection 2 — who does it?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "inspection roles"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Inspection roles: <b>Author</b>, <b>Moderator</b>, <b>Reader</b>, <b>Recorder</b> and <b>Inspector</b>. Choose the role for each task.</p><p>Each row is graded on its own; the explanation of every answer appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Vai trò trong inspection: Author, Moderator, Reader, Recorder, Inspector. Chọn vai trò cho từng việc.</p><p>Mỗi dòng được chấm riêng; giải thích từng đáp án hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Moderator vừa chủ trì vừa theo dõi sau họp.",
+        "Reader diễn giải lại bằng lời của mình."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Inspection 2 — who does it?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Inspection 2 — who does it? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Moderator\n   - r1.k: Reader\n   - r2.k: Recorder\n   - r3.k: Author\n   - r4.k: Inspector\n   - r5.k: Moderator\n   Everyone except the author acts as an inspector too; the moderator runs the process, the reader paraphrases, the recorder logs, the author fixes.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Everyone except the author acts as an inspector too; the moderator runs the process, the reader paraphrases, the recorder logs, the author fixes.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Role",
+                "luaChon": [
+                  "Author",
+                  "Moderator",
+                  "Reader",
+                  "Recorder",
+                  "Inspector"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Plans the inspection, chooses the participants and leads the meeting."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Paraphrases each requirement aloud during the meeting."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Writes down every issue raised in the meeting."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Wrote the SRS and fixes the defects afterwards."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Examines the document before the meeting to find defects."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Checks that the rework was done before the document is approved."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Moderator",
+              "r1.k": "Reader",
+              "r2.k": "Recorder",
+              "r3.k": "Author",
+              "r4.k": "Inspector",
+              "r5.k": "Moderator"
+            },
+            "giaiThich": "<p><p>Everyone except the author acts as an inspector too; the moderator runs the process, the reader paraphrases, the recorder logs, the author fixes.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Để tác giả làm moderator."
+        },
+        {
+          "loi": "Nhầm reader với recorder."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "inspection",
+          "vi": "thanh tra — loại review hình thức nhất, có vai trò và quy trình"
+        }
+      ]
+    },
+    {
+      "title": "Inspection 3 — entry and exit criteria",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "entry and exit criteria"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p><b>Entry criteria</b> say when a document is ready to be inspected (e.g. it follows the template, it was spell-checked, the author has fixed obvious problems, line numbers are printed, open issues are marked TBD, reference documents are available). <b>Exit criteria</b> say when the inspection is finished (e.g. all issues are resolved, changes are verified, the document is checked in under configuration control).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Tiêu chí vào</b>: khi nào tài liệu sẵn sàng để inspection. <b>Tiêu chí ra</b>: khi nào inspection kết thúc.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Chưa đạt tiêu chí vào ⇒ hoãn.",
+        "Tiêu chí ra liên quan tới việc đã sửa và đã kiểm."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Inspection 3 — entry and exit criteria\n\nAnswer in the answer panel (no code needed).\n\n1. The draft is full of spelling errors and half the sections are empty. The moderator should…Bản nháp đầy lỗi chính tả, nửa số mục trống. Moderator nên…\n2. Which is an exit criterion?Đâu là tiêu chí ra?\n3. Why are line numbers an entry criterion?Vì sao đánh số dòng là tiêu chí vào?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Inspection 3 — entry and exit criteria — answer key\n\n1. The draft is full of spelling errors and half the sections are empty. The moderator should…Bản nháp đầy lỗi chính tả, nửa số mục trống. Moderator nên…\n   Answer: a) postpone the inspection — entry criteria are not met\n   Do not waste inspectors on obvious problems.VI: Đừng phí inspector vào lỗi hiển nhiên.\n\n2. Which is an exit criterion?Đâu là tiêu chí ra?\n   Answer: a) All issues raised are resolved and the changes are verified\n   Exit = issues closed, changes checked.VI: Ra = lỗi đã đóng, thay đổi đã kiểm.\n\n3. Why are line numbers an entry criterion?Vì sao đánh số dòng là tiêu chí vào?\n   Answer: a) So issues can be located precisely in the meeting and the log\n   Precise references speed up the meeting and rework.VI: Tham chiếu chính xác giúp họp và sửa nhanh.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · a · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>The draft is full of spelling errors and half the sections are empty. The moderator should…</p><p style=\"opacity:.75;font-size:.92em\"><i>Bản nháp đầy lỗi chính tả, nửa số mục trống. Moderator nên…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "postpone the inspection — entry criteria are not met"
+              },
+              {
+                "ma": "b",
+                "noiDung": "run it anyway"
+              },
+              {
+                "ma": "c",
+                "noiDung": "fix it himself"
+              },
+              {
+                "ma": "d",
+                "noiDung": "cancel the project"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Do not waste inspectors on obvious problems.</p><p><i>VI: Đừng phí inspector vào lỗi hiển nhiên.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Which is an exit criterion?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đâu là tiêu chí ra?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "All issues raised are resolved and the changes are verified"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The document has line numbers"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The author is present"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Inspectors have read the template"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Exit = issues closed, changes checked.</p><p><i>VI: Ra = lỗi đã đóng, thay đổi đã kiểm.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Why are line numbers an entry criterion?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao đánh số dòng là tiêu chí vào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "So issues can be located precisely in the meeting and the log"
+              },
+              {
+                "ma": "b",
+                "noiDung": "For decoration"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The printer needs them"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Template rule only"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Precise references speed up the meeting and rework.</p><p><i>VI: Tham chiếu chính xác giúp họp và sửa nhanh.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Inspection bản nháp thô."
+        },
+        {
+          "loi": "Kết thúc khi họp xong mà chưa kiểm phần sửa."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "inspection",
+          "vi": "thanh tra — loại review hình thức nhất, có vai trò và quy trình"
+        }
+      ]
+    },
+    {
+      "title": "Inspection 4 — automate part of the checklist",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "inspection checklists"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>An inspection checklist has items a tool can pre-check, so inspectors spend their time on real thinking. Write <code>function lint(text)</code> that returns an array of issue codes (any order, no duplicates) for one requirement:</p><ul><li><code>NO_SHALL</code> — the text does not contain the word \"shall\".</li><li><code>MULTI</code> — \"shall\" appears more than once.</li><li><code>VAGUE</code> — contains (whole word, case-insensitive) one of: <i>fast, user-friendly, easy, flexible, efficient, robust, appropriate, adequate, several, etc, and/or, support</i>.</li><li><code>PASSIVE</code> — \"shall be\" followed by a word ending in \"ed\" or \"en\" (e.g. \"shall be sent\", \"shall be displayed\").</li><li><code>TBD</code> — contains \"TBD\" (upper case).</li></ul><p>A clean requirement returns <code>[]</code>. It is tested on hidden requirements.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Whole-word matching: \"supported\" must not trigger \"support\"; \"etc.\" triggers \"etc\".</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>lint(text)</code> trả mảng mã lỗi (không trùng) cho một yêu cầu: NO_SHALL, MULTI (shall xuất hiện >1 lần), VAGUE (từ mơ hồ trong danh sách, nguyên từ, không phân biệt hoa thường), PASSIVE (\"shall be\" + từ đuôi \"ed\"/\"en\"), TBD. Yêu cầu sạch trả []. Có kiểm trên dữ liệu ẩn.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>So nguyên từ: \"supported\" không bị tính là \"support\"; \"etc.\" thì có.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "lint(\"The report shall be sent fast.\")",
+          "output": "[\"PASSIVE\",\"VAGUE\"]",
+          "explanation": "Passive voice + \"fast\".|||Bị động + \"fast\"."
+        }
+      ],
+      "hintsJson": [
+        "Đếm \"shall\" bằng /\\bshall\\b/gi.",
+        "So nguyên từ: kiểm ký tự trước/sau không phải chữ, số hay \"-\" (để \"user-friendliness\" không khớp \"user-friendly\")."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "lint.js",
+          "language": "javascript",
+          "code": "function lint(text) {\n  var issues = [];\n  // TODO\n  return issues;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "lint.js",
+          "language": "javascript",
+          "code": "var VAGUE_WORDS = ['fast', 'user-friendly', 'easy', 'flexible', 'efficient', 'robust', 'appropriate', 'adequate', 'several', 'etc', 'and/or', 'support'];\n\nfunction lint(text) {\n  var t = String(text);\n  var issues = [];\n  var shall = (t.match(/\\bshall\\b/gi) || []).length;\n  if (shall === 0) issues.push('NO_SHALL');\n  if (shall > 1) issues.push('MULTI');\n  var low = t.toLowerCase();\n  var vague = VAGUE_WORDS.some(function (w) {\n    var esc = w.replace(/[.*+?^${}()|[\\]\\\\\\/-]/g, '\\\\$&');\n    return new RegExp('(^|[^a-z0-9-])' + esc + '(?![a-z0-9-])').test(low);\n  });\n  if (vague) issues.push('VAGUE');\n  if (/\\bshall be \\w+(ed|en)\\b/i.test(t)) issues.push('PASSIVE');\n  if (/TBD/.test(t)) issues.push('TBD');\n  return issues;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A tool can pre-check mechanical defects (missing or multiple \"shall\", vague words, passive voice, TBDs), which lets inspectors concentrate on correctness, completeness and feasibility — things only people can judge.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "lint.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "a clean requirement returns []",
+              "vi": "yêu cầu sạch trả []"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var t=[[\"The system shall e-mail the patient 24 hours before the appointment.\",[]]];if(typeof lint!=\"function\")return\"lint is not a function\";for(var n=0;n<t.length;n++){var r=lint(t[n][0]);if(!Array.isArray(r))return\"lint must return an array\";var e=r.slice().sort().join(\",\"),i=t[n][1].slice().sort().join(\",\");if(e!==i)return\"lint(\"+JSON.stringify(t[n][0])+\") should be [\"+i+\"], got [\"+e+\"]\"}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "NO_SHALL and MULTI",
+              "vi": "NO_SHALL và MULTI"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var t=[[\"Patients can book online.\",[\"NO_SHALL\"]],[\"The system shall book the slot and shall send an SMS.\",[\"MULTI\"]]];if(typeof lint!=\"function\")return\"lint is not a function\";for(var n=0;n<t.length;n++){var r=lint(t[n][0]);if(!Array.isArray(r))return\"lint must return an array\";var o=r.slice().sort().join(\",\"),a=t[n][1].slice().sort().join(\",\");if(o!==a)return\"lint(\"+JSON.stringify(t[n][0])+\") should be [\"+a+\"], got [\"+o+\"]\"}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "VAGUE",
+              "vi": "VAGUE"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var r=[[\"The search shall be fast.\",[\"VAGUE\"]]];if(typeof lint!=\"function\")return\"lint is not a function\";for(var n=0;n<r.length;n++){var t=lint(r[n][0]);if(!Array.isArray(t))return\"lint must return an array\";var i=t.slice().sort().join(\",\"),o=r[n][1].slice().sort().join(\",\");if(i!==o)return\"lint(\"+JSON.stringify(r[n][0])+\") should be [\"+o+\"], got [\"+i+\"]\"}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "PASSIVE and TBD",
+              "vi": "PASSIVE và TBD"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var r=[[\"The invoice shall be generated at midnight.\",[\"PASSIVE\"]],[\"The fine shall be TBD per day.\",[\"TBD\"]]];if(typeof lint!=\"function\")return\"lint is not a function\";for(var n=0;n<r.length;n++){var t=lint(r[n][0]);if(!Array.isArray(t))return\"lint must return an array\";var e=t.slice().sort().join(\",\"),i=r[n][1].slice().sort().join(\",\");if(e!==i)return\"lint(\"+JSON.stringify(r[n][0])+\") should be [\"+i+\"], got [\"+e+\"]\"}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "hidden requirements (vague words, whole words, combined issues)",
+              "vi": "yêu cầu ẩn (từ mơ hồ, nguyên từ, nhiều lỗi)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var e=[[\"The system shall export reports in PDF, CSV, etc.\",[\"VAGUE\"]],[\"The system shall notify the doctor and/or the nurse.\",[\"VAGUE\"]],[\"The system shall display supported file types.\",[]],[\"The receipt shall be written to the audit log.\",[\"PASSIVE\"]],[\"The system shall support several languages and shall be robust.\",[\"MULTI\",\"VAGUE\"]]];if(typeof lint!=\"function\")return\"lint is not a function\";for(var t=0;t<e.length;t++){var r=lint(e[t][0]);if(!Array.isArray(r))return\"lint must return an array\";var s=r.slice().sort().join(\",\"),n=e[t][1].slice().sort().join(\",\");if(s!==n)return\"lint(\"+JSON.stringify(e[t][0])+\") should be [\"+n+\"], got [\"+s+\"]\"}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "hidden requirements (case, compound words)",
+              "vi": "yêu cầu ẩn (hoa thường, từ ghép)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var r=[[\"Reports are generated TBD.\",[\"NO_SHALL\",\"TBD\"]],[\"The SHALL keyword in upper case SHALL count.\",[\"MULTI\"]],[\"The system shall lock the account after 5 failed attempts.\",[]],[\"The system shall be Easy to learn for new nurses.\",[\"VAGUE\"]],[\"The system shall show the user-friendliness score of each screen.\",[]]];if(typeof lint!=\"function\")return\"lint is not a function\";for(var e=0;e<r.length;e++){var n=lint(r[e][0]);if(!Array.isArray(n))return\"lint must return an array\";var t=n.slice().sort().join(\",\"),s=r[e][1].slice().sort().join(\",\");if(t!==s)return\"lint(\"+JSON.stringify(r[e][0])+\") should be [\"+s+\"], got [\"+t+\"]\"}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng includes(\"support\") ⇒ \"supported\" bị bắt nhầm."
+        },
+        {
+          "loi": "Quên không phân biệt hoa thường với \"Easy\" và \"SHALL\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "inspection",
+          "vi": "thanh tra — loại review hình thức nhất, có vai trò và quy trình"
+        },
+        {
+          "en": "ambiguous",
+          "vi": "mơ hồ — hiểu được nhiều cách"
+        },
+        {
+          "en": "TBD (to be determined)",
+          "vi": "chỗ chưa quyết, đánh dấu để theo dõi tới khi đóng"
+        }
+      ]
+    }
+  ]
+}

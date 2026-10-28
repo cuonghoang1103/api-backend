@@ -1,0 +1,622 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-6-1-tham-dinh",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-6-1-tham-dinh"
+  },
+  "exercises": [
+    {
+      "title": "Validation 1 — validation or verification?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "validation vs verification"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p><b>Verification</b>: are we building the product <i>right</i>? (does a work product meet its specification and standards?) <b>Validation</b>: are we building the <i>right</i> product? (does it satisfy the customer’s real needs?) Requirements validation checks that the requirements describe the right system.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Verification</b>: làm sản phẩm có <i>đúng cách</i> không (khớp đặc tả, chuẩn)? <b>Validation</b>: làm có <i>đúng sản phẩm</i> không (thoả nhu cầu thật của khách)? Thẩm định yêu cầu kiểm rằng yêu cầu mô tả đúng hệ thống cần làm.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Nhìn ra nhu cầu thật/mục tiêu nghiệp vụ ⇒ validation.",
+        "So với đặc tả/chuẩn/mẫu ⇒ verification."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Validation 1 — validation or verification?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Validation 1 — validation or verification? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Validation\n   - r1.k: Verification\n   - r2.k: Validation\n   - r3.k: Verification\n   - r4.k: Validation\n   - r5.k: Verification\n   Validation looks outward to real needs and objectives; verification looks at conformance with a specification, template or standard.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Validation looks outward to real needs and objectives; verification looks at conformance with a specification, template or standard.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Activity",
+                "luaChon": [
+                  "Validation",
+                  "Verification"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Nurses try a clickable prototype and say whether it fits their real shift work."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "A reviewer checks that every requirement follows the SRS template and labeling rules."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The sponsor confirms that the requirements will reach the business objective \"cut waiting time by 30%\"."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "A tester checks that the code implements FR-12 as written."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Users write acceptance criteria describing how they will decide the release is good enough."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "A tool checks that every functional requirement traces to a test case."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Validation",
+              "r1.k": "Verification",
+              "r2.k": "Validation",
+              "r3.k": "Verification",
+              "r4.k": "Validation",
+              "r5.k": "Verification"
+            },
+            "giaiThich": "<p><p>Validation looks outward to real needs and objectives; verification looks at conformance with a specification, template or standard.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Coi mọi review là verification."
+        },
+        {
+          "loi": "Đảo nghĩa \"right product\" và \"product right\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "validation",
+          "vi": "thẩm định — xác nhận đúng THỨ cần làm (đúng nhu cầu)"
+        },
+        {
+          "en": "verification",
+          "vi": "kiểm chứng — xác nhận làm ĐÚNG CÁCH (khớp đặc tả, chất lượng tài liệu)"
+        }
+      ]
+    },
+    {
+      "title": "Validation 4 — why validate early?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 4,
+      "points": 10,
+      "concepts": [
+        "why validate"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Requirement defects found late cost far more to fix than defects found while the requirements are written. Validation reduces rework, but it is never \"finished\": requirements keep changing and must be revalidated.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lỗi yêu cầu phát hiện muộn tốn kém hơn nhiều so với khi đang viết yêu cầu. Thẩm định giảm làm lại, nhưng không bao giờ \"xong hẳn\": yêu cầu đổi thì phải thẩm định lại.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Sửa lỗi yêu cầu sớm rẻ hơn nhiều.",
+        "Thay đổi ⇒ thẩm định lại."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Validation 4 — why validate early?\n\nAnswer in the answer panel (no code needed).\n\n1. When should requirements validation start?Khi nào bắt đầu thẩm định yêu cầu?\n2. A requirement changes after it was validated. What now?Một yêu cầu đã thẩm định bị thay đổi. Làm gì?\n3. Does validation guarantee the requirements are perfect?Thẩm định có đảm bảo yêu cầu hoàn hảo không?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Validation 4 — why validate early? — answer key\n\n1. When should requirements validation start?Khi nào bắt đầu thẩm định yêu cầu?\n   Answer: a) As soon as the first requirements are written, incrementally\n   Small, early, frequent reviews.VI: Review nhỏ, sớm, thường xuyên.\n\n2. A requirement changes after it was validated. What now?Một yêu cầu đã thẩm định bị thay đổi. Làm gì?\n   Answer: a) Validate the change and its impact again\n   Validation follows every change.VI: Thẩm định đi theo mỗi thay đổi.\n\n3. Does validation guarantee the requirements are perfect?Thẩm định có đảm bảo yêu cầu hoàn hảo không?\n   Answer: a) No — it reduces risk; some defects will still be found later\n   It reduces, not removes, risk.VI: Nó giảm, không xoá rủi ro.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · a · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>When should requirements validation start?</p><p style=\"opacity:.75;font-size:.92em\"><i>Khi nào bắt đầu thẩm định yêu cầu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "As soon as the first requirements are written, incrementally"
+              },
+              {
+                "ma": "b",
+                "noiDung": "After coding"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only at the end of analysis"
+              },
+              {
+                "ma": "d",
+                "noiDung": "During acceptance testing"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Small, early, frequent reviews.</p><p><i>VI: Review nhỏ, sớm, thường xuyên.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>A requirement changes after it was validated. What now?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một yêu cầu đã thẩm định bị thay đổi. Làm gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Validate the change and its impact again"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Nothing — it was validated"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Delete it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Ask developers to decide"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Validation follows every change.</p><p><i>VI: Thẩm định đi theo mỗi thay đổi.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Does validation guarantee the requirements are perfect?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thẩm định có đảm bảo yêu cầu hoàn hảo không?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "No — it reduces risk; some defects will still be found later"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Yes, always"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only if the SRS is short"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only with tools"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>It reduces, not removes, risk.</p><p><i>VI: Nó giảm, không xoá rủi ro.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chỉ review SRS một lần lúc cuối."
+        },
+        {
+          "loi": "Cho rằng đã thẩm định thì không cần xem lại."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "validation",
+          "vi": "thẩm định — xác nhận đúng THỨ cần làm (đúng nhu cầu)"
+        }
+      ]
+    },
+    {
+      "title": "Validation 2 — choose the validation technique",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "validation techniques"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers’ validation techniques: <b>reviewing requirements</b> (informal reviews, inspections), <b>prototyping</b>, <b>testing the requirements</b> (deriving conceptual tests), <b>defining acceptance criteria</b>, and <b>simulating</b> requirements.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các kỹ thuật thẩm định của Wiegers: <b>review yêu cầu</b> (không chính thức, inspection), <b>prototype</b>, <b>test các yêu cầu</b> (suy ra test khái niệm), <b>định nghĩa tiêu chí chấp nhận</b>, <b>mô phỏng</b>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Người dùng không hình dung được ⇒ prototype.",
+        "Rủi ro cao ⇒ inspection."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Validation 2 — choose the validation technique\n\nAnswer in the answer panel (no code needed).\n\n1. Users cannot imagine how the new triage screen will work.Người dùng không hình dung được màn hình phân loại bệnh mới.\n2. A high-risk SRS for a medical device must be checked rigorously by a team.SRS rủi ro cao cho thiết bị y tế cần kiểm tra chặt chẽ bởi một nhóm.\n3. Writing test cases from the requirements before any code exists mainly reveals…Viết test từ yêu cầu trước khi có code chủ yếu phát hiện…\n4. The customer asks: \"How will we know the release is good enough to accept?\"Khách hỏi: \"Làm sao biết bản phát hành đủ tốt để nghiệm thu?\"\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Validation 2 — choose the validation technique — answer key\n\n1. Users cannot imagine how the new triage screen will work.Người dùng không hình dung được màn hình phân loại bệnh mới.\n   Answer: a) Prototyping\n   Let them see and try it.VI: Cho họ xem và thử.\n\n2. A high-risk SRS for a medical device must be checked rigorously by a team.SRS rủi ro cao cho thiết bị y tế cần kiểm tra chặt chẽ bởi một nhóm.\n   Answer: b) Inspection\n   Inspection is the most formal review.VI: Inspection là review chính thức nhất.\n\n3. Writing test cases from the requirements before any code exists mainly reveals…Viết test từ yêu cầu trước khi có code chủ yếu phát hiện…\n   Answer: a) ambiguities, missing requirements and errors in the requirements\n   If you cannot write a test, the requirement is not clear.VI: Không viết được test ⇒ yêu cầu chưa rõ.\n\n4. The customer asks: \"How will we know the release is good enough to accept?\"Khách hỏi: \"Làm sao biết bản phát hành đủ tốt để nghiệm thu?\"\n   Answer: a) Define acceptance criteria\n   Agree the criteria up front.VI: Thống nhất tiêu chí từ đầu.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · b · a · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Users cannot imagine how the new triage screen will work.</p><p style=\"opacity:.75;font-size:.92em\"><i>Người dùng không hình dung được màn hình phân loại bệnh mới.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Prototyping"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Formal inspection only"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Simulation of the network"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nothing"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Let them see and try it.</p><p><i>VI: Cho họ xem và thử.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>A high-risk SRS for a medical device must be checked rigorously by a team.</p><p style=\"opacity:.75;font-size:.92em\"><i>SRS rủi ro cao cho thiết bị y tế cần kiểm tra chặt chẽ bởi một nhóm.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Peer desk-check"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Inspection"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Simulation"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A survey"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Inspection is the most formal review.</p><p><i>VI: Inspection là review chính thức nhất.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Writing test cases from the requirements before any code exists mainly reveals…</p><p style=\"opacity:.75;font-size:.92em\"><i>Viết test từ yêu cầu trước khi có code chủ yếu phát hiện…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "ambiguities, missing requirements and errors in the requirements"
+              },
+              {
+                "ma": "b",
+                "noiDung": "code bugs"
+              },
+              {
+                "ma": "c",
+                "noiDung": "server problems"
+              },
+              {
+                "ma": "d",
+                "noiDung": "nothing until coding"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>If you cannot write a test, the requirement is not clear.</p><p><i>VI: Không viết được test ⇒ yêu cầu chưa rõ.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>The customer asks: \"How will we know the release is good enough to accept?\"</p><p style=\"opacity:.75;font-size:.92em\"><i>Khách hỏi: \"Làm sao biết bản phát hành đủ tốt để nghiệm thu?\"</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Define acceptance criteria"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Write more code"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Skip testing"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Use a context diagram"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Agree the criteria up front.</p><p><i>VI: Thống nhất tiêu chí từ đầu.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chờ có code mới viết test."
+        },
+        {
+          "loi": "Dùng prototype thay cho mọi review."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "validation",
+          "vi": "thẩm định — xác nhận đúng THỨ cần làm (đúng nhu cầu)"
+        },
+        {
+          "en": "inspection",
+          "vi": "thanh tra — loại review hình thức nhất, có vai trò và quy trình"
+        },
+        {
+          "en": "prototype",
+          "vi": "nguyên mẫu — bản thử để làm rõ yêu cầu (throwaway / evolutionary, mock-up / proof of concept)"
+        },
+        {
+          "en": "acceptance criteria",
+          "vi": "tiêu chí chấp nhận — điều kiện để khách nhận một yêu cầu/story (Given/When/Then)"
+        }
+      ]
+    },
+    {
+      "title": "Validation 3 — which level validates which requirement?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "requirements and test levels"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Each requirement level is checked by a matching test or evaluation (the V-model view used in the course): business requirements ↔ measuring business objectives after release; user requirements ↔ acceptance testing; functional requirements ↔ system testing; architecture/design ↔ integration testing; detailed design ↔ unit testing. Choose the activity that checks each item.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi cấp yêu cầu được kiểm bằng hoạt động tương ứng (góc nhìn mô hình V). Chọn hoạt động kiểm từng mục.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Mục tiêu nghiệp vụ chỉ đo được sau khi đưa vào dùng.",
+        "Use case của người dùng ⇒ acceptance testing."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Validation 3 — which level validates which requirement?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Validation 3 — which level validates which requirement? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Measuring business objectives\n   - r1.k: Acceptance testing\n   - r2.k: System testing\n   - r3.k: Integration testing\n   - r4.k: Unit testing\n   Business requirements are validated by measuring the objectives; user requirements by acceptance tests; functional requirements by system tests; architecture by integration tests; component design by unit tests.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Business requirements are validated by measuring the objectives; user requirements by acceptance tests; functional requirements by system tests; architecture by integration tests; component design by unit tests.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Checked by",
+                "luaChon": [
+                  "Measuring business objectives",
+                  "Acceptance testing",
+                  "System testing",
+                  "Integration testing",
+                  "Unit testing"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Reduce the average waiting time at reception by 30% within 6 months."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "UC-03 \"Book appointment\": the patient books a slot with a chosen doctor."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "FR-21: The system shall reject a booking that overlaps an existing one for the same doctor."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "The booking service and the SMS gateway exchange confirmation messages."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "The function calcEndTime(start, duration) returns the slot end time."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Measuring business objectives",
+              "r1.k": "Acceptance testing",
+              "r2.k": "System testing",
+              "r3.k": "Integration testing",
+              "r4.k": "Unit testing"
+            },
+            "giaiThich": "<p><p>Business requirements are validated by measuring the objectives; user requirements by acceptance tests; functional requirements by system tests; architecture by integration tests; component design by unit tests.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gán use case cho unit test."
+        },
+        {
+          "loi": "Gán mục tiêu nghiệp vụ cho system test."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "business requirement",
+          "vi": "yêu cầu nghiệp vụ — VÌ SAO tổ chức làm hệ thống (mục tiêu, lợi ích); ghi trong Vision & Scope"
+        },
+        {
+          "en": "user requirement",
+          "vi": "yêu cầu người dùng — việc người dùng phải làm được (use case, user story)"
+        },
+        {
+          "en": "functional requirement (FR)",
+          "vi": "yêu cầu chức năng — hành vi hệ thống thể hiện trong điều kiện cụ thể (\"The system shall…\"); ghi trong SRS"
+        },
+        {
+          "en": "validation",
+          "vi": "thẩm định — xác nhận đúng THỨ cần làm (đúng nhu cầu)"
+        }
+      ]
+    }
+  ]
+}

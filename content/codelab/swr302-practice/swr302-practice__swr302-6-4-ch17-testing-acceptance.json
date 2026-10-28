@@ -1,0 +1,531 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-6-4-ch17-testing-acceptance",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-6-4-ch17-testing-acceptance"
+  },
+  "exercises": [
+    {
+      "title": "Requirement tests 1 — what conceptual tests reveal",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "testing the requirements"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers: write <b>conceptual tests</b> from the requirements early, without knowing the UI. Each test describes the expected behaviour for a situation. When you cannot write a test, or the test and the requirement disagree, you have found a requirement defect.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Wiegers: viết <b>test khái niệm</b> từ yêu cầu từ sớm, chưa cần biết giao diện. Không viết được test, hoặc test mâu thuẫn với yêu cầu ⇒ đã tìm ra lỗi yêu cầu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Không viết được test ⇒ yêu cầu chưa rõ/đủ.",
+        "Test khái niệm không phụ thuộc giao diện."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Requirement tests 1 — what conceptual tests reveal\n\nAnswer in the answer panel (no code needed).\n\n1. Requirement: \"Members get a discount.\" Writing a test, you ask \"how much, and from when?\" This reveals…Yêu cầu: \"Hội viên được giảm giá.\" Viết test, bạn hỏi \"bao nhiêu, từ khi nào?\". Điều này cho thấy…\n2. Conceptual tests are written…Test khái niệm được viết…\n3. A test from the use case and a test from the functional requirement give different expected results. You should…Test từ use case và test từ yêu cầu chức năng cho kết quả mong đợi khác nhau. Bạn nên…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Requirement tests 1 — what conceptual tests reveal — answer key\n\n1. Requirement: \"Members get a discount.\" Writing a test, you ask \"how much, and from when?\" This reveals…Yêu cầu: \"Hội viên được giảm giá.\" Viết test, bạn hỏi \"bao nhiêu, từ khi nào?\". Điều này cho thấy…\n   Answer: a) an incomplete, unverifiable requirement\n   Missing values ⇒ incomplete.VI: Thiếu giá trị ⇒ chưa đầy đủ.\n\n2. Conceptual tests are written…Test khái niệm được viết…\n   Answer: a) from the requirements, independent of the UI and code\n   They test the requirements themselves.VI: Chúng kiểm chính các yêu cầu.\n\n3. A test from the use case and a test from the functional requirement give different expected results. You should…Test từ use case và test từ yêu cầu chức năng cho kết quả mong đợi khác nhau. Bạn nên…\n   Answer: a) investigate — one of the requirements (or models) is wrong\n   Disagreement reveals a defect.VI: Mâu thuẫn lộ ra lỗi.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · a · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Requirement: \"Members get a discount.\" Writing a test, you ask \"how much, and from when?\" This reveals…</p><p style=\"opacity:.75;font-size:.92em\"><i>Yêu cầu: \"Hội viên được giảm giá.\" Viết test, bạn hỏi \"bao nhiêu, từ khi nào?\". Điều này cho thấy…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "an incomplete, unverifiable requirement"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a code bug"
+              },
+              {
+                "ma": "c",
+                "noiDung": "nothing"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a UI problem"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Missing values ⇒ incomplete.</p><p><i>VI: Thiếu giá trị ⇒ chưa đầy đủ.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Conceptual tests are written…</p><p style=\"opacity:.75;font-size:.92em\"><i>Test khái niệm được viết…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "from the requirements, independent of the UI and code"
+              },
+              {
+                "ma": "b",
+                "noiDung": "after the UI is finished"
+              },
+              {
+                "ma": "c",
+                "noiDung": "by copying the code"
+              },
+              {
+                "ma": "d",
+                "noiDung": "only by developers"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>They test the requirements themselves.</p><p><i>VI: Chúng kiểm chính các yêu cầu.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>A test from the use case and a test from the functional requirement give different expected results. You should…</p><p style=\"opacity:.75;font-size:.92em\"><i>Test từ use case và test từ yêu cầu chức năng cho kết quả mong đợi khác nhau. Bạn nên…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "investigate — one of the requirements (or models) is wrong"
+              },
+              {
+                "ma": "b",
+                "noiDung": "pick the easier one"
+              },
+              {
+                "ma": "c",
+                "noiDung": "delete both tests"
+              },
+              {
+                "ma": "d",
+                "noiDung": "ignore"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Disagreement reveals a defect.</p><p><i>VI: Mâu thuẫn lộ ra lỗi.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đợi có giao diện mới viết test."
+        },
+        {
+          "loi": "Chọn kết quả dễ hơn khi hai nguồn mâu thuẫn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "verifiable",
+          "vi": "kiểm chứng được — có cách test/đo để biết đạt hay không"
+        },
+        {
+          "en": "validation",
+          "vi": "thẩm định — xác nhận đúng THỨ cần làm (đúng nhu cầu)"
+        }
+      ]
+    },
+    {
+      "title": "Requirement tests 4 — acceptance criteria, acceptance test or Definition of Done?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "acceptance criteria"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p><b>Acceptance criteria</b>: conditions a specific story or release must satisfy to be accepted. <b>Acceptance test</b>: a concrete test (data, steps, expected result) that checks the criteria. <b>Definition of Done</b>: a team-wide checklist that applies to every story.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Tiêu chí chấp nhận</b>: điều kiện một story/bản phát hành phải thoả. <b>Acceptance test</b>: test cụ thể (dữ liệu, bước, kết quả). <b>Definition of Done</b>: checklist chung cho mọi story.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Có dữ liệu + bước cụ thể ⇒ acceptance test.",
+        "Áp cho mọi story ⇒ DoD."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Requirement tests 4 — acceptance criteria, acceptance test or Definition of Done?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Requirement tests 4 — acceptance criteria, acceptance test or Definition of Done? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Acceptance criteria\n   - r1.k: Acceptance test\n   - r2.k: Definition of Done\n   - r3.k: Acceptance criteria\n   - r4.k: Definition of Done\n   - r5.k: Acceptance test\n   Criteria are statements; tests are concrete executions with data; the DoD is the same for every story.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Criteria are statements; tests are concrete executions with data; the DoD is the same for every story.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Kind",
+                "luaChon": [
+                  "Acceptance criteria",
+                  "Acceptance test",
+                  "Definition of Done"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "A cancelled slot becomes available to other owners."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Log in as owner01, open appointment #A-17 (at 15:00), cancel it at 12:00, expect status \"Cancelled\"."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Code reviewed, unit tests pass, documentation updated."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Owners cannot cancel less than 2 hours before an appointment."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Every story is deployed to the staging server before the sprint review."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "With appointment at 10:00 and current time 09:15, press Cancel ⇒ message E-12 is shown."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Acceptance criteria",
+              "r1.k": "Acceptance test",
+              "r2.k": "Definition of Done",
+              "r3.k": "Acceptance criteria",
+              "r4.k": "Definition of Done",
+              "r5.k": "Acceptance test"
+            },
+            "giaiThich": "<p><p>Criteria are statements; tests are concrete executions with data; the DoD is the same for every story.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Coi DoD là tiêu chí riêng của một story."
+        },
+        {
+          "loi": "Nhầm tiêu chí với test cụ thể."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "acceptance criteria",
+          "vi": "tiêu chí chấp nhận — điều kiện để khách nhận một yêu cầu/story (Given/When/Then)"
+        }
+      ]
+    },
+    {
+      "title": "Requirement tests 2 — derive boundary tests from a requirement",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "testing the requirements"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>FR-15 (ShopNow): \"Orders of at least 500,000 VND and less than 1,000,000 VND get a 5% discount. Orders of at least 1,000,000 VND get a 10% discount. Smaller orders get no discount.\" Write <code>TESTS</code>: an array of <code>{ total, discountPercent }</code> conceptual tests that cover every boundary: the last value before and the first value of each band (whole VND). Each expected value must be correct according to FR-15. 6 to 10 tests.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Boundaries: 499,999 / 500,000 and 999,999 / 1,000,000; also a typical value inside each band.</li>\n</ul>",
+      "problemHtmlVi": "<p>FR-15: \"Đơn từ 500.000đ tới dưới 1.000.000đ giảm 5%. Từ 1.000.000đ giảm 10%. Nhỏ hơn không giảm.\" Viết <code>TESTS</code> gồm các test khái niệm <code>{ total, discountPercent }</code> phủ mọi biên: giá trị cuối trước và giá trị đầu của mỗi khoảng (đồng nguyên). Kết quả mong đợi phải đúng theo FR-15. 6–10 test.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Biên: 499.999 / 500.000 và 999.999 / 1.000.000; thêm một giá trị điển hình trong mỗi khoảng.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "{ total: 500000, discountPercent: ? }",
+          "output": "5",
+          "explanation": "\"at least 500,000\" includes 500,000.|||\"at least\" bao gồm 500.000."
+        }
+      ],
+      "hintsJson": [
+        "\"at least\" bao gồm giá trị biên; \"less than\" thì không.",
+        "Mỗi biên cần hai test: ngay trước và ngay tại biên."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "tests.js",
+          "language": "javascript",
+          "code": "const TESTS = [\n  // { total: 100000, discountPercent: 0 },\n];\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "tests.js",
+          "language": "javascript",
+          "code": "const TESTS = [\n  { total: 100000, discountPercent: 0 },\n  { total: 499999, discountPercent: 0 },\n  { total: 500000, discountPercent: 5 },\n  { total: 750000, discountPercent: 5 },\n  { total: 999999, discountPercent: 5 },\n  { total: 1000000, discountPercent: 10 },\n  { total: 2500000, discountPercent: 10 },\n];\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Boundary tests sit on both sides of each edge: 499,999 → 0%, 500,000 → 5%, 999,999 → 5%, 1,000,000 → 10%. Writing them forces the analyst to confirm whether each boundary is inclusive.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "tests.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "6 to 10 well-formed tests",
+              "vi": "6–10 test đúng dạng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof TESTS==\"undefined\"||!Array.isArray(TESTS))return\"TESTS must be an array\";if(TESTS.length<6||TESTS.length>10)return\"write 6 to 10 tests (got \"+TESTS.length+\")\";for(var e=0;e<TESTS.length;e++){var t=TESTS[e];if(!t||typeof t.total!=\"number\"||typeof t.discountPercent!=\"number\")return\"test \"+e+\" needs numeric total and discountPercent\"}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "every expected value follows FR-15",
+              "vi": "mọi kết quả mong đợi đúng FR-15"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof TESTS==\"undefined\"||!Array.isArray(TESTS))return\"TESTS must be an array\";for(var t=0;t<TESTS.length;t++){var r=TESTS[t],n=r.total>=1e6?10:r.total>=5e5?5:0;if(r.discountPercent!==n)return\"total \"+r.total+\" \\u21D2 \"+n+\"% (got \"+r.discountPercent+\"%)\"}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "covers the 500,000 boundary on both sides",
+              "vi": "phủ biên 500.000 hai phía"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof TESTS==\"undefined\"||!Array.isArray(TESTS))return\"TESTS must be an array\";var n=TESTS.map(function(r){return r.total});return n.indexOf(499999)>=0&&n.indexOf(5e5)>=0?\"OK\":\"test 499,999 and 500,000\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "covers the 1,000,000 boundary on both sides",
+              "vi": "phủ biên 1.000.000 hai phía"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof TESTS==\"undefined\"||!Array.isArray(TESTS))return\"TESTS must be an array\";var n=TESTS.map(function(r){return r.total});return n.indexOf(999999)>=0&&n.indexOf(1e6)>=0?\"OK\":\"test 999,999 and 1,000,000\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "each of the three bands has at least one test",
+              "vi": "mỗi khoảng có ít nhất một test"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof TESTS==\"undefined\"||!Array.isArray(TESTS))return\"TESTS must be an array\";var r=[0,0,0];return TESTS.forEach(function(n){r[n.total>=1e6?2:n.total>=5e5?1:0]++}),r[0]&&r[1]&&r[2]?\"OK\":\"cover all three bands (no discount, 5%, 10%)\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chỉ test giá trị giữa khoảng."
+        },
+        {
+          "loi": "Ghi 500.000 ⇒ 0%."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "boundary value",
+          "vi": "giá trị biên"
+        },
+        {
+          "en": "conceptual test",
+          "vi": "test khái niệm — viết từ yêu cầu, chưa phụ thuộc giao diện"
+        }
+      ]
+    },
+    {
+      "title": "Requirement tests 3 — acceptance criteria in Given/When/Then",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "acceptance criteria"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>User story: \"As a <b>pet owner</b>, I want to <b>cancel an appointment</b> so that <b>the slot can be given to someone else</b>.\" Business rule: cancellation is allowed up to 2 hours before the appointment; later cancellations are refused with a message. Write <code>CRITERIA</code>: an array of at least 3 scenarios, each <code>{ title, given, when, then }</code>. Include the success scenario, the \"too late\" scenario (refused), and one more (for example the freed slot becoming bookable or a notification to the clinic).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Given = state, When = one action, Then = observable result; numbers where the rule has numbers.</li>\n</ul>",
+      "problemHtmlVi": "<p>Story: chủ thú cưng huỷ lịch hẹn để nhường slot. Luật: được huỷ tới trước 2 giờ; trễ hơn thì từ chối kèm thông báo. Viết <code>CRITERIA</code> ít nhất 3 kịch bản <code>{ title, given, when, then }</code>: thành công, \"quá muộn\" (bị từ chối), và một kịch bản nữa.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Given = trạng thái, When = một hành động, Then = kết quả quan sát được; có số khi luật có số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "success",
+          "output": "Given an appointment 5 hours from now / When the owner cancels it / Then the appointment is cancelled and the slot becomes available",
+          "explanation": "|||"
+        }
+      ],
+      "hintsJson": [
+        "Given chứa số giờ cụ thể (vd 1 hour from now).",
+        "Then nói người dùng THẤY gì (thông báo, trạng thái)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "criteria.js",
+          "language": "javascript",
+          "code": "const CRITERIA = [\n  // { title: '', given: '', when: '', then: '' },\n];\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "criteria.js",
+          "language": "javascript",
+          "code": "const CRITERIA = [\n  { title: 'Cancel in time', given: 'an owner has an appointment 5 hours from now', when: 'the owner cancels the appointment', then: 'the appointment is cancelled and the owner sees a confirmation' },\n  { title: 'Too late to cancel', given: 'an owner has an appointment 1 hour from now', when: 'the owner tries to cancel the appointment', then: 'the cancellation is refused and the message \"Appointments can only be cancelled up to 2 hours before\" is shown' },\n  { title: 'Exactly at the limit', given: 'an owner has an appointment exactly 2 hours from now', when: 'the owner cancels the appointment', then: 'the appointment is cancelled' },\n  { title: 'Slot freed', given: 'an appointment at 10:00 was cancelled', when: 'another owner searches for free slots that day', then: 'the 10:00 slot is shown as available' },\n];\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Good acceptance criteria cover the normal path, the rule violations and the boundaries, each as an observable result. Here the boundary \"exactly 2 hours\" is worth a scenario too.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "criteria.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "at least 3 complete scenarios",
+              "vi": "ít nhất 3 kịch bản đầy đủ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof CRITERIA==\"undefined\"||!Array.isArray(CRITERIA))return\"CRITERIA must be an array\";if(CRITERIA.length<3)return\"at least 3 scenarios\";for(var r=0;r<CRITERIA.length;r++)for(var n=CRITERIA[r]||{},e=[\"title\",\"given\",\"when\",\"then\"],t=0;t<4;t++)if(String(n[e[t]]||\"\").trim().length<5)return\"scenario \"+r+': \"'+e[t]+'\" is empty or too short';return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "When is one action; Then is an observable result",
+              "vi": "When là một hành động; Then là kết quả quan sát được"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof CRITERIA==\"undefined\"||!Array.isArray(CRITERIA))return\"CRITERIA must be an array\";for(var e=0;e<CRITERIA.length;e++){var r=CRITERIA[e]||{};if(/\\bthen\\b/i.test(r.when)||(String(r.when).match(/\\band\\b/gi)||[]).length>1)return\"scenario \"+e+': keep \"when\" to a single action';if(/\\b(works|is ok|is fine|correctly|properly|as expected)\\b/i.test(r.then))return\"scenario \"+e+': \"then\" must say what is observed, not \"works correctly\"'}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "includes a successful cancellation",
+              "vi": "có kịch bản huỷ thành công"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){return typeof CRITERIA==\"undefined\"||!Array.isArray(CRITERIA)?\"CRITERIA must be an array\":CRITERIA.some(function(e){return/cancel/i.test(e.when)&&/cancel(l)?ed|confirm/i.test(e.then)&&!/refus|reject|not allowed|denied|cannot/i.test(e.then)})?\"OK\":\"add the success scenario (the appointment is cancelled)\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "includes the \"too late\" scenario with the 2-hour rule",
+              "vi": "có kịch bản \"quá muộn\" với luật 2 giờ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof CRITERIA==\"undefined\"||!Array.isArray(CRITERIA))return\"CRITERIA must be an array\";var t=CRITERIA.filter(function(e){return/refus|reject|not allowed|denied|cannot|blocked/i.test(e.then)});return t.length?t.some(function(e){var n=String(e.given),r=n.match(/(\\d+(?:\\.\\d+)?)\\s*(minute|hour)/i);if(!r)return!1;var a=parseFloat(r[1])/(/minute/i.test(r[2])?60:1);return a<2})?\"OK\":'the refused scenario must start less than 2 hours before the appointment (e.g. \"1 hour from now\")':\"add the scenario where cancellation is refused\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết Then = \"it works correctly\"."
+        },
+        {
+          "loi": "Chỉ viết đường thuận."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "acceptance criteria",
+          "vi": "tiêu chí chấp nhận — điều kiện để khách nhận một yêu cầu/story (Given/When/Then)"
+        },
+        {
+          "en": "user story",
+          "vi": "câu chuyện người dùng — \"As a <role>, I want <goal> so that <benefit>\""
+        }
+      ]
+    }
+  ]
+}

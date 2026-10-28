@@ -1,0 +1,495 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-2-deep-utility-library",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-2-2-destructuring-spread-modules"
+  },
+  "exercises": [
+    {
+      "title": "Deep Lab 2 — Utility Library (memoize · debounce · EventEmitter · asyncPool · retry)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 120,
+      "points": 100,
+      "concepts": [
+        "closures",
+        "higher-order functions",
+        "currying",
+        "LRU cache",
+        "debounce / throttle",
+        "classes & private fields",
+        "recursion",
+        "concurrency limits",
+        "exponential back-off"
+      ],
+      "prerequisites": [
+        "Lab 2 — Student Data Toolkit",
+        "Promise / async-await"
+      ],
+      "tags": [
+        "fer202",
+        "deep-lab",
+        "javascript",
+        "es6"
+      ],
+      "problemHtml": "<h1>DEEP LAB 2: Utility Library — closures, higher-order functions, timers, classes and async control</h1>\n<p class=\"bi-phu\">FER202 · Chapter 2 (deep) · Suggested time: 120 minutes · Total: 10 marks</p>\n<h2>1. Overview</h2>\n<p>React developers use utilities like these every day — <code>debounce</code> for search boxes, <code>memoize</code> for expensive selectors, event emitters for sockets, retry for flaky APIs — usually from a library. In this deep lab you write them yourself in one file, <code>utils.js</code>. Each one is a small lesson in closures, higher-order functions, timers or asynchronous control. Timers in the grader are <b>virtual</b>, so 300 ms is measured exactly.</p>\n<h3>Main features</h3>\n<ul>\n  <li>12 utilities + 1 class in <code>utils.js</code>, 8 graded features.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>No libraries; plain modern JavaScript (<code>const</code>/<code>let</code>, arrow functions, rest/spread, classes with private fields).</li>\n  <li>Never mutate inputs. The grader loads <code>utils.js</code> as a plain script and calls the functions by name; a helper <code>wait(ms)</code> is available in checks only.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>utils.js   # pipe · curry · memoize · once · debounce · throttle · EventEmitter\n           # isEqual · buildTree · flattenTree · asyncPool · retry</pre>\n<h2>3. Data model</h2>\n<p><b>Signatures</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>pipe(...fns)(x) / curry(fn)</code></td><td>function</td><td>left-to-right composition / partial application by fn.length</td></tr><tr><td><code>memoize(fn, { maxSize, key })</code></td><td>function + .cache</td><td>LRU eviction</td></tr><tr><td><code>debounce(fn, ms) / throttle(fn, ms)</code></td><td>function</td><td>debounced.cancel()</td></tr><tr><td><code>new EventEmitter()</code></td><td>on / off / once / emit / listenerCount</td><td>on() returns unsubscribe</td></tr><tr><td><code>buildTree(rows) / flattenTree(nodes)</code></td><td>{ ...row, children } / { id, depth }</td><td>rows: { id, parentId }</td></tr><tr><td><code>asyncPool(limit, items, worker) / retry(task, { retries, baseMs })</code></td><td>Promise</td><td>order kept / back-off base·2^n</td></tr></tbody></table>\n<h2>4. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. Higher-order functions: pipe &amp; curry <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>pipe(f, g, h)(x) === h(g(f(x)))</code>; <code>pipe()(x) === x</code>. <code>curry(fn)</code> collects arguments until <code>fn.length</code> are given, in any grouping.</li>\n</ul>\n<p><b>Example:</b></p>\n<pre>curry((a, b, c) =&gt; a + b + c)(1)(2, 3)  ⇒  6</pre>\n</div>\n<div class=\"bi-cn\"><h3>2. Closures: memoize (LRU) &amp; once <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>memoize(fn, { maxSize = 100, key })</code> caches results; when full, evicts the <b>least recently used</b> entry (a hit refreshes it). <code>once(fn)</code> calls fn the first time and returns that result forever.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>3. Timers: debounce &amp; throttle <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>debounce</code> runs only after <code>ms</code> of silence, with the latest arguments; <code>.cancel()</code>. <code>throttle</code> runs immediately, then at most once per <code>ms</code>; the last call inside a window runs at the end of it.</li>\n</ul>\n<p><b>Example:</b></p>\n<pre>throttle 100 ms: calls at 0, 0, 0, 150 ⇒ runs at 0 (1), 100 (3), 200 (4)</pre>\n</div>\n<div class=\"bi-cn\"><h3>4. Class: EventEmitter <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>on(event, fn)</code> returns an unsubscribe function; <code>off</code>, <code>once</code>, <code>emit(event, ...args)</code> (returns whether listeners existed), <code>listenerCount</code>. Store listeners in a <b>private field</b>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. Deep equality <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>isEqual(a, b)</code> for primitives (<code>Object.is</code>), Dates, arrays and plain objects (key order irrelevant).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>6. Recursion: comment tree <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>buildTree(rows)</code> ⇒ roots with nested <code>children</code> (copies — inputs untouched; unknown parent ⇒ root). <code>flattenTree(nodes)</code> ⇒ depth-first <code>[{ id, depth }]</code> (for an indented list).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>7. Concurrency limit: asyncPool <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>asyncPool(limit, items, worker)</code> runs at most <code>limit</code> workers at a time and resolves to results in input order.</li>\n</ul>\n<p><b>Example:</b></p>\n<pre>limit 2, five 100 ms jobs  ⇒  300 ms total</pre>\n</div>\n<div class=\"bi-cn\"><h3>8. Retry with exponential back-off <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>retry(task, { retries = 3, baseMs = 100 })</code> calls <code>task(attempt)</code>; on failure waits <code>baseMs · 2^attempt</code> and tries again, up to <code>retries</code> extra attempts; errors with <code>retryable === false</code> are thrown at once.</li>\n</ul>\n</div>\n<h2>5. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>Higher-order functions: pipe &amp; curry</td><td>1</td></tr><tr><td>2</td><td>Closures: memoize (LRU) &amp; once</td><td>1.5</td></tr><tr><td>3</td><td>Timers: debounce &amp; throttle</td><td>1.5</td></tr><tr><td>4</td><td>Class: EventEmitter</td><td>1.5</td></tr><tr><td>5</td><td>Deep equality</td><td>1</td></tr><tr><td>6</td><td>Recursion: comment tree</td><td>1</td></tr><tr><td>7</td><td>Concurrency limit: asyncPool</td><td>1.5</td></tr><tr><td>8</td><td>Retry with exponential back-off</td><td>1</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>A global variable shared by every debounced function — two search boxes cancel each other.</li>\n  <li><code>JSON.stringify(a) === JSON.stringify(b)</code> as deep equality — fails on key order and Dates.</li>\n  <li>asyncPool that starts everything with <code>Promise.all(items.map(worker))</code> — no limit at all.</li>\n  <li>An unbounded memo cache — memory grows forever in a long-running page.</li>\n</ul>\n<h2>6. Submission</h2>\n<p>Write <code>utils.js</code> in the editor. <b>Run</b> = sample checks, <b>Submit</b> = all checks. Timers are virtual: <code>wait(300)</code> in a check advances the fake clock by exactly 300 ms.</p>",
+      "problemHtmlVi": "<h1>DEEP LAB 2: Thư viện tiện ích — closure, hàm bậc cao, hẹn giờ, class và điều khiển bất đồng bộ</h1>\n<p class=\"bi-phu\">FER202 · Chương 2 (chuyên sâu) · Thời gian gợi ý: 120 phút · Tổng: 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p>Lập trình viên React dùng các tiện ích này hằng ngày — <code>debounce</code> cho ô tìm kiếm, <code>memoize</code> cho selector tốn kém, event emitter cho socket, retry cho API chập chờn — thường lấy từ thư viện. Trong deep lab này bạn tự viết chúng trong một tệp <code>utils.js</code>. Mỗi hàm là một bài học nhỏ về closure, hàm bậc cao, hẹn giờ hoặc điều khiển bất đồng bộ. Hẹn giờ trong máy chấm là <b>ảo</b>, nên 300 ms được đo chính xác.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>12 tiện ích + 1 class trong <code>utils.js</code>, 8 chức năng chấm điểm.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Không dùng thư viện; JavaScript hiện đại thuần (<code>const</code>/<code>let</code>, arrow function, rest/spread, class có trường riêng tư).</li>\n  <li>Không sửa dữ liệu vào. Máy chấm nạp <code>utils.js</code> như script thường và gọi hàm theo tên; hàm phụ <code>wait(ms)</code> chỉ có trong phần kiểm.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>utils.js   # pipe · curry · memoize · once · debounce · throttle · EventEmitter\n           # isEqual · buildTree · flattenTree · asyncPool · retry</pre>\n<h2>3. Mô hình dữ liệu</h2>\n<p><b>Signatures</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>pipe(...fns)(x) / curry(fn)</code></td><td>function</td><td>ghép trái→phải / áp dụng từng phần theo fn.length</td></tr><tr><td><code>memoize(fn, { maxSize, key })</code></td><td>function + .cache</td><td>loại bỏ theo LRU</td></tr><tr><td><code>debounce(fn, ms) / throttle(fn, ms)</code></td><td>function</td><td>debounced.cancel()</td></tr><tr><td><code>new EventEmitter()</code></td><td>on / off / once / emit / listenerCount</td><td>on() trả hàm huỷ</td></tr><tr><td><code>buildTree(rows) / flattenTree(nodes)</code></td><td>{ ...row, children } / { id, depth }</td><td>rows: { id, parentId }</td></tr><tr><td><code>asyncPool(limit, items, worker) / retry(task, { retries, baseMs })</code></td><td>Promise</td><td>giữ thứ tự / lùi base·2^n</td></tr></tbody></table>\n<h2>4. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. Hàm bậc cao: pipe &amp; curry <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>pipe(f, g, h)(x) === h(g(f(x)))</code>; <code>pipe()(x) === x</code>. <code>curry(fn)</code> gom đối số tới khi đủ <code>fn.length</code>, nhóm kiểu gì cũng được.</li>\n</ul>\n<p><b>Ví dụ:</b></p>\n<pre>curry((a, b, c) =&gt; a + b + c)(1)(2, 3)  ⇒  6</pre>\n</div>\n<div class=\"bi-cn\"><h3>2. Closure: memoize (LRU) &amp; once <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>memoize(fn, { maxSize = 100, key })</code> nhớ kết quả; đầy thì bỏ phần tử <b>lâu không dùng nhất</b> (trúng cache thì làm mới). <code>once(fn)</code> gọi fn lần đầu và trả mãi kết quả đó.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>3. Hẹn giờ: debounce &amp; throttle <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>debounce</code> chỉ chạy sau <code>ms</code> yên lặng, với đối số mới nhất; có <code>.cancel()</code>. <code>throttle</code> chạy ngay, rồi tối đa một lần mỗi <code>ms</code>; lần gọi cuối trong cửa sổ được chạy bù khi hết cửa sổ.</li>\n</ul>\n<p><b>Ví dụ:</b></p>\n<pre>throttle 100 ms: calls at 0, 0, 0, 150 ⇒ runs at 0 (1), 100 (3), 200 (4)</pre>\n</div>\n<div class=\"bi-cn\"><h3>4. Class: EventEmitter <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>on(event, fn)</code> trả hàm huỷ đăng ký; <code>off</code>, <code>once</code>, <code>emit(event, ...args)</code> (trả có listener hay không), <code>listenerCount</code>. Lưu listener trong <b>trường riêng tư</b>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. So sánh sâu <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>isEqual(a, b)</code> cho kiểu nguyên thuỷ (<code>Object.is</code>), Date, mảng và object thường (thứ tự khoá không quan trọng).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>6. Đệ quy: cây bình luận <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>buildTree(rows)</code> ⇒ các gốc có <code>children</code> lồng (bản sao — không sửa đầu vào; cha không có ⇒ thành gốc). <code>flattenTree(nodes)</code> ⇒ duyệt sâu <code>[{ id, depth }]</code> (để vẽ danh sách thụt lề).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>7. Giới hạn đồng thời: asyncPool <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>asyncPool(limit, items, worker)</code> chạy tối đa <code>limit</code> việc cùng lúc và trả kết quả theo thứ tự đầu vào.</li>\n</ul>\n<p><b>Ví dụ:</b></p>\n<pre>limit 2, five 100 ms jobs  ⇒  300 ms total</pre>\n</div>\n<div class=\"bi-cn\"><h3>8. Thử lại với lùi theo hàm mũ <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>retry(task, { retries = 3, baseMs = 100 })</code> gọi <code>task(attempt)</code>; lỗi thì đợi <code>baseMs · 2^attempt</code> rồi thử lại, tối đa <code>retries</code> lần thêm; lỗi có <code>retryable === false</code> ném ngay.</li>\n</ul>\n</div>\n<h2>5. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>Hàm bậc cao: pipe &amp; curry</td><td>1</td></tr><tr><td>2</td><td>Closure: memoize (LRU) &amp; once</td><td>1.5</td></tr><tr><td>3</td><td>Hẹn giờ: debounce &amp; throttle</td><td>1.5</td></tr><tr><td>4</td><td>Class: EventEmitter</td><td>1.5</td></tr><tr><td>5</td><td>So sánh sâu</td><td>1</td></tr><tr><td>6</td><td>Đệ quy: cây bình luận</td><td>1</td></tr><tr><td>7</td><td>Giới hạn đồng thời: asyncPool</td><td>1.5</td></tr><tr><td>8</td><td>Thử lại với lùi theo hàm mũ</td><td>1</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Một biến toàn cục dùng chung cho mọi hàm debounce — hai ô tìm kiếm huỷ lẫn nhau.</li>\n  <li><code>JSON.stringify(a) === JSON.stringify(b)</code> làm so sâu — sai khi thứ tự khoá khác và với Date.</li>\n  <li>asyncPool khởi chạy tất cả bằng <code>Promise.all(items.map(worker))</code> — không giới hạn gì.</li>\n  <li>Cache memo không giới hạn — bộ nhớ tăng mãi trong trang chạy lâu.</li>\n</ul>\n<h2>6. Nộp bài</h2>\n<p>Viết <code>utils.js</code> trong editor. <b>Chạy thử</b> = kiểm mẫu, <b>Nộp</b> = mọi kiểm. Hẹn giờ là ảo: <code>wait(300)</code> trong phần kiểm đẩy đồng hồ giả đúng 300 ms.</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "No libraries; plain modern JavaScript (<code>const</code>/<code>let</code>, arrow functions, rest/spread, classes with private fields).|||Không dùng thư viện; JavaScript hiện đại thuần (<code>const</code>/<code>let</code>, arrow function, rest/spread, class có trường riêng tư).\nNever mutate inputs. The grader loads <code>utils.js</code> as a plain script and calls the functions by name; a helper <code>wait(ms)</code> is available in checks only.|||Không sửa dữ liệu vào. Máy chấm nạp <code>utils.js</code> như script thường và gọi hàm theo tên; hàm phụ <code>wait(ms)</code> chỉ có trong phần kiểm.",
+      "examplesJson": [
+        {
+          "input": "Higher-order functions: pipe & curry|||Hàm bậc cao: pipe & curry",
+          "output": "curry((a, b, c) => a + b + c)(1)(2, 3)  ⇒  6",
+          "explanation": "See the brief / Xem đề."
+        }
+      ],
+      "hintsJson": [
+        "Closure: biến khai báo trong hàm ngoài (timer, cache, called) sống tiếp trong hàm được trả về — mỗi lần gọi debounce(...) có biến RIÊNG.",
+        "LRU với Map: trúng ⇒ delete rồi set lại (lên cuối); đầy ⇒ xoá cache.keys().next().value (phần tử đầu).",
+        "throttle: nhớ thời điểm chạy cuối (Date.now()); trong cửa sổ thì lưu đối số mới nhất và hẹn một setTimeout cho phần còn lại của cửa sổ.",
+        "asyncPool: tạo limit \"làn\" async, mỗi làn lặp lấy chỉ số kế tiếp (next++) cho tới hết; await Promise.all(lanes)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "utils.js",
+          "language": "javascript",
+          "code": "// utils.js — STARTER: viết đủ các hàm theo đề (giữ đúng tên)\n\nfunction pipe(...fns) {}\nfunction curry(fn) {}\nfunction memoize(fn, { maxSize = 100, key = (...args) => JSON.stringify(args) } = {}) {}\nfunction once(fn) {}\nfunction debounce(fn, ms) {}\nfunction throttle(fn, ms) {}\nclass EventEmitter {}\nfunction isEqual(a, b) {}\nfunction buildTree(rows) {}\nfunction flattenTree(nodes) {}\nasync function asyncPool(limit, items, worker) {}\nasync function retry(task, { retries = 3, baseMs = 100 } = {}) {}\n"
+        },
+        {
+          "name": "wait.js",
+          "language": "javascript",
+          "code": "// wait.js — hàm phụ cho PHẦN KIỂM (đã cho, không nộp)\nconst wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "utils.js",
+          "language": "javascript",
+          "code": "// utils.js — thư viện tiện ích: closure, hàm bậc cao, hẹn giờ, class, đệ quy, bất đồng bộ có kiểm soát\n\n// ── f1. Hàm bậc cao: pipe & curry ─────────────────────────────────────────────\n// pipe(f, g, h)(x) = h(g(f(x))) — đọc từ trái sang phải như một dây chuyền\nfunction pipe(...fns) {\n  return (input) => fns.reduce((value, fn) => fn(value), input);\n}\n\n// curry(add3)(1)(2)(3) = curry(add3)(1, 2)(3) = add3(1, 2, 3)\nfunction curry(fn) {\n  return function curried(...args) {\n    if (args.length >= fn.length) return fn(...args);\n    return (...more) => curried(...args, ...more);\n  };\n}\n\n// ── f2. Closure: memoize có giới hạn (LRU) + once ─────────────────────────────\nfunction memoize(fn, { maxSize = 100, key = (...args) => JSON.stringify(args) } = {}) {\n  const cache = new Map(); // Map giữ thứ tự chèn ⇒ phần tử đầu là phần tử ít dùng gần đây nhất\n  function memoized(...args) {\n    const k = key(...args);\n    if (cache.has(k)) {\n      const value = cache.get(k);\n      cache.delete(k); // đưa lên \"mới dùng nhất\"\n      cache.set(k, value);\n      return value;\n    }\n    const value = fn(...args);\n    cache.set(k, value);\n    if (cache.size > maxSize) cache.delete(cache.keys().next().value); // bỏ cái cũ nhất\n    return value;\n  }\n  memoized.cache = cache;\n  return memoized;\n}\n\nfunction once(fn) {\n  let called = false;\n  let result;\n  return (...args) => {\n    if (!called) {\n      called = true;\n      result = fn(...args);\n    }\n    return result;\n  };\n}\n\n// ── f3. Hẹn giờ: debounce & throttle ─────────────────────────────────────────\n// debounce: chỉ chạy SAU KHI ngừng gọi ms mili-giây (ô tìm kiếm)\nfunction debounce(fn, ms) {\n  let timer = null;\n  function debounced(...args) {\n    clearTimeout(timer);\n    timer = setTimeout(() => {\n      timer = null;\n      fn(...args);\n    }, ms);\n  }\n  debounced.cancel = () => {\n    clearTimeout(timer);\n    timer = null;\n  };\n  return debounced;\n}\n\n// throttle: chạy NGAY lần đầu, rồi tối đa một lần mỗi ms (cuộn trang); lần gọi cuối trong cửa sổ được chạy bù\nfunction throttle(fn, ms) {\n  let last = -Infinity;\n  let timer = null;\n  let pendingArgs = null;\n  return function throttled(...args) {\n    const now = Date.now();\n    const remaining = ms - (now - last);\n    if (remaining <= 0) {\n      last = now;\n      fn(...args);\n    } else {\n      pendingArgs = args;\n      if (!timer) {\n        timer = setTimeout(() => {\n          last = Date.now();\n          timer = null;\n          fn(...pendingArgs);\n          pendingArgs = null;\n        }, remaining);\n      }\n    }\n  };\n}\n\n// ── f4. Class: EventEmitter ─────────────────────────────────────────────────\nclass EventEmitter {\n  #listeners = new Map(); // trường riêng tư\n\n  on(event, listener) {\n    if (!this.#listeners.has(event)) this.#listeners.set(event, []);\n    this.#listeners.get(event).push(listener);\n    return () => this.off(event, listener); // trả hàm huỷ đăng ký (như useEffect cleanup)\n  }\n\n  off(event, listener) {\n    const list = this.#listeners.get(event);\n    if (!list) return;\n    const i = list.indexOf(listener);\n    if (i >= 0) list.splice(i, 1);\n  }\n\n  once(event, listener) {\n    const wrapper = (...args) => {\n      this.off(event, wrapper);\n      listener(...args);\n    };\n    return this.on(event, wrapper);\n  }\n\n  emit(event, ...args) {\n    const list = this.#listeners.get(event);\n    if (!list || list.length === 0) return false;\n    [...list].forEach((l) => l(...args)); // bản sao: listener tự gỡ trong lúc emit vẫn an toàn\n    return true;\n  }\n\n  listenerCount(event) {\n    return this.#listeners.get(event)?.length ?? 0;\n  }\n}\n\n// ── f5. So sâu (như React so props? KHÔNG — React so NÔNG; đây là toEqual của test) ──\nfunction isEqual(a, b) {\n  if (Object.is(a, b)) return true;\n  if (a instanceof Date && b instanceof Date) return a.getTime() === b.getTime();\n  if (typeof a !== 'object' || typeof b !== 'object' || a === null || b === null) return false;\n  if (Array.isArray(a) !== Array.isArray(b)) return false;\n  const ka = Object.keys(a);\n  const kb = Object.keys(b);\n  if (ka.length !== kb.length) return false;\n  return ka.every((k) => Object.prototype.hasOwnProperty.call(b, k) && isEqual(a[k], b[k]));\n}\n\n// ── f6. Đệ quy: dựng cây bình luận từ danh sách phẳng và trải phẳng lại ────────\nfunction buildTree(rows) {\n  const byId = new Map(rows.map((r) => [r.id, { ...r, children: [] }]));\n  const roots = [];\n  for (const r of rows) {\n    const node = byId.get(r.id);\n    const parent = r.parentId == null ? null : byId.get(r.parentId);\n    if (parent) parent.children.push(node);\n    else roots.push(node); // cha không tồn tại ⇒ coi như gốc\n  }\n  return roots;\n}\n\nfunction flattenTree(nodes, depth = 0) {\n  return nodes.flatMap((n) => [{ id: n.id, depth }, ...flattenTree(n.children ?? [], depth + 1)]);\n}\n\n// ── f7. Giới hạn đồng thời: chạy tối đa limit việc cùng lúc, giữ thứ tự kết quả ──\nasync function asyncPool(limit, items, worker) {\n  const results = new Array(items.length);\n  let next = 0;\n  async function lane() {\n    while (next < items.length) {\n      const i = next++;\n      results[i] = await worker(items[i], i);\n    }\n  }\n  const lanes = Array.from({ length: Math.min(limit, items.length) }, lane);\n  await Promise.all(lanes);\n  return results;\n}\n\n// ── f8. Thử lại với lùi theo hàm mũ: đợi base, 2·base, 4·base… ─────────────────\nasync function retry(task, { retries = 3, baseMs = 100 } = {}) {\n  let attempt = 0;\n  for (;;) {\n    try {\n      return await task(attempt);\n    } catch (err) {\n      if (attempt >= retries || err?.retryable === false) throw err;\n      await new Promise((r) => setTimeout(r, baseMs * 2 ** attempt));\n      attempt += 1;\n    }\n  }\n}\n"
+        },
+        {
+          "name": "wait.js",
+          "language": "javascript",
+          "code": "// wait.js — hàm phụ cho PHẦN KIỂM (đã cho, không nộp)\nconst wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Mọi tiện ích đều dựa trên <b>closure</b>: biến <code>timer</code>, <code>cache</code>, <code>called</code> nằm trong phạm vi hàm ngoài và sống cùng hàm trả về. <code>Map</code> giữ thứ tự chèn nên làm LRU chỉ cần xoá rồi chèn lại. debounce và throttle khác nhau ở câu hỏi \"chạy khi nào\": sau khi yên lặng, hay đều đặn tối đa một lần mỗi khoảng. asyncPool dùng mô hình \"làn\": mỗi làn là một vòng lặp async lấy việc kế tiếp, nên số việc chạy cùng lúc không bao giờ vượt <code>limit</code> và kết quả ghi đúng chỉ số. retry nhân đôi thời gian chờ mỗi lần để không dội thêm tải lên server đang gặp sự cố.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "utils.js",
+        "tepNap": [
+          "wait.js",
+          "utils.js"
+        ],
+        "kiem": [
+          {
+            "nhom": "f1",
+            "moTa": "pipe runs left to right",
+            "goi": "pipe((x) => x + 1, (x) => x * 2, String)(3)",
+            "mongDoi": "8"
+          },
+          {
+            "nhom": "f1",
+            "moTa": "pipe with no functions returns the input",
+            "goi": "pipe()(42)",
+            "mongDoi": 42
+          },
+          {
+            "nhom": "f1",
+            "moTa": "curry accepts arguments in any grouping",
+            "chuanBi": "const add3 = curry((a, b, c) => a + b + c);",
+            "goi": "[add3(1)(2)(3), add3(1, 2)(3), add3(1)(2, 3), add3(1, 2, 3)]",
+            "mongDoi": [
+              6,
+              6,
+              6,
+              6
+            ]
+          },
+          {
+            "nhom": "f1",
+            "an": true,
+            "moTa": "Partially applied functions are reusable",
+            "chuanBi": "const mul = curry((a, b) => a * b); const double = mul(2);",
+            "goi": "[double(5), double(7)]",
+            "mongDoi": [
+              10,
+              14
+            ]
+          },
+          {
+            "nhom": "f2",
+            "moTa": "memoize caches by arguments",
+            "chuanBi": "let calls = 0; const sq = memoize((n) => { calls++; return n * n; }); sq(4); sq(4); sq(5);",
+            "goi": "calls",
+            "mongDoi": 2
+          },
+          {
+            "nhom": "f2",
+            "moTa": "LRU: least recently used entry is evicted",
+            "chuanBi": "let calls = 0; const f = memoize((n) => { calls++; return n; }, { maxSize: 2 }); f(1); f(2); f(1); f(3); f(1); f(2);",
+            "goi": "calls",
+            "mongDoi": 4
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Custom key function",
+            "chuanBi": "let calls = 0; const byId = memoize((u) => { calls++; return u.name.toUpperCase(); }, { key: (u) => u.id }); byId({ id: 1, name: 'an' }); byId({ id: 1, name: 'an' });",
+            "goi": "calls",
+            "mongDoi": 1
+          },
+          {
+            "nhom": "f2",
+            "an": true,
+            "moTa": "once runs a single time and returns the first result",
+            "chuanBi": "let n = 0; const init = once((x) => { n++; return x * 10; });",
+            "goi": "[init(1), init(2), n]",
+            "mongDoi": [
+              10,
+              10,
+              1
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "debounce fires once after calls stop",
+            "chuanBi": "const seen = []; const d = debounce((q) => seen.push(q), 300); d('r'); await wait(100); d('re'); await wait(100); d('react'); await wait(350);",
+            "goi": "seen",
+            "mongDoi": [
+              "react"
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "debounce.cancel prevents the call",
+            "chuanBi": "const seen = []; const d = debounce((q) => seen.push(q), 300); d('x'); d.cancel(); await wait(400);",
+            "goi": "seen",
+            "mongDoi": []
+          },
+          {
+            "nhom": "f3",
+            "moTa": "throttle: immediate first call, at most once per window, trailing call",
+            "chuanBi": "const seen = []; const t = throttle((v) => seen.push([v, Date.now() % 100000]), 100); const t0 = Date.now() % 100000; t(1); t(2); t(3); await wait(150); t(4); await wait(300);",
+            "goi": "seen.map(([v, at]) => [v, at - t0])",
+            "mongDoi": [
+              [
+                1,
+                0
+              ],
+              [
+                3,
+                100
+              ],
+              [
+                4,
+                200
+              ]
+            ]
+          },
+          {
+            "nhom": "f3",
+            "an": true,
+            "moTa": "throttle after a quiet period runs immediately",
+            "chuanBi": "const seen = []; const t = throttle((v) => seen.push(v), 100); t(1); await wait(500); t(2);",
+            "goi": "seen",
+            "mongDoi": [
+              1,
+              2
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "on + emit with arguments",
+            "chuanBi": "const e = new EventEmitter(); const got = []; e.on('msg', (a, b) => got.push(a + b)); e.emit('msg', 'hi ', 'there');",
+            "goi": "got",
+            "mongDoi": [
+              "hi there"
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "on returns an unsubscribe function",
+            "chuanBi": "const e = new EventEmitter(); let n = 0; const off = e.on('tick', () => n++); e.emit('tick'); off(); e.emit('tick');",
+            "goi": "[n, e.listenerCount(\"tick\")]",
+            "mongDoi": [
+              1,
+              0
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "once fires a single time",
+            "chuanBi": "const e = new EventEmitter(); let n = 0; e.once('ready', () => n++); e.emit('ready'); e.emit('ready');",
+            "goi": "n",
+            "mongDoi": 1
+          },
+          {
+            "nhom": "f4",
+            "an": true,
+            "moTa": "emit returns whether anyone listened",
+            "chuanBi": "const e = new EventEmitter(); e.on('a', () => {});",
+            "goi": "[e.emit(\"a\"), e.emit(\"b\")]",
+            "mongDoi": [
+              true,
+              false
+            ]
+          },
+          {
+            "nhom": "f4",
+            "an": true,
+            "moTa": "Listeners are private (#field)",
+            "kiem": "ma-nguon",
+            "tep": "utils.js",
+            "khop": "#\\w+\\s*=\\s*new Map"
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Deep equality of nested data",
+            "goi": "isEqual({ a: [1, { b: 2 }], c: \"x\" }, { c: \"x\", a: [1, { b: 2 }] })",
+            "mongDoi": true
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Detects a nested difference",
+            "goi": "isEqual({ a: [1, { b: 2 }] }, { a: [1, { b: 3 }] })",
+            "mongDoi": false
+          },
+          {
+            "nhom": "f5",
+            "an": true,
+            "moTa": "Edge cases: NaN, Dates, array vs object, extra keys",
+            "goi": "[isEqual(NaN, NaN), isEqual(new Date(5), new Date(5)), isEqual([], {}), isEqual({ a: 1 }, { a: 1, b: undefined })]",
+            "mongDoi": [
+              true,
+              true,
+              false,
+              false
+            ]
+          },
+          {
+            "nhom": "f6",
+            "moTa": "buildTree nests comments by parentId",
+            "goi": "buildTree([{ id: 1, parentId: null, text: \"A\" }, { id: 2, parentId: 1, text: \"B\" }, { id: 3, parentId: 1, text: \"C\" }, { id: 4, parentId: 2, text: \"D\" }]).map((n) => [n.text, n.children.map((c) => [c.text, c.children.map((g) => g.text)])])",
+            "mongDoi": [
+              [
+                "A",
+                [
+                  [
+                    "B",
+                    [
+                      "D"
+                    ]
+                  ],
+                  [
+                    "C",
+                    []
+                  ]
+                ]
+              ]
+            ]
+          },
+          {
+            "nhom": "f6",
+            "moTa": "flattenTree gives depth-first order with depth",
+            "goi": "flattenTree(buildTree([{ id: 1, parentId: null }, { id: 2, parentId: 1 }, { id: 3, parentId: null }, { id: 4, parentId: 2 }]))",
+            "mongDoi": [
+              {
+                "id": 1,
+                "depth": 0
+              },
+              {
+                "id": 2,
+                "depth": 1
+              },
+              {
+                "id": 4,
+                "depth": 2
+              },
+              {
+                "id": 3,
+                "depth": 0
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "an": true,
+            "moTa": "Input rows are not mutated; orphans become roots",
+            "chuanBi": "const rows = [{ id: 1, parentId: 99 }]; const roots = buildTree(rows);",
+            "goi": "[roots.length, \"children\" in rows[0]]",
+            "mongDoi": [
+              1,
+              false
+            ]
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Results keep input order",
+            "goi": "await asyncPool(2, [300, 100, 200], (ms) => wait(ms).then(() => ms))",
+            "mongDoi": [
+              300,
+              100,
+              200
+            ]
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Never more than limit at once",
+            "chuanBi": "let running = 0, peak = 0; await asyncPool(2, [1, 2, 3, 4, 5], async () => { running++; peak = Math.max(peak, running); await wait(50); running--; });",
+            "goi": "peak",
+            "mongDoi": 2
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Total time ≈ 2 lanes (5 × 100 ms, limit 2 ⇒ 300 ms)",
+            "chuanBi": "const t0 = Date.now(); await asyncPool(2, [1, 2, 3, 4, 5], () => wait(100));",
+            "goi": "Date.now() - t0",
+            "mongDoi": 300
+          },
+          {
+            "nhom": "f7",
+            "an": true,
+            "moTa": "Empty input resolves to []",
+            "goi": "await asyncPool(3, [], () => 1)",
+            "mongDoi": []
+          },
+          {
+            "nhom": "f8",
+            "moTa": "Retries until success",
+            "chuanBi": "let n = 0; const value = await retry(async () => { n++; if (n < 3) throw new Error(\"flaky\"); return \"ok\"; }, { baseMs: 10 });",
+            "goi": "[value, n]",
+            "mongDoi": [
+              "ok",
+              3
+            ]
+          },
+          {
+            "nhom": "f8",
+            "moTa": "Exponential back-off: 100 + 200 + 400 ms",
+            "chuanBi": "const t0 = Date.now(); try { await retry(async () => { throw new Error(\"down\"); }, { retries: 3, baseMs: 100 }); } catch (e) {}",
+            "goi": "Date.now() - t0",
+            "mongDoi": 700
+          },
+          {
+            "nhom": "f8",
+            "moTa": "Gives up with the last error",
+            "goi": "await retry(async (attempt) => { throw new Error(\"fail #\" + attempt); }, { retries: 2, baseMs: 1 })",
+            "mongDoi": {
+              "loi": "Error",
+              "thongDiep": "^fail #2$"
+            }
+          },
+          {
+            "nhom": "f8",
+            "an": true,
+            "moTa": "Non-retryable errors stop immediately",
+            "chuanBi": "let n = 0; try { await retry(async () => { n++; const e = new Error(\"bad request\"); e.retryable = false; throw e; }); } catch (e) {}",
+            "goi": "n",
+            "mongDoi": 1
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. Higher-order functions: pipe & curry",
+            "diem": 1
+          },
+          {
+            "ma": "f2",
+            "ten": "2. Closures: memoize (LRU) & once",
+            "diem": 1.5
+          },
+          {
+            "ma": "f3",
+            "ten": "3. Timers: debounce & throttle",
+            "diem": 1.5
+          },
+          {
+            "ma": "f4",
+            "ten": "4. Class: EventEmitter",
+            "diem": 1.5
+          },
+          {
+            "ma": "f5",
+            "ten": "5. Deep equality",
+            "diem": 1
+          },
+          {
+            "ma": "f6",
+            "ten": "6. Recursion: comment tree",
+            "diem": 1
+          },
+          {
+            "ma": "f7",
+            "ten": "7. Concurrency limit: asyncPool",
+            "diem": 1.5
+          },
+          {
+            "ma": "f8",
+            "ten": "8. Retry with exponential back-off",
+            "diem": 1
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "deep-lab",
+      "mistakesJson": [
+        {
+          "loi": "curry dùng <code>args.length === fn.length</code> nhưng quên trường hợp truyền nhiều hơn một đối số mỗi lần."
+        },
+        {
+          "loi": "memoize với khoá là chính object ⇒ hai object giống nội dung vẫn trượt cache; cần hàm key."
+        },
+        {
+          "loi": "debounce gọi <code>fn</code> với đối số của lần gọi ĐẦU thay vì lần cuối."
+        },
+        {
+          "loi": "EventEmitter.emit duyệt trực tiếp mảng listener trong khi <code>once</code> tự gỡ ⇒ bỏ sót listener kế tiếp."
+        },
+        {
+          "loi": "retry đợi cố định thay vì nhân đôi, hoặc thử lại vô hạn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "closure",
+          "vi": "hàm \"nhớ\" biến của phạm vi nơi nó được tạo"
+        },
+        {
+          "en": "higher-order function",
+          "vi": "hàm nhận hoặc trả về hàm"
+        },
+        {
+          "en": "currying",
+          "vi": "biến hàm nhiều đối số thành chuỗi hàm một/vài đối số"
+        },
+        {
+          "en": "LRU (least recently used)",
+          "vi": "bỏ phần tử lâu không dùng nhất khi đầy"
+        },
+        {
+          "en": "debounce / throttle",
+          "vi": "chờ ngừng gọi rồi chạy / chạy tối đa một lần mỗi khoảng"
+        },
+        {
+          "en": "private field (#x)",
+          "vi": "trường riêng tư của class, bên ngoài không đọc được"
+        },
+        {
+          "en": "back-off",
+          "vi": "giãn dần thời gian giữa các lần thử lại"
+        },
+        {
+          "en": "immutable update",
+          "vi": "cập nhật bằng cách tạo object/mảng MỚI"
+        }
+      ]
+    }
+  ]
+}

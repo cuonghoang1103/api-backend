@@ -1,0 +1,479 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-3-deep-invoice-renderer",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-3-2-fragments-conditional"
+  },
+  "exercises": [
+    {
+      "title": "Deep Lab 3 — Invoice Renderer (grouped tables · Fragments · derived totals)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 110,
+      "points": 100,
+      "concepts": [
+        "keyed Fragment",
+        "grouping data for rendering",
+        "conditional branches",
+        "lookup objects",
+        "derived data",
+        "formatting helpers"
+      ],
+      "prerequisites": [
+        "Lab 3 — Report Card"
+      ],
+      "tags": [
+        "fer202",
+        "deep-lab",
+        "jsx"
+      ],
+      "problemHtml": "<h1>DEEP LAB 3: Invoice Renderer — advanced JSX</h1>\n<p class=\"bi-phu\">FER202 · Chapter 3 (deep) · Suggested time: 110 minutes · Total: 10 marks</p>\n<h2>1. Overview</h2>\n<p>Render three invoices from nested data — no state yet, only JSX, components and pure functions. The hard parts are the ones real admin screens have: a table <b>grouped by category</b> (several <code>&lt;tr&gt;</code> per group — you need a keyed <code>Fragment</code>, a <code>&lt;div&gt;</code> inside <code>&lt;tbody&gt;</code> is invalid HTML), money and date formatting, totals that are <b>derived</b> from the items, and several conditional branches driven by the invoice status.</p>\n<h3>Main features</h3>\n<ul>\n  <li>Invoice header & status · grouped items table · discounts · totals with coupon and VAT · empty/notes branches · summary.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>Components: <code>Invoice</code>, <code>ItemsTable</code>, <code>Totals</code> (also export <code>computeTotals</code>), <code>StatusBadge</code>; helpers in <code>utils/format.js</code>.</li>\n  <li>Money: <code>18,000,000 ₫</code> (<code>toLocaleString('en-US')</code>). Dates: <code>DD/MM/YYYY</code>. Use <code>TODAY</code> from the data file, never the real clock.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>src/\n├── data/invoices.js        # INVOICES, TODAY (given)\n├── utils/format.js         # vnd · formatDate · daysBetween · lineTotal\n├── components/\n│   ├── Invoice.js\n│   ├── ItemsTable.js       # grouped by category\n│   ├── Totals.js           # computeTotals + Totals\n│   └── StatusBadge.js\n├── App.js                  # all invoices + #summary\n├── index.css (given)\n└── index.js</pre>\n<h2>3. UI wireframe</h2>\n<pre class=\"bi-wire\">+-------------------------------------------------------------+\n| INV-2026-0042                                  [ Paid ]     |\n| CT Academy JSC                    Issued 01/10/2026 · Due…  |\n| billing@ctacademy.vn                              ╔══════╗  |\n|                                                   ║ PAID ║  |\n| Item              Qty    Unit price        Total  ╚══════╝  |\n| Hardware (2)                                                 |\n| Laptop  -10%        1   18,000,000 ₫   16,200,000 ₫          |\n| Mouse               2      250,000 ₫      500,000 ₫          |\n| Software (2)                                                 |\n| …                                                            |\n|                          Subtotal          18,500,000 ₫      |\n|                          Coupon WELCOME500   -500,000 ₫      |\n|                          VAT 8%             1,440,000 ₫      |\n|                          Total             19,440,000 ₫      |\n+-------------------------------------------------------------+</pre>\n<h2>4. Data model</h2>\n<p><b>Invoice</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>number · status</code></td><td>string · 'PAID' | 'PENDING' | 'OVERDUE'</td><td></td></tr><tr><td><code>customer</code></td><td>{ name, email? }</td><td>email may be missing</td></tr><tr><td><code>issueDate · dueDate</code></td><td>'YYYY-MM-DD'</td><td></td></tr><tr><td><code>coupon</code></td><td>{ code, amount } | null</td><td>capped at the subtotal</td></tr><tr><td><code>notes</code></td><td>string[]</td><td></td></tr><tr><td><code>items</code></td><td>{ id, category, name, qty, unitPrice, discountPct }[]</td><td>line total = qty × unitPrice × (1 − discount%)</td></tr></tbody></table>\n<h2>5. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. Invoice header <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>article.invoice</code> with <code>id</code> = number; <code>.inv-no</code>, <code>.customer</code>, <code>.email</code> (missing ⇒ <code>No email</code>), <code>.dates</code> <code>Issued 01/10/2026 · Due 15/10/2026</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>2. Status branches <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>StatusBadge</code>: <code>.badge.badge-paid</code> Paid / <code>badge-pending</code> Pending / <code>badge-overdue</code> Overdue (lookup object). OVERDUE ⇒ <code>.overdue-alert</code> <code>Overdue by 8 days</code> (from <code>dueDate</code> to <code>TODAY</code>); PAID ⇒ <code>.paid-stamp</code>.</li>\n</ul>\n<p><b>Example:</b></p>\n<pre>dueDate 2026-10-20, TODAY 2026-10-28 ⇒ \"Overdue by 8 days\"</pre>\n</div>\n<div class=\"bi-cn\"><h3>3. Table grouped by category <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>table.items</code>; for each category (first-appearance order) a <code>tr.group-row</code> <code>Hardware (2)</code> followed by its <code>tr.item-row</code>s — all directly inside <code>&lt;tbody&gt;</code> via a keyed <code>Fragment</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>4. Line totals &amp; discounts <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Cells <code>.name</code> (+ <code>.discount</code> <code>-10%</code> only when &gt; 0), <code>.qty</code>, <code>.unit</code>, <code>.line-total</code> (after discount).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. Totals <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>.subtotal</code>, <code>.coupon-row</code> (only with a coupon; <code>.coupon</code> <code>-500,000 ₫</code>), <code>.vat</code> (8% of subtotal − coupon, rounded), <code>.grand</code>. Export <code>computeTotals(items, coupon)</code>.</li>\n</ul>\n<p><b>Example:</b></p>\n<pre>Invoice 1: 18,500,000 − 500,000 = 18,000,000; VAT 1,440,000; total 19,440,000</pre>\n</div>\n<div class=\"bi-cn\"><h3>6. Empty state &amp; notes <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>No items ⇒ <code>.empty</code> <code>No items yet</code> and no table/totals. Notes ⇒ <code>ul.notes</code> (only when non-empty).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>7. Summary <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>#summary</code> <code>3 invoices · Outstanding: 7,560,000 ₫</code> = sum of grand totals of invoices that are not PAID.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>8. Clean JSX structure <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Lookup object for statuses, formatting helpers in <code>utils/format.js</code>, no <code>dangerouslySetInnerHTML</code>.</li>\n</ul>\n</div>\n<h2>6. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>article.invoice#&lt;number&gt; · .inv-no · .customer · .email · .dates</code></td><td>header</td></tr><tr><td><code>.badge.badge-paid|pending|overdue · .overdue-alert · .paid-stamp</code></td><td>status</td></tr><tr><td><code>table.items · tr.group-row · tr.item-row · .name .discount .qty .unit .line-total</code></td><td>table</td></tr><tr><td><code>.subtotal · .coupon-row .coupon · .vat · .grand</code></td><td>totals</td></tr><tr><td><code>.empty · ul.notes · #summary</code></td><td>other</td></tr></tbody></table>\n<h2>7. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>Invoice header</td><td>1</td></tr><tr><td>2</td><td>Status branches</td><td>1.5</td></tr><tr><td>3</td><td>Table grouped by category</td><td>1.5</td></tr><tr><td>4</td><td>Line totals &amp; discounts</td><td>1</td></tr><tr><td>5</td><td>Totals</td><td>2</td></tr><tr><td>6</td><td>Empty state &amp; notes</td><td>1</td></tr><tr><td>7</td><td>Summary</td><td>1</td></tr><tr><td>8</td><td>Clean JSX structure</td><td>1</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Wrapping group rows in <code>&lt;div&gt;</code> inside <code>&lt;tbody&gt;</code> (invalid DOM, React warns).</li>\n  <li>Hard-coding totals or the overdue day count.</li>\n  <li><code>new Date()</code> for \"today\" — results change every day.</li>\n  <li><code>{notes.length &amp;&amp; …}</code> — renders a stray <code>0</code>.</li>\n</ul>\n<h2>8. Submission</h2>\n<p>Work directly in the editor (files on the right) or download the starter, run it locally with Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> when the paper uses an API) and paste the files back. Press <b>Run</b> for the sample checks and <b>Submit</b> for full grading (hidden checks included).</p>",
+      "problemHtmlVi": "<h1>DEEP LAB 3: Trình hiển thị hoá đơn — JSX chuyên sâu</h1>\n<p class=\"bi-phu\">FER202 · Chương 3 (chuyên sâu) · Thời gian gợi ý: 110 phút · Tổng: 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p>Hiển thị ba hoá đơn từ dữ liệu lồng — chưa cần state, chỉ JSX, component và hàm thuần. Phần khó là phần màn hình quản trị thật hay có: bảng <b>nhóm theo danh mục</b> (nhiều <code>&lt;tr&gt;</code> cho một nhóm — cần <code>Fragment</code> có key, <code>&lt;div&gt;</code> trong <code>&lt;tbody&gt;</code> là HTML sai), định dạng tiền và ngày, các con số tổng <b>suy ra</b> từ mặt hàng, và nhiều nhánh điều kiện theo trạng thái hoá đơn.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>Đầu hoá đơn & trạng thái · bảng nhóm theo danh mục · giảm giá · tổng có coupon và VAT · nhánh rỗng/ghi chú · dòng tổng hợp.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Component: <code>Invoice</code>, <code>ItemsTable</code>, <code>Totals</code> (export thêm <code>computeTotals</code>), <code>StatusBadge</code>; hàm phụ trong <code>utils/format.js</code>.</li>\n  <li>Tiền: <code>18,000,000 ₫</code> (<code>toLocaleString('en-US')</code>). Ngày: <code>DD/MM/YYYY</code>. Dùng <code>TODAY</code> trong tệp dữ liệu, không dùng đồng hồ thật.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>src/\n├── data/invoices.js        # INVOICES, TODAY (given)\n├── utils/format.js         # vnd · formatDate · daysBetween · lineTotal\n├── components/\n│   ├── Invoice.js\n│   ├── ItemsTable.js       # grouped by category\n│   ├── Totals.js           # computeTotals + Totals\n│   └── StatusBadge.js\n├── App.js                  # all invoices + #summary\n├── index.css (given)\n└── index.js</pre>\n<h2>3. Wireframe giao diện</h2>\n<pre class=\"bi-wire\">+-------------------------------------------------------------+\n| INV-2026-0042                                  [ Paid ]     |\n| CT Academy JSC                    Issued 01/10/2026 · Due…  |\n| billing@ctacademy.vn                              ╔══════╗  |\n|                                                   ║ PAID ║  |\n| Item              Qty    Unit price        Total  ╚══════╝  |\n| Hardware (2)                                                 |\n| Laptop  -10%        1   18,000,000 ₫   16,200,000 ₫          |\n| Mouse               2      250,000 ₫      500,000 ₫          |\n| Software (2)                                                 |\n| …                                                            |\n|                          Subtotal          18,500,000 ₫      |\n|                          Coupon WELCOME500   -500,000 ₫      |\n|                          VAT 8%             1,440,000 ₫      |\n|                          Total             19,440,000 ₫      |\n+-------------------------------------------------------------+</pre>\n<h2>4. Mô hình dữ liệu</h2>\n<p><b>Invoice</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>number · status</code></td><td>string · 'PAID' | 'PENDING' | 'OVERDUE'</td><td></td></tr><tr><td><code>customer</code></td><td>{ name, email? }</td><td>email có thể thiếu</td></tr><tr><td><code>issueDate · dueDate</code></td><td>'YYYY-MM-DD'</td><td></td></tr><tr><td><code>coupon</code></td><td>{ code, amount } | null</td><td>không vượt quá tạm tính</td></tr><tr><td><code>notes</code></td><td>string[]</td><td></td></tr><tr><td><code>items</code></td><td>{ id, category, name, qty, unitPrice, discountPct }[]</td><td>thành tiền = qty × đơn giá × (1 − giảm%)</td></tr></tbody></table>\n<h2>5. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. Đầu hoá đơn <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>article.invoice</code> có <code>id</code> = số hoá đơn; <code>.inv-no</code>, <code>.customer</code>, <code>.email</code> (thiếu ⇒ <code>No email</code>), <code>.dates</code> <code>Issued 01/10/2026 · Due 15/10/2026</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>2. Nhánh trạng thái <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>StatusBadge</code>: <code>.badge.badge-paid</code> Paid / <code>badge-pending</code> Pending / <code>badge-overdue</code> Overdue (đối tượng tra cứu). OVERDUE ⇒ <code>.overdue-alert</code> <code>Overdue by 8 days</code> (từ <code>dueDate</code> tới <code>TODAY</code>); PAID ⇒ <code>.paid-stamp</code>.</li>\n</ul>\n<p><b>Ví dụ:</b></p>\n<pre>dueDate 2026-10-20, TODAY 2026-10-28 ⇒ \"Overdue by 8 days\"</pre>\n</div>\n<div class=\"bi-cn\"><h3>3. Bảng nhóm theo danh mục <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>table.items</code>; mỗi danh mục (theo thứ tự xuất hiện) một <code>tr.group-row</code> <code>Hardware (2)</code> rồi tới các <code>tr.item-row</code> của nó — tất cả nằm thẳng trong <code>&lt;tbody&gt;</code> nhờ <code>Fragment</code> có key.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>4. Thành tiền &amp; giảm giá <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Ô <code>.name</code> (+ <code>.discount</code> <code>-10%</code> chỉ khi &gt; 0), <code>.qty</code>, <code>.unit</code>, <code>.line-total</code> (sau giảm).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. Các dòng tổng <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>.subtotal</code>, <code>.coupon-row</code> (chỉ khi có coupon; <code>.coupon</code> <code>-500,000 ₫</code>), <code>.vat</code> (8% của tạm tính − coupon, làm tròn), <code>.grand</code>. Export <code>computeTotals(items, coupon)</code>.</li>\n</ul>\n<p><b>Ví dụ:</b></p>\n<pre>Hoá đơn 1: 18,500,000 − 500,000 = 18,000,000; VAT 1,440,000; tổng 19,440,000</pre>\n</div>\n<div class=\"bi-cn\"><h3>6. Trạng thái rỗng &amp; ghi chú <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Không mặt hàng ⇒ <code>.empty</code> <code>No items yet</code>, không bảng/tổng. Ghi chú ⇒ <code>ul.notes</code> (chỉ khi có).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>7. Dòng tổng hợp <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>#summary</code> <code>3 invoices · Outstanding: 7,560,000 ₫</code> = tổng tiền các hoá đơn chưa PAID.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>8. Cấu trúc JSX sạch <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Đối tượng tra cứu cho trạng thái, hàm định dạng trong <code>utils/format.js</code>, không dùng <code>dangerouslySetInnerHTML</code>.</li>\n</ul>\n</div>\n<h2>6. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>article.invoice#&lt;number&gt; · .inv-no · .customer · .email · .dates</code></td><td>đầu hoá đơn</td></tr><tr><td><code>.badge.badge-paid|pending|overdue · .overdue-alert · .paid-stamp</code></td><td>trạng thái</td></tr><tr><td><code>table.items · tr.group-row · tr.item-row · .name .discount .qty .unit .line-total</code></td><td>bảng</td></tr><tr><td><code>.subtotal · .coupon-row .coupon · .vat · .grand</code></td><td>tổng</td></tr><tr><td><code>.empty · ul.notes · #summary</code></td><td>khác</td></tr></tbody></table>\n<h2>7. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>Đầu hoá đơn</td><td>1</td></tr><tr><td>2</td><td>Nhánh trạng thái</td><td>1.5</td></tr><tr><td>3</td><td>Bảng nhóm theo danh mục</td><td>1.5</td></tr><tr><td>4</td><td>Thành tiền &amp; giảm giá</td><td>1</td></tr><tr><td>5</td><td>Các dòng tổng</td><td>2</td></tr><tr><td>6</td><td>Trạng thái rỗng &amp; ghi chú</td><td>1</td></tr><tr><td>7</td><td>Dòng tổng hợp</td><td>1</td></tr><tr><td>8</td><td>Cấu trúc JSX sạch</td><td>1</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Bọc các hàng nhóm bằng <code>&lt;div&gt;</code> trong <code>&lt;tbody&gt;</code> (DOM sai, React cảnh báo).</li>\n  <li>Viết cứng số tổng hoặc số ngày quá hạn.</li>\n  <li><code>new Date()</code> cho \"hôm nay\" — kết quả đổi theo ngày.</li>\n  <li><code>{notes.length &amp;&amp; …}</code> — in ra số <code>0</code> lạc lõng.</li>\n</ul>\n<h2>8. Nộp bài</h2>\n<p>Làm thẳng trong editor (các tệp bên phải) hoặc tải starter, chạy trên máy bằng Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> khi đề dùng API) rồi dán lại tệp. Bấm <b>Chạy thử</b> để chạy kiểm mẫu, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn).</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "Components: <code>Invoice</code>, <code>ItemsTable</code>, <code>Totals</code> (also export <code>computeTotals</code>), <code>StatusBadge</code>; helpers in <code>utils/format.js</code>.|||Component: <code>Invoice</code>, <code>ItemsTable</code>, <code>Totals</code> (export thêm <code>computeTotals</code>), <code>StatusBadge</code>; hàm phụ trong <code>utils/format.js</code>.\nMoney: <code>18,000,000 ₫</code> (<code>toLocaleString('en-US')</code>). Dates: <code>DD/MM/YYYY</code>. Use <code>TODAY</code> from the data file, never the real clock.|||Tiền: <code>18,000,000 ₫</code> (<code>toLocaleString('en-US')</code>). Ngày: <code>DD/MM/YYYY</code>. Dùng <code>TODAY</code> trong tệp dữ liệu, không dùng đồng hồ thật.",
+      "examplesJson": [
+        {
+          "input": "Status branches|||Nhánh trạng thái",
+          "output": "dueDate 2026-10-20, TODAY 2026-10-28 ⇒ \"Overdue by 8 days\"",
+          "explanation": "See the brief / Xem đề."
+        }
+      ],
+      "hintsJson": [
+        "Gom nhóm bằng Map để giữ thứ tự xuất hiện: for (const it of items) { if (!m.has(it.category)) m.set(it.category, []); m.get(it.category).push(it); }",
+        "Nhiều <tr> cho một nhóm: <Fragment key={category}><tr className=\"group-row\">…</tr>{rows.map(…)}</Fragment> — import { Fragment } from \"react\".",
+        "daysBetween dùng Date.parse(d + \"T00:00:00Z\") để không lệch múi giờ; formatDate chỉ cần split/reverse/join.",
+        "computeTotals: subtotal = Σ lineTotal; discount = min(coupon.amount, subtotal); vat = round((subtotal − discount) × 0.08)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER: hiện mới chỉ in số hoá đơn đầu tiên\nimport { INVOICES } from './data/invoices';\n\nexport default function App() {\n  return (\n    <main>\n      <h1>Invoices</h1>\n      <article className=\"invoice\">\n        <h2 className=\"inv-no\">{INVOICES[0].number}</h2>\n      </article>\n    </main>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/Invoice.js",
+          "language": "javascript",
+          "code": "// src/components/Invoice.js — STARTER\n// article.invoice: .inv-no, .customer, .email, StatusBadge, .dates, .overdue-alert / .paid-stamp, bảng, tổng, .notes, .empty\nexport default function Invoice() {\n  return null;\n}\n"
+        },
+        {
+          "name": "src/components/ItemsTable.js",
+          "language": "javascript",
+          "code": "// src/components/ItemsTable.js — STARTER\n// table.items: tr.group-row \"Hardware (2)\" + tr.item-row (.name .discount, .qty, .unit, .line-total)\nexport default function ItemsTable() {\n  return null;\n}\n"
+        },
+        {
+          "name": "src/components/Totals.js",
+          "language": "javascript",
+          "code": "// src/components/Totals.js — STARTER\nexport function computeTotals() {\n  return { subtotal: 0, discount: 0, vat: 0, grandTotal: 0 };\n}\nexport default function Totals() {\n  return null;\n}\n"
+        },
+        {
+          "name": "src/components/StatusBadge.js",
+          "language": "javascript",
+          "code": "// src/components/StatusBadge.js — STARTER\n// span.badge.badge-paid \"Paid\" · badge-pending \"Pending\" · badge-overdue \"Overdue\"\nexport default function StatusBadge() {\n  return null;\n}\n"
+        },
+        {
+          "name": "src/utils/format.js",
+          "language": "javascript",
+          "code": "// src/utils/format.js — STARTER\nexport const vnd = (n) => String(n);\nexport const formatDate = (iso) => iso;\nexport const daysBetween = () => 0;\nexport const lineTotal = (item) => item.qty * item.unitPrice;\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport './index.css';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "src/index.css",
+          "language": "css",
+          "code": "/* src/index.css (đã cho) */\nbody { font-family: system-ui, sans-serif; background: #f3f4f6; margin: 0; padding: 24px; color: #111827; }\n.invoice { background: #fff; border-radius: 12px; padding: 20px 24px; margin: 0 auto 24px; max-width: 760px; box-shadow: 0 1px 3px rgba(0,0,0,.1); position: relative; }\n.inv-head { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; }\n.badge { padding: 2px 10px; border-radius: 999px; font-size: 13px; font-weight: 600; }\n.badge-paid { background: #dcfce7; color: #166534; } .badge-pending { background: #fef9c3; color: #854d0e; } .badge-overdue { background: #fee2e2; color: #991b1b; }\ntable { width: 100%; border-collapse: collapse; margin: 16px 0; }\nth, td { padding: 6px 8px; border-bottom: 1px solid #e5e7eb; text-align: left; }\ntd.num, th.num { text-align: right; }\n.group-row td { background: #f9fafb; font-weight: 600; }\n.discount { color: #b91c1c; font-size: 12px; margin-left: 6px; }\n.totals { margin-left: auto; width: 320px; }\n.totals div { display: flex; justify-content: space-between; padding: 3px 0; }\n#grand-total, .grand-total { font-weight: 700; font-size: 18px; }\n.alert { background: #fee2e2; color: #991b1b; padding: 8px 12px; border-radius: 8px; }\n.paid-stamp { position: absolute; right: 24px; top: 70px; transform: rotate(-12deg); color: #16a34a; border: 3px solid #16a34a; padding: 4px 12px; font-weight: 800; letter-spacing: 2px; }\n.notes { color: #4b5563; font-size: 14px; }\n"
+        },
+        {
+          "name": "src/data/invoices.js",
+          "language": "javascript",
+          "code": "// src/data/invoices.js — dữ liệu mẫu (đã cho, không sửa)\nexport const TODAY = '2026-10-28'; // \"hôm nay\" cố định để kết quả không phụ thuộc ngày chấm\n\nexport const INVOICES = [\n  {\n    number: 'INV-2026-0042',\n    status: 'PAID',\n    customer: { name: 'CT Academy JSC', email: 'billing@ctacademy.vn' },\n    issueDate: '2026-10-01',\n    dueDate: '2026-10-15',\n    coupon: { code: 'WELCOME500', amount: 500000 },\n    notes: [],\n    items: [\n      { id: 1, category: 'Hardware', name: 'Laptop', qty: 1, unitPrice: 18000000, discountPct: 10 },\n      { id: 2, category: 'Hardware', name: 'Mouse', qty: 2, unitPrice: 250000, discountPct: 0 },\n      { id: 3, category: 'Software', name: 'Office 365', qty: 1, unitPrice: 1500000, discountPct: 0 },\n      { id: 4, category: 'Software', name: 'Antivirus', qty: 2, unitPrice: 300000, discountPct: 50 },\n    ],\n  },\n  {\n    number: 'INV-2026-0043',\n    status: 'OVERDUE',\n    customer: { name: 'Lan Nguyen' },\n    issueDate: '2026-10-05',\n    dueDate: '2026-10-20',\n    coupon: null,\n    notes: ['Please pay by bank transfer.', 'Late fee applies after 30 days.'],\n    items: [\n      { id: 5, category: 'Services', name: 'Consulting (hours)', qty: 3, unitPrice: 2000000, discountPct: 0 },\n      { id: 6, category: 'Services', name: 'Setup', qty: 1, unitPrice: 1000000, discountPct: 0 },\n    ],\n  },\n  {\n    number: 'INV-2026-0044',\n    status: 'PENDING',\n    customer: { name: 'Minh Tran', email: 'minh@example.com' },\n    issueDate: '2026-10-27',\n    dueDate: '2026-11-10',\n    coupon: null,\n    notes: [],\n    items: [],\n  },\n];\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — vẽ mọi hoá đơn + dòng tổng hợp\nimport Invoice from './components/Invoice';\nimport { computeTotals } from './components/Totals';\nimport { INVOICES } from './data/invoices';\nimport { vnd } from './utils/format';\n\nexport default function App() {\n  const outstanding = INVOICES\n    .filter((inv) => inv.status !== 'PAID')\n    .reduce((sum, inv) => sum + computeTotals(inv.items, inv.coupon).grandTotal, 0);\n\n  return (\n    <main>\n      <h1>Invoices</h1>\n      <p id=\"summary\">{INVOICES.length} invoices · Outstanding: {vnd(outstanding)}</p>\n      {INVOICES.map((inv) => <Invoice key={inv.number} invoice={inv} />)}\n    </main>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/Invoice.js",
+          "language": "javascript",
+          "code": "// src/components/Invoice.js — một hoá đơn: đầu trang, cảnh báo/con dấu theo trạng thái, bảng, tổng, ghi chú\nimport StatusBadge from './StatusBadge';\nimport ItemsTable from './ItemsTable';\nimport Totals from './Totals';\nimport { daysBetween, formatDate } from '../utils/format';\nimport { TODAY } from '../data/invoices';\n\nexport default function Invoice({ invoice }) {\n  const { number, status, customer, issueDate, dueDate, coupon, notes, items } = invoice;\n  const overdueDays = status === 'OVERDUE' ? daysBetween(dueDate, TODAY) : 0;\n\n  return (\n    <article className=\"invoice\" id={number}>\n      <header className=\"inv-head\">\n        <div>\n          <h2 className=\"inv-no\">{number}</h2>\n          <p className=\"customer\">{customer.name}</p>\n          <p className=\"email\">{customer.email ?? 'No email'}</p>\n        </div>\n        <div>\n          <StatusBadge status={status} />\n          <p className=\"dates\">Issued {formatDate(issueDate)} · Due {formatDate(dueDate)}</p>\n        </div>\n      </header>\n\n      {status === 'OVERDUE' && (\n        <p className=\"alert overdue-alert\">Overdue by {overdueDays} {overdueDays === 1 ? 'day' : 'days'}</p>\n      )}\n      {status === 'PAID' && <div className=\"paid-stamp\">PAID</div>}\n\n      {items.length === 0 ? (\n        <p className=\"empty\">No items yet</p>\n      ) : (\n        <>\n          <ItemsTable items={items} />\n          <Totals items={items} coupon={coupon} />\n        </>\n      )}\n\n      {notes.length > 0 && (\n        <ul className=\"notes\">\n          {notes.map((note) => <li key={note}>{note}</li>)}\n        </ul>\n      )}\n    </article>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/ItemsTable.js",
+          "language": "javascript",
+          "code": "// src/components/ItemsTable.js — bảng NHÓM theo danh mục: mỗi nhóm một hàng tiêu đề + các hàng mặt hàng\nimport { Fragment } from 'react';\nimport { lineTotal, vnd } from '../utils/format';\n\n// gom theo danh mục, giữ thứ tự xuất hiện đầu tiên\nfunction groupByCategory(items) {\n  const groups = new Map();\n  for (const item of items) {\n    if (!groups.has(item.category)) groups.set(item.category, []);\n    groups.get(item.category).push(item);\n  }\n  return [...groups.entries()];\n}\n\nexport default function ItemsTable({ items }) {\n  return (\n    <table className=\"items\">\n      <thead>\n        <tr>\n          <th>Item</th>\n          <th className=\"num\">Qty</th>\n          <th className=\"num\">Unit price</th>\n          <th className=\"num\">Total</th>\n        </tr>\n      </thead>\n      <tbody>\n        {groupByCategory(items).map(([category, rows]) => (\n          // Fragment CÓ key: nhiều <tr> cho một nhóm mà không thêm thẻ bọc sai chỗ trong <tbody>\n          <Fragment key={category}>\n            <tr className=\"group-row\">\n              <td colSpan={4}>{category} ({rows.length})</td>\n            </tr>\n            {rows.map((item) => (\n              <tr key={item.id} className=\"item-row\">\n                <td className=\"name\">\n                  {item.name}\n                  {item.discountPct > 0 && <span className=\"discount\">-{item.discountPct}%</span>}\n                </td>\n                <td className=\"num qty\">{item.qty}</td>\n                <td className=\"num unit\">{vnd(item.unitPrice)}</td>\n                <td className=\"num line-total\">{vnd(lineTotal(item))}</td>\n              </tr>\n            ))}\n          </Fragment>\n        ))}\n      </tbody>\n    </table>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/Totals.js",
+          "language": "javascript",
+          "code": "// src/components/Totals.js — các con số đều SUY RA từ items/coupon (không nhập tay)\nimport { lineTotal, vnd } from '../utils/format';\n\nexport const VAT_RATE = 0.08;\n\nexport function computeTotals(items, coupon) {\n  const subtotal = items.reduce((sum, item) => sum + lineTotal(item), 0);\n  const discount = coupon ? Math.min(coupon.amount, subtotal) : 0;\n  const taxable = subtotal - discount;\n  const vat = Math.round(taxable * VAT_RATE);\n  return { subtotal, discount, vat, grandTotal: taxable + vat };\n}\n\nexport default function Totals({ items, coupon }) {\n  const t = computeTotals(items, coupon);\n  return (\n    <div className=\"totals\">\n      <div><span>Subtotal</span><span className=\"subtotal\">{vnd(t.subtotal)}</span></div>\n      {coupon && (\n        <div className=\"coupon-row\"><span>Coupon {coupon.code}</span><span className=\"coupon\">-{vnd(t.discount)}</span></div>\n      )}\n      <div><span>VAT 8%</span><span className=\"vat\">{vnd(t.vat)}</span></div>\n      <div className=\"grand-total\"><span>Total</span><span className=\"grand\">{vnd(t.grandTotal)}</span></div>\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/StatusBadge.js",
+          "language": "javascript",
+          "code": "// src/components/StatusBadge.js — tra bảng thay cho if/else lồng nhau\nconst STATUS = {\n  PAID: { label: 'Paid', className: 'badge badge-paid' },\n  PENDING: { label: 'Pending', className: 'badge badge-pending' },\n  OVERDUE: { label: 'Overdue', className: 'badge badge-overdue' },\n};\n\nexport default function StatusBadge({ status }) {\n  const s = STATUS[status] ?? { label: status, className: 'badge' };\n  return <span className={s.className}>{s.label}</span>;\n}\n"
+        },
+        {
+          "name": "src/utils/format.js",
+          "language": "javascript",
+          "code": "// src/utils/format.js — định dạng dùng chung\nexport const vnd = (n) => n.toLocaleString('en-US') + ' ₫';\n\n// 'YYYY-MM-DD' ⇒ 'DD/MM/YYYY' (không qua Date ⇒ không lệch múi giờ)\nexport const formatDate = (iso) => iso.split('-').reverse().join('/');\n\n// số ngày từ a tới b (cả hai 'YYYY-MM-DD'), dùng UTC nên không lệch\nexport const daysBetween = (a, b) => Math.round((Date.parse(b + 'T00:00:00Z') - Date.parse(a + 'T00:00:00Z')) / 86400000);\n\n// tổng tiền một dòng sau giảm giá\nexport const lineTotal = (item) => Math.round(item.qty * item.unitPrice * (1 - item.discountPct / 100));\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport './index.css';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "src/index.css",
+          "language": "css",
+          "code": "/* src/index.css (đã cho) */\nbody { font-family: system-ui, sans-serif; background: #f3f4f6; margin: 0; padding: 24px; color: #111827; }\n.invoice { background: #fff; border-radius: 12px; padding: 20px 24px; margin: 0 auto 24px; max-width: 760px; box-shadow: 0 1px 3px rgba(0,0,0,.1); position: relative; }\n.inv-head { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; }\n.badge { padding: 2px 10px; border-radius: 999px; font-size: 13px; font-weight: 600; }\n.badge-paid { background: #dcfce7; color: #166534; } .badge-pending { background: #fef9c3; color: #854d0e; } .badge-overdue { background: #fee2e2; color: #991b1b; }\ntable { width: 100%; border-collapse: collapse; margin: 16px 0; }\nth, td { padding: 6px 8px; border-bottom: 1px solid #e5e7eb; text-align: left; }\ntd.num, th.num { text-align: right; }\n.group-row td { background: #f9fafb; font-weight: 600; }\n.discount { color: #b91c1c; font-size: 12px; margin-left: 6px; }\n.totals { margin-left: auto; width: 320px; }\n.totals div { display: flex; justify-content: space-between; padding: 3px 0; }\n#grand-total, .grand-total { font-weight: 700; font-size: 18px; }\n.alert { background: #fee2e2; color: #991b1b; padding: 8px 12px; border-radius: 8px; }\n.paid-stamp { position: absolute; right: 24px; top: 70px; transform: rotate(-12deg); color: #16a34a; border: 3px solid #16a34a; padding: 4px 12px; font-weight: 800; letter-spacing: 2px; }\n.notes { color: #4b5563; font-size: 14px; }\n"
+        },
+        {
+          "name": "src/data/invoices.js",
+          "language": "javascript",
+          "code": "// src/data/invoices.js — dữ liệu mẫu (đã cho, không sửa)\nexport const TODAY = '2026-10-28'; // \"hôm nay\" cố định để kết quả không phụ thuộc ngày chấm\n\nexport const INVOICES = [\n  {\n    number: 'INV-2026-0042',\n    status: 'PAID',\n    customer: { name: 'CT Academy JSC', email: 'billing@ctacademy.vn' },\n    issueDate: '2026-10-01',\n    dueDate: '2026-10-15',\n    coupon: { code: 'WELCOME500', amount: 500000 },\n    notes: [],\n    items: [\n      { id: 1, category: 'Hardware', name: 'Laptop', qty: 1, unitPrice: 18000000, discountPct: 10 },\n      { id: 2, category: 'Hardware', name: 'Mouse', qty: 2, unitPrice: 250000, discountPct: 0 },\n      { id: 3, category: 'Software', name: 'Office 365', qty: 1, unitPrice: 1500000, discountPct: 0 },\n      { id: 4, category: 'Software', name: 'Antivirus', qty: 2, unitPrice: 300000, discountPct: 50 },\n    ],\n  },\n  {\n    number: 'INV-2026-0043',\n    status: 'OVERDUE',\n    customer: { name: 'Lan Nguyen' },\n    issueDate: '2026-10-05',\n    dueDate: '2026-10-20',\n    coupon: null,\n    notes: ['Please pay by bank transfer.', 'Late fee applies after 30 days.'],\n    items: [\n      { id: 5, category: 'Services', name: 'Consulting (hours)', qty: 3, unitPrice: 2000000, discountPct: 0 },\n      { id: 6, category: 'Services', name: 'Setup', qty: 1, unitPrice: 1000000, discountPct: 0 },\n    ],\n  },\n  {\n    number: 'INV-2026-0044',\n    status: 'PENDING',\n    customer: { name: 'Minh Tran', email: 'minh@example.com' },\n    issueDate: '2026-10-27',\n    dueDate: '2026-11-10',\n    coupon: null,\n    notes: [],\n    items: [],\n  },\n];\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Mọi thứ hiển thị đều là hàm của dữ liệu: nhóm được tính bằng Map (giữ thứ tự), con số tổng tính bằng <code>computeTotals</code> và được dùng lại cho dòng tổng hợp. Fragment có key cho phép trả về nhiều <code>&lt;tr&gt;</code> mà không thêm thẻ bọc sai chỗ. Trạng thái hiển thị bằng bảng tra (thêm trạng thái mới = thêm một dòng), ngày được xử lý dạng chuỗi/UTC để kết quả không phụ thuộc múi giờ hay ngày chấm bài.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://react.dev/reference/react/Fragment",
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "kiem": [
+          {
+            "nhom": "f1",
+            "moTa": "Three invoices rendered",
+            "kiem": "danh-sach-text",
+            "selector": "article.invoice .inv-no",
+            "mongDoi": [
+              "INV-2026-0042",
+              "INV-2026-0043",
+              "INV-2026-0044"
+            ]
+          },
+          {
+            "nhom": "f1",
+            "moTa": "Customer and fallback email",
+            "kiem": "danh-sach-text",
+            "selector": "article.invoice:nth-of-type(2) .customer, article.invoice:nth-of-type(2) .email",
+            "mongDoi": [
+              "Lan Nguyen",
+              "No email"
+            ]
+          },
+          {
+            "nhom": "f1",
+            "moTa": "Dates formatted DD/MM/YYYY",
+            "kiem": "text",
+            "selector": "article.invoice:nth-of-type(1) .dates",
+            "giaTri": "Issued 01/10/2026 · Due 15/10/2026"
+          },
+          {
+            "nhom": "f1",
+            "an": true,
+            "moTa": "Each invoice has its number as id",
+            "kiem": "ton-tai",
+            "selector": "article#INV-2026-0043"
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Status badges with classes",
+            "kiem": "danh-sach-text",
+            "selector": ".badge-paid, .badge-overdue, .badge-pending",
+            "mongDoi": [
+              "Paid",
+              "Overdue",
+              "Pending"
+            ]
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Overdue alert with day count",
+            "kiem": "text",
+            "selector": "article.invoice:nth-of-type(2) .overdue-alert",
+            "giaTri": "Overdue by 8 days"
+          },
+          {
+            "nhom": "f2",
+            "moTa": "PAID stamp only on paid invoices",
+            "kiem": "so-luong",
+            "selector": ".paid-stamp",
+            "giaTri": 1
+          },
+          {
+            "nhom": "f2",
+            "an": true,
+            "moTa": "No alert on non-overdue invoices",
+            "kiem": "khong-ton-tai",
+            "selector": "article.invoice:nth-of-type(1) .overdue-alert, article.invoice:nth-of-type(3) .overdue-alert"
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Group header rows with counts",
+            "kiem": "danh-sach-text",
+            "selector": "article.invoice:nth-of-type(1) tr.group-row",
+            "mongDoi": [
+              "Hardware (2)",
+              "Software (2)"
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Rows in document order: group, items, group, items",
+            "kiem": "so-luong",
+            "selector": "article.invoice:nth-of-type(1) tbody > tr",
+            "giaTri": 6
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Quantities in item rows",
+            "kiem": "danh-sach-text",
+            "selector": "article.invoice:nth-of-type(1) tr.item-row .qty",
+            "mongDoi": [
+              "1",
+              "2",
+              "1",
+              "2"
+            ]
+          },
+          {
+            "nhom": "f3",
+            "an": true,
+            "moTa": "Group rows sit directly in tbody (Fragment, not div)",
+            "kiem": "ton-tai",
+            "selector": "article.invoice:nth-of-type(1) table > tbody > tr.group-row + tr.item-row"
+          },
+          {
+            "nhom": "f3",
+            "an": true,
+            "moTa": "Fragment with a key",
+            "kiem": "ma-nguon",
+            "tep": "src/components/ItemsTable.js",
+            "khop": "<(React\\.)?Fragment\\s+key="
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Line totals after discount",
+            "kiem": "danh-sach-text",
+            "selector": "article.invoice:nth-of-type(1) .line-total",
+            "mongDoi": [
+              "16,200,000 ₫",
+              "500,000 ₫",
+              "1,500,000 ₫",
+              "300,000 ₫"
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Discount labels only when > 0",
+            "kiem": "danh-sach-text",
+            "selector": "article.invoice:nth-of-type(1) .discount",
+            "mongDoi": [
+              "-10%",
+              "-50%"
+            ]
+          },
+          {
+            "nhom": "f4",
+            "an": true,
+            "moTa": "Unit price formatted",
+            "kiem": "text",
+            "selector": "article.invoice:nth-of-type(1) tr.item-row:nth-of-type(2) .unit",
+            "giaTri": "18,000,000 ₫"
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Subtotal, coupon, VAT, total",
+            "kiem": "danh-sach-text",
+            "selector": "article.invoice:nth-of-type(1) .subtotal, article.invoice:nth-of-type(1) .coupon, article.invoice:nth-of-type(1) .vat, article.invoice:nth-of-type(1) .grand",
+            "mongDoi": [
+              "18,500,000 ₫",
+              "-500,000 ₫",
+              "1,440,000 ₫",
+              "19,440,000 ₫"
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "No coupon row without a coupon",
+            "kiem": "khong-ton-tai",
+            "selector": "article.invoice:nth-of-type(2) .coupon-row"
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Totals of invoice 2",
+            "kiem": "danh-sach-text",
+            "selector": "article.invoice:nth-of-type(2) .subtotal, article.invoice:nth-of-type(2) .vat, article.invoice:nth-of-type(2) .grand",
+            "mongDoi": [
+              "7,000,000 ₫",
+              "560,000 ₫",
+              "7,560,000 ₫"
+            ]
+          },
+          {
+            "nhom": "f5",
+            "an": true,
+            "moTa": "Totals computed from data (computeTotals exported)",
+            "kiem": "ma-nguon",
+            "tep": "src/components/Totals.js",
+            "khop": "export\\s+function\\s+computeTotals[\\s\\S]*reduce\\("
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Empty invoice shows a message and no table",
+            "kiem": "danh-sach-text",
+            "selector": "article.invoice:nth-of-type(3) .empty, article.invoice:nth-of-type(3) table",
+            "mongDoi": [
+              "No items yet"
+            ]
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Notes list only when there are notes",
+            "kiem": "danh-sach-text",
+            "selector": ".notes li",
+            "mongDoi": [
+              "Please pay by bank transfer.",
+              "Late fee applies after 30 days."
+            ]
+          },
+          {
+            "nhom": "f6",
+            "an": true,
+            "moTa": "No empty <ul> for invoices without notes",
+            "kiem": "so-luong",
+            "selector": "ul.notes",
+            "giaTri": 1
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Summary of outstanding (not paid) invoices",
+            "kiem": "text",
+            "selector": "#summary",
+            "giaTri": "3 invoices · Outstanding: 7,560,000 ₫"
+          },
+          {
+            "nhom": "f7",
+            "an": true,
+            "moTa": "Invoices rendered with map + key",
+            "kiem": "ma-nguon",
+            "tep": "src/App.js",
+            "khop": "INVOICES\\.map\\([\\s\\S]*key="
+          },
+          {
+            "nhom": "f8",
+            "moTa": "StatusBadge uses a lookup object, not nested if/else",
+            "kiem": "ma-nguon",
+            "tep": "src/components/StatusBadge.js",
+            "khop": "PAID\\s*:\\s*\\{[\\s\\S]*PENDING\\s*:\\s*\\{[\\s\\S]*OVERDUE\\s*:"
+          },
+          {
+            "nhom": "f8",
+            "moTa": "No dangerouslySetInnerHTML",
+            "kiem": "ma-nguon",
+            "khop": "dangerouslySetInnerHTML",
+            "phuDinh": true
+          },
+          {
+            "nhom": "f8",
+            "an": true,
+            "moTa": "Formatting helpers in utils/format.js",
+            "kiem": "ma-nguon",
+            "tep": "src/utils/format.js",
+            "khop": "^(?=[\\s\\S]*export\\s+const\\s+vnd)(?=[\\s\\S]*export\\s+const\\s+formatDate)(?=[\\s\\S]*export\\s+const\\s+daysBetween)"
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. Invoice header",
+            "diem": 1
+          },
+          {
+            "ma": "f2",
+            "ten": "2. Status branches",
+            "diem": 1.5
+          },
+          {
+            "ma": "f3",
+            "ten": "3. Table grouped by category",
+            "diem": 1.5
+          },
+          {
+            "ma": "f4",
+            "ten": "4. Line totals & discounts",
+            "diem": 1
+          },
+          {
+            "ma": "f5",
+            "ten": "5. Totals",
+            "diem": 2
+          },
+          {
+            "ma": "f6",
+            "ten": "6. Empty state & notes",
+            "diem": 1
+          },
+          {
+            "ma": "f7",
+            "ten": "7. Summary",
+            "diem": 1
+          },
+          {
+            "ma": "f8",
+            "ten": "8. Clean JSX structure",
+            "diem": 1
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "deep-lab",
+      "mistakesJson": [
+        {
+          "loi": "Dùng <code>&lt;&gt;…&lt;/&gt;</code> trong map ⇒ không gắn được key (cú pháp rút gọn không nhận thuộc tính)."
+        },
+        {
+          "loi": "<code>new Date(\"2026-10-20\")</code> rồi trừ theo giờ địa phương ⇒ lệch một ngày ở một số múi giờ."
+        },
+        {
+          "loi": "Tính VAT trên tạm tính TRƯỚC khi trừ coupon."
+        },
+        {
+          "loi": "Ẩn bảng bằng CSS khi rỗng thay vì không render nó."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Fragment",
+          "vi": "thẻ bọc không sinh ra phần tử DOM"
+        },
+        {
+          "en": "derived value",
+          "vi": "giá trị tính ra từ dữ liệu khác"
+        },
+        {
+          "en": "lookup table",
+          "vi": "bảng tra cứu: object ánh xạ khoá → giá trị"
+        },
+        {
+          "en": "invalid DOM nesting",
+          "vi": "lồng thẻ sai luật HTML (vd div trong tbody)"
+        },
+        {
+          "en": "rubric",
+          "vi": "thang điểm theo tiêu chí"
+        }
+      ],
+      "demoHtml": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>Deep Lab 3 — Invoice Renderer (grouped tables · Fragments · derived totals) — Live demo</title>\n<script src=\"https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js\" crossorigin=\"anonymous\"></script>\n\n</head><body><div id=\"root\"></div><script>(function(){\nvar M={\"src/App.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/App.js — vẽ mọi hoá đơn + dòng tổng hợp\\nvar _Invoice = require('./components/Invoice'); var _Invoice2 = _interopRequireDefault(_Invoice);\\nvar _Totals = require('./components/Totals');\\nvar _invoices = require('./data/invoices');\\nvar _format = require('./utils/format');\\n\\n function App() {\\n  const outstanding = _invoices.INVOICES\\n    .filter((inv) => inv.status !== 'PAID')\\n    .reduce((sum, inv) => sum + _Totals.computeTotals.call(void 0, inv.items, inv.coupon).grandTotal, 0);\\n\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'main', { children: [\\n      _jsxruntime.jsx.call(void 0, 'h1', { children: \\\"Invoices\\\"})\\n      , _jsxruntime.jsxs.call(void 0, 'p', { id: \\\"summary\\\", children: [_invoices.INVOICES.length, \\\" invoices · Outstanding: \\\"    , _format.vnd.call(void 0, outstanding)]})\\n      , _invoices.INVOICES.map((inv) => _jsxruntime.jsx.call(void 0, _Invoice2.default, { invoice: inv,}, inv.number ))\\n    ]})\\n  );\\n} exports.default = App;\\n\",\"src/components/Invoice.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; } function _nullishCoalesce(lhs, rhsFn) { if (lhs != null) { return lhs; } else { return rhsFn(); } }// src/components/Invoice.js — một hoá đơn: đầu trang, cảnh báo/con dấu theo trạng thái, bảng, tổng, ghi chú\\nvar _StatusBadge = require('./StatusBadge'); var _StatusBadge2 = _interopRequireDefault(_StatusBadge);\\nvar _ItemsTable = require('./ItemsTable'); var _ItemsTable2 = _interopRequireDefault(_ItemsTable);\\nvar _Totals = require('./Totals'); var _Totals2 = _interopRequireDefault(_Totals);\\nvar _format = require('../utils/format');\\nvar _invoices = require('../data/invoices');\\n\\n function Invoice({ invoice }) {\\n  const { number, status, customer, issueDate, dueDate, coupon, notes, items } = invoice;\\n  const overdueDays = status === 'OVERDUE' ? _format.daysBetween.call(void 0, dueDate, _invoices.TODAY) : 0;\\n\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'article', { className: \\\"invoice\\\", id: number, children: [\\n      _jsxruntime.jsxs.call(void 0, 'header', { className: \\\"inv-head\\\", children: [\\n        _jsxruntime.jsxs.call(void 0, 'div', { children: [\\n          _jsxruntime.jsx.call(void 0, 'h2', { className: \\\"inv-no\\\", children: number})\\n          , _jsxruntime.jsx.call(void 0, 'p', { className: \\\"customer\\\", children: customer.name})\\n          , _jsxruntime.jsx.call(void 0, 'p', { className: \\\"email\\\", children: _nullishCoalesce(customer.email, () => ( 'No email'))})\\n        ]})\\n        , _jsxruntime.jsxs.call(void 0, 'div', { children: [\\n          _jsxruntime.jsx.call(void 0, _StatusBadge2.default, { status: status,} )\\n          , _jsxruntime.jsxs.call(void 0, 'p', { className: \\\"dates\\\", children: [\\\"Issued \\\" , _format.formatDate.call(void 0, issueDate), \\\" · Due \\\"   , _format.formatDate.call(void 0, dueDate)]})\\n        ]})\\n      ]})\\n\\n      , status === 'OVERDUE' && (\\n        _jsxruntime.jsxs.call(void 0, 'p', { className: \\\"alert overdue-alert\\\" , children: [\\\"Overdue by \\\"  , overdueDays, \\\" \\\" , overdueDays === 1 ? 'day' : 'days']})\\n      )\\n      , status === 'PAID' && _jsxruntime.jsx.call(void 0, 'div', { className: \\\"paid-stamp\\\", children: \\\"PAID\\\"})\\n\\n      , items.length === 0 ? (\\n        _jsxruntime.jsx.call(void 0, 'p', { className: \\\"empty\\\", children: \\\"No items yet\\\"  })\\n      ) : (\\n        _jsxruntime.jsxs.call(void 0, _jsxruntime.Fragment, { children: [\\n          _jsxruntime.jsx.call(void 0, _ItemsTable2.default, { items: items,} )\\n          , _jsxruntime.jsx.call(void 0, _Totals2.default, { items: items, coupon: coupon,} )\\n        ]})\\n      )\\n\\n      , notes.length > 0 && (\\n        _jsxruntime.jsx.call(void 0, 'ul', { className: \\\"notes\\\", children: \\n          notes.map((note) => _jsxruntime.jsx.call(void 0, 'li', { children: note}, note))\\n        })\\n      )\\n    ]})\\n  );\\n} exports.default = Invoice;\\n\",\"src/components/ItemsTable.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/components/ItemsTable.js — bảng NHÓM theo danh mục: mỗi nhóm một hàng tiêu đề + các hàng mặt hàng\\nvar _react = require('react');\\nvar _format = require('../utils/format');\\n\\n// gom theo danh mục, giữ thứ tự xuất hiện đầu tiên\\nfunction groupByCategory(items) {\\n  const groups = new Map();\\n  for (const item of items) {\\n    if (!groups.has(item.category)) groups.set(item.category, []);\\n    groups.get(item.category).push(item);\\n  }\\n  return [...groups.entries()];\\n}\\n\\n function ItemsTable({ items }) {\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'table', { className: \\\"items\\\", children: [\\n      _jsxruntime.jsx.call(void 0, 'thead', { children: \\n        _jsxruntime.jsxs.call(void 0, 'tr', { children: [\\n          _jsxruntime.jsx.call(void 0, 'th', { children: \\\"Item\\\"})\\n          , _jsxruntime.jsx.call(void 0, 'th', { className: \\\"num\\\", children: \\\"Qty\\\"})\\n          , _jsxruntime.jsx.call(void 0, 'th', { className: \\\"num\\\", children: \\\"Unit price\\\" })\\n          , _jsxruntime.jsx.call(void 0, 'th', { className: \\\"num\\\", children: \\\"Total\\\"})\\n        ]})\\n      })\\n      , _jsxruntime.jsx.call(void 0, 'tbody', { children: \\n        groupByCategory(items).map(([category, rows]) => (\\n          // Fragment CÓ key: nhiều \\u003ctr> cho một nhóm mà không thêm thẻ bọc sai chỗ trong \\u003ctbody>\\n          _jsxruntime.jsxs.call(void 0, _react.Fragment, { children: [\\n            _jsxruntime.jsx.call(void 0, 'tr', { className: \\\"group-row\\\", children: \\n              _jsxruntime.jsxs.call(void 0, 'td', { colSpan: 4, children: [category, \\\" (\\\" , rows.length, \\\")\\\"]})\\n            })\\n            , rows.map((item) => (\\n              _jsxruntime.jsxs.call(void 0, 'tr', { className: \\\"item-row\\\", children: [\\n                _jsxruntime.jsxs.call(void 0, 'td', { className: \\\"name\\\", children: [\\n                  item.name\\n                  , item.discountPct > 0 && _jsxruntime.jsxs.call(void 0, 'span', { className: \\\"discount\\\", children: [\\\"-\\\", item.discountPct, \\\"%\\\"]})\\n                ]})\\n                , _jsxruntime.jsx.call(void 0, 'td', { className: \\\"num qty\\\" , children: item.qty})\\n                , _jsxruntime.jsx.call(void 0, 'td', { className: \\\"num unit\\\" , children: _format.vnd.call(void 0, item.unitPrice)})\\n                , _jsxruntime.jsx.call(void 0, 'td', { className: \\\"num line-total\\\" , children: _format.vnd.call(void 0, _format.lineTotal.call(void 0, item))})\\n              ]}, item.id)\\n            ))\\n          ]}, category)\\n        ))\\n      })\\n    ]})\\n  );\\n} exports.default = ItemsTable;\\n\",\"src/components/Totals.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/components/Totals.js — các con số đều SUY RA từ items/coupon (không nhập tay)\\nvar _format = require('../utils/format');\\n\\n const VAT_RATE = 0.08; exports.VAT_RATE = VAT_RATE;\\n\\n function computeTotals(items, coupon) {\\n  const subtotal = items.reduce((sum, item) => sum + _format.lineTotal.call(void 0, item), 0);\\n  const discount = coupon ? Math.min(coupon.amount, subtotal) : 0;\\n  const taxable = subtotal - discount;\\n  const vat = Math.round(taxable * exports.VAT_RATE);\\n  return { subtotal, discount, vat, grandTotal: taxable + vat };\\n} exports.computeTotals = computeTotals;\\n\\n function Totals({ items, coupon }) {\\n  const t = computeTotals(items, coupon);\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"totals\\\", children: [\\n      _jsxruntime.jsxs.call(void 0, 'div', { children: [_jsxruntime.jsx.call(void 0, 'span', { children: \\\"Subtotal\\\"}), _jsxruntime.jsx.call(void 0, 'span', { className: \\\"subtotal\\\", children: _format.vnd.call(void 0, t.subtotal)})]})\\n      , coupon && (\\n        _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"coupon-row\\\", children: [_jsxruntime.jsxs.call(void 0, 'span', { children: [\\\"Coupon \\\" , coupon.code]}), _jsxruntime.jsxs.call(void 0, 'span', { className: \\\"coupon\\\", children: [\\\"-\\\", _format.vnd.call(void 0, t.discount)]})]})\\n      )\\n      , _jsxruntime.jsxs.call(void 0, 'div', { children: [_jsxruntime.jsx.call(void 0, 'span', { children: \\\"VAT 8%\\\" }), _jsxruntime.jsx.call(void 0, 'span', { className: \\\"vat\\\", children: _format.vnd.call(void 0, t.vat)})]})\\n      , _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"grand-total\\\", children: [_jsxruntime.jsx.call(void 0, 'span', { children: \\\"Total\\\"}), _jsxruntime.jsx.call(void 0, 'span', { className: \\\"grand\\\", children: _format.vnd.call(void 0, t.grandTotal)})]})\\n    ]})\\n  );\\n} exports.default = Totals;\\n\",\"src/components/StatusBadge.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _nullishCoalesce(lhs, rhsFn) { if (lhs != null) { return lhs; } else { return rhsFn(); } }// src/components/StatusBadge.js — tra bảng thay cho if/else lồng nhau\\nconst STATUS = {\\n  PAID: { label: 'Paid', className: 'badge badge-paid' },\\n  PENDING: { label: 'Pending', className: 'badge badge-pending' },\\n  OVERDUE: { label: 'Overdue', className: 'badge badge-overdue' },\\n};\\n\\n function StatusBadge({ status }) {\\n  const s = _nullishCoalesce(STATUS[status], () => ( { label: status, className: 'badge' }));\\n  return _jsxruntime.jsx.call(void 0, 'span', { className: s.className, children: s.label});\\n} exports.default = StatusBadge;\\n\",\"src/utils/format.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/utils/format.js — định dạng dùng chung\\n const vnd = (n) => n.toLocaleString('en-US') + ' ₫'; exports.vnd = vnd;\\n\\n// 'YYYY-MM-DD' ⇒ 'DD/MM/YYYY' (không qua Date ⇒ không lệch múi giờ)\\n const formatDate = (iso) => iso.split('-').reverse().join('/'); exports.formatDate = formatDate;\\n\\n// số ngày từ a tới b (cả hai 'YYYY-MM-DD'), dùng UTC nên không lệch\\n const daysBetween = (a, b) => Math.round((Date.parse(b + 'T00:00:00Z') - Date.parse(a + 'T00:00:00Z')) / 86400000); exports.daysBetween = daysBetween;\\n\\n// tổng tiền một dòng sau giảm giá\\n const lineTotal = (item) => Math.round(item.qty * item.unitPrice * (1 - item.discountPct / 100)); exports.lineTotal = lineTotal;\\n\",\"src/index.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\"); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\\nvar _react = require('react'); var _react2 = _interopRequireDefault(_react);\\nvar _client = require('react-dom/client'); var _client2 = _interopRequireDefault(_client);\\nrequire('./index.css');\\nvar _App = require('./App'); var _App2 = _interopRequireDefault(_App);\\n\\nconst root = _client2.default.createRoot(document.getElementById('root'));\\nroot.render(\\n  _jsxruntime.jsx.call(void 0, _react2.default.StrictMode, { children: \\n    _jsxruntime.jsx.call(void 0, _App2.default, {} )\\n  })\\n);\\n\",\"src/data/invoices.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/data/invoices.js — dữ liệu mẫu (đã cho, không sửa)\\n const TODAY = '2026-10-28'; exports.TODAY = TODAY; // \\\"hôm nay\\\" cố định để kết quả không phụ thuộc ngày chấm\\n\\n const INVOICES = [\\n  {\\n    number: 'INV-2026-0042',\\n    status: 'PAID',\\n    customer: { name: 'CT Academy JSC', email: 'billing@ctacademy.vn' },\\n    issueDate: '2026-10-01',\\n    dueDate: '2026-10-15',\\n    coupon: { code: 'WELCOME500', amount: 500000 },\\n    notes: [],\\n    items: [\\n      { id: 1, category: 'Hardware', name: 'Laptop', qty: 1, unitPrice: 18000000, discountPct: 10 },\\n      { id: 2, category: 'Hardware', name: 'Mouse', qty: 2, unitPrice: 250000, discountPct: 0 },\\n      { id: 3, category: 'Software', name: 'Office 365', qty: 1, unitPrice: 1500000, discountPct: 0 },\\n      { id: 4, category: 'Software', name: 'Antivirus', qty: 2, unitPrice: 300000, discountPct: 50 },\\n    ],\\n  },\\n  {\\n    number: 'INV-2026-0043',\\n    status: 'OVERDUE',\\n    customer: { name: 'Lan Nguyen' },\\n    issueDate: '2026-10-05',\\n    dueDate: '2026-10-20',\\n    coupon: null,\\n    notes: ['Please pay by bank transfer.', 'Late fee applies after 30 days.'],\\n    items: [\\n      { id: 5, category: 'Services', name: 'Consulting (hours)', qty: 3, unitPrice: 2000000, discountPct: 0 },\\n      { id: 6, category: 'Services', name: 'Setup', qty: 1, unitPrice: 1000000, discountPct: 0 },\\n    ],\\n  },\\n  {\\n    number: 'INV-2026-0044',\\n    status: 'PENDING',\\n    customer: { name: 'Minh Tran', email: 'minh@example.com' },\\n    issueDate: '2026-10-27',\\n    dueDate: '2026-11-10',\\n    coupon: null,\\n    notes: [],\\n    items: [],\\n  },\\n]; exports.INVOICES = INVOICES;\\n\"};var CSS={\"src/index.css\":\"/* src/index.css (đã cho) */\\nbody { font-family: system-ui, sans-serif; background: #f3f4f6; margin: 0; padding: 24px; color: #111827; }\\n.invoice { background: #fff; border-radius: 12px; padding: 20px 24px; margin: 0 auto 24px; max-width: 760px; box-shadow: 0 1px 3px rgba(0,0,0,.1); position: relative; }\\n.inv-head { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; }\\n.badge { padding: 2px 10px; border-radius: 999px; font-size: 13px; font-weight: 600; }\\n.badge-paid { background: #dcfce7; color: #166534; } .badge-pending { background: #fef9c3; color: #854d0e; } .badge-overdue { background: #fee2e2; color: #991b1b; }\\ntable { width: 100%; border-collapse: collapse; margin: 16px 0; }\\nth, td { padding: 6px 8px; border-bottom: 1px solid #e5e7eb; text-align: left; }\\ntd.num, th.num { text-align: right; }\\n.group-row td { background: #f9fafb; font-weight: 600; }\\n.discount { color: #b91c1c; font-size: 12px; margin-left: 6px; }\\n.totals { margin-left: auto; width: 320px; }\\n.totals div { display: flex; justify-content: space-between; padding: 3px 0; }\\n#grand-total, .grand-total { font-weight: 700; font-size: 18px; }\\n.alert { background: #fee2e2; color: #991b1b; padding: 8px 12px; border-radius: 8px; }\\n.paid-stamp { position: absolute; right: 24px; top: 70px; transform: rotate(-12deg); color: #16a34a; border: 3px solid #16a34a; padding: 4px 12px; font-weight: 800; letter-spacing: 2px; }\\n.notes { color: #4b5563; font-size: 14px; }\\n\"};var DB=null;var BASE=\"http://localhost:9999\";var URL0=null;var THANH=false;\nfunction kho(){var m={};var k={getItem:function(x){x=String(x);return Object.prototype.hasOwnProperty.call(m,x)?m[x]:null},setItem:function(x,v){m[String(x)]=String(v)},removeItem:function(x){delete m[String(x)]},clear:function(){m={}},key:function(i){return Object.keys(m)[i]||null}};Object.defineProperty(k,'length',{get:function(){return Object.keys(m).length}});return k}\ntry{Object.defineProperty(window,'localStorage',{value:kho(),configurable:true})}catch(e){}\ntry{Object.defineProperty(window,'sessionStorage',{value:kho(),configurable:true})}catch(e){}\nwindow.confirm=function(){return true};window.alert=function(m){console.log('[alert]',m);var t=document.getElementById('cl-demo-alert');if(!t){t=document.createElement('div');t.id='cl-demo-alert';t.style.cssText='position:fixed;right:12px;bottom:12px;z-index:99999;max-width:320px;padding:10px 14px;border-radius:10px;background:#0f172a;color:#fff;font:13px system-ui;box-shadow:0 6px 24px rgba(0,0,0,.25)';document.body.appendChild(t)}t.textContent='alert: '+m;clearTimeout(t.__h);t.__h=setTimeout(function(){t.remove()},2600)};\nvar ENV={NODE_ENV:'production',MODE:'production',PROD:true,DEV:false,BASE_URL:'/'};\nString(M['.env']||'').split(/\\r?\\n/).forEach(function(d){var m=/^\\s*(?:export\\s+)?([A-Za-z_][A-Za-z0-9_]*)\\s*=\\s*(.*)\\s*$/.exec(d);if(m)ENV[m[1]]=m[2].replace(/^(['\"])(.*)\\1$/,'$2')});\nwindow.__CL_ENV__=ENV;if(!window.process)window.process={env:ENV};\n// json-server giả (bản sao domAgent.ts)\nvar jsDb=DB?JSON.parse(JSON.stringify(DB)):null;\nfunction tl(st,b){return new Response(b===undefined?'{}':JSON.stringify(b),{status:st,headers:{'content-type':'application/json'}})}\nfunction lay(o,k){return String(k).split('.').reduce(function(a,p){return a==null?undefined:a[p]},o)}\nfunction mot(t){return /ies$/.test(t)?t.slice(0,-3)+'y':t.replace(/s$/,'')}\nfunction xuLy(method,url,body){var u=new URL(url);var ph=u.pathname.replace(/^\\/+|\\/+$/g,'').split('/').filter(Boolean).map(decodeURIComponent);var ten=ph[0],id=ph[1];\nif(!ten||!(ten in jsDb))return tl(404,{});var bang=jsDb[ten];var dl=null;if(body!=null&&body!==''){try{dl=JSON.parse(body)}catch(e){return tl(400,{})}}\nif(!Array.isArray(bang)){if(method==='GET')return tl(200,bang);if(method==='PUT'||method==='POST'){jsDb[ten]=dl||{};return tl(200,jsDb[ten])}if(method==='PATCH'){jsDb[ten]=Object.assign({},bang,dl||{});return tl(200,jsDb[ten])}return tl(404,{})}\nvar vt=function(x){return bang.findIndex(function(r){return String(r.id)===String(x)})};\nvar mr=function(r){var o=Object.assign({},r);u.searchParams.getAll('_expand').forEach(function(e){var b=jsDb[e+'s']||jsDb[e];if(Array.isArray(b))o[e]=b.find(function(x){return String(x.id)===String(r[e+'Id'])})});u.searchParams.getAll('_embed').forEach(function(e){var b=jsDb[e];if(Array.isArray(b)){var k=mot(ten)+'Id';o[e]=b.filter(function(x){return String(x[k])===String(r.id)})}});return o};\nif(method==='GET'){if(id!=null){var i=vt(id);return i<0?tl(404,{}):tl(200,mr(bang[i]))}var ds=bang.slice();var loc={};u.searchParams.forEach(function(v,k){if(k.charAt(0)!=='_'&&k!=='q')(loc[k]=loc[k]||[]).push(v)});\nObject.keys(loc).forEach(function(k){var vs=loc[k],m=/^(.*)_(like|gte|lte|ne)$/.exec(k);ds=ds.filter(function(r){if(m){var gv=lay(r,m[1]);return vs.every(function(v){if(m[2]==='like')return new RegExp(v,'i').test(String(gv));if(m[2]==='ne')return String(gv)!==v;var a=Number(gv),b=Number(v);var so=!isNaN(a)&&!isNaN(b);return m[2]==='gte'?(so?a>=b:String(gv)>=v):(so?a<=b:String(gv)<=v)})}var g=lay(r,k);return vs.some(function(v){return String(g)===v})})});\nvar qq=u.searchParams.get('q');if(qq)ds=ds.filter(function(r){return JSON.stringify(r).toLowerCase().indexOf(qq.toLowerCase())>=0});\nvar sx=u.searchParams.get('_sort');if(sx){var tr=sx.split(','),th=(u.searchParams.get('_order')||'asc').split(',');ds.sort(function(a,b){for(var t=0;t<tr.length;t++){var f=tr[t].replace(/^-/,''),gi=tr[t].charAt(0)==='-'||(th[t]||th[0])==='desc';var x=lay(a,f),y=lay(b,f);var c=(typeof x==='number'&&typeof y==='number')?x-y:String(x).localeCompare(String(y));if(c)return gi?-c:c}return 0})}\nvar gh=u.searchParams.get('_limit'),pg=u.searchParams.get('_page');var tong=ds.length;if(pg){var n=Number(gh)||10;ds=ds.slice((Number(pg)-1)*n,Number(pg)*n)}else if(gh)ds=ds.slice(0,Number(gh));var rr=tl(200,ds.map(mr));try{rr.headers.set('X-Total-Count',String(tong))}catch(e){}return rr}\nif(method==='POST'){if(id!=null)return tl(404,{});var mo=Object.assign({},dl||{});if(mo.id==null){var so2=bang.length&&bang.every(function(r){return typeof r.id==='number'});mo.id=so2||!bang.length?bang.reduce(function(mx,r){return Math.max(mx,Number(r.id)||0)},0)+1:Math.random().toString(16).slice(2,6)}bang.push(mo);return tl(201,mo)}\nif(id==null)return tl(404,{});var j=vt(id);if(j<0)return tl(404,{});\nif(method==='PUT'){bang[j]=Object.assign({},dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='PATCH'){bang[j]=Object.assign({},bang[j],dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='DELETE'){bang.splice(j,1);return tl(200,{})}return tl(404,{})}\nif(jsDb){window.fetch=function(url,init){init=init||{};var s=String(url&&url.url?url.url:url);var me=String(init.method||'GET').toUpperCase();return new Promise(function(res){setTimeout(function(){if(s.indexOf(BASE+'/')!==0)return res(new Response('Not Found',{status:404}));try{res(xuLy(me,s,init.body))}catch(e){res(tl(500,{error:String(e)}))}},120)})}}\nfunction axiosGia(){function goi(method,url,data,cfg){cfg=cfg||{};var u=(cfg.baseURL||'')+url;if(cfg.params){var sp=new URLSearchParams(cfg.params).toString();if(sp)u+=(u.indexOf('?')>=0?'&':'?')+sp}var init={method:method.toUpperCase(),headers:Object.assign({'Content-Type':'application/json'},cfg.headers||{})};if(data!==undefined)init.body=typeof data==='string'?data:JSON.stringify(data);\nreturn window.fetch(u,init).then(function(res){return res.text().then(function(t){var d;try{d=JSON.parse(t)}catch(e){d=t}var hd={};try{res.headers.forEach(function(v,k){hd[k.toLowerCase()]=v})}catch(e){}var out={data:d,status:res.status,statusText:res.statusText,headers:hd,config:cfg};if(res.status>=200&&res.status<300)return out;var err=new Error('Request failed with status code '+res.status);err.response=out;err.name='AxiosError';throw err})})}\nfunction tao(base){var a=function(cfg){return goi(cfg.method||'get',cfg.url,cfg.data,Object.assign({},base,cfg))};['get','delete','head'].forEach(function(m){a[m]=function(url,cfg){return goi(m,url,undefined,Object.assign({},base,cfg))}});['post','put','patch'].forEach(function(m){a[m]=function(url,data,cfg){return goi(m,url,data,Object.assign({},base,cfg))}});a.create=function(c){return tao(Object.assign({},base,c))};a.defaults=base;a.interceptors={request:{use:function(){}},response:{use:function(){}}};a.isAxiosError=function(e){return!!(e&&e.name==='AxiosError')};return a}\nvar ax=tao({});ax.default=ax;return ax}\nvar R=window.React;var tach=function(p,k){var q=Object.assign({},p);var c=q.children;delete q.children;if(k!==undefined)q.key=k;return[q,c]};\nvar j=function(t,p,k){var x=tach(p,k);return x[1]===undefined?R.createElement(t,x[0]):R.createElement(t,x[0],x[1])};\nvar js=function(t,p,k){var x=tach(p,k);return R.createElement.apply(null,[t,x[0]].concat(x[1]||[]))};\n// React Router: MemoryRouter + thanh địa chỉ (gõ URL được — thử ?status=ACTIVE, /items/2…)\nvar viTri=null,routerBoc=null,dieuHuong=null;\nfunction datThanh(v){var o=document.getElementById('cl-demo-url');if(o&&document.activeElement!==o)o.value='http://localhost:3000'+v}\nfunction routerGia(){var RRD=window.ReactRouterDOM;if(!RRD)return null;if(routerBoc)return routerBoc;\nfunction Ghi(){var l=RRD.useLocation();var nav=RRD.useNavigate();dieuHuong=nav;viTri=l.pathname+l.search+l.hash;R.useEffect(function(){datThanh(viTri)});return null}\nfunction RG(p){var d=R.useState(function(){return[viTri||URL0||'/']})[0];return R.createElement(RRD.MemoryRouter,{initialEntries:d,basename:p.basename},R.createElement(Ghi),p.children)}\nfunction tr(routes,opts){var r=RRD.createMemoryRouter(routes,Object.assign({},opts||{},{initialEntries:[viTri||URL0||'/']}));var g=function(s){viTri=s.location.pathname+s.location.search+s.location.hash;datThanh(viTri)};g(r.state);r.subscribe(g);dieuHuong=function(to){r.navigate(to)};return r}\nrouterBoc=Object.assign({},RRD,{BrowserRouter:RG,HashRouter:RG,createBrowserRouter:tr,createHashRouter:tr});return routerBoc}\nvar thunk=function(api){return function(next){return function(a){return typeof a==='function'?a(api.dispatch,api.getState):next(a)}}};\nvar LIB={'react':R,'react-dom':window.ReactDOM,'react-dom/client':window.ReactDOM,'react/jsx-runtime':{jsx:j,jsxs:js,Fragment:R.Fragment},'react/jsx-dev-runtime':{jsxDEV:j,Fragment:R.Fragment},'prop-types':window.PropTypes,'react-bootstrap':window.ReactBootstrap,'@reduxjs/toolkit':window.RTK,'redux':window.RTK,'react-redux':window.ReactRedux,'redux-thunk':{'default':thunk,thunk:thunk}};\nvar C={};\nfunction dd(tu,s){var p=tu.split('/').slice(0,-1);s.split('/').forEach(function(x){if(x==='.'||x==='')return;if(x==='..')p.pop();else p.push(x)});return p.join('/')}\nfunction tim(p){var d=['','.js','.jsx','.ts','.tsx','.json','/index.js','/index.jsx'];for(var i=0;i<d.length;i++){if(M[p+d[i]]!=null||CSS[p+d[i]]!=null)return p+d[i]}return null}\nfunction req(tu,s){if(s==='axios')return axiosGia();if(s==='react-router-dom'||s==='react-router')return routerGia();if(LIB[s])return LIB[s];if(/\\.css$/.test(s)&&!/^\\./.test(s))return{};var p=tim(dd(tu,s));if(!p)throw new Error('Cannot find module '+s);return nap(p)}\nfunction nap(p){if(C[p])return C[p].exports;if(CSS[p]!=null){var st=document.createElement('style');st.textContent=CSS[p];document.head.appendChild(st);C[p]={exports:{}};return{}}var m={exports:{}};C[p]=m;if(/\\.json$/.test(p)){m.exports=JSON.parse(M[p]);return m.exports}new Function('require','module','exports',M[p])(function(s){return req(p,s)},m,m.exports);return m.exports}\nif(THANH){var bar=document.createElement('form');bar.style.cssText='position:sticky;top:0;z-index:99998;display:flex;gap:6px;align-items:center;padding:6px 10px;background:#e2e8f0;border-bottom:1px solid #cbd5e1;font:12px system-ui';bar.innerHTML='<span style=\"color:#475569\">URL</span><input id=\"cl-demo-url\" style=\"flex:1;padding:4px 8px;border:1px solid #cbd5e1;border-radius:6px;font:12px ui-monospace,monospace\" aria-label=\"Address bar\"><button style=\"padding:3px 10px;border-radius:6px;border:1px solid #94a3b8;background:#fff;cursor:pointer\">Go</button>';\nbar.addEventListener('submit',function(e){e.preventDefault();var v=document.getElementById('cl-demo-url').value.replace(/^https?:\\/\\/[^/]+/,'')||'/';if(dieuHuong)dieuHuong(v)});document.body.insertBefore(bar,document.body.firstChild);datThanh(URL0||'/')}\nnap(\"src/index.js\");\n})();</script></body></html>"
+    }
+  ]
+}

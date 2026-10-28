@@ -554,6 +554,18 @@
       "name": "14.3 TypeScript & Next.js (advanced)",
       "level": "ADVANCED",
       "description": "Đọc kiểu TypeScript cho React, ánh xạ tệp app router Next.js sang URL."
+    },
+    {
+      "slug": "fer202-2-deep-utility-library",
+      "name": "Deep Lab 2 — Utility Library (closures · timers · async control)",
+      "level": "ADVANCED",
+      "description": "Deep lab chương 2: pipe/curry, memoize LRU, debounce/throttle, EventEmitter, isEqual, cây đệ quy, asyncPool, retry. Thang 10."
+    },
+    {
+      "slug": "fer202-3-deep-invoice-renderer",
+      "name": "Deep Lab 3 — Invoice Renderer (advanced JSX)",
+      "level": "ADVANCED",
+      "description": "Deep lab chương 3: bảng nhóm bằng Fragment có key, giảm giá, coupon + VAT suy ra, nhánh trạng thái, trạng thái rỗng. Thang 10."
     }
   ]
 }

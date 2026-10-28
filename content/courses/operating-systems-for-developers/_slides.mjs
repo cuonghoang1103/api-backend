@@ -18,6 +18,7 @@
 export const CDN_ROOT = 'https://media.cuongthai.com/images/academy/OS';
 const VER = {
   'os-10-1': 'v2', // 28/10: ảnh 001 của v1 bị Cloudflare giữ 404 (bị dò trước khi đẩy) ⇒ đẩy lại cả deck sang v2
+  'os-11-1': 'v3', // 29/10: 001 của v1 (và v2 — bị dò khi kiểm) bị Cloudflare giữ 404 ⇒ đẩy lại sang v3. ĐỪNG curl ảnh trước khi đẩy.
 };
 const pad = (n) => String(n).padStart(3, '0');
 const attr = (s) => String(s).replace(/<[^>]+>/g, '').replace(/&/g, '&amp;').replace(/"/g, '&quot;');

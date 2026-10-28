@@ -1,0 +1,581 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-9-4-ch20-essentials-2",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-9-4-ch20-essentials-2"
+  },
+  "exercises": [
+    {
+      "title": "Agile essentials 4 — epic, user story or feature?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "epics, stories, features"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>A <b>user story</b> is a concise statement of a user need, sized to be implemented in <b>one iteration</b>. An <b>epic</b> is a story too large for one iteration and is split (story decomposition). A <b>feature</b> is a grouping of capabilities that provides user value; it may span several stories or epics.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>User story</b>: nhu cầu ngắn gọn, vừa <b>một vòng</b>. <b>Epic</b>: story quá lớn, phải tách. <b>Feature</b>: nhóm khả năng đem giá trị, có thể trải nhiều story/epic.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Vừa một vòng ⇒ story.",
+        "Tên một nhóm khả năng ⇒ feature."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agile essentials 4 — epic, user story or feature?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agile essentials 4 — epic, user story or feature? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Epic\n   - r1.k: User story\n   - r2.k: Feature\n   - r3.k: User story\n   - r4.k: Epic\n   Size and form decide: one-iteration \"As a… I want… so that…\" ⇒ story; too big for one iteration ⇒ epic; a named capability grouping ⇒ feature.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Size and form decide: one-iteration \"As a… I want… so that…\" ⇒ story; too big for one iteration ⇒ epic; a named capability grouping ⇒ feature.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Kind",
+                "luaChon": [
+                  "Epic",
+                  "User story",
+                  "Feature"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "\"As a patient, I want to manage all my health records online.\" (several months of work)"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "\"As a patient, I want to download my last lab result as PDF so I can send it to another doctor.\" (3 points)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "\"Online payments\" — card, e-wallet, refunds, receipts."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "\"As a receptionist, I want to search a patient by phone number so I can check them in quickly.\" (2 points)"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "\"As a clinic owner, I want a full analytics suite.\" (spans many sprints)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Epic",
+              "r1.k": "User story",
+              "r2.k": "Feature",
+              "r3.k": "User story",
+              "r4.k": "Epic"
+            },
+            "giaiThich": "<p><p>Size and form decide: one-iteration \"As a… I want… so that…\" ⇒ story; too big for one iteration ⇒ epic; a named capability grouping ⇒ feature.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gọi mọi thứ lớn là feature."
+        },
+        {
+          "loi": "Đưa epic vào sprint mà không tách."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "epic",
+          "vi": "story lớn, phải tách thành nhiều story"
+        },
+        {
+          "en": "user story",
+          "vi": "câu chuyện người dùng — \"As a <role>, I want <goal> so that <benefit>\""
+        }
+      ]
+    },
+    {
+      "title": "Agile essentials 5 — timing and expecting change",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "timing",
+        "expect change"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Agile projects need the same requirements activities, but not all at once: high-level stories fill the backlog early; details are clarified in the iteration that implements them (Figure 20-1). Exception: learn about <b>nonfunctional requirements early</b> so the architecture can support them. When change arises, the BA says \"Okay, let’s talk about the change\" and prioritises it against the backlog — while still looking ahead.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Agile vẫn làm đủ hoạt động yêu cầu nhưng rải theo thời gian; ngoại lệ: tìm hiểu <b>yêu cầu phi chức năng sớm</b>. Khi có thay đổi: \"Được, ta bàn về thay đổi này\" rồi xếp ưu tiên với backlog.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Chi tiết ⇒ đúng lúc (trong vòng thực hiện).",
+        "NFR định hình kiến trúc ⇒ sớm."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agile essentials 5 — timing and expecting change\n\nAnswer in the answer panel (no code needed).\n\n1. When are the details of a story usually worked out?Chi tiết của story thường được làm rõ khi nào?\n2. Which requirements should be explored early even on agile projects?Yêu cầu nào nên tìm hiểu sớm kể cả trong agile?\n3. The client asks to add a feature mid-project. The agile BA’s first response is…Khách xin thêm tính năng giữa dự án. Phản ứng đầu tiên của BA agile là…\n4. Change in agile can also mean…Thay đổi trong agile cũng có thể là…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agile essentials 5 — timing and expecting change — answer key\n\n1. When are the details of a story usually worked out?Chi tiết của story thường được làm rõ khi nào?\n   Answer: a) In the iteration that implements it (just in time)\n   Figure 20-1.VI: Hình 20-1.\n\n2. Which requirements should be explored early even on agile projects?Yêu cầu nào nên tìm hiểu sớm kể cả trong agile?\n   Answer: a) Nonfunctional requirements that shape the architecture (performance, security, scalability)\n   They are costly to retrofit.VI: Thêm sau rất tốn.\n\n3. The client asks to add a feature mid-project. The agile BA’s first response is…Khách xin thêm tính năng giữa dự án. Phản ứng đầu tiên của BA agile là…\n   Answer: a) \"Okay, let’s talk about the change\" — write the story and prioritise it against the backlog\n   Embrace change, but manage it.VI: Đón nhận thay đổi nhưng có quản lý.\n\n4. Change in agile can also mean…Thay đổi trong agile cũng có thể là…\n   Answer: a) removing items from the backlog that are no longer valuable\n   Dropping work is a change too.VI: Bỏ việc cũng là thay đổi.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · a · a · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>When are the details of a story usually worked out?</p><p style=\"opacity:.75;font-size:.92em\"><i>Chi tiết của story thường được làm rõ khi nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "In the iteration that implements it (just in time)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "All at the start of the project"
+              },
+              {
+                "ma": "c",
+                "noiDung": "After release"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Never"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Figure 20-1.</p><p><i>VI: Hình 20-1.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Which requirements should be explored early even on agile projects?</p><p style=\"opacity:.75;font-size:.92em\"><i>Yêu cầu nào nên tìm hiểu sớm kể cả trong agile?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Nonfunctional requirements that shape the architecture (performance, security, scalability)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Button colours"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Report fonts"
+              },
+              {
+                "ma": "d",
+                "noiDung": "None"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>They are costly to retrofit.</p><p><i>VI: Thêm sau rất tốn.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>The client asks to add a feature mid-project. The agile BA’s first response is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Khách xin thêm tính năng giữa dự án. Phản ứng đầu tiên của BA agile là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "\"Okay, let’s talk about the change\" — write the story and prioritise it against the backlog"
+              },
+              {
+                "ma": "b",
+                "noiDung": "\"No changes allowed\""
+              },
+              {
+                "ma": "c",
+                "noiDung": "Start coding it immediately"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Ignore it until the end"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Embrace change, but manage it.</p><p><i>VI: Đón nhận thay đổi nhưng có quản lý.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Change in agile can also mean…</p><p style=\"opacity:.75;font-size:.92em\"><i>Thay đổi trong agile cũng có thể là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "removing items from the backlog that are no longer valuable"
+              },
+              {
+                "ma": "b",
+                "noiDung": "only adding items"
+              },
+              {
+                "ma": "c",
+                "noiDung": "changing the team every sprint"
+              },
+              {
+                "ma": "d",
+                "noiDung": "rewriting the vision daily"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Dropping work is a change too.</p><p><i>VI: Bỏ việc cũng là thay đổi.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chi tiết hoá mọi story ngay đầu dự án."
+        },
+        {
+          "loi": "Để yêu cầu hiệu năng tới cuối."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "product backlog",
+          "vi": "danh sách việc của sản phẩm, xếp theo ưu tiên"
+        },
+        {
+          "en": "nonfunctional requirement (NFR)",
+          "vi": "yêu cầu phi chức năng — thuộc tính chất lượng, giao diện ngoài, ràng buộc"
+        }
+      ]
+    },
+    {
+      "title": "Agile essentials 6 — decompose an epic into stories",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "story decomposition"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Epic (ClinicCare): \"<i>As a patient, I want to pay for my visit online.</i>\" The team’s iteration capacity is 20 points; no story may exceed 8 points. Decompose the epic into <code>STORIES</code>: an array of 4–8 objects <code>{ id, text, points, criteria }</code>:</p><ul><li><code>text</code> follows \"As a &lt;role&gt;, I want &lt;goal&gt; so that &lt;benefit&gt;\".</li><li>Together they must cover: paying by <b>card</b>, paying by <b>e-wallet</b>, getting a <b>receipt</b>, and a <b>refund</b> when a visit is cancelled.</li><li><code>points</code> is a Fibonacci number 1, 2, 3, 5 or 8.</li><li>Each story has at least 2 <code>criteria</code> (acceptance criteria).</li><li>Not all stories may be for the patient — at least one other role (e.g. cashier, clinic manager) should appear.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Each story must fit in one iteration (≤ 8 points).</li>\n</ul>",
+      "problemHtmlVi": "<p>Tách epic \"bệnh nhân thanh toán trực tuyến\" thành 4–8 story <code>{ id, text, points, criteria }</code>: đúng mẫu \"As a…, I want… so that…\", phủ thẻ, ví điện tử, biên lai, hoàn tiền; điểm thuộc 1,2,3,5,8 (≤ 8); mỗi story ≥ 2 tiêu chí chấp nhận; có ít nhất một vai trò khác bệnh nhân.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Mỗi story vừa một vòng (≤ 8 điểm).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "card payment",
+          "output": "{ id: 'PAY-1', text: 'As a patient, I want to pay my visit fee by card so that I do not need cash at the clinic.', points: 5, criteria: ['…', '…'] }",
+          "explanation": "|||"
+        }
+      ],
+      "hintsJson": [
+        "Tách theo phương thức (thẻ, ví), theo bước (biên lai), theo trường hợp đặc biệt (hoàn tiền).",
+        "Điểm Fibonacci; story > 8 điểm là epic, phải tách tiếp."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "stories.js",
+          "language": "javascript",
+          "code": "const STORIES = [\n  // { id: 'PAY-1', text: 'As a patient, I want … so that …', points: 5, criteria: ['…', '…'] },\n];\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "stories.js",
+          "language": "javascript",
+          "code": "const STORIES = [\n  { id: 'PAY-1', text: 'As a patient, I want to pay my visit fee by card so that I do not need cash at the clinic.', points: 5, criteria: ['Given a confirmed visit, when the card payment succeeds, then the visit is marked Paid.', 'Given a declined card, when the patient pays, then an error is shown and the visit stays Unpaid.'] },\n  { id: 'PAY-2', text: 'As a patient, I want to pay by e-wallet so that I can pay from my phone.', points: 5, criteria: ['Given a confirmed visit, when the e-wallet confirms, then the visit is marked Paid.', 'Given the e-wallet times out after 60 seconds, then the patient can retry.'] },\n  { id: 'PAY-3', text: 'As a patient, I want to receive an electronic receipt so that I can claim insurance.', points: 2, criteria: ['When a payment succeeds, a PDF receipt is e-mailed within 5 minutes.', 'The receipt shows the visit, the amount and the tax.'] },\n  { id: 'PAY-4', text: 'As a patient, I want a refund when the clinic cancels my visit so that I do not lose money.', points: 5, criteria: ['When the clinic cancels a paid visit, a full refund is started within 1 hour.', 'The patient is notified of the refund.'] },\n  { id: 'PAY-5', text: 'As a cashier, I want to see the list of online payments for today so that I can reconcile the cash register.', points: 3, criteria: ['The list shows time, patient, method and amount.', 'The total of the list equals the sum of the payments.'] },\n];\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Story decomposition continues until each story can be estimated, implemented and tested in one iteration, each with acceptance criteria. Splitting by payment method, by step (receipt) and by exception (refund) gives small, valuable, testable slices.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "stories.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "4 to 8 stories with unique ids",
+              "vi": "4–8 story, id không trùng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof STORIES==\"undefined\"||!Array.isArray(STORIES))return\"STORIES must be an array\";var S=STORIES.map(function(e){return String(e&&e.text||\"\")}),a=S.join(\" \").toLowerCase();if(STORIES.length<4||STORIES.length>8)return\"write 4 to 8 stories (got \"+STORIES.length+\")\";for(var t={},r=0;r<STORIES.length;r++){var n=String(STORIES[r].id||\"\");if(!n)return\"story \"+r+\" has no id\";if(t[n])return\"duplicate id \"+n;t[n]=1}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "every story follows As a … I want … so that …",
+              "vi": "mọi story theo mẫu As a … I want … so that …"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof STORIES==\"undefined\"||!Array.isArray(STORIES))return\"STORIES must be an array\";for(var n=STORIES.map(function(r){return String(r&&r.text||\"\")}),a=n.join(\" \").toLowerCase(),t=0;t<n.length;t++)if(!/^as an? [^,]{2,40},? i want (to )?.{5,}\\bso that\\b.{5,}/i.test(n[t].trim()))return\"story \"+(STORIES[t].id||t)+' does not follow \"As a <role>, I want <goal> so that <benefit>\"';return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "each story fits one iteration (Fibonacci ≤ 8)",
+              "vi": "mỗi story vừa một vòng (Fibonacci ≤ 8)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof STORIES==\"undefined\"||!Array.isArray(STORIES))return\"STORIES must be an array\";for(var t=STORIES.map(function(r){return String(r&&r.text||\"\")}),o=t.join(\" \").toLowerCase(),n=0;n<STORIES.length;n++)if([1,2,3,5,8].indexOf(STORIES[n].points)<0)return(STORIES[n].id||n)+\": points must be 1, 2, 3, 5 or 8 (got \"+STORIES[n].points+\")\";return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "covers card, e-wallet, receipt and refund",
+              "vi": "phủ thẻ, ví điện tử, biên lai, hoàn tiền"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof STORIES==\"undefined\"||!Array.isArray(STORIES))return\"STORIES must be an array\";for(var a=STORIES.map(function(e){return String(e&&e.text||\"\")}),n=a.join(\" \").toLowerCase(),t=[[\"card\",/\\bcard\\b/],[\"e-wallet\",/e-?wallet|momo|zalopay|wallet/],[\"receipt\",/receipt|invoice/],[\"refund\",/refund/]],r=0;r<t.length;r++)if(!t[r][1].test(n))return\"no story covers \"+t[r][0];var o=a.filter(function(e){return/\\bcard\\b/i.test(e)&&/wallet/i.test(e)});return o.length?\"card and e-wallet are separate stories \\u2014 split them\":\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "each story has at least 2 acceptance criteria",
+              "vi": "mỗi story ≥ 2 tiêu chí chấp nhận"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof STORIES==\"undefined\"||!Array.isArray(STORIES))return\"STORIES must be an array\";for(var e=STORIES.map(function(n){return String(n&&n.text||\"\")}),S=e.join(\" \").toLowerCase(),r=0;r<STORIES.length;r++){var t=STORIES[r].criteria;if(!Array.isArray(t)||t.filter(function(n){return String(n).trim().length>10}).length<2)return(STORIES[r].id||r)+\" needs at least 2 real acceptance criteria\"}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "more than one role appears",
+              "vi": "có hơn một vai trò"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof STORIES==\"undefined\"||!Array.isArray(STORIES))return\"STORIES must be an array\";var a=STORIES.map(function(r){return String(r&&r.text||\"\")}),o=a.join(\" \").toLowerCase(),n={};return a.forEach(function(r){var e=r.match(/^as an? ([^,]+?),? i want/i);e&&(n[e[1].toLowerCase().trim()]=1)}),Object.keys(n).length>=2?\"OK\":\"add a story for another role (cashier, clinic manager\\u2026)\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gộp thẻ và ví trong một story."
+        },
+        {
+          "loi": "Story vai \"the system\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "epic",
+          "vi": "story lớn, phải tách thành nhiều story"
+        },
+        {
+          "en": "user story",
+          "vi": "câu chuyện người dùng — \"As a <role>, I want <goal> so that <benefit>\""
+        },
+        {
+          "en": "acceptance criteria",
+          "vi": "tiêu chí chấp nhận — điều kiện để khách nhận một yêu cầu/story (Given/When/Then)"
+        },
+        {
+          "en": "INVEST",
+          "vi": "Independent · Negotiable · Valuable · Estimable · Small · Testable — tiêu chí story tốt"
+        }
+      ]
+    },
+    {
+      "title": "Agile essentials 7 — transitioning to agile",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 4,
+      "points": 10,
+      "concepts": [
+        "transitioning to agile"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers’ transition advice: determine your role on the team; identify the agile practices that fit your organisation best; pilot a small project first, or adopt a few agile practices on your next project; in a hybrid model, start with a few low-risk practices that work in any methodology.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lời khuyên chuyển sang agile của Wiegers.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Thí điểm nhỏ trước.",
+        "Vai trò BA vẫn còn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agile essentials 7 — transitioning to agile\n\nAnswer in the answer panel (no code needed).\n\n1. Your company has never used agile. Best first step?Công ty chưa từng dùng agile. Bước đầu tốt nhất?\n2. In agile, does the BA role disappear?Trong agile, vai trò BA có biến mất không?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agile essentials 7 — transitioning to agile — answer key\n\n1. Your company has never used agile. Best first step?Công ty chưa từng dùng agile. Bước đầu tốt nhất?\n   Answer: a) Pilot agile on a small project, or adopt a few low-risk practices\n   Transition incrementally.VI: Chuyển đổi từng bước.\n\n2. In agile, does the BA role disappear?Trong agile, vai trò BA có biến mất không?\n   Answer: a) No — the BA may act as or support the product owner and keep doing requirements work continuously\n   The activities remain; the timing changes.VI: Hoạt động vẫn còn; thời điểm thay đổi.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Your company has never used agile. Best first step?</p><p style=\"opacity:.75;font-size:.92em\"><i>Công ty chưa từng dùng agile. Bước đầu tốt nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Pilot agile on a small project, or adopt a few low-risk practices"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Switch every project to Scrum tomorrow"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Stop writing requirements"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Fire the BAs"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Transition incrementally.</p><p><i>VI: Chuyển đổi từng bước.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>In agile, does the BA role disappear?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong agile, vai trò BA có biến mất không?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "No — the BA may act as or support the product owner and keep doing requirements work continuously"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Yes, always"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only in big teams"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only testers remain"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The activities remain; the timing changes.</p><p><i>VI: Hoạt động vẫn còn; thời điểm thay đổi.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chuyển đổi toàn bộ trong một đêm."
+        },
+        {
+          "loi": "Bỏ hẳn việc làm yêu cầu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "product backlog",
+          "vi": "danh sách việc của sản phẩm, xếp theo ưu tiên"
+        }
+      ]
+    }
+  ]
+}

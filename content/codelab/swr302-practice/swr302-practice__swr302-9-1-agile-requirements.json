@@ -1,0 +1,535 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-9-1-agile-requirements",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-9-1-agile-requirements"
+  },
+  "exercises": [
+    {
+      "title": "Agile 1 — where does it sit in the backlog?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "product backlog"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>A product backlog is refined progressively: items at the <b>top</b> are small, detailed, estimated and testable (ready); items in the <b>middle</b> are coarser stories being refined; items at the <b>bottom</b> are epics or themes, big and vague. Place each item.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Backlog được làm rõ dần: <b>đỉnh</b> là story nhỏ, chi tiết, đã ước lượng, test được; <b>giữa</b> là story thô đang làm rõ; <b>đáy</b> là epic/chủ đề lớn, mơ hồ.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Có ước lượng + tiêu chí chấp nhận + nhỏ ⇒ sẵn sàng.",
+        "Một cụm từ chung chung ⇒ epic."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agile 1 — where does it sit in the backlog?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agile 1 — where does it sit in the backlog? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Top — ready\n   - r1.k: Bottom — epic/theme\n   - r2.k: Middle — being refined\n   - r3.k: Top — ready\n   - r4.k: Bottom — epic/theme\n   Detail is added just in time: ready stories at the top, refining in the middle, big ideas at the bottom.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Detail is added just in time: ready stories at the top, refining in the middle, big ideas at the bottom.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Position",
+                "luaChon": [
+                  "Top — ready",
+                  "Middle — being refined",
+                  "Bottom — epic/theme"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "\"As a patient, I want to cancel an appointment up to 2 h before so the slot is freed.\" 3 points, 4 acceptance criteria."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "\"Telemedicine for remote patients.\""
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "\"As a doctor, I want to see a patient’s history\" — not estimated, criteria still being discussed."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "\"As a receptionist, I want to print today’s schedule.\" 2 points, criteria agreed, no open questions."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "\"Loyalty programme.\""
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Top — ready",
+              "r1.k": "Bottom — epic/theme",
+              "r2.k": "Middle — being refined",
+              "r3.k": "Top — ready",
+              "r4.k": "Bottom — epic/theme"
+            },
+            "giaiThich": "<p><p>Detail is added just in time: ready stories at the top, refining in the middle, big ideas at the bottom.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đưa epic lên đỉnh backlog."
+        },
+        {
+          "loi": "Coi story chưa ước lượng là sẵn sàng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "product backlog",
+          "vi": "danh sách việc của sản phẩm, xếp theo ưu tiên"
+        },
+        {
+          "en": "epic",
+          "vi": "story lớn, phải tách thành nhiều story"
+        },
+        {
+          "en": "user story",
+          "vi": "câu chuyện người dùng — \"As a <role>, I want <goal> so that <benefit>\""
+        }
+      ]
+    },
+    {
+      "title": "Agile 2 — the backbone of a story map",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 4,
+      "points": 10,
+      "concepts": [
+        "user story mapping"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>User story mapping (Jeff Patton): the <b>backbone</b> across the top is the user’s journey — activities in the order the user does them; detailed stories hang below each step, ordered by priority. Put the backbone of a patient using ClinicCare in order.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Story map: <b>xương sống</b> là hành trình người dùng theo thứ tự; story chi tiết treo bên dưới mỗi bước. Sắp xương sống của bệnh nhân dùng ClinicCare.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Theo thứ tự người dùng thực sự làm.",
+        "Thanh toán sau khi khám."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agile 2 — the backbone of a story map\n\nAnswer in the answer panel (no code needed).\n\n1. Order the activitiesSắp các hoạt động\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agile 2 — the backbone of a story map — answer key\n\n1. Order the activitiesSắp các hoạt động\n   Answer: a) Find a doctor  →  b) Book a slot  →  c) Check in at the clinic  →  d) See the doctor  →  e) Pay  →  f) Follow up (results, re-visit)\n   The journey from first need to after-care.VI: Hành trình từ nhu cầu đầu tới chăm sóc sau.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Find a doctor → Book a slot → Check in → See the doctor → Pay → Follow up.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Order the activities</p><p style=\"opacity:.75;font-size:.92em\"><i>Sắp các hoạt động</i></p>",
+            "muc": [
+              {
+                "ma": "d",
+                "noiDung": "See the doctor"
+              },
+              {
+                "ma": "f",
+                "noiDung": "Follow up (results, re-visit)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Book a slot"
+              },
+              {
+                "ma": "e",
+                "noiDung": "Pay"
+              },
+              {
+                "ma": "a",
+                "noiDung": "Find a doctor"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Check in at the clinic"
+              }
+            ],
+            "dapAn": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e",
+              "f"
+            ],
+            "giaiThich": "<p>The journey from first need to after-care.</p><p><i>VI: Hành trình từ nhu cầu đầu tới chăm sóc sau.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Xếp theo thứ tự ưu tiên thay vì thứ tự hành trình."
+        },
+        {
+          "loi": "Đặt Follow up trước Pay."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "story map",
+          "vi": "bản đồ story — xương sống hành trình + story bên dưới"
+        },
+        {
+          "en": "walking skeleton",
+          "vi": "bộ xương biết đi — lát mỏng chạy trọn hành trình"
+        }
+      ]
+    },
+    {
+      "title": "Agile 4 — refinement, acceptance criteria and DoD",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "backlog refinement"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Backlog refinement (grooming) is the ongoing elicitation, analysis and validation of agile projects: the team keeps the top items ready. Acceptance criteria are per story; the Definition of Done is the same for every story.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Refinement là khai thác–phân tích–thẩm định liên tục trong agile. Tiêu chí chấp nhận là của từng story; DoD áp cho mọi story.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Agile vẫn làm yêu cầu, chỉ là liên tục và nhỏ.",
+        "PO sở hữu backlog."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agile 4 — refinement, acceptance criteria and DoD\n\nAnswer in the answer panel (no code needed).\n\n1. \"We’re agile, so we don’t do requirements.\" This is…\"Chúng tôi agile nên không làm yêu cầu.\" Câu này…\n2. Who owns the product backlog?Ai sở hữu product backlog?\n3. Refinement mainly aims to…Refinement chủ yếu nhằm…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agile 4 — refinement, acceptance criteria and DoD — answer key\n\n1. \"We’re agile, so we don’t do requirements.\" This is…\"Chúng tôi agile nên không làm yêu cầu.\" Câu này…\n   Answer: a) a myth — agile does requirements continuously, in small batches\n   Agile removes the big document, not the thinking.VI: Agile bỏ tài liệu lớn, không bỏ tư duy.\n\n2. Who owns the product backlog?Ai sở hữu product backlog?\n   Answer: a) The product owner\n   The PO orders it and represents the customers.VI: PO sắp xếp và đại diện khách hàng.\n\n3. Refinement mainly aims to…Refinement chủ yếu nhằm…\n   Answer: a) keep the top of the backlog ready (small, clear, estimated, testable)\n   Ready items enter the next iterations.VI: Mục sẵn sàng vào các vòng tới.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · a · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>\"We’re agile, so we don’t do requirements.\" This is…</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Chúng tôi agile nên không làm yêu cầu.\" Câu này…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a myth — agile does requirements continuously, in small batches"
+              },
+              {
+                "ma": "b",
+                "noiDung": "correct"
+              },
+              {
+                "ma": "c",
+                "noiDung": "correct for small teams"
+              },
+              {
+                "ma": "d",
+                "noiDung": "required by Scrum"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Agile removes the big document, not the thinking.</p><p><i>VI: Agile bỏ tài liệu lớn, không bỏ tư duy.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Who owns the product backlog?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ai sở hữu product backlog?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The product owner"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The tester"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The CEO"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Each developer"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The PO orders it and represents the customers.</p><p><i>VI: PO sắp xếp và đại diện khách hàng.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Refinement mainly aims to…</p><p style=\"opacity:.75;font-size:.92em\"><i>Refinement chủ yếu nhằm…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "keep the top of the backlog ready (small, clear, estimated, testable)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "write the whole SRS"
+              },
+              {
+                "ma": "c",
+                "noiDung": "assign blame"
+              },
+              {
+                "ma": "d",
+                "noiDung": "deploy the release"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Ready items enter the next iterations.</p><p><i>VI: Mục sẵn sàng vào các vòng tới.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng agile không cần tiêu chí chấp nhận."
+        },
+        {
+          "loi": "Nghĩ dev sở hữu backlog."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "product backlog",
+          "vi": "danh sách việc của sản phẩm, xếp theo ưu tiên"
+        },
+        {
+          "en": "acceptance criteria",
+          "vi": "tiêu chí chấp nhận — điều kiện để khách nhận một yêu cầu/story (Given/When/Then)"
+        }
+      ]
+    },
+    {
+      "title": "Agile 3 — slice a walking skeleton from a story map",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "user story mapping"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>A <b>walking skeleton</b> is a thin first release that touches every step of the backbone. Write <code>function skeleton(map)</code>: for each backbone step <i>in backbone order</i>, choose ONE story — the best priority (Must &gt; Should &gt; Could &gt; Won’t), and among equal priorities the one listed first. Ignore stories whose step is not in the backbone; a step with no stories is reported in <code>gaps</code>. Return <code>{ release1: [ids…], gaps: [steps…] }</code>. Stories with priority \"Won’t\" never go into release 1 (their step becomes a gap if nothing else is there).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>On the sample map: release1 = S1, S3, S5, S6, S7; gaps = [].</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Walking skeleton</b>: bản đầu mỏng chạm mọi bước của xương sống. Viết <code>skeleton(map)</code>: mỗi bước (theo thứ tự xương sống) chọn MỘT story ưu tiên cao nhất (Must &gt; Should &gt; Could), bằng nhau thì lấy cái liệt kê trước; bỏ qua story có bước không thuộc xương sống; bước không có story nào ⇒ đưa vào <code>gaps</code>; story \"Won’t\" không bao giờ vào bản 1.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Với bản đồ mẫu: release1 = S1, S3, S5, S6, S7; gaps = [].</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "skeleton(MAP)",
+          "output": "{ release1: ['S1','S3','S5','S6','S7'], gaps: [] }",
+          "explanation": "Checkout: S5 (Must) beats S4 (Should).|||Checkout: S5 (Must) thắng S4 (Should)."
+        }
+      ],
+      "hintsJson": [
+        "Duyệt backbone theo thứ tự; với mỗi bước tìm story có hạng nhỏ nhất (Must = 0).",
+        "So sánh \"<\" (không \"<=\") để giữ story liệt kê trước khi hoà."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "map.js",
+          "language": "javascript",
+          "code": "const MAP = {\n \"backbone\": [\n  \"Browse\",\n  \"Select\",\n  \"Checkout\",\n  \"Pay\",\n  \"Track\"\n ],\n \"stories\": [\n  {\n   \"id\": \"S1\",\n   \"step\": \"Browse\",\n   \"title\": \"List products by category\",\n   \"priority\": \"Must\"\n  },\n  {\n   \"id\": \"S2\",\n   \"step\": \"Browse\",\n   \"title\": \"Search by keyword\",\n   \"priority\": \"Should\"\n  },\n  {\n   \"id\": \"S3\",\n   \"step\": \"Select\",\n   \"title\": \"Add to cart\",\n   \"priority\": \"Must\"\n  },\n  {\n   \"id\": \"S4\",\n   \"step\": \"Checkout\",\n   \"title\": \"Apply coupon\",\n   \"priority\": \"Should\"\n  },\n  {\n   \"id\": \"S5\",\n   \"step\": \"Checkout\",\n   \"title\": \"Guest checkout\",\n   \"priority\": \"Must\"\n  },\n  {\n   \"id\": \"S6\",\n   \"step\": \"Pay\",\n   \"title\": \"Pay by card\",\n   \"priority\": \"Must\"\n  },\n  {\n   \"id\": \"S7\",\n   \"step\": \"Track\",\n   \"title\": \"E-mail order status\",\n   \"priority\": \"Could\"\n  },\n  {\n   \"id\": \"S8\",\n   \"step\": \"Track\",\n   \"title\": \"Live courier map\",\n   \"priority\": \"Could\"\n  }\n ]\n};\n"
+        },
+        {
+          "name": "skeleton.js",
+          "language": "javascript",
+          "code": "function skeleton(map) {\n  // TODO\n  return { release1: [], gaps: [] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "map.js",
+          "language": "javascript",
+          "code": "const MAP = {\n \"backbone\": [\n  \"Browse\",\n  \"Select\",\n  \"Checkout\",\n  \"Pay\",\n  \"Track\"\n ],\n \"stories\": [\n  {\n   \"id\": \"S1\",\n   \"step\": \"Browse\",\n   \"title\": \"List products by category\",\n   \"priority\": \"Must\"\n  },\n  {\n   \"id\": \"S2\",\n   \"step\": \"Browse\",\n   \"title\": \"Search by keyword\",\n   \"priority\": \"Should\"\n  },\n  {\n   \"id\": \"S3\",\n   \"step\": \"Select\",\n   \"title\": \"Add to cart\",\n   \"priority\": \"Must\"\n  },\n  {\n   \"id\": \"S4\",\n   \"step\": \"Checkout\",\n   \"title\": \"Apply coupon\",\n   \"priority\": \"Should\"\n  },\n  {\n   \"id\": \"S5\",\n   \"step\": \"Checkout\",\n   \"title\": \"Guest checkout\",\n   \"priority\": \"Must\"\n  },\n  {\n   \"id\": \"S6\",\n   \"step\": \"Pay\",\n   \"title\": \"Pay by card\",\n   \"priority\": \"Must\"\n  },\n  {\n   \"id\": \"S7\",\n   \"step\": \"Track\",\n   \"title\": \"E-mail order status\",\n   \"priority\": \"Could\"\n  },\n  {\n   \"id\": \"S8\",\n   \"step\": \"Track\",\n   \"title\": \"Live courier map\",\n   \"priority\": \"Could\"\n  }\n ]\n};\n"
+        },
+        {
+          "name": "skeleton.js",
+          "language": "javascript",
+          "code": "var RANK = { 'Must': 0, 'Should': 1, 'Could': 2 };\n\nfunction skeleton(map) {\n  var release1 = [], gaps = [];\n  map.backbone.forEach(function (step) {\n    var best = null;\n    map.stories.forEach(function (s) {\n      if (s.step !== step || !Object.prototype.hasOwnProperty.call(RANK, s.priority)) return;\n      if (!best || RANK[s.priority] < RANK[best.priority]) best = s;\n    });\n    if (best) release1.push(best.id); else gaps.push(step);\n  });\n  return { release1: release1, gaps: gaps };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The skeleton gives an end-to-end usable product as early as possible; later releases deepen each step with the remaining stories.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "map.js",
+          "skeleton.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "sample map",
+              "vi": "bản đồ mẫu"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var r={backbone:[\"Browse\",\"Select\",\"Checkout\",\"Pay\",\"Track\"],stories:[{id:\"S1\",step:\"Browse\",title:\"List products by category\",priority:\"Must\"},{id:\"S2\",step:\"Browse\",title:\"Search by keyword\",priority:\"Should\"},{id:\"S3\",step:\"Select\",title:\"Add to cart\",priority:\"Must\"},{id:\"S4\",step:\"Checkout\",title:\"Apply coupon\",priority:\"Should\"},{id:\"S5\",step:\"Checkout\",title:\"Guest checkout\",priority:\"Must\"},{id:\"S6\",step:\"Pay\",title:\"Pay by card\",priority:\"Must\"},{id:\"S7\",step:\"Track\",title:\"E-mail order status\",priority:\"Could\"},{id:\"S8\",step:\"Track\",title:\"Live courier map\",priority:\"Could\"}]},e={release1:[\"S1\",\"S3\",\"S5\",\"S6\",\"S7\"],gaps:[]};if(typeof skeleton!=\"function\")return\"skeleton is not a function\";var t=skeleton(r);return t?JSON.stringify(t.release1)!==JSON.stringify(e.release1)?\"release1 should be \"+JSON.stringify(e.release1)+\", got \"+JSON.stringify(t.release1):JSON.stringify(t.gaps)!==JSON.stringify(e.gaps)?\"gaps should be \"+JSON.stringify(e.gaps)+\", got \"+JSON.stringify(t.gaps):\"OK\":\"return { release1, gaps }\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "one story per step, in backbone order",
+              "vi": "mỗi bước một story, theo thứ tự xương sống"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var s={backbone:[\"B\",\"A\"],stories:[{id:\"a1\",step:\"A\",priority:\"Must\"},{id:\"b1\",step:\"B\",priority:\"Could\"},{id:\"b2\",step:\"B\",priority:\"Could\"}]},r={release1:[\"b1\",\"a1\"],gaps:[]};if(typeof skeleton!=\"function\")return\"skeleton is not a function\";var e=skeleton(s);return e?JSON.stringify(e.release1)!==JSON.stringify(r.release1)?\"release1 should be \"+JSON.stringify(r.release1)+\", got \"+JSON.stringify(e.release1):JSON.stringify(e.gaps)!==JSON.stringify(r.gaps)?\"gaps should be \"+JSON.stringify(r.gaps)+\", got \"+JSON.stringify(e.gaps):\"OK\":\"return { release1, gaps }\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "hidden: ties, Won’t, unknown steps, gaps",
+              "vi": "ẩn: hoà ưu tiên, Won’t, bước lạ, khoảng trống"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var e={backbone:[\"Register\",\"Book\",\"Remind\",\"Pay\"],stories:[{id:\"P9\",step:\"Pay\",title:\"Cash at desk\",priority:\"Could\"},{id:\"P1\",step:\"Book\",title:\"Pick slot\",priority:\"Should\"},{id:\"P2\",step:\"Book\",title:\"Pick doctor\",priority:\"Must\"},{id:\"P3\",step:\"Book\",title:\"Pick room\",priority:\"Must\"},{id:\"P4\",step:\"Remind\",title:\"Push\",priority:\"Won't\"},{id:\"P5\",step:\"Admin\",title:\"Reports\",priority:\"Must\"},{id:\"P6\",step:\"Pay\",title:\"Card\",priority:\"Should\"}]},i={release1:[\"P2\",\"P6\"],gaps:[\"Register\",\"Remind\"]};if(typeof skeleton!=\"function\")return\"skeleton is not a function\";var t=skeleton(e);return t?JSON.stringify(t.release1)!==JSON.stringify(i.release1)?\"release1 should be \"+JSON.stringify(i.release1)+\", got \"+JSON.stringify(t.release1):JSON.stringify(t.gaps)!==JSON.stringify(i.gaps)?\"gaps should be \"+JSON.stringify(i.gaps)+\", got \"+JSON.stringify(t.gaps):\"OK\":\"return { release1, gaps }\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "hidden: empty story list",
+              "vi": "ẩn: không có story nào"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var s={backbone:[\"X\",\"Y\"],stories:[]},r={release1:[],gaps:[\"X\",\"Y\"]};if(typeof skeleton!=\"function\")return\"skeleton is not a function\";var e=skeleton(s);return e?JSON.stringify(e.release1)!==JSON.stringify(r.release1)?\"release1 should be \"+JSON.stringify(r.release1)+\", got \"+JSON.stringify(e.release1):JSON.stringify(e.gaps)!==JSON.stringify(r.gaps)?\"gaps should be \"+JSON.stringify(r.gaps)+\", got \"+JSON.stringify(e.gaps):\"OK\":\"return { release1, gaps }\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Sắp tất cả story theo ưu tiên rồi lấy đầu — mất thứ tự xương sống."
+        },
+        {
+          "loi": "Đưa story \"Won’t\" vào bản 1."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "walking skeleton",
+          "vi": "bộ xương biết đi — lát mỏng chạy trọn hành trình"
+        },
+        {
+          "en": "MoSCoW",
+          "vi": "Must / Should / Could / Won’t (this time) — thang ưu tiên"
+        }
+      ]
+    }
+  ]
+}

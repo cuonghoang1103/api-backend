@@ -1,0 +1,415 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-9-2-ch20-waterfall-agile",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-9-2-ch20-waterfall-agile"
+  },
+  "exercises": [
+    {
+      "title": "Waterfall vs agile 1 — which approach?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "waterfall vs agile"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Waterfall: a linear sequence — fully specify requirements, then design, code and test. Agile: iterative and incremental development in short iterations (sprints of one week to a month), each adding a small set of functionality, tested and validated against acceptance criteria, with ongoing customer participation. Which approach does each statement describe?</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Waterfall: tuần tự — đặc tả đủ yêu cầu rồi thiết kế, code, test. Agile: lặp và tăng dần theo vòng ngắn, mỗi vòng thêm một ít chức năng, có khách tham gia liên tục.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ký duyệt toàn bộ trước ⇒ waterfall.",
+        "Demo định kỳ, làm rõ trong vòng ⇒ agile."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Waterfall vs agile 1 — which approach?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Waterfall vs agile 1 — which approach? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Waterfall\n   - r1.k: Agile\n   - r2.k: Waterfall\n   - r3.k: Agile\n   - r4.k: Waterfall\n   - r5.k: Agile\n   The key differentiator is the time between creating a requirement and delivering software based on it: long for waterfall, short for agile.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The key differentiator is the time between creating a requirement and delivering software based on it: long for waterfall, short for agile.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Approach",
+                "luaChon": [
+                  "Waterfall",
+                  "Agile"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "The full requirements set is signed off before design begins."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Every two weeks the team demonstrates working features to the product owner."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Customers are heavily involved at the start and again at user acceptance testing."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Requirement details are clarified during the iteration that implements them."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "A long time passes between writing a requirement and customers seeing software built from it."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Priorities are revisited before every iteration."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Waterfall",
+              "r1.k": "Agile",
+              "r2.k": "Waterfall",
+              "r3.k": "Agile",
+              "r4.k": "Waterfall",
+              "r5.k": "Agile"
+            },
+            "giaiThich": "<p><p>The key differentiator is the time between creating a requirement and delivering software based on it: long for waterfall, short for agile.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng agile không có tiêu chí chấp nhận."
+        },
+        {
+          "loi": "Nghĩ waterfall không có khách hàng tham gia."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "user story",
+          "vi": "câu chuyện người dùng — \"As a <role>, I want <goal> so that <benefit>\""
+        },
+        {
+          "en": "product backlog",
+          "vi": "danh sách việc của sản phẩm, xếp theo ưu tiên"
+        }
+      ]
+    },
+    {
+      "title": "Waterfall vs agile 2 — why the waterfall struggles",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "limitations of the waterfall"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers: large waterfall projects are often delivered late, lack needed features and miss expectations, because of the layers of dependency built on the requirements, and because stakeholders <b>will</b> change requirements — they do not know precisely what they want at the start.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Wiegers: dự án waterfall lớn thường trễ, thiếu tính năng, không đạt kỳ vọng vì nhiều lớp phụ thuộc xây trên yêu cầu, và vì khách <b>sẽ</b> đổi yêu cầu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Phản hồi muộn ⇒ lỗi yêu cầu đắt.",
+        "Agile cần khách tham gia liên tục."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Waterfall vs agile 2 — why the waterfall struggles\n\nAnswer in the answer panel (no code needed).\n\n1. The main advantage claimed for the waterfall is…Ưu điểm chính được nêu của waterfall là…\n2. Why does feedback come late in a waterfall project?Vì sao phản hồi đến muộn trong waterfall?\n3. Agile fits best when…Agile hợp nhất khi…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Waterfall vs agile 2 — why the waterfall struggles — answer key\n\n1. The main advantage claimed for the waterfall is…Ưu điểm chính được nêu của waterfall là…\n   Answer: a) catching flaws early, when fixing is cheaper\n   Early, complete requirements in theory reduce later rework.VI: Về lý thuyết, yêu cầu đầy đủ sớm giảm làm lại.\n\n2. Why does feedback come late in a waterfall project?Vì sao phản hồi đến muộn trong waterfall?\n   Answer: a) Customers see working software only near the end\n   So requirement errors surface at their most expensive.VI: Nên lỗi yêu cầu lộ ra lúc đắt nhất.\n\n3. Agile fits best when…Agile hợp nhất khi…\n   Answer: a) requirements are uncertain or expected to evolve and customers can be continuously available\n   Uncertainty + available customers + value from early delivery.VI: Bất định + khách luôn sẵn + giá trị từ giao sớm.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · a · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>The main advantage claimed for the waterfall is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Ưu điểm chính được nêu của waterfall là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "catching flaws early, when fixing is cheaper"
+              },
+              {
+                "ma": "b",
+                "noiDung": "no documentation"
+              },
+              {
+                "ma": "c",
+                "noiDung": "no planning"
+              },
+              {
+                "ma": "d",
+                "noiDung": "customers never change their minds"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Early, complete requirements in theory reduce later rework.</p><p><i>VI: Về lý thuyết, yêu cầu đầy đủ sớm giảm làm lại.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Why does feedback come late in a waterfall project?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao phản hồi đến muộn trong waterfall?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Customers see working software only near the end"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Testers are lazy"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The SRS is too short"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Feedback is forbidden"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>So requirement errors surface at their most expensive.</p><p><i>VI: Nên lỗi yêu cầu lộ ra lúc đắt nhất.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Agile fits best when…</p><p style=\"opacity:.75;font-size:.92em\"><i>Agile hợp nhất khi…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "requirements are uncertain or expected to evolve and customers can be continuously available"
+              },
+              {
+                "ma": "b",
+                "noiDung": "requirements are fixed by contract and the customer is unavailable"
+              },
+              {
+                "ma": "c",
+                "noiDung": "there is no customer"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the team never meets"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Uncertainty + available customers + value from early delivery.</p><p><i>VI: Bất định + khách luôn sẵn + giá trị từ giao sớm.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng agile = không kế hoạch."
+        },
+        {
+          "loi": "Nghĩ waterfall không có ưu điểm nào."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "product backlog",
+          "vi": "danh sách việc của sản phẩm, xếp theo ưu tiên"
+        }
+      ]
+    },
+    {
+      "title": "Waterfall vs agile 3 — choose an approach for the project",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "choosing an approach"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Choose the more suitable approach for each project: <b>more predictive (waterfall-like)</b>, or <b>adaptive (agile)</b>. Think about how stable the requirements are, how available the customer is, and the value of early delivery.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chọn cách tiếp cận phù hợp hơn: <b>dự đoán (kiểu waterfall)</b> hay <b>thích ứng (agile)</b>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Yêu cầu ổn định + khách ít gặp ⇒ dự đoán.",
+        "Yêu cầu thay đổi + PO luôn có mặt ⇒ agile."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Waterfall vs agile 3 — choose an approach for the project\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Waterfall vs agile 3 — choose an approach for the project — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Adaptive (agile)\n   - r1.k: More predictive (waterfall-like)\n   - r2.k: Adaptive (agile)\n   - r3.k: More predictive (waterfall-like)\n   Stable, regulated, contract-fixed requirements with little customer availability favour a predictive approach; evolving needs with an engaged product owner favour agile. Many real projects are hybrids.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Stable, regulated, contract-fixed requirements with little customer availability favour a predictive approach; evolving needs with an engaged product owner favour agile. Many real projects are hybrids.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Approach",
+                "luaChon": [
+                  "More predictive (waterfall-like)",
+                  "Adaptive (agile)"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "A start-up app; the founders keep learning what users want from weekly feedback."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Replacing a payroll module whose rules are fixed by law, with a fixed-price contract and a customer available only at milestones."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "A new student portal; the product owner sits with the team every day and wants features released early."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Firmware for a certified medical pump with strict, stable regulatory requirements."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Adaptive (agile)",
+              "r1.k": "More predictive (waterfall-like)",
+              "r2.k": "Adaptive (agile)",
+              "r3.k": "More predictive (waterfall-like)"
+            },
+            "giaiThich": "<p><p>Stable, regulated, contract-fixed requirements with little customer availability favour a predictive approach; evolving needs with an engaged product owner favour agile. Many real projects are hybrids.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chọn agile cho mọi dự án."
+        },
+        {
+          "loi": "Bỏ qua mức sẵn sàng của khách hàng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "product backlog",
+          "vi": "danh sách việc của sản phẩm, xếp theo ưu tiên"
+        }
+      ]
+    }
+  ]
+}

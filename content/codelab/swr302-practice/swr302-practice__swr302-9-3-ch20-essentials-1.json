@@ -1,0 +1,414 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-9-3-ch20-essentials-1",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-9-3-ch20-essentials-1"
+  },
+  "exercises": [
+    {
+      "title": "Agile essentials 1 — customer involvement",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "customer involvement"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers: on waterfall projects customers invest heavily up front and again at acceptance testing, but little during construction. On agile projects customers — or a <b>product owner</b> representing them — are engaged continuously: they help identify and prioritise stories, clarify details during iterations, and test and give feedback on new features.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Waterfall: khách đầu tư nhiều lúc đầu và lúc nghiệm thu. Agile: khách hoặc <b>product owner</b> tham gia liên tục.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Story ít chi tiết ⇒ cần trao đổi.",
+        "PO đại diện khách hàng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agile essentials 1 — customer involvement\n\nAnswer in the answer panel (no code needed).\n\n1. During an iteration a developer has a question about a story. Who answers?Trong vòng, dev có câu hỏi về một story. Ai trả lời?\n2. Why must customers stay available on agile projects?Vì sao khách phải luôn sẵn sàng trong agile?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agile essentials 1 — customer involvement — answer key\n\n1. During an iteration a developer has a question about a story. Who answers?Trong vòng, dev có câu hỏi về một story. Ai trả lời?\n   Answer: a) The product owner / customer representative, right away\n   Stories are less detailed, so the PO must be available.VI: Story ít chi tiết nên PO phải sẵn sàng.\n\n2. Why must customers stay available on agile projects?Vì sao khách phải luôn sẵn sàng trong agile?\n   Answer: a) Stories are less detailed than traditional requirements; details come from conversations\n   Conversation replaces part of the written detail.VI: Trao đổi thay một phần chi tiết viết.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>During an iteration a developer has a question about a story. Who answers?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong vòng, dev có câu hỏi về một story. Ai trả lời?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The product owner / customer representative, right away"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Nobody until the next release"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The developer guesses"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The SRS only"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Stories are less detailed, so the PO must be available.</p><p><i>VI: Story ít chi tiết nên PO phải sẵn sàng.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Why must customers stay available on agile projects?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao khách phải luôn sẵn sàng trong agile?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Stories are less detailed than traditional requirements; details come from conversations"
+              },
+              {
+                "ma": "b",
+                "noiDung": "To write code"
+              },
+              {
+                "ma": "c",
+                "noiDung": "To approve every commit"
+              },
+              {
+                "ma": "d",
+                "noiDung": "They need not"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Conversation replaces part of the written detail.</p><p><i>VI: Trao đổi thay một phần chi tiết viết.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đợi tới bản phát hành mới hỏi khách."
+        },
+        {
+          "loi": "Để dev tự đoán."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "user story",
+          "vi": "câu chuyện người dùng — \"As a <role>, I want <goal> so that <benefit>\""
+        },
+        {
+          "en": "product backlog",
+          "vi": "danh sách việc của sản phẩm, xếp theo ưu tiên"
+        }
+      ]
+    },
+    {
+      "title": "Agile essentials 2 — needed documentation or waste?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "documentation detail"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Agile encourages the <b>minimum documentation needed to accurately guide developers and testers</b>, plus whatever regulations or standards require. Anything beyond that is wasted effort. Decide for a hospital scheduling product built with Scrum.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Agile khuyến khích <b>tài liệu tối thiểu đủ để dẫn dắt dev và tester</b>, cộng với những gì luật/chuẩn yêu cầu. Thêm nữa là lãng phí.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Có người dùng ngay (dev/tester) hoặc luật bắt ⇒ cần.",
+        "Chi tiết hoá việc xa chưa ưu tiên ⇒ lãng phí."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agile essentials 2 — needed documentation or waste?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agile essentials 2 — needed documentation or waste? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Needed\n   - r1.k: Waste\n   - r2.k: Needed\n   - r3.k: Needed\n   - r4.k: Waste\n   - r5.k: Waste\n   Write what guides the current work and what regulation demands; detailing far-future work that may change is waste.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Write what guides the current work and what regulation demands; detailing far-future work that may change is waste.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Decision",
+                "luaChon": [
+                  "Needed",
+                  "Waste"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Acceptance criteria for each story in the next sprint."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "A 40-page detailed specification of features planned for next year."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The data-retention rules required by the health ministry."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Business rules for the cancellation fee, which developers and testers both use."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Copying every chat message into a Word document \"for the record\"."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Pixel-perfect mock-ups for all screens of epics nobody has prioritised."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Needed",
+              "r1.k": "Waste",
+              "r2.k": "Needed",
+              "r3.k": "Needed",
+              "r4.k": "Waste",
+              "r5.k": "Waste"
+            },
+            "giaiThich": "<p><p>Write what guides the current work and what regulation demands; detailing far-future work that may change is waste.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng agile không viết gì."
+        },
+        {
+          "loi": "Viết đặc tả chi tiết cho cả năm sau."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "acceptance criteria",
+          "vi": "tiêu chí chấp nhận — điều kiện để khách nhận một yêu cầu/story (Given/When/Then)"
+        },
+        {
+          "en": "business rule",
+          "vi": "quy tắc nghiệp vụ — chính sách, luật, chuẩn, công thức tồn tại NGOÀI phần mềm"
+        }
+      ]
+    },
+    {
+      "title": "Agile essentials 3 — plan the next iteration from the backlog",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "backlog and prioritization"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>The backlog is a single ordered list (stories and defects together). Write <code>function plan(backlog, capacity, done)</code> that selects items for the next iteration:</p><ul><li>Go through items in order of <code>rank</code> (1 = highest).</li><li>Skip an item if any id in its <code>after</code> list is neither already <code>done</code> (array of ids) nor selected earlier in this plan.</li><li>Skip an item that does not fit in the remaining capacity, but keep going — a smaller lower-ranked item may still fit.</li><li>Skip items whose id is already in <code>done</code>.</li><li>Return the selected ids in the order they were selected.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>plan(BACKLOG, 13, []) on the sample ⇒ [\"B1\",\"B2\",\"B3\",\"B6\"].</li>\n</ul>",
+      "problemHtmlVi": "<p>Backlog là một danh sách duy nhất (story và lỗi chung). Viết <code>plan(backlog, capacity, done)</code>: đi theo <code>rank</code>; bỏ mục có phụ thuộc chưa xong và chưa được chọn trước; bỏ mục không vừa sức chứa còn lại nhưng vẫn xét tiếp; bỏ mục đã có trong <code>done</code>; trả id theo thứ tự chọn.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Với dữ liệu mẫu, plan(BACKLOG, 13, []) ⇒ [\"B1\",\"B2\",\"B3\",\"B6\"].</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "plan(BACKLOG, 13, [])",
+          "output": "[\"B1\",\"B2\",\"B3\",\"B6\"]",
+          "explanation": "B4 (8) and B5 (5) do not fit after 11 points; B6 (1) does.|||Sau 11 điểm, B4 (8) và B5 (5) không vừa; B6 (1) vừa."
+        }
+      ],
+      "hintsJson": [
+        "Sắp theo rank trước; giữ một tập \"đã xong hoặc đã chọn\".",
+        "Mục không vừa thì bỏ qua và xét tiếp (không dừng)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "backlog.js",
+          "language": "javascript",
+          "code": "const BACKLOG = [\n {\n  \"id\": \"B1\",\n  \"title\": \"Book appointment\",\n  \"points\": 5,\n  \"rank\": 1,\n  \"after\": []\n },\n {\n  \"id\": \"B2\",\n  \"title\": \"Cancel appointment\",\n  \"points\": 3,\n  \"rank\": 2,\n  \"after\": [\n   \"B1\"\n  ]\n },\n {\n  \"id\": \"B3\",\n  \"title\": \"SMS reminder\",\n  \"points\": 3,\n  \"rank\": 3,\n  \"after\": [\n   \"B1\"\n  ]\n },\n {\n  \"id\": \"B4\",\n  \"title\": \"Doctor schedule view\",\n  \"points\": 8,\n  \"rank\": 4,\n  \"after\": []\n },\n {\n  \"id\": \"B5\",\n  \"title\": \"Online payment\",\n  \"points\": 5,\n  \"rank\": 5,\n  \"after\": [\n   \"B1\"\n  ]\n },\n {\n  \"id\": \"B6\",\n  \"title\": \"Fix: wrong time zone\",\n  \"points\": 1,\n  \"rank\": 6,\n  \"after\": []\n }\n];\n"
+        },
+        {
+          "name": "plan.js",
+          "language": "javascript",
+          "code": "function plan(backlog, capacity, done) {\n  // TODO\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "backlog.js",
+          "language": "javascript",
+          "code": "const BACKLOG = [\n {\n  \"id\": \"B1\",\n  \"title\": \"Book appointment\",\n  \"points\": 5,\n  \"rank\": 1,\n  \"after\": []\n },\n {\n  \"id\": \"B2\",\n  \"title\": \"Cancel appointment\",\n  \"points\": 3,\n  \"rank\": 2,\n  \"after\": [\n   \"B1\"\n  ]\n },\n {\n  \"id\": \"B3\",\n  \"title\": \"SMS reminder\",\n  \"points\": 3,\n  \"rank\": 3,\n  \"after\": [\n   \"B1\"\n  ]\n },\n {\n  \"id\": \"B4\",\n  \"title\": \"Doctor schedule view\",\n  \"points\": 8,\n  \"rank\": 4,\n  \"after\": []\n },\n {\n  \"id\": \"B5\",\n  \"title\": \"Online payment\",\n  \"points\": 5,\n  \"rank\": 5,\n  \"after\": [\n   \"B1\"\n  ]\n },\n {\n  \"id\": \"B6\",\n  \"title\": \"Fix: wrong time zone\",\n  \"points\": 1,\n  \"rank\": 6,\n  \"after\": []\n }\n];\n"
+        },
+        {
+          "name": "plan.js",
+          "language": "javascript",
+          "code": "function plan(backlog, capacity, done) {\n  var items = backlog.slice().sort(function (a, b) { return a.rank - b.rank; });\n  var ok = {};\n  (done || []).forEach(function (id) { ok[id] = true; });\n  var left = capacity, out = [];\n  items.forEach(function (it) {\n    var ready = (it.after || []).every(function (d) { return ok[d] === true; });\n    if (ok[it.id] === true || !ready || it.points > left) return;\n    out.push(it.id); ok[it.id] = true; left -= it.points;\n  });\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>One ordered backlog, dependencies respected, capacity filled greedily: a simple model of how the PO and team pick the next iteration. Priorities only need to hold for the next iteration — they are revisited every time.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "backlog.js",
+          "plan.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "sample backlog, capacity 13",
+              "vi": "backlog mẫu, sức chứa 13"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var t=[[{id:\"B1\",title:\"Book appointment\",points:5,rank:1,after:[]},{id:\"B2\",title:\"Cancel appointment\",points:3,rank:2,after:[\"B1\"]},{id:\"B3\",title:\"SMS reminder\",points:3,rank:3,after:[\"B1\"]},{id:\"B4\",title:\"Doctor schedule view\",points:8,rank:4,after:[]},{id:\"B5\",title:\"Online payment\",points:5,rank:5,after:[\"B1\"]},{id:\"B6\",title:\"Fix: wrong time zone\",points:1,rank:6,after:[]}],13,[]],n=[\"B1\",\"B2\",\"B3\",\"B6\"];if(typeof plan!=\"function\")return\"plan is not a function\";var i=plan(t[0],t[1],t[2]);return JSON.stringify(i)===JSON.stringify(n)?\"OK\":\"expected \"+JSON.stringify(n)+\", got \"+JSON.stringify(i)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "dependencies already done",
+              "vi": "phụ thuộc đã xong từ trước"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var t=[[{id:\"B1\",title:\"Book appointment\",points:5,rank:1,after:[]},{id:\"B2\",title:\"Cancel appointment\",points:3,rank:2,after:[\"B1\"]},{id:\"B3\",title:\"SMS reminder\",points:3,rank:3,after:[\"B1\"]},{id:\"B4\",title:\"Doctor schedule view\",points:8,rank:4,after:[]},{id:\"B5\",title:\"Online payment\",points:5,rank:5,after:[\"B1\"]},{id:\"B6\",title:\"Fix: wrong time zone\",points:1,rank:6,after:[]}],10,[\"B1\"]],n=[\"B2\",\"B3\",\"B6\"];if(typeof plan!=\"function\")return\"plan is not a function\";var i=plan(t[0],t[1],t[2]);return JSON.stringify(i)===JSON.stringify(n)?\"OK\":\"expected \"+JSON.stringify(n)+\", got \"+JSON.stringify(i)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "items are taken by rank, not by array order",
+              "vi": "chọn theo rank, không theo thứ tự mảng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var t=[[{id:\"X3\",title:\"c\",points:2,rank:3,after:[\"X9\"]},{id:\"X1\",title:\"a\",points:4,rank:1,after:[\"X2\"]},{id:\"X2\",title:\"b\",points:3,rank:2,after:[]},{id:\"X4\",title:\"d\",points:2,rank:4,after:[\"X2\"]},{id:\"X5\",title:\"e\",points:6,rank:5,after:[]},{id:\"X6\",title:\"f\",points:1,rank:6,after:[\"X1\"]}],20,[\"X9\"]],i=[\"X2\",\"X3\",\"X4\",\"X5\"];if(typeof plan!=\"function\")return\"plan is not a function\";var n=plan(t[0],t[1],t[2]);return JSON.stringify(n)===JSON.stringify(i)?\"OK\":\"expected \"+JSON.stringify(i)+\", got \"+JSON.stringify(n)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "hidden: a dependency selected later does not count",
+              "vi": "ẩn: phụ thuộc được chọn SAU không tính"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var t=[[{id:\"X3\",title:\"c\",points:2,rank:3,after:[\"X9\"]},{id:\"X1\",title:\"a\",points:4,rank:1,after:[\"X2\"]},{id:\"X2\",title:\"b\",points:3,rank:2,after:[]},{id:\"X4\",title:\"d\",points:2,rank:4,after:[\"X2\"]},{id:\"X5\",title:\"e\",points:6,rank:5,after:[]},{id:\"X6\",title:\"f\",points:1,rank:6,after:[\"X1\"]}],9,[]],i=[\"X2\",\"X4\"];if(typeof plan!=\"function\")return\"plan is not a function\";var n=plan(t[0],t[1],t[2]);return JSON.stringify(n)===JSON.stringify(i)?\"OK\":\"expected \"+JSON.stringify(i)+\", got \"+JSON.stringify(n)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "hidden: zero capacity, missing \"done\"",
+              "vi": "ẩn: sức chứa 0, thiếu \"done\""
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var t=[[{id:\"B1\",title:\"Book appointment\",points:5,rank:1,after:[]},{id:\"B2\",title:\"Cancel appointment\",points:3,rank:2,after:[\"B1\"]},{id:\"B3\",title:\"SMS reminder\",points:3,rank:3,after:[\"B1\"]},{id:\"B4\",title:\"Doctor schedule view\",points:8,rank:4,after:[]},{id:\"B5\",title:\"Online payment\",points:5,rank:5,after:[\"B1\"]},{id:\"B6\",title:\"Fix: wrong time zone\",points:1,rank:6,after:[]}],0],n=[];if(typeof plan!=\"function\")return\"plan is not a function\";var i=plan(t[0],t[1],t[2]);return JSON.stringify(i)===JSON.stringify(n)?\"OK\":\"expected \"+JSON.stringify(n)+\", got \"+JSON.stringify(i)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "hidden: unknown dependency blocks the item",
+              "vi": "ẩn: phụ thuộc không tồn tại chặn mục"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var n=[[{id:\"Q1\",points:1,rank:1,after:[\"toString\"]},{id:\"Q2\",points:1,rank:2}],5,[]],i=[\"Q2\"];if(typeof plan!=\"function\")return\"plan is not a function\";var t=plan(n[0],n[1],n[2]);return JSON.stringify(t)===JSON.stringify(i)?\"OK\":\"expected \"+JSON.stringify(i)+\", got \"+JSON.stringify(t)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dừng ngay khi gặp mục không vừa."
+        },
+        {
+          "loi": "Dùng obj[d] với d = \"toString\" ⇒ tưởng đã xong."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "product backlog",
+          "vi": "danh sách việc của sản phẩm, xếp theo ưu tiên"
+        }
+      ]
+    }
+  ]
+}

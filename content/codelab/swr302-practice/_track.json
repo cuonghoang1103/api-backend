@@ -352,6 +352,30 @@
       "description": "Lab chương 8: chọn loại prototype (mock-up/proof of concept, throwaway/evolutionary, giấy/điện tử), dialog map các màn hình thuê xe có guard và không ngõ cụt, review wireframe so với yêu cầu, rủi ro và yếu tố thành công của prototyping, phân tích danh từ/động từ thành lớp, thuộc tính, thao tác."
     },
     {
+      "slug": "swr302-9-1-agile-requirements",
+      "name": "9.1 Agile requirements: backlog, story mapping and DoD",
+      "level": "INTERMEDIATE",
+      "description": "Vị trí mục trong backlog (sẵn sàng / đang làm rõ / epic), xương sống story map, tự viết hàm cắt walking skeleton từ story map (ưu tiên MoSCoW, khoảng trống) chấm dữ liệu ẩn, refinement và DoD."
+    },
+    {
+      "slug": "swr302-9-2-ch20-waterfall-agile",
+      "name": "9.2 Waterfall limits and the agile approach",
+      "level": "BEGINNER",
+      "description": "Đặc điểm waterfall và agile, vì sao waterfall gặp khó (phản hồi muộn, yêu cầu thay đổi), khi nào agile phù hợp, chọn cách tiếp cận cho 4 dự án."
+    },
+    {
+      "slug": "swr302-9-3-ch20-essentials-1",
+      "name": "9.3 Agile essentials: customer, documentation and backlog",
+      "level": "INTERMEDIATE",
+      "description": "Khách hàng/PO tham gia liên tục, tài liệu tối thiểu đủ dùng vs lãng phí, tự viết hàm lập kế hoạch vòng lặp từ backlog (rank, phụ thuộc, sức chứa) chấm dữ liệu ẩn."
+    },
+    {
+      "slug": "swr302-9-4-ch20-essentials-2",
+      "name": "9.4 Agile essentials: timing, epics and change",
+      "level": "INTERMEDIATE",
+      "description": "Phân biệt epic / user story / feature, thời điểm làm rõ chi tiết và NFR sớm, đón nhận thay đổi, tự tách epic thanh toán trực tuyến thành story có điểm và tiêu chí chấp nhận, chuyển đổi sang agile."
+    },
+    {
       "slug": "swr302-9-lab-agile-backlog-clubhub",
       "name": "Lab 9 — Agile Requirements: the ClubHub Backlog",
       "level": "ADVANCED",

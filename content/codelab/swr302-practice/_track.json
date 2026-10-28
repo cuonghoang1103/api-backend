@@ -250,6 +250,12 @@
       "description": "Dự án ClinicCare, mốc 3 (chương 4): sơ đồ use case 8 actor / 17 use case với «extend» trả trước và «include» gửi đơn thuốc quốc gia, đặc tả đầy đủ use case \"Book Appointment\" theo template Wiegers — chấm bằng máy đọc PlantUML; kèm Góc phỏng vấn."
     },
     {
+      "slug": "swr302-4-project-cliniccare-m4-models",
+      "name": "ClinicCare project — Milestone 4: Data and behaviour models",
+      "level": "INTERMEDIATE",
+      "description": "Dự án ClinicCare, mốc 4 (chương 4): ERD khái niệm 9 thực thể (slot 1–1 lịch hẹn, dòng đơn thuốc mang liều dùng, không khoá ngoại) và sơ đồ chuyển trạng thái của lịch hẹn với guard từ BR-01/BR-02 và sự kiện thời gian — chấm bằng máy đọc Mermaid; kèm Góc phỏng vấn."
+    },
+    {
       "slug": "swr302-5-1-srs-ieee-830",
       "name": "5.1 The SRS: template, sections and audiences",
       "level": "BEGINNER",

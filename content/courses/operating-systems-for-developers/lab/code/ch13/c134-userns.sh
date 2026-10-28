@@ -1,0 +1,5 @@
+# @ Chương 13 · bài 13.4 — user namespace (rootless). Chạy: docker run --rm --label oslab=1 --hostname oslab --security-opt seccomp=unconfined -v "$PWD/ch13":/lab/ch13 -w /lab/ch13 os-lab bash -c "phien c134-userns.sh 2>&1"
+# @ EN: The unprivileged user "dev" creates a new user namespace and becomes root INSIDE it. ||| VI: Người dùng không đặc quyền "dev" tạo một user namespace mới và thành root BÊN TRONG nó.
+runuser -u dev -- unshare -Ur sh -c 'echo "inside: id -u = $(id -u) (root)"; echo "uid_map (inside outside count):"; cat /proc/self/uid_map'
+# @ EN: uid_map "0 1001 1" means: root inside = the unprivileged dev (1001) outside. Its power stops at the namespace edge. ||| VI: uid_map "0 1001 1" nghĩa là: root bên trong = chính dev (1001) không đặc quyền bên ngoài. Quyền của nó dừng ở biên namespace.
+# @ EN: This is how rootless Docker/Podman run: "root" in the container is a normal user on the host. ||| VI: Đây là cách Docker/Podman rootless chạy: "root" trong container là một người dùng thường trên máy chủ.

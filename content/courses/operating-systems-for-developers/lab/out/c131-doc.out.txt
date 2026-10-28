@@ -1,0 +1,112 @@
+$ uname -m
+aarch64
+$ gcc -O0 -g add.c -o add
+$ ./add 100 3
+total(100, 3) = 283
+$ file add
+add: ELF 64-bit LSB pie executable, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, BuildID[sha1]=12d012f2162610528d69425013fcf4ca8fbbfd28, for GNU/Linux 3.7.0, with debug_info, not stripped
+$ readelf -h add | head -n 14
+ELF Header:
+  Magic:   7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00 
+  Class:                             ELF64
+  Data:                              2's complement, little endian
+  Version:                           1 (current)
+  OS/ABI:                            UNIX - System V
+  ABI Version:                       0
+  Type:                              DYN (Position-Independent Executable file)
+  Machine:                           AArch64
+  Version:                           0x1
+  Entry point address:               0x6c0
+  Start of program headers:          64 (bytes into file)
+  Start of section headers:          70064 (bytes into file)
+  Flags:                             0x0
+$ readelf -S add | grep -E 'Nr|\.text|\.rodata|\.data|\.bss|\.plt|\.got' | head
+  [Nr] Name              Type             Address           Offset
+  [ 9] .rela.plt         RELA             0000000000000578  00000578
+  [11] .plt              PROGBITS         0000000000000630  00000630
+  [12] .text             PROGBITS         00000000000006c0  000006c0
+  [14] .rodata           PROGBITS         0000000000000920  00000920
+  [21] .got              PROGBITS         000000000001ff88  0000ff88
+  [22] .data             PROGBITS         0000000000020000  00010000
+  [23] .bss              NOBITS           0000000000020010  00010010
+$ nm add | grep -E ' T | t ' | grep -iE 'total|main'
+0000000000000868 T main
+00000000000007e8 T total
+$ objdump -d --no-show-raw-insn add | sed -n '/<total>:/,/^$/p'
+00000000000007e8 <total>:
+ 7e8:	sub	sp, sp, #0x20
+ 7ec:	str	w0, [sp, #12]
+ 7f0:	str	w1, [sp, #8]
+ 7f4:	ldr	w1, [sp, #12]
+ 7f8:	ldr	w0, [sp, #8]
+ 7fc:	mul	w0, w1, w0
+ 800:	str	w0, [sp, #24]
+ 804:	ldr	w0, [sp, #24]
+ 808:	mov	w1, #0x6667                	// #26215
+ 80c:	movk	w1, #0x6666, lsl #16
+ 810:	smull	x1, w0, w1
+ 814:	lsr	x1, x1, #32
+ 818:	asr	w1, w1, #2
+ 81c:	asr	w0, w0, #31
+ 820:	sub	w0, w1, w0
+ 824:	str	w0, [sp, #28]
+ 828:	ldr	w1, [sp, #24]
+ 82c:	ldr	w0, [sp, #28]
+ 830:	sub	w1, w1, w0
+ 834:	ldr	w2, [sp, #24]
+ 838:	ldr	w0, [sp, #28]
+ 83c:	sub	w0, w2, w0
+ 840:	mov	w2, #0x6667                	// #26215
+ 844:	movk	w2, #0x6666, lsl #16
+ 848:	smull	x2, w0, w2
+ 84c:	lsr	x2, x2, #32
+ 850:	asr	w2, w2, #3
+ 854:	asr	w0, w0, #31
+ 858:	sub	w0, w2, w0
+ 85c:	add	w0, w1, w0
+ 860:	add	sp, sp, #0x20
+ 864:	ret
+
+$ gdb -q -batch -ex 'break total' -ex 'run 100 3' -ex 'info args' -ex 'bt' -ex 'info frame' -ex 'x/4i $pc' -ex 'stepi 6' -ex 'info registers x0 x1 sp' ./add
+Breakpoint 1 at 0x7f4: file add.c, line 8.
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/usr/lib/aarch64-linux-gnu/libthread_db.so.1".
+
+Breakpoint 1, total (price=100, qty=3) at add.c:8
+8	    int sub = price * qty;      // subtotal
+price = 100
+qty = 3
+#0  total (price=100, qty=3) at add.c:8
+#1  0x0000aaaaaaaa08dc in main (argc=3, argv=0xfffffffffc38) at add.c:16
+Stack level 0, frame at 0xfffffffffa80:
+ pc = 0xaaaaaaaa07f4 in total (add.c:8); saved pc = 0xaaaaaaaa08dc
+ called by frame at 0xfffffffffab0
+ source language c.
+ Arglist at 0xfffffffffa60, args: price=100, qty=3
+ Locals at 0xfffffffffa60, Previous frame's sp is 0xfffffffffa80
+=> 0xaaaaaaaa07f4 <total+12>:	ldr	w1, [sp, #12]
+   0xaaaaaaaa07f8 <total+16>:	ldr	w0, [sp, #8]
+   0xaaaaaaaa07fc <total+20>:	mul	w0, w1, w0
+   0xaaaaaaaa0800 <total+24>:	str	w0, [sp, #24]
+0x0000aaaaaaaa080c	9	    int disc = sub / 10;        // 10% off
+x0             0x12c               300
+x1             0x6667              26215
+sp             0xfffffffffa60      0xfffffffffa60
+$ gcc -O2 greet.c -o greet
+$ objdump -d --no-show-raw-insn greet | sed -n '/<main>:/,/^$/p' | head -n 16
+0000000000000780 <main>:
+ 780:	sub	sp, sp, #0x40
+ 784:	adrp	x2, 1f000 <__abi_tag+0x1e570>
+ 788:	ldr	x2, [x2, #4072]
+ 78c:	stp	x29, x30, [sp, #48]
+ 790:	add	x29, sp, #0x30
+ 794:	ldr	x3, [x2]
+ 798:	str	x3, [sp, #40]
+ 79c:	mov	x3, #0x0                   	// #0
+ 7a0:	cmp	w0, #0x1
+ 7a4:	b.le	800 <main+0x80>
+ 7a8:	ldr	x1, [x1, #8]
+ 7ac:	add	x0, sp, #0x8
+ 7b0:	mov	x2, #0x1f                  	// #31
+ 7b4:	bl	770 <strncpy@plt>
+ 7b8:	mov	x3, x0

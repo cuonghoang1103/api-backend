@@ -34,6 +34,7 @@ import s05 from './operating-systems-for-developers/s05-dong-bo.mjs';
 import s07 from './operating-systems-for-developers/s07-bo-nho-ao.mjs';
 import s06 from './operating-systems-for-developers/s06-deadlock.mjs';
 import s08 from './operating-systems-for-developers/s08-ap-luc-bo-nho.mjs';
+import s13 from './operating-systems-for-developers/s13-bao-mat.mjs';
 
 /*
  * Đề cương đầy đủ (redesigned 28/10/2026). Mục 0 và Chương 1 ở đây chỉ là KHUNG dự phòng — hai section THẬT (s00, s01)
@@ -165,6 +166,7 @@ sections[5] = s05;
 sections[7] = s07;
 sections[6] = s06;
 sections[8] = s08;
+sections[13] = s13;
 
 export default {
   category: { slug: 'cs-fundamentals', name: 'Nền tảng khoa học máy tính', icon: 'Cpu', sortOrder: 9 },

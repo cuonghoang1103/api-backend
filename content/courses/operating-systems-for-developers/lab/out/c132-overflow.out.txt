@@ -1,0 +1,65 @@
+$ gcc -O0 -fno-stack-protector vuln.c -o vuln
+$ ./vuln hello
+buf = "hello"  flag = 0
+$ ./vuln AAAAAAAAAAAAAAAAAAAA
+buf = "AAAAAAAAAAAAAAAAAAAA"  flag = 1094795585
+  -> the copy ran past buf[16] and changed flag
+$ gcc -O0 -fno-stack-protector retaddr.c -o retaddr
+$ ./retaddr AAAAAAAAAAAAAAAA; echo "exit $?"
+copied 16 bytes into buf[16]
+victim() returned normally
+exit 0
+$ ./retaddr $(python3 -c "print('A'*200)"); echo "exit $?"
+/usr/local/bin/phien: line 24:    33 Bus error                  ./retaddr $(python3 -c "print('A'*200)")
+exit 135
+$ gcc -O2 vuln.c -o vuln-hardened
+$ readelf -s vuln-hardened | grep -c __stack_chk_fail; readelf -s vuln | grep -c __stack_chk_fail
+1
+0
+$ readelf -l vuln-hardened | grep -A1 GNU_STACK
+  GNU_STACK      0x0000000000000000 0x0000000000000000 0x0000000000000000
+                 0x0000000000000000 0x0000000000000000  RW     0x10
+$ readelf -h vuln-hardened | grep Type
+  Type:                              DYN (Position-Independent Executable file)
+$ readelf -d vuln-hardened | grep -E 'BIND_NOW|FLAGS'; readelf -l vuln-hardened | grep -c GNU_RELRO
+ 0x000000000000001e (FLAGS)              BIND_NOW
+ 0x000000006ffffffb (FLAGS_1)            Flags: NOW PIE
+1
+$ gcc -O0 retaddr.c -o retaddr-canary
+$ ./retaddr-canary $(python3 -c "print('A'*200)") 2>&1; echo "exit $?"
+*** stack smashing detected ***: terminated
+/usr/local/bin/phien: line 24:    71 Aborted                    ./retaddr-canary $(python3 -c "print('A'*200)") 2>&1
+exit 134
+$ gcc -O2 -D_FORTIFY_SOURCE=3 retaddr.c -o retaddr-fortify
+$ ./retaddr-fortify $(python3 -c "print('A'*200)") 2>&1; echo "exit $?"
+*** buffer overflow detected ***: terminated
+/usr/local/bin/phien: line 24:    82 Aborted                    ./retaddr-fortify $(python3 -c "print('A'*200)") 2>&1
+exit 134
+$ gcc -O2 safe.c -o safe
+$ ./safe hello
+buf = "hello"
+$ ./safe $(python3 -c "print('A'*200)"); echo "exit $?"
+input too long (200), max 15
+exit 1
+$ gcc -O2 -Wno-format-security fmt.c -o fmt
+$ ./fmt good "%p.%p.%p"
+%p.%p.%p
+$ ./fmt bad "%p.%p.%p"
+0xffffdaa94e87.(nil).0x33f6170ea145550
+$ gcc -O0 -g -fsanitize=address uaf.c -o uaf
+$ ./uaf 2>&1 | grep -E 'ERROR|freed by|previously allocated|#0 |strlen|SUMMARY' | head -n 8; echo "exit ${PIPESTATUS[0]}"
+==119==ERROR: AddressSanitizer: heap-use-after-free on address 0xfc2fb29e0040 at pc 0xffffb398ea88 bp 0xfffff303bfc0 sp 0xfffff303b7a0
+    #0 0xffffb398ea84 in strlen ../../../../src/libsanitizer/sanitizer_common/sanitizer_common_interceptors.inc:425
+freed by thread T0 here:
+    #0 0xffffb3a06244 in free ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:51
+previously allocated by thread T0 here:
+    #0 0xffffb3a07354 in malloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:67
+SUMMARY: AddressSanitizer: heap-use-after-free /lab/ch13/uaf.c:10 in main
+exit 1
+$ gcc -O0 -g -fsanitize=address df.c -o df
+$ ./df 2>&1 | grep -E 'ERROR|double-free|#0 |SUMMARY' | head -n 5
+==131==ERROR: AddressSanitizer: attempting double-free on 0xfc1fb75e0010 in thread T0:
+    #0 0xffffb8676244 in free ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:51
+    #0 0xffffb8676244 in free ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:51
+    #0 0xffffb8677354 in malloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:67
+SUMMARY: AddressSanitizer: double-free /lab/ch13/df.c:6 in main

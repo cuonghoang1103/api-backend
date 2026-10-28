@@ -1,0 +1,4 @@
+$ runuser -u dev -- unshare -Ur sh -c 'echo "inside: id -u = $(id -u) (root)"; echo "uid_map (inside outside count):"; cat /proc/self/uid_map'
+inside: id -u = 0 (root)
+uid_map (inside outside count):
+         0       1001          1

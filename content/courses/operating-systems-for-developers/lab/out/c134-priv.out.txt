@@ -1,0 +1,13 @@
+$ grep -E '^(CapBnd|CapEff|Seccomp|NoNewPrivs):' /proc/self/status
+CapEff:	000001ffffffffff
+CapBnd:	000001ffffffffff
+NoNewPrivs:	0
+Seccomp:	0
+$ capsh --decode=$(grep CapBnd /proc/self/status | awk '{print $2}') | sed 's/^.*=//' | tr ',' '\n' | wc -l
+41
+$ ls /dev | wc -l
+169
+$ ls /dev | grep -E '^(vd|sd|nvme|mem|kmsg)' | tr '\n' ' '; echo
+kmsg mem vda vda1 vdb 
+$ echo "lesson: never run application workloads with --privileged"
+lesson: never run application workloads with --privileged

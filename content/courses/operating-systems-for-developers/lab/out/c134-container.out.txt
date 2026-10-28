@@ -1,0 +1,27 @@
+$ grep -E '^(CapBnd|CapEff|Seccomp|NoNewPrivs):' /proc/self/status
+CapEff:	00000000a80425fb
+CapBnd:	00000000a80425fb
+NoNewPrivs:	0
+Seccomp:	2
+$ capsh --decode=$(grep CapBnd /proc/self/status | awk '{print $2}') | sed 's/^.*=//' | tr ',' '\n' | wc -l
+14
+$ echo "dropped vs a full set: dangerous caps like CAP_SYS_ADMIN are absent"
+dropped vs a full set: dangerous caps like CAP_SYS_ADMIN are absent
+$ capsh --decode=0x000001ffffffffff | sed 's/^.*=//' | tr ',' '\n' | wc -l
+41
+$ ls /dev | wc -l; ls /dev | tr '\n' ' '; echo
+15
+core fd full mqueue null ptmx pts random shm stderr stdin stdout tty urandom zero 
+$ install -d -m 755 /srv/lab; cp greetsuid.c /srv/lab/; gcc -O2 /srv/lab/greetsuid.c -o /srv/lab/greetsuid 2>/dev/null
+$ chown root:root /srv/lab/greetsuid; chmod 4755 /srv/lab/greetsuid
+$ echo "== setuid works normally =="; runuser -u dev -- /srv/lab/greetsuid
+== setuid works normally ==
+uid=1001 euid=0 — running: hostname
+oslab
+$ echo "== same binary under no-new-privs (what Docker --security-opt no-new-privileges and systemd NoNewPrivileges= set) =="
+== same binary under no-new-privs (what Docker --security-opt no-new-privileges and systemd NoNewPrivileges= set) ==
+$ runuser -u dev -- setpriv --no-new-privs /srv/lab/greetsuid
+uid=1001 euid=1001 — running: hostname
+oslab
+$ ls -l /var/run/docker.sock 2>&1
+ls: cannot access '/var/run/docker.sock': No such file or directory

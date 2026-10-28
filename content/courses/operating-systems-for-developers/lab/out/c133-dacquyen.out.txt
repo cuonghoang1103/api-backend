@@ -1,0 +1,73 @@
+$ install -d -m 755 /srv/lab /srv/evil
+$ cp greetsuid.c greetexec.c greetfix.c bind80.c euidcmd.c /srv/lab/
+$ gcc -O2 /srv/lab/greetsuid.c -o /srv/lab/greetsuid 2>/dev/null
+$ gcc -O2 /srv/lab/greetexec.c -o /srv/lab/greetexec
+$ gcc -O2 /srv/lab/greetfix.c  -o /srv/lab/greetfix
+$ gcc -O2 /srv/lab/euidcmd.c   -o /srv/evil/hostname
+$ chown root:root /srv/lab/greet*; chmod 4755 /srv/lab/greet*
+$ ls -l /srv/lab/greetsuid
+-rwsr-xr-x 1 root root 70672 Oct 28 19:34 /srv/lab/greetsuid
+$ runuser -u dev -- /srv/lab/greetsuid
+uid=1001 euid=0 — running: hostname
+oslab
+$ runuser -u dev -- env PATH=/srv/evil /srv/lab/greetsuid
+uid=1001 euid=0 — running: hostname
+  >>> planted 'hostname' ran, effective uid = 1001  (0 = root)
+$ runuser -u dev -- env PATH=/srv/evil /srv/lab/greetexec
+uid=1001 euid=0 — running: execlp("hostname")
+  >>> planted 'hostname' ran, effective uid = 0  (0 = root)
+$ runuser -u dev -- env PATH=/srv/evil /srv/lab/greetfix
+uid=1001 euid=1001 — running: /bin/hostname
+oslab
+$ gcc -O2 /srv/lab/bind80.c -o /srv/lab/bind80
+$ runuser -u dev -- /srv/lab/bind80
+bind 127.0.0.1:80: Permission denied
+$ setcap cap_net_bind_service=+ep /srv/lab/bind80; getcap /srv/lab/bind80
+/srv/lab/bind80 cap_net_bind_service=ep
+$ runuser -u dev -- /srv/lab/bind80   # now with the capability
+bound 127.0.0.1:80 as uid=1001 euid=1001 — no root needed
+$ grep -E '^Cap(Prm|Eff):' /proc/self/status
+CapPrm:	00000000a80425fb
+CapEff:	00000000a80425fb
+$ capsh --decode=$(grep CapEff /proc/self/status | awk '{print $2}') | sed 's/^.*=//' | tr ',' '\n' | head -n 5
+cap_chown
+cap_dac_override
+cap_fowner
+cap_fsetid
+cap_kill
+$ install -d -m 755 /srv/app; echo 'DB_PASSWORD=prod-secret' > /srv/app/config.env
+$ chmod 666 /srv/app/config.env            # world-writable: anyone can rewrite your config
+$ ls -l /srv/app/config.env
+-rw-rw-rw- 1 root root 24 Oct 28 19:34 /srv/app/config.env
+$ find /srv/app -type f -perm -0002
+/srv/app/config.env
+$ find /usr/bin -perm -4000 -type f 2>/dev/null | head -n 6
+/usr/bin/umount
+/usr/bin/chfn
+/usr/bin/gpasswd
+/usr/bin/mount
+/usr/bin/su
+/usr/bin/chsh
+$ cd /lab/ch13; gcc -O2 toctou.c -o /tmp/toctou
+$ echo 'public quarterly report' > report.txt; echo 'TOP SECRET salaries' > secret.txt; ln -sf report.txt link
+$ /tmp/toctou vuln link
+vuln : opened link -> "public quarterly report"
+$ ln -sf secret.txt link; /tmp/toctou vuln link
+vuln : opened link -> "TOP SECRET salaries"
+$ /tmp/toctou fixed link; echo "exit $?"
+fixed: open O_NOFOLLOW: Too many levels of symbolic links
+exit 1
+$ gcc -O2 sleeper.c -o /tmp/api-server
+$ DB_PASSWORD=prod-db-s3cret sleep 30 & SP=$!
+$ sleep 0.4
+$ ls -l /proc/$SP/environ; tr '\0' '\n' < /proc/$SP/environ | grep DB_PASSWORD
+-r-------- 1 root root 0 Oct 28 19:34 /proc/145/environ
+DB_PASSWORD=prod-db-s3cret
+$ kill $SP 2>/dev/null
+$ /tmp/api-server --token=AKIA-leaky-prod-token & AP=$!
+$ sleep 0.4
+$ tr '\0' ' ' < /proc/$AP/cmdline; echo
+/tmp/api-server --token=AKIA-leaky-prod-token 
+$ runuser -u dev -- ps -eo pid,user,args | grep -- '--token' | grep -v grep
+    158 root     /tmp/api-server --token=AKIA-leaky-prod-token
+$ kill $AP 2>/dev/null

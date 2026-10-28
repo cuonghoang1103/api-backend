@@ -219,6 +219,7 @@ export default deThiPE({
   slug: 'swr302-11-pe-3-labequip-lending',
   ten: 'PE Practice 3 — LabEquip Equipment Lending (context · use case · ERD)',
   tieuDe: 'PE Practice 3 — LabEquip Lab Equipment Lending System',
+  moTaModule: 'PE luyện định dạng FA25/SU25: trang bìa SRS, context diagram, use case + hai bảng, ERD khái niệm với bẫy loại thiết bị ↔ từng chiếc (serial), thực thể kết hợp Loan × Unit mang tình trạng lúc trả, bảo trì theo từng chiếc.',
   maDe: 'SWR302_PE_Practice_3',
   duAn: DU_AN,
   phu: { en: 'FA25 / SU25 format · 90 minutes · 10 points · Q4 = conceptual ERD (type vs instance)', vi: 'Định dạng FA25 / SU25 · 90 phút · 10 điểm · Câu 4 = ERD khái niệm (loại vs từng chiếc)' },

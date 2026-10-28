@@ -10,6 +10,24 @@
   "description": "Bộ luyện môn SWR302 (Software Requirements) theo giáo trình Wiegers & Beatty và slide trường — đề tiếng Anh kèm bản Việt và bảng thuật ngữ; mỗi bài học một bộ đề từ dễ đến khó có máy chấm thật (phân loại yêu cầu, MoSCoW/Wiegers, RTM, RACI, CRUD, bảng quyết định; sơ đồ viết bằng Mermaid/PlantUML được chấm theo thuộc tính: context diagram, DFD, use case, ERD, state, swimlane; đặc tả use case theo template), mỗi chương một Lab + Deep Lab dạng bản in, PE luyện đúng định dạng SP26/SU26 và dự án xuyên suốt ClinicCare.",
   "modules": [
     {
+      "slug": "swr302-4-lab-behaviour-quickfix",
+      "name": "Lab 4C — Behaviour Models: QuickFix IT Helpdesk",
+      "level": "ADVANCED",
+      "description": "Lab chương 4C: sơ đồ chuyển trạng thái của Ticket (guard, luật thời gian, không trạng thái cụt), swimlane xử lý sự cố theo vai trò có nhánh không thuận, bảng quyết định độ ưu tiên đủ 2³ cột rồi rút gọn."
+    },
+    {
+      "slug": "swr302-4-lab-data-flow-swiftwash",
+      "name": "Lab 4B — Data & Flow Models: SwiftWash Campus Laundry",
+      "level": "ADVANCED",
+      "description": "Lab chương 4B: context diagram, DFD mức 0 cân bằng với context của chính bạn (không hố đen/phép màu, kho có ghi có đọc), data dictionary ký pháp Wiegers kiểm khép kín, phân tích ma trận CRUD tìm yêu cầu thiếu."
+    },
+    {
+      "slug": "swr302-4-lab-use-cases-gympass",
+      "name": "Lab 4A — Use Cases: GymPass Campus Fitness Centre",
+      "level": "ADVANCED",
+      "description": "Lab chương 4A: use case GymPass — sơ đồ, hai bảng, đặc tả Book a Class, business rule, FR."
+    },
+    {
       "slug": "swr302-11-pe-1-freshbox-meal-kit",
       "name": "PE Practice 1 — FreshBox Meal-Kit Subscription (context · use case · ERD)",
       "level": "ADVANCED",

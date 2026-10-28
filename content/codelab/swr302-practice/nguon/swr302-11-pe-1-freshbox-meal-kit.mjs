@@ -241,6 +241,7 @@ export default deThiPE({
   slug: 'swr302-11-pe-1-freshbox-meal-kit',
   ten: 'PE Practice 1 — FreshBox Meal-Kit Subscription (context · use case · ERD)',
   tieuDe: 'PE Practice 1 — FreshBox Meal-Kit Subscription Platform',
+  moTaModule: 'PE luyện định dạng SP26: trang bìa SRS, context diagram, use case diagram + bảng Actor/Use case, ERD khái niệm + bảng thực thể — chấm theo rubric 10 điểm, kiểm nhất quán giữa các câu, hướng include/extend, bản số và thực thể kết hợp.',
   maDe: 'SWR302_PE_Practice_1',
   duAn: DU_AN,
   phu: { en: 'SP26 format · 90 minutes · 10 points · Q4 = conceptual ERD', vi: 'Định dạng SP26 · 90 phút · 10 điểm · Câu 4 = ERD khái niệm' },

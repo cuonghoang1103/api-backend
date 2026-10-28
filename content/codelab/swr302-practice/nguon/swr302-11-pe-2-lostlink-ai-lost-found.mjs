@@ -188,6 +188,7 @@ export default deThiPE({
   slug: 'swr302-11-pe-2-lostlink-ai-lost-found',
   ten: 'PE Practice 2 — LostLink AI Lost & Found (context · use case · state machine)',
   tieuDe: 'PE Practice 2 — LostLink AI-Assisted Lost & Found Platform',
+  moTaModule: 'PE luyện định dạng SU26 mới nhất: trang bìa SRS, context diagram, use case + hai bảng, sơ đồ chuyển trạng thái của Found Item có chuyển do AI kích hoạt kèm guard theo ngưỡng điểm, luật thời gian 24 giờ / 7 ngày / 60 ngày.',
   maDe: 'SWR302_PE_Practice_2',
   duAn: DU_AN,
   phu: { en: 'SU26 format · 90 minutes · 10 points · Q4 = state transition diagram with AI-triggered transitions', vi: 'Định dạng SU26 · 90 phút · 10 điểm · Câu 4 = sơ đồ chuyển trạng thái có chuyển do AI kích hoạt' },

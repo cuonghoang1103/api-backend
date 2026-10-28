@@ -515,7 +515,7 @@ function dfdDoc(L, C, A) {
 
 export function kiemDfd(cfg) {
   const { bien = 'DFD', nhom = {}, an = [] } = cfg;
-  const C = { bien, proc: cfg.proc || [], kho: cfg.kho || [], ngoai: cfg.ngoai || [], canBang: cfg.canBang || [] };
+  const C = { bien, proc: cfg.proc || [], kho: cfg.kho || [], ngoai: cfg.ngoai || [], canBang: cfg.canBang || [], canBangVoi: cfg.canBangVoi || null };
   const DOC = dfdDoc.toString();
   const boc = (than) => new Function('L', 'C', 'A', `var dfdDoc = ${DOC}; var d = dfdDoc(L, C, A); if (d.loi) return d.loi; var p = d.p; ${than}`);
   const opt = (k, ten) => ({ C, bien: [bien], phan: ['flow'], nhom: nh(nhom, k), an: an.includes(ten) });
@@ -560,6 +560,25 @@ export function kiemDfd(cfg) {
       var t2 = C.kho.filter(function (e) { return !d.kho.some(function (n) { return L.khop(n.nhan, e.khop); }); });
       if (t2.length) return L.m('missing data store: ' + L.ds(t2.map(function (e) { return e.ten; })), 'thiếu kho dữ liệu: ' + L.ds(t2.map(function (e) { return e.ten; })));
       return 'OK';`), opt('thanhPhan', 'du')));
+  }
+  if (C.canBangVoi) {
+    ds.push(kiemMH({ en: 'DFD — balanced with YOUR context diagram: the same external flows, same names, same directions, nothing added', vi: 'DFD — cân bằng với sơ đồ ngữ cảnh CỦA BẠN: đúng các luồng ngoài, cùng tên, cùng chiều, không thêm' }, boc(`
+      var src = A[C.canBangVoi];
+      if (typeof src !== 'string' || !src.trim()) return L.m('draw the context diagram first (' + C.canBangVoi + ')', 'hãy vẽ sơ đồ ngữ cảnh trước (' + C.canBangVoi + ')');
+      var q = L.pf(src), Q = q.nut, N = p.nut;
+      function ngoaiCua(pp, NN) {
+        return pp.canh.filter(function (c) { return NN[c.tu] && NN[c.den] && (NN[c.tu].hinh === 'hcn' || NN[c.den].hinh === 'hcn'); }).map(function (c) {
+          var e = NN[c.tu].hinh === 'hcn' ? NN[c.tu] : NN[c.den];
+          return { e: L.norm(e.nhan), huong: NN[c.tu].hinh === 'hcn' ? 'vao' : 'ra', nhan: L.norm(c.nhan), goc: c.nhan, dong: c.dong };
+        });
+      }
+      var a = ngoaiCua(q, Q), b = ngoaiCua(p, N);
+      var cung = function (x, y) { return x.e === y.e && x.huong === y.huong && x.nhan === y.nhan; };
+      var thieu = a.filter(function (x) { return !b.some(function (y) { return cung(x, y); }); });
+      if (thieu.length) return L.m('the context flow "' + thieu[0].goc + '" (' + (thieu[0].huong === 'vao' ? thieu[0].e + ' → system' : 'system → ' + thieu[0].e) + ') is missing or renamed in the DFD', 'luồng ngữ cảnh "' + thieu[0].goc + '" bị thiếu hoặc đổi tên trong DFD');
+      var them = b.filter(function (y) { return !a.some(function (x) { return cung(x, y); }); });
+      if (them.length) return L.m('line ' + them[0].dong + ': flow "' + them[0].goc + '" with an external entity is not in your context diagram — levels must balance', 'dòng ' + them[0].dong + ': luồng "' + them[0].goc + '" với thực thể ngoài không có trong sơ đồ ngữ cảnh của bạn — các mức phải cân bằng');
+      return 'OK';`), { ...opt('canBang', 'canbang'), bien: [bien, C.canBangVoi] }));
   }
   if (C.canBang.length) {
     ds.push(kiemMH({ en: 'DFD — balanced with the context diagram: the same external flows, same names, same directions, nothing added', vi: 'DFD — cân bằng với sơ đồ ngữ cảnh: đúng các luồng ngoài, cùng tên, cùng chiều, không thêm' }, boc(`
@@ -692,7 +711,7 @@ export function kiemDacTaUC(cfg) {
     var t = C.luongChinh || {};
     if (b.length < (t.toiThieu || 5)) return L.m('only ' + b.length + ' steps — the normal flow needs at least ' + (t.toiThieu || 5), 'mới ' + b.length + ' bước — luồng chính cần ít nhất ' + (t.toiThieu || 5));
     var he = b.filter(function (x) { return /^(the )?system\\b/i.test(x.trim()); }).length;
-    if (he === 0 || he === b.length) return L.m('alternate actor steps and System steps ("Patient selects…", "System displays…")', 'xen kẽ bước của actor và bước "System …" ("Patient selects…", "System displays…")');
+    if (he === 0 || he === b.length) return L.m('alternate actor steps and System steps ("<Actor> selects…", "System displays…")', 'xen kẽ bước của actor và bước "System …"');
     var vt = -1;
     for (var i = 0; i < (t.su || []).length; i++) {
       var f = t.su[i], j = -1;

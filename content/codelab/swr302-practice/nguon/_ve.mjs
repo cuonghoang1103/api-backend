@@ -103,7 +103,10 @@ export function veLuong(src, tieuDe = '') {
     khac.forEach((n, i) => { const a = -Math.PI / 2 + (2 * Math.PI * i) / khac.length + (khac.length % 2 ? 0 : Math.PI / khac.length); pos[n.id] = { x: cx + R.rx * Math.cos(a), y: cy + R.ry * Math.sin(a), k: n.hinh }; });
   } else {
     // DFD: process ở cột giữa, thực thể bên trái, kho bên phải
-    const cot = { tron: tron, hcn: khac.filter((n) => n.hinh === 'hcn'), kho: khac.filter((n) => n.hinh !== 'hcn') };
+    // thứ tự barycentre: thực thể/kho xếp theo vị trí trung bình của các process nối với nó ⇒ ít đường cắt nhau
+    const viTriP = Object.fromEntries(tron.map((n, i) => [n.id, i]));
+    const tam = (n) => { const ks = p.canh.filter((c) => c.tu === n.id || c.den === n.id).map((c) => viTriP[c.tu === n.id ? c.den : c.tu]).filter((x) => x != null); return ks.length ? ks.reduce((a, b) => a + b, 0) / ks.length : 99; };
+    const cot = { tron: tron, hcn: khac.filter((n) => n.hinh === 'hcn').sort((a, b) => tam(a) - tam(b)), kho: khac.filter((n) => n.hinh !== 'hcn').sort((a, b) => tam(a) - tam(b)) };
     const X = { hcn: 120, tron: W / 2, kho: W - 130 };
     for (const [k, ds] of Object.entries(cot)) ds.forEach((n, i) => { pos[n.id] = { x: X[k], y: 70 + ((H - 110) * (i + 0.5)) / Math.max(1, ds.length), k: n.hinh, r: 46 }; });
   }
@@ -129,7 +132,7 @@ export function veLuong(src, tieuDe = '') {
     const ox = (-dy / l) * lech, oy = (dx / l) * lech;
     const [x1, y1] = vien(c.tu, b.x + ox, b.y + oy), [x2, y2] = vien(c.den, a.x + ox, a.y + oy);
     net.push(`<path d="M${f1(x1 + ox)},${f1(y1 + oy)} L${f1(x2 + ox)},${f1(y2 + oy)}" stroke="#1f2937" stroke-width="1.3" fill="none" marker-end="url(#swm)"/>`);
-    const tt = tron.length === 1 ? 0.3 : 0.5;
+    const tt = tron.length === 1 ? 0.3 : (c.tu < c.den ? 0.38 : 0.62);
     if (c.nhan) net.push(nhan(x1 + (x2 - x1) * tt + ox, y1 + (y2 - y1) * tt + oy, c.nhan));
   });
   return khung(W, H, tieuDe, [...net, ...p.ds.map(hinhNut)]);
@@ -267,6 +270,8 @@ export function veState(src, tieuDe = '', viTri = null) {
       else if (n.id === '__dau') toaDo[n.id] = { x: 30, y: 60 };
       else throw new Error('veState: thiếu viTri cho ' + n.id);
     }
+    const yMin = Math.min(...Object.values(toaDo).map((q) => q.y));
+    Object.values(toaDo).forEach((q) => { q.y += 70 - yMin; });
     toaDo.__H = Math.max(...Object.values(toaDo).map((q) => q.y)) + 60;
   } else toaDo = lucBoCuc(nut, canh, W, 300, 30, 280);
   const H = toaDo.__H;
@@ -318,7 +323,8 @@ export function veSwimlane(src, tieuDe = '') {
     if (i) { const a = pos[i - 1], c = pos[i]; out.push(`<path d="M${f1(a.x)},${f1(a.y + 16)} L${f1(c.x)},${f1(c.y - 16)}" stroke="#1f2937" fill="none" stroke-width="1.2" marker-end="url(#swm)"/>`); }
   });
   hd.forEach((b, i) => out.push(`<rect x="${f1(pos[i].x - 92)}" y="${f1(pos[i].y - 16)}" width="184" height="32" rx="12" fill="${b.sau ? '#fef3c7' : '#eef2ff'}" stroke="#1f2937"/>${chuNhieu(pos[i].x, pos[i].y, b.ten, { rong: 28, co: 11 })}`));
-  return khung(W, H, tieuDe, out);
+  if (p.qd.length) out.push(`<text x="20" y="${H - 8}" fill="#92400e" font-size="10.5">Yellow = action inside a decision branch (${p.qd.map((q) => esc(q.dk)).join(' · ')}) — see the source for the branches · Vàng = hành động nằm trong một nhánh rẽ</text>`);
+  return khung(W, H + 6, tieuDe, out);
 }
 
 /** Khối "sơ đồ tham chiếu": SVG + mã nguồn (để người học dán vào công cụ). */

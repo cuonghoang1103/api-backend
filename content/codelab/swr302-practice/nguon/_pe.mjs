@@ -276,6 +276,8 @@ UC2 ..> UC1 : <<extend>>
   return doiDau({
     slug: pe.slug,
     ten: pe.ten,
+    moTaModule: pe.moTaModule,
+    capDo: 'ADVANCED',
     khoa: KHOA,
     baiHoc: pe.baiHoc || 'swr302-final-exam-pe',
     de: [{

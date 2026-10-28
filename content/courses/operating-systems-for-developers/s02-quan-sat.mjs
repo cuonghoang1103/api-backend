@@ -72,7 +72,7 @@ ${suCo('en', [
 <tr><td>Network</td><td><code>sar -n DEV</code> kB/s vs link speed</td><td><code>ss</code> Recv-Q/Send-Q</td><td><code>sar -n ETCP</code> retransmits, resets</td></tr>
 </table>
 <p>The method protects you from the most common mistake: staring at CPU because <code>top</code> opens on the CPU, while the real problem is a full disk or a queue on the network.</p>
-${lab('sysmon', 'calm', 'en', 'A healthy 4-core box, live: read every column of top, then type uptime, vmstat, free -m or df -h and see which command shows which number.')}
+${lab('sysmon', 'calm', 'en', 'A healthy 4-core box, live: read every column of top, then type uptime, vmstat, free -m or df -h and see which command shows which number.', { tour: 'sysmon-read' })}
 
 <h3>The first five minutes, on a box with something wrong</h3>
 <p>We started a container and, before the commands below, silently launched two programs (you will see them at the end). Pretend you do not know what they are. Here are the ten commands, in Gregg's order, with their real output.</p>
@@ -192,7 +192,7 @@ ${suCo('vi', [
 <tr><td>Mạng</td><td><code>sar -n DEV</code> kB/s so với tốc độ đường truyền</td><td>Recv-Q/Send-Q của <code>ss</code></td><td>truyền lại, reset trong <code>sar -n ETCP</code></td></tr>
 </table>
 <p>Phương pháp này che cho bạn khỏi lỗi phổ biến nhất: nhìn chằm chằm vào CPU vì <code>top</code> mở ra là thấy CPU, trong khi vấn đề thật là đầy đĩa hay một hàng đợi trên mạng.</p>
-${lab('sysmon', 'calm', 'vi', 'Một máy 4 lõi đang khoẻ, chạy thật: đọc từng cột của top, rồi gõ uptime, vmstat, free -m hay df -h để thấy lệnh nào cho ra con số nào.')}
+${lab('sysmon', 'calm', 'vi', 'Một máy 4 lõi đang khoẻ, chạy thật: đọc từng cột của top, rồi gõ uptime, vmstat, free -m hay df -h để thấy lệnh nào cho ra con số nào.', { tour: 'sysmon-read' })}
 
 <h3>Năm phút đầu tiên, trên một máy đang có chuyện</h3>
 <p>Ta mở một container và, trước các lệnh dưới đây, lặng lẽ chạy hai chương trình (cuối mục sẽ lộ ra). Hãy giả vờ bạn không biết chúng là gì. Đây là mười lệnh, theo thứ tự của Gregg, kèm output thật.</p>
@@ -335,7 +335,7 @@ ${run('c22-load', 'top -b -n 1')}
 ${run('c22-load', 'ps -o pid,psr')}
 <p>Read it together. Both cores are at 100%. Six processes share them, so each gets about a third of a core — no process shows 100%, yet the box is saturated three times over: four tasks are always <em>waiting</em>. The machine-wide <code>%Cpu(s)</code> says 80% idle because eight other cores of the VM are free — but these six cannot use them. The load average counts the waiting: it climbed to 4.37 after one minute and keeps rising toward ~6 plus whatever else the VM runs (the 1-minute figure is an exponentially damped average, so after one minute it has covered only about 63% of a jump). In <code>/proc/loadavg</code>, <code>7/726</code> means 7 tasks runnable right now out of 726 tasks (threads) on the whole machine.</p>
 <p>The rule: <strong>compare load with the number of CPUs it can use</strong>. Load 4 on 10 free cores is fine; load 4 on 2 cores is a queue of two. And on Linux, load also counts tasks stuck in <code>D</code> state (waiting for disk) — so a high load with idle CPUs points at the disk, not the CPU.</p>
-${lab('sysmon', 'cpuhog', 'en', 'Inject a CPU hog on the 4-core box and watch it happen: one core pinned, %Cpu(s) barely moves, load climbs minute by minute. Find the PID, then kill or renice it.')}
+${lab('sysmon', 'cpuhog', 'en', 'Inject a CPU hog on the 4-core box and watch it happen: one core pinned, %Cpu(s) barely moves, load climbs minute by minute. Find the PID, then kill or renice it.', { tour: 'sysmon-read' })}
 
 <h3>ps: STAT and sorting</h3>
 <p><code>ps</code> is a snapshot you can filter and sort, which makes it better than <code>top</code> for scripts and incident notes. We created one process in each state:</p>
@@ -482,7 +482,7 @@ ${run('c22-load', 'top -b -n 1')}
 ${run('c22-load', 'ps -o pid,psr')}
 <p>Đọc chung với nhau. Cả hai lõi đều 100%. Sáu tiến trình chia nhau, nên mỗi cái được chừng một phần ba lõi — không tiến trình nào hiện 100%, vậy mà máy đã bão hoà gấp ba: luôn có bốn tác vụ đang <em>chờ</em>. Dòng <code>%Cpu(s)</code> của cả máy báo rảnh 80% vì tám lõi khác của máy ảo đang trống — nhưng sáu tiến trình này không được dùng chúng. Load average đếm phần đang chờ: nó leo lên 4,37 sau một phút và tiếp tục tăng dần về khoảng 6 cộng với mọi thứ khác máy ảo đang chạy (con số 1 phút là trung bình giảm dần theo hàm mũ, nên sau một phút nó mới đi được chừng 63% của một cú nhảy). Trong <code>/proc/loadavg</code>, <code>7/726</code> nghĩa là 7 tác vụ đang sẵn sàng chạy ngay lúc này trên tổng 726 tác vụ (luồng) của cả máy.</p>
 <p>Quy tắc: <strong>so load với số CPU mà công việc được phép dùng</strong>. Load 4 trên 10 lõi rảnh là ổn; load 4 trên 2 lõi là một hàng đợi hai việc. Và trên Linux, load còn đếm cả tác vụ kẹt ở trạng thái <code>D</code> (chờ đĩa) — nên load cao mà CPU rảnh là đang chỉ vào đĩa, không phải CPU.</p>
-${lab('sysmon', 'cpuhog', 'vi', 'Bơm một kẻ ăn CPU vào máy 4 lõi và nhìn nó diễn ra: một lõi bị ghim, %Cpu(s) gần như không đổi, load leo dần theo từng phút. Tìm PID, rồi kill hoặc renice nó.')}
+${lab('sysmon', 'cpuhog', 'vi', 'Bơm một kẻ ăn CPU vào máy 4 lõi và nhìn nó diễn ra: một lõi bị ghim, %Cpu(s) gần như không đổi, load leo dần theo từng phút. Tìm PID, rồi kill hoặc renice nó.', { tour: 'sysmon-read' })}
 
 <h3>ps: STAT và sắp xếp</h3>
 <p><code>ps</code> là một tấm ảnh chụp mà bạn lọc và sắp xếp được, nên nó hợp với script và ghi chú sự cố hơn <code>top</code>. Ta tạo mỗi trạng thái một tiến trình:</p>
@@ -1127,7 +1127,7 @@ ${L('https://man7.org/linux/man-pages/man8/lsof.8.html', '📄', 'man 8 lsof', '
 <span class="eyebrow">Chapter 2 · Lesson 2.5</span>
 <h2>Who holds the port, who holds the files</h2>
 <p class="lead">Two errors every backend developer meets: <code>listen EADDRINUSE: address already in use :::3000</code> and <code>EMFILE: too many open files</code>. Both are about the same kernel object — the file descriptor, which for a network server is also how it holds its port. This lesson reads the socket table with <code>ss</code>, finds the owner of a port three ways (one of which fails in a way that bit this project), and lets a server leak descriptors until it breaks.</p>
-${lab('process', 'shell', 'en', 'fork copies the parent’s file-descriptor table: a child started by your dev server inherits its sockets too — one way a port stays "in use" after you killed the process you were looking at.')}
+${lab('process', 'shell', 'en', 'fork copies the parent’s file-descriptor table: a child started by your dev server inherits its sockets too — one way a port stays "in use" after you killed the process you were looking at.', { tour: 'process-shell' })}
 
 <h3>Reading ss -tulpn</h3>
 <p>A Node API on port 3000 and a Python server on 8080 that listens only on localhost:</p>
@@ -1228,7 +1228,7 @@ ${L('https://man7.org/linux/man-pages/man2/getrlimit.2.html', '📄', 'man 2 get
 <span class="eyebrow">Chương 2 · Bài 2.5</span>
 <h2>Ai giữ cổng, ai giữ file</h2>
 <p class="lead">Hai lỗi lập trình viên backend nào cũng gặp: <code>listen EADDRINUSE: address already in use :::3000</code> và <code>EMFILE: too many open files</code>. Cả hai cùng nói về một đối tượng của nhân — file descriptor, mà với một máy chủ mạng thì đó cũng chính là cách nó giữ cổng. Bài này đọc bảng socket bằng <code>ss</code>, tìm chủ của một cổng bằng ba cách (một cách hỏng theo đúng kiểu đã làm khổ dự án này), và để một máy chủ rò rỉ descriptor cho tới khi nó gãy.</p>
-${lab('process', 'shell', 'vi', 'fork chép cả bảng file descriptor của cha: một tiến trình con mà dev server của bạn khởi chạy cũng thừa hưởng socket của nó — một lý do cổng vẫn "đang bận" sau khi bạn đã giết đúng tiến trình mình nhìn thấy.')}
+${lab('process', 'shell', 'vi', 'fork chép cả bảng file descriptor của cha: một tiến trình con mà dev server của bạn khởi chạy cũng thừa hưởng socket của nó — một lý do cổng vẫn "đang bận" sau khi bạn đã giết đúng tiến trình mình nhìn thấy.', { tour: 'process-shell' })}
 
 <h3>Đọc ss -tulpn</h3>
 <p>Một API Node ở cổng 3000 và một máy chủ Python ở 8080 chỉ nghe trên localhost:</p>

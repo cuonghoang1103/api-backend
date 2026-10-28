@@ -303,7 +303,7 @@ ${run('c72-trang', './xlate', 1)}
 <p>Run the same program as an ordinary user:</p>
 ${run('c72-trang', 'setpriv', 1)}
 <p>Present bits still work, but every PFN reads 0. Since 2015 (Linux 4.0, refined in 4.2) only <code>CAP_SYS_ADMIN</code> may see physical frame numbers, because knowing them helped Rowhammer attacks aim at specific RAM rows (the lab ran this lesson with <code>--cap-add SYS_ADMIN</code>). Now step through the walk yourself — address → TLB → page-table entry → frame — on a small 16-page machine:</p>
-${lab('vm', 'walk', 'en', 'Walk an array on the heap: watch the virtual page number index the page table, the TLB fill up, and the hits once the same page is reused.')}
+${lab('vm', 'walk', 'en', 'Walk an array on the heap: watch the virtual page number index the page table, the TLB fill up, and the hits once the same page is reused.', { tour: 'vm-translate' })}
 
 <h3>Why four levels instead of one big table</h3>
 <p>A single flat table for 48-bit addresses needs 2<sup>36</sup> entries × 8 bytes = <strong>512 GiB per process</strong>. A tree only allocates the branches that are used: an empty process needs a handful of table pages, and the cost grows with the memory you actually touch. Measured — touch N MiB of 4 KiB pages and read <code>VmPTE</code> (the size of the process's page tables) from <code>/proc/self/status</code>:</p>
@@ -402,7 +402,7 @@ ${run('c72-trang', './xlate', 1)}
 <p>Chạy cùng chương trình với tư cách người dùng thường:</p>
 ${run('c72-trang', 'setpriv', 1)}
 <p>Bit "có mặt" vẫn đúng, nhưng PFN nào cũng đọc ra 0. Từ năm 2015 (Linux 4.0, chỉnh lại ở 4.2) chỉ <code>CAP_SYS_ADMIN</code> được thấy số khung vật lý, vì biết chúng giúp tấn công Rowhammer nhắm vào đúng hàng RAM (lab chạy bài này với <code>--cap-add SYS_ADMIN</code>). Giờ tự bước qua phép duyệt — địa chỉ → TLB → mục bảng trang → khung — trên một cỗ máy nhỏ 16 trang:</p>
-${lab('vm', 'walk', 'vi', 'Duyệt một mảng trên heap: nhìn số trang ảo chọn mục trong bảng trang, TLB đầy dần, và các lần trúng TLB khi cùng một trang được dùng lại.')}
+${lab('vm', 'walk', 'vi', 'Duyệt một mảng trên heap: nhìn số trang ảo chọn mục trong bảng trang, TLB đầy dần, và các lần trúng TLB khi cùng một trang được dùng lại.', { tour: 'vm-translate' })}
 
 <h3>Vì sao bốn cấp thay vì một bảng to</h3>
 <p>Một bảng phẳng duy nhất cho địa chỉ 48 bit cần 2<sup>36</sup> mục × 8 byte = <strong>512 GiB cho mỗi tiến trình</strong>. Một cái cây chỉ cấp phát những nhánh đang dùng: một tiến trình trống chỉ cần vài trang bảng, và chi phí lớn theo lượng bộ nhớ bạn thật sự chạm. Đo thật — chạm N MiB bằng trang 4 KiB rồi đọc <code>VmPTE</code> (cỡ bảng trang của tiến trình) trong <code>/proc/self/status</code>:</p>
@@ -517,7 +517,7 @@ ${run('c73-fault', './demand', 1)}
 <li><strong>After writing every page</strong>: another 16,386 faults, and now RSS +64 MiB. Each write hit the read-only zero page, faulted, and the kernel gave the page its own zeroed frame — copy-on-write from the zero page.</li>
 </ul>
 <p>This is <strong>demand paging</strong>: memory is promised at <code>mmap</code>/<code>malloc</code> time and delivered at first touch, a page at a time. It is why VSZ can be 4.8 GB while RSS is 77 MB, and also why "malloc succeeded" does not mean the memory exists — Linux may promise more than it has, and the bill arrives on first touch (overcommit and the OOM killer are Chapter 8). Step through faults of every kind here — code, data, heap, stack, and a bad pointer that ends in SIGSEGV:</p>
-${lab('vm', 'program', 'en', 'A program starts: fetching main(), pushing frames, reading a global, malloc + write, and one bad pointer. Watch minor and major faults and the SIGSEGV.')}
+${lab('vm', 'program', 'en', 'A program starts: fetching main(), pushing frames, reading a global, malloc + write, and one bad pointer. Watch minor and major faults and the SIGSEGV.', { tour: 'vm-translate' })}
 
 <h3>Major faults, measured: when one access costs 50 µs</h3>
 <p>Major faults need a page that is on disk and not in RAM. This program maps a 256 MiB file and reads it in different ways; <code>evict</code> uses <code>posix_fadvise(DONTNEED)</code> to drop the file's pages from the page cache, so we can start cold without root:</p>
@@ -576,7 +576,7 @@ ${run('c73-fault', 'for n in 4 5', 1)}
 <p>Linux uses an LRU approximation (active/inactive lists, and the multi-generational LRU in newer kernels), not any of these exactly. Run the exam string yourself, change the frame count, and try Bélády's string with 3 then 4 frames:</p>
 ${lab('vm', 'exam', 'en', 'The Silberschatz reference string with 3 frames: switch FIFO / LRU / Clock / OPT and compare the faults.')}
 ${lab('vm', 'belady', 'en', "Bélády's anomaly: run FIFO with 3 frames, then 4 — the fault count goes up.")}
-${lab('vm', 'loop', 'en', 'A loop over 5 pages: drag the frames slider from 5 to 4 and watch every access become a fault.')}
+${lab('vm', 'loop', 'en', 'A loop over 5 pages: drag the frames slider from 5 to 4 and watch every access become a fault.', { tour: 'vm-thrash' })}
 <p>What happens to a whole machine when that happens to everything — swap, thrashing, pressure stall information, and finally the OOM killer — is Chapter 8. Get a feel for it first with the RAM-pressure preset:</p>
 ${lab('vm', 'pressure', 'en', 'RAM pressure: 5 pages share 3 frames. Every fault now evicts someone; watch the time per access climb.')}
 
@@ -646,7 +646,7 @@ ${run('c73-fault', './demand', 1)}
 <li><strong>Sau khi ghi mọi trang</strong>: thêm 16.386 fault nữa, và giờ RSS +64 MiB. Mỗi lần ghi đụng trang số 0 chỉ-đọc, gây fault, và nhân cấp cho trang đó một khung riêng đã xoá về 0 — copy-on-write từ trang số 0.</li>
 </ul>
 <p>Đó là <strong>nạp trang theo yêu cầu (demand paging)</strong>: bộ nhớ được hứa lúc <code>mmap</code>/<code>malloc</code> và được giao ở lần chạm đầu, từng trang một. Nó là lý do VSZ có thể 4,8 GB trong khi RSS 77 MB, và cũng là lý do "malloc thành công" không có nghĩa bộ nhớ đã tồn tại — Linux có thể hứa nhiều hơn mình có, và hoá đơn tới ở lần chạm đầu (overcommit và OOM killer là Chương 8). Bước qua đủ các loại fault ở đây — mã, dữ liệu, heap, stack, và một con trỏ hỏng kết thúc bằng SIGSEGV:</p>
-${lab('vm', 'program', 'vi', 'Một chương trình khởi động: lấy lệnh main(), đẩy khung stack, đọc biến toàn cục, malloc rồi ghi, và một con trỏ hỏng. Nhìn fault nhẹ, fault nặng và SIGSEGV.')}
+${lab('vm', 'program', 'vi', 'Một chương trình khởi động: lấy lệnh main(), đẩy khung stack, đọc biến toàn cục, malloc rồi ghi, và một con trỏ hỏng. Nhìn fault nhẹ, fault nặng và SIGSEGV.', { tour: 'vm-translate' })}
 
 <h3>Major fault, đo thật: khi một lần truy cập tốn 50 µs</h3>
 <p>Major fault cần một trang đang nằm trên đĩa và không có trong RAM. Chương trình này ánh xạ một file 256 MiB và đọc nó theo nhiều cách; <code>evict</code> dùng <code>posix_fadvise(DONTNEED)</code> để đẩy các trang của file ra khỏi page cache, nên ta bắt đầu "nguội" được mà không cần root:</p>
@@ -705,7 +705,7 @@ ${run('c73-fault', 'for n in 4 5', 1)}
 <p>Linux dùng một phép xấp xỉ LRU (danh sách active/inactive, và multi-generational LRU ở các nhân mới), không dùng đúng thuật toán nào ở trên. Tự chạy chuỗi đề thi, đổi số khung, và thử chuỗi Bélády với 3 rồi 4 khung:</p>
 ${lab('vm', 'exam', 'vi', 'Chuỗi tham chiếu của Silberschatz với 3 khung: đổi FIFO / LRU / Clock / OPT và so số fault.')}
 ${lab('vm', 'belady', 'vi', 'Nghịch lý Bélády: chạy FIFO với 3 khung, rồi 4 khung — số fault lại tăng.')}
-${lab('vm', 'loop', 'vi', 'Vòng lặp qua 5 trang: kéo thanh số khung từ 5 về 4 và nhìn mọi lần truy cập biến thành fault.')}
+${lab('vm', 'loop', 'vi', 'Vòng lặp qua 5 trang: kéo thanh số khung từ 5 về 4 và nhìn mọi lần truy cập biến thành fault.', { tour: 'vm-thrash' })}
 <p>Chuyện gì xảy ra với cả một cỗ máy khi điều đó xảy ra với mọi thứ — swap, thrashing, pressure stall information, và cuối cùng là OOM killer — là Chương 8. Cảm nhận nó trước bằng preset thiếu RAM:</p>
 ${lab('vm', 'pressure', 'vi', 'Thiếu RAM: 5 trang chia nhau 3 khung. Giờ fault nào cũng phải đuổi ai đó; nhìn thời gian mỗi lần truy cập leo lên.')}
 

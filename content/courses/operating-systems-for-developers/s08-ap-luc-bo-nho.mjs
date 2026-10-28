@@ -295,7 +295,7 @@ ${run('c82-swap', './ws 160 3 rand', 1)}
 ${run('c82-swap', "grep -E '^(pswpin", 1)}
 <p>64 MiB fits in 128 MiB of RAM: after the first pass, about <strong>12 ns per page</strong> and no major faults. 160 MiB does not fit: every pass needs <strong>15,000–19,000 major faults</strong> — that many 4 KiB pages read back from swap — and costs <strong>30–38 µs per page</strong>, about three thousand times more. <code>pswpin</code>/<code>pswpout</code> count pages swapped in and out of this cgroup. This is <strong>thrashing</strong>: the working set — the pages the program touches again and again — is bigger than the RAM it gets, so it spends its time moving pages instead of computing. The cliff is not gradual: the same code, 2.5× more data, three orders of magnitude slower. You met the same cliff as a page-replacement exercise in Chapter 7; slide RAM away and watch it here:</p>
 ${lab('vm', 'pressure', 'en', 'Five pages, three frames: every reference evicts something the next reference needs. Drag the RAM slider down and watch the fault rate.')}
-${lab('vm', 'loop', 'en', 'A loop over 5 pages with 4 frames: LRU faults on every single reference. One frame short is as bad as having none.')}
+${lab('vm', 'loop', 'en', 'A loop over 5 pages with 4 frames: LRU faults on every single reference. One frame short is as bad as having none.', { tour: 'vm-thrash' })}
 ${run('c82-swap', './ws 160 3 seq', 1)}
 <p>Sequential order needs fewer major faults (6,000–8,000 per pass: swap read-ahead brings in neighbouring pages) but is not much faster: each fault is still a trip to the swap device, and the kernel keeps evicting the pages it will need next pass.</p>
 
@@ -406,7 +406,7 @@ ${run('c82-swap', './ws 160 3 rand', 1)}
 ${run('c82-swap', "grep -E '^(pswpin", 1)}
 <p>64 MiB vừa trong 128 MiB RAM: sau lượt đầu, khoảng <strong>12 ns mỗi trang</strong> và không có major fault. 160 MiB không vừa: mỗi lượt cần <strong>15.000–19.000 major fault</strong> — chừng đó trang 4 KiB đọc lại từ swap — và tốn <strong>30–38 µs mỗi trang</strong>, đắt hơn khoảng ba nghìn lần. <code>pswpin</code>/<code>pswpout</code> đếm số trang swap vào và ra của cgroup này. Đây là <strong>thrashing</strong>: working set — các trang chương trình chạm đi chạm lại — lớn hơn lượng RAM nó được, nên nó tiêu thời gian vào việc dời trang thay vì tính toán. Bờ vực không thoai thoải: cùng một đoạn mã, dữ liệu nhiều hơn 2,5 lần, chậm đi ba bậc độ lớn. Bạn đã gặp đúng bờ vực này dưới dạng bài tập thay trang ở Chương 7; kéo bớt RAM và nhìn nó ở đây:</p>
 ${lab('vm', 'pressure', 'vi', 'Năm trang, ba khung: lần tham chiếu nào cũng đuổi thứ mà lần sau cần. Kéo thanh RAM xuống và nhìn tỉ lệ fault.')}
-${lab('vm', 'loop', 'vi', 'Vòng lặp qua 5 trang với 4 khung: LRU fault ở mọi lần tham chiếu. Thiếu một khung cũng tệ như không có khung nào.')}
+${lab('vm', 'loop', 'vi', 'Vòng lặp qua 5 trang với 4 khung: LRU fault ở mọi lần tham chiếu. Thiếu một khung cũng tệ như không có khung nào.', { tour: 'vm-thrash' })}
 ${run('c82-swap', './ws 160 3 seq', 1)}
 <p>Thứ tự tuần tự cần ít major fault hơn (6.000–8.000 mỗi lượt: swap đọc trước các trang lân cận) nhưng không nhanh hơn bao nhiêu: mỗi fault vẫn là một chuyến tới thiết bị swap, và nhân cứ đuổi các trang mà lượt sau sẽ cần.</p>
 
@@ -1057,7 +1057,7 @@ ${lab('cgroup', 'restart', 'en', 'What a pod over its limit looks like from insi
 <p>The idea fits in seven lines of bash. Here it watches the file-thrashing reader of lesson 8.2 (no swap, 128 MiB) and kills it when <code>some avg10</code> reaches 20%:</p>
 ${run('c85-lim', './ws 200 50', 3)}
 <p>Pressure rose as the 10-second average caught up — 4%, 9%, 13%, 17%, 20.4% — and at ten seconds our watcher killed the reader. <code>oom_kill</code> is still 1, the count left by the Buffer test: <strong>the kernel never decided to kill anything</strong>, and without the watcher this reader would have crawled at a minute per pass indefinitely. That is the gap systemd-oomd fills on desktops and Kubernetes eviction fills on clusters.</p>
-${lab('vm', 'loop', 'en', 'A limit just one frame too small: the loop over 5 pages faults on every reference with 4 frames. Too-tight limits create the crawl that pressure-based killers exist for.')}
+${lab('vm', 'loop', 'en', 'A limit just one frame too small: the loop over 5 pages faults on every reference with 4 frames. Too-tight limits create the crawl that pressure-based killers exist for.', { tour: 'vm-thrash' })}
 
 <h3>Too tight hurts too</h3>
 <p>The limits this project runs with, from its <code>docker-compose.yml</code>: postgres 2G, redis 512M (with <code>--maxmemory 256mb</code> inside, so Redis evicts keys long before the cgroup kills it), backend 2G (heap 1536), frontend 2G, tts 2560M, coturn and nginx 256M each. The tts limit is a good example of sizing: the compose comment records a measured 973 MB while reading text, raised to 2.5G because voice cloning also loads torch and torchaudio. Rules of thumb:</p>
@@ -1177,7 +1177,7 @@ ${lab('cgroup', 'restart', 'vi', 'Một pod vượt giới hạn nhìn từ bên
 <p>Ý tưởng gói gọn trong bảy dòng bash. Ở đây nó canh tiến trình đọc file đang thrash của bài 8.2 (không swap, 128 MiB) và giết nó khi <code>some avg10</code> đạt 20%:</p>
 ${run('c85-lim', './ws 200 50', 3)}
 <p>Áp lực tăng dần khi trung bình 10 giây đuổi kịp — 4%, 9%, 13%, 17%, 20,4% — và ở giây thứ mười bộ canh của ta giết tiến trình đọc. <code>oom_kill</code> vẫn là 1, con số còn lại từ bài thử Buffer: <strong>nhân không hề quyết định giết gì</strong>, và nếu không có bộ canh, tiến trình đọc này sẽ bò mãi với một phút mỗi lượt. Đó là khoảng trống mà systemd-oomd lấp trên máy desktop và cơ chế eviction của Kubernetes lấp trên cụm.</p>
-${lab('vm', 'loop', 'vi', 'Một giới hạn chỉ thiếu đúng một khung: vòng lặp qua 5 trang fault ở mọi lần tham chiếu khi có 4 khung. Giới hạn quá chặt tạo ra cơn bò mà các bộ giết theo áp lực sinh ra để xử lý.')}
+${lab('vm', 'loop', 'vi', 'Một giới hạn chỉ thiếu đúng một khung: vòng lặp qua 5 trang fault ở mọi lần tham chiếu khi có 4 khung. Giới hạn quá chặt tạo ra cơn bò mà các bộ giết theo áp lực sinh ra để xử lý.', { tour: 'vm-thrash' })}
 
 <h3>Quá chặt cũng gây hại</h3>
 <p>Các giới hạn dự án này đang chạy, lấy từ <code>docker-compose.yml</code>: postgres 2G, redis 512M (kèm <code>--maxmemory 256mb</code> bên trong, nên Redis tự đuổi khoá từ lâu trước khi cgroup giết nó), backend 2G (heap 1536), frontend 2G, tts 2560M, coturn và nginx mỗi cái 256M. Giới hạn của tts là ví dụ tốt về cách chọn cỡ: chú thích trong compose ghi lại mức đo được 973 MB lúc đọc văn bản, nâng lên 2,5G vì nhân bản giọng còn nạp thêm torch và torchaudio. Quy tắc kinh nghiệm:</p>

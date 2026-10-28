@@ -182,7 +182,7 @@ ${L('https://man7.org/linux/man-pages/man5/proc.5.html', '📄', 'man 5 proc', '
 <span class="eyebrow">Chapter 1 · Lesson 1.2</span>
 <h2>Every process is forked from another</h2>
 <p class="lead">There is no "create a process" call that conjures one from nothing. Instead a process clones itself with <strong>fork()</strong>, and the clone usually replaces its own program with <strong>exec()</strong>. The parent collects the result with <strong>wait()</strong>. That triad — fork, exec, wait — is how your shell runs every command, how a server spawns a worker, and how Docker starts your container. Watch it once and the whole system makes sense.</p>
-${lab('process', 'shell', 'en', 'A shell running one command: fork clones it, the child execs into ls, the parent waits, then reaps the zombie. Step through it.')}
+${lab('process', 'shell', 'en', 'A shell running one command: fork clones it, the child execs into ls, the parent waits, then reaps the zombie. Step through it.', { tour: 'process-shell' })}
 
 <h3>fork() returns twice</h3>
 <p>This is the idea that trips everyone up at first:</p>
@@ -262,7 +262,7 @@ ${L('https://man7.org/linux/man-pages/man2/execve.2.html', '📄', 'man 2 execve
 <span class="eyebrow">Chương 1 · Bài 1.2</span>
 <h2>Mọi tiến trình đều được fork ra từ một tiến trình khác</h2>
 <p class="lead">Không có lời gọi "tạo một tiến trình" nào biến nó ra từ hư không. Thay vào đó, một tiến trình tự nhân bản bằng <strong>fork()</strong>, và bản sao thường thay chương trình của chính nó bằng <strong>exec()</strong>. Cha thu kết quả bằng <strong>wait()</strong>. Bộ ba đó — fork, exec, wait — là cách shell chạy mọi lệnh, cách một máy chủ sinh worker, và cách Docker khởi động container của bạn. Nhìn nó một lần là cả hệ thống sáng ra.</p>
-${lab('process', 'shell', 'vi', 'Một shell chạy một lệnh: fork nhân bản nó, con exec thành ls, cha chờ, rồi dọn zombie. Đi từng bước.')}
+${lab('process', 'shell', 'vi', 'Một shell chạy một lệnh: fork nhân bản nó, con exec thành ls, cha chờ, rồi dọn zombie. Đi từng bước.', { tour: 'process-shell' })}
 
 <h3>fork() trả về hai lần</h3>
 <p>Đây là ý mà ai mới học cũng vấp:</p>
@@ -488,7 +488,7 @@ ${L('https://man7.org/linux/man-pages/man7/vdso.7.html', '📄', 'man 7 vdso', '
 <span class="eyebrow">Chapter 1 · Lesson 1.4</span>
 <h2>The life and death of a process</h2>
 <p class="lead">A process is not always running — it spends most of its life waiting, and it can be paused, interrupted and killed. The letters you see in <code>ps</code> (R, S, D, T, Z) are its state; <strong>signals</strong> are how it gets interrupted; and its <strong>exit code</strong> tells you how it died. Read these three right and "the container exited with 137" stops being a mystery and becomes a diagnosis.</p>
-${lab('process', 'shell', 'en', 'The state machine on the right shows which state each process is in and the transitions as they happen. Try the zombie and orphan scenarios too.')}
+${lab('process', 'shell', 'en', 'The state machine on the right shows which state each process is in and the transitions as they happen. Try the zombie and orphan scenarios too.', { tour: 'process-shell' })}
 
 <h3>The five states</h3>
 <p>From the kernel's point of view a process is always in exactly one state:</p>
@@ -574,7 +574,7 @@ ${L('https://man7.org/linux/man-pages/man7/signal.7.html', '📄', 'man 7 signal
 <span class="eyebrow">Chương 1 · Bài 1.4</span>
 <h2>Sinh và tử của một tiến trình</h2>
 <p class="lead">Một tiến trình không phải lúc nào cũng chạy — nó dành phần lớn cuộc đời để chờ, và có thể bị tạm dừng, bị ngắt và bị giết. Các chữ cái bạn thấy trong <code>ps</code> (R, S, D, T, Z) là trạng thái của nó; <strong>tín hiệu (signal)</strong> là cách nó bị ngắt; và <strong>mã thoát (exit code)</strong> cho biết nó chết thế nào. Đọc đúng ba thứ này thì "container thoát với 137" thôi là bí ẩn và thành một chẩn đoán.</p>
-${lab('process', 'shell', 'vi', 'Máy trạng thái bên phải cho thấy mỗi tiến trình đang ở trạng thái nào và các chuyển trạng thái khi chúng xảy ra. Thử cả kịch bản zombie và mồ côi.')}
+${lab('process', 'shell', 'vi', 'Máy trạng thái bên phải cho thấy mỗi tiến trình đang ở trạng thái nào và các chuyển trạng thái khi chúng xảy ra. Thử cả kịch bản zombie và mồ côi.', { tour: 'process-shell' })}
 
 <h3>Năm trạng thái</h3>
 <p>Dưới con mắt nhân, một tiến trình luôn ở đúng một trạng thái:</p>

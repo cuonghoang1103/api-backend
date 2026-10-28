@@ -241,7 +241,7 @@ ${L('https://pages.cs.wisc.edu/~remzi/OSTEP/threads-intro.pdf', '📘', 'OSTEP �
 <tr><td>Round robin, quantum 4</td><td>P1 P2 P3 P4 P1 P3 P4 P3 in slices of ≤4</td><td>11.75</td><td>4.5</td></tr>
 <tr><td>Round robin, quantum 2</td><td>slices of 2, 12 switches</td><td>12.75</td><td><strong>2.0</strong></td></tr>
 </table>
-${lab('scheduler', 'textbook', 'en', 'The textbook set. Switch the policy between FCFS, SJF, SRTF and RR and watch the Gantt chart and the three averages change.')}
+${lab('scheduler', 'textbook', 'en', 'The textbook set. Switch the policy between FCFS, SJF, SRTF and RR and watch the Gantt chart and the three averages change.', { tour: 'sched-policies' })}
 <p>Read the table as a law, not trivia: <strong>SRTF minimises average waiting but needs to know the future</strong> (how long each job will run), which a real OS never does. <strong>Round robin has the worst waiting but the best response</strong> — every job starts quickly. Shrinking the quantum improves response further and costs more switches (lesson 3.3 measures what a switch costs).</p>
 
 <h3>FCFS and the convoy effect</h3>
@@ -339,7 +339,7 @@ ${L('https://pages.cs.wisc.edu/~remzi/OSTEP/cpu-sched-mlfq.pdf', '📘', 'OSTEP 
 <tr><td>Round robin, quantum 4</td><td>P1 P2 P3 P4 P1 P3 P4 P3, mỗi lát ≤4</td><td>11,75</td><td>4,5</td></tr>
 <tr><td>Round robin, quantum 2</td><td>lát 2, 12 lần chuyển</td><td>12,75</td><td><strong>2,0</strong></td></tr>
 </table>
-${lab('scheduler', 'textbook', 'vi', 'Bộ đề giáo trình. Đổi chính sách giữa FCFS, SJF, SRTF và RR, nhìn sơ đồ Gantt và ba con số trung bình thay đổi.')}
+${lab('scheduler', 'textbook', 'vi', 'Bộ đề giáo trình. Đổi chính sách giữa FCFS, SJF, SRTF và RR, nhìn sơ đồ Gantt và ba con số trung bình thay đổi.', { tour: 'sched-policies' })}
 <p>Đọc bảng như một định luật chứ đừng như chuyện vặt: <strong>SRTF cho thời gian chờ trung bình nhỏ nhất nhưng cần biết trước tương lai</strong> (mỗi việc sẽ chạy bao lâu) — điều mà hệ điều hành thật không bao giờ biết. <strong>Round robin chờ lâu nhất nhưng đáp ứng tốt nhất</strong> — việc nào cũng được bắt đầu sớm. Thu nhỏ quantum thì đáp ứng còn tốt hơn nữa, đổi lại tốn thêm lần chuyển (bài 3.3 đo một lần chuyển tốn bao nhiêu).</p>
 
 <h3>FCFS và hiệu ứng đoàn xe</h3>

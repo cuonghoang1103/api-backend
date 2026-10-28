@@ -338,7 +338,7 @@ export default {
 ${thuNgay('en', 'bits', 'intro', 'Drag the voltage, add noise, and watch when the reading becomes unreliable. Then flip the eight switches below it.', [
   'Set the noise to its maximum. Can a bit near 0 V or near 3.3 V still be read correctly?',
   'Make the pattern 01001101 with the eight switches. Read the six boxes: number, letter, pixel, instruction&hellip;',
-], { heading: false })}
+], { tour: 'bits-basics', heading: false })}
 <div class="callout ok"><b>The key idea of this whole lesson:</b> a pattern of bits has <em>no meaning by itself</em>. 01001101 is the number 77 to an adder, the letter M to a text editor, a grey pixel to a screen, and an instruction to a CPU. Meaning comes from whoever reads the bits. The computer never &ldquo;understands&rdquo; anything &mdash; circuits just react to patterns.</div>
 
 <h3>Step 2 — Bits become numbers</h3>
@@ -346,21 +346,21 @@ ${thuNgay('en', 'bits', 'intro', 'Drag the voltage, add noise, and watch when th
 ${thuNgay('en', 'bits', 'convert', 'Watch 200 being converted by repeated division, then checked back with place values.', [
   'Convert 200 to base 2, then to base 16. Compare with the binary above.',
   'Open the <b>Negative numbers</b> tab and click <b>127 + 1</b>: one more than the largest 8-bit number becomes negative. That is overflow &mdash; Chapter 2.',
-], { heading: false })}
+], { tour: 'bits-convert', heading: false })}
 
 <h3>Step 3 — Numbers become text, colours and real numbers</h3>
 <p>Text is numbers by agreement. ASCII agreed that A = 65; Unicode extends the agreement to every script (the letter e-with-circumflex-and-dot of Vietnamese is number 7879), and UTF-8 says how to write those numbers as bytes. A colour is three numbers (red, green, blue), and a picture is millions of colours in a grid. Real numbers such as 0.1 use the IEEE-754 format &mdash; which cannot store 0.1 exactly.</p>
 ${thuNgay('en', 'data', 'text', 'Type any text, including Vietnamese, and see the number and the bytes behind every character.', [
   'Which characters need more than one byte? Why does a Vietnamese letter need three?',
   'Visit the <b>Real numbers</b> tab and find out why 0.1 + 0.2 is not 0.3 in almost every programming language.',
-], { heading: false })}
+], { tour: 'data-text', heading: false })}
 
 <h3>Step 4 — Gates do the arithmetic</h3>
 <p>How does a machine made of switches add? Combine switches into <strong>logic gates</strong> (AND, OR, XOR, NOT). One XOR gate and one AND gate add two bits; eight such adders chained together add two bytes. Every calculation a CPU does is built from gates like these.</p>
 ${thuNgay('en', 'logic', 'adder', 'A full adder: three input bits in, a sum bit and a carry bit out.', [
   'Set A = 1, B = 1, Cin = 0. Why is the sum bit 0?',
   'Open the <b>8-bit adder</b> tab and watch the carry travel from the right to the left.',
-], { heading: false })}
+], { tour: 'logic-adder', heading: false })}
 
 <h3>Step 5 and 6 — An instruction is just a number, and the CPU obeys it</h3>
 <p>Here is the trick that makes computers programmable (John von Neumann, 1945): instructions are numbers too, stored in the <strong>same memory</strong> as the data. In the tiny CPU below, the 16-bit number <code>0001 0000 0000 0101</code> means &ldquo;Load the value at address 5&rdquo;: the first 4 bits say <em>what</em> to do, the other 12 say <em>where</em>. The CPU repeats one cycle forever: <strong>fetch</strong> the number that the program counter points to, <strong>decode</strong> it, <strong>execute</strong> it, move to the next one.</p>
@@ -368,14 +368,14 @@ ${thuNgay('en', 'cpu', 'add', 'A complete computer you can watch: registers, an 
   'Press <b>Step</b> repeatedly through the first instruction. Note the three fetch steps, the decode step, and the execute steps.',
   'In the memory table, find the cell that holds 5 and the cell that holds the instruction <code>Load 005</code>. Both are just 16 bits.',
   'Change <code>Y, DEC 7</code> to 30 and run to the end. What is printed?',
-], { heading: false })}
+], { tour: 'cpu-first', heading: false })}
 
 <h3>Step 7 — From the code you write to the bytes that run</h3>
 <p>Nobody writes programs as bit patterns. You write C, Java or Python; a <strong>compiler</strong> translates it into the instructions of one particular CPU (x86-64 in most laptops, ARM64 in phones and Apple Macs), an <strong>assembler</strong> turns those into bytes, a <strong>linker</strong> packs them into an executable file, and the operating system <strong>loads</strong> that file into memory and points the CPU at it. From then on it is exactly the fetch&ndash;decode&ndash;execute cycle you just watched, three billion times a second.</p>
 ${thuNgay('en', 'pipeline', 'sum', 'A real C program, compiled by the real gcc. Click through the six stages.', [
   'In stage 3, find the machine-code bytes of the loop. How many bytes is each ARM64 instruction?',
   'In stage 6, compare the toy CPU with a real one. What is the same, and what has become faster?',
-], { heading: false })}
+], { tour: 'pipeline-stages', heading: false })}
 
 <h3>The whole chain on one page</h3>
 <div class="lz-stack">
@@ -412,7 +412,7 @@ ${thuNgay('en', 'pipeline', 'sum', 'A real C program, compiled by the real gcc. 
 ${thuNgay('vi', 'bits', 'intro', 'Kéo điện áp, thêm nhiễu, và xem lúc nào việc đọc bit hết đáng tin. Rồi bật tắt tám công tắc bên dưới.', [
   'Đặt nhiễu lớn nhất. Bit ở gần 0 V hay gần 3,3 V có còn đọc đúng không?',
   'Dùng tám công tắc tạo mẫu 01001101. Đọc sáu ô: số, chữ, điểm ảnh, lệnh&hellip;',
-], { heading: false })}
+], { tour: 'bits-basics', heading: false })}
 <div class="callout ok"><b>Ý chính của cả bài:</b> một dãy bit <em>tự nó không có nghĩa gì</em>. 01001101 là số 77 với mạch cộng, là chữ M với trình soạn thảo, là một điểm ảnh xám với màn hình, và là một lệnh với CPU. Nghĩa đến từ thứ ĐỌC dãy bit. Máy tính không bao giờ &ldquo;hiểu&rdquo; gì cả &mdash; mạch điện chỉ phản ứng với các mẫu bit.</div>
 
 <h3>Bậc 2 — Bit thành số</h3>
@@ -420,21 +420,21 @@ ${thuNgay('vi', 'bits', 'intro', 'Kéo điện áp, thêm nhiễu, và xem lúc 
 ${thuNgay('vi', 'bits', 'convert', 'Xem 200 được đổi bằng phép chia liên tiếp, rồi kiểm ngược bằng trọng số.', [
   'Đổi 200 sang cơ số 2, rồi cơ số 16. So với dãy nhị phân ở trên.',
   'Mở thẻ <b>Số âm &amp; tràn số</b> và bấm <b>127 + 1</b>: lớn hơn số 8 bit lớn nhất một đơn vị là thành số âm. Đó là tràn số &mdash; Chương 2.',
-], { heading: false })}
+], { tour: 'bits-convert', heading: false })}
 
 <h3>Bậc 3 — Số thành chữ, màu và số thực</h3>
 <p>Chữ là số theo quy ước. ASCII quy ước A = 65; Unicode mở rộng quy ước cho mọi hệ chữ (chữ ệ tiếng Việt là số 7879), và UTF-8 quy định cách viết các số đó thành byte. Một màu là ba con số (đỏ, lục, lam), một bức ảnh là hàng triệu màu xếp thành lưới. Số thực như 0.1 dùng chuẩn IEEE-754 &mdash; và chuẩn đó không lưu được 0.1 một cách chính xác.</p>
 ${thuNgay('vi', 'data', 'text', 'Gõ chữ bất kỳ, cả tiếng Việt, và xem con số cùng các byte đằng sau từng ký tự.', [
   'Ký tự nào cần nhiều hơn một byte? Vì sao một chữ tiếng Việt cần tới ba?',
   'Ghé thẻ <b>Số thực</b> và tìm hiểu vì sao 0.1 + 0.2 không bằng 0.3 trong gần như mọi ngôn ngữ lập trình.',
-], { heading: false })}
+], { tour: 'data-text', heading: false })}
 
 <h3>Bậc 4 — Cổng logic làm phép tính</h3>
 <p>Một cỗ máy toàn công tắc thì cộng kiểu gì? Ghép công tắc thành <strong>cổng logic</strong> (AND, OR, XOR, NOT). Một cổng XOR và một cổng AND cộng được hai bit; nối tám bộ cộng như thế lại là cộng được hai byte. Mọi phép tính CPU làm đều dựng từ những cổng như vậy.</p>
 ${thuNgay('vi', 'logic', 'adder', 'Full adder: ba bit vào, một bit tổng và một bit nhớ ra.', [
   'Đặt A = 1, B = 1, Cin = 0. Vì sao bit tổng bằng 0?',
   'Mở thẻ <b>Bộ cộng 8 bit</b> và xem bit nhớ đi từ phải sang trái.',
-], { heading: false })}
+], { tour: 'logic-adder', heading: false })}
 
 <h3>Bậc 5 và 6 — Lệnh chỉ là một con số, và CPU làm theo nó</h3>
 <p>Đây là mẹo khiến máy tính lập trình được (John von Neumann, 1945): lệnh cũng là số, nằm trong <strong>cùng một bộ nhớ</strong> với dữ liệu. Trong CPU tí hon bên dưới, con số 16 bit <code>0001 0000 0000 0101</code> nghĩa là &ldquo;Nạp giá trị ở địa chỉ 5&rdquo;: 4 bit đầu nói <em>làm gì</em>, 12 bit sau nói <em>ở đâu</em>. CPU lặp mãi một chu trình: <strong>nạp</strong> con số mà bộ đếm chương trình đang trỏ tới, <strong>giải mã</strong> nó, <strong>thực thi</strong> nó, rồi sang con số kế tiếp.</p>
@@ -442,14 +442,14 @@ ${thuNgay('vi', 'cpu', 'add', 'Một chiếc máy tính trọn vẹn bạn nhìn
   'Bấm <b>Bước</b> liên tục qua lệnh đầu tiên. Ghi lại ba bước nạp lệnh, bước giải mã, và các bước thực thi.',
   'Trong bảng bộ nhớ, tìm ô chứa số 5 và ô chứa lệnh <code>Load 005</code>. Cả hai đều chỉ là 16 bit.',
   'Đổi <code>Y, DEC 7</code> thành 30 rồi chạy tới cuối. Máy in ra số mấy?',
-], { heading: false })}
+], { tour: 'cpu-first', heading: false })}
 
 <h3>Bậc 7 — Từ mã bạn viết tới các byte đang chạy</h3>
 <p>Không ai viết chương trình bằng dãy bit. Bạn viết C, Java hay Python; <strong>trình biên dịch</strong> dịch nó thành lệnh của một dòng CPU cụ thể (x86-64 trên phần lớn laptop, ARM64 trên điện thoại và máy Mac), <strong>trình hợp dịch</strong> biến các lệnh đó thành byte, <strong>trình liên kết</strong> đóng gói thành tệp thực thi, và hệ điều hành <strong>nạp</strong> tệp vào bộ nhớ rồi chỉ CPU vào đó. Từ lúc ấy trở đi là đúng chu trình nạp&ndash;giải mã&ndash;thực thi bạn vừa xem, ba tỉ lần mỗi giây.</p>
 ${thuNgay('vi', 'pipeline', 'sum', 'Một chương trình C thật, biên dịch bằng gcc thật. Bấm qua sáu bước.', [
   'Ở bước 3, tìm các byte mã máy của vòng lặp. Mỗi lệnh ARM64 dài mấy byte?',
   'Ở bước 6, so CPU đồ chơi với CPU thật. Cái gì giống nhau, cái gì đã nhanh hơn?',
-], { heading: false })}
+], { tour: 'pipeline-stages', heading: false })}
 
 <h3>Cả chuỗi trên một trang</h3>
 <div class="lz-stack">
@@ -512,7 +512,7 @@ ${thuNgay('en', 'cpu', 'add', 'This is a real (tiny) von Neumann machine: ONE me
   'Press <b>Step</b> until PC changes for the first time. Which register received the address just before that?',
   'Find X, Y and Z in the <b>Memory</b> table. Are they kept anywhere different from the instructions?',
   'Choose the program <b>Program = data</b> and run it: an instruction is read, changed and written back as if it were a number.',
-])}
+], { tour: 'cpu-first' })}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 1 · Bài 1.1</span>
@@ -545,7 +545,7 @@ ${thuNgay('vi', 'cpu', 'add', 'Đây là một cỗ máy von Neumann thật (tí
   'Bấm <b>Bước</b> tới khi PC đổi lần đầu. Ngay trước đó địa chỉ được chép vào thanh ghi nào?',
   'Tìm X, Y và Z trong bảng <b>Bộ nhớ</b>. Chúng có nằm ở chỗ nào khác với các lệnh không?',
   'Chọn chương trình <b>Chương trình = dữ liệu</b> rồi chạy: một lệnh bị đọc, sửa và ghi lại như thể nó là một con số.',
-])}
+], { tour: 'cpu-first' })}
 </div>
 `,
         },
@@ -654,7 +654,7 @@ ${thuNgay('en', 'cpu', 'sum', 'The fetch → decode → execute cycle for real: 
   'Count the micro-steps of one <code>Load</code> instruction. Which three belong to the fetch?',
   'Switch to <b>whole instructions</b> and run to the end: how many instructions did the CPU execute to add 1..5?',
   'Change <code>N, DEC 5</code> to 10 and predict the output before you run it.',
-])}
+], { tour: 'fetch-decode' })}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 1 · Bài 1.3</span>
@@ -687,7 +687,7 @@ ${thuNgay('vi', 'cpu', 'sum', 'Chu trình nạp → giải mã → thực thi b�
   'Đếm số vi bước của một lệnh <code>Load</code>. Ba bước nào thuộc giai đoạn nạp lệnh?',
   'Chuyển sang <b>từng lệnh</b> rồi chạy tới cuối: CPU đã chạy bao nhiêu lệnh để cộng 1..5?',
   'Đổi <code>N, DEC 5</code> thành 10 và đoán kết quả trước khi chạy.',
-])}
+], { tour: 'fetch-decode' })}
 </div>
 `,
         },
@@ -729,7 +729,7 @@ ${thuNgay('en', 'cache', 'sequential', 'A cache keeps recently used blocks close
   'Run it. Why is the hit rate exactly 75%?',
   'Change <b>Block</b> to 4 B. What happens to the hit rate, and why?',
   'Pick the scenario <b>A loop re-reading a small array</b>. Which accesses still miss?',
-])}
+], { tour: 'cache-basics' })}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 1 · Bài 1.4</span>
@@ -756,7 +756,7 @@ ${thuNgay('vi', 'cache', 'sequential', 'Cache giữ những khối vừa dùng �
   'Chạy thử. Vì sao tỉ lệ trúng đúng bằng 75%?',
   'Đổi <b>Khối</b> thành 4 B. Tỉ lệ trúng thay đổi thế nào, vì sao?',
   'Chọn kịch bản <b>Vòng lặp đọc lại mảng nhỏ</b>. Những lần truy cập nào vẫn trượt?',
-])}
+], { tour: 'cache-basics' })}
 </div>
 `,
         },
@@ -879,7 +879,7 @@ ${thuNgay('en', 'bits', 'intro', 'Why only 0 and 1? Move the voltage, add electr
   'Set the noise to ±1.0 V. Which voltages still give a reliable bit?',
   'Make the pattern 01000001. Which letter is it in ASCII, and which number?',
   'How many different patterns can 8 switches make? Check on the <b>Bit board</b> tab with all bits set to 1.',
-])}
+], { tour: 'bits-basics' })}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 2 · Bài 2.1</span>
@@ -909,7 +909,7 @@ ${thuNgay('vi', 'bits', 'intro', 'Vì sao chỉ có 0 và 1? Kéo điện áp, t
   'Đặt nhiễu ±1,0 V. Những mức điện áp nào vẫn cho ra bit đáng tin?',
   'Tạo mẫu 01000001. Đó là chữ gì trong ASCII, và là số mấy?',
   'Tám công tắc tạo được bao nhiêu mẫu khác nhau? Kiểm ở thẻ <b>Bảng bit</b> với mọi bit bằng 1.',
-])}
+], { tour: 'bits-basics' })}
 </div>
 `,
         },
@@ -949,7 +949,7 @@ ${thuNgay('en', 'bits', 'convert', 'The repeated-division method from this lesso
   'Convert 200 to binary step by step. Then switch to base 16: what is 200 in hex?',
   'Is 0xC8 equal to 1100 1000? Use the grouping trick: 4 bits per hex digit.',
   'Convert 1000 to octal and verify it with the place-value column.',
-])}
+], { tour: 'bits-convert' })}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 2 · Bài 2.2</span>
@@ -981,7 +981,7 @@ ${thuNgay('vi', 'bits', 'convert', 'Đúng phương pháp chia liên tiếp củ
   'Đổi 200 sang nhị phân từng bước. Rồi chuyển sang cơ số 16: 200 viết hex là gì?',
   '0xC8 có bằng 1100 1000 không? Dùng mẹo gom nhóm: 4 bit cho mỗi chữ số hex.',
   'Đổi 1000 sang bát phân và kiểm lại bằng cột trọng số.',
-])}
+], { tour: 'bits-convert' })}
 </div>
 `,
         },
@@ -1017,7 +1017,7 @@ ${thuNgay('en', 'bits', 'signed', 'Binary addition column by column with every c
   'Click <b>127 + 1</b>. Why does the signed result become −128? Which flag turns on?',
   'Switch to 4 bit and do 5 + 4 on the number wheel. Where does the result cross the red line?',
   'Compute 5 − 9 in 8 bit. How does the ALU subtract using nothing but an adder?',
-])}
+], { tour: 'bits-signed' })}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 2 · Bài 2.3</span>
@@ -1038,7 +1038,7 @@ ${thuNgay('vi', 'bits', 'signed', 'Cộng nhị phân theo từng cột, hiện 
   'Bấm <b>127 + 1</b>. Vì sao kết quả có dấu thành −128? Cờ nào bật?',
   'Chuyển sang 4 bit và làm 5 + 4 trên vòng số. Kết quả vượt qua vạch đỏ ở đâu?',
   'Tính 5 − 9 với 8 bit. ALU trừ bằng cách nào khi chỉ có mạch cộng?',
-])}
+], { tour: 'bits-signed' })}
 </div>
 `,
         },
@@ -1102,7 +1102,7 @@ ${thuNgay('en', 'data', 'float', 'Integers are stored in two&#39;s complement (C
   'Type 0.5, then 0.1. Why is 0.5 stored exactly but 0.1 is not?',
   'Read the box <b>0.1 + 0.2 == 0.3?</b> Which of the two numbers is larger?',
   'Click the first (sign) bit: what changes? Then try 16777217 as a float.',
-])}
+], { tour: 'data-float' })}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 3 · Bài 3.1</span>
@@ -1127,7 +1127,7 @@ ${thuNgay('vi', 'data', 'float', 'Số nguyên lưu bằng bù hai (phòng lab C
   'Gõ 0.5, rồi 0.1. Vì sao 0.5 lưu chính xác còn 0.1 thì không?',
   'Đọc ô <b>0.1 + 0.2 == 0.3?</b> Trong hai số, số nào lớn hơn?',
   'Bấm bit đầu tiên (bit dấu): điều gì đổi? Rồi thử 16777217 dạng float.',
-])}
+], { tour: 'data-float' })}
 </div>
 `,
         },
@@ -1168,7 +1168,7 @@ ${thuNgay('en', 'data', 'text', 'Text is stored as numbers. Type Vietnamese and 
   'Why does A take 1 byte but the Vietnamese letter e-with-circumflex-and-dot take 3? Click its row.',
   'Switch to NFD. How many code points does that letter become?',
   'Open the <b>Mojibake</b> tab and explain where the garbled text comes from.',
-])}
+], { tour: 'data-text' })}
 ${thuNgay('en', 'data', 'color', 'Images are grids of numbers too: every pixel is three bytes — red, green and blue.', [
   'Make pure yellow with the sliders. What is its hex code?',
   'How many bytes does an uncompressed 1920 × 1080 photo need?',
@@ -1198,7 +1198,7 @@ ${thuNgay('vi', 'data', 'text', 'Chữ được lưu bằng số. Gõ tiếng Vi
   'Vì sao A tốn 1 byte còn ệ tốn 3? Bấm vào hàng của ệ.',
   'Chuyển sang NFD. Chữ ệ thành mấy mã điểm?',
   'Mở thẻ <b>Lỗi font</b> và giải thích chữ “Viá»‡t” từ đâu ra.',
-])}
+], { tour: 'data-text' })}
 ${thuNgay('vi', 'data', 'color', 'Ảnh cũng là lưới các con số: mỗi điểm ảnh là ba byte — đỏ, lục, lam.', [
   'Pha màu vàng tươi bằng các thanh trượt. Mã hex của nó là gì?',
   'Một ảnh 1920 × 1080 chưa nén cần bao nhiêu byte?',
@@ -1242,11 +1242,11 @@ ${thuNgay('en', 'bits', 'ops', 'AND, OR and XOR applied to whole bytes are the b
   'Choose the example <b>keep the low 4 bits</b>. Which bits of A survive, and why?',
   'Apply XOR 0x20 to the letter a (0x61). Which letter do you get?',
   'Choose NOT. What is the relation between A and the result?',
-])}
+], { tour: 'bits-ops' })}
 ${thuNgay('en', 'logic', 'gates', 'Each of those byte operations is built from tiny logic gates, one per bit.', [
   'Pick XOR and fill in its truth table on paper before you look.',
   'Which gate outputs 1 only when both inputs are 0?',
-], { heading: false })}
+], { tour: 'logic-gates', heading: false })}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 3 · Bài 3.3</span>
@@ -1271,11 +1271,11 @@ ${thuNgay('vi', 'bits', 'ops', 'AND, OR và XOR áp lên cả byte chính là nh
   'Chọn ví dụ <b>giữ 4 bit thấp</b>. Những bit nào của A còn lại, vì sao?',
   'Áp XOR 0x20 lên chữ a (0x61). Bạn được chữ gì?',
   'Chọn NOT. A và kết quả liên hệ với nhau thế nào?',
-])}
+], { tour: 'bits-ops' })}
 ${thuNgay('vi', 'logic', 'gates', 'Mỗi phép toán trên byte ở trên được dựng từ các cổng logic tí hon, mỗi bit một cổng.', [
   'Chọn XOR và tự điền bảng chân trị ra giấy trước khi nhìn.',
   'Cổng nào ra 1 chỉ khi cả hai đầu vào là 0?',
-], { heading: false })}
+], { tour: 'logic-gates', heading: false })}
 </div>
 `,
         },
@@ -1305,7 +1305,7 @@ ${thuNgay('en', 'bits', 'ops', 'Shifting left multiplies by 2, shifting right di
   'Choose <b>x × 4 = shift left 2</b> and check 13 × 4 = 52.',
   'Choose <b>−20 ÷ 4</b>. Why must this shift copy the sign bit instead of inserting 0?',
   'Shift 200 left by 1 in 8 bits. What is lost, and what is the result?',
-])}
+], { tour: 'bits-ops' })}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 3 · Bài 3.4</span>
@@ -1327,7 +1327,7 @@ ${thuNgay('vi', 'bits', 'ops', 'Dịch trái là nhân 2, dịch phải là chia
   'Chọn <b>x × 4 = dịch trái 2</b> và kiểm 13 × 4 = 52.',
   'Chọn <b>−20 ÷ 4</b>. Vì sao phép dịch này phải chép bit dấu thay vì chèn 0?',
   'Dịch trái 200 đi 1 với 8 bit. Mất gì, và kết quả bằng bao nhiêu?',
-])}
+], { tour: 'bits-ops' })}
 </div>
 `,
         },
@@ -1937,7 +1937,7 @@ ${thuNgay('en', 'pipeline', 'sum', 'Follow a real C program through gcc: assembl
   'Compare the x86-64 and ARM64 machine code in stage 3: whose instructions all have the same length?',
   'Switch from -O0 to -O2. What happened to the loop inside main?',
   'In stage 5, at which address does sum_to end up?',
-])}
+], { tour: 'pipeline-stages' })}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 7 · Bài 7.1</span>
@@ -1975,7 +1975,7 @@ ${thuNgay('vi', 'pipeline', 'sum', 'Lần theo một chương trình C thật đ
   'So mã máy x86-64 và ARM64 ở bước 3: lệnh của bên nào dài bằng nhau hết?',
   'Đổi -O0 sang -O2. Vòng lặp trong main đã đi đâu?',
   'Ở bước 5, sum_to nằm ở địa chỉ nào?',
-])}
+], { tour: 'pipeline-stages' })}
 </div>
 `,
         },
@@ -2907,11 +2907,11 @@ ${thuNgay('vi', 'pipeline', 'sum', 'Lần theo một chương trình C thật đ
 ${thuNgay('en', 'logic', 'adder', 'Build the adder from this lesson gate by gate.', [
   'Set A = 1, B = 1, Cin = 1 on the full adder. What are S and Cout? Check with 1 + 1 + 1 = 3.',
   'Switch to Half adder: which input is missing, and why can it not add multi-bit numbers alone?',
-])}
+], { tour: 'logic-adder' })}
 ${thuNgay('en', 'logic', 'ripple', 'Then chain eight full adders into an 8-bit adder and watch the carry ripple from right to left.', [
   'Set A = 255 and B = 1. How many stages does the carry travel through?',
   'Why do real CPUs use carry-lookahead adders instead?',
-], { heading: false })}
+], { tour: 'logic-ripple', heading: false })}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Nâng cao 1 · Bài N1.1</span>
@@ -2948,11 +2948,11 @@ ${thuNgay('en', 'logic', 'ripple', 'Then chain eight full adders into an 8-bit a
 ${thuNgay('vi', 'logic', 'adder', 'Dựng bộ cộng của bài này từng cổng một.', [
   'Đặt A = 1, B = 1, Cin = 1 trên full adder. S và Cout bằng bao nhiêu? Kiểm bằng 1 + 1 + 1 = 3.',
   'Chuyển sang Half adder: thiếu đầu vào nào, và vì sao một mình nó không cộng được số nhiều bit?',
-])}
+], { tour: 'logic-adder' })}
 ${thuNgay('vi', 'logic', 'ripple', 'Rồi nối tám full adder thành bộ cộng 8 bit và xem bit nhớ lan từ phải sang trái.', [
   'Đặt A = 255 và B = 1. Bit nhớ đi qua bao nhiêu tầng?',
   'Vì sao CPU thật dùng bộ cộng nhìn trước số nhớ (carry-lookahead)?',
-], { heading: false })}
+], { tour: 'logic-ripple', heading: false })}
 </div>
 `,
         },
@@ -3059,7 +3059,7 @@ ${thuNgay('en', 'pipeline', 'add', 'The compilation pipeline of this lesson with
   'Find the bytes of <code>ret</code> in x86-64 (stage 3). How many bytes is it?',
   'In stage 4, why does .bss have a size but take no space in the file?',
   'In stage 1, which MARIE instruction plays the role of <code>mov eax, [x]</code>?',
-])}
+], { tour: 'pipeline-stages' })}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Nâng cao 3 · Bài N3.1</span>
@@ -3086,7 +3086,7 @@ ${thuNgay('vi', 'pipeline', 'add', 'Đường ống biên dịch của bài này
   'Tìm các byte của <code>ret</code> trên x86-64 (bước 3). Nó dài mấy byte?',
   'Ở bước 4, vì sao .bss có kích thước mà không chiếm chỗ trong tệp?',
   'Ở bước 1, lệnh MARIE nào đóng vai <code>mov eax, [x]</code>?',
-])}
+], { tour: 'pipeline-stages' })}
 </div>
 `,
         },

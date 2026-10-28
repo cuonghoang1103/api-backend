@@ -419,7 +419,7 @@ ${thuNgay('en', 'cpu', 'add', 'The four functions of a computer — data process
   'Which unit in the diagram does the data processing? Step until it is used.',
   'Which steps are pure data movement (register to register, or memory to register)?',
   'Which register tells the control unit what to do next?',
-])}
+], { tour: 'cpu-first' })}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 1 · Bài 1.2</span>
@@ -444,7 +444,7 @@ ${thuNgay('vi', 'cpu', 'add', 'Bốn chức năng của máy tính — xử lý,
   'Khối nào trong sơ đồ làm việc xử lý dữ liệu? Đi từng bước tới khi nó được dùng.',
   'Những bước nào thuần tuý là di chuyển dữ liệu (thanh ghi sang thanh ghi, hay bộ nhớ sang thanh ghi)?',
   'Thanh ghi nào cho khối điều khiển biết phải làm gì tiếp?',
-])}
+], { tour: 'cpu-first' })}
 </div>
 `,
         },
@@ -640,7 +640,7 @@ ${thuNgay('en', 'cpu', 'sum', 'The instruction cycle — fetch, then execute —
   'Write down the RTN of the fetch cycle that the simulator shows.',
   'For <code>Add Count</code>, which steps are operand fetch and which is the data operation?',
   'How many memory reads does one <code>Load</code> instruction need in total?',
-])}
+], { tour: 'fetch-decode' })}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 3 · Bài 3.1</span>
@@ -665,7 +665,7 @@ ${thuNgay('vi', 'cpu', 'sum', 'Chu trình lệnh — nạp rồi thực thi — 
   'Chép lại RTN của chu trình nạp mà mô phỏng hiện ra.',
   'Với <code>Add Count</code>, bước nào là nạp toán hạng, bước nào là phép xử lý dữ liệu?',
   'Một lệnh <code>Load</code> cần tổng cộng bao nhiêu lần đọc bộ nhớ?',
-])}
+], { tour: 'fetch-decode' })}
 </div>
 `,
         },
@@ -697,7 +697,7 @@ ${thuNgay('en', 'cpu', 'max', 'Watch the address bus (blue packets) and the data
   'During <code>LoadI Ptr</code>, how many times does an address go out on the bus?',
   'Which transfers stay inside the CPU (internal bus) and never reach memory?',
   'Why must MAR be loaded before a memory read can begin?',
-])}
+], { tour: 'cpu-bus' })}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 3 · Bài 3.2</span>
@@ -721,7 +721,7 @@ ${thuNgay('vi', 'cpu', 'max', 'Xem bus địa chỉ (gói xanh dương) và bus 
   'Trong lệnh <code>LoadI Ptr</code>, địa chỉ được đưa ra bus mấy lần?',
   'Những lượt truyền nào chỉ ở trong CPU (bus trong) và không bao giờ tới bộ nhớ?',
   'Vì sao phải nạp MAR trước thì mới đọc bộ nhớ được?',
-])}
+], { tour: 'cpu-bus' })}
 </div>
 `,
         },
@@ -862,11 +862,11 @@ ${thuNgay('en', 'cache', 'textbook', 'The three mapping schemes on one trace. Th
   'Direct mapping gives 5 misses for 0, 8, 0, 6, 8. Predict, then set Ways = 2: how many now?',
   'Set Ways = all (fully associative): 3 misses. Which access turned into a hit?',
   'With 2 ways, switch LRU and FIFO. Does anything change for this trace?',
-])}
+], { tour: 'cache-mapping' })}
 ${thuNgay('en', 'cache', 'conflict', 'Conflict misses in real code: <code>c[i] = a[i] + b[i]</code> with two arrays exactly one cache-size apart.', [
   'Why do a[i] and b[i] always land in the same line of a 128-byte direct-mapped cache?',
   'Fix it with 2-way set associativity and read the new hit rate.',
-], { heading: false })}
+], { tour: 'cache-mapping', heading: false })}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 4 · Bài 4.2</span>
@@ -890,11 +890,11 @@ ${thuNgay('vi', 'cache', 'textbook', 'Ba cách ánh xạ trên cùng một dãy 
   'Ánh xạ trực tiếp cho 5 lần trượt với 0, 8, 0, 6, 8. Đoán trước, rồi đặt Đường/tập = 2: giờ là mấy?',
   'Đặt Đường/tập = tất cả (kết hợp toàn phần): 3 lần trượt. Lần truy cập nào đã thành trúng?',
   'Với 2 đường, đổi qua lại LRU và FIFO. Dãy này có gì thay đổi không?',
-])}
+], { tour: 'cache-mapping' })}
 ${thuNgay('vi', 'cache', 'conflict', 'Trượt xung đột trong code thật: <code>c[i] = a[i] + b[i]</code> với hai mảng cách nhau đúng một dung lượng cache.', [
   'Vì sao a[i] và b[i] luôn rơi vào cùng một dòng của cache ánh xạ trực tiếp 128 byte?',
   'Sửa bằng kết hợp tập hợp 2 đường và đọc tỉ lệ trúng mới.',
-], { heading: false })}
+], { tour: 'cache-mapping', heading: false })}
 </div>
 `,
         },
@@ -1358,7 +1358,7 @@ ${thuNgay('vi', 'cache', 'conflict', 'Trượt xung đột trong code thật: <c
 ${thuNgay('en', 'logic', 'gates', 'Every gate of this lesson with its truth table, live.', [
   'For each gate, predict the output for A = 1, B = 0 before you click.',
   'Which gate is a 1-bit equality comparator?',
-])}
+], { tour: 'logic-gates' })}
 ${thuNgay('en', 'logic', 'nand', 'NAND is functionally complete: build the other gates from it and check every input.', [
   'How many NAND gates does XOR need?',
   'Use De Morgan&#39;s law to explain why OR = NAND(NOT a, NOT b).',
@@ -1392,7 +1392,7 @@ ${thuNgay('en', 'logic', 'nand', 'NAND is functionally complete: build the other
 ${thuNgay('vi', 'logic', 'gates', 'Mọi cổng của bài này kèm bảng chân trị, chạy trực tiếp.', [
   'Với mỗi cổng, đoán đầu ra khi A = 1, B = 0 trước khi bấm.',
   'Cổng nào là bộ so sánh bằng nhau 1 bit?',
-])}
+], { tour: 'logic-gates' })}
 ${thuNgay('vi', 'logic', 'nand', 'NAND là cổng đầy đủ chức năng: dựng các cổng khác từ nó và kiểm mọi đầu vào.', [
   'XOR cần bao nhiêu cổng NAND?',
   'Dùng định luật De Morgan giải thích vì sao OR = NAND(NOT a, NOT b).',
@@ -1439,7 +1439,7 @@ ${thuNgay('vi', 'logic', 'nand', 'NAND là cổng đầy đủ chức năng: d�
 ${thuNgay('en', 'logic', 'ripple', 'A combinational circuit: the 8-bit ripple-carry adder, with the carry settling one stage at a time.', [
   'Add 0b11111111 + 1. Count the stages until the result is final.',
   'Why is it called ripple-carry, and why are real ALUs not built this way?',
-])}
+], { tour: 'logic-ripple' })}
 ${thuNgay('en', 'logic', 'register', 'A sequential circuit: a 4-bit register built from D flip-flops, driven by a clock.', [
   'Change D several times without a clock tick. Does Q change?',
   'Give one clock tick. Which value is stored — the first D or the last one?',
@@ -1472,7 +1472,7 @@ ${thuNgay('en', 'logic', 'register', 'A sequential circuit: a 4-bit register bui
 ${thuNgay('vi', 'logic', 'ripple', 'Một mạch tổ hợp: bộ cộng nối tiếp nhớ 8 bit, bit nhớ ổn định dần từng tầng.', [
   'Cộng 0b11111111 + 1. Đếm số tầng tới khi kết quả chốt.',
   'Vì sao gọi là ripple-carry (nhớ lan), và vì sao ALU thật không dựng như vậy?',
-])}
+], { tour: 'logic-ripple' })}
 ${thuNgay('vi', 'logic', 'register', 'Một mạch tuần tự: thanh ghi 4 bit dựng từ D flip-flop, chạy theo đồng hồ.', [
   'Đổi D vài lần mà không có nhịp đồng hồ. Q có đổi không?',
   'Cho một nhịp đồng hồ. Giá trị nào được lưu — D đầu tiên hay D cuối cùng?',
@@ -1539,11 +1539,11 @@ ${thuNgay('en', 'cpu', 'add', 'A machine instruction, bit by bit: MARIE uses one
   'In the listing, split <code>1005</code> into opcode bits and address bits. What does each part mean?',
   'Change <code>Load X</code> to <code>Load Y</code>. Which bits of the machine code change?',
   'Open <b>Instruction set</b>. With a 4-bit opcode, how many different instructions can MARIE have at most?',
-])}
+], { tour: 'cpu-first' })}
 ${thuNgay('en', 'pipeline', 'sum', 'Real instruction formats from gcc: x86-64 (variable length) next to ARM64 (fixed 32 bits).', [
   'Compare the instruction lengths of x86-64 and ARM64 in stage 3.',
   'Find an x86-64 instruction that takes its operand straight from memory.',
-], { heading: false })}
+], { tour: 'pipeline-stages', heading: false })}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 10 · Bài 10.1</span>
@@ -1574,11 +1574,11 @@ ${thuNgay('vi', 'cpu', 'add', 'Một lệnh máy, từng bit: MARIE dùng một 
   'Trong bảng hợp dịch, tách <code>1005</code> thành bit mã lệnh và bit địa chỉ. Mỗi phần nghĩa là gì?',
   'Đổi <code>Load X</code> thành <code>Load Y</code>. Những bit nào của mã máy thay đổi?',
   'Mở <b>Tập lệnh</b>. Với mã lệnh 4 bit, MARIE có tối đa bao nhiêu lệnh khác nhau?',
-])}
+], { tour: 'cpu-first' })}
 ${thuNgay('vi', 'pipeline', 'sum', 'Khuôn lệnh thật do gcc sinh: x86-64 (dài thay đổi) cạnh ARM64 (cố định 32 bit).', [
   'So độ dài lệnh x86-64 và ARM64 ở bước 3.',
   'Tìm một lệnh x86-64 lấy toán hạng thẳng từ bộ nhớ.',
-], { heading: false })}
+], { tour: 'pipeline-stages', heading: false })}
 </div>
 `,
         },
@@ -1632,7 +1632,7 @@ ${thuNgay('en', 'cpu', 'max', 'Direct and indirect addressing in one program: th
   'Which instruction uses indirect addressing? Follow its two memory reads step by step.',
   'Compare the micro-steps of <code>Load Arr</code> (direct) with <code>LoadI Ptr</code> (indirect).',
   'The operand of Skipcond is not an address at all. What is it?',
-])}
+], { tour: 'cpu-bus' })}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 11 · Bài 11.1</span>
@@ -1656,7 +1656,7 @@ ${thuNgay('vi', 'cpu', 'max', 'Định địa chỉ trực tiếp và gián ti�
   'Lệnh nào dùng định địa chỉ gián tiếp? Theo dõi hai lần đọc bộ nhớ của nó từng bước.',
   'So vi bước của <code>Load Arr</code> (trực tiếp) với <code>LoadI Ptr</code> (gián tiếp).',
   'Toán hạng của Skipcond hoàn toàn không phải địa chỉ. Vậy nó là gì?',
-])}
+], { tour: 'cpu-bus' })}
 </div>
 `,
         },
@@ -1717,7 +1717,7 @@ ${thuNgay('en', 'cpu', 'sum', 'User-visible and control/status registers at work
   'List the registers of this machine and sort them into user-visible and control/status.',
   'Run one full loop iteration and write down PC after every instruction.',
   'When does PC change other than in the fetch cycle?',
-])}
+], { tour: 'fetch-decode' })}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 12 · Bài 12.1</span>
@@ -1748,7 +1748,7 @@ ${thuNgay('vi', 'cpu', 'sum', 'Thanh ghi người dùng thấy được và than
   'Liệt kê các thanh ghi của máy này và chia thành nhóm người dùng thấy được và nhóm điều khiển/trạng thái.',
   'Chạy trọn một vòng lặp và ghi lại PC sau mỗi lệnh.',
   'Ngoài chu trình nạp, PC còn đổi vào lúc nào?',
-])}
+], { tour: 'fetch-decode' })}
 </div>
 `,
         },
@@ -1861,7 +1861,7 @@ ${thuNgay('en', 'pipeline', 'sum', 'RISC versus CISC on the same C function, com
   'In stage 3, measure the instruction lengths on x86-64 and on ARM64.',
   'ARM64 is a load/store architecture: at -O0, find the ldr/str around each add.',
   'Count the instructions of sum_to at -O2 on both CPUs.',
-])}
+], { tour: 'pipeline-stages' })}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 13 · Bài 13.1</span>
@@ -1890,7 +1890,7 @@ ${thuNgay('vi', 'pipeline', 'sum', 'RISC đối đầu CISC trên cùng một h�
   'Ở bước 3, đo độ dài lệnh trên x86-64 và trên ARM64.',
   'ARM64 là kiến trúc load/store: ở -O0, tìm các lệnh ldr/str quanh mỗi lệnh add.',
   'Đếm số lệnh của sum_to ở -O2 trên cả hai CPU.',
-])}
+], { tour: 'pipeline-stages' })}
 </div>
 `,
         },
@@ -2090,7 +2090,7 @@ ${thuNgay('en', 'cpu', 'add', 'The program of this lesson, running inside the pa
   'Run the first program and check that Z = 12.',
   'Start from the <b>Empty</b> program and write your own: add 5 + 7 and Halt.',
   'Write a countdown that prints 3, 2, 1 using a loop and Skipcond.',
-])}
+], { tour: 'cpu-first' })}
 ${thuNgay('en', 'cpu', 'selfmod', 'Von Neumann&#39;s big idea has a dark side: since instructions are data, a program can rewrite its own code.', [
   'The first Output prints the instruction itself. Decode that number by hand.',
   'Modern operating systems mark code pages read-only (W^X). Why does that stop this trick — and many attacks?',
@@ -2127,7 +2127,7 @@ ${thuNgay('vi', 'cpu', 'add', 'Chương trình của bài này chạy ngay trong
   'Chạy chương trình đầu tiên và kiểm Z = 12.',
   'Bắt đầu từ chương trình <b>Trống</b> và tự viết: cộng 5 + 7 rồi Halt.',
   'Viết chương trình đếm ngược in ra 3, 2, 1 bằng vòng lặp và Skipcond.',
-])}
+], { tour: 'cpu-first' })}
 ${thuNgay('vi', 'cpu', 'selfmod', 'Ý tưởng lớn của von Neumann có mặt tối: vì lệnh cũng là dữ liệu, chương trình có thể tự viết lại mã của chính nó.', [
   'Lệnh Output đầu tiên in ra chính cái lệnh. Tự giải mã con số đó.',
   'Hệ điều hành ngày nay đánh dấu trang mã là chỉ-đọc (W^X). Vì sao điều đó chặn được chiêu này — và nhiều kiểu tấn công?',

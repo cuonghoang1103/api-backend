@@ -54,7 +54,7 @@ ${run('c51-race', 'objdump -d --no-show-raw-insn race ')}
 <tr><td>4</td><td></td><td>add → r = 6; store</td><td><strong>6, not 7</strong></td></tr>
 </table>
 <p>Both threads did an increment; memory went up by one. That is a <strong>lost update</strong>, and it is the whole chapter in four rows. With ten cores running truly in parallel, the windows overlap constantly — hence 70% lost. Step through it yourself, choose who runs next, then press <em>Run it 1,000 times</em> to see the spread of final values:</p>
-${lab('race', 'none', 'en', 'counter++ split into load / add / store for two threads. Step manually or randomly, then run 1,000 random interleavings and look at the histogram of final values.')}
+${lab('race', 'none', 'en', 'counter++ split into load / add / store for two threads. Step manually or randomly, then run 1,000 random interleavings and look at the histogram of final values.', { tour: 'race-lost-update' })}
 <p>Three words you will use for the rest of the course:</p>
 <ul>
 <li><strong>Race condition</strong> — the result depends on the timing of threads (who ran first).</li>
@@ -147,7 +147,7 @@ ${run('c51-race', 'objdump -d --no-show-raw-insn race ')}
 <tr><td>4</td><td></td><td>cộng → r = 6; ghi</td><td><strong>6, không phải 7</strong></td></tr>
 </table>
 <p>Cả hai luồng đều đã tăng; bộ nhớ chỉ lên một. Đó là một <strong>lần cập nhật bị mất (lost update)</strong>, và cả chương này nằm trong bốn dòng đó. Với mười lõi chạy song song thật, các khe hở chồng lên nhau liên tục — nên mất 70%. Tự bước qua từng lệnh, chọn ai chạy tiếp, rồi bấm <em>Chạy 1.000 lần</em> để xem các giá trị cuối phân tán ra sao:</p>
-${lab('race', 'none', 'vi', 'counter++ tách thành nạp / cộng / ghi cho hai luồng. Bước tay hoặc ngẫu nhiên, rồi chạy 1.000 lần xen kẽ ngẫu nhiên và xem biểu đồ tần suất các giá trị cuối.')}
+${lab('race', 'none', 'vi', 'counter++ tách thành nạp / cộng / ghi cho hai luồng. Bước tay hoặc ngẫu nhiên, rồi chạy 1.000 lần xen kẽ ngẫu nhiên và xem biểu đồ tần suất các giá trị cuối.', { tour: 'race-lost-update' })}
 <p>Ba từ bạn sẽ dùng suốt phần còn lại của khoá:</p>
 <ul>
 <li><strong>Race condition (điều kiện tương tranh)</strong> — kết quả phụ thuộc vào thời điểm chạy của các luồng (ai chạy trước).</li>
@@ -264,7 +264,7 @@ ${src('ch05/Locks.java', 'java')}
 ${run('c52-mutex', 'java Locks.java')}
 <p>Both locks give exactly 8,000,000; no lock gives a wrong number. On this JVM and this micro-benchmark <code>ReentrantLock</code> was about 5× faster than <code>synchronized</code>; on other JVM versions and other contention patterns the gap shrinks or flips, so do not choose a lock from a blog benchmark. Choose <code>synchronized</code> for simple cases, and <code>ReentrantLock</code> when you need what it adds: <code>tryLock()</code> with a timeout, interruptible waiting, an optional fair queue, and several condition variables per lock. Either way, release in <code>finally</code> — an exception inside the critical section must not leave the lock held forever.</p>
 <p>See the fix instruction by instruction — the second thread now waits at the lock instead of slipping between load and store — and press <em>Run it 1,000 times</em>: every run ends at the same value:</p>
-${lab('race', 'mutex', 'en', 'The same two threads, now with lock(m) / unlock(m) around load-add-store. Only the holder may enter; run 1,000 random interleavings and the histogram collapses to one bar.')}
+${lab('race', 'mutex', 'en', 'The same two threads, now with lock(m) / unlock(m) around load-add-store. Only the holder may enter; run 1,000 random interleavings and the histogram collapses to one bar.', { tour: 'race-lost-update' })}
 
 <h3>Condition variables: waiting for a state, not for a lock</h3>
 <p>A mutex answers "may I enter?". Often a thread needs "wait until there is something to do" — a consumer waiting for a job, a producer waiting for space. Spinning on a flag wastes a core; sleeping a fixed time adds latency. The tool is a <strong>condition variable</strong>: <code>pthread_cond_wait(&amp;cv, &amp;mu)</code> atomically <em>releases the mutex and sleeps</em>; when woken it re-acquires the mutex before returning. Here is the classic <strong>producer–consumer</strong> (bounded buffer): two producers, four consumers, a 4-slot ring buffer:</p>
@@ -350,7 +350,7 @@ ${src('ch05/Locks.java', 'java')}
 ${run('c52-mutex', 'java Locks.java')}
 <p>Cả hai khoá cho đúng 8.000.000; không khoá thì ra số sai. Trên JVM này và bài đo nhỏ này <code>ReentrantLock</code> nhanh hơn <code>synchronized</code> khoảng 5 lần; ở phiên bản JVM khác và kiểu tranh chấp khác khoảng cách thu hẹp hoặc đảo chiều, nên đừng chọn khoá theo một bài đo trên blog. Dùng <code>synchronized</code> cho trường hợp đơn giản, và <code>ReentrantLock</code> khi bạn cần thứ nó thêm vào: <code>tryLock()</code> có thời hạn, chờ có thể bị ngắt, hàng đợi công bằng tuỳ chọn, và nhiều biến điều kiện trên một khoá. Cách nào cũng vậy, nhả khoá trong <code>finally</code> — một ngoại lệ trong vùng găng không được để khoá bị giữ mãi mãi.</p>
 <p>Xem cách sửa từng lệnh máy — luồng thứ hai giờ chờ ở khoá thay vì lọt vào giữa nạp và ghi — rồi bấm <em>Chạy 1.000 lần</em>: lần nào cũng kết thúc cùng một giá trị:</p>
-${lab('race', 'mutex', 'vi', 'Vẫn hai luồng đó, giờ có lock(m) / unlock(m) bao quanh nạp-cộng-ghi. Chỉ người giữ khoá được vào; chạy 1.000 lần xen kẽ ngẫu nhiên và biểu đồ co lại còn một cột.')}
+${lab('race', 'mutex', 'vi', 'Vẫn hai luồng đó, giờ có lock(m) / unlock(m) bao quanh nạp-cộng-ghi. Chỉ người giữ khoá được vào; chạy 1.000 lần xen kẽ ngẫu nhiên và biểu đồ co lại còn một cột.', { tour: 'race-lost-update' })}
 
 <h3>Biến điều kiện: chờ một trạng thái, không phải chờ một khoá</h3>
 <p>Mutex trả lời câu "tôi được vào không?". Nhiều khi một luồng cần "chờ tới khi có việc" — consumer chờ một job, producer chờ có chỗ trống. Quay vòng trên một cờ thì phí một lõi; ngủ một khoảng cố định thì thêm độ trễ. Công cụ đúng là <strong>biến điều kiện (condition variable)</strong>: <code>pthread_cond_wait(&amp;cv, &amp;mu)</code> <em>nhả mutex và đi ngủ</em> trong một bước nguyên tử; khi được đánh thức nó lấy lại mutex rồi mới trả về. Đây là bài <strong>producer–consumer</strong> (bộ đệm giới hạn) kinh điển: hai producer, bốn consumer, một bộ đệm vòng 4 ô:</p>
@@ -435,7 +435,7 @@ ${run('c53-sem', 'java Atomics.java')}
 <p><code>AtomicLong</code> is one shared word, so eight threads still fight over one cache line. <code>LongAdder</code> gives each thread its own cell and only adds them up when you call <code>sum()</code> — the <code>local</code> idea from lesson 5.2 packaged as a class — and it was more than 15× faster here. Use it for metrics and hit counters. And Node, with the <code>atomics</code> mode of the program from lesson 5.1:</p>
 ${run('c53-sem', 'node race-sab.js atomics')}
 <p>Zero lost (the broken <code>plain</code> mode lost up to half), at roughly three times the time of the broken version. Correctness has a price; it is still far cheaper than a wrong balance.</p>
-${lab('race', 'atomic', 'en', 'counter++ as ONE indivisible atomic instruction: the other thread can never slip between load and store. Run 1,000 interleavings — one bar at the right value, and no lock was taken.')}
+${lab('race', 'atomic', 'en', 'counter++ as ONE indivisible atomic instruction: the other thread can never slip between load and store. Run 1,000 interleavings — one bar at the right value, and no lock was taken.', { tour: 'race-lost-update' })}
 
 <h3>Memory visibility: the write that never arrives</h3>
 <p>A different bug. One thread spins until a flag becomes 1; the main thread sets it after 100 ms. Nothing is incremented, so nothing can be lost:</p>
@@ -525,7 +525,7 @@ ${run('c53-sem', 'java Atomics.java')}
 <p><code>AtomicLong</code> là một từ nhớ dùng chung, nên tám luồng vẫn tranh nhau một dòng cache. <code>LongAdder</code> cho mỗi luồng một ô riêng và chỉ cộng lại khi bạn gọi <code>sum()</code> — ý tưởng <code>local</code> của bài 5.2 đóng gói thành một lớp — và ở đây nó nhanh hơn trên 15 lần. Dùng nó cho số liệu đo (metrics) và bộ đếm lượt truy cập. Còn Node, với chế độ <code>atomics</code> của chương trình bài 5.1:</p>
 ${run('c53-sem', 'node race-sab.js atomics')}
 <p>Không mất lần nào (chế độ <code>plain</code> hỏng có lúc mất tới một nửa), với thời gian cỡ gấp ba bản hỏng. Đúng thì có giá; vẫn rẻ hơn nhiều so với một số dư tài khoản sai.</p>
-${lab('race', 'atomic', 'vi', 'counter++ thành MỘT lệnh nguyên tử không chia cắt: luồng kia không bao giờ lọt vào giữa nạp và ghi. Chạy 1.000 lần xen kẽ — một cột ở đúng giá trị, và không cần khoá nào.')}
+${lab('race', 'atomic', 'vi', 'counter++ thành MỘT lệnh nguyên tử không chia cắt: luồng kia không bao giờ lọt vào giữa nạp và ghi. Chạy 1.000 lần xen kẽ — một cột ở đúng giá trị, và không cần khoá nào.', { tour: 'race-lost-update' })}
 
 <h3>Tầm nhìn bộ nhớ: lần ghi không bao giờ tới</h3>
 <p>Một lỗi khác. Một luồng quay vòng tới khi cờ thành 1; luồng main bật cờ sau 100 ms. Không tăng gì cả, nên không có gì để mất:</p>
@@ -616,7 +616,7 @@ ${run('c54-db', 'psql -qX -v who=alice -f book-naive.sql', 2)}
 ${src('ch05/book-lock.sql', 'sql')}
 ${run('c54-db', 'psql -qX -v who=alice -f book-lock.sql', 2)}
 <p>While alice's transaction held the row, bob's <code>SELECT … FOR UPDATE</code> was <em>waiting</em> — <code>pg_stat_activity</code> shows it with <code>wait_event_type = Lock</code>. When alice committed, PostgreSQL woke bob and re-read the <strong>latest</strong> version of the row, so his check now saw alice and refused. This is exactly a mutex from lesson 5.2: the lock key is the row, the critical section is the transaction, and the waiting connection sleeps instead of spinning. The same lesson-5.2 rules apply: keep the critical section short (never call a payment provider or send an e-mail while holding a row lock — every waiting request also holds a pooled connection), and lock several rows in a fixed order or you get a deadlock (Chapter 6).</p>
-${lab('race', 'mutex', 'en', 'Read “thread” as “request” and “counter” as “the seat row”: FOR UPDATE is lock(m) around read–check–write. Step it and watch the second request wait.')}
+${lab('race', 'mutex', 'en', 'Read “thread” as “request” and “counter” as “the seat row”: FOR UPDATE is lock(m) around read–check–write. Step it and watch the second request wait.', { tour: 'race-lost-update' })}
 
 <h3>Fix 2 — make check-and-write one statement</h3>
 <p>Often you do not need to read first at all. Put the check <em>in</em> the write:</p>
@@ -716,7 +716,7 @@ ${run('c54-db', 'psql -qX -v who=alice -f book-naive.sql', 2)}
 ${src('ch05/book-lock.sql', 'sql')}
 ${run('c54-db', 'psql -qX -v who=alice -f book-lock.sql', 2)}
 <p>Trong lúc giao dịch của alice giữ dòng, lệnh <code>SELECT … FOR UPDATE</code> của bob <em>đang chờ</em> — <code>pg_stat_activity</code> hiện nó với <code>wait_event_type = Lock</code>. Khi alice commit, PostgreSQL đánh thức bob và đọc lại phiên bản <strong>mới nhất</strong> của dòng, nên lần kiểm của bob giờ thấy alice và từ chối. Đây đúng là một mutex của bài 5.2: khoá mang tên dòng, vùng găng là giao dịch, và kết nối đang chờ thì ngủ chứ không quay vòng. Các luật của bài 5.2 vẫn áp dụng: giữ vùng găng ngắn (đừng bao giờ gọi cổng thanh toán hay gửi e-mail trong lúc giữ khoá dòng — mỗi yêu cầu đang chờ cũng đang giữ một kết nối trong pool), và khoá nhiều dòng theo một thứ tự cố định nếu không muốn deadlock (Chương 6).</p>
-${lab('race', 'mutex', 'vi', 'Đọc “luồng” thành “yêu cầu” và “counter” thành “dòng ghế”: FOR UPDATE chính là lock(m) bao quanh đọc–kiểm–ghi. Bước từng lệnh và nhìn yêu cầu thứ hai phải chờ.')}
+${lab('race', 'mutex', 'vi', 'Đọc “luồng” thành “yêu cầu” và “counter” thành “dòng ghế”: FOR UPDATE chính là lock(m) bao quanh đọc–kiểm–ghi. Bước từng lệnh và nhìn yêu cầu thứ hai phải chờ.', { tour: 'race-lost-update' })}
 
 <h3>Sửa 2 — gộp kiểm và ghi thành một câu lệnh</h3>
 <p>Nhiều khi bạn chẳng cần đọc trước. Đặt phép kiểm <em>vào trong</em> lệnh ghi:</p>

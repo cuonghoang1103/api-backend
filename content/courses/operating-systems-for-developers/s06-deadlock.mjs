@@ -56,7 +56,7 @@ ${run('c61-dl', 'grep -m 4 .')}
 <p>The answer lives in user space, so attach a debugger to the live process (it keeps running afterwards):</p>
 ${run('c61-dl', 'gdb -p $P -batch -ex "thread', 2)}
 <p>LWP 30 is inside <code>transfer(from=B, to=A)</code> and blocked locking <strong>A</strong>; LWP 29 is inside <code>transfer(from=A, to=B)</code> and blocked locking <strong>B</strong>. glibc stores the owner's thread id inside the mutex, so the last command reads it directly: A is owned by 29, B by 30. Each thread waits for a lock its partner owns. Step through exactly this in the lab — pick who runs next and watch the dashed "waits for" arrows close into a loop:</p>
-${lab('race', 'deadlock', 'en', 'Two bank transfers, T1 locks A then B, T2 locks B then A. Step them one instruction at a time; when each holds one lock and waits for the other, the wait-for arrows form a cycle and nothing can move.')}
+${lab('race', 'deadlock', 'en', 'Two bank transfers, T1 locks A then B, T2 locks B then A. Step them one instruction at a time; when each holds one lock and waits for the other, the wait-for arrows form a cycle and nothing can move.', { tour: 'race-deadlock' })}
 
 <h3>The four Coffman conditions</h3>
 <p>In 1971 Coffman, Elphick and Shoshani showed that a deadlock needs <strong>all four</strong> of these at once:</p>
@@ -99,7 +99,7 @@ ${run('c61-dl', './dl ordered')}
 ${run('c61-dl', './dl trylock')}
 <p>Correct — but 5.56 s instead of 1.35 s, because 1,816 times a thread waited the full 2 ms for nothing. The pause after giving up must be <strong>random</strong>; with a fixed pause both threads can retry in lockstep forever, which is the livelock of lesson 6.2. Java's version is <code>ReentrantLock.tryLock(10, MILLISECONDS)</code>:</p>
 ${run('c61-dl', 'java Transfer.java trylock')}
-${lab('race', 'ordered', 'en', 'The fix: both transfers take A before B. Try every interleaving — a cycle can no longer form; at worst one thread waits for the other to finish.')}
+${lab('race', 'ordered', 'en', 'The fix: both transfers take A before B. Try every interleaving — a cycle can no longer form; at worst one thread waits for the other to finish.', { tour: 'race-deadlock' })}
 <table>
 <tr><th>technique</th><th>breaks</th><th>measured / cost</th></tr>
 <tr><td>global lock order</td><td>circular wait</td><td>1.35 s, 0 timeouts — free; needs a rule everyone follows</td></tr>
@@ -169,7 +169,7 @@ ${run('c61-dl', 'grep -m 4 .')}
 <p>Câu trả lời nằm ở phía người dùng, nên gắn trình gỡ lỗi vào tiến trình đang sống (nó vẫn chạy tiếp sau đó):</p>
 ${run('c61-dl', 'gdb -p $P -batch -ex "thread', 2)}
 <p>LWP 30 đang ở trong <code>transfer(from=B, to=A)</code> và bị chặn khi khoá <strong>A</strong>; LWP 29 ở trong <code>transfer(from=A, to=B)</code> và bị chặn khi khoá <strong>B</strong>. glibc lưu id luồng chủ sở hữu ngay trong mutex, nên lệnh cuối đọc thẳng ra: A do 29 giữ, B do 30 giữ. Mỗi luồng chờ một khoá mà bạn đồng hành của nó đang giữ. Hãy tự bước qua đúng cảnh này trong lab — chọn ai chạy tiếp và xem các mũi tên đứt "đang chờ" khép thành vòng:</p>
-${lab('race', 'deadlock', 'vi', 'Hai lệnh chuyển tiền, T1 khoá A rồi B, T2 khoá B rồi A. Bước từng lệnh một; khi mỗi bên giữ một khoá và chờ khoá kia, các mũi tên chờ tạo thành vòng và không gì nhúc nhích được nữa.')}
+${lab('race', 'deadlock', 'vi', 'Hai lệnh chuyển tiền, T1 khoá A rồi B, T2 khoá B rồi A. Bước từng lệnh một; khi mỗi bên giữ một khoá và chờ khoá kia, các mũi tên chờ tạo thành vòng và không gì nhúc nhích được nữa.', { tour: 'race-deadlock' })}
 
 <h3>Bốn điều kiện Coffman</h3>
 <p>Năm 1971 Coffman, Elphick và Shoshani chỉ ra rằng deadlock cần <strong>cả bốn</strong> điều sau cùng lúc:</p>
@@ -212,7 +212,7 @@ ${run('c61-dl', './dl ordered')}
 ${run('c61-dl', './dl trylock')}
 <p>Đúng — nhưng 5,56 giây thay vì 1,35 giây, vì 1.816 lần một luồng chờ trọn 2 ms mà không được gì. Khoảng nghỉ sau khi bỏ cuộc phải <strong>ngẫu nhiên</strong>; với khoảng nghỉ cố định, hai luồng có thể thử lại cùng nhịp mãi mãi, đó là livelock của bài 6.2. Bản Java là <code>ReentrantLock.tryLock(10, MILLISECONDS)</code>:</p>
 ${run('c61-dl', 'java Transfer.java trylock')}
-${lab('race', 'ordered', 'vi', 'Cách sửa: cả hai lệnh chuyển đều lấy A trước B. Thử mọi cách xen kẽ — vòng chờ không thể hình thành nữa; tệ nhất là một luồng chờ luồng kia làm xong.')}
+${lab('race', 'ordered', 'vi', 'Cách sửa: cả hai lệnh chuyển đều lấy A trước B. Thử mọi cách xen kẽ — vòng chờ không thể hình thành nữa; tệ nhất là một luồng chờ luồng kia làm xong.', { tour: 'race-deadlock' })}
 <table>
 <tr><th>kỹ thuật</th><th>phá</th><th>đo được / giá phải trả</th></tr>
 <tr><td>thứ tự khoá chung</td><td>chờ vòng tròn</td><td>1,35 s, 0 lần hết hạn — miễn phí; cần một luật ai cũng theo</td></tr>
@@ -304,7 +304,7 @@ ${details('starve.c — readers / writers', src('ch06/starve.c', 'c'))}
 ${run('c62-live', './starve readers', 2)}
 <p>glibc's default read-write lock <strong>prefers readers</strong>: a new reader may enter while a writer waits, and with overlapping readers the writer never finds a gap. It gave up after 3 seconds while almost 31,000 reads went by. (Yes, <code>ETIMEDOUT</code>'s message really is "Connection timed out".) With <code>PTHREAD_RWLOCK_PREFER_WRITER_NONRECURSIVE_NP</code>, new readers queue behind a waiting writer and it gets in after 0.2 ms.</p>
 <p>The same thing happens in CPU schedulers. With strict preemptive priority, a low-priority job runs only when nothing more important is ready — keep important work arriving and it never runs. The classic fix is <strong>aging</strong>: the longer a job waits, the higher its priority. Linux CFS/EEVDF avoid the problem differently: priorities (nice values) are <em>weights</em>, so even nice 19 gets a small share. See it in the scheduler lab: switch the policy to <strong>Prio-P</strong> and watch the least important process wait for everyone else:</p>
-${lab('scheduler', 'textbook', 'en', 'Four processes with priorities. Choose Prio-P (preemptive priority): the lowest-priority job waits until every more important job is done — add more important arrivals and it may never run. Compare with RR or CFS.')}
+${lab('scheduler', 'textbook', 'en', 'Four processes with priorities. Choose Prio-P (preemptive priority): the lowest-priority job waits until every more important job is done — add more important arrivals and it may never run. Compare with RR or CFS.', { tour: 'sched-policies' })}
 
 <h3>Priority inversion: what happened on Mars</h3>
 <p>Mars Pathfinder landed on 4 July 1997. A few days later, after it started gathering weather data, its computer began <strong>resetting itself</strong>, losing data each time. The software ran on VxWorks with preemptive priority scheduling, and three tasks mattered:</p>
@@ -396,7 +396,7 @@ ${details('starve.c — readers / writers', src('ch06/starve.c', 'c'))}
 ${run('c62-live', './starve readers', 2)}
 <p>Khoá đọc-ghi mặc định của glibc <strong>ưu tiên người đọc</strong>: người đọc mới được vào trong lúc người ghi đang chờ, và khi người đọc chồng lên nhau thì người ghi không bao giờ tìm được khe hở. Nó bỏ cuộc sau 3 giây trong lúc gần 31.000 lượt đọc trôi qua. (Đúng vậy, thông điệp của <code>ETIMEDOUT</code> là "Connection timed out".) Với <code>PTHREAD_RWLOCK_PREFER_WRITER_NONRECURSIVE_NP</code>, người đọc mới phải xếp sau người ghi đang chờ và nó vào được sau 0,2 ms.</p>
 <p>Bộ lập lịch CPU cũng gặp đúng chuyện này. Với ưu tiên cắt ngang thuần tuý, việc ưu tiên thấp chỉ chạy khi không còn việc nào quan trọng hơn sẵn sàng — cứ có việc quan trọng đến liên tục là nó không bao giờ chạy. Cách sửa kinh điển là <strong>lão hoá (aging)</strong>: chờ càng lâu, ưu tiên càng cao. Linux CFS/EEVDF tránh vấn đề theo cách khác: mức ưu tiên (nice) là <em>trọng số</em>, nên kể cả nice 19 vẫn có một phần nhỏ CPU. Xem trong lab lập lịch: chuyển chính sách sang <strong>Prio-P</strong> và nhìn tiến trình kém quan trọng nhất chờ mọi người khác:</p>
-${lab('scheduler', 'textbook', 'vi', 'Bốn tiến trình có mức ưu tiên. Chọn Prio-P (ưu tiên có cắt ngang): việc ưu tiên thấp nhất phải chờ tới khi mọi việc quan trọng hơn xong — cho thêm việc quan trọng đến là nó có thể không bao giờ chạy. So với RR hoặc CFS.')}
+${lab('scheduler', 'textbook', 'vi', 'Bốn tiến trình có mức ưu tiên. Chọn Prio-P (ưu tiên có cắt ngang): việc ưu tiên thấp nhất phải chờ tới khi mọi việc quan trọng hơn xong — cho thêm việc quan trọng đến là nó có thể không bao giờ chạy. So với RR hoặc CFS.', { tour: 'sched-policies' })}
 
 <h3>Đảo ngược ưu tiên: chuyện gì đã xảy ra trên sao Hoả</h3>
 <p>Mars Pathfinder hạ cánh ngày 4/7/1997. Vài ngày sau, khi bắt đầu thu dữ liệu thời tiết, máy tính của nó bắt đầu <strong>tự khởi động lại</strong>, mỗi lần mất một ít dữ liệu. Phần mềm chạy trên VxWorks với lập lịch ưu tiên có cắt ngang, và có ba tác vụ đáng chú ý:</p>
@@ -479,7 +479,7 @@ ${run('c63-philo', 'java Philo.java naive')}
 <h3>Solution 1: order the forks (break circular wait)</h3>
 <p>Always pick up the <strong>lower-numbered</strong> fork first. For philosophers 0–3 nothing changes; philosopher 4 now reaches for fork 0 before fork 4, so the cycle cannot close — the same rule as "lock the smaller account id first" in 6.1.</p>
 ${run('c63-philo', './philo ordered')}
-${lab('race', 'ordered', 'en', 'The two-lock version of the same rule: when every thread takes locks in one global order, the wait-for arrows can never close into a cycle. Ordering the forks is this, with five locks.')}
+${lab('race', 'ordered', 'en', 'The two-lock version of the same rule: when every thread takes locks in one global order, the wait-for arrows can never close into a cycle. Ordering the forks is this, with five locks.', { tour: 'race-deadlock' })}
 <p>Fastest of the three — 12,412 meals in 2 s — but uneven: philosophers 0 and 4 both start with fork 0, compete for it, and eat about half as much as philosopher 3.</p>
 
 <h3>Solution 2: a waiter (break circular wait with a semaphore)</h3>
@@ -600,7 +600,7 @@ ${run('c63-philo', 'java Philo.java naive')}
 <h3>Lời giải 1: sắp thứ tự đũa (phá chờ vòng tròn)</h3>
 <p>Luôn cầm chiếc đũa <strong>số nhỏ</strong> trước. Với triết gia 0–3 không gì thay đổi; triết gia 4 giờ với đũa 0 trước đũa 4, nên vòng không thể khép — đúng luật "khoá tài khoản id nhỏ trước" ở bài 6.1.</p>
 ${run('c63-philo', './philo ordered')}
-${lab('race', 'ordered', 'vi', 'Bản hai khoá của cùng một luật: khi mọi luồng lấy khoá theo một thứ tự chung, các mũi tên chờ không bao giờ khép thành vòng. Sắp thứ tự đũa chính là điều này, với năm khoá.')}
+${lab('race', 'ordered', 'vi', 'Bản hai khoá của cùng một luật: khi mọi luồng lấy khoá theo một thứ tự chung, các mũi tên chờ không bao giờ khép thành vòng. Sắp thứ tự đũa chính là điều này, với năm khoá.', { tour: 'race-deadlock' })}
 <p>Nhanh nhất trong ba cách — 12.412 bữa trong 2 giây — nhưng không đều: triết gia 0 và 4 cùng bắt đầu bằng đũa 0, tranh nhau nó, và chỉ ăn khoảng một nửa so với triết gia 3.</p>
 
 <h3>Lời giải 2: người phục vụ (phá chờ vòng tròn bằng semaphore)</h3>
@@ -761,7 +761,7 @@ ${run('c64-db', 'psql -qX -v from=1 -v to=2 -f transfer.sql >')}
 ${src('ch06/transfer-ordered.sql', 'sql')}
 ${run('c64-db', 'psql -X -v from=1 -v to=2 -f transfer-ordered.sql', 2)}
 <p>Same two opposite transfers, same sleep: T2's <code>SELECT … ORDER BY id FOR UPDATE</code> simply waits for T1, then runs. Both commit, no error, balances back to 1000/1000.</p>
-${lab('race', 'deadlock', 'en', 'What PostgreSQL’s detector searches for: each transaction holds one row lock and waits for the other, and the wait-for arrows close into a cycle. The database breaks it by cancelling one of them.')}
+${lab('race', 'deadlock', 'en', 'What PostgreSQL’s detector searches for: each transaction holds one row lock and waits for the other, and the wait-for arrows close into a cycle. The database breaks it by cancelling one of them.', { tour: 'race-deadlock' })}
 
 <div class="pitfall co-tieu-de">
 <p><strong>Catching 40P01 and retrying is necessary — and not a fix.</strong> Every write path that can deadlock must retry the whole transaction on SQLSTATE 40P01 (and 40001). But if deadlocks show up daily, each one costs a full second of a held connection plus a rolled-back transaction, and under load the retries collide again. Raising <code>deadlock_timeout</code> "to get fewer errors" only makes every deadlock last longer. Find the two statements in the server log and give them one lock order.</p>
@@ -886,7 +886,7 @@ ${run('c64-db', 'psql -qX -v from=1 -v to=2 -f transfer.sql >')}
 ${src('ch06/transfer-ordered.sql', 'sql')}
 ${run('c64-db', 'psql -X -v from=1 -v to=2 -f transfer-ordered.sql', 2)}
 <p>Vẫn hai lệnh chuyển ngược chiều, vẫn khoảng ngủ đó: <code>SELECT … ORDER BY id FOR UPDATE</code> của T2 chỉ việc chờ T1, rồi chạy. Cả hai commit, không lỗi, số dư trở về 1000/1000.</p>
-${lab('race', 'deadlock', 'vi', 'Thứ mà bộ phát hiện của PostgreSQL đi tìm: mỗi giao dịch giữ một khoá dòng và chờ khoá kia, các mũi tên chờ khép thành vòng. CSDL phá vòng bằng cách huỷ một trong hai.')}
+${lab('race', 'deadlock', 'vi', 'Thứ mà bộ phát hiện của PostgreSQL đi tìm: mỗi giao dịch giữ một khoá dòng và chờ khoá kia, các mũi tên chờ khép thành vòng. CSDL phá vòng bằng cách huỷ một trong hai.', { tour: 'race-deadlock' })}
 
 <div class="pitfall co-tieu-de">
 <p><strong>Bắt 40P01 rồi thử lại là cần thiết — nhưng chưa phải sửa.</strong> Mọi đường ghi có thể deadlock đều phải thử lại cả giao dịch khi gặp SQLSTATE 40P01 (và 40001). Nhưng nếu deadlock xuất hiện hằng ngày, mỗi lần tốn trọn một giây giữ kết nối cộng một giao dịch bị quay lui, và lúc tải cao các lần thử lại lại đụng nhau. Nâng <code>deadlock_timeout</code> "cho đỡ lỗi" chỉ làm mỗi deadlock kéo dài hơn. Hãy tìm hai câu lệnh trong log máy chủ và cho chúng một thứ tự khoá chung.</p>

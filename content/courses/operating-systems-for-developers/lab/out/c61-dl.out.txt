@@ -1,0 +1,80 @@
+$ gcc -O0 -g -pthread dl.c -o dl
+$ timeout 5 ./dl naive; echo "exit=$?"
+pid 22, mode naive: T1 moves A->B, T2 moves B->A, 5000 transfers each
+exit=124
+$ ./dl naive & sleep 1; P=$!
+pid 27, mode naive: T1 moves A->B, T2 moves B->A, 5000 transfers each
+$ ps -L -o pid,lwp,stat,pcpu,wchan:16,comm -p $P
+    PID     LWP STAT %CPU WCHAN            COMMAND
+     27      27 Sl    0.0 futex_do_wait    dl
+     27      29 Sl    0.0 futex_do_wait    dl
+     27      30 Sl    0.0 futex_do_wait    dl
+$ grep . /proc/$P/task/*/wchan
+/proc/27/task/27/wchan:futex_do_wait
+/proc/27/task/29/wchan:futex_do_wait
+/proc/27/task/30/wchan:futex_do_wait
+$ grep -m 4 . /proc/$P/task/*/stack
+/proc/27/task/27/stack:[<0>] futex_do_wait+0x4c/0xa0
+/proc/27/task/27/stack:[<0>] __futex_wait+0xa0/0x118
+/proc/27/task/27/stack:[<0>] futex_wait+0x8c/0x120
+/proc/27/task/27/stack:[<0>] do_futex+0x11c/0x1b0
+/proc/27/task/29/stack:[<0>] futex_do_wait+0x4c/0xa0
+/proc/27/task/29/stack:[<0>] __futex_wait+0xa0/0x118
+/proc/27/task/29/stack:[<0>] futex_wait+0x8c/0x120
+/proc/27/task/29/stack:[<0>] do_futex+0x11c/0x1b0
+/proc/27/task/30/stack:[<0>] futex_do_wait+0x4c/0xa0
+/proc/27/task/30/stack:[<0>] __futex_wait+0xa0/0x118
+/proc/27/task/30/stack:[<0>] futex_wait+0x8c/0x120
+/proc/27/task/30/stack:[<0>] do_futex+0x11c/0x1b0
+$ gdb -p $P -batch -ex "thread apply 2-3 bt 5" 2>&1 | grep -E '^Thread|^#[34] '
+Thread 2 (Thread 0xffff9c15f1a0 (LWP 30) "dl"):
+#3  ___pthread_mutex_lock (mutex=0xaaaae0520020 <A+16>) at ./nptl/pthread_mutex_lock.c:87
+#4  0x0000aaaae0500d98 [PAC] in transfer (from=0xaaaae0520050 <B>, to=0xaaaae0520010 <A>, my_retries=0xffff9c15e8d0) at dl.c:26
+Thread 3 (Thread 0xffff9c96f1a0 (LWP 29) "dl"):
+#3  ___pthread_mutex_lock (mutex=0xaaaae0520060 <B+16>) at ./nptl/pthread_mutex_lock.c:87
+#4  0x0000aaaae0500d98 [PAC] in transfer (from=0xaaaae0520010 <A>, to=0xaaaae0520050 <B>, my_retries=0xffff9c96e8d0) at dl.c:26
+$ gdb -p $P -batch -ex "p A.m.__data.__owner" -ex "p B.m.__data.__owner" 2>&1 | grep '^\$'
+$1 = 29
+$2 = 30
+$ kill -9 $P; wait $P 2>/dev/null
+$ ./dl ordered
+pid 72, mode ordered: T1 moves A->B, T2 moves B->A, 5000 transfers each
+done in 1.35 s: A=1000000 B=1000000 (sum 2000000), timed-out waits 0
+$ ./dl trylock
+pid 77, mode trylock: T1 moves A->B, T2 moves B->A, 5000 transfers each
+done in 5.56 s: A=1000000 B=1000000 (sum 2000000), timed-out waits 1816
+$ java Transfer.java naive & sleep 4; J=$!
+pid 82, mode naive
+$ jstack $J | sed -n '/Found one Java-level deadlock/,/^Found 1 deadlock/p' | grep -v -E 'Lambda|runWith|Thread.run\(|^$'
+Found one Java-level deadlock:
+=============================
+"transfer-A-to-B":
+  waiting to lock monitor 0x0000ffff200018c0 (object 0x000000008b59af48, a Transfer$Account),
+  which is held by "transfer-B-to-A"
+"transfer-B-to-A":
+  waiting to lock monitor 0x0000ffff14000ee0 (object 0x000000008b59ae30, a Transfer$Account),
+  which is held by "transfer-A-to-B"
+Java stack information for the threads listed above:
+===================================================
+"transfer-A-to-B":
+	at Transfer.naive(Transfer.java:21)
+	- waiting to lock <0x000000008b59af48> (a Transfer$Account)
+	- locked <0x000000008b59ae30> (a Transfer$Account)
+	at Transfer.run(Transfer.java:68)
+	at Transfer.lambda$main$0(Transfer.java:43)
+"transfer-B-to-A":
+	at Transfer.naive(Transfer.java:21)
+	- waiting to lock <0x000000008b59ae30> (a Transfer$Account)
+	- locked <0x000000008b59af48> (a Transfer$Account)
+	at Transfer.run(Transfer.java:68)
+	at Transfer.lambda$main$1(Transfer.java:44)
+Found 1 deadlock.
+$ kill -9 $J; wait $J 2>/dev/null
+$ java Transfer.java watchdog; echo "exit=$?"
+pid 133, mode watchdog
+DEADLOCK: transfer-A-to-B waits for Transfer$Account@1165b38 held by transfer-B-to-A
+DEADLOCK: transfer-B-to-A waits for Transfer$Account@2f4948e4 held by transfer-A-to-B
+exit=2
+$ java Transfer.java trylock
+pid 158, mode trylock
+done in 0.13 s: A=1000 B=1000, timed-out waits 13

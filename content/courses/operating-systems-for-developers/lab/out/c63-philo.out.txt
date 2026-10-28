@@ -1,0 +1,28 @@
+$ gcc -O2 -pthread philo.c -o philo
+$ ./philo naive; echo "exit=$?"
+naive: DEADLOCK - no meal for 1 s after 0 meals. Forks held: P0=1 P1=1 P2=1 P3=1 P4=1
+exit=3
+$ ./philo ordered
+ordered   12412 meals in 2 s; per philosopher: 1699 2835 3024 3159 1695
+$ ./philo waiter
+waiter    11345 meals in 2 s; per philosopher: 2271 2269 2271 2265 2269
+$ ./philo trylock
+trylock    8734 meals in 2 s; per philosopher: 1758 1719 1828 1701 1728
+$ java Philo.java naive; echo "exit=$?"
+naive: deadlock detected, 5 threads in the cycle:
+  philosopher-0 waits for a fork held by philosopher-1
+  philosopher-1 waits for a fork held by philosopher-2
+  philosopher-2 waits for a fork held by philosopher-3
+  philosopher-3 waits for a fork held by philosopher-4
+  philosopher-4 waits for a fork held by philosopher-0
+exit=3
+$ java Philo.java ordered
+ordered: 8428 meals in 2 s; per philosopher: 1 1 18 8407 1
+$ java Philo.java waiter
+waiter: 8618 meals in 2 s; per philosopher: 1305 1704 2449 749 2411
+$ gcc -O2 -pthread bb.c -o bb
+$ ./bb right
+right: 2000 produced, 2000 consumed
+$ ./bb wrong; echo "exit=$?"
+wrong: DEADLOCK after 4 produced, 0 consumed (empty=0 full=3 mutex=0)
+exit=3

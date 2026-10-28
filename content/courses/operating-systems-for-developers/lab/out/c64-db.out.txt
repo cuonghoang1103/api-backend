@@ -1,0 +1,88 @@
+$ psql -X -c "SHOW deadlock_timeout"
+ deadlock_timeout 
+------------------
+ 1s
+(1 row)
+
+$ psql -X -v from=1 -v to=2 -f transfer.sql 2>&1 | sed -u 's/^/[T1] /' & sleep 0.1; psql -X -v from=2 -v to=1 -f transfer.sql 2>&1 | sed -u 's/^/[T2] /' & wait
+[T1] BEGIN
+[T1] UPDATE 1
+[T2] BEGIN
+[T2] UPDATE 1
+[T1] Timing is on.
+[T2] Timing is on.
+[T2] UPDATE 1
+[T2] Time: 900.277 ms
+[T2] Timing is off.
+[T1] psql:transfer.sql:7: ERROR:  40P01: deadlock detected
+[T1] DETAIL:  Process 106 waits for ShareLock on transaction 742; blocked by process 109.
+[T1] Process 109 waits for ShareLock on transaction 741; blocked by process 106.
+[T1] HINT:  See server log for query details.
+[T1] CONTEXT:  while updating tuple (0,2) in relation "accounts"
+[T1] LOCATION:  DeadLockReport, deadlock.c:1130
+[T1] Time: 1011.141 ms (00:01.011)
+[T1] Timing is off.
+[T1] ROLLBACK
+[T2] COMMIT
+$ psql -X -c "SELECT * FROM accounts ORDER BY id"
+ id | owner | balance 
+----+-------+---------
+  1 | alice |    1100
+  2 | bob   |     900
+(2 rows)
+
+$ grep -h -A4 'detected deadlock' /tmp/pglog/*.log | cut -c 25-
+UTC [106] LOG:  process 106 detected deadlock while waiting for ShareLock on transaction 742 after 1009.748 ms
+UTC [106] DETAIL:  Process holding the lock: 109. Wait queue: .
+UTC [106] CONTEXT:  while updating tuple (0,2) in relation "accounts"
+UTC [106] STATEMENT:  UPDATE accounts SET balance = balance + 100 WHERE id = 2;
+UTC [106] ERROR:  deadlock detected
+$ psql -qX -c "ALTER SYSTEM SET deadlock_timeout = '10s'" -c "SELECT pg_reload_conf()"
+ pg_reload_conf 
+----------------
+ t
+(1 row)
+
+$ psql -qX -f accounts.sql
+$ psql -qX -v from=1 -v to=2 -f transfer.sql >/dev/null 2>&1 & sleep 0.1; psql -qX -v from=2 -v to=1 -f transfer.sql >/dev/null 2>&1 & sleep 1.5; psql -X -c "SELECT pid, pg_blocking_pids(pid) AS blocked_by, wait_event, left(query, 52) AS query FROM pg_stat_activity WHERE wait_event_type = 'Lock'"; wait
+ pid | blocked_by |  wait_event   |                        query                         
+-----+------------+---------------+------------------------------------------------------
+ 130 | {133}      | transactionid | UPDATE accounts SET balance = balance + 100 WHERE id
+ 133 | {130}      | transactionid | UPDATE accounts SET balance = balance + 100 WHERE id
+(2 rows)
+
+$ psql -qX -c "ALTER SYSTEM RESET deadlock_timeout" -c "SELECT pg_reload_conf()"
+ pg_reload_conf 
+----------------
+ t
+(1 row)
+
+$ psql -qX -f accounts.sql
+$ psql -X -v from=1 -v to=2 -f transfer-ordered.sql 2>&1 | sed -u 's/^/[T1] /' & sleep 0.1; psql -X -v from=2 -v to=1 -f transfer-ordered.sql 2>&1 | sed -u 's/^/[T2] /' & wait
+[T1] BEGIN
+[T1]  id 
+[T1] ----
+[T1]   1
+[T1]   2
+[T1] (2 rows)
+[T1] 
+[T2] BEGIN
+[T1] UPDATE 1
+[T1] UPDATE 1
+[T1] COMMIT
+[T2]  id 
+[T2] ----
+[T2]   1
+[T2]   2
+[T2] (2 rows)
+[T2] 
+[T2] UPDATE 1
+[T2] UPDATE 1
+[T2] COMMIT
+$ psql -X -c "SELECT * FROM accounts ORDER BY id"
+ id | owner | balance 
+----+-------+---------
+  1 | alice |    1000
+  2 | bob   |    1000
+(2 rows)
+

@@ -1,0 +1,52 @@
+$ gcc -O2 -pthread livelock.c -o livelock
+$ /usr/bin/time -f "%e s wall, %U s user + %S s kernel CPU" timeout 3 ./dl naive
+pid 30, mode naive: T1 moves A->B, T2 moves B->A, 5000 transfers each
+Command exited with non-zero status 124
+3.00 s wall, 0.00 s user + 0.00 s kernel CPU
+$ /usr/bin/time -f "%e s wall, %U s user + %S s kernel CPU" ./livelock lockstep
+thread 0:      0 jobs done, 100000 polite retries
+thread 1:      0 jobs done, 100000 polite retries
+3.67 s wall, 0.19 s user + 1.75 s kernel CPU
+$ /usr/bin/time -f "%e s wall, %U s user + %S s kernel CPU" ./livelock lockstep-random
+thread 0:  14186 jobs done,  57049 polite retries
+thread 1:  14344 jobs done,  57049 polite retries
+3.83 s wall, 0.20 s user + 1.76 s kernel CPU
+$ ./livelock real
+thread 0:   4004 jobs done,   4046 polite retries
+thread 1:   3974 jobs done,   4059 polite retries
+$ gcc -O2 -pthread starve.c -o starve
+$ ./starve readers
+writer GAVE UP after 3000.1 ms: Connection timed out (readers finished 30977 reads meanwhile)
+$ ./starve writers
+writer got the lock after 0.2 ms (readers finished 4 reads meanwhile)
+$ gcc -O2 -pthread pi.c -o pi
+$ ./pi none
+mutex protocol: none, all threads on CPU 0, SCHED_FIFO
+    0.1 ms  L (prio 10) locked the bus, needs 50 ms of work
+   10.2 ms  H (prio 30) wants the bus
+   10.2 ms  M (prio 20) starts 500 ms of unrelated CPU work
+  510.2 ms  M (prio 20) done
+  550.3 ms  L (prio 10) unlocks the bus
+  550.3 ms  H (prio 30) got the bus after waiting 540.2 ms
+$ ./pi inherit
+mutex protocol: PTHREAD_PRIO_INHERIT, all threads on CPU 0, SCHED_FIFO
+    0.0 ms  L (prio 10) locked the bus, needs 50 ms of work
+   10.1 ms  H (prio 30) wants the bus
+   50.2 ms  L (prio 10) unlocks the bus
+   50.3 ms  H (prio 30) got the bus after waiting 40.0 ms
+   50.4 ms  M (prio 20) starts 500 ms of unrelated CPU work
+  550.4 ms  M (prio 20) done
+$ strace -f -e trace=futex ./pi none 2>&1 | grep -o 'FUTEX_[A-Z_]*' | sort | uniq -c
+      2 FUTEX_BITSET_MATCH_ANY
+      2 FUTEX_CLOCK_REALTIME
+      2 FUTEX_WAIT_BITSET
+      4 FUTEX_WAIT_PRIVATE
+      8 FUTEX_WAKE_PRIVATE
+$ strace -f -e trace=futex ./pi inherit 2>&1 | grep -o 'FUTEX_[A-Z_]*' | sort | uniq -c
+      2 FUTEX_BITSET_MATCH_ANY
+      2 FUTEX_CLOCK_REALTIME
+      1 FUTEX_LOCK_PI_PRIVATE
+      3 FUTEX_UNLOCK_PI_PRIVATE
+      2 FUTEX_WAIT_BITSET
+      3 FUTEX_WAIT_PRIVATE
+      6 FUTEX_WAKE_PRIVATE

@@ -1041,7 +1041,7 @@ ${lab('vm', 'exam', 'en', 'Type any reference string, pick FIFO, LRU, OPT or Clo
 
 <h3>Belady’s anomaly</h3>
 ${drill('M2', 'For the string <code>1 2 3 4 1 2 5 1 2 3 4 5</code>, which statement is true?', ['FIFO: 3 frames ⇒ 10 faults, 4 frames ⇒ 9', 'FIFO: 3 frames ⇒ 9 faults, 4 frames ⇒ 10; LRU with 4 frames ⇒ 8', 'LRU also gets worse with more frames', 'Adding a frame never increases faults'], 'Worked solution', run('c164-bo-nho', 'python3 osgcalc.py page fifo 3 "1 2 3 4', 3) + '<p><strong>B.</strong> FIFO is not a stack algorithm: the set of pages in 4 frames is not always a superset of the set in 3 frames, so one more frame can cost one more fault (Belady, 1969). LRU and OPT are stack algorithms and never get worse — C and D are both false.</p>')}
-${lab('vm', 'belady', 'en', 'Run FIFO with 3 then 4 frames on the classic string and watch the fault count go up.', { tour: 'vm-thrash' })}
+${lab('vm', 'belady', 'en', 'Run FIFO with 3 then 4 frames on the classic string and watch the fault count go up.')}
 
 <h3>Choosing a victim from a table</h3>
 <p>A computer has four page frames. Loading time, time of last access, and the R and M bits (times in clock ticks):</p>
@@ -1122,7 +1122,7 @@ ${lab('vm', 'exam', 'vi', 'Gõ bất kỳ chuỗi tham chiếu nào, chọn FIFO
 
 <h3>Nghịch lý Belady</h3>
 ${drill('M2', 'Với chuỗi <code>1 2 3 4 1 2 5 1 2 3 4 5</code>, phát biểu nào đúng?', ['FIFO: 3 khung ⇒ 10 lỗi, 4 khung ⇒ 9', 'FIFO: 3 khung ⇒ 9 lỗi, 4 khung ⇒ 10; LRU với 4 khung ⇒ 8', 'LRU cũng tệ đi khi thêm khung', 'Thêm khung không bao giờ làm tăng số lỗi'], 'Lời giải từng bước', run('c164-bo-nho', 'python3 osgcalc.py page fifo 3 "1 2 3 4', 3) + '<p><strong>B.</strong> FIFO không phải thuật toán ngăn xếp (stack algorithm): tập trang trong 4 khung không phải lúc nào cũng chứa tập trang trong 3 khung, nên thêm một khung có thể tốn thêm một lỗi (Belady, 1969). LRU và OPT là thuật toán ngăn xếp và không bao giờ tệ đi — C và D đều sai.</p>')}
-${lab('vm', 'belady', 'vi', 'Chạy FIFO với 3 rồi 4 khung trên chuỗi kinh điển và nhìn số lỗi tăng lên.', { tour: 'vm-thrash' })}
+${lab('vm', 'belady', 'vi', 'Chạy FIFO với 3 rồi 4 khung trên chuỗi kinh điển và nhìn số lỗi tăng lên.')}
 
 <h3>Chọn trang nạn nhân từ một bảng</h3>
 <p>Một máy có bốn khung trang. Thời điểm nạp, thời điểm truy cập cuối, và các bit R, M (thời gian tính bằng nhịp đồng hồ):</p>

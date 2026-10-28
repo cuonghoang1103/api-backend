@@ -7,6 +7,7 @@
  * công cụ/cài đặt → Exp Hub.
  * Seed: node scripts/academy-seed-course.mjs --file ./content/academy/CSI104.mjs --apply
  */
+import { thuNgay } from '../_labs.mjs';
 export default {
   semester: { code: 'KY1', name: 'Kỳ 1', ordinal: 1 },
   course: {
@@ -310,6 +311,163 @@ export default {
 </div>
 `,
         },
+        {
+          title: '0.5 — Start from zero: from electricity to a running program|||0.5 — Bắt đầu từ số 0: từ dòng điện tới chương trình đang chạy',
+          slug: 'csi104-0-5-bat-dau-tu-so-0',
+          type: 'VIDEO',
+          isFreePreview: true,
+          description: 'Đi trọn chuỗi dòng điện → bit → số → chữ → lệnh → CPU → chương trình trong một bài, mỗi bậc có mô phỏng tự tay làm.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 0 · Lesson 0.5</span>
+<h2>Start from zero: from electricity to a running program</h2>
+<p class="lead">&ldquo;01010101 &mdash; only zeros and ones, and the computer understands it?&rdquo; This lesson answers that question in one sitting. We climb seven steps from a wire carrying electricity to a program that runs, and on every step you do something with your own hands in a simulator. Nothing to install, nothing to memorise yet &mdash; just see it once, end to end. The rest of CSI104 (and CEA201) then zooms into each step.</p>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">Electricity</div><div class="lz-d">a wire is high or low</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">Bit</div><div class="lz-d">0 or 1</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Number</div><div class="lz-d">bits with place values</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Text &amp; images</div><div class="lz-d">numbers by agreement</div></div>
+  <div class="lz-step"><div class="lz-k">5</div><div class="lz-t">Instruction</div><div class="lz-d">a number the CPU obeys</div></div>
+  <div class="lz-step"><div class="lz-k">6</div><div class="lz-t">CPU</div><div class="lz-d">fetch, decode, execute</div></div>
+  <div class="lz-step"><div class="lz-k">7</div><div class="lz-t">Program</div><div class="lz-d">from C to bytes to running</div></div>
+</div>
+
+<h3>Step 1 — Electricity becomes a bit</h3>
+<p>A chip contains billions of transistors, and a transistor is a switch controlled by electricity. Any wire inside the chip is either close to 0 volts or close to the supply voltage. Engineers call the low level <strong>0</strong> and the high level <strong>1</strong>. That is all a <strong>bit</strong> is: one wire that is either low or high.</p>
+<p>Why not ten levels, one per decimal digit? Because electricity is noisy. With two levels far apart, a little noise never turns a 0 into a 1. With ten levels squeezed together, it would happen all the time.</p>
+${thuNgay('en', 'bits', 'intro', 'Drag the voltage, add noise, and watch when the reading becomes unreliable. Then flip the eight switches below it.', [
+  'Set the noise to its maximum. Can a bit near 0 V or near 3.3 V still be read correctly?',
+  'Make the pattern 01001101 with the eight switches. Read the six boxes: number, letter, pixel, instruction&hellip;',
+], { heading: false })}
+<div class="callout ok"><b>The key idea of this whole lesson:</b> a pattern of bits has <em>no meaning by itself</em>. 01001101 is the number 77 to an adder, the letter M to a text editor, a grey pixel to a screen, and an instruction to a CPU. Meaning comes from whoever reads the bits. The computer never &ldquo;understands&rdquo; anything &mdash; circuits just react to patterns.</div>
+
+<h3>Step 2 — Bits become numbers</h3>
+<p>One bit has 2 patterns, two bits have 4, eight bits (a <strong>byte</strong>) have 256. To use them as numbers we give each position a <strong>place value</strong>, exactly like decimal (ones, tens, hundreds) but with powers of 2: 1, 2, 4, 8, 16&hellip; So 1100 1000 = 128 + 64 + 8 = 200. Hexadecimal is just a short way to write bits: one hex digit = exactly 4 bits, so 1100 1000 = C8.</p>
+${thuNgay('en', 'bits', 'convert', 'Watch 200 being converted by repeated division, then checked back with place values.', [
+  'Convert 200 to base 2, then to base 16. Compare with the binary above.',
+  'Open the <b>Negative numbers</b> tab and click <b>127 + 1</b>: one more than the largest 8-bit number becomes negative. That is overflow &mdash; Chapter 2.',
+], { heading: false })}
+
+<h3>Step 3 — Numbers become text, colours and real numbers</h3>
+<p>Text is numbers by agreement. ASCII agreed that A = 65; Unicode extends the agreement to every script (the letter e-with-circumflex-and-dot of Vietnamese is number 7879), and UTF-8 says how to write those numbers as bytes. A colour is three numbers (red, green, blue), and a picture is millions of colours in a grid. Real numbers such as 0.1 use the IEEE-754 format &mdash; which cannot store 0.1 exactly.</p>
+${thuNgay('en', 'data', 'text', 'Type any text, including Vietnamese, and see the number and the bytes behind every character.', [
+  'Which characters need more than one byte? Why does a Vietnamese letter need three?',
+  'Visit the <b>Real numbers</b> tab and find out why 0.1 + 0.2 is not 0.3 in almost every programming language.',
+], { heading: false })}
+
+<h3>Step 4 — Gates do the arithmetic</h3>
+<p>How does a machine made of switches add? Combine switches into <strong>logic gates</strong> (AND, OR, XOR, NOT). One XOR gate and one AND gate add two bits; eight such adders chained together add two bytes. Every calculation a CPU does is built from gates like these.</p>
+${thuNgay('en', 'logic', 'adder', 'A full adder: three input bits in, a sum bit and a carry bit out.', [
+  'Set A = 1, B = 1, Cin = 0. Why is the sum bit 0?',
+  'Open the <b>8-bit adder</b> tab and watch the carry travel from the right to the left.',
+], { heading: false })}
+
+<h3>Step 5 and 6 — An instruction is just a number, and the CPU obeys it</h3>
+<p>Here is the trick that makes computers programmable (John von Neumann, 1945): instructions are numbers too, stored in the <strong>same memory</strong> as the data. In the tiny CPU below, the 16-bit number <code>0001 0000 0000 0101</code> means &ldquo;Load the value at address 5&rdquo;: the first 4 bits say <em>what</em> to do, the other 12 say <em>where</em>. The CPU repeats one cycle forever: <strong>fetch</strong> the number that the program counter points to, <strong>decode</strong> it, <strong>execute</strong> it, move to the next one.</p>
+${thuNgay('en', 'cpu', 'add', 'A complete computer you can watch: registers, an ALU, memory, and the bus between them.', [
+  'Press <b>Step</b> repeatedly through the first instruction. Note the three fetch steps, the decode step, and the execute steps.',
+  'In the memory table, find the cell that holds 5 and the cell that holds the instruction <code>Load 005</code>. Both are just 16 bits.',
+  'Change <code>Y, DEC 7</code> to 30 and run to the end. What is printed?',
+], { heading: false })}
+
+<h3>Step 7 — From the code you write to the bytes that run</h3>
+<p>Nobody writes programs as bit patterns. You write C, Java or Python; a <strong>compiler</strong> translates it into the instructions of one particular CPU (x86-64 in most laptops, ARM64 in phones and Apple Macs), an <strong>assembler</strong> turns those into bytes, a <strong>linker</strong> packs them into an executable file, and the operating system <strong>loads</strong> that file into memory and points the CPU at it. From then on it is exactly the fetch&ndash;decode&ndash;execute cycle you just watched, three billion times a second.</p>
+${thuNgay('en', 'pipeline', 'sum', 'A real C program, compiled by the real gcc. Click through the six stages.', [
+  'In stage 3, find the machine-code bytes of the loop. How many bytes is each ARM64 instruction?',
+  'In stage 6, compare the toy CPU with a real one. What is the same, and what has become faster?',
+], { heading: false })}
+
+<h3>The whole chain on one page</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><div class="lz-lt">Program (C, Java, Python)</div><div class="lz-ld">compiled or interpreted into instructions &mdash; CSI104 Ch7, Advanced 3</div></div>
+  <div class="lz-layer"><div class="lz-lt">Instructions &amp; the CPU</div><div class="lz-ld">fetch &ndash; decode &ndash; execute, registers, the bus &mdash; CSI104 Ch1, CEA201 Ch3, 10&ndash;12</div></div>
+  <div class="lz-layer"><div class="lz-lt">Logic circuits</div><div class="lz-ld">gates, adders, registers, memory &mdash; CSI104 Advanced 1, CEA201 Ch9</div></div>
+  <div class="lz-layer"><div class="lz-lt">Data</div><div class="lz-ld">numbers, text, images as bits &mdash; CSI104 Ch2&ndash;3</div></div>
+  <div class="lz-layer"><div class="lz-lt">Electricity</div><div class="lz-ld">transistors as switches, high and low voltage &mdash; the bottom of everything</div></div>
+</div>
+<div class="note-ct"><b>How to study this subject with the lab.</b> For every lesson: (1) read the explanation once; (2) predict the answer to each task <em>before</em> touching the simulator; (3) run it and compare; (4) explain the difference out loud or in your notes. Being wrong in step 3 is the most useful thing that can happen &mdash; that is the moment the idea sticks.</div>
+<a class="link-card" href="/cpu-lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🔬</span>
+  <span class="lc-body"><span class="lc-title">Open the whole lab: A computer from zero</span><span class="lc-sub">Six simulations in learning order: bits, data, logic, the toy CPU, C to machine code, cache.</span></span>
+  <span class="lc-cta">LAB →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 0 · Bài 0.5</span>
+<h2>Bắt đầu từ số 0: từ dòng điện tới chương trình đang chạy</h2>
+<p class="lead">&ldquo;01010101 &mdash; chỉ có số 0 với số 1, mà máy tính hiểu được?&rdquo; Bài này trả lời đúng câu hỏi đó trong một lần ngồi. Ta leo bảy bậc, từ một sợi dây có dòng điện tới một chương trình đang chạy, và ở mỗi bậc bạn tự tay làm một việc trong mô phỏng. Không cài gì, chưa cần học thuộc gì &mdash; chỉ cần nhìn thấy trọn một lần từ đầu tới cuối. Phần còn lại của CSI104 (và CEA201) sẽ phóng to từng bậc.</p>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">Dòng điện</div><div class="lz-d">dây ở mức cao hoặc thấp</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">Bit</div><div class="lz-d">0 hoặc 1</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Số</div><div class="lz-d">bit có trọng số</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Chữ &amp; ảnh</div><div class="lz-d">số theo quy ước</div></div>
+  <div class="lz-step"><div class="lz-k">5</div><div class="lz-t">Lệnh</div><div class="lz-d">một con số CPU làm theo</div></div>
+  <div class="lz-step"><div class="lz-k">6</div><div class="lz-t">CPU</div><div class="lz-d">nạp, giải mã, thực thi</div></div>
+  <div class="lz-step"><div class="lz-k">7</div><div class="lz-t">Chương trình</div><div class="lz-d">từ C tới byte tới lúc chạy</div></div>
+</div>
+
+<h3>Bậc 1 — Dòng điện thành bit</h3>
+<p>Một con chip chứa hàng tỉ transistor, và transistor là một công tắc điều khiển bằng điện. Mọi sợi dây trong chip hoặc gần 0 volt, hoặc gần điện áp nguồn. Kỹ sư gọi mức thấp là <strong>0</strong> và mức cao là <strong>1</strong>. <strong>Bit</strong> chỉ có vậy: một sợi dây đang ở mức thấp hoặc mức cao.</p>
+<p>Sao không dùng mười mức, mỗi mức một chữ số thập phân? Vì dòng điện luôn có nhiễu. Hai mức cách xa nhau thì chút nhiễu không bao giờ biến 0 thành 1. Mười mức chen chúc thì chuyện đó xảy ra liên tục.</p>
+${thuNgay('vi', 'bits', 'intro', 'Kéo điện áp, thêm nhiễu, và xem lúc nào việc đọc bit hết đáng tin. Rồi bật tắt tám công tắc bên dưới.', [
+  'Đặt nhiễu lớn nhất. Bit ở gần 0 V hay gần 3,3 V có còn đọc đúng không?',
+  'Dùng tám công tắc tạo mẫu 01001101. Đọc sáu ô: số, chữ, điểm ảnh, lệnh&hellip;',
+], { heading: false })}
+<div class="callout ok"><b>Ý chính của cả bài:</b> một dãy bit <em>tự nó không có nghĩa gì</em>. 01001101 là số 77 với mạch cộng, là chữ M với trình soạn thảo, là một điểm ảnh xám với màn hình, và là một lệnh với CPU. Nghĩa đến từ thứ ĐỌC dãy bit. Máy tính không bao giờ &ldquo;hiểu&rdquo; gì cả &mdash; mạch điện chỉ phản ứng với các mẫu bit.</div>
+
+<h3>Bậc 2 — Bit thành số</h3>
+<p>Một bit có 2 mẫu, hai bit có 4, tám bit (một <strong>byte</strong>) có 256. Muốn dùng chúng làm số, ta gán cho mỗi vị trí một <strong>trọng số</strong>, y như hệ thập phân (hàng đơn vị, chục, trăm) nhưng là luỹ thừa của 2: 1, 2, 4, 8, 16&hellip; Nên 1100 1000 = 128 + 64 + 8 = 200. Hệ hex chỉ là cách viết gọn dãy bit: một chữ số hex = đúng 4 bit, nên 1100 1000 = C8.</p>
+${thuNgay('vi', 'bits', 'convert', 'Xem 200 được đổi bằng phép chia liên tiếp, rồi kiểm ngược bằng trọng số.', [
+  'Đổi 200 sang cơ số 2, rồi cơ số 16. So với dãy nhị phân ở trên.',
+  'Mở thẻ <b>Số âm &amp; tràn số</b> và bấm <b>127 + 1</b>: lớn hơn số 8 bit lớn nhất một đơn vị là thành số âm. Đó là tràn số &mdash; Chương 2.',
+], { heading: false })}
+
+<h3>Bậc 3 — Số thành chữ, màu và số thực</h3>
+<p>Chữ là số theo quy ước. ASCII quy ước A = 65; Unicode mở rộng quy ước cho mọi hệ chữ (chữ ệ tiếng Việt là số 7879), và UTF-8 quy định cách viết các số đó thành byte. Một màu là ba con số (đỏ, lục, lam), một bức ảnh là hàng triệu màu xếp thành lưới. Số thực như 0.1 dùng chuẩn IEEE-754 &mdash; và chuẩn đó không lưu được 0.1 một cách chính xác.</p>
+${thuNgay('vi', 'data', 'text', 'Gõ chữ bất kỳ, cả tiếng Việt, và xem con số cùng các byte đằng sau từng ký tự.', [
+  'Ký tự nào cần nhiều hơn một byte? Vì sao một chữ tiếng Việt cần tới ba?',
+  'Ghé thẻ <b>Số thực</b> và tìm hiểu vì sao 0.1 + 0.2 không bằng 0.3 trong gần như mọi ngôn ngữ lập trình.',
+], { heading: false })}
+
+<h3>Bậc 4 — Cổng logic làm phép tính</h3>
+<p>Một cỗ máy toàn công tắc thì cộng kiểu gì? Ghép công tắc thành <strong>cổng logic</strong> (AND, OR, XOR, NOT). Một cổng XOR và một cổng AND cộng được hai bit; nối tám bộ cộng như thế lại là cộng được hai byte. Mọi phép tính CPU làm đều dựng từ những cổng như vậy.</p>
+${thuNgay('vi', 'logic', 'adder', 'Full adder: ba bit vào, một bit tổng và một bit nhớ ra.', [
+  'Đặt A = 1, B = 1, Cin = 0. Vì sao bit tổng bằng 0?',
+  'Mở thẻ <b>Bộ cộng 8 bit</b> và xem bit nhớ đi từ phải sang trái.',
+], { heading: false })}
+
+<h3>Bậc 5 và 6 — Lệnh chỉ là một con số, và CPU làm theo nó</h3>
+<p>Đây là mẹo khiến máy tính lập trình được (John von Neumann, 1945): lệnh cũng là số, nằm trong <strong>cùng một bộ nhớ</strong> với dữ liệu. Trong CPU tí hon bên dưới, con số 16 bit <code>0001 0000 0000 0101</code> nghĩa là &ldquo;Nạp giá trị ở địa chỉ 5&rdquo;: 4 bit đầu nói <em>làm gì</em>, 12 bit sau nói <em>ở đâu</em>. CPU lặp mãi một chu trình: <strong>nạp</strong> con số mà bộ đếm chương trình đang trỏ tới, <strong>giải mã</strong> nó, <strong>thực thi</strong> nó, rồi sang con số kế tiếp.</p>
+${thuNgay('vi', 'cpu', 'add', 'Một chiếc máy tính trọn vẹn bạn nhìn được: thanh ghi, ALU, bộ nhớ, và bus nối giữa chúng.', [
+  'Bấm <b>Bước</b> liên tục qua lệnh đầu tiên. Ghi lại ba bước nạp lệnh, bước giải mã, và các bước thực thi.',
+  'Trong bảng bộ nhớ, tìm ô chứa số 5 và ô chứa lệnh <code>Load 005</code>. Cả hai đều chỉ là 16 bit.',
+  'Đổi <code>Y, DEC 7</code> thành 30 rồi chạy tới cuối. Máy in ra số mấy?',
+], { heading: false })}
+
+<h3>Bậc 7 — Từ mã bạn viết tới các byte đang chạy</h3>
+<p>Không ai viết chương trình bằng dãy bit. Bạn viết C, Java hay Python; <strong>trình biên dịch</strong> dịch nó thành lệnh của một dòng CPU cụ thể (x86-64 trên phần lớn laptop, ARM64 trên điện thoại và máy Mac), <strong>trình hợp dịch</strong> biến các lệnh đó thành byte, <strong>trình liên kết</strong> đóng gói thành tệp thực thi, và hệ điều hành <strong>nạp</strong> tệp vào bộ nhớ rồi chỉ CPU vào đó. Từ lúc ấy trở đi là đúng chu trình nạp&ndash;giải mã&ndash;thực thi bạn vừa xem, ba tỉ lần mỗi giây.</p>
+${thuNgay('vi', 'pipeline', 'sum', 'Một chương trình C thật, biên dịch bằng gcc thật. Bấm qua sáu bước.', [
+  'Ở bước 3, tìm các byte mã máy của vòng lặp. Mỗi lệnh ARM64 dài mấy byte?',
+  'Ở bước 6, so CPU đồ chơi với CPU thật. Cái gì giống nhau, cái gì đã nhanh hơn?',
+], { heading: false })}
+
+<h3>Cả chuỗi trên một trang</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><div class="lz-lt">Chương trình (C, Java, Python)</div><div class="lz-ld">biên dịch hoặc thông dịch thành lệnh &mdash; CSI104 Ch7, Nâng cao 3</div></div>
+  <div class="lz-layer"><div class="lz-lt">Lệnh &amp; CPU</div><div class="lz-ld">nạp &ndash; giải mã &ndash; thực thi, thanh ghi, bus &mdash; CSI104 Ch1, CEA201 Ch3, 10&ndash;12</div></div>
+  <div class="lz-layer"><div class="lz-lt">Mạch logic</div><div class="lz-ld">cổng, bộ cộng, thanh ghi, bộ nhớ &mdash; CSI104 Nâng cao 1, CEA201 Ch9</div></div>
+  <div class="lz-layer"><div class="lz-lt">Dữ liệu</div><div class="lz-ld">số, chữ, ảnh dưới dạng bit &mdash; CSI104 Ch2&ndash;3</div></div>
+  <div class="lz-layer"><div class="lz-lt">Dòng điện</div><div class="lz-ld">transistor làm công tắc, điện áp cao và thấp &mdash; tầng dưới cùng của mọi thứ</div></div>
+</div>
+<div class="note-ct"><b>Cách học môn này cùng phòng lab.</b> Với mỗi bài: (1) đọc phần giải thích một lần; (2) <em>đoán trước</em> đáp án từng việc khi chưa đụng vào mô phỏng; (3) chạy và so sánh; (4) giải thích chỗ khác biệt thành lời hoặc ghi vào vở. Đoán sai ở bước 3 là điều có ích nhất có thể xảy ra &mdash; đó chính là lúc kiến thức bám lại.</div>
+<a class="link-card" href="/cpu-lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🔬</span>
+  <span class="lc-body"><span class="lc-title">Mở cả phòng lab: Máy tính từ số 0</span><span class="lc-sub">Sáu mô phỏng theo thứ tự học: bit, dữ liệu, logic, CPU đồ chơi, từ C tới mã máy, cache.</span></span>
+  <span class="lc-cta">PHÒNG LAB →</span>
+</a>
+</div>
+`,
+        },
       ],
     },
     /* ══════════════════ CHƯƠNG 1 — TỔ CHỨC MÁY TÍNH ══════════════════ */
@@ -350,6 +508,11 @@ export default {
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The von Neumann bottleneck.</b> Because instructions and data share one memory bus, the CPU often stalls waiting on that single channel — the throughput limit John Backus named the "von Neumann bottleneck" in 1977. Real chips dodge it with a Harvard-style split: separate L1 instruction and data caches, so code and data can be read at the same time. <em>Intro presents the pure model; the bottleneck and Harvard variant are computer-architecture (CEA201) topics.</em></div>
 <div class="callout ok">Every phone, laptop and server you touch is a Von Neumann machine. When you "install an app", you are literally copying a program into memory/disk so the same hardware can now do a new thing.</div>
 <div class="pitfall">A common mix-up: the Von Neumann model is <em>logical</em>, not physical. The ALU and Control Unit together are what we package as the CPU chip; memory is the RAM. The model describes <em>roles</em>, not which plastic box each part sits in.</div>
+${thuNgay('en', 'cpu', 'add', 'This is a real (tiny) von Neumann machine: ONE memory holds both the program and its data, and the CPU fetches the instructions from it one at a time. The program below adds 5 + 7.', [
+  'Press <b>Step</b> until PC changes for the first time. Which register received the address just before that?',
+  'Find X, Y and Z in the <b>Memory</b> table. Are they kept anywhere different from the instructions?',
+  'Choose the program <b>Program = data</b> and run it: an instruction is read, changed and written back as if it were a number.',
+])}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 1 · Bài 1.1</span>
@@ -378,6 +541,11 @@ export default {
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Nút thắt cổ chai Von Neumann.</b> Vì lệnh và dữ liệu dùng chung một bus bộ nhớ, CPU thường phải chờ trên kênh duy nhất đó — giới hạn thông lượng mà John Backus gọi là "von Neumann bottleneck" năm 1977. Chip thật né nó bằng kiểu Harvard: tách cache lệnh (L1i) và cache dữ liệu (L1d) để đọc cả hai cùng lúc. <em>Nhập môn chỉ dạy mô hình thuần; nút thắt và biến thể Harvard là chủ đề kiến trúc máy tính (CEA201).</em></div>
 <div class="callout ok">Mọi điện thoại, laptop và máy chủ bạn chạm vào đều là máy Von Neumann. Khi bạn "cài một app", bạn thực chất đang chép một chương trình vào bộ nhớ/đĩa để cùng phần cứng đó giờ làm được việc mới.</div>
 <div class="pitfall">Một nhầm lẫn phổ biến: mô hình Von Neumann là <em>logic</em>, không phải vật lý. ALU và Control Unit gộp lại là thứ ta đóng gói thành con chip CPU; bộ nhớ là RAM. Mô hình mô tả <em>vai trò</em>, không phải mỗi phần nằm trong hộp nhựa nào.</div>
+${thuNgay('vi', 'cpu', 'add', 'Đây là một cỗ máy von Neumann thật (tí hon): MỘT bộ nhớ chứa cả chương trình lẫn dữ liệu, và CPU lần lượt nạp từng lệnh từ đó. Chương trình dưới đây cộng 5 + 7.', [
+  'Bấm <b>Bước</b> tới khi PC đổi lần đầu. Ngay trước đó địa chỉ được chép vào thanh ghi nào?',
+  'Tìm X, Y và Z trong bảng <b>Bộ nhớ</b>. Chúng có nằm ở chỗ nào khác với các lệnh không?',
+  'Chọn chương trình <b>Chương trình = dữ liệu</b> rồi chạy: một lệnh bị đọc, sửa và ghi lại như thể nó là một con số.',
+])}
 </div>
 `,
         },
@@ -482,6 +650,11 @@ export default {
   <span class="lc-body"><span class="lc-title">See memory addresses in real code</span><span class="lc-sub">In C you touch registers/memory directly — the CodeLab "Pointers &amp; Memory" module makes it concrete.</span></span>
   <span class="lc-cta">PRACTICE →</span>
 </a>
+${thuNgay('en', 'cpu', 'sum', 'The fetch → decode → execute cycle for real: every micro-step shows which register changes and what travels on the bus.', [
+  'Count the micro-steps of one <code>Load</code> instruction. Which three belong to the fetch?',
+  'Switch to <b>whole instructions</b> and run to the end: how many instructions did the CPU execute to add 1..5?',
+  'Change <code>N, DEC 5</code> to 10 and predict the output before you run it.',
+])}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 1 · Bài 1.3</span>
@@ -510,6 +683,11 @@ export default {
   <span class="lc-body"><span class="lc-title">Thấy địa chỉ bộ nhớ trong code thật</span><span class="lc-sub">Trong C bạn chạm trực tiếp thanh ghi/bộ nhớ — module "Con trỏ &amp; Bộ nhớ" ở CodeLab làm điều đó cụ thể.</span></span>
   <span class="lc-cta">LUYỆN TẬP →</span>
 </a>
+${thuNgay('vi', 'cpu', 'sum', 'Chu trình nạp → giải mã → thực thi bằng thật: mỗi vi bước cho thấy thanh ghi nào đổi và thứ gì chạy trên bus.', [
+  'Đếm số vi bước của một lệnh <code>Load</code>. Ba bước nào thuộc giai đoạn nạp lệnh?',
+  'Chuyển sang <b>từng lệnh</b> rồi chạy tới cuối: CPU đã chạy bao nhiêu lệnh để cộng 1..5?',
+  'Đổi <code>N, DEC 5</code> thành 10 và đoán kết quả trước khi chạy.',
+])}
 </div>
 `,
         },
@@ -547,6 +725,11 @@ export default {
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Why caching pays off: locality.</b> Caches help only because programs obey the principle of locality: they reuse recent data (temporal) and touch neighbours (spatial). Hardware exploits this by loading a whole cache line (~64 bytes) at once, so summing a 2D array row-by-row can be several times faster than column-by-column purely from cache behaviour. <em>Intro describes the hierarchy but not the locality principle that makes it worth building.</em></div>
 <div class="callout ok">Everyday proof: the second time you open a big app it launches faster. Parts of it are still cached in RAM (and RAM is cached toward the CPU), so less has to be fetched from the slow disk.</div>
 <div class="pitfall">RAM is <strong>volatile</strong> — cut the power and it forgets everything. That is why unsaved work vanishes in a crash: it was only in RAM, never written to the permanent disk.</div>
+${thuNgay('en', 'cache', 'sequential', 'A cache keeps recently used blocks close to the CPU. Walk through an array and see one miss bring in several neighbours at once.', [
+  'Run it. Why is the hit rate exactly 75%?',
+  'Change <b>Block</b> to 4 B. What happens to the hit rate, and why?',
+  'Pick the scenario <b>A loop re-reading a small array</b>. Which accesses still miss?',
+])}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 1 · Bài 1.4</span>
@@ -569,6 +752,11 @@ export default {
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Vì sao cache hiệu quả: tính cục bộ.</b> Cache chỉ hữu ích vì chương trình tuân theo nguyên lý cục bộ: hay dùng lại dữ liệu vừa dùng (thời gian) và truy cập ô lân cận (không gian). Phần cứng khai thác bằng cách nạp cả một dòng cache (~64 byte) một lần, nên cộng mảng 2 chiều theo hàng có thể nhanh gấp mấy lần theo cột chỉ nhờ cách cache hoạt động. <em>Nhập môn mô tả phân cấp bộ nhớ nhưng không nói nguyên lý cục bộ khiến nó đáng xây.</em></div>
 <div class="callout ok">Bằng chứng đời thường: lần thứ hai mở một app lớn, nó khởi động nhanh hơn. Một phần của nó vẫn còn cache trong RAM (và RAM được cache về phía CPU), nên phải lấy ít hơn từ đĩa chậm.</div>
 <div class="pitfall">RAM là <strong>bay hơi (volatile)</strong> — mất điện là quên sạch. Vì thế công việc chưa lưu biến mất khi treo máy: nó chỉ ở RAM, chưa bao giờ được ghi xuống đĩa lưu vĩnh viễn.</div>
+${thuNgay('vi', 'cache', 'sequential', 'Cache giữ những khối vừa dùng ở sát CPU. Duyệt qua một mảng và xem một lần trượt kéo về cả mấy phần tử hàng xóm.', [
+  'Chạy thử. Vì sao tỉ lệ trúng đúng bằng 75%?',
+  'Đổi <b>Khối</b> thành 4 B. Tỉ lệ trúng thay đổi thế nào, vì sao?',
+  'Chọn kịch bản <b>Vòng lặp đọc lại mảng nhỏ</b>. Những lần truy cập nào vẫn trượt?',
+])}
 </div>
 `,
         },
@@ -687,6 +875,11 @@ export default {
 </div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Binary is a physics choice, not just math.</b> Computers use base-2 because a transistor reliably distinguishes two voltage states (on/off) far more cheaply than ten — more states means more errors. This ties to 1854 Boolean algebra, which gave a mathematics for manipulating just true/false, the theory that made digital logic possible a century before the transistor existed. <em>Intro shows binary as a convention; the reliability-and-Boolean reasoning behind it is deeper.</em></div>
 <div class="note-ct">A <strong>bit</strong> is one 0/1. Eight bits make a <strong>byte</strong>, which can hold 256 different patterns (2⁸). Bigger units: KB, MB, GB, TB — each roughly 1000× the last. Hex exists mainly because it is a compact shorthand for binary: one hex digit = exactly four bits.</div>
+${thuNgay('en', 'bits', 'intro', 'Why only 0 and 1? Move the voltage, add electrical noise, then flip eight switches and read the same byte six different ways.', [
+  'Set the noise to ±1.0 V. Which voltages still give a reliable bit?',
+  'Make the pattern 01000001. Which letter is it in ASCII, and which number?',
+  'How many different patterns can 8 switches make? Check on the <b>Bit board</b> tab with all bits set to 1.',
+])}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 2 · Bài 2.1</span>
@@ -712,6 +905,11 @@ export default {
 </div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Nhị phân là lựa chọn vật lý, không chỉ toán.</b> Máy dùng cơ số 2 vì transistor phân biệt hai mức điện áp (bật/tắt) rẻ và tin cậy hơn nhiều so với mười mức — càng nhiều mức càng dễ lỗi. Điều này nối với đại số Boole năm 1854, thứ cho một nền toán để thao tác chỉ đúng/sai — lý thuyết làm nên logic số cả trăm năm trước khi có transistor. <em>Nhập môn coi nhị phân là quy ước; lý do tin cậy và gốc Boole sâu hơn thế.</em></div>
 <div class="note-ct">Một <strong>bit</strong> là một số 0/1. Tám bit thành một <strong>byte</strong>, chứa được 256 mẫu khác nhau (2⁸). Đơn vị lớn hơn: KB, MB, GB, TB — mỗi bậc khoảng 1000× bậc trước. Hex tồn tại chủ yếu vì nó là cách viết tắt gọn của nhị phân: một chữ số hex = đúng bốn bit.</div>
+${thuNgay('vi', 'bits', 'intro', 'Vì sao chỉ có 0 và 1? Kéo điện áp, thêm nhiễu điện, rồi bật tắt tám công tắc và đọc cùng một byte theo sáu cách khác nhau.', [
+  'Đặt nhiễu ±1,0 V. Những mức điện áp nào vẫn cho ra bit đáng tin?',
+  'Tạo mẫu 01000001. Đó là chữ gì trong ASCII, và là số mấy?',
+  'Tám công tắc tạo được bao nhiêu mẫu khác nhau? Kiểm ở thẻ <b>Bảng bit</b> với mọi bit bằng 1.',
+])}
 </div>
 `,
         },
@@ -747,6 +945,11 @@ export default {
   <span class="lc-body"><span class="lc-title">Bits &amp; bases in real code</span><span class="lc-sub">C prints hex with %x and shifts bits with &lt;&lt; — the "Variables, Types &amp; Operators" module lets you try.</span></span>
   <span class="lc-cta">PRACTICE →</span>
 </a>
+${thuNgay('en', 'bits', 'convert', 'The repeated-division method from this lesson, one division per step, then checked back with place values.', [
+  'Convert 200 to binary step by step. Then switch to base 16: what is 200 in hex?',
+  'Is 0xC8 equal to 1100 1000? Use the grouping trick: 4 bits per hex digit.',
+  'Convert 1000 to octal and verify it with the place-value column.',
+])}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 2 · Bài 2.2</span>
@@ -774,6 +977,11 @@ export default {
   <span class="lc-body"><span class="lc-title">Bit &amp; hệ cơ số trong code thật</span><span class="lc-sub">C in hex bằng %x và dịch bit bằng &lt;&lt; — module "Biến, Kiểu &amp; Toán tử" cho bạn thử.</span></span>
   <span class="lc-cta">LUYỆN TẬP →</span>
 </a>
+${thuNgay('vi', 'bits', 'convert', 'Đúng phương pháp chia liên tiếp của bài này, mỗi bước một phép chia, rồi kiểm ngược lại bằng trọng số.', [
+  'Đổi 200 sang nhị phân từng bước. Rồi chuyển sang cơ số 16: 200 viết hex là gì?',
+  '0xC8 có bằng 1100 1000 không? Dùng mẹo gom nhóm: 4 bit cho mỗi chữ số hex.',
+  'Đổi 1000 sang bát phân và kiểm lại bằng cột trọng số.',
+])}
 </div>
 `,
         },
@@ -805,6 +1013,11 @@ export default {
 <div class="callout warn">In 8-bit unsigned storage, 255 + 1 does not give 256 — it wraps to 0. The famous "Gandhi becomes hyper-aggressive" video-game bug and many security holes come from exactly this kind of overflow.</div>
 <div class="note-ct"><b>Two&rsquo;s complement makes subtraction free</b> — storing integers in two&rsquo;s complement is core textbook material (session 13, &ldquo;3.1 Storing numbers&rdquo;) and its arithmetic is session 16. Instead of a separate subtract circuit, computers store negatives in two’s complement (invert the bits, add 1), so a − b becomes a + (−b) using the very same adder. Example in 8-bit: −5 is 11111011; adding 7 (00000111) gives 00000010 = 2, correct with no special case. Overflow is detected when the sign bit flips the wrong way. Signed representation is a standard exam item, not an optional extra.</div>
 <div class="note-ct">This is why Chapter 3 matters: the <em>meaning</em> of a bit pattern (how many bits, signed or unsigned, integer or float) decides what arithmetic is correct. The bits alone do not tell you.</div>
+${thuNgay('en', 'bits', 'signed', 'Binary addition column by column with every carry shown, exactly as the ALU does it, plus the overflow flags a real CPU sets.', [
+  'Click <b>127 + 1</b>. Why does the signed result become −128? Which flag turns on?',
+  'Switch to 4 bit and do 5 + 4 on the number wheel. Where does the result cross the red line?',
+  'Compute 5 − 9 in 8 bit. How does the ALU subtract using nothing but an adder?',
+])}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 2 · Bài 2.3</span>
@@ -821,6 +1034,11 @@ export default {
 <div class="callout warn">Trong lưu trữ 8-bit không dấu, 255 + 1 không cho 256 — nó quay về 0. Lỗi game "Gandhi bỗng hung hãn" nổi tiếng và nhiều lỗ hổng bảo mật đến từ đúng kiểu tràn số này.</div>
 <div class="note-ct"><b>Bù hai (two&rsquo;s complement) khiến phép trừ thành miễn phí</b> — lưu số nguyên ở dạng bù hai là nội dung cốt lõi của giáo trình (buổi 13, &ldquo;3.1 Storing numbers&rdquo;) và số học của nó là buổi 16. Thay vì mạch trừ riêng, máy lưu số âm ở dạng bù hai (đảo bit rồi cộng 1), nên a − b thành a + (−b) dùng đúng bộ cộng đó. Ví dụ 8-bit: −5 là 11111011; cộng 7 (00000111) ra 00000010 = 2, đúng mà không cần trường hợp đặc biệt. Tràn số được phát hiện khi bit dấu lật sai. Biểu diễn có dấu là một mục thi tiêu chuẩn, không phải phần thêm tuỳ chọn.</div>
 <div class="note-ct">Đây là lý do Chương 3 quan trọng: <em>ý nghĩa</em> của một mẫu bit (bao nhiêu bit, có dấu hay không, số nguyên hay thực) quyết định phép toán nào đúng. Riêng các bit không nói cho bạn điều đó.</div>
+${thuNgay('vi', 'bits', 'signed', 'Cộng nhị phân theo từng cột, hiện đủ mọi bit nhớ, đúng như ALU làm, kèm các cờ tràn số mà CPU thật bật lên.', [
+  'Bấm <b>127 + 1</b>. Vì sao kết quả có dấu thành −128? Cờ nào bật?',
+  'Chuyển sang 4 bit và làm 5 + 4 trên vòng số. Kết quả vượt qua vạch đỏ ở đâu?',
+  'Tính 5 − 9 với 8 bit. ALU trừ bằng cách nào khi chỉ có mạch cộng?',
+])}
 </div>
 `,
         },
@@ -880,6 +1098,11 @@ export default {
 <div class="note-ct"><b>IEEE 754 is the standard behind every float</b> — the textbook&rsquo;s &ldquo;storing reals&rdquo; section (session 13) covers normalisation, the Excess representation of the exponent and the IEEE standards by name. Floating point is not ad-hoc: the IEEE 754 standard fixes the layout (sign, exponent, mantissa) so a 32-bit float carries ~7 decimal digits and a 64-bit double ~15–16. It even reserves bit patterns for +/- infinity and NaN ("not a number", produced by 0/0), which lets hardware signal errors without crashing. The reserved patterns for infinity and NaN are what let hardware signal an error without crashing.</div>
 <div class="pitfall">Floating point is <strong>approximate</strong>. Many decimals (like 0.1) have no exact binary form, so 0.1 + 0.2 can print 0.30000000000000004. Never compare floats with == in code — this surprises every new programmer.</div>
 <div class="note-ct">Same bits, different meaning: 11111011 is 251 as unsigned but −5 as signed two&#39;s complement. The type declared in your program tells the computer which reading to use.</div>
+${thuNgay('en', 'data', 'float', 'Integers are stored in two&#39;s complement (Chapter 2 lab); real numbers use IEEE-754. Type a number and see its sign, exponent and fraction bits, and the exact value that is really stored.', [
+  'Type 0.5, then 0.1. Why is 0.5 stored exactly but 0.1 is not?',
+  'Read the box <b>0.1 + 0.2 == 0.3?</b> Which of the two numbers is larger?',
+  'Click the first (sign) bit: what changes? Then try 16777217 as a float.',
+])}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 3 · Bài 3.1</span>
@@ -900,6 +1123,11 @@ export default {
 <div class="note-ct"><b>IEEE 754 là chuẩn đằng sau mọi số thực</b> — mục &ldquo;storing reals&rdquo; của giáo trình (buổi 13) trình bày chuẩn hoá (normalization), biểu diễn Excess cho số mũ và gọi thẳng tên các chuẩn IEEE. Dấu phẩy động không tuỳ tiện: chuẩn IEEE 754 cố định bố cục (dấu, số mũ, phần định trị) nên float 32-bit giữ ~7 chữ số thập phân và double 64-bit ~15–16. Nó còn dành riêng mẫu bit cho +/- vô cực và NaN ("không phải số", sinh từ 0/0), cho phần cứng báo lỗi mà không sập. Các mẫu bit dành riêng cho vô cực và NaN là thứ cho phép phần cứng báo lỗi mà không sập.</div>
 <div class="pitfall">Dấu phẩy động là <strong>gần đúng</strong>. Nhiều số thập phân (như 0.1) không có dạng nhị phân chính xác, nên 0.1 + 0.2 có thể in ra 0.30000000000000004. Đừng bao giờ so sánh số thực bằng == trong code — điều này làm mọi lập trình viên mới bất ngờ.</div>
 <div class="note-ct">Cùng bit, khác nghĩa: 11111011 là 251 nếu không dấu nhưng là −5 nếu có dấu bù hai. Kiểu dữ liệu khai báo trong chương trình cho máy biết đọc theo cách nào.</div>
+${thuNgay('vi', 'data', 'float', 'Số nguyên lưu bằng bù hai (phòng lab Chương 2); số thực dùng IEEE-754. Gõ một số và xem các bit dấu, số mũ, định trị, cùng giá trị chính xác thực sự được lưu.', [
+  'Gõ 0.5, rồi 0.1. Vì sao 0.5 lưu chính xác còn 0.1 thì không?',
+  'Đọc ô <b>0.1 + 0.2 == 0.3?</b> Trong hai số, số nào lớn hơn?',
+  'Bấm bit đầu tiên (bit dấu): điều gì đổi? Rồi thử 16777217 dạng float.',
+])}
 </div>
 `,
         },
@@ -936,6 +1164,15 @@ export default {
 <p>Video is just a rapid sequence of images (<strong>frames</strong>, e.g. 30 fps) plus a synced audio track. That is enormous data, so video compression (H.264) is essential.</p>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>From ASCII to UTF-8, and lossy vs lossless.</b> ASCII covers only 128 characters — useless for Vietnamese or emoji. Unicode assigns a number (code point) to every character worldwide, and UTF-8 encodes it in 1–4 bytes while staying backward-compatible with ASCII. Media adds another split: lossless (PNG, FLAC) rebuilds the original exactly, while lossy (JPEG, MP3) discards detail the eye/ear barely notices to shrink files. <em>Intro mentions character codes; UTF-8 and the lossy/lossless distinction are the practical depth.</em></div>
 <div class="note-ct">One unifying idea: to digitize the real (analog) world, we <strong>sample</strong> it and turn each sample into a number. More samples = higher fidelity but bigger files. That trade-off is at the heart of all media formats.</div>
+${thuNgay('en', 'data', 'text', 'Text is stored as numbers. Type Vietnamese and see each character&#39;s code point and its UTF-8 bytes.', [
+  'Why does A take 1 byte but the Vietnamese letter e-with-circumflex-and-dot take 3? Click its row.',
+  'Switch to NFD. How many code points does that letter become?',
+  'Open the <b>Mojibake</b> tab and explain where the garbled text comes from.',
+])}
+${thuNgay('en', 'data', 'color', 'Images are grids of numbers too: every pixel is three bytes — red, green and blue.', [
+  'Make pure yellow with the sliders. What is its hex code?',
+  'How many bytes does an uncompressed 1920 × 1080 photo need?',
+], { heading: false })}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 3 · Bài 3.2</span>
@@ -957,6 +1194,15 @@ export default {
 <p>Video chỉ là một chuỗi ảnh nối nhanh (<strong>khung hình — frame</strong>, ví dụ 30 fps) cộng với âm thanh đồng bộ. Đó là lượng dữ liệu khổng lồ, nên nén video (H.264) là bắt buộc.</p>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Từ ASCII tới UTF-8, và nén mất mát vs không mất mát.</b> ASCII chỉ có 128 ký tự — vô dụng với tiếng Việt hay emoji. Unicode gán một số (code point) cho mọi ký tự trên thế giới, còn UTF-8 mã hoá nó bằng 1–4 byte mà vẫn tương thích ngược với ASCII. Media có thêm một tách đôi: không mất mát (PNG, FLAC) dựng lại y hệt bản gốc, còn mất mát (JPEG, MP3) bỏ bớt chi tiết mắt/tai khó nhận ra để thu nhỏ tệp. <em>Nhập môn nhắc mã ký tự; UTF-8 và phân biệt mất/không mất mát mới là chiều sâu thực dụng.</em></div>
 <div class="note-ct">Một ý tưởng chung: để số hoá thế giới thực (analog), ta <strong>lấy mẫu</strong> nó và biến mỗi mẫu thành một con số. Nhiều mẫu hơn = trung thực hơn nhưng tệp lớn hơn. Đánh đổi đó nằm ở trung tâm mọi định dạng media.</div>
+${thuNgay('vi', 'data', 'text', 'Chữ được lưu bằng số. Gõ tiếng Việt và xem mã điểm cùng các byte UTF-8 của từng ký tự.', [
+  'Vì sao A tốn 1 byte còn ệ tốn 3? Bấm vào hàng của ệ.',
+  'Chuyển sang NFD. Chữ ệ thành mấy mã điểm?',
+  'Mở thẻ <b>Lỗi font</b> và giải thích chữ “Viá»‡t” từ đâu ra.',
+])}
+${thuNgay('vi', 'data', 'color', 'Ảnh cũng là lưới các con số: mỗi điểm ảnh là ba byte — đỏ, lục, lam.', [
+  'Pha màu vàng tươi bằng các thanh trượt. Mã hex của nó là gì?',
+  'Một ảnh 1920 × 1080 chưa nén cần bao nhiêu byte?',
+], { heading: false })}
 </div>
 `,
         },
@@ -992,6 +1238,15 @@ export default {
 <p>A <strong>mask</strong> is a chosen bit pattern used with AND/OR to inspect or change specific bits. AND with a mask <em>clears</em> the bits that are 0 in the mask; OR <em>sets</em> the bits that are 1. This is how programs pack many yes/no flags into a single number (e.g. file permissions, hardware settings).</p>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Bit masks: one integer holds many flags.</b> Using AND/OR/XOR with a chosen pattern (a mask) lets a single integer store many yes/no settings compactly. Example: permission &amp; 0100 tests the "write" bit; flags |= 0010 turns one flag on; x XOR mask flips selected bits. This is exactly how file permissions and hardware registers are read and set. <em>The syllabus teaches the operations; using them as masks is the applied technique programmers rely on.</em></div>
 <div class="note-ct">Important distinction the exam asks (CQ5.3): a <strong>logic operation at bit level</strong> works on individual bits (each column separately). A logic operation at <strong>pattern level</strong> treats the whole pattern as one true/false value. Bit-level = per-bit; pattern-level = whole-value.</div>
+${thuNgay('en', 'bits', 'ops', 'AND, OR and XOR applied to whole bytes are the bit masks programmers use every day.', [
+  'Choose the example <b>keep the low 4 bits</b>. Which bits of A survive, and why?',
+  'Apply XOR 0x20 to the letter a (0x61). Which letter do you get?',
+  'Choose NOT. What is the relation between A and the result?',
+])}
+${thuNgay('en', 'logic', 'gates', 'Each of those byte operations is built from tiny logic gates, one per bit.', [
+  'Pick XOR and fill in its truth table on paper before you look.',
+  'Which gate outputs 1 only when both inputs are 0?',
+], { heading: false })}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 3 · Bài 3.3</span>
@@ -1012,6 +1267,15 @@ export default {
 <p>Một <strong>mặt nạ (mask)</strong> là mẫu bit được chọn, dùng cùng AND/OR để kiểm tra hoặc thay đổi các bit cụ thể. AND với mask <em>xoá</em> các bit là 0 trong mask; OR <em>bật</em> các bit là 1. Đây là cách chương trình gói nhiều cờ có/không vào một con số (ví dụ quyền tệp, cấu hình phần cứng).</p>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Mặt nạ bit (bit mask): một số nguyên chứa nhiều cờ.</b> Dùng AND/OR/XOR với một mẫu chọn sẵn (mặt nạ) cho phép một số nguyên lưu gọn nhiều thiết lập bật/tắt. Ví dụ: permission &amp; 0100 kiểm bit "ghi"; flags |= 0010 bật một cờ; x XOR mask lật các bit đã chọn. Đây đúng là cách quyền tệp và thanh ghi phần cứng được đọc và đặt. <em>Giáo trình dạy các phép toán; dùng chúng làm mặt nạ mới là kỹ thuật ứng dụng lập trình viên hay dùng.</em></div>
 <div class="note-ct">Phân biệt quan trọng bài thi hỏi (CQ5.3): phép logic ở <strong>mức bit</strong> làm việc trên từng bit (mỗi cột riêng). Phép logic ở <strong>mức mẫu (pattern level)</strong> coi cả mẫu là một giá trị đúng/sai. Mức bit = từng-bit; mức mẫu = cả-giá-trị.</div>
+${thuNgay('vi', 'bits', 'ops', 'AND, OR và XOR áp lên cả byte chính là những mặt nạ bit lập trình viên dùng hằng ngày.', [
+  'Chọn ví dụ <b>giữ 4 bit thấp</b>. Những bit nào của A còn lại, vì sao?',
+  'Áp XOR 0x20 lên chữ a (0x61). Bạn được chữ gì?',
+  'Chọn NOT. A và kết quả liên hệ với nhau thế nào?',
+])}
+${thuNgay('vi', 'logic', 'gates', 'Mỗi phép toán trên byte ở trên được dựng từ các cổng logic tí hon, mỗi bit một cổng.', [
+  'Chọn XOR và tự điền bảng chân trị ra giấy trước khi nhìn.',
+  'Cổng nào ra 1 chỉ khi cả hai đầu vào là 0?',
+], { heading: false })}
 </div>
 `,
         },
@@ -1037,6 +1301,11 @@ export default {
 <p>Chapter 3 together shows the ALU\'s full toolkit: <strong>arithmetic</strong> (add, subtract via two&#39;s complement, and shift-based multiply/divide) and <strong>logic</strong> (AND, OR, NOT, XOR). Every high-level operation you write eventually reduces to these primitive bit operations.</p>
 <div class="note-ct"><b>Logical vs arithmetic right-shift</b> — session 16 covers shift operations in all three forms: logical, circular (rotate) and arithmetic. Shifting left by n multiplies by 2^n; shifting right divides by 2^n — but for signed numbers a logical shift fills zeros (wrong for negatives) while an arithmetic shift copies the sign bit to keep the value negative. Example: −8 &gt;&gt; 1 must give −4, which only an arithmetic shift produces. The signed/unsigned split is the subtlety compilers must respect.</div>
 <div class="note-ct">Exam contrast (CQ5.4): an <strong>arithmetic</strong> operation changes the numeric value following math rules (add, multiply). A <strong>shift</strong> just relocates bits — though a shift <em>happens to</em> multiply or divide by a power of two, which is why compilers replace slow multiplications by fast shifts.</div>
+${thuNgay('en', 'bits', 'ops', 'Shifting left multiplies by 2, shifting right divides by 2 — and the arithmetic shift keeps the sign of a negative number.', [
+  'Choose <b>x × 4 = shift left 2</b> and check 13 × 4 = 52.',
+  'Choose <b>−20 ÷ 4</b>. Why must this shift copy the sign bit instead of inserting 0?',
+  'Shift 200 left by 1 in 8 bits. What is lost, and what is the result?',
+])}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 3 · Bài 3.4</span>
@@ -1054,6 +1323,11 @@ export default {
 <p>Chương 3 gộp lại cho thấy đầy đủ bộ công cụ của ALU: <strong>số học</strong> (cộng, trừ qua bù hai, và nhân/chia dựa trên dịch) và <strong>logic</strong> (AND, OR, NOT, XOR). Mọi phép bậc cao bạn viết rốt cuộc rút về các phép bit nguyên thủy này.</p>
 <div class="note-ct"><b>Dịch phải logic vs dịch phải số học</b> — buổi 16 dạy phép dịch ở cả ba dạng: logic, vòng (circular/rotate) và số học. Dịch trái n bit là nhân 2^n; dịch phải n bit là chia 2^n — nhưng với số có dấu, dịch logic điền số 0 (sai với số âm) còn dịch số học chép lại bit dấu để giữ giá trị âm. Ví dụ: −8 &gt;&gt; 1 phải ra −4, điều chỉ dịch số học làm được. Phân biệt có dấu/không dấu là điểm tinh tế mà trình biên dịch phải tôn trọng.</div>
 <div class="note-ct">So sánh bài thi (CQ5.4): phép <strong>số học</strong> đổi giá trị số theo quy tắc toán (cộng, nhân). Phép <strong>dịch</strong> chỉ dời bit — dù dịch <em>tình cờ</em> nhân hoặc chia cho lũy thừa của hai, đó là lý do trình biên dịch thay phép nhân chậm bằng phép dịch nhanh.</div>
+${thuNgay('vi', 'bits', 'ops', 'Dịch trái là nhân 2, dịch phải là chia 2 — và dịch số học giữ được dấu của số âm.', [
+  'Chọn <b>x × 4 = dịch trái 2</b> và kiểm 13 × 4 = 52.',
+  'Chọn <b>−20 ÷ 4</b>. Vì sao phép dịch này phải chép bit dấu thay vì chèn 0?',
+  'Dịch trái 200 đi 1 với 8 bit. Mất gì, và kết quả bằng bao nhiêu?',
+])}
 </div>
 `,
         },
@@ -1659,6 +1933,11 @@ export default {
   <span class="lc-body"><span class="lc-title">Try an interpreted language</span><span class="lc-sub">Python runs line by line — feel interpretation firsthand in the "Python Basics" module.</span></span>
   <span class="lc-cta">PRACTICE →</span>
 </a>
+${thuNgay('en', 'pipeline', 'sum', 'Follow a real C program through gcc: assembly, machine-code bytes, the executable file and finally the CPU. Every byte on screen came from the real compiler.', [
+  'Compare the x86-64 and ARM64 machine code in stage 3: whose instructions all have the same length?',
+  'Switch from -O0 to -O2. What happened to the loop inside main?',
+  'In stage 5, at which address does sum_to end up?',
+])}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 7 · Bài 7.1</span>
@@ -1692,6 +1971,11 @@ export default {
   <span class="lc-body"><span class="lc-title">Thử một ngôn ngữ thông dịch</span><span class="lc-sub">Python chạy từng dòng — cảm nhận thông dịch trực tiếp ở module "Python Basics".</span></span>
   <span class="lc-cta">LUYỆN TẬP →</span>
 </a>
+${thuNgay('vi', 'pipeline', 'sum', 'Lần theo một chương trình C thật đi qua gcc: hợp ngữ, byte mã máy, tệp thực thi và cuối cùng là CPU. Mọi byte trên màn hình đều do trình biên dịch thật sinh ra.', [
+  'So mã máy x86-64 và ARM64 ở bước 3: lệnh của bên nào dài bằng nhau hết?',
+  'Đổi -O0 sang -O2. Vòng lặp trong main đã đi đâu?',
+  'Ở bước 5, sum_to nằm ở địa chỉ nào?',
+])}
 </div>
 `,
         },
@@ -2620,6 +2904,14 @@ export default {
 </div>
 <div class="callout ok">This is the profound idea: from just a handful of gate types, wired in the right patterns, you can build an adder, then a full ALU, then a CPU. A computer is Boolean logic made physical — millions of these gates switching billions of times a second.</div>
 <div class="note-ct">Chapter 3 gave you AND/OR/NOT as operations on data; here you see they are also the literal building blocks of the hardware doing the computing. Same logic, two levels. CEA201 (Computer Organization) explores this in depth.</div>
+${thuNgay('en', 'logic', 'adder', 'Build the adder from this lesson gate by gate.', [
+  'Set A = 1, B = 1, Cin = 1 on the full adder. What are S and Cout? Check with 1 + 1 + 1 = 3.',
+  'Switch to Half adder: which input is missing, and why can it not add multi-bit numbers alone?',
+])}
+${thuNgay('en', 'logic', 'ripple', 'Then chain eight full adders into an 8-bit adder and watch the carry ripple from right to left.', [
+  'Set A = 255 and B = 1. How many stages does the carry travel through?',
+  'Why do real CPUs use carry-lookahead adders instead?',
+], { heading: false })}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Nâng cao 1 · Bài N1.1</span>
@@ -2653,6 +2945,14 @@ export default {
 </div>
 <div class="callout ok">Đây là ý tưởng sâu sắc: chỉ từ vài loại cổng, đấu theo đúng mẫu, bạn xây được bộ cộng, rồi một ALU đầy đủ, rồi một CPU. Máy tính là logic Boole được vật lý hoá — hàng triệu cổng như vậy chuyển mạch hàng tỷ lần mỗi giây.</div>
 <div class="note-ct">Chương 3 cho bạn AND/OR/NOT như các phép trên dữ liệu; ở đây bạn thấy chúng cũng là viên gạch xây phần cứng đang tính toán. Cùng logic, hai tầng. CEA201 (Tổ chức máy tính) đào sâu điều này.</div>
+${thuNgay('vi', 'logic', 'adder', 'Dựng bộ cộng của bài này từng cổng một.', [
+  'Đặt A = 1, B = 1, Cin = 1 trên full adder. S và Cout bằng bao nhiêu? Kiểm bằng 1 + 1 + 1 = 3.',
+  'Chuyển sang Half adder: thiếu đầu vào nào, và vì sao một mình nó không cộng được số nhiều bit?',
+])}
+${thuNgay('vi', 'logic', 'ripple', 'Rồi nối tám full adder thành bộ cộng 8 bit và xem bit nhớ lan từ phải sang trái.', [
+  'Đặt A = 255 và B = 1. Bit nhớ đi qua bao nhiêu tầng?',
+  'Vì sao CPU thật dùng bộ cộng nhìn trước số nhớ (carry-lookahead)?',
+], { heading: false })}
 </div>
 `,
         },
@@ -2755,6 +3055,11 @@ export default {
 </ul>
 <div class="callout ok">Now the pieces connect: your C source (Ch7) becomes machine code, the linker assembles the final program, the OS (Ch5) loads it as a process into the memory hierarchy (Ch1), and the CPU runs the fetch-decode-execute cycle (Ch1). One "click to run" quietly touches every chapter of this course.</div>
 <div class="note-ct">This is exactly the machinery behind PRF192&#39;s "compile and run". When a build fails, knowing <em>which stage</em> failed tells you where to look — a skill you will use for your entire career.</div>
+${thuNgay('en', 'pipeline', 'add', 'The compilation pipeline of this lesson with real gcc output for add.c — from three lines of C down to the bytes the CPU fetches.', [
+  'Find the bytes of <code>ret</code> in x86-64 (stage 3). How many bytes is it?',
+  'In stage 4, why does .bss have a size but take no space in the file?',
+  'In stage 1, which MARIE instruction plays the role of <code>mov eax, [x]</code>?',
+])}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Nâng cao 3 · Bài N3.1</span>
@@ -2777,6 +3082,11 @@ export default {
 </ul>
 <div class="callout ok">Giờ các mảnh ghép nối lại: mã nguồn C của bạn (Ch7) thành mã máy, trình liên kết ghép chương trình cuối, OS (Ch5) nạp nó thành một tiến trình vào phân cấp bộ nhớ (Ch1), và CPU chạy chu trình nạp-giải mã-thực thi (Ch1). Một cú "bấm chạy" lặng lẽ chạm vào mọi chương của môn này.</div>
 <div class="note-ct">Đây đúng là bộ máy đằng sau "biên dịch và chạy" của PRF192. Khi build lỗi, biết <em>bước nào</em> hỏng cho bạn biết chỗ cần xem — một kỹ năng bạn dùng suốt sự nghiệp.</div>
+${thuNgay('vi', 'pipeline', 'add', 'Đường ống biên dịch của bài này với output thật của gcc cho add.c — từ ba dòng C xuống tới các byte CPU nạp về.', [
+  'Tìm các byte của <code>ret</code> trên x86-64 (bước 3). Nó dài mấy byte?',
+  'Ở bước 4, vì sao .bss có kích thước mà không chiếm chỗ trong tệp?',
+  'Ở bước 1, lệnh MARIE nào đóng vai <code>mov eax, [x]</code>?',
+])}
 </div>
 `,
         },

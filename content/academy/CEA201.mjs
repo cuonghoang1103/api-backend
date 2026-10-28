@@ -39,6 +39,7 @@ import ch15bSlides from './cea201/ch15b-slides.mjs';
 import ch15cSlides from './cea201/ch15c-slides.mjs';
 import asmaSlides from './cea201/asm-a-slides.mjs';
 import asmbSlides from './cea201/asm-b-slides.mjs';
+import { thuNgay } from '../_labs.mjs';
 
 export default {
   semester: { code: 'KY1', name: 'Kỳ 1', ordinal: 1 },
@@ -299,6 +300,11 @@ export default {
   <span class="lc-body"><span class="lc-title">Set up MARIE, Logisim &amp; CPU-Z</span><span class="lc-sub">One-click links and quick-start for the CEA201 simulators.</span></span>
   <span class="lc-cta">EXP HUB →</span>
 </a>
+<a class="link-card" href="/cpu-lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🔬</span>
+  <span class="lc-body"><span class="lc-title">In-page lab: A computer from zero</span><span class="lc-sub">Bits, logic gates, a MARIE CPU stepping through micro-operations, real C-to-machine-code output, a cache simulator — runs in the browser and is embedded in the lessons of Ch1, 3, 4, 9–13 and ASM.</span></span>
+  <span class="lc-cta">LAB →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Mục 0 · Bài 0.4</span>
@@ -326,6 +332,11 @@ export default {
   <span class="lc-ico">🧰</span>
   <span class="lc-body"><span class="lc-title">Cài đặt MARIE, Logisim &amp; CPU-Z</span><span class="lc-sub">Link một cú nhấp và hướng dẫn nhanh cho các simulator CEA201.</span></span>
   <span class="lc-cta">EXP HUB →</span>
+</a>
+<a class="link-card" href="/cpu-lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🔬</span>
+  <span class="lc-body"><span class="lc-title">Phòng lab trong trang: Máy tính từ số 0</span><span class="lc-sub">Bit, cổng logic, CPU MARIE chạy từng vi bước, từ C tới mã máy thật, mô phỏng cache — chạy ngay trong trình duyệt, đã nhúng vào các bài Ch1, 3, 4, 9–13 và ASM.</span></span>
+  <span class="lc-cta">PHÒNG LAB →</span>
 </a>
 </div>
 `,
@@ -404,6 +415,11 @@ export default {
 </div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The von Neumann bottleneck.</b> The four functions plus the stored-program idea share one path between CPU and memory, so throughput is limited by that channel &mdash; the von Neumann bottleneck. The Harvard architecture (separate instruction and data memories) and split L1 instruction/data caches are the practical answers you meet later. <em>The syllabus lists the functions but not the structural limit they impose, which drives cache and bus design.</em></div>
 <div class="note-ct">This top-down map is the plan of the whole course: Chapters 3–7 study Memory and I/O, Chapters 9–15 zoom into the CPU (logic, instructions, processor, RISC, parallelism). Keep this hierarchy in mind and every chapter has an obvious home.</div>
+${thuNgay('en', 'cpu', 'add', 'The four functions of a computer — data processing, data storage, data movement and control — happening for real in a tiny machine.', [
+  'Which unit in the diagram does the data processing? Step until it is used.',
+  'Which steps are pure data movement (register to register, or memory to register)?',
+  'Which register tells the control unit what to do next?',
+])}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 1 · Bài 1.2</span>
@@ -424,6 +440,11 @@ export default {
 </div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Nút thắt cổ chai von Neumann.</b> Bốn chức năng cộng với ý tưởng chương trình lưu trữ dùng chung một đường giữa CPU và bộ nhớ, nên thông lượng bị giới hạn bởi kênh đó &mdash; nút thắt von Neumann. Kiến trúc Harvard (tách bộ nhớ lệnh và dữ liệu) và cache L1 tách lệnh/dữ liệu là câu trả lời thực tế bạn gặp về sau. <em>Syllabus liệt kê các chức năng nhưng không nói giới hạn cấu trúc chúng áp đặt, thứ chi phối thiết kế cache và bus.</em></div>
 <div class="note-ct">Bản đồ top-down này là kế hoạch của cả môn: Chương 3–7 học Bộ nhớ và I/O, Chương 9–15 phóng vào CPU (logic, tập lệnh, bộ xử lý, RISC, song song). Giữ phân cấp này trong đầu và mọi chương đều có chỗ đứng rõ ràng.</div>
+${thuNgay('vi', 'cpu', 'add', 'Bốn chức năng của máy tính — xử lý, lưu trữ, di chuyển dữ liệu và điều khiển — diễn ra thật trong một cỗ máy tí hon.', [
+  'Khối nào trong sơ đồ làm việc xử lý dữ liệu? Đi từng bước tới khi nó được dùng.',
+  'Những bước nào thuần tuý là di chuyển dữ liệu (thanh ghi sang thanh ghi, hay bộ nhớ sang thanh ghi)?',
+  'Thanh ghi nào cho khối điều khiển biết phải làm gì tiếp?',
+])}
 </div>
 `,
         },
@@ -615,6 +636,11 @@ export default {
 <p>An <strong>interrupt</strong> lets a slow device (or a timer, or an error) signal the CPU asynchronously. The CPU pauses, saves its state, runs an <em>interrupt handler</em>, then resumes — this is what makes responsive, multitasking systems possible.</p>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Microprogramming: a tiny program per instruction.</b> Between fetch and execute sits decode, and on CISC machines a microcode ROM turns one complex instruction into a sequence of internal control steps &mdash; effectively a little program per instruction. This is Wilkes&#39; microprogramming idea (1951), and microcode is still patchable today (CPU microcode updates fix errata). <em>The three-step cycle hides how a single instruction becomes dozens of timed control signals.</em></div>
 <div class="note-ct">You met fetch–execute in CSI104; here it is formalized with the interrupt check that real machines need. Interrupts reappear in Chapter 7 (I/O) and Chapter 8 (OS support) — they are how hardware and software cooperate.</div>
+${thuNgay('en', 'cpu', 'sum', 'The instruction cycle — fetch, then execute — in micro-steps written in RTN, as in the state diagram of this chapter.', [
+  'Write down the RTN of the fetch cycle that the simulator shows.',
+  'For <code>Add Count</code>, which steps are operand fetch and which is the data operation?',
+  'How many memory reads does one <code>Load</code> instruction need in total?',
+])}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 3 · Bài 3.1</span>
@@ -635,6 +661,11 @@ export default {
 <p>Một <strong>ngắt</strong> cho một thiết bị chậm (hoặc timer, hoặc lỗi) báo cho CPU một cách bất đồng bộ. CPU tạm dừng, lưu trạng thái, chạy một <em>trình xử lý ngắt</em>, rồi tiếp tục — đây là thứ làm nên hệ thống phản hồi nhanh, đa nhiệm.</p>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Microprogramming: một chương trình nhỏ cho mỗi lệnh.</b> Giữa nạp và thực thi là giải mã, và trên máy CISC một ROM microcode biến một lệnh phức tạp thành chuỗi bước điều khiển nội bộ &mdash; thực chất là một chương trình con cho mỗi lệnh. Đây là ý tưởng microprogramming của Wilkes (1951), và microcode ngày nay vẫn vá được (bản cập nhật microcode CPU sửa lỗi errata). <em>Chu trình ba bước giấu đi việc một lệnh đơn trở thành hàng chục tín hiệu điều khiển được định thời.</em></div>
 <div class="note-ct">Bạn đã gặp nạp–thực thi ở CSI104; ở đây nó được hình thức hoá với bước kiểm ngắt mà máy thật cần. Ngắt trở lại ở Chương 7 (I/O) và Chương 8 (hỗ trợ OS) — đó là cách phần cứng và phần mềm hợp tác.</div>
+${thuNgay('vi', 'cpu', 'sum', 'Chu trình lệnh — nạp rồi thực thi — theo từng vi bước viết bằng RTN, như sơ đồ trạng thái của chương này.', [
+  'Chép lại RTN của chu trình nạp mà mô phỏng hiện ra.',
+  'Với <code>Add Count</code>, bước nào là nạp toán hạng, bước nào là phép xử lý dữ liệu?',
+  'Một lệnh <code>Load</code> cần tổng cộng bao nhiêu lần đọc bộ nhớ?',
+])}
 </div>
 `,
         },
@@ -662,6 +693,11 @@ export default {
 </div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Arbitration and DMA bus mastering.</b> When several devices want to drive a shared bus at once, an arbiter grants it via schemes like daisy-chaining or centralized priority. A DMA controller can itself become bus master and move data straight between memory and a device, &quot;stealing&quot; bus cycles from the CPU so large transfers do not tie up the processor. <em>The topology view shows the wires but not who decides which device drives them, which is where real throughput is won or lost.</em></div>
 <div class="note-ct">Modern systems replaced the single shared bus with hierarchies and dedicated point-to-point links (like PCI Express) precisely to remove this bottleneck — a direct application of "find and fix the bottleneck" from Amdahl&#39;s law.</div>
+${thuNgay('en', 'cpu', 'max', 'Watch the address bus (blue packets) and the data bus (green packets) carry every single transfer.', [
+  'During <code>LoadI Ptr</code>, how many times does an address go out on the bus?',
+  'Which transfers stay inside the CPU (internal bus) and never reach memory?',
+  'Why must MAR be loaded before a memory read can begin?',
+])}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 3 · Bài 3.2</span>
@@ -681,6 +717,11 @@ export default {
 </div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Trọng tài bus và DMA làm bus master.</b> Khi nhiều thiết bị muốn chiếm bus dùng chung cùng lúc, một bộ trọng tài (arbiter) cấp quyền qua các cách như daisy-chain hay ưu tiên tập trung. Bộ điều khiển DMA có thể tự trở thành bus master và chuyển dữ liệu thẳng giữa bộ nhớ và thiết bị, &quot;ăn cắp&quot; chu kỳ bus từ CPU để các chuyển khối lớn không trói buộc bộ xử lý. <em>Góc nhìn topo cho thấy dây nối nhưng không cho thấy ai quyết định thiết bị nào được truyền, nơi thông lượng thực sự thắng hay thua.</em></div>
 <div class="note-ct">Hệ thống hiện đại thay bus dùng chung đơn bằng phân cấp và liên kết điểm-điểm riêng (như PCI Express) chính là để loại điểm nghẽn này — một ứng dụng trực tiếp của "tìm và sửa điểm nghẽn" từ định luật Amdahl.</div>
+${thuNgay('vi', 'cpu', 'max', 'Xem bus địa chỉ (gói xanh dương) và bus dữ liệu (gói xanh lá) chở từng lượt truyền một.', [
+  'Trong lệnh <code>LoadI Ptr</code>, địa chỉ được đưa ra bus mấy lần?',
+  'Những lượt truyền nào chỉ ở trong CPU (bus trong) và không bao giờ tới bộ nhớ?',
+  'Vì sao phải nạp MAR trước thì mới đọc bộ nhớ được?',
+])}
 </div>
 `,
         },
@@ -746,6 +787,11 @@ export default {
   <span class="lc-cta">PRACTICE →</span>
 </a>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Put numbers on the hierarchy.</b> The principle is qualitative; the stakes are quantitative. Rough latencies (Jeff Dean&#39;s &quot;numbers everyone should know&quot;): L1 about 1 ns, L2 about 4 ns, L3 about 15 ns, main DRAM about 100 ns, an SSD read about 100 microseconds. L1 versus DRAM is roughly a 100x gap, which is exactly why exploiting locality pays so heavily. <em>The book states locality as a rule; the latency ladder shows why a cache miss is so expensive.</em></div>
+${thuNgay('en', 'cache', 'loop', 'Temporal and spatial locality, measured access by access.', [
+  'Run it. Which accesses miss, and why is everything after them a hit?',
+  'Switch to <b>Walk an array in order</b>. What hit rate does spatial locality give?',
+  'Choose <b>Matrix</b> and explain the 0% hit rate. Then type the row-order addresses 400 404 408 … yourself.',
+])}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 4 · Bài 4.1</span>
@@ -773,6 +819,11 @@ export default {
   <span class="lc-cta">LUYỆN TẬP →</span>
 </a>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Đặt con số lên phân cấp bộ nhớ.</b> Nguyên lý thì định tính; cái giá thì định lượng. Độ trễ ước lượng (bộ &quot;số ai cũng nên biết&quot; của Jeff Dean): L1 khoảng 1 ns, L2 khoảng 4 ns, L3 khoảng 15 ns, DRAM chính khoảng 100 ns, đọc SSD khoảng 100 micro-giây. L1 so với DRAM chênh khoảng 100 lần, đúng là lý do khai thác tính cục bộ có lợi to đến vậy. <em>Sách nêu tính cục bộ như một quy tắc; thang độ trễ cho thấy vì sao một lần miss cache lại đắt đến thế.</em></div>
+${thuNgay('vi', 'cache', 'loop', 'Cục bộ thời gian và cục bộ không gian, đo từng lần truy cập.', [
+  'Chạy thử. Những lần nào trượt, và vì sao mọi lần sau đó đều trúng?',
+  'Chuyển sang <b>Duyệt mảng tuần tự</b>. Cục bộ không gian cho tỉ lệ trúng bao nhiêu?',
+  'Chọn <b>Ma trận</b> và giải thích tỉ lệ trúng 0%. Rồi tự gõ dãy địa chỉ theo hàng 400 404 408 …',
+])}
 </div>
 `,
         },
@@ -807,6 +858,15 @@ export default {
 </div>
 <div class="note-ct"><b>Write policy is the other half of cache design</b> &mdash; and it is on the syllabus: Stallings 4.3 &ldquo;Elements of cache design&rdquo;, sessions 13&ndash;14. Mapping decides where a block goes; write policy decides when memory is updated. Write-through writes memory on every store (simple, always coherent, but slow); write-back sets a dirty bit and writes only on eviction (fast, fewer memory writes, but needs coherence tracking). Modern caches use write-back with write-allocate. The write path is the half that dominates real cache traffic and multicore coherence.</div>
 <div class="note-ct">Exam framing: direct = fast but rigid; associative = flexible but costly; set-associative = the practical middle ground. This "simple-vs-flexible" tension repeats everywhere in architecture. Try the ParaCacheSimulator (Exp Hub) to watch hits, misses and evictions happen.</div>
+${thuNgay('en', 'cache', 'textbook', 'The three mapping schemes on one trace. The address is split into tag | index | offset exactly as in this lesson.', [
+  'Direct mapping gives 5 misses for 0, 8, 0, 6, 8. Predict, then set Ways = 2: how many now?',
+  'Set Ways = all (fully associative): 3 misses. Which access turned into a hit?',
+  'With 2 ways, switch LRU and FIFO. Does anything change for this trace?',
+])}
+${thuNgay('en', 'cache', 'conflict', 'Conflict misses in real code: <code>c[i] = a[i] + b[i]</code> with two arrays exactly one cache-size apart.', [
+  'Why do a[i] and b[i] always land in the same line of a 128-byte direct-mapped cache?',
+  'Fix it with 2-way set associativity and read the new hit rate.',
+], { heading: false })}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 4 · Bài 4.2</span>
@@ -826,6 +886,15 @@ export default {
 </div>
 <div class="note-ct"><b>Chính sách ghi là nửa còn lại của thiết kế cache</b> &mdash; và nó nằm trong syllabus: Stallings 4.3 &ldquo;Elements of cache design&rdquo;, buổi 13&ndash;14. Ánh xạ quyết định block đi đâu; chính sách ghi quyết định khi nào bộ nhớ được cập nhật. Write-through ghi bộ nhớ ở mỗi lần store (đơn giản, luôn nhất quán, nhưng chậm); write-back đặt bit dirty và chỉ ghi khi bị đuổi (nhanh, ít ghi bộ nhớ hơn, nhưng cần theo dõi nhất quán). Cache hiện đại dùng write-back kèm write-allocate. Đường ghi là nửa chi phối lưu lượng cache thực và nhất quán đa nhân.</div>
 <div class="note-ct">Khung thi: direct = nhanh nhưng cứng; associative = linh hoạt nhưng tốn; set-associative = trung gian thực tế. Căng thẳng "đơn giản-vs-linh hoạt" này lặp lại khắp kiến trúc. Thử ParaCacheSimulator (Exp Hub) để xem hit, miss và eviction diễn ra.</div>
+${thuNgay('vi', 'cache', 'textbook', 'Ba cách ánh xạ trên cùng một dãy truy cập. Địa chỉ tách thành tag | index | offset đúng như bài này.', [
+  'Ánh xạ trực tiếp cho 5 lần trượt với 0, 8, 0, 6, 8. Đoán trước, rồi đặt Đường/tập = 2: giờ là mấy?',
+  'Đặt Đường/tập = tất cả (kết hợp toàn phần): 3 lần trượt. Lần truy cập nào đã thành trúng?',
+  'Với 2 đường, đổi qua lại LRU và FIFO. Dãy này có gì thay đổi không?',
+])}
+${thuNgay('vi', 'cache', 'conflict', 'Trượt xung đột trong code thật: <code>c[i] = a[i] + b[i]</code> với hai mảng cách nhau đúng một dung lượng cache.', [
+  'Vì sao a[i] và b[i] luôn rơi vào cùng một dòng của cache ánh xạ trực tiếp 128 byte?',
+  'Sửa bằng kết hợp tập hợp 2 đường và đọc tỉ lệ trúng mới.',
+], { heading: false })}
 </div>
 `,
         },
@@ -1286,6 +1355,14 @@ export default {
   <span class="lc-cta">EXP HUB →</span>
 </a>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>NAND alone can build anything.</b> NAND (and equally NOR) is functionally complete: any Boolean function can be built from NAND gates alone, so real chips are dominated by NAND because standardizing on one gate type simplifies fabrication. De Morgan&#39;s laws (NOT(A AND B) = NOT A OR NOT B) are what let you convert freely between AND/OR/NOT forms to reach that all-NAND design. <em>The gate zoo is introduced, but the universality of NAND is the reason fabs build almost everything from it.</em></div>
+${thuNgay('en', 'logic', 'gates', 'Every gate of this lesson with its truth table, live.', [
+  'For each gate, predict the output for A = 1, B = 0 before you click.',
+  'Which gate is a 1-bit equality comparator?',
+])}
+${thuNgay('en', 'logic', 'nand', 'NAND is functionally complete: build the other gates from it and check every input.', [
+  'How many NAND gates does XOR need?',
+  'Use De Morgan&#39;s law to explain why OR = NAND(NOT a, NOT b).',
+], { heading: false })}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 9 · Bài 9.1</span>
@@ -1312,6 +1389,14 @@ export default {
   <span class="lc-cta">EXP HUB →</span>
 </a>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Chỉ NAND cũng dựng được mọi thứ.</b> NAND (và tương tự NOR) là đầy đủ chức năng: mọi hàm Boole đều dựng được chỉ từ cổng NAND, nên chip thực bị NAND thống trị vì chuẩn hóa một loại cổng làm đơn giản chế tạo. Luật De Morgan (NOT(A AND B) = NOT A OR NOT B) chính là thứ cho phép biến đổi tự do giữa các dạng AND/OR/NOT để đạt thiết kế toàn NAND. <em>Vườn cổng được giới thiệu, nhưng tính phổ dụng của NAND mới là lý do nhà máy dựng gần như mọi thứ từ nó.</em></div>
+${thuNgay('vi', 'logic', 'gates', 'Mọi cổng của bài này kèm bảng chân trị, chạy trực tiếp.', [
+  'Với mỗi cổng, đoán đầu ra khi A = 1, B = 0 trước khi bấm.',
+  'Cổng nào là bộ so sánh bằng nhau 1 bit?',
+])}
+${thuNgay('vi', 'logic', 'nand', 'NAND là cổng đầy đủ chức năng: dựng các cổng khác từ nó và kiểm mọi đầu vào.', [
+  'XOR cần bao nhiêu cổng NAND?',
+  'Dùng định luật De Morgan giải thích vì sao OR = NAND(NOT a, NOT b).',
+], { heading: false })}
 </div>
 `,
         },
@@ -1351,6 +1436,15 @@ export default {
 <p>A <strong>flip-flop</strong> is a sequential circuit that stores one bit stably until told to change, driven by the clock. Put many side by side and you get a <strong>register</strong>; that is literally how the CPU&#39;s registers and SRAM cache are built.</p>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Propagation delay sets the clock.</b> A combinational circuit is not instantaneous: each gate has a propagation delay, and the longest path through the logic (the critical path) sets the maximum clock frequency &mdash; the clock period must exceed critical-path delay plus flip-flop setup time. Pipelining works precisely by chopping that long path into shorter stages so the clock can run faster. <em>The combinational/sequential taxonomy is functional; timing (critical path) is what actually caps real hardware speed.</em></div>
 <div class="note-ct">Now the full picture connects: gates → combinational adders (the ALU) + sequential flip-flops (registers/memory) → together they make a CPU. Everything in the earlier chapters ultimately reduces to these two circuit families switching billions of times a second.</div>
+${thuNgay('en', 'logic', 'ripple', 'A combinational circuit: the 8-bit ripple-carry adder, with the carry settling one stage at a time.', [
+  'Add 0b11111111 + 1. Count the stages until the result is final.',
+  'Why is it called ripple-carry, and why are real ALUs not built this way?',
+])}
+${thuNgay('en', 'logic', 'register', 'A sequential circuit: a 4-bit register built from D flip-flops, driven by a clock.', [
+  'Change D several times without a clock tick. Does Q change?',
+  'Give one clock tick. Which value is stored — the first D or the last one?',
+  'Is a register combinational or sequential? Why?',
+], { heading: false })}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 9 · Bài 9.2</span>
@@ -1375,6 +1469,15 @@ export default {
 <p>Một <strong>flip-flop</strong> là mạch tuần tự lưu một bit ổn định tới khi được bảo đổi, dẫn bởi clock. Đặt nhiều cái cạnh nhau và bạn có một <strong>thanh ghi (register)</strong>; đó đúng là cách thanh ghi CPU và cache SRAM được xây.</p>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Độ trễ lan truyền định ra xung nhịp.</b> Mạch tổ hợp không tức thời: mỗi cổng có độ trễ lan truyền, và đường dài nhất qua logic (đường tới hạn) ấn định tần số xung nhịp tối đa &mdash; chu kỳ xung phải lớn hơn độ trễ đường tới hạn cộng thời gian setup của flip-flop. Pipeline hoạt động chính nhờ chặt đường dài đó thành các chặng ngắn hơn để xung chạy nhanh hơn. <em>Phân loại tổ hợp/tuần tự là về chức năng; định thời (đường tới hạn) mới là thứ chặn tốc độ phần cứng thực.</em></div>
 <div class="note-ct">Giờ bức tranh đầy đủ nối lại: cổng → bộ cộng tổ hợp (ALU) + flip-flop tuần tự (thanh ghi/bộ nhớ) → cùng nhau tạo nên một CPU. Mọi thứ ở các chương trước rốt cuộc rút về hai họ mạch này chuyển mạch hàng tỷ lần mỗi giây.</div>
+${thuNgay('vi', 'logic', 'ripple', 'Một mạch tổ hợp: bộ cộng nối tiếp nhớ 8 bit, bit nhớ ổn định dần từng tầng.', [
+  'Cộng 0b11111111 + 1. Đếm số tầng tới khi kết quả chốt.',
+  'Vì sao gọi là ripple-carry (nhớ lan), và vì sao ALU thật không dựng như vậy?',
+])}
+${thuNgay('vi', 'logic', 'register', 'Một mạch tuần tự: thanh ghi 4 bit dựng từ D flip-flop, chạy theo đồng hồ.', [
+  'Đổi D vài lần mà không có nhịp đồng hồ. Q có đổi không?',
+  'Cho một nhịp đồng hồ. Giá trị nào được lưu — D đầu tiên hay D cuối cùng?',
+  'Thanh ghi là mạch tổ hợp hay tuần tự? Vì sao?',
+], { heading: false })}
 </div>
 `,
         },
@@ -1432,6 +1535,15 @@ export default {
   <span class="lc-cta">EXP HUB →</span>
 </a>
 <div class="note-ct"><b>Fixed vs variable-length encoding, and endianness</b> &mdash; Stallings 13.3 &ldquo;Instruction formats&rdquo; (instruction length, bit allocation, variable-length instructions) is session 38. Opcode and operands must be packed into bits, and the layout is a trade-off: RISC uses fixed-length encodings (e.g. 32-bit) for easy, parallel decode, while x86 uses variable length (1 to 15 bytes) for code density at the cost of a harder decoder. How multi-byte operands are laid out (big-endian vs little-endian) is decided at this same level. The density-versus-decodability trade-off is what shapes every ISA.</div>
+${thuNgay('en', 'cpu', 'add', 'A machine instruction, bit by bit: MARIE uses one fixed format — a 4-bit opcode and a 12-bit address.', [
+  'In the listing, split <code>1005</code> into opcode bits and address bits. What does each part mean?',
+  'Change <code>Load X</code> to <code>Load Y</code>. Which bits of the machine code change?',
+  'Open <b>Instruction set</b>. With a 4-bit opcode, how many different instructions can MARIE have at most?',
+])}
+${thuNgay('en', 'pipeline', 'sum', 'Real instruction formats from gcc: x86-64 (variable length) next to ARM64 (fixed 32 bits).', [
+  'Compare the instruction lengths of x86-64 and ARM64 in stage 3.',
+  'Find an x86-64 instruction that takes its operand straight from memory.',
+], { heading: false })}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 10 · Bài 10.1</span>
@@ -1458,6 +1570,15 @@ export default {
   <span class="lc-cta">EXP HUB →</span>
 </a>
 <div class="note-ct"><b>Mã hóa dài cố định vs biến đổi, và endianness</b> &mdash; Stallings 13.3 &ldquo;Instruction formats&rdquo; (độ dài lệnh, phân bổ bit, lệnh dài thay đổi) là buổi 38. Opcode và toán hạng phải được nhồi vào bit, và cách bố trí là một đánh đổi: RISC dùng mã hóa dài cố định (ví dụ 32-bit) để giải mã dễ và song song, còn x86 dùng dài biến đổi (1 tới 15 byte) để nén mã, đổi lấy bộ giải mã phức tạp hơn. Cách xếp toán hạng nhiều byte (big-endian vs little-endian) cũng được quyết ngay ở mức này. <em>Sách nêu tên các trường nhưng không nói đánh đổi mã hóa (mật độ vs dễ giải mã) chi phối mọi ISA.</em></div>
+${thuNgay('vi', 'cpu', 'add', 'Một lệnh máy, từng bit: MARIE dùng một khuôn cố định — 4 bit mã lệnh và 12 bit địa chỉ.', [
+  'Trong bảng hợp dịch, tách <code>1005</code> thành bit mã lệnh và bit địa chỉ. Mỗi phần nghĩa là gì?',
+  'Đổi <code>Load X</code> thành <code>Load Y</code>. Những bit nào của mã máy thay đổi?',
+  'Mở <b>Tập lệnh</b>. Với mã lệnh 4 bit, MARIE có tối đa bao nhiêu lệnh khác nhau?',
+])}
+${thuNgay('vi', 'pipeline', 'sum', 'Khuôn lệnh thật do gcc sinh: x86-64 (dài thay đổi) cạnh ARM64 (cố định 32 bit).', [
+  'So độ dài lệnh x86-64 và ARM64 ở bước 3.',
+  'Tìm một lệnh x86-64 lấy toán hạng thẳng từ bộ nhớ.',
+], { heading: false })}
 </div>
 `,
         },
@@ -1507,6 +1628,11 @@ export default {
 </div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>PC-relative addressing enables shared libraries.</b> PC-relative addressing (a displacement from the program counter) is what makes position-independent code, shared libraries, and ASLR possible: the same bytes run correctly at any load address. Rich modes like x86&#39;s base + index*scale + displacement fold a whole array index into one instruction, but cost an extra adder in the address-generation unit. <em>The modes are enumerated, but their role in modern security (ASLR) and their hardware cost is where they matter today.</em></div>
 <div class="note-ct">This is the hardware reality behind <strong>pointers</strong> and <strong>arrays</strong> you meet in C. Indirect addressing is a pointer; indexed addressing is exactly how array[i] is computed. Understanding modes here makes low-level programming click.</div>
+${thuNgay('en', 'cpu', 'max', 'Direct and indirect addressing in one program: the pointer Ptr holds an address, not a value.', [
+  'Which instruction uses indirect addressing? Follow its two memory reads step by step.',
+  'Compare the micro-steps of <code>Load Arr</code> (direct) with <code>LoadI Ptr</code> (indirect).',
+  'The operand of Skipcond is not an address at all. What is it?',
+])}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 11 · Bài 11.1</span>
@@ -1526,6 +1652,11 @@ export default {
 </div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Địa chỉ tương đối PC làm nên thư viện dùng chung.</b> Địa chỉ tương đối theo PC (một độ dịch từ thanh đếm chương trình) là thứ làm nên mã độc lập vị trí, thư viện dùng chung và ASLR: cùng dãy byte chạy đúng ở bất kỳ địa chỉ nạp nào. Các mode giàu như base + index*scale + displacement của x86 gộp cả việc lập chỉ số mảng vào một lệnh, nhưng tốn thêm một bộ cộng trong đơn vị sinh địa chỉ. <em>Các mode được liệt kê, nhưng vai trò của chúng trong bảo mật hiện đại (ASLR) và cái giá phần cứng mới là chỗ quan trọng ngày nay.</em></div>
 <div class="note-ct">Đây là hiện thực phần cứng đằng sau <strong>con trỏ</strong> và <strong>mảng</strong> bạn gặp trong C. Indirect addressing là một con trỏ; indexed addressing đúng là cách array[i] được tính. Hiểu các mode ở đây làm lập trình low-level "khớp" ngay.</div>
+${thuNgay('vi', 'cpu', 'max', 'Định địa chỉ trực tiếp và gián tiếp trong cùng một chương trình: con trỏ Ptr giữ một địa chỉ, không phải giá trị.', [
+  'Lệnh nào dùng định địa chỉ gián tiếp? Theo dõi hai lần đọc bộ nhớ của nó từng bước.',
+  'So vi bước của <code>Load Arr</code> (trực tiếp) với <code>LoadI Ptr</code> (gián tiếp).',
+  'Toán hạng của Skipcond hoàn toàn không phải địa chỉ. Vậy nó là gì?',
+])}
 </div>
 `,
         },
@@ -1582,6 +1713,11 @@ export default {
   <span class="lc-cta">PRACTICE →</span>
 </a>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Register renaming hides false dependencies.</b> The ISA exposes only a handful of architectural registers, but a modern CPU keeps a much larger physical register file and uses register renaming to map names onto it. This breaks false (write-after-read and write-after-write) dependencies, letting independent instructions execute out of order without clobbering each other. <em>The visible register set is covered, but renaming is the hidden mechanism that unlocks the parallelism of Chapters 12&ndash;14.</em></div>
+${thuNgay('en', 'cpu', 'sum', 'User-visible and control/status registers at work, micro-step by micro-step.', [
+  'List the registers of this machine and sort them into user-visible and control/status.',
+  'Run one full loop iteration and write down PC after every instruction.',
+  'When does PC change other than in the fetch cycle?',
+])}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 12 · Bài 12.1</span>
@@ -1608,6 +1744,11 @@ export default {
   <span class="lc-cta">LUYỆN TẬP →</span>
 </a>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Đổi tên thanh ghi che phụ thuộc giả.</b> ISA chỉ để lộ vài thanh ghi kiến trúc, nhưng CPU hiện đại giữ một tệp thanh ghi vật lý lớn hơn nhiều và dùng đổi tên thanh ghi (register renaming) để ánh xạ tên lên đó. Việc này phá các phụ thuộc giả (ghi-sau-đọc và ghi-sau-ghi), cho các lệnh độc lập chạy không đúng thứ tự mà không đè lên nhau. <em>Tập thanh ghi nhìn thấy được thì đã học, nhưng đổi tên mới là cơ chế ẩn mở khóa song song của Chương 12&ndash;14.</em></div>
+${thuNgay('vi', 'cpu', 'sum', 'Thanh ghi người dùng thấy được và thanh ghi điều khiển/trạng thái đang làm việc, từng vi bước.', [
+  'Liệt kê các thanh ghi của máy này và chia thành nhóm người dùng thấy được và nhóm điều khiển/trạng thái.',
+  'Chạy trọn một vòng lặp và ghi lại PC sau mỗi lệnh.',
+  'Ngoài chu trình nạp, PC còn đổi vào lúc nào?',
+])}
 </div>
 `,
         },
@@ -1716,6 +1857,11 @@ export default {
 </div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The debate dissolved into load/store plus micro-ops.</b> The modern answer is &quot;both&quot;: x86 (CISC) chips decode into RISC-like micro-ops internally, while RISC ISAs like ARM and RISC-V grew richer instructions. The line that actually survived is the load/store architecture &mdash; only load and store touch memory, all ALU operations are register-to-register. RISC-V, an open royalty-free ISA, is the current frontier. <em>The book frames it as a rivalry; in practice the two philosophies converged and the interesting action moved to open ISAs.</em></div>
 <div class="callout ok">The phone in your pocket runs a RISC (ARM) chip — its simplicity means low power, which means long battery life. Modern x86 CPUs are CISC on the outside but translate instructions into RISC-like micro-ops internally, blending both worlds.</div>
+${thuNgay('en', 'pipeline', 'sum', 'RISC versus CISC on the same C function, compiled for real for ARM64 and x86-64.', [
+  'In stage 3, measure the instruction lengths on x86-64 and on ARM64.',
+  'ARM64 is a load/store architecture: at -O0, find the ldr/str around each add.',
+  'Count the instructions of sum_to at -O2 on both CPUs.',
+])}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 13 · Bài 13.1</span>
@@ -1740,6 +1886,11 @@ export default {
 </div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Cuộc tranh luận tan vào load/store cộng micro-op.</b> Câu trả lời hiện đại là &quot;cả hai&quot;: chip x86 (CISC) giải mã thành micro-op kiểu RISC bên trong, còn các ISA RISC như ARM và RISC-V thêm lệnh giàu hơn. Ranh giới thực sự còn lại là kiến trúc load/store &mdash; chỉ load và store chạm bộ nhớ, mọi phép ALU đều thanh-ghi-tới-thanh-ghi. RISC-V, một ISA mở miễn bản quyền, là biên giới hiện nay. <em>Sách dựng nó thành cuộc đối đầu; thực tế hai triết lý đã hội tụ và điểm nóng chuyển sang các ISA mở.</em></div>
 <div class="callout ok">Chiếc điện thoại trong túi bạn chạy chip RISC (ARM) — sự đơn giản của nó nghĩa là điện năng thấp, nghĩa là pin lâu. CPU x86 hiện đại là CISC bên ngoài nhưng dịch lệnh thành micro-op kiểu RISC bên trong, hoà trộn cả hai thế giới.</div>
+${thuNgay('vi', 'pipeline', 'sum', 'RISC đối đầu CISC trên cùng một hàm C, biên dịch thật cho ARM64 và x86-64.', [
+  'Ở bước 3, đo độ dài lệnh trên x86-64 và trên ARM64.',
+  'ARM64 là kiến trúc load/store: ở -O0, tìm các lệnh ldr/str quanh mỗi lệnh add.',
+  'Đếm số lệnh của sum_to ở -O2 trên cả hai CPU.',
+])}
 </div>
 `,
         },
@@ -1935,6 +2086,15 @@ Z, <span class="tok-function">DEC</span> 0</pre>
   <span class="lc-body"><span class="lc-title">Open MARIE &amp; try this program</span><span class="lc-sub">Web-based MARIE simulator link + quick-start on the CEA201 tools guide.</span></span>
   <span class="lc-cta">EXP HUB →</span>
 </a>
+${thuNgay('en', 'cpu', 'add', 'The program of this lesson, running inside the page — no installation. It is the same MARIE instruction set as the simulator used in the lab sessions.', [
+  'Run the first program and check that Z = 12.',
+  'Start from the <b>Empty</b> program and write your own: add 5 + 7 and Halt.',
+  'Write a countdown that prints 3, 2, 1 using a loop and Skipcond.',
+])}
+${thuNgay('en', 'cpu', 'selfmod', 'Von Neumann&#39;s big idea has a dark side: since instructions are data, a program can rewrite its own code.', [
+  'The first Output prints the instruction itself. Decode that number by hand.',
+  'Modern operating systems mark code pages read-only (W^X). Why does that stop this trick — and many attacks?',
+], { heading: false })}
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Nâng cao 1 · Bài N1.1</span>
@@ -1963,6 +2123,15 @@ Z, <span class="tok-function">DEC</span> 0</pre>
   <span class="lc-body"><span class="lc-title">Mở MARIE &amp; thử chương trình này</span><span class="lc-sub">Link MARIE simulator trên web + hướng dẫn nhanh ở guide công cụ CEA201.</span></span>
   <span class="lc-cta">EXP HUB →</span>
 </a>
+${thuNgay('vi', 'cpu', 'add', 'Chương trình của bài này chạy ngay trong trang — không cần cài gì. Đây là cùng tập lệnh MARIE với trình mô phỏng dùng trong các buổi lab.', [
+  'Chạy chương trình đầu tiên và kiểm Z = 12.',
+  'Bắt đầu từ chương trình <b>Trống</b> và tự viết: cộng 5 + 7 rồi Halt.',
+  'Viết chương trình đếm ngược in ra 3, 2, 1 bằng vòng lặp và Skipcond.',
+])}
+${thuNgay('vi', 'cpu', 'selfmod', 'Ý tưởng lớn của von Neumann có mặt tối: vì lệnh cũng là dữ liệu, chương trình có thể tự viết lại mã của chính nó.', [
+  'Lệnh Output đầu tiên in ra chính cái lệnh. Tự giải mã con số đó.',
+  'Hệ điều hành ngày nay đánh dấu trang mã là chỉ-đọc (W^X). Vì sao điều đó chặn được chiêu này — và nhiều kiểu tấn công?',
+], { heading: false })}
 </div>
 `,
         },

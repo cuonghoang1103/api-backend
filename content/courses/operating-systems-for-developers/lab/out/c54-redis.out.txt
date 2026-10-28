@@ -1,0 +1,30 @@
+$ redis-cli SET lock:seat:A7 worker-A NX PX 2000
+OK
+$ redis-cli SET lock:seat:A7 worker-B NX PX 2000
+(nil)
+$ sleep 2.5; redis-cli PTTL lock:seat:A7
+(integer) -2
+$ redis-cli SET lock:seat:A7 worker-B NX PX 2000
+OK
+$ redis-cli DEL lock:seat:A7
+(integer) 1
+$ redis-cli SET lock:seat:A7 worker-C NX PX 2000
+OK
+$ redis-cli GET lock:seat:A7
+"worker-C"
+$ redis-cli EVAL "$(cat unlock.lua)" 1 lock:seat:A7 worker-A
+(integer) 0
+$ redis-cli GET lock:seat:A7
+"worker-C"
+$ redis-cli EVAL "$(cat unlock.lua)" 1 lock:seat:A7 worker-C
+(integer) 1
+$ redis-cli INCR fence:seat:A7
+(integer) 1
+$ redis-cli INCR fence:seat:A7
+(integer) 2
+$ redis-cli EVAL "$(cat fenced-write.lua)" 1 seat:A7 2 booked-by-B
+"OK: written by token 2"
+$ redis-cli EVAL "$(cat fenced-write.lua)" 1 seat:A7 1 booked-by-A
+"REJECTED: token 1 <= 2"
+$ redis-cli GET seat:A7
+"booked-by-B"

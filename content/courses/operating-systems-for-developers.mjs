@@ -28,6 +28,7 @@
 import { khung } from './_chung/khung.mjs';
 import s00 from './operating-systems-for-developers/s00-gioi-thieu.mjs';
 import s01 from './operating-systems-for-developers/s01-tien-trinh.mjs';
+import s05 from './operating-systems-for-developers/s05-dong-bo.mjs';
 
 /*
  * Đề cương đầy đủ (redesigned 28/10/2026). Mục 0 và Chương 1 ở đây chỉ là KHUNG dự phòng — hai section THẬT (s00, s01)
@@ -153,6 +154,7 @@ const sections = khung('os', [
 // Ghi đè hai section KHUNG bằng hai section THẬT đã soạn (giữ nguyên slug bài + title chương để seeder neo đúng).
 sections[0] = s00;
 sections[1] = s01;
+sections[5] = s05;
 
 export default {
   category: { slug: 'cs-fundamentals', name: 'Nền tảng khoa học máy tính', icon: 'Cpu', sortOrder: 9 },

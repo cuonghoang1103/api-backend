@@ -1,0 +1,40 @@
+$ gcc -O2 -pthread lockcost.c -o lockcost
+$ for m in none mutex spin atomic local; do ./lockcost $m 1 10000000; done
+none   threads=1  got=10000000  correct      3.9 ms     0.4 ns/increment
+mutex  threads=1  got=10000000  correct    113.4 ms    11.3 ns/increment
+spin   threads=1  got=10000000  correct     83.6 ms     8.4 ns/increment
+atomic threads=1  got=10000000  correct     75.8 ms     7.6 ns/increment
+local  threads=1  got=10000000  correct     23.0 ms     2.3 ns/increment
+$ for m in none mutex spin atomic local; do ./lockcost $m 4 2500000; done
+none   threads=4  got=2946613   WRONG        9.1 ms     0.9 ns/increment
+mutex  threads=4  got=10000000  correct    645.2 ms    64.5 ns/increment
+spin   threads=4  got=10000000  correct   1522.9 ms   152.3 ns/increment
+atomic threads=4  got=10000000  correct    508.0 ms    50.8 ns/increment
+local  threads=4  got=10000000  correct      6.0 ms     0.6 ns/increment
+$ strace -f -c -e trace=futex ./lockcost mutex 1 1000000 2>&1 | tail -4
+------ ----------- ----------- --------- --------- ----------------
+  0.00    0.000000           0         1           futex
+------ ----------- ----------- --------- --------- ----------------
+100.00    0.000000           0         1           total
+$ strace -f -c -e trace=futex ./lockcost mutex 4 2500000 2>&1 | tail -4
+------ ----------- ----------- --------- --------- ----------------
+100.00    0.162788          24      6723      2106 futex
+------ ----------- ----------- --------- --------- ----------------
+100.00    0.162788          24      6723      2106 total
+$ /usr/bin/time -f "%e s wall, %U s user + %S s kernel CPU" ./lockcost mutex 32 250000
+mutex  threads=32  got=8000000   correct    505.9 ms    63.2 ns/increment
+0.50 s wall, 0.61 s user + 3.45 s kernel CPU
+$ /usr/bin/time -f "%e s wall, %U s user + %S s kernel CPU" ./lockcost spin 32 250000
+spin   threads=32  got=8000000   correct   7450.8 ms   931.4 ns/increment
+7.45 s wall, 66.69 s user + 0.02 s kernel CPU
+$ java Locks.java
+no lock       got=2100722  WRONG      12 ms
+synchronized  got=8000000  correct   823 ms
+ReentrantLock got=8000000  correct   158 ms
+$ gcc -O2 -pthread pc.c -o pc
+$ ./pc while
+while: consumed=400000/400000 sum ok, woke up to an EMPTY buffer 0 times
+$ ./pc if
+if   : consumed=400000/400000 sum ok, woke up to an EMPTY buffer 41857 times
+$ ./pc if
+if   : consumed=400000/400000 sum ok, woke up to an EMPTY buffer 54634 times

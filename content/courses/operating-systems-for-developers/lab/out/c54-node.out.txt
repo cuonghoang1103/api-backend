@@ -1,0 +1,8 @@
+$ node async-race.js
+alice: booked ✔
+bob: booked ✔
+seatsLeft = 0  bookings = [ 'alice', 'bob' ]
+$ node async-race.js lock
+alice: booked ✔
+bob: sold out
+seatsLeft = 0  bookings = [ 'alice' ]

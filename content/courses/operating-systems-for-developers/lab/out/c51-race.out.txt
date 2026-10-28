@@ -1,0 +1,48 @@
+$ nproc
+10
+$ gcc -O0 -pthread race.c -o race
+$ ./race 1 1000000
+threads=1 expected=1000000 got=1000000 lost=0 (0.0%)
+$ ./race 2 1000000
+threads=2 expected=2000000 got=1120356 lost=879644 (44.0%)
+$ for i in 1 2 3 4 5; do ./race 4 1000000; done
+threads=4 expected=4000000 got=1302927 lost=2697073 (67.4%)
+threads=4 expected=4000000 got=1195646 lost=2804354 (70.1%)
+threads=4 expected=4000000 got=1218361 lost=2781639 (69.5%)
+threads=4 expected=4000000 got=1167287 lost=2832713 (70.8%)
+threads=4 expected=4000000 got=1178016 lost=2821984 (70.5%)
+$ objdump -d --no-show-raw-insn race | awk '/<worker>:/,/ret/' | sed -n '6,12p'
+ 9b8:	adrp	x0, 20000 <__data_start>
+ 9bc:	add	x0, x0, #0x18
+ 9c0:	ldr	x0, [x0]
+ 9c4:	add	x1, x0, #0x1
+ 9c8:	adrp	x0, 20000 <__data_start>
+ 9cc:	add	x0, x0, #0x18
+ 9d0:	str	x1, [x0]
+$ taskset -c 0 ./race 4 1000000
+threads=4 expected=4000000 got=4000000 lost=0 (0.0%)
+$ gcc -O2 -pthread race.c -o race-O2
+$ for i in 1 2 3; do ./race-O2 4 1000000; done
+threads=4 expected=4000000 got=4000000 lost=0 (0.0%)
+threads=4 expected=4000000 got=4000000 lost=0 (0.0%)
+threads=4 expected=4000000 got=4000000 lost=0 (0.0%)
+$ objdump -d --no-show-raw-insn race-O2 | awk '/<worker>:/,/ret/'
+0000000000000b40 <worker>:
+ b40:	adrp	x0, 20000 <__data_start>
+ b44:	add	x2, x0, #0x18
+ b48:	ldr	x1, [x0, #24]
+ b4c:	cmp	x1, #0x0
+ b50:	b.le	b60 <worker+0x20>
+ b54:	ldr	x0, [x2, #8]
+ b58:	add	x0, x0, x1
+ b5c:	str	x0, [x2, #8]
+ b60:	mov	x0, #0x0                   	// #0
+ b64:	ret
+$ java Race.java
+expected=2000000 got=1285603 lost=714397
+$ java Race.java
+expected=2000000 got=1305860 lost=694140
+$ node race-sab.js plain
+plain: expected=4000000 got=2629796 lost=1370204 (44 ms)
+$ node race-sab.js plain
+plain: expected=4000000 got=2194076 lost=1805924 (41 ms)

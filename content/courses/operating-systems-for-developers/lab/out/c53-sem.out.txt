@@ -1,0 +1,46 @@
+$ gcc -O2 -pthread sem.c -o sem
+$ ./sem 0
+limit=none  peak concurrent=10  total=101 ms
+$ ./sem 3
+limit=3  peak concurrent=3  total=404 ms
+$ gcc -O2 -pthread rw.c -o rw
+$ ./rw mutex
+mutex  8 threads x 20000 ops (99% reads):    251 ms  =    638 ops/ms
+$ ./rw rwlock
+rwlock 8 threads x 20000 ops (99% reads):    119 ms  =   1348 ops/ms
+$ gcc -O2 -pthread cas.c -o cas
+$ ./cas 1 1000000
+threads=1  counter=1000000 (correct)  CAS retries=0 (0.00 per increment)
+$ ./cas 4 1000000
+threads=4  counter=4000000 (correct)  CAS retries=4456907 (1.11 per increment)
+$ java Atomics.java
+synchronized got=16000000   1406 ms
+AtomicLong   got=16000000    956 ms
+LongAdder    got=16000000     52 ms
+$ node race-sab.js atomics
+atomics: expected=4000000 got=4000000 lost=0 (121 ms)
+$ gcc -O2 -pthread flag.c -o flag
+$ timeout 3 ./flag plain; echo "exit=$?"
+main: ready = 1
+exit=124
+$ ./flag atomic
+waiter: saw ready = 1
+main: ready = 1
+$ timeout 5 java Stop.java plain; echo "exit=$?"
+main: flag set
+exit=124
+$ java Stop.java volatile
+main: flag set
+worker saw the flag after 1567259638 spins
+main: worker stopped
+$ gcc -O2 -pthread sb.c -o sb
+$ ./sb relaxed
+relaxed  1000000 runs: r1=0 and r2=0 ("impossible") seen 988037 times
+$ ./sb seq_cst
+seq_cst  1000000 runs: r1=0 and r2=0 ("impossible") seen 0 times
+$ objdump -d --no-show-raw-insn sb | sed -n '/<A>:/,/<B>:/p' | grep -A1 -E '(stlr|str)[[:space:]]+w0, \[x24\]'
+ cb8:	stlr	w0, [x24]
+ cbc:	ldar	w0, [x23]
+--
+ cf8:	str	w0, [x24]
+ cfc:	ldr	w0, [x23]

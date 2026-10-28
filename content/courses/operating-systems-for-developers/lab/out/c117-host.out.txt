@@ -1,0 +1,37 @@
+$ docker run --rm --label oslab=1 os-lab grep -E '^Seccomp' /proc/self/status
+Seccomp:	2
+Seccomp_filters:	1
+$ docker run --rm --label oslab=1 --security-opt seccomp=unconfined os-lab grep -E '^Seccomp' /proc/self/status
+Seccomp:	0
+Seccomp_filters:	0
+$ docker run --rm --label oslab=1 os-lab unshare --user id -u; echo "exit=$?"
+unshare: unshare failed: Operation not permitted
+exit=1
+$ docker run --rm --label oslab=1 --security-opt seccomp=unconfined os-lab unshare --user id -u; echo "exit=$?"
+65534
+exit=0
+$ docker run --rm --label oslab=1 os-lab bash -c 'strace -f -qq -e trace=perf_event_open perf stat -e task-clock true 2>&1 | grep -oE "^perf_event_open.{0,20}|= -1 E.*$" | head -2'
+= -1 EPERM (Operation not permitted)
+$ docker run --rm --label oslab=1 -v "$PWD/lab/code/ch11":/lab/ch11 os-lab bash -c 'curl -s https://raw.githubusercontent.com/moby/profiles/main/seccomp/default.json -o /tmp/d.json && python3 /lab/ch11/docker-profile.py /tmp/d.json'
+defaultAction: SCMP_ACT_ERRNO  defaultErrnoRet: 1
+allowed for every container: 361 | allowed only with a capability/arch/argument condition: 65
+clone3: SCMP_ACT_ERRNO errnoRet 38 (38 = ENOSYS) unless caps ['CAP_SYS_ADMIN']
+$ cat lab/code/ch11/deny-mkdir.json
+{
+  "defaultAction": "SCMP_ACT_ALLOW",
+  "syscalls": [
+    { "names": ["mkdir", "mkdirat"], "action": "SCMP_ACT_ERRNO", "errnoRet": 1 }
+  ]
+}
+$ docker run --rm --label oslab=1 --security-opt seccomp="$PWD/lab/code/ch11/deny-mkdir.json" os-lab gnumkdir /tmp/uploads; echo "exit=$?"
+gnumkdir: cannot create directory ‘/tmp/uploads’: Operation not permitted
+exit=1
+$ docker run --rm --label oslab=1 -v "$PWD/lab/code/ch11":/lab/ch11 os-lab bash -c 'gcc -O2 /lab/ch11/strict.c -o /tmp/strict && /tmp/strict; echo "exit=$?"'
+before: pid 12
+prctl(SECCOMP_MODE_STRICT) failed: Invalid argument
+exit=1
+$ docker run --rm --label oslab=1 --security-opt seccomp=unconfined -v "$PWD/lab/code/ch11":/lab/ch11 os-lab bash -c 'gcc -O2 /lab/ch11/strict.c -o /tmp/strict && /tmp/strict; echo "exit=$?"'
+before: pid 12
+inside strict mode: write() still works
+bash: line 1:    12 Killed                     /tmp/strict
+exit=137

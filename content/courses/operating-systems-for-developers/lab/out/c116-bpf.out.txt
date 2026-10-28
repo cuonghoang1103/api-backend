@@ -1,0 +1,23 @@
+$ bpftrace --version
+bpftrace v0.25.0
+$ ls /sys/kernel/btf/vmlinux
+/sys/kernel/btf/vmlinux
+$ node server.js & NODE=$!; sleep 1
+$ TIMEFORMAT='%R s'
+$ time curl -s -o /dev/null "http://127.0.0.1:3000/[1-1000]"
+0.129 s
+$ bpftrace -q -e 'tracepoint:syscalls:sys_enter_* /comm == "node"/ { @[probe] = count(); }' -o bt.txt & BT=$!; sleep 8
+$ time curl -s -o /dev/null "http://127.0.0.1:3000/[1-1000]"
+0.177 s
+$ kill -INT $BT; wait $BT; awk '/^@/ {print $NF, $1}' bt.txt | sort -rn | head -6
+1937 @[tracepoint:syscalls:sys_enter_epoll_pwait]:
+1010 @[tracepoint:syscalls:sys_enter_read]:
+1000 @[tracepoint:syscalls:sys_enter_writev]:
+117 @[tracepoint:syscalls:sys_enter_futex]:
+10 @[tracepoint:syscalls:sys_enter_write]:
+8 @[tracepoint:syscalls:sys_enter_getpid]:
+$ kill $NODE
+$ bpftrace -q -e 'tracepoint:syscalls:sys_enter_openat /comm == "node"/ { printf("%s\n", str(args.filename)); }' -o open.txt & BT=$!; sleep 6
+$ node cfg.js; sleep 0.5; kill -INT $BT; wait $BT; grep -E 'settings|config' open.txt
+Error: could not load configuration
+/srv/app/config/settings.json

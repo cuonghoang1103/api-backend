@@ -1,0 +1,15 @@
+$ cat /sys/kernel/tracing/available_tracers
+function nop
+$ gcc -O2 ktrace.c -o ktrace && ./ktrace; echo "exit=$?"
+exit=0
+$ awk '/do_el0_svc <-/{if(b~/write_null/)printf "%s",b; b=""} {sub(/^.*\] [^ ]+ +[0-9.]+: /,""); b=b $0 "\n"} END{if(b~/write_null/)printf "%s",b}' /sys/kernel/tracing/trace
+do_el0_svc <-el0_svc
+invoke_syscall.constprop.0 <-do_el0_svc
+__arm64_sys_write <-invoke_syscall.constprop.0
+ksys_write <-__arm64_sys_write
+fdget_pos <-ksys_write
+vfs_write <-ksys_write
+rw_verify_area <-vfs_write
+security_file_permission <-rw_verify_area
+bpf_lsm_file_permission <-security_file_permission
+write_null <-vfs_write

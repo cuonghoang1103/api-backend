@@ -1,0 +1,72 @@
+$ gcc -O2 -Wall raw.c -o raw && ./raw
+2  write() : libc wrapper, sets errno
+3  syscall(): generic libc wrapper
+4  svc #0  : no libc at all
+fd 99: write()=-1 errno=9 | syscall()=-1 errno=9 | svc=-9 errno=0 (Bad file descriptor)
+1  printf  : stdio buffer, write() later
+$ strace -qq -e trace=write ./raw > /dev/null
+write(1, "2  write() : libc wrapper, sets "..., 38) = 38
+write(1, "3  syscall(): generic libc wrapp"..., 35) = 35
+write(1, "4  svc #0  : no libc at all\n", 28) = 28
+write(99, "x", 1)                       = -1 EBADF (Bad file descriptor)
+write(99, "x", 1)                       = -1 EBADF (Bad file descriptor)
+write(99, "x", 1)                       = -1 EBADF (Bad file descriptor)
+write(1, "fd 99: write()=-1 errno=9 | sysc"..., 88) = 88
+write(1, "1  printf  : stdio buffer, write"..., 41) = 41
+$ gcc -O2 -static -nostdlib -fno-stack-protector -o tiny tiny.c && ls -l tiny
+-rwxr-xr-x 1 root root 1632 Oct 28 20:46 tiny
+$ ./tiny; echo "exit=$?"
+hello with no libc
+exit=7
+$ strace ./tiny > /dev/null
+execve("./tiny", ["./tiny"], 0xffffd5c18120 /* 16 vars */) = 0
+write(1, "hello with no libc\n", 19)    = 19
+exit_group(7)                           = ?
++++ exited with 7 +++
+$ go version
+go version go1.27.3 linux/arm64
+$ CGO_ENABLED=0 go build -o hello-go hello.go && ls -l hello-go
+-rwxr-xr-x 1 root root 2341973 Oct 28 20:46 hello-go
+$ ldd hello-go
+	not a dynamic executable
+$ go tool objdump -s 'internal/runtime/syscall/linux.Syscall6' hello-go | grep -E 'R8|SVC'
+  asm_linux_arm64.s:9	0x1c900			f94007e8		MOVD 8(RSP), R8		
+  asm_linux_arm64.s:16	0x1c91c			d4000001		SVC $0			
+$ strace -f -qq -e trace=write -o go.txt ./hello-go > /dev/null; grep 'hi from' go.txt
+1429  write(1, "hi from Go\n", 11)      = 11
+$ strace -f -c -o goc.txt ./hello-go > /dev/null; head -8 goc.txt; tail -1 goc.txt
+% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ------------------
+ 22.29    0.000904         113         8           nanosleep
+ 19.21    0.000779           6       114           rt_sigaction
+ 10.04    0.000407          81         5         1 futex
+  8.95    0.000363          90         4           clone
+  7.89    0.000320          22        14           rt_sigprocmask
+  7.35    0.000298          29        10           sigaltstack
+100.00    0.004055          18       214         2 total
+$ objdump -T $(which node) | grep -wE 'write|epoll_pwait|epoll_ctl|accept4' | awk '{print $NF, $(NF-1)}'
+epoll_pwait (GLIBC_2.17)
+epoll_ctl (GLIBC_2.17)
+accept4 (GLIBC_2.17)
+write (GLIBC_2.17)
+$ strace -f -qq -e trace=openat,connect,accept4 -o uv.txt node uv.js; head -1 uv.txt | cut -d' ' -f1; grep -E 'hostname|connect\(|accept4\(' uv.txt
+1456
+1466  openat(AT_FDCWD, "/etc/hostname", O_RDONLY|O_CLOEXEC) = 19
+1456  connect(19, {sa_family=AF_INET, sin_port=htons(3001), sin_addr=inet_addr("127.0.0.1")}, 16) = -1 EINPROGRESS (Operation now in progress)
+1456  accept4(18, NULL, NULL, SOCK_CLOEXEC|SOCK_NONBLOCK) = 20
+$ javac Hello.java && strace -f -qq -e trace=clone,clone3 -o jt.txt java Hello > /dev/null; grep -c clone jt.txt
+18
+$ objdump -T /opt/java/openjdk/lib/libjava.so | grep -wE 'write|read' | awk '{print $NF, $(NF-1)}'
+read (GLIBC_2.17)
+write (GLIBC_2.17)
+$ strace -f -c -o jc.txt java Hello > /dev/null; head -9 jc.txt; tail -1 jc.txt
+% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ------------------
+ 91.35    0.109841         471       233        29 futex
+  2.22    0.002668           9       281           mmap
+  0.81    0.000978          57        17           clone
+  0.75    0.000899           9        90        28 openat
+  0.57    0.000689           5       117           rt_sigprocmask
+  0.42    0.000502          12        41           madvise
+  0.41    0.000491           9        53           mprotect
+100.00    0.120244          91      1318        82 total

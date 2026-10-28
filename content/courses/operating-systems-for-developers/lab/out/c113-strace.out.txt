@@ -1,0 +1,150 @@
+$ node cfg.js; echo "exit=$?"
+Error: could not load configuration
+exit=1
+$ strace -f -qq -Z -e trace=%file -o cfg.txt node cfg.js; grep -c . cfg.txt
+Error: could not load configuration
+10
+$ grep settings cfg.txt
+25    openat(AT_FDCWD, "/srv/app/config/settings.json", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+$ python3 hang.py & APP=$!; sleep 1
+connecting to the database...
+$ timeout 2 strace -p $APP; echo
+strace: Process 38 attached
+connect(3, {sa_family=AF_INET, sin_port=htons(5432), sin_addr=inet_addr("10.255.255.1")}, 16strace: Process 38 detached
+ <detached ...>
+
+$ kill $APP
+$ strace -f -tt -T -e trace=connect,sendmmsg,sendto,recvfrom -o curl.txt curl -s -o /dev/null -w '%{http_code} dns=%{time_namelookup}s connect=%{time_connect}s total=%{time_total}s\n' http://example.com/
+200 dns=0.020150s connect=0.083222s total=0.161667s
+$ grep -E 'htons\((53|80)\)|GET /|HTTP/1.1 200' curl.txt | cut -c1-138
+52    21:38:36.060950 connect(5, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("192.168.65.7")}, 16) = 0 <0.000035>
+52    21:38:36.062522 recvfrom(5, "\367\301\201\200\0\1\0\0\0\0\0\0\7example\3com\0\0\34\0\1", 2048, 0, {sa_family=AF_INET, sin_port=htons
+52    21:38:36.074508 recvfrom(5, "\320\302\201\200\0\1\0\2\0\0\0\0\7example\3com\0\0\1\0\1\7ex"..., 65536, 0, {sa_family=AF_INET, sin_por
+52    21:38:36.076958 connect(5, {sa_family=AF_INET, sin_port=htons(80), sin_addr=inet_addr("172.66.147.243")}, 16) = 0 <0.000030>
+52    21:38:36.077244 connect(5, {sa_family=AF_INET, sin_port=htons(80), sin_addr=inet_addr("104.20.23.154")}, 16) = 0 <0.000024>
+51    21:38:36.078372 connect(5, {sa_family=AF_INET, sin_port=htons(80), sin_addr=inet_addr("172.66.147.243")}, 16) = -1 EINPROGRESS (Oper
+51    21:38:36.141107 sendto(5, "GET / HTTP/1.1\r\nHost: example.co"..., 75, MSG_NOSIGNAL, NULL, 0) = 75 <0.000053>
+51    21:38:36.217538 recvfrom(5, "HTTP/1.1 200 OK\r\nDate: Wed, 28 O"..., 102400, 0, NULL, NULL) = 937 <0.000049>
+$ node server.js & NODE=$!; sleep 1
+$ strace -f -qq -tt -T -e trace=accept4,setsockopt,epoll_ctl,read,writev,shutdown,close -p $NODE -o one.txt & ST=$!; sleep 1
+$ curl -s http://127.0.0.1:3000/; sleep 0.3; kill -INT $ST; wait $ST
+hello
+$ cut -c1-130 one.txt
+59    21:38:38.253666 accept4(18, NULL, NULL, SOCK_CLOEXEC|SOCK_NONBLOCK) = 19 <0.000016>
+59    21:38:38.254710 setsockopt(19, SOL_TCP, TCP_NODELAY, [1], 4) = 0 <0.000006>
+59    21:38:38.255258 epoll_ctl(13, EPOLL_CTL_ADD, 19, {events=EPOLLIN, data=0x13}) = 0 <0.000010>
+59    21:38:38.255360 read(19, "GET / HTTP/1.1\r\nHost: 127.0.0.1:"..., 65536) = 78 <0.000006>
+59    21:38:38.256364 read(20, "TZif2\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 4096) = 337 <0.000008>
+59    21:38:38.256482 read(20, "TZif2\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 4096) = 191 <0.000003>
+59    21:38:38.256545 close(20)         = 0 <0.000007>
+59    21:38:38.257196 writev(19, [{iov_base="HTTP/1.1 200 OK\r\nDate: Wed, 28 O"..., iov_len=128}, {iov_base="", iov_len=0}], 2) =
+59    21:38:38.258419 read(19, "", 65536) = 0 <0.000004>
+59    21:38:38.258732 shutdown(19, SHUT_WR) = 0 <0.000024>
+59    21:38:38.259090 epoll_ctl(13, EPOLL_CTL_DEL, 19, 0xffffc1f86f90) = 0 <0.000005>
+59    21:38:38.259149 close(19)         = 0 <0.000010>
+$ TIMEFORMAT='%R s'
+$ time curl -s -o /dev/null "http://127.0.0.1:3000/[1-1000]"
+0.135 s
+$ strace -f -qq -c -p $NODE -o node.sc & ST=$!; sleep 1
+$ time curl -s -o /dev/null "http://127.0.0.1:3000/[1-1000]"
+0.250 s
+$ kill -INT $ST; wait $ST; head -7 node.sc; tail -1 node.sc
+% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+ 92.75    0.166799        1076       155        26 futex
+  3.58    0.006441           6      1000           writev
+  2.01    0.003621           3      1009           read
+  1.57    0.002827           2      1015           epoll_pwait
+  0.02    0.000043           5         8           write
+100.00    0.179831          56      3207        26 total
+$ kill $NODE; sleep 0.5
+$ python3 pyserver.py & PY=$!; sleep 1
+$ time curl -s -o /dev/null "http://127.0.0.1:3000/[1-200]"
+8.367 s
+$ strace -qq -tt -T -e trace=sendto,recvfrom -o client.txt curl -s -o /dev/null "http://127.0.0.1:3000/[1-2]"; cut -c1-118 client.txt
+21:38:49.919645 sendto(4, "GET /1 HTTP/1.1\r\nHost: 127.0.0.1"..., 79, MSG_NOSIGNAL, NULL, 0) = 79 <0.000395>
+21:38:49.920711 recvfrom(4, "HTTP/1.1 200 OK\r\nServer: BaseHTT"..., 102400, 0, NULL, NULL) = 117 <0.000040>
+21:38:49.922176 sendto(4, "GET /2 HTTP/1.1\r\nHost: 127.0.0.1"..., 79, MSG_NOSIGNAL, NULL, 0) = 79 <0.000108>
+21:38:49.922405 recvfrom(4, "HTTP/1.1 200 OK\r\nServer: BaseHTT"..., 102400, 0, NULL, NULL) = 111 <0.000026>
+21:38:49.922546 recvfrom(4, 0xaaaad78f68e0, 6, 0, NULL, NULL) = -1 EAGAIN (Resource temporarily unavailable) <0.000025
+21:38:49.963545 recvfrom(4, "hello\n", 6, 0, NULL, NULL) = 6 <0.000044>
+21:38:49.965354 recvfrom(4, 0xfffffe300b28, 1024, 0, NULL, NULL) = -1 EAGAIN (Resource temporarily unavailable) <0.000
+$ kill $PY; sleep 0.5
+$ NODELAY=1 python3 pyserver.py & PY=$!; sleep 1
+$ time curl -s -o /dev/null "http://127.0.0.1:3000/[1-200]"
+0.028 s
+$ strace -f -qq -c -p $PY -o py.sc & ST=$!; sleep 1
+$ time curl -s -o /dev/null "http://127.0.0.1:3000/[1-1000]"
+0.276 s
+$ kill -INT $ST; wait $ST; grep -v '^100.00' py.sc; grep -m1 '^100.00' py.sc
+% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+ 78.24    0.016567           8      2000           sendto
+ 21.56    0.004566           4      1001           recvfrom
+  0.16    0.000034          11         3           ppoll
+  0.03    0.000006           6         1           accept4
+  0.00    0.000001           1         1           getsockname
+  0.00    0.000001           1         1           setsockopt
+  0.00    0.000000           0         1           close
+  0.00    0.000000           0         1           shutdown
+------ ----------- ----------- --------- --------- ----------------
+100.00    0.021175           7      3009           total
+$ kill $PY; sleep 0.5
+$ javac HelloServer.java && java HelloServer & sleep 2
+$ time curl -s -o /dev/null "http://127.0.0.1:3000/[1-200]"
+8.604 s
+$ pkill -f HelloServer; sleep 1
+$ java -Dsun.net.httpserver.nodelay=true HelloServer & sleep 2; JAVA=$(pgrep -f 'HelloServer$')
+$ curl -s -o /dev/null "http://127.0.0.1:3000/[1-3000]"
+$ time curl -s -o /dev/null "http://127.0.0.1:3000/[1-1000]"
+0.115 s
+$ strace -f -qq -c -p $JAVA -o java.sc & ST=$!; sleep 1
+$ time curl -s -o /dev/null "http://127.0.0.1:3000/[1-1000]"
+0.870 s
+$ kill -INT $ST; wait $ST; head -10 java.sc; tail -1 java.sc
+% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ------------------
+ 87.42    1.028592        2370       434       105 futex
+  4.86    0.057199        7149         8         4 restart_syscall
+  2.49    0.029302           9      3000           write
+  1.72    0.020255           5      4005           fcntl
+  1.57    0.018431           6      3007           epoll_pwait
+  0.96    0.011336           5      2002           epoll_ctl
+  0.86    0.010113           5      2003           read
+  0.03    0.000304           9        32           rt_sigprocmask
+100.00    1.176578          80     14571       109 total
+$ kill $JAVA; sleep 0.5
+$ strace -k -e trace=write ./raw > /dev/null
+strace: Stack traces (-k/--stack-trace option) are not supported by this build of strace
+$ time dd if=/dev/zero of=/dev/null bs=1 count=100000 status=none
+0.053 s
+$ time strace -c -o /dev/null dd if=/dev/zero of=/dev/null bs=1 count=100000 status=none
+8.261 s
+$ time strace -o /dev/null -e trace=openat dd if=/dev/zero of=/dev/null bs=1 count=100000 status=none
+8.671 s
+$ time strace -o /dev/null --seccomp-bpf -f -e trace=openat dd if=/dev/zero of=/dev/null bs=1 count=100000 status=none
+0.051 s
+$ gcc -O2 words.c -o words && ./words /etc/services
+1795 words
+$ ltrace -c ./words /etc/services 2>&1 | head -10
+1795 words
+% time     seconds  usecs/call     calls      function
+------ ----------- ----------- --------- --------------------
+ 58.86    0.433437      433437         1 __libc_start_main
+ 22.49    0.165593          76      2160 strtok
+  3.75    0.027629          75       365 strlen
+  3.73    0.027472          75       365 free
+  3.71    0.027287          74       365 malloc
+  3.70    0.027223          74       366 fgets
+  3.67    0.027054          74       365 __memcpy_chk
+$ strace -c ./words /etc/services 2>&1 | tail -1
+100.00    0.000435          10        40         1 total
+$ ltrace -S -e malloc+strtok+fgets ./words /etc/services 2>&1 | grep -m1 -B1 -A6 'read@SYS(3, "# Network'
+libc.so.6->malloc(4096)                          = 0xaaaabd0741f0
+read@SYS(3, "# Network services, Internet sty"..., 4096) = 4096
+<... fgets resumed> "# Network services, Internet sty"..., 512, 0xaaaabd074010) = 0xffffc3622278
+words->malloc(36)                                = 0xaaaabd075200
+words->strtok("# Network services, Internet sty"..., " \t\n") = "#"
+words->strtok(nil, " \t\n")                      = "Network"
+words->strtok(nil, " \t\n")                      = "services,"
+words->strtok(nil, " \t\n")                      = "Internet"

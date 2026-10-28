@@ -1,0 +1,76 @@
+$ strace -qq -c -o ps.sc ps aux > /dev/null; grep -E ' (openat|read|close|total)$' ps.sc
+ 28.02    0.002246          27        82        23 openat
+ 13.72    0.001100          17        62           close
+ 12.33    0.000988          17        58           read
+100.00    0.008015          21       373        31 total
+$ strace -qq -y -e trace=openat,read -o ps.txt ps aux > /dev/null; grep -c '</proc/' ps.txt; grep -m3 '</proc/1/' ps.txt | cut -c1-100
+78
+openat(5</proc/1>, "stat", O_RDONLY)    = 6</proc/1/stat>
+read(6</proc/1/stat>, "1 (bash) S 0 1 1 0 -1 4194560 14"..., 1024) = 302
+openat(5</proc/1>, "status", O_RDONLY)  = 6</proc/1/status>
+$ strace -qq -e trace=openat -o free.txt free -m > /dev/null; grep proc free.txt
+openat(AT_FDCWD, "/usr/lib/aarch64-linux-gnu/libproc2.so.0", O_RDONLY|O_CLOEXEC) = 3
+openat(AT_FDCWD, "/proc/meminfo", O_RDONLY) = 3
+$ strace -qq -e trace=openat -o up.txt uptime > /dev/null; grep proc up.txt
+openat(AT_FDCWD, "/usr/lib/aarch64-linux-gnu/libproc2.so.0", O_RDONLY|O_CLOEXEC) = 3
+openat(AT_FDCWD, "/proc/uptime", O_RDONLY) = 3
+openat(AT_FDCWD, "/proc/loadavg", O_RDONLY) = 3
+$ strace -qq -e trace=openat,read,write -o sysctl.txt sysctl vm.swappiness; grep -E 'swappiness' sysctl.txt
+vm.swappiness = 60
+openat(AT_FDCWD, "/proc/sys/vm/swappiness", O_RDONLY) = 3
+write(1, "vm.swappiness = 60\n", 19)    = 19
+$ sysctl -w vm.swappiness=10
+sysctl: setting key "vm.swappiness", ignoring: Read-only file system
+vm.swappiness = 10
+$ grep -E ' /(proc|sys) ' /proc/mounts
+proc /proc proc rw,nosuid,nodev,noexec,relatime 0 0
+sysfs /sys sysfs ro,nosuid,nodev,noexec,relatime 0 0
+$ sleep 300 & S=$!; sleep 0.3
+$ grep -E '^State' /proc/$S/status; cat /proc/$S/wchan; echo
+State:	S (sleeping)
+hrtimer_nanosleep
+$ cat /proc/$S/syscall
+115 0x0 0x0 0xffffd7d68928 0xffffd7d68928 0x0 0x0 0xffffd7d68900 0xffff8d8d8464
+$ cat /proc/$S/stack
+cat: /proc/47/stack: Permission denied
+$ kill $S
+$ python3 hang.py > /dev/null & APP=$!; sleep 1
+$ cat /proc/$APP/wchan; echo; cut -d' ' -f1-4 /proc/$APP/syscall
+wait_woken
+203 0x3 0xfffff2247958 0x10
+$ ls -l /proc/$APP/fd/3 | awk '{print $NF}'; grep -E '^ *[0-9]+: .* 02 ' /proc/net/tcp | head -2
+socket:[1292875]
+   0: 040011AC:938A 01FFFF0A:1538 02 00000001:00000000 01:00000000 00000000     0        0 1292875 2 0000000000000000 100 0 0 10 -1                  
+$ kill $APP
+$ node server.js & NODE=$!; sleep 1
+$ grep -E '^sysc' /proc/$NODE/io
+syscr: 28
+syscw: 1
+$ curl -s -o /dev/null "http://127.0.0.1:3000/[1-1000]"
+$ grep -E '^sysc' /proc/$NODE/io
+syscr: 1044
+syscw: 1014
+$ kill $NODE
+$ cat /sys/fs/cgroup/memory.max /sys/fs/cgroup/cpu.max /sys/fs/cgroup/pids.max
+536870912
+150000 100000
+max
+$ java -XshowSettings:system -version 2>&1 | grep -E 'Effective CPU|Memory Limit'
+    Effective CPU Count: 2
+    Memory Limit: 512.00M
+$ strace -f -qq -e trace=openat -o jvm.txt java -version 2> /dev/null; grep -oE '/sys/fs/cgroup/[a-z._]+|/proc/self/(cgroup|mountinfo)' jvm.txt | sort -u
+/proc/self/cgroup
+/proc/self/mountinfo
+/sys/fs/cgroup/cgroup.controllers
+/sys/fs/cgroup/cpu.max
+/sys/fs/cgroup/memory.max
+$ node -e 'console.log(require("os").availableParallelism(), process.constrainedMemory())'
+1 536870912
+$ strace -f -qq -e trace=openat -o nd.txt node -e 'process.constrainedMemory()'; grep -oE '/sys/fs/cgroup/+[a-z._]+|/proc/self/cgroup' nd.txt | sort -u
+/proc/self/cgroup
+/sys/fs/cgroup//memory.high
+/sys/fs/cgroup//memory.max
+$ cat /sys/class/net/eth0/statistics/rx_bytes /sys/devices/system/cpu/online /sys/kernel/mm/transparent_hugepage/enabled
+956
+0-9
+[always] madvise never

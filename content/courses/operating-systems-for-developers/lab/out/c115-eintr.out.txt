@@ -1,0 +1,71 @@
+$ python3 -c 'import errno, os; [print(f"{n:>3} {errno.errorcode[n]:<13} {os.strerror(n)}") for n in (1, 2, 4, 9, 11, 13, 17, 22, 24, 28, 32, 110, 111)]'
+  1 EPERM         Operation not permitted
+  2 ENOENT        No such file or directory
+  4 EINTR         Interrupted system call
+  9 EBADF         Bad file descriptor
+ 11 EAGAIN        Resource temporarily unavailable
+ 13 EACCES        Permission denied
+ 17 EEXIST        File exists
+ 22 EINVAL        Invalid argument
+ 24 EMFILE        Too many open files
+ 28 ENOSPC        No space left on device
+ 32 EPIPE         Broken pipe
+110 ETIMEDOUT     Connection timed out
+111 ECONNREFUSED  Connection refused
+$ gcc -O2 -Wall eintr.c -o eintr && ./eintr norestart
+1.0s read() = -1 Interrupted system call
+2.0s retry: read() = 5
+$ strace -qq -e trace=read,rt_sigreturn ./eintr norestart 2>&1 | grep -v ELF
+read(3, 0xffffeed7c178, 64)             = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+--- SIGALRM {si_signo=SIGALRM, si_code=SI_KERNEL} ---
+rt_sigreturn({mask=[]})                 = -1 EINTR (Interrupted system call)
+1.0s read() = -1 Interrupted system call
+read(3, "data\n", 64)                   = 5
+--- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=26, si_uid=0, si_status=0, si_utime=0, si_stime=0} ---
+2.0s retry: read() = 5
+$ strace -qq -e trace=read,rt_sigreturn ./eintr restart 2>&1 | grep -v ELF
+read(3, 0xffffd4f0eec8, 64)             = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+--- SIGALRM {si_signo=SIGALRM, si_code=SI_KERNEL} ---
+rt_sigreturn({mask=[]})                 = 3
+read(3, "data\n", 64)                   = 5
+--- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=33, si_uid=0, si_status=0, si_utime=0, si_stime=0} ---
+2.0s read() = 5 
+$ strace -qq -e trace=ppoll,rt_sigreturn ./eintr poll 2>&1
+ppoll([{fd=3, events=POLLIN}], 1, NULL, NULL, 0) = ? ERESTARTNOHAND (To be restarted if no handler)
+--- SIGALRM {si_signo=SIGALRM, si_code=SI_KERNEL} ---
+rt_sigreturn({mask=[]})                 = -1 EINTR (Interrupted system call)
+1.0s poll() = -1 Interrupted system call
+$ strace -qq -e trace=read,rt_sigreturn -e signal=SIGALRM python3 pyeintr.py 2>&1 | grep -A4 'read(3, 0x'
+read(3, 0xffffbb3832a0, 64)             = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+--- SIGALRM {si_signo=SIGALRM, si_code=SI_KERNEL} ---
+rt_sigreturn({mask=[]})                 = -1 EINTR (Interrupted system call)
+read(3, "data\n", 64)                   = 5
+handler ran
+$ gcc -O2 -Wall nb.c -o nb && ./nb
+non-blocking read() = -1 Resource temporarily unavailable after 11 us
+blocking reader 55 after 0.3 s:
+  /proc/55/wchan   anon_pipe_read
+  /proc/55/syscall 63 0x5 0xfffff61ab348 0x40 0x0 0x0 0x0 0xfffff61ab310 0xffffb2768464
+blocking reader woke up: read() = 5
+$ strace -qq -o yes.txt -e trace=write -e signal=SIGPIPE gnuyes | head -1; tail -3 yes.txt | cut -c1-96
+y
+write(1, "y\ny\ny\ny\ny\ny\ny\ny\ny\ny\ny\ny\ny\ny\ny\ny\n"..., 8192) = -1 EPIPE (Broken pipe)
+--- SIGPIPE {si_signo=SIGPIPE, si_code=SI_USER, si_pid=61, si_uid=0} ---
++++ killed by SIGPIPE +++
+$ strace -qq -o py.txt -e trace=write -e signal=SIGPIPE python3 -c 'while True: print("y")' | head -1; grep -m2 -E 'EPIPE|SIGPIPE' py.txt | cut -c1-96
+y
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    while True: print("y")
+                ~~~~~^^^^^
+BrokenPipeError: [Errno 32] Broken pipe
+Exception ignored while flushing sys.stdout:
+BrokenPipeError: [Errno 32] Broken pipe
+write(1, "y\ny\ny\ny\ny\ny\ny\ny\ny\ny\ny\ny\ny\ny\ny\ny\n"..., 131072) = -1 EPIPE (Broken pipe)
+--- SIGPIPE {si_signo=SIGPIPE, si_code=SI_USER, si_pid=69, si_uid=0} ---
+$ TIMEFORMAT='%R s'
+$ CGO_ENABLED=0 go build -o spin spin.go && time GOMAXPROCS=1 strace -f -qq -e trace=none -e signal=SIGURG -o spin.txt ./spin
+1.475 s
+$ grep -c SIGURG spin.txt; head -1 spin.txt
+49
+610   --- SIGURG {si_signo=SIGURG, si_code=SI_TKILL, si_pid=610, si_uid=0} ---

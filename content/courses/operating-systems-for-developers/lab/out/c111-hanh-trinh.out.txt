@@ -1,0 +1,110 @@
+$ cat hello.c
+#include <stdio.h>
+
+int main(void) {
+    printf("hi from C\n");
+    return 0;
+}
+$ gcc -O2 -static hello.c -o hello-static && ls -l hello-static
+-rwxr-xr-x 1 root root 711936 Oct 28 20:42 hello-static
+$ strace ./hello-static
+execve("./hello-static", ["./hello-static"], 0xfffffcbde660 /* 14 vars */) = 0
+brk(NULL)                               = 0x79f1000
+brk(0x79f1ae0)                          = 0x79f1ae0
+set_tid_address(0x79f1448)              = 23
+set_robust_list(0x79f1100, 24)          = 0
+rseq(0x79f17a0, 0x20, 0, 0xd428bc00)    = 0
+prlimit64(0, RLIMIT_STACK, NULL, {rlim_cur=8192*1024, rlim_max=RLIM64_INFINITY}) = 0
+getrandom("\xa9\x2b\x8d\x05\x14\xfa\xb9\xb0", 8, GRND_NONBLOCK) = 8
+readlinkat(AT_FDCWD, "/proc/self/exe", "/lab/ch11/hello-static", 4096) = 22
+brk(NULL)                               = 0x79f1ae0
+brk(0x7c00000)                          = 0x7c00000
+madvise(0x79f2000, 2154496, MADV_HUGEPAGE) = 0
+mprotect(0x49c000, 16384, PROT_READ)    = 0
+fstat(1, {st_mode=S_IFIFO|0600, st_size=0, ...}) = 0
+write(1, "hi from C\n", 10hi from C
+)             = 10
+exit_group(0)                           = ?
++++ exited with 0 +++
+$ nm hello-static | grep -E ' (printf|puts|_IO_new_file_write|__libc_write|__internal_syscall_cancel)$'
+0000000000403d80 T _IO_new_file_write
+0000000000435024 T __internal_syscall_cancel
+0000000000411ca0 T __libc_write
+00000000004017e0 W puts
+$ objdump -d --no-show-raw-insn hello-static | awk '/<__libc_write>:/,/^$/' | grep -v nop
+0000000000411ca0 <__libc_write>:
+  411ca0:	paciasp
+  411ca4:	stp	x29, x30, [sp, #-16]!
+  411ca8:	sxtw	x0, w0
+  411cac:	mov	x6, #0x40                  	// #64
+  411cb0:	mov	x29, sp
+  411cb4:	mov	x5, #0x0                   	// #0
+  411cb8:	ldp	x29, x30, [sp], #16
+  411cbc:	autiasp
+  411cc0:	mov	x4, #0x0                   	// #0
+  411cc4:	mov	x3, #0x0                   	// #0
+  411cc8:	b	4350c0 <__syscall_cancel>
+
+$ objdump -d --no-show-raw-insn hello-static | awk '/<__internal_syscall_cancel>:/,/^$/' | grep -B1 -A1 'svc'
+  4350a0:	mov	x8, x6
+  4350a4:	svc	#0x0
+  4350a8:	ret
+$ grep -wE 'define __NR_(openat|close|read|write|exit_group|getpid)' /usr/include/asm-generic/unistd.h
+#define __NR_openat 56
+#define __NR_close 57
+#define __NR_read 63
+#define __NR_write 64
+#define __NR_exit_group 94
+#define __NR_getpid 172
+$ grep -E ' (el0_svc|do_el0_svc|__arm64_sys_write|__arm64_sys_openat)$' /proc/kallsyms
+0000000000000000 T do_el0_svc
+0000000000000000 T __arm64_sys_openat
+0000000000000000 T __arm64_sys_write
+0000000000000000 t el0_svc
+$ grep -c ' __arm64_sys_' /proc/kallsyms
+434
+$ gdb -q -batch -ex 'catch syscall write' -ex run -ex bt -ex 'info registers x8 x0 x1 x2' -ex 'x/s $x1' -ex 'x/2i $pc-4' -ex stepi -ex 'info registers x0' ./hello-static 2>&1 | grep -v 'address space randomization'
+Catchpoint 1 (syscall 'write' [64])
+
+Catchpoint 1 (call to syscall write), 0x00000000004350a8 in __internal_syscall_cancel ()
+#0  0x00000000004350a8 in __internal_syscall_cancel ()
+#1  0x00000000004350d0 in __syscall_cancel ()
+#2  0x0000000000403dc4 [PAC] in _IO_new_file_write ()
+#3  0x0000000000401d5c [PAC] in new_do_write ()
+#4  0x0000000000402584 [PAC] in _IO_new_do_write ()
+#5  0x00000000004060b4 [PAC] in _IO_flush_all ()
+#6  0x0000000000406594 [PAC] in _IO_cleanup ()
+#7  0x0000000000401778 [PAC] in __run_exit_handlers ()
+#8  0x00000000004017c8 [PAC] in exit ()
+#9  0x00000000004007f4 [PAC] in __libc_start_call_main ()
+#10 0x0000000000400e6c [PAC] in __libc_start_main_impl ()
+#11 0x00000000004005f0 [PAC] in _start ()
+x8             0x40                64
+x0             0x1                 1
+x1             0x11c4a420          298099744
+x2             0xa                 10
+0x11c4a420:	"hi from C\n"
+   0x4350a4 <__internal_syscall_cancel+128>:	svc	#0x0
+=> 0x4350a8 <__internal_syscall_cancel+132>:	ret
+hi from C
+0x00000000004350a8 in __internal_syscall_cancel ()
+x0             0xa                 10
+$ gcc -O2 -static fail.c -o fail && ./fail
+open returned -1, errno = 2 (No such file or directory)
+$ strace -e trace=openat ./fail 2>&1 | grep nope
+openat(AT_FDCWD, "/nope/config.json", O_RDONLY) = -1 ENOENT (No such file or directory)
+$ gdb -q -batch -ex 'catch syscall openat' -ex run -ex 'x/s $x1' -ex continue -ex 'info registers x0' -ex 'p (long)$x0' ./fail 2>&1 | grep -v 'address space randomization'
+Catchpoint 1 (syscall 'openat' [56])
+
+Catchpoint 1 (call to syscall openat), 0x0000000000427888 in __internal_syscall_cancel ()
+0x45b808:	"/nope/config.json"
+
+Catchpoint 1 (returned from syscall openat), 0x0000000000427888 in __internal_syscall_cancel ()
+x0             0xfffffffffffffffe  -2
+$1 = -2
+$ strace -f -qq -e trace=write -e signal=none -o node.txt node -e 'console.log("hi from Node")' >/dev/null; grep 'hi from' node.txt
+95    write(1, "hi from Node\n", 13)    = 13
+$ strace -f -qq -e trace=write -e signal=none python3 -c 'print("hi from Python")' 2>&1 >/dev/null
+write(1, "hi from Python\n", 15)        = 15
+$ strace -f -qq -e trace=write -e signal=none -o java.txt java Hello.java >/dev/null; grep 'hi from' java.txt
+113   write(1, "hi from Java\n", 13)    = 13

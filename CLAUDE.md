@@ -765,7 +765,7 @@ Thiết kế: `docs/ct-work-ai-agents-thiet-ke.md` · hợp đồng API đợt 2
 - **CuongMini (app/CLI/VS Code) KHÔNG phải agent thành viên** (21/10/2026): nó nối bằng token `ctw_` CÁ NHÂN của người dùng
   (`/ctwork` ⇒ `POST /work/me/api-tokens`), `McpCtx.agent = null` ⇒ làm được đúng những gì vai của người đó làm trên web, kể
   cả sửa/xoá. Lệnh xoá của registry: `destructive: true` (MCP `destructiveHint` ⇒ app LUÔN hỏi, kể cả `/ctwork tu-ghi on`;
-  mô tả bắt đầu `DESTRUCTIVE:`) + `personOnly` + `requirePerson()` (agent ⇒ WORK_AGENT_FORBIDDEN). Lệnh của đợt này `mcpOnly` (không vào Ask AI/BUILTIN — giữ giá prompt web).
+  mô tả bắt đầu `DESTRUCTIVE:`) + `personOnly` + `requirePerson()` (agent ⇒ WORK_AGENT_FORBIDDEN). Lệnh của đợt này `mcpOnly` (không vào BUILTIN; **từ 28/10/2026 Ask AI web với tới MỌI lệnh token người qua `find_commands` → `read_command` / đề xuất Apply** — `src/services/work/aiTroLyWeb.ts`, prompt chỉ in ~30 lệnh hay dùng + mục lục tên; ghi kết quả chạy test cần tick "đã thật sự chạy" ⇒ thiếu = 409 `WORK_AI_CONFIRM_RAN`; việc trên máy người dùng ⇒ câu chuẩn `cauMayCucBo`).
   Không có lệnh cho: quyết định duyệt / APPROVED (cả quyết định CR + `decision` review), tài chính, gửi khách/ra ngoài, cấu hình dự án, làm quiz/chấm điểm/điểm danh. Token người thấy 277 lệnh (731 tuyến ghi: 369 có lệnh, 362 chỉ người, 0 thiếu) — mục lục máy chủ trần 300 (`parseMucLucMcp`), app trần 300, `registry.test` chặn > 280: lệnh mới phải gộp vào `action` của lệnh sẵn có (`*_extras`, `ctwork_read`, `ctwork_delete`). Bảng đối
   chiếu đầy đủ + việc còn thiếu: `docs/cuongmini-ctwork-parity.md`. Thêm lệnh xoá mới ⇒ thêm tuyến DELETE vào
   `AGENT_DENIED_ROUTES` (bảng `permissions.test.ts`) — `registry.test.ts` bắt lệnh tên `*delete*` thiếu destructive/personOnly.

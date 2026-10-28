@@ -25,6 +25,7 @@ import LessonQuizPlayer, { type QuizData } from './LessonQuizPlayer';
 import LessonPdfViewer from './LessonPdfViewer';
 import type { Course, LessonDto, LessonProgress, LessonDetail, LessonVideoTrack, VideoTrackKey } from '@/types';
 import { useToMauCode } from '@/lib/toMauCode';
+import { LAB_SELECTOR } from '@/components/labs/selector';
 import dynamic from 'next/dynamic';
 
 // Bôi đen → "📝 Lưu vào sổ tay" + mục "Ghi chú của bạn cho bài này".
@@ -193,17 +194,18 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
     })().catch(() => { /* để nguyên khối mã, vẫn đọc được */ });
     return () => { huy = true; };
   }, [currentLesson?.id, currentLesson?.content, locale]);
-  /* Mô phỏng tương tác của khoá "Operating Systems for Developers" (28/10/2026): bài nhúng
-     `<div class="os-lab os-lab-sim-<tên> os-lab-p-<preset>">` — chỉ class, qua được sanitizeHtml, không chạy mã
-     tuỳ ý (tên phải có trong components/os-lab/registry.ts). Không có khối nào thì không tải gì cả. */
+  /* Phòng lab trực quan nhúng trong bài (28/10/2026): khoá "Operating Systems for Developers" (`os-lab`) và
+     "Máy tính từ số 0" của CSI104/CEA201 (`cpu-lab`). Bài nhúng `<div class="<ns> <ns>-sim-<tên> <ns>-p-<preset>">`
+     — chỉ class, qua được sanitizeHtml, không chạy mã tuỳ ý (tên phải có trong components/labs/registry.ts).
+     Không có khối nào thì không tải gì cả. Academy dùng CHUNG trang học này (academy/courses/[slug]/learn chuyển hướng về đây). */
   useEffect(() => {
     const root = khungNoiDungRef.current;
-    if (!root || !root.querySelector('div.os-lab')) return;
+    if (!root || !root.querySelector(LAB_SELECTOR)) return;
     let huy = false;
     let don: (() => void) | null = null;
-    import('@/components/os-lab/mount').then(({ mountOsLabs }) => {
-      if (!huy && khungNoiDungRef.current) don = mountOsLabs(khungNoiDungRef.current, locale === 'en' ? 'en' : 'vi');
-    }).catch(() => { /* vẫn còn link mở /os-lab trong khối */ });
+    import('@/components/labs/mount').then(({ mountLabs }) => {
+      if (!huy && khungNoiDungRef.current) don = mountLabs(khungNoiDungRef.current, locale === 'en' ? 'en' : 'vi');
+    }).catch(() => { /* vẫn còn link mở /os-lab, /cpu-lab trong khối */ });
     return () => { huy = true; don?.(); };
   }, [currentLesson?.id, currentLesson?.content, locale]);
   // Only the setter is used now (we reset it on lesson change / completion);

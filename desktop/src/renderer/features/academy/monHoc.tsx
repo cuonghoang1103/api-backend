@@ -42,6 +42,7 @@ import LessonPdfViewer from '@/app/courses/[slug]/learn/LessonPdfViewer';
 import { CourseRoadmapPanel } from '@/components/academy/CourseRoadmap';
 import { docSlide } from '@/components/academy/docSlide';
 import { useToMauCode } from '@/lib/toMauCode';
+import { LAB_SELECTOR } from '@/components/labs/selector';
 import { khoaGiaSu, useGiaSuBaiStore, type LuotGiaSu } from '@/store/giaSuBaiStore';
 import { luotCanGui } from './dongBoGiaSu';
 import { duongTaiLieu, laBaiQuiz, locPdf, useChiTietBai, useChungChi, useTienDo, type TuyChonGoi } from './chiTietBai';
@@ -614,6 +615,20 @@ function DocBai({
   const khungGiangRef = useRef<HTMLDivElement | null>(null);
   useToMauCode(() => khungNoiDungRef.current, [bai.id, html]);
   useToMauCode(() => khungGiangRef.current, [bai.id, ghiChuGiang]);
+
+  /* Phòng lab trực quan nhúng trong bài (`os-lab`, `cpu-lab` — 28/10/2026): dùng CHUNG bộ gắn của web
+     (`@/components/labs/mount`), chỉ tải khi bài có khối mô phỏng. Bài của app chỉ hiện khối `.ml-vi`, khối
+     tiếng Anh bị ẩn nên không bao giờ lọt vào khung nhìn ⇒ không bị dựng. */
+  useEffect(() => {
+    const root = khungNoiDungRef.current;
+    if (!root || !root.querySelector(LAB_SELECTOR)) return;
+    let huy = false;
+    let don: (() => void) | null = null;
+    import('@/components/labs/mount').then(({ mountLabs }) => {
+      if (!huy && khungNoiDungRef.current) don = mountLabs(khungNoiDungRef.current, 'vi');
+    }).catch(() => { /* còn chú thích + link mở trang phòng lab */ });
+    return () => { huy = true; don?.(); };
+  }, [bai.id, html]);
 
   /* Đề của bài QUIZ. Máy chủ trả `quizData` dạng object; bản cũ có thể là
      CHUỖI JSON — nhận cả hai, vì một `JSON.parse` thiếu ở đây là trang trắng. */

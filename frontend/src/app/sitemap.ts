@@ -89,6 +89,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // xuống toàn bộ track và bài tập được liệt kê ở cuối hàm này.
     { url: `${SITE_URL}/code-lab`, lastModified: now, changeFrequency: 'daily', priority: 0.9 },
     { url: `${SITE_URL}/algorithms`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
+    // Phòng lab trực quan (28/10/2026): "Máy tính từ số 0" (CSI104/CEA201) và hệ điều hành.
+    { url: `${SITE_URL}/cpu-lab`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${SITE_URL}/os-lab`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${SITE_URL}/interview`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
     { url: `${SITE_URL}/cv`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
     { url: `${SITE_URL}/hub`, lastModified: now, changeFrequency: 'weekly', priority: 0.5 },

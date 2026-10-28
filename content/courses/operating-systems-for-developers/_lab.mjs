@@ -18,6 +18,14 @@ export const SIMS = {
   race: ['none', 'mutex', 'atomic', 'deadlock', 'ordered'],
   memory: ['layout', 'stack', 'overflow'],
   vm: ['program', 'walk', 'pressure', 'exam', 'belady', 'loop'],
+  sysmon: ['calm', 'cpuhog', 'memleak', 'diskfull', 'iostorm', 'forkbomb', 'zombies', 'mystery'],
+  eventloop: ['order', 'block', 'offload', 'pool', 'race', 'racelock'],
+  threadpool: ['healthy', 'overload', 'timeout', 'dbpool', 'virtual', 'mm1'],
+  sync: ['semaphore', 'leak', 'pcif', 'pcwhile', 'readers', 'writerpref'],
+  deadlock: ['banker', 'request', 'detect', 'cycle', 'pool', 'philosophers', 'inversion'],
+  cgroup: ['oom', 'high', 'cache', 'swap', 'restart', 'cpuquota', 'cputhreads'],
+  cow: ['fork', 'exec', 'bgsave', 'hugepage'],
+  pagecache: ['seq', 'random', 'warm', 'mmap', 'lru'],
   latency: ['default'],
 };
 

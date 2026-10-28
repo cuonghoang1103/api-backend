@@ -12,7 +12,7 @@ const OsLabGallery = dynamic(() => import('@/components/os-lab/OsLabGallery'), {
 export const metadata: Metadata = {
   title: 'Phòng lab Hệ điều hành — OS Visual Lab',
   description:
-    'Mô phỏng tương tác cho khoá Operating Systems for Developers: tiến trình và fork/exec, lập lịch CPU, race condition và deadlock, bố cục bộ nhớ và ASLR, bộ nhớ ảo và thrashing, thang độ trễ.',
+    'Mô phỏng tương tác cho khoá Operating Systems for Developers: tiến trình và fork/exec, đọc top/htop, lập lịch CPU, event loop, thread pool, semaphore, race condition và deadlock, bộ nhớ ảo, copy-on-write, page cache, cgroup và OOM, thang độ trễ.',
   alternates: { canonical: `${SITE_URL}/os-lab` },
   openGraph: {
     title: 'Phòng lab Hệ điều hành — nhìn thấy hệ điều hành làm việc',

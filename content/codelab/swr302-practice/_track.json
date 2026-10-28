@@ -88,6 +88,30 @@
       "description": "Lab chương 2: xếp 13 phát biểu vào mục tài liệu Vision & Scope, chọn mục tiêu nghiệp vụ SMART, viết tuyên bố tầm nhìn theo khuôn Moore, lưới quyền lực–quan tâm và lớp người dùng ưu tiên/không mong muốn/bỏ qua, quyền và trách nhiệm của khách hàng."
     },
     {
+      "slug": "swr302-3-1-ky-thuat-elicitation",
+      "name": "3.1 Elicitation techniques",
+      "level": "INTERMEDIATE",
+      "description": "Chín kỹ thuật khai thác của Wiegers Ch.7: mỗi kỹ thuật hợp với việc gì, chọn kỹ thuật cho nhà thuốc bệnh viện, hạn chế chính của từng kỹ thuật, phối hợp kỹ thuật trong kế hoạch khai thác."
+    },
+    {
+      "slug": "swr302-3-2-lap-ke-hoach-elicitation",
+      "name": "3.2 Planning and conducting elicitation",
+      "level": "BEGINNER",
+      "description": "Vòng đời một buổi khai thác (chuẩn bị → thực hiện → theo dõi), câu hỏi mở/đóng/dẫn dắt, sáu cái bẫy khi khai thác và cách khắc phục, nội dung kế hoạch khai thác."
+    },
+    {
+      "slug": "swr302-3-5-ch7-classifying-input",
+      "name": "3.3 Classifying customer input",
+      "level": "INTERMEDIATE",
+      "description": "Chín nhóm đầu vào khách hàng của Wiegers Ch.7 và từ khoá nhận biết, phân loại ghi chép phỏng vấn thư viện, các câu dễ nhầm, tách một đoạn nói liền thành tám loại thông tin yêu cầu."
+    },
+    {
+      "slug": "swr302-3-6-ch7-done-missing",
+      "name": "3.4 Knowing when you are done and finding missing requirements",
+      "level": "INTERMEDIATE",
+      "description": "Dấu hiệu khai thác sắp đủ (khác với hết ngân sách), sáu kỹ thuật tìm yêu cầu thiếu (CRUD, phân rã, lớp người dùng, ngoại lệ, đối xứng, sự kiện thời gian), đọc ma trận CRUD, bắt lỗ hổng trong bộ yêu cầu."
+    },
+    {
       "slug": "swr302-3-lab-elicitation-canteengo",
       "name": "Lab 3 — Elicitation: CanteenGo Pre-Order Canteen",
       "level": "ADVANCED",

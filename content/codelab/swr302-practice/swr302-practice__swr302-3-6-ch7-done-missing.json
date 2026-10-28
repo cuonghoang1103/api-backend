@@ -1,0 +1,555 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-3-6-ch7-done-missing",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-3-6-ch7-done-missing"
+  },
+  "exercises": [
+    {
+      "title": "Done and missing 1 — signals of completeness",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "knowing when you are done"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers: you are approaching completion when users cannot think of more use cases, new scenarios are variations of existing ones, new ideas are out of scope or low priority, and users propose things for \"some day\". You are never sure — but these are evidence, unlike budgets and deadlines.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Wiegers: bạn đang gần xong khi người dùng không nghĩ ra thêm use case, kịch bản mới chỉ là biến thể, ý tưởng mới ngoài phạm vi hoặc ưu tiên thấp, và người dùng đề xuất thứ \"để sau\". Không bao giờ chắc chắn — nhưng đây là bằng chứng, khác với ngân sách và hạn chót.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Bằng chứng đến từ NỘI DUNG khai thác, không từ áp lực dự án.",
+        "Không bao giờ chắc 100%; dùng mô hình và review để giảm rủi ro."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Done and missing 1 — signals of completeness\n\nAnswer in the answer panel (no code needed).\n\n1. Which is evidence that elicitation is nearly complete?Điều nào là bằng chứng khai thác sắp xong?\n2. Users start proposing features \"that would be nice in a future version\". This suggests…Người dùng bắt đầu đề xuất tính năng \"có thì hay cho bản sau\". Điều đó gợi ý…\n3. Can you ever be completely sure you found all requirements?Có bao giờ chắc chắn tìm đủ mọi yêu cầu không?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Done and missing 1 — signals of completeness — answer key\n\n1. Which is evidence that elicitation is nearly complete?Điều nào là bằng chứng khai thác sắp xong?\n   Answer: b) New scenarios are variations of use cases already captured\n   Repetition in what you hear is a sign of saturation.VI: Nghe lặp lại là dấu hiệu bão hoà.\n\n2. Users start proposing features \"that would be nice in a future version\". This suggests…Người dùng bắt đầu đề xuất tính năng \"có thì hay cho bản sau\". Điều đó gợi ý…\n   Answer: b) the important requirements for this release are probably captured\n   Low-priority ideas mean the core is covered.VI: Ý tưởng ưu tiên thấp nghĩa là phần lõi đã phủ.\n\n3. Can you ever be completely sure you found all requirements?Có bao giờ chắc chắn tìm đủ mọi yêu cầu không?\n   Answer: b) No — but you can reduce the risk with modelling, checklists and reviews\n   Completeness is managed, not proven.VI: Độ đầy đủ được quản lý, không chứng minh được.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which is evidence that elicitation is nearly complete?</p><p style=\"opacity:.75;font-size:.92em\"><i>Điều nào là bằng chứng khai thác sắp xong?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The elicitation budget is spent"
+              },
+              {
+                "ma": "b",
+                "noiDung": "New scenarios are variations of use cases already captured"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The sponsor wants to start coding"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The SRS template is full"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Repetition in what you hear is a sign of saturation.</p><p><i>VI: Nghe lặp lại là dấu hiệu bão hoà.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Users start proposing features \"that would be nice in a future version\". This suggests…</p><p style=\"opacity:.75;font-size:.92em\"><i>Người dùng bắt đầu đề xuất tính năng \"có thì hay cho bản sau\". Điều đó gợi ý…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "scope creep is out of control"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the important requirements for this release are probably captured"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the users are confused"
+              },
+              {
+                "ma": "d",
+                "noiDung": "nothing"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Low-priority ideas mean the core is covered.</p><p><i>VI: Ý tưởng ưu tiên thấp nghĩa là phần lõi đã phủ.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Can you ever be completely sure you found all requirements?</p><p style=\"opacity:.75;font-size:.92em\"><i>Có bao giờ chắc chắn tìm đủ mọi yêu cầu không?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Yes, with enough interviews"
+              },
+              {
+                "ma": "b",
+                "noiDung": "No — but you can reduce the risk with modelling, checklists and reviews"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Yes, when the customer signs"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only on small projects"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Completeness is managed, not proven.</p><p><i>VI: Độ đầy đủ được quản lý, không chứng minh được.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dừng khai thác khi hết ngân sách và gọi là \"đủ\"."
+        },
+        {
+          "loi": "Cho rằng chữ ký khách hàng chứng minh yêu cầu đầy đủ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "saturation",
+          "vi": "bão hoà — thông tin mới chỉ lặp lại cái đã có"
+        }
+      ]
+    },
+    {
+      "title": "Done and missing 4 — spot the missing requirement",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "finding missing requirements"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Each short requirement set below has an obvious hole: an exception with no response, a missing inverse action, or a forgotten user class. Read the set, ask \"what if…?\" and \"who creates this?\", then choose the missing requirement.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi bộ yêu cầu ngắn dưới đây có một lỗ hổng rõ ràng: ngoại lệ chưa có phản hồi, thiếu hành động ngược, hoặc quên một lớp người dùng. Đọc bộ yêu cầu, hỏi \"nếu … thì sao?\" và \"ai tạo ra cái này?\", rồi chọn yêu cầu còn thiếu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Hỏi \"nếu … thì sao?\" và \"cái ngược lại là gì?\".",
+        "Cái được dùng phải do ai đó tạo ra."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Done and missing 4 — spot the missing requirement\n\nAnswer in the answer panel (no code needed).\n\n1. ATM: withdraw cash; check balance; print receipt; PIN entered three times wrong ⇒ ?ATM: rút tiền; xem số dư; in hoá đơn; nhập sai PIN ba lần ⇒ ?\n2. Library: borrow; return; reserve a book that is on loan. What is missing?Thư viện: mượn; trả; đặt trước sách đang được mượn. Thiếu gì?\n3. Gym: members book classes; trainers record attendance. Which user class is forgotten?Gym: hội viên đặt lớp; huấn luyện viên điểm danh. Lớp người dùng nào bị quên?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Done and missing 4 — spot the missing requirement — answer key\n\n1. ATM: withdraw cash; check balance; print receipt; PIN entered three times wrong ⇒ ?ATM: rút tiền; xem số dư; in hoá đơn; nhập sai PIN ba lần ⇒ ?\n   Answer: b) What the ATM does with the card after three wrong PINs (retain it, notify the bank)\n   An exception with no defined response.VI: Một ngoại lệ chưa có phản hồi.\n\n2. Library: borrow; return; reserve a book that is on loan. What is missing?Thư viện: mượn; trả; đặt trước sách đang được mượn. Thiếu gì?\n   Answer: a) Cancel a reservation\n   Symmetry: every reservation needs a way to cancel it.VI: Đối xứng: đặt trước thì phải huỷ được.\n\n3. Gym: members book classes; trainers record attendance. Which user class is forgotten?Gym: hội viên đặt lớp; huấn luyện viên điểm danh. Lớp người dùng nào bị quên?\n   Answer: a) The manager who sets the class schedule and capacity\n   Someone must create the classes being booked.VI: Phải có người tạo các lớp để mà đặt.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · a · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>ATM: withdraw cash; check balance; print receipt; PIN entered three times wrong ⇒ ?</p><p style=\"opacity:.75;font-size:.92em\"><i>ATM: rút tiền; xem số dư; in hoá đơn; nhập sai PIN ba lần ⇒ ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Nothing is missing"
+              },
+              {
+                "ma": "b",
+                "noiDung": "What the ATM does with the card after three wrong PINs (retain it, notify the bank)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The colour of the screen"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The brand of the printer"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>An exception with no defined response.</p><p><i>VI: Một ngoại lệ chưa có phản hồi.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Library: borrow; return; reserve a book that is on loan. What is missing?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thư viện: mượn; trả; đặt trước sách đang được mượn. Thiếu gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Cancel a reservation"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Print the catalogue"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Change the logo"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nothing"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Symmetry: every reservation needs a way to cancel it.</p><p><i>VI: Đối xứng: đặt trước thì phải huỷ được.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Gym: members book classes; trainers record attendance. Which user class is forgotten?</p><p style=\"opacity:.75;font-size:.92em\"><i>Gym: hội viên đặt lớp; huấn luyện viên điểm danh. Lớp người dùng nào bị quên?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The manager who sets the class schedule and capacity"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The members"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The trainers"
+              },
+              {
+                "ma": "d",
+                "noiDung": "None"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Someone must create the classes being booked.</p><p><i>VI: Phải có người tạo các lớp để mà đặt.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chỉ đọc đường thuận."
+        },
+        {
+          "loi": "Quên vai trò quản trị tạo dữ liệu nền."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "exception",
+          "vi": "ngoại lệ"
+        },
+        {
+          "en": "symmetry",
+          "vi": "đối xứng — thao tác nào cũng cần thao tác ngược"
+        }
+      ]
+    },
+    {
+      "title": "Done and missing 2 — techniques to find missing requirements",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "finding missing requirements"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Missing requirements are the hardest defects to spot: you cannot review what is not written. Match each discovery with the technique that found it.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Yêu cầu thiếu là lỗi khó thấy nhất: không review được cái chưa viết. Ghép mỗi phát hiện với kỹ thuật đã tìm ra nó.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Thiếu thao tác trên dữ liệu ⇒ CRUD; thiếu hành động ngược ⇒ đối xứng.",
+        "Việc tự xảy ra theo giờ ⇒ sự kiện thời gian."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Done and missing 2 — techniques to find missing requirements\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Done and missing 2 — techniques to find missing requirements — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: CRUD matrix\n   - r1.k: Decompose high-level requirements\n   - r2.k: Check every user class\n   - r3.k: Ask about exceptions (\"what if…\")\n   - r4.k: Look for symmetry (add ↔ remove, open ↔ close)\n   - r5.k: Event list (including temporal events)\n   CRUD finds missing operations on data; decomposition finds hidden sub-functions; user classes find forgotten people; exceptions find unhappy paths; symmetry finds missing inverse actions; the event list finds what nobody triggers by hand.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>CRUD finds missing operations on data; decomposition finds hidden sub-functions; user classes find forgotten people; exceptions find unhappy paths; symmetry finds missing inverse actions; the event list finds what nobody triggers by hand.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Discovery"
+              },
+              {
+                "ma": "k",
+                "ten": "Technique",
+                "luaChon": [
+                  "CRUD matrix",
+                  "Decompose high-level requirements",
+                  "Check every user class",
+                  "Ask about exceptions (\"what if…\")",
+                  "Look for symmetry (add ↔ remove, open ↔ close)",
+                  "Event list (including temporal events)"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "The system can create a reservation but nothing ever deletes old ones."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "\"Manage loans\" turned out to include renew, return, report lost and pay fine."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Nobody had written requirements for alumni, who may read but not borrow."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "What happens when the barcode on a returned book cannot be read?"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "There is \"suspend a reader\" but no \"reinstate a reader\"."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "At midnight, unpaid reservations must expire — no requirement said so."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "CRUD matrix",
+              "r1.k": "Decompose high-level requirements",
+              "r2.k": "Check every user class",
+              "r3.k": "Ask about exceptions (\"what if…\")",
+              "r4.k": "Look for symmetry (add ↔ remove, open ↔ close)",
+              "r5.k": "Event list (including temporal events)"
+            },
+            "giaiThich": "<p><p>CRUD finds missing operations on data; decomposition finds hidden sub-functions; user classes find forgotten people; exceptions find unhappy paths; symmetry finds missing inverse actions; the event list finds what nobody triggers by hand.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm CRUD với đối xứng (CRUD theo thực thể, đối xứng theo cặp hành động)."
+        },
+        {
+          "loi": "Bỏ qua sự kiện thời gian."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "CRUD matrix",
+          "vi": "ma trận Create/Read/Update/Delete giữa use case (hoặc actor) và thực thể — tìm yêu cầu thiếu"
+        }
+      ]
+    },
+    {
+      "title": "Done and missing 3 — read a CRUD matrix",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 12,
+      "points": 30,
+      "concepts": [
+        "CRUD analysis"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>The library team wrote this CRUD matrix (C create, R read, U update, D delete):</p><table><thead><tr><th>Use case</th><th>Reader</th><th>Book</th><th>Copy</th><th>Loan</th><th>Fine</th></tr></thead><tbody><tr><td>Register reader</td><td>C</td><td></td><td></td><td></td><td></td></tr><tr><td>Search catalogue</td><td></td><td>R</td><td>R</td><td></td><td></td></tr><tr><td>Borrow copy</td><td>R</td><td></td><td>RU</td><td>C</td><td></td></tr><tr><td>Return copy</td><td></td><td></td><td>U</td><td>U</td><td></td></tr><tr><td>Add book</td><td></td><td>C</td><td>C</td><td></td><td></td></tr><tr><td>Pay fine</td><td></td><td></td><td></td><td>R</td><td>U</td></tr></tbody></table><p>Answer in <code>GAPS</code>: <code>neverCreated</code> — entities no use case creates; <code>neverRead</code> — entities never read; <code>neverDeleted</code> — entities nobody can delete; <code>readerUpdated</code> — can a reader’s data ever be updated? (true/false).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Arrays of entity names exactly as in the matrix.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đội thư viện viết ma trận CRUD như trên. Trả lời trong <code>GAPS</code>: thực thể không use case nào tạo; thực thể không ai đọc; thực thể không ai xoá được; dữ liệu độc giả có bao giờ được sửa không (true/false).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Mảng tên thực thể đúng như ma trận.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Fine has only U",
+          "output": "Fine is never created and never read",
+          "explanation": "Something must create the fine (Return copy, when late).|||Phải có use case tạo khoản phạt (Return copy khi trễ)."
+        }
+      ],
+      "hintsJson": [
+        "Đọc theo CỘT: một cột không có C ⇒ không ai tạo; không có R ⇒ không ai đọc.",
+        "Không cột nào có D."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const GAPS = { neverCreated: [], neverRead: [], neverDeleted: [], readerUpdated: null };\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Fine: only U ⇒ never created, never read. Nothing has D. No use case has U on Reader.\nconst GAPS = { neverCreated: ['Fine'], neverRead: ['Fine'], neverDeleted: ['Reader', 'Book', 'Copy', 'Loan', 'Fine'], readerUpdated: false };\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each gap is a missing requirement: who creates fines (Return copy when late)? who reads them (a reader sees what they owe)? how are records archived or deleted? how does a reader update an e-mail address?</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "entities never created",
+              "vi": "thực thể không bao giờ được tạo"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((GAPS.neverCreated || []).map(String)); } catch (e) { return '(GAPS.neverCreated || []).map(String) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(GAPS.neverCreated || []).map(String) is empty';\n  var chap = [[\"Fine\"]];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"tap\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"tap\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"tap\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "entities never read",
+              "vi": "thực thể không ai đọc"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((GAPS.neverRead || []).map(String)); } catch (e) { return '(GAPS.neverRead || []).map(String) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(GAPS.neverRead || []).map(String) is empty';\n  var chap = [[\"Fine\"]];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"tap\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"tap\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"tap\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "entities nobody can delete",
+              "vi": "thực thể không ai xoá được"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((GAPS.neverDeleted || []).map(String)); } catch (e) { return '(GAPS.neverDeleted || []).map(String) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(GAPS.neverDeleted || []).map(String) is empty';\n  var chap = [[\"Reader\",\"Book\",\"Copy\",\"Loan\",\"Fine\"]];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"tap\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"tap\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"tap\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "reader data can be updated?",
+              "vi": "dữ liệu độc giả có được sửa không?"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (String(GAPS.readerUpdated)); } catch (e) { return 'String(GAPS.readerUpdated) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'String(GAPS.readerUpdated) is empty';\n  var chap = [\"false\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đọc theo hàng thay vì theo cột."
+        },
+        {
+          "loi": "Coi \"Return copy\" là nơi tạo Fine dù ma trận không ghi C."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "CRUD matrix",
+          "vi": "ma trận Create/Read/Update/Delete giữa use case (hoặc actor) và thực thể — tìm yêu cầu thiếu"
+        }
+      ]
+    }
+  ]
+}

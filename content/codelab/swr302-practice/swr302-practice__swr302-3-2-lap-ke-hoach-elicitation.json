@@ -1,0 +1,553 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-3-2-lap-ke-hoach-elicitation",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-3-2-lap-ke-hoach-elicitation"
+  },
+  "exercises": [
+    {
+      "title": "Elicitation planning 1 — the life of an interview",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "elicitation lifecycle"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers splits each elicitation activity into <b>prepare → perform → follow up</b>. Put the steps of one interview with the head of a dormitory in order.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Wiegers chia mỗi hoạt động khai thác thành <b>chuẩn bị → thực hiện → theo dõi</b>. Sắp thứ tự các bước của một buổi phỏng vấn trưởng ký túc xá.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Mục tiêu và tài liệu đọc trước luôn ở đầu.",
+        "Ghi chú gửi lại người được phỏng vấn để họ xác nhận — thuộc phần theo dõi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Elicitation planning 1 — the life of an interview\n\nAnswer in the answer panel (no code needed).\n\n1. Order the stepsSắp các bước\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Elicitation planning 1 — the life of an interview — answer key\n\n1. Order the stepsSắp các bước\n   Answer: a) Define the goal of the interview and read the dormitory rules  →  b) Prepare open questions and a draft process model  →  c) Send the invitation with the goal and the agenda  →  d) Run the interview, stay in scope and take notes  →  e) Summarise the notes and send them to the interviewee within a day  →  f) Classify the input and record open issues\n   Prepare (goal, questions, invitation) → perform → follow up (notes, classification, issues).VI: Chuẩn bị → thực hiện → theo dõi.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Prepare → perform → follow up.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Order the steps</p><p style=\"opacity:.75;font-size:.92em\"><i>Sắp các bước</i></p>",
+            "muc": [
+              {
+                "ma": "d",
+                "noiDung": "Run the interview, stay in scope and take notes"
+              },
+              {
+                "ma": "f",
+                "noiDung": "Classify the input and record open issues"
+              },
+              {
+                "ma": "a",
+                "noiDung": "Define the goal of the interview and read the dormitory rules"
+              },
+              {
+                "ma": "e",
+                "noiDung": "Summarise the notes and send them to the interviewee within a day"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Send the invitation with the goal and the agenda"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Prepare open questions and a draft process model"
+              }
+            ],
+            "dapAn": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e",
+              "f"
+            ],
+            "giaiThich": "<p>Prepare (goal, questions, invitation) → perform → follow up (notes, classification, issues).</p><p><i>VI: Chuẩn bị → thực hiện → theo dõi.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Phân loại đầu vào ngay trong buổi phỏng vấn thay vì sau đó."
+        },
+        {
+          "loi": "Không gửi lại ghi chú để xác nhận."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "agenda",
+          "vi": "chương trình buổi làm việc"
+        },
+        {
+          "en": "follow-up",
+          "vi": "theo dõi sau buổi làm việc"
+        }
+      ]
+    },
+    {
+      "title": "Elicitation planning 2 — open, closed or leading question?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "interview questions"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Open questions invite a description; closed questions ask for a fact or a choice; leading questions suggest the answer the asker wants. Classify the questions a BA prepared for the dormitory interview.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi mở mời mô tả; câu hỏi đóng hỏi một dữ kiện hay một lựa chọn; câu hỏi dẫn dắt gợi sẵn câu trả lời người hỏi muốn. Phân loại câu hỏi BA chuẩn bị cho buổi phỏng vấn KTX.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Câu bắt đầu bằng How/What/Walk me through thường là câu mở.",
+        "Câu gợi sẵn đáp án (\"right?\", \"surely\") là câu dẫn dắt."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Elicitation planning 2 — open, closed or leading question?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Elicitation planning 2 — open, closed or leading question? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Open\n   - r1.k: Closed\n   - r2.k: Leading\n   - r3.k: Open\n   - r4.k: Closed\n   - r5.k: Leading\n   - r6.k: Open\n   Use open questions to explore, closed ones to confirm facts, and avoid leading questions — they put the BA’s solution into the customer’s mouth.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Use open questions to explore, closed ones to confirm facts, and avoid leading questions — they put the BA’s solution into the customer’s mouth.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Kind",
+                "luaChon": [
+                  "Open",
+                  "Closed",
+                  "Leading"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "How do students report a broken air conditioner today?"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "How many rooms does building B have?"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "You would prefer an app to the paper form, right?"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "What happens when two students report the same problem?"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Do repairs happen on weekends — yes or no?"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Surely the slow repairs are the technicians’ fault?"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "Can you walk me through the last repair that went wrong?"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Open",
+              "r1.k": "Closed",
+              "r2.k": "Leading",
+              "r3.k": "Open",
+              "r4.k": "Closed",
+              "r5.k": "Leading",
+              "r6.k": "Open"
+            },
+            "giaiThich": "<p><p>Use open questions to explore, closed ones to confirm facts, and avoid leading questions — they put the BA’s solution into the customer’s mouth.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Coi câu hỏi số lượng là câu mở."
+        },
+        {
+          "loi": "Không nhận ra câu dẫn dắt có đuôi \"right?\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "open / closed / leading question",
+          "vi": "câu hỏi mở / đóng / dẫn dắt"
+        }
+      ]
+    },
+    {
+      "title": "Elicitation planning 3 — pitfalls and their remedies",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "elicitation pitfalls"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Common elicitation pitfalls and what a good BA does about them. Match each pitfall with its remedy.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Những cái bẫy thường gặp khi khai thác và cách BA giỏi xử lý. Ghép mỗi bẫy với cách khắc phục.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ý tưởng giải pháp ⇒ hỏi \"vì sao\".",
+        "Chỉ có đường thuận ⇒ hỏi \"nếu … hỏng thì sao\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Elicitation planning 3 — pitfalls and their remedies\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Elicitation planning 3 — pitfalls and their remedies — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Keep a parking lot of off-topic items and return to the agenda\n   - r1.k: Ask \"why?\" until you reach the underlying need\n   - r2.k: Invite representatives of every user class and the decision makers\n   - r3.k: Ask about exceptions: \"what if… fails?\"\n   - r4.k: Write down assumptions and confirm them with the stakeholders\n   - r5.k: Give the participants the goal and materials in advance\n   Stay in scope, dig for needs behind solutions, get the right people, explore exceptions, surface assumptions, prepare participants.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Stay in scope, dig for needs behind solutions, get the right people, explore exceptions, surface assumptions, prepare participants.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Pitfall"
+              },
+              {
+                "ma": "k",
+                "ten": "Remedy",
+                "luaChon": [
+                  "Keep a parking lot of off-topic items and return to the agenda",
+                  "Ask \"why?\" until you reach the underlying need",
+                  "Invite representatives of every user class and the decision makers",
+                  "Ask about exceptions: \"what if… fails?\"",
+                  "Write down assumptions and confirm them with the stakeholders",
+                  "Give the participants the goal and materials in advance"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "The workshop drifts into a debate about the colour of the app."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "A manager says \"we need a chatbot\" without saying why."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Only managers attended; no student or technician was there."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Everyone describes the happy path; nobody mentions what happens when a part is out of stock."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "The BA \"knows\" how dormitories work and does not check."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Participants arrive without having read anything and spend an hour catching up."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Keep a parking lot of off-topic items and return to the agenda",
+              "r1.k": "Ask \"why?\" until you reach the underlying need",
+              "r2.k": "Invite representatives of every user class and the decision makers",
+              "r3.k": "Ask about exceptions: \"what if… fails?\"",
+              "r4.k": "Write down assumptions and confirm them with the stakeholders",
+              "r5.k": "Give the participants the goal and materials in advance"
+            },
+            "giaiThich": "<p><p>Stay in scope, dig for needs behind solutions, get the right people, explore exceptions, surface assumptions, prepare participants.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Ghép \"chỉ có quản lý tham dự\" với \"gửi tài liệu trước\"."
+        },
+        {
+          "loi": "Bỏ qua giả định của chính BA."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "parking lot",
+          "vi": "bảng \"để sau\" — ghi ý ngoài chủ đề để không lạc buổi họp"
+        }
+      ]
+    },
+    {
+      "title": "Elicitation planning 4 — the elicitation plan",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "elicitation plan"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>An elicitation plan states the objectives, the techniques and their order, the schedule and effort, the participants, the documents and systems to study, the expected products and the risks.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Kế hoạch khai thác nêu mục tiêu, kỹ thuật và thứ tự, lịch và công sức, người tham gia, tài liệu và hệ thống cần nghiên cứu, sản phẩm mong đợi và rủi ro.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Kế hoạch khai thác nói về CÁCH làm yêu cầu, không về thiết kế.",
+        "Kỹ thuật trước chuẩn bị đầu vào cho kỹ thuật sau."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Elicitation planning 4 — the elicitation plan\n\nAnswer in the answer panel (no code needed).\n\n1. Which item does NOT belong in an elicitation plan?Mục nào KHÔNG thuộc kế hoạch khai thác?\n2. Why plan the ORDER of techniques?Vì sao phải lập THỨ TỰ kỹ thuật?\n3. A risk of the dormitory elicitation is that students are on holiday in August. Where do you write it?Một rủi ro của việc khai thác KTX là sinh viên nghỉ hè tháng 8. Ghi ở đâu?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Elicitation planning 4 — the elicitation plan — answer key\n\n1. Which item does NOT belong in an elicitation plan?Mục nào KHÔNG thuộc kế hoạch khai thác?\n   Answer: c) The database schema\n   The database design is not part of planning elicitation.VI: Thiết kế CSDL không thuộc kế hoạch khai thác.\n\n2. Why plan the ORDER of techniques?Vì sao phải lập THỨ TỰ kỹ thuật?\n   Answer: b) Early techniques (document analysis, interviews) prepare later ones (workshops, prototypes)\n   You arrive at a workshop with a straw-man model from the earlier work.VI: Bạn tới workshop với mô hình nháp từ các bước trước.\n\n3. A risk of the dormitory elicitation is that students are on holiday in August. Where do you write it?Một rủi ro của việc khai thác KTX là sinh viên nghỉ hè tháng 8. Ghi ở đâu?\n   Answer: b) In the risks of the elicitation plan, with a mitigation such as an online questionnaire\n   Planned risks come with mitigations.VI: Rủi ro được lập kế hoạch kèm cách giảm thiểu.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: c · b · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which item does NOT belong in an elicitation plan?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mục nào KHÔNG thuộc kế hoạch khai thác?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Elicitation objectives"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Planned techniques and their order"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The database schema"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Expected products of each session"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The database design is not part of planning elicitation.</p><p><i>VI: Thiết kế CSDL không thuộc kế hoạch khai thác.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Why plan the ORDER of techniques?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao phải lập THỨ TỰ kỹ thuật?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It does not matter"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Early techniques (document analysis, interviews) prepare later ones (workshops, prototypes)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "To please the sponsor"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Because tools require it"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>You arrive at a workshop with a straw-man model from the earlier work.</p><p><i>VI: Bạn tới workshop với mô hình nháp từ các bước trước.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>A risk of the dormitory elicitation is that students are on holiday in August. Where do you write it?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một rủi ro của việc khai thác KTX là sinh viên nghỉ hè tháng 8. Ghi ở đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Nowhere"
+              },
+              {
+                "ma": "b",
+                "noiDung": "In the risks of the elicitation plan, with a mitigation such as an online questionnaire"
+              },
+              {
+                "ma": "c",
+                "noiDung": "In the SRS functional requirements"
+              },
+              {
+                "ma": "d",
+                "noiDung": "In the code comments"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Planned risks come with mitigations.</p><p><i>VI: Rủi ro được lập kế hoạch kèm cách giảm thiểu.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Lẫn kế hoạch khai thác với kế hoạch dự án tổng."
+        },
+        {
+          "loi": "Bỏ qua rủi ro về lịch của người tham gia."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "elicitation plan",
+          "vi": "kế hoạch khai thác"
+        },
+        {
+          "en": "mitigation",
+          "vi": "biện pháp giảm thiểu rủi ro"
+        }
+      ]
+    }
+  ]
+}

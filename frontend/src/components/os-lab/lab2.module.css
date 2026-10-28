@@ -1,0 +1,153 @@
+/*
+ * Kiểu dáng riêng của đợt mô phỏng #2 (syscall, perm, fdtable, nslayers, overlay, epoll — 28/10/2026).
+ * Màu đi bằng biến --ol-* của khung (.root trong oslab.module.css) nên tự đổi theo theme `theme-dark` (KHÔNG phải `dark`).
+ * Mọi chuyển động có nhánh prefers-reduced-motion. Không có gì rộng cố định ⇒ không cuộn ngang trên điện thoại.
+ */
+
+/* ── tháp các tầng (syscall) ── */
+.tower { display: flex; flex-direction: column; gap: 4px; }
+.row { display: grid; grid-template-columns: minmax(96px, 30%) minmax(0, 1fr) auto; gap: 8px; align-items: center;
+  border: 1px solid var(--ol-border); border-radius: 9px; padding: 5px 8px; background: var(--ol-bg); min-height: 38px;
+  transition: background-color .25s, border-color .25s, box-shadow .25s, opacity .25s; }
+.rowName { font-weight: 800; font-size: 12.5px; line-height: 1.2; }
+.rowName small { display: block; font-weight: 600; font-size: 10.5px; color: var(--ol-muted); }
+.rowFn { font-family: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace; font-size: 11.5px; overflow-wrap: anywhere; color: var(--ol-muted); min-width: 0; }
+.rowNs { font-variant-numeric: tabular-nums; font-size: 11.5px; font-weight: 700; color: var(--ol-muted); white-space: nowrap; }
+.rowSeen { background: var(--ol-panel); }
+.rowSeen .rowFn { color: var(--ol-text); }
+.rowOn { border-color: var(--ol-accent); background: var(--ol-accent-bg); box-shadow: 0 0 0 2px var(--ol-accent); }
+.rowOn .rowFn { color: var(--ol-text); font-weight: 700; }
+.rowBad { border-color: var(--ol-bad); background: var(--ol-bad-bg); box-shadow: 0 0 0 2px var(--ol-bad); }
+.rowOk { border-color: var(--ol-ok); background: var(--ol-ok-bg); box-shadow: 0 0 0 2px var(--ol-ok); }
+.rowWarn { border-color: var(--ol-warn); background: var(--ol-warn-bg); box-shadow: 0 0 0 2px var(--ol-warn); }
+.rowDim { opacity: 0.42; }
+.rowKern { border-left: 4px solid #e8590c; }
+.rowUser { border-left: 4px solid #2563eb; }
+.rowSide { margin-left: 18px; border-style: dashed; }
+.token { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--ol-accent); margin-right: 6px; vertical-align: middle;
+  box-shadow: 0 0 0 0 var(--ol-accent); animation: tok 1.1s ease-out infinite; }
+@keyframes tok { 0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.55); } 100% { box-shadow: 0 0 0 9px rgba(37, 99, 235, 0); } }
+.boundary { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 800; color: var(--ol-bad); margin: 2px 0; }
+.boundary::before, .boundary::after { content: ''; flex: 1; border-top: 2px dashed var(--ol-bad); opacity: 0.7; }
+
+.modeChip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; font-weight: 800; font-size: 13px; color: #fff; }
+.modeUser { background: #2563eb; }
+.modeKern { background: #c2410c; }
+
+.regs { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 4px; }
+.reg { border: 1px solid var(--ol-border); border-radius: 7px; padding: 3px 7px; background: var(--ol-bg); font-family: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace; font-size: 11.5px; overflow-wrap: anywhere; }
+.reg b { color: var(--ol-accent); margin-right: 4px; }
+
+/* ── thang chi phí (log) ── */
+.ladder { display: flex; flex-direction: column; gap: 4px; }
+.lrow { display: grid; grid-template-columns: minmax(110px, 34%) minmax(0, 1fr) auto; gap: 8px; align-items: center; font-size: 12px; }
+.ltrack { height: 12px; background: var(--ol-panel2); border-radius: 6px; overflow: hidden; border: 1px solid var(--ol-border); }
+.lfill { height: 100%; border-radius: 6px; background: #94a3b8; transition: width .4s; }
+.lrowOn { font-weight: 800; }
+.lrowOn .lfill { background: var(--ol-accent); }
+
+/* ── ô chữ có viền nhỏ dùng chung ── */
+.tag { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 999px; border: 1px solid var(--ol-border); background: var(--ol-panel); color: var(--ol-muted); white-space: nowrap; }
+.tagOk { color: var(--ol-ok); border-color: var(--ol-ok); background: var(--ol-ok-bg); }
+.tagBad { color: var(--ol-bad); border-color: var(--ol-bad); background: var(--ol-bad-bg); }
+.tagWarn { color: var(--ol-warn); border-color: var(--ol-warn); background: var(--ol-warn-bg); }
+.tagAcc { color: var(--ol-accent); border-color: var(--ol-accent); background: var(--ol-accent-bg); }
+
+/* ── bảng bit quyền (perm) ── */
+.bits { display: inline-grid; grid-template-columns: repeat(12, minmax(22px, 1fr)); gap: 2px; max-width: 100%; }
+.bit { appearance: none; border: 1px solid var(--ol-border); background: var(--ol-bg); color: var(--ol-muted); border-radius: 5px; font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+  font-size: 12px; font-weight: 800; min-height: 28px; padding: 0; cursor: pointer; }
+.bit[aria-pressed='true'] { background: var(--ol-accent); border-color: var(--ol-accent); color: #fff; }
+:global(html.theme-dark) .bit[aria-pressed='true'] { color: #0d1626; }
+.bitSp[aria-pressed='true'] { background: #c2410c; border-color: #c2410c; }
+.bitHead { font-size: 9.5px; text-align: center; color: var(--ol-muted); font-weight: 700; }
+.tree { display: flex; flex-direction: column; gap: 3px; }
+.node { appearance: none; text-align: left; border: 1px solid var(--ol-border); background: var(--ol-bg); color: var(--ol-text); border-radius: 8px; padding: 4px 8px;
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px; align-items: center; cursor: pointer; font-size: 12.5px; }
+.node code { font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 11.5px; overflow-wrap: anywhere; }
+.nodeOn { border-color: var(--ol-accent); box-shadow: 0 0 0 2px var(--ol-accent); background: var(--ol-accent-bg); }
+.nodeTarget { border-style: dashed; border-color: var(--ol-warn); }
+.checks { display: flex; flex-direction: column; gap: 4px; }
+.check { display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 6px; align-items: start; border: 1px solid var(--ol-border); border-radius: 8px; padding: 5px 8px; background: var(--ol-bg); font-size: 12.5px;
+  transition: opacity .25s, background-color .25s; }
+.check .ic { font-size: 15px; line-height: 1.2; text-align: center; }
+.checkPass { border-color: var(--ol-ok); }
+.checkFail { border-color: var(--ol-bad); }
+.checkDecide { box-shadow: 0 0 0 2px var(--ol-accent); background: var(--ol-accent-bg); }
+.checkFuture { opacity: 0.35; }
+.verdict { display: flex; align-items: center; gap: 10px; border-radius: 10px; padding: 8px 12px; font-weight: 800; font-size: 15px; }
+.verdictOk { background: var(--ol-ok-bg); color: var(--ol-ok); border: 1px solid var(--ol-ok); }
+.verdictBad { background: var(--ol-bad-bg); color: var(--ol-bad); border: 1px solid var(--ol-bad); }
+
+/* ── ba tầng fd → mô tả file mở → inode (fdtable) ── */
+.cols3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; align-items: start; }
+.col { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.colHead { font-size: 11.5px; font-weight: 800; color: var(--ol-muted); text-transform: uppercase; letter-spacing: .04em; }
+.card { border: 1px solid var(--ol-border); border-radius: 9px; background: var(--ol-bg); padding: 5px 8px; font-size: 12px; min-width: 0; overflow-wrap: anywhere;
+  transition: box-shadow .25s, background-color .25s; }
+.card b { font-weight: 800; }
+.cardHot { box-shadow: 0 0 0 2px var(--ol-accent); background: var(--ol-accent-bg); }
+.cardGone { opacity: 0.45; border-style: dashed; }
+.cardBad { box-shadow: 0 0 0 2px var(--ol-bad); background: var(--ol-bad-bg); }
+.link { display: block; font-size: 11px; color: var(--ol-muted); }
+.fdGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(26px, 1fr)); gap: 2px; }
+.fdCell { height: 14px; border-radius: 3px; background: var(--ol-panel2); border: 1px solid var(--ol-border); }
+.fdUsed { background: #2563eb; border-color: #2563eb; }
+.fdStd { background: #64748b; border-color: #64748b; }
+@media (max-width: 760px) { .cols3 { grid-template-columns: minmax(0, 1fr); } }
+
+/* ── hai góc nhìn (nslayers) ── */
+.nsToggles { display: flex; flex-wrap: wrap; gap: 6px; }
+.nsBtn { appearance: none; border: 2px solid var(--ol-border); background: var(--ol-panel); color: var(--ol-text); border-radius: 10px; padding: 5px 10px; font-weight: 800; font-size: 12.5px; cursor: pointer; min-height: 34px;
+  display: inline-flex; align-items: center; gap: 6px; }
+.nsBtn[aria-pressed='true'] { border-color: #7c3aed; background: #f3e8ff; color: #6b21a8; }
+:global(html.theme-dark) .nsBtn[aria-pressed='true'] { background: #2e1d47; color: #e9d5ff; }
+.nsBtnHot { animation: nsPulse 1s ease-out 1; }
+@keyframes nsPulse { 0% { box-shadow: 0 0 0 0 rgba(124, 58, 237, .6); } 100% { box-shadow: 0 0 0 10px rgba(124, 58, 237, 0); } }
+.view { border: 2px solid var(--ol-border); border-radius: 12px; padding: 8px 10px; background: var(--ol-bg); min-width: 0; }
+.viewIn { border-color: #7c3aed; }
+.viewHead { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 13px; margin-bottom: 6px; flex-wrap: wrap; }
+.kv { display: grid; grid-template-columns: minmax(70px, 28%) minmax(0, 1fr); gap: 3px 8px; font-size: 12px; align-items: start; }
+.kv dt { color: var(--ol-muted); font-weight: 700; }
+.kv dd { margin: 0; font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 11.5px; overflow-wrap: anywhere; white-space: pre-wrap; }
+.changed { background: var(--ol-hl); border-radius: 4px; transition: background-color .6s; }
+.me { background: #7c3aed; color: #fff; border-radius: 4px; padding: 0 4px; }
+
+/* ── chồng lớp (overlay) ── */
+.layers { display: flex; flex-direction: column; gap: 6px; }
+.layer { border: 1px solid var(--ol-border); border-radius: 10px; padding: 6px 8px; background: var(--ol-bg); min-width: 0; }
+.layerHead { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-size: 12px; font-weight: 800; margin-bottom: 4px; }
+.files { display: flex; flex-wrap: wrap; gap: 4px; }
+.file { display: inline-flex; align-items: center; gap: 4px; border: 1px solid var(--ol-border); border-radius: 7px; padding: 2px 7px; font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 11.5px; background: var(--ol-panel); }
+.fileHide { opacity: 0.4; text-decoration: line-through; }
+.fileWh { border-color: var(--ol-bad); color: var(--ol-bad); background: var(--ol-bad-bg); }
+.fileHot { box-shadow: 0 0 0 2px var(--ol-accent); }
+.fileNew { border-color: var(--ol-ok); color: var(--ol-ok); background: var(--ol-ok-bg); }
+.progressBar { height: 10px; border-radius: 5px; background: var(--ol-panel2); overflow: hidden; border: 1px solid var(--ol-border); }
+.progressBar > div { height: 100%; background: var(--ol-warn); transition: width .3s; }
+.steps { display: flex; flex-direction: column; gap: 4px; }
+.bstep { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 8px; align-items: center; border: 1px solid var(--ol-border); border-radius: 8px; padding: 4px 8px; font-size: 12px; background: var(--ol-bg); }
+.bstep code { font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 11.5px; overflow-wrap: anywhere; }
+.bCached { border-color: var(--ol-ok); }
+.bRun { border-color: var(--ol-warn); background: var(--ol-warn-bg); }
+
+/* ── epoll ── */
+.socks { display: grid; grid-template-columns: repeat(auto-fill, minmax(34px, 1fr)); gap: 4px; }
+.sock { border: 1px solid var(--ol-border); border-radius: 7px; padding: 3px 0; text-align: center; font-size: 11px; font-weight: 800; background: var(--ol-bg); font-variant-numeric: tabular-nums; transition: background-color .25s, transform .25s; }
+.sockReady { background: #059669; border-color: #059669; color: #fff; }
+.sockScan { background: var(--ol-warn-bg); border-color: var(--ol-warn); }
+.sockServe { background: var(--ol-accent); border-color: var(--ol-accent); color: #fff; }
+.byteRow { display: flex; gap: 3px; flex-wrap: wrap; }
+.byte { width: 22px; height: 22px; border-radius: 5px; display: grid; place-items: center; font-size: 11px; font-weight: 800; border: 1px solid var(--ol-border); background: var(--ol-panel); }
+.byteIn { background: #0891b2; border-color: #0891b2; color: #fff; }
+.byteRead { background: var(--ol-ok-bg); border-color: var(--ol-ok); color: var(--ol-ok); }
+
+@media (prefers-reduced-motion: reduce) {
+  .row, .lfill, .check, .card, .sock, .changed, .progressBar > div { transition: none; }
+  .token, .nsBtnHot { animation: none; }
+}
+
+/* hai cột lệch (trái rộng hơn) — gộp thành một cột trên điện thoại (style inline sẽ đè media query, nên dùng lớp) */
+.split { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 10px; align-items: start; }
+.splitR { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 10px; align-items: start; }
+@media (max-width: 760px) { .split, .splitR { grid-template-columns: minmax(0, 1fr); } }

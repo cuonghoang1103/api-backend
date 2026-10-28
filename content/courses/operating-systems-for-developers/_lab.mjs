@@ -32,6 +32,7 @@ export const SIMS = {
   cgroup: ['oom', 'high', 'cache', 'swap', 'restart', 'cpuquota', 'cputhreads'],
   cow: ['fork', 'exec', 'bgsave', 'hugepage'],
   pagecache: ['seq', 'random', 'warm', 'mmap', 'lru'],
+  syscall: ['write', 'fail', 'vdso', 'batch', 'strace', 'seccomp'],
   latency: ['default'],
 };
 
@@ -50,6 +51,7 @@ export const TOURS = {
   cgroup: ['cgroup-start'],
   cow: ['cow-start'],
   pagecache: ['pagecache-start'],
+  syscall: ['syscall-journey', 'syscall-errno', 'syscall-start'],
   latency: ['latency-start'],
 };
 

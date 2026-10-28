@@ -104,6 +104,13 @@ export const OS_LABS: Record<string, OsLabDef> = {
     presets: ['seq', 'random', 'warm', 'mmap', 'lru'],
     load: () => import('./PageCacheSim'),
   },
+  syscall: {
+    en: 'The journey of a system call', vi: 'Hành trình một lời gọi hệ thống', chapterEn: 'Chapter 11', chapterVi: 'Chương 11',
+    descEn: 'Your code → libc → svc/syscall trap → syscall table → handler → driver → back with bytes or −errno, with the measured price of every hop; vDSO, batching, strace, seccomp.',
+    descVi: 'Mã của bạn → libc → bẫy svc/syscall → bảng syscall → hàm xử lý → driver → quay về với số byte hoặc −errno, kèm giá đo thật của từng chặng; vDSO, gom lời gọi, strace, seccomp.',
+    presets: ['write', 'fail', 'vdso', 'batch', 'strace', 'seccomp'],
+    load: () => import('./SyscallSim'),
+  },
   latency: {
     en: 'Latency ladder', vi: 'Thang độ trễ', chapterEn: 'Section 0', chapterVi: 'Mục 0',
     descEn: 'Registers → caches → RAM → SSD → disk → network, on a human time scale.',

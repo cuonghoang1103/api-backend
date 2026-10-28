@@ -6,6 +6,7 @@ import type { ComponentType } from 'react';
 import {
   Binary, Boxes, Cable, CalendarClock, Cpu, Database, FileCode2, GitFork, Gauge, HardDrive, Layers, Lock, MemoryStick,
   Network, Route, ScanSearch, ShieldAlert, Shuffle, Timer, Type, Workflow, Zap,
+  ArrowDownUp, KeyRound, ShieldCheck, Container, Layers3, RadioTower, Table2,
 } from 'lucide-react';
 import type { L } from './tour/types';
 import type { LabNs } from './selector';
@@ -15,6 +16,7 @@ export const SIM_ICON: Record<LabNs, Record<string, ComponentType<{ className?: 
   'os-lab': {
     process: GitFork, scheduler: CalendarClock, race: Shuffle, memory: Layers, vm: MemoryStick, sysmon: Gauge, eventloop: Workflow,
     threadpool: Boxes, sync: Lock, deadlock: ShieldAlert, cgroup: Database, cow: Route, pagecache: HardDrive, latency: Timer,
+    syscall: ArrowDownUp, perm: KeyRound, fdtable: Table2, nslayers: Container, overlay: Layers3, epoll: RadioTower, stackframe: ShieldCheck,
   },
 };
 export const FALLBACK_ICON = ScanSearch;
@@ -44,5 +46,12 @@ export const SIM_HINT: Record<LabNs, Record<string, L>> = {
     cow: ['fork() shares memory pages instead of copying them. Write to a page and watch only that one get copied.', 'fork() dùng chung trang nhớ thay vì sao chép. Ghi vào một trang và xem chỉ đúng trang đó bị chép.'],
     pagecache: ['Files are read through RAM (the page cache). Step through the reads and compare cold and warm.', 'Tệp được đọc qua RAM (page cache). Đi từng lần đọc và so lúc nguội với lúc nóng.'],
     latency: ['How long things take, scaled to human time: if one CPU cycle were one second…', 'Mọi thứ mất bao lâu, đổi ra thời gian con người: nếu một chu kỳ CPU là một giây…'],
+    syscall: ['One call travels down the tower and back up. Press Step: watch the dashed red line (user → kernel), the registers and the time counter.', 'Một lời gọi đi xuống tháp rồi đi lên. Bấm Bước: nhìn vạch đỏ đứt nét (người dùng → nhân), các thanh ghi và đồng hồ đếm giá.'],
+    perm: ['Pick a person, a file and an action, then press Step: the kernel checks one rule at a time — the highlighted one decides.', 'Chọn một người, một tệp và một việc, rồi bấm Bước: nhân kiểm từng luật một — luật được tô sáng là luật quyết định.'],
+    fdtable: ['Three columns: the numbers a process holds (fd), the kernel\'s open files (with the offset), the files themselves (inodes). Press Step and follow the arrows.', 'Ba cột: con số tiến trình cầm (fd), các tệp đang mở của nhân (kèm offset), chính các tệp (inode). Bấm Bước và lần theo mũi tên.'],
+    nslayers: ['The same process seen from the host (left) and from inside the container (right). Turn namespaces on one by one and watch the right side change.', 'Cùng một tiến trình nhìn từ máy chủ (trái) và từ trong container (phải). Bật từng namespace một và xem bên phải thay đổi.'],
+    overlay: ['Read-only layers at the bottom, one writable layer on top, the merged view the container sees. Press Step to read, write and delete files.', 'Các lớp chỉ-đọc ở dưới, một lớp ghi được ở trên, góc nhìn ghép mà container thấy. Bấm Bước để đọc, ghi, xoá tệp.'],
+    epoll: ['Many sockets, one thread. Green = has data. Press Step and see how epoll hands over only the ready ones.', 'Nhiều socket, một luồng. Xanh = có dữ liệu. Bấm Bước và xem epoll chỉ trao đúng những socket đã sẵn sàng.'],
+    stackframe: ['A function\'s stack frame, one instruction at a time. Make the input longer and see which defence stops the damage.', 'Khung stack của một hàm, từng lệnh một. Cho chuỗi vào dài dần và xem lớp phòng vệ nào chặn được.'],
   },
 };

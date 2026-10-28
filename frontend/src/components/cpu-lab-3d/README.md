@@ -25,6 +25,8 @@ import WhereInComputer from '@/components/cpu-lab-3d/WhereInComputer';
   vẽ trong lúc bay + 8 s xoay chậm rồi **ngừng vẽ** (rê chuột vào để xoay tiếp).
 - `prefers-reduced-motion` ⇒ không bay, không xoay. Không có WebGL ⇒ sơ đồ 2D (`MiniMap2D` trong `Fallback2D.tsx`).
 - Mỗi mini-map giữ một ngữ cảnh WebGL ⇒ **một trang chỉ nên có một cái** (đổi `focus` thay vì gắn nhiều cái).
+  Trong phòng lab OS dùng `<WhereBox>` (`os-lab/where.tsx`): khung đầu tiên trên trang giữ ngữ cảnh 3D, các khung sau tự vẽ 2D
+  (có nút "Xem 3D" để giành lại chỗ).
 - Mở thẳng trên trang 3D: `/cpu-lab/3d?vi-tri=page-table` (tab "Ở đâu?").
 
 ## 2. Id điểm đến (`FOCUS_IDS`, `scene/data.ts`)
@@ -67,6 +69,15 @@ import WhereInComputer from '@/components/cpu-lab-3d/WhereInComputer';
 | `interrupt` | `cpu.core` | `chipset` |
 | `packet` | `nic` | `chipset`, `ram` |
 | `gpu` | `gpu` | |
+| `syscall` | `cpu.core` | `cpu.registers`, `ram` |
+| `kernel-code` | `ram` | `cpu.core` |
+| `vdso` | `ram` | `cpu.core` |
+| `fd-table` | `ram` | `ssd.nand` |
+| `inode` | `ssd.nand` | `ram` |
+| `permission` | `cpu.core` | `ram`, `ssd.nand` |
+| `namespace` | `ram` | `cpu.core` |
+| `overlay` | `ssd.nand` | `ram` |
+| `epoll` | `ram` | `nic`, `cpu.core` |
 
 Thêm khái niệm: một dòng trong `CONCEPTS` (`scene/data.ts`), có `note` VI/EN. Thêm chỗ mới: thêm id vào `FOCUS_IDS` + `FOCUS`,
 một tư thế camera trong `poses` (`scene/macro.ts`) và vùng sáng trong `FOCUS_HL` (`scene/journey.ts`).

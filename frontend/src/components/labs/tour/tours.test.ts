@@ -124,6 +124,8 @@ const FINAL: Record<string, (s: Record<string, Record<string, unknown> | undefin
   'deadlock-banker': (s) => s.banker?.verdict === 'deny',
   'eventloop-block': (s) => s.el?.offload === true,
   'process-shell': (s) => s.process?.zombies === 0 && (s.process?.i as number) === 7,
+  'syscall-journey': (s) => s.sys?.scenario === 'vdso' && s.sys?.atEnd === true && s.sys?.mode === 'user',
+  'syscall-errno': (s) => s.sys?.kind === 'clone3' && s.sys?.raw === -38 && s.sys?.atEnd === true,
 };
 
 describe('tours — run on the real simulations', () => {

@@ -662,6 +662,30 @@
       "name": "CT Booking · Milestone 8 — Hooks: reducer, persistence, custom hook",
       "level": "ADVANCED",
       "description": "Dự án CT Booking mốc 8: useReducer, lưu localStorage, custom hook useFreeSlots, focus bằng useRef. Thang 10."
+    },
+    {
+      "slug": "fer202-9-project-ctbooking-m9",
+      "name": "CT Booking · Milestone 9 — Pages with React Router",
+      "level": "ADVANCED",
+      "description": "Dự án CT Booking mốc 9: /rooms, /rooms/:id, /my-bookings, 404, navigate kèm state. Thang 10."
+    },
+    {
+      "slug": "fer202-10-project-ctbooking-m10",
+      "name": "CT Booking · Milestone 10 — Code splitting the pages",
+      "level": "ADVANCED",
+      "description": "Dự án CT Booking mốc 10: tải lười trang, Suspense trong layout, tải trước. Thang 10."
+    },
+    {
+      "slug": "fer202-11-project-ctbooking-m11",
+      "name": "CT Booking · Milestone 11 — Bookings on a REST API",
+      "level": "ADVANCED",
+      "description": "Dự án CT Booking mốc 11: json-server + axios — tải/lỗi/thử lại, POST, DELETE. Thang 10."
+    },
+    {
+      "slug": "fer202-12-project-ctbooking-m12",
+      "name": "CT Booking · Milestone 12 — Migrating to Redux Toolkit",
+      "level": "ADVANCED",
+      "description": "Dự án CT Booking mốc 12: Redux Toolkit — slice + thunk, hook mặt tiền, selector ghi nhớ. Thang 10."
     }
   ]
 }

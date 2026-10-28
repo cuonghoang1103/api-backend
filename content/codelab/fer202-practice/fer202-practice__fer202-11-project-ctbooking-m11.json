@@ -1,0 +1,756 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-11-project-ctbooking-m11",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-11-2-axios-json-server"
+  },
+  "exercises": [
+    {
+      "title": "CT Booking · Milestone 11 — json-server API with axios (load · POST · DELETE · retry)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 110,
+      "points": 100,
+      "concepts": [
+        "axios instance",
+        "environment variables",
+        "async context actions",
+        "loading/error states",
+        "server-generated ids"
+      ],
+      "prerequisites": [
+        "CT Booking · Milestone 10"
+      ],
+      "tags": [
+        "fer202",
+        "project",
+        "ct-booking",
+        "http",
+        "axios"
+      ],
+      "problemHtml": "<h1>CT BOOKING · MILESTONE 11: Bookings on a REST API</h1>\n<p class=\"bi-phu\">FER202 running project · Chapter 11 · Builds on milestone 10 · Suggested time: 110 minutes · Total: 10 marks</p>\n<h2>1. Overview</h2>\n<p>Move bookings from localStorage to a real REST API (json-server at <code>http://localhost:9999/bookings</code>, rooms stay static). One axios instance reads its base URL from <code>.env</code>; the booking context loads with a loading/error state and a Retry button, creates bookings with <code>POST</code> (the server assigns the id) and cancels them with <code>DELETE</code>. A failed save keeps the user on the room page with an error.</p>\n<h3>Main features</h3>\n<ul>\n  <li>Load from the API · Create with POST · Cancel with DELETE · Error & retry · HTTP layer</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>Start from your solution of the previous milestone (the starter already contains it). Keep the ids/classes printed below — the grader uses them.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>.env                            # REACT_APP_API_URL (given)\nsrc/\n├── api/client.js               # ← axios instance + bookingsApi\n├── context/BookingContext.js   # reducer LOADING/LOADED/FAILED/ADD/CANCEL\n├── pages/RoomPage.js           # async booking + #save-error\n├── App.js                      # loading / error / retry\n└── …</pre>\n<h2>3. Data model</h2>\n<p><b>Room · Booking</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>Room</code></td><td>{ id, name, capacity, floor, features: string[] }</td><td></td></tr><tr><td><code>Booking</code></td><td>{ id, roomId, student, name, start: 'HH:MM', end: 'HH:MM', purpose }</td><td>opening hours 08:00–17:00 · max 2 h · no overlap in the same room</td></tr></tbody></table>\n<h2>4. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. Load from the API <span class=\"bi-diem\">2.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>GET /bookings</code> on start; <code>#bookings-loading</code> <code>Loading bookings…</code> meanwhile; pages render only when ready.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>2. Create with POST <span class=\"bi-diem\">3 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>addBooking</code> POSTs, stores the server copy (with id) and resolves it; RoomPage awaits it, then navigates; on failure shows <code>#save-error</code> <code>Could not save the booking, please try again</code>.</li>\n</ul>\n<p><b>Example:</b></p>\n<pre>POST /bookings ⇒ { id: 4, … } ⇒ /my-bookings</pre>\n</div>\n<div class=\"bi-cn\"><h3>3. Cancel with DELETE <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>cancelBooking(id)</code> sends <code>DELETE /bookings/:id</code> then removes it from state.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>4. Error &amp; retry <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>#bookings-error</code> <code>Could not load bookings (…message…)</code> + <code>#retry</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. HTTP layer <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>axios.create({ baseURL: process.env.REACT_APP_API_URL })</code> in <code>src/api/client.js</code>; no localStorage for bookings anymore.</li>\n</ul>\n</div>\n<h2>5. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>#bookings-loading · #bookings-error · #retry · #save-error</code></td><td>new in milestone 11</td></tr></tbody></table>\n<h2>6. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>Load from the API</td><td>2.5</td></tr><tr><td>2</td><td>Create with POST</td><td>3</td></tr><tr><td>3</td><td>Cancel with DELETE</td><td>2</td></tr><tr><td>4</td><td>Error &amp; retry</td><td>1.5</td></tr><tr><td>5</td><td>HTTP layer</td><td>1</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Generating ids on the client (max + 1) — collides with other users.</li>\n  <li>Navigating before the POST finishes.</li>\n</ul>\n<h2>7. Submission</h2>\n<p>Work directly in the editor (files on the right) or download the starter, run it locally with Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> when the paper uses an API) and paste the files back. Press <b>Run</b> for the sample checks and <b>Submit</b> for full grading (hidden checks included).</p>",
+      "problemHtmlVi": "<h1>CT BOOKING · MỐC 11: Lượt đặt trên REST API</h1>\n<p class=\"bi-phu\">Dự án xuyên suốt FER202 · Chương 11 · Tiếp nối mốc 10 · Thời gian gợi ý: 110 phút · Tổng: 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p>Chuyển lượt đặt từ localStorage sang REST API thật (json-server ở <code>http://localhost:9999/bookings</code>, danh sách phòng vẫn tĩnh). Một axios instance đọc base URL từ <code>.env</code>; context lượt đặt tải dữ liệu có trạng thái đang tải/lỗi và nút Retry, tạo lượt bằng <code>POST</code> (server cấp id) và huỷ bằng <code>DELETE</code>. Lưu lỗi thì giữ người dùng ở trang phòng kèm thông báo.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>Tải từ API · Tạo bằng POST · Huỷ bằng DELETE · Lỗi & thử lại · Lớp HTTP</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Bắt đầu từ lời giải mốc trước (starter đã chứa sẵn). Giữ đúng id/class in bên dưới — máy chấm dùng chúng.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>.env                            # REACT_APP_API_URL (given)\nsrc/\n├── api/client.js               # ← axios instance + bookingsApi\n├── context/BookingContext.js   # reducer LOADING/LOADED/FAILED/ADD/CANCEL\n├── pages/RoomPage.js           # async booking + #save-error\n├── App.js                      # loading / error / retry\n└── …</pre>\n<h2>3. Mô hình dữ liệu</h2>\n<p><b>Room · Booking</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>Room</code></td><td>{ id, name, capacity, floor, features: string[] }</td><td></td></tr><tr><td><code>Booking</code></td><td>{ id, roomId, student, name, start: 'HH:MM', end: 'HH:MM', purpose }</td><td>giờ mở cửa 08:00–17:00 · tối đa 2 giờ · không trùng giờ cùng phòng</td></tr></tbody></table>\n<h2>4. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. Tải từ API <span class=\"bi-diem\">2.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>GET /bookings</code> khi khởi động; trong lúc chờ hiện <code>#bookings-loading</code> <code>Loading bookings…</code>; trang chỉ vẽ khi sẵn sàng.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>2. Tạo bằng POST <span class=\"bi-diem\">3 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>addBooking</code> POST, lưu bản server trả (có id) và trả về nó; RoomPage chờ rồi mới điều hướng; lỗi thì hiện <code>#save-error</code> <code>Could not save the booking, please try again</code>.</li>\n</ul>\n<p><b>Ví dụ:</b></p>\n<pre>POST /bookings ⇒ { id: 4, … } ⇒ /my-bookings</pre>\n</div>\n<div class=\"bi-cn\"><h3>3. Huỷ bằng DELETE <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>cancelBooking(id)</code> gửi <code>DELETE /bookings/:id</code> rồi mới bỏ khỏi state.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>4. Lỗi &amp; thử lại <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>#bookings-error</code> <code>Could not load bookings (…thông điệp…)</code> + <code>#retry</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. Lớp HTTP <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>axios.create({ baseURL: process.env.REACT_APP_API_URL })</code> trong <code>src/api/client.js</code>; bỏ localStorage cho bookings.</li>\n</ul>\n</div>\n<h2>5. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>#bookings-loading · #bookings-error · #retry · #save-error</code></td><td>mới ở mốc 11</td></tr></tbody></table>\n<h2>6. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>Tải từ API</td><td>2.5</td></tr><tr><td>2</td><td>Tạo bằng POST</td><td>3</td></tr><tr><td>3</td><td>Huỷ bằng DELETE</td><td>2</td></tr><tr><td>4</td><td>Lỗi &amp; thử lại</td><td>1.5</td></tr><tr><td>5</td><td>Lớp HTTP</td><td>1</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Tự tạo id ở client (max + 1) — trùng với người dùng khác.</li>\n  <li>Điều hướng trước khi POST xong.</li>\n</ul>\n<h2>7. Nộp bài</h2>\n<p>Làm thẳng trong editor (các tệp bên phải) hoặc tải starter, chạy trên máy bằng Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> khi đề dùng API) rồi dán lại tệp. Bấm <b>Chạy thử</b> để chạy kiểm mẫu, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn).</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "Start from your solution of the previous milestone (the starter already contains it). Keep the ids/classes printed below — the grader uses them.|||Bắt đầu từ lời giải mốc trước (starter đã chứa sẵn). Giữ đúng id/class in bên dưới — máy chấm dùng chúng.",
+      "examplesJson": [
+        {
+          "input": "Create with POST|||Tạo bằng POST",
+          "output": "POST /bookings ⇒ { id: 4, … } ⇒ /my-bookings",
+          "explanation": "See the brief / Xem đề."
+        }
+      ],
+      "hintsJson": [
+        "bookingsApi.create = (b) => client.post(\"/bookings\", b).then(r => r.data);",
+        "Provider: useReducer với LOADING/LOADED/FAILED/ADD/CANCEL; addBooking async: const saved = await bookingsApi.create(b); dispatch({ type: \"ADD\", booking: saved }); return saved;"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport 'bootstrap/dist/css/bootstrap.min.css';\nimport { BrowserRouter } from 'react-router-dom';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <BrowserRouter>\n        <App />\n      </BrowserRouter>\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "src/data/seed.js",
+          "language": "javascript",
+          "code": "// src/data/seed.js — dữ liệu mẫu (đã cho)\nexport const ROOMS = [\n  {\n    id: 1,\n    name: 'Room A1',\n    capacity: 4,\n    floor: 1,\n    features: [\n      'TV'\n    ]\n  },\n  {\n    id: 2,\n    name: 'Room A2',\n    capacity: 6,\n    floor: 1,\n    features: [\n      'Whiteboard',\n      'TV'\n    ]\n  },\n  {\n    id: 3,\n    name: 'Room B1',\n    capacity: 8,\n    floor: 2,\n    features: [\n      'Whiteboard'\n    ]\n  }\n];\n\nexport const BOOKINGS = [\n  {\n    id: 1,\n    roomId: 1,\n    student: 'HE180001',\n    name: 'An',\n    start: '08:00',\n    end: '09:30',\n    purpose: 'SWT301 review'\n  },\n  {\n    id: 2,\n    roomId: 1,\n    student: 'HE180002',\n    name: 'Binh',\n    start: '10:00',\n    end: '11:00',\n    purpose: 'FER202 project'\n  },\n  {\n    id: 3,\n    roomId: 2,\n    student: 'HE180003',\n    name: 'Cuong',\n    start: '09:00',\n    end: '10:30',\n    purpose: 'Group meeting'\n  }\n];\n"
+        },
+        {
+          "name": "src/domain/booking.js",
+          "language": "javascript",
+          "code": "// src/domain/booking.js — lõi nghiệp vụ từ mốc 2 (ES module)\nconst OPEN = '08:00';\nconst CLOSE = '17:00';\nconst MAX_MINUTES = 120;\n\n// '08:30' ⇒ 510 phút kể từ 00:00\nexport function toMinutes(time) {\n  const [h, m] = time.split(':').map(Number);\n  return h * 60 + m;\n}\n\n// 510 ⇒ '08:30'\nexport function toTime(minutes) {\n  return `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`;\n}\n\n// hai khoảng [start, end) chồng nhau khi mỗi cái bắt đầu trước khi cái kia kết thúc\nexport function overlaps(a, b) {\n  return toMinutes(a.start) < toMinutes(b.end) && toMinutes(b.start) < toMinutes(a.end);\n}\n\n// danh sách lỗi (rỗng = hợp lệ); chỉ so trùng với booking CÙNG phòng, khác id\nexport function validateBooking(booking, existing = []) {\n  const errors = [];\n  const s = toMinutes(booking.start);\n  const e = toMinutes(booking.end);\n  if (s >= e) errors.push('Start must be before end');\n  if (s < toMinutes(OPEN) || e > toMinutes(CLOSE)) errors.push('Outside opening hours (08:00–17:00)');\n  if (e - s > MAX_MINUTES) errors.push('Maximum 2 hours per booking');\n  const clash = existing.some((x) => x.roomId === booking.roomId && x.id !== booking.id && overlaps(x, booking));\n  if (clash) errors.push('Overlaps with an existing booking');\n  return errors;\n}\n\n// giờ bắt đầu của các ô trống step phút trong giờ mở cửa\nexport function freeSlots(roomId, bookings, step = 30) {\n  const taken = bookings.filter((b) => b.roomId === roomId);\n  const slots = [];\n  for (let t = toMinutes(OPEN); t + step <= toMinutes(CLOSE); t += step) {\n    const slot = { start: toTime(t), end: toTime(t + step) };\n    if (!taken.some((b) => overlaps(b, slot))) slots.push(slot.start);\n  }\n  return slots;\n}\n\n// { roomId: số booking } bằng reduce, không sửa dữ liệu vào\nexport function countByRoom(bookings) {\n  return bookings.reduce((acc, b) => ({ ...acc, [b.roomId]: (acc[b.roomId] ?? 0) + 1 }), {});\n}\n\n// bản sao đã sắp: theo phòng rồi theo giờ bắt đầu\nexport function sortBookings(list) {\n  return [...list].sort((a, b) => a.roomId - b.roomId || toMinutes(a.start) - toMinutes(b.start));\n}\n\n// '08:00–09:30 (90 min)'\nexport function formatRange({ start, end }) {\n  return `${start}–${end} (${toMinutes(end) - toMinutes(start)} min)`;\n}\n\n// cộng phút vào một giờ: addMinutes('09:30', 60) ⇒ '10:30'\nexport function addMinutes(time, minutes) {\n  return toTime(toMinutes(time) + minutes);\n}\n"
+        },
+        {
+          "name": "src/components/Schedule.js",
+          "language": "javascript",
+          "code": "// src/components/Schedule.js — danh sách lượt đặt của một phòng\nimport PropTypes from 'prop-types';\nimport { ListGroup } from 'react-bootstrap';\nimport { formatRange } from '../domain/booking';\n\nexport default function Schedule({ bookings }) {\n  if (bookings.length === 0) return <p className=\"no-bookings text-muted mb-0 px-3\">No bookings yet</p>;\n  return (\n    <ListGroup variant=\"flush\" className=\"schedule\">\n      {bookings.map((b) => (\n        <ListGroup.Item key={b.id} className=\"booking-row\">{formatRange(b)} · {b.name} · {b.purpose}</ListGroup.Item>\n      ))}\n    </ListGroup>\n  );\n}\n\nSchedule.propTypes = {\n  bookings: PropTypes.arrayOf(\n    PropTypes.shape({ id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired, start: PropTypes.string.isRequired, end: PropTypes.string.isRequired }),\n  ).isRequired,\n};\n"
+        },
+        {
+          "name": "src/components/RoomCard.js",
+          "language": "javascript",
+          "code": "// src/components/RoomCard.js — thẻ phòng: chỉ hiển thị + báo cha khi được chọn\nimport PropTypes from 'prop-types';\nimport { Badge, Button, Card } from 'react-bootstrap';\nimport Schedule from './Schedule';\n\nexport default function RoomCard({ room, bookings, freeCount, firstFree, selected, onSelect }) {\n  const n = bookings.length;\n  return (\n    <Card className={`room-card h-100 shadow-sm${selected ? ' selected border-primary' : ''}`} id={`room-${room.id}`}>\n      <Card.Body>\n        <Card.Title className=\"room-name\">{room.name}</Card.Title>\n        <Card.Subtitle className=\"room-meta mb-2 text-muted\">{room.capacity} seats · Floor {room.floor}</Card.Subtitle>\n        <div className=\"mb-2\">\n          {room.features.map((f) => <Badge key={f} bg=\"info\" className=\"feature me-1\">{f}</Badge>)}\n        </div>\n        <Card.Text className=\"room-count\">{n} {n === 1 ? 'booking' : 'bookings'} today</Card.Text>\n      </Card.Body>\n      <Schedule bookings={bookings} />\n      <Card.Footer className=\"d-flex justify-content-between align-items-center\">\n        <Badge bg={freeCount > 0 ? 'success' : 'danger'} className=\"first-free\">\n          {freeCount > 0 ? `First free slot: ${firstFree}` : 'Fully booked'}\n        </Badge>\n        <Button size=\"sm\" className=\"btn-select\" variant={selected ? 'primary' : 'outline-primary'} disabled={freeCount === 0} onClick={() => onSelect(room.id)}>\n          {selected ? 'Selected' : 'Select'}\n        </Button>\n      </Card.Footer>\n    </Card>\n  );\n}\n\nRoomCard.propTypes = {\n  room: PropTypes.shape({\n    id: PropTypes.number.isRequired,\n    name: PropTypes.string.isRequired,\n    capacity: PropTypes.number.isRequired,\n    floor: PropTypes.number.isRequired,\n    features: PropTypes.arrayOf(PropTypes.string).isRequired,\n  }).isRequired,\n  bookings: PropTypes.array.isRequired,\n  freeCount: PropTypes.number.isRequired,\n  firstFree: PropTypes.string,\n  selected: PropTypes.bool,\n  onSelect: PropTypes.func.isRequired,\n};\n"
+        },
+        {
+          "name": "src/components/SlotPicker.js",
+          "language": "javascript",
+          "code": "// src/components/SlotPicker.js — component ĐIỀU KHIỂN: cha giữ value, con báo onChange\nimport PropTypes from 'prop-types';\nimport { Button } from 'react-bootstrap';\n\nexport default function SlotPicker({ slots, value, onChange }) {\n  if (slots.length === 0) return <p className=\"text-muted\">No free slots</p>;\n  return (\n    <div className=\"slot-picker\">\n      {slots.map((s) => (\n        <Button key={s} size=\"sm\" className=\"slot me-1 mb-1\" variant={s === value ? 'primary' : 'outline-primary'} active={s === value} onClick={() => onChange(s)}>\n          {s}\n        </Button>\n      ))}\n    </div>\n  );\n}\n\nSlotPicker.propTypes = {\n  slots: PropTypes.arrayOf(PropTypes.string).isRequired,\n  value: PropTypes.string,\n  onChange: PropTypes.func.isRequired,\n};\n"
+        },
+        {
+          "name": "src/context/BookingContext.js",
+          "language": "javascript",
+          "code": "// src/context/BookingContext.js — mốc 8: useReducer + lưu localStorage \"ctb-bookings\"\nimport { createContext, useContext, useEffect, useMemo, useReducer } from 'react';\nimport { BOOKINGS } from '../data/seed';\n\nconst BookingContext = createContext(null);\nconst KEY = 'ctb-bookings';\n\nexport function bookingsReducer(state, action) {\n  switch (action.type) {\n    case 'ADD':\n      return [...state, action.booking];\n    case 'CANCEL':\n      return state.filter((b) => b.id !== action.id);\n    default:\n      return state;\n  }\n}\n\nfunction loadBookings() {\n  try {\n    const saved = JSON.parse(localStorage.getItem(KEY));\n    return Array.isArray(saved) ? saved : BOOKINGS;\n  } catch {\n    return BOOKINGS;\n  }\n}\n\nexport function BookingProvider({ children }) {\n  const [bookings, dispatch] = useReducer(bookingsReducer, undefined, loadBookings);\n\n  useEffect(() => {\n    localStorage.setItem(KEY, JSON.stringify(bookings));\n  }, [bookings]);\n\n  const value = useMemo(() => {\n    const addBooking = (booking) => {\n      const saved = { ...booking, id: Math.max(0, ...bookings.map((b) => b.id)) + 1 };\n      dispatch({ type: 'ADD', booking: saved });\n      return saved;\n    };\n    const cancelBooking = (id) => dispatch({ type: 'CANCEL', id });\n    return { bookings, addBooking, cancelBooking };\n  }, [bookings]);\n\n  return <BookingContext.Provider value={value}>{children}</BookingContext.Provider>;\n}\n\nexport function useBookings() {\n  const ctx = useContext(BookingContext);\n  if (!ctx) throw new Error('useBookings must be used inside BookingProvider');\n  return ctx;\n}\n"
+        },
+        {
+          "name": "src/context/StudentContext.js",
+          "language": "javascript",
+          "code": "// src/context/StudentContext.js — mốc 8: nhớ sinh viên qua localStorage \"ctb-student\"\nimport { createContext, useContext, useEffect, useMemo, useState } from 'react';\n\nconst StudentContext = createContext(null);\nconst KEY = 'ctb-student';\n\nexport function StudentProvider({ children }) {\n  const [student, setStudent] = useState(() => {\n    try {\n      return JSON.parse(localStorage.getItem(KEY));\n    } catch {\n      return null;\n    }\n  });\n\n  useEffect(() => {\n    if (student) localStorage.setItem(KEY, JSON.stringify(student));\n    else localStorage.removeItem(KEY);\n  }, [student]);\n\n  const value = useMemo(\n    () => ({ student, login: (name, code) => setStudent({ name, code }), logout: () => setStudent(null) }),\n    [student],\n  );\n  return <StudentContext.Provider value={value}>{children}</StudentContext.Provider>;\n}\n\nexport function useStudent() {\n  const ctx = useContext(StudentContext);\n  if (!ctx) throw new Error('useStudent must be used inside StudentProvider');\n  return ctx;\n}\n"
+        },
+        {
+          "name": "src/components/StudentArea.js",
+          "language": "javascript",
+          "code": "// src/components/StudentArea.js — đăng nhập nhanh bằng tên + mã SV (đọc/ghi qua context)\nimport { useState } from 'react';\nimport { Button, Form } from 'react-bootstrap';\nimport { useStudent } from '../context/StudentContext';\n\nexport default function StudentArea() {\n  const { student, login, logout } = useStudent();\n  const [name, setName] = useState('');\n  const [code, setCode] = useState('');\n\n  if (student) {\n    return (\n      <div className=\"d-flex align-items-center gap-2 text-white\">\n        <span id=\"current-student\">{student.name} ({student.code})</span>\n        <Button id=\"logout\" size=\"sm\" variant=\"light\" onClick={logout}>Log out</Button>\n      </div>\n    );\n  }\n  const submit = (e) => {\n    e.preventDefault();\n    if (name.trim() && /^[A-Z]{2}\\d{6}$/.test(code.trim())) login(name.trim(), code.trim());\n  };\n  return (\n    <Form id=\"login-form\" className=\"d-flex gap-2\" onSubmit={submit}>\n      <Form.Control id=\"login-name\" size=\"sm\" placeholder=\"Name\" value={name} onChange={(e) => setName(e.target.value)} />\n      <Form.Control id=\"login-code\" size=\"sm\" placeholder=\"HE180001\" value={code} onChange={(e) => setCode(e.target.value)} />\n      <Button id=\"login\" size=\"sm\" variant=\"light\" type=\"submit\">Log in</Button>\n    </Form>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/MyBookings.js",
+          "language": "javascript",
+          "code": "// src/components/MyBookings.js — lượt đặt của sinh viên đang đăng nhập, có huỷ\nimport { Button, Card, ListGroup } from 'react-bootstrap';\nimport { useBookings } from '../context/BookingContext';\nimport { useStudent } from '../context/StudentContext';\nimport { ROOMS } from '../data/seed';\nimport { formatRange, sortBookings } from '../domain/booking';\n\nexport default function MyBookings() {\n  const { student } = useStudent();\n  const { bookings, cancelBooking } = useBookings();\n  if (!student) return <p id=\"my-bookings\" className=\"text-muted\">Log in to see your bookings</p>;\n  const mine = sortBookings(bookings.filter((b) => b.student === student.code));\n  return (\n    <Card id=\"my-bookings\" className=\"mt-4\">\n      <Card.Header>My bookings ({mine.length})</Card.Header>\n      {mine.length === 0 ? (\n        <Card.Body className=\"text-muted\">You have no bookings today</Card.Body>\n      ) : (\n        <ListGroup variant=\"flush\">\n          {mine.map((b) => (\n            <ListGroup.Item key={b.id} className=\"my-booking d-flex justify-content-between\">\n              <span className=\"my-booking-text\">{ROOMS.find((r) => r.id === b.roomId)?.name} · {formatRange(b)}</span>\n              <Button size=\"sm\" variant=\"outline-danger\" className=\"btn-cancel\" onClick={() => cancelBooking(b.id)}>Cancel</Button>\n            </ListGroup.Item>\n          ))}\n        </ListGroup>\n      )}\n    </Card>\n  );\n}\n"
+        },
+        {
+          "name": "src/hooks/useFreeSlots.js",
+          "language": "javascript",
+          "code": "// src/hooks/useFreeSlots.js — custom hook: ô trống của một phòng, chỉ tính lại khi bookings/phòng đổi\nimport { useMemo } from 'react';\nimport { useBookings } from '../context/BookingContext';\nimport { freeSlots } from '../domain/booking';\n\nexport function useFreeSlots(roomId) {\n  const { bookings } = useBookings();\n  return useMemo(() => (roomId == null ? [] : freeSlots(roomId, bookings)), [roomId, bookings]);\n}\n"
+        },
+        {
+          "name": "src/pages/RoomsPage.js",
+          "language": "javascript",
+          "code": "// src/pages/RoomsPage.js — /rooms: lưới phòng; \"Book\" điều hướng tới /rooms/:id\nimport { Col, Row } from 'react-bootstrap';\nimport { useNavigate } from 'react-router-dom';\nimport RoomCard from '../components/RoomCard';\nimport { useBookings } from '../context/BookingContext';\nimport { ROOMS } from '../data/seed';\nimport { freeSlots, sortBookings } from '../domain/booking';\n\nexport default function RoomsPage() {\n  const { bookings } = useBookings();\n  const navigate = useNavigate();\n  const sorted = sortBookings(bookings);\n  return (\n    <Row className=\"g-3\">\n      {ROOMS.map((room) => {\n        const free = freeSlots(room.id, bookings);\n        return (\n          <Col key={room.id} xs={12} md={6} lg={4}>\n            <RoomCard room={room} bookings={sorted.filter((b) => b.roomId === room.id)} freeCount={free.length} firstFree={free[0]} selected={false} onSelect={(id) => navigate(`/rooms/${id}`)} />\n          </Col>\n        );\n      })}\n    </Row>\n  );\n}\n"
+        },
+        {
+          "name": "src/pages/RoomPage.js",
+          "language": "javascript",
+          "code": "// src/pages/RoomPage.js — /rooms/:id: chi tiết phòng + chọn giờ + đặt; xong thì sang /my-bookings kèm thông báo\nimport { useState } from 'react';\nimport { Card } from 'react-bootstrap';\nimport { Link, useNavigate, useParams } from 'react-router-dom';\nimport Schedule from '../components/Schedule';\nimport SlotPicker from '../components/SlotPicker';\nimport BookingForm from '../components/BookingForm';\nimport { useBookings } from '../context/BookingContext';\nimport { useStudent } from '../context/StudentContext';\nimport { useFreeSlots } from '../hooks/useFreeSlots';\nimport { ROOMS } from '../data/seed';\nimport { addMinutes, formatRange, sortBookings } from '../domain/booking';\n\nexport default function RoomPage() {\n  const { id } = useParams();\n  const room = ROOMS.find((r) => r.id === Number(id));\n  const { bookings, addBooking } = useBookings();\n  const { student } = useStudent();\n  const [slot, setSlot] = useState(null);\n  const free = useFreeSlots(room ? room.id : null);\n  const navigate = useNavigate();\n\n  if (!room) {\n    return (\n      <div>\n        <p id=\"not-found\">Room not found</p>\n        <Link to=\"/rooms\" id=\"back-to-rooms\">Back to rooms</Link>\n      </div>\n    );\n  }\n\n  const book = (booking) => {\n    const saved = addBooking(booking);\n    navigate('/my-bookings', { state: { message: `Booked ${room.name} ${formatRange(saved).split(' (')[0]} for ${saved.name}` } });\n  };\n\n  return (\n    <Card id=\"room-page\">\n      <Card.Body>\n        <Card.Title id=\"room-title\">{room.name}</Card.Title>\n        <Card.Subtitle className=\"mb-3 text-muted\">{room.capacity} seats · Floor {room.floor}</Card.Subtitle>\n        <Schedule bookings={sortBookings(bookings.filter((b) => b.roomId === room.id))} />\n        <h3 className=\"h6 mt-3\">Choose a start time</h3>\n        <SlotPicker slots={free} value={slot} onChange={setSlot} />\n        <p id=\"selected-slot\" className=\"mt-2\">{slot ? `Selected slot: ${slot}–${addMinutes(slot, 30)}` : 'Choose a start time'}</p>\n        <BookingForm\n          key={student?.code ?? 'guest'}\n          room={room}\n          slot={slot}\n          bookings={bookings}\n          onBook={book}\n          initial={student ? { name: student.name, student: student.code } : undefined}\n        />\n        <Link to=\"/rooms\" id=\"back-to-rooms\">← All rooms</Link>\n      </Card.Body>\n    </Card>\n  );\n}\n"
+        },
+        {
+          "name": "src/pages/MyBookingsPage.js",
+          "language": "javascript",
+          "code": "// src/pages/MyBookingsPage.js — /my-bookings: thông báo từ location.state + danh sách của tôi\nimport { useLocation } from 'react-router-dom';\nimport MyBookings from '../components/MyBookings';\n\nexport default function MyBookingsPage() {\n  const { state } = useLocation();\n  return (\n    <div>\n      {state?.message && <p id=\"booking-success\" className=\"success\">{state.message}</p>}\n      <MyBookings />\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/BookingForm.js",
+          "language": "javascript",
+          "code": "// src/components/BookingForm.js — mốc 8: thêm useRef + useEffect focus ô Purpose khi vừa chọn giờ\nimport { useEffect, useRef, useState } from 'react';\nimport PropTypes from 'prop-types';\nimport { Button, Form } from 'react-bootstrap';\nimport { addMinutes, validateBooking } from '../domain/booking';\n\nconst EMPTY = { name: '', student: '', duration: '60', purpose: '' };\n\nexport function fieldErrors(values, slot) {\n  const e = {};\n  if (!slot) e.slot = 'Choose a start time first';\n  if (values.name.trim().length < 2) e.name = 'Name is required';\n  if (!/^[A-Z]{2}\\d{6}$/.test(values.student.trim())) e.student = 'Student code looks like HE180001';\n  if (values.purpose.trim().length < 5) e.purpose = 'Purpose needs at least 5 characters';\n  return e;\n}\n\nexport default function BookingForm({ room, slot, bookings, onBook, initial = EMPTY }) {\n  const [values, setValues] = useState({ ...EMPTY, ...initial });\n  const [errors, setErrors] = useState({});\n  const [ruleErrors, setRuleErrors] = useState([]);\n  const purposeRef = useRef(null);\n\n  useEffect(() => {\n    if (slot && purposeRef.current) purposeRef.current.focus(); // vừa chọn giờ ⇒ gõ mục đích ngay\n  }, [slot]);\n\n  const handleChange = (e) => setValues((v) => ({ ...v, [e.target.name]: e.target.value }));\n\n  const handleSubmit = (e) => {\n    e.preventDefault();\n    const fe = fieldErrors(values, slot);\n    setErrors(fe);\n    setRuleErrors([]);\n    if (Object.keys(fe).length > 0) return;\n    const booking = {\n      roomId: room.id,\n      student: values.student.trim(),\n      name: values.name.trim(),\n      start: slot,\n      end: addMinutes(slot, Number(values.duration)),\n      purpose: values.purpose.trim(),\n    };\n    const rules = validateBooking(booking, bookings);\n    if (rules.length > 0) {\n      setRuleErrors(rules);\n      return;\n    }\n    onBook(booking);\n    setValues({ ...EMPTY, ...initial });\n  };\n\n  return (\n    <Form id=\"booking-form\" noValidate onSubmit={handleSubmit}>\n      {errors.slot && <p className=\"error\" id=\"err-slot\">{errors.slot}</p>}\n      <Form.Group className=\"mb-2\" controlId=\"name\">\n        <Form.Label>Name</Form.Label>\n        <Form.Control name=\"name\" value={values.name} onChange={handleChange} isInvalid={!!errors.name} />\n        {errors.name && <p className=\"error\" id=\"err-name\">{errors.name}</p>}\n      </Form.Group>\n      <Form.Group className=\"mb-2\" controlId=\"student\">\n        <Form.Label>Student code</Form.Label>\n        <Form.Control name=\"student\" value={values.student} onChange={handleChange} isInvalid={!!errors.student} />\n        {errors.student && <p className=\"error\" id=\"err-student\">{errors.student}</p>}\n      </Form.Group>\n      <Form.Group className=\"mb-2\" controlId=\"duration\">\n        <Form.Label>Duration</Form.Label>\n        <Form.Select name=\"duration\" value={values.duration} onChange={handleChange}>\n          <option value=\"30\">30 min</option>\n          <option value=\"60\">60 min</option>\n          <option value=\"90\">90 min</option>\n          <option value=\"120\">120 min</option>\n        </Form.Select>\n      </Form.Group>\n      <Form.Group className=\"mb-2\" controlId=\"purpose\">\n        <Form.Label>Purpose</Form.Label>\n        <Form.Control ref={purposeRef} name=\"purpose\" value={values.purpose} onChange={handleChange} isInvalid={!!errors.purpose} />\n        {errors.purpose && <p className=\"error\" id=\"err-purpose\">{errors.purpose}</p>}\n      </Form.Group>\n      {ruleErrors.map((m) => <p key={m} className=\"error rule-error\">{m}</p>)}\n      <Button id=\"btn-book\" type=\"submit\">Book {room.name}</Button>\n    </Form>\n  );\n}\n\nBookingForm.propTypes = {\n  room: PropTypes.shape({ id: PropTypes.number.isRequired, name: PropTypes.string.isRequired }).isRequired,\n  slot: PropTypes.string,\n  bookings: PropTypes.array.isRequired,\n  onBook: PropTypes.func.isRequired,\n  initial: PropTypes.object,\n};\n"
+        },
+        {
+          "name": "src/utils/lazy.js",
+          "language": "javascript",
+          "code": "// src/utils/lazy.js — giả lập mạng chậm + lazy có preload (đã cho)\nimport { lazy } from 'react';\n\nexport const withDelay = (factory, ms) => () =>\n  Promise.all([factory(), new Promise((r) => setTimeout(r, ms))]).then(([m]) => m);\n\nexport function lazyWithPreload(factory) {\n  let promise = null;\n  const load = () => {\n    if (!promise) promise = factory();\n    return promise;\n  };\n  const Component = lazy(load);\n  Component.preload = load;\n  return Component;\n}\n"
+        },
+        {
+          "name": ".env",
+          "language": "text",
+          "code": "REACT_APP_API_URL=http://localhost:9999\n"
+        },
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER mốc 11 = lời giải mốc 10; chuyển bookings sang json-server (http://localhost:9999/bookings)\nimport { Suspense } from 'react';\nimport { Container, Nav, Navbar } from 'react-bootstrap';\nimport { Navigate, NavLink, Route, Routes } from 'react-router-dom';\nimport StudentArea from './components/StudentArea';\nimport { BookingProvider, useBookings } from './context/BookingContext';\nimport { StudentProvider } from './context/StudentContext';\nimport { ROOMS } from './data/seed';\nimport RoomsPage from './pages/RoomsPage';\nimport { lazyWithPreload, withDelay } from './utils/lazy';\n\n// trang danh sách (trang mở đầu) giữ trong bundle chính; hai trang còn lại tách chunk\nconst RoomPage = lazyWithPreload(withDelay(() => import('./pages/RoomPage'), 400));\nconst MyBookingsPage = lazyWithPreload(withDelay(() => import('./pages/MyBookingsPage'), 400));\n\nfunction Shell() {\n  const { bookings } = useBookings();\n  return (\n    <>\n      <Navbar bg=\"primary\" variant=\"dark\" expand=\"md\" id=\"app-nav\">\n        <Container>\n          <Navbar.Brand id=\"title\">CT Booking</Navbar.Brand>\n          <Nav className=\"me-auto\">\n            <Nav.Link as={NavLink} to=\"/rooms\" id=\"nav-rooms\">Rooms</Nav.Link>\n            <Nav.Link as={NavLink} to=\"/my-bookings\" id=\"nav-my\" onMouseEnter={MyBookingsPage.preload} onFocus={MyBookingsPage.preload}>My bookings</Nav.Link>\n          </Nav>\n          <Navbar.Text id=\"summary\" className=\"text-white me-3\">{ROOMS.length} rooms · {bookings.length} bookings today</Navbar.Text>\n          <StudentArea />\n        </Container>\n      </Navbar>\n      <Container className=\"py-4\">\n        <Suspense fallback={<p id=\"page-loading\" className=\"text-muted\">Loading page…</p>}>\n        <Routes>\n          <Route path=\"/\" element={<Navigate to=\"/rooms\" replace />} />\n          <Route path=\"/rooms\" element={<RoomsPage />} />\n          <Route path=\"/rooms/:id\" element={<RoomPage />} />\n          <Route path=\"/my-bookings\" element={<MyBookingsPage />} />\n          <Route path=\"*\" element={<p id=\"page-404\">Page not found</p>} />\n        </Routes>\n        </Suspense>\n      </Container>\n    </>\n  );\n}\n\nexport default function App() {\n  return (\n    <StudentProvider>\n      <BookingProvider>\n        <Shell />\n      </BookingProvider>\n    </StudentProvider>\n  );\n}\n"
+        },
+        {
+          "name": "src/api/client.js",
+          "language": "javascript",
+          "code": "// src/api/client.js — STARTER: axios.create({ baseURL: process.env.REACT_APP_API_URL }) + bookingsApi.list / create / remove\nexport {};\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport 'bootstrap/dist/css/bootstrap.min.css';\nimport { BrowserRouter } from 'react-router-dom';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <BrowserRouter>\n        <App />\n      </BrowserRouter>\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "src/data/seed.js",
+          "language": "javascript",
+          "code": "// src/data/seed.js — dữ liệu mẫu (đã cho)\nexport const ROOMS = [\n  {\n    id: 1,\n    name: 'Room A1',\n    capacity: 4,\n    floor: 1,\n    features: [\n      'TV'\n    ]\n  },\n  {\n    id: 2,\n    name: 'Room A2',\n    capacity: 6,\n    floor: 1,\n    features: [\n      'Whiteboard',\n      'TV'\n    ]\n  },\n  {\n    id: 3,\n    name: 'Room B1',\n    capacity: 8,\n    floor: 2,\n    features: [\n      'Whiteboard'\n    ]\n  }\n];\n\nexport const BOOKINGS = [\n  {\n    id: 1,\n    roomId: 1,\n    student: 'HE180001',\n    name: 'An',\n    start: '08:00',\n    end: '09:30',\n    purpose: 'SWT301 review'\n  },\n  {\n    id: 2,\n    roomId: 1,\n    student: 'HE180002',\n    name: 'Binh',\n    start: '10:00',\n    end: '11:00',\n    purpose: 'FER202 project'\n  },\n  {\n    id: 3,\n    roomId: 2,\n    student: 'HE180003',\n    name: 'Cuong',\n    start: '09:00',\n    end: '10:30',\n    purpose: 'Group meeting'\n  }\n];\n"
+        },
+        {
+          "name": "src/domain/booking.js",
+          "language": "javascript",
+          "code": "// src/domain/booking.js — lõi nghiệp vụ từ mốc 2 (ES module)\nconst OPEN = '08:00';\nconst CLOSE = '17:00';\nconst MAX_MINUTES = 120;\n\n// '08:30' ⇒ 510 phút kể từ 00:00\nexport function toMinutes(time) {\n  const [h, m] = time.split(':').map(Number);\n  return h * 60 + m;\n}\n\n// 510 ⇒ '08:30'\nexport function toTime(minutes) {\n  return `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`;\n}\n\n// hai khoảng [start, end) chồng nhau khi mỗi cái bắt đầu trước khi cái kia kết thúc\nexport function overlaps(a, b) {\n  return toMinutes(a.start) < toMinutes(b.end) && toMinutes(b.start) < toMinutes(a.end);\n}\n\n// danh sách lỗi (rỗng = hợp lệ); chỉ so trùng với booking CÙNG phòng, khác id\nexport function validateBooking(booking, existing = []) {\n  const errors = [];\n  const s = toMinutes(booking.start);\n  const e = toMinutes(booking.end);\n  if (s >= e) errors.push('Start must be before end');\n  if (s < toMinutes(OPEN) || e > toMinutes(CLOSE)) errors.push('Outside opening hours (08:00–17:00)');\n  if (e - s > MAX_MINUTES) errors.push('Maximum 2 hours per booking');\n  const clash = existing.some((x) => x.roomId === booking.roomId && x.id !== booking.id && overlaps(x, booking));\n  if (clash) errors.push('Overlaps with an existing booking');\n  return errors;\n}\n\n// giờ bắt đầu của các ô trống step phút trong giờ mở cửa\nexport function freeSlots(roomId, bookings, step = 30) {\n  const taken = bookings.filter((b) => b.roomId === roomId);\n  const slots = [];\n  for (let t = toMinutes(OPEN); t + step <= toMinutes(CLOSE); t += step) {\n    const slot = { start: toTime(t), end: toTime(t + step) };\n    if (!taken.some((b) => overlaps(b, slot))) slots.push(slot.start);\n  }\n  return slots;\n}\n\n// { roomId: số booking } bằng reduce, không sửa dữ liệu vào\nexport function countByRoom(bookings) {\n  return bookings.reduce((acc, b) => ({ ...acc, [b.roomId]: (acc[b.roomId] ?? 0) + 1 }), {});\n}\n\n// bản sao đã sắp: theo phòng rồi theo giờ bắt đầu\nexport function sortBookings(list) {\n  return [...list].sort((a, b) => a.roomId - b.roomId || toMinutes(a.start) - toMinutes(b.start));\n}\n\n// '08:00–09:30 (90 min)'\nexport function formatRange({ start, end }) {\n  return `${start}–${end} (${toMinutes(end) - toMinutes(start)} min)`;\n}\n\n// cộng phút vào một giờ: addMinutes('09:30', 60) ⇒ '10:30'\nexport function addMinutes(time, minutes) {\n  return toTime(toMinutes(time) + minutes);\n}\n"
+        },
+        {
+          "name": "src/components/Schedule.js",
+          "language": "javascript",
+          "code": "// src/components/Schedule.js — danh sách lượt đặt của một phòng\nimport PropTypes from 'prop-types';\nimport { ListGroup } from 'react-bootstrap';\nimport { formatRange } from '../domain/booking';\n\nexport default function Schedule({ bookings }) {\n  if (bookings.length === 0) return <p className=\"no-bookings text-muted mb-0 px-3\">No bookings yet</p>;\n  return (\n    <ListGroup variant=\"flush\" className=\"schedule\">\n      {bookings.map((b) => (\n        <ListGroup.Item key={b.id} className=\"booking-row\">{formatRange(b)} · {b.name} · {b.purpose}</ListGroup.Item>\n      ))}\n    </ListGroup>\n  );\n}\n\nSchedule.propTypes = {\n  bookings: PropTypes.arrayOf(\n    PropTypes.shape({ id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired, start: PropTypes.string.isRequired, end: PropTypes.string.isRequired }),\n  ).isRequired,\n};\n"
+        },
+        {
+          "name": "src/components/RoomCard.js",
+          "language": "javascript",
+          "code": "// src/components/RoomCard.js — thẻ phòng: chỉ hiển thị + báo cha khi được chọn\nimport PropTypes from 'prop-types';\nimport { Badge, Button, Card } from 'react-bootstrap';\nimport Schedule from './Schedule';\n\nexport default function RoomCard({ room, bookings, freeCount, firstFree, selected, onSelect }) {\n  const n = bookings.length;\n  return (\n    <Card className={`room-card h-100 shadow-sm${selected ? ' selected border-primary' : ''}`} id={`room-${room.id}`}>\n      <Card.Body>\n        <Card.Title className=\"room-name\">{room.name}</Card.Title>\n        <Card.Subtitle className=\"room-meta mb-2 text-muted\">{room.capacity} seats · Floor {room.floor}</Card.Subtitle>\n        <div className=\"mb-2\">\n          {room.features.map((f) => <Badge key={f} bg=\"info\" className=\"feature me-1\">{f}</Badge>)}\n        </div>\n        <Card.Text className=\"room-count\">{n} {n === 1 ? 'booking' : 'bookings'} today</Card.Text>\n      </Card.Body>\n      <Schedule bookings={bookings} />\n      <Card.Footer className=\"d-flex justify-content-between align-items-center\">\n        <Badge bg={freeCount > 0 ? 'success' : 'danger'} className=\"first-free\">\n          {freeCount > 0 ? `First free slot: ${firstFree}` : 'Fully booked'}\n        </Badge>\n        <Button size=\"sm\" className=\"btn-select\" variant={selected ? 'primary' : 'outline-primary'} disabled={freeCount === 0} onClick={() => onSelect(room.id)}>\n          {selected ? 'Selected' : 'Select'}\n        </Button>\n      </Card.Footer>\n    </Card>\n  );\n}\n\nRoomCard.propTypes = {\n  room: PropTypes.shape({\n    id: PropTypes.number.isRequired,\n    name: PropTypes.string.isRequired,\n    capacity: PropTypes.number.isRequired,\n    floor: PropTypes.number.isRequired,\n    features: PropTypes.arrayOf(PropTypes.string).isRequired,\n  }).isRequired,\n  bookings: PropTypes.array.isRequired,\n  freeCount: PropTypes.number.isRequired,\n  firstFree: PropTypes.string,\n  selected: PropTypes.bool,\n  onSelect: PropTypes.func.isRequired,\n};\n"
+        },
+        {
+          "name": "src/components/SlotPicker.js",
+          "language": "javascript",
+          "code": "// src/components/SlotPicker.js — component ĐIỀU KHIỂN: cha giữ value, con báo onChange\nimport PropTypes from 'prop-types';\nimport { Button } from 'react-bootstrap';\n\nexport default function SlotPicker({ slots, value, onChange }) {\n  if (slots.length === 0) return <p className=\"text-muted\">No free slots</p>;\n  return (\n    <div className=\"slot-picker\">\n      {slots.map((s) => (\n        <Button key={s} size=\"sm\" className=\"slot me-1 mb-1\" variant={s === value ? 'primary' : 'outline-primary'} active={s === value} onClick={() => onChange(s)}>\n          {s}\n        </Button>\n      ))}\n    </div>\n  );\n}\n\nSlotPicker.propTypes = {\n  slots: PropTypes.arrayOf(PropTypes.string).isRequired,\n  value: PropTypes.string,\n  onChange: PropTypes.func.isRequired,\n};\n"
+        },
+        {
+          "name": "src/context/BookingContext.js",
+          "language": "javascript",
+          "code": "// src/context/BookingContext.js — mốc 11: server (json-server) là nguồn sự thật; reducer + trạng thái tải\nimport { createContext, useCallback, useContext, useEffect, useMemo, useReducer } from 'react';\nimport { bookingsApi } from '../api/client';\n\nconst BookingContext = createContext(null);\n\nexport function bookingsReducer(state, action) {\n  switch (action.type) {\n    case 'LOADING':\n      return { ...state, status: 'loading', error: null };\n    case 'LOADED':\n      return { status: 'ready', error: null, items: action.items };\n    case 'FAILED':\n      return { ...state, status: 'error', error: action.error };\n    case 'ADD':\n      return { ...state, items: [...state.items, action.booking] };\n    case 'CANCEL':\n      return { ...state, items: state.items.filter((b) => b.id !== action.id) };\n    default:\n      return state;\n  }\n}\n\nexport function BookingProvider({ children }) {\n  const [state, dispatch] = useReducer(bookingsReducer, { status: 'loading', error: null, items: [] });\n\n  const load = useCallback(async () => {\n    dispatch({ type: 'LOADING' });\n    try {\n      dispatch({ type: 'LOADED', items: await bookingsApi.list() });\n    } catch (err) {\n      dispatch({ type: 'FAILED', error: err.message });\n    }\n  }, []);\n\n  useEffect(() => {\n    load();\n  }, [load]);\n\n  const value = useMemo(() => {\n    const addBooking = async (booking) => {\n      const saved = await bookingsApi.create(booking); // id do server cấp\n      dispatch({ type: 'ADD', booking: saved });\n      return saved;\n    };\n    const cancelBooking = async (id) => {\n      await bookingsApi.remove(id);\n      dispatch({ type: 'CANCEL', id });\n    };\n    return { bookings: state.items, status: state.status, error: state.error, reload: load, addBooking, cancelBooking };\n  }, [state, load]);\n\n  return <BookingContext.Provider value={value}>{children}</BookingContext.Provider>;\n}\n\nexport function useBookings() {\n  const ctx = useContext(BookingContext);\n  if (!ctx) throw new Error('useBookings must be used inside BookingProvider');\n  return ctx;\n}\n"
+        },
+        {
+          "name": "src/context/StudentContext.js",
+          "language": "javascript",
+          "code": "// src/context/StudentContext.js — mốc 8: nhớ sinh viên qua localStorage \"ctb-student\"\nimport { createContext, useContext, useEffect, useMemo, useState } from 'react';\n\nconst StudentContext = createContext(null);\nconst KEY = 'ctb-student';\n\nexport function StudentProvider({ children }) {\n  const [student, setStudent] = useState(() => {\n    try {\n      return JSON.parse(localStorage.getItem(KEY));\n    } catch {\n      return null;\n    }\n  });\n\n  useEffect(() => {\n    if (student) localStorage.setItem(KEY, JSON.stringify(student));\n    else localStorage.removeItem(KEY);\n  }, [student]);\n\n  const value = useMemo(\n    () => ({ student, login: (name, code) => setStudent({ name, code }), logout: () => setStudent(null) }),\n    [student],\n  );\n  return <StudentContext.Provider value={value}>{children}</StudentContext.Provider>;\n}\n\nexport function useStudent() {\n  const ctx = useContext(StudentContext);\n  if (!ctx) throw new Error('useStudent must be used inside StudentProvider');\n  return ctx;\n}\n"
+        },
+        {
+          "name": "src/components/StudentArea.js",
+          "language": "javascript",
+          "code": "// src/components/StudentArea.js — đăng nhập nhanh bằng tên + mã SV (đọc/ghi qua context)\nimport { useState } from 'react';\nimport { Button, Form } from 'react-bootstrap';\nimport { useStudent } from '../context/StudentContext';\n\nexport default function StudentArea() {\n  const { student, login, logout } = useStudent();\n  const [name, setName] = useState('');\n  const [code, setCode] = useState('');\n\n  if (student) {\n    return (\n      <div className=\"d-flex align-items-center gap-2 text-white\">\n        <span id=\"current-student\">{student.name} ({student.code})</span>\n        <Button id=\"logout\" size=\"sm\" variant=\"light\" onClick={logout}>Log out</Button>\n      </div>\n    );\n  }\n  const submit = (e) => {\n    e.preventDefault();\n    if (name.trim() && /^[A-Z]{2}\\d{6}$/.test(code.trim())) login(name.trim(), code.trim());\n  };\n  return (\n    <Form id=\"login-form\" className=\"d-flex gap-2\" onSubmit={submit}>\n      <Form.Control id=\"login-name\" size=\"sm\" placeholder=\"Name\" value={name} onChange={(e) => setName(e.target.value)} />\n      <Form.Control id=\"login-code\" size=\"sm\" placeholder=\"HE180001\" value={code} onChange={(e) => setCode(e.target.value)} />\n      <Button id=\"login\" size=\"sm\" variant=\"light\" type=\"submit\">Log in</Button>\n    </Form>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/MyBookings.js",
+          "language": "javascript",
+          "code": "// src/components/MyBookings.js — lượt đặt của sinh viên đang đăng nhập, có huỷ\nimport { Button, Card, ListGroup } from 'react-bootstrap';\nimport { useBookings } from '../context/BookingContext';\nimport { useStudent } from '../context/StudentContext';\nimport { ROOMS } from '../data/seed';\nimport { formatRange, sortBookings } from '../domain/booking';\n\nexport default function MyBookings() {\n  const { student } = useStudent();\n  const { bookings, cancelBooking } = useBookings();\n  if (!student) return <p id=\"my-bookings\" className=\"text-muted\">Log in to see your bookings</p>;\n  const mine = sortBookings(bookings.filter((b) => b.student === student.code));\n  return (\n    <Card id=\"my-bookings\" className=\"mt-4\">\n      <Card.Header>My bookings ({mine.length})</Card.Header>\n      {mine.length === 0 ? (\n        <Card.Body className=\"text-muted\">You have no bookings today</Card.Body>\n      ) : (\n        <ListGroup variant=\"flush\">\n          {mine.map((b) => (\n            <ListGroup.Item key={b.id} className=\"my-booking d-flex justify-content-between\">\n              <span className=\"my-booking-text\">{ROOMS.find((r) => r.id === b.roomId)?.name} · {formatRange(b)}</span>\n              <Button size=\"sm\" variant=\"outline-danger\" className=\"btn-cancel\" onClick={() => cancelBooking(b.id)}>Cancel</Button>\n            </ListGroup.Item>\n          ))}\n        </ListGroup>\n      )}\n    </Card>\n  );\n}\n"
+        },
+        {
+          "name": "src/hooks/useFreeSlots.js",
+          "language": "javascript",
+          "code": "// src/hooks/useFreeSlots.js — custom hook: ô trống của một phòng, chỉ tính lại khi bookings/phòng đổi\nimport { useMemo } from 'react';\nimport { useBookings } from '../context/BookingContext';\nimport { freeSlots } from '../domain/booking';\n\nexport function useFreeSlots(roomId) {\n  const { bookings } = useBookings();\n  return useMemo(() => (roomId == null ? [] : freeSlots(roomId, bookings)), [roomId, bookings]);\n}\n"
+        },
+        {
+          "name": "src/pages/RoomsPage.js",
+          "language": "javascript",
+          "code": "// src/pages/RoomsPage.js — /rooms: lưới phòng; \"Book\" điều hướng tới /rooms/:id\nimport { Col, Row } from 'react-bootstrap';\nimport { useNavigate } from 'react-router-dom';\nimport RoomCard from '../components/RoomCard';\nimport { useBookings } from '../context/BookingContext';\nimport { ROOMS } from '../data/seed';\nimport { freeSlots, sortBookings } from '../domain/booking';\n\nexport default function RoomsPage() {\n  const { bookings } = useBookings();\n  const navigate = useNavigate();\n  const sorted = sortBookings(bookings);\n  return (\n    <Row className=\"g-3\">\n      {ROOMS.map((room) => {\n        const free = freeSlots(room.id, bookings);\n        return (\n          <Col key={room.id} xs={12} md={6} lg={4}>\n            <RoomCard room={room} bookings={sorted.filter((b) => b.roomId === room.id)} freeCount={free.length} firstFree={free[0]} selected={false} onSelect={(id) => navigate(`/rooms/${id}`)} />\n          </Col>\n        );\n      })}\n    </Row>\n  );\n}\n"
+        },
+        {
+          "name": "src/pages/RoomPage.js",
+          "language": "javascript",
+          "code": "// src/pages/RoomPage.js — mốc 11: đặt phòng gọi POST (bất đồng bộ); lỗi lưu hiện #save-error\nimport { useState } from 'react';\nimport { Card } from 'react-bootstrap';\nimport { Link, useNavigate, useParams } from 'react-router-dom';\nimport Schedule from '../components/Schedule';\nimport SlotPicker from '../components/SlotPicker';\nimport BookingForm from '../components/BookingForm';\nimport { useBookings } from '../context/BookingContext';\nimport { useStudent } from '../context/StudentContext';\nimport { useFreeSlots } from '../hooks/useFreeSlots';\nimport { ROOMS } from '../data/seed';\nimport { addMinutes, formatRange, sortBookings } from '../domain/booking';\n\nexport default function RoomPage() {\n  const { id } = useParams();\n  const room = ROOMS.find((r) => r.id === Number(id));\n  const { bookings, addBooking } = useBookings();\n  const { student } = useStudent();\n  const [slot, setSlot] = useState(null);\n  const [saveError, setSaveError] = useState('');\n  const free = useFreeSlots(room ? room.id : null);\n  const navigate = useNavigate();\n\n  if (!room) {\n    return (\n      <div>\n        <p id=\"not-found\">Room not found</p>\n        <Link to=\"/rooms\" id=\"back-to-rooms\">Back to rooms</Link>\n      </div>\n    );\n  }\n\n  const book = async (booking) => {\n    setSaveError('');\n    let saved;\n    try {\n      saved = await addBooking(booking);\n    } catch {\n      setSaveError('Could not save the booking, please try again');\n      return;\n    }\n    navigate('/my-bookings', { state: { message: `Booked ${room.name} ${formatRange(saved).split(' (')[0]} for ${saved.name}` } });\n  };\n\n  return (\n    <Card id=\"room-page\">\n      <Card.Body>\n        <Card.Title id=\"room-title\">{room.name}</Card.Title>\n        <Card.Subtitle className=\"mb-3 text-muted\">{room.capacity} seats · Floor {room.floor}</Card.Subtitle>\n        <Schedule bookings={sortBookings(bookings.filter((b) => b.roomId === room.id))} />\n        <h3 className=\"h6 mt-3\">Choose a start time</h3>\n        <SlotPicker slots={free} value={slot} onChange={setSlot} />\n        <p id=\"selected-slot\" className=\"mt-2\">{slot ? `Selected slot: ${slot}–${addMinutes(slot, 30)}` : 'Choose a start time'}</p>\n        {saveError && <p id=\"save-error\" className=\"error\">{saveError}</p>}\n        <BookingForm\n          key={student?.code ?? 'guest'}\n          room={room}\n          slot={slot}\n          bookings={bookings}\n          onBook={book}\n          initial={student ? { name: student.name, student: student.code } : undefined}\n        />\n        <Link to=\"/rooms\" id=\"back-to-rooms\">← All rooms</Link>\n      </Card.Body>\n    </Card>\n  );\n}\n"
+        },
+        {
+          "name": "src/pages/MyBookingsPage.js",
+          "language": "javascript",
+          "code": "// src/pages/MyBookingsPage.js — /my-bookings: thông báo từ location.state + danh sách của tôi\nimport { useLocation } from 'react-router-dom';\nimport MyBookings from '../components/MyBookings';\n\nexport default function MyBookingsPage() {\n  const { state } = useLocation();\n  return (\n    <div>\n      {state?.message && <p id=\"booking-success\" className=\"success\">{state.message}</p>}\n      <MyBookings />\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/BookingForm.js",
+          "language": "javascript",
+          "code": "// src/components/BookingForm.js — mốc 8: thêm useRef + useEffect focus ô Purpose khi vừa chọn giờ\nimport { useEffect, useRef, useState } from 'react';\nimport PropTypes from 'prop-types';\nimport { Button, Form } from 'react-bootstrap';\nimport { addMinutes, validateBooking } from '../domain/booking';\n\nconst EMPTY = { name: '', student: '', duration: '60', purpose: '' };\n\nexport function fieldErrors(values, slot) {\n  const e = {};\n  if (!slot) e.slot = 'Choose a start time first';\n  if (values.name.trim().length < 2) e.name = 'Name is required';\n  if (!/^[A-Z]{2}\\d{6}$/.test(values.student.trim())) e.student = 'Student code looks like HE180001';\n  if (values.purpose.trim().length < 5) e.purpose = 'Purpose needs at least 5 characters';\n  return e;\n}\n\nexport default function BookingForm({ room, slot, bookings, onBook, initial = EMPTY }) {\n  const [values, setValues] = useState({ ...EMPTY, ...initial });\n  const [errors, setErrors] = useState({});\n  const [ruleErrors, setRuleErrors] = useState([]);\n  const purposeRef = useRef(null);\n\n  useEffect(() => {\n    if (slot && purposeRef.current) purposeRef.current.focus(); // vừa chọn giờ ⇒ gõ mục đích ngay\n  }, [slot]);\n\n  const handleChange = (e) => setValues((v) => ({ ...v, [e.target.name]: e.target.value }));\n\n  const handleSubmit = (e) => {\n    e.preventDefault();\n    const fe = fieldErrors(values, slot);\n    setErrors(fe);\n    setRuleErrors([]);\n    if (Object.keys(fe).length > 0) return;\n    const booking = {\n      roomId: room.id,\n      student: values.student.trim(),\n      name: values.name.trim(),\n      start: slot,\n      end: addMinutes(slot, Number(values.duration)),\n      purpose: values.purpose.trim(),\n    };\n    const rules = validateBooking(booking, bookings);\n    if (rules.length > 0) {\n      setRuleErrors(rules);\n      return;\n    }\n    onBook(booking);\n    setValues({ ...EMPTY, ...initial });\n  };\n\n  return (\n    <Form id=\"booking-form\" noValidate onSubmit={handleSubmit}>\n      {errors.slot && <p className=\"error\" id=\"err-slot\">{errors.slot}</p>}\n      <Form.Group className=\"mb-2\" controlId=\"name\">\n        <Form.Label>Name</Form.Label>\n        <Form.Control name=\"name\" value={values.name} onChange={handleChange} isInvalid={!!errors.name} />\n        {errors.name && <p className=\"error\" id=\"err-name\">{errors.name}</p>}\n      </Form.Group>\n      <Form.Group className=\"mb-2\" controlId=\"student\">\n        <Form.Label>Student code</Form.Label>\n        <Form.Control name=\"student\" value={values.student} onChange={handleChange} isInvalid={!!errors.student} />\n        {errors.student && <p className=\"error\" id=\"err-student\">{errors.student}</p>}\n      </Form.Group>\n      <Form.Group className=\"mb-2\" controlId=\"duration\">\n        <Form.Label>Duration</Form.Label>\n        <Form.Select name=\"duration\" value={values.duration} onChange={handleChange}>\n          <option value=\"30\">30 min</option>\n          <option value=\"60\">60 min</option>\n          <option value=\"90\">90 min</option>\n          <option value=\"120\">120 min</option>\n        </Form.Select>\n      </Form.Group>\n      <Form.Group className=\"mb-2\" controlId=\"purpose\">\n        <Form.Label>Purpose</Form.Label>\n        <Form.Control ref={purposeRef} name=\"purpose\" value={values.purpose} onChange={handleChange} isInvalid={!!errors.purpose} />\n        {errors.purpose && <p className=\"error\" id=\"err-purpose\">{errors.purpose}</p>}\n      </Form.Group>\n      {ruleErrors.map((m) => <p key={m} className=\"error rule-error\">{m}</p>)}\n      <Button id=\"btn-book\" type=\"submit\">Book {room.name}</Button>\n    </Form>\n  );\n}\n\nBookingForm.propTypes = {\n  room: PropTypes.shape({ id: PropTypes.number.isRequired, name: PropTypes.string.isRequired }).isRequired,\n  slot: PropTypes.string,\n  bookings: PropTypes.array.isRequired,\n  onBook: PropTypes.func.isRequired,\n  initial: PropTypes.object,\n};\n"
+        },
+        {
+          "name": "src/utils/lazy.js",
+          "language": "javascript",
+          "code": "// src/utils/lazy.js — giả lập mạng chậm + lazy có preload (đã cho)\nimport { lazy } from 'react';\n\nexport const withDelay = (factory, ms) => () =>\n  Promise.all([factory(), new Promise((r) => setTimeout(r, ms))]).then(([m]) => m);\n\nexport function lazyWithPreload(factory) {\n  let promise = null;\n  const load = () => {\n    if (!promise) promise = factory();\n    return promise;\n  };\n  const Component = lazy(load);\n  Component.preload = load;\n  return Component;\n}\n"
+        },
+        {
+          "name": ".env",
+          "language": "text",
+          "code": "REACT_APP_API_URL=http://localhost:9999\n"
+        },
+        {
+          "name": "src/api/client.js",
+          "language": "javascript",
+          "code": "// src/api/client.js — MỘT axios instance cho cả app (base URL từ .env)\nimport axios from 'axios';\n\nexport const client = axios.create({ baseURL: process.env.REACT_APP_API_URL || 'http://localhost:9999' });\n\nexport const bookingsApi = {\n  list: () => client.get('/bookings').then((r) => r.data),\n  create: (booking) => client.post('/bookings', booking).then((r) => r.data),\n  remove: (id) => client.delete(`/bookings/${id}`),\n};\n"
+        },
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — mốc 11: dữ liệu từ json-server — trạng thái tải / lỗi + thử lại trong layout\nimport { Suspense } from 'react';\nimport { Container, Nav, Navbar } from 'react-bootstrap';\nimport { Navigate, NavLink, Route, Routes } from 'react-router-dom';\nimport StudentArea from './components/StudentArea';\nimport { BookingProvider, useBookings } from './context/BookingContext';\nimport { StudentProvider } from './context/StudentContext';\nimport { ROOMS } from './data/seed';\nimport RoomsPage from './pages/RoomsPage';\nimport { lazyWithPreload, withDelay } from './utils/lazy';\n\n// trang danh sách (trang mở đầu) giữ trong bundle chính; hai trang còn lại tách chunk\nconst RoomPage = lazyWithPreload(withDelay(() => import('./pages/RoomPage'), 400));\nconst MyBookingsPage = lazyWithPreload(withDelay(() => import('./pages/MyBookingsPage'), 400));\n\nfunction Shell() {\n  const { bookings, status, error, reload } = useBookings();\n  return (\n    <>\n      <Navbar bg=\"primary\" variant=\"dark\" expand=\"md\" id=\"app-nav\">\n        <Container>\n          <Navbar.Brand id=\"title\">CT Booking</Navbar.Brand>\n          <Nav className=\"me-auto\">\n            <Nav.Link as={NavLink} to=\"/rooms\" id=\"nav-rooms\">Rooms</Nav.Link>\n            <Nav.Link as={NavLink} to=\"/my-bookings\" id=\"nav-my\" onMouseEnter={MyBookingsPage.preload} onFocus={MyBookingsPage.preload}>My bookings</Nav.Link>\n          </Nav>\n          <Navbar.Text id=\"summary\" className=\"text-white me-3\">{ROOMS.length} rooms · {bookings.length} bookings today</Navbar.Text>\n          <StudentArea />\n        </Container>\n      </Navbar>\n      <Container className=\"py-4\">\n        {status === 'loading' && <p id=\"bookings-loading\" className=\"text-muted\">Loading bookings…</p>}\n        {status === 'error' && (\n          <div>\n            <p id=\"bookings-error\" className=\"error\">Could not load bookings ({error})</p>\n            <button id=\"retry\" type=\"button\" className=\"btn btn-outline-danger btn-sm\" onClick={reload}>Retry</button>\n          </div>\n        )}\n        {status === 'ready' && (\n        <Suspense fallback={<p id=\"page-loading\" className=\"text-muted\">Loading page…</p>}>\n        <Routes>\n          <Route path=\"/\" element={<Navigate to=\"/rooms\" replace />} />\n          <Route path=\"/rooms\" element={<RoomsPage />} />\n          <Route path=\"/rooms/:id\" element={<RoomPage />} />\n          <Route path=\"/my-bookings\" element={<MyBookingsPage />} />\n          <Route path=\"*\" element={<p id=\"page-404\">Page not found</p>} />\n        </Routes>\n        </Suspense>\n        )}\n      </Container>\n    </>\n  );\n}\n\nexport default function App() {\n  return (\n    <StudentProvider>\n      <BookingProvider>\n        <Shell />\n      </BookingProvider>\n    </StudentProvider>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Khi dữ liệu nằm trên server, context trở thành \"bộ nhớ đệm\" của server: tải lúc đầu, cập nhật sau mỗi request thành công. Id do server cấp; giao diện chờ request xong mới điều hướng và giữ nguyên trang khi lỗi.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "thuVien": [
+          "react-bootstrap",
+          "bootstrap",
+          "prop-types",
+          "react-router-dom",
+          "axios"
+        ],
+        "url": "/rooms",
+        "jsonServer": {
+          "base": "http://localhost:9999",
+          "db": {
+            "bookings": [
+              {
+                "id": 1,
+                "roomId": 1,
+                "student": "HE180001",
+                "name": "An",
+                "start": "08:00",
+                "end": "09:30",
+                "purpose": "SWT301 review"
+              },
+              {
+                "id": 2,
+                "roomId": 1,
+                "student": "HE180002",
+                "name": "Binh",
+                "start": "10:00",
+                "end": "11:00",
+                "purpose": "FER202 project"
+              },
+              {
+                "id": 3,
+                "roomId": 2,
+                "student": "HE180003",
+                "name": "Cuong",
+                "start": "09:00",
+                "end": "10:30",
+                "purpose": "Group meeting"
+              }
+            ]
+          }
+        },
+        "kiem": [
+          {
+            "nhom": "f1",
+            "moTa": "Loading state while bookings are fetched",
+            "url": "/rooms",
+            "jsonServer": {
+              "base": "http://localhost:9999",
+              "db": {
+                "bookings": [
+                  {
+                    "id": 1,
+                    "roomId": 1,
+                    "student": "HE180001",
+                    "name": "An",
+                    "start": "08:00",
+                    "end": "09:30",
+                    "purpose": "SWT301 review"
+                  },
+                  {
+                    "id": 2,
+                    "roomId": 1,
+                    "student": "HE180002",
+                    "name": "Binh",
+                    "start": "10:00",
+                    "end": "11:00",
+                    "purpose": "FER202 project"
+                  },
+                  {
+                    "id": 3,
+                    "roomId": 2,
+                    "student": "HE180003",
+                    "name": "Cuong",
+                    "start": "09:00",
+                    "end": "10:30",
+                    "purpose": "Group meeting"
+                  }
+                ]
+              },
+              "treMs": 900
+            },
+            "kiem": "text",
+            "selector": "#bookings-loading",
+            "giaTri": "Loading bookings…"
+          },
+          {
+            "nhom": "f1",
+            "moTa": "Bookings come from the server",
+            "url": "/rooms",
+            "kiem": "danh-sach-text",
+            "selector": "#summary, .room-count",
+            "mongDoi": [
+              "3 rooms · 3 bookings today",
+              "2 bookings today",
+              "1 booking today",
+              "0 bookings today"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f1",
+            "an": true,
+            "moTa": "GET /bookings via the axios instance",
+            "url": "/rooms",
+            "kiem": "goi-fetch",
+            "khop": "^GET http://localhost:9999/bookings$",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Booking is POSTed with the server id",
+            "url": "/rooms",
+            "kiem": "du-lieu-server",
+            "bang": "bookings",
+            "chua": {
+              "id": 4,
+              "roomId": 1,
+              "student": "HE180010",
+              "start": "11:00",
+              "end": "12:00",
+              "purpose": "Study React"
+            },
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#login-name",
+                "giaTri": "Lan"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#login-code",
+                "giaTri": "HE180010"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#login-form"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#room-1 .btn-select",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 700
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#room-page .slot:nth-child(2)",
+                "lan": 1
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#purpose",
+                "giaTri": "Study React"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#booking-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 800
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "moTa": "and shows in My bookings",
+            "url": "/rooms",
+            "kiem": "danh-sach-text",
+            "selector": "#booking-success, .my-booking-text",
+            "mongDoi": [
+              "Booked Room A1 11:00–12:00 for Lan",
+              "Room A1 · 11:00–12:00 (60 min)"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#login-name",
+                "giaTri": "Lan"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#login-code",
+                "giaTri": "HE180010"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#login-form"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#room-1 .btn-select",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 700
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#room-page .slot:nth-child(2)",
+                "lan": 1
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#purpose",
+                "giaTri": "Study React"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#booking-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 800
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "an": true,
+            "moTa": "Failed POST keeps the user on the page with an error",
+            "url": "/rooms",
+            "fetchGia": {
+              "POST http://localhost:9999/bookings": {
+                "status": 500,
+                "text": "boom"
+              }
+            },
+            "kiem": "danh-sach-text",
+            "selector": "#save-error, #room-title",
+            "mongDoi": [
+              "Room A1",
+              "Could not save the booking, please try again"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#login-name",
+                "giaTri": "Lan"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#login-code",
+                "giaTri": "HE180010"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#login-form"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#room-1 .btn-select",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 700
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#room-page .slot:nth-child(2)",
+                "lan": 1
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#purpose",
+                "giaTri": "Study React"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#booking-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 800
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Cancel sends DELETE",
+            "url": "/my-bookings",
+            "kiem": "du-lieu-server",
+            "bang": "bookings",
+            "khongChua": {
+              "id": 1
+            },
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#login-name",
+                "giaTri": "An"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#login-code",
+                "giaTri": "HE180001"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#login-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 700
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".my-booking .btn-cancel",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "an": true,
+            "moTa": "Cancelled booking disappears from the list",
+            "url": "/my-bookings",
+            "kiem": "text",
+            "selector": "#my-bookings .card-body",
+            "giaTri": "You have no bookings today",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#login-name",
+                "giaTri": "An"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#login-code",
+                "giaTri": "HE180001"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#login-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 700
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".my-booking .btn-cancel",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Load error with retry",
+            "url": "/rooms",
+            "jsonServer": {
+              "base": "http://localhost:9999",
+              "db": {}
+            },
+            "kiem": "danh-sach-text",
+            "selector": "#bookings-error, #retry",
+            "mongDoi": [
+              "Could not load bookings (Request failed with status code 404)",
+              "Retry"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Retry fetches again",
+            "url": "/rooms",
+            "jsonServer": {
+              "base": "http://localhost:9999",
+              "db": {}
+            },
+            "kiem": "goi-fetch",
+            "khop": "/bookings$",
+            "min": 2,
+            "max": 2,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#retry",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Base URL from .env in one axios instance",
+            "kiem": "ma-nguon",
+            "tep": "src/api/client.js",
+            "khop": "axios\\.create\\(\\s*\\{\\s*baseURL:\\s*process\\.env\\.REACT_APP_API_URL"
+          },
+          {
+            "nhom": "f5",
+            "an": true,
+            "moTa": "No more localStorage for bookings (server is the source of truth)",
+            "kiem": "ma-nguon",
+            "tep": "src/context/BookingContext.js",
+            "khop": "localStorage",
+            "phuDinh": true
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. Load from the API",
+            "diem": 2.5
+          },
+          {
+            "ma": "f2",
+            "ten": "2. Create with POST",
+            "diem": 3
+          },
+          {
+            "ma": "f3",
+            "ten": "3. Cancel with DELETE",
+            "diem": 2
+          },
+          {
+            "ma": "f4",
+            "ten": "4. Error & retry",
+            "diem": 1.5
+          },
+          {
+            "ma": "f5",
+            "ten": "5. HTTP layer",
+            "diem": 1
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "project",
+      "mistakesJson": [
+        {
+          "loi": "Quên await trong RoomPage ⇒ navigate với saved là Promise."
+        },
+        {
+          "loi": "Xoá khỏi state trước khi DELETE thành công rồi không hoàn tác khi lỗi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "source of truth",
+          "vi": "nguồn sự thật — nơi dữ liệu chính thức nằm"
+        },
+        {
+          "en": "rubric",
+          "vi": "thang điểm theo tiêu chí"
+        }
+      ],
+      "demoHtml": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>CT Booking · Milestone 11 — json-server API with axios (load · POST · DELETE · retry) — Live demo</title>\n<script src=\"https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-bootstrap@2.10.5/dist/react-bootstrap.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/prop-types@15.8.1/prop-types.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/@remix-run/router@1.19.2/dist/router.umd.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-router@6.26.2/dist/umd/react-router.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-router-dom@6.26.2/dist/umd/react-router-dom.production.min.js\" crossorigin=\"anonymous\"></script>\n<script>fetch(\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css\").then(function(r){return r.text()}).then(function(t){var s=document.createElement('style');s.textContent=t;document.head.insertBefore(s,document.head.firstChild)}).catch(function(){})</script>\n</head><body><div id=\"root\"></div><script>(function(){\nvar M={\"src/index.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\"); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\\nvar _react = require('react'); var _react2 = _interopRequireDefault(_react);\\nvar _client = require('react-dom/client'); var _client2 = _interopRequireDefault(_client);\\nrequire('bootstrap/dist/css/bootstrap.min.css');\\nvar _reactrouterdom = require('react-router-dom');\\nvar _App = require('./App'); var _App2 = _interopRequireDefault(_App);\\n\\nconst root = _client2.default.createRoot(document.getElementById('root'));\\nroot.render(\\n  _jsxruntime.jsx.call(void 0, _react2.default.StrictMode, { children: \\n    _jsxruntime.jsx.call(void 0, _reactrouterdom.BrowserRouter, { children: \\n        _jsxruntime.jsx.call(void 0, _App2.default, {} )\\n      })\\n  })\\n);\\n\",\"src/data/seed.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/data/seed.js — dữ liệu mẫu (đã cho)\\n const ROOMS = [\\n  {\\n    id: 1,\\n    name: 'Room A1',\\n    capacity: 4,\\n    floor: 1,\\n    features: [\\n      'TV'\\n    ]\\n  },\\n  {\\n    id: 2,\\n    name: 'Room A2',\\n    capacity: 6,\\n    floor: 1,\\n    features: [\\n      'Whiteboard',\\n      'TV'\\n    ]\\n  },\\n  {\\n    id: 3,\\n    name: 'Room B1',\\n    capacity: 8,\\n    floor: 2,\\n    features: [\\n      'Whiteboard'\\n    ]\\n  }\\n]; exports.ROOMS = ROOMS;\\n\\n const BOOKINGS = [\\n  {\\n    id: 1,\\n    roomId: 1,\\n    student: 'HE180001',\\n    name: 'An',\\n    start: '08:00',\\n    end: '09:30',\\n    purpose: 'SWT301 review'\\n  },\\n  {\\n    id: 2,\\n    roomId: 1,\\n    student: 'HE180002',\\n    name: 'Binh',\\n    start: '10:00',\\n    end: '11:00',\\n    purpose: 'FER202 project'\\n  },\\n  {\\n    id: 3,\\n    roomId: 2,\\n    student: 'HE180003',\\n    name: 'Cuong',\\n    start: '09:00',\\n    end: '10:30',\\n    purpose: 'Group meeting'\\n  }\\n]; exports.BOOKINGS = BOOKINGS;\\n\",\"src/domain/booking.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _nullishCoalesce(lhs, rhsFn) { if (lhs != null) { return lhs; } else { return rhsFn(); } }// src/domain/booking.js — lõi nghiệp vụ từ mốc 2 (ES module)\\nconst OPEN = '08:00';\\nconst CLOSE = '17:00';\\nconst MAX_MINUTES = 120;\\n\\n// '08:30' ⇒ 510 phút kể từ 00:00\\n function toMinutes(time) {\\n  const [h, m] = time.split(':').map(Number);\\n  return h * 60 + m;\\n} exports.toMinutes = toMinutes;\\n\\n// 510 ⇒ '08:30'\\n function toTime(minutes) {\\n  return `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`;\\n} exports.toTime = toTime;\\n\\n// hai khoảng [start, end) chồng nhau khi mỗi cái bắt đầu trước khi cái kia kết thúc\\n function overlaps(a, b) {\\n  return toMinutes(a.start) \\u003c toMinutes(b.end) && toMinutes(b.start) \\u003c toMinutes(a.end);\\n} exports.overlaps = overlaps;\\n\\n// danh sách lỗi (rỗng = hợp lệ); chỉ so trùng với booking CÙNG phòng, khác id\\n function validateBooking(booking, existing = []) {\\n  const errors = [];\\n  const s = toMinutes(booking.start);\\n  const e = toMinutes(booking.end);\\n  if (s >= e) errors.push('Start must be before end');\\n  if (s \\u003c toMinutes(OPEN) || e > toMinutes(CLOSE)) errors.push('Outside opening hours (08:00–17:00)');\\n  if (e - s > MAX_MINUTES) errors.push('Maximum 2 hours per booking');\\n  const clash = existing.some((x) => x.roomId === booking.roomId && x.id !== booking.id && overlaps(x, booking));\\n  if (clash) errors.push('Overlaps with an existing booking');\\n  return errors;\\n} exports.validateBooking = validateBooking;\\n\\n// giờ bắt đầu của các ô trống step phút trong giờ mở cửa\\n function freeSlots(roomId, bookings, step = 30) {\\n  const taken = bookings.filter((b) => b.roomId === roomId);\\n  const slots = [];\\n  for (let t = toMinutes(OPEN); t + step \\u003c= toMinutes(CLOSE); t += step) {\\n    const slot = { start: toTime(t), end: toTime(t + step) };\\n    if (!taken.some((b) => overlaps(b, slot))) slots.push(slot.start);\\n  }\\n  return slots;\\n} exports.freeSlots = freeSlots;\\n\\n// { roomId: số booking } bằng reduce, không sửa dữ liệu vào\\n function countByRoom(bookings) {\\n  return bookings.reduce((acc, b) => ({ ...acc, [b.roomId]: (_nullishCoalesce(acc[b.roomId], () => ( 0))) + 1 }), {});\\n} exports.countByRoom = countByRoom;\\n\\n// bản sao đã sắp: theo phòng rồi theo giờ bắt đầu\\n function sortBookings(list) {\\n  return [...list].sort((a, b) => a.roomId - b.roomId || toMinutes(a.start) - toMinutes(b.start));\\n} exports.sortBookings = sortBookings;\\n\\n// '08:00–09:30 (90 min)'\\n function formatRange({ start, end }) {\\n  return `${start}–${end} (${toMinutes(end) - toMinutes(start)} min)`;\\n} exports.formatRange = formatRange;\\n\\n// cộng phút vào một giờ: addMinutes('09:30', 60) ⇒ '10:30'\\n function addMinutes(time, minutes) {\\n  return toTime(toMinutes(time) + minutes);\\n} exports.addMinutes = addMinutes;\\n\",\"src/components/Schedule.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/components/Schedule.js — danh sách lượt đặt của một phòng\\nvar _proptypes = require('prop-types'); var _proptypes2 = _interopRequireDefault(_proptypes);\\nvar _reactbootstrap = require('react-bootstrap');\\nvar _booking = require('../domain/booking');\\n\\n function Schedule({ bookings }) {\\n  if (bookings.length === 0) return _jsxruntime.jsx.call(void 0, 'p', { className: \\\"no-bookings text-muted mb-0 px-3\\\"   , children: \\\"No bookings yet\\\"  });\\n  return (\\n    _jsxruntime.jsx.call(void 0, _reactbootstrap.ListGroup, { variant: \\\"flush\\\", className: \\\"schedule\\\", children: \\n      bookings.map((b) => (\\n        _jsxruntime.jsxs.call(void 0, _reactbootstrap.ListGroup.Item, { className: \\\"booking-row\\\", children: [_booking.formatRange.call(void 0, b), \\\" · \\\"  , b.name, \\\" · \\\"  , b.purpose]}, b.id)\\n      ))\\n    })\\n  );\\n} exports.default = Schedule;\\n\\nSchedule.propTypes = {\\n  bookings: _proptypes2.default.arrayOf(\\n    _proptypes2.default.shape({ id: _proptypes2.default.oneOfType([_proptypes2.default.number, _proptypes2.default.string]).isRequired, start: _proptypes2.default.string.isRequired, end: _proptypes2.default.string.isRequired }),\\n  ).isRequired,\\n};\\n\",\"src/components/RoomCard.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/components/RoomCard.js — thẻ phòng: chỉ hiển thị + báo cha khi được chọn\\nvar _proptypes = require('prop-types'); var _proptypes2 = _interopRequireDefault(_proptypes);\\nvar _reactbootstrap = require('react-bootstrap');\\nvar _Schedule = require('./Schedule'); var _Schedule2 = _interopRequireDefault(_Schedule);\\n\\n function RoomCard({ room, bookings, freeCount, firstFree, selected, onSelect }) {\\n  const n = bookings.length;\\n  return (\\n    _jsxruntime.jsxs.call(void 0, _reactbootstrap.Card, { className: `room-card h-100 shadow-sm${selected ? ' selected border-primary' : ''}`, id: `room-${room.id}`, children: [\\n      _jsxruntime.jsxs.call(void 0, _reactbootstrap.Card.Body, { children: [\\n        _jsxruntime.jsx.call(void 0, _reactbootstrap.Card.Title, { className: \\\"room-name\\\", children: room.name})\\n        , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Card.Subtitle, { className: \\\"room-meta mb-2 text-muted\\\"  , children: [room.capacity, \\\" seats · Floor \\\"    , room.floor]})\\n        , _jsxruntime.jsx.call(void 0, 'div', { className: \\\"mb-2\\\", children: \\n          room.features.map((f) => _jsxruntime.jsx.call(void 0, _reactbootstrap.Badge, { bg: \\\"info\\\", className: \\\"feature me-1\\\" , children: f}, f))\\n        })\\n        , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Card.Text, { className: \\\"room-count\\\", children: [n, \\\" \\\" , n === 1 ? 'booking' : 'bookings', \\\" today\\\" ]})\\n      ]})\\n      , _jsxruntime.jsx.call(void 0, _Schedule2.default, { bookings: bookings,} )\\n      , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Card.Footer, { className: \\\"d-flex justify-content-between align-items-center\\\"  , children: [\\n        _jsxruntime.jsx.call(void 0, _reactbootstrap.Badge, { bg: freeCount > 0 ? 'success' : 'danger', className: \\\"first-free\\\", children: \\n          freeCount > 0 ? `First free slot: ${firstFree}` : 'Fully booked'\\n        })\\n        , _jsxruntime.jsx.call(void 0, _reactbootstrap.Button, { size: \\\"sm\\\", className: \\\"btn-select\\\", variant: selected ? 'primary' : 'outline-primary', disabled: freeCount === 0, onClick: () => onSelect(room.id), children: \\n          selected ? 'Selected' : 'Select'\\n        })\\n      ]})\\n    ]})\\n  );\\n} exports.default = RoomCard;\\n\\nRoomCard.propTypes = {\\n  room: _proptypes2.default.shape({\\n    id: _proptypes2.default.number.isRequired,\\n    name: _proptypes2.default.string.isRequired,\\n    capacity: _proptypes2.default.number.isRequired,\\n    floor: _proptypes2.default.number.isRequired,\\n    features: _proptypes2.default.arrayOf(_proptypes2.default.string).isRequired,\\n  }).isRequired,\\n  bookings: _proptypes2.default.array.isRequired,\\n  freeCount: _proptypes2.default.number.isRequired,\\n  firstFree: _proptypes2.default.string,\\n  selected: _proptypes2.default.bool,\\n  onSelect: _proptypes2.default.func.isRequired,\\n};\\n\",\"src/components/SlotPicker.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/components/SlotPicker.js — component ĐIỀU KHIỂN: cha giữ value, con báo onChange\\nvar _proptypes = require('prop-types'); var _proptypes2 = _interopRequireDefault(_proptypes);\\nvar _reactbootstrap = require('react-bootstrap');\\n\\n function SlotPicker({ slots, value, onChange }) {\\n  if (slots.length === 0) return _jsxruntime.jsx.call(void 0, 'p', { className: \\\"text-muted\\\", children: \\\"No free slots\\\"  });\\n  return (\\n    _jsxruntime.jsx.call(void 0, 'div', { className: \\\"slot-picker\\\", children: \\n      slots.map((s) => (\\n        _jsxruntime.jsx.call(void 0, _reactbootstrap.Button, { size: \\\"sm\\\", className: \\\"slot me-1 mb-1\\\"  , variant: s === value ? 'primary' : 'outline-primary', active: s === value, onClick: () => onChange(s), children: \\n          s\\n        }, s)\\n      ))\\n    })\\n  );\\n} exports.default = SlotPicker;\\n\\nSlotPicker.propTypes = {\\n  slots: _proptypes2.default.arrayOf(_proptypes2.default.string).isRequired,\\n  value: _proptypes2.default.string,\\n  onChange: _proptypes2.default.func.isRequired,\\n};\\n\",\"src/context/BookingContext.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/context/BookingContext.js — mốc 11: server (json-server) là nguồn sự thật; reducer + trạng thái tải\\nvar _react = require('react');\\nvar _client = require('../api/client');\\n\\nconst BookingContext = _react.createContext.call(void 0, null);\\n\\n function bookingsReducer(state, action) {\\n  switch (action.type) {\\n    case 'LOADING':\\n      return { ...state, status: 'loading', error: null };\\n    case 'LOADED':\\n      return { status: 'ready', error: null, items: action.items };\\n    case 'FAILED':\\n      return { ...state, status: 'error', error: action.error };\\n    case 'ADD':\\n      return { ...state, items: [...state.items, action.booking] };\\n    case 'CANCEL':\\n      return { ...state, items: state.items.filter((b) => b.id !== action.id) };\\n    default:\\n      return state;\\n  }\\n} exports.bookingsReducer = bookingsReducer;\\n\\n function BookingProvider({ children }) {\\n  const [state, dispatch] = _react.useReducer.call(void 0, bookingsReducer, { status: 'loading', error: null, items: [] });\\n\\n  const load = _react.useCallback.call(void 0, async () => {\\n    dispatch({ type: 'LOADING' });\\n    try {\\n      dispatch({ type: 'LOADED', items: await _client.bookingsApi.list() });\\n    } catch (err) {\\n      dispatch({ type: 'FAILED', error: err.message });\\n    }\\n  }, []);\\n\\n  _react.useEffect.call(void 0, () => {\\n    load();\\n  }, [load]);\\n\\n  const value = _react.useMemo.call(void 0, () => {\\n    const addBooking = async (booking) => {\\n      const saved = await _client.bookingsApi.create(booking); // id do server cấp\\n      dispatch({ type: 'ADD', booking: saved });\\n      return saved;\\n    };\\n    const cancelBooking = async (id) => {\\n      await _client.bookingsApi.remove(id);\\n      dispatch({ type: 'CANCEL', id });\\n    };\\n    return { bookings: state.items, status: state.status, error: state.error, reload: load, addBooking, cancelBooking };\\n  }, [state, load]);\\n\\n  return _jsxruntime.jsx.call(void 0, BookingContext.Provider, { value: value, children: children});\\n} exports.BookingProvider = BookingProvider;\\n\\n function useBookings() {\\n  const ctx = _react.useContext.call(void 0, BookingContext);\\n  if (!ctx) throw new Error('useBookings must be used inside BookingProvider');\\n  return ctx;\\n} exports.useBookings = useBookings;\\n\",\"src/context/StudentContext.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/context/StudentContext.js — mốc 8: nhớ sinh viên qua localStorage \\\"ctb-student\\\"\\nvar _react = require('react');\\n\\nconst StudentContext = _react.createContext.call(void 0, null);\\nconst KEY = 'ctb-student';\\n\\n function StudentProvider({ children }) {\\n  const [student, setStudent] = _react.useState.call(void 0, () => {\\n    try {\\n      return JSON.parse(localStorage.getItem(KEY));\\n    } catch (e) {\\n      return null;\\n    }\\n  });\\n\\n  _react.useEffect.call(void 0, () => {\\n    if (student) localStorage.setItem(KEY, JSON.stringify(student));\\n    else localStorage.removeItem(KEY);\\n  }, [student]);\\n\\n  const value = _react.useMemo.call(void 0, \\n    () => ({ student, login: (name, code) => setStudent({ name, code }), logout: () => setStudent(null) }),\\n    [student],\\n  );\\n  return _jsxruntime.jsx.call(void 0, StudentContext.Provider, { value: value, children: children});\\n} exports.StudentProvider = StudentProvider;\\n\\n function useStudent() {\\n  const ctx = _react.useContext.call(void 0, StudentContext);\\n  if (!ctx) throw new Error('useStudent must be used inside StudentProvider');\\n  return ctx;\\n} exports.useStudent = useStudent;\\n\",\"src/components/StudentArea.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/components/StudentArea.js — đăng nhập nhanh bằng tên + mã SV (đọc/ghi qua context)\\nvar _react = require('react');\\nvar _reactbootstrap = require('react-bootstrap');\\nvar _StudentContext = require('../context/StudentContext');\\n\\n function StudentArea() {\\n  const { student, login, logout } = _StudentContext.useStudent.call(void 0, );\\n  const [name, setName] = _react.useState.call(void 0, '');\\n  const [code, setCode] = _react.useState.call(void 0, '');\\n\\n  if (student) {\\n    return (\\n      _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"d-flex align-items-center gap-2 text-white\\\"   , children: [\\n        _jsxruntime.jsxs.call(void 0, 'span', { id: \\\"current-student\\\", children: [student.name, \\\" (\\\" , student.code, \\\")\\\"]})\\n        , _jsxruntime.jsx.call(void 0, _reactbootstrap.Button, { id: \\\"logout\\\", size: \\\"sm\\\", variant: \\\"light\\\", onClick: logout, children: \\\"Log out\\\" })\\n      ]})\\n    );\\n  }\\n  const submit = (e) => {\\n    e.preventDefault();\\n    if (name.trim() && /^[A-Z]{2}\\\\d{6}$/.test(code.trim())) login(name.trim(), code.trim());\\n  };\\n  return (\\n    _jsxruntime.jsxs.call(void 0, _reactbootstrap.Form, { id: \\\"login-form\\\", className: \\\"d-flex gap-2\\\" , onSubmit: submit, children: [\\n      _jsxruntime.jsx.call(void 0, _reactbootstrap.Form.Control, { id: \\\"login-name\\\", size: \\\"sm\\\", placeholder: \\\"Name\\\", value: name, onChange: (e) => setName(e.target.value),} )\\n      , _jsxruntime.jsx.call(void 0, _reactbootstrap.Form.Control, { id: \\\"login-code\\\", size: \\\"sm\\\", placeholder: \\\"HE180001\\\", value: code, onChange: (e) => setCode(e.target.value),} )\\n      , _jsxruntime.jsx.call(void 0, _reactbootstrap.Button, { id: \\\"login\\\", size: \\\"sm\\\", variant: \\\"light\\\", type: \\\"submit\\\", children: \\\"Log in\\\" })\\n    ]})\\n  );\\n} exports.default = StudentArea;\\n\",\"src/components/MyBookings.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _optionalChain(ops) { let lastAccessLHS = undefined; let value = ops[0]; let i = 1; while (i \\u003c ops.length) { const op = ops[i]; const fn = ops[i + 1]; i += 2; if ((op === 'optionalAccess' || op === 'optionalCall') && value == null) { return undefined; } if (op === 'access' || op === 'optionalAccess') { lastAccessLHS = value; value = fn(value); } else if (op === 'call' || op === 'optionalCall') { value = fn((...args) => value.call(lastAccessLHS, ...args)); lastAccessLHS = undefined; } } return value; }// src/components/MyBookings.js — lượt đặt của sinh viên đang đăng nhập, có huỷ\\nvar _reactbootstrap = require('react-bootstrap');\\nvar _BookingContext = require('../context/BookingContext');\\nvar _StudentContext = require('../context/StudentContext');\\nvar _seed = require('../data/seed');\\nvar _booking = require('../domain/booking');\\n\\n function MyBookings() {\\n  const { student } = _StudentContext.useStudent.call(void 0, );\\n  const { bookings, cancelBooking } = _BookingContext.useBookings.call(void 0, );\\n  if (!student) return _jsxruntime.jsx.call(void 0, 'p', { id: \\\"my-bookings\\\", className: \\\"text-muted\\\", children: \\\"Log in to see your bookings\\\"     });\\n  const mine = _booking.sortBookings.call(void 0, bookings.filter((b) => b.student === student.code));\\n  return (\\n    _jsxruntime.jsxs.call(void 0, _reactbootstrap.Card, { id: \\\"my-bookings\\\", className: \\\"mt-4\\\", children: [\\n      _jsxruntime.jsxs.call(void 0, _reactbootstrap.Card.Header, { children: [\\\"My bookings (\\\"  , mine.length, \\\")\\\"]})\\n      , mine.length === 0 ? (\\n        _jsxruntime.jsx.call(void 0, _reactbootstrap.Card.Body, { className: \\\"text-muted\\\", children: \\\"You have no bookings today\\\"    })\\n      ) : (\\n        _jsxruntime.jsx.call(void 0, _reactbootstrap.ListGroup, { variant: \\\"flush\\\", children: \\n          mine.map((b) => (\\n            _jsxruntime.jsxs.call(void 0, _reactbootstrap.ListGroup.Item, { className: \\\"my-booking d-flex justify-content-between\\\"  , children: [\\n              _jsxruntime.jsxs.call(void 0, 'span', { className: \\\"my-booking-text\\\", children: [_optionalChain([_seed.ROOMS, 'access', _ => _.find, 'call', _2 => _2((r) => r.id === b.roomId), 'optionalAccess', _3 => _3.name]), \\\" · \\\"  , _booking.formatRange.call(void 0, b)]})\\n              , _jsxruntime.jsx.call(void 0, _reactbootstrap.Button, { size: \\\"sm\\\", variant: \\\"outline-danger\\\", className: \\\"btn-cancel\\\", onClick: () => cancelBooking(b.id), children: \\\"Cancel\\\"})\\n            ]}, b.id)\\n          ))\\n        })\\n      )\\n    ]})\\n  );\\n} exports.default = MyBookings;\\n\",\"src/hooks/useFreeSlots.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/hooks/useFreeSlots.js — custom hook: ô trống của một phòng, chỉ tính lại khi bookings/phòng đổi\\nvar _react = require('react');\\nvar _BookingContext = require('../context/BookingContext');\\nvar _booking = require('../domain/booking');\\n\\n function useFreeSlots(roomId) {\\n  const { bookings } = _BookingContext.useBookings.call(void 0, );\\n  return _react.useMemo.call(void 0, () => (roomId == null ? [] : _booking.freeSlots.call(void 0, roomId, bookings)), [roomId, bookings]);\\n} exports.useFreeSlots = useFreeSlots;\\n\",\"src/pages/RoomsPage.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/pages/RoomsPage.js — /rooms: lưới phòng; \\\"Book\\\" điều hướng tới /rooms/:id\\nvar _reactbootstrap = require('react-bootstrap');\\nvar _reactrouterdom = require('react-router-dom');\\nvar _RoomCard = require('../components/RoomCard'); var _RoomCard2 = _interopRequireDefault(_RoomCard);\\nvar _BookingContext = require('../context/BookingContext');\\nvar _seed = require('../data/seed');\\nvar _booking = require('../domain/booking');\\n\\n function RoomsPage() {\\n  const { bookings } = _BookingContext.useBookings.call(void 0, );\\n  const navigate = _reactrouterdom.useNavigate.call(void 0, );\\n  const sorted = _booking.sortBookings.call(void 0, bookings);\\n  return (\\n    _jsxruntime.jsx.call(void 0, _reactbootstrap.Row, { className: \\\"g-3\\\", children: \\n      _seed.ROOMS.map((room) => {\\n        const free = _booking.freeSlots.call(void 0, room.id, bookings);\\n        return (\\n          _jsxruntime.jsx.call(void 0, _reactbootstrap.Col, { xs: 12, md: 6, lg: 4, children: \\n            _jsxruntime.jsx.call(void 0, _RoomCard2.default, { room: room, bookings: sorted.filter((b) => b.roomId === room.id), freeCount: free.length, firstFree: free[0], selected: false, onSelect: (id) => navigate(`/rooms/${id}`),} )\\n          }, room.id)\\n        );\\n      })\\n    })\\n  );\\n} exports.default = RoomsPage;\\n\",\"src/pages/RoomPage.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; } function _nullishCoalesce(lhs, rhsFn) { if (lhs != null) { return lhs; } else { return rhsFn(); } } function _optionalChain(ops) { let lastAccessLHS = undefined; let value = ops[0]; let i = 1; while (i \\u003c ops.length) { const op = ops[i]; const fn = ops[i + 1]; i += 2; if ((op === 'optionalAccess' || op === 'optionalCall') && value == null) { return undefined; } if (op === 'access' || op === 'optionalAccess') { lastAccessLHS = value; value = fn(value); } else if (op === 'call' || op === 'optionalCall') { value = fn((...args) => value.call(lastAccessLHS, ...args)); lastAccessLHS = undefined; } } return value; }// src/pages/RoomPage.js — mốc 11: đặt phòng gọi POST (bất đồng bộ); lỗi lưu hiện #save-error\\nvar _react = require('react');\\nvar _reactbootstrap = require('react-bootstrap');\\nvar _reactrouterdom = require('react-router-dom');\\nvar _Schedule = require('../components/Schedule'); var _Schedule2 = _interopRequireDefault(_Schedule);\\nvar _SlotPicker = require('../components/SlotPicker'); var _SlotPicker2 = _interopRequireDefault(_SlotPicker);\\nvar _BookingForm = require('../components/BookingForm'); var _BookingForm2 = _interopRequireDefault(_BookingForm);\\nvar _BookingContext = require('../context/BookingContext');\\nvar _StudentContext = require('../context/StudentContext');\\nvar _useFreeSlots = require('../hooks/useFreeSlots');\\nvar _seed = require('../data/seed');\\nvar _booking = require('../domain/booking');\\n\\n function RoomPage() {\\n  const { id } = _reactrouterdom.useParams.call(void 0, );\\n  const room = _seed.ROOMS.find((r) => r.id === Number(id));\\n  const { bookings, addBooking } = _BookingContext.useBookings.call(void 0, );\\n  const { student } = _StudentContext.useStudent.call(void 0, );\\n  const [slot, setSlot] = _react.useState.call(void 0, null);\\n  const [saveError, setSaveError] = _react.useState.call(void 0, '');\\n  const free = _useFreeSlots.useFreeSlots.call(void 0, room ? room.id : null);\\n  const navigate = _reactrouterdom.useNavigate.call(void 0, );\\n\\n  if (!room) {\\n    return (\\n      _jsxruntime.jsxs.call(void 0, 'div', { children: [\\n        _jsxruntime.jsx.call(void 0, 'p', { id: \\\"not-found\\\", children: \\\"Room not found\\\"  })\\n        , _jsxruntime.jsx.call(void 0, _reactrouterdom.Link, { to: \\\"/rooms\\\", id: \\\"back-to-rooms\\\", children: \\\"Back to rooms\\\"  })\\n      ]})\\n    );\\n  }\\n\\n  const book = async (booking) => {\\n    setSaveError('');\\n    let saved;\\n    try {\\n      saved = await addBooking(booking);\\n    } catch (e) {\\n      setSaveError('Could not save the booking, please try again');\\n      return;\\n    }\\n    navigate('/my-bookings', { state: { message: `Booked ${room.name} ${_booking.formatRange.call(void 0, saved).split(' (')[0]} for ${saved.name}` } });\\n  };\\n\\n  return (\\n    _jsxruntime.jsx.call(void 0, _reactbootstrap.Card, { id: \\\"room-page\\\", children: \\n      _jsxruntime.jsxs.call(void 0, _reactbootstrap.Card.Body, { children: [\\n        _jsxruntime.jsx.call(void 0, _reactbootstrap.Card.Title, { id: \\\"room-title\\\", children: room.name})\\n        , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Card.Subtitle, { className: \\\"mb-3 text-muted\\\" , children: [room.capacity, \\\" seats · Floor \\\"    , room.floor]})\\n        , _jsxruntime.jsx.call(void 0, _Schedule2.default, { bookings: _booking.sortBookings.call(void 0, bookings.filter((b) => b.roomId === room.id)),} )\\n        , _jsxruntime.jsx.call(void 0, 'h3', { className: \\\"h6 mt-3\\\" , children: \\\"Choose a start time\\\"   })\\n        , _jsxruntime.jsx.call(void 0, _SlotPicker2.default, { slots: free, value: slot, onChange: setSlot,} )\\n        , _jsxruntime.jsx.call(void 0, 'p', { id: \\\"selected-slot\\\", className: \\\"mt-2\\\", children: slot ? `Selected slot: ${slot}–${_booking.addMinutes.call(void 0, slot, 30)}` : 'Choose a start time'})\\n        , saveError && _jsxruntime.jsx.call(void 0, 'p', { id: \\\"save-error\\\", className: \\\"error\\\", children: saveError})\\n        , _jsxruntime.jsx.call(void 0, _BookingForm2.default, {\\n\\n          room: room,\\n          slot: slot,\\n          bookings: bookings,\\n          onBook: book,\\n          initial: student ? { name: student.name, student: student.code } : undefined,}, _nullishCoalesce(_optionalChain([student, 'optionalAccess', _ => _.code]), () => ( 'guest'))\\n        )\\n        , _jsxruntime.jsx.call(void 0, _reactrouterdom.Link, { to: \\\"/rooms\\\", id: \\\"back-to-rooms\\\", children: \\\"← All rooms\\\"  })\\n      ]})\\n    })\\n  );\\n} exports.default = RoomPage;\\n\",\"src/pages/MyBookingsPage.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; } function _optionalChain(ops) { let lastAccessLHS = undefined; let value = ops[0]; let i = 1; while (i \\u003c ops.length) { const op = ops[i]; const fn = ops[i + 1]; i += 2; if ((op === 'optionalAccess' || op === 'optionalCall') && value == null) { return undefined; } if (op === 'access' || op === 'optionalAccess') { lastAccessLHS = value; value = fn(value); } else if (op === 'call' || op === 'optionalCall') { value = fn((...args) => value.call(lastAccessLHS, ...args)); lastAccessLHS = undefined; } } return value; }// src/pages/MyBookingsPage.js — /my-bookings: thông báo từ location.state + danh sách của tôi\\nvar _reactrouterdom = require('react-router-dom');\\nvar _MyBookings = require('../components/MyBookings'); var _MyBookings2 = _interopRequireDefault(_MyBookings);\\n\\n function MyBookingsPage() {\\n  const { state } = _reactrouterdom.useLocation.call(void 0, );\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'div', { children: [\\n      _optionalChain([state, 'optionalAccess', _ => _.message]) && _jsxruntime.jsx.call(void 0, 'p', { id: \\\"booking-success\\\", className: \\\"success\\\", children: state.message})\\n      , _jsxruntime.jsx.call(void 0, _MyBookings2.default, {} )\\n    ]})\\n  );\\n} exports.default = MyBookingsPage;\\n\",\"src/components/BookingForm.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/components/BookingForm.js — mốc 8: thêm useRef + useEffect focus ô Purpose khi vừa chọn giờ\\nvar _react = require('react');\\nvar _proptypes = require('prop-types'); var _proptypes2 = _interopRequireDefault(_proptypes);\\nvar _reactbootstrap = require('react-bootstrap');\\nvar _booking = require('../domain/booking');\\n\\nconst EMPTY = { name: '', student: '', duration: '60', purpose: '' };\\n\\n function fieldErrors(values, slot) {\\n  const e = {};\\n  if (!slot) e.slot = 'Choose a start time first';\\n  if (values.name.trim().length \\u003c 2) e.name = 'Name is required';\\n  if (!/^[A-Z]{2}\\\\d{6}$/.test(values.student.trim())) e.student = 'Student code looks like HE180001';\\n  if (values.purpose.trim().length \\u003c 5) e.purpose = 'Purpose needs at least 5 characters';\\n  return e;\\n} exports.fieldErrors = fieldErrors;\\n\\n function BookingForm({ room, slot, bookings, onBook, initial = EMPTY }) {\\n  const [values, setValues] = _react.useState.call(void 0, { ...EMPTY, ...initial });\\n  const [errors, setErrors] = _react.useState.call(void 0, {});\\n  const [ruleErrors, setRuleErrors] = _react.useState.call(void 0, []);\\n  const purposeRef = _react.useRef.call(void 0, null);\\n\\n  _react.useEffect.call(void 0, () => {\\n    if (slot && purposeRef.current) purposeRef.current.focus(); // vừa chọn giờ ⇒ gõ mục đích ngay\\n  }, [slot]);\\n\\n  const handleChange = (e) => setValues((v) => ({ ...v, [e.target.name]: e.target.value }));\\n\\n  const handleSubmit = (e) => {\\n    e.preventDefault();\\n    const fe = fieldErrors(values, slot);\\n    setErrors(fe);\\n    setRuleErrors([]);\\n    if (Object.keys(fe).length > 0) return;\\n    const booking = {\\n      roomId: room.id,\\n      student: values.student.trim(),\\n      name: values.name.trim(),\\n      start: slot,\\n      end: _booking.addMinutes.call(void 0, slot, Number(values.duration)),\\n      purpose: values.purpose.trim(),\\n    };\\n    const rules = _booking.validateBooking.call(void 0, booking, bookings);\\n    if (rules.length > 0) {\\n      setRuleErrors(rules);\\n      return;\\n    }\\n    onBook(booking);\\n    setValues({ ...EMPTY, ...initial });\\n  };\\n\\n  return (\\n    _jsxruntime.jsxs.call(void 0, _reactbootstrap.Form, { id: \\\"booking-form\\\", noValidate: true, onSubmit: handleSubmit, children: [\\n      errors.slot && _jsxruntime.jsx.call(void 0, 'p', { className: \\\"error\\\", id: \\\"err-slot\\\", children: errors.slot})\\n      , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Form.Group, { className: \\\"mb-2\\\", controlId: \\\"name\\\", children: [\\n        _jsxruntime.jsx.call(void 0, _reactbootstrap.Form.Label, { children: \\\"Name\\\"})\\n        , _jsxruntime.jsx.call(void 0, _reactbootstrap.Form.Control, { name: \\\"name\\\", value: values.name, onChange: handleChange, isInvalid: !!errors.name,} )\\n        , errors.name && _jsxruntime.jsx.call(void 0, 'p', { className: \\\"error\\\", id: \\\"err-name\\\", children: errors.name})\\n      ]})\\n      , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Form.Group, { className: \\\"mb-2\\\", controlId: \\\"student\\\", children: [\\n        _jsxruntime.jsx.call(void 0, _reactbootstrap.Form.Label, { children: \\\"Student code\\\" })\\n        , _jsxruntime.jsx.call(void 0, _reactbootstrap.Form.Control, { name: \\\"student\\\", value: values.student, onChange: handleChange, isInvalid: !!errors.student,} )\\n        , errors.student && _jsxruntime.jsx.call(void 0, 'p', { className: \\\"error\\\", id: \\\"err-student\\\", children: errors.student})\\n      ]})\\n      , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Form.Group, { className: \\\"mb-2\\\", controlId: \\\"duration\\\", children: [\\n        _jsxruntime.jsx.call(void 0, _reactbootstrap.Form.Label, { children: \\\"Duration\\\"})\\n        , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Form.Select, { name: \\\"duration\\\", value: values.duration, onChange: handleChange, children: [\\n          _jsxruntime.jsx.call(void 0, 'option', { value: \\\"30\\\", children: \\\"30 min\\\" })\\n          , _jsxruntime.jsx.call(void 0, 'option', { value: \\\"60\\\", children: \\\"60 min\\\" })\\n          , _jsxruntime.jsx.call(void 0, 'option', { value: \\\"90\\\", children: \\\"90 min\\\" })\\n          , _jsxruntime.jsx.call(void 0, 'option', { value: \\\"120\\\", children: \\\"120 min\\\" })\\n        ]})\\n      ]})\\n      , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Form.Group, { className: \\\"mb-2\\\", controlId: \\\"purpose\\\", children: [\\n        _jsxruntime.jsx.call(void 0, _reactbootstrap.Form.Label, { children: \\\"Purpose\\\"})\\n        , _jsxruntime.jsx.call(void 0, _reactbootstrap.Form.Control, { ref: purposeRef, name: \\\"purpose\\\", value: values.purpose, onChange: handleChange, isInvalid: !!errors.purpose,} )\\n        , errors.purpose && _jsxruntime.jsx.call(void 0, 'p', { className: \\\"error\\\", id: \\\"err-purpose\\\", children: errors.purpose})\\n      ]})\\n      , ruleErrors.map((m) => _jsxruntime.jsx.call(void 0, 'p', { className: \\\"error rule-error\\\" , children: m}, m))\\n      , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Button, { id: \\\"btn-book\\\", type: \\\"submit\\\", children: [\\\"Book \\\" , room.name]})\\n    ]})\\n  );\\n} exports.default = BookingForm;\\n\\nBookingForm.propTypes = {\\n  room: _proptypes2.default.shape({ id: _proptypes2.default.number.isRequired, name: _proptypes2.default.string.isRequired }).isRequired,\\n  slot: _proptypes2.default.string,\\n  bookings: _proptypes2.default.array.isRequired,\\n  onBook: _proptypes2.default.func.isRequired,\\n  initial: _proptypes2.default.object,\\n};\\n\",\"src/utils/lazy.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/utils/lazy.js — giả lập mạng chậm + lazy có preload (đã cho)\\nvar _react = require('react');\\n\\n const withDelay = (factory, ms) => () =>\\n  Promise.all([factory(), new Promise((r) => setTimeout(r, ms))]).then(([m]) => m); exports.withDelay = withDelay;\\n\\n function lazyWithPreload(factory) {\\n  let promise = null;\\n  const load = () => {\\n    if (!promise) promise = factory();\\n    return promise;\\n  };\\n  const Component = _react.lazy.call(void 0, load);\\n  Component.preload = load;\\n  return Component;\\n} exports.lazyWithPreload = lazyWithPreload;\\n\",\".env\":\"REACT_APP_API_URL=http://localhost:9999\\n\",\"src/api/client.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/api/client.js — MỘT axios instance cho cả app (base URL từ .env)\\nvar _axios = require('axios'); var _axios2 = _interopRequireDefault(_axios);\\n\\n const client = _axios2.default.create({ baseURL: process.env.REACT_APP_API_URL || 'http://localhost:9999' }); exports.client = client;\\n\\n const bookingsApi = {\\n  list: () => exports.client.get('/bookings').then((r) => r.data),\\n  create: (booking) => exports.client.post('/bookings', booking).then((r) => r.data),\\n  remove: (id) => exports.client.delete(`/bookings/${id}`),\\n}; exports.bookingsApi = bookingsApi;\\n\",\"src/App.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { newObj[key] = obj[key]; } } } newObj.default = obj; return newObj; } } function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/App.js — mốc 11: dữ liệu từ json-server — trạng thái tải / lỗi + thử lại trong layout\\nvar _react = require('react');\\nvar _reactbootstrap = require('react-bootstrap');\\nvar _reactrouterdom = require('react-router-dom');\\nvar _StudentArea = require('./components/StudentArea'); var _StudentArea2 = _interopRequireDefault(_StudentArea);\\nvar _BookingContext = require('./context/BookingContext');\\nvar _StudentContext = require('./context/StudentContext');\\nvar _seed = require('./data/seed');\\nvar _RoomsPage = require('./pages/RoomsPage'); var _RoomsPage2 = _interopRequireDefault(_RoomsPage);\\nvar _lazy = require('./utils/lazy');\\n\\n// trang danh sách (trang mở đầu) giữ trong bundle chính; hai trang còn lại tách chunk\\nconst RoomPage = _lazy.lazyWithPreload.call(void 0, _lazy.withDelay.call(void 0, () => Promise.resolve().then(() => _interopRequireWildcard(require('./pages/RoomPage'))), 400));\\nconst MyBookingsPage = _lazy.lazyWithPreload.call(void 0, _lazy.withDelay.call(void 0, () => Promise.resolve().then(() => _interopRequireWildcard(require('./pages/MyBookingsPage'))), 400));\\n\\nfunction Shell() {\\n  const { bookings, status, error, reload } = _BookingContext.useBookings.call(void 0, );\\n  return (\\n    _jsxruntime.jsxs.call(void 0, _jsxruntime.Fragment, { children: [\\n      _jsxruntime.jsx.call(void 0, _reactbootstrap.Navbar, { bg: \\\"primary\\\", variant: \\\"dark\\\", expand: \\\"md\\\", id: \\\"app-nav\\\", children: \\n        _jsxruntime.jsxs.call(void 0, _reactbootstrap.Container, { children: [\\n          _jsxruntime.jsx.call(void 0, _reactbootstrap.Navbar.Brand, { id: \\\"title\\\", children: \\\"CT Booking\\\" })\\n          , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Nav, { className: \\\"me-auto\\\", children: [\\n            _jsxruntime.jsx.call(void 0, _reactbootstrap.Nav.Link, { as: _reactrouterdom.NavLink, to: \\\"/rooms\\\", id: \\\"nav-rooms\\\", children: \\\"Rooms\\\"})\\n            , _jsxruntime.jsx.call(void 0, _reactbootstrap.Nav.Link, { as: _reactrouterdom.NavLink, to: \\\"/my-bookings\\\", id: \\\"nav-my\\\", onMouseEnter: MyBookingsPage.preload, onFocus: MyBookingsPage.preload, children: \\\"My bookings\\\" })\\n          ]})\\n          , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Navbar.Text, { id: \\\"summary\\\", className: \\\"text-white me-3\\\" , children: [_seed.ROOMS.length, \\\" rooms · \\\"   , bookings.length, \\\" bookings today\\\"  ]})\\n          , _jsxruntime.jsx.call(void 0, _StudentArea2.default, {} )\\n        ]})\\n      })\\n      , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Container, { className: \\\"py-4\\\", children: [\\n        status === 'loading' && _jsxruntime.jsx.call(void 0, 'p', { id: \\\"bookings-loading\\\", className: \\\"text-muted\\\", children: \\\"Loading bookings…\\\" })\\n        , status === 'error' && (\\n          _jsxruntime.jsxs.call(void 0, 'div', { children: [\\n            _jsxruntime.jsxs.call(void 0, 'p', { id: \\\"bookings-error\\\", className: \\\"error\\\", children: [\\\"Could not load bookings (\\\"    , error, \\\")\\\"]})\\n            , _jsxruntime.jsx.call(void 0, 'button', { id: \\\"retry\\\", type: \\\"button\\\", className: \\\"btn btn-outline-danger btn-sm\\\"  , onClick: reload, children: \\\"Retry\\\"})\\n          ]})\\n        )\\n        , status === 'ready' && (\\n        _jsxruntime.jsx.call(void 0, _react.Suspense, { fallback: _jsxruntime.jsx.call(void 0, 'p', { id: \\\"page-loading\\\", className: \\\"text-muted\\\", children: \\\"Loading page…\\\" }), children: \\n        _jsxruntime.jsxs.call(void 0, _reactrouterdom.Routes, { children: [\\n          _jsxruntime.jsx.call(void 0, _reactrouterdom.Route, { path: \\\"/\\\", element: _jsxruntime.jsx.call(void 0, _reactrouterdom.Navigate, { to: \\\"/rooms\\\", replace: true,} ),} )\\n          , _jsxruntime.jsx.call(void 0, _reactrouterdom.Route, { path: \\\"/rooms\\\", element: _jsxruntime.jsx.call(void 0, _RoomsPage2.default, {} ),} )\\n          , _jsxruntime.jsx.call(void 0, _reactrouterdom.Route, { path: \\\"/rooms/:id\\\", element: _jsxruntime.jsx.call(void 0, RoomPage, {} ),} )\\n          , _jsxruntime.jsx.call(void 0, _reactrouterdom.Route, { path: \\\"/my-bookings\\\", element: _jsxruntime.jsx.call(void 0, MyBookingsPage, {} ),} )\\n          , _jsxruntime.jsx.call(void 0, _reactrouterdom.Route, { path: \\\"*\\\", element: _jsxruntime.jsx.call(void 0, 'p', { id: \\\"page-404\\\", children: \\\"Page not found\\\"  }),} )\\n        ]})\\n        })\\n        )\\n      ]})\\n    ]})\\n  );\\n}\\n\\n function App() {\\n  return (\\n    _jsxruntime.jsx.call(void 0, _StudentContext.StudentProvider, { children: \\n      _jsxruntime.jsx.call(void 0, _BookingContext.BookingProvider, { children: \\n        _jsxruntime.jsx.call(void 0, Shell, {} )\\n      })\\n    })\\n  );\\n} exports.default = App;\\n\"};var CSS={};var DB={\"bookings\":[{\"id\":1,\"roomId\":1,\"student\":\"HE180001\",\"name\":\"An\",\"start\":\"08:00\",\"end\":\"09:30\",\"purpose\":\"SWT301 review\"},{\"id\":2,\"roomId\":1,\"student\":\"HE180002\",\"name\":\"Binh\",\"start\":\"10:00\",\"end\":\"11:00\",\"purpose\":\"FER202 project\"},{\"id\":3,\"roomId\":2,\"student\":\"HE180003\",\"name\":\"Cuong\",\"start\":\"09:00\",\"end\":\"10:30\",\"purpose\":\"Group meeting\"}]};var BASE=\"http://localhost:9999\";var URL0=\"/rooms\";var THANH=true;\nfunction kho(){var m={};var k={getItem:function(x){x=String(x);return Object.prototype.hasOwnProperty.call(m,x)?m[x]:null},setItem:function(x,v){m[String(x)]=String(v)},removeItem:function(x){delete m[String(x)]},clear:function(){m={}},key:function(i){return Object.keys(m)[i]||null}};Object.defineProperty(k,'length',{get:function(){return Object.keys(m).length}});return k}\ntry{Object.defineProperty(window,'localStorage',{value:kho(),configurable:true})}catch(e){}\ntry{Object.defineProperty(window,'sessionStorage',{value:kho(),configurable:true})}catch(e){}\nwindow.confirm=function(){return true};window.alert=function(m){console.log('[alert]',m);var t=document.getElementById('cl-demo-alert');if(!t){t=document.createElement('div');t.id='cl-demo-alert';t.style.cssText='position:fixed;right:12px;bottom:12px;z-index:99999;max-width:320px;padding:10px 14px;border-radius:10px;background:#0f172a;color:#fff;font:13px system-ui;box-shadow:0 6px 24px rgba(0,0,0,.25)';document.body.appendChild(t)}t.textContent='alert: '+m;clearTimeout(t.__h);t.__h=setTimeout(function(){t.remove()},2600)};\nvar ENV={NODE_ENV:'production',MODE:'production',PROD:true,DEV:false,BASE_URL:'/'};\nString(M['.env']||'').split(/\\r?\\n/).forEach(function(d){var m=/^\\s*(?:export\\s+)?([A-Za-z_][A-Za-z0-9_]*)\\s*=\\s*(.*)\\s*$/.exec(d);if(m)ENV[m[1]]=m[2].replace(/^(['\"])(.*)\\1$/,'$2')});\nwindow.__CL_ENV__=ENV;if(!window.process)window.process={env:ENV};\n// json-server giả (bản sao domAgent.ts)\nvar jsDb=DB?JSON.parse(JSON.stringify(DB)):null;\nfunction tl(st,b){return new Response(b===undefined?'{}':JSON.stringify(b),{status:st,headers:{'content-type':'application/json'}})}\nfunction lay(o,k){return String(k).split('.').reduce(function(a,p){return a==null?undefined:a[p]},o)}\nfunction mot(t){return /ies$/.test(t)?t.slice(0,-3)+'y':t.replace(/s$/,'')}\nfunction xuLy(method,url,body){var u=new URL(url);var ph=u.pathname.replace(/^\\/+|\\/+$/g,'').split('/').filter(Boolean).map(decodeURIComponent);var ten=ph[0],id=ph[1];\nif(!ten||!(ten in jsDb))return tl(404,{});var bang=jsDb[ten];var dl=null;if(body!=null&&body!==''){try{dl=JSON.parse(body)}catch(e){return tl(400,{})}}\nif(!Array.isArray(bang)){if(method==='GET')return tl(200,bang);if(method==='PUT'||method==='POST'){jsDb[ten]=dl||{};return tl(200,jsDb[ten])}if(method==='PATCH'){jsDb[ten]=Object.assign({},bang,dl||{});return tl(200,jsDb[ten])}return tl(404,{})}\nvar vt=function(x){return bang.findIndex(function(r){return String(r.id)===String(x)})};\nvar mr=function(r){var o=Object.assign({},r);u.searchParams.getAll('_expand').forEach(function(e){var b=jsDb[e+'s']||jsDb[e];if(Array.isArray(b))o[e]=b.find(function(x){return String(x.id)===String(r[e+'Id'])})});u.searchParams.getAll('_embed').forEach(function(e){var b=jsDb[e];if(Array.isArray(b)){var k=mot(ten)+'Id';o[e]=b.filter(function(x){return String(x[k])===String(r.id)})}});return o};\nif(method==='GET'){if(id!=null){var i=vt(id);return i<0?tl(404,{}):tl(200,mr(bang[i]))}var ds=bang.slice();var loc={};u.searchParams.forEach(function(v,k){if(k.charAt(0)!=='_'&&k!=='q')(loc[k]=loc[k]||[]).push(v)});\nObject.keys(loc).forEach(function(k){var vs=loc[k],m=/^(.*)_(like|gte|lte|ne)$/.exec(k);ds=ds.filter(function(r){if(m){var gv=lay(r,m[1]);return vs.every(function(v){if(m[2]==='like')return new RegExp(v,'i').test(String(gv));if(m[2]==='ne')return String(gv)!==v;var a=Number(gv),b=Number(v);var so=!isNaN(a)&&!isNaN(b);return m[2]==='gte'?(so?a>=b:String(gv)>=v):(so?a<=b:String(gv)<=v)})}var g=lay(r,k);return vs.some(function(v){return String(g)===v})})});\nvar qq=u.searchParams.get('q');if(qq)ds=ds.filter(function(r){return JSON.stringify(r).toLowerCase().indexOf(qq.toLowerCase())>=0});\nvar sx=u.searchParams.get('_sort');if(sx){var tr=sx.split(','),th=(u.searchParams.get('_order')||'asc').split(',');ds.sort(function(a,b){for(var t=0;t<tr.length;t++){var f=tr[t].replace(/^-/,''),gi=tr[t].charAt(0)==='-'||(th[t]||th[0])==='desc';var x=lay(a,f),y=lay(b,f);var c=(typeof x==='number'&&typeof y==='number')?x-y:String(x).localeCompare(String(y));if(c)return gi?-c:c}return 0})}\nvar gh=u.searchParams.get('_limit'),pg=u.searchParams.get('_page');var tong=ds.length;if(pg){var n=Number(gh)||10;ds=ds.slice((Number(pg)-1)*n,Number(pg)*n)}else if(gh)ds=ds.slice(0,Number(gh));var rr=tl(200,ds.map(mr));try{rr.headers.set('X-Total-Count',String(tong))}catch(e){}return rr}\nif(method==='POST'){if(id!=null)return tl(404,{});var mo=Object.assign({},dl||{});if(mo.id==null){var so2=bang.length&&bang.every(function(r){return typeof r.id==='number'});mo.id=so2||!bang.length?bang.reduce(function(mx,r){return Math.max(mx,Number(r.id)||0)},0)+1:Math.random().toString(16).slice(2,6)}bang.push(mo);return tl(201,mo)}\nif(id==null)return tl(404,{});var j=vt(id);if(j<0)return tl(404,{});\nif(method==='PUT'){bang[j]=Object.assign({},dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='PATCH'){bang[j]=Object.assign({},bang[j],dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='DELETE'){bang.splice(j,1);return tl(200,{})}return tl(404,{})}\nif(jsDb){window.fetch=function(url,init){init=init||{};var s=String(url&&url.url?url.url:url);var me=String(init.method||'GET').toUpperCase();return new Promise(function(res){setTimeout(function(){if(s.indexOf(BASE+'/')!==0)return res(new Response('Not Found',{status:404}));try{res(xuLy(me,s,init.body))}catch(e){res(tl(500,{error:String(e)}))}},120)})}}\nfunction axiosGia(){function goi(method,url,data,cfg){cfg=cfg||{};var u=(cfg.baseURL||'')+url;if(cfg.params){var sp=new URLSearchParams(cfg.params).toString();if(sp)u+=(u.indexOf('?')>=0?'&':'?')+sp}var init={method:method.toUpperCase(),headers:Object.assign({'Content-Type':'application/json'},cfg.headers||{})};if(data!==undefined)init.body=typeof data==='string'?data:JSON.stringify(data);\nreturn window.fetch(u,init).then(function(res){return res.text().then(function(t){var d;try{d=JSON.parse(t)}catch(e){d=t}var hd={};try{res.headers.forEach(function(v,k){hd[k.toLowerCase()]=v})}catch(e){}var out={data:d,status:res.status,statusText:res.statusText,headers:hd,config:cfg};if(res.status>=200&&res.status<300)return out;var err=new Error('Request failed with status code '+res.status);err.response=out;err.name='AxiosError';throw err})})}\nfunction tao(base){var a=function(cfg){return goi(cfg.method||'get',cfg.url,cfg.data,Object.assign({},base,cfg))};['get','delete','head'].forEach(function(m){a[m]=function(url,cfg){return goi(m,url,undefined,Object.assign({},base,cfg))}});['post','put','patch'].forEach(function(m){a[m]=function(url,data,cfg){return goi(m,url,data,Object.assign({},base,cfg))}});a.create=function(c){return tao(Object.assign({},base,c))};a.defaults=base;a.interceptors={request:{use:function(){}},response:{use:function(){}}};a.isAxiosError=function(e){return!!(e&&e.name==='AxiosError')};return a}\nvar ax=tao({});ax.default=ax;return ax}\nvar R=window.React;var tach=function(p,k){var q=Object.assign({},p);var c=q.children;delete q.children;if(k!==undefined)q.key=k;return[q,c]};\nvar j=function(t,p,k){var x=tach(p,k);return x[1]===undefined?R.createElement(t,x[0]):R.createElement(t,x[0],x[1])};\nvar js=function(t,p,k){var x=tach(p,k);return R.createElement.apply(null,[t,x[0]].concat(x[1]||[]))};\n// React Router: MemoryRouter + thanh địa chỉ (gõ URL được — thử ?status=ACTIVE, /items/2…)\nvar viTri=null,routerBoc=null,dieuHuong=null;\nfunction datThanh(v){var o=document.getElementById('cl-demo-url');if(o&&document.activeElement!==o)o.value='http://localhost:3000'+v}\nfunction routerGia(){var RRD=window.ReactRouterDOM;if(!RRD)return null;if(routerBoc)return routerBoc;\nfunction Ghi(){var l=RRD.useLocation();var nav=RRD.useNavigate();dieuHuong=nav;viTri=l.pathname+l.search+l.hash;R.useEffect(function(){datThanh(viTri)});return null}\nfunction RG(p){var d=R.useState(function(){return[viTri||URL0||'/']})[0];return R.createElement(RRD.MemoryRouter,{initialEntries:d,basename:p.basename},R.createElement(Ghi),p.children)}\nfunction tr(routes,opts){var r=RRD.createMemoryRouter(routes,Object.assign({},opts||{},{initialEntries:[viTri||URL0||'/']}));var g=function(s){viTri=s.location.pathname+s.location.search+s.location.hash;datThanh(viTri)};g(r.state);r.subscribe(g);dieuHuong=function(to){r.navigate(to)};return r}\nrouterBoc=Object.assign({},RRD,{BrowserRouter:RG,HashRouter:RG,createBrowserRouter:tr,createHashRouter:tr});return routerBoc}\nvar thunk=function(api){return function(next){return function(a){return typeof a==='function'?a(api.dispatch,api.getState):next(a)}}};\nvar LIB={'react':R,'react-dom':window.ReactDOM,'react-dom/client':window.ReactDOM,'react/jsx-runtime':{jsx:j,jsxs:js,Fragment:R.Fragment},'react/jsx-dev-runtime':{jsxDEV:j,Fragment:R.Fragment},'prop-types':window.PropTypes,'react-bootstrap':window.ReactBootstrap,'@reduxjs/toolkit':window.RTK,'redux':window.RTK,'react-redux':window.ReactRedux,'redux-thunk':{'default':thunk,thunk:thunk}};\nvar C={};\nfunction dd(tu,s){var p=tu.split('/').slice(0,-1);s.split('/').forEach(function(x){if(x==='.'||x==='')return;if(x==='..')p.pop();else p.push(x)});return p.join('/')}\nfunction tim(p){var d=['','.js','.jsx','.ts','.tsx','.json','/index.js','/index.jsx'];for(var i=0;i<d.length;i++){if(M[p+d[i]]!=null||CSS[p+d[i]]!=null)return p+d[i]}return null}\nfunction req(tu,s){if(s==='axios')return axiosGia();if(s==='react-router-dom'||s==='react-router')return routerGia();if(LIB[s])return LIB[s];if(/\\.css$/.test(s)&&!/^\\./.test(s))return{};var p=tim(dd(tu,s));if(!p)throw new Error('Cannot find module '+s);return nap(p)}\nfunction nap(p){if(C[p])return C[p].exports;if(CSS[p]!=null){var st=document.createElement('style');st.textContent=CSS[p];document.head.appendChild(st);C[p]={exports:{}};return{}}var m={exports:{}};C[p]=m;if(/\\.json$/.test(p)){m.exports=JSON.parse(M[p]);return m.exports}new Function('require','module','exports',M[p])(function(s){return req(p,s)},m,m.exports);return m.exports}\nif(THANH){var bar=document.createElement('form');bar.style.cssText='position:sticky;top:0;z-index:99998;display:flex;gap:6px;align-items:center;padding:6px 10px;background:#e2e8f0;border-bottom:1px solid #cbd5e1;font:12px system-ui';bar.innerHTML='<span style=\"color:#475569\">URL</span><input id=\"cl-demo-url\" style=\"flex:1;padding:4px 8px;border:1px solid #cbd5e1;border-radius:6px;font:12px ui-monospace,monospace\" aria-label=\"Address bar\"><button style=\"padding:3px 10px;border-radius:6px;border:1px solid #94a3b8;background:#fff;cursor:pointer\">Go</button>';\nbar.addEventListener('submit',function(e){e.preventDefault();var v=document.getElementById('cl-demo-url').value.replace(/^https?:\\/\\/[^/]+/,'')||'/';if(dieuHuong)dieuHuong(v)});document.body.insertBefore(bar,document.body.firstChild);datThanh(URL0||'/')}\nnap(\"src/index.js\");\n})();</script></body></html>"
+    }
+  ]
+}

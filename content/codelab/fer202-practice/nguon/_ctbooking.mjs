@@ -896,3 +896,417 @@ export const APP_M8 = APP_M7
   .replace("import { ROOMS } from './data/seed';", "import { ROOMS } from './data/seed';\nimport { useFreeSlots } from './hooks/useFreeSlots';")
   .replace("  const selectedRoom = ROOMS.find((r) => r.id === selectedRoomId) ?? null;\n", "  const selectedRoom = ROOMS.find((r) => r.id === selectedRoomId) ?? null;\n  const selectedFree = useFreeSlots(selectedRoomId);\n")
   .replace('<SlotPicker slots={freeSlots(selectedRoom.id, bookings)}', '<SlotPicker slots={selectedFree}');
+
+// ─────────────────────────── MỐC 9 (React Router) ───────────────────────────
+export const M9_FILES = {
+  'src/pages/RoomsPage.js': `// src/pages/RoomsPage.js — /rooms: lưới phòng; "Book" điều hướng tới /rooms/:id
+import { Col, Row } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+import RoomCard from '../components/RoomCard';
+import { useBookings } from '../context/BookingContext';
+import { ROOMS } from '../data/seed';
+import { freeSlots, sortBookings } from '../domain/booking';
+
+export default function RoomsPage() {
+  const { bookings } = useBookings();
+  const navigate = useNavigate();
+  const sorted = sortBookings(bookings);
+  return (
+    <Row className="g-3">
+      {ROOMS.map((room) => {
+        const free = freeSlots(room.id, bookings);
+        return (
+          <Col key={room.id} xs={12} md={6} lg={4}>
+            <RoomCard room={room} bookings={sorted.filter((b) => b.roomId === room.id)} freeCount={free.length} firstFree={free[0]} selected={false} onSelect={(id) => navigate(´/rooms/@{id}´)} />
+          </Col>
+        );
+      })}
+    </Row>
+  );
+}
+`,
+  'src/pages/RoomPage.js': `// src/pages/RoomPage.js — /rooms/:id: chi tiết phòng + chọn giờ + đặt; xong thì sang /my-bookings kèm thông báo
+import { useState } from 'react';
+import { Card } from 'react-bootstrap';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import Schedule from '../components/Schedule';
+import SlotPicker from '../components/SlotPicker';
+import BookingForm from '../components/BookingForm';
+import { useBookings } from '../context/BookingContext';
+import { useStudent } from '../context/StudentContext';
+import { useFreeSlots } from '../hooks/useFreeSlots';
+import { ROOMS } from '../data/seed';
+import { addMinutes, formatRange, sortBookings } from '../domain/booking';
+
+export default function RoomPage() {
+  const { id } = useParams();
+  const room = ROOMS.find((r) => r.id === Number(id));
+  const { bookings, addBooking } = useBookings();
+  const { student } = useStudent();
+  const [slot, setSlot] = useState(null);
+  const free = useFreeSlots(room ? room.id : null);
+  const navigate = useNavigate();
+
+  if (!room) {
+    return (
+      <div>
+        <p id="not-found">Room not found</p>
+        <Link to="/rooms" id="back-to-rooms">Back to rooms</Link>
+      </div>
+    );
+  }
+
+  const book = (booking) => {
+    const saved = addBooking(booking);
+    navigate('/my-bookings', { state: { message: ´Booked @{room.name} @{formatRange(saved).split(' (')[0]} for @{saved.name}´ } });
+  };
+
+  return (
+    <Card id="room-page">
+      <Card.Body>
+        <Card.Title id="room-title">{room.name}</Card.Title>
+        <Card.Subtitle className="mb-3 text-muted">{room.capacity} seats · Floor {room.floor}</Card.Subtitle>
+        <Schedule bookings={sortBookings(bookings.filter((b) => b.roomId === room.id))} />
+        <h3 className="h6 mt-3">Choose a start time</h3>
+        <SlotPicker slots={free} value={slot} onChange={setSlot} />
+        <p id="selected-slot" className="mt-2">{slot ? ´Selected slot: @{slot}–@{addMinutes(slot, 30)}´ : 'Choose a start time'}</p>
+        <BookingForm
+          key={student?.code ?? 'guest'}
+          room={room}
+          slot={slot}
+          bookings={bookings}
+          onBook={book}
+          initial={student ? { name: student.name, student: student.code } : undefined}
+        />
+        <Link to="/rooms" id="back-to-rooms">← All rooms</Link>
+      </Card.Body>
+    </Card>
+  );
+}
+`,
+  'src/pages/MyBookingsPage.js': `// src/pages/MyBookingsPage.js — /my-bookings: thông báo từ location.state + danh sách của tôi
+import { useLocation } from 'react-router-dom';
+import MyBookings from '../components/MyBookings';
+
+export default function MyBookingsPage() {
+  const { state } = useLocation();
+  return (
+    <div>
+      {state?.message && <p id="booking-success" className="success">{state.message}</p>}
+      <MyBookings />
+    </div>
+  );
+}
+`,
+};
+
+export const APP_M9 = `// src/App.js — mốc 9: React Router — layout (navbar) + các trang
+import { Container, Nav, Navbar } from 'react-bootstrap';
+import { Navigate, NavLink, Route, Routes } from 'react-router-dom';
+import StudentArea from './components/StudentArea';
+import { BookingProvider, useBookings } from './context/BookingContext';
+import { StudentProvider } from './context/StudentContext';
+import { ROOMS } from './data/seed';
+import RoomsPage from './pages/RoomsPage';
+import RoomPage from './pages/RoomPage';
+import MyBookingsPage from './pages/MyBookingsPage';
+
+function Shell() {
+  const { bookings } = useBookings();
+  return (
+    <>
+      <Navbar bg="primary" variant="dark" expand="md" id="app-nav">
+        <Container>
+          <Navbar.Brand id="title">CT Booking</Navbar.Brand>
+          <Nav className="me-auto">
+            <Nav.Link as={NavLink} to="/rooms" id="nav-rooms">Rooms</Nav.Link>
+            <Nav.Link as={NavLink} to="/my-bookings" id="nav-my">My bookings</Nav.Link>
+          </Nav>
+          <Navbar.Text id="summary" className="text-white me-3">{ROOMS.length} rooms · {bookings.length} bookings today</Navbar.Text>
+          <StudentArea />
+        </Container>
+      </Navbar>
+      <Container className="py-4">
+        <Routes>
+          <Route path="/" element={<Navigate to="/rooms" replace />} />
+          <Route path="/rooms" element={<RoomsPage />} />
+          <Route path="/rooms/:id" element={<RoomPage />} />
+          <Route path="/my-bookings" element={<MyBookingsPage />} />
+          <Route path="*" element={<p id="page-404">Page not found</p>} />
+        </Routes>
+      </Container>
+    </>
+  );
+}
+
+export default function App() {
+  return (
+    <StudentProvider>
+      <BookingProvider>
+        <Shell />
+      </BookingProvider>
+    </StudentProvider>
+  );
+}
+`;
+
+// ─────────────────────────── MỐC 10 (lazy · Suspense) ───────────────────────────
+export const LAZY_HELPERS = `// src/utils/lazy.js — giả lập mạng chậm + lazy có preload (đã cho)
+import { lazy } from 'react';
+
+export const withDelay = (factory, ms) => () =>
+  Promise.all([factory(), new Promise((r) => setTimeout(r, ms))]).then(([m]) => m);
+
+export function lazyWithPreload(factory) {
+  let promise = null;
+  const load = () => {
+    if (!promise) promise = factory();
+    return promise;
+  };
+  const Component = lazy(load);
+  Component.preload = load;
+  return Component;
+}
+`;
+
+export const APP_M10 = APP_M9
+  .replace('// src/App.js — mốc 9: React Router — layout (navbar) + các trang', '// src/App.js — mốc 10: trang chi tiết + My bookings tải lười; Suspense TRONG layout; preload khi rê chuột/focus')
+  .replace("import { Container, Nav, Navbar } from 'react-bootstrap';", "import { Suspense } from 'react';\nimport { Container, Nav, Navbar } from 'react-bootstrap';")
+  .replace("import RoomPage from './pages/RoomPage';\nimport MyBookingsPage from './pages/MyBookingsPage';",
+    "import { lazyWithPreload, withDelay } from './utils/lazy';\n\n// trang danh sách (trang mở đầu) giữ trong bundle chính; hai trang còn lại tách chunk\nconst RoomPage = lazyWithPreload(withDelay(() => import('./pages/RoomPage'), 400));\nconst MyBookingsPage = lazyWithPreload(withDelay(() => import('./pages/MyBookingsPage'), 400));")
+  .replace('<Nav.Link as={NavLink} to="/my-bookings" id="nav-my">My bookings</Nav.Link>', '<Nav.Link as={NavLink} to="/my-bookings" id="nav-my" onMouseEnter={MyBookingsPage.preload} onFocus={MyBookingsPage.preload}>My bookings</Nav.Link>')
+  .replace('        <Routes>', '        <Suspense fallback={<p id="page-loading" className="text-muted">Loading page…</p>}>\n        <Routes>')
+  .replace('        </Routes>\n      </Container>', '        </Routes>\n        </Suspense>\n      </Container>');
+
+// ─────────────────────────── MỐC 11 (HTTP · json-server) ───────────────────────────
+export const M11_FILES = {
+  '.env': 'REACT_APP_API_URL=http://localhost:9999\n',
+  'src/api/client.js': `// src/api/client.js — MỘT axios instance cho cả app (base URL từ .env)
+import axios from 'axios';
+
+export const client = axios.create({ baseURL: process.env.REACT_APP_API_URL || 'http://localhost:9999' });
+
+export const bookingsApi = {
+  list: () => client.get('/bookings').then((r) => r.data),
+  create: (booking) => client.post('/bookings', booking).then((r) => r.data),
+  remove: (id) => client.delete(´/bookings/@{id}´),
+};
+`,
+  'src/context/BookingContext.js': `// src/context/BookingContext.js — mốc 11: server (json-server) là nguồn sự thật; reducer + trạng thái tải
+import { createContext, useCallback, useContext, useEffect, useMemo, useReducer } from 'react';
+import { bookingsApi } from '../api/client';
+
+const BookingContext = createContext(null);
+
+export function bookingsReducer(state, action) {
+  switch (action.type) {
+    case 'LOADING':
+      return { ...state, status: 'loading', error: null };
+    case 'LOADED':
+      return { status: 'ready', error: null, items: action.items };
+    case 'FAILED':
+      return { ...state, status: 'error', error: action.error };
+    case 'ADD':
+      return { ...state, items: [...state.items, action.booking] };
+    case 'CANCEL':
+      return { ...state, items: state.items.filter((b) => b.id !== action.id) };
+    default:
+      return state;
+  }
+}
+
+export function BookingProvider({ children }) {
+  const [state, dispatch] = useReducer(bookingsReducer, { status: 'loading', error: null, items: [] });
+
+  const load = useCallback(async () => {
+    dispatch({ type: 'LOADING' });
+    try {
+      dispatch({ type: 'LOADED', items: await bookingsApi.list() });
+    } catch (err) {
+      dispatch({ type: 'FAILED', error: err.message });
+    }
+  }, []);
+
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  const value = useMemo(() => {
+    const addBooking = async (booking) => {
+      const saved = await bookingsApi.create(booking); // id do server cấp
+      dispatch({ type: 'ADD', booking: saved });
+      return saved;
+    };
+    const cancelBooking = async (id) => {
+      await bookingsApi.remove(id);
+      dispatch({ type: 'CANCEL', id });
+    };
+    return { bookings: state.items, status: state.status, error: state.error, reload: load, addBooking, cancelBooking };
+  }, [state, load]);
+
+  return <BookingContext.Provider value={value}>{children}</BookingContext.Provider>;
+}
+
+export function useBookings() {
+  const ctx = useContext(BookingContext);
+  if (!ctx) throw new Error('useBookings must be used inside BookingProvider');
+  return ctx;
+}
+`,
+};
+
+export const ROOM_PAGE_M11 = M9_FILES['src/pages/RoomPage.js']
+  .replace('// src/pages/RoomPage.js — /rooms/:id: chi tiết phòng + chọn giờ + đặt; xong thì sang /my-bookings kèm thông báo', '// src/pages/RoomPage.js — mốc 11: đặt phòng gọi POST (bất đồng bộ); lỗi lưu hiện #save-error')
+  .replace("  const [slot, setSlot] = useState(null);\n", "  const [slot, setSlot] = useState(null);\n  const [saveError, setSaveError] = useState('');\n")
+  .replace("  const book = (booking) => {\n    const saved = addBooking(booking);\n    navigate(", "  const book = async (booking) => {\n    setSaveError('');\n    let saved;\n    try {\n      saved = await addBooking(booking);\n    } catch {\n      setSaveError('Could not save the booking, please try again');\n      return;\n    }\n    navigate(")
+  .replace("        <BookingForm\n", "        {saveError && <p id=\"save-error\" className=\"error\">{saveError}</p>}\n        <BookingForm\n");
+
+export const APP_M11 = APP_M10
+  .replace('// src/App.js — mốc 10: trang chi tiết + My bookings tải lười; Suspense TRONG layout; preload khi rê chuột/focus', '// src/App.js — mốc 11: dữ liệu từ json-server — trạng thái tải / lỗi + thử lại trong layout')
+  .replace('  const { bookings } = useBookings();\n', '  const { bookings, status, error, reload } = useBookings();\n')
+  .replace('        <Suspense fallback=', "        {status === 'loading' && <p id=\"bookings-loading\" className=\"text-muted\">Loading bookings…</p>}\n        {status === 'error' && (\n          <div>\n            <p id=\"bookings-error\" className=\"error\">Could not load bookings ({error})</p>\n            <button id=\"retry\" type=\"button\" className=\"btn btn-outline-danger btn-sm\" onClick={reload}>Retry</button>\n          </div>\n        )}\n        {status === 'ready' && (\n        <Suspense fallback=")
+  .replace('        </Suspense>\n', '        </Suspense>\n        )}\n');
+
+// ─────────────────────────── MỐC 12 (Redux Toolkit) ───────────────────────────
+export const M12_FILES = {
+  'src/store/bookingsSlice.js': `// src/store/bookingsSlice.js — lượt đặt trong Redux: 3 thunk gọi API + trạng thái tải
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { bookingsApi } from '../api/client';
+
+export const fetchBookings = createAsyncThunk('bookings/fetch', () => bookingsApi.list());
+export const createBooking = createAsyncThunk('bookings/create', (booking) => bookingsApi.create(booking));
+export const cancelBooking = createAsyncThunk('bookings/cancel', async (id) => {
+  await bookingsApi.remove(id);
+  return id;
+});
+
+const bookingsSlice = createSlice({
+  name: 'bookings',
+  initialState: { items: [], status: 'loading', error: null },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchBookings.pending, (state) => { state.status = 'loading'; state.error = null; })
+      .addCase(fetchBookings.fulfilled, (state, action) => { state.status = 'ready'; state.items = action.payload; })
+      .addCase(fetchBookings.rejected, (state, action) => { state.status = 'error'; state.error = action.error.message; })
+      .addCase(createBooking.fulfilled, (state, action) => { state.items.push(action.payload); })
+      .addCase(cancelBooking.fulfilled, (state, action) => { state.items = state.items.filter((b) => b.id !== action.payload); });
+  },
+});
+
+export default bookingsSlice.reducer;
+`,
+  'src/store/studentSlice.js': `// src/store/studentSlice.js — sinh viên đăng nhập (khôi phục từ localStorage)
+import { createSlice } from '@reduxjs/toolkit';
+
+function loadStudent() {
+  try {
+    return JSON.parse(localStorage.getItem('ctb-student'));
+  } catch {
+    return null;
+  }
+}
+
+const studentSlice = createSlice({
+  name: 'student',
+  initialState: loadStudent,
+  reducers: {
+    loggedIn: (_state, action) => action.payload,
+    loggedOut: () => null,
+  },
+});
+
+export const { loggedIn, loggedOut } = studentSlice.actions;
+export default studentSlice.reducer;
+`,
+  'src/store/selectors.js': `// src/store/selectors.js — dữ liệu suy ra có ghi nhớ
+import { createSelector } from '@reduxjs/toolkit';
+import { ROOMS } from '../data/seed';
+import { countByRoom } from '../domain/booking';
+
+export const selectBookings = (state) => state.bookings.items;
+
+export const selectBusiestRoom = createSelector([selectBookings], (bookings) => {
+  const counts = countByRoom(bookings);
+  let best = null;
+  for (const room of ROOMS) {
+    const n = counts[room.id] ?? 0;
+    if (n > 0 && (!best || n > best.count)) best = { name: room.name, count: n };
+  }
+  return best;
+});
+`,
+  'src/store/index.js': `// src/store/index.js — configureStore; lưu sinh viên bằng subscribe (ngoài reducer)
+import { configureStore } from '@reduxjs/toolkit';
+import bookingsReducer from './bookingsSlice';
+import studentReducer from './studentSlice';
+
+export const store = configureStore({
+  reducer: { bookings: bookingsReducer, student: studentReducer },
+});
+
+let lastStudent = store.getState().student;
+store.subscribe(() => {
+  const { student } = store.getState();
+  if (student !== lastStudent) {
+    lastStudent = student;
+    if (student) localStorage.setItem('ctb-student', JSON.stringify(student));
+    else localStorage.removeItem('ctb-student');
+  }
+});
+`,
+  'src/context/BookingContext.js': `// src/context/BookingContext.js — mốc 12: "mặt tiền" giữ nguyên API cũ (useBookings) nhưng chạy bằng Redux
+// ⇒ các component cũ (RoomsPage, RoomPage, MyBookings…) KHÔNG phải sửa: chuyển đổi từng bước (strangler pattern)
+import { useEffect, useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { cancelBooking, createBooking, fetchBookings } from '../store/bookingsSlice';
+
+export function BookingProvider({ children }) {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchBookings());
+  }, [dispatch]);
+  return children;
+}
+
+export function useBookings() {
+  const dispatch = useDispatch();
+  const { items, status, error } = useSelector((s) => s.bookings);
+  return useMemo(
+    () => ({
+      bookings: items,
+      status,
+      error,
+      reload: () => dispatch(fetchBookings()),
+      addBooking: (booking) => dispatch(createBooking(booking)).unwrap(),
+      cancelBooking: (id) => dispatch(cancelBooking(id)).unwrap(),
+    }),
+    [items, status, error, dispatch],
+  );
+}
+`,
+  'src/context/StudentContext.js': `// src/context/StudentContext.js — mốc 12: mặt tiền Redux cho useStudent()
+import { useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { loggedIn, loggedOut } from '../store/studentSlice';
+
+export function StudentProvider({ children }) {
+  return children;
+}
+
+export function useStudent() {
+  const dispatch = useDispatch();
+  const student = useSelector((s) => s.student);
+  return useMemo(
+    () => ({ student, login: (name, code) => dispatch(loggedIn({ name, code })), logout: () => dispatch(loggedOut()) }),
+    [student, dispatch],
+  );
+}
+`,
+};
+
+export const APP_M12 = APP_M11
+  .replace('// src/App.js — mốc 11: dữ liệu từ json-server — trạng thái tải / lỗi + thử lại trong layout', '// src/App.js — mốc 12: dữ liệu trong Redux store (qua mặt tiền useBookings) + thống kê bằng selector ghi nhớ')
+  .replace("import { ROOMS } from './data/seed';", "import { useSelector } from 'react-redux';\nimport { ROOMS } from './data/seed';\nimport { selectBusiestRoom } from './store/selectors';")
+  .replace("  const { bookings, status, error, reload } = useBookings();\n", "  const { bookings, status, error, reload } = useBookings();\n  const busiest = useSelector(selectBusiestRoom);\n")
+  .replace("      <Container className=\"py-4\">\n", "      <Container className=\"py-4\">\n        {status === 'ready' && (\n          <p id=\"stats\" className=\"text-muted\">{busiest ? ´Busiest room: @{busiest.name} (@{busiest.count} bookings)´ : 'No bookings yet today'}</p>\n        )}\n");

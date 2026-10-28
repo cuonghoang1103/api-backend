@@ -1,0 +1,128 @@
+$ gcc -O0 mal.c -o mal
+$ strace -e trace=brk,mmap,munmap ./mal 2>&1 | sed -n '/-- malloc(100)/,$p'
+-- malloc(100)
+brk(NULL)                               = 0xaaab168de000
+brk(0xaaab16a00000)                     = 0xaaab16a00000
+-- malloc(100) again
+-- malloc(200 KiB)
+-- malloc(4 MiB)
+mmap(NULL, 4198400, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0xffffbb41f000
+-- free(4 MiB)
+munmap(0xffffbb41f000, 4198400)         = 0
+-- malloc(4 MiB) again
+brk(0xaaab16e00000)                     = 0xaaab16e00000
+-- done
++++ exited with 0 +++
+$ gcc -O2 -pthread arena.c -o arena
+$ for n in 1 4 16 100; do ./arena $n; done
+  1 threads:   2 arenas   VSZ   77688 kB   RSS   3456 kB (  2048 kB in huge pages)   malloc'd   3 kB
+  4 threads:   5 arenas   VSZ  297608 kB   RSS   9620 kB (  8192 kB in huge pages)   malloc'd  13 kB
+ 16 threads:  17 arenas   VSZ 1183232 kB   RSS  34300 kB ( 32768 kB in huge pages)   malloc'd  54 kB
+100 threads:  80 arenas   VSZ 6006016 kB   RSS 164068 kB (161792 kB in huge pages)   malloc'd 293 kB
+$ MALLOC_ARENA_MAX=2 ./arena 100
+100 threads:   2 arenas   VSZ  894020 kB   RSS   4320 kB (  2048 kB in huge pages)   malloc'd 128 kB
+$ gcc -O2 frag.c -o frag
+$ ./frag
+start                                          live data    0.0 MB   RSS    1.0 MB
+1. malloc 1,000,000 x 100 B                    live data  100.0 MB   RSS  118.7 MB
+2. free every other block                      live data   50.0 MB   RSS  118.7 MB
+3. malloc_trim(0)                              live data   50.0 MB   RSS  118.7 MB
+4. malloc 500,000 x 200 B (won't fit the holes) live data  150.0 MB   RSS  220.6 MB
+5. free all but the last 100 B block           live data    0.0 MB   RSS  120.6 MB
+6. malloc_trim(0)                              live data    0.0 MB   RSS   13.8 MB
+$ gcc -g -O0 leak.c -o leak
+$ valgrind --leak-check=full ./leak 2>&1 | grep -vE '^==[0-9]+== *$' | tail -12
+==277== 100,000 bytes in 1,000 blocks are definitely lost in loss record 1 of 1
+==277==    at 0x48A5618: malloc (vg_replace_malloc.c:447)
+==277==    by 0x400087B: handle_request (leak.c:7)
+==277==    by 0x40008C3: main (leak.c:14)
+==277== LEAK SUMMARY:
+==277==    definitely lost: 100,000 bytes in 1,000 blocks
+==277==    indirectly lost: 0 bytes in 0 blocks
+==277==      possibly lost: 0 bytes in 0 blocks
+==277==    still reachable: 0 bytes in 0 blocks
+==277==         suppressed: 0 bytes in 0 blocks
+==277== For lists of detected and suppressed errors, rerun with: -s
+==277== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
+$ gcc -g -O0 -fsanitize=address leak.c -o leak-asan
+$ ./leak-asan 2>&1 | head -7
+
+=================================================================
+==289==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 100000 byte(s) in 1000 object(s) allocated from:
+    #0 0xffffa6917354 in malloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:67
+    #1 0xaaaadc8b0bb8 in handle_request /lab/ch07/leak.c:7
+$ ./leak-asan uaf 2>&1 | sed -n '2,4p;9,12p'
+==295==ERROR: AddressSanitizer: heap-use-after-free on address 0xfcaf8ce0afc0 at pc 0xaaaad5c80d00 bp 0xffffe39fb5f0 sp 0xffffe39fb5e0
+READ of size 1 at 0xfcaf8ce0afc0 thread T0
+    #0 0xaaaad5c80cfc in main /lab/ch07/leak.c:20
+0xfcaf8ce0afc0 is located 0 bytes inside of 100-byte region [0xfcaf8ce0afc0,0xfcaf8ce0b024)
+freed by thread T0 here:
+    #0 0xffff8df26244 in free ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:51
+    #1 0xaaaad5c80ca8 in main /lab/ch07/leak.c:19
+$ node gc.js limits
+heap_size_limit  2096.0 MB
+read_only_space            size     0.0 MB   used     0.0 MB
+new_space                  size     1.0 MB   used     0.4 MB
+old_space                  size     2.8 MB   used     2.6 MB
+code_space                 size     0.3 MB   used     0.0 MB
+shared_space               size     0.0 MB   used     0.0 MB
+trusted_space              size     0.9 MB   used     0.7 MB
+new_large_object_space     size     0.0 MB   used     0.0 MB
+large_object_space         size     0.3 MB   used     0.3 MB
+code_large_object_space    size     0.0 MB   used     0.0 MB
+shared_large_object_space  size     0.0 MB   used     0.0 MB
+trusted_large_object_space size     0.0 MB   used     0.0 MB
+$ node --max-old-space-size=64 gc.js limits | head -1
+heap_size_limit   112.0 MB
+$ node --max-old-space-size=64 gc.js grow 2>&1 | grep -E 'objects|FATAL'; echo "exit code ${PIPESTATUS[0]}"
+  20000 objects  heapUsed    13.2 MB  heapTotal    26.8 MB  rss    67.8 MB
+  40000 objects  heapUsed    23.0 MB  heapTotal    50.5 MB  rss    89.0 MB
+  60000 objects  heapUsed    31.8 MB  heapTotal    52.0 MB  rss   103.5 MB
+  80000 objects  heapUsed    42.3 MB  heapTotal    66.1 MB  rss   120.7 MB
+ 100000 objects  heapUsed    50.9 MB  heapTotal    69.9 MB  rss   124.4 MB
+ 120000 objects  heapUsed    61.7 MB  heapTotal    83.4 MB  rss   138.2 MB
+FATAL ERROR: Reached heap limit Allocation failed - JavaScript heap out of memory
+exit code 134
+$ node gc.js snapshot
+snapshot    31.2 MB on disk, 453202 heap objects; top 5 by retained-in-place (self) size:
+  (array)             101004 objects     7.2 MB
+  Session             100000 objects     4.6 MB
+  (string)            110897 objects     3.4 MB
+  Array               100127 objects     3.1 MB
+  (code)               19880 objects     1.9 MB
+$ node --expose-gc leak.js bug
+bug   after  50000 requests: heapUsed  14.1 MB, cache size 50000
+bug   after 100000 requests: heapUsed  25.3 MB, cache size 100000
+bug   after 150000 requests: heapUsed  37.9 MB, cache size 150000
+bug   after 200000 requests: heapUsed  47.1 MB, cache size 200000
+$ node --expose-gc leak.js fixed
+fixed after  50000 requests: heapUsed   3.4 MB, cache size 1000
+fixed after 100000 requests: heapUsed   3.7 MB, cache size 1000
+fixed after 150000 requests: heapUsed   3.7 MB, cache size 1000
+fixed after 200000 requests: heapUsed   3.7 MB, cache size 1000
+$ javac Gc.java
+$ java -XX:+PrintFlagsFinal -version 2>/dev/null | grep -E ' (MaxHeapSize|MaxRAMPercentage|UseG1GC) '
+   size_t MaxHeapSize                              = 2080374784                                {product} {ergonomic}
+   double MaxRAMPercentage                         = 25.000000                                 {product} {default}
+     bool UseG1GC                                  = true                                      {product} {ergonomic}
+$ java -Xmx256m -XX:+UseG1GC Gc
+max heap 256 MB, allocated 3906 MB of garbage in 582 ms
+  G1 Young Generation       100 collections,    97 ms total
+  G1 Concurrent GC          196 collections,    48 ms total
+  G1 Old Generation           0 collections,     0 ms total
+$ java -Xmx256m -XX:+UseG1GC -Xlog:gc Gc | grep 'Pause Young' | sed -n '1,3p'
+[0.022s][info][gc] GC(0) Pause Young (Concurrent Start) (G1 Humongous Allocation) 56M->55M(126M) 1.065ms
+[0.032s][info][gc] GC(2) Pause Young (Prepare Mixed) (G1 Evacuation Pause) 177M->122M(209M) 1.153ms
+[0.042s][info][gc] GC(3) Pause Young (Mixed) (G1 Evacuation Pause) 200M->122M(209M) 0.940ms
+$ java -Xmx256m -XX:+UseZGC -XX:+ZGenerational Gc
+max heap 256 MB, allocated 3906 MB of garbage in 542 ms
+  ZGC Minor Cycles           96 collections,   292 ms total
+  ZGC Minor Pauses          297 collections,     1 ms total
+  ZGC Major Cycles           12 collections,   247 ms total
+  ZGC Major Pauses           51 collections,     0 ms total
+$ java -Xmx256m -XX:+UseZGC -XX:+ZGenerational -Xlog:gc+phases Gc | grep 'Pause' | sed -n '1,3p'
+[0.049s][info][gc,phases] GC(0) Y: Pause Mark Start (Major) 0.012ms
+[0.050s][info][gc,phases] GC(0) Y: Pause Mark End 0.008ms
+[0.052s][info][gc,phases] GC(0) Y: Pause Relocate Start 0.005ms

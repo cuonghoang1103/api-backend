@@ -1,0 +1,60 @@
+$ gcc -O2 touch.c -o touch
+$ /usr/bin/time -v ./touch 256 nohuge 2>&1 | grep -E 'MiB|Maximum resident|page faults|Elapsed'
+  256 MiB nohuge    65536 pages written    65539 faults    69.6 ms  RSS  263400 kB  page tables   552 kB  huge       0 kB
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.09
+	Maximum resident set size (kbytes): 263580
+	Major (requiring I/O) page faults: 2
+	Minor (reclaiming a frame) page faults: 65609
+$ perf stat -e page-faults,minor-faults,major-faults ./touch 256 nohuge 2>&1 | grep -E 'MiB|faults|elapsed'
+  256 MiB nohuge    65536 pages written    65538 faults    67.3 ms  RSS  263400 kB  page tables   556 kB  huge       0 kB
+             65590      page-faults                                                           
+             65589      minor-faults                                                          
+                 1      major-faults                                                          
+       0.088246167 seconds time elapsed
+$ gcc -O2 demand.c -o demand
+$ ./demand
+after mmap(64 MiB)         RSS   1252 kB   pages present     0 / 16384   page faults so far    32
+after reading every page   RSS   1576 kB   pages present 16384 / 16384   page faults so far 16425
+after writing every page   RSS  67112 kB   pages present 16384 / 16384   page faults so far 32811
+$ gcc -O2 filemap.c -o filemap
+$ ./filemap make /tmp/data 256
+$ ./filemap cached /tmp/data
+65536 of 65536 pages in the page cache (100%)
+$ ./filemap evict /tmp/data; ./filemap cached /tmp/data
+0 of 65536 pages in the page cache (0%)
+$ /usr/bin/time -v ./filemap rand /tmp/data 2>&1 | grep -E '^rand|Major|Minor|Elapsed'
+rand  256 MiB in 3416.1 ms   minor faults      2   major faults 65536
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:03.42
+	Major (requiring I/O) page faults: 65537
+	Minor (reclaiming a frame) page faults: 74
+$ ./filemap rand /tmp/data
+rand  256 MiB in   11.6 ms   minor faults   4098   major faults     0
+$ ./filemap evict /tmp/data; ./filemap mmap /tmp/data; ./filemap mmap /tmp/data
+mmap  256 MiB in   34.9 ms   minor faults   3941   major faults     1
+mmap  256 MiB in   19.4 ms   minor faults   3954   major faults     0
+$ ./filemap evict /tmp/data; ./filemap read /tmp/data; ./filemap read /tmp/data
+read  256 MiB in   34.1 ms   minor faults    259   major faults     0
+read  256 MiB in   23.4 ms   minor faults    259   major faults     0
+$ gcc -O2 cowpfn.c -o cowpfn
+$ ./cowpfn
+parent  before fork        va 0xffffa13c8000 -> frame 0x10f8f5  holds 'P'
+child   after fork         va 0xffffa13c8000 -> frame 0x10f8f5  holds 'P'
+child   after its write    va 0xffffa13c8000 -> frame 0x115db4  holds 'C'  (1 page fault)
+parent  after child exit   va 0xffffa13c8000 -> frame 0x10f8f5  holds 'P'
+$ gcc -O2 cow.c -o cow
+$ for w in 0 1 10 50 100; do ./cow 512 $w nohuge; done
+ 512 MiB nohuge fork   3.7 ms | wrote   0% of pages (     0) in    0.0 ms:      0 faults | parent now Private    0 MiB, Shared  513 MiB
+ 512 MiB nohuge fork   3.6 ms | wrote   1% of pages (  1311) in    3.0 ms:   1312 faults | parent now Private    5 MiB, Shared  508 MiB
+ 512 MiB nohuge fork   3.8 ms | wrote  10% of pages ( 13108) in   27.2 ms:  13108 faults | parent now Private   51 MiB, Shared  462 MiB
+ 512 MiB nohuge fork   4.4 ms | wrote  50% of pages ( 65536) in  131.9 ms:  65536 faults | parent now Private  256 MiB, Shared  257 MiB
+ 512 MiB nohuge fork   4.4 ms | wrote 100% of pages (131072) in  386.5 ms: 131072 faults | parent now Private  512 MiB, Shared    1 MiB
+$ ./cow 512 10 huge
+ 512 MiB huge   fork   0.3 ms | wrote  10% of pages ( 13108) in   32.7 ms:  13109 faults | parent now Private   51 MiB, Shared  462 MiB
+$ python3 repl.py 3 7 0 1 2 0 3 0 4 2 3 0 3 2 1 2 0 1 7 0 1
+20 references, 3 frames: FIFO 15   LRU 12   Clock 14   OPT 9
+$ for n in 3 4; do python3 repl.py $n 1 2 3 4 1 2 5 1 2 3 4 5; done
+12 references, 3 frames: FIFO 9   LRU 10   Clock 9   OPT 7
+12 references, 4 frames: FIFO 10   LRU 8   Clock 10   OPT 6
+$ for n in 4 5; do python3 repl.py $n 1 2 3 4 5 1 2 3 4 5 1 2 3 4 5 1 2 3 4 5; done
+20 references, 4 frames: FIFO 20   LRU 20   Clock 20   OPT 8
+20 references, 5 frames: FIFO 5   LRU 5   Clock 5   OPT 5

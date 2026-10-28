@@ -1,0 +1,52 @@
+$ getconf PAGESIZE
+4096
+$ zcat /proc/config.gz | grep -E 'PGTABLE_LEVELS|ARM64_VA_BITS=|ARM64_4K_PAGES'
+CONFIG_PGTABLE_LEVELS=4
+CONFIG_ARM64_4K_PAGES=y
+CONFIG_ARM64_VA_BITS=48
+$ gcc -O2 xlate.c -o xlate
+$ ./xlate
+what                 virtual addr   L0  L1  L2  L3    off  in RAM        PFN      physical
+code   main()      0xaaaae9480880  341 171 330 128  0x880  yes      0x12be6d   0x12be6d880
+data   global      0xaaaae94a0010  341 171 330 160   0x10  yes      0x11594f   0x11594f010
+stack  local       0xffffda7f1604  511 511 211 497  0x604  yes      0x1441b0   0x1441b0604
+mmap   page 1      0xffff9eb58064  511 510 245 344   0x64  yes      0x1608d8   0x1608d8064
+mmap   page 2      0xffff9eb59064  511 510 245 345   0x64  no              0             0
+$ setpriv --reuid=1001 --regid=1001 --clear-groups ./xlate | tail -2
+mmap   page 1      0xffffa01d9064  511 510 256 473   0x64  yes             0             0
+mmap   page 2      0xffffa01da064  511 510 256 474   0x64  no              0             0
+$ gcc -O2 touch.c -o touch
+$ for m in 64 256 1024; do ./touch $m nohuge; done
+   64 MiB nohuge    16384 pages written    16386 faults    17.4 ms  RSS   66784 kB  page tables   172 kB  huge       0 kB
+  256 MiB nohuge    65536 pages written    65538 faults    56.7 ms  RSS  263400 kB  page tables   556 kB  huge       0 kB
+ 1024 MiB nohuge   262144 pages written   262146 faults   229.6 ms  RSS 1049828 kB  page tables  2096 kB  huge       0 kB
+$ cat /sys/kernel/mm/transparent_hugepage/enabled
+[always] madvise never
+$ cat /sys/kernel/mm/transparent_hugepage/defrag
+always defer defer+madvise [madvise] never
+$ grep -E 'AnonHugePages|Hugepagesize' /proc/meminfo
+AnonHugePages:   1165312 kB
+Hugepagesize:       2048 kB
+$ for h in nohuge huge; do ./touch 256 $h; done
+  256 MiB nohuge    65536 pages written    65538 faults    61.5 ms  RSS  263392 kB  page tables   556 kB  huge       0 kB
+  256 MiB huge      65536 pages written      130 faults     5.1 ms  RSS  263396 kB  page tables   560 kB  huge  262144 kB
+$ gcc -O2 tlb.c -o tlb
+$ for m in 1 8 64 1024; do for h in nohuge huge; do ./tlb $m $h; done; done
+    1 MiB      256 pages  nohuge     3.0 ns per access
+    1 MiB      256 pages  huge       3.0 ns per access
+    8 MiB     2048 pages  nohuge     7.8 ns per access
+    8 MiB     2048 pages  huge       7.5 ns per access
+   64 MiB    16384 pages  nohuge    47.3 ns per access
+   64 MiB    16384 pages  huge      19.3 ns per access
+ 1024 MiB   262144 pages  nohuge   198.8 ns per access
+ 1024 MiB   262144 pages  huge     155.6 ns per access
+$ perf stat -e page-faults,dTLB-loads,dTLB-load-misses ./tlb 64 nohuge 2>&1 | grep -E 'ns per|faults|dTLB|elapsed'
+   64 MiB    16384 pages  nohuge    46.9 ns per access
+             16468      page-faults                                                           
+   <not supported>      dTLB-loads                                                            
+   <not supported>      dTLB-load-misses                                                      
+       0.962112542 seconds time elapsed
+$ perf stat -e cycles,instructions,cpu-clock true 2>&1 | grep -E 'cycles|instructions|cpu-clock'
+   <not supported>      cycles                                                                
+   <not supported>      instructions                                                          
+              0.24 msec cpu-clock                                                             

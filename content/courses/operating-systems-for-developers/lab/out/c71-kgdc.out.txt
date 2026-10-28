@@ -1,0 +1,118 @@
+$ uname -m; getconf PAGESIZE
+aarch64
+4096
+$ gcc -O0 -g layout.c -o layout
+$ ./layout
+text    main()         0xaaaaad0f0b68
+rodata  "hello"        0xaaaaad0f0de8
+data    global_init    0xaaaaad110010
+bss     global_zero    0xaaaaad110024
+heap    malloc(32)     0xaaaad608b010
+mmap    malloc(8 MiB)  0xffffbd08f010
+mmap    /etc/hostname  0xffffbda9f000
+lib     printf()       0xffffbd8df8a0
+stack   local          0xffffe4b13178
+$ ./layout maps | tail -n +10
+aaaae1f70000-aaaae1f72000 r-xp 00000000 00:2b 273                        /lab/ch07/layout
+aaaae1f8f000-aaaae1f90000 r--p 0000f000 00:2b 273                        /lab/ch07/layout
+aaaae1f90000-aaaae1f91000 rw-p 00010000 00:2b 273                        /lab/ch07/layout
+aaab09e47000-aaab0a000000 rw-p 00000000 00:00 0                          [heap]
+ffffadaff000-ffffae300000 rw-p 00000000 00:00 0 
+ffffae300000-ffffae4a9000 r-xp 00000000 00:41 148211                     /usr/lib/aarch64-linux-gnu/libc.so.6
+ffffae4a9000-ffffae4bd000 ---p 001a9000 00:41 148211                     /usr/lib/aarch64-linux-gnu/libc.so.6
+ffffae4bd000-ffffae4c0000 r--p 001ad000 00:41 148211                     /usr/lib/aarch64-linux-gnu/libc.so.6
+ffffae4c0000-ffffae4c2000 rw-p 001b0000 00:41 148211                     /usr/lib/aarch64-linux-gnu/libc.so.6
+ffffae4c2000-ffffae4ce000 rw-p 00000000 00:00 0 
+ffffae4de000-ffffae508000 r-xp 00000000 00:41 148191                     /usr/lib/aarch64-linux-gnu/ld-linux-aarch64.so.1
+ffffae513000-ffffae514000 r--p 00000000 fe:01 398018                     /etc/hostname
+ffffae514000-ffffae516000 rw-p 00000000 00:00 0 
+ffffae516000-ffffae51a000 r--p 00000000 00:00 0                          [vvar]
+ffffae51a000-ffffae51c000 r-xp 00000000 00:00 0                          [vdso]
+ffffae51c000-ffffae51e000 r--p 0002e000 00:41 148191                     /usr/lib/aarch64-linux-gnu/ld-linux-aarch64.so.1
+ffffae51e000-ffffae51f000 rw-p 00030000 00:41 148191                     /usr/lib/aarch64-linux-gnu/ld-linux-aarch64.so.1
+ffffae51f000-ffffae520000 rw-p 00000000 00:00 0 
+ffffc0ab8000-ffffc0ad9000 rw-p 00000000 00:00 0                          [stack]
+$ pmap -x $P
+28:   ./layout wait
+Address           Kbytes     RSS   Dirty Mode  Mapping
+0000aaaaab500000       8       8       0 r-x-- layout
+0000aaaaab51f000       4       4       4 r---- layout
+0000aaaaab520000       4       4       4 rw--- layout
+0000aaaae8988000     480       8       8 rw---   [ anon ]
+0000ffffb426f000    8196       4       4 rw---   [ anon ]
+0000ffffb4a70000    1700    1060       0 r-x-- libc.so.6
+0000ffffb4c19000      80       0       0 ----- libc.so.6
+0000ffffb4c2d000      12      12      12 r---- libc.so.6
+0000ffffb4c30000       8       8       8 rw--- libc.so.6
+0000ffffb4c32000      48      16      16 rw---   [ anon ]
+0000ffffb4c4d000     168     168       0 r-x-- ld-linux-aarch64.so.1
+0000ffffb4c82000       4       0       0 r---- hostname
+0000ffffb4c83000       8       8       8 rw---   [ anon ]
+0000ffffb4c85000      16       0       0 r----   [ anon ]
+0000ffffb4c89000       8       4       0 r-x--   [ anon ]
+0000ffffb4c8b000       8       8       8 r---- ld-linux-aarch64.so.1
+0000ffffb4c8d000       4       4       4 rw--- ld-linux-aarch64.so.1
+0000ffffb4c8e000       4       4       4 rw---   [ anon ]
+0000ffffc357b000     132      12      12 rw---   [ stack ]
+---------------- ------- ------- ------- 
+total kB           10892    1332      92
+$ cat /proc/sys/kernel/randomize_va_space
+2
+$ for i in 1 2 3; do ./layout short; done
+main 0xaaaae22c0b68  heap 0xaaab11650010  libc 0xffffa7fbf8a0  stack 0xffffce95f1d8
+main 0xaaaad6b90b68  heap 0xaaaaec5c2010  libc 0xffffa963f8a0  stack 0xffffeabce6a8
+main 0xaaaae9580b68  heap 0xaaab034de010  libc 0xffff7fc5f8a0  stack 0xffffce8d3598
+$ for i in 1 2 3; do setarch -R ./layout short; done
+main 0xaaaaaaaa0b68  heap 0xaaaaaaac1010  libc 0xfffff7e2f8a0  stack 0xfffffffff8a8
+main 0xaaaaaaaa0b68  heap 0xaaaaaaac1010  libc 0xfffff7e2f8a0  stack 0xfffffffff8a8
+main 0xaaaaaaaa0b68  heap 0xaaaaaaac1010  libc 0xfffff7e2f8a0  stack 0xfffffffff8a8
+$ gcc -O0 -no-pie layout.c -o layout-nopie; file layout layout-nopie | cut -c1-80
+layout:       ELF 64-bit LSB pie executable, ARM aarch64, version 1 (SYSV), dyna
+layout-nopie: ELF 64-bit LSB executable, ARM aarch64, version 1 (SYSV), dynamica
+$ for i in 1 2 3; do ./layout-nopie short; done
+main 0x400a6c  heap 0x3b24c010  libc 0xffffb87bf8a0  stack 0xfffff7cb7528
+main 0x400a6c  heap 0x3ece4010  libc 0xffff8b6af8a0  stack 0xffffed569478
+main 0x400a6c  heap 0x15a22010  libc 0xffffb865f8a0  stack 0xfffff6ecf3f8
+$ ulimit -s
+8192
+$ gcc -O0 rec.c -o rec
+$ ./rec; echo "exit code $?"
+SIGSEGV at 0xffffd0141df8, depth 7941, about 8190 KiB below the first frame
+/usr/local/bin/phien: line 24:    73 Segmentation fault         ./rec
+exit code 139
+$ (ulimit -s 2048; ./rec; echo "exit code $?")
+SIGSEGV at 0xfffff75a5f98, depth 1981, about 2043 KiB below the first frame
+/usr/local/bin/phien: line 24:    77 Segmentation fault         ./rec
+exit code 139
+$ node -e "let d = 0; function f() { d++; f(); } try { f(); } catch (e) { console.log(e.constructor.name + ': ' + e.message + ' after ' + d + ' calls'); }"
+RangeError: Maximum call stack size exceeded after 9158 calls
+$ javac Deep.java Idle.java
+$ java Deep
+StackOverflowError after 47616 calls
+$ java -Xss256k Deep
+StackOverflowError after 1629 calls
+$ gcc -O2 reserve.c -o reserve
+$ ./reserve 1024 100
+start                         VmSize:	    2776 kB  VmRSS:	    1320 kB
+after malloc                  VmSize:	 1051356 kB  VmRSS:	    1324 kB
+after writing                 VmSize:	 1051356 kB  VmRSS:	  103852 kB
+$ ps -o pid,vsz,rss,comm -p $P
+    PID    VSZ   RSS COMMAND
+    163 1051096 104548 reserve
+$ ps -o pid,vsz,rss,nlwp,comm -p $N,$J
+    PID    VSZ   RSS NLWP COMMAND
+    172 485228 45736    7 node
+    173 4818476 77568  18 java
+$ grep -E '^(Rss|Pss|Shared_Clean|Private_Dirty):' /proc/$N/smaps_rollup
+Rss:               45736 kB
+Pss:               44374 kB
+Shared_Clean:       1680 kB
+Private_Dirty:      9252 kB
+$ gcc -O2 pss.c -o pss
+$ ./pss 200 3
+pid           Rss      Pss   Shared  Private   (MiB)
+215           201       50      201        0
+216           200       50      200        0
+217           200       50      200        0
+218           200       50      200        0
+sum           801      200

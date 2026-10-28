@@ -1,0 +1,26 @@
+$ redis-server --version | cut -c1-40
+Redis server v=7.4.9 sha=00000000:0 mall
+$ redis-server --daemonize yes --save '' --rdb-key-save-delay 1 --logfile /tmp/redis.log --dir /tmp
+$ redis-benchmark -q -t set -n 600000 -r 300000 -d 1024 -P 50 --csv | tail -1
+"SET","619195.06","1.710","0.752","1.671","2.271","2.447","3.839"
+$ redis-cli DBSIZE
+259399
+$ redis-cli INFO memory | grep -E '^used_memory_human'
+used_memory_human:335.52M
+$ redis-cli BGSAVE
+Background saving started
+$ redis-benchmark -q -t set -n 30000 -r 300000 -d 1024 --csv | tail -1
+"SET","115830.12","0.313","0.096","0.271","0.495","0.607","8.607"
+$ redis-cli INFO persistence | grep -E 'rdb_last_bgsave_status|rdb_last_cow_size'
+rdb_last_bgsave_status:ok
+rdb_last_cow_size:130830336
+$ redis-cli INFO stats | grep -E '^latest_fork_usec'
+latest_fork_usec:2967
+$ grep -E 'Background saving started|Fork CoW|DB saved on disk|Background saving terminated' /tmp/redis.log | cut -d' ' -f5-
+10:21:58.283 * Background saving started by pid 40
+10:22:25.525 * DB saved on disk
+10:22:25.528 * Fork CoW for RDB: current 124 MB, peak 124 MB, average 120 MB
+10:22:25.575 * Background saving terminated with success
+$ redis-cli CONFIG GET disable-thp
+disable-thp
+yes

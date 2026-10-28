@@ -1,0 +1,393 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-6u-1-ch6-user-classes-personas",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-6u-1-ch6-user-classes-personas"
+  },
+  "exercises": [
+    {
+      "title": "User classes 1 — favored, disfavored or ignored?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "favored / disfavored user classes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers: some user classes are <b>favored</b> (their needs come first because they matter most to the business objectives), some are <b>disfavored</b> (you do not want them to use the product — for legal, security or safety reasons) and some may be <b>ignored</b> (the team decides not to design for them). Classify the user classes of an online exam system.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Wiegers: có lớp người dùng <b>ưu tiên</b> (nhu cầu được đặt trước vì quan trọng nhất với mục tiêu), <b>không mong muốn</b> (không muốn họ dùng sản phẩm — vì pháp lý, bảo mật, an toàn) và <b>bỏ qua</b> (đội quyết định không thiết kế cho họ). Phân loại lớp người dùng của hệ thống thi trực tuyến.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Không mong muốn ≠ bỏ qua: lớp không mong muốn sinh ra yêu cầu bảo mật để CHẶN họ.",
+        "Bỏ qua là quyết định phạm vi có ghi lại."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# User classes 1 — favored, disfavored or ignored?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# User classes 1 — favored, disfavored or ignored? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Favored\n   - r1.k: Disfavored\n   - r2.k: Favored\n   - r3.k: Ignored\n   - r4.k: Disfavored\n   Favored classes drive decisions; disfavored classes lead to security requirements (identity checks, access control); ignored classes are a conscious scope decision, written down so nobody builds for them by accident.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Favored classes drive decisions; disfavored classes lead to security requirements (identity checks, access control); ignored classes are a conscious scope decision, written down so nobody builds for them by accident.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Kind",
+                "luaChon": [
+                  "Favored",
+                  "Disfavored",
+                  "Ignored"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Students who take the exam."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "People who try to sit the exam for someone else."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Lecturers who create and grade the exams."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Alumni who want to browse old exams — the faculty decided not to support them."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Students who try to open other students’ answers."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Favored",
+              "r1.k": "Disfavored",
+              "r2.k": "Favored",
+              "r3.k": "Ignored",
+              "r4.k": "Disfavored"
+            },
+            "giaiThich": "<p><p>Favored classes drive decisions; disfavored classes lead to security requirements (identity checks, access control); ignored classes are a conscious scope decision, written down so nobody builds for them by accident.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Coi người gian lận là \"ignored\" — họ là disfavored, phải chặn."
+        },
+        {
+          "loi": "Không ghi lại lớp bị bỏ qua."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "user class",
+          "vi": "lớp người dùng — nhóm người dùng có cách dùng/nhu cầu giống nhau"
+        }
+      ]
+    },
+    {
+      "title": "User classes 2 — personas",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "personas"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>A <b>persona</b> is a description of a hypothetical, generic person who represents a user class: a name, a photo, background, goals, frustrations, skills, a typical day. Personas help the team think about real people instead of \"the user\".</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Persona</b> là mô tả một người giả định, điển hình, đại diện cho một lớp người dùng: tên, ảnh, hoàn cảnh, mục tiêu, khó chịu, kỹ năng, một ngày điển hình. Persona giúp đội nghĩ về người thật thay vì \"người dùng\" chung chung.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Persona = một người hư cấu đại diện cho lớp người dùng.",
+        "Chi tiết hữu ích là chi tiết ảnh hưởng tới yêu cầu."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# User classes 2 — personas\n\nAnswer in the answer panel (no code needed).\n\n1. A persona represents…Một persona đại diện cho…\n2. Which detail is most useful in a persona?Chi tiết nào hữu ích nhất trong persona?\n3. Can a persona replace talking to real users?Persona có thay được việc nói chuyện với người dùng thật không?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# User classes 2 — personas — answer key\n\n1. A persona represents…Một persona đại diện cho…\n   Answer: b) a user class, through a believable fictional person\n   A persona is a stand-in for a user class.VI: Persona đứng thay cho một lớp người dùng.\n\n2. Which detail is most useful in a persona?Chi tiết nào hữu ích nhất trong persona?\n   Answer: b) Goals and frustrations related to the product\n   Goals and pain points drive requirements.VI: Mục tiêu và điểm đau dẫn tới yêu cầu.\n\n3. Can a persona replace talking to real users?Persona có thay được việc nói chuyện với người dùng thật không?\n   Answer: b) No — personas complement, not replace, real user representatives\n   Personas come from research and are validated with real users.VI: Persona đến từ nghiên cứu và được kiểm với người dùng thật.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>A persona represents…</p><p style=\"opacity:.75;font-size:.92em\"><i>Một persona đại diện cho…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "one real customer the team interviewed"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a user class, through a believable fictional person"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the whole market"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the product owner"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A persona is a stand-in for a user class.</p><p><i>VI: Persona đứng thay cho một lớp người dùng.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Which detail is most useful in a persona?</p><p style=\"opacity:.75;font-size:.92em\"><i>Chi tiết nào hữu ích nhất trong persona?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Favourite colour"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Goals and frustrations related to the product"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Shoe size"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Zodiac sign"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Goals and pain points drive requirements.</p><p><i>VI: Mục tiêu và điểm đau dẫn tới yêu cầu.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Can a persona replace talking to real users?</p><p style=\"opacity:.75;font-size:.92em\"><i>Persona có thay được việc nói chuyện với người dùng thật không?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Yes"
+              },
+              {
+                "ma": "b",
+                "noiDung": "No — personas complement, not replace, real user representatives"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only on agile projects"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only for small projects"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Personas come from research and are validated with real users.</p><p><i>VI: Persona đến từ nghiên cứu và được kiểm với người dùng thật.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết persona như một hồ sơ cá nhân đầy chi tiết vô ích."
+        },
+        {
+          "loi": "Dùng persona thay cho phỏng vấn người dùng thật."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "persona",
+          "vi": "nhân vật giả định tiêu biểu cho một lớp người dùng"
+        },
+        {
+          "en": "user class",
+          "vi": "lớp người dùng — nhóm người dùng có cách dùng/nhu cầu giống nhau"
+        }
+      ]
+    },
+    {
+      "title": "User classes 3 — write a persona for a user class",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "personas"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>The online exam system has the user class <b>Proctor</b>: staff who watch 30–60 students taking an exam remotely, raise flags on suspicious behaviour and must react within one minute. Write a persona for this class in <code>PERSONA</code>: <code>name, userClass, age, background, goals[] (≥2), frustrations[] (≥2), techSkill (\"low\" | \"medium\" | \"high\"), quote</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Goals and frustrations must be about proctoring an online exam.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hệ thống thi trực tuyến có lớp người dùng <b>Proctor</b> (giám thị): cán bộ giám sát 30–60 sinh viên thi từ xa, gắn cờ hành vi đáng ngờ và phải phản ứng trong một phút. Viết persona cho lớp này trong <code>PERSONA</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Mục tiêu và khó chịu phải nói về việc giám sát thi trực tuyến.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "userClass: 'Proctor'",
+          "output": "the persona represents the Proctor class",
+          "explanation": "A persona always belongs to one user class.|||Persona luôn thuộc một lớp người dùng."
+        }
+      ],
+      "hintsJson": [
+        "Bắt đầu từ mô tả lớp: giám sát 30–60 sinh viên, gắn cờ, phản ứng trong 1 phút.",
+        "Khó chịu thường đến từ quá tải thông tin và tín hiệu mơ hồ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "persona.js",
+          "language": "javascript",
+          "code": "const PERSONA = { name: '', userClass: 'Proctor', age: 0, background: '', goals: [], frustrations: [], techSkill: '', quote: '' };\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "persona.js",
+          "language": "javascript",
+          "code": "const PERSONA = {\n  name: 'Ms Thu Ha',\n  userClass: 'Proctor',\n  age: 41,\n  background: 'Administrative officer of the examination office, proctors about ten online exams per term.',\n  goals: ['See every student\\'s webcam and screen status on one page', 'Flag suspicious behaviour and contact the student within one minute'],\n  frustrations: ['Switching between many browser tabs to watch 60 students', 'Not knowing whether a frozen video is cheating or a bad connection'],\n  techSkill: 'medium',\n  quote: 'I cannot watch sixty faces at once — tell me where to look.',\n};\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A useful persona makes the class concrete: what the proctor wants (one overview, quick contact) and what hurts (too many tabs, ambiguous signals) translate directly into requirements.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "persona.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "every field is filled with real content",
+              "vi": "mọi trường có nội dung thật"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){return typeof PERSONA==\"undefined\"||!PERSONA?\"PERSONA is missing\":!String(PERSONA.name).trim()||!String(PERSONA.background).trim()||!String(PERSONA.quote).trim()?\"name, background and quote are required\":Number(PERSONA.age)>=18&&Number(PERSONA.age)<=80?[\"low\",\"medium\",\"high\"].indexOf(String(PERSONA.techSkill).toLowerCase())<0?\"techSkill: low | medium | high\":!Array.isArray(PERSONA.goals)||PERSONA.goals.length<2||!Array.isArray(PERSONA.frustrations)||PERSONA.frustrations.length<2?\"at least two goals and two frustrations\":\"OK\":\"age: a believable adult age\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "the persona represents the Proctor class",
+              "vi": "persona đại diện lớp Proctor"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){return typeof PERSONA==\"undefined\"||!PERSONA?\"PERSONA is missing\":String(PERSONA.userClass).trim().toLowerCase()===\"proctor\"?\"OK\":\"userClass must be Proctor\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "goals and frustrations are about proctoring an online exam",
+              "vi": "mục tiêu và khó chịu nói về giám sát thi trực tuyến"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof PERSONA==\"undefined\"||!PERSONA)return\"PERSONA is missing\";var t=[].concat(PERSONA.goals||[],PERSONA.frustrations||[]).join(\" \").toLowerCase();return/student|exam|cheat|webcam|camera|screen|flag|suspicious|watch|monitor/.test(t)?\"OK\":\"write goals and frustrations about watching students, flagging behaviour, reacting fast\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Persona không gắn với lớp người dùng nào."
+        },
+        {
+          "loi": "Mục tiêu chung chung (\"work efficiently\")."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "persona",
+          "vi": "nhân vật giả định tiêu biểu cho một lớp người dùng"
+        },
+        {
+          "en": "user class",
+          "vi": "lớp người dùng — nhóm người dùng có cách dùng/nhu cầu giống nhau"
+        }
+      ]
+    }
+  ]
+}

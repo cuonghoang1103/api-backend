@@ -1,0 +1,453 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-2-3-ch2-bill-of-rights",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-2-3-ch2-bill-of-rights"
+  },
+  "exercises": [
+    {
+      "title": "Rights and responsibilities 1 — which right?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "customer rights"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>The ten rights of a software customer (Wiegers Ch.2): R1 BAs speak your language · R2 BAs learn your business · R3 Requirements recorded appropriately · R4 Explanations of practices and deliverables · R5 Change your requirements · R6 Mutual respect · R7 Hear ideas and alternatives · R8 Describe usability needs · R9 Hear about reuse · R10 A system that meets your needs. Which right is at stake in each situation?</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mười quyền của khách hàng phần mềm (Wiegers Ch.2) — xem danh sách ở bản tiếng Anh. Quyền nào đang được nói tới trong từng tình huống?</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Quyền = điều khách hàng được KỲ VỌNG từ BA và đội phát triển.",
+        "Đề xuất phương án khác ⇒ R7; giải thích quy trình/tài liệu ⇒ R4."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Rights and responsibilities 1 — which right?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Rights and responsibilities 1 — which right? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: R1 BAs speak your language\n   - r1.k: R2 BAs learn your business\n   - r2.k: R4 Explanations of practices and deliverables\n   - r3.k: R7 Hear ideas and alternatives\n   - r4.k: R8 Describe usability needs\n   - r5.k: R5 Change your requirements\n   Each right describes something the customer may expect from the BA and the developers; the matching responsibility is usually its mirror (e.g. R5 change ↔ P9 communicate changes promptly and P10 respect the process).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each right describes something the customer may expect from the BA and the developers; the matching responsibility is usually its mirror (e.g. R5 change ↔ P9 communicate changes promptly and P10 respect the process).</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Right",
+                "luaChon": [
+                  "R1 BAs speak your language",
+                  "R2 BAs learn your business",
+                  "R3 Requirements recorded appropriately",
+                  "R4 Explanations of practices and deliverables",
+                  "R5 Change your requirements",
+                  "R6 Mutual respect",
+                  "R7 Hear ideas and alternatives",
+                  "R8 Describe usability needs",
+                  "R9 Hear about reuse",
+                  "R10 A system that meets your needs"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "The clinic staff ask the BA to stop saying \"CRUD\" and \"actor\" in meetings."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "The BA spends two days at the front desk watching how bookings are taken."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The owner asks why she must sign off a \"baseline\" and what it means for later changes."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "The BA proposes an SMS reminder instead of the phone calls the nurses asked for, explaining the trade-offs."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Elderly patients ask for large buttons and a one-tap rebooking flow."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Halfway through the project the owner adds online payment, accepting the impact on cost and schedule."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "R1 BAs speak your language",
+              "r1.k": "R2 BAs learn your business",
+              "r2.k": "R4 Explanations of practices and deliverables",
+              "r3.k": "R7 Hear ideas and alternatives",
+              "r4.k": "R8 Describe usability needs",
+              "r5.k": "R5 Change your requirements"
+            },
+            "giaiThich": "<p><p>Each right describes something the customer may expect from the BA and the developers; the matching responsibility is usually its mirror (e.g. R5 change ↔ P9 communicate changes promptly and P10 respect the process).</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm R2 (BA tìm hiểu nghiệp vụ) với P1 (khách dạy BA về nghiệp vụ)."
+        },
+        {
+          "loi": "Coi thay đổi yêu cầu là không được phép — đó là một quyền, đi kèm trách nhiệm theo quy trình."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Requirements Bill of Rights",
+          "vi": "mười quyền của khách hàng về yêu cầu (Wiegers)"
+        }
+      ]
+    },
+    {
+      "title": "Rights and responsibilities 2 — which responsibility is not met?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "customer responsibilities"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>The ten responsibilities of a software customer: P1 Educate BAs about your business · P2 Dedicate the time · P3 Be specific and precise · P4 Make timely decisions · P5 Respect cost and feasibility assessments · P6 Set realistic priorities · P7 Review requirements and prototypes · P8 Establish acceptance criteria · P9 Promptly communicate changes · P10 Respect the requirements process. In each situation a customer fails one responsibility — which one?</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mười trách nhiệm của khách hàng phần mềm (xem bản tiếng Anh). Trong mỗi tình huống, khách hàng không làm tròn một trách nhiệm — trách nhiệm nào?</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Trách nhiệm = điều khách hàng PHẢI làm.",
+        "Mọi thứ \"Must\" ⇒ không đặt ưu tiên thực tế (P6)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Rights and responsibilities 2 — which responsibility is not met?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Rights and responsibilities 2 — which responsibility is not met? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: P2 Dedicate the time\n   - r1.k: P3 Be specific and precise\n   - r2.k: P4 Make timely decisions\n   - r3.k: P5 Respect cost and feasibility assessments\n   - r4.k: P6 Set realistic priorities\n   - r5.k: P9 Promptly communicate changes\n   - r6.k: P10 Respect the requirements process\n   Responsibilities are what the customer must do for the partnership to work: give time and precise input, decide on time, respect estimates, prioritise realistically, communicate changes, follow the process.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Responsibilities are what the customer must do for the partnership to work: give time and precise input, decide on time, respect estimates, prioritise realistically, communicate changes, follow the process.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Responsibility",
+                "luaChon": [
+                  "P1 Educate BAs about your business",
+                  "P2 Dedicate the time",
+                  "P3 Be specific and precise",
+                  "P4 Make timely decisions",
+                  "P5 Respect cost and feasibility assessments",
+                  "P6 Set realistic priorities",
+                  "P7 Review requirements and prototypes",
+                  "P8 Establish acceptance criteria",
+                  "P9 Promptly communicate changes",
+                  "P10 Respect the requirements process"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "The owner cancels three requirement workshops in a row because she is \"too busy\"."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "A nurse says \"make it work like the old system\" and cannot say what that means."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The team waits two weeks for the owner to decide whether walk-ins can book online."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "The owner rejects the developers’ 4-week estimate for insurance integration without any reason."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Every feature is labelled \"Must\" by the owner."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "The receptionists learn about a new pricing rule but tell the BA only after the release."
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "A doctor asks a developer directly to add a feature, skipping the change request process."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "P2 Dedicate the time",
+              "r1.k": "P3 Be specific and precise",
+              "r2.k": "P4 Make timely decisions",
+              "r3.k": "P5 Respect cost and feasibility assessments",
+              "r4.k": "P6 Set realistic priorities",
+              "r5.k": "P9 Promptly communicate changes",
+              "r6.k": "P10 Respect the requirements process"
+            },
+            "giaiThich": "<p><p>Responsibilities are what the customer must do for the partnership to work: give time and precise input, decide on time, respect estimates, prioritise realistically, communicate changes, follow the process.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chọn P10 cho mọi tình huống \"khách làm sai\"."
+        },
+        {
+          "loi": "Nhầm P4 (quyết định kịp thời) với P2 (dành thời gian)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Requirements Bill of Responsibilities",
+          "vi": "mười trách nhiệm của khách hàng về yêu cầu (Wiegers)"
+        }
+      ]
+    },
+    {
+      "title": "Rights and responsibilities 3 — decision makers and reaching agreement",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "decision makers",
+        "requirements baseline"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers Ch.2 ends with decision making: identify early who decides each kind of requirements issue, agree on a decision rule, and record the agreement as a requirements <b>baseline</b>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Wiegers Ch.2 kết thúc bằng việc ra quyết định: xác định sớm ai quyết định từng loại vấn đề yêu cầu, thống nhất luật ra quyết định, và ghi thoả thuận thành <b>baseline</b> yêu cầu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Baseline = bộ yêu cầu đã thống nhất, từ đó thay đổi phải qua kiểm soát.",
+        "Ai quyết định — xác định TRƯỚC khi có xung đột."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Rights and responsibilities 3 — decision makers and reaching agreement\n\nAnswer in the answer panel (no code needed).\n\n1. What is a requirements baseline?Baseline yêu cầu là gì?\n2. When should the project decide who has the authority to resolve requirements conflicts?Khi nào dự án nên xác định ai có quyền giải quyết xung đột yêu cầu?\n3. The customers will not sign off the requirements. What does Wiegers suggest?Khách hàng không chịu ký duyệt yêu cầu. Wiegers gợi ý gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Rights and responsibilities 3 — decision makers and reaching agreement — answer key\n\n1. What is a requirements baseline?Baseline yêu cầu là gì?\n   Answer: b) The set of requirements agreed upon, reviewed and approved, that serves as the basis for further work and is then changed only through change control\n   After baselining, changes go through the change control process.VI: Sau baseline, thay đổi phải qua quy trình kiểm soát thay đổi.\n\n2. When should the project decide who has the authority to resolve requirements conflicts?Khi nào dự án nên xác định ai có quyền giải quyết xung đột yêu cầu?\n   Answer: b) Early, before conflicts arise\n   Identify decision makers and the decision rule early.VI: Xác định người quyết định và luật quyết định từ sớm.\n\n3. The customers will not sign off the requirements. What does Wiegers suggest?Khách hàng không chịu ký duyệt yêu cầu. Wiegers gợi ý gì?\n   Answer: b) Treat sign-off as agreement on the baseline, record the assumptions and risks, and track the open issues\n   Sign-off means \"I agree this is our best understanding today; changes follow the process\".VI: Ký duyệt nghĩa là \"tôi đồng ý đây là hiểu biết tốt nhất hôm nay; thay đổi theo quy trình\".\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>What is a requirements baseline?</p><p style=\"opacity:.75;font-size:.92em\"><i>Baseline yêu cầu là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The first draft of the SRS"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The set of requirements agreed upon, reviewed and approved, that serves as the basis for further work and is then changed only through change control"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The list of all ideas ever proposed"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The test plan"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>After baselining, changes go through the change control process.</p><p><i>VI: Sau baseline, thay đổi phải qua quy trình kiểm soát thay đổi.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>When should the project decide who has the authority to resolve requirements conflicts?</p><p style=\"opacity:.75;font-size:.92em\"><i>Khi nào dự án nên xác định ai có quyền giải quyết xung đột yêu cầu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "When the first conflict blocks the team"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Early, before conflicts arise"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Never — the BA decides everything"
+              },
+              {
+                "ma": "d",
+                "noiDung": "At the end, during acceptance testing"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Identify decision makers and the decision rule early.</p><p><i>VI: Xác định người quyết định và luật quyết định từ sớm.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>The customers will not sign off the requirements. What does Wiegers suggest?</p><p style=\"opacity:.75;font-size:.92em\"><i>Khách hàng không chịu ký duyệt yêu cầu. Wiegers gợi ý gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Start coding anyway and hope"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Treat sign-off as agreement on the baseline, record the assumptions and risks, and track the open issues"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Stop the project"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Let the developers sign instead"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Sign-off means \"I agree this is our best understanding today; changes follow the process\".</p><p><i>VI: Ký duyệt nghĩa là \"tôi đồng ý đây là hiểu biết tốt nhất hôm nay; thay đổi theo quy trình\".</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Coi baseline là \"đóng băng mãi mãi\"."
+        },
+        {
+          "loi": "Đợi xung đột xảy ra mới hỏi ai có quyền quyết định."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "baseline",
+          "vi": "đường cơ sở — bộ yêu cầu đã thống nhất, từ đó mọi thay đổi phải qua kiểm soát"
+        },
+        {
+          "en": "change control board (CCB)",
+          "vi": "hội đồng kiểm soát thay đổi — người quyết định chấp nhận/từ chối thay đổi"
+        }
+      ]
+    }
+  ]
+}

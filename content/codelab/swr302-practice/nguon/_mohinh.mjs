@@ -63,7 +63,7 @@ export function P_TU(C) {
     + 'triage unlock unsubscribe update upgrade upload use validate verify view visit vote waitlist watch withdraw write').split(' ');
   // Động từ "rõ là hành động" — nhãn luồng dữ liệu không được bắt đầu bằng chúng (luồng = DỮ LIỆU, không phải hành động)
   var HANH = ('accept add approve assign browse calculate cancel choose confirm create delete edit enter generate get give inform maintain manage '
-    + 'make modify notify pay place provide receive register reject remove select send submit validate verify display show print ask').split(' ');
+    + 'make modify notify pay place provide receive register reject remove select send submit validate verify ask').split(' ');
   // Danh động từ hợp lệ làm tên trạng thái (không phải hoạt động)
   var GER_OK = 'pending waiting booking ongoing outstanding missing remaining upcoming incoming outgoing existing'.split(' ');
   function goc3(w) { // places → place, sends → send, approves → approve, pushes → push

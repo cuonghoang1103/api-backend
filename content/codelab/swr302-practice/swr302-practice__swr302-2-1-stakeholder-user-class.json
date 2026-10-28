@@ -1,0 +1,619 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-2-1-stakeholder-user-class",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-2-1-stakeholder-user-class"
+  },
+  "exercises": [
+    {
+      "title": "Stakeholders 1 — stakeholder, customer, user",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "stakeholders",
+        "customers",
+        "users"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers: a <b>stakeholder</b> is a person, group or organisation that is actively involved in a project, is affected by its outcome or can influence it. <b>Customers</b> are the subset of stakeholders who derive a benefit from the product (they may pay for it, request it or use it). <b>Users</b> are customers who interact with the product — directly, or indirectly by receiving its outputs.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Wiegers: <b>bên liên quan</b> là người, nhóm hay tổ chức tham gia tích cực vào dự án, bị ảnh hưởng bởi kết quả, hoặc có thể tác động lên nó. <b>Khách hàng</b> là tập con của bên liên quan được hưởng lợi từ sản phẩm (trả tiền, yêu cầu hoặc dùng nó). <b>Người dùng</b> là khách hàng tương tác với sản phẩm — trực tiếp, hoặc gián tiếp bằng cách nhận đầu ra của nó.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Người dùng ⊂ khách hàng ⊂ bên liên quan.",
+        "Người dùng gián tiếp nhận đầu ra mà không thao tác hệ thống."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Stakeholders 1 — stakeholder, customer, user\n\nAnswer in the answer panel (no code needed).\n\n1. Which set is the largest?Tập nào lớn nhất?\n2. The government tax office that receives the monthly VAT file produced by a shop’s billing system is…Cơ quan thuế nhận tệp VAT hằng tháng do hệ thống bán hàng của cửa hàng sinh ra là…\n3. A sales manager who reads the reports of a CRM but never logs in (the assistant prints them) is…Quản lý bán hàng đọc báo cáo CRM nhưng không bao giờ đăng nhập (thư ký in cho) là…\n4. Why does the expectation gap appear between what customers expect and what developers build?Vì sao có \"khoảng cách kỳ vọng\" giữa điều khách mong và điều dev xây?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Stakeholders 1 — stakeholder, customer, user — answer key\n\n1. Which set is the largest?Tập nào lớn nhất?\n   Answer: c) Stakeholders\n   Users ⊂ customers ⊂ stakeholders.VI: Người dùng ⊂ khách hàng ⊂ bên liên quan.\n\n2. The government tax office that receives the monthly VAT file produced by a shop’s billing system is…Cơ quan thuế nhận tệp VAT hằng tháng do hệ thống bán hàng của cửa hàng sinh ra là…\n   Answer: b) a stakeholder (it can influence the requirements) — possibly an indirect user\n   It receives output and its regulations shape requirements.VI: Nó nhận đầu ra và quy định của nó định hình yêu cầu.\n\n3. A sales manager who reads the reports of a CRM but never logs in (the assistant prints them) is…Quản lý bán hàng đọc báo cáo CRM nhưng không bao giờ đăng nhập (thư ký in cho) là…\n   Answer: b) an indirect user\n   Indirect users receive the product’s outputs without touching it.VI: Người dùng gián tiếp nhận đầu ra mà không chạm vào sản phẩm.\n\n4. Why does the expectation gap appear between what customers expect and what developers build?Vì sao có \"khoảng cách kỳ vọng\" giữa điều khách mong và điều dev xây?\n   Answer: b) Because communication about requirements is insufficient and needs change over time\n   Frequent customer engagement shrinks the gap (Ch.2 slide 4).VI: Tương tác thường xuyên với khách hàng thu hẹp khoảng cách (Ch.2 slide 4).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: c · b · b · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which set is the largest?</p><p style=\"opacity:.75;font-size:.92em\"><i>Tập nào lớn nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Users"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Customers"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Stakeholders"
+              },
+              {
+                "ma": "d",
+                "noiDung": "They are the same set"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Users ⊂ customers ⊂ stakeholders.</p><p><i>VI: Người dùng ⊂ khách hàng ⊂ bên liên quan.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>The government tax office that receives the monthly VAT file produced by a shop’s billing system is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Cơ quan thuế nhận tệp VAT hằng tháng do hệ thống bán hàng của cửa hàng sinh ra là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "not a stakeholder"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a stakeholder (it can influence the requirements) — possibly an indirect user"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the product champion"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the sponsor"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>It receives output and its regulations shape requirements.</p><p><i>VI: Nó nhận đầu ra và quy định của nó định hình yêu cầu.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>A sales manager who reads the reports of a CRM but never logs in (the assistant prints them) is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Quản lý bán hàng đọc báo cáo CRM nhưng không bao giờ đăng nhập (thư ký in cho) là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a direct user"
+              },
+              {
+                "ma": "b",
+                "noiDung": "an indirect user"
+              },
+              {
+                "ma": "c",
+                "noiDung": "not a user"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a developer"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Indirect users receive the product’s outputs without touching it.</p><p><i>VI: Người dùng gián tiếp nhận đầu ra mà không chạm vào sản phẩm.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Why does the expectation gap appear between what customers expect and what developers build?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao có \"khoảng cách kỳ vọng\" giữa điều khách mong và điều dev xây?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Because developers are lazy"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Because communication about requirements is insufficient and needs change over time"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Because customers never know what they want"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It cannot be reduced"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Frequent customer engagement shrinks the gap (Ch.2 slide 4).</p><p><i>VI: Tương tác thường xuyên với khách hàng thu hẹp khoảng cách (Ch.2 slide 4).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chỉ coi người trả tiền là khách hàng."
+        },
+        {
+          "loi": "Bỏ sót người dùng gián tiếp và cơ quan quản lý."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "stakeholder",
+          "vi": "bên liên quan — người/tổ chức bị ảnh hưởng hoặc ảnh hưởng tới dự án"
+        },
+        {
+          "en": "user class",
+          "vi": "lớp người dùng — nhóm người dùng có cách dùng/nhu cầu giống nhau"
+        }
+      ]
+    },
+    {
+      "title": "Stakeholders 2 — direct user, indirect user or other stakeholder?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "direct vs indirect users"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p><b>MediBook</b> lets patients book appointments at a private clinic. Classify each party.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>MediBook</b> cho bệnh nhân đặt lịch ở một phòng khám tư. Phân loại từng bên.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Có thao tác hệ thống không? ⇒ direct user.",
+        "Chỉ nhận đầu ra (báo cáo, tệp)? ⇒ indirect user. Chỉ ảnh hưởng/bị ảnh hưởng? ⇒ other stakeholder."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Stakeholders 2 — direct user, indirect user or other stakeholder?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Stakeholders 2 — direct user, indirect user or other stakeholder? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Direct user\n   - r1.k: Direct user\n   - r2.k: Indirect user\n   - r3.k: Other stakeholder\n   - r4.k: Other stakeholder\n   - r5.k: Direct user\n   - r6.k: Indirect user\n   Direct users operate MediBook; indirect users only receive its outputs (reports, files); regulators and developers are stakeholders who influence the requirements without being users.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Direct users operate MediBook; indirect users only receive its outputs (reports, files); regulators and developers are stakeholders who influence the requirements without being users.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Kind",
+                "luaChon": [
+                  "Direct user",
+                  "Indirect user",
+                  "Other stakeholder"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Patients who book an appointment in the app. — <i>Bệnh nhân đặt lịch trong app.</i>"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Receptionists who confirm bookings on the clinic PC. — <i>Lễ tân xác nhận lịch trên máy của phòng khám.</i>"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The clinic owner who reads a printed weekly occupancy report but never uses the app. — <i>Chủ phòng khám đọc báo cáo in hằng tuần nhưng không dùng app.</i>"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "The Ministry of Health, whose rules on patient data the system must follow. — <i>Bộ Y tế — hệ thống phải theo quy định về dữ liệu bệnh nhân.</i>"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "The software vendor’s developers. — <i>Lập trình viên của nhà cung cấp phần mềm.</i>"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Doctors who see their day schedule on a tablet. — <i>Bác sĩ xem lịch ngày trên máy tính bảng.</i>"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "The insurance company that receives monthly claim files exported by the system. — <i>Công ty bảo hiểm nhận tệp yêu cầu bồi thường hằng tháng do hệ thống xuất.</i>"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Direct user",
+              "r1.k": "Direct user",
+              "r2.k": "Indirect user",
+              "r3.k": "Other stakeholder",
+              "r4.k": "Other stakeholder",
+              "r5.k": "Direct user",
+              "r6.k": "Indirect user"
+            },
+            "giaiThich": "<p><p>Direct users operate MediBook; indirect users only receive its outputs (reports, files); regulators and developers are stakeholders who influence the requirements without being users.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Coi chủ phòng khám là direct user vì họ \"dùng\" báo cáo."
+        },
+        {
+          "loi": "Bỏ Bộ Y tế ra khỏi danh sách bên liên quan."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "stakeholder",
+          "vi": "bên liên quan — người/tổ chức bị ảnh hưởng hoặc ảnh hưởng tới dự án"
+        }
+      ]
+    },
+    {
+      "title": "Stakeholders 3 — group the users into user classes",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "user classes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>User classes group users by how they use the product: frequency, features used, privileges, experience. MediBook has four classes: <b>Patient</b> (books for self or family, occasional, mobile), <b>Front desk</b> (many bookings per day, can override rules), <b>Clinician</b> (sees own schedule, writes notes), <b>Administrator</b> (configures doctors, rooms, prices). Assign each person.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lớp người dùng gom người dùng theo cách họ dùng sản phẩm: tần suất, tính năng dùng, quyền, kinh nghiệm. MediBook có bốn lớp: <b>Patient</b> (đặt cho mình/gia đình, thỉnh thoảng, dùng điện thoại), <b>Front desk</b> (nhiều lượt đặt mỗi ngày, được vượt luật), <b>Clinician</b> (xem lịch mình, ghi chú), <b>Administrator</b> (cấu hình bác sĩ, phòng, giá). Gán từng người.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Lớp người dùng định nghĩa theo CÁCH DÙNG (tính năng, tần suất, quyền), không theo chức danh.",
+        "Người được đặt hộ vẫn thuộc trải nghiệm lớp Patient."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Stakeholders 3 — group the users into user classes\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Stakeholders 3 — group the users into user classes — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Patient\n   - r1.k: Front desk\n   - r2.k: Clinician\n   - r3.k: Administrator\n   - r4.k: Clinician\n   - r5.k: Patient\n   Classes are defined by usage, not by job title or age: the nurse writes visit notes like a clinician; the elderly man is represented by a patient-class user.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Classes are defined by usage, not by job title or age: the nurse writes visit notes like a clinician; the elderly man is represented by a patient-class user.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "User class",
+                "luaChon": [
+                  "Patient",
+                  "Front desk",
+                  "Clinician",
+                  "Administrator"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Ms Lan books her daughter’s vaccination twice a year."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Mr Huy, receptionist, handles 120 phone bookings a day and sometimes books outside opening hours for VIPs."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Dr Minh checks his afternoon schedule and adds a note after each visit."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "The IT staff member who adds a new dermatology room and its price list."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "A nurse who records blood pressure in the visit note."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "An elderly patient whose son books for him in the app."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Patient",
+              "r1.k": "Front desk",
+              "r2.k": "Clinician",
+              "r3.k": "Administrator",
+              "r4.k": "Clinician",
+              "r5.k": "Patient"
+            },
+            "giaiThich": "<p><p>Classes are defined by usage, not by job title or age: the nurse writes visit notes like a clinician; the elderly man is represented by a patient-class user.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Tạo lớp theo phòng ban thay vì theo cách dùng."
+        },
+        {
+          "loi": "Gán y tá vào Front desk vì không phải bác sĩ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "user class",
+          "vi": "lớp người dùng — nhóm người dùng có cách dùng/nhu cầu giống nhau"
+        }
+      ]
+    },
+    {
+      "title": "Stakeholders 4 — the product champion",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "product champion",
+        "favored user classes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers recommends one <b>product champion</b> per major user class: a real member of that class who speaks for it to the BA, provides and reviews requirements, and makes decisions within the scope agreed.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Wiegers khuyên mỗi lớp người dùng chính có một <b>product champion</b>: một thành viên thật của lớp đó, nói thay lớp với BA, cung cấp và review yêu cầu, ra quyết định trong phạm vi đã thống nhất.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Champion là NGƯỜI DÙNG THẬT của lớp, không phải người quản lý họ.",
+        "Xung đột giữa các lớp ⇒ xem lớp nào được ưu tiên theo mục tiêu nghiệp vụ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Stakeholders 4 — the product champion\n\nAnswer in the answer panel (no code needed).\n\n1. Who is the best product champion for the Front desk class of MediBook?Ai là product champion tốt nhất cho lớp Front desk của MediBook?\n2. Which is NOT a typical activity of a product champion?Việc nào KHÔNG phải việc điển hình của product champion?\n3. Two user classes ask for conflicting requirements. Wiegers suggests the decision usually follows…Hai lớp người dùng đòi yêu cầu mâu thuẫn. Wiegers gợi ý quyết định thường dựa trên…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Stakeholders 4 — the product champion — answer key\n\n1. Who is the best product champion for the Front desk class of MediBook?Ai là product champion tốt nhất cho lớp Front desk của MediBook?\n   Answer: b) An experienced receptionist respected by colleagues and given time to do it\n   A champion must be an actual member of the class, credible to peers, with time allocated.VI: Champion phải là thành viên thật của lớp, được đồng nghiệp tin, có thời gian.\n\n2. Which is NOT a typical activity of a product champion?Việc nào KHÔNG phải việc điển hình của product champion?\n   Answer: c) Write the production code of the features\n   Champions provide and validate requirements; they do not build the product.VI: Champion cung cấp và thẩm định yêu cầu; họ không xây sản phẩm.\n\n3. Two user classes ask for conflicting requirements. Wiegers suggests the decision usually follows…Hai lớp người dùng đòi yêu cầu mâu thuẫn. Wiegers gợi ý quyết định thường dựa trên…\n   Answer: b) the favored user class, i.e. the class most important to the business objectives\n   Favored user classes get priority because they matter most to the business objectives.VI: Lớp người dùng ưu tiên được ưu tiên vì quan trọng nhất với mục tiêu nghiệp vụ.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · c · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Who is the best product champion for the Front desk class of MediBook?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ai là product champion tốt nhất cho lớp Front desk của MediBook?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The clinic owner, because she pays"
+              },
+              {
+                "ma": "b",
+                "noiDung": "An experienced receptionist respected by colleagues and given time to do it"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The project manager"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A developer who used to work at a reception desk"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A champion must be an actual member of the class, credible to peers, with time allocated.</p><p><i>VI: Champion phải là thành viên thật của lớp, được đồng nghiệp tin, có thời gian.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Which is NOT a typical activity of a product champion?</p><p style=\"opacity:.75;font-size:.92em\"><i>Việc nào KHÔNG phải việc điển hình của product champion?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Collect input from other members of the user class"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Review requirements and evaluate prototypes"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Write the production code of the features"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Help define acceptance criteria"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Champions provide and validate requirements; they do not build the product.</p><p><i>VI: Champion cung cấp và thẩm định yêu cầu; họ không xây sản phẩm.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Two user classes ask for conflicting requirements. Wiegers suggests the decision usually follows…</p><p style=\"opacity:.75;font-size:.92em\"><i>Hai lớp người dùng đòi yêu cầu mâu thuẫn. Wiegers gợi ý quyết định thường dựa trên…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "whichever class shouts loudest"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the favored user class, i.e. the class most important to the business objectives"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the developers’ preference"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a coin toss"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Favored user classes get priority because they matter most to the business objectives.</p><p><i>VI: Lớp người dùng ưu tiên được ưu tiên vì quan trọng nhất với mục tiêu nghiệp vụ.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chọn sếp làm champion thay vì người dùng thật."
+        },
+        {
+          "loi": "Để dev quyết định khi hai lớp người dùng mâu thuẫn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "product champion",
+          "vi": "người đại diện chính của một lớp người dùng, nói thay họ với BA"
+        },
+        {
+          "en": "user class",
+          "vi": "lớp người dùng — nhóm người dùng có cách dùng/nhu cầu giống nhau"
+        }
+      ]
+    }
+  ]
+}

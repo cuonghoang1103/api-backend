@@ -1,0 +1,539 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-5v-1-ch5-business-req-vision",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-5v-1-ch5-business-req-vision"
+  },
+  "exercises": [
+    {
+      "title": "Business requirements 2 — SMART objectives",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "SMART objectives"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Good business objectives are <b>SMART</b>: Specific, Measurable, Attainable, Relevant, Time-bound. Pick the SMART one each time.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mục tiêu nghiệp vụ tốt phải <b>SMART</b>: cụ thể, đo được, khả thi, liên quan, có thời hạn. Chọn mục tiêu SMART.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Có con số? Có hạn? Có nói KẾT QUẢ nghiệp vụ (không phải công nghệ)?",
+        "Mục tiêu tốt thường có mốc hiện tại → mục tiêu → thời hạn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Business requirements 2 — SMART objectives\n\nAnswer in the answer panel (no code needed).\n\n1. Which objective is SMART?Mục tiêu nào SMART?\n2. Which candidate is a solution, not a business objective?Phương án nào là giải pháp, không phải mục tiêu nghiệp vụ?\n3. \"Improve customer satisfaction\" becomes SMART when written as…\"Tăng sự hài lòng\" trở thành SMART khi viết…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Business requirements 2 — SMART objectives — answer key\n\n1. Which objective is SMART?Mục tiêu nào SMART?\n   Answer: b) Increase canteen revenue by 20% by December 2027.\n   Specific, measurable (20%), time-bound (Dec 2027).VI: Cụ thể, đo được (20%), có hạn (12/2027).\n\n2. Which candidate is a solution, not a business objective?Phương án nào là giải pháp, không phải mục tiêu nghiệp vụ?\n   Answer: b) Build the app with Flutter.\n   A technology choice is not a business result.VI: Lựa chọn công nghệ không phải kết quả nghiệp vụ.\n\n3. \"Improve customer satisfaction\" becomes SMART when written as…\"Tăng sự hài lòng\" trở thành SMART khi viết…\n   Answer: b) Raise the average rating from 3.6 to 4.3 stars within six months of launch.\n   Baseline, target and deadline make it measurable and time-bound.VI: Mốc hiện tại, mục tiêu và hạn làm nó đo được và có thời hạn.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which objective is SMART?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mục tiêu nào SMART?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Make students happier with food."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Increase canteen revenue by 20% by December 2027."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Become the best food app in Vietnam."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Use machine learning for recommendations."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Specific, measurable (20%), time-bound (Dec 2027).</p><p><i>VI: Cụ thể, đo được (20%), có hạn (12/2027).</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Which candidate is a solution, not a business objective?</p><p style=\"opacity:.75;font-size:.92em\"><i>Phương án nào là giải pháp, không phải mục tiêu nghiệp vụ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Cut the lunch queue time from 20 to 5 minutes by June."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Build the app with Flutter."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Reduce food waste by 30% this year."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Serve 500 more students per day."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A technology choice is not a business result.</p><p><i>VI: Lựa chọn công nghệ không phải kết quả nghiệp vụ.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>\"Improve customer satisfaction\" becomes SMART when written as…</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Tăng sự hài lòng\" trở thành SMART khi viết…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Greatly improve customer satisfaction."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Raise the average rating from 3.6 to 4.3 stars within six months of launch."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Customers will love us."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Improve satisfaction using surveys."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Baseline, target and deadline make it measurable and time-bound.</p><p><i>VI: Mốc hiện tại, mục tiêu và hạn làm nó đo được và có thời hạn.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chọn \"become the best\" vì nghe tham vọng."
+        },
+        {
+          "loi": "Nhầm giải pháp công nghệ với mục tiêu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "SMART",
+          "vi": "Specific · Measurable · Attainable · Relevant · Time-bound"
+        }
+      ]
+    },
+    {
+      "title": "Business requirements 3 — the parts of the Moore vision template",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 4,
+      "points": 10,
+      "concepts": [
+        "vision statement"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Geoffrey Moore’s template: <i>For</i> [target customer] <i>who</i> [statement of need or opportunity], <i>the</i> [product name] <i>is a</i> [product category] <i>that</i> [key benefit, compelling reason to buy or use]. <i>Unlike</i> [primary competitive alternative, current system or current process], <i>our product</i> [statement of primary differentiation and advantages]. Put the parts of the FoodRun vision back in order.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Khuôn của Geoffrey Moore (bản tiếng Anh). Sắp lại các phần của tuyên bố tầm nhìn FoodRun cho đúng thứ tự.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Bắt đầu bằng For (khách hàng đích), kết thúc bằng our product (khác biệt).",
+        "Tên sản phẩm đứng ngay trước \"is a\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Business requirements 3 — the parts of the Moore vision template\n\nAnswer in the answer panel (no code needed).\n\n1. Order the partsSắp các phần\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Business requirements 3 — the parts of the Moore vision template — answer key\n\n1. Order the partsSắp các phần\n   Answer: a) For dormitory students  →  b) who are hungry between classes and cannot leave campus,  →  c) FoodRun  →  d) is a campus food-delivery app  →  e) that brings canteen meals to their door in 15 minutes.  →  f) Unlike walking to the canteen and queuing,  →  g) our product lets them order between classes and pay with the campus e-wallet.\n   For → who → the (name) → is a → that → unlike → our product.VI: For → who → tên → is a → that → unlike → our product.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>For → who → product name → is a → that → unlike → our product.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Order the parts</p><p style=\"opacity:.75;font-size:.92em\"><i>Sắp các phần</i></p>",
+            "muc": [
+              {
+                "ma": "e",
+                "noiDung": "that brings canteen meals to their door in 15 minutes."
+              },
+              {
+                "ma": "a",
+                "noiDung": "For dormitory students"
+              },
+              {
+                "ma": "g",
+                "noiDung": "our product lets them order between classes and pay with the campus e-wallet."
+              },
+              {
+                "ma": "c",
+                "noiDung": "FoodRun"
+              },
+              {
+                "ma": "f",
+                "noiDung": "Unlike walking to the canteen and queuing,"
+              },
+              {
+                "ma": "b",
+                "noiDung": "who are hungry between classes and cannot leave campus,"
+              },
+              {
+                "ma": "d",
+                "noiDung": "is a campus food-delivery app"
+              }
+            ],
+            "dapAn": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e",
+              "f",
+              "g"
+            ],
+            "giaiThich": "<p>For → who → the (name) → is a → that → unlike → our product.</p><p><i>VI: For → who → tên → is a → that → unlike → our product.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt \"Unlike\" trước \"that\"."
+        },
+        {
+          "loi": "Đưa tên sản phẩm lên đầu câu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "vision statement",
+          "vi": "tuyên bố tầm nhìn — một đoạn ngắn nói sản phẩm cho ai, giải quyết gì, khác gì"
+        }
+      ]
+    },
+    {
+      "title": "Business requirements 1 — opportunity, objective, metric, vision, risk or assumption?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "business requirements",
+        "vision and scope"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Section 1 of the vision and scope document holds the <b>business requirements</b>: background, business opportunity, business objectives, success metrics, vision statement, business risks, business assumptions and dependencies. Classify each statement of a campus food-delivery project, <b>FoodRun</b>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phần 1 của tài liệu tầm nhìn & phạm vi chứa <b>yêu cầu nghiệp vụ</b>: bối cảnh, cơ hội nghiệp vụ, mục tiêu nghiệp vụ, chỉ số thành công, tuyên bố tầm nhìn, rủi ro nghiệp vụ, giả định và phụ thuộc. Phân loại từng phát biểu của dự án giao đồ ăn trong khuôn viên <b>FoodRun</b>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Mục tiêu = kết quả nghiệp vụ muốn đạt; chỉ số = con số cho biết có đang/đã đạt hay không.",
+        "Rủi ro = điều có thể làm hỏng dự án; giả định = điều ta TIN là đúng và dựa vào."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Business requirements 1 — opportunity, objective, metric, vision, risk or assumption?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Business requirements 1 — opportunity, objective, metric, vision, risk or assumption? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Business opportunity\n   - r1.k: Business objective\n   - r2.k: Success metric\n   - r3.k: Vision statement\n   - r4.k: Business risk\n   - r5.k: Business assumption or dependency\n   - r6.k: Business objective\n   - r7.k: Success metric\n   An objective states the business result the organisation wants; a success metric is an indicator that tells, along the way or after delivery, whether the objective is being reached; the opportunity explains why now; a risk may make the project fail; an assumption is something believed true that the project depends on.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>An objective states the business result the organisation wants; a success metric is an indicator that tells, along the way or after delivery, whether the objective is being reached; the opportunity explains why now; a risk may make the project fail; an assumption is something believed true that the project depends on.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Part",
+                "luaChon": [
+                  "Business opportunity",
+                  "Business objective",
+                  "Success metric",
+                  "Vision statement",
+                  "Business risk",
+                  "Business assumption or dependency"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "70% of students now order food on their phones, but no service delivers inside the dormitories. — <i>70% sinh viên đặt đồ ăn trên điện thoại nhưng chưa dịch vụ nào giao vào ký túc xá.</i>"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Reach 3,000 orders per month by the end of the first semester. — <i>Đạt 3.000 đơn mỗi tháng vào cuối học kỳ đầu.</i>"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Average delivery time below 15 minutes, measured every month. — <i>Thời gian giao trung bình dưới 15 phút, đo hằng tháng.</i>"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "For dormitory students who are hungry between classes, FoodRun is a delivery app that brings canteen food to their door in 15 minutes. — <i>Cho sinh viên KTX đói giữa giờ học, FoodRun là app giao đồ ăn căng-tin tận cửa trong 15 phút.</i>"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Dormitory security may refuse couriers at night, cutting evening sales. — <i>Bảo vệ KTX có thể chặn người giao buổi tối, làm giảm doanh số tối.</i>"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "The canteen will keep its kitchen open until 22:00. — <i>Căng-tin sẽ mở bếp tới 22:00.</i>"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "Increase canteen revenue by 20% within one year. — <i>Tăng doanh thu căng-tin 20% trong một năm.</i>"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "s": "At least 4.2 stars average rating in the first three months. — <i>Đánh giá trung bình ít nhất 4,2 sao trong ba tháng đầu.</i>"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Business opportunity",
+              "r1.k": "Business objective",
+              "r2.k": "Success metric",
+              "r3.k": "Vision statement",
+              "r4.k": "Business risk",
+              "r5.k": "Business assumption or dependency",
+              "r6.k": "Business objective",
+              "r7.k": "Success metric"
+            },
+            "giaiThich": "<p><p>An objective states the business result the organisation wants; a success metric is an indicator that tells, along the way or after delivery, whether the objective is being reached; the opportunity explains why now; a risk may make the project fail; an assumption is something believed true that the project depends on.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Xếp chỉ số thành công vào mục tiêu vì cùng có con số."
+        },
+        {
+          "loi": "Xếp giả định (căng-tin mở tới 22:00) vào rủi ro."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "business requirement",
+          "vi": "yêu cầu nghiệp vụ — VÌ SAO tổ chức làm hệ thống (mục tiêu, lợi ích); ghi trong Vision & Scope"
+        },
+        {
+          "en": "vision and scope document",
+          "vi": "tài liệu tầm nhìn & phạm vi — chứa business requirements"
+        },
+        {
+          "en": "success metric",
+          "vi": "chỉ số thành công"
+        },
+        {
+          "en": "business opportunity",
+          "vi": "cơ hội nghiệp vụ — vì sao bây giờ nên làm"
+        }
+      ]
+    },
+    {
+      "title": "Business requirements 4 — write the vision statement of PrintPal",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 12,
+      "points": 30,
+      "concepts": [
+        "vision statement"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p><b>PrintPal</b> lets students send documents from their phones to the campus printers and pick them up with their student card. Today students must queue at the library copy shop, carry a USB stick and pay in cash. Write PrintPal’s vision statement with the Moore template, one property per part, in the object <code>VISION</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Fill forWho, who, productName, isA, that, unlike, ourProduct with meaningful phrases about PrintPal.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>PrintPal</b> cho sinh viên gửi tài liệu từ điện thoại tới máy in trong trường và lấy bản in bằng thẻ sinh viên. Hiện sinh viên phải xếp hàng ở tiệm photo thư viện, mang USB và trả tiền mặt. Viết tuyên bố tầm nhìn của PrintPal theo khuôn Moore, mỗi phần một thuộc tính trong object <code>VISION</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Điền forWho, who, productName, isA, that, unlike, ourProduct bằng cụm từ có nghĩa về PrintPal.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "productName",
+          "output": "\"PrintPal\"",
+          "explanation": "The exact product name.|||Đúng tên sản phẩm."
+        }
+      ],
+      "hintsJson": [
+        "Ghép câu: \"For … who …, the PrintPal is a … that … . Unlike …, our product …\".",
+        "Khác biệt chính: lấy bản in bằng thẻ sinh viên, trả bằng ví điện tử."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const VISION = { forWho: '', who: '', productName: '', isA: '', that: '', unlike: '', ourProduct: '' };\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// For students who need printouts, who waste time queuing with a USB stick, the PrintPal is a mobile printing service that\n// sends documents from a phone to any campus printer. Unlike the library copy shop, our product releases the job with the student card and charges the e-wallet.\nconst VISION = {\n  forWho: 'students who need to print assignments and slides',\n  who: 'waste time queuing at the copy shop with a USB stick and cash',\n  productName: 'PrintPal',\n  isA: 'mobile printing service',\n  that: 'sends documents from a phone to any campus printer in seconds',\n  unlike: 'the library copy shop with its queues, USB sticks and cash payments',\n  ourProduct: 'releases the print job when the student taps the student card and charges the campus e-wallet',\n};\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A vision statement is short, names the target customers, their need, the key benefit, today’s alternative and the differentiation — it guides scope decisions for the whole project.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "every part of the template is filled",
+              "vi": "điền đủ mọi phần của khuôn"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof VISION==\"undefined\"||!VISION)return\"VISION is missing\";for(var t=[\"forWho\",\"who\",\"productName\",\"isA\",\"that\",\"unlike\",\"ourProduct\"],r=0;r<t.length;r++)if(String(VISION[t[r]]||\"\").trim().split(/\\s+/).length<(t[r]===\"productName\"?1:3))return'part \"'+t[r]+'\" is empty or too short';return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "productName is PrintPal and isA names a product category",
+              "vi": "productName là PrintPal và isA là một loại sản phẩm"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){return typeof VISION==\"undefined\"||!VISION?\"VISION is missing\":String(VISION.productName).trim().toLowerCase()!==\"printpal\"?\"productName: PrintPal\":/app|service|system|platform|solution|tool/i.test(String(VISION.isA))?\"OK\":\"isA: a product category (app, service, platform\\u2026)\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "the parts carry the facts of the case (students, queue/USB/cash today, phone-to-printer, student card)",
+              "vi": "các phần mang đúng sự kiện của đề (sinh viên, hàng đợi/USB/tiền mặt hiện nay, điện thoại tới máy in, thẻ sinh viên)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof VISION==\"undefined\"||!VISION)return\"VISION is missing\";var e=function(t){return String(VISION[t]||\"\").toLowerCase()};return/student/.test(e(\"forWho\"))?/print|queue|usb|cash|time/.test(e(\"who\"))?/phone|mobile|send|printer|anywhere/.test(e(\"that\"))?/copy shop|queue|usb|cash|library/.test(e(\"unlike\"))?/card|wallet|tap|release/.test(e(\"ourProduct\"))?\"OK\":\"ourProduct: the differentiation (student card, e-wallet)\":\"unlike: the current alternative (the copy shop, USB stick, cash)\":\"that: the key benefit (from the phone to a campus printer)\":\"who: their need or problem today\":\"forWho: who are the target customers?\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Liệt kê tính năng thay vì lợi ích chính."
+        },
+        {
+          "loi": "Phần \"unlike\" nói về đối thủ chung chung thay vì cách làm hiện tại."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "vision statement",
+          "vi": "tuyên bố tầm nhìn"
+        },
+        {
+          "en": "differentiation",
+          "vi": "điểm khác biệt"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,455 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-4b-1-ch4-role-tasks",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-4b-1-ch4-role-tasks"
+  },
+  "exercises": [
+    {
+      "title": "The business analyst 1 — the role",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "BA role"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers: the business analyst (BA) is the individual with the primary responsibility to elicit, analyse, document and validate the needs of the project stakeholders — the bridge between the people who have needs and the people who can satisfy them. \"BA\" is a role, not necessarily a job title.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Wiegers: business analyst (BA) là người chịu trách nhiệm chính khai thác, phân tích, ghi lại và thẩm định nhu cầu của các bên liên quan — cây cầu giữa người có nhu cầu và người đáp ứng nhu cầu. \"BA\" là một vai trò, không nhất thiết là chức danh.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "BA = vai trò cầu nối, không phải chức danh.",
+        "Không có BA thì vẫn phải có người làm việc của BA."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The business analyst 1 — the role\n\nAnswer in the answer panel (no code needed).\n\n1. The BA is best described as…BA được mô tả đúng nhất là…\n2. In a small team without a BA, who performs the BA role?Trong nhóm nhỏ không có BA, ai làm vai BA?\n3. On agile projects, much of the BA work is often done by…Trong dự án agile, phần lớn việc BA thường do… làm\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The business analyst 1 — the role — answer key\n\n1. The BA is best described as…BA được mô tả đúng nhất là…\n   Answer: b) a communication bridge between stakeholders and the development team\n   The BA translates needs into requirements developers can implement.VI: BA dịch nhu cầu thành yêu cầu dev hiện thực được.\n\n2. In a small team without a BA, who performs the BA role?Trong nhóm nhỏ không có BA, ai làm vai BA?\n   Answer: b) Someone else (a developer, PM, product owner) must still do the BA activities\n   The work still has to be done; the role is shared or assigned.VI: Việc vẫn phải làm; vai được chia hoặc giao cho ai đó.\n\n3. On agile projects, much of the BA work is often done by…Trong dự án agile, phần lớn việc BA thường do… làm\n   Answer: a) the product owner, with team members helping\n   The agile analyst role is shared; the product owner owns the backlog.VI: Vai phân tích trong agile được chia sẻ; product owner sở hữu backlog.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>The BA is best described as…</p><p style=\"opacity:.75;font-size:.92em\"><i>BA được mô tả đúng nhất là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the person who writes all the code"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a communication bridge between stakeholders and the development team"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the project sponsor"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the tester"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The BA translates needs into requirements developers can implement.</p><p><i>VI: BA dịch nhu cầu thành yêu cầu dev hiện thực được.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>In a small team without a BA, who performs the BA role?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong nhóm nhỏ không có BA, ai làm vai BA?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Nobody — the role is skipped"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Someone else (a developer, PM, product owner) must still do the BA activities"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The customer alone"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The tool"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The work still has to be done; the role is shared or assigned.</p><p><i>VI: Việc vẫn phải làm; vai được chia hoặc giao cho ai đó.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>On agile projects, much of the BA work is often done by…</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong dự án agile, phần lớn việc BA thường do… làm</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the product owner, with team members helping"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the database administrator"
+              },
+              {
+                "ma": "c",
+                "noiDung": "nobody, agile has no requirements"
+              },
+              {
+                "ma": "d",
+                "noiDung": "an external auditor"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The agile analyst role is shared; the product owner owns the backlog.</p><p><i>VI: Vai phân tích trong agile được chia sẻ; product owner sở hữu backlog.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng BA là \"người viết tài liệu\" duy nhất."
+        },
+        {
+          "loi": "Cho rằng agile không cần ai làm việc phân tích yêu cầu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "business analyst (BA)",
+          "vi": "người phân tích nghiệp vụ — chịu trách nhiệm chính về yêu cầu"
+        }
+      ]
+    },
+    {
+      "title": "The business analyst 2 — is this a BA task?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "BA tasks"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers lists ten typical BA tasks: define business requirements, plan the requirements approach, identify stakeholders and user classes, elicit requirements, analyse requirements, document requirements, communicate requirements, lead validation, facilitate prioritisation, manage requirements. Decide for each activity whether it is a <b>BA task</b> or belongs to <b>another role</b>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Wiegers liệt kê mười việc điển hình của BA: xác định yêu cầu nghiệp vụ, lập kế hoạch cách làm yêu cầu, xác định bên liên quan và lớp người dùng, khai thác, phân tích, ghi lại, truyền đạt yêu cầu, dẫn dắt thẩm định, điều phối xếp ưu tiên, quản lý yêu cầu. Xác định mỗi hoạt động là <b>việc của BA</b> hay của <b>vai khác</b>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "BA điều phối và ghi lại; người quyết định phạm vi/ngân sách là nhà tài trợ.",
+        "Thiết kế CSDL và viết unit test là việc của đội phát triển."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The business analyst 2 — is this a BA task?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The business analyst 2 — is this a BA task? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: BA task\n   - r1.k: Another role\n   - r2.k: BA task\n   - r3.k: Another role\n   - r4.k: BA task\n   - r5.k: Another role\n   - r6.k: BA task\n   - r7.k: Another role\n   The BA facilitates, elicits, analyses, documents, validates and manages; design and code belong to developers, budgets and final scope decisions to the sponsor or decision makers — the BA helps them decide but does not own the decision.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The BA facilitates, elicits, analyses, documents, validates and manages; design and code belong to developers, budgets and final scope decisions to the sponsor or decision makers — the BA helps them decide but does not own the decision.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Whose task?",
+                "luaChon": [
+                  "BA task",
+                  "Another role"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Run a workshop to elicit the booking requirements."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Choose the database engine and design the tables."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Facilitate a prioritisation session between the owner and the doctors."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Approve the budget of the project."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Lead the review of the SRS with stakeholders."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Write unit tests for the payment module."
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "Track the status of each requirement after the baseline."
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "s": "Decide which features are in scope when the sponsor and the doctors disagree."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "BA task",
+              "r1.k": "Another role",
+              "r2.k": "BA task",
+              "r3.k": "Another role",
+              "r4.k": "BA task",
+              "r5.k": "Another role",
+              "r6.k": "BA task",
+              "r7.k": "Another role"
+            },
+            "giaiThich": "<p><p>The BA facilitates, elicits, analyses, documents, validates and manages; design and code belong to developers, budgets and final scope decisions to the sponsor or decision makers — the BA helps them decide but does not own the decision.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng BA tự quyết định phạm vi khi các bên bất đồng."
+        },
+        {
+          "loi": "Giao thiết kế bảng CSDL cho BA."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "facilitate",
+          "vi": "điều phối — dẫn dắt buổi làm việc để nhóm tự đi tới kết quả"
+        }
+      ]
+    },
+    {
+      "title": "The business analyst 3 — which skill?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "BA skills"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers’ essential analyst skills: Listening · Interviewing and questioning · Thinking on your feet · Analytical · Systems thinking · Learning · Facilitation · Leadership · Observational · Communication · Organizational · Modeling · Interpersonal · Creativity. Which skill does the BA use most in each moment?</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các kỹ năng thiết yếu của BA theo Wiegers (bản tiếng Anh). Ở mỗi khoảnh khắc, BA dùng kỹ năng nào nhiều nhất?</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Thấy điều không ai nói ⇒ quan sát. Thấy ảnh hưởng dây chuyền ⇒ tư duy hệ thống.",
+        "Giữ buổi họp đúng hướng ⇒ điều phối."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The business analyst 3 — which skill?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The business analyst 3 — which skill? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Observational\n   - r1.k: Thinking on your feet\n   - r2.k: Modeling\n   - r3.k: Facilitation\n   - r4.k: Systems thinking\n   - r5.k: Creativity\n   Noticing what is not said = observation; reacting live = thinking on your feet; diagrams = modelling; running a group = facilitation; seeing the ripple effects = systems thinking; proposing new ideas = creativity.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Noticing what is not said = observation; reacting live = thinking on your feet; diagrams = modelling; running a group = facilitation; seeing the ripple effects = systems thinking; proposing new ideas = creativity.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Skill",
+                "luaChon": [
+                  "Listening",
+                  "Interviewing and questioning",
+                  "Thinking on your feet",
+                  "Analytical",
+                  "Systems thinking",
+                  "Learning",
+                  "Facilitation",
+                  "Leadership",
+                  "Observational",
+                  "Communication",
+                  "Organizational",
+                  "Modeling",
+                  "Interpersonal",
+                  "Creativity"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "The BA notices the receptionist writes bookings on sticky notes before typing them — something nobody mentioned."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "A stakeholder suddenly raises a new constraint in a meeting; the BA quickly asks the right follow-up questions."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The BA draws a context diagram so everybody sees the scope."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "The BA keeps a workshop of 12 people on track and makes sure quiet people speak."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "The BA sees that changing the booking rule will also affect billing and insurance reports."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "The BA proposes a waitlist the users had never imagined."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Observational",
+              "r1.k": "Thinking on your feet",
+              "r2.k": "Modeling",
+              "r3.k": "Facilitation",
+              "r4.k": "Systems thinking",
+              "r5.k": "Creativity"
+            },
+            "giaiThich": "<p><p>Noticing what is not said = observation; reacting live = thinking on your feet; diagrams = modelling; running a group = facilitation; seeing the ripple effects = systems thinking; proposing new ideas = creativity.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chọn Communication cho mọi tình huống có nói chuyện."
+        },
+        {
+          "loi": "Nhầm Analytical với Systems thinking (cái sau nhìn toàn cục và tác động qua lại)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "systems thinking",
+          "vi": "tư duy hệ thống — thấy các phần ảnh hưởng nhau thế nào"
+        },
+        {
+          "en": "facilitation",
+          "vi": "kỹ năng điều phối nhóm"
+        }
+      ]
+    }
+  ]
+}

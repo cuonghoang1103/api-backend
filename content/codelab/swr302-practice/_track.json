@@ -40,6 +40,48 @@
       "description": "Lab chương 1: phân loại 14 phát biểu theo Hình 1-1 của Wiegers, tài liệu chứa từng loại, yêu cầu sản phẩm vs dự án, xếp 8 việc vào năm hoạt động kỹ nghệ yêu cầu, gọi tên sáu vấn đề yêu cầu kinh điển."
     },
     {
+      "slug": "swr302-2-1-stakeholder-user-class",
+      "name": "2.1 Stakeholders, user classes and the product champion",
+      "level": "BEGINNER",
+      "description": "Bên liên quan ⊃ khách hàng ⊃ người dùng (trực tiếp/gián tiếp), gom người dùng thành lớp theo cách dùng, chọn product champion và giải quyết xung đột giữa các lớp."
+    },
+    {
+      "slug": "swr302-2-3-ch2-bill-of-rights",
+      "name": "2.2 Customer rights, responsibilities and reaching agreement",
+      "level": "BEGINNER",
+      "description": "Mười quyền và mười trách nhiệm của khách hàng theo Wiegers qua tình huống phòng khám MediBook, người ra quyết định, luật quyết định và baseline yêu cầu."
+    },
+    {
+      "slug": "swr302-4b-1-ch4-role-tasks",
+      "name": "2.3 The business analyst: role, tasks and skills",
+      "level": "BEGINNER",
+      "description": "BA là vai trò cầu nối (không phải chức danh), mười việc điển hình của BA so với việc của vai khác, mười bốn kỹ năng thiết yếu qua tình huống thật."
+    },
+    {
+      "slug": "swr302-5v-1-ch5-business-req-vision",
+      "name": "2.4 Business requirements and the vision statement",
+      "level": "INTERMEDIATE",
+      "description": "Các phần của yêu cầu nghiệp vụ (cơ hội, mục tiêu, chỉ số thành công, tầm nhìn, rủi ro, giả định), mục tiêu SMART, khuôn tầm nhìn của Moore và tự viết tuyên bố tầm nhìn có chấm."
+    },
+    {
+      "slug": "swr302-5v-2-ch5-scope-context",
+      "name": "2.5 Scope and the context diagram",
+      "level": "INTERMEDIATE",
+      "description": "Luật sơ đồ ngữ cảnh (một vòng tròn, không ruột, nhãn là dữ liệu, mỗi chiều một mũi tên), trong hay ngoài biên hệ thống, tự vẽ context diagram PrintPal và sửa một sơ đồ sai — chấm bằng máy đọc Mermaid."
+    },
+    {
+      "slug": "swr302-5v-3-ch5-scope-techniques",
+      "name": "2.6 Scope techniques: ecosystem map, feature tree, event list",
+      "level": "BEGINNER",
+      "description": "Bốn cách biểu diễn phạm vi (context diagram, ecosystem map, feature tree, event list), phân loại sự kiện nghiệp vụ / tín hiệu / thời gian, giữ phạm vi bằng tầm nhìn và mục tiêu nghiệp vụ."
+    },
+    {
+      "slug": "swr302-6u-1-ch6-user-classes-personas",
+      "name": "2.7 User classes and personas",
+      "level": "BEGINNER",
+      "description": "Lớp người dùng ưu tiên / không mong muốn / bỏ qua, persona là gì và dùng thế nào, tự viết persona cho lớp Proctor của hệ thống thi trực tuyến."
+    },
+    {
       "slug": "swr302-2-lab-vision-scope-parksmart",
       "name": "Lab 2 — Customer, Vision & Scope: ParkSmart Campus Parking",
       "level": "ADVANCED",

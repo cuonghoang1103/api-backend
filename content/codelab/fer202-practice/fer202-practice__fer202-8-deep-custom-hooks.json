@@ -1,0 +1,775 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-8-deep-custom-hooks",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-8-1-usestate-useeffect"
+  },
+  "exercises": [
+    {
+      "title": "Deep Lab 8 — Custom Hooks Library (useFetch cache · useDebounce · useInterval · usePrevious · useOnClickOutside)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 130,
+      "points": 100,
+      "concepts": [
+        "custom hooks",
+        "request cache & deduplication",
+        "debounced values",
+        "declarative intervals",
+        "refs for latest callbacks",
+        "previous values",
+        "click outside"
+      ],
+      "prerequisites": [
+        "Lab 8 — Movie hooks",
+        "8.1 useState & useEffect"
+      ],
+      "tags": [
+        "fer202",
+        "deep-lab",
+        "hooks",
+        "custom-hooks"
+      ],
+      "problemHtml": "<h1>DEEP LAB 8: Custom Hooks Library — Crypto Watchlist</h1>\n<p class=\"bi-phu\">FER202 · Chapter 8 (deep) · Suggested time: 130 minutes · Total: 10 marks</p>\n<h2>1. Overview</h2>\n<p>Professional React code is mostly <b>custom hooks</b>. Write six of them in <code>src/hooks/</code> and build a watchlist on top: <code>useFetch</code> with a shared cache and <code>refetch</code>, <code>useDebounce</code> for search, <code>useInterval</code> for auto refresh (the famous \"callback in a ref\" pattern), <code>usePrevious</code> for price arrows, <code>useLocalStorage</code> for favourites and <code>useOnClickOutside</code> for a dropdown. The API is json-server at <code>http://localhost:9999/coins</code> (supports <code>?q=</code> full-text search).</p>\n<h3>Main features</h3>\n<ul>\n  <li>6 custom hooks + one app: fetch with cache, debounced search, auto refresh, price arrows, favourites, dropdown.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>One hook per file in <code>src/hooks/</code>, named export, name starts with <code>use</code>; every subscription/timer cleaned up.</li>\n  <li>Run <code>npx json-server --watch db.json --port 9999</code> with a <code>coins</code> collection locally; the grader provides one.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>src/\n├── hooks/\n│   ├── useFetch.js          # { data, loading, error, refetch } + shared cache\n│   ├── useDebounce.js\n│   ├── useInterval.js       # (callback, delay | null)\n│   ├── usePrevious.js\n│   ├── useLocalStorage.js\n│   └── useOnClickOutside.js\n├── App.js                   # Ticker · toolbar · list · PriceTracker · Menu\n└── index.css (given)</pre>\n<h2>3. UI wireframe</h2>\n<pre class=\"bi-wire\">+------------------------------------------------------------------+\n| Crypto Watchlist                                                  |\n| BTC · ETH · BNB · SOL · WBTC                          (#ticker)   |\n| [Search coins    ]  [x] Auto refresh  Refreshed 2 times  [Sort ▾] |\n| BTC   Bitcoin          $68,000.00                          ★      |\n| ETH   Ethereum          $3,500.00                          ☆      |\n| …                                              2 favourites       |\n| BTC $68,680.00   ▲ 1.00%   [+1%] [−2%]                (#tracker) |\n+------------------------------------------------------------------+</pre>\n<h2>4. Data model</h2>\n<p><b>coins (json-server)</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>id</code></td><td>number</td><td></td></tr><tr><td><code>symbol</code></td><td>string</td><td>BTC, ETH, …</td></tr><tr><td><code>name</code></td><td>string</td><td></td></tr><tr><td><code>price</code></td><td>number (USD)</td><td>shown as $68,000.00</td></tr></tbody></table>\n<h3>Sample data</h3>\n<pre>{\n \"coins\": [\n  {\n   \"id\": 1,\n   \"symbol\": \"BTC\",\n   \"name\": \"Bitcoin\",\n   \"price\": 68000\n  },\n  {\n   \"id\": 2,\n   \"symbol\": \"ETH\",\n   \"name\": \"Ethereum\",\n   \"price\": 3500\n  },\n  {\n   \"id\": 3,\n   \"symbol\": \"BNB\",\n   \"name\": \"BNB\",\n   \"price\": 590\n  },\n  {\n   \"id\": 4,\n   \"symbol\": \"SOL\",\n   \"name\": \"Solana\",\n   \"price\": 150\n  },\n  {\n   \"id\": 5,\n   \"symbol\": \"WBTC\",\n   \"name\": \"Wrapped Bitcoin\",\n   \"price\": 67900\n  }\n ]\n}</pre>\n<h2>5. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. useFetch <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>useFetch(url)</code> ⇒ <code>{ data, loading, error, refetch }</code>; non-2xx ⇒ <code>error = \"HTTP 404\"</code>; outdated responses ignored. UI: <code>#loading</code>, <code>#error</code> <code>Error: HTTP 404</code>, rows <code>.coin</code> (<code>.symbol .name .price</code> <code>$68,000.00</code>).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>2. Shared cache <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>A module-level <code>Map</code> url ⇒ promise: the <code>#ticker</code> component and the list use the same URL and trigger only <b>one</b> request; <code>refetch()</code> bypasses the cache.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>3. Debounced search <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>#search</code> + <code>useDebounce(value, 400)</code> ⇒ <code>GET /coins?q=…</code> only after typing stops; <code>#no-results</code> <code>No coins match \"doge\"</code>.</li>\n</ul>\n<p><b>Example:</b></p>\n<pre>type b, bi, bit quickly ⇒ one request /coins?q=bit</pre>\n</div>\n<div class=\"bi-cn\"><h3>4. useInterval auto refresh <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>#auto-refresh</code> on ⇒ <code>useInterval(cb, 1000)</code> calls <code>refetch</code> and increments <code>#refreshes</code> (<code>Refreshed 2 times</code>); off ⇒ delay <code>null</code> stops it. The callback is kept in a ref so the interval is not restarted every render.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. usePrevious price arrows <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>#tracker</code>: <code>#tick-up</code> (+1%), <code>#tick-down</code> (−2%); <code>#price-change</code> <code>▲ 1.00%</code> (class <code>up</code>) / <code>▼ 2.00%</code> (class <code>down</code>) vs the previous render; <code>—</code> at first.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>6. Favourites with useLocalStorage <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>.fav-btn</code> toggles <code>.fav</code>; stored as a JSON array of symbols in <code>favs</code>; <code>#fav-count</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>7. Dropdown with useOnClickOutside <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>#menu-btn</code> toggles <code>#menu</code>; a click anywhere outside the menu wrapper closes it; clicks inside keep it open.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>8. Hook hygiene <span class=\"bi-diem\">0.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Named <code>use…</code>, one per file, listeners and timers removed in cleanups.</li>\n</ul>\n</div>\n<h2>6. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>#title · #ticker · #search · #auto-refresh · #refreshes</code></td><td>toolbar</td></tr><tr><td><code>#loading · #error · #no-results · .coin .symbol .name .price .fav-btn(.fav) · #fav-count</code></td><td>list</td></tr><tr><td><code>#tracker · #btc-price · #price-change(.up/.down) · #tick-up · #tick-down</code></td><td>tracker</td></tr><tr><td><code>#menu-btn · #menu · #menu-name · #menu-price</code></td><td>dropdown</td></tr></tbody></table>\n<h2>7. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>useFetch</td><td>1.5</td></tr><tr><td>2</td><td>Shared cache</td><td>1.5</td></tr><tr><td>3</td><td>Debounced search</td><td>1.5</td></tr><tr><td>4</td><td>useInterval auto refresh</td><td>1.5</td></tr><tr><td>5</td><td>usePrevious price arrows</td><td>1</td></tr><tr><td>6</td><td>Favourites with useLocalStorage</td><td>1</td></tr><tr><td>7</td><td>Dropdown with useOnClickOutside</td><td>1</td></tr><tr><td>8</td><td>Hook hygiene</td><td>0.5</td></tr><tr><td></td><td><b>Total</b></td><td><b>9.5</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Fetching on every keystroke (no debounce).</li>\n  <li><code>setInterval</code> in an effect depending on the callback — the interval restarts every render and never fires.</li>\n  <li><code>setRefreshes(refreshes + 1)</code> inside the interval — stuck at 1 (stale closure).</li>\n  <li>Document listener never removed.</li>\n</ul>\n<h2>8. Submission</h2>\n<p>Work directly in the editor (files on the right) or download the starter, run it locally with Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> when the paper uses an API) and paste the files back. Press <b>Run</b> for the sample checks and <b>Submit</b> for full grading (hidden checks included).</p>",
+      "problemHtmlVi": "<h1>DEEP LAB 8: Thư viện Custom Hook — Crypto Watchlist</h1>\n<p class=\"bi-phu\">FER202 · Chương 8 (chuyên sâu) · Thời gian gợi ý: 130 phút · Tổng: 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p>Code React chuyên nghiệp chủ yếu là <b>custom hook</b>. Viết sáu hook trong <code>src/hooks/</code> và dựng watchlist trên đó: <code>useFetch</code> có cache dùng chung và <code>refetch</code>, <code>useDebounce</code> cho ô tìm, <code>useInterval</code> cho tự làm mới (mẫu \"callback trong ref\" nổi tiếng), <code>usePrevious</code> cho mũi tên giá, <code>useLocalStorage</code> cho mục yêu thích và <code>useOnClickOutside</code> cho menu thả. API là json-server ở <code>http://localhost:9999/coins</code> (hỗ trợ tìm toàn văn <code>?q=</code>).</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>6 custom hook + một ứng dụng: fetch có cache, tìm có debounce, tự làm mới, mũi tên giá, yêu thích, menu thả.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Mỗi hook một tệp trong <code>src/hooks/</code>, export có tên, tên bắt đầu bằng <code>use</code>; mọi đăng ký/hẹn giờ đều được dọn.</li>\n  <li>Trên máy chạy <code>npx json-server --watch db.json --port 9999</code> với bảng <code>coins</code>; máy chấm có sẵn.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>src/\n├── hooks/\n│   ├── useFetch.js          # { data, loading, error, refetch } + shared cache\n│   ├── useDebounce.js\n│   ├── useInterval.js       # (callback, delay | null)\n│   ├── usePrevious.js\n│   ├── useLocalStorage.js\n│   └── useOnClickOutside.js\n├── App.js                   # Ticker · toolbar · list · PriceTracker · Menu\n└── index.css (given)</pre>\n<h2>3. Wireframe giao diện</h2>\n<pre class=\"bi-wire\">+------------------------------------------------------------------+\n| Crypto Watchlist                                                  |\n| BTC · ETH · BNB · SOL · WBTC                          (#ticker)   |\n| [Search coins    ]  [x] Auto refresh  Refreshed 2 times  [Sort ▾] |\n| BTC   Bitcoin          $68,000.00                          ★      |\n| ETH   Ethereum          $3,500.00                          ☆      |\n| …                                              2 favourites       |\n| BTC $68,680.00   ▲ 1.00%   [+1%] [−2%]                (#tracker) |\n+------------------------------------------------------------------+</pre>\n<h2>4. Mô hình dữ liệu</h2>\n<p><b>coins (json-server)</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>id</code></td><td>number</td><td></td></tr><tr><td><code>symbol</code></td><td>string</td><td>BTC, ETH, …</td></tr><tr><td><code>name</code></td><td>string</td><td></td></tr><tr><td><code>price</code></td><td>number (USD)</td><td>hiển thị $68,000.00</td></tr></tbody></table>\n<h3>Dữ liệu mẫu</h3>\n<pre>{\n \"coins\": [\n  {\n   \"id\": 1,\n   \"symbol\": \"BTC\",\n   \"name\": \"Bitcoin\",\n   \"price\": 68000\n  },\n  {\n   \"id\": 2,\n   \"symbol\": \"ETH\",\n   \"name\": \"Ethereum\",\n   \"price\": 3500\n  },\n  {\n   \"id\": 3,\n   \"symbol\": \"BNB\",\n   \"name\": \"BNB\",\n   \"price\": 590\n  },\n  {\n   \"id\": 4,\n   \"symbol\": \"SOL\",\n   \"name\": \"Solana\",\n   \"price\": 150\n  },\n  {\n   \"id\": 5,\n   \"symbol\": \"WBTC\",\n   \"name\": \"Wrapped Bitcoin\",\n   \"price\": 67900\n  }\n ]\n}</pre>\n<h2>5. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. useFetch <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>useFetch(url)</code> ⇒ <code>{ data, loading, error, refetch }</code>; không phải 2xx ⇒ <code>error = \"HTTP 404\"</code>; bỏ phản hồi cũ. Giao diện: <code>#loading</code>, <code>#error</code> <code>Error: HTTP 404</code>, dòng <code>.coin</code> (<code>.symbol .name .price</code> <code>$68,000.00</code>).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>2. Cache dùng chung <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>Map</code> cấp module url ⇒ promise: component <code>#ticker</code> và danh sách dùng cùng URL và chỉ gây <b>một</b> request; <code>refetch()</code> bỏ qua cache.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>3. Tìm kiếm có debounce <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>#search</code> + <code>useDebounce(value, 400)</code> ⇒ <code>GET /coins?q=…</code> chỉ sau khi ngừng gõ; <code>#no-results</code> <code>No coins match \"doge\"</code>.</li>\n</ul>\n<p><b>Ví dụ:</b></p>\n<pre>gõ nhanh b, bi, bit ⇒ một request /coins?q=bit</pre>\n</div>\n<div class=\"bi-cn\"><h3>4. useInterval tự làm mới <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>#auto-refresh</code> bật ⇒ <code>useInterval(cb, 1000)</code> gọi <code>refetch</code> và tăng <code>#refreshes</code> (<code>Refreshed 2 times</code>); tắt ⇒ delay <code>null</code> dừng. Callback giữ trong ref để interval không khởi động lại mỗi render.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. usePrevious mũi tên giá <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>#tracker</code>: <code>#tick-up</code> (+1%), <code>#tick-down</code> (−2%); <code>#price-change</code> <code>▲ 1.00%</code> (class <code>up</code>) / <code>▼ 2.00%</code> (class <code>down</code>) so với lần render trước; <code>—</code> lúc đầu.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>6. Yêu thích với useLocalStorage <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>.fav-btn</code> bật/tắt <code>.fav</code>; lưu mảng JSON các symbol ở <code>favs</code>; <code>#fav-count</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>7. Menu thả với useOnClickOutside <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>#menu-btn</code> bật/tắt <code>#menu</code>; bấm bất kỳ đâu ngoài khung menu thì đóng; bấm bên trong giữ nguyên.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>8. Hook sạch <span class=\"bi-diem\">0.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Tên <code>use…</code>, mỗi tệp một hook, listener và hẹn giờ được gỡ trong cleanup.</li>\n</ul>\n</div>\n<h2>6. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>#title · #ticker · #search · #auto-refresh · #refreshes</code></td><td>thanh công cụ</td></tr><tr><td><code>#loading · #error · #no-results · .coin .symbol .name .price .fav-btn(.fav) · #fav-count</code></td><td>danh sách</td></tr><tr><td><code>#tracker · #btc-price · #price-change(.up/.down) · #tick-up · #tick-down</code></td><td>theo dõi giá</td></tr><tr><td><code>#menu-btn · #menu · #menu-name · #menu-price</code></td><td>menu</td></tr></tbody></table>\n<h2>7. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>useFetch</td><td>1.5</td></tr><tr><td>2</td><td>Cache dùng chung</td><td>1.5</td></tr><tr><td>3</td><td>Tìm kiếm có debounce</td><td>1.5</td></tr><tr><td>4</td><td>useInterval tự làm mới</td><td>1.5</td></tr><tr><td>5</td><td>usePrevious mũi tên giá</td><td>1</td></tr><tr><td>6</td><td>Yêu thích với useLocalStorage</td><td>1</td></tr><tr><td>7</td><td>Menu thả với useOnClickOutside</td><td>1</td></tr><tr><td>8</td><td>Hook sạch</td><td>0.5</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>9.5</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Gọi API mỗi phím gõ (không debounce).</li>\n  <li><code>setInterval</code> trong effect phụ thuộc callback — interval khởi động lại mỗi render và không bao giờ chạy.</li>\n  <li><code>setRefreshes(refreshes + 1)</code> trong interval — kẹt ở 1 (closure cũ).</li>\n  <li>Listener trên document không bao giờ được gỡ.</li>\n</ul>\n<h2>8. Nộp bài</h2>\n<p>Làm thẳng trong editor (các tệp bên phải) hoặc tải starter, chạy trên máy bằng Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> khi đề dùng API) rồi dán lại tệp. Bấm <b>Chạy thử</b> để chạy kiểm mẫu, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn).</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "One hook per file in <code>src/hooks/</code>, named export, name starts with <code>use</code>; every subscription/timer cleaned up.|||Mỗi hook một tệp trong <code>src/hooks/</code>, export có tên, tên bắt đầu bằng <code>use</code>; mọi đăng ký/hẹn giờ đều được dọn.\nRun <code>npx json-server --watch db.json --port 9999</code> with a <code>coins</code> collection locally; the grader provides one.|||Trên máy chạy <code>npx json-server --watch db.json --port 9999</code> với bảng <code>coins</code>; máy chấm có sẵn.",
+      "examplesJson": [
+        {
+          "input": "Debounced search|||Tìm kiếm có debounce",
+          "output": "type b, bi, bit quickly ⇒ one request /coins?q=bit|||gõ nhanh b, bi, bit ⇒ một request /coins?q=bit",
+          "explanation": "See the brief / Xem đề."
+        }
+      ],
+      "hintsJson": [
+        "Cache theo URL: lưu PROMISE (không lưu dữ liệu) ⇒ hai component gọi cùng lúc vẫn dùng chung một request.",
+        "useInterval: savedCallback = useRef(cb); effect 1 cập nhật savedCallback.current = cb; effect 2 [delay] tạo setInterval(() => savedCallback.current(), delay).",
+        "useDebounce: effect [value, delay] đặt setTimeout cập nhật state, cleanup clearTimeout.",
+        "useOnClickOutside: document.addEventListener(\"click\", …) và kiểm ref.current.contains(e.target)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER: mọi thứ viết thẳng trong component, gọi API mỗi phím gõ, không cache\nimport { useEffect, useState } from 'react';\n\nexport default function App() {\n  const [query, setQuery] = useState('');\n  const [coins, setCoins] = useState([]);\n  useEffect(() => {\n    fetch('http://localhost:9999/coins' + (query ? '?q=' + query : '')).then((r) => r.json()).then(setCoins);\n  }, [query]);\n  return (\n    <main>\n      <h1 id=\"title\">Crypto Watchlist</h1>\n      <input id=\"search\" value={query} onChange={(e) => setQuery(e.target.value)} />\n      {coins.map((c) => <div key={c.id} className=\"coin\"><span className=\"symbol\">{c.symbol}</span></div>)}\n    </main>\n  );\n}\n"
+        },
+        {
+          "name": "src/hooks/useFetch.js",
+          "language": "javascript",
+          "code": "// src/hooks/useFetch.js — STARTER\nexport function useFetch() {\n  return undefined;\n}\n"
+        },
+        {
+          "name": "src/hooks/useDebounce.js",
+          "language": "javascript",
+          "code": "// src/hooks/useDebounce.js — STARTER\nexport function useDebounce() {\n  return undefined;\n}\n"
+        },
+        {
+          "name": "src/hooks/useInterval.js",
+          "language": "javascript",
+          "code": "// src/hooks/useInterval.js — STARTER\nexport function useInterval() {\n  return undefined;\n}\n"
+        },
+        {
+          "name": "src/hooks/usePrevious.js",
+          "language": "javascript",
+          "code": "// src/hooks/usePrevious.js — STARTER\nexport function usePrevious() {\n  return undefined;\n}\n"
+        },
+        {
+          "name": "src/hooks/useLocalStorage.js",
+          "language": "javascript",
+          "code": "// src/hooks/useLocalStorage.js — STARTER\nexport function useLocalStorage() {\n  return undefined;\n}\n"
+        },
+        {
+          "name": "src/hooks/useOnClickOutside.js",
+          "language": "javascript",
+          "code": "// src/hooks/useOnClickOutside.js — STARTER\nexport function useOnClickOutside() {\n  return undefined;\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport './index.css';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "src/index.css",
+          "language": "css",
+          "code": "/* src/index.css (đã cho) */\nbody { font-family: system-ui, sans-serif; margin: 0; padding: 20px; background: #0f172a; color: #e2e8f0; }\n.card { background: #1e293b; border-radius: 12px; padding: 14px 18px; margin-bottom: 14px; }\n.toolbar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }\ninput[type=text] { padding: 6px 10px; border-radius: 6px; border: 1px solid #334155; background: #0f172a; color: inherit; }\n.coin { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #334155; }\n.fav-btn { background: none; border: 0; color: #64748b; font-size: 18px; cursor: pointer; } .fav-btn.fav { color: #facc15; }\n.up { color: #4ade80; } .down { color: #f87171; }\n.menu-wrap { position: relative; } #menu { position: absolute; top: 28px; left: 0; background: #334155; padding: 6px; border-radius: 8px; list-style: none; margin: 0; min-width: 140px; }\nbutton { cursor: pointer; }\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — ghép các custom hook thành ứng dụng watchlist\nimport { useRef, useState } from 'react';\nimport { useFetch } from './hooks/useFetch';\nimport { useDebounce } from './hooks/useDebounce';\nimport { useInterval } from './hooks/useInterval';\nimport { usePrevious } from './hooks/usePrevious';\nimport { useLocalStorage } from './hooks/useLocalStorage';\nimport { useOnClickOutside } from './hooks/useOnClickOutside';\n\nconst API = 'http://localhost:9999/coins';\nconst usd = (n) => '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });\n\n// Thanh tin dùng CÙNG URL với danh sách ⇒ cache ⇒ chỉ một request\nfunction Ticker() {\n  const { data } = useFetch(API);\n  return <p id=\"ticker\">{data ? data.map((c) => c.symbol).join(' · ') : '…'}</p>;\n}\n\nfunction PriceTracker() {\n  const [price, setPrice] = useState(68000);\n  const prev = usePrevious(price);\n  const change = prev === undefined ? 0 : ((price - prev) / prev) * 100;\n  return (\n    <div className=\"card\" id=\"tracker\">\n      <span id=\"btc-price\">BTC {usd(price)}</span>{' '}\n      <span id=\"price-change\" className={change > 0 ? 'up' : change < 0 ? 'down' : ''}>\n        {change === 0 ? '—' : `${change > 0 ? '▲' : '▼'} ${Math.abs(change).toFixed(2)}%`}\n      </span>{' '}\n      <button id=\"tick-up\" type=\"button\" onClick={() => setPrice((p) => Math.round(p * 1.01 * 100) / 100)}>+1%</button>{' '}\n      <button id=\"tick-down\" type=\"button\" onClick={() => setPrice((p) => Math.round(p * 0.98 * 100) / 100)}>−2%</button>\n    </div>\n  );\n}\n\nfunction Menu() {\n  const [open, setOpen] = useState(false);\n  const ref = useRef(null);\n  useOnClickOutside(ref, () => setOpen(false));\n  return (\n    <div className=\"menu-wrap\" ref={ref}>\n      <button id=\"menu-btn\" type=\"button\" onClick={() => setOpen((o) => !o)}>Sort ▾</button>\n      {open && (\n        <ul id=\"menu\">\n          <li><button id=\"menu-name\" type=\"button\">By name</button></li>\n          <li><button id=\"menu-price\" type=\"button\">By price</button></li>\n        </ul>\n      )}\n    </div>\n  );\n}\n\nexport default function App() {\n  const [query, setQuery] = useState('');\n  const q = useDebounce(query.trim(), 400);\n  const url = q ? `${API}?q=${encodeURIComponent(q)}` : API;\n  const { data, loading, error, refetch } = useFetch(url);\n  const [auto, setAuto] = useState(false);\n  const [refreshes, setRefreshes] = useState(0);\n  const [favs, setFavs] = useLocalStorage('favs', []);\n\n  useInterval(() => {\n    refetch();\n    setRefreshes((n) => n + 1);\n  }, auto ? 1000 : null);\n\n  const toggleFav = (symbol) =>\n    setFavs((list) => (list.includes(symbol) ? list.filter((s) => s !== symbol) : [...list, symbol]));\n\n  return (\n    <main>\n      <h1 id=\"title\">Crypto Watchlist</h1>\n      <Ticker />\n      <div className=\"card toolbar\">\n        <input id=\"search\" type=\"text\" placeholder=\"Search coins\" value={query} onChange={(e) => setQuery(e.target.value)} />\n        <label><input id=\"auto-refresh\" type=\"checkbox\" checked={auto} onChange={(e) => setAuto(e.target.checked)} /> Auto refresh</label>\n        <span id=\"refreshes\">Refreshed {refreshes} times</span>\n        <Menu />\n      </div>\n      <div className=\"card\">\n        {loading && !data && <p id=\"loading\">Loading...</p>}\n        {error && <p id=\"error\">Error: {error}</p>}\n        {data && data.length === 0 && <p id=\"no-results\">No coins match \"{q}\"</p>}\n        {data && data.map((c) => (\n          <div key={c.id} className=\"coin\">\n            <span className=\"symbol\">{c.symbol}</span>\n            <span className=\"name\">{c.name}</span>\n            <span className=\"price\">{usd(c.price)}</span>\n            <button type=\"button\" className={favs.includes(c.symbol) ? 'fav-btn fav' : 'fav-btn'} aria-label={`Favourite ${c.symbol}`} onClick={() => toggleFav(c.symbol)}>★</button>\n          </div>\n        ))}\n        <p id=\"fav-count\">{favs.length} favourites</p>\n      </div>\n      <PriceTracker />\n    </main>\n  );\n}\n"
+        },
+        {
+          "name": "src/hooks/useFetch.js",
+          "language": "javascript",
+          "code": "// src/hooks/useFetch.js — GET có cache DÙNG CHUNG theo URL, refetch, và bỏ phản hồi cũ\nimport { useCallback, useEffect, useState } from 'react';\n\nconst cache = new Map(); // url ⇒ Promise<data> (hai component cùng URL dùng chung MỘT request)\n\nfunction load(url, force) {\n  if (force || !cache.has(url)) {\n    const p = fetch(url).then((res) => {\n      if (!res.ok) throw new Error(`HTTP ${res.status}`);\n      return res.json();\n    });\n    cache.set(url, p);\n    p.catch(() => cache.delete(url)); // lỗi thì không giữ trong cache\n  }\n  return cache.get(url);\n}\n\nexport function useFetch(url) {\n  const [state, setState] = useState({ data: null, loading: Boolean(url), error: null });\n  const [version, setVersion] = useState(0);\n\n  useEffect(() => {\n    if (!url) {\n      setState({ data: null, loading: false, error: null });\n      return undefined;\n    }\n    let ignore = false;\n    setState((s) => ({ ...s, loading: true, error: null }));\n    load(url, version > 0)\n      .then((data) => { if (!ignore) setState({ data, loading: false, error: null }); })\n      .catch((err) => { if (!ignore) setState({ data: null, loading: false, error: err.message }); });\n    return () => { ignore = true; };\n  }, [url, version]);\n\n  const refetch = useCallback(() => setVersion((v) => v + 1), []);\n  return { ...state, refetch };\n}\n"
+        },
+        {
+          "name": "src/hooks/useDebounce.js",
+          "language": "javascript",
+          "code": "// src/hooks/useDebounce.js — giá trị \"trễ\": chỉ đổi khi value đứng yên delay ms\nimport { useEffect, useState } from 'react';\n\nexport function useDebounce(value, delay) {\n  const [debounced, setDebounced] = useState(value);\n  useEffect(() => {\n    const id = setTimeout(() => setDebounced(value), delay);\n    return () => clearTimeout(id);\n  }, [value, delay]);\n  return debounced;\n}\n"
+        },
+        {
+          "name": "src/hooks/useInterval.js",
+          "language": "javascript",
+          "code": "// src/hooks/useInterval.js — setInterval theo kiểu khai báo; callback mới nhất luôn được gọi; delay null = dừng\nimport { useEffect, useRef } from 'react';\n\nexport function useInterval(callback, delay) {\n  const saved = useRef(callback);\n\n  useEffect(() => {\n    saved.current = callback; // cập nhật mỗi render, KHÔNG khởi động lại interval\n  }, [callback]);\n\n  useEffect(() => {\n    if (delay === null) return undefined;\n    const id = setInterval(() => saved.current(), delay);\n    return () => clearInterval(id);\n  }, [delay]);\n}\n"
+        },
+        {
+          "name": "src/hooks/usePrevious.js",
+          "language": "javascript",
+          "code": "// src/hooks/usePrevious.js — giá trị của lần render trước\nimport { useEffect, useRef } from 'react';\n\nexport function usePrevious(value) {\n  const ref = useRef(undefined);\n  useEffect(() => {\n    ref.current = value;\n  }, [value]);\n  return ref.current;\n}\n"
+        },
+        {
+          "name": "src/hooks/useLocalStorage.js",
+          "language": "javascript",
+          "code": "// src/hooks/useLocalStorage.js — giống useState nhưng còn sau khi tải lại\nimport { useEffect, useState } from 'react';\n\nexport function useLocalStorage(key, initialValue) {\n  const [value, setValue] = useState(() => {\n    try {\n      const raw = localStorage.getItem(key);\n      return raw === null ? initialValue : JSON.parse(raw);\n    } catch {\n      return initialValue;\n    }\n  });\n  useEffect(() => {\n    localStorage.setItem(key, JSON.stringify(value));\n  }, [key, value]);\n  return [value, setValue];\n}\n"
+        },
+        {
+          "name": "src/hooks/useOnClickOutside.js",
+          "language": "javascript",
+          "code": "// src/hooks/useOnClickOutside.js — gọi handler khi bấm RA NGOÀI phần tử ref\nimport { useEffect, useRef } from 'react';\n\nexport function useOnClickOutside(ref, handler) {\n  const saved = useRef(handler);\n  useEffect(() => {\n    saved.current = handler;\n  }, [handler]);\n\n  useEffect(() => {\n    const onClick = (e) => {\n      if (ref.current && !ref.current.contains(e.target)) saved.current(e);\n    };\n    document.addEventListener('click', onClick);\n    return () => document.removeEventListener('click', onClick);\n  }, [ref]);\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport './index.css';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "src/index.css",
+          "language": "css",
+          "code": "/* src/index.css (đã cho) */\nbody { font-family: system-ui, sans-serif; margin: 0; padding: 20px; background: #0f172a; color: #e2e8f0; }\n.card { background: #1e293b; border-radius: 12px; padding: 14px 18px; margin-bottom: 14px; }\n.toolbar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }\ninput[type=text] { padding: 6px 10px; border-radius: 6px; border: 1px solid #334155; background: #0f172a; color: inherit; }\n.coin { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #334155; }\n.fav-btn { background: none; border: 0; color: #64748b; font-size: 18px; cursor: pointer; } .fav-btn.fav { color: #facc15; }\n.up { color: #4ade80; } .down { color: #f87171; }\n.menu-wrap { position: relative; } #menu { position: absolute; top: 28px; left: 0; background: #334155; padding: 6px; border-radius: 8px; list-style: none; margin: 0; min-width: 140px; }\nbutton { cursor: pointer; }\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Custom hook đóng gói <b>logic có state</b>, không đóng gói giao diện. <code>useFetch</code> lưu <i>promise</i> theo URL để các component cùng cần dữ liệu dùng chung một request (ý tưởng cốt lõi của SWR/React Query). <code>useInterval</code> giữ callback trong ref nên interval chỉ tạo lại khi <code>delay</code> đổi, và luôn gọi phiên bản mới nhất của callback — không còn closure cũ. <code>useDebounce</code> biến chuỗi đang gõ thành giá trị \"đứng yên\", và vì URL chỉ đổi khi giá trị đó đổi nên số request giảm hẳn.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://overreacted.io/making-setinterval-declarative-with-react-hooks/",
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "jsonServer": {
+          "base": "http://localhost:9999",
+          "db": {
+            "coins": [
+              {
+                "id": 1,
+                "symbol": "BTC",
+                "name": "Bitcoin",
+                "price": 68000
+              },
+              {
+                "id": 2,
+                "symbol": "ETH",
+                "name": "Ethereum",
+                "price": 3500
+              },
+              {
+                "id": 3,
+                "symbol": "BNB",
+                "name": "BNB",
+                "price": 590
+              },
+              {
+                "id": 4,
+                "symbol": "SOL",
+                "name": "Solana",
+                "price": 150
+              },
+              {
+                "id": 5,
+                "symbol": "WBTC",
+                "name": "Wrapped Bitcoin",
+                "price": 67900
+              }
+            ]
+          }
+        },
+        "kiem": [
+          {
+            "nhom": "f1",
+            "moTa": "Coins loaded through useFetch",
+            "kiem": "danh-sach-text",
+            "selector": ".coin .symbol",
+            "mongDoi": [
+              "BTC",
+              "ETH",
+              "BNB",
+              "SOL",
+              "WBTC"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              }
+            ]
+          },
+          {
+            "nhom": "f1",
+            "moTa": "Loading state",
+            "jsonServer": {
+              "base": "http://localhost:9999",
+              "db": {
+                "coins": [
+                  {
+                    "id": 1,
+                    "symbol": "BTC",
+                    "name": "Bitcoin",
+                    "price": 68000
+                  },
+                  {
+                    "id": 2,
+                    "symbol": "ETH",
+                    "name": "Ethereum",
+                    "price": 3500
+                  },
+                  {
+                    "id": 3,
+                    "symbol": "BNB",
+                    "name": "BNB",
+                    "price": 590
+                  },
+                  {
+                    "id": 4,
+                    "symbol": "SOL",
+                    "name": "Solana",
+                    "price": 150
+                  },
+                  {
+                    "id": 5,
+                    "symbol": "WBTC",
+                    "name": "Wrapped Bitcoin",
+                    "price": 67900
+                  }
+                ]
+              },
+              "treMs": 1200
+            },
+            "kiem": "text",
+            "selector": "#loading",
+            "giaTri": "Loading..."
+          },
+          {
+            "nhom": "f1",
+            "moTa": "Error state (HTTP 404)",
+            "jsonServer": {
+              "base": "http://localhost:9999",
+              "db": {}
+            },
+            "kiem": "text",
+            "selector": "#error",
+            "giaTri": "Error: HTTP 404",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              }
+            ]
+          },
+          {
+            "nhom": "f1",
+            "an": true,
+            "moTa": "Prices formatted in USD",
+            "kiem": "danh-sach-text",
+            "selector": ".coin:first-child .price",
+            "mongDoi": [
+              "$68,000.00"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Ticker and list share one request",
+            "kiem": "goi-fetch",
+            "khop": "/coins$",
+            "min": 1,
+            "max": 1,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 400
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Ticker shows symbols",
+            "kiem": "text",
+            "selector": "#ticker",
+            "giaTri": "BTC · ETH · BNB · SOL · WBTC",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "an": true,
+            "moTa": "Cache lives in the hook module",
+            "kiem": "ma-nguon",
+            "tep": "src/hooks/useFetch.js",
+            "khop": "new Map\\("
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Debounced search: one request for fast typing",
+            "kiem": "goi-fetch",
+            "khop": "/coins\\?q=",
+            "min": 1,
+            "max": 1,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#search",
+                "giaTri": "b"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#search",
+                "giaTri": "bi"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#search",
+                "giaTri": "bit"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 700
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Search results from the server",
+            "kiem": "danh-sach-text",
+            "selector": ".coin .symbol",
+            "mongDoi": [
+              "BTC",
+              "WBTC"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#search",
+                "giaTri": "bitcoin"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 700
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "No results message",
+            "kiem": "text",
+            "selector": "#no-results",
+            "giaTri": "No coins match \"doge\"",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#search",
+                "giaTri": "doge"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 700
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "an": true,
+            "moTa": "Nothing requested before the delay",
+            "kiem": "goi-fetch",
+            "khop": "/coins\\?q=",
+            "min": 0,
+            "max": 0,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#search",
+                "giaTri": "eth"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Auto refresh re-fetches every second",
+            "kiem": "goi-fetch",
+            "khop": "/coins$",
+            "min": 3,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#auto-refresh"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 2300
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Refresh counter uses the latest state (no stale closure)",
+            "kiem": "text",
+            "selector": "#refreshes",
+            "giaTri": "Refreshed 2 times",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#auto-refresh"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 2300
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Unchecking stops the interval",
+            "kiem": "text",
+            "selector": "#refreshes",
+            "giaTri": "Refreshed 1 times",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#auto-refresh"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 1300
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#auto-refresh",
+                "giaTri": false
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 1500
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "an": true,
+            "moTa": "useInterval keeps the callback in a ref",
+            "kiem": "ma-nguon",
+            "tep": "src/hooks/useInterval.js",
+            "khop": "useRef\\([\\s\\S]*\\.current\\s*=\\s*callback[\\s\\S]*setInterval\\("
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Price change shows ▲ percent",
+            "kiem": "text",
+            "selector": "#price-change",
+            "giaTri": "▲ 1.00%",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#tick-up",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Price going down shows ▼ with class down",
+            "kiem": "danh-sach-text",
+            "selector": "#price-change.down",
+            "mongDoi": [
+              "▼ 2.00%"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#tick-up",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#tick-down",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "an": true,
+            "moTa": "No change on first render",
+            "kiem": "text",
+            "selector": "#price-change",
+            "giaTri": "—"
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Favourites toggle and persist",
+            "kiem": "danh-sach-text",
+            "selector": ".coin .fav-btn.fav, #fav-count",
+            "mongDoi": [
+              "★",
+              "★",
+              "2 favourites"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".coin:nth-child(1) .fav-btn",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".coin:nth-child(4) .fav-btn",
+                "lan": 1
+              },
+              {
+                "hanhDong": "tai-lai"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Saved as JSON array \"favs\"",
+            "kiem": "kho-cuc-bo",
+            "khoa": "favs",
+            "khop": "^\\[\"ETH\"\\]$",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".coin:nth-child(2) .fav-btn",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "an": true,
+            "moTa": "Toggling twice removes",
+            "kiem": "text",
+            "selector": "#fav-count",
+            "giaTri": "0 favourites",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".coin:nth-child(2) .fav-btn",
+                "lan": 2
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Menu opens",
+            "kiem": "ton-tai",
+            "selector": "#menu",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#menu-btn",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Click outside closes it",
+            "kiem": "khong-ton-tai",
+            "selector": "#menu",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#menu-btn",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#title",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Click inside keeps it open",
+            "kiem": "ton-tai",
+            "selector": "#menu",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#menu-btn",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#menu-name",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f8",
+            "moTa": "Each hook in src/hooks and named use…",
+            "kiem": "ma-nguon",
+            "tep": "src/hooks/useDebounce.js",
+            "khop": "export\\s+function\\s+useDebounce\\s*\\([\\s\\S]*clearTimeout"
+          },
+          {
+            "nhom": "f8",
+            "an": true,
+            "moTa": "useOnClickOutside removes its listener",
+            "kiem": "ma-nguon",
+            "tep": "src/hooks/useOnClickOutside.js",
+            "khop": "removeEventListener\\("
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. useFetch",
+            "diem": 1.5
+          },
+          {
+            "ma": "f2",
+            "ten": "2. Shared cache",
+            "diem": 1.5
+          },
+          {
+            "ma": "f3",
+            "ten": "3. Debounced search",
+            "diem": 1.5
+          },
+          {
+            "ma": "f4",
+            "ten": "4. useInterval auto refresh",
+            "diem": 1.5
+          },
+          {
+            "ma": "f5",
+            "ten": "5. usePrevious price arrows",
+            "diem": 1
+          },
+          {
+            "ma": "f6",
+            "ten": "6. Favourites with useLocalStorage",
+            "diem": 1
+          },
+          {
+            "ma": "f7",
+            "ten": "7. Dropdown with useOnClickOutside",
+            "diem": 1
+          },
+          {
+            "ma": "f8",
+            "ten": "8. Hook hygiene",
+            "diem": 0.5
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "deep-lab",
+      "mistakesJson": [
+        {
+          "loi": "Lưu data (không phải promise) vào cache ⇒ hai component mount cùng lúc vẫn gửi hai request."
+        },
+        {
+          "loi": "Cho callback vào mảng phụ thuộc của effect setInterval ⇒ interval bị xoá/tạo lại mỗi render."
+        },
+        {
+          "loi": "useDebounce trả về hàm thay vì giá trị ⇒ khó dùng với useFetch(url)."
+        },
+        {
+          "loi": "Quên cleanup listener ⇒ mở/đóng menu nhiều lần thì handler nhân lên."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "deduplication",
+          "vi": "gộp các request trùng thành một"
+        },
+        {
+          "en": "stale closure",
+          "vi": "hàm nhìn thấy giá trị cũ của lần render trước"
+        },
+        {
+          "en": "latest ref pattern",
+          "vi": "giữ callback mới nhất trong ref để effect không phải chạy lại"
+        },
+        {
+          "en": "debounced value",
+          "vi": "giá trị chỉ cập nhật khi nguồn đứng yên một lúc"
+        },
+        {
+          "en": "rubric",
+          "vi": "thang điểm theo tiêu chí"
+        },
+        {
+          "en": "persist",
+          "vi": "lưu bền — còn sau khi tải lại trang"
+        }
+      ],
+      "demoHtml": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>Deep Lab 8 — Custom Hooks Library (useFetch cache · useDebounce · useInterval · usePrevious · useOnClickOutside) — Live demo</title>\n<script src=\"https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js\" crossorigin=\"anonymous\"></script>\n\n</head><body><div id=\"root\"></div><script>(function(){\nvar M={\"src/App.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/App.js — ghép các custom hook thành ứng dụng watchlist\\nvar _react = require('react');\\nvar _useFetch = require('./hooks/useFetch');\\nvar _useDebounce = require('./hooks/useDebounce');\\nvar _useInterval = require('./hooks/useInterval');\\nvar _usePrevious = require('./hooks/usePrevious');\\nvar _useLocalStorage = require('./hooks/useLocalStorage');\\nvar _useOnClickOutside = require('./hooks/useOnClickOutside');\\n\\nconst API = 'http://localhost:9999/coins';\\nconst usd = (n) => '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });\\n\\n// Thanh tin dùng CÙNG URL với danh sách ⇒ cache ⇒ chỉ một request\\nfunction Ticker() {\\n  const { data } = _useFetch.useFetch.call(void 0, API);\\n  return _jsxruntime.jsx.call(void 0, 'p', { id: \\\"ticker\\\", children: data ? data.map((c) => c.symbol).join(' · ') : '…'});\\n}\\n\\nfunction PriceTracker() {\\n  const [price, setPrice] = _react.useState.call(void 0, 68000);\\n  const prev = _usePrevious.usePrevious.call(void 0, price);\\n  const change = prev === undefined ? 0 : ((price - prev) / prev) * 100;\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"card\\\", id: \\\"tracker\\\", children: [\\n      _jsxruntime.jsxs.call(void 0, 'span', { id: \\\"btc-price\\\", children: [\\\"BTC \\\" , usd(price)]}), ' '\\n      , _jsxruntime.jsx.call(void 0, 'span', { id: \\\"price-change\\\", className: change > 0 ? 'up' : change \\u003c 0 ? 'down' : '', children: \\n        change === 0 ? '—' : `${change > 0 ? '▲' : '▼'} ${Math.abs(change).toFixed(2)}%`\\n      }), ' '\\n      , _jsxruntime.jsx.call(void 0, 'button', { id: \\\"tick-up\\\", type: \\\"button\\\", onClick: () => setPrice((p) => Math.round(p * 1.01 * 100) / 100), children: \\\"+1%\\\"}), ' '\\n      , _jsxruntime.jsx.call(void 0, 'button', { id: \\\"tick-down\\\", type: \\\"button\\\", onClick: () => setPrice((p) => Math.round(p * 0.98 * 100) / 100), children: \\\"−2%\\\"})\\n    ]})\\n  );\\n}\\n\\nfunction Menu() {\\n  const [open, setOpen] = _react.useState.call(void 0, false);\\n  const ref = _react.useRef.call(void 0, null);\\n  _useOnClickOutside.useOnClickOutside.call(void 0, ref, () => setOpen(false));\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"menu-wrap\\\", ref: ref, children: [\\n      _jsxruntime.jsx.call(void 0, 'button', { id: \\\"menu-btn\\\", type: \\\"button\\\", onClick: () => setOpen((o) => !o), children: \\\"Sort ▾\\\" })\\n      , open && (\\n        _jsxruntime.jsxs.call(void 0, 'ul', { id: \\\"menu\\\", children: [\\n          _jsxruntime.jsx.call(void 0, 'li', { children: _jsxruntime.jsx.call(void 0, 'button', { id: \\\"menu-name\\\", type: \\\"button\\\", children: \\\"By name\\\" })})\\n          , _jsxruntime.jsx.call(void 0, 'li', { children: _jsxruntime.jsx.call(void 0, 'button', { id: \\\"menu-price\\\", type: \\\"button\\\", children: \\\"By price\\\" })})\\n        ]})\\n      )\\n    ]})\\n  );\\n}\\n\\n function App() {\\n  const [query, setQuery] = _react.useState.call(void 0, '');\\n  const q = _useDebounce.useDebounce.call(void 0, query.trim(), 400);\\n  const url = q ? `${API}?q=${encodeURIComponent(q)}` : API;\\n  const { data, loading, error, refetch } = _useFetch.useFetch.call(void 0, url);\\n  const [auto, setAuto] = _react.useState.call(void 0, false);\\n  const [refreshes, setRefreshes] = _react.useState.call(void 0, 0);\\n  const [favs, setFavs] = _useLocalStorage.useLocalStorage.call(void 0, 'favs', []);\\n\\n  _useInterval.useInterval.call(void 0, () => {\\n    refetch();\\n    setRefreshes((n) => n + 1);\\n  }, auto ? 1000 : null);\\n\\n  const toggleFav = (symbol) =>\\n    setFavs((list) => (list.includes(symbol) ? list.filter((s) => s !== symbol) : [...list, symbol]));\\n\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'main', { children: [\\n      _jsxruntime.jsx.call(void 0, 'h1', { id: \\\"title\\\", children: \\\"Crypto Watchlist\\\" })\\n      , _jsxruntime.jsx.call(void 0, Ticker, {} )\\n      , _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"card toolbar\\\" , children: [\\n        _jsxruntime.jsx.call(void 0, 'input', { id: \\\"search\\\", type: \\\"text\\\", placeholder: \\\"Search coins\\\" , value: query, onChange: (e) => setQuery(e.target.value),} )\\n        , _jsxruntime.jsxs.call(void 0, 'label', { children: [_jsxruntime.jsx.call(void 0, 'input', { id: \\\"auto-refresh\\\", type: \\\"checkbox\\\", checked: auto, onChange: (e) => setAuto(e.target.checked),} ), \\\" Auto refresh\\\"  ]})\\n        , _jsxruntime.jsxs.call(void 0, 'span', { id: \\\"refreshes\\\", children: [\\\"Refreshed \\\" , refreshes, \\\" times\\\" ]})\\n        , _jsxruntime.jsx.call(void 0, Menu, {} )\\n      ]})\\n      , _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"card\\\", children: [\\n        loading && !data && _jsxruntime.jsx.call(void 0, 'p', { id: \\\"loading\\\", children: \\\"Loading...\\\"})\\n        , error && _jsxruntime.jsxs.call(void 0, 'p', { id: \\\"error\\\", children: [\\\"Error: \\\" , error]})\\n        , data && data.length === 0 && _jsxruntime.jsxs.call(void 0, 'p', { id: \\\"no-results\\\", children: [\\\"No coins match \\\\\\\"\\\"   , q, \\\"\\\\\\\"\\\"]})\\n        , data && data.map((c) => (\\n          _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"coin\\\", children: [\\n            _jsxruntime.jsx.call(void 0, 'span', { className: \\\"symbol\\\", children: c.symbol})\\n            , _jsxruntime.jsx.call(void 0, 'span', { className: \\\"name\\\", children: c.name})\\n            , _jsxruntime.jsx.call(void 0, 'span', { className: \\\"price\\\", children: usd(c.price)})\\n            , _jsxruntime.jsx.call(void 0, 'button', { type: \\\"button\\\", className: favs.includes(c.symbol) ? 'fav-btn fav' : 'fav-btn', 'aria-label': `Favourite ${c.symbol}`, onClick: () => toggleFav(c.symbol), children: \\\"★\\\"})\\n          ]}, c.id)\\n        ))\\n        , _jsxruntime.jsxs.call(void 0, 'p', { id: \\\"fav-count\\\", children: [favs.length, \\\" favourites\\\" ]})\\n      ]})\\n      , _jsxruntime.jsx.call(void 0, PriceTracker, {} )\\n    ]})\\n  );\\n} exports.default = App;\\n\",\"src/hooks/useFetch.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/hooks/useFetch.js — GET có cache DÙNG CHUNG theo URL, refetch, và bỏ phản hồi cũ\\nvar _react = require('react');\\n\\nconst cache = new Map(); // url ⇒ Promise\\u003cdata> (hai component cùng URL dùng chung MỘT request)\\n\\nfunction load(url, force) {\\n  if (force || !cache.has(url)) {\\n    const p = fetch(url).then((res) => {\\n      if (!res.ok) throw new Error(`HTTP ${res.status}`);\\n      return res.json();\\n    });\\n    cache.set(url, p);\\n    p.catch(() => cache.delete(url)); // lỗi thì không giữ trong cache\\n  }\\n  return cache.get(url);\\n}\\n\\n function useFetch(url) {\\n  const [state, setState] = _react.useState.call(void 0, { data: null, loading: Boolean(url), error: null });\\n  const [version, setVersion] = _react.useState.call(void 0, 0);\\n\\n  _react.useEffect.call(void 0, () => {\\n    if (!url) {\\n      setState({ data: null, loading: false, error: null });\\n      return undefined;\\n    }\\n    let ignore = false;\\n    setState((s) => ({ ...s, loading: true, error: null }));\\n    load(url, version > 0)\\n      .then((data) => { if (!ignore) setState({ data, loading: false, error: null }); })\\n      .catch((err) => { if (!ignore) setState({ data: null, loading: false, error: err.message }); });\\n    return () => { ignore = true; };\\n  }, [url, version]);\\n\\n  const refetch = _react.useCallback.call(void 0, () => setVersion((v) => v + 1), []);\\n  return { ...state, refetch };\\n} exports.useFetch = useFetch;\\n\",\"src/hooks/useDebounce.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/hooks/useDebounce.js — giá trị \\\"trễ\\\": chỉ đổi khi value đứng yên delay ms\\nvar _react = require('react');\\n\\n function useDebounce(value, delay) {\\n  const [debounced, setDebounced] = _react.useState.call(void 0, value);\\n  _react.useEffect.call(void 0, () => {\\n    const id = setTimeout(() => setDebounced(value), delay);\\n    return () => clearTimeout(id);\\n  }, [value, delay]);\\n  return debounced;\\n} exports.useDebounce = useDebounce;\\n\",\"src/hooks/useInterval.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/hooks/useInterval.js — setInterval theo kiểu khai báo; callback mới nhất luôn được gọi; delay null = dừng\\nvar _react = require('react');\\n\\n function useInterval(callback, delay) {\\n  const saved = _react.useRef.call(void 0, callback);\\n\\n  _react.useEffect.call(void 0, () => {\\n    saved.current = callback; // cập nhật mỗi render, KHÔNG khởi động lại interval\\n  }, [callback]);\\n\\n  _react.useEffect.call(void 0, () => {\\n    if (delay === null) return undefined;\\n    const id = setInterval(() => saved.current(), delay);\\n    return () => clearInterval(id);\\n  }, [delay]);\\n} exports.useInterval = useInterval;\\n\",\"src/hooks/usePrevious.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/hooks/usePrevious.js — giá trị của lần render trước\\nvar _react = require('react');\\n\\n function usePrevious(value) {\\n  const ref = _react.useRef.call(void 0, undefined);\\n  _react.useEffect.call(void 0, () => {\\n    ref.current = value;\\n  }, [value]);\\n  return ref.current;\\n} exports.usePrevious = usePrevious;\\n\",\"src/hooks/useLocalStorage.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/hooks/useLocalStorage.js — giống useState nhưng còn sau khi tải lại\\nvar _react = require('react');\\n\\n function useLocalStorage(key, initialValue) {\\n  const [value, setValue] = _react.useState.call(void 0, () => {\\n    try {\\n      const raw = localStorage.getItem(key);\\n      return raw === null ? initialValue : JSON.parse(raw);\\n    } catch (e) {\\n      return initialValue;\\n    }\\n  });\\n  _react.useEffect.call(void 0, () => {\\n    localStorage.setItem(key, JSON.stringify(value));\\n  }, [key, value]);\\n  return [value, setValue];\\n} exports.useLocalStorage = useLocalStorage;\\n\",\"src/hooks/useOnClickOutside.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/hooks/useOnClickOutside.js — gọi handler khi bấm RA NGOÀI phần tử ref\\nvar _react = require('react');\\n\\n function useOnClickOutside(ref, handler) {\\n  const saved = _react.useRef.call(void 0, handler);\\n  _react.useEffect.call(void 0, () => {\\n    saved.current = handler;\\n  }, [handler]);\\n\\n  _react.useEffect.call(void 0, () => {\\n    const onClick = (e) => {\\n      if (ref.current && !ref.current.contains(e.target)) saved.current(e);\\n    };\\n    document.addEventListener('click', onClick);\\n    return () => document.removeEventListener('click', onClick);\\n  }, [ref]);\\n} exports.useOnClickOutside = useOnClickOutside;\\n\",\"src/index.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\"); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\\nvar _react = require('react'); var _react2 = _interopRequireDefault(_react);\\nvar _client = require('react-dom/client'); var _client2 = _interopRequireDefault(_client);\\nrequire('./index.css');\\nvar _App = require('./App'); var _App2 = _interopRequireDefault(_App);\\n\\nconst root = _client2.default.createRoot(document.getElementById('root'));\\nroot.render(\\n  _jsxruntime.jsx.call(void 0, _react2.default.StrictMode, { children: \\n    _jsxruntime.jsx.call(void 0, _App2.default, {} )\\n  })\\n);\\n\"};var CSS={\"src/index.css\":\"/* src/index.css (đã cho) */\\nbody { font-family: system-ui, sans-serif; margin: 0; padding: 20px; background: #0f172a; color: #e2e8f0; }\\n.card { background: #1e293b; border-radius: 12px; padding: 14px 18px; margin-bottom: 14px; }\\n.toolbar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }\\ninput[type=text] { padding: 6px 10px; border-radius: 6px; border: 1px solid #334155; background: #0f172a; color: inherit; }\\n.coin { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #334155; }\\n.fav-btn { background: none; border: 0; color: #64748b; font-size: 18px; cursor: pointer; } .fav-btn.fav { color: #facc15; }\\n.up { color: #4ade80; } .down { color: #f87171; }\\n.menu-wrap { position: relative; } #menu { position: absolute; top: 28px; left: 0; background: #334155; padding: 6px; border-radius: 8px; list-style: none; margin: 0; min-width: 140px; }\\nbutton { cursor: pointer; }\\n\"};var DB={\"coins\":[{\"id\":1,\"symbol\":\"BTC\",\"name\":\"Bitcoin\",\"price\":68000},{\"id\":2,\"symbol\":\"ETH\",\"name\":\"Ethereum\",\"price\":3500},{\"id\":3,\"symbol\":\"BNB\",\"name\":\"BNB\",\"price\":590},{\"id\":4,\"symbol\":\"SOL\",\"name\":\"Solana\",\"price\":150},{\"id\":5,\"symbol\":\"WBTC\",\"name\":\"Wrapped Bitcoin\",\"price\":67900}]};var BASE=\"http://localhost:9999\";var URL0=null;var THANH=false;\nfunction kho(){var m={};var k={getItem:function(x){x=String(x);return Object.prototype.hasOwnProperty.call(m,x)?m[x]:null},setItem:function(x,v){m[String(x)]=String(v)},removeItem:function(x){delete m[String(x)]},clear:function(){m={}},key:function(i){return Object.keys(m)[i]||null}};Object.defineProperty(k,'length',{get:function(){return Object.keys(m).length}});return k}\ntry{Object.defineProperty(window,'localStorage',{value:kho(),configurable:true})}catch(e){}\ntry{Object.defineProperty(window,'sessionStorage',{value:kho(),configurable:true})}catch(e){}\nwindow.confirm=function(){return true};window.alert=function(m){console.log('[alert]',m);var t=document.getElementById('cl-demo-alert');if(!t){t=document.createElement('div');t.id='cl-demo-alert';t.style.cssText='position:fixed;right:12px;bottom:12px;z-index:99999;max-width:320px;padding:10px 14px;border-radius:10px;background:#0f172a;color:#fff;font:13px system-ui;box-shadow:0 6px 24px rgba(0,0,0,.25)';document.body.appendChild(t)}t.textContent='alert: '+m;clearTimeout(t.__h);t.__h=setTimeout(function(){t.remove()},2600)};\nvar ENV={NODE_ENV:'production',MODE:'production',PROD:true,DEV:false,BASE_URL:'/'};\nString(M['.env']||'').split(/\\r?\\n/).forEach(function(d){var m=/^\\s*(?:export\\s+)?([A-Za-z_][A-Za-z0-9_]*)\\s*=\\s*(.*)\\s*$/.exec(d);if(m)ENV[m[1]]=m[2].replace(/^(['\"])(.*)\\1$/,'$2')});\nwindow.__CL_ENV__=ENV;if(!window.process)window.process={env:ENV};\n// json-server giả (bản sao domAgent.ts)\nvar jsDb=DB?JSON.parse(JSON.stringify(DB)):null;\nfunction tl(st,b){return new Response(b===undefined?'{}':JSON.stringify(b),{status:st,headers:{'content-type':'application/json'}})}\nfunction lay(o,k){return String(k).split('.').reduce(function(a,p){return a==null?undefined:a[p]},o)}\nfunction mot(t){return /ies$/.test(t)?t.slice(0,-3)+'y':t.replace(/s$/,'')}\nfunction xuLy(method,url,body){var u=new URL(url);var ph=u.pathname.replace(/^\\/+|\\/+$/g,'').split('/').filter(Boolean).map(decodeURIComponent);var ten=ph[0],id=ph[1];\nif(!ten||!(ten in jsDb))return tl(404,{});var bang=jsDb[ten];var dl=null;if(body!=null&&body!==''){try{dl=JSON.parse(body)}catch(e){return tl(400,{})}}\nif(!Array.isArray(bang)){if(method==='GET')return tl(200,bang);if(method==='PUT'||method==='POST'){jsDb[ten]=dl||{};return tl(200,jsDb[ten])}if(method==='PATCH'){jsDb[ten]=Object.assign({},bang,dl||{});return tl(200,jsDb[ten])}return tl(404,{})}\nvar vt=function(x){return bang.findIndex(function(r){return String(r.id)===String(x)})};\nvar mr=function(r){var o=Object.assign({},r);u.searchParams.getAll('_expand').forEach(function(e){var b=jsDb[e+'s']||jsDb[e];if(Array.isArray(b))o[e]=b.find(function(x){return String(x.id)===String(r[e+'Id'])})});u.searchParams.getAll('_embed').forEach(function(e){var b=jsDb[e];if(Array.isArray(b)){var k=mot(ten)+'Id';o[e]=b.filter(function(x){return String(x[k])===String(r.id)})}});return o};\nif(method==='GET'){if(id!=null){var i=vt(id);return i<0?tl(404,{}):tl(200,mr(bang[i]))}var ds=bang.slice();var loc={};u.searchParams.forEach(function(v,k){if(k.charAt(0)!=='_'&&k!=='q')(loc[k]=loc[k]||[]).push(v)});\nObject.keys(loc).forEach(function(k){var vs=loc[k],m=/^(.*)_(like|gte|lte|ne)$/.exec(k);ds=ds.filter(function(r){if(m){var gv=lay(r,m[1]);return vs.every(function(v){if(m[2]==='like')return new RegExp(v,'i').test(String(gv));if(m[2]==='ne')return String(gv)!==v;var a=Number(gv),b=Number(v);var so=!isNaN(a)&&!isNaN(b);return m[2]==='gte'?(so?a>=b:String(gv)>=v):(so?a<=b:String(gv)<=v)})}var g=lay(r,k);return vs.some(function(v){return String(g)===v})})});\nvar qq=u.searchParams.get('q');if(qq)ds=ds.filter(function(r){return JSON.stringify(r).toLowerCase().indexOf(qq.toLowerCase())>=0});\nvar sx=u.searchParams.get('_sort');if(sx){var tr=sx.split(','),th=(u.searchParams.get('_order')||'asc').split(',');ds.sort(function(a,b){for(var t=0;t<tr.length;t++){var f=tr[t].replace(/^-/,''),gi=tr[t].charAt(0)==='-'||(th[t]||th[0])==='desc';var x=lay(a,f),y=lay(b,f);var c=(typeof x==='number'&&typeof y==='number')?x-y:String(x).localeCompare(String(y));if(c)return gi?-c:c}return 0})}\nvar gh=u.searchParams.get('_limit'),pg=u.searchParams.get('_page');var tong=ds.length;if(pg){var n=Number(gh)||10;ds=ds.slice((Number(pg)-1)*n,Number(pg)*n)}else if(gh)ds=ds.slice(0,Number(gh));var rr=tl(200,ds.map(mr));try{rr.headers.set('X-Total-Count',String(tong))}catch(e){}return rr}\nif(method==='POST'){if(id!=null)return tl(404,{});var mo=Object.assign({},dl||{});if(mo.id==null){var so2=bang.length&&bang.every(function(r){return typeof r.id==='number'});mo.id=so2||!bang.length?bang.reduce(function(mx,r){return Math.max(mx,Number(r.id)||0)},0)+1:Math.random().toString(16).slice(2,6)}bang.push(mo);return tl(201,mo)}\nif(id==null)return tl(404,{});var j=vt(id);if(j<0)return tl(404,{});\nif(method==='PUT'){bang[j]=Object.assign({},dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='PATCH'){bang[j]=Object.assign({},bang[j],dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='DELETE'){bang.splice(j,1);return tl(200,{})}return tl(404,{})}\nif(jsDb){window.fetch=function(url,init){init=init||{};var s=String(url&&url.url?url.url:url);var me=String(init.method||'GET').toUpperCase();return new Promise(function(res){setTimeout(function(){if(s.indexOf(BASE+'/')!==0)return res(new Response('Not Found',{status:404}));try{res(xuLy(me,s,init.body))}catch(e){res(tl(500,{error:String(e)}))}},120)})}}\nfunction axiosGia(){function goi(method,url,data,cfg){cfg=cfg||{};var u=(cfg.baseURL||'')+url;if(cfg.params){var sp=new URLSearchParams(cfg.params).toString();if(sp)u+=(u.indexOf('?')>=0?'&':'?')+sp}var init={method:method.toUpperCase(),headers:Object.assign({'Content-Type':'application/json'},cfg.headers||{})};if(data!==undefined)init.body=typeof data==='string'?data:JSON.stringify(data);\nreturn window.fetch(u,init).then(function(res){return res.text().then(function(t){var d;try{d=JSON.parse(t)}catch(e){d=t}var hd={};try{res.headers.forEach(function(v,k){hd[k.toLowerCase()]=v})}catch(e){}var out={data:d,status:res.status,statusText:res.statusText,headers:hd,config:cfg};if(res.status>=200&&res.status<300)return out;var err=new Error('Request failed with status code '+res.status);err.response=out;err.name='AxiosError';throw err})})}\nfunction tao(base){var a=function(cfg){return goi(cfg.method||'get',cfg.url,cfg.data,Object.assign({},base,cfg))};['get','delete','head'].forEach(function(m){a[m]=function(url,cfg){return goi(m,url,undefined,Object.assign({},base,cfg))}});['post','put','patch'].forEach(function(m){a[m]=function(url,data,cfg){return goi(m,url,data,Object.assign({},base,cfg))}});a.create=function(c){return tao(Object.assign({},base,c))};a.defaults=base;a.interceptors={request:{use:function(){}},response:{use:function(){}}};a.isAxiosError=function(e){return!!(e&&e.name==='AxiosError')};return a}\nvar ax=tao({});ax.default=ax;return ax}\nvar R=window.React;var tach=function(p,k){var q=Object.assign({},p);var c=q.children;delete q.children;if(k!==undefined)q.key=k;return[q,c]};\nvar j=function(t,p,k){var x=tach(p,k);return x[1]===undefined?R.createElement(t,x[0]):R.createElement(t,x[0],x[1])};\nvar js=function(t,p,k){var x=tach(p,k);return R.createElement.apply(null,[t,x[0]].concat(x[1]||[]))};\n// React Router: MemoryRouter + thanh địa chỉ (gõ URL được — thử ?status=ACTIVE, /items/2…)\nvar viTri=null,routerBoc=null,dieuHuong=null;\nfunction datThanh(v){var o=document.getElementById('cl-demo-url');if(o&&document.activeElement!==o)o.value='http://localhost:3000'+v}\nfunction routerGia(){var RRD=window.ReactRouterDOM;if(!RRD)return null;if(routerBoc)return routerBoc;\nfunction Ghi(){var l=RRD.useLocation();var nav=RRD.useNavigate();dieuHuong=nav;viTri=l.pathname+l.search+l.hash;R.useEffect(function(){datThanh(viTri)});return null}\nfunction RG(p){var d=R.useState(function(){return[viTri||URL0||'/']})[0];return R.createElement(RRD.MemoryRouter,{initialEntries:d,basename:p.basename},R.createElement(Ghi),p.children)}\nfunction tr(routes,opts){var r=RRD.createMemoryRouter(routes,Object.assign({},opts||{},{initialEntries:[viTri||URL0||'/']}));var g=function(s){viTri=s.location.pathname+s.location.search+s.location.hash;datThanh(viTri)};g(r.state);r.subscribe(g);dieuHuong=function(to){r.navigate(to)};return r}\nrouterBoc=Object.assign({},RRD,{BrowserRouter:RG,HashRouter:RG,createBrowserRouter:tr,createHashRouter:tr});return routerBoc}\nvar thunk=function(api){return function(next){return function(a){return typeof a==='function'?a(api.dispatch,api.getState):next(a)}}};\nvar LIB={'react':R,'react-dom':window.ReactDOM,'react-dom/client':window.ReactDOM,'react/jsx-runtime':{jsx:j,jsxs:js,Fragment:R.Fragment},'react/jsx-dev-runtime':{jsxDEV:j,Fragment:R.Fragment},'prop-types':window.PropTypes,'react-bootstrap':window.ReactBootstrap,'@reduxjs/toolkit':window.RTK,'redux':window.RTK,'react-redux':window.ReactRedux,'redux-thunk':{'default':thunk,thunk:thunk}};\nvar C={};\nfunction dd(tu,s){var p=tu.split('/').slice(0,-1);s.split('/').forEach(function(x){if(x==='.'||x==='')return;if(x==='..')p.pop();else p.push(x)});return p.join('/')}\nfunction tim(p){var d=['','.js','.jsx','.ts','.tsx','.json','/index.js','/index.jsx'];for(var i=0;i<d.length;i++){if(M[p+d[i]]!=null||CSS[p+d[i]]!=null)return p+d[i]}return null}\nfunction req(tu,s){if(s==='axios')return axiosGia();if(s==='react-router-dom'||s==='react-router')return routerGia();if(LIB[s])return LIB[s];if(/\\.css$/.test(s)&&!/^\\./.test(s))return{};var p=tim(dd(tu,s));if(!p)throw new Error('Cannot find module '+s);return nap(p)}\nfunction nap(p){if(C[p])return C[p].exports;if(CSS[p]!=null){var st=document.createElement('style');st.textContent=CSS[p];document.head.appendChild(st);C[p]={exports:{}};return{}}var m={exports:{}};C[p]=m;if(/\\.json$/.test(p)){m.exports=JSON.parse(M[p]);return m.exports}new Function('require','module','exports',M[p])(function(s){return req(p,s)},m,m.exports);return m.exports}\nif(THANH){var bar=document.createElement('form');bar.style.cssText='position:sticky;top:0;z-index:99998;display:flex;gap:6px;align-items:center;padding:6px 10px;background:#e2e8f0;border-bottom:1px solid #cbd5e1;font:12px system-ui';bar.innerHTML='<span style=\"color:#475569\">URL</span><input id=\"cl-demo-url\" style=\"flex:1;padding:4px 8px;border:1px solid #cbd5e1;border-radius:6px;font:12px ui-monospace,monospace\" aria-label=\"Address bar\"><button style=\"padding:3px 10px;border-radius:6px;border:1px solid #94a3b8;background:#fff;cursor:pointer\">Go</button>';\nbar.addEventListener('submit',function(e){e.preventDefault();var v=document.getElementById('cl-demo-url').value.replace(/^https?:\\/\\/[^/]+/,'')||'/';if(dieuHuong)dieuHuong(v)});document.body.insertBefore(bar,document.body.firstChild);datThanh(URL0||'/')}\nnap(\"src/index.js\");\n})();</script></body></html>"
+    }
+  ]
+}

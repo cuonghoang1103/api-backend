@@ -590,6 +590,18 @@
       "name": "Deep Lab 7 — Permissions & Notifications Center (Context in depth)",
       "level": "ADVANCED",
       "description": "Deep lab chương 7: Context + useReducer, tách state/dispatch, ma trận quyền + <Can> + HOC, cờ tính năng lồng, trung tâm thông báo. Thang 10."
+    },
+    {
+      "slug": "fer202-8-deep-custom-hooks",
+      "name": "Deep Lab 8 — Custom Hooks Library (Crypto Watchlist)",
+      "level": "ADVANCED",
+      "description": "Deep lab chương 8: useFetch cache dùng chung, useDebounce, useInterval mẫu ref, usePrevious, useLocalStorage, useOnClickOutside trên json-server. Thang 10."
+    },
+    {
+      "slug": "fer202-9-deep-data-router",
+      "name": "Deep Lab 9 — Course Catalog (React Router loaders · actions · fetchers)",
+      "level": "ADVANCED",
+      "description": "Deep lab chương 9: data router — loader, action + redirect, errorElement 404, useActionData, useFetcher, useNavigation trên json-server. Thang 10."
     }
   ]
 }

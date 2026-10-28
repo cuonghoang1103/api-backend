@@ -1,0 +1,920 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-9-deep-data-router",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-9-1-router"
+  },
+  "exercises": [
+    {
+      "title": "Deep Lab 9 — Course Catalog with the Data Router (loaders · actions · errorElement · useFetcher)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 140,
+      "points": 100,
+      "concepts": [
+        "createBrowserRouter",
+        "loaders",
+        "actions & redirect",
+        "errorElement & Response",
+        "useActionData",
+        "useFetcher",
+        "useNavigation",
+        "GET forms"
+      ],
+      "prerequisites": [
+        "Lab 9 — Course portal",
+        "Exercise 21 — Resource ids"
+      ],
+      "tags": [
+        "fer202",
+        "deep-lab",
+        "react-router",
+        "data-router"
+      ],
+      "problemHtml": "<h1>DEEP LAB 9: Course Catalog — React Router data APIs (loaders · actions · fetchers)</h1>\n<p class=\"bi-phu\">FER202 · Chapter 9 (deep) · Suggested time: 140 minutes · Total: 10 marks</p>\n<h2>1. Overview</h2>\n<p>Since version 6.4 React Router can load and mutate data itself. Rebuild a course catalog with <code>createBrowserRouter</code>: every page gets its data from a <b>loader</b> before it renders, forms post to <b>actions</b> that validate, call the API and <code>redirect</code>, a missing course shows a route <b>errorElement</b>, publishing toggles in place with a <b>fetcher</b> (no navigation), and a global spinner follows <code>useNavigation()</code>. No <code>useEffect</code> for data, no form state.</p>\n<h3>Main features</h3>\n<ul>\n  <li>Data router · list loader + GET search · detail loader + 404 · create/edit/delete actions · fetcher toggle · pending UI.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>json-server at <code>http://localhost:9999/courses</code>; all calls in <code>src/api.js</code>, which throws a <code>Response</code> for non-2xx statuses.</li>\n  <li>Use <code>&lt;Form&gt;</code> from react-router-dom (not a plain <code>&lt;form&gt;</code> with onSubmit + fetch).</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>src/\n├── api.js                  # listCourses · getCourse · createCourse · updateCourse · deleteCourse\n├── router.js               # createBrowserRouter([...])\n├── routes/\n│   ├── Root.js             # layout · #global-spinner · RootError\n│   ├── Courses.js          # coursesLoader · search Form\n│   ├── Course.js           # courseLoader · courseAction · fetcher · CourseError\n│   ├── NewCourse.js        # newCourseAction · validateCourse\n│   ├── EditCourse.js       # editCourseAction\n│   └── destroy.js          # destroyAction\n├── index.js                # &lt;RouterProvider router={router} /&gt;\n└── index.css (given)</pre>\n<h2>3. UI wireframe</h2>\n<pre class=\"bi-wire\">+---------------+--------------------------------------------------+\n| CT Catalog    |                                    [Loading…]    |\n| All courses   | Courses                                          |\n| + New course  | [Search courses        ] [Search]                |\n|               | • React Basics  FER202                           |\n|               | • Software Testing  SWT301                       |\n|               | -------- /courses/2 --------                     |\n|               | Software Testing   SWT301   (Draft) [Publish]    |\n|               | Edit                         [Delete]            |\n+---------------+--------------------------------------------------+</pre>\n<h2>4. Data model</h2>\n<p><b>Routes</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>/</code></td><td>index loader ⇒ redirect(\"/courses\")</td><td></td></tr><tr><td><code>/courses</code></td><td>loader: list (?q=)</td><td>GET Form search</td></tr><tr><td><code>/courses/new</code></td><td>action: validate ⇒ { errors, values } | POST + redirect</td><td></td></tr><tr><td><code>/courses/:id</code></td><td>loader: one course · action: intent=toggle (PATCH) · errorElement</td><td>404 ⇒ \"Course not found\"</td></tr><tr><td><code>/courses/:id/edit</code></td><td>loader (reuse) · action: PATCH + redirect</td><td></td></tr><tr><td><code>/courses/:id/destroy</code></td><td>action: DELETE + redirect(\"/courses\")</td><td>no element</td></tr></tbody></table>\n<h3>Sample data</h3>\n<pre>{\n \"courses\": [\n  {\n   \"id\": 1,\n   \"title\": \"React Basics\",\n   \"code\": \"FER202\",\n   \"published\": true\n  },\n  {\n   \"id\": 2,\n   \"title\": \"Software Testing\",\n   \"code\": \"SWT301\",\n   \"published\": false\n  },\n  {\n   \"id\": 3,\n   \"title\": \"Software Requirements\",\n   \"code\": \"SWR302\",\n   \"published\": true\n  }\n ]\n}</pre>\n<h2>5. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. Data router &amp; layout <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>createBrowserRouter</code> + <code>RouterProvider</code>; root layout with <code>#sidebar</code> (<code>#nav-courses</code>, <code>#nav-new</code>) and <code>&lt;Outlet /&gt;</code>; <code>/</code> redirects to <code>/courses</code> in an index loader.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>2. List loader &amp; GET search <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>coursesLoader</code> reads <code>q</code> from <code>request.url</code> and calls <code>GET /courses?q=</code>. <code>&lt;Form id=\"search-form\"&gt;</code> with <code>#q</code> (default value from the loader); rows <code>.course-item a</code>; <code>#no-courses</code>.</li>\n</ul>\n<p><b>Example:</b></p>\n<pre>submit \"testing\" ⇒ URL /courses?q=testing ⇒ Software Testing</pre>\n</div>\n<div class=\"bi-cn\"><h3>3. Detail loader &amp; 404 <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>#course-title</code>, <code>#course-code</code>, <code>#course-status</code> (<code>Published</code>/<code>Draft</code>). Unknown id ⇒ the route's <code>errorElement</code> shows <code>#not-found</code> <code>Course not found</code> while the layout stays.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>4. Create action <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>&lt;Form method=\"post\" id=\"course-form\"&gt;</code> (<code>#title</code>, <code>#code</code>). Action returns <code>{ errors, values }</code> (<code>#err-title</code> <code>Title is too short</code>, <code>#err-code</code> <code>Code must look like FER202</code>) or POSTs <code>{ title, code, published: false }</code> and redirects to <code>/courses/:newId</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. Edit action <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>/courses/:id/edit</code> reuses the detail loader; <code>#edit-form</code> submits <code>PATCH</code> and redirects back to the detail.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>6. Delete action <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>&lt;Form method=\"post\" action=\"destroy\" id=\"delete-form\"&gt;</code>; cancelled <code>confirm()</code> prevents submission; the action DELETEs and redirects to <code>/courses</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>7. Fetcher toggle <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>&lt;fetcher.Form method=\"post\"&gt;</code> with <code>#btn-toggle</code> (<code>intent=toggle</code>) PATCHes <code>published</code> through the detail route's action; the page does not navigate and the status updates (optimistically via <code>fetcher.formData</code>).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>8. Pending UI <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>#global-spinner</code> while <code>useNavigation().state !== 'idle'</code>.</li>\n</ul>\n</div>\n<h2>6. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>#sidebar · #nav-courses · #nav-new · #global-spinner</code></td><td>layout</td></tr><tr><td><code>#search-form · #q · .course-item a · #no-courses</code></td><td>list</td></tr><tr><td><code>#course-title · #course-code · #course-status · #btn-toggle · #edit-link · #delete-form · #not-found</code></td><td>detail</td></tr><tr><td><code>#course-form · #title · #code · #err-title · #err-code · #edit-form</code></td><td>forms</td></tr></tbody></table>\n<h2>7. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>Data router &amp; layout</td><td>1</td></tr><tr><td>2</td><td>List loader &amp; GET search</td><td>1.5</td></tr><tr><td>3</td><td>Detail loader &amp; 404</td><td>1.5</td></tr><tr><td>4</td><td>Create action</td><td>1.5</td></tr><tr><td>5</td><td>Edit action</td><td>1</td></tr><tr><td>6</td><td>Delete action</td><td>1</td></tr><tr><td>7</td><td>Fetcher toggle</td><td>1.5</td></tr><tr><td>8</td><td>Pending UI</td><td>1</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li><code>useEffect</code> + <code>useState</code> to fetch data in route components (waterfalls, flashes of empty UI).</li>\n  <li>Plain <code>&lt;form onSubmit&gt;</code> + <code>fetch</code> + <code>navigate()</code> instead of actions.</li>\n  <li>One global <code>errorElement</code> only — a 404 wipes out the whole layout.</li>\n  <li>Toggling with a navigation form — the page jumps and the history grows.</li>\n</ul>\n<h2>8. Submission</h2>\n<p>Work directly in the editor (files on the right) or download the starter, run it locally with Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> when the paper uses an API) and paste the files back. Press <b>Run</b> for the sample checks and <b>Submit</b> for full grading (hidden checks included).</p>",
+      "problemHtmlVi": "<h1>DEEP LAB 9: Danh mục khoá học — API dữ liệu của React Router (loader · action · fetcher)</h1>\n<p class=\"bi-phu\">FER202 · Chương 9 (chuyên sâu) · Thời gian gợi ý: 140 phút · Tổng: 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p>Từ bản 6.4 React Router tự tải và thay đổi dữ liệu. Dựng lại danh mục khoá học bằng <code>createBrowserRouter</code>: mỗi trang lấy dữ liệu từ <b>loader</b> trước khi vẽ, form gửi tới <b>action</b> để kiểm hợp lệ, gọi API rồi <code>redirect</code>, khoá học không tồn tại hiện <b>errorElement</b> của route, xuất bản bật/tắt tại chỗ bằng <b>fetcher</b> (không điều hướng), và vòng chờ toàn cục theo <code>useNavigation()</code>. Không dùng <code>useEffect</code> để lấy dữ liệu, không giữ state cho form.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>Data router · loader danh sách + tìm GET · loader chi tiết + 404 · action tạo/sửa/xoá · fetcher bật/tắt · giao diện chờ.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>json-server ở <code>http://localhost:9999/courses</code>; mọi lời gọi trong <code>src/api.js</code>, ném <code>Response</code> khi mã không phải 2xx.</li>\n  <li>Dùng <code>&lt;Form&gt;</code> của react-router-dom (không dùng <code>&lt;form&gt;</code> thường + onSubmit + fetch).</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>src/\n├── api.js                  # listCourses · getCourse · createCourse · updateCourse · deleteCourse\n├── router.js               # createBrowserRouter([...])\n├── routes/\n│   ├── Root.js             # layout · #global-spinner · RootError\n│   ├── Courses.js          # coursesLoader · search Form\n│   ├── Course.js           # courseLoader · courseAction · fetcher · CourseError\n│   ├── NewCourse.js        # newCourseAction · validateCourse\n│   ├── EditCourse.js       # editCourseAction\n│   └── destroy.js          # destroyAction\n├── index.js                # &lt;RouterProvider router={router} /&gt;\n└── index.css (given)</pre>\n<h2>3. Wireframe giao diện</h2>\n<pre class=\"bi-wire\">+---------------+--------------------------------------------------+\n| CT Catalog    |                                    [Loading…]    |\n| All courses   | Courses                                          |\n| + New course  | [Search courses        ] [Search]                |\n|               | • React Basics  FER202                           |\n|               | • Software Testing  SWT301                       |\n|               | -------- /courses/2 --------                     |\n|               | Software Testing   SWT301   (Draft) [Publish]    |\n|               | Edit                         [Delete]            |\n+---------------+--------------------------------------------------+</pre>\n<h2>4. Mô hình dữ liệu</h2>\n<p><b>Routes</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>/</code></td><td>index loader ⇒ redirect(\"/courses\")</td><td></td></tr><tr><td><code>/courses</code></td><td>loader: list (?q=)</td><td>tìm bằng Form GET</td></tr><tr><td><code>/courses/new</code></td><td>action: validate ⇒ { errors, values } | POST + redirect</td><td></td></tr><tr><td><code>/courses/:id</code></td><td>loader: one course · action: intent=toggle (PATCH) · errorElement</td><td>404 ⇒ \"Course not found\"</td></tr><tr><td><code>/courses/:id/edit</code></td><td>loader (reuse) · action: PATCH + redirect</td><td></td></tr><tr><td><code>/courses/:id/destroy</code></td><td>action: DELETE + redirect(\"/courses\")</td><td>không có giao diện</td></tr></tbody></table>\n<h3>Dữ liệu mẫu</h3>\n<pre>{\n \"courses\": [\n  {\n   \"id\": 1,\n   \"title\": \"React Basics\",\n   \"code\": \"FER202\",\n   \"published\": true\n  },\n  {\n   \"id\": 2,\n   \"title\": \"Software Testing\",\n   \"code\": \"SWT301\",\n   \"published\": false\n  },\n  {\n   \"id\": 3,\n   \"title\": \"Software Requirements\",\n   \"code\": \"SWR302\",\n   \"published\": true\n  }\n ]\n}</pre>\n<h2>5. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. Data router &amp; layout <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>createBrowserRouter</code> + <code>RouterProvider</code>; layout gốc có <code>#sidebar</code> (<code>#nav-courses</code>, <code>#nav-new</code>) và <code>&lt;Outlet /&gt;</code>; <code>/</code> chuyển tới <code>/courses</code> bằng index loader.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>2. Loader danh sách &amp; tìm GET <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>coursesLoader</code> đọc <code>q</code> từ <code>request.url</code> và gọi <code>GET /courses?q=</code>. <code>&lt;Form id=\"search-form\"&gt;</code> có <code>#q</code> (giá trị mặc định từ loader); dòng <code>.course-item a</code>; <code>#no-courses</code>.</li>\n</ul>\n<p><b>Ví dụ:</b></p>\n<pre>gửi \"testing\" ⇒ URL /courses?q=testing ⇒ Software Testing</pre>\n</div>\n<div class=\"bi-cn\"><h3>3. Loader chi tiết &amp; 404 <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>#course-title</code>, <code>#course-code</code>, <code>#course-status</code> (<code>Published</code>/<code>Draft</code>). Id lạ ⇒ <code>errorElement</code> của route hiện <code>#not-found</code> <code>Course not found</code>, layout vẫn giữ.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>4. Action tạo mới <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>&lt;Form method=\"post\" id=\"course-form\"&gt;</code> (<code>#title</code>, <code>#code</code>). Action trả <code>{ errors, values }</code> (<code>#err-title</code> <code>Title is too short</code>, <code>#err-code</code> <code>Code must look like FER202</code>) hoặc POST <code>{ title, code, published: false }</code> rồi chuyển tới <code>/courses/:idMới</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. Action sửa <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>/courses/:id/edit</code> dùng lại loader chi tiết; <code>#edit-form</code> gửi <code>PATCH</code> rồi quay về trang chi tiết.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>6. Action xoá <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>&lt;Form method=\"post\" action=\"destroy\" id=\"delete-form\"&gt;</code>; huỷ <code>confirm()</code> thì không gửi; action DELETE rồi chuyển về <code>/courses</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>7. Bật/tắt bằng fetcher <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>&lt;fetcher.Form method=\"post\"&gt;</code> với <code>#btn-toggle</code> (<code>intent=toggle</code>) PATCH <code>published</code> qua action của route chi tiết; trang không điều hướng và trạng thái cập nhật (lạc quan qua <code>fetcher.formData</code>).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>8. Giao diện chờ <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>#global-spinner</code> khi <code>useNavigation().state !== 'idle'</code>.</li>\n</ul>\n</div>\n<h2>6. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>#sidebar · #nav-courses · #nav-new · #global-spinner</code></td><td>layout</td></tr><tr><td><code>#search-form · #q · .course-item a · #no-courses</code></td><td>danh sách</td></tr><tr><td><code>#course-title · #course-code · #course-status · #btn-toggle · #edit-link · #delete-form · #not-found</code></td><td>chi tiết</td></tr><tr><td><code>#course-form · #title · #code · #err-title · #err-code · #edit-form</code></td><td>form</td></tr></tbody></table>\n<h2>7. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>Data router &amp; layout</td><td>1</td></tr><tr><td>2</td><td>Loader danh sách &amp; tìm GET</td><td>1.5</td></tr><tr><td>3</td><td>Loader chi tiết &amp; 404</td><td>1.5</td></tr><tr><td>4</td><td>Action tạo mới</td><td>1.5</td></tr><tr><td>5</td><td>Action sửa</td><td>1</td></tr><tr><td>6</td><td>Action xoá</td><td>1</td></tr><tr><td>7</td><td>Bật/tắt bằng fetcher</td><td>1.5</td></tr><tr><td>8</td><td>Giao diện chờ</td><td>1</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li><code>useEffect</code> + <code>useState</code> để lấy dữ liệu trong component route (thác request, nháy giao diện rỗng).</li>\n  <li><code>&lt;form onSubmit&gt;</code> thường + <code>fetch</code> + <code>navigate()</code> thay cho action.</li>\n  <li>Chỉ một <code>errorElement</code> gốc — 404 xoá luôn cả layout.</li>\n  <li>Bật/tắt bằng form điều hướng — trang nhảy và lịch sử dài thêm.</li>\n</ul>\n<h2>8. Nộp bài</h2>\n<p>Làm thẳng trong editor (các tệp bên phải) hoặc tải starter, chạy trên máy bằng Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> khi đề dùng API) rồi dán lại tệp. Bấm <b>Chạy thử</b> để chạy kiểm mẫu, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn).</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "json-server at <code>http://localhost:9999/courses</code>; all calls in <code>src/api.js</code>, which throws a <code>Response</code> for non-2xx statuses.|||json-server ở <code>http://localhost:9999/courses</code>; mọi lời gọi trong <code>src/api.js</code>, ném <code>Response</code> khi mã không phải 2xx.\nUse <code>&lt;Form&gt;</code> from react-router-dom (not a plain <code>&lt;form&gt;</code> with onSubmit + fetch).|||Dùng <code>&lt;Form&gt;</code> của react-router-dom (không dùng <code>&lt;form&gt;</code> thường + onSubmit + fetch).",
+      "examplesJson": [
+        {
+          "input": "List loader & GET search|||Loader danh sách & tìm GET",
+          "output": "submit \"testing\" ⇒ URL /courses?q=testing ⇒ Software Testing|||gửi \"testing\" ⇒ URL /courses?q=testing ⇒ Software Testing",
+          "explanation": "See the brief / Xem đề."
+        }
+      ],
+      "hintsJson": [
+        "Loader: export async function coursesLoader({ request }) { const q = new URL(request.url).searchParams.get(\"q\") ?? \"\"; return { courses: await listCourses(q), q }; }",
+        "Action: const form = await request.formData(); kiểm ⇒ return { errors, values } (useActionData đọc) hoặc return redirect(`/courses/${id}`).",
+        "404: api ném new Response(\"\", { status: 404 }); route có errorElement: <CourseError/> dùng isRouteErrorResponse(error) && error.status === 404.",
+        "Fetcher: const fetcher = useFetcher(); <fetcher.Form method=\"post\"><input type=\"hidden\" name=\"published\" …/><button name=\"intent\" value=\"toggle\">…"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — STARTER: BrowserRouter cổ điển\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { BrowserRouter } from 'react-router-dom';\nimport './index.css';\nimport App from './App';\n\nReactDOM.createRoot(document.getElementById('root')).render(\n  <BrowserRouter>\n    <App />\n  </BrowserRouter>\n);\n"
+        },
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER: tải dữ liệu bằng useEffect trong component (chậm một nhịp, không có loader/action)\nimport { useEffect, useState } from 'react';\nimport { Link, Route, Routes } from 'react-router-dom';\n\nfunction Courses() {\n  const [courses, setCourses] = useState([]);\n  useEffect(() => {\n    fetch('http://localhost:9999/courses').then((r) => r.json()).then(setCourses);\n  }, []);\n  return <ul id=\"course-list\">{courses.map((c) => <li key={c.id} className=\"course-item\"><Link to={'/courses/' + c.id}>{c.title}</Link></li>)}</ul>;\n}\n\nexport default function App() {\n  return (\n    <Routes>\n      <Route path=\"/courses\" element={<Courses />} />\n    </Routes>\n  );\n}\n"
+        },
+        {
+          "name": "src/router.js",
+          "language": "javascript",
+          "code": "// src/router.js — STARTER\n// createBrowserRouter([...]) với loader / action / errorElement\nexport {};\n"
+        },
+        {
+          "name": "src/routes/Root.js",
+          "language": "javascript",
+          "code": "// src/routes/Root.js — STARTER\n// layout + NavLink #nav-courses #nav-new + Outlet + #global-spinner (useNavigation) + RootError\nexport {};\n"
+        },
+        {
+          "name": "src/routes/Courses.js",
+          "language": "javascript",
+          "code": "// src/routes/Courses.js — STARTER\n// coursesLoader (đọc ?q) + <Form id=\"search-form\"> + .course-item\nexport {};\n"
+        },
+        {
+          "name": "src/routes/Course.js",
+          "language": "javascript",
+          "code": "// src/routes/Course.js — STARTER\n// courseLoader · courseAction (intent toggle) · useFetcher · #delete-form · CourseError (404)\nexport {};\n"
+        },
+        {
+          "name": "src/routes/NewCourse.js",
+          "language": "javascript",
+          "code": "// src/routes/NewCourse.js — STARTER\n// newCourseAction (validate ⇒ { errors } hoặc redirect) · <Form method=\"post\" id=\"course-form\">\nexport {};\n"
+        },
+        {
+          "name": "src/routes/EditCourse.js",
+          "language": "javascript",
+          "code": "// src/routes/EditCourse.js — STARTER\n// editCourseAction (PATCH ⇒ redirect) · <Form id=\"edit-form\">\nexport {};\n"
+        },
+        {
+          "name": "src/routes/destroy.js",
+          "language": "javascript",
+          "code": "// src/routes/destroy.js — STARTER\n// destroyAction (DELETE ⇒ redirect(\"/courses\"))\nexport {};\n"
+        },
+        {
+          "name": "src/index.css",
+          "language": "css",
+          "code": "/* src/index.css (đã cho) */\nbody { font-family: system-ui, sans-serif; margin: 0; color: #0f172a; background: #f8fafc; }\n.layout { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; }\nnav.sidebar { background: #1e293b; color: #fff; padding: 16px; } nav.sidebar a { color: #cbd5e1; display: block; padding: 4px 0; }\nnav.sidebar a.active { color: #fff; font-weight: 700; }\nmain { padding: 20px 28px; position: relative; }\n#global-spinner { position: absolute; top: 8px; right: 16px; background: #fde68a; padding: 2px 10px; border-radius: 999px; font-size: 13px; }\n.course-item a { color: #2563eb; } .error { color: #dc2626; font-size: 13px; }\nlabel { display: block; margin-top: 8px; } input { padding: 6px 8px; }\n.badge { padding: 2px 8px; border-radius: 999px; background: #e2e8f0; } .badge.published { background: #bbf7d0; }\n"
+        },
+        {
+          "name": "src/api.js",
+          "language": "javascript",
+          "code": "// src/api.js — gọi json-server; lỗi HTTP ném Response để errorElement đọc được status\nconst BASE = 'http://localhost:9999/courses';\n\nasync function call(url, options) {\n  const res = await fetch(url, options);\n  if (!res.ok) throw new Response(res.statusText || 'Error', { status: res.status });\n  return res.status === 204 ? null : res.json();\n}\n\nconst json = (method, body) => ({ method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });\n\nexport const listCourses = (q) => call(q ? `${BASE}?q=${encodeURIComponent(q)}` : BASE);\nexport const getCourse = (id) => call(`${BASE}/${id}`);\nexport const createCourse = (data) => call(BASE, json('POST', data));\nexport const updateCourse = (id, data) => call(`${BASE}/${id}`, json('PATCH', data));\nexport const deleteCourse = (id) => call(`${BASE}/${id}`, { method: 'DELETE' });\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — RouterProvider thay cho <BrowserRouter><App/></BrowserRouter>\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { RouterProvider } from 'react-router-dom';\nimport './index.css';\nimport { router } from './router';\n\nReactDOM.createRoot(document.getElementById('root')).render(\n  <React.StrictMode>\n    <RouterProvider router={router} />\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "src/router.js",
+          "language": "javascript",
+          "code": "// src/router.js — cấu hình data router: loader/action/errorElement gắn vào từng route\nimport { createBrowserRouter, redirect } from 'react-router-dom';\nimport Root, { RootError } from './routes/Root';\nimport Courses, { coursesLoader } from './routes/Courses';\nimport Course, { CourseError, courseAction, courseLoader } from './routes/Course';\nimport NewCourse, { newCourseAction } from './routes/NewCourse';\nimport EditCourse, { editCourseAction } from './routes/EditCourse';\nimport { destroyAction } from './routes/destroy';\n\nexport const router = createBrowserRouter([\n  {\n    path: '/',\n    element: <Root />,\n    errorElement: <RootError />,\n    children: [\n      { index: true, loader: () => redirect('/courses') },\n      { path: 'courses', element: <Courses />, loader: coursesLoader },\n      { path: 'courses/new', element: <NewCourse />, action: newCourseAction },\n      {\n        path: 'courses/:id',\n        element: <Course />,\n        loader: courseLoader,\n        action: courseAction,\n        errorElement: <CourseError />,\n      },\n      { path: 'courses/:id/edit', element: <EditCourse />, loader: courseLoader, action: editCourseAction },\n      { path: 'courses/:id/destroy', action: destroyAction },\n    ],\n  },\n]);\n"
+        },
+        {
+          "name": "src/routes/Root.js",
+          "language": "javascript",
+          "code": "// src/routes/Root.js — layout chung + trạng thái chờ toàn cục + lỗi gốc\nimport { NavLink, Outlet, useNavigation, useRouteError } from 'react-router-dom';\n\nexport default function Root() {\n  const navigation = useNavigation();\n  return (\n    <div className=\"layout\">\n      <nav className=\"sidebar\" id=\"sidebar\">\n        <h2>CT Catalog</h2>\n        <NavLink to=\"/courses\" end id=\"nav-courses\">All courses</NavLink>\n        <NavLink to=\"/courses/new\" id=\"nav-new\">+ New course</NavLink>\n      </nav>\n      <main>\n        {navigation.state !== 'idle' && <span id=\"global-spinner\">Loading…</span>}\n        <Outlet />\n      </main>\n    </div>\n  );\n}\n\nexport function RootError() {\n  const error = useRouteError();\n  return <p id=\"root-error\">Something went wrong: {error?.status ?? ''} {error?.statusText ?? error?.message}</p>;\n}\n"
+        },
+        {
+          "name": "src/routes/Courses.js",
+          "language": "javascript",
+          "code": "// src/routes/Courses.js — loader đọc ?q từ URL; tìm kiếm bằng <Form> GET (không cần state)\nimport { Form, Link, useLoaderData } from 'react-router-dom';\nimport { listCourses } from '../api';\n\nexport async function coursesLoader({ request }) {\n  const q = new URL(request.url).searchParams.get('q') ?? '';\n  const courses = await listCourses(q.trim());\n  return { courses, q };\n}\n\nexport default function Courses() {\n  const { courses, q } = useLoaderData();\n  return (\n    <section>\n      <h1>Courses</h1>\n      <Form id=\"search-form\" role=\"search\">\n        <input id=\"q\" name=\"q\" defaultValue={q} key={q} placeholder=\"Search courses\" />\n        <button type=\"submit\">Search</button>\n      </Form>\n      {courses.length === 0 ? (\n        <p id=\"no-courses\">No courses found</p>\n      ) : (\n        <ul id=\"course-list\">\n          {courses.map((c) => (\n            <li key={c.id} className=\"course-item\">\n              <Link to={`/courses/${c.id}`}>{c.title}</Link> <small>{c.code}</small>\n            </li>\n          ))}\n        </ul>\n      )}\n    </section>\n  );\n}\n"
+        },
+        {
+          "name": "src/routes/Course.js",
+          "language": "javascript",
+          "code": "// src/routes/Course.js — loader theo :id, action của chính route (bật/tắt xuất bản qua useFetcher), errorElement 404\nimport { Form, Link, isRouteErrorResponse, useFetcher, useLoaderData, useRouteError } from 'react-router-dom';\nimport { getCourse, updateCourse } from '../api';\n\nexport async function courseLoader({ params }) {\n  return getCourse(params.id); // 404 ⇒ ném Response ⇒ errorElement\n}\n\nexport async function courseAction({ request, params }) {\n  const form = await request.formData();\n  if (form.get('intent') === 'toggle') {\n    return updateCourse(params.id, { published: form.get('published') === 'true' });\n  }\n  return null;\n}\n\nexport default function Course() {\n  const course = useLoaderData();\n  const fetcher = useFetcher();\n  // cập nhật lạc quan: đang gửi thì hiện luôn giá trị sắp có\n  const published = fetcher.formData ? fetcher.formData.get('published') === 'true' : course.published;\n\n  return (\n    <article>\n      <h1 id=\"course-title\">{course.title}</h1>\n      <p id=\"course-code\">{course.code}</p>\n      <span id=\"course-status\" className={published ? 'badge published' : 'badge'}>{published ? 'Published' : 'Draft'}</span>\n      <fetcher.Form method=\"post\" id=\"toggle-form\">\n        <input type=\"hidden\" name=\"published\" value={String(!published)} />\n        <button id=\"btn-toggle\" type=\"submit\" name=\"intent\" value=\"toggle\">{published ? 'Unpublish' : 'Publish'}</button>\n      </fetcher.Form>\n      <p>\n        <Link id=\"edit-link\" to=\"edit\">Edit</Link>\n      </p>\n      <Form\n        method=\"post\"\n        action=\"destroy\"\n        id=\"delete-form\"\n        onSubmit={(e) => {\n          if (!window.confirm('Delete this course?')) e.preventDefault();\n        }}\n      >\n        <button id=\"btn-delete\" type=\"submit\">Delete</button>\n      </Form>\n    </article>\n  );\n}\n\nexport function CourseError() {\n  const error = useRouteError();\n  if (isRouteErrorResponse(error) && error.status === 404) {\n    return (\n      <div>\n        <p id=\"not-found\">Course not found</p>\n        <Link to=\"/courses\" id=\"back-to-list\">Back to courses</Link>\n      </div>\n    );\n  }\n  throw error; // lỗi khác ⇒ để errorElement phía trên xử lý\n}\n"
+        },
+        {
+          "name": "src/routes/NewCourse.js",
+          "language": "javascript",
+          "code": "// src/routes/NewCourse.js — <Form method=\"post\"> + action kiểm hợp lệ, trả lỗi (useActionData) hoặc redirect\nimport { Form, redirect, useActionData, useNavigation } from 'react-router-dom';\nimport { createCourse } from '../api';\n\nexport function validateCourse({ title, code }) {\n  const errors = {};\n  if (title.trim().length < 3) errors.title = 'Title is too short';\n  if (!/^[A-Z]{3}\\d{3}$/.test(code.trim())) errors.code = 'Code must look like FER202';\n  return errors;\n}\n\nexport async function newCourseAction({ request }) {\n  const form = await request.formData();\n  const data = { title: String(form.get('title') ?? ''), code: String(form.get('code') ?? '') };\n  const errors = validateCourse(data);\n  if (Object.keys(errors).length > 0) return { errors, values: data };\n  const created = await createCourse({ title: data.title.trim(), code: data.code.trim(), published: false });\n  return redirect(`/courses/${created.id}`);\n}\n\nexport default function NewCourse() {\n  const result = useActionData();\n  const navigation = useNavigation();\n  const errors = result?.errors ?? {};\n  return (\n    <section>\n      <h1>New course</h1>\n      <Form method=\"post\" id=\"course-form\" noValidate>\n        <label>Title <input id=\"title\" name=\"title\" defaultValue={result?.values?.title ?? ''} /></label>\n        {errors.title && <p className=\"error\" id=\"err-title\">{errors.title}</p>}\n        <label>Code <input id=\"code\" name=\"code\" defaultValue={result?.values?.code ?? ''} /></label>\n        {errors.code && <p className=\"error\" id=\"err-code\">{errors.code}</p>}\n        <button id=\"btn-create\" type=\"submit\" disabled={navigation.state === 'submitting'}>Create</button>\n      </Form>\n    </section>\n  );\n}\n"
+        },
+        {
+          "name": "src/routes/EditCourse.js",
+          "language": "javascript",
+          "code": "// src/routes/EditCourse.js — dùng lại loader chi tiết; action PATCH rồi redirect về trang chi tiết\nimport { Form, redirect, useLoaderData } from 'react-router-dom';\nimport { updateCourse } from '../api';\n\nexport async function editCourseAction({ request, params }) {\n  const form = await request.formData();\n  await updateCourse(params.id, { title: String(form.get('title')).trim(), code: String(form.get('code')).trim() });\n  return redirect(`/courses/${params.id}`);\n}\n\nexport default function EditCourse() {\n  const course = useLoaderData();\n  return (\n    <section>\n      <h1>Edit {course.code}</h1>\n      <Form method=\"post\" id=\"edit-form\">\n        <label>Title <input id=\"title\" name=\"title\" defaultValue={course.title} /></label>\n        <label>Code <input id=\"code\" name=\"code\" defaultValue={course.code} /></label>\n        <button id=\"btn-save\" type=\"submit\">Save</button>\n      </Form>\n    </section>\n  );\n}\n"
+        },
+        {
+          "name": "src/routes/destroy.js",
+          "language": "javascript",
+          "code": "// src/routes/destroy.js — route chỉ có action (không có giao diện)\nimport { redirect } from 'react-router-dom';\nimport { deleteCourse } from '../api';\n\nexport async function destroyAction({ params }) {\n  await deleteCourse(params.id);\n  return redirect('/courses');\n}\n"
+        },
+        {
+          "name": "src/index.css",
+          "language": "css",
+          "code": "/* src/index.css (đã cho) */\nbody { font-family: system-ui, sans-serif; margin: 0; color: #0f172a; background: #f8fafc; }\n.layout { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; }\nnav.sidebar { background: #1e293b; color: #fff; padding: 16px; } nav.sidebar a { color: #cbd5e1; display: block; padding: 4px 0; }\nnav.sidebar a.active { color: #fff; font-weight: 700; }\nmain { padding: 20px 28px; position: relative; }\n#global-spinner { position: absolute; top: 8px; right: 16px; background: #fde68a; padding: 2px 10px; border-radius: 999px; font-size: 13px; }\n.course-item a { color: #2563eb; } .error { color: #dc2626; font-size: 13px; }\nlabel { display: block; margin-top: 8px; } input { padding: 6px 8px; }\n.badge { padding: 2px 8px; border-radius: 999px; background: #e2e8f0; } .badge.published { background: #bbf7d0; }\n"
+        },
+        {
+          "name": "src/api.js",
+          "language": "javascript",
+          "code": "// src/api.js — gọi json-server; lỗi HTTP ném Response để errorElement đọc được status\nconst BASE = 'http://localhost:9999/courses';\n\nasync function call(url, options) {\n  const res = await fetch(url, options);\n  if (!res.ok) throw new Response(res.statusText || 'Error', { status: res.status });\n  return res.status === 204 ? null : res.json();\n}\n\nconst json = (method, body) => ({ method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });\n\nexport const listCourses = (q) => call(q ? `${BASE}?q=${encodeURIComponent(q)}` : BASE);\nexport const getCourse = (id) => call(`${BASE}/${id}`);\nexport const createCourse = (data) => call(BASE, json('POST', data));\nexport const updateCourse = (id, data) => call(`${BASE}/${id}`, json('PATCH', data));\nexport const deleteCourse = (id) => call(`${BASE}/${id}`, { method: 'DELETE' });\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Data router đưa việc <b>tải</b> và <b>đổi</b> dữ liệu lên tầng route: loader chạy trước khi component vẽ (không còn màn hình rỗng rồi mới có dữ liệu), action nhận <code>FormData</code> của <code>&lt;Form&gt;</code> và quyết định trả lỗi hay <code>redirect</code>. Sau mỗi action router tự chạy lại loader nên giao diện luôn khớp server mà không cần state thủ công. Lỗi ném ra từ loader (kể cả <code>Response</code> 404) được <code>errorElement</code> gần nhất bắt, nên layout vẫn còn. Fetcher dùng chung cơ chế action nhưng không điều hướng — đúng cho thao tác tại chỗ như bật/tắt xuất bản.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://reactrouter.com/en/6.26.2/start/tutorial",
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "thuVien": [
+          "react-router-dom"
+        ],
+        "url": "/courses",
+        "jsonServer": {
+          "base": "http://localhost:9999",
+          "db": {
+            "courses": [
+              {
+                "id": 1,
+                "title": "React Basics",
+                "code": "FER202",
+                "published": true
+              },
+              {
+                "id": 2,
+                "title": "Software Testing",
+                "code": "SWT301",
+                "published": false
+              },
+              {
+                "id": 3,
+                "title": "Software Requirements",
+                "code": "SWR302",
+                "published": true
+              }
+            ]
+          }
+        },
+        "kiem": [
+          {
+            "nhom": "f1",
+            "moTa": "\"/\" redirects to /courses (loader redirect)",
+            "url": "/",
+            "kiem": "duong-dan",
+            "giaTri": "/courses",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f1",
+            "moTa": "Layout with sidebar links",
+            "url": "/courses",
+            "kiem": "danh-sach-text",
+            "selector": "#sidebar a",
+            "mongDoi": [
+              "All courses",
+              "+ New course"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f1",
+            "an": true,
+            "moTa": "createBrowserRouter + RouterProvider",
+            "kiem": "ma-nguon",
+            "tep": "src/router.js",
+            "khop": "createBrowserRouter\\("
+          },
+          {
+            "nhom": "f2",
+            "moTa": "List comes from the loader",
+            "url": "/courses",
+            "kiem": "danh-sach-text",
+            "selector": ".course-item a",
+            "mongDoi": [
+              "React Basics",
+              "Software Testing",
+              "Software Requirements"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "moTa": "GET <Form> puts the query in the URL",
+            "url": "/courses",
+            "kiem": "duong-dan",
+            "giaTri": "/courses?q=testing",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#q",
+                "giaTri": "testing"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#search-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Filtered by the server",
+            "url": "/courses?q=react",
+            "kiem": "danh-sach-text",
+            "selector": ".course-item a",
+            "mongDoi": [
+              "React Basics"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "an": true,
+            "moTa": "Search box shows the query from the URL",
+            "url": "/courses?q=react",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#q",
+            "thuocTinh": "value",
+            "giaTri": "react",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "an": true,
+            "moTa": "Loader reads request.url",
+            "kiem": "ma-nguon",
+            "tep": "src/routes/Courses.js",
+            "khop": "new URL\\(\\s*request\\.url\\s*\\)"
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Detail from the loader",
+            "url": "/courses/2",
+            "kiem": "danh-sach-text",
+            "selector": "#course-title, #course-code, #course-status",
+            "mongDoi": [
+              "Software Testing",
+              "SWT301",
+              "Draft"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Clicking a course navigates",
+            "url": "/courses",
+            "kiem": "duong-dan",
+            "giaTri": "/courses/3",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".course-item:nth-child(3) a",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Unknown id ⇒ route errorElement, layout kept",
+            "url": "/courses/99",
+            "kiem": "danh-sach-text",
+            "selector": "#sidebar h2, #not-found",
+            "mongDoi": [
+              "CT Catalog",
+              "Course not found"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "an": true,
+            "moTa": "Loader throws a Response for errors",
+            "kiem": "ma-nguon",
+            "tep": "src/api.js",
+            "khop": "throw new Response\\("
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Invalid data ⇒ action errors via useActionData",
+            "url": "/courses/new",
+            "kiem": "danh-sach-text",
+            "selector": ".error",
+            "mongDoi": [
+              "Title is too short",
+              "Code must look like FER202"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#title",
+                "giaTri": "AB"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#code",
+                "giaTri": "fer"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#course-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Values kept after errors, URL unchanged",
+            "url": "/courses/new",
+            "kiem": "duong-dan",
+            "giaTri": "/courses/new",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#title",
+                "giaTri": "AB"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#course-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Valid ⇒ POST then redirect to the new course",
+            "url": "/courses/new",
+            "kiem": "duong-dan",
+            "giaTri": "/courses/4",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#title",
+                "giaTri": "Web Design"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#code",
+                "giaTri": "WED201"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#course-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 500
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Created on the server as draft",
+            "url": "/courses/new",
+            "kiem": "du-lieu-server",
+            "bang": "courses",
+            "chua": {
+              "title": "Web Design",
+              "code": "WED201",
+              "published": false
+            },
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#title",
+                "giaTri": "Web Design"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#code",
+                "giaTri": "WED201"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#course-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 500
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "an": true,
+            "moTa": "Entered title kept after an error",
+            "url": "/courses/new",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#title",
+            "thuocTinh": "value",
+            "giaTri": "Web Design",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#title",
+                "giaTri": "Web Design"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#code",
+                "giaTri": "x"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#course-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Edit form prefilled by the loader",
+            "url": "/courses/2/edit",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#title",
+            "thuocTinh": "value",
+            "giaTri": "Software Testing",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Save PATCHes and redirects to the detail page",
+            "url": "/courses/2/edit",
+            "kiem": "danh-sach-text",
+            "selector": "#course-title",
+            "mongDoi": [
+              "Software Testing K19"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#title",
+                "giaTri": "Software Testing K19"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#edit-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 600
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "an": true,
+            "moTa": "Uses PATCH",
+            "url": "/courses/2/edit",
+            "kiem": "goi-fetch",
+            "khop": "^PATCH .*/courses/2$",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#edit-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 500
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Delete (confirmed) removes and goes back to the list",
+            "url": "/courses/3",
+            "kiem": "danh-sach-text",
+            "selector": ".course-item a",
+            "mongDoi": [
+              "React Basics",
+              "Software Testing"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#delete-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 600
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Server record deleted",
+            "url": "/courses/3",
+            "kiem": "du-lieu-server",
+            "bang": "courses",
+            "khongChua": {
+              "id": 3
+            },
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#delete-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 600
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "an": true,
+            "moTa": "Cancelled confirm ⇒ nothing deleted",
+            "url": "/courses/3",
+            "confirm": false,
+            "kiem": "goi-fetch",
+            "khop": "^DELETE",
+            "min": 0,
+            "max": 0,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#delete-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 400
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Publish via fetcher updates the status",
+            "url": "/courses/2",
+            "kiem": "text",
+            "selector": "#course-status",
+            "giaTri": "Published",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-toggle",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 600
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Fetcher does not navigate",
+            "url": "/courses/2",
+            "kiem": "duong-dan",
+            "giaTri": "/courses/2",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-toggle",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 600
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Saved on the server",
+            "url": "/courses/2",
+            "kiem": "du-lieu-server",
+            "bang": "courses",
+            "chua": {
+              "id": 2,
+              "published": true
+            },
+            "chat": true,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-toggle",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 600
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "an": true,
+            "moTa": "Uses useFetcher",
+            "kiem": "ma-nguon",
+            "tep": "src/routes/Course.js",
+            "khop": "useFetcher\\(\\)"
+          },
+          {
+            "nhom": "f8",
+            "moTa": "Global spinner while the next loader runs",
+            "url": "/courses",
+            "jsonServer": {
+              "base": "http://localhost:9999",
+              "db": {
+                "courses": [
+                  {
+                    "id": 1,
+                    "title": "React Basics",
+                    "code": "FER202",
+                    "published": true
+                  },
+                  {
+                    "id": 2,
+                    "title": "Software Testing",
+                    "code": "SWT301",
+                    "published": false
+                  },
+                  {
+                    "id": 3,
+                    "title": "Software Requirements",
+                    "code": "SWR302",
+                    "published": true
+                  }
+                ]
+              },
+              "treMs": 900
+            },
+            "kiem": "ton-tai",
+            "selector": "#global-spinner",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 1200
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".course-item:nth-child(1) a",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              }
+            ]
+          },
+          {
+            "nhom": "f8",
+            "an": true,
+            "moTa": "Spinner gone when idle",
+            "url": "/courses",
+            "kiem": "khong-ton-tai",
+            "selector": "#global-spinner",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. Data router & layout",
+            "diem": 1
+          },
+          {
+            "ma": "f2",
+            "ten": "2. List loader & GET search",
+            "diem": 1.5
+          },
+          {
+            "ma": "f3",
+            "ten": "3. Detail loader & 404",
+            "diem": 1.5
+          },
+          {
+            "ma": "f4",
+            "ten": "4. Create action",
+            "diem": 1.5
+          },
+          {
+            "ma": "f5",
+            "ten": "5. Edit action",
+            "diem": 1
+          },
+          {
+            "ma": "f6",
+            "ten": "6. Delete action",
+            "diem": 1
+          },
+          {
+            "ma": "f7",
+            "ten": "7. Fetcher toggle",
+            "diem": 1.5
+          },
+          {
+            "ma": "f8",
+            "ten": "8. Pending UI",
+            "diem": 1
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "deep-lab",
+      "mistakesJson": [
+        {
+          "loi": "Đặt route \"courses/new\" SAU \"courses/:id\" và nghĩ nó bị nuốt — React Router xếp hạng route tĩnh cao hơn, nhưng đừng đặt tên id là \"new\"."
+        },
+        {
+          "loi": "Quên <code>return</code> trước <code>redirect(...)</code> trong action ⇒ không chuyển trang."
+        },
+        {
+          "loi": "Dùng <code>value</code> (không phải <code>defaultValue</code>) cho ô trong &lt;Form&gt; mà không có state ⇒ ô không gõ được."
+        },
+        {
+          "loi": "Ô tìm kiếm thiếu <code>key={q}</code> ⇒ quay lại trang trước, ô vẫn giữ chữ cũ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "loader",
+          "vi": "hàm tải dữ liệu của route, chạy TRƯỚC khi vẽ"
+        },
+        {
+          "en": "action",
+          "vi": "hàm xử lý form gửi tới route (POST/PATCH/DELETE)"
+        },
+        {
+          "en": "fetcher",
+          "vi": "gọi loader/action mà không điều hướng"
+        },
+        {
+          "en": "revalidation",
+          "vi": "router tự chạy lại loader sau mỗi action"
+        },
+        {
+          "en": "error boundary (errorElement)",
+          "vi": "giao diện thay thế khi route lỗi"
+        },
+        {
+          "en": "rubric",
+          "vi": "thang điểm theo tiêu chí"
+        }
+      ],
+      "demoHtml": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>Deep Lab 9 — Course Catalog with the Data Router (loaders · actions · errorElement · useFetcher) — Live demo</title>\n<script src=\"https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/@remix-run/router@1.19.2/dist/router.umd.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-router@6.26.2/dist/umd/react-router.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-router-dom@6.26.2/dist/umd/react-router-dom.production.min.js\" crossorigin=\"anonymous\"></script>\n\n</head><body><div id=\"root\"></div><script>(function(){\nvar M={\"src/index.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\"); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/index.js — RouterProvider thay cho \\u003cBrowserRouter>\\u003cApp/>\\u003c/BrowserRouter>\\nvar _react = require('react'); var _react2 = _interopRequireDefault(_react);\\nvar _client = require('react-dom/client'); var _client2 = _interopRequireDefault(_client);\\nvar _reactrouterdom = require('react-router-dom');\\nrequire('./index.css');\\nvar _router = require('./router');\\n\\n_client2.default.createRoot(document.getElementById('root')).render(\\n  _jsxruntime.jsx.call(void 0, _react2.default.StrictMode, { children: \\n    _jsxruntime.jsx.call(void 0, _reactrouterdom.RouterProvider, { router: _router.router,} )\\n  })\\n);\\n\",\"src/router.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/router.js — cấu hình data router: loader/action/errorElement gắn vào từng route\\nvar _reactrouterdom = require('react-router-dom');\\nvar _Root = require('./routes/Root'); var _Root2 = _interopRequireDefault(_Root);\\nvar _Courses = require('./routes/Courses'); var _Courses2 = _interopRequireDefault(_Courses);\\nvar _Course = require('./routes/Course'); var _Course2 = _interopRequireDefault(_Course);\\nvar _NewCourse = require('./routes/NewCourse'); var _NewCourse2 = _interopRequireDefault(_NewCourse);\\nvar _EditCourse = require('./routes/EditCourse'); var _EditCourse2 = _interopRequireDefault(_EditCourse);\\nvar _destroy = require('./routes/destroy');\\n\\n const router = _reactrouterdom.createBrowserRouter.call(void 0, [\\n  {\\n    path: '/',\\n    element: _jsxruntime.jsx.call(void 0, _Root2.default, {} ),\\n    errorElement: _jsxruntime.jsx.call(void 0, _Root.RootError, {} ),\\n    children: [\\n      { index: true, loader: () => _reactrouterdom.redirect.call(void 0, '/courses') },\\n      { path: 'courses', element: _jsxruntime.jsx.call(void 0, _Courses2.default, {} ), loader: _Courses.coursesLoader },\\n      { path: 'courses/new', element: _jsxruntime.jsx.call(void 0, _NewCourse2.default, {} ), action: _NewCourse.newCourseAction },\\n      {\\n        path: 'courses/:id',\\n        element: _jsxruntime.jsx.call(void 0, _Course2.default, {} ),\\n        loader: _Course.courseLoader,\\n        action: _Course.courseAction,\\n        errorElement: _jsxruntime.jsx.call(void 0, _Course.CourseError, {} ),\\n      },\\n      { path: 'courses/:id/edit', element: _jsxruntime.jsx.call(void 0, _EditCourse2.default, {} ), loader: _Course.courseLoader, action: _EditCourse.editCourseAction },\\n      { path: 'courses/:id/destroy', action: _destroy.destroyAction },\\n    ],\\n  },\\n]); exports.router = router;\\n\",\"src/routes/Root.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _nullishCoalesce(lhs, rhsFn) { if (lhs != null) { return lhs; } else { return rhsFn(); } } function _optionalChain(ops) { let lastAccessLHS = undefined; let value = ops[0]; let i = 1; while (i \\u003c ops.length) { const op = ops[i]; const fn = ops[i + 1]; i += 2; if ((op === 'optionalAccess' || op === 'optionalCall') && value == null) { return undefined; } if (op === 'access' || op === 'optionalAccess') { lastAccessLHS = value; value = fn(value); } else if (op === 'call' || op === 'optionalCall') { value = fn((...args) => value.call(lastAccessLHS, ...args)); lastAccessLHS = undefined; } } return value; }// src/routes/Root.js — layout chung + trạng thái chờ toàn cục + lỗi gốc\\nvar _reactrouterdom = require('react-router-dom');\\n\\n function Root() {\\n  const navigation = _reactrouterdom.useNavigation.call(void 0, );\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"layout\\\", children: [\\n      _jsxruntime.jsxs.call(void 0, 'nav', { className: \\\"sidebar\\\", id: \\\"sidebar\\\", children: [\\n        _jsxruntime.jsx.call(void 0, 'h2', { children: \\\"CT Catalog\\\" })\\n        , _jsxruntime.jsx.call(void 0, _reactrouterdom.NavLink, { to: \\\"/courses\\\", end: true, id: \\\"nav-courses\\\", children: \\\"All courses\\\" })\\n        , _jsxruntime.jsx.call(void 0, _reactrouterdom.NavLink, { to: \\\"/courses/new\\\", id: \\\"nav-new\\\", children: \\\"+ New course\\\"  })\\n      ]})\\n      , _jsxruntime.jsxs.call(void 0, 'main', { children: [\\n        navigation.state !== 'idle' && _jsxruntime.jsx.call(void 0, 'span', { id: \\\"global-spinner\\\", children: \\\"Loading…\\\"})\\n        , _jsxruntime.jsx.call(void 0, _reactrouterdom.Outlet, {} )\\n      ]})\\n    ]})\\n  );\\n} exports.default = Root;\\n\\n function RootError() {\\n  const error = _reactrouterdom.useRouteError.call(void 0, );\\n  return _jsxruntime.jsxs.call(void 0, 'p', { id: \\\"root-error\\\", children: [\\\"Something went wrong: \\\"   , _nullishCoalesce(_optionalChain([error, 'optionalAccess', _ => _.status]), () => ( '')), \\\" \\\" , _nullishCoalesce(_optionalChain([error, 'optionalAccess', _2 => _2.statusText]), () => ( _optionalChain([error, 'optionalAccess', _3 => _3.message])))]});\\n} exports.RootError = RootError;\\n\",\"src/routes/Courses.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _nullishCoalesce(lhs, rhsFn) { if (lhs != null) { return lhs; } else { return rhsFn(); } }// src/routes/Courses.js — loader đọc ?q từ URL; tìm kiếm bằng \\u003cForm> GET (không cần state)\\nvar _reactrouterdom = require('react-router-dom');\\nvar _api = require('../api');\\n\\n async function coursesLoader({ request }) {\\n  const q = _nullishCoalesce(new URL(request.url).searchParams.get('q'), () => ( ''));\\n  const courses = await _api.listCourses.call(void 0, q.trim());\\n  return { courses, q };\\n} exports.coursesLoader = coursesLoader;\\n\\n function Courses() {\\n  const { courses, q } = _reactrouterdom.useLoaderData.call(void 0, );\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'section', { children: [\\n      _jsxruntime.jsx.call(void 0, 'h1', { children: \\\"Courses\\\"})\\n      , _jsxruntime.jsxs.call(void 0, _reactrouterdom.Form, { id: \\\"search-form\\\", role: \\\"search\\\", children: [\\n        _jsxruntime.jsx.call(void 0, 'input', { id: \\\"q\\\", name: \\\"q\\\", defaultValue: q, placeholder: \\\"Search courses\\\" ,}, q )\\n        , _jsxruntime.jsx.call(void 0, 'button', { type: \\\"submit\\\", children: \\\"Search\\\"})\\n      ]})\\n      , courses.length === 0 ? (\\n        _jsxruntime.jsx.call(void 0, 'p', { id: \\\"no-courses\\\", children: \\\"No courses found\\\"  })\\n      ) : (\\n        _jsxruntime.jsx.call(void 0, 'ul', { id: \\\"course-list\\\", children: \\n          courses.map((c) => (\\n            _jsxruntime.jsxs.call(void 0, 'li', { className: \\\"course-item\\\", children: [\\n              _jsxruntime.jsx.call(void 0, _reactrouterdom.Link, { to: `/courses/${c.id}`, children: c.title}), \\\" \\\" , _jsxruntime.jsx.call(void 0, 'small', { children: c.code})\\n            ]}, c.id)\\n          ))\\n        })\\n      )\\n    ]})\\n  );\\n} exports.default = Courses;\\n\",\"src/routes/Course.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/routes/Course.js — loader theo :id, action của chính route (bật/tắt xuất bản qua useFetcher), errorElement 404\\nvar _reactrouterdom = require('react-router-dom');\\nvar _api = require('../api');\\n\\n async function courseLoader({ params }) {\\n  return _api.getCourse.call(void 0, params.id); // 404 ⇒ ném Response ⇒ errorElement\\n} exports.courseLoader = courseLoader;\\n\\n async function courseAction({ request, params }) {\\n  const form = await request.formData();\\n  if (form.get('intent') === 'toggle') {\\n    return _api.updateCourse.call(void 0, params.id, { published: form.get('published') === 'true' });\\n  }\\n  return null;\\n} exports.courseAction = courseAction;\\n\\n function Course() {\\n  const course = _reactrouterdom.useLoaderData.call(void 0, );\\n  const fetcher = _reactrouterdom.useFetcher.call(void 0, );\\n  // cập nhật lạc quan: đang gửi thì hiện luôn giá trị sắp có\\n  const published = fetcher.formData ? fetcher.formData.get('published') === 'true' : course.published;\\n\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'article', { children: [\\n      _jsxruntime.jsx.call(void 0, 'h1', { id: \\\"course-title\\\", children: course.title})\\n      , _jsxruntime.jsx.call(void 0, 'p', { id: \\\"course-code\\\", children: course.code})\\n      , _jsxruntime.jsx.call(void 0, 'span', { id: \\\"course-status\\\", className: published ? 'badge published' : 'badge', children: published ? 'Published' : 'Draft'})\\n      , _jsxruntime.jsxs.call(void 0, fetcher.Form, { method: \\\"post\\\", id: \\\"toggle-form\\\", children: [\\n        _jsxruntime.jsx.call(void 0, 'input', { type: \\\"hidden\\\", name: \\\"published\\\", value: String(!published),} )\\n        , _jsxruntime.jsx.call(void 0, 'button', { id: \\\"btn-toggle\\\", type: \\\"submit\\\", name: \\\"intent\\\", value: \\\"toggle\\\", children: published ? 'Unpublish' : 'Publish'})\\n      ]})\\n      , _jsxruntime.jsx.call(void 0, 'p', { children: \\n        _jsxruntime.jsx.call(void 0, _reactrouterdom.Link, { id: \\\"edit-link\\\", to: \\\"edit\\\", children: \\\"Edit\\\"})\\n      })\\n      , _jsxruntime.jsx.call(void 0, _reactrouterdom.Form, {\\n        method: \\\"post\\\",\\n        action: \\\"destroy\\\",\\n        id: \\\"delete-form\\\",\\n        onSubmit: (e) => {\\n          if (!window.confirm('Delete this course?')) e.preventDefault();\\n        },\\n children: \\n        _jsxruntime.jsx.call(void 0, 'button', { id: \\\"btn-delete\\\", type: \\\"submit\\\", children: \\\"Delete\\\"})\\n      })\\n    ]})\\n  );\\n} exports.default = Course;\\n\\n function CourseError() {\\n  const error = _reactrouterdom.useRouteError.call(void 0, );\\n  if (_reactrouterdom.isRouteErrorResponse.call(void 0, error) && error.status === 404) {\\n    return (\\n      _jsxruntime.jsxs.call(void 0, 'div', { children: [\\n        _jsxruntime.jsx.call(void 0, 'p', { id: \\\"not-found\\\", children: \\\"Course not found\\\"  })\\n        , _jsxruntime.jsx.call(void 0, _reactrouterdom.Link, { to: \\\"/courses\\\", id: \\\"back-to-list\\\", children: \\\"Back to courses\\\"  })\\n      ]})\\n    );\\n  }\\n  throw error; // lỗi khác ⇒ để errorElement phía trên xử lý\\n} exports.CourseError = CourseError;\\n\",\"src/routes/NewCourse.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _nullishCoalesce(lhs, rhsFn) { if (lhs != null) { return lhs; } else { return rhsFn(); } } function _optionalChain(ops) { let lastAccessLHS = undefined; let value = ops[0]; let i = 1; while (i \\u003c ops.length) { const op = ops[i]; const fn = ops[i + 1]; i += 2; if ((op === 'optionalAccess' || op === 'optionalCall') && value == null) { return undefined; } if (op === 'access' || op === 'optionalAccess') { lastAccessLHS = value; value = fn(value); } else if (op === 'call' || op === 'optionalCall') { value = fn((...args) => value.call(lastAccessLHS, ...args)); lastAccessLHS = undefined; } } return value; }// src/routes/NewCourse.js — \\u003cForm method=\\\"post\\\"> + action kiểm hợp lệ, trả lỗi (useActionData) hoặc redirect\\nvar _reactrouterdom = require('react-router-dom');\\nvar _api = require('../api');\\n\\n function validateCourse({ title, code }) {\\n  const errors = {};\\n  if (title.trim().length \\u003c 3) errors.title = 'Title is too short';\\n  if (!/^[A-Z]{3}\\\\d{3}$/.test(code.trim())) errors.code = 'Code must look like FER202';\\n  return errors;\\n} exports.validateCourse = validateCourse;\\n\\n async function newCourseAction({ request }) {\\n  const form = await request.formData();\\n  const data = { title: String(_nullishCoalesce(form.get('title'), () => ( ''))), code: String(_nullishCoalesce(form.get('code'), () => ( ''))) };\\n  const errors = validateCourse(data);\\n  if (Object.keys(errors).length > 0) return { errors, values: data };\\n  const created = await _api.createCourse.call(void 0, { title: data.title.trim(), code: data.code.trim(), published: false });\\n  return _reactrouterdom.redirect.call(void 0, `/courses/${created.id}`);\\n} exports.newCourseAction = newCourseAction;\\n\\n function NewCourse() {\\n  const result = _reactrouterdom.useActionData.call(void 0, );\\n  const navigation = _reactrouterdom.useNavigation.call(void 0, );\\n  const errors = _nullishCoalesce(_optionalChain([result, 'optionalAccess', _ => _.errors]), () => ( {}));\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'section', { children: [\\n      _jsxruntime.jsx.call(void 0, 'h1', { children: \\\"New course\\\" })\\n      , _jsxruntime.jsxs.call(void 0, _reactrouterdom.Form, { method: \\\"post\\\", id: \\\"course-form\\\", noValidate: true, children: [\\n        _jsxruntime.jsxs.call(void 0, 'label', { children: [\\\"Title \\\" , _jsxruntime.jsx.call(void 0, 'input', { id: \\\"title\\\", name: \\\"title\\\", defaultValue: _nullishCoalesce(_optionalChain([result, 'optionalAccess', _2 => _2.values, 'optionalAccess', _3 => _3.title]), () => ( '')),} )]})\\n        , errors.title && _jsxruntime.jsx.call(void 0, 'p', { className: \\\"error\\\", id: \\\"err-title\\\", children: errors.title})\\n        , _jsxruntime.jsxs.call(void 0, 'label', { children: [\\\"Code \\\" , _jsxruntime.jsx.call(void 0, 'input', { id: \\\"code\\\", name: \\\"code\\\", defaultValue: _nullishCoalesce(_optionalChain([result, 'optionalAccess', _4 => _4.values, 'optionalAccess', _5 => _5.code]), () => ( '')),} )]})\\n        , errors.code && _jsxruntime.jsx.call(void 0, 'p', { className: \\\"error\\\", id: \\\"err-code\\\", children: errors.code})\\n        , _jsxruntime.jsx.call(void 0, 'button', { id: \\\"btn-create\\\", type: \\\"submit\\\", disabled: navigation.state === 'submitting', children: \\\"Create\\\"})\\n      ]})\\n    ]})\\n  );\\n} exports.default = NewCourse;\\n\",\"src/routes/EditCourse.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/routes/EditCourse.js — dùng lại loader chi tiết; action PATCH rồi redirect về trang chi tiết\\nvar _reactrouterdom = require('react-router-dom');\\nvar _api = require('../api');\\n\\n async function editCourseAction({ request, params }) {\\n  const form = await request.formData();\\n  await _api.updateCourse.call(void 0, params.id, { title: String(form.get('title')).trim(), code: String(form.get('code')).trim() });\\n  return _reactrouterdom.redirect.call(void 0, `/courses/${params.id}`);\\n} exports.editCourseAction = editCourseAction;\\n\\n function EditCourse() {\\n  const course = _reactrouterdom.useLoaderData.call(void 0, );\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'section', { children: [\\n      _jsxruntime.jsxs.call(void 0, 'h1', { children: [\\\"Edit \\\" , course.code]})\\n      , _jsxruntime.jsxs.call(void 0, _reactrouterdom.Form, { method: \\\"post\\\", id: \\\"edit-form\\\", children: [\\n        _jsxruntime.jsxs.call(void 0, 'label', { children: [\\\"Title \\\" , _jsxruntime.jsx.call(void 0, 'input', { id: \\\"title\\\", name: \\\"title\\\", defaultValue: course.title,} )]})\\n        , _jsxruntime.jsxs.call(void 0, 'label', { children: [\\\"Code \\\" , _jsxruntime.jsx.call(void 0, 'input', { id: \\\"code\\\", name: \\\"code\\\", defaultValue: course.code,} )]})\\n        , _jsxruntime.jsx.call(void 0, 'button', { id: \\\"btn-save\\\", type: \\\"submit\\\", children: \\\"Save\\\"})\\n      ]})\\n    ]})\\n  );\\n} exports.default = EditCourse;\\n\",\"src/routes/destroy.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/routes/destroy.js — route chỉ có action (không có giao diện)\\nvar _reactrouterdom = require('react-router-dom');\\nvar _api = require('../api');\\n\\n async function destroyAction({ params }) {\\n  await _api.deleteCourse.call(void 0, params.id);\\n  return _reactrouterdom.redirect.call(void 0, '/courses');\\n} exports.destroyAction = destroyAction;\\n\",\"src/api.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/api.js — gọi json-server; lỗi HTTP ném Response để errorElement đọc được status\\nconst BASE = 'http://localhost:9999/courses';\\n\\nasync function call(url, options) {\\n  const res = await fetch(url, options);\\n  if (!res.ok) throw new Response(res.statusText || 'Error', { status: res.status });\\n  return res.status === 204 ? null : res.json();\\n}\\n\\nconst json = (method, body) => ({ method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });\\n\\n const listCourses = (q) => call(q ? `${BASE}?q=${encodeURIComponent(q)}` : BASE); exports.listCourses = listCourses;\\n const getCourse = (id) => call(`${BASE}/${id}`); exports.getCourse = getCourse;\\n const createCourse = (data) => call(BASE, json('POST', data)); exports.createCourse = createCourse;\\n const updateCourse = (id, data) => call(`${BASE}/${id}`, json('PATCH', data)); exports.updateCourse = updateCourse;\\n const deleteCourse = (id) => call(`${BASE}/${id}`, { method: 'DELETE' }); exports.deleteCourse = deleteCourse;\\n\"};var CSS={\"src/index.css\":\"/* src/index.css (đã cho) */\\nbody { font-family: system-ui, sans-serif; margin: 0; color: #0f172a; background: #f8fafc; }\\n.layout { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; }\\nnav.sidebar { background: #1e293b; color: #fff; padding: 16px; } nav.sidebar a { color: #cbd5e1; display: block; padding: 4px 0; }\\nnav.sidebar a.active { color: #fff; font-weight: 700; }\\nmain { padding: 20px 28px; position: relative; }\\n#global-spinner { position: absolute; top: 8px; right: 16px; background: #fde68a; padding: 2px 10px; border-radius: 999px; font-size: 13px; }\\n.course-item a { color: #2563eb; } .error { color: #dc2626; font-size: 13px; }\\nlabel { display: block; margin-top: 8px; } input { padding: 6px 8px; }\\n.badge { padding: 2px 8px; border-radius: 999px; background: #e2e8f0; } .badge.published { background: #bbf7d0; }\\n\"};var DB={\"courses\":[{\"id\":1,\"title\":\"React Basics\",\"code\":\"FER202\",\"published\":true},{\"id\":2,\"title\":\"Software Testing\",\"code\":\"SWT301\",\"published\":false},{\"id\":3,\"title\":\"Software Requirements\",\"code\":\"SWR302\",\"published\":true}]};var BASE=\"http://localhost:9999\";var URL0=\"/courses\";var THANH=true;\nfunction kho(){var m={};var k={getItem:function(x){x=String(x);return Object.prototype.hasOwnProperty.call(m,x)?m[x]:null},setItem:function(x,v){m[String(x)]=String(v)},removeItem:function(x){delete m[String(x)]},clear:function(){m={}},key:function(i){return Object.keys(m)[i]||null}};Object.defineProperty(k,'length',{get:function(){return Object.keys(m).length}});return k}\ntry{Object.defineProperty(window,'localStorage',{value:kho(),configurable:true})}catch(e){}\ntry{Object.defineProperty(window,'sessionStorage',{value:kho(),configurable:true})}catch(e){}\nwindow.confirm=function(){return true};window.alert=function(m){console.log('[alert]',m);var t=document.getElementById('cl-demo-alert');if(!t){t=document.createElement('div');t.id='cl-demo-alert';t.style.cssText='position:fixed;right:12px;bottom:12px;z-index:99999;max-width:320px;padding:10px 14px;border-radius:10px;background:#0f172a;color:#fff;font:13px system-ui;box-shadow:0 6px 24px rgba(0,0,0,.25)';document.body.appendChild(t)}t.textContent='alert: '+m;clearTimeout(t.__h);t.__h=setTimeout(function(){t.remove()},2600)};\nvar ENV={NODE_ENV:'production',MODE:'production',PROD:true,DEV:false,BASE_URL:'/'};\nString(M['.env']||'').split(/\\r?\\n/).forEach(function(d){var m=/^\\s*(?:export\\s+)?([A-Za-z_][A-Za-z0-9_]*)\\s*=\\s*(.*)\\s*$/.exec(d);if(m)ENV[m[1]]=m[2].replace(/^(['\"])(.*)\\1$/,'$2')});\nwindow.__CL_ENV__=ENV;if(!window.process)window.process={env:ENV};\n// json-server giả (bản sao domAgent.ts)\nvar jsDb=DB?JSON.parse(JSON.stringify(DB)):null;\nfunction tl(st,b){return new Response(b===undefined?'{}':JSON.stringify(b),{status:st,headers:{'content-type':'application/json'}})}\nfunction lay(o,k){return String(k).split('.').reduce(function(a,p){return a==null?undefined:a[p]},o)}\nfunction mot(t){return /ies$/.test(t)?t.slice(0,-3)+'y':t.replace(/s$/,'')}\nfunction xuLy(method,url,body){var u=new URL(url);var ph=u.pathname.replace(/^\\/+|\\/+$/g,'').split('/').filter(Boolean).map(decodeURIComponent);var ten=ph[0],id=ph[1];\nif(!ten||!(ten in jsDb))return tl(404,{});var bang=jsDb[ten];var dl=null;if(body!=null&&body!==''){try{dl=JSON.parse(body)}catch(e){return tl(400,{})}}\nif(!Array.isArray(bang)){if(method==='GET')return tl(200,bang);if(method==='PUT'||method==='POST'){jsDb[ten]=dl||{};return tl(200,jsDb[ten])}if(method==='PATCH'){jsDb[ten]=Object.assign({},bang,dl||{});return tl(200,jsDb[ten])}return tl(404,{})}\nvar vt=function(x){return bang.findIndex(function(r){return String(r.id)===String(x)})};\nvar mr=function(r){var o=Object.assign({},r);u.searchParams.getAll('_expand').forEach(function(e){var b=jsDb[e+'s']||jsDb[e];if(Array.isArray(b))o[e]=b.find(function(x){return String(x.id)===String(r[e+'Id'])})});u.searchParams.getAll('_embed').forEach(function(e){var b=jsDb[e];if(Array.isArray(b)){var k=mot(ten)+'Id';o[e]=b.filter(function(x){return String(x[k])===String(r.id)})}});return o};\nif(method==='GET'){if(id!=null){var i=vt(id);return i<0?tl(404,{}):tl(200,mr(bang[i]))}var ds=bang.slice();var loc={};u.searchParams.forEach(function(v,k){if(k.charAt(0)!=='_'&&k!=='q')(loc[k]=loc[k]||[]).push(v)});\nObject.keys(loc).forEach(function(k){var vs=loc[k],m=/^(.*)_(like|gte|lte|ne)$/.exec(k);ds=ds.filter(function(r){if(m){var gv=lay(r,m[1]);return vs.every(function(v){if(m[2]==='like')return new RegExp(v,'i').test(String(gv));if(m[2]==='ne')return String(gv)!==v;var a=Number(gv),b=Number(v);var so=!isNaN(a)&&!isNaN(b);return m[2]==='gte'?(so?a>=b:String(gv)>=v):(so?a<=b:String(gv)<=v)})}var g=lay(r,k);return vs.some(function(v){return String(g)===v})})});\nvar qq=u.searchParams.get('q');if(qq)ds=ds.filter(function(r){return JSON.stringify(r).toLowerCase().indexOf(qq.toLowerCase())>=0});\nvar sx=u.searchParams.get('_sort');if(sx){var tr=sx.split(','),th=(u.searchParams.get('_order')||'asc').split(',');ds.sort(function(a,b){for(var t=0;t<tr.length;t++){var f=tr[t].replace(/^-/,''),gi=tr[t].charAt(0)==='-'||(th[t]||th[0])==='desc';var x=lay(a,f),y=lay(b,f);var c=(typeof x==='number'&&typeof y==='number')?x-y:String(x).localeCompare(String(y));if(c)return gi?-c:c}return 0})}\nvar gh=u.searchParams.get('_limit'),pg=u.searchParams.get('_page');var tong=ds.length;if(pg){var n=Number(gh)||10;ds=ds.slice((Number(pg)-1)*n,Number(pg)*n)}else if(gh)ds=ds.slice(0,Number(gh));var rr=tl(200,ds.map(mr));try{rr.headers.set('X-Total-Count',String(tong))}catch(e){}return rr}\nif(method==='POST'){if(id!=null)return tl(404,{});var mo=Object.assign({},dl||{});if(mo.id==null){var so2=bang.length&&bang.every(function(r){return typeof r.id==='number'});mo.id=so2||!bang.length?bang.reduce(function(mx,r){return Math.max(mx,Number(r.id)||0)},0)+1:Math.random().toString(16).slice(2,6)}bang.push(mo);return tl(201,mo)}\nif(id==null)return tl(404,{});var j=vt(id);if(j<0)return tl(404,{});\nif(method==='PUT'){bang[j]=Object.assign({},dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='PATCH'){bang[j]=Object.assign({},bang[j],dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='DELETE'){bang.splice(j,1);return tl(200,{})}return tl(404,{})}\nif(jsDb){window.fetch=function(url,init){init=init||{};var s=String(url&&url.url?url.url:url);var me=String(init.method||'GET').toUpperCase();return new Promise(function(res){setTimeout(function(){if(s.indexOf(BASE+'/')!==0)return res(new Response('Not Found',{status:404}));try{res(xuLy(me,s,init.body))}catch(e){res(tl(500,{error:String(e)}))}},120)})}}\nfunction axiosGia(){function goi(method,url,data,cfg){cfg=cfg||{};var u=(cfg.baseURL||'')+url;if(cfg.params){var sp=new URLSearchParams(cfg.params).toString();if(sp)u+=(u.indexOf('?')>=0?'&':'?')+sp}var init={method:method.toUpperCase(),headers:Object.assign({'Content-Type':'application/json'},cfg.headers||{})};if(data!==undefined)init.body=typeof data==='string'?data:JSON.stringify(data);\nreturn window.fetch(u,init).then(function(res){return res.text().then(function(t){var d;try{d=JSON.parse(t)}catch(e){d=t}var hd={};try{res.headers.forEach(function(v,k){hd[k.toLowerCase()]=v})}catch(e){}var out={data:d,status:res.status,statusText:res.statusText,headers:hd,config:cfg};if(res.status>=200&&res.status<300)return out;var err=new Error('Request failed with status code '+res.status);err.response=out;err.name='AxiosError';throw err})})}\nfunction tao(base){var a=function(cfg){return goi(cfg.method||'get',cfg.url,cfg.data,Object.assign({},base,cfg))};['get','delete','head'].forEach(function(m){a[m]=function(url,cfg){return goi(m,url,undefined,Object.assign({},base,cfg))}});['post','put','patch'].forEach(function(m){a[m]=function(url,data,cfg){return goi(m,url,data,Object.assign({},base,cfg))}});a.create=function(c){return tao(Object.assign({},base,c))};a.defaults=base;a.interceptors={request:{use:function(){}},response:{use:function(){}}};a.isAxiosError=function(e){return!!(e&&e.name==='AxiosError')};return a}\nvar ax=tao({});ax.default=ax;return ax}\nvar R=window.React;var tach=function(p,k){var q=Object.assign({},p);var c=q.children;delete q.children;if(k!==undefined)q.key=k;return[q,c]};\nvar j=function(t,p,k){var x=tach(p,k);return x[1]===undefined?R.createElement(t,x[0]):R.createElement(t,x[0],x[1])};\nvar js=function(t,p,k){var x=tach(p,k);return R.createElement.apply(null,[t,x[0]].concat(x[1]||[]))};\n// React Router: MemoryRouter + thanh địa chỉ (gõ URL được — thử ?status=ACTIVE, /items/2…)\nvar viTri=null,routerBoc=null,dieuHuong=null;\nfunction datThanh(v){var o=document.getElementById('cl-demo-url');if(o&&document.activeElement!==o)o.value='http://localhost:3000'+v}\nfunction routerGia(){var RRD=window.ReactRouterDOM;if(!RRD)return null;if(routerBoc)return routerBoc;\nfunction Ghi(){var l=RRD.useLocation();var nav=RRD.useNavigate();dieuHuong=nav;viTri=l.pathname+l.search+l.hash;R.useEffect(function(){datThanh(viTri)});return null}\nfunction RG(p){var d=R.useState(function(){return[viTri||URL0||'/']})[0];return R.createElement(RRD.MemoryRouter,{initialEntries:d,basename:p.basename},R.createElement(Ghi),p.children)}\nfunction tr(routes,opts){var r=RRD.createMemoryRouter(routes,Object.assign({},opts||{},{initialEntries:[viTri||URL0||'/']}));var g=function(s){viTri=s.location.pathname+s.location.search+s.location.hash;datThanh(viTri)};g(r.state);r.subscribe(g);dieuHuong=function(to){r.navigate(to)};return r}\nrouterBoc=Object.assign({},RRD,{BrowserRouter:RG,HashRouter:RG,createBrowserRouter:tr,createHashRouter:tr});return routerBoc}\nvar thunk=function(api){return function(next){return function(a){return typeof a==='function'?a(api.dispatch,api.getState):next(a)}}};\nvar LIB={'react':R,'react-dom':window.ReactDOM,'react-dom/client':window.ReactDOM,'react/jsx-runtime':{jsx:j,jsxs:js,Fragment:R.Fragment},'react/jsx-dev-runtime':{jsxDEV:j,Fragment:R.Fragment},'prop-types':window.PropTypes,'react-bootstrap':window.ReactBootstrap,'@reduxjs/toolkit':window.RTK,'redux':window.RTK,'react-redux':window.ReactRedux,'redux-thunk':{'default':thunk,thunk:thunk}};\nvar C={};\nfunction dd(tu,s){var p=tu.split('/').slice(0,-1);s.split('/').forEach(function(x){if(x==='.'||x==='')return;if(x==='..')p.pop();else p.push(x)});return p.join('/')}\nfunction tim(p){var d=['','.js','.jsx','.ts','.tsx','.json','/index.js','/index.jsx'];for(var i=0;i<d.length;i++){if(M[p+d[i]]!=null||CSS[p+d[i]]!=null)return p+d[i]}return null}\nfunction req(tu,s){if(s==='axios')return axiosGia();if(s==='react-router-dom'||s==='react-router')return routerGia();if(LIB[s])return LIB[s];if(/\\.css$/.test(s)&&!/^\\./.test(s))return{};var p=tim(dd(tu,s));if(!p)throw new Error('Cannot find module '+s);return nap(p)}\nfunction nap(p){if(C[p])return C[p].exports;if(CSS[p]!=null){var st=document.createElement('style');st.textContent=CSS[p];document.head.appendChild(st);C[p]={exports:{}};return{}}var m={exports:{}};C[p]=m;if(/\\.json$/.test(p)){m.exports=JSON.parse(M[p]);return m.exports}new Function('require','module','exports',M[p])(function(s){return req(p,s)},m,m.exports);return m.exports}\nif(THANH){var bar=document.createElement('form');bar.style.cssText='position:sticky;top:0;z-index:99998;display:flex;gap:6px;align-items:center;padding:6px 10px;background:#e2e8f0;border-bottom:1px solid #cbd5e1;font:12px system-ui';bar.innerHTML='<span style=\"color:#475569\">URL</span><input id=\"cl-demo-url\" style=\"flex:1;padding:4px 8px;border:1px solid #cbd5e1;border-radius:6px;font:12px ui-monospace,monospace\" aria-label=\"Address bar\"><button style=\"padding:3px 10px;border-radius:6px;border:1px solid #94a3b8;background:#fff;cursor:pointer\">Go</button>';\nbar.addEventListener('submit',function(e){e.preventDefault();var v=document.getElementById('cl-demo-url').value.replace(/^https?:\\/\\/[^/]+/,'')||'/';if(dieuHuong)dieuHuong(v)});document.body.insertBefore(bar,document.body.firstChild);datThanh(URL0||'/')}\nnap(\"src/index.js\");\n})();</script></body></html>"
+    }
+  ]
+}

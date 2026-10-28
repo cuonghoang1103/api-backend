@@ -352,6 +352,7 @@ ${run('c33-cs', 'taskset -c 0 ./pingpong 200000', 2)}
 <p>On one core a round trip (two switches) took about 2 µs; across two cores it took 23 µs because each wake-up crosses cores. Context switches are cheap one by one and expensive by the million.</p>
 <p><strong>Exam traps.</strong> SJF is optimal for <em>average waiting time</em> only when all jobs are known; SRTF is its preemptive form. Round robin with a huge quantum becomes FCFS; with a tiny one, switch overhead dominates. In Gantt problems, state your tie rule (who enters the queue first when a job arrives as another is preempted) — 16.3 drills it. 🎓 ${g('osg202-2-4-lap-lich-tinh-toan', 'OSG202 2.4')}</p>
 ${lab('scheduler', 'textbook', 'en', 'Four textbook jobs under FCFS, SJF, SRTF, RR and priority: switch the policy and watch the Gantt chart and the averages change.', { tour: 'sched-policies' })}
+${lab('gantt-exam', 'random', 'en', 'Self-test: a fresh random problem each time. Paint the Gantt chart yourself, fill finish/turnaround/waiting, press Check my answer — wrong cells are named by the convention you broke.')}
 
 <h3>3. Synchronization</h3>
 ${sheet([
@@ -397,6 +398,7 @@ ${run('c73-fault', '/usr/bin/time -v ./touch 256 nohuge')}
 ${run('c14-oom', 'docker run --name os-oom', 3)}
 <p><strong>Exam traps.</strong> Page size from the offset bits; number of pages from the page-number bits; FIFO can get worse with more frames (Belady), LRU and OPT cannot. Internal fragmentation belongs to paging, external to segmentation. 16.4 drills every computation. 🎓 ${g('osg202-3-1-phan-trang', 'OSG202 3.1')} · ${g('osg202-3-2-thay-trang', 'OSG202 3.2')} · ${g('osg202-3-3-tlb-dia-chi', 'OSG202 3.3')}</p>
 ${lab('vm', 'walk', 'en', 'Translate a virtual address by hand: split the bits, walk the levels, hit or miss in the TLB.', { tour: 'vm-translate' })}
+${lab('addr-split', 'split', 'en', 'Split 0x12345678 into 10/10/12 bits: the fields are coloured on the binary, so you see why the answer is 72 / 837 / 1656 and not the hex digits read off directly.')}
 
 <div class="pitfall co-tieu-de">
 <p><strong>Memorising definitions without a number.</strong> "A context switch is expensive", "fork is slow", "page faults hurt" — every candidate says that. The difference between a passing answer and a strong one is a measurement and its limit: "about a microsecond on one core, 23 µs across cores in my lab, so it matters at hundreds of thousands per second, not at a hundred". If a number on this sheet surprises you, rerun its command in the lab before the exam — re-deriving it is faster than re-reading.</p>
@@ -479,6 +481,7 @@ ${run('c33-cs', 'taskset -c 0 ./pingpong 200000', 2)}
 <p>Trên một lõi, một vòng đi về (hai lần chuyển) mất khoảng 2 µs; qua hai lõi mất 23 µs vì mỗi lần đánh thức phải vượt lõi. Chuyển ngữ cảnh rẻ khi tính từng lần và đắt khi tính theo triệu lần.</p>
 <p><strong>Bẫy trong đề.</strong> SJF tối ưu cho <em>thời gian chờ trung bình</em> chỉ khi biết trước mọi việc; SRTF là bản có cắt ngang của nó. Round robin với quantum rất lớn thành FCFS; với quantum rất nhỏ thì chi phí chuyển lấn át. Trong bài Gantt, hãy ghi rõ luật hoà (ai vào hàng trước khi một việc đến đúng lúc việc khác bị cắt) — bài 16.3 luyện đúng chỗ này. 🎓 ${g('osg202-2-4-lap-lich-tinh-toan', 'OSG202 2.4')}</p>
 ${lab('scheduler', 'textbook', 'vi', 'Bốn việc giáo trình dưới FCFS, SJF, SRTF, RR và ưu tiên: đổi chính sách và nhìn biểu đồ Gantt cùng các giá trị trung bình thay đổi.', { tour: 'sched-policies' })}
+${lab('gantt-exam', 'random', 'vi', 'Tự kiểm: mỗi lần một đề ngẫu nhiên mới. Tự tô biểu đồ Gantt, điền xong/hoàn thành/chờ, bấm Chấm bài — ô sai được gọi tên đúng quy ước bạn làm sai.')}
 
 <h3>3. Đồng bộ</h3>
 ${sheet([
@@ -524,6 +527,7 @@ ${run('c73-fault', '/usr/bin/time -v ./touch 256 nohuge')}
 ${run('c14-oom', 'docker run --name os-oom', 3)}
 <p><strong>Bẫy trong đề.</strong> Cỡ trang suy từ số bit offset; số trang suy từ số bit số trang; FIFO có thể tệ đi khi thêm khung (Belady), LRU và OPT thì không. Phân mảnh trong thuộc về phân trang, phân mảnh ngoài thuộc về phân đoạn. Bài 16.4 luyện mọi phép tính. 🎓 ${g('osg202-3-1-phan-trang', 'OSG202 3.1')} · ${g('osg202-3-2-thay-trang', 'OSG202 3.2')} · ${g('osg202-3-3-tlb-dia-chi', 'OSG202 3.3')}</p>
 ${lab('vm', 'walk', 'vi', 'Tự tay dịch một địa chỉ ảo: tách bit, đi qua các cấp, trúng hay trượt TLB.', { tour: 'vm-translate' })}
+${lab('addr-split', 'split', 'vi', 'Tách 0x12345678 thành 10/10/12 bit: các trường được tô màu trên dãy nhị phân, nên bạn thấy vì sao đáp án là 72 / 837 / 1656 chứ không phải đọc thẳng các chữ số hex.')}
 
 <div class="pitfall co-tieu-de">
 <p><strong>Học thuộc định nghĩa mà không có con số.</strong> "Chuyển ngữ cảnh tốn kém", "fork chậm", "page fault gây hại" — ứng viên nào cũng nói thế. Khác biệt giữa câu trả lời đạt và câu trả lời mạnh là một số đo và giới hạn của nó: "khoảng một micro giây trên một lõi, 23 µs khi qua lõi trong lab của tôi, nên nó đáng kể ở mức hàng trăm nghìn lần mỗi giây, không phải ở mức một trăm". Nếu một con số trên bảng này làm bạn bất ngờ, hãy chạy lại lệnh của nó trong lab trước kỳ thi — tự đo lại nhanh hơn đọc lại.</p>
@@ -608,6 +612,7 @@ ${sheet([
 ${run('c103-epoll', 'gcc -O2 -Wall -o pollbench')}
 <p>select and poll grow linearly with the number of watched fds; epoll stays at 0.7 µs per wake-up from 10 to 10,000. select cannot even watch fd 10,002: <code>FD_SETSIZE</code> is 1,024.</p>
 <p><strong>Exam traps.</strong> OSG202 I/O questions: programmed I/O (busy wait) vs interrupt-driven vs DMA; where buffering helps; and <strong>disk-arm scheduling</strong> (FCFS, SSTF/SSF, SCAN/elevator, C-SCAN, LOOK) — drilled with a program in 16.5. 🎓 ${g('osg202-5-1-io', 'OSG202 5.1')} · ${g('osg202-5-2-lap-lich-dia', 'OSG202 5.2')}</p>
+${lab('disk-arm', 'exam', 'en', 'Disk-arm scheduling in exam mode: type the service order and the total head movement, then check — the path stays hidden until you do.')}
 ${lab('epoll', 'scan', 'en', 'select/poll scan every fd on every call; epoll returns only the ready ones — slide from 10 to 10,000 connections.', { tour: 'epoll-ready' })}
 
 <h3>8. System calls and the kernel boundary</h3>
@@ -741,6 +746,7 @@ ${sheet([
 ${run('c103-epoll', 'gcc -O2 -Wall -o pollbench')}
 <p>select và poll tăng tuyến tính theo số fd được theo dõi; epoll đứng yên ở 0,7 µs mỗi lần thức từ 10 tới 10.000. select thậm chí không theo dõi nổi fd 10.002: <code>FD_SETSIZE</code> là 1.024.</p>
 <p><strong>Bẫy trong đề.</strong> Câu I/O của OSG202: I/O có lập trình (bận chờ), I/O theo ngắt, DMA; bộ đệm giúp ở đâu; và <strong>lập lịch tay đĩa</strong> (FCFS, SSTF/SSF, SCAN/thang máy, C-SCAN, LOOK) — luyện bằng chương trình ở 16.5. 🎓 ${g('osg202-5-1-io', 'OSG202 5.1')} · ${g('osg202-5-2-lap-lich-dia', 'OSG202 5.2')}</p>
+${lab('disk-arm', 'exam', 'vi', 'Lập lịch tay đĩa ở chế độ thi: gõ thứ tự phục vụ và tổng quãng đường tay đĩa rồi chấm — đường đi bị ẩn cho tới khi bạn chấm.')}
 ${lab('epoll', 'scan', 'vi', 'select/poll quét mọi fd ở mỗi lần gọi; epoll chỉ trả các fd sẵn sàng — kéo từ 10 tới 10.000 kết nối.', { tour: 'epoll-ready' })}
 
 <h3>8. Lời gọi hệ thống và ranh giới nhân</h3>
@@ -872,21 +878,25 @@ ${drill('S1.2', 'What is the average waiting time under <strong>SJF</strong>?', 
 ${drill('S1.3', 'What is the average waiting time under (non-preemptive) <strong>priority</strong> scheduling?', ['6.6 min', '10.2 min', '12.4 min', '13.6 min'], 'Worked solution', run('c163-lich', 'python3 osgcalc.py sched prio "A:0:6:4') + '<p>5 is highest, so the order is C(5), A(4), E(3), D(2), B(1). Waits 0, 8, 14, 19, 21 → 62 / 5 = <strong>12.4 min — C</strong>. If you read "1 = highest" by habit you get B, D, E, A, C and 34 / 5 = 6.8 — not even an option, which should make you re-read the stem.</p>')}
 ${drill('S1.4', 'What is the average turnaround time under <strong>round robin, quantum = 2</strong>?', ['15 min', '17.2 min', '12.4 min', '19 min'], 'Worked solution', run('c163-lich', 'python3 osgcalc.py sched rr "A:0:6:4') + '<p>Slices of 2 in order A B C D E A B C E A C E C. D finishes first at 8 (it only needs one slice), B at 13, A at 19, E at 22, C at 24. Average turnaround 86 / 5 = <strong>17.2 min — B</strong>. Note the coincidence: RR’s average <em>waiting</em> (12.4) equals priority’s — never pick an answer because the number "looks familiar".</p>')}
 ${lab('scheduler', 'textbook', 'en', 'Load your own jobs into the scheduler simulator and step through the Gantt chart tick by tick — it uses the same tie rules as this lesson.', { tour: 'sched-policies' })}
+${lab('gantt-exam', 's1', 'en', 'Problem S1 to do yourself: pick a job, tap or drag across the cells to paint the FCFS chart, fill the table and press Check my answer. Then switch to 📖 Worked solution and replay it moment by moment with the ready queue.', { tour: 'gantt-exam-grade' })}
 
 <h3>Problem S2 — five processes with arrival times</h3>
 <p>Processes P1–P5 arrive at times 0, 1, 2, 4, 6 with CPU bursts 7, 4, 1, 4, 3.</p>
 ${drill('S2.1', 'Under <strong>non-preemptive SJF</strong>, in which order do the processes <em>start</em>?', ['P1, P2, P3, P4, P5', 'P3, P2, P5, P4, P1', 'P1, P3, P5, P2, P4', 'P1, P3, P2, P5, P4'], 'Worked solution', run('c163-lich', 'python3 osgcalc.py sched sjf "P1:0:7') + '<p>At time 0 only P1 exists, and non-preemptive means it runs to 7. At 7 the ready queue holds P2(4), P3(1), P4(4), P5(3): shortest is P3, then P5 (3), then P2 and P4 tie on 4 — earlier arrival P2 wins. Order <strong>P1, P3, P5, P2, P4 — C</strong>. B is what SJF would do if all had arrived at 0.</p>')}
 ${drill('S2.2', 'Under <strong>SRTF</strong> (preemptive SJF), what is the average waiting time?', ['3.6', '5.6', '7.4', '9'], 'Worked solution', run('c163-lich', 'python3 osgcalc.py sched srtf "P1:0:7') + '<p>Re-decide at every arrival. At 1, P2 (4) beats P1’s remaining 6; at 2, P3 (1) beats P2’s remaining 3; at 6, P5 (3) beats P4 (4) and P1 (6). Waiting = turnaround − burst: 12, 1, 0, 5, 0 → 18 / 5 = <strong>3.6 — A</strong>. 5.6 (B) is non-preemptive SJF; 7.4 (C) is SRTF’s average turnaround.</p>')}
 ${drill('S2.3', 'Under <strong>round robin, quantum = 3</strong>, what is the turnaround time of P2?', ['5', '12', '16', '17'], 'Worked solution', run('c163-lich', 'python3 osgcalc.py sched rr "P1:0:7') + '<p>The key moment is time 6: P5 arrives exactly when P2’s slice ends, and by the textbook rule P5 enters the queue <strong>before</strong> P2. Queue after 6: P3, P1, P4, P5, P2. P2’s last unit runs 16–17. Turnaround = 17 − 1 = <strong>16 — C</strong>. 17 (D) is P2’s finish time; 12 (B) is its waiting time.</p>')}
+${lab('gantt-exam', 'rr', 'en', 'S2 under round robin, q = 3, with the trap at t = 6: P5 arrives exactly when P2’s slice ends. Paint it your way and check — if you queued P2 first, the grader names the rr-order rule you broke.', { tour: 'gantt-exam-rr' })}
 
 <h3>Problem S3 — priority, with and without preemption</h3>
 <p>P1–P4 arrive at 0, 2, 3, 5 with bursts 6, 3, 4, 2 and priorities 3, 1, 4, 2 (<strong>smaller number = higher priority</strong>, as in Linux nice).</p>
 ${drill('S3.1', 'Under <strong>preemptive</strong> priority scheduling, what is the average waiting time?', ['4', '3.25', '5.5', '7'], 'Worked solution', run('c163-lich', 'python3 osgcalc.py sched prio-p "P1:0:6:3', 2) + '<p>Preemptive: P2 (priority 1) takes the CPU from P1 at 2; P4 (priority 2) arrives at 5 when P2 has just finished and beats P1 (3). Waits 5, 0, 8, 0 → 13 / 4 = <strong>3.25 — B</strong>. Without preemption (second output) P1 keeps the CPU until 6 and the average rises to 4 (A). 7 (D) is the preemptive average turnaround.</p>')}
+${lab('gantt-exam', 'prio', 'en', 'S3 with preemptive priority (smaller number = higher): check the priority direction switch first, paint the chart, then compare your average waiting time with 3.25.')}
 
 <div class="pitfall co-tieu-de">
 <p><strong>The quantum-boundary tie decides round-robin answers.</strong> When a job arrives at exactly the moment another job’s quantum expires, the two possible queue orders give different charts — in S2.3 the "wrong" order changes P2’s turnaround. The textbook convention puts the newly arrived job first, and both osgcalc.py and the /os-lab simulator follow it. Write your rule at the top of the answer; if your result is not among the options, try the other order before anything else.</p>
 </div>
 
+${lab('gantt-exam', 'random', 'en', 'More practice: New exam gives a random problem with a seed. Do at least one of each policy until every cell comes back green.')}
 <h3>If you have done OSG202 lesson 2.4</h3>
 <p>There you learned the policies and the formulas; here you practised them on new numbers with an exact checker. For more real past-paper questions, the exam room has every FPT final with explanations. 🎓 ${g('osg202-2-4-lap-lich-tinh-toan', 'OSG202 2.4 — scheduling computations')} · ${g('osg202-final-exam-fe', 'OSG202 — final exam practice')}</p>
 
@@ -949,21 +959,25 @@ ${drill('S1.2', 'Thời gian chờ trung bình theo <strong>SJF</strong> là bao
 ${drill('S1.3', 'Thời gian chờ trung bình theo lập lịch <strong>ưu tiên</strong> (không cắt ngang) là bao nhiêu?', ['6,6 phút', '10,2 phút', '12,4 phút', '13,6 phút'], 'Lời giải từng bước', run('c163-lich', 'python3 osgcalc.py sched prio "A:0:6:4') + '<p>5 là cao nhất, nên thứ tự là C(5), A(4), E(3), D(2), B(1). Chờ 0, 8, 14, 19, 21 → 62 / 5 = <strong>12,4 phút — C</strong>. Nếu theo thói quen đọc "1 = cao nhất" bạn được B, D, E, A, C và 34 / 5 = 6,8 — không có trong phương án, điều đó phải khiến bạn đọc lại đề.</p>')}
 ${drill('S1.4', 'Thời gian hoàn thành trung bình theo <strong>round robin, quantum = 2</strong> là bao nhiêu?', ['15 phút', '17,2 phút', '12,4 phút', '19 phút'], 'Lời giải từng bước', run('c163-lich', 'python3 osgcalc.py sched rr "A:0:6:4') + '<p>Các lát 2 theo thứ tự A B C D E A B C E A C E C. D xong đầu tiên ở 8 (nó chỉ cần một lát), B ở 13, A ở 19, E ở 22, C ở 24. Turnaround trung bình 86 / 5 = <strong>17,2 phút — B</strong>. Để ý sự trùng hợp: thời gian <em>chờ</em> trung bình của RR (12,4) bằng của ưu tiên — đừng bao giờ chọn một đáp án vì con số "trông quen".</p>')}
 ${lab('scheduler', 'textbook', 'vi', 'Nạp bảng việc của chính bạn vào trình mô phỏng lập lịch và đi từng nhịp trên biểu đồ Gantt — nó dùng đúng các luật hoà của bài này.', { tour: 'sched-policies' })}
+${lab('gantt-exam', 's1', 'vi', 'Bài S1 để tự làm: chọn một việc, chạm hoặc kéo qua các ô để tô biểu đồ FCFS, điền bảng rồi bấm Chấm bài. Sau đó chuyển sang 📖 Lời giải và phát lại từng thời điểm cùng hàng sẵn sàng.', { tour: 'gantt-exam-grade' })}
 
 <h3>Bài S2 — năm tiến trình có thời điểm đến</h3>
 <p>Các tiến trình P1–P5 đến lúc 0, 1, 2, 4, 6 với thời gian CPU 7, 4, 1, 4, 3.</p>
 ${drill('S2.1', 'Theo <strong>SJF không cắt ngang</strong>, các tiến trình <em>bắt đầu</em> chạy theo thứ tự nào?', ['P1, P2, P3, P4, P5', 'P3, P2, P5, P4, P1', 'P1, P3, P5, P2, P4', 'P1, P3, P2, P5, P4'], 'Lời giải từng bước', run('c163-lich', 'python3 osgcalc.py sched sjf "P1:0:7') + '<p>Lúc 0 chỉ có P1, và không cắt ngang nghĩa là nó chạy tới 7. Lúc 7 hàng sẵn sàng có P2(4), P3(1), P4(4), P5(3): ngắn nhất là P3, rồi P5 (3), rồi P2 và P4 hoà ở 4 — P2 đến sớm hơn nên thắng. Thứ tự <strong>P1, P3, P5, P2, P4 — C</strong>. B là điều SJF sẽ làm nếu tất cả đến lúc 0.</p>')}
 ${drill('S2.2', 'Theo <strong>SRTF</strong> (SJF có cắt ngang), thời gian chờ trung bình là bao nhiêu?', ['3,6', '5,6', '7,4', '9'], 'Lời giải từng bước', run('c163-lich', 'python3 osgcalc.py sched srtf "P1:0:7') + '<p>Quyết định lại ở mỗi lần có việc đến. Lúc 1, P2 (4) thắng phần còn lại 6 của P1; lúc 2, P3 (1) thắng phần còn lại 3 của P2; lúc 6, P5 (3) thắng P4 (4) và P1 (6). Chờ = turnaround − thời gian CPU: 12, 1, 0, 5, 0 → 18 / 5 = <strong>3,6 — A</strong>. 5,6 (B) là SJF không cắt ngang; 7,4 (C) là turnaround trung bình của SRTF.</p>')}
 ${drill('S2.3', 'Theo <strong>round robin, quantum = 3</strong>, thời gian hoàn thành (turnaround) của P2 là bao nhiêu?', ['5', '12', '16', '17'], 'Lời giải từng bước', run('c163-lich', 'python3 osgcalc.py sched rr "P1:0:7') + '<p>Thời điểm then chốt là 6: P5 đến đúng lúc lát của P2 hết, và theo luật giáo trình P5 vào hàng <strong>trước</strong> P2. Hàng sau lúc 6: P3, P1, P4, P5, P2. Đơn vị cuối của P2 chạy từ 16 tới 17. Turnaround = 17 − 1 = <strong>16 — C</strong>. 17 (D) là thời điểm xong của P2; 12 (B) là thời gian chờ của nó.</p>')}
+${lab('gantt-exam', 'rr', 'vi', 'S2 theo round robin, q = 3, có bẫy ở t = 6: P5 tới đúng lúc lượt của P2 hết. Tô theo cách của bạn rồi chấm — nếu bạn xếp P2 trước, máy chấm gọi tên luật rr-order bạn đã làm sai.', { tour: 'gantt-exam-rr' })}
 
 <h3>Bài S3 — ưu tiên, có và không cắt ngang</h3>
 <p>P1–P4 đến lúc 0, 2, 3, 5 với thời gian CPU 6, 3, 4, 2 và độ ưu tiên 3, 1, 4, 2 (<strong>số nhỏ = ưu tiên cao</strong>, như nice của Linux).</p>
 ${drill('S3.1', 'Theo lập lịch ưu tiên <strong>có cắt ngang</strong>, thời gian chờ trung bình là bao nhiêu?', ['4', '3,25', '5,5', '7'], 'Lời giải từng bước', run('c163-lich', 'python3 osgcalc.py sched prio-p "P1:0:6:3', 2) + '<p>Có cắt ngang: P2 (ưu tiên 1) giành CPU của P1 lúc 2; P4 (ưu tiên 2) đến lúc 5 khi P2 vừa xong và thắng P1 (3). Chờ 5, 0, 8, 0 → 13 / 4 = <strong>3,25 — B</strong>. Không cắt ngang (output thứ hai) thì P1 giữ CPU tới 6 và trung bình tăng lên 4 (A). 7 (D) là turnaround trung bình khi có cắt ngang.</p>')}
+${lab('gantt-exam', 'prio', 'vi', 'S3 với ưu tiên có cắt ngang (số nhỏ = cao): kiểm công tắc chiều ưu tiên trước, tô biểu đồ, rồi so thời gian chờ trung bình của bạn với 3,25.')}
 
 <div class="pitfall co-tieu-de">
 <p><strong>Ca hoà ở ranh giới quantum quyết định đáp án round robin.</strong> Khi một việc đến đúng lúc quantum của việc khác hết, hai thứ tự hàng đợi có thể cho hai biểu đồ khác nhau — ở S2.3, thứ tự "sai" làm đổi turnaround của P2. Quy ước giáo trình cho việc vừa đến đứng trước, và cả osgcalc.py lẫn trình mô phỏng /os-lab đều theo nó. Ghi luật của bạn ở đầu bài làm; nếu kết quả không có trong phương án, hãy thử thứ tự kia trước mọi thứ khác.</p>
 </div>
 
+${lab('gantt-exam', 'random', 'vi', 'Luyện thêm: Đề mới cho một đề ngẫu nhiên có hạt giống. Làm ít nhất một đề cho mỗi thuật toán tới khi mọi ô đều xanh.')}
 <h3>Nếu bạn đã học OSG202 bài 2.4</h3>
 <p>Ở đó bạn học các chính sách và công thức; ở đây bạn luyện chúng trên số mới với một bộ kiểm chính xác. Muốn thêm câu thật của đề cũ, phòng thi có mọi đề cuối kỳ FPT kèm lời giải. 🎓 ${g('osg202-2-4-lap-lich-tinh-toan', 'OSG202 2.4 — tính toán lập lịch')} · ${g('osg202-final-exam-fe', 'OSG202 — luyện đề cuối kỳ')}</p>
 
@@ -1042,9 +1056,13 @@ ${drill('M4.3', 'A system has 32-bit virtual addresses, 8 KiB pages and 4-byte p
 ${drill('M4.4', 'A logical address space has 128 pages of 8,192 words each. How long is a logical address?', ['20 bits', '21 bits', '13 bits', '17 bits'], 'Worked solution', run('c164-bo-nho', 'python3 osgcalc.py loglen 128 8192') + '<p>log<sub>2</sub>128 = 7 bits for the page number, log<sub>2</sub>8,192 = 13 bits for the offset: <strong>20 bits — A</strong>.</p>')}
 ${drill('M4.5', 'Segment table: segment 0 base 2100 limit 500; segment 1 base 3800 limit 120; segment 2 base 900 limit 300; segment 3 base 5000 limit 750. What are the physical addresses of (2, 250) and (1, 130)?', ['1150 and 3930', '1150 and a trap', '250 and 130', 'a trap and 3930'], 'Worked solution', run('c164-bo-nho', 'python3 osgcalc.py seg', 2) + '<p>Check the offset against the limit <em>before</em> adding: 250 &lt; 300 ⇒ 900 + 250 = 1150; 130 ≥ 120 ⇒ addressing error, trap to the OS. <strong>B.</strong> A adds without checking — exactly the bug segmentation hardware exists to prevent.</p>')}
 ${lab('vm', 'walk', 'en', 'Split a virtual address into its fields and walk the page-table levels — the same arithmetic as M4.1, animated.', { tour: 'vm-translate' })}
+${lab('addr-split', 'split', 'en', 'M4.1 step by step: 0x12345678 split 10/10/12. Change the bit widths (try 8/12/12 or 9/11/12) and the hex address, and watch the coloured fields and the page walk follow.', { tour: 'addr-split-walk' })}
+${lab('addr-split', 'table', 'en', 'M4.2–M4.4: drag the address size, page size and PTE size, and compare a one-level table (4 MiB) with the few small tables a sparse process needs on many levels (12 KiB).', { tour: 'addr-split-size' })}
+${lab('addr-split', 'seg', 'en', 'M4.5 segmentation: (2, 250) ⇒ 900 + 250 = 1150; (1, 130) exceeds limit 120 ⇒ TRAP. Try other offsets against each segment’s limit.')}
 
 <h3>Effective access time with a TLB</h3>
 ${drill('M5', 'TLB lookup 10 ns, memory access 80 ns, TLB hit ratio 95 %, single-level page table. What is the effective access time? (And with a 4-level table?)', ['90 ns (and 90 ns)', '94 ns (and 106 ns)', '85.5 ns (and 106 ns)', '170 ns (and 410 ns)'], 'Worked solution', run('c164-bo-nho', 'python3 osgcalc.py eat 10 80 0.95', 3) + '<p>Hit: TLB + one memory access = 90 ns. Miss: TLB + one page-table read per level + the access = 170 ns (1 level) or 410 ns (4 levels). EAT = 0.95 × 90 + 0.05 × 170 = <strong>94 ns</strong>, and with 4 levels 0.95 × 90 + 0.05 × 410 = <strong>106 ns — B</strong>. The third line shows why hit ratio matters more than depth: at 80 % hits a 4-level walk costs 154 ns. On the real machine of 7.2, arm64 uses 4 levels — the TLB is what makes that affordable.</p>')}
+${lab('addr-split', 'tlb', 'en', 'Effective access time with a TLB: drag the hit rate, memory time and number of table levels and watch EAT move between 94, 106 and 154 ns; compare TLB reach with 4 KiB and 2 MiB pages.')}
 
 <div class="pitfall co-tieu-de">
 <p><strong>Splitting a hex address at hex digits.</strong> 0x12345678 is not "PT1 = 0x12, PT2 = 0x345" unless the fields are 8 and 12 bits. Hex digits are 4-bit groups; fields of 9, 10 or 11 bits cut through them. Always write the binary first, in groups of four, then draw the field boundaries — 30 seconds that save the whole question.</p>
@@ -1119,9 +1137,13 @@ ${drill('M4.3', 'Một hệ thống có địa chỉ ảo 32 bit, trang 8 KiB v�
 ${drill('M4.4', 'Không gian địa chỉ logic có 128 trang, mỗi trang 8.192 word. Địa chỉ logic dài bao nhiêu bit?', ['20 bit', '21 bit', '13 bit', '17 bit'], 'Lời giải từng bước', run('c164-bo-nho', 'python3 osgcalc.py loglen 128 8192') + '<p>log<sub>2</sub>128 = 7 bit cho số trang, log<sub>2</sub>8.192 = 13 bit cho offset: <strong>20 bit — A</strong>.</p>')}
 ${drill('M4.5', 'Bảng phân đoạn: đoạn 0 base 2100 limit 500; đoạn 1 base 3800 limit 120; đoạn 2 base 900 limit 300; đoạn 3 base 5000 limit 750. Địa chỉ vật lý của (2, 250) và (1, 130) là gì?', ['1150 và 3930', '1150 và một trap', '250 và 130', 'một trap và 3930'], 'Lời giải từng bước', run('c164-bo-nho', 'python3 osgcalc.py seg', 2) + '<p>So offset với limit <em>trước</em> khi cộng: 250 &lt; 300 ⇒ 900 + 250 = 1150; 130 ≥ 120 ⇒ lỗi địa chỉ, bẫy vào hệ điều hành. <strong>B.</strong> A cộng mà không kiểm — đúng lỗi mà phần cứng phân đoạn sinh ra để ngăn.</p>')}
 ${lab('vm', 'walk', 'vi', 'Tách một địa chỉ ảo thành các trường và đi qua các cấp của bảng trang — đúng phép tính của M4.1, có hoạt hoạ.', { tour: 'vm-translate' })}
+${lab('addr-split', 'split', 'vi', 'M4.1 từng bước: 0x12345678 tách 10/10/12. Đổi số bit (thử 8/12/12 hay 9/11/12) và địa chỉ hex, rồi xem các trường tô màu và bước đi bảng trang đổi theo.', { tour: 'addr-split-walk' })}
+${lab('addr-split', 'table', 'vi', 'M4.2–M4.4: kéo số bit địa chỉ, cỡ trang và cỡ PTE, rồi so bảng một mức (4 MiB) với vài bảng nhỏ mà tiến trình thưa cần khi chia nhiều mức (12 KiB).', { tour: 'addr-split-size' })}
+${lab('addr-split', 'seg', 'vi', 'M4.5 phân đoạn: (2, 250) ⇒ 900 + 250 = 1150; (1, 130) vượt giới hạn 120 ⇒ TRAP. Thử các offset khác với giới hạn của từng đoạn.')}
 
 <h3>Thời gian truy cập hiệu dụng có TLB</h3>
 ${drill('M5', 'Tra TLB 10 ns, truy cập bộ nhớ 80 ns, tỉ lệ trúng TLB 95 %, bảng trang một cấp. Thời gian truy cập hiệu dụng là bao nhiêu? (Và với bảng 4 cấp?)', ['90 ns (và 90 ns)', '94 ns (và 106 ns)', '85,5 ns (và 106 ns)', '170 ns (và 410 ns)'], 'Lời giải từng bước', run('c164-bo-nho', 'python3 osgcalc.py eat 10 80 0.95', 3) + '<p>Trúng: TLB + một lần truy cập bộ nhớ = 90 ns. Trượt: TLB + mỗi cấp một lần đọc bảng trang + lần truy cập = 170 ns (1 cấp) hoặc 410 ns (4 cấp). EAT = 0,95 × 90 + 0,05 × 170 = <strong>94 ns</strong>, và với 4 cấp 0,95 × 90 + 0,05 × 410 = <strong>106 ns — B</strong>. Dòng thứ ba cho thấy vì sao tỉ lệ trúng quan trọng hơn độ sâu: ở 80 % trúng, đi 4 cấp tốn 154 ns. Trên máy thật của bài 7.2, arm64 dùng 4 cấp — chính TLB làm việc đó trở nên chấp nhận được.</p>')}
+${lab('addr-split', 'tlb', 'vi', 'Thời gian truy cập hiệu dụng có TLB: kéo tỉ lệ trúng, thời gian bộ nhớ và số mức bảng, xem EAT đi giữa 94, 106 và 154 ns; so TLB reach với trang 4 KiB và 2 MiB.')}
 
 <div class="pitfall co-tieu-de">
 <p><strong>Tách địa chỉ hex theo chữ số hex.</strong> 0x12345678 không phải "PT1 = 0x12, PT2 = 0x345" trừ khi các trường dài 8 và 12 bit. Chữ số hex là nhóm 4 bit; trường dài 9, 10 hay 11 bit cắt ngang qua chúng. Luôn viết nhị phân trước, nhóm bốn bit, rồi mới vạch ranh giới trường — 30 giây cứu cả câu.</p>
@@ -1210,7 +1232,9 @@ ${drill('K1.1', 'What is the total head movement under <strong>SSTF</strong> (sh
 ${drill('K1.2', 'What are the totals for <strong>SCAN</strong>, <strong>LOOK</strong>, <strong>C-SCAN</strong> and <strong>C-LOOK</strong>?', ['270, 306, 325, 385', '306, 270, 385, 325', '306, 270, 186, 325', '237, 237, 385, 325'], 'Worked solution', run('c165-banker-dia', 'python3 osgcalc.py disk scan 80', 4) + '<p>SCAN goes up to the edge (199) before turning: 306. LOOK turns at the last request (181): 270. C-SCAN goes to 199, jumps to 0 and sweeps up: 385 <em>counting</em> the 199-cylinder return (186 without it — some books leave the return out; say which rule you use). C-LOOK jumps from 181 back to the lowest request, 12: 325. <strong>B.</strong></p>')}
 ${drill('K1.3', 'The arm visited 80, 98, 132, 140, 181, 12, 30, 45, 67. Which algorithm was used?', ['SCAN', 'LOOK', 'C-LOOK', 'SSTF'], 'Worked solution', '<p>Up to the highest request (not to 199 — so not SCAN or C-SCAN), then a jump to the <em>lowest</em> request and upward again: <strong>C-LOOK — C</strong>. LOOK would turn around and go 67, 45, 30, 12 (downward); SSTF would have started with 67.</p>')}
 ${drill('K1.4', 'If the head at 80 is moving <strong>down</strong>, what is LOOK’s total — and which other algorithm gives the same total here?', ['237, SSTF', '270, SCAN', '306, C-SCAN', '325, C-LOOK'], 'Worked solution', run('c165-banker-dia', 'python3 osgcalc.py disk look 80 "45 132 12 98 181 67 140 30" down') + '<p>Down first: 67, 45, 30, 12, then up 98 … 181 = 237 — the same order SSTF chose, by coincidence of the numbers. <strong>A.</strong> Direction is part of the question: always state it.</p>')}
+${lab('disk-arm', 'cscan', 'en', 'Problem K1 on a disk seen from above: pick FCFS, SSTF, SCAN, LOOK, C-SCAN or C-LOOK and step the arm while the running total adds each move. Flip the return-jump switch to see why C-SCAN is 385 counted and 186 without the jump.', { tour: 'disk-arm-cscan' })}
 ${drill('K2', 'A 7,200 RPM disk has 300 sectors per track and a track-to-track seek of 1 ms. How much cylinder skew is needed so that reading continues without waiting a full rotation after moving to the next track?', ['30 sectors', '36 sectors', '42 sectors', '8 sectors'], 'Worked solution', run('c165-banker-dia', 'python3 osgcalc.py skew 7200 1 300') + '<p>One rotation = 60,000 / 7,200 = 8.33 ms; one sector passes in 8.33 / 300 ≈ 0.0278 ms; during the 1 ms seek 36 sectors pass under the head, so the next track’s sector 0 must start 36 sectors later: <strong>36 — B</strong>.</p>')}
+${lab('disk-arm', 'exam', 'en', 'Exam mode: type the order and the total for each algorithm, check, then answer “which algorithm is this?” (K1.3). The cylinder-skew panel works K2 out step by step.', { tour: 'disk-arm-exam' })}
 
 <h3>Semaphores: which outputs are possible?</h3>
 <p>S = 1, T = 0. Three processes run concurrently:</p>
@@ -1296,7 +1320,9 @@ ${drill('K1.1', 'Tổng quãng di chuyển theo <strong>SSTF</strong> (gần nh�
 ${drill('K1.2', 'Tổng quãng của <strong>SCAN</strong>, <strong>LOOK</strong>, <strong>C-SCAN</strong> và <strong>C-LOOK</strong> là bao nhiêu?', ['270, 306, 325, 385', '306, 270, 385, 325', '306, 270, 186, 325', '237, 237, 385, 325'], 'Lời giải từng bước', run('c165-banker-dia', 'python3 osgcalc.py disk scan 80', 4) + '<p>SCAN đi lên tới mép (199) rồi mới quay: 306. LOOK quay ở yêu cầu cuối (181): 270. C-SCAN đi tới 199, nhảy về 0 rồi quét lên: 385 khi <em>tính</em> cả 199 trụ quay về (186 nếu không tính — vài sách bỏ phần quay về; hãy ghi rõ bạn dùng luật nào). C-LOOK nhảy từ 181 về yêu cầu thấp nhất, 12: 325. <strong>B.</strong></p>')}
 ${drill('K1.3', 'Tay đĩa đã đi qua 80, 98, 132, 140, 181, 12, 30, 45, 67. Thuật toán nào đã được dùng?', ['SCAN', 'LOOK', 'C-LOOK', 'SSTF'], 'Lời giải từng bước', '<p>Lên tới yêu cầu cao nhất (không tới 199 — nên không phải SCAN hay C-SCAN), rồi nhảy về yêu cầu <em>thấp nhất</em> và đi lên tiếp: <strong>C-LOOK — C</strong>. LOOK sẽ quay đầu và đi 67, 45, 30, 12 (đi xuống); SSTF thì đã bắt đầu bằng 67.</p>')}
 ${drill('K1.4', 'Nếu đầu đọc ở 80 đang đi <strong>xuống</strong>, tổng quãng của LOOK là bao nhiêu — và thuật toán nào khác cho cùng tổng ở đây?', ['237, SSTF', '270, SCAN', '306, C-SCAN', '325, C-LOOK'], 'Lời giải từng bước', run('c165-banker-dia', 'python3 osgcalc.py disk look 80 "45 132 12 98 181 67 140 30" down') + '<p>Xuống trước: 67, 45, 30, 12, rồi lên 98 … 181 = 237 — đúng thứ tự SSTF đã chọn, do trùng hợp của các con số. <strong>A.</strong> Hướng đi là một phần của đề: luôn ghi rõ.</p>')}
+${lab('disk-arm', 'cscan', 'vi', 'Bài K1 trên mặt đĩa nhìn từ trên xuống: chọn FCFS, SSTF, SCAN, LOOK, C-SCAN hay C-LOOK rồi bấm từng bước cho tay đĩa chạy, bộ cộng dồn cộng từng bước. Lật công tắc cú nhảy về để thấy vì sao C-SCAN là 385 khi tính và 186 khi không tính.', { tour: 'disk-arm-cscan' })}
 ${drill('K2', 'Một đĩa 7.200 vòng/phút có 300 sector mỗi track và seek giữa hai track kề nhau 1 ms. Cần lệch trụ (cylinder skew) bao nhiêu để sau khi sang track kế tiếp việc đọc tiếp diễn mà không phải chờ trọn một vòng?', ['30 sector', '36 sector', '42 sector', '8 sector'], 'Lời giải từng bước', run('c165-banker-dia', 'python3 osgcalc.py skew 7200 1 300') + '<p>Một vòng = 60.000 / 7.200 = 8,33 ms; một sector đi qua trong 8,33 / 300 ≈ 0,0278 ms; trong 1 ms seek có 36 sector đi qua dưới đầu đọc, nên sector 0 của track kế phải bắt đầu chậm 36 sector: <strong>36 — B</strong>.</p>')}
+${lab('disk-arm', 'exam', 'vi', 'Chế độ thi: gõ thứ tự và tổng cho từng thuật toán, chấm, rồi trả lời “thuật toán nào đây?” (K1.3). Ô độ lệch trụ giải K2 từng bước.', { tour: 'disk-arm-exam' })}
 
 <h3>Semaphore: những output nào có thể xảy ra?</h3>
 <p>S = 1, T = 0. Ba tiến trình chạy đồng thời:</p>
@@ -1385,6 +1411,7 @@ ${lab('race', 'deadlock', 'en', 'For questions 14–15: two locks taken in oppos
 
 <h3>Memory</h3>
 ${ivList(IV1.slice(15), 16, false)}
+${lab('addr-split', 'x64', 'en', 'For the page-table questions: a 48-bit x86-64 address split 9/9/9/9/12. Count the levels a TLB miss walks, and why a sparse process needs only a few small tables.')}
 
 <div class="pitfall co-tieu-de">
 <p><strong>Answering the question you memorised instead of the one asked.</strong> "What happens when you call malloc?" is not "explain virtual memory" — the interviewer wants to hear "usually no system call", then brk/mmap, then lazy pages. Listen for the noun (malloc, fork, 137, load average), answer that first in one sentence, and only then widen. If you do not know, say what you would measure and how — "I would check /proc/PID/status and strace -c" is a good answer to almost any "why is it slow?".</p>
@@ -1455,6 +1482,7 @@ ${lab('race', 'deadlock', 'vi', 'Cho câu 14–15: hai khoá lấy theo thứ t�
 
 <h3>Bộ nhớ</h3>
 ${ivList(IV1.slice(15), 16, true)}
+${lab('addr-split', 'x64', 'vi', 'Cho các câu về bảng trang: địa chỉ 48 bit x86-64 tách 9/9/9/9/12. Đếm số mức một lần trượt TLB phải đi, và vì sao một tiến trình thưa chỉ cần vài bảng nhỏ.')}
 
 <div class="pitfall co-tieu-de">
 <p><strong>Trả lời câu mình đã học thuộc thay vì câu được hỏi.</strong> "Chuyện gì xảy ra khi bạn gọi malloc?" không phải "giải thích bộ nhớ ảo" — người phỏng vấn muốn nghe "thường không có system call", rồi brk/mmap, rồi trang được cấp lười. Hãy nghe danh từ chính (malloc, fork, 137, load average), trả lời đúng nó trước trong một câu, rồi mới mở rộng. Nếu không biết, hãy nói bạn sẽ đo gì và đo thế nào — "tôi sẽ xem /proc/PID/status và strace -c" là câu trả lời tốt cho gần như mọi câu "vì sao nó chậm?".</p>

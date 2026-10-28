@@ -80,6 +80,7 @@ ${run('c41-c', './sweep.sh "./primes queue')}
 ${run('c41-c', './sweep.sh "./primes fork')}
 <p>The work queue stays near the ideal up to 6 cores (5.80×, 97% efficient) and reaches <strong>7.92× on 10</strong>. Fixed blocks and fork bend from the first step (1.60× on 2 cores: one thread has 2/3 of the work) and end at 6.13× and 6.50×. Why does even the queue lose efficiency after 8 cores? Look at the hardware: Docker's VM gets the 10 cores of an <strong>Apple M1 Max, which has 8 performance cores and 2 efficiency cores</strong> — the 9th and 10th threads land on slower cores — and the machine also runs other people's work. Lesson 4.5 adds the third reason, the serial parts of the program, and puts a formula on it.</p>
 ${lab('scheduler', 'multicore', 'en', 'Six jobs of different lengths on 1–4 cores: the finish time is set by the core that ends last. Change the core count and watch idle gaps appear when the split is uneven.', { tour: 'scheduler-start' })}
+${lab('amdahl', 'hetero', 'en', 'Why even the work queue bends after 8 cores: switch between uniform cores and 8 P + 2 E cores and lower the E-core speed. The curve breaks at the 9th thread with no serial part at all — the hardware, not the program (a model, labelled as such).')}
 
 <div class="pitfall co-tieu-de">
 <p><strong>"I gave every thread the same number of items, so the work is balanced."</strong> Only if every item costs the same. Primes near 20 million, Mandelbrot rows through the black body, users with 10 000 orders vs users with 3, images of 40 MB vs 40 KB — real work is uneven far more often than not. Measured here: equal blocks wasted the first thread's core for 400 of 706 ms. Split into <em>many small pieces</em> and let free workers pull the next one; check by printing each worker's busy time, as <code>-v</code> does.</p>
@@ -101,6 +102,7 @@ ${run('c41-c', './mandel static 4 ascii')}
 ${run('c41-c', './mandel dynamic 4')}
 ${run('c41-c', './sweep.sh "./mandel dynamic')}
 <p>Static: threads 1 and 2 hold the black body and run 1.2 s while threads 0 and 3 are done after 91 ms. Dynamic: 661 ms, everyone busy to the end, same checksum 765 456 517 — and 7.58× on 8 cores.</p>
+${lab('amdahl', 'balance', 'en', 'Fixed equal blocks vs a shared queue on uneven work: compare the busy bars (primes 308/498/616/706 ms vs 535 ms each; Mandelbrot 91/1 199/1 201/91 vs 661). The run ends when the slowest thread ends — notice how much the queue saves with the same cores.')}
 
 <h3>If you have done OSG202 lesson 2.2</h3>
 <p>OSG202 asks you to name the benefits of multithreading — responsiveness, resource sharing, economy, scalability. Here "scalability" became a curve you measured, and you met the reason it bends that exam questions rarely mention: the split.</p>
@@ -181,6 +183,7 @@ ${run('c41-c', './sweep.sh "./primes queue')}
 ${run('c41-c', './sweep.sh "./primes fork')}
 <p>Hàng đợi việc bám sát lý tưởng tới 6 lõi (5,80×, hiệu suất 97%) và đạt <strong>7,92× trên 10 lõi</strong>. Khối cố định và fork bẻ cong ngay bước đầu (1,60× trên 2 lõi: một luồng ôm 2/3 việc) và dừng ở 6,13× và 6,50×. Vì sao ngay cả hàng đợi cũng mất hiệu suất sau 8 lõi? Nhìn phần cứng: VM của Docker nhận 10 lõi của một <strong>Apple M1 Max, gồm 8 lõi hiệu năng và 2 lõi tiết kiệm điện</strong> — luồng thứ 9 và 10 rơi vào lõi chậm hơn — và máy còn đang chạy việc của người khác. Bài 4.5 thêm lý do thứ ba, phần tuần tự của chương trình, và gắn cho nó một công thức.</p>
 ${lab('scheduler', 'multicore', 'vi', 'Sáu việc dài ngắn khác nhau trên 1–4 lõi: lúc xong là lúc lõi về đích cuối cùng xong. Đổi số lõi và xem các khoảng ngồi không hiện ra khi việc chia lệch.', { tour: 'scheduler-start' })}
+${lab('amdahl', 'hetero', 'vi', 'Vì sao ngay cả hàng đợi việc cũng gãy sau 8 lõi: chuyển giữa lõi đều nhau và 8 lõi P + 2 lõi E, rồi hạ tốc độ lõi E. Đường cong gãy ở luồng thứ 9 dù không có phần tuần tự nào — do phần cứng, không do chương trình (đây là mô hình, có ghi rõ).')}
 
 <div class="pitfall co-tieu-de">
 <p><strong>"Tôi đã chia cho mỗi luồng số phần tử bằng nhau, vậy là việc đã cân."</strong> Chỉ đúng khi mọi phần tử tốn như nhau. Số nguyên tố gần 20 triệu, hàng Mandelbrot cắt qua thân đen, người dùng có 10 000 đơn hàng so với người có 3, ảnh 40 MB so với 40 KB — việc thật lệch nhau thường xuyên hơn nhiều so với đều. Đo được ở đây: chia khối bằng nhau đã bỏ phí lõi của luồng đầu tiên 400 trên 706 ms. Hãy chia thành <em>nhiều mẩu nhỏ</em> và để worker rảnh tự kéo mẩu kế tiếp; kiểm bằng cách in thời gian bận của từng worker như <code>-v</code> làm.</p>
@@ -202,6 +205,7 @@ ${run('c41-c', './mandel static 4 ascii')}
 ${run('c41-c', './mandel dynamic 4')}
 ${run('c41-c', './sweep.sh "./mandel dynamic')}
 <p>Tĩnh: luồng 1 và 2 ôm phần thân đen và chạy 1,2 s trong khi luồng 0 và 3 xong sau 91 ms. Động: 661 ms, ai cũng bận tới cuối, cùng checksum 765 456 517 — và 7,58× trên 8 lõi.</p>
+${lab('amdahl', 'balance', 'vi', 'Chia khối bằng nhau vs hàng đợi chung trên việc lệch: so các thanh bận (số nguyên tố 308/498/616/706 ms vs đều 535 ms; Mandelbrot 91/1 199/1 201/91 vs 661). Lượt chạy xong khi luồng chậm nhất xong — để ý hàng đợi tiết kiệm bao nhiêu trên cùng số lõi.')}
 
 <h3>Nếu bạn đã học OSG202 bài 2.2</h3>
 <p>OSG202 bắt bạn kể lợi ích của đa luồng — đáp ứng nhanh, dùng chung tài nguyên, tiết kiệm, khả năng mở rộng. Ở đây "khả năng mở rộng" thành một đường cong bạn tự đo, và bạn gặp lý do khiến nó bẻ cong mà đề thi ít khi nhắc: cách chia việc.</p>
@@ -827,17 +831,20 @@ ${run('c45-amdahl', './sweep.sh "./amdahl {k} 25"', 2)}
 <tr><td>10</td><td>8.59×</td><td>4.97×</td><td>5.26×</td><td>3.02×</td><td>3.08×</td></tr>
 </table>
 <p>At 25% the formula is almost exact. At 10% the measurement falls a little below it on 8–10 cores, because Amdahl assumes the parallel part scales perfectly — and the 0%-serial run shows it does not quite here (8.59× on 10 cores: the two efficiency cores and the neighbours from lesson 4.1). Notice how brutal the law is: a quarter of serial work turns 10 cores into 3×. That is why profiling the serial part — the single-threaded startup, the one lock everyone takes, the final merge — often buys more than another 10 cores.</p>
+${lab('amdahl', 'amdahl', 'en', 'Drag the serial part s and the core count n: the Amdahl curve flattens towards the ceiling 1/s, and the measured points of this lesson (0 %, 10 %, 25 %) sit on or just under it. Notice that at s = 25 % no number of cores ever gets past 4×.', { tour: 'amdahl-ceiling' })}
 
 <h3>Gustafson's law: more cores, more work</h3>
 <p>Amdahl fixes the problem and asks how fast it gets. In practice we often fix the <em>time</em> and grow the problem with the machine — more users, bigger images, a longer log. With <code>grow</code>, the parallel part becomes T times bigger while the serial part stays the same:</p>
 ${run('c45-amdahl', 'for k in 1 2 4 8 10; do taskset')}
 <p>10 threads did <strong>9.1 times the work</strong> (36 400 units instead of 4 000) in only <strong>1.19 times the time</strong> (3 612 vs 3 048 ms): a scaled speedup of about 7.7×. Gustafson's law, <strong>S(n) = s + (1 − s) · n</strong>, predicts 9.1× for 10% serial; the gap is again the imperfect parallel part. Both laws are right — they answer different questions: <em>how much faster</em> (Amdahl) and <em>how much more</em> (Gustafson).</p>
+${lab('amdahl', 'gustafson', 'en', 'The same s, the other question: Gustafson grows the job with the machine, S(n) = s + (1 − s)·n. Compare the straight Gustafson line with the flat Amdahl curve and find the grow run (4 000 → 36 400 units) on the chart.')}
 
 <h3>Karp–Flatt: read the serial fraction off your own numbers</h3>
 <p>Real programs do not tell you their <em>s</em>. Turn the formula around: from a measured speedup S on n cores, the <strong>Karp–Flatt metric</strong> <em>e = (1/S − 1/n) / (1 − 1/n)</em> is the serial fraction that would explain it. If <em>e</em> stays flat as n grows, you have a classic serial part; if it rises, something grows with the number of threads (a lock, memory bandwidth, slower extra cores):</p>
 ${run('c45-amdahl', './sweep.sh "./amdahl {k} 10" 1 2 4 8 10 | python3')}
 ${run('c45-amdahl', './sweep.sh "./primes queue {k} 20000000" 1 2 4 8 10 | python3')}
 <p>For <code>amdahl.c</code> it found 10.6–11.8% — the 10% we built in, plus a little overhead. For lesson 4.1's work queue: 0.8–3%, almost nothing serial, which is why it scaled so well. The jump to 3.0% at 10 cores is the efficiency-core effect showing up as "serial".</p>
+${lab('amdahl', 'karp', 'en', 'Karp–Flatt on a sweep table: the amdahl 10 % run and the prime-counting runs of lesson 4.1 are preloaded. Read e for each core count — flat means a classic serial part, rising means something grows with the threads — then paste your own sweep.sh output and read the 16/32/64-core prediction.', { tour: 'amdahl-karp' })}
 
 <div class="pitfall co-tieu-de">
 <p><strong>"It got 3× faster on 4 cores, so it will be 30× faster on 40."</strong> Extrapolating a speedup linearly is the most common way to overspend on hardware. Measured above: the 10%-serial program gave 3.04× on 4 cores — and Amdahl with the Karp–Flatt fraction says ~5.8× on 16 cores and under 8.6× on <em>any</em> number. Measure on at least three core counts, compute <em>e</em>, and predict from that.</p>
@@ -940,17 +947,20 @@ ${run('c45-amdahl', './sweep.sh "./amdahl {k} 25"', 2)}
 <tr><td>10</td><td>8,59×</td><td>4,97×</td><td>5,26×</td><td>3,02×</td><td>3,08×</td></tr>
 </table>
 <p>Ở 25% công thức gần như chính xác. Ở 10% số đo thấp hơn công thức một chút trên 8–10 lõi, vì Amdahl giả định phần song song mở rộng hoàn hảo — và lượt 0% tuần tự cho thấy ở đây nó không hẳn vậy (8,59× trên 10 lõi: hai lõi tiết kiệm điện và hàng xóm của bài 4.1). Để ý định luật khắc nghiệt cỡ nào: một phần tư việc tuần tự biến 10 lõi thành 3×. Vì thế đo hồ sơ phần tuần tự — đoạn khởi động một luồng, cái khoá ai cũng lấy, bước gộp cuối — thường được lợi hơn thêm 10 lõi.</p>
+${lab('amdahl', 'amdahl', 'vi', 'Kéo phần tuần tự s và số lõi n: đường Amdahl dẹt dần về trần 1/s, và các chấm đo thật của bài này (0 %, 10 %, 25 %) nằm trên hoặc ngay dưới nó. Để ý: với s = 25 % thì bao nhiêu lõi cũng không vượt nổi 4×.', { tour: 'amdahl-ceiling' })}
 
 <h3>Định luật Gustafson: thêm lõi, thêm việc</h3>
 <p>Amdahl giữ cố định bài toán và hỏi nó nhanh lên bao nhiêu. Thực tế ta hay giữ cố định <em>thời gian</em> và cho bài toán lớn theo máy — thêm người dùng, ảnh lớn hơn, log dài hơn. Với <code>grow</code>, phần song song lớn gấp T lần còn phần tuần tự giữ nguyên:</p>
 ${run('c45-amdahl', 'for k in 1 2 4 8 10; do taskset')}
 <p>10 luồng làm <strong>gấp 9,1 lần khối việc</strong> (36 400 đơn vị thay vì 4 000) trong chỉ <strong>1,19 lần thời gian</strong> (3 612 so với 3 048 ms): speedup theo quy mô khoảng 7,7×. Định luật Gustafson, <strong>S(n) = s + (1 − s) · n</strong>, dự đoán 9,1× cho 10% tuần tự; khoảng chênh lại là phần song song không hoàn hảo. Cả hai định luật đều đúng — chúng trả lời hai câu khác nhau: <em>nhanh hơn bao nhiêu</em> (Amdahl) và <em>làm được thêm bao nhiêu</em> (Gustafson).</p>
+${lab('amdahl', 'gustafson', 'vi', 'Cùng s, câu hỏi kia: Gustafson cho bài toán lớn theo máy, S(n) = s + (1 − s)·n. So đường thẳng Gustafson với đường Amdahl dẹt và tìm lượt grow (4 000 → 36 400 đơn vị) trên biểu đồ.')}
 
 <h3>Karp–Flatt: đọc phần tuần tự từ chính số đo của bạn</h3>
 <p>Chương trình thật không nói cho bạn <em>s</em> của nó. Lật ngược công thức: từ speedup S đo được trên n lõi, <strong>chỉ số Karp–Flatt</strong> <em>e = (1/S − 1/n) / (1 − 1/n)</em> là phần tuần tự đủ để giải thích nó. Nếu <em>e</em> đứng yên khi n tăng, bạn có một phần tuần tự kinh điển; nếu nó tăng, có thứ gì đó lớn lên theo số luồng (một cái khoá, băng thông bộ nhớ, những lõi thêm vào chậm hơn):</p>
 ${run('c45-amdahl', './sweep.sh "./amdahl {k} 10" 1 2 4 8 10 | python3')}
 ${run('c45-amdahl', './sweep.sh "./primes queue {k} 20000000" 1 2 4 8 10 | python3')}
 <p>Với <code>amdahl.c</code> nó tìm ra 10,6–11,8% — đúng 10% ta cài vào, cộng một chút chi phí. Với hàng đợi việc của bài 4.1: 0,8–3%, gần như không có gì tuần tự, nên nó mới mở rộng tốt như thế. Cú nhảy lên 3,0% ở 10 lõi là hiệu ứng lõi tiết kiệm điện hiện ra dưới dạng "tuần tự".</p>
+${lab('amdahl', 'karp', 'vi', 'Karp–Flatt trên một bảng sweep: nạp sẵn lượt amdahl 10 % và các lượt đếm số nguyên tố của bài 4.1. Đọc e ở từng số lõi — đứng yên là phần tuần tự kinh điển, tăng dần là có thứ lớn lên theo số luồng — rồi dán output sweep.sh của chính bạn và đọc dự đoán 16/32/64 lõi.', { tour: 'amdahl-karp' })}
 
 <div class="pitfall co-tieu-de">
 <p><strong>"Trên 4 lõi nó nhanh gấp 3, vậy trên 40 lõi sẽ nhanh gấp 30."</strong> Ngoại suy speedup theo đường thẳng là cách phổ biến nhất để mua thừa phần cứng. Đo ở trên: chương trình 10% tuần tự cho 3,04× trên 4 lõi — và Amdahl với phần Karp–Flatt nói ~5,8× trên 16 lõi và dưới 8,6× trên <em>bất kỳ</em> số lõi nào. Hãy đo ở ít nhất ba mức lõi, tính <em>e</em>, rồi dự đoán từ đó.</p>
@@ -1058,10 +1068,12 @@ ${run('c46-false', './best3.sh taskset -c 0-7 ./fs 8 local')}
 <h3>Why: the CPU moves cache lines, not bytes</h3>
 <p>A core never reads or writes a single <code>long</code> from RAM. Its cache holds memory in fixed blocks called <strong>cache lines</strong>, and a coherence protocol (MESI and its relatives) guarantees that before a core <em>writes</em> a line, it holds the only valid copy — every other core's copy is invalidated. Put four counters in one line and each increment by thread 0 invalidates the line in cores 1–3; their next increment must fetch it back, invalidating thread 0's copy… The line ping-pongs between cores at the speed of the interconnect instead of staying in L1. That is <strong>false sharing</strong>: the data is not shared, but the line is.</p>
 ${lab('race', 'atomic', 'en', 'Several threads updating the same memory word: even a correct atomic increment serialises them on one location. False sharing is the same queue, at the granularity of a whole cache line instead of one variable.', { tour: 'race-lost-update' })}
+${lab('cacheline', 'false', 'en', 'Eight counters 8 bytes apart in one 64-byte line: step the writes and watch the line jump from core to core, each copy flipping between M and I (MESI) while the bounce counter climbs. Then move the counters apart or to local variables and watch the bouncing stop.', { tour: 'cacheline-bounce' })}
 
 <h3>getconf says 64 — the hardware says 128</h3>
 ${run('c46-false', 'getconf LEVEL1_DCACHE_LINESIZE')}
 <p>Linux in the VM reports a 64-byte line, and most articles say "pad to 64 bytes". Yet padding to 64 still cost 17% with 4 threads and 40% with 8; only 128 matched the single-thread time. The Mac itself answers why: <code>sysctl hw.cachelinesize</code> prints <strong>128</strong> — Apple's M1 tracks coherence in 128-byte lines, so two counters 64 bytes apart still share one. (Many x86 server CPUs also fetch 64-byte lines in adjacent pairs, which is why the JDK pads its hot fields to 128 bytes everywhere.) The lesson is the method, not the constant: <strong>sweep the gap and measure</strong>.</p>
+${lab('cacheline', 'm1', 'en', 'Counters 64 bytes apart, as getconf suggests: switch the line size between 64 B (getconf) and 128 B (the real M1) and see why pairs of counters still share a line — 269 ms instead of 192.')}
 
 <h3>The CPU was busy — doing nothing useful</h3>
 ${run('c46-false', 'perf stat -e task-clock,context-switches taskset -c 0-3 ./fs 4 8 ', 2)}
@@ -1075,6 +1087,7 @@ ${run('c46-false', 'perf stat -e task-clock,context-switches taskset -c 0-3 ./fs
 <p>Write <code>FalseShare.java</code>: four threads each increment their own slot 50 million times, four ways — (1) slots 0, 1, 2, 3 of an <code>AtomicLongArray</code>; (2) slots 0, 16, 32, 48 (16 longs = 128 bytes apart); (3) one shared <code>LongAdder</code>; (4) a local <code>long</code>, added to the total once at the end. Reference solution: <code>lab/code/ch04/giai/FalseShare.java</code>.</p>
 ${run('c46-false', 'taskset -c 0-3 java giai/FalseShare.java')}
 <p>Neighbouring atomic slots: 6.1 s. Padded: 1.1 s. <code>LongAdder</code> — the JDK's striped counter, whose internal cells are padded with <code>@Contended</code> — 0.39 s for <em>one</em> logical counter shared by all four threads. Local variables: 25 ms. The order of the fixes is the order of preference: <strong>don't share</strong> (local, publish once); use a <strong>striped</strong> structure (<code>LongAdder</code>, per-CPU counters in the kernel); and only if a shared array is unavoidable, <strong>pad</strong> to the measured line size.</p>
+${lab('cacheline', 'java', 'en', 'The four Java variants side by side — adjacent AtomicLongArray slots, padded by 16 longs, LongAdder, local and add once. Step the writes for each and match the bounce count to the measured 6 086 / 1 064 / 385 / 25 ms.')}
 
 <h3>🧪 Practice (25 min)</h3>
 <div class="callout ok">
@@ -1131,10 +1144,12 @@ ${run('c46-false', './best3.sh taskset -c 0-7 ./fs 8 local')}
 <h3>Vì sao: CPU chuyển dòng cache, không chuyển từng byte</h3>
 <p>Một lõi không bao giờ đọc hay ghi một <code>long</code> lẻ từ RAM. Cache của nó giữ bộ nhớ theo các khối cố định gọi là <strong>dòng cache (cache line)</strong>, và một giao thức nhất quán (MESI và họ hàng) bảo đảm rằng trước khi một lõi <em>ghi</em> vào một dòng, nó giữ bản hợp lệ duy nhất — bản sao ở mọi lõi khác bị vô hiệu. Đặt bốn bộ đếm trong một dòng thì mỗi lần luồng 0 tăng là dòng ở lõi 1–3 bị vô hiệu; lần tăng kế tiếp của chúng phải kéo dòng về, lại vô hiệu bản của luồng 0… Dòng cache nảy qua nảy lại giữa các lõi với tốc độ của đường nối liên lõi thay vì nằm yên trong L1. Đó là <strong>false sharing (chia sẻ giả)</strong>: dữ liệu không chung, nhưng dòng cache thì chung.</p>
 ${lab('race', 'atomic', 'vi', 'Nhiều luồng cùng cập nhật một ô nhớ: ngay cả phép tăng nguyên tử đúng đắn cũng bắt chúng xếp hàng trên một chỗ. False sharing là cùng cái hàng đó, ở cỡ cả một dòng cache thay vì một biến.', { tour: 'race-lost-update' })}
+${lab('cacheline', 'false', 'vi', 'Tám bộ đếm cách nhau 8 byte trong một dòng 64 byte: bấm từng lần ghi và xem dòng nhảy từ lõi này sang lõi khác, mỗi bản sao lật giữa M và I (MESI) trong khi bộ đếm lần nhảy tăng. Rồi giãn các bộ đếm ra hoặc chuyển sang biến cục bộ và xem dòng thôi nhảy.', { tour: 'cacheline-bounce' })}
 
 <h3>getconf nói 64 — phần cứng nói 128</h3>
 ${run('c46-false', 'getconf LEVEL1_DCACHE_LINESIZE')}
 <p>Linux trong VM báo dòng 64 byte, và đa số bài viết nói "đệm tới 64 byte". Vậy mà đệm tới 64 vẫn tốn thêm 17% với 4 luồng và 40% với 8; chỉ 128 mới bằng thời gian một luồng. Chính máy Mac trả lời vì sao: <code>sysctl hw.cachelinesize</code> in ra <strong>128</strong> — M1 của Apple theo dõi nhất quán theo dòng 128 byte, nên hai bộ đếm cách nhau 64 byte vẫn chung một dòng. (Nhiều CPU máy chủ x86 cũng kéo dòng 64 byte theo từng cặp kề nhau, nên JDK đệm các trường nóng tới 128 byte ở mọi nơi.) Bài học là phương pháp, không phải hằng số: <strong>quét khoảng cách và đo</strong>.</p>
+${lab('cacheline', 'm1', 'vi', 'Bộ đếm cách nhau 64 byte, đúng như getconf gợi ý: đổi cỡ dòng giữa 64 B (getconf) và 128 B (M1 thật) và xem vì sao từng cặp bộ đếm vẫn chung một dòng — 269 ms thay vì 192.')}
 
 <h3>CPU bận suốt — mà chẳng làm gì có ích</h3>
 ${run('c46-false', 'perf stat -e task-clock,context-switches taskset -c 0-3 ./fs 4 8 ', 2)}
@@ -1148,6 +1163,7 @@ ${run('c46-false', 'perf stat -e task-clock,context-switches taskset -c 0-3 ./fs
 <p>Viết <code>FalseShare.java</code>: bốn luồng, mỗi luồng tăng ô của riêng nó 50 triệu lần, theo bốn cách — (1) ô 0, 1, 2, 3 của một <code>AtomicLongArray</code>; (2) ô 0, 16, 32, 48 (cách nhau 16 long = 128 byte); (3) một <code>LongAdder</code> dùng chung; (4) một <code>long</code> cục bộ, cộng vào tổng một lần ở cuối. Lời giải mẫu: <code>lab/code/ch04/giai/FalseShare.java</code>.</p>
 ${run('c46-false', 'taskset -c 0-3 java giai/FalseShare.java')}
 <p>Các ô atomic kề nhau: 6,1 s. Có đệm: 1,1 s. <code>LongAdder</code> — bộ đếm phân mảnh của JDK, các ô bên trong được đệm bằng <code>@Contended</code> — 0,39 s cho <em>một</em> bộ đếm logic dùng chung cả bốn luồng. Biến cục bộ: 25 ms. Thứ tự các cách sửa cũng là thứ tự nên ưu tiên: <strong>đừng chia sẻ</strong> (cục bộ, công bố một lần); dùng cấu trúc <strong>phân mảnh</strong> (<code>LongAdder</code>, bộ đếm theo CPU trong nhân); và chỉ khi buộc phải có một mảng chung mới <strong>đệm</strong> tới kích thước dòng đã đo.</p>
+${lab('cacheline', 'java', 'vi', 'Bốn biến thể Java cạnh nhau — ô AtomicLongArray kề nhau, đệm 16 long, LongAdder, cục bộ rồi cộng một lần. Bấm từng lần ghi cho từng cách và khớp số lần dòng nhảy với số đo 6 086 / 1 064 / 385 / 25 ms.')}
 
 <h3>🧪 Thực hành (25 phút)</h3>
 <div class="callout ok">

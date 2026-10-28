@@ -356,6 +356,7 @@ ${run('c152-perf', 'python3 folded.py hot.folded')}
 <li>Look for wide <strong>plateaus</strong> on the top edge: that is where the CPU actually is. Here, one plateau: <code>crc_bitwise</code>, 86.9% of the width.</li>
 <li>A wide box with a flat top is self time; a wide box whose children cover it is a function that is only expensive because of what it calls (<code>render_json</code>: 10.2% total, almost none self).</li>
 </ul>
+${lab('flamegraph', 'hot', 'en', 'The flame graph of hot.c, rebuilt from this lesson’s real stacks: hover or tap a box to read SELF and TOTAL, click to zoom a branch, search a name. Find the plateau (crc_bitwise, 86.9 % self) and the wide box with no top of its own (render_json, 10.2 % total, ~0 self).', { tour: 'flamegraph-read' })}
 ${lab('sysmon', 'cpuhog', 'en', 'The system view of the same situation: one process eating a core. top tells you WHICH process; the profiler of this lesson tells you WHICH LINE.', { tour: 'sysmon-read' })}
 
 <h3>Down to the instruction: perf annotate</h3>
@@ -367,6 +368,7 @@ ${run('c152-perf', 'perf annotate')}
 ${run('c152-perf', './hot 50000 table')}
 ${run('c152-perf', 'perf script -i fixed.data')}
 <p>921 ms → 313 ms: <strong>2.9× faster</strong> for the whole request, not 8×, because the checksum was 87% and the rest did not change — Amdahl's law from lesson 4.5 applied to one function. The new profile also tells you where to look next: <code>crc_table</code> still 64.4% (it is still the main work), and <code>render_json</code> has grown from 10.2% to 24.9% of a smaller total. The slides show the <strong>differential flame graph</strong> (<code>difffolded.pl -n before after | flamegraph.pl</code>): box widths come from the <em>after</em> profile, red means more samples than before, blue fewer. Read it with care: <code>crc_bitwise</code> no longer exists, so it cannot appear at all, and the renamed <code>crc_table</code> shows as entirely new (red) — when code is renamed or removed, also draw the reverse diff.</p>
+${lab('flamegraph', 'diff', 'en', 'Before/after as a differential flame graph: widths come from the AFTER profile, red = more samples, blue = fewer. Notice the trap — crc_table is all red only because the function was renamed, not because it got slower.', { tour: 'flamegraph-traps' })}
 
 <h3>Three ways to break the picture</h3>
 ${run('c152-perf', 'gcc -O2 hot.c -o hot-stripped')}
@@ -473,6 +475,7 @@ ${run('c152-perf', 'python3 folded.py hot.folded')}
 <li>Tìm những <strong>cao nguyên</strong> rộng ở mép trên: đó là chỗ CPU thật sự đang ở. Ở đây có một cao nguyên: <code>crc_bitwise</code>, 86,9% bề rộng.</li>
 <li>Hộp rộng mà đỉnh phẳng là thời gian self; hộp rộng mà bị các hộp con phủ kín là hàm chỉ đắt vì những gì nó gọi (<code>render_json</code>: total 10,2%, self gần như không).</li>
 </ul>
+${lab('flamegraph', 'hot', 'vi', 'Flame graph của hot.c, dựng lại từ đúng các ngăn xếp thật của bài: rê hoặc chạm một hộp để đọc SELF và TOTAL, bấm để phóng một nhánh, tìm theo tên. Tìm cao nguyên (crc_bitwise, 86,9 % self) và hộp rộng không có đỉnh riêng (render_json, 10,2 % total, ~0 self).', { tour: 'flamegraph-read' })}
 ${lab('sysmon', 'cpuhog', 'vi', 'Góc nhìn hệ thống của cùng tình huống: một tiến trình ăn trọn một lõi. top cho biết tiến trình NÀO; profiler của bài này cho biết DÒNG nào.', { tour: 'sysmon-read' })}
 
 <h3>Xuống tới từng lệnh máy: perf annotate</h3>
@@ -484,6 +487,7 @@ ${run('c152-perf', 'perf annotate')}
 ${run('c152-perf', './hot 50000 table')}
 ${run('c152-perf', 'perf script -i fixed.data')}
 <p>921 ms → 313 ms: <strong>nhanh gấp 2,9 lần</strong> cho cả request, không phải 8 lần, vì checksum chiếm 87% còn phần còn lại không đổi — định luật Amdahl của bài 4.5 áp vào một hàm. Hồ sơ mới cũng cho biết nhìn đâu tiếp theo: <code>crc_table</code> vẫn 64,4% (nó vẫn là việc chính), và <code>render_json</code> đã tăng từ 10,2% lên 24,9% của một tổng nhỏ hơn. Phần slide có <strong>flame graph vi sai</strong> (<code>difffolded.pl -n before after | flamegraph.pl</code>): bề rộng các hộp lấy từ hồ sơ <em>sau</em>, đỏ là nhiều mẫu hơn trước, xanh là ít hơn. Đọc cho cẩn thận: <code>crc_bitwise</code> không còn tồn tại nên không thể hiện ra, còn <code>crc_table</code> mang tên mới nên hiện toàn màu đỏ như đồ mới hoàn toàn — khi code bị đổi tên hay bị xoá, hãy vẽ thêm bản vi sai theo chiều ngược lại.</p>
+${lab('flamegraph', 'diff', 'vi', 'Trước/sau dưới dạng flame graph vi sai: độ rộng lấy theo hồ sơ SAU, đỏ = nhiều mẫu hơn, xanh = ít hơn. Để ý cái bẫy — crc_table đỏ toàn bộ chỉ vì hàm đã đổi tên, không phải vì nó chậm đi.', { tour: 'flamegraph-traps' })}
 
 <h3>Ba cách làm vỡ bức tranh</h3>
 ${run('c152-perf', 'gcc -O2 hot.c -o hot-stripped')}
@@ -582,6 +586,7 @@ ${run('c153-offcpu', 'offcputime-libbpf -p $G 3')}
 <p>One block per distinct stack: kernel frames from the leaf (<code>__schedule</code>: the thread left the CPU here) down to the system-call entry, the thread, and the microseconds it spent switched out with that stack. This build of <code>offcputime</code> records kernel stacks only; they are enough to tell <em>why</em> a thread waited. <code>offcpu2folded.py</code> turns the blocks into folded stacks (dropping the frames every sleep has in common), so the same <code>folded.py</code> as before applies:</p>
 ${run('c153-offcpu', 'python3 offcpu2folded.py')}
 <p>22.6 seconds of off-CPU time in 3 seconds — eight threads waiting almost all the time. <strong>87.8% of it is <code>futex_do_wait</code></strong>: a <code>futex</code> is how a contended <code>pthread_mutex_lock</code> sleeps (lesson 5.2). 12.2% is <code>do_nanosleep</code>, the "audit write". The threads spend seven times longer waiting <em>for the lock</em> than doing the slow I/O itself. The off-CPU flame graph in the slides shows the same two towers.</p>
+${lab('flamegraph', 'offcpu', 'en', 'The same program, two profiles: switch on-CPU (price_order 96.7 %) to off-CPU (futex_do_wait 87.8 %, do_nanosleep 12.2 %). Notice that the on-CPU picture is correct and still points at the wrong fix.')}
 
 <h3>Which lock? A poor man's profiler</h3>
 <p>Kernel stacks say "a lock"; they do not say which line of <em>your</em> code took it. A crude but famous technique, the <strong>poor man's profiler</strong>, answers that: stop the process with <code>gdb</code>, print the stack of every thread, repeat a few times, and count. Every thread is captured, running or not — it is wall-clock sampling. <code>pmp.py</code> does it five times, 200 ms apart:</p>
@@ -669,6 +674,7 @@ ${run('c153-offcpu', 'offcputime-libbpf -p $G 3')}
 <p>Mỗi ngăn xếp khác nhau một khối: các khung nhân từ lá (<code>__schedule</code>: luồng rời CPU tại đây) xuống tới điểm vào lời gọi hệ thống, tên luồng, rồi số micro giây nó đã nằm ngoài CPU với ngăn xếp đó. Bản <code>offcputime</code> này chỉ ghi ngăn xếp nhân; chừng đó đủ để biết <em>vì sao</em> luồng phải chờ. <code>offcpu2folded.py</code> đổi các khối thành folded stack (bỏ những khung mà lần ngủ nào cũng có), để dùng lại đúng <code>folded.py</code> như trước:</p>
 ${run('c153-offcpu', 'python3 offcpu2folded.py')}
 <p>22,6 giây thời gian ngoài CPU trong 3 giây — tám luồng gần như lúc nào cũng chờ. <strong>87,8% là <code>futex_do_wait</code></strong>: <code>futex</code> là cách một <code>pthread_mutex_lock</code> đang tranh chấp đi ngủ (bài 5.2). 12,2% là <code>do_nanosleep</code>, tức "lần ghi kiểm toán". Các luồng chờ <em>cái khoá</em> lâu gấp bảy lần thời gian làm chính việc I/O chậm. Flame graph ngoài CPU trong phần slide cho thấy đúng hai toà tháp đó.</p>
+${lab('flamegraph', 'offcpu', 'vi', 'Cùng một chương trình, hai hồ sơ: chuyển từ trên CPU (price_order 96,7 %) sang ngoài CPU (futex_do_wait 87,8 %, do_nanosleep 12,2 %). Để ý: bức tranh trên CPU đúng mà vẫn chỉ sai chỗ cần sửa.')}
 
 <h3>Khoá nào? "Profiler của người nghèo"</h3>
 <p>Ngăn xếp nhân nói "một cái khoá"; nó không nói dòng nào trong code <em>của bạn</em> đã lấy khoá. Một kỹ thuật thô sơ mà nổi tiếng, <strong>poor man's profiler</strong> (profiler của người nghèo), trả lời được: dừng tiến trình bằng <code>gdb</code>, in ngăn xếp của mọi luồng, lặp vài lần rồi đếm. Luồng nào cũng bị chụp, dù đang chạy hay không — đây là lấy mẫu theo thời gian thật. <code>pmp.py</code> làm việc đó năm lần, cách nhau 200 ms:</p>
@@ -760,6 +766,7 @@ ${run('c154-prof', 'node cpuprofile.js')}
 <p>The surprise: <code>uniqueCustomers</code> has only 0.7% self time, and <code>report</code> has 83.2%. TurboFan <strong>inlined</strong> <code>uniqueCustomers</code> into <code>report</code>, so its samples are booked to its caller — and <code>includes</code> is a V8 built-in, booked to whoever called it. The per-line ticks that V8 also records settle it: <strong>91.3% of the ticks are on line 24</strong>, <code>const customers = uniqueCustomers(list);</code>. <code>node --prof</code> (V8's tick log, processed with <code>--prof-process</code>) tells the same story from below:</p>
 ${run('c154-prof', 'node --prof-process')}
 <p>94.1% of ticks are inside the <code>node</code> binary itself — the built-in <code>Array.prototype.includes</code>, as <code>perf</code> showed in lesson 15.2 — and 90.8% of those were called from <code>report</code>. Three tools, one answer. The fix is one line (<code>new Set(...)</code>):</p>
+${lab('flamegraph', 'inline', 'en', 'The inlining trap as a quiz: which JavaScript function should you fix? Builtins_ArrayIncludes is 93.3 % at the top, report 97.7 % on the stack, uniqueCustomers only 0.1 % — because TurboFan inlined it into report. Answer, then compare with the --cpu-prof line numbers.')}
 ${run('c154-prof', 'node tai.js http://127.0.0.1:8084/report')}
 <p>10.6 ms → <strong>0.9 ms</strong> at p50, 93 → 1 052 requests/s: <strong>11×</strong>.</p>
 ${lab('eventloop', 'block', 'en', 'Why 10 ms matters so much in Node: one slow callback holds the only JavaScript thread, and every other request — even /health — waits behind it.', { tour: 'eventloop-block' })}
@@ -770,6 +777,7 @@ ${run('c154-prof', 'C0=$(cpu $J); node tai.js http://127.0.0.1:8085/report')}
 ${run('c154-prof', 'asprof -d 4')}
 ${run('c154-prof', 'jcmd $J JFR.dump')}
 <p>Both agree: <code>ArrayList.indexOfRange</code> — the loop inside <code>contains</code> — is 81.1% (async-profiler) and 93.1% (JFR) of the CPU samples. But look at the baseline before fixing anything: p50 is <strong>51.7 ms</strong>, while the JVM used <strong>1 170 ms of CPU for 96 requests: 12.2 ms each</strong>. A CPU profiler can only explain those 12 ms. Some 40 ms per request are spent <em>not on any CPU</em> — the subject of lesson 15.3. The JDK's built-in HTTP server sends the response headers and the body in two separate writes; with Nagle's algorithm on, the second small write waits for the client's ACK, which the client delays by up to 40 ms (lesson 11.3, measured with <code>strace</code> there). That is a hypothesis; test it by changing one thing:</p>
+${lab('flamegraph', 'java', 'en', 'The Java service’s flame graph: search indexOfRange and read its share; switch flame ▲ / icicle ▼ to see the same stacks from the root down.')}
 ${run('c154-prof', 'C0=$(cpu $J); node tai.js http://127.0.0.1:8086/report')}
 <p>With <code>-Dsun.net.httpserver.nodelay=true</code> (TCP_NODELAY on every connection): p50 51.7 → <strong>10.1 ms</strong>, and now CPU per request (5 060 ms ÷ 493 = 10.3 ms) matches latency — nothing left off the CPU. Then the real fix:</p>
 ${run('c154-prof', 'node tai.js http://127.0.0.1:8087/report --closed 1 --duration 5')}
@@ -784,6 +792,7 @@ ${run('c154-prof', 'C0=$(cpu $P)')}
 ${run('c154-prof', 'py-spy dump')}
 ${run('c154-prof', 'py-spy record')}
 <p><code>py-spy dump</code> is a live snapshot of every thread: the one holding the GIL is on line 14 of <code>unique_customers</code>. <code>py-spy record</code> samples for 4 s: 81.9% in <code>unique_customers</code>, and 15.7% in <code>readinto</code> — the handler thread waiting to read the next request on its keep-alive connection. And the same gap as Java: <strong>77 ms latency, 35.5 ms of CPU per request</strong> (2 340 ms ÷ 66). Python's <code>http.server</code> also writes headers and body separately:</p>
+${lab('flamegraph', 'python', 'en', 'The Python service’s flame graph from py-spy: find unique_customers and compare its self time with what cProfile’s tottime said above.')}
 ${run('c154-prof', 'NODELAY=1 python3 orders.py 8089', 2)}
 ${run('c154-prof', 'NODELAY=1 FIX=1', 2)}
 <p>TCP_NODELAY: 77 → 35.3 ms (now equal to the CPU cost). The set: <strong>1.4 ms</strong>, 704 requests/s — 55× the original.</p>
@@ -859,6 +868,7 @@ ${run('c154-prof', 'node cpuprofile.js')}
 <p>Điều bất ngờ: <code>uniqueCustomers</code> chỉ có 0,7% thời gian self, còn <code>report</code> có 83,2%. TurboFan đã <strong>inline</strong> <code>uniqueCustomers</code> vào <code>report</code>, nên mẫu của nó bị ghi cho hàm gọi — và <code>includes</code> là hàm dựng sẵn của V8, cũng bị ghi cho ai gọi nó. Số nhịp theo từng dòng mà V8 cũng ghi lại chốt câu chuyện: <strong>91,3% số nhịp nằm ở dòng 24</strong>, <code>const customers = uniqueCustomers(list);</code>. <code>node --prof</code> (nhật ký nhịp của V8, xử lý bằng <code>--prof-process</code>) kể cùng câu chuyện từ phía dưới lên:</p>
 ${run('c154-prof', 'node --prof-process')}
 <p>94,1% số nhịp nằm trong chính tệp nhị phân <code>node</code> — hàm dựng sẵn <code>Array.prototype.includes</code>, như <code>perf</code> đã cho thấy ở bài 15.2 — và 90,8% trong số đó được gọi từ <code>report</code>. Ba công cụ, một câu trả lời. Bản sửa chỉ một dòng (<code>new Set(...)</code>):</p>
+${lab('flamegraph', 'inline', 'vi', 'Bẫy inline thành câu đố: nên sửa hàm JavaScript nào? Builtins_ArrayIncludes 93,3 % ở đỉnh, report 97,7 % trên ngăn xếp, uniqueCustomers chỉ 0,1 % — vì TurboFan đã inline nó vào report. Trả lời, rồi đối chiếu số dòng của --cpu-prof.')}
 ${run('c154-prof', 'node tai.js http://127.0.0.1:8084/report')}
 <p>10,6 ms → <strong>0,9 ms</strong> ở p50, 93 → 1 052 request/giây: <strong>11 lần</strong>.</p>
 ${lab('eventloop', 'block', 'vi', 'Vì sao 10 ms lại quan trọng tới vậy ở Node: một callback chậm chiếm luồng JavaScript duy nhất, và mọi request khác — kể cả /health — phải chờ sau nó.', { tour: 'eventloop-block' })}
@@ -869,6 +879,7 @@ ${run('c154-prof', 'C0=$(cpu $J); node tai.js http://127.0.0.1:8085/report')}
 ${run('c154-prof', 'asprof -d 4')}
 ${run('c154-prof', 'jcmd $J JFR.dump')}
 <p>Cả hai đồng ý: <code>ArrayList.indexOfRange</code> — vòng lặp bên trong <code>contains</code> — chiếm 81,1% (async-profiler) và 93,1% (JFR) số mẫu CPU. Nhưng hãy nhìn mốc ban đầu trước khi sửa gì: p50 là <strong>51,7 ms</strong>, trong khi JVM dùng <strong>1 170 ms CPU cho 96 request: 12,2 ms mỗi cái</strong>. Profiler CPU chỉ giải thích được 12 ms đó. Khoảng 40 ms mỗi request được tiêu <em>không trên CPU nào cả</em> — chủ đề của bài 15.3. HTTP server có sẵn của JDK gửi header và thân trả lời bằng hai lần ghi riêng; khi bật thuật toán Nagle, lần ghi nhỏ thứ hai phải chờ ACK của khách, mà khách thì hoãn ACK tới 40 ms (bài 11.3, ở đó đo bằng <code>strace</code>). Đó là một giả thuyết; kiểm nó bằng cách đổi đúng một thứ:</p>
+${lab('flamegraph', 'java', 'vi', 'Flame graph của dịch vụ Java: tìm indexOfRange và đọc tỉ lệ của nó; chuyển flame ▲ / icicle ▼ để xem cùng các ngăn xếp từ gốc trở xuống.')}
 ${run('c154-prof', 'C0=$(cpu $J); node tai.js http://127.0.0.1:8086/report')}
 <p>Với <code>-Dsun.net.httpserver.nodelay=true</code> (TCP_NODELAY trên mọi kết nối): p50 51,7 → <strong>10,1 ms</strong>, và giờ CPU mỗi request (5 060 ms ÷ 493 = 10,3 ms) khớp với độ trễ — không còn gì nằm ngoài CPU. Rồi tới bản sửa thật:</p>
 ${run('c154-prof', 'node tai.js http://127.0.0.1:8087/report --closed 1 --duration 5')}
@@ -883,6 +894,7 @@ ${run('c154-prof', 'C0=$(cpu $P)')}
 ${run('c154-prof', 'py-spy dump')}
 ${run('c154-prof', 'py-spy record')}
 <p><code>py-spy dump</code> là một ảnh chụp sống của mọi luồng: luồng đang giữ GIL nằm ở dòng 14 của <code>unique_customers</code>. <code>py-spy record</code> lấy mẫu trong 4 s: 81,9% ở <code>unique_customers</code>, và 15,7% ở <code>readinto</code> — luồng xử lý đang chờ đọc request tiếp theo trên kết nối keep-alive. Và cùng khoảng hở như Java: <strong>độ trễ 77 ms, CPU 35,5 ms mỗi request</strong> (2 340 ms ÷ 66). <code>http.server</code> của Python cũng ghi header và thân riêng nhau:</p>
+${lab('flamegraph', 'python', 'vi', 'Flame graph của dịch vụ Python từ py-spy: tìm unique_customers và so self time của nó với tottime mà cProfile báo ở trên.')}
 ${run('c154-prof', 'NODELAY=1 python3 orders.py 8089', 2)}
 ${run('c154-prof', 'NODELAY=1 FIX=1', 2)}
 <p>TCP_NODELAY: 77 → 35,3 ms (giờ bằng đúng chi phí CPU). Dùng set: <strong>1,4 ms</strong>, 704 request/giây — gấp 55 lần bản gốc.</p>
@@ -1204,8 +1216,10 @@ ${run('c156-bench', 'node tai.js http://127.0.0.1:8090/ --closed 1')}
 ${run('c156-bench', 'node tai.js http://127.0.0.1:8090/ --rate 100 --duration 8 --conns 1')}
 ${run('c156-bench', 'k6 run', 2)}
 <p><strong>Open-loop</strong> tools schedule requests at a fixed rate (here 100/s), whatever the server does, like independent users. k6's <code>constant-arrival-rate</code> executor starts extra virtual users when the server is slow so that requests still leave on time: p95 150 ms, <strong>p99 189 ms</strong>. <code>tai.js</code> in open mode agrees (p99 189–191 ms) — and its single-connection run shows the trap inside one tool: measured from when each request was <em>supposed</em> to leave, p99 = 189 ms; measured from when it <em>actually</em> got a socket, p99 = 6.4 ms. Same run, same requests; the second number silently forgets the queue in front of the socket.</p>
+${lab('coordinated-omission', 'stall', 'en', 'stall.js as a model: two lanes, closed loop vs open loop, on a server that freezes 200 ms every second. Watch the closed client stop sending during the freeze while open-loop requests pile up behind it, and read p99 ≈ 0.1 ms vs ≈ 190 ms “from intended”.', { tour: 'coordinated-omission-loops' })}
 ${run('c156-bench', 'wrk -t1 -c1')}
 <p><code>wrk</code> is a closed-loop tool, yet it reports p99 = 187 ms. Its source shows why: after the run, <code>stats_correct()</code> takes the average interval between requests (8.02 s ÷ 123 200 ≈ 65 µs) and, for every recorded latency longer than twice that, adds the samples that "should" have been taken. That rescues the p99 — but the correction assumes a user sending 15 000 requests per second, so the rest of its distribution (p90 = 78 ms) describes that user, not yours. <code>wrk2</code> and k6's arrival-rate executors avoid the problem by design: fix the rate, then measure from the intended start.</p>
+${lab('coordinated-omission', 'wrk', 'en', 'Turn the wrk-style fix on and off: the closed-loop histogram gets the samples it “should” have seen inserted at the expected interval, and its p99 jumps from ~0.1 ms to ≈ 187 ms.')}
 ${lab('threadpool', 'mm1', 'en', 'Queueing when arrivals do not wait for the server: push the arrival rate towards the service rate and watch the p99 climb long before the average looks bad.', { tour: 'threadpool-start' })}
 
 <h3>5. Choosing a load generator</h3>
@@ -1300,8 +1314,10 @@ ${run('c156-bench', 'node tai.js http://127.0.0.1:8090/ --closed 1')}
 ${run('c156-bench', 'node tai.js http://127.0.0.1:8090/ --rate 100 --duration 8 --conns 1')}
 ${run('c156-bench', 'k6 run', 2)}
 <p>Các công cụ <strong>vòng mở</strong> lên lịch request theo một tốc độ cố định (ở đây 100/giây), bất kể máy chủ làm gì, như những người dùng độc lập. Executor <code>constant-arrival-rate</code> của k6 mở thêm người dùng ảo khi máy chủ chậm để request vẫn rời đi đúng giờ: p95 150 ms, <strong>p99 189 ms</strong>. <code>tai.js</code> ở chế độ mở cũng đồng ý (p99 189–191 ms) — và lượt chạy một kết nối của nó cho thấy cái bẫy ngay trong một công cụ: tính từ lúc mỗi request <em>lẽ ra</em> được gửi, p99 = 189 ms; tính từ lúc nó <em>thật sự</em> nhận được socket, p99 = 6,4 ms. Cùng lượt chạy, cùng những request đó; con số thứ hai lặng lẽ quên đi hàng đợi phía trước socket.</p>
+${lab('coordinated-omission', 'stall', 'vi', 'stall.js dưới dạng mô hình: hai làn, vòng kín và vòng mở, trên một máy chủ đứng hình 200 ms mỗi giây. Xem khách vòng kín ngừng gửi trong lúc đứng hình còn yêu cầu vòng mở xếp hàng phía sau, rồi đọc p99 ≈ 0,1 ms so với ≈ 190 ms “từ lúc dự định”.', { tour: 'coordinated-omission-loops' })}
 ${run('c156-bench', 'wrk -t1 -c1')}
 <p><code>wrk</code> là công cụ vòng kín, vậy mà nó báo p99 = 187 ms. Mã nguồn của nó cho biết vì sao: sau lượt chạy, <code>stats_correct()</code> lấy khoảng cách trung bình giữa các request (8,02 s ÷ 123 200 ≈ 65 µs) và, với mỗi độ trễ đã ghi dài hơn hai lần khoảng đó, thêm vào những mẫu "lẽ ra" đã được lấy. Cách đó cứu được p99 — nhưng phép hiệu chỉnh giả định một người dùng gửi 15 000 request mỗi giây, nên phần còn lại của phân bố (p90 = 78 ms) mô tả người dùng đó, không phải người dùng của bạn. <code>wrk2</code> và các executor arrival-rate của k6 tránh vấn đề ngay từ thiết kế: cố định tốc độ, rồi đo từ thời điểm dự định.</p>
+${lab('coordinated-omission', 'wrk', 'vi', 'Bật và tắt cách sửa kiểu wrk: histogram vòng kín được chèn những mẫu lẽ ra phải thấy theo khoảng kỳ vọng, và p99 của nó nhảy từ ~0,1 ms lên ≈ 187 ms.')}
 ${lab('threadpool', 'mm1', 'vi', 'Xếp hàng khi request đến không chờ máy chủ: đẩy tốc độ đến về gần tốc độ phục vụ và xem p99 leo thang từ rất lâu trước khi trung bình trông có vẻ tệ.', { tour: 'threadpool-start' })}
 
 <h3>5. Chọn máy tạo tải</h3>

@@ -7,6 +7,12 @@
  * Máy chấm code chạy trong TRÌNH DUYỆT (frontend/src/components/code-lab/cham/**):
  *   dom · js · console · module · react  ⇒ iframe sandbox / Web Worker
  *   choice · order · table              ⇒ chấm thuần JS — máy chủ chấm LẠI được (không chạy code ai cả)
+ *   sql (29/10/2026)                    ⇒ PostgreSQL 18 (PGlite/WASM) trong Web Worker, chế độ giống SQL Server
+ *                                         (frontend/.../cham/chamSql.ts + sqlLoi.ts). KHÔNG chấm lại ở máy chủ:
+ *                                         chạy PGlite trên VPS = chạy SQL người học cạnh Postgres thật (WASM chặn
+ *                                         được tệp/mạng nhưng một truy vấn chạy mãi vẫn chiếm CPU, ~100 MB RAM mỗi
+ *                                         phiên trên máy 6 GB) ⇒ như loại code khác: trình duyệt báo, máy chủ kiểm
+ *                                         hình dạng ⇒ tiến độ cá nhân. Chấm có chứng thực ⇒ máy chấm T-SQL ở máy nhà.
  *   python                              ⇒ Pyodide (đợt sau)
  *   java · tsql · bash · sql-pg         ⇒ máy chấm máy chủ ở máy Linux nhà (đợt sau) — "sắp có"
  *   text-ai                             ⇒ AI chấm theo rubric (đợt sau)
@@ -30,13 +36,14 @@ import { createHash } from 'node:crypto';
 export const GRADE_KINDS = [
   'dom', 'js', 'console', 'module', 'react',
   'choice', 'order', 'table',
+  'sql',
   'python', 'java', 'tsql', 'bash', 'sql-pg',
   'text-ai', 'manual',
 ] as const;
 export type GradeKind = (typeof GRADE_KINDS)[number];
 
 /** Chấm được ngay trong trình duyệt hôm nay. */
-export const BROWSER_GRADE_KINDS: ReadonlySet<string> = new Set(['dom', 'js', 'console', 'module', 'react', 'choice', 'order', 'table']);
+export const BROWSER_GRADE_KINDS: ReadonlySet<string> = new Set(['dom', 'js', 'console', 'module', 'react', 'choice', 'order', 'table', 'sql']);
 /** Chấm thuần dữ liệu — máy chủ chấm lại được từ đáp án người học gửi. */
 export const STATIC_GRADE_KINDS: ReadonlySet<string> = new Set(['choice', 'order', 'table']);
 

@@ -76,6 +76,7 @@ duLieuMau, chucNang: [{ ten, diem, moTa, yeuCau[], hook[], khoa?, viDu? }], idBa
 `choice` | thuần JS (máy chủ chấm lại) | `cauHoi: [{ ma, de, luaChon:[{ma,noiDung}], dapAn:['b'] \| [['a','c']], nhieu?, giaiThich?, nhom? }]`
 `order` | thuần JS | `cauHoi: [{ ma, de, muc:[{ma,noiDung}] (thứ tự hiện), dapAn:['c','a','b'], giaiThich? }]`
 `table` | thuần JS | `bang: [{ ma, de, cot:[{ma,ten,luaChon?,phanBietHoa?}], hang:[{ma,o:{cot:'giá trị cho sẵn'}}], dapAn:{'<hàng>.<cột>': 'đáp án' \| ['các','đáp án']}, giaiThich?, nhom? }]` — mỗi ô đáp án là một kiểm (SWT301: phân vùng, giá trị biên, bảng quyết định…)
+`sql` (29/10/2026) | Worker (PGlite) | SQL chạy thật trên PostgreSQL 18 (WASM) ở **chế độ SQL Server** — mục 3b
 `java` `tsql` `bash` `sql-pg` `python` `text-ai` | — | **chưa chấm** (máy chủ nhà / AI — đợt sau); giao diện ghi "sắp có", người học tự đánh dấu
 
 Kiểm chung: `{ moTa, kiem, an?: true (kiểm ẩn — chỉ khi Nộp), nhom?: 'f1', truoc?: [bước], choToiDa?: ms }`.
@@ -106,6 +107,51 @@ Khung chấm: localStorage/sessionStorage GIẢ (bắt đầu rỗng, hoặc `kh
 - Demo (`demo: { tepChinh, url?, jsonServer? }` — mặc định lấy `tests.jsonServer/url`): json-server giả + thanh địa chỉ (app có router).
 - `choice`/`order`/`table`: bộ kiểm trình duyệt tự dựng câu trả lời đúng từ `dapAn` (không cần `dapAnMau`); vẫn cần `khoiDau`/`loiGiai`
   (vd `answers.md`) vì bộ xuất bắt buộc.
+
+## 3b. Máy chấm SQL (`loai: 'sql'`, 29/10/2026)
+
+Mã: `frontend/src/components/code-lab/cham/` — `chamSql.ts` (điều phối) · `sqlRunner.ts` (bộ chạy PGlite dùng chung
+worker web / khung hộp cát app / Node) · `sqlSoSanh.ts` (so bảng) · `sqlLoi.ts` (tách câu, phương ngữ, gợi ý lỗi).
+Test: `npx tsx --test frontend/src/components/code-lab/cham/sql.test.ts`. Mẫu đề: `dbi202-practice/nguon/*.mjs`.
+
+```js
+tests: { loai: 'sql', csdl: '<DDL + INSERT kiểu SQL Server — như DBscript.sql của PE>', tepChinh: 'query.sql', timeoutMs?: 8000, kiem: [
+  { kiem: 'ket-qua',   moTa, thuTu?, tenCot?, boQuaThuTuCot?, saiSo?, nullBang?: 'rong', tep?, csdl?, themCsdl?, an?, nhom? },
+  { kiem: 'sau-lenh',  moTa, kiemTra: 'SELECT …' /* chạy SAU mã người học: DML, DDL, VIEW */, …như trên },
+  { kiem: 'bi-chan',   moTa, thu: 'INSERT …', maLoi?: '23505' },   // câu thử PHẢI bị CSDL từ chối (23505 trùng · 23503 FK · 23502 NOT NULL · 23514 CHECK · 44000 CHECK OPTION)
+  { kiem: 'chay-duoc', moTa, thu: 'INSERT …' },                    // câu hợp lệ phải chạy được
+  { kiem: 'ma-nguon',  moTa, khop, phuDinh?, tep },                // regex (chú thích -- đã bỏ)
+]}
+```
+
+- **`mongDoi` KHÔNG viết tay**: `codelab-xuat-de.mjs` chạy LỜI GIẢI qua đúng bộ chạy này trong Node (PGlite ghim bản, tự
+  cài vào `~/.cache/cuongthai-pglite/<bản>` lần đầu — `scripts/codelab-sql-node.mjs`) rồi ghi bảng kết quả vào JSON.
+  Lời giải có cú pháp riêng một hệ ⇒ bộ xuất từ chối. `saiMau: ['SQL sai…']` (hoặc `{ 'Q3.sql': '…' }`) = các câu SAI
+  mẫu (đúng lỗi trong `loiHayGap`) — bộ xuất chạy thử, mỗi câu phải trượt ≥ 1 kiểm (không ghi vào JSON).
+- **Mỗi kiểm cô lập**: `BEGIN` → dữ liệu mẫu → mã người học → kiểm → `ROLLBACK`; catalog lệch (COMMIT lén…) ⇒ dựng CSDL mới.
+  Kiểm ẩn nên **đổi dữ liệu** (`themCsdl`) để bắt lời giải chép cứng.
+- **Giới hạn**: ≤ 20 000 ký tự, ≤ 40 câu, không BEGIN/COMMIT/ROLLBACK, ≤ 2 000 dòng/bảng, mỗi kiểm ≤ `timeoutMs` (quá ⇒ huỷ worker).
+- **Phương ngữ — phương án (a) "tập con ANSI chung", không dịch mã người học** (đầu `sqlLoi.ts`):
+  - Đề + lời giải viết bằng SQL chạy GIỐNG nhau trên SQL Server 2019+ và PostgreSQL. Cú pháp chỉ T-SQL (TOP, ISNULL,
+    GETDATE, YEAR(), IDENTITY, NVARCHAR, `[tên]`, biến `@`, procedure…) ⇒ báo "chấm bằng máy chủ SQL Server — sắp có";
+    chỉ PostgreSQL (LIMIT, ILIKE, `::`, `||`, TRUE/FALSE, NATURAL JOIN, ORDER BY trong truy vấn con/view, GROUP BY bí danh…)
+    ⇒ báo "SQL Server sẽ từ chối", không tính đạt.
+  - Cùng cú pháp, khác kết quả ⇒ GIẢ LẬP SQL Server: cột **NVARCHAR** của dữ liệu mẫu nạp thành CITEXT (so chuỗi, LIKE,
+    ORDER BY không phân biệt hoa thường; có toán tử riêng cho hằng `N'…'`), AVG trên INT/BIGINT cắt phần lẻ, PRIMARY KEY
+    nạp thành UNIQUE NOT NULL (PostgreSQL thôi nới GROUP BY theo khoá chính).
+  - Soạn dữ liệu mẫu: chữ người đọc ⇒ NVARCHAR; mã/khoá (người học sẽ tạo khoá ngoại tới) ⇒ VARCHAR/CHAR (giữ nguyên,
+    phân biệt hoa thường — citext ≠ char thì PostgreSQL từ chối khoá ngoại).
+  - Còn lệch, KHÔNG giả lập: NULL khi ORDER BY (SQL Server NULL đứng đầu, PostgreSQL đứng cuối) ⇒ kiểm `thuTu: true` không
+    để NULL trong khoá sắp xếp; thứ tự chữ có dấu tiếng Việt ⇒ đừng kiểm thứ tự theo tên có dấu (sắp theo số/mã).
+    UNIQUE cho NHIỀU NULL (PostgreSQL) vs MỘT NULL (SQL Server) ⇒ dữ liệu kiểm tránh. information_schema (`data_type`) là
+    tên kiểu của PostgreSQL — chỉ dùng trong `kiemTra`, không bắt người học viết.
+- **Máy chủ không chấm lại** (như loại code khác): trình duyệt báo kết quả, máy chủ kiểm hình dạng ⇒ tiến độ cá nhân.
+  Không chạy PGlite trên VPS — mã người học không bao giờ chạy cạnh Postgres thật.
+- **CSP**: không phải sửa. Web: `script-src` đã có `cdn.jsdelivr.net` + `'unsafe-eval'` (biên dịch WASM), `connect-src`
+  jsdelivr (tải .wasm/.data), `worker-src blob:`. App desktop: worker blob bị CSP renderer chặn ⇒ chạy trong khung hộp cát
+  `hop-cat-khung.html` (CSP riêng đã có jsdelivr + `'unsafe-eval'`).
+- **Đề lớn SQL** (Lab/PE): `deLonSql()` trong `dbi202-practice/nguon/_chung.mjs` — mỗi câu một tệp `Q1.sql … Qn.sql` như quy
+  định PE, kiểm câu i tự gắn `tep: 'Qi.sql'` + `nhom: 'fi'`; `moHinh` nhận MẢNG bảng.
 
 ## 4. Lệnh
 

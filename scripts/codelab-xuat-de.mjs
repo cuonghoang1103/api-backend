@@ -133,6 +133,8 @@ function xuat(de, m) {
     ...(de.thuatNgu ? { glossaryJson: de.thuatNgu } : {}),
     ...(de.videoRef ? { videoRef: de.videoRef } : {}),
     ...(demoHtml ? { demoHtml } : {}),
+    // SQL: câu SAI mẫu (lỗi hay gặp) — bộ xuất chạy thử, phải trượt ≥ 1 kiểm; KHÔNG ghi vào JSON
+    ...(de.saiMau ? { __saiMau: de.saiMau } : {}),
   };
 }
 
@@ -172,9 +174,38 @@ for (const f of tepNguon) {
     lesson: { course: m.khoa, slug: m.baiHoc || m.slug },
     exercises: m.de.map((d) => xuat(d, m)),
   };
+  // SQL (29/10/2026): `mongDoi` của mọi kiểm dựng bằng cách chạy LỜI GIẢI qua đúng máy chấm SQL (PGlite trong
+  // Node — scripts/codelab-sql-node.mjs) + ví dụ trong đề lấy từ bảng mong đợi của kiểm mẫu đầu tiên.
+  const loiSql = new Map();
+  for (const ex of payload.exercises) {
+    if (ex.testsJson?.loai !== 'sql') continue;
+    const sqlNode = await import('./codelab-sql-node.mjs');
+    const saiMau = ex.__saiMau;
+    delete ex.__saiMau;
+    loiSql.set(ex, await sqlNode.dienMongDoiSql(ex, saiMau));
+    if (!ex.examplesJson.length) {
+      const k = ex.testsJson.kiem.find((x) => !x.an && x.mongDoi?.cot);
+      if (k) {
+        const { soSanh } = await sqlNode.napMayCham();
+        ex.examplesJson.push({
+          input: gop(ex.testsJson.viDuVao ?? { en: 'The sample database of this task (schema above).', vi: 'CSDL mẫu của bài (lược đồ ở trên).' }),
+          output: soSanh.bangChu(k.mongDoi, 8),
+          explanation: gop({ en: `Expected result of check "${k.moTa}"${k.thuTu ? ' (row order matters)' : ' (row order does not matter)'}.`, vi: `Kết quả mong đợi của kiểm "${k.moTa}"${k.thuTu ? ' (đúng thứ tự dòng)' : ' (thứ tự dòng không quan trọng)'}.` }),
+        });
+      }
+      const t = !k && ex.testsJson.kiem.find((x) => !x.an && (x.kiem === 'chay-duoc' || x.kiem === 'bi-chan'));
+      if (t) {
+        ex.examplesJson.push({
+          input: gop({ en: `After your statement(s), the grader runs: ${t.thu}`, vi: `Sau (các) lệnh của bạn, máy chấm chạy: ${t.thu}` }),
+          output: gop(t.kiem === 'chay-duoc' ? { en: 'Accepted (the statement succeeds).', vi: 'Chạy được (câu lệnh thành công).' } : { en: 'Rejected by a constraint (error).', vi: 'Bị ràng buộc chặn (báo lỗi).' }),
+          explanation: gop({ en: `Check "${t.moTa}".`, vi: `Kiểm "${t.moTa}".` }),
+        });
+      }
+    }
+  }
   for (const ex of payload.exercises) {
     soDe++;
-    const l = kiemTruong(ex);
+    const l = [...kiemTruong(ex), ...(loiSql.get(ex) ?? [])];
     if (l.length) { soLoi += l.length; console.log(`  ✗ [${m.slug}] "${ex.title}"`); for (const x of l) console.log(`      - ${x}`); }
     else console.log(`  ✓ [${m.slug}] ${ex.kind} ${ex.difficulty} "${ex.title}" — ${ex.testsJson.kiem?.length ?? '?'} kiểm${ex.demoHtml ? ` · demo ${(ex.demoHtml.length / 1024).toFixed(0)} KB` : ''}`);
   }

@@ -11,6 +11,7 @@
 import { useEffect, useState } from 'react';
 import { CheckCircle2, XCircle, Loader2, Lock, MinusCircle, ChevronRight, Trophy, Timer, FlaskConical, ListChecks } from 'lucide-react';
 import type { Diem, Kiem, KetQuaKiem, TestsJson } from './cham/kieu';
+import { BangSqlNho, BangSqlSo } from './BangSqlSo';
 
 export type CheDoCham = 'chay' | 'nop';
 
@@ -35,6 +36,8 @@ function moTaLoiGoi(k: Kiem): string | null {
   if (!goi) return null;
   return (typeof k.chuanBi === 'string' && k.chuanBi.trim() ? `${k.chuanBi.trim()}\n` : '') + goi;
 }
+
+const laBangSql = (v: unknown): v is { cot: string[]; hang: unknown[][] } => !!v && typeof v === 'object' && Array.isArray((v as { cot?: unknown }).cot) && Array.isArray((v as { hang?: unknown }).hang);
 
 const ngan = (v: unknown) => { const s = JSON.stringify(v); return s && s.length > 200 ? `${s.slice(0, 197)}...` : (s ?? String(v)); };
 
@@ -83,6 +86,8 @@ export function TestPanel({ tj, st, onDong, videoHref, chiKetQua }: { tj: TestsJ
                       {k.mongDoi !== undefined && <div><dt>Mong đợi</dt><dd><code>{ngan(k.mongDoi)}</code></dd></div>}
                     </dl>
                   )}
+                  {/* SQL (29/10/2026): bảng mong đợi của kiểm mẫu */}
+                  {tj?.loai === 'sql' && laBangSql(k.mongDoi) && <BangSqlNho b={k.mongDoi} />}
                 </li>
               );
             })}
@@ -166,6 +171,7 @@ export function TestPanel({ tj, st, onDong, videoHref, chiKetQua }: { tj: TestsJ
                         {r.thay && <div><dt>{r.dat ? 'Nhận' : 'Nhận được'}</dt><dd><code>{r.thay}</code></dd></div>}
                       </dl>
                     )}
+                    {!an && mo1 && r.bangSql && <BangSqlSo d={r.bangSql} />}
                   </li>
                 );
               })}

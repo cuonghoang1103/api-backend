@@ -981,3 +981,23 @@ html.theme-dark .cl-toc-cokind > [data-kind="lab"] { background: #e2e8f0; color:
 /* `hidden sm:inline-flex` của Tailwind thua luật display ở trên (cùng độ đặc hiệu, tệp này nạp sau) ⇒ ghi rõ */
 .cl-toc-cham.hidden { display: none; }
 @media (min-width: 640px) { .cl-toc-cham.hidden { display: inline-flex; } }
+
+/* ── Máy chấm SQL (29/10/2026): bảng mong đợi / bảng của bạn + ghi chú phương ngữ ── */
+.cl-sql-so-sanh { margin: 4px 0 8px 34px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.cl-sql-so-sanh.is-mot { grid-template-columns: minmax(0, 1fr); }
+@media (max-width: 720px) { .cl-sql-so-sanh { grid-template-columns: minmax(0, 1fr); margin-left: 0; } }
+.cl-sql-fig { margin: 0; min-width: 0; }
+.cl-sql-fig figcaption { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .03em; margin-bottom: 3px; }
+.cl-sql-fig figcaption span { font-weight: 500; text-transform: none; letter-spacing: 0; }
+.cl-sql-cuon { overflow: auto; max-height: 220px; border: 1px solid var(--border-color); border-radius: 6px; }
+.cl-sql-bang { border-collapse: collapse; width: max-content; min-width: 100%; font-family: var(--font-jetbrains-mono), ui-monospace, monospace; font-size: 11.5px; }
+.cl-sql-bang th { position: sticky; top: 0; background: var(--bg-surface); color: var(--text-primary); text-align: left; font-weight: 700; padding: 3px 8px; border-bottom: 1px solid var(--border-color); white-space: nowrap; }
+.cl-sql-bang td { padding: 2px 8px; border-bottom: 1px solid color-mix(in srgb, var(--border-color) 60%, transparent); color: var(--text-primary); white-space: nowrap; max-width: 260px; overflow: hidden; text-overflow: ellipsis; }
+.cl-sql-bang td[data-null] { color: var(--text-muted); font-style: italic; }
+.cl-sql-bang .cl-sql-so { color: var(--text-muted); text-align: right; width: 1%; }
+.cl-sql-bang tr[data-to] td { background: color-mix(in srgb, #ef4444 16%, transparent); }
+.cl-sql-rong { color: var(--text-muted); font-style: italic; text-align: center; }
+.cl-note-sql { font-size: 12px; line-height: 1.5; color: var(--text-secondary, var(--text-muted)); background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 8px 10px; margin: 8px 0; }
+.cl-note-sql b { color: var(--text-primary); }
+.cl-note-sql summary { cursor: pointer; }
+.cl-note-sql p { margin: 0; }

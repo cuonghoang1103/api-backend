@@ -55,11 +55,14 @@ export function dungBanIn(b, lang = 'en') {
   out.push(`<h2>1. ${N.tongQuan}</h2>`, L(b.moTa, lang));
   if (b.chucNangChinh) out.push(`<h3>${N.chinh}</h3>`, ul(LS(b.chucNangChinh, lang)));
   if (b.yeuCauChung) out.push(`<h3>${N.chung}</h3>`, ul(LS(b.yeuCauChung, lang)));
-  out.push(`<h2>2. ${N.cay}</h2>`, pre(b.cayThuMuc));
+  out.push(`<h2>2. ${b.tieuDeCay ? esc(L(b.tieuDeCay, lang)) : N.cay}</h2>`, pre(b.cayThuMuc));
   if (b.wireframe) out.push(`<h2>3. ${N.wire}</h2>`, pre(b.wireframe, 'bi-wire'));
   out.push(`<h2>${b.wireframe ? 4 : 3}. ${N.mohinh}</h2>`);
-  out.push(`<p><b>${esc(b.moHinh.ten)}</b></p>`);
-  out.push(`<table><thead><tr><th>${N.truong}</th><th>${N.kieu}</th><th>${N.ghiChu}</th></tr></thead><tbody>${b.moHinh.truong.map(([t, k, g]) => `<tr><td><code>${esc(t)}</code></td><td>${esc(k)}</td><td>${L(g, lang)}</td></tr>`).join('')}</tbody></table>`);
+  // moHinh: một mô hình { ten, truong } — hoặc (SQL, 29/10/2026) MẢNG mô hình = các bảng của CSDL đề
+  for (const mh of Array.isArray(b.moHinh) ? b.moHinh : [b.moHinh]) {
+    out.push(`<p><b>${esc(mh.ten)}</b>${mh.moTa ? ` — ${L(mh.moTa, lang)}` : ''}</p>`);
+    out.push(`<table><thead><tr><th>${N.truong}</th><th>${N.kieu}</th><th>${N.ghiChu}</th></tr></thead><tbody>${mh.truong.map(([t, k, g]) => `<tr><td><code>${esc(t)}</code></td><td>${esc(k)}</td><td>${L(g, lang)}</td></tr>`).join('')}</tbody></table>`);
+  }
   if (b.duLieuMau) out.push(`<h3>${N.mau}</h3>`, pre(b.duLieuMau));
   let so = b.wireframe ? 5 : 4;
   out.push(`<h2>${so++}. ${N.cn}</h2>`);

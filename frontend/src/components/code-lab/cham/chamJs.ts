@@ -294,6 +294,7 @@ function ngan(v: unknown): string {
 export function boChuThich(s: string, ten = ''): string {
   let r = s.replace(/<!--[\s\S]*?-->/g, '').replace(/\/\*[\s\S]*?\*\//g, '');
   if (/\.(m?js|jsx|tsx?)$/.test(ten)) r = r.replace(/(^|[ \t;{}(),])\/\/[^\n]*/gm, '$1');
+  if (/\.sql$/i.test(ten)) r = r.replace(/--[^\n]*/g, ''); // SQL (29/10/2026): chú thích -- …
   return r;
 }
 

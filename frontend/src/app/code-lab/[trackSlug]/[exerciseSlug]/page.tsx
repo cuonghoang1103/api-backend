@@ -663,6 +663,14 @@ export default function ExerciseDetailPage() {
             <p className="cl-note-server">⚙ Bài {TEN_LOAI[loai ?? ''] ?? loai}: <b>máy chấm máy chủ — sắp có</b>. Tạm thời chạy trên máy của bạn rồi tự đánh dấu.</p>
           )}
 
+          {loai === 'sql' && (
+            <details className="cl-note-sql">
+              <summary>🐘 <b>Chạy trên PostgreSQL 18 (WASM) trong trình duyệt</b> · chế độ giống SQL Server — viết SQL chuẩn chạy được cả hai hệ</summary>
+              <p className="mt-1">So chuỗi không phân biệt hoa thường, AVG của cột số nguyên cắt phần lẻ, GROUP BY chặt — như SQL Server. Cú pháp riêng T-SQL (TOP, ISNULL, GETDATE, YEAR()…) hay riêng PostgreSQL (LIMIT, ILIKE, ::, ||) bị <b>báo, không chấm</b>. T-SQL (procedure, trigger) chấm bằng máy chủ SQL Server — <b>sắp có</b>. Lần chạy đầu tải ~5 MB.</p>
+              <p className="mt-1 opacity-80">Runs on PostgreSQL 18 (WASM) in SQL Server mode: case-insensitive strings, integer AVG, strict GROUP BY. Write portable SQL — T-SQL-only and PostgreSQL-only syntax is flagged, not graded.</p>
+            </details>
+          )}
+
           {daDat && nav.next && (
             <Link href={`/code-lab/${params.trackSlug}/${nav.next.slug}${qs}`} className="cl-accepted-next">
               <CheckCircle2 size={18} /> <span className="min-w-0 flex-1 truncate">Accepted! Bài tiếp theo: <b>{nav.next.title}</b></span> <ChevronRight size={16} />

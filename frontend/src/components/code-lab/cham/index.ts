@@ -9,6 +9,7 @@
  */
 import { chamJs } from './chamJs';
 import { chamKhung } from './chamKhung';
+import { chamSql } from './chamSql';
 import { chamTinh, type TraLoiTinh } from './chamTinh';
 import { tinhDiem } from './diem';
 import { LOAI_TRINH_DUYET, type Diem, type KetQuaKiem, type TepMap, type TestsJson } from './kieu';
@@ -50,6 +51,9 @@ export async function chamBai({ exerciseId, tj, files, traLoi, onTung }: ChamVao
     case 'dom':
     case 'react':
       ketQua = await chamKhung(tj, kiem, files, onTung);
+      break;
+    case 'sql':
+      ketQua = await chamSql(tj, kiem, files, onTung);
       break;
     case 'choice':
     case 'order':

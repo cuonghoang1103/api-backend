@@ -620,7 +620,7 @@ CODELAB_SEED_OUT=$($DC exec -T backend sh -c '
     o=$(node scripts/codelab-create-track.mjs --file "$d/_track.json" --apply 2>&1) || rc=1
     printf "%s\n" "$o" | tail -3
     o=$(node scripts/codelab-seed-authored.mjs --dir "$d" --apply --update 2>&1) || rc=1
-    printf "%s\n" "$o" | tail -4
+    printf "%s\n" "$o" | grep -E "✗|^      #|done —" | tail -40
   done
   echo "__SEED_RC__=$rc"
 ') || true

@@ -84,12 +84,16 @@ function validate(ex, i) {
   if (!Array.isArray(ex.examplesJson) || ex.examplesJson.length < 1) errs.push('needs >= 1 example');
   if (String(ex.problemHtml || '').length < 300) errs.push('problemHtml too thin (<300 chars)');
   const sol = (ex.solutionCodeJson || []).map((b) => b.code || '').join('');
-  if (sol.length < 200 && !allDeclarative(ex.solutionCodeJson, ex.language)) errs.push('solution code too thin (<200 chars)');
+  // Đề CÓ máy chấm (testsJson) ⇒ lời giải đã được chứng minh đạt 100% bằng bộ kiểm (codelab-kiem-cham-trinh-duyet)
+  // — ngắn là bình thường (khoá đáp án choice/table, vài giá trị đầu vào cho bài độ phủ). Chốt "mỏng" chỉ còn cho đề cũ không máy chấm.
+  if (sol.length < 200 && !ex.testsJson && !allDeclarative(ex.solutionCodeJson, ex.language)) errs.push('solution code too thin (<200 chars)');
   // Only flag genuine "unfinished work" markers. Two traps to avoid: a bare "..." is legal
   // JS/TS (spread/rest) and legal Python (Ellipsis), and the word "todo" is ordinary DATA in
   // a to-do app — so require an uppercase marker sitting inside a COMMENT.
   if (/(\/\/|#|\/\*|\*)\s*(TODO|FIXME)\b/.test(sol)
-      || /…|(\/\/|#)\s*\.\.\.\s*$|rest omitted|omitted for brevity|implementation left/im.test(sol)) {
+      // 28/10/2026: "…" trần là chữ bình thường (chú thích "90.476…", đáp án trắc nghiệm, "B8…E8") — chỉ bắt
+      // dòng CHỈ có "…"/"..." hoặc chú thích chỉ có "…"/"..." (dấu hiệu lược code thật).
+      || /^\s*…\s*$|(\/\/|#)\s*(\.\.\.|…)\s*$|rest omitted|omitted for brevity|implementation left/im.test(sol)) {
     errs.push('solution still contains an unfinished-work marker');
   }
   return errs.length ? `#${i + 1} "${ex.title || '?'}": ${errs.join(', ')}` : null;

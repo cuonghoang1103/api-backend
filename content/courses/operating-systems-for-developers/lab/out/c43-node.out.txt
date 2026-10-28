@@ -1,0 +1,51 @@
+$ node -v
+v22.23.4
+$ node primes.js 0 20000000
+main x0  N=20000000 primes=1270607  3054 ms
+$ ./sweep.sh "node primes.js {k} 20000000" 1 2 4 8 10
+cores        ms  speedup    eff
+    1      3073    1.00x   100%
+    2      1611    1.91x    95%
+    4       831    3.70x    92%
+    8       453    6.78x    85%
+   10       437    7.03x    70%
+$ node fetch.js seq 100
+seq       calls=100 ok=100 server saw peak=1 in flight  10762 ms
+$ node fetch.js all 100
+all       calls=100 ok=100 server saw peak=100 in flight  188 ms
+$ node fetch.js limit 100 10
+limit x10 calls=100 ok=100 server saw peak=10 in flight  1122 ms
+$ node fetch.js all 1000
+all       calls=1000 ok=1000 server saw peak=1000 in flight  393 ms
+$ cat /tmp/c.log
+primary 348: 1 worker(s) listening on :8080
+$ node hit.js http://localhost:8080/ 400 32
+400 req, 32 concurrent: 49 req/s  p50 425 ms  p99 7774 ms  max 8098 ms (sent at +33 ms)  distinct replies: 1  8152 ms
+$ cat /tmp/c.log
+single process 388 listening on :8080 (no cluster)
+$ node hit.js http://localhost:8080/ 400 32 > /tmp/h.txt & sleep 2; ss -ltn 'sport = :8080'; wait $!; cat /tmp/h.txt
+State  Recv-Q Send-Q Local Address:Port Peer Address:Port
+LISTEN 0      511                *:8080            *:*   
+400 req, 32 concurrent: 49 req/s  p50 608 ms  p99 1246 ms  max 1874 ms (sent at +71 ms)  distinct replies: 1  8179 ms
+$ cat /tmp/c.log
+primary 424: 4 worker(s) listening on :8080
+$ ps -o pid,ppid,rss,nlwp,args --ppid $(pgrep -f 'cluster.js 4' | head -1)
+    PID    PPID   RSS NLWP COMMAND
+    434     424 48280    7 /usr/local/bin/node /lab/ch04/cluster.js 4
+    435     424 48176    7 /usr/local/bin/node /lab/ch04/cluster.js 4
+    436     424 48736    7 /usr/local/bin/node /lab/ch04/cluster.js 4
+    437     424 49592    7 /usr/local/bin/node /lab/ch04/cluster.js 4
+$ node hit.js http://localhost:8080/ 400 32
+400 req, 32 concurrent: 191 req/s  p50 149 ms  p99 354 ms  max 513 ms (sent at +63 ms)  distinct replies: 4  2095 ms
+$ node hit.js http://localhost:8080/ 400 32
+400 req, 32 concurrent: 364 req/s  p50 76 ms  p99 200 ms  max 237 ms (sent at +73 ms)  distinct replies: 8  1100 ms
+$ cat /tmp/p.log
+inline listening on :8080
+$ node hit.js http://localhost:8080/hash 80 20 > /dev/null & sleep 0.3; curl -s -o /dev/null -w 'GET /fast while /hash runs: %{time_total} s\n' localhost:8080/fast; wait $!
+GET /fast while /hash runs: 3.785032 s
+$ cat /tmp/p.log
+pool x4 listening on :8080
+$ node hit.js http://localhost:8080/hash 80 20 > /dev/null & sleep 0.3; curl -s -o /dev/null -w 'GET /fast while /hash runs: %{time_total} s\n' localhost:8080/fast; wait $!
+GET /fast while /hash runs: 0.000486 s
+$ node hit.js http://localhost:8080/hash 80 20
+80 req, 20 concurrent: 77 req/s  p50 251 ms  p99 259 ms  max 259 ms (sent at +28 ms)  distinct replies: 1  1039 ms

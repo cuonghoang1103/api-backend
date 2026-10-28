@@ -1,0 +1,8 @@
+$ python3 gil.py
+3.14.4 | Py_GIL_DISABLED = 0 | GIL enabled now: True
+$ ls /usr/bin/python3*
+/usr/bin/python3
+/usr/bin/python3.14
+$ apt-cache search --names-only '^python3\.1[3-9]' | grep -ciE 'nogil|freethread|python3\.1[3-9]t'
+0
+$ apt-cache policy python3.14-nogil python3.14t 2>&1 | head -3

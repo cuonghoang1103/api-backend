@@ -1,0 +1,41 @@
+$ java -version 2>&1 | head -1
+openjdk version "21.0.12.1" 2026-08-18 LTS
+$ taskset -c 0 java Primes.java threads 1 20000000
+threads x1  N=20000000 primes=1270607 cold   2146 ms
+threads x1  N=20000000 primes=1270607 warm   2155 ms
+$ for m in threads pool cf stream virtual; do ./best3.sh taskset -c 0-3 java Primes.java $m 4 20000000; done
+threads x4  N=20000000 primes=1270607 warm    726 ms
+pool    x4  N=20000000 primes=1270607 warm    558 ms
+cf      x4  N=20000000 primes=1270607 warm    569 ms
+stream  x4  N=20000000 primes=1270607 warm    587 ms
+virtual x4  N=20000000 primes=1270607 warm    551 ms
+$ ./sweep.sh "java Primes.java pool {k} 20000000" 1 2 4 8 10
+cores        ms  speedup    eff
+    1      2137    1.00x   100%
+    2      1091    1.96x    98%
+    4       559    3.82x    96%
+    8       305    7.01x    88%
+   10       309    6.92x    69%
+$ ./sweep.sh "java Primes.java stream {k} 20000000" 1 2 4 8 10
+cores        ms  speedup    eff
+    1      2074    1.00x   100%
+    2      1151    1.80x    90%
+    4       584    3.55x    89%
+    8       312    6.65x    83%
+   10       295    7.03x    70%
+$ cat /tmp/slow.log
+slow API on :9000 — every request waits ?ms= (default 100 ms)
+$ java Fetch.java seq 100
+seq         calls=100 ok=100  peak platform threads=10   11220 ms
+$ java Fetch.java pool 100 10
+pool    x10 calls=100 ok=100  peak platform threads=31    1162 ms
+$ java Fetch.java pool 100 100
+pool    x100 calls=100 ok=100  peak platform threads=156     186 ms
+$ java Fetch.java virtual 100
+virtual     calls=100 ok=100  peak platform threads=46     172 ms
+$ java Fetch.java async 100
+async       calls=100 ok=100  peak platform threads=118     181 ms
+$ taskset -c 0 java Fetch.java virtual 100
+virtual     calls=100 ok=100  peak platform threads=35     213 ms
+$ java giai/Limited.java 300 20
+calls=300 ok=300 limit=20 server {"served":300,"peak":20}    1696 ms

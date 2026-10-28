@@ -1,0 +1,35 @@
+$ gcc -O2 -Wall -pthread fs.c -o fs
+$ getconf LEVEL1_DCACHE_LINESIZE
+64
+$ for g in 8 64 128 256; do ./best3.sh taskset -c 0 ./fs 1 $g; done
+threads=1 8         sum=100000000     172 ms
+threads=1 64        sum=100000000     173 ms
+threads=1 128       sum=100000000     173 ms
+threads=1 256       sum=100000000     173 ms
+$ for g in 8 64 128 256; do ./best3.sh taskset -c 0-3 ./fs 4 $g; done
+threads=4 8         sum=400000000     398 ms
+threads=4 64        sum=400000000     209 ms
+threads=4 128       sum=400000000     179 ms
+threads=4 256       sum=400000000     179 ms
+$ for g in 8 64 128 256; do ./best3.sh taskset -c 0-7 ./fs 8 $g; done
+threads=8 8         sum=800000000     777 ms
+threads=8 64        sum=800000000     269 ms
+threads=8 128       sum=800000000     192 ms
+threads=8 256       sum=800000000     201 ms
+$ ./best3.sh taskset -c 0-7 ./fs 8 local
+threads=8 local     sum=800000000      38 ms
+$ perf stat -e task-clock,context-switches taskset -c 0-3 ./fs 4 8 2>&1 | grep -E 'threads=|task-clock|context|seconds user'
+threads=4 8         sum=400000000     366 ms
+           1429.59 msec task-clock                                                            
+                14      context-switches                                                      
+       1.428201000 seconds user
+$ perf stat -e task-clock,context-switches taskset -c 0-3 ./fs 4 128 2>&1 | grep -E 'threads=|task-clock|context|seconds user'
+threads=4 128       sum=400000000     179 ms
+            713.36 msec task-clock                                                            
+                 7      context-switches                                                      
+       0.712870000 seconds user
+$ taskset -c 0-3 java giai/FalseShare.java
+adjacent sum=200,000,000   6086 ms
+padded   sum=200,000,000   1064 ms
+adder    sum=200,000,000    385 ms
+local    sum=200,000,000     25 ms

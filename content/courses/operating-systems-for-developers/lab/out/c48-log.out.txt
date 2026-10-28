@@ -1,0 +1,64 @@
+$ node gen-log.js /data/access.log 2000000
+/data/access.log: 2,000,000 lines, 182.6 MB
+$ head -3 /data/access.log
+10.0.4.37 - - [29/Oct/2026:10:00:00 +0700] "GET /api/v1/courses HTTP/1.1" 200 1181 0.064
+10.0.2.26 - - [29/Oct/2026:10:00:00 +0700] "GET /api/v1/feed HTTP/1.1" 200 18189 0.072
+10.0.6.240 - - [29/Oct/2026:10:00:00 +0700] "GET /api/v1/work/projects HTTP/1.1" 200 16300 0.065
+$ javac -d . LogAnalyzer.java
+$ time awk '{ s[$9]++ } END { for (k in s) printf "%s=%d ", k, s[k]; print "" }' /data/access.log
+502=22222 200=1769215 304=109421 404=71786 503=5131 500=22225 
+
+real	0m0.392s
+user	0m0.375s
+sys	0m0.017s
+$ java LogAnalyzer /data/access.log 4
+java  W=4  lines=2,000,000  status {200=1769215, 304=109421, 404=71786, 500=22225, 502=22222, 503=5131}
+  /api/v1/feed                 581,228 req  p95   109 ms   5551.5 MB
+  /api/v1/auth/refresh         292,294 req  p95    20 ms   2904.1 MB
+  /api/v1/messages/threads     266,651 req  p95    64 ms   2371.7 MB
+  /api/v1/courses              196,582 req  p95    85 ms   1790.7 MB
+  /api/v1/notes                162,383 req  p95    62 ms   1454.0 MB
+java  W=4     217 ms
+$ node loganalyzer.js /data/access.log 4
+node  W=4  lines=2,000,000  status {200=1769215, 304=109421, 404=71786, 500=22225, 502=22222, 503=5131}
+  /api/v1/feed                 581,228 req  p95   109 ms   5551.5 MB
+  /api/v1/auth/refresh         292,294 req  p95    20 ms   2904.1 MB
+  /api/v1/messages/threads     266,651 req  p95    64 ms   2371.7 MB
+  /api/v1/courses              196,582 req  p95    85 ms   1790.7 MB
+  /api/v1/notes                162,383 req  p95    62 ms   1454.0 MB
+node  W=4     288 ms
+$ diff <(java LogAnalyzer /data/access.log 1 | sed -E 's/^java  W=[0-9]+ +//' | head -6) <(node loganalyzer.js /data/access.log 8 | sed -E 's/^node  W=[0-9]+ +//' | head -6) && echo "same result: Java W=1 and Node W=8"
+same result: Java W=1 and Node W=8
+$ ./sweep.sh "java LogAnalyzer /data/access.log {k}" 1 2 4 8 10
+cores        ms  speedup    eff
+    1       458    1.00x   100%
+    2       313    1.46x    73%
+    4       218    2.10x    53%
+    8       236    1.94x    24%
+   10       212    2.16x    22%
+$ ./sweep.sh "node loganalyzer.js /data/access.log {k}" 1 2 4 8 10
+cores        ms  speedup    eff
+    1       982    1.00x   100%
+    2       535    1.84x    92%
+    4       293    3.35x    84%
+    8       207    4.74x    59%
+   10       206    4.77x    48%
+$ java LogAnalyzer /data/access.log 8 3 | grep " ms$"
+java  W=8  run 1 of 3     258 ms
+java  W=8  run 2 of 3     140 ms
+java  W=8  run 3 of 3      72 ms
+$ ./sweep.sh "java LogAnalyzer /data/access.log {k} 3" 1 2 4 8 10
+cores        ms  speedup    eff
+    1       375    1.00x   100%
+    2       204    1.84x    92%
+    4       117    3.21x    80%
+    8        66    5.68x    71%
+   10        65    5.77x    58%
+$ /usr/bin/time -f "java W=4: %e s wall, %U s user, max RSS %M KB" java LogAnalyzer /data/access.log 4 > /dev/null
+java W=4: 0.27 s wall, 0.90 s user, max RSS 568012 KB
+$ /usr/bin/time -f "node W=4: %e s wall, %U s user, max RSS %M KB" node loganalyzer.js /data/access.log 4 > /dev/null
+node W=4: 0.31 s wall, 1.06 s user, max RSS 392188 KB
+$ /usr/bin/time -f "java W=1: %e s wall, %U s user, max RSS %M KB" java LogAnalyzer /data/access.log 1 > /dev/null
+java W=1: 0.45 s wall, 0.47 s user, max RSS 281552 KB
+$ /usr/bin/time -f "node W=1: %e s wall, %U s user, max RSS %M KB" node loganalyzer.js /data/access.log 1 > /dev/null
+node W=1: 0.93 s wall, 0.89 s user, max RSS 182920 KB

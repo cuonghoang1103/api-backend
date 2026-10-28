@@ -1,0 +1,68 @@
+$ java -Xmx256m Pipeline.java bounded 1000000 2
+bounded   lines=1,000,000 errors=20,000  max queue depth=1,024  max heap=76 MB     981 ms
+$ java -Xmx256m Pipeline.java unbounded 1000000 2
+unbounded lines=1,000,000 errors=20,000  max queue depth=910,748  max heap=189 MB    1028 ms
+$ java -Xmx256m Pipeline.java bounded 2000000 2
+bounded   lines=2,000,000 errors=40,000  max queue depth=1,024  max heap=80 MB    1334 ms
+$ for i in 1 2 3; do java -Xmx256m Pipeline.java unbounded 2000000 2; echo "exit $?"; done
+unbounded producer: OutOfMemoryError after 2808 ms — 1,839,059 lines were waiting in the queue
+exit 1
+unbounded 2 of 2 consumers DIED with OutOfMemoryError
+unbounded lines=2,000,000 errors=3,840  max queue depth=1,828,113  max heap=254 MB    3983 ms
+exit 0
+unbounded lines=2,000,000 errors=40,000  max queue depth=1,779,716  max heap=247 MB    5208 ms
+exit 0
+$ python3 mr.py gen /data/words.txt 1000000
+/data/words.txt: 34.3 MB
+$ python3 mr.py one /data/words.txt
+one     x1  words=8,000,000  top: w0=880419 w1=439506 w2=293633     867 ms
+$ python3 mr.py lines /data/words.txt 4
+lines   x4  words=8,000,000  top: w0=880419 w1=439506 w2=293633     456 ms
+$ python3 mr.py ranges /data/words.txt 4
+ranges  x4  words=8,000,000  top: w0=880419 w1=439506 w2=293633     405 ms
+$ python3 mr.py ranges /data/words.txt 8
+ranges  x8  words=8,000,000  top: w0=880419 w1=439506 w2=293633     249 ms
+$ head -n 100000 /data/words.txt > /data/small.txt
+$ python3 mr.py one /data/small.txt
+one     x1  words=800,000  top: w0=87705 w1=44121 w2=29139      88 ms
+$ python3 mr.py lines1 /data/small.txt 4
+lines1  x4  words=800,000  top: w0=87705 w1=44121 w2=29139    3462 ms
+$ python3 mr.py ranges /data/small.txt 4
+ranges  x4  words=800,000  top: w0=87705 w1=44121 w2=29139      97 ms
+$ java Cancel.java sleep
+[ 310 ms] get() timed out → cancel(true): true, isCancelled=true
+[ 836 ms] the task stopped itself at 327 ms
+[ 842 ms] awaitTermination(1 s): true
+$ java Cancel.java spin
+[ 305 ms] get() timed out → cancel(true): true, isCancelled=true
+[ 814 ms] the task never noticed the cancel
+[ 815 ms] 500 ms after cancel the task did 71,442,725 more iterations
+[ 815 ms] awaitTermination(1 s): false
+$ java Cancel.java check
+[ 304 ms] get() timed out → cancel(true): true, isCancelled=true
+[ 821 ms] the task stopped itself at 310 ms
+[ 828 ms] 500 ms after cancel the task did 0 more iterations
+[ 830 ms] awaitTermination(1 s): true
+$ java Cancel.java http
+[ 414 ms] java.net.http.HttpTimeoutException: request timed out
+$ node cancel.js fetch
+[ 315 ms] TimeoutError: The operation was aborted due to timeout
+$ node cancel.js race
+[ 311 ms] race says: timeout after 300 ms
+[2011 ms] the "cancelled" work finished anyway — and wrote its result
+$ node cancel.js worker
+[ 326 ms] worker exited, code 1
+$ python3 cancel.py asyncio
+[ 306 ms] asyncio: TimeoutError — the task was cancelled at its await
+$ python3 cancel.py thread
+[ 303 ms] thread: result() timed out; cancel() returns False
+[2023 ms] thread: the call finished anyway
+[2023 ms] thread: leaving the with-block (it waited for the thread)
+$ python3 cancel.py process
+[ 359 ms] process: exitcode -15 (= killed by signal 15, SIGTERM)
+$ node gen-log.js /data/access.log 300000
+/data/access.log: 300,000 lines, 27.4 MB
+$ java giai/Pipeline3.java /data/access.log 3 10000
+finished after 173 ms: 300,000 lines counted {200=265370, 304=16429, 404=10760, 500=3336, 502=3333, 503=772}; all threads stopped: true
+$ java giai/Pipeline3.java /data/access.log 3 50
+DEADLINE — cancelled, partial result after 55 ms: 67,766 lines counted {200=59931, 304=3727, 404=2422, 500=756, 502=755, 503=175}; all threads stopped: true

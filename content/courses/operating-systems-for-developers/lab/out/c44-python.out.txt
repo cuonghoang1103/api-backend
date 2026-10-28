@@ -1,0 +1,51 @@
+$ python3 gil.py
+3.14.4 | Py_GIL_DISABLED = 0 | GIL enabled now: True
+$ python3 primes.py seq 1 2000000
+seq     x1  N=2000000 primes=148933    4358 ms
+$ taskset -c 0-3 python3 primes.py threads 4 2000000
+threads x4  N=2000000 primes=148933    4448 ms
+$ taskset -c 0-3 python3 primes.py procs 4 2000000
+procs   x4  N=2000000 primes=148933    1326 ms
+$ ./sweep.sh "python3 primes.py threads {k} 2000000" 1 2 4
+cores        ms  speedup    eff
+    1      4367    1.00x   100%
+    2      4374    1.00x    50%
+    4      4355    1.00x    25%
+$ ./sweep.sh "python3 primes.py procs {k} 2000000" 1 2 4 8 10
+cores        ms  speedup    eff
+    1      4446    1.00x   100%
+    2      2446    1.82x    91%
+    4      1308    3.40x    85%
+    8       729    6.10x    76%
+   10       631    7.05x    70%
+$ python3 primes.py threads 4 2000000 & sleep 2; ps -L -o pid,lwp,pcpu,comm -p $!; top -b -n1 -p $! | tail -2; wait $!
+    PID     LWP %CPU COMMAND
+    368     368  0.5 python3
+    368     370 26.0 Thread-1 (worke
+    368     371 21.6 Thread-2 (worke
+    368     372 24.7 Thread-3 (worke
+    368     373 27.6 Thread-4 (worke
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+    368 root      20   0  316928  21604   6324 S 100.0   0.3   0:02.23 python3
+threads x4  N=2000000 primes=148933    4489 ms
+$ python3 fetch.py seq 100
+seq         calls=100 ok=100 server saw peak=1 in flight   11058 ms
+$ python3 fetch.py threads 100 10
+threads x10 calls=100 ok=100 server saw peak=10 in flight    1132 ms
+$ python3 fetch.py threads 100 100
+threads x100 calls=100 ok=100 server saw peak=100 in flight     139 ms
+$ python3 fetch.py asyncio 100
+asyncio     calls=100 ok=100 server saw peak=100 in flight     130 ms
+$ python3 fetch.py asyncio 1000
+asyncio     calls=1000 ok=1000 server saw peak=1000 in flight     266 ms
+$ python3 race.py inline
+inline expected 4,000,000  got 4,000,000  lost 0
+$ python3 race.py split
+split  expected 4,000,000  got 2,774,985  lost 1,225,015
+$ python3 race.py split
+split  expected 4,000,000  got 2,606,951  lost 1,393,049
+$ python3 race.py lock
+lock   expected 4,000,000  got 4,000,000  lost 0
+$ python3 giai/hybrid.py
+I/O : 100 calls, ok=100, server peak=10 in flight   1125 ms
+CPU : primes below 2,000,000 = 148933 in 4 processes   1576 ms; heartbeat ticked 14 times, longest gap 102 ms

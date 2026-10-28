@@ -1,0 +1,701 @@
+{
+  "trackSlug": "ky-nang-practice",
+  "moduleSlug": "ssg105-4-3-team-talk-evidence",
+  "lesson": {
+    "course": "ssg105-communication-and-in-group-working-skills",
+    "slug": "ssg105-4-1-presentation"
+  },
+  "exercises": [
+    {
+      "title": "Team 1 — Time-box a 15-minute team presentation",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "time-boxing",
+        "team presentation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "ky-nang",
+        "ssg105"
+      ],
+      "problemHtml": "<p>Your team of <b>5</b> has a <b>15-minute</b> slot (SWT301 Lab 2+3, one module per member). The team agreed these rules:</p>\n<ul><li>Q&amp;A reserve = <b>20%</b> of the slot (teachers always ask; a talk that eats the Q&amp;A loses marks).</li>\n<li>Opening (agenda + who owns which module) = 1 minute; closing summary = 1 minute.</li>\n<li>One live demo on the leader’s laptop = 2 minutes.</li>\n<li>Hand-over buffer for switching speakers and the projector = 0.5 minute in total.</li>\n<li>The remaining time is split <b>equally</b> between the 5 module speakers.</li></ul>\n<p>Fill the minutes per segment (table 1), then the word budget at a clear speaking pace of <b>130 words per minute</b> (table 2).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Nhóm <b>5</b> người có <b>15 phút</b> (SWT301 Lab 2+3, mỗi người một module). Nhóm thống nhất: dành <b>20%</b> cho hỏi đáp; mở đầu 1 phút, tổng kết 1 phút; một demo trên máy trưởng nhóm 2 phút; tổng thời gian đổi người/đổi máy chiếu 0,5 phút; thời gian còn lại chia <b>đều</b> cho 5 người trình bày module. Điền số phút mỗi phần (bảng 1), rồi ngân sách số từ ở tốc độ nói rõ ràng <b>130 từ/phút</b> (bảng 2).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Tính phần hỏi đáp trước (20% của 15), rồi trừ các phần cố định, phần còn lại chia 5.",
+        "Số từ = số phút × 130."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Team 1 — Time-box a 15-minute team presentation\n\nAnswer in the answer panel (no code needed).\n\n1. Table 1 — minutes per segmentBảng 1 — số phút mỗi phần\n2. Table 2 — word budget at 130 words per minuteBảng 2 — ngân sách từ ở 130 từ/phút\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Team 1 — Time-box a 15-minute team presentation — answer key\n\n1. Table 1 — minutes per segmentBảng 1 — số phút mỗi phần\n   - r0.m: 3\n   - r1.m: 1\n   - r2.m: 2\n   - r3.m: 0.5\n   - r4.m: 1\n   - r5.m: 1.5\n   20% × 15 = 3. Fixed parts: 1 + 2 + 0.5 + 1 = 4.5. Left: 15 − 3 − 4.5 = 7.5 minutes ÷ 5 speakers = 1.5 minutes each.VI: 20% × 15 = 3. Phần cố định: 1 + 2 + 0,5 + 1 = 4,5. Còn: 15 − 3 − 4,5 = 7,5 phút ÷ 5 người = 1,5 phút mỗi người.\n\n2. Table 2 — word budget at 130 words per minuteBảng 2 — ngân sách từ ở 130 từ/phút\n   - r0.w: 130\n   - r1.w: 195\n   - r2.w: 390\n   - r3.w: 260\n   words = minutes × 130. 1.5 × 130 = 195 — a typical first draft of “my module” is 400+ words, i.e. twice too long.VI: số từ = số phút × 130. 1,5 × 130 = 195 — bản nháp \"module của em\" đầu tiên thường 400+ từ, tức dài gấp đôi.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>3 · 1 · 2 · 0.5 · 1 · 1.5 — then 130 · 195 · 390 · 260.</p>",
+      "solutionExplanationHtmlVi": "<p>3 · 1 · 2 · 0,5 · 1 · 1,5 — rồi 130 · 195 · 390 · 260.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Table 1 — minutes per segment</p><p style=\"opacity:.75;font-size:.92em\"><i>Bảng 1 — số phút mỗi phần</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Segment"
+              },
+              {
+                "ma": "m",
+                "ten": "Minutes",
+                "luaChon": [
+                  "0.5",
+                  "1",
+                  "1.5",
+                  "2",
+                  "2.5",
+                  "3"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Q&A reserve"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Opening"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Live demo"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Hand-over buffer (total)"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Closing summary"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "EACH module speaker (A–E)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.m": "3",
+              "r1.m": "1",
+              "r2.m": "2",
+              "r3.m": "0.5",
+              "r4.m": "1",
+              "r5.m": "1.5"
+            },
+            "giaiThich": "<p>20% × 15 = 3. Fixed parts: 1 + 2 + 0.5 + 1 = 4.5. Left: 15 − 3 − 4.5 = 7.5 minutes ÷ 5 speakers = 1.5 minutes each.</p><p><i>VI: 20% × 15 = 3. Phần cố định: 1 + 2 + 0,5 + 1 = 4,5. Còn: 15 − 3 − 4,5 = 7,5 phút ÷ 5 người = 1,5 phút mỗi người.</i></p>"
+          },
+          {
+            "ma": "b2",
+            "de": "<p>Table 2 — word budget at 130 words per minute</p><p style=\"opacity:.75;font-size:.92em\"><i>Bảng 2 — ngân sách từ ở 130 từ/phút</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Part"
+              },
+              {
+                "ma": "w",
+                "ten": "Max words",
+                "luaChon": [
+                  "65",
+                  "130",
+                  "195",
+                  "260",
+                  "390",
+                  "520"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Opening (1 min)"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "EACH module speaker (1.5 min)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Your solo 3-minute talk (another class)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "A 2-minute OJT update"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.w": "130",
+              "r1.w": "195",
+              "r2.w": "390",
+              "r3.w": "260"
+            },
+            "giaiThich": "<p>words = minutes × 130. 1.5 × 130 = 195 — a typical first draft of “my module” is 400+ words, i.e. twice too long.</p><p><i>VI: số từ = số phút × 130. 1,5 × 130 = 195 — bản nháp \"module của em\" đầu tiên thường 400+ từ, tức dài gấp đôi.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên dành giờ hỏi đáp — chia hết 15 phút cho phần nói."
+        },
+        {
+          "loi": "Quên thời gian đổi người/đổi máy — mỗi lần đổi mất 5–10 giây thật."
+        },
+        {
+          "loi": "Viết phần của mình theo cảm giác rồi đọc nhanh cho kịp."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "time-box",
+          "vi": "khung giờ cố định cho từng phần, hết giờ là chuyển"
+        },
+        {
+          "en": "words per minute (wpm)",
+          "vi": "số từ mỗi phút — thuyết trình rõ ràng ≈ 130"
+        },
+        {
+          "en": "hand-over",
+          "vi": "chuyển lượt cho người nói sau"
+        }
+      ]
+    },
+    {
+      "title": "Team 2 — Question from the teacher ↔ evidence you open",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "evidence",
+        "lab defence"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "ky-nang",
+        "ssg105"
+      ],
+      "problemHtml": "<p>In a lab defence the teacher rarely asks “explain testing”; she asks <b>“show me”</b>. Answering means opening the right file within seconds. These are the owner’s real evidence files for SportShop module A. Match each likely question to the evidence you open first.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Khi bảo vệ lab, cô hiếm khi hỏi \"giải thích kiểm thử là gì\"; cô hỏi <b>\"cho cô xem\"</b>. Trả lời nghĩa là mở đúng tệp trong vài giây. Đây là các tệp bằng chứng thật của module A SportShop. Ghép mỗi câu hỏi với bằng chứng mở đầu tiên.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "\"Chứng minh trong CSDL\" ⇒ log câu SELECT, không phải ảnh giao diện.",
+        "\"Ai chạy\" ⇒ trả lời đúng sự thật, chỉ vào cột tester và ghi chú trên thẻ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Team 2 — Question from the teacher ↔ evidence you open\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Team 2 — Question from the teacher ↔ evidence you open — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: AuthFilterTest (failing case) + AuthFilter.java:45\n   - r1.k: bao-cao/lab2/coverage-module-A.txt (JaCoCo per class)\n   - r2.k: Report 5.1 › Test Report sheet\n   - r3.k: bao-cao/lab3/postman/R2/report.html (Newman, round 2)\n   - r4.k: bao-cao/lab3/postman/R1/db-queries.log (SELECT after IT17)\n   - r5.k: bao-cao/lab4/R1/evidence/RL02_S1_R1.jpg\n   - r6.k: Report 5.2 tester column + the note on ticket SS-18\n   Each question names an artefact: a test + a line, a coverage file, the statistics sheet, a dated round report, a DB log, a screenshot, the honest tester record.VI: Mỗi câu hỏi trỏ tới một sản phẩm: test + dòng, tệp độ phủ, sheet thống kê, báo cáo round có ngày, log CSDL, ảnh chụp, ghi chép trung thực về người chạy.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Rows map to the evidence list in order.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Question"
+              },
+              {
+                "ma": "k",
+                "ten": "Open first",
+                "luaChon": [
+                  "AuthFilterTest (failing case) + AuthFilter.java:45",
+                  "bao-cao/lab2/coverage-module-A.txt (JaCoCo per class)",
+                  "Report 5.1 › Test Report sheet",
+                  "bao-cao/lab3/postman/R2/report.html (Newman, round 2)",
+                  "bao-cao/lab3/postman/R1/db-queries.log (SELECT after IT17)",
+                  "bao-cao/lab4/R1/evidence/RL02_S1_R1.jpg",
+                  "Report 5.2 tester column + the note on ticket SS-18"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "“Show me one failing unit test and the code line that makes it fail.” — <i>“Cho cô xem một unit test fail và dòng code làm nó fail.”</i>"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "“Why is UserDAO branch coverage only 83%?” — <i>“Sao độ phủ nhánh của UserDAO chỉ 83%?”</i>"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "“How many unit test cases, how many pass?” — <i>“Bao nhiêu ca unit test, bao nhiêu ca đạt?”</i>"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "“Did you really run round 2, or copy round 1?” — <i>“Em có chạy round 2 thật không hay chép round 1?”</i>"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "“IT17 says another account’s password changed — prove it in the database.” — <i>“IT17 nói mật khẩu tài khoản khác bị đổi — chứng minh trong CSDL.”</i>"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "“What does a guest actually see on /dashboard?” — <i>“Khách chưa đăng nhập thực sự thấy gì ở /dashboard?”</i>"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "“The plan said another member runs round 2. Who actually ran it?” — <i>“Kế hoạch ghi thành viên khác chạy round 2. Thực tế ai chạy?”</i>"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "AuthFilterTest (failing case) + AuthFilter.java:45",
+              "r1.k": "bao-cao/lab2/coverage-module-A.txt (JaCoCo per class)",
+              "r2.k": "Report 5.1 › Test Report sheet",
+              "r3.k": "bao-cao/lab3/postman/R2/report.html (Newman, round 2)",
+              "r4.k": "bao-cao/lab3/postman/R1/db-queries.log (SELECT after IT17)",
+              "r5.k": "bao-cao/lab4/R1/evidence/RL02_S1_R1.jpg",
+              "r6.k": "Report 5.2 tester column + the note on ticket SS-18"
+            },
+            "giaiThich": "<p>Each question names an artefact: a test + a line, a coverage file, the statistics sheet, a dated round report, a DB log, a screenshot, the honest tester record.</p><p><i>VI: Mỗi câu hỏi trỏ tới một sản phẩm: test + dòng, tệp độ phủ, sheet thống kê, báo cáo round có ngày, log CSDL, ảnh chụp, ghi chép trung thực về người chạy.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Mở Excel rồi cuộn tìm trước cả lớp — chuẩn bị sẵn tab theo thứ tự câu hỏi."
+        },
+        {
+          "loi": "Trả lời câu \"ai chạy round 2\" bằng tên người không chạy — vừa sai vừa mất điểm đạo đức."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "evidence",
+          "vi": "bằng chứng: log, ảnh chụp, dòng trong báo cáo, dòng mã"
+        },
+        {
+          "en": "Q&A / defence",
+          "vi": "phần hỏi đáp / bảo vệ trước hội đồng"
+        },
+        {
+          "en": "round",
+          "vi": "vòng chạy test (R1, R2, R3)"
+        }
+      ]
+    },
+    {
+      "title": "Team 3 — Order the demo and the pre-demo checklist",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "live demo",
+        "checklist"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "ky-nang",
+        "ssg105"
+      ],
+      "problemHtml": "<p>A two-minute demo works when it tells <b>one story</b> and when the machine was checked before the room filled up. The SportShop story is “one bug, three levels”: the same defect SS-19 seen as a line of code, a failing unit test, a failing integration case and a system-test screenshot. Order the demo, then the checklist.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Demo hai phút chạy tốt khi kể <b>một câu chuyện</b> và máy đã được kiểm trước khi vào phòng. Chuyện SportShop là \"một lỗi, ba cấp\": cùng lỗi SS-19 thấy ở một dòng code, một unit test fail, một ca tích hợp fail và một ảnh test hệ thống. Sắp thứ tự demo, rồi danh sách kiểm trước demo.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Demo đi từ trong ra ngoài: dòng code → test đơn vị → API thật → màn hình người dùng.",
+        "Kiểm số đã biết (113/93/20, 22/16/6) trước khi demo — lệch là có chuyện."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Team 3 — Order the demo and the pre-demo checklist\n\nAnswer in the answer panel (no code needed).\n\n1. Demo: one bug (SS-19), three levelsDemo: một lỗi (SS-19), ba cấp\n2. Pre-demo checklist (the evening before / 15 minutes before)Kiểm trước demo (tối trước / 15 phút trước)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Team 3 — Order the demo and the pre-demo checklist — answer key\n\n1. Demo: one bug (SS-19), three levelsDemo: một lỗi (SS-19), ba cấp\n   Answer: a) Open AuthFilter.java:45 — getRole() on a null account  →  b) Run AuthFilterTest — the guest case fails with NullPointerException  →  c) Show IT10 in Report 5.2 — real Tomcat + DB answer HTTP 500  →  d) Show RL02_S1_R1.jpg — what a guest really sees in Chrome  →  e) Say the takeaway: one null check, three levels caught it\n   Cause → unit → integration → system → takeaway: each step zooms out, so the audience follows the same bug from code to user.VI: Nguyên nhân → unit → tích hợp → hệ thống → câu chốt: mỗi bước lùi ra một tầng, người nghe theo cùng một lỗi từ code tới người dùng.\n\n2. Pre-demo checklist (the evening before / 15 minutes before)Kiểm trước demo (tối trước / 15 phút trước)\n   Answer: a) Start Docker Desktop; check the sportshop-mssql container is running  →  b) Run the unit tests: expect 113 found, 93 pass, 20 fail  →  c) Reset the test database  →  d) Run one trial integration round: expect 16 pass, 6 fail  →  e) Open the files and tabs in demo order, font size up  →  f) Keep the recorded evidence (report.html, screenshots) one click away as plan B\n   Infrastructure → known-good numbers → clean data → integration → layout → backup. If any step shows different numbers, you find out tonight, not in front of the class.VI: Hạ tầng → con số đã biết → dữ liệu sạch → tích hợp → sắp cửa sổ → phương án dự phòng. Bước nào ra số khác thì biết ngay tối nay, không phải trước cả lớp.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Demo: one bug (SS-19), three levels</b>: Open AuthFilter.java:45 — getRole() on a null account → Run AuthFilterTest — the guest case fails with NullPointerException → Show IT10 in Report 5.2 — real Tomcat + DB answer HTTP 500 → Show RL02_S1_R1.jpg — what a guest really sees in Chrome → Say the takeaway: one null check, three levels caught it.</p><p><b>Pre-demo checklist (the evening before / 15 minutes before)</b>: Start Docker Desktop; check the sportshop-mssql container is running → Run the unit tests: expect 113 found, 93 pass, 20 fail → Reset the test database → Run one trial integration round: expect 16 pass, 6 fail → Open the files and tabs in demo order, font size up → Keep the recorded evidence (report.html, screenshots) one click away as plan B.</p>",
+      "solutionExplanationHtmlVi": "<p><b>Demo: một lỗi (SS-19), ba cấp</b>: Nguyên nhân → unit → tích hợp → hệ thống → câu chốt: mỗi bước lùi ra một tầng, người nghe theo cùng một lỗi từ code tới người dùng.</p><p><b>Kiểm trước demo (tối trước / 15 phút trước)</b>: Hạ tầng → con số đã biết → dữ liệu sạch → tích hợp → sắp cửa sổ → phương án dự phòng. Bước nào ra số khác thì biết ngay tối nay, không phải trước cả lớp.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Demo: one bug (SS-19), three levels</p><p style=\"opacity:.75;font-size:.92em\"><i>Demo: một lỗi (SS-19), ba cấp</i></p>",
+            "muc": [
+              {
+                "ma": "c",
+                "noiDung": "Show IT10 in Report 5.2 — real Tomcat + DB answer HTTP 500"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Show RL02_S1_R1.jpg — what a guest really sees in Chrome"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Run AuthFilterTest — the guest case fails with NullPointerException"
+              },
+              {
+                "ma": "e",
+                "noiDung": "Say the takeaway: one null check, three levels caught it"
+              },
+              {
+                "ma": "a",
+                "noiDung": "Open AuthFilter.java:45 — getRole() on a null account"
+              }
+            ],
+            "dapAn": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e"
+            ],
+            "giaiThich": "<p>Cause → unit → integration → system → takeaway: each step zooms out, so the audience follows the same bug from code to user.</p><p><i>VI: Nguyên nhân → unit → tích hợp → hệ thống → câu chốt: mỗi bước lùi ra một tầng, người nghe theo cùng một lỗi từ code tới người dùng.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Pre-demo checklist (the evening before / 15 minutes before)</p><p style=\"opacity:.75;font-size:.92em\"><i>Kiểm trước demo (tối trước / 15 phút trước)</i></p>",
+            "muc": [
+              {
+                "ma": "b",
+                "noiDung": "Run the unit tests: expect 113 found, 93 pass, 20 fail"
+              },
+              {
+                "ma": "f",
+                "noiDung": "Keep the recorded evidence (report.html, screenshots) one click away as plan B"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Run one trial integration round: expect 16 pass, 6 fail"
+              },
+              {
+                "ma": "e",
+                "noiDung": "Open the files and tabs in demo order, font size up"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Reset the test database"
+              },
+              {
+                "ma": "a",
+                "noiDung": "Start Docker Desktop; check the sportshop-mssql container is running"
+              }
+            ],
+            "dapAn": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e",
+              "f"
+            ],
+            "giaiThich": "<p>Infrastructure → known-good numbers → clean data → integration → layout → backup. If any step shows different numbers, you find out tonight, not in front of the class.</p><p><i>VI: Hạ tầng → con số đã biết → dữ liệu sạch → tích hợp → sắp cửa sổ → phương án dự phòng. Bước nào ra số khác thì biết ngay tối nay, không phải trước cả lớp.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Demo mỗi thứ một chút, không có câu chuyện chung."
+        },
+        {
+          "loi": "Không reset CSDL test — round thử để lại dữ liệu bẩn, số lệch ngay trước lớp."
+        },
+        {
+          "loi": "Không có phương án B khi Docker/Tomcat không lên."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "plan B / fallback",
+          "vi": "phương án dự phòng khi demo sống hỏng"
+        },
+        {
+          "en": "evidence",
+          "vi": "bằng chứng: log, ảnh chụp, dòng trong báo cáo, dòng mã"
+        }
+      ]
+    },
+    {
+      "title": "Team 4 — When the demo goes wrong",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "demo recovery"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "ky-nang",
+        "ssg105"
+      ],
+      "problemHtml": "<p>Live demos fail in front of an audience more often than at home: the Wi-Fi is different, the projector changes the resolution, a container did not start. What the committee grades is how you <b>recover</b>. Choose the best reaction.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Demo sống hỏng trước khán giả nhiều hơn ở nhà: Wi-Fi khác, máy chiếu đổi độ phân giải, container không lên. Điều hội đồng chấm là cách bạn <b>xử lý</b>. Chọn phản ứng tốt nhất.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Mọi phương án tốt đều có: một câu nói thẳng + một phương án B đã chuẩn bị.",
+        "Không sửa lỗi sống trước lớp quá 30 giây."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Team 4 — When the demo goes wrong\n\nAnswer in the answer panel (no code needed).\n\n1. Tomcat does not start in front of the class.Tomcat không chạy trước cả lớp.\n2. The test result on screen differs from your slide (17 pass instead of 16).Kết quả trên màn hình khác slide (17 đạt thay vì 16).\n3. The projector makes your code unreadable.Máy chiếu làm code không đọc được.\n4. A teammate’s laptop (with their module) will not connect to the projector.Laptop của bạn cùng nhóm (có module của bạn ấy) không nối được máy chiếu.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Team 4 — When the demo goes wrong — answer key\n\n1. Tomcat does not start in front of the class.Tomcat không chạy trước cả lớp.\n   Answer: a) “The live server is not cooperating — here is the same run recorded this morning” and open report.html\n   Name it in one sentence, switch to plan B, keep the clock.VI: Nói một câu, chuyển phương án B, giữ đồng hồ.\n\n2. The test result on screen differs from your slide (17 pass instead of 16).Kết quả trên màn hình khác slide (17 đạt thay vì 16).\n   Answer: a) Say what you see, give the likely reason (dirty test data) and that you will re-run on a clean database after class\n   Honest and specific: what differs, a hypothesis, a follow-up.VI: Trung thực và cụ thể: lệch gì, giả thuyết, việc sẽ làm.\n\n3. The projector makes your code unreadable.Máy chiếu làm code không đọc được.\n   Answer: c) Zoom the editor (Ctrl/Cmd +) to ≥ 20 pt, or switch to the slide with the 6-line excerpt\n   Prepare both: a zoom shortcut and a slide copy of the key lines.VI: Chuẩn bị cả hai: phím phóng to và bản slide của mấy dòng chính.\n\n4. A teammate’s laptop (with their module) will not connect to the projector.Laptop của bạn cùng nhóm (có module của bạn ấy) không nối được máy chiếu.\n   Answer: a) Use the shared deck on the leader’s laptop — every member’s slides were merged into one file the night before\n   One merged deck on one machine removes the most common team-talk failure.VI: Một bộ slide gộp trên một máy loại bỏ lỗi phổ biến nhất của bài nhóm.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · a · c · a.</p>",
+      "solutionExplanationHtmlVi": "<p>Đáp án: a · a · c · a.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Tomcat does not start in front of the class.</p><p style=\"opacity:.75;font-size:.92em\"><i>Tomcat không chạy trước cả lớp.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "“The live server is not cooperating — here is the same run recorded this morning” and open report.html"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Debug it live for five minutes"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Blame the school network"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Skip the demo without a word"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Name it in one sentence, switch to plan B, keep the clock.</p><p><i>VI: Nói một câu, chuyển phương án B, giữ đồng hồ.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>The test result on screen differs from your slide (17 pass instead of 16).</p><p style=\"opacity:.75;font-size:.92em\"><i>Kết quả trên màn hình khác slide (17 đạt thay vì 16).</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Say what you see, give the likely reason (dirty test data) and that you will re-run on a clean database after class"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Change the slide on the spot"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Say the tool is broken"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Pretend you did not see it"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Honest and specific: what differs, a hypothesis, a follow-up.</p><p><i>VI: Trung thực và cụ thể: lệch gì, giả thuyết, việc sẽ làm.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>The projector makes your code unreadable.</p><p style=\"opacity:.75;font-size:.92em\"><i>Máy chiếu làm code không đọc được.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Read the code character by character"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Continue anyway"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Zoom the editor (Ctrl/Cmd +) to ≥ 20 pt, or switch to the slide with the 6-line excerpt"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Ask everyone to come closer"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Prepare both: a zoom shortcut and a slide copy of the key lines.</p><p><i>VI: Chuẩn bị cả hai: phím phóng to và bản slide của mấy dòng chính.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>A teammate’s laptop (with their module) will not connect to the projector.</p><p style=\"opacity:.75;font-size:.92em\"><i>Laptop của bạn cùng nhóm (có module của bạn ấy) không nối được máy chiếu.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Use the shared deck on the leader’s laptop — every member’s slides were merged into one file the night before"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Wait until it works"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Present their part yourself without telling anyone"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Their part is skipped"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>One merged deck on one machine removes the most common team-talk failure.</p><p><i>VI: Một bộ slide gộp trên một máy loại bỏ lỗi phổ biến nhất của bài nhóm.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gỡ lỗi sống trước lớp tới hết giờ."
+        },
+        {
+          "loi": "Đổ lỗi cho mạng/công cụ — nghe như không chuẩn bị."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "plan B / fallback",
+          "vi": "phương án dự phòng"
+        },
+        {
+          "en": "recover",
+          "vi": "xử lý, lấy lại nhịp sau sự cố"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,873 @@
+{
+  "trackSlug": "ky-nang-practice",
+  "moduleSlug": "ssg105-3-2-lab-report-structure",
+  "lesson": {
+    "course": "ssg105-communication-and-in-group-working-skills",
+    "slug": "ssg105-3-1-writing"
+  },
+  "exercises": [
+    {
+      "title": "Report 1 — Order the sections of a lab report",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "report structure"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "ky-nang",
+        "ssg105"
+      ],
+      "problemHtml": "<p>FPT lab reports and the test reports of SWT301 (Report 5.1 / 5.2 / 5.3) follow the scientific-report order: why you did it, with what, how, what came out, what it means, what you conclude — and the raw evidence at the back. A reader who knows the order finds anything in seconds. Order the sections, then the four sentences of a good results paragraph.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Báo cáo lab ở FPT và báo cáo kiểm thử SWT301 (Report 5.1 / 5.2 / 5.3) theo thứ tự báo cáo khoa học: làm để làm gì, bằng gì, làm thế nào, ra kết quả gì, nghĩa là gì, kết luận gì — và bằng chứng thô ở cuối. Người đọc biết thứ tự này tìm được mọi thứ trong vài giây. Sắp các mục, rồi bốn câu của một đoạn kết quả tốt.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Tóm tắt luôn ở đầu; phụ lục luôn ở cuối.",
+        "Kết quả chỉ nêu sự việc; \"vì sao\" thuộc phân tích; \"nên làm gì\" thuộc kết luận."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Report 1 — Order the sections of a lab report\n\nAnswer in the answer panel (no code needed).\n\n1. Sections of a lab reportCác mục của báo cáo lab\n2. Sentences of one results paragraphCác câu của một đoạn kết quả\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Report 1 — Order the sections of a lab report — answer key\n\n1. Sections of a lab reportCác mục của báo cáo lab\n   Answer: a) Summary (5–8 lines: result + conclusion)  →  b) Purpose and scope  →  c) Environment (system, tools, data)  →  d) Method (procedure, rounds, criteria)  →  e) Results (tables, figures, no opinions)  →  f) Analysis (why the results look like this)  →  g) Conclusion and recommendations  →  h) Appendix (evidence: logs, screenshots, raw data)\n   The summary goes first even though you write it last; evidence goes to the appendix so the body stays readable.VI: Tóm tắt đặt đầu dù viết sau cùng; bằng chứng xuống phụ lục để thân báo cáo dễ đọc.\n\n2. Sentences of one results paragraphCác câu của một đoạn kết quả\n   Answer: a) Claim: “Integration results did not change across rounds.”  →  b) Numbers: “16 of 22 cases passed in rounds 1, 2 and 3 (72.73%).”  →  c) Reference: “Table 3 and the Newman reports R1–R3 in Appendix B.”  →  d) Meaning: “The 6 failures are reproducible defects, not flaky tests.”\n   Claim → numbers → where to verify → what it means. The meaning sentence leads into the analysis.VI: Khẳng định → số liệu → kiểm ở đâu → nghĩa là gì. Câu ý nghĩa dẫn sang phần phân tích.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Sections of a lab report</b>: Summary (5–8 lines: result + conclusion) → Purpose and scope → Environment (system, tools, data) → Method (procedure, rounds, criteria) → Results (tables, figures, no opinions) → Analysis (why the results look like this) → Conclusion and recommendations → Appendix (evidence: logs, screenshots, raw data).</p><p><b>Sentences of one results paragraph</b>: Claim: “Integration results did not change across rounds.” → Numbers: “16 of 22 cases passed in rounds 1, 2 and 3 (72.73%).” → Reference: “Table 3 and the Newman reports R1–R3 in Appendix B.” → Meaning: “The 6 failures are reproducible defects, not flaky tests.”.</p>",
+      "solutionExplanationHtmlVi": "<p><b>Các mục của báo cáo lab</b>: Tóm tắt đặt đầu dù viết sau cùng; bằng chứng xuống phụ lục để thân báo cáo dễ đọc.</p><p><b>Các câu của một đoạn kết quả</b>: Khẳng định → số liệu → kiểm ở đâu → nghĩa là gì. Câu ý nghĩa dẫn sang phần phân tích.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Sections of a lab report</p><p style=\"opacity:.75;font-size:.92em\"><i>Các mục của báo cáo lab</i></p>",
+            "muc": [
+              {
+                "ma": "d",
+                "noiDung": "Method (procedure, rounds, criteria)"
+              },
+              {
+                "ma": "a",
+                "noiDung": "Summary (5–8 lines: result + conclusion)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Purpose and scope"
+              },
+              {
+                "ma": "h",
+                "noiDung": "Appendix (evidence: logs, screenshots, raw data)"
+              },
+              {
+                "ma": "f",
+                "noiDung": "Analysis (why the results look like this)"
+              },
+              {
+                "ma": "e",
+                "noiDung": "Results (tables, figures, no opinions)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Environment (system, tools, data)"
+              },
+              {
+                "ma": "g",
+                "noiDung": "Conclusion and recommendations"
+              }
+            ],
+            "dapAn": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e",
+              "f",
+              "g",
+              "h"
+            ],
+            "giaiThich": "<p>The summary goes first even though you write it last; evidence goes to the appendix so the body stays readable.</p><p><i>VI: Tóm tắt đặt đầu dù viết sau cùng; bằng chứng xuống phụ lục để thân báo cáo dễ đọc.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Sentences of one results paragraph</p><p style=\"opacity:.75;font-size:.92em\"><i>Các câu của một đoạn kết quả</i></p>",
+            "muc": [
+              {
+                "ma": "c",
+                "noiDung": "Reference: “Table 3 and the Newman reports R1–R3 in Appendix B.”"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Meaning: “The 6 failures are reproducible defects, not flaky tests.”"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Numbers: “16 of 22 cases passed in rounds 1, 2 and 3 (72.73%).”"
+              },
+              {
+                "ma": "a",
+                "noiDung": "Claim: “Integration results did not change across rounds.”"
+              }
+            ],
+            "dapAn": [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            "giaiThich": "<p>Claim → numbers → where to verify → what it means. The meaning sentence leads into the analysis.</p><p><i>VI: Khẳng định → số liệu → kiểm ở đâu → nghĩa là gì. Câu ý nghĩa dẫn sang phần phân tích.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Trộn phân tích vào bảng kết quả — người đọc không tách được số và ý kiến."
+        },
+        {
+          "loi": "Đặt ảnh chụp giữa thân bài — 144 ảnh làm báo cáo dài 100 trang."
+        },
+        {
+          "loi": "Để tóm tắt ở cuối — người chấm đọc câu đầu và không thấy kết quả."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "scope",
+          "vi": "phạm vi — cái gì được kiểm, cái gì không"
+        },
+        {
+          "en": "appendix",
+          "vi": "phụ lục"
+        },
+        {
+          "en": "procedure",
+          "vi": "quy trình thực hiện"
+        }
+      ]
+    },
+    {
+      "title": "Report 2 — Which section does each piece of content belong to?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "report sections"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "ky-nang",
+        "ssg105"
+      ],
+      "problemHtml": "<p>The draft of the SportShop Lab 4 report (Report 5.3, module A) has its content in one long list. Put each piece into the right section. The test: <b>Results</b> state what happened with numbers; <b>Analysis</b> explains why; <b>Conclusion</b> says what to do; <b>Method</b> says how you would repeat it; <b>Environment</b> says on what.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bản nháp báo cáo Lab 4 SportShop (Report 5.3, module A) để mọi nội dung trong một danh sách dài. Đưa mỗi mảnh vào đúng mục. Cách phân biệt: <b>Kết quả</b> nêu chuyện gì xảy ra kèm số; <b>Phân tích</b> giải thích vì sao; <b>Kết luận</b> nói nên làm gì; <b>Phương pháp</b> nói làm lại thế nào; <b>Môi trường</b> nói chạy trên gì.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Câu \"cho thấy…\" ⇒ phân tích, kể cả khi có số.",
+        "Tên tệp ảnh, log ⇒ phụ lục."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Report 2 — Which section does each piece of content belong to?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Report 2 — Which section does each piece of content belong to? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Purpose and scope\n   - r1.k: Environment\n   - r2.k: Method\n   - r3.k: Results\n   - r4.k: Analysis\n   - r5.k: Conclusion\n   - r6.k: Appendix\n   - r7.k: Analysis\n   - r8.k: Purpose and scope\n   A sentence with “because / shows that” is analysis; a sentence with “should / do not / fix first” is a conclusion; a bare count is a result.VI: Câu có \"vì / cho thấy\" là phân tích; câu có \"nên / chưa / sửa trước\" là kết luận; câu chỉ có số đếm là kết quả.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Purpose · Environment · Method · Results · Analysis · Conclusion · Appendix · Analysis · Purpose.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Content"
+              },
+              {
+                "ma": "k",
+                "ten": "Section",
+                "luaChon": [
+                  "Purpose and scope",
+                  "Environment",
+                  "Method",
+                  "Results",
+                  "Analysis",
+                  "Conclusion",
+                  "Appendix"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Scope: module A (Authentication & Account) only; modules B–E are out of scope. — <i>Phạm vi: chỉ module A; module B–E nằm ngoài phạm vi.</i>"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Tomcat 10.1, SQL Server in Docker (container sportshop-mssql), Chromium driven by Playwright. — <i>Tomcat 10.1, SQL Server trong Docker, Chromium điều khiển bằng Playwright.</i>"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Each case starts from the seed data; 3 rounds; one screenshot per step per round. — <i>Mỗi ca bắt đầu từ dữ liệu mẫu; 3 round; mỗi bước mỗi round một ảnh.</i>"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "12 of 18 cases pass in each of the 3 rounds (66.67%). — <i>12/18 ca đạt ở mỗi round (66,67%).</i>"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Three of the six failures (AC05–AC07) cluster in the account-management pages: profile update and logout. — <i>Ba trong sáu ca fail (AC05–AC07) dồn vào trang quản lý tài khoản: cập nhật hồ sơ và đăng xuất.</i>"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Do not release module A yet; fix SS-31 (logout) and SS-27 (false success message) first. — <i>Chưa phát hành module A; sửa SS-31 và SS-27 trước.</i>"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "144 screenshots named &lt;case&gt;_S&lt;step&gt;_R&lt;round&gt;.jpg, e.g. RL02_S1_R1.jpg. — <i>144 ảnh đặt tên &lt;ca&gt;_S&lt;bước&gt;_R&lt;round&gt;.jpg.</i>"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "s": "Identical rounds on a freshly loaded database show the failures are not caused by dirty data. — <i>Các round giống nhau trên CSDL nạp lại cho thấy fail không do dữ liệu bẩn.</i>"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "s": "Purpose: verify that the customer journeys of module A meet the SRS end to end. — <i>Mục đích: kiểm các hành trình khách hàng của module A đúng SRS từ đầu tới cuối.</i>"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Purpose and scope",
+              "r1.k": "Environment",
+              "r2.k": "Method",
+              "r3.k": "Results",
+              "r4.k": "Analysis",
+              "r5.k": "Conclusion",
+              "r6.k": "Appendix",
+              "r7.k": "Analysis",
+              "r8.k": "Purpose and scope"
+            },
+            "giaiThich": "<p>A sentence with “because / shows that” is analysis; a sentence with “should / do not / fix first” is a conclusion; a bare count is a result.</p><p><i>VI: Câu có \"vì / cho thấy\" là phân tích; câu có \"nên / chưa / sửa trước\" là kết luận; câu chỉ có số đếm là kết quả.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt \"đề xuất sửa trước\" vào kết quả."
+        },
+        {
+          "loi": "Đặt cách đặt tên ảnh vào phương pháp thay vì phụ lục (phương pháp chỉ cần nói \"mỗi bước một ảnh\")."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "results vs analysis",
+          "vi": "kết quả (chuyện gì) và phân tích (vì sao)"
+        },
+        {
+          "en": "evidence",
+          "vi": "bằng chứng: log, ảnh chụp, dòng trong báo cáo, dòng mã"
+        }
+      ]
+    },
+    {
+      "title": "Report 3 — Compute the statistics exactly as the report shows them",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "test statistics"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "ky-nang",
+        "ssg105"
+      ],
+      "problemHtml": "<p>The statistics block of Report 5.x uses two ratios, shown with <b>two decimals</b>: <b>test coverage</b> = (Pass + Fail) ÷ Total (how much was executed) and <b>successful coverage</b> = Pass ÷ Total (how much passed). Test density = cases ÷ KLOC. Real numbers of SportShop module A:</p>\n<ul><li>Lab 2 (unit): 113 cases, 93 pass, 20 fail, module size 389 lines of code;</li>\n<li>Lab 3 (integration): 22 cases, 16 pass, 6 fail;</li>\n<li>Lab 4 (system): 18 cases, 12 pass, 6 fail.</li></ul>\n<p>Choose the exact value for each row.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Khối thống kê của Report 5.x dùng hai tỉ lệ, ghi <b>hai chữ số thập phân</b>: <b>test coverage</b> = (Pass + Fail) ÷ Tổng (đã chạy được bao nhiêu) và <b>successful coverage</b> = Pass ÷ Tổng (đạt bao nhiêu). Mật độ test = số ca ÷ KLOC. Số thật module A SportShop: Lab 2 có 113 ca, 93 đạt, 20 fail, module 389 dòng mã; Lab 3 có 22 ca, 16 đạt, 6 fail; Lab 4 có 18 ca, 12 đạt, 6 fail. Chọn giá trị đúng cho mỗi dòng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Successful coverage chỉ dùng Pass; test coverage dùng Pass + Fail.",
+        "KLOC = nghìn dòng ⇒ 389 dòng = 0,389 KLOC."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Report 3 — Compute the statistics exactly as the report shows them\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Report 3 — Compute the statistics exactly as the report shows them — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: 82.30%\n   - r1.k: 72.73%\n   - r2.k: 66.67%\n   - r3.k: 100.00%\n   - r4.k: 33.33%\n   - r5.k: 290.49 TC/KLOC\n   93 ÷ 113 = 82.30% · 16 ÷ 22 = 72.73% · 12 ÷ 18 = 66.67% · 113 ÷ 113 = 100.00% · 6 ÷ 18 = 33.33% · 113 ÷ 0.389 = 290.49 cases per KLOC (the rule asks ≥ 100).VI: 93 ÷ 113 = 82,30% · 16 ÷ 22 = 72,73% · 12 ÷ 18 = 66,67% · 113 ÷ 113 = 100,00% · 6 ÷ 18 = 33,33% · 113 ÷ 0,389 = 290,49 ca/KLOC (quy định ≥ 100).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>82.30% · 72.73% · 66.67% · 100.00% · 33.33% · 290.49 TC/KLOC.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statistic"
+              },
+              {
+                "ma": "k",
+                "ten": "Value",
+                "luaChon": [
+                  "82.30%",
+                  "72.73%",
+                  "66.67%",
+                  "100.00%",
+                  "33.33%",
+                  "290.49 TC/KLOC",
+                  "29.05 TC/KLOC",
+                  "81.42%"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Lab 2 successful coverage — <i>Successful coverage Lab 2</i>"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Lab 3 successful coverage — <i>Successful coverage Lab 3</i>"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Lab 4 successful coverage — <i>Successful coverage Lab 4</i>"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Lab 2 test coverage — <i>Test coverage Lab 2</i>"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Lab 4 failure rate (Fail ÷ Total) — <i>Tỉ lệ fail Lab 4</i>"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Lab 2 test density (cases per 1,000 lines) — <i>Mật độ test Lab 2</i>"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "82.30%",
+              "r1.k": "72.73%",
+              "r2.k": "66.67%",
+              "r3.k": "100.00%",
+              "r4.k": "33.33%",
+              "r5.k": "290.49 TC/KLOC"
+            },
+            "giaiThich": "<p>93 ÷ 113 = 82.30% · 16 ÷ 22 = 72.73% · 12 ÷ 18 = 66.67% · 113 ÷ 113 = 100.00% · 6 ÷ 18 = 33.33% · 113 ÷ 0.389 = 290.49 cases per KLOC (the rule asks ≥ 100).</p><p><i>VI: 93 ÷ 113 = 82,30% · 16 ÷ 22 = 72,73% · 12 ÷ 18 = 66,67% · 113 ÷ 113 = 100,00% · 6 ÷ 18 = 33,33% · 113 ÷ 0,389 = 290,49 ca/KLOC (quy định ≥ 100).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chia cho 389 thay vì 0,389 ⇒ 0,29 ca/KLOC (hoặc lệch 10 lần nếu chia 3,89)."
+        },
+        {
+          "loi": "Làm tròn một chữ số thập phân (82,3%) trong khi template ghi hai (82,30%)."
+        },
+        {
+          "loi": "Dùng tỉ lệ của lab khác."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "successful coverage",
+          "vi": "Pass ÷ Tổng ca — tỉ lệ ca đạt (Report 5.x)"
+        },
+        {
+          "en": "test coverage (execution)",
+          "vi": "(Pass + Fail) ÷ Tổng — tỉ lệ ca đã chạy"
+        },
+        {
+          "en": "KLOC",
+          "vi": "nghìn dòng mã"
+        }
+      ]
+    },
+    {
+      "title": "Report 4 — Results, analysis or conclusion?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "analysis",
+        "conclusion"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "ky-nang",
+        "ssg105"
+      ],
+      "problemHtml": "<p>The commonest weakness teachers mark in student reports: the analysis repeats the results, and the conclusion is “we learned a lot”. Each part has a different job. Answer these questions about where things belong and what a good conclusion contains.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Điểm yếu thầy cô hay trừ nhất trong báo cáo sinh viên: phần phân tích nhắc lại kết quả, còn kết luận là \"em học được nhiều điều\". Mỗi phần có một việc khác nhau. Trả lời các câu về nội dung nào thuộc phần nào và kết luận tốt gồm gì.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Kết quả = chuyện gì; Phân tích = vì sao; Kết luận = vậy nên làm gì.",
+        "Kết luận phải trả lời đúng câu hỏi của mục Mục đích."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Report 4 — Results, analysis or conclusion?\n\nAnswer in the answer panel (no code needed).\n\n1. Where do you explain why UserDAO branch coverage is 83% while every servlet is at 100%?Giải thích vì sao độ phủ nhánh UserDAO 83% trong khi mọi servlet 100% ở đâu?\n2. Which is a proper conclusion?Câu nào là kết luận đúng nghĩa?\n3. Which sentence belongs in Results?Câu nào thuộc Kết quả?\n4. The analysis section should mainly…Phần phân tích chủ yếu nên…\n5. Where do “lessons learned” go in a technical report?\"Bài học rút ra\" đặt ở đâu trong báo cáo kỹ thuật?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Report 4 — Results, analysis or conclusion? — answer key\n\n1. Where do you explain why UserDAO branch coverage is 83% while every servlet is at 100%?Giải thích vì sao độ phủ nhánh UserDAO 83% trong khi mọi servlet 100% ở đâu?\n   Answer: c) Analysis\n   “Why” is analysis: unreachable compiler-generated branches.VI: \"Vì sao\" là phân tích: nhánh do trình biên dịch sinh ra không tới được.\n\n2. Which is a proper conclusion?Câu nào là kết luận đúng nghĩa?\n   Answer: c) “Module A is not ready for release: 5 open defects, SS-31 blocks logout on two pages. Fix SS-31 and SS-27, then re-run AC05–AC07.”\n   A verdict against the purpose, the evidence in one clause, and next actions.VI: Phán quyết so với mục đích, bằng chứng một vế, và việc tiếp theo.\n\n3. Which sentence belongs in Results?Câu nào thuộc Kết quả?\n   Answer: a) “IT06 failed in rounds 1–3: the Password column contains the plain text Sport@2026.”\n   A fact with its observation; no judgement, no advice.VI: Một sự việc kèm quan sát; không phán xét, không khuyên.\n\n4. The analysis section should mainly…Phần phân tích chủ yếu nên…\n   Answer: d) find patterns and causes: which kind of defect, where they cluster, why rounds match\n   Patterns and causes add what the table cannot say by itself.VI: Quy luật và nguyên nhân bổ sung điều bảng tự nó không nói được.\n\n5. Where do “lessons learned” go in a technical report?\"Bài học rút ra\" đặt ở đâu trong báo cáo kỹ thuật?\n   Answer: b) A short subsection after the conclusion, each lesson tied to a piece of evidence\n   Lessons are valuable when they point at evidence (“IT05 shows …”).VI: Bài học có giá trị khi chỉ vào bằng chứng (\"IT05 cho thấy…\").\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: c · c · a · d · b.</p>",
+      "solutionExplanationHtmlVi": "<p>Đáp án: c · c · a · d · b.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Where do you explain why UserDAO branch coverage is 83% while every servlet is at 100%?</p><p style=\"opacity:.75;font-size:.92em\"><i>Giải thích vì sao độ phủ nhánh UserDAO 83% trong khi mọi servlet 100% ở đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Purpose"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Results"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Analysis"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Environment"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>“Why” is analysis: unreachable compiler-generated branches.</p><p><i>VI: \"Vì sao\" là phân tích: nhánh do trình biên dịch sinh ra không tới được.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Which is a proper conclusion?</p><p style=\"opacity:.75;font-size:.92em\"><i>Câu nào là kết luận đúng nghĩa?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "“The results are shown in Table 3.”"
+              },
+              {
+                "ma": "b",
+                "noiDung": "“We learned a lot about testing.”"
+              },
+              {
+                "ma": "c",
+                "noiDung": "“Module A is not ready for release: 5 open defects, SS-31 blocks logout on two pages. Fix SS-31 and SS-27, then re-run AC05–AC07.”"
+              },
+              {
+                "ma": "d",
+                "noiDung": "“Testing is important.”"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A verdict against the purpose, the evidence in one clause, and next actions.</p><p><i>VI: Phán quyết so với mục đích, bằng chứng một vế, và việc tiếp theo.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Which sentence belongs in Results?</p><p style=\"opacity:.75;font-size:.92em\"><i>Câu nào thuộc Kết quả?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "“IT06 failed in rounds 1–3: the Password column contains the plain text Sport@2026.”"
+              },
+              {
+                "ma": "b",
+                "noiDung": "“The developers should hash passwords.”"
+              },
+              {
+                "ma": "c",
+                "noiDung": "“Security is very important nowadays.”"
+              },
+              {
+                "ma": "d",
+                "noiDung": "“This shows the team did not think about security.”"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>A fact with its observation; no judgement, no advice.</p><p><i>VI: Một sự việc kèm quan sát; không phán xét, không khuyên.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>The analysis section should mainly…</p><p style=\"opacity:.75;font-size:.92em\"><i>Phần phân tích chủ yếu nên…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "list what each member did"
+              },
+              {
+                "ma": "b",
+                "noiDung": "describe the tools in detail"
+              },
+              {
+                "ma": "c",
+                "noiDung": "repeat the table in sentences"
+              },
+              {
+                "ma": "d",
+                "noiDung": "find patterns and causes: which kind of defect, where they cluster, why rounds match"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Patterns and causes add what the table cannot say by itself.</p><p><i>VI: Quy luật và nguyên nhân bổ sung điều bảng tự nó không nói được.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>Where do “lessons learned” go in a technical report?</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Bài học rút ra\" đặt ở đâu trong báo cáo kỹ thuật?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "In the title"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A short subsection after the conclusion, each lesson tied to a piece of evidence"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Mixed into the results"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nowhere — reports have no lessons"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Lessons are valuable when they point at evidence (“IT05 shows …”).</p><p><i>VI: Bài học có giá trị khi chỉ vào bằng chứng (\"IT05 cho thấy…\").</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Kết luận chung chung (\"em học được nhiều\")."
+        },
+        {
+          "loi": "Viết lời khuyên trong phần kết quả."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "verdict",
+          "vi": "phán quyết — đạt/chưa đạt so với mục đích"
+        },
+        {
+          "en": "lessons learned",
+          "vi": "bài học rút ra"
+        }
+      ]
+    },
+    {
+      "title": "Report 5 — Tables, figures and evidence references",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "figures and tables"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "ky-nang",
+        "ssg105"
+      ],
+      "problemHtml": "<p>Figures and tables carry most of the information in a test report, and they are where marks are lost silently: a screenshot without a caption, a table nobody refers to, evidence that cannot be found from the text. Choose the better practice.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hình và bảng mang phần lớn thông tin của báo cáo kiểm thử, và cũng là chỗ mất điểm âm thầm: ảnh không chú thích, bảng không ai nhắc tới, bằng chứng không tìm được từ văn bản. Chọn cách làm tốt hơn.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Bảng/hình: đánh số + chú thích + được nhắc trong văn bản.",
+        "Bằng chứng đầy đủ để phụ lục; thân bài chỉ chọn hình đại diện."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Report 5 — Tables, figures and evidence references\n\nAnswer in the answer panel (no code needed).\n\n1. A table of the 3 rounds is in the report. What must the text do?Báo cáo có bảng 3 round. Văn bản phải làm gì?\n2. Where does a caption go and what does it say?Chú thích đặt đâu và nói gì?\n3. The text claims “IT17 changed another user’s password”. How do you support it?Văn bản viết \"IT17 đổi mật khẩu người khác\". Dẫn chứng thế nào?\n4. Your report has 144 screenshots. How do you include them?Báo cáo có 144 ảnh. Đưa vào thế nào?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Report 5 — Tables, figures and evidence references — answer key\n\n1. A table of the 3 rounds is in the report. What must the text do?Báo cáo có bảng 3 round. Văn bản phải làm gì?\n   Answer: a) Refer to it by number and state its key point: “Table 3: results were identical in all rounds (16/22).”\n   Every table/figure is numbered, captioned and referred to with its message.VI: Mọi bảng/hình được đánh số, chú thích, và được nhắc tới kèm thông điệp.\n\n2. Where does a caption go and what does it say?Chú thích đặt đâu và nói gì?\n   Answer: a) Tables: above; figures: below; it says what, where and when — “Figure 4. RL02 step 1, round 1: guest sees HTTP 500 (SS-19).”\n   The usual academic convention, and a caption that stands alone.VI: Quy ước học thuật thông dụng, và chú thích đọc riêng vẫn hiểu.\n\n3. The text claims “IT17 changed another user’s password”. How do you support it?Văn bản viết \"IT17 đổi mật khẩu người khác\". Dẫn chứng thế nào?\n   Answer: c) Cite the evidence: “see the SELECT before/after in Appendix B, db-queries.log, round 1”\n   A precise pointer lets the reader verify in one step without bloating the body.VI: Một con trỏ chính xác cho người đọc kiểm trong một bước mà thân bài không phình.\n\n4. Your report has 144 screenshots. How do you include them?Báo cáo có 144 ảnh. Đưa vào thế nào?\n   Answer: a) One or two representative figures in the body; all 144 in the appendix / evidence sheet, named consistently\n   Body = readable story; appendix = complete evidence, failures included.VI: Thân bài = câu chuyện dễ đọc; phụ lục = bằng chứng đủ, kể cả ca fail.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · a · c · a.</p>",
+      "solutionExplanationHtmlVi": "<p>Đáp án: a · a · c · a.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>A table of the 3 rounds is in the report. What must the text do?</p><p style=\"opacity:.75;font-size:.92em\"><i>Báo cáo có bảng 3 round. Văn bản phải làm gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Refer to it by number and state its key point: “Table 3: results were identical in all rounds (16/22).”"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Nothing, the table speaks for itself"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Put it after the appendix"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Copy every cell into a paragraph"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Every table/figure is numbered, captioned and referred to with its message.</p><p><i>VI: Mọi bảng/hình được đánh số, chú thích, và được nhắc tới kèm thông điệp.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Where does a caption go and what does it say?</p><p style=\"opacity:.75;font-size:.92em\"><i>Chú thích đặt đâu và nói gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Tables: above; figures: below; it says what, where and when — “Figure 4. RL02 step 1, round 1: guest sees HTTP 500 (SS-19).”"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Captions are optional"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only in the file name"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Anywhere; “Image”"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The usual academic convention, and a caption that stands alone.</p><p><i>VI: Quy ước học thuật thông dụng, và chú thích đọc riêng vẫn hiểu.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>The text claims “IT17 changed another user’s password”. How do you support it?</p><p style=\"opacity:.75;font-size:.92em\"><i>Văn bản viết \"IT17 đổi mật khẩu người khác\". Dẫn chứng thế nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "“Trust us.”"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Paste the whole log into the text"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Cite the evidence: “see the SELECT before/after in Appendix B, db-queries.log, round 1”"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Mention it only in the slides"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A precise pointer lets the reader verify in one step without bloating the body.</p><p><i>VI: Một con trỏ chính xác cho người đọc kiểm trong một bước mà thân bài không phình.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Your report has 144 screenshots. How do you include them?</p><p style=\"opacity:.75;font-size:.92em\"><i>Báo cáo có 144 ảnh. Đưa vào thế nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "One or two representative figures in the body; all 144 in the appendix / evidence sheet, named consistently"
+              },
+              {
+                "ma": "b",
+                "noiDung": "None — too many"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only the passing ones"
+              },
+              {
+                "ma": "d",
+                "noiDung": "All in the results section, full size"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Body = readable story; appendix = complete evidence, failures included.</p><p><i>VI: Thân bài = câu chuyện dễ đọc; phụ lục = bằng chứng đủ, kể cả ca fail.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chú thích kiểu \"Hình 1\" không nói gì."
+        },
+        {
+          "loi": "Chỉ đưa ảnh ca đạt — báo cáo trông đẹp nhưng không trung thực."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "caption",
+          "vi": "chú thích hình/bảng"
+        },
+        {
+          "en": "cross-reference",
+          "vi": "tham chiếu chéo (\"xem Bảng 3\")"
+        },
+        {
+          "en": "evidence",
+          "vi": "bằng chứng: log, ảnh chụp, dòng trong báo cáo, dòng mã"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,828 @@
+{
+  "trackSlug": "ky-nang-practice",
+  "moduleSlug": "ssg105-3-4-postmortem",
+  "lesson": {
+    "course": "ssg105-communication-and-in-group-working-skills",
+    "slug": "ssg105-3-1-writing"
+  },
+  "exercises": [
+    {
+      "title": "Post-mortem 1 — Order the sections and the disk-full timeline",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "post-mortem structure"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "ky-nang",
+        "ssg105"
+      ],
+      "problemHtml": "<p>A <b>post-mortem</b> (incident review) is written after something broke, so that it does not break the same way again. Its order is fixed so that a reader in a hurry gets the essentials from the top: what happened and how bad → when → why → what was done → what will change. Order the sections, then the real events of 18/08/2026, when a deploy on the cuongthai.com VPS ran out of disk.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Post-mortem</b> (báo cáo sau sự cố) được viết sau khi có thứ hỏng, để nó không hỏng theo cùng một cách nữa. Thứ tự cố định để người đọc vội lấy được điều cốt lõi từ trên xuống: chuyện gì và nặng cỡ nào → khi nào → vì sao → đã làm gì → sẽ thay đổi gì. Sắp các mục, rồi các sự kiện thật ngày 18/08/2026 khi một lần deploy trên VPS cuongthai.com cạn đĩa.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Mục \"đã xử lý\" (khôi phục) đứng trước \"việc cần làm\" (phòng ngừa).",
+        "Dòng thời gian bắt đầu từ nguyên nhân âm ỉ, không phải từ lúc thấy lỗi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Post-mortem 1 — Order the sections and the disk-full timeline\n\nAnswer in the answer panel (no code needed).\n\n1. Sections of a post-mortemCác mục của post-mortem\n2. Timeline of the 18/08/2026 disk incidentDòng thời gian sự cố đĩa 18/08/2026\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Post-mortem 1 — Order the sections and the disk-full timeline — answer key\n\n1. Sections of a post-mortemCác mục của post-mortem\n   Answer: a) Summary (2–3 sentences)  →  b) Impact (who, what, how long, how much)  →  c) Timeline (detection → recovery)  →  d) Root cause (5 whys)  →  e) Resolution and recovery  →  f) Action items (owner + due date)  →  g) Lessons learned\n   Summary and impact first for busy readers; the analysis in the middle; commitments at the end.VI: Tóm tắt và ảnh hưởng trước cho người đọc vội; phân tích ở giữa; cam kết ở cuối.\n\n2. Timeline of the 18/08/2026 disk incidentDòng thời gian sự cố đĩa 18/08/2026\n   Answer: a) Over weeks, the Docker build cache grows to 7.6 GB on the disk that also holds Postgres  →  b) deploy.sh starts and runs next build on the VPS  →  c) Free disk drops to 1.8 GB while next build runs  →  d) The deploy dies with “no space left on device”  →  e) The build cache is pruned and the deploy is re-run  →  f) Builds move to the home machine (deploy-nha.sh); the VPS keeps no build cache\n   Slow cause → trigger → symptom → failure → recovery → prevention.VI: Nguyên nhân âm ỉ → kích hoạt → triệu chứng → hỏng → khôi phục → phòng ngừa.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Sections of a post-mortem</b>: Summary (2–3 sentences) → Impact (who, what, how long, how much) → Timeline (detection → recovery) → Root cause (5 whys) → Resolution and recovery → Action items (owner + due date) → Lessons learned.</p><p><b>Timeline of the 18/08/2026 disk incident</b>: Over weeks, the Docker build cache grows to 7.6 GB on the disk that also holds Postgres → deploy.sh starts and runs next build on the VPS → Free disk drops to 1.8 GB while next build runs → The deploy dies with “no space left on device” → The build cache is pruned and the deploy is re-run → Builds move to the home machine (deploy-nha.sh); the VPS keeps no build cache.</p>",
+      "solutionExplanationHtmlVi": "<p><b>Các mục của post-mortem</b>: Tóm tắt và ảnh hưởng trước cho người đọc vội; phân tích ở giữa; cam kết ở cuối.</p><p><b>Dòng thời gian sự cố đĩa 18/08/2026</b>: Nguyên nhân âm ỉ → kích hoạt → triệu chứng → hỏng → khôi phục → phòng ngừa.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Sections of a post-mortem</p><p style=\"opacity:.75;font-size:.92em\"><i>Các mục của post-mortem</i></p>",
+            "muc": [
+              {
+                "ma": "c",
+                "noiDung": "Timeline (detection → recovery)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Root cause (5 whys)"
+              },
+              {
+                "ma": "a",
+                "noiDung": "Summary (2–3 sentences)"
+              },
+              {
+                "ma": "f",
+                "noiDung": "Action items (owner + due date)"
+              },
+              {
+                "ma": "e",
+                "noiDung": "Resolution and recovery"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Impact (who, what, how long, how much)"
+              },
+              {
+                "ma": "g",
+                "noiDung": "Lessons learned"
+              }
+            ],
+            "dapAn": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e",
+              "f",
+              "g"
+            ],
+            "giaiThich": "<p>Summary and impact first for busy readers; the analysis in the middle; commitments at the end.</p><p><i>VI: Tóm tắt và ảnh hưởng trước cho người đọc vội; phân tích ở giữa; cam kết ở cuối.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Timeline of the 18/08/2026 disk incident</p><p style=\"opacity:.75;font-size:.92em\"><i>Dòng thời gian sự cố đĩa 18/08/2026</i></p>",
+            "muc": [
+              {
+                "ma": "b",
+                "noiDung": "deploy.sh starts and runs next build on the VPS"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The deploy dies with “no space left on device”"
+              },
+              {
+                "ma": "f",
+                "noiDung": "Builds move to the home machine (deploy-nha.sh); the VPS keeps no build cache"
+              },
+              {
+                "ma": "a",
+                "noiDung": "Over weeks, the Docker build cache grows to 7.6 GB on the disk that also holds Postgres"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Free disk drops to 1.8 GB while next build runs"
+              },
+              {
+                "ma": "e",
+                "noiDung": "The build cache is pruned and the deploy is re-run"
+              }
+            ],
+            "dapAn": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e",
+              "f"
+            ],
+            "giaiThich": "<p>Slow cause → trigger → symptom → failure → recovery → prevention.</p><p><i>VI: Nguyên nhân âm ỉ → kích hoạt → triệu chứng → hỏng → khôi phục → phòng ngừa.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt nguyên nhân gốc lên đầu trước khi người đọc biết chuyện gì xảy ra."
+        },
+        {
+          "loi": "Dòng thời gian chỉ có lúc hỏng và lúc sửa — mất phần \"đã âm ỉ bao lâu\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "post-mortem (incident review)",
+          "vi": "báo cáo sau sự cố: chuyện gì xảy ra, vì sao, sẽ làm gì để không lặp lại"
+        },
+        {
+          "en": "impact",
+          "vi": "ảnh hưởng: ai bị, bao lâu, bao nhiêu"
+        },
+        {
+          "en": "timeline",
+          "vi": "dòng thời gian sự kiện"
+        },
+        {
+          "en": "build cache",
+          "vi": "bộ đệm lớp ảnh Docker khi build"
+        }
+      ]
+    },
+    {
+      "title": "Post-mortem 2 — 5 whys of the 502 that lasted seven minutes",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "5 whys",
+        "root cause"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "ky-nang",
+        "ssg105"
+      ],
+      "problemHtml": "<p>On 18/08/2026 a deploy of cuongthai.com was green at every step — build, push, swap — and then the API answered <b>HTTP 502 for seven minutes</b>. Ask “why?” until you reach something you can change so it never happens again. Put each answer on the right step of the chain.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ngày 18/08/2026 một lần deploy cuongthai.com xanh ở mọi bước — build, đẩy, tráo — rồi API trả <b>HTTP 502 suốt bảy phút</b>. Hỏi \"vì sao?\" tới khi chạm thứ có thể thay đổi để nó không bao giờ lặp lại. Đặt mỗi câu trả lời vào đúng bậc của chuỗi.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Mỗi câu trả lời là nguyên nhân trực tiếp của câu ngay trên nó.",
+        "Bậc cuối phải là thứ quy trình thay đổi được, không phải một người."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Post-mortem 2 — 5 whys of the 502 that lasted seven minutes\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Post-mortem 2 — 5 whys of the 502 that lasted seven minutes — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: The backend container kept restarting after the image swap\n   - r1.k: The Prisma engine in the image was built for glibc, but the image base was Alpine (musl)\n   - r2.k: The image was built from the default Dockerfile instead of Dockerfile.backend that compose uses\n   - r3.k: The new deploy script ran docker build . without -f, outside compose\n   - r4.k: Nothing checked that the image could start before it was pushed and swapped in\n   The root cause is not “someone forgot -f” (a person) but “no check that the image runs” (a missing safety net). The real fix added both: the correct -f AND a libc ↔ engine check before pushing. Lesson recorded: a green build does not mean a runnable image.VI: Nguyên nhân gốc không phải \"ai đó quên -f\" (một người) mà là \"không có chốt kiểm ảnh chạy được\" (thiếu lưới an toàn). Bản sửa thật thêm cả hai: đúng -f VÀ chốt kiểm libc ↔ engine trước khi đẩy. Bài học: build xanh không có nghĩa là ảnh chạy được.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Restart loop → glibc engine on musl → default Dockerfile → no -f → no runnability check.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Question"
+              },
+              {
+                "ma": "k",
+                "ten": "Answer",
+                "luaChon": [
+                  "The backend container kept restarting after the image swap",
+                  "The Prisma engine in the image was built for glibc, but the image base was Alpine (musl)",
+                  "The image was built from the default Dockerfile instead of Dockerfile.backend that compose uses",
+                  "The new deploy script ran docker build . without -f, outside compose",
+                  "Nothing checked that the image could start before it was pushed and swapped in"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Why 1 — Why did the API return 502? — <i>Vì sao API trả 502?</i>"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Why 2 — Why did the container keep restarting? — <i>Vì sao container khởi động lại liên tục?</i>"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Why 3 — Why did the image carry the wrong engine? — <i>Vì sao ảnh mang engine sai?</i>"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Why 4 — Why the wrong Dockerfile? — <i>Vì sao dùng nhầm Dockerfile?</i>"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Why 5 — Why did it reach production? — <i>Vì sao nó lọt tới production?</i>"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "The backend container kept restarting after the image swap",
+              "r1.k": "The Prisma engine in the image was built for glibc, but the image base was Alpine (musl)",
+              "r2.k": "The image was built from the default Dockerfile instead of Dockerfile.backend that compose uses",
+              "r3.k": "The new deploy script ran docker build . without -f, outside compose",
+              "r4.k": "Nothing checked that the image could start before it was pushed and swapped in"
+            },
+            "giaiThich": "<p>The root cause is not “someone forgot -f” (a person) but “no check that the image runs” (a missing safety net). The real fix added both: the correct -f AND a libc ↔ engine check before pushing. Lesson recorded: a green build does not mean a runnable image.</p><p><i>VI: Nguyên nhân gốc không phải \"ai đó quên -f\" (một người) mà là \"không có chốt kiểm ảnh chạy được\" (thiếu lưới an toàn). Bản sửa thật thêm cả hai: đúng -f VÀ chốt kiểm libc ↔ engine trước khi đẩy. Bài học: build xanh không có nghĩa là ảnh chạy được.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dừng ở bậc 3 (\"dùng nhầm Dockerfile\") — sửa xong vẫn có thể lọt kiểu lỗi khác."
+        },
+        {
+          "loi": "Viết bậc 5 là \"người viết script bất cẩn\" — đổ lỗi, không sửa được gì."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "5 Whys",
+          "vi": "hỏi \"vì sao\" liên tiếp tới nguyên nhân gốc"
+        },
+        {
+          "en": "root cause",
+          "vi": "nguyên nhân gốc — sửa nó thì sự cố không lặp lại"
+        },
+        {
+          "en": "musl vs glibc",
+          "vi": "hai thư viện C khác nhau — Alpine dùng musl, Debian/Ubuntu dùng glibc"
+        }
+      ]
+    },
+    {
+      "title": "Post-mortem 3 — Prevent, detect or mitigate?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "action items"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "ky-nang",
+        "ssg105"
+      ],
+      "problemHtml": "<p>Good action items cover three layers: <b>prevent</b> (the failure cannot happen this way again), <b>detect</b> (if it happens, we notice in seconds instead of days), <b>mitigate</b> (when it happens, recovery is fast and small). These are real measures from the three cuongthai.com incidents. Classify each.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Việc cần làm tốt phủ ba lớp: <b>ngăn</b> (lỗi không thể xảy ra theo cách này nữa), <b>phát hiện</b> (nếu xảy ra, biết trong vài giây thay vì vài ngày), <b>giảm nhẹ</b> (khi xảy ra, khôi phục nhanh và ít thiệt hại). Đây là các biện pháp thật từ ba sự cố của cuongthai.com. Phân loại từng cái.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Hỏi: biện pháp này chạy trước, sau, hay trong lúc sự cố?",
+        "Một lệnh khôi phục nhanh là giảm nhẹ, không phải ngăn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Post-mortem 3 — Prevent, detect or mitigate?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Post-mortem 3 — Prevent, detect or mitigate? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Prevent\n   - r1.k: Detect\n   - r2.k: Mitigate\n   - r3.k: Prevent\n   - r4.k: Detect\n   - r5.k: Mitigate\n   - r6.k: Prevent\n   - r7.k: Prevent\n   A check BEFORE the change reaches production prevents; a check AFTER detects; a fast way back mitigates. Note the libc check runs before the push, so it prevents the bad image from ever being swapped in.VI: Chốt kiểm TRƯỚC khi thay đổi tới production là ngăn; kiểm SAU là phát hiện; đường lui nhanh là giảm nhẹ. Chốt libc chạy trước khi đẩy nên nó ngăn ảnh hỏng được tráo vào.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Prevent · Detect · Mitigate · Prevent · Detect · Mitigate · Prevent · Prevent.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Action"
+              },
+              {
+                "ma": "k",
+                "ten": "Layer",
+                "luaChon": [
+                  "Prevent",
+                  "Detect",
+                  "Mitigate"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Overwrite nginx.conf in place (cat new > conf) instead of mv — <i>Ghi đè tại chỗ thay vì mv</i>"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "After writing, compare sha256 on the host with sha256sum inside the container; stop on mismatch — <i>So sha256 trên host với bên trong container</i>"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "If nginx -t fails, put the previous config back automatically — <i>nginx -t hỏng thì tự trả bản cũ về</i>"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Build images on the home machine so the VPS keeps no build cache — <i>Build ở máy nhà để VPS không giữ cache</i>"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Smoke-test core API routes after each deploy and fail on 404 — <i>Smoke-test các route chính sau deploy, 404 thì báo hỏng</i>"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Re-tag the previous image and recreate the backend (about 40 seconds) — <i>Gắn lại tag ảnh cũ và dựng lại backend (~40 giây)</i>"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "Check libc ↔ Prisma engine before pushing the image — <i>Kiểm libc ↔ engine Prisma trước khi đẩy ảnh</i>"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "s": "Weekly cron job reclaims VPS disk space — <i>Cron hằng tuần dọn đĩa VPS</i>"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Prevent",
+              "r1.k": "Detect",
+              "r2.k": "Mitigate",
+              "r3.k": "Prevent",
+              "r4.k": "Detect",
+              "r5.k": "Mitigate",
+              "r6.k": "Prevent",
+              "r7.k": "Prevent"
+            },
+            "giaiThich": "<p>A check BEFORE the change reaches production prevents; a check AFTER detects; a fast way back mitigates. Note the libc check runs before the push, so it prevents the bad image from ever being swapped in.</p><p><i>VI: Chốt kiểm TRƯỚC khi thay đổi tới production là ngăn; kiểm SAU là phát hiện; đường lui nhanh là giảm nhẹ. Chốt libc chạy trước khi đẩy nên nó ngăn ảnh hỏng được tráo vào.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chỉ viết việc \"ngăn\" — lần sau hỏng kiểu khác vẫn không ai biết."
+        },
+        {
+          "loi": "Coi smoke-test sau deploy là ngăn (nó chỉ phát hiện, sau khi đã lên)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "action item",
+          "vi": "việc cần làm sau sự cố — có người làm và hạn"
+        },
+        {
+          "en": "smoke test",
+          "vi": "kiểm nhanh vài đường chính sau khi lên bản"
+        },
+        {
+          "en": "mitigation",
+          "vi": "giảm nhẹ thiệt hại"
+        }
+      ]
+    },
+    {
+      "title": "Post-mortem 4 — Blameless summaries and impact statements",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "blameless culture"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "ky-nang",
+        "ssg105"
+      ],
+      "problemHtml": "<p>A post-mortem is <b>blameless</b>: it assumes people acted reasonably with what they knew, and looks for the gap in the system that let a reasonable action cause harm. It is also <b>precise about impact</b>: who was affected, how, for how long. Choose the best sentence each time.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Post-mortem là <b>không đổ lỗi</b>: giả định mọi người hành động hợp lý với thông tin họ có, và tìm lỗ hổng của hệ thống đã để một hành động hợp lý gây hại. Nó cũng <b>chính xác về ảnh hưởng</b>: ai bị, bị thế nào, bao lâu. Chọn câu tốt nhất.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Câu tốt có cơ chế + con số; không có tên người, không có tính từ chê.",
+        "\"Cẩn thận hơn\" không phải bài học — không kiểm được."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Post-mortem 4 — Blameless summaries and impact statements\n\nAnswer in the answer panel (no code needed).\n\n1. Summary of the nginx incidentTóm tắt sự cố nginx\n2. Impact of the 18/08 502 incidentẢnh hưởng của sự cố 502 ngày 18/08\n3. A blameless “contributing factor”Một \"yếu tố góp phần\" không đổ lỗi\n4. Lesson from the nginx incidentBài học từ sự cố nginx\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Post-mortem 4 — Blameless summaries and impact statements — answer key\n\n1. Summary of the nginx incidentTóm tắt sự cố nginx\n   Answer: a) “For two deploys (23–25/08), nginx config changes reported OK but never took effect: the file was replaced with mv, and the single-file bind mount kept serving the old inode.”\n   Duration, the misleading signal (“OK”), the mechanism — no person.VI: Thời gian, tín hiệu đánh lừa (\"OK\"), cơ chế — không có người bị nêu.\n\n2. Impact of the 18/08 502 incidentẢnh hưởng của sự cố 502 ngày 18/08\n   Answer: a) “Every API request returned HTTP 502 for about 7 minutes; the web pages loaded but could not log in or load data.”\n   What failed, the scope, the duration, what users experienced.VI: Cái gì hỏng, phạm vi, thời lượng, người dùng trải qua gì.\n\n3. A blameless “contributing factor”Một \"yếu tố góp phần\" không đổ lỗi\n   Answer: d) “Building outside compose required repeating the Dockerfile name by hand, and nothing compared it with the compose file.”\n   Describe the condition that made the mistake easy, not the person who made it.VI: Mô tả điều kiện khiến sai sót dễ xảy ra, không phải người mắc sai sót.\n\n4. Lesson from the nginx incidentBài học từ sự cố nginx\n   Answer: c) “‘Written’ is not ‘in effect’: verify a change from where it is consumed (inside the container), not where it was written.”\n   A lesson is a reusable rule, not an emotion.VI: Bài học là quy tắc dùng lại được, không phải cảm xúc.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · a · d · c.</p>",
+      "solutionExplanationHtmlVi": "<p>Đáp án: a · a · d · c.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Summary of the nginx incident</p><p style=\"opacity:.75;font-size:.92em\"><i>Tóm tắt sự cố nginx</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "“For two deploys (23–25/08), nginx config changes reported OK but never took effect: the file was replaced with mv, and the single-file bind mount kept serving the old inode.”"
+              },
+              {
+                "ma": "b",
+                "noiDung": "“Someone should have tested it.”"
+              },
+              {
+                "ma": "c",
+                "noiDung": "“Nginx had a problem.”"
+              },
+              {
+                "ma": "d",
+                "noiDung": "“The deploy script was badly written.”"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Duration, the misleading signal (“OK”), the mechanism — no person.</p><p><i>VI: Thời gian, tín hiệu đánh lừa (\"OK\"), cơ chế — không có người bị nêu.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Impact of the 18/08 502 incident</p><p style=\"opacity:.75;font-size:.92em\"><i>Ảnh hưởng của sự cố 502 ngày 18/08</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "“Every API request returned HTTP 502 for about 7 minutes; the web pages loaded but could not log in or load data.”"
+              },
+              {
+                "ma": "b",
+                "noiDung": "“Users were very angry.”"
+              },
+              {
+                "ma": "c",
+                "noiDung": "“Not much impact.”"
+              },
+              {
+                "ma": "d",
+                "noiDung": "“The site was down for a while.”"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>What failed, the scope, the duration, what users experienced.</p><p><i>VI: Cái gì hỏng, phạm vi, thời lượng, người dùng trải qua gì.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>A blameless “contributing factor”</p><p style=\"opacity:.75;font-size:.92em\"><i>Một \"yếu tố góp phần\" không đổ lỗi</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "“The developer is new.”"
+              },
+              {
+                "ma": "b",
+                "noiDung": "“Bad luck.”"
+              },
+              {
+                "ma": "c",
+                "noiDung": "“The developer forgot the -f flag.”"
+              },
+              {
+                "ma": "d",
+                "noiDung": "“Building outside compose required repeating the Dockerfile name by hand, and nothing compared it with the compose file.”"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Describe the condition that made the mistake easy, not the person who made it.</p><p><i>VI: Mô tả điều kiện khiến sai sót dễ xảy ra, không phải người mắc sai sót.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Lesson from the nginx incident</p><p style=\"opacity:.75;font-size:.92em\"><i>Bài học từ sự cố nginx</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "“Be more careful.”"
+              },
+              {
+                "ma": "b",
+                "noiDung": "“Never use nginx.”"
+              },
+              {
+                "ma": "c",
+                "noiDung": "“‘Written’ is not ‘in effect’: verify a change from where it is consumed (inside the container), not where it was written.”"
+              },
+              {
+                "ma": "d",
+                "noiDung": "“Do not deploy on Mondays.”"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A lesson is a reusable rule, not an emotion.</p><p><i>VI: Bài học là quy tắc dùng lại được, không phải cảm xúc.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết tóm tắt như lời xin lỗi."
+        },
+        {
+          "loi": "Ảnh hưởng ghi \"không đáng kể\" mà không đo."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "blameless",
+          "vi": "không đổ lỗi cá nhân — tìm lỗ hổng của quy trình/hệ thống"
+        },
+        {
+          "en": "impact",
+          "vi": "ảnh hưởng: ai bị, bao lâu, bao nhiêu"
+        },
+        {
+          "en": "contributing factor",
+          "vi": "yếu tố góp phần gây sự cố"
+        },
+        {
+          "en": "bind mount",
+          "vi": "gắn tệp/thư mục của máy chủ vào container"
+        }
+      ]
+    },
+    {
+      "title": "Post-mortem 5 — Write the nginx post-mortem (structured)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 40,
+      "points": 30,
+      "concepts": [
+        "post-mortem writing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "ky-nang",
+        "ssg105"
+      ],
+      "problemHtml": "<p>Write the post-mortem of a real cuongthai.com incident as a structured object. The facts (from the project’s incident log):</p>\n<ul>\n<li><b>23/08/2026</b> — step 6c is added to <code>deploy-nha.sh</code>: copy <code>nginx/nginx.conf</code> to the VPS, run <code>nginx -t</code>, then <code>reload</code>. Goal: HTTP/2 and real cache headers (the <code>/playground</code> assets, 94 MB, were served <code>no-store</code>; 12 logo SVGs and <code>robot.json</code> were refetched on every navigation).</li>\n<li><b>Two deploys in a row</b> report <code>KQ=OK</code> — <code>nginx -t</code> green, <code>reload</code> green — but HTTP/2 is still off and every cache header is still <code>no-store</code>.</li>\n<li><b>25/08/2026</b> — cause: the step replaced the file with <code>mv</code>. <code>nginx.conf</code> is a <b>single-file bind mount</b>, and Docker binds a single file <b>by inode</b> when the container starts. <code>mv</code> points the host path to a new inode; the container keeps reading the old one, so <code>nginx -t</code> tests the old config and <code>reload</code> reloads it.</li>\n<li><b>Fix</b>: overwrite in place (<code>cat new &gt; conf</code>; never <code>mv</code>/<code>rsync</code>/<code>sed -i</code>/editor save-as) and compare <code>sha256</code> on the host with <code>docker exec … sha256sum</code> inside the container; on mismatch restore the old file and stop.</li>\n</ul>\n<p>The log has dates, not times — use <b>illustrative</b> times in the timeline and say so in a comment. Fill <code>POSTMORTEM</code>:</p>\n<ul><li><code>summary</code> ≤ 60 words with a number; <code>impact</code> with ≥ 2 numbers; no vague words in either;</li>\n<li><code>timeline</code> ≥ 5 entries <code>{ time: 'YYYY-MM-DD HH:MM', event }</code> in chronological order, from 23/08 to 25/08;</li>\n<li><code>rootCause</code> explains the mechanism (mentions <b>inode</b> and <b>mv</b>);</li>\n<li><code>whys</code> ≥ 4 steps of at least 6 words each; no blame words anywhere;</li>\n<li><code>actionItems</code> ≥ 3, each with action, owner (a role is fine), due date after the incident, and type; at least one <code>prevent</code> and one <code>detect</code>, and at least one action verifies the file <b>inside the container</b> (sha256 / docker exec);</li>\n<li><code>resolution</code> and ≥ 1 <code>lessons</code> filled.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>⚠ Honest note: the grader checks <b>structure, length, numbers and banned words only</b> — it cannot judge whether your argument is clear or convincing. AI rubric grading is not available yet; use the self-rubric and record yourself.</li>\n  <li>owner can be a role (“deploy maintainer”) — a post-mortem assigns work, it does not name culprits.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết post-mortem của một sự cố thật của cuongthai.com dưới dạng đối tượng có cấu trúc. Sự việc (từ nhật ký sự cố của dự án): 23/08 thêm bước 6c vào <code>deploy-nha.sh</code> (chép <code>nginx.conf</code>, <code>nginx -t</code>, <code>reload</code>) để bật HTTP/2 và header cache thật (94 MB tài nguyên <code>/playground</code> đang <code>no-store</code>; 12 logo SVG và <code>robot.json</code> tải lại mỗi lần chuyển trang). Hai lần deploy liền báo <code>KQ=OK</code> nhưng HTTP/2 vẫn tắt, header vẫn <code>no-store</code>. 25/08 tìm ra: bước đó thay tệp bằng <code>mv</code>; <code>nginx.conf</code> là bind-mount MỘT TỆP, Docker gắn theo <b>inode</b> lúc container khởi động; <code>mv</code> trỏ đường dẫn sang inode mới, container vẫn đọc inode cũ, nên <code>nginx -t</code> kiểm và <code>reload</code> nạp lại config cũ. Sửa: ghi đè tại chỗ + so <code>sha256</code> trên host với bên trong container, lệch thì trả bản cũ và dừng.</p>\n<p>Nhật ký chỉ có ngày — dùng giờ <b>minh hoạ</b> và ghi chú rõ. Điền <code>POSTMORTEM</code> theo các yêu cầu ở bản tiếng Anh: tóm tắt ≤ 60 từ có số; ảnh hưởng ≥ 2 con số; không từ mơ hồ; dòng thời gian ≥ 5 mốc đúng thứ tự từ 23/08 tới 25/08; nguyên nhân gốc nói tới inode và mv; ≥ 4 bậc \"vì sao\", không từ đổ lỗi; ≥ 3 việc cần làm có người, hạn sau sự cố, loại — có ít nhất một prevent, một detect, và một việc kiểm tệp <b>bên trong container</b>; có resolution và bài học.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>⚠ Nói thật: máy chấm chỉ kiểm <b>cấu trúc, độ dài, số liệu và từ cấm</b> — không đánh giá được lập luận có rõ, có thuyết phục không. Chưa có chấm bằng AI theo rubric; hãy dùng rubric tự chấm và tự ghi âm.</li>\n  <li>owner có thể là vai trò (\"người giữ script deploy\") — post-mortem giao việc, không gọi tên thủ phạm.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "timeline: [{ time: '2026-08-25 10:00', event: '…' }, { time: '2026-08-23 10:00', event: '…' }]",
+          "output": "✗ Timeline — entries are not in chronological order|||✗ Timeline — các mốc không theo thứ tự thời gian",
+          "explanation": "Sort by time; the incident starts on 23/08.|||Sắp theo thời gian; sự cố bắt đầu 23/08."
+        }
+      ],
+      "hintsJson": [
+        "Viết rootCause trước: một câu về bind-mount theo inode, một câu về mv, một câu về vì sao nginx -t vẫn xanh.",
+        "Năm \"vì sao\" đi từ triệu chứng (header không đổi) xuống tới thiếu chốt kiểm (chỉ kiểm \"đã ghi\", không kiểm \"container đọc được\").",
+        "Việc cần làm: prevent = ghi đè tại chỗ; detect = so sha256 host ↔ container; mitigate = tự trả bản cũ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "postmortem.js",
+          "language": "javascript",
+          "code": "// Write the post-mortem of the nginx bind-mount incident (23–25/08/2026), from the log in the statement.\n// Times in \"YYYY-MM-DD HH:MM\". Write in English or Vietnamese.\n\nconst POSTMORTEM = {\n  title: '',\n  summary: '',     // ≤ 60 words, contains at least one number\n  impact: '',      // who/what was affected, for how long — at least 2 numbers\n  timeline: [\n    // { time: '2026-08-23 10:00', event: '' },\n  ],\n  rootCause: '',   // the mechanism\n  whys: [\n    // 'Why 1 …', 'Why 2 …', …\n  ],\n  resolution: '',\n  actionItems: [\n    // { action: '', owner: '', due: 'YYYY-MM-DD', type: 'prevent' | 'detect' | 'mitigate' },\n  ],\n  lessons: [],\n};\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "postmortem.js",
+          "language": "javascript",
+          "code": "// Post-mortem — nginx config changes \"deployed\" but never in effect (23–25/08/2026).\n// Times are illustrative (the real log has dates, not minutes); facts, numbers and mechanism are real.\n\nconst POSTMORTEM = {\n  title: 'nginx config changes reported OK for 2 deploys but never took effect',\n  summary: 'For 2 deploys between 23/08 and 25/08, step 6c of deploy-nha.sh reported KQ=OK while production nginx kept serving the old config: HTTP/2 stayed off and cache headers stayed no-store.',\n  impact: 'The intended cache rules for 94 MB of /playground assets never applied, so browsers re-downloaded them on every visit; 12 logo SVG files and robot.json were also refetched on each navigation. HTTP/2 stayed off on production for about 2 days.',\n  timeline: [\n    { time: '2026-08-23 10:00', event: 'Step 6c is added to deploy-nha.sh to sync nginx/nginx.conf, run nginx -t and reload.' },\n    { time: '2026-08-23 10:20', event: 'Deploy 1: step 6c prints KQ=OK; curl -I still shows no-store and no HTTP/2.' },\n    { time: '2026-08-25 09:00', event: 'Deploy 2 with a new config: KQ=OK again, headers unchanged.' },\n    { time: '2026-08-25 09:30', event: 'Investigation: sha256 of the host file differs from sha256sum inside the container.' },\n    { time: '2026-08-25 10:00', event: 'Cause found: the file was replaced with mv; the container still reads the old inode.' },\n    { time: '2026-08-25 10:30', event: 'Fix deployed: overwrite in place + host/container sha256 check; HTTP/2 and cache headers confirmed with curl -I.' },\n  ],\n  rootCause: 'nginx.conf is a single-file bind mount, and Docker binds a single file by inode when the container starts. Step 6c replaced the file with mv, which points the host path to a new inode, so the container kept reading the old one; nginx -t and reload checked and reloaded the old config.',\n  whys: [\n    'Why did the new headers not appear? Because nginx inside the container still used the old config.',\n    'Why the old config? Because the container read the old inode of nginx.conf.',\n    'Why the old inode? Because step 6c replaced the file with mv, creating a new inode on the host.',\n    'Why did nobody notice for 2 deploys? Because the step verified the config with nginx -t and reload, which only see what the container sees, and both reported OK.',\n    'Why was that the only check? Because the step checked that the file was written, not that the container was reading it.',\n  ],\n  resolution: 'The deploy step now overwrites the file in place (cat new > nginx.conf) and compares the sha256 on the host with sha256sum inside the container; on mismatch it restores the previous config and stops.',\n  actionItems: [\n    { action: 'Write bind-mounted single files in place; never mv, rsync, sed -i or editor save-as', owner: 'deploy maintainer', due: '2026-08-26', type: 'prevent' },\n    { action: 'Compare host sha256 with docker exec sha256sum after every config write; stop on mismatch', owner: 'deploy maintainer', due: '2026-08-26', type: 'detect' },\n    { action: 'Keep the previous config and restore it automatically when nginx -t or the hash check fails', owner: 'deploy maintainer', due: '2026-08-27', type: 'mitigate' },\n    { action: 'Add curl -I checks of HTTP/2 and cache headers to the post-deploy smoke test', owner: 'deploy maintainer', due: '2026-08-30', type: 'detect' },\n  ],\n  lessons: [\n    'Written is not in effect: verify a change where it is consumed (inside the container).',\n    'A success message from a check that reads the old state is worse than no check.',\n  ],\n};\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The model answer keeps every claim checkable: the summary names the duration (2 deploys, 23–25/08), the misleading signal (KQ=OK) and the visible symptom; the impact quantifies what the fix was supposed to deliver; the whys end on a missing check, not a person; the action items cover prevent / detect / mitigate, with a role as owner. The general lesson — <i>“written” is not “in effect”</i> — is the same one this project learned with sshd drop-ins and with Next.js headers swallowed by nginx.</p>",
+      "solutionExplanationHtmlVi": "<p>Bài mẫu giữ mọi khẳng định kiểm được: tóm tắt nêu thời lượng (2 lần deploy, 23–25/08), tín hiệu đánh lừa (KQ=OK) và triệu chứng thấy được; ảnh hưởng đo cái bản sửa lẽ ra mang lại; các \"vì sao\" kết thúc ở một chốt kiểm thiếu, không ở một người; việc cần làm phủ ngăn / phát hiện / giảm nhẹ, owner là vai trò. Bài học chung — <i>\"đã ghi\" không phải \"đã có hiệu lực\"</i> — cũng là bài học dự án này rút ra với drop-in sshd và với header của Next.js bị nginx nuốt.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "postmortem.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "All sections filled",
+              "vi": "Đủ mọi mục"
+            },
+            "chuanBi": "const __KQ = (function () { var __V = (((function(){const o=t=>typeof t==\"string\"?t:\"\",s=t=>o(t).toLowerCase(),i=t=>o(t).split(/\\s+/).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),h=t=>t.replace(/[.*+?^${}()|[\\]\\\\]/g,\"\\\\$&\"),n=(t,e)=>{const u=s(t);return e.filter(r=>new RegExp(`(?<![\\\\p{L}\\\\p{N}])${h(r.toLowerCase())}(?![\\\\p{L}\\\\p{N}])`,\"u\").test(u))},l=[\"fast\",\"slow\",\"quickly\",\"many\",\"some\",\"a lot\",\"lots of\",\"good\",\"bad\",\"better\",\"quite\",\"fairly\",\"several\",\"soon\",\"etc\",\"stable\",\"pretty much\",\"kh\\xE1\",\"\\u1ED5n\",\"nhanh\",\"ch\\u1EADm\",\"nhi\\u1EC1u\",\"m\\u1ED9t s\\u1ED1\",\"t\\u1ED1t\",\"h\\u01A1i\",\"t\\u01B0\\u01A1ng \\u0111\\u1ED1i\",\"v\\xE2n v\\xE2n\"],a=[\"careless\",\"lazy\",\"stupid\",\"fault of\",\"his fault\",\"her fault\",\"their fault\",\"should have known\",\"someone forgot\",\"blame\",\"b\\u1EA5t c\\u1EA9n\",\"l\\u01B0\\u1EDDi\",\"l\\u1ED7i c\\u1EE7a b\\u1EA1n\",\"l\\u1ED7i c\\u1EE7a anh\",\"l\\u1ED7i c\\u1EE7a em\",\"t\\u1EA1i b\\u1EA1n\",\"t\\u1EA1i anh\",\"\\u0111\\u1ED5 l\\u1ED7i\"],c=[\"basically\",\"actually\",\"you know\",\"kind of\",\"sort of\",\"um\",\"uh\",\"so yeah\",\"like i said\",\"ki\\u1EC3u nh\\u01B0\",\"th\\xEC l\\xE0\",\"\\u1EDD\",\"\\xE0 th\\xEC\"];return{s:o,low:s,tok:i,coTu:n,VAGUE:l,BLAME:a,FILLER:c,w:t=>i(t).length,nums:t=>o(t).match(/\\d+(?:[.,]\\d+)?%?/g)||[],cau:t=>o(t).split(/(?<=[.!?])\\s+/).map(e=>e.trim()).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),vague:t=>n(t,l),blame:t=>n(t,a),filler:t=>n(t,c),chao:t=>/^\\s*(hello|hi|good (morning|afternoon|evening)|my name is|xin chào|chào (cô|thầy|các bạn)|em (tên là|xin tự giới thiệu)|em là)(?![\\p{L}\\p{N}])/iu.test(o(t))}})))(); try { return (((()=>{const s=POSTMORTEM,e=[\"title\",\"summary\",\"impact\",\"rootCause\",\"resolution\"].filter(t=>!__V.s(s[t]).trim()),o=[\"timeline\",\"whys\",\"actionItems\",\"lessons\"].filter(t=>!Array.isArray(s[t])||!s[t].length),n=e.concat(o);return n.length?\"empty: \"+n.join(\", \"):\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Summary ≤ 60 words with a number; impact with ≥ 2 numbers; no vague words",
+              "vi": "Tóm tắt ≤ 60 từ có số; ảnh hưởng ≥ 2 con số; không từ mơ hồ"
+            },
+            "chuanBi": "const __KQ = (function () { var __V = (((function(){const o=t=>typeof t==\"string\"?t:\"\",s=t=>o(t).toLowerCase(),i=t=>o(t).split(/\\s+/).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),h=t=>t.replace(/[.*+?^${}()|[\\]\\\\]/g,\"\\\\$&\"),n=(t,e)=>{const u=s(t);return e.filter(r=>new RegExp(`(?<![\\\\p{L}\\\\p{N}])${h(r.toLowerCase())}(?![\\\\p{L}\\\\p{N}])`,\"u\").test(u))},l=[\"fast\",\"slow\",\"quickly\",\"many\",\"some\",\"a lot\",\"lots of\",\"good\",\"bad\",\"better\",\"quite\",\"fairly\",\"several\",\"soon\",\"etc\",\"stable\",\"pretty much\",\"kh\\xE1\",\"\\u1ED5n\",\"nhanh\",\"ch\\u1EADm\",\"nhi\\u1EC1u\",\"m\\u1ED9t s\\u1ED1\",\"t\\u1ED1t\",\"h\\u01A1i\",\"t\\u01B0\\u01A1ng \\u0111\\u1ED1i\",\"v\\xE2n v\\xE2n\"],a=[\"careless\",\"lazy\",\"stupid\",\"fault of\",\"his fault\",\"her fault\",\"their fault\",\"should have known\",\"someone forgot\",\"blame\",\"b\\u1EA5t c\\u1EA9n\",\"l\\u01B0\\u1EDDi\",\"l\\u1ED7i c\\u1EE7a b\\u1EA1n\",\"l\\u1ED7i c\\u1EE7a anh\",\"l\\u1ED7i c\\u1EE7a em\",\"t\\u1EA1i b\\u1EA1n\",\"t\\u1EA1i anh\",\"\\u0111\\u1ED5 l\\u1ED7i\"],c=[\"basically\",\"actually\",\"you know\",\"kind of\",\"sort of\",\"um\",\"uh\",\"so yeah\",\"like i said\",\"ki\\u1EC3u nh\\u01B0\",\"th\\xEC l\\xE0\",\"\\u1EDD\",\"\\xE0 th\\xEC\"];return{s:o,low:s,tok:i,coTu:n,VAGUE:l,BLAME:a,FILLER:c,w:t=>i(t).length,nums:t=>o(t).match(/\\d+(?:[.,]\\d+)?%?/g)||[],cau:t=>o(t).split(/(?<=[.!?])\\s+/).map(e=>e.trim()).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),vague:t=>n(t,l),blame:t=>n(t,a),filler:t=>n(t,c),chao:t=>/^\\s*(hello|hi|good (morning|afternoon|evening)|my name is|xin chào|chào (cô|thầy|các bạn)|em (tên là|xin tự giới thiệu)|em là)(?![\\p{L}\\p{N}])/iu.test(o(t))}})))(); try { return (((()=>{const n=POSTMORTEM,m=__V.w(n.summary);if(!m||m>60)return\"summary has \"+m+\" words\";if(!__V.nums(n.summary).length)return\"summary has no number\";if(__V.nums(n.impact).length<2)return\"impact needs at least 2 numbers\";const r=__V.vague(n.summary+\" \"+n.impact);return r.length?\"vague words: \"+r.join(\", \"):\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Timeline: ≥ 5 entries, valid times, chronological, 23/08 → 25/08",
+              "vi": "Dòng thời gian: ≥ 5 mốc, giờ hợp lệ, đúng thứ tự, 23/08 → 25/08"
+            },
+            "chuanBi": "const __KQ = (function () { var __V = (((function(){const o=t=>typeof t==\"string\"?t:\"\",s=t=>o(t).toLowerCase(),i=t=>o(t).split(/\\s+/).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),h=t=>t.replace(/[.*+?^${}()|[\\]\\\\]/g,\"\\\\$&\"),n=(t,e)=>{const u=s(t);return e.filter(r=>new RegExp(`(?<![\\\\p{L}\\\\p{N}])${h(r.toLowerCase())}(?![\\\\p{L}\\\\p{N}])`,\"u\").test(u))},l=[\"fast\",\"slow\",\"quickly\",\"many\",\"some\",\"a lot\",\"lots of\",\"good\",\"bad\",\"better\",\"quite\",\"fairly\",\"several\",\"soon\",\"etc\",\"stable\",\"pretty much\",\"kh\\xE1\",\"\\u1ED5n\",\"nhanh\",\"ch\\u1EADm\",\"nhi\\u1EC1u\",\"m\\u1ED9t s\\u1ED1\",\"t\\u1ED1t\",\"h\\u01A1i\",\"t\\u01B0\\u01A1ng \\u0111\\u1ED1i\",\"v\\xE2n v\\xE2n\"],a=[\"careless\",\"lazy\",\"stupid\",\"fault of\",\"his fault\",\"her fault\",\"their fault\",\"should have known\",\"someone forgot\",\"blame\",\"b\\u1EA5t c\\u1EA9n\",\"l\\u01B0\\u1EDDi\",\"l\\u1ED7i c\\u1EE7a b\\u1EA1n\",\"l\\u1ED7i c\\u1EE7a anh\",\"l\\u1ED7i c\\u1EE7a em\",\"t\\u1EA1i b\\u1EA1n\",\"t\\u1EA1i anh\",\"\\u0111\\u1ED5 l\\u1ED7i\"],c=[\"basically\",\"actually\",\"you know\",\"kind of\",\"sort of\",\"um\",\"uh\",\"so yeah\",\"like i said\",\"ki\\u1EC3u nh\\u01B0\",\"th\\xEC l\\xE0\",\"\\u1EDD\",\"\\xE0 th\\xEC\"];return{s:o,low:s,tok:i,coTu:n,VAGUE:l,BLAME:a,FILLER:c,w:t=>i(t).length,nums:t=>o(t).match(/\\d+(?:[.,]\\d+)?%?/g)||[],cau:t=>o(t).split(/(?<=[.!?])\\s+/).map(e=>e.trim()).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),vague:t=>n(t,l),blame:t=>n(t,a),filler:t=>n(t,c),chao:t=>/^\\s*(hello|hi|good (morning|afternoon|evening)|my name is|xin chào|chào (cô|thầy|các bạn)|em (tên là|xin tự giới thiệu)|em là)(?![\\p{L}\\p{N}])/iu.test(o(t))}})))(); try { return (((()=>{const e=POSTMORTEM.timeline;if(!Array.isArray(e)||e.length<5)return\"need at least 5 entries\";for(let t=0;t<e.length;t++){if(!/^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}$/.test(__V.s(e[t]&&e[t].time)))return\"entry \"+t+\" time must be YYYY-MM-DD HH:MM\";if(__V.w(e[t].event)<4)return\"entry \"+t+\" event is too short\";if(t&&e[t].time<e[t-1].time)return\"entries are not in chronological order (\"+e[t-1].time+\" then \"+e[t].time+\")\"}return e[0].time.slice(0,10)!==\"2026-08-23\"?\"the incident starts on 2026-08-23\":e[e.length-1].time.slice(0,10)===\"2026-08-25\"?\"OK\":\"the timeline should end on 2026-08-25 (fix confirmed)\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Root cause names the mechanism (inode, mv)",
+              "vi": "Nguyên nhân gốc nêu cơ chế (inode, mv)"
+            },
+            "chuanBi": "const __KQ = (function () { var __V = (((function(){const o=t=>typeof t==\"string\"?t:\"\",s=t=>o(t).toLowerCase(),i=t=>o(t).split(/\\s+/).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),h=t=>t.replace(/[.*+?^${}()|[\\]\\\\]/g,\"\\\\$&\"),n=(t,e)=>{const u=s(t);return e.filter(r=>new RegExp(`(?<![\\\\p{L}\\\\p{N}])${h(r.toLowerCase())}(?![\\\\p{L}\\\\p{N}])`,\"u\").test(u))},l=[\"fast\",\"slow\",\"quickly\",\"many\",\"some\",\"a lot\",\"lots of\",\"good\",\"bad\",\"better\",\"quite\",\"fairly\",\"several\",\"soon\",\"etc\",\"stable\",\"pretty much\",\"kh\\xE1\",\"\\u1ED5n\",\"nhanh\",\"ch\\u1EADm\",\"nhi\\u1EC1u\",\"m\\u1ED9t s\\u1ED1\",\"t\\u1ED1t\",\"h\\u01A1i\",\"t\\u01B0\\u01A1ng \\u0111\\u1ED1i\",\"v\\xE2n v\\xE2n\"],a=[\"careless\",\"lazy\",\"stupid\",\"fault of\",\"his fault\",\"her fault\",\"their fault\",\"should have known\",\"someone forgot\",\"blame\",\"b\\u1EA5t c\\u1EA9n\",\"l\\u01B0\\u1EDDi\",\"l\\u1ED7i c\\u1EE7a b\\u1EA1n\",\"l\\u1ED7i c\\u1EE7a anh\",\"l\\u1ED7i c\\u1EE7a em\",\"t\\u1EA1i b\\u1EA1n\",\"t\\u1EA1i anh\",\"\\u0111\\u1ED5 l\\u1ED7i\"],c=[\"basically\",\"actually\",\"you know\",\"kind of\",\"sort of\",\"um\",\"uh\",\"so yeah\",\"like i said\",\"ki\\u1EC3u nh\\u01B0\",\"th\\xEC l\\xE0\",\"\\u1EDD\",\"\\xE0 th\\xEC\"];return{s:o,low:s,tok:i,coTu:n,VAGUE:l,BLAME:a,FILLER:c,w:t=>i(t).length,nums:t=>o(t).match(/\\d+(?:[.,]\\d+)?%?/g)||[],cau:t=>o(t).split(/(?<=[.!?])\\s+/).map(e=>e.trim()).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),vague:t=>n(t,l),blame:t=>n(t,a),filler:t=>n(t,c),chao:t=>/^\\s*(hello|hi|good (morning|afternoon|evening)|my name is|xin chào|chào (cô|thầy|các bạn)|em (tên là|xin tự giới thiệu)|em là)(?![\\p{L}\\p{N}])/iu.test(o(t))}})))(); try { return (((()=>{const e=__V.low(POSTMORTEM.rootCause);return/inode/.test(e)&&/(^|[^a-z])mv([^a-z]|$)/.test(e)?\"OK\":\"explain WHY: the single-file bind mount follows the inode, and mv created a new one\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "5 whys: ≥ 4 steps, ≥ 6 words each, blameless",
+              "vi": "5 whys: ≥ 4 bậc, mỗi bậc ≥ 6 từ, không đổ lỗi"
+            },
+            "chuanBi": "const __KQ = (function () { var __V = (((function(){const o=t=>typeof t==\"string\"?t:\"\",s=t=>o(t).toLowerCase(),i=t=>o(t).split(/\\s+/).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),h=t=>t.replace(/[.*+?^${}()|[\\]\\\\]/g,\"\\\\$&\"),n=(t,e)=>{const u=s(t);return e.filter(r=>new RegExp(`(?<![\\\\p{L}\\\\p{N}])${h(r.toLowerCase())}(?![\\\\p{L}\\\\p{N}])`,\"u\").test(u))},l=[\"fast\",\"slow\",\"quickly\",\"many\",\"some\",\"a lot\",\"lots of\",\"good\",\"bad\",\"better\",\"quite\",\"fairly\",\"several\",\"soon\",\"etc\",\"stable\",\"pretty much\",\"kh\\xE1\",\"\\u1ED5n\",\"nhanh\",\"ch\\u1EADm\",\"nhi\\u1EC1u\",\"m\\u1ED9t s\\u1ED1\",\"t\\u1ED1t\",\"h\\u01A1i\",\"t\\u01B0\\u01A1ng \\u0111\\u1ED1i\",\"v\\xE2n v\\xE2n\"],a=[\"careless\",\"lazy\",\"stupid\",\"fault of\",\"his fault\",\"her fault\",\"their fault\",\"should have known\",\"someone forgot\",\"blame\",\"b\\u1EA5t c\\u1EA9n\",\"l\\u01B0\\u1EDDi\",\"l\\u1ED7i c\\u1EE7a b\\u1EA1n\",\"l\\u1ED7i c\\u1EE7a anh\",\"l\\u1ED7i c\\u1EE7a em\",\"t\\u1EA1i b\\u1EA1n\",\"t\\u1EA1i anh\",\"\\u0111\\u1ED5 l\\u1ED7i\"],c=[\"basically\",\"actually\",\"you know\",\"kind of\",\"sort of\",\"um\",\"uh\",\"so yeah\",\"like i said\",\"ki\\u1EC3u nh\\u01B0\",\"th\\xEC l\\xE0\",\"\\u1EDD\",\"\\xE0 th\\xEC\"];return{s:o,low:s,tok:i,coTu:n,VAGUE:l,BLAME:a,FILLER:c,w:t=>i(t).length,nums:t=>o(t).match(/\\d+(?:[.,]\\d+)?%?/g)||[],cau:t=>o(t).split(/(?<=[.!?])\\s+/).map(e=>e.trim()).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),vague:t=>n(t,l),blame:t=>n(t,a),filler:t=>n(t,c),chao:t=>/^\\s*(hello|hi|good (morning|afternoon|evening)|my name is|xin chào|chào (cô|thầy|các bạn)|em (tên là|xin tự giới thiệu)|em là)(?![\\p{L}\\p{N}])/iu.test(o(t))}})))(); try { return (((()=>{const n=POSTMORTEM.whys;if(!Array.isArray(n)||n.length<4)return\"need at least 4 whys\";const t=n.findIndex(e=>__V.w(e)<6);if(t>=0)return\"why \"+(t+1)+\" is too short\";const s=JSON.stringify(POSTMORTEM),r=__V.blame(s);return r.length?\"blame words: \"+r.join(\", \"):\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Action items: owner, due date after the incident, type; prevent + detect",
+              "vi": "Việc cần làm: người, hạn sau sự cố, loại; có prevent + detect"
+            },
+            "chuanBi": "const __KQ = (function () { var __V = (((function(){const o=t=>typeof t==\"string\"?t:\"\",s=t=>o(t).toLowerCase(),i=t=>o(t).split(/\\s+/).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),h=t=>t.replace(/[.*+?^${}()|[\\]\\\\]/g,\"\\\\$&\"),n=(t,e)=>{const u=s(t);return e.filter(r=>new RegExp(`(?<![\\\\p{L}\\\\p{N}])${h(r.toLowerCase())}(?![\\\\p{L}\\\\p{N}])`,\"u\").test(u))},l=[\"fast\",\"slow\",\"quickly\",\"many\",\"some\",\"a lot\",\"lots of\",\"good\",\"bad\",\"better\",\"quite\",\"fairly\",\"several\",\"soon\",\"etc\",\"stable\",\"pretty much\",\"kh\\xE1\",\"\\u1ED5n\",\"nhanh\",\"ch\\u1EADm\",\"nhi\\u1EC1u\",\"m\\u1ED9t s\\u1ED1\",\"t\\u1ED1t\",\"h\\u01A1i\",\"t\\u01B0\\u01A1ng \\u0111\\u1ED1i\",\"v\\xE2n v\\xE2n\"],a=[\"careless\",\"lazy\",\"stupid\",\"fault of\",\"his fault\",\"her fault\",\"their fault\",\"should have known\",\"someone forgot\",\"blame\",\"b\\u1EA5t c\\u1EA9n\",\"l\\u01B0\\u1EDDi\",\"l\\u1ED7i c\\u1EE7a b\\u1EA1n\",\"l\\u1ED7i c\\u1EE7a anh\",\"l\\u1ED7i c\\u1EE7a em\",\"t\\u1EA1i b\\u1EA1n\",\"t\\u1EA1i anh\",\"\\u0111\\u1ED5 l\\u1ED7i\"],c=[\"basically\",\"actually\",\"you know\",\"kind of\",\"sort of\",\"um\",\"uh\",\"so yeah\",\"like i said\",\"ki\\u1EC3u nh\\u01B0\",\"th\\xEC l\\xE0\",\"\\u1EDD\",\"\\xE0 th\\xEC\"];return{s:o,low:s,tok:i,coTu:n,VAGUE:l,BLAME:a,FILLER:c,w:t=>i(t).length,nums:t=>o(t).match(/\\d+(?:[.,]\\d+)?%?/g)||[],cau:t=>o(t).split(/(?<=[.!?])\\s+/).map(e=>e.trim()).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),vague:t=>n(t,l),blame:t=>n(t,a),filler:t=>n(t,c),chao:t=>/^\\s*(hello|hi|good (morning|afternoon|evening)|my name is|xin chào|chào (cô|thầy|các bạn)|em (tên là|xin tự giới thiệu)|em là)(?![\\p{L}\\p{N}])/iu.test(o(t))}})))(); try { return (((()=>{const t=POSTMORTEM.actionItems;if(!Array.isArray(t)||t.length<3)return\"need at least 3 action items\";for(let e=0;e<t.length;e++){const n=t[e]||{};if(__V.w(n.action)<3)return\"item \"+e+\" has no real action\";if(!__V.s(n.owner).trim())return\"item \"+e+\" has no owner\";if(!/^\\d{4}-\\d{2}-\\d{2}$/.test(__V.s(n.due))||n.due<\"2026-08-25\")return\"item \"+e+\" due date must be YYYY-MM-DD on/after 2026-08-25\";if([\"prevent\",\"detect\",\"mitigate\"].indexOf(n.type)<0)return\"item \"+e+\" type must be prevent | detect | mitigate\"}const r=t.map(e=>e.type);return r.indexOf(\"prevent\")>=0&&r.indexOf(\"detect\")>=0?\"OK\":\"need at least one prevent and one detect\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "One action verifies the file inside the container",
+              "vi": "Một việc kiểm tệp bên trong container"
+            },
+            "chuanBi": "const __KQ = (function () { var __V = (((function(){const o=t=>typeof t==\"string\"?t:\"\",s=t=>o(t).toLowerCase(),i=t=>o(t).split(/\\s+/).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),h=t=>t.replace(/[.*+?^${}()|[\\]\\\\]/g,\"\\\\$&\"),n=(t,e)=>{const u=s(t);return e.filter(r=>new RegExp(`(?<![\\\\p{L}\\\\p{N}])${h(r.toLowerCase())}(?![\\\\p{L}\\\\p{N}])`,\"u\").test(u))},l=[\"fast\",\"slow\",\"quickly\",\"many\",\"some\",\"a lot\",\"lots of\",\"good\",\"bad\",\"better\",\"quite\",\"fairly\",\"several\",\"soon\",\"etc\",\"stable\",\"pretty much\",\"kh\\xE1\",\"\\u1ED5n\",\"nhanh\",\"ch\\u1EADm\",\"nhi\\u1EC1u\",\"m\\u1ED9t s\\u1ED1\",\"t\\u1ED1t\",\"h\\u01A1i\",\"t\\u01B0\\u01A1ng \\u0111\\u1ED1i\",\"v\\xE2n v\\xE2n\"],a=[\"careless\",\"lazy\",\"stupid\",\"fault of\",\"his fault\",\"her fault\",\"their fault\",\"should have known\",\"someone forgot\",\"blame\",\"b\\u1EA5t c\\u1EA9n\",\"l\\u01B0\\u1EDDi\",\"l\\u1ED7i c\\u1EE7a b\\u1EA1n\",\"l\\u1ED7i c\\u1EE7a anh\",\"l\\u1ED7i c\\u1EE7a em\",\"t\\u1EA1i b\\u1EA1n\",\"t\\u1EA1i anh\",\"\\u0111\\u1ED5 l\\u1ED7i\"],c=[\"basically\",\"actually\",\"you know\",\"kind of\",\"sort of\",\"um\",\"uh\",\"so yeah\",\"like i said\",\"ki\\u1EC3u nh\\u01B0\",\"th\\xEC l\\xE0\",\"\\u1EDD\",\"\\xE0 th\\xEC\"];return{s:o,low:s,tok:i,coTu:n,VAGUE:l,BLAME:a,FILLER:c,w:t=>i(t).length,nums:t=>o(t).match(/\\d+(?:[.,]\\d+)?%?/g)||[],cau:t=>o(t).split(/(?<=[.!?])\\s+/).map(e=>e.trim()).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),vague:t=>n(t,l),blame:t=>n(t,a),filler:t=>n(t,c),chao:t=>/^\\s*(hello|hi|good (morning|afternoon|evening)|my name is|xin chào|chào (cô|thầy|các bạn)|em (tên là|xin tự giới thiệu)|em là)(?![\\p{L}\\p{N}])/iu.test(o(t))}})))(); try { return (((()=>(POSTMORTEM.actionItems||[]).some(e=>/sha256|docker exec|inside the container|bên trong container/i.test(__V.s(e&&e.action)))?\"OK\":\"add the check that would have caught it: compare the file as the CONTAINER sees it\")))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nguyên nhân gốc là \"nginx lỗi\" hoặc \"script sai\" — không nêu cơ chế inode."
+        },
+        {
+          "loi": "Việc cần làm không có hạn hoặc không có người — không ai làm."
+        },
+        {
+          "loi": "Ảnh hưởng \"trang chậm hơn\" — không có số (94 MB, 2 lần deploy, ~2 ngày)."
+        },
+        {
+          "loi": "Viết \"người viết script bất cẩn\" trong 5 whys."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "post-mortem (incident review)",
+          "vi": "báo cáo sau sự cố: chuyện gì xảy ra, vì sao, sẽ làm gì để không lặp lại"
+        },
+        {
+          "en": "root cause",
+          "vi": "nguyên nhân gốc — sửa nó thì sự cố không lặp lại"
+        },
+        {
+          "en": "5 Whys",
+          "vi": "hỏi \"vì sao\" liên tiếp tới nguyên nhân gốc"
+        },
+        {
+          "en": "action item",
+          "vi": "việc cần làm sau sự cố — có người làm và hạn"
+        },
+        {
+          "en": "blameless",
+          "vi": "không đổ lỗi cá nhân — tìm lỗ hổng của quy trình/hệ thống"
+        },
+        {
+          "en": "inode",
+          "vi": "mã định danh của tệp trong hệ thống tệp — đổi tên bằng mv tạo inode mới cho đường dẫn"
+        },
+        {
+          "en": "single-file bind mount",
+          "vi": "gắn MỘT tệp của máy chủ vào container — gắn theo inode lúc khởi động"
+        }
+      ]
+    }
+  ]
+}

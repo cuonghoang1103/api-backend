@@ -1,0 +1,777 @@
+{
+  "trackSlug": "ky-nang-practice",
+  "moduleSlug": "ssg105-4-2-slides-charts",
+  "lesson": {
+    "course": "ssg105-communication-and-in-group-working-skills",
+    "slug": "ssg105-4-1-presentation"
+  },
+  "exercises": [
+    {
+      "title": "Slides 1 — Choose the right chart (or a table) for the result",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "chart choice",
+        "data visualisation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "ky-nang",
+        "ssg105"
+      ],
+      "problemHtml": "<p>The chart type follows the <b>question the slide answers</b>: comparison between categories → bar; change over time → line; part of a whole with 2–3 parts → a 100% bar (or a pie at most); a few exact numbers people will quote → a small table. When in doubt, a sorted bar chart with labelled values beats anything 3D. Choose the best visual for each result.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Loại biểu đồ đi theo <b>câu hỏi mà slide trả lời</b>: so sánh giữa các nhóm → cột; thay đổi theo thời gian → đường; phần của tổng thể với 2–3 phần → cột 100% (tối đa là tròn); vài con số chính xác người nghe sẽ trích → bảng nhỏ. Phân vân thì cột đã sắp xếp có ghi giá trị luôn hơn mọi thứ 3D. Chọn hình phù hợp nhất cho từng kết quả.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Hỏi trước: slide trả lời câu hỏi gì — so sánh, xu hướng, tỉ lệ hay vài con số chính xác?",
+        "Vài con số người nghe sẽ trích lại ⇒ bảng nhỏ là đủ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Slides 1 — Choose the right chart (or a table) for the result\n\nAnswer in the answer panel (no code needed).\n\n1. Pass/fail of the 22 integration cases in Round 1, 2 and 3.Pass/fail của 22 ca tích hợp ở Round 1, 2, 3.\n2. Case types of the 113 unit tests: Normal 22 · Abnormal 68 · Boundary 23.Loại ca của 113 unit test: Normal 22 · Abnormal 68 · Boundary 23.\n3. Daily count of open defects over a 3-week sprint.Số lỗi còn mở mỗi ngày trong sprint 3 tuần.\n4. Line and branch coverage for 2 classes (AuthFilter 100%/100%, UserDAO 98.4%/83%).Độ phủ dòng và nhánh của 2 lớp (AuthFilter 100%/100%, UserDAO 98,4%/83%).\n5. Defects found per module (A 15, B 7, C 4, D 9, E 3).Số lỗi theo module (A 15, B 7, C 4, D 9, E 3).\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Slides 1 — Choose the right chart (or a table) for the result — answer key\n\n1. Pass/fail of the 22 integration cases in Round 1, 2 and 3.Pass/fail của 22 ca tích hợp ở Round 1, 2, 3.\n   Answer: a) Stacked bar per round (pass + fail = 22), values labelled\n   Comparing the same total across rounds: stacked bars of equal height make “nothing changed” obvious.VI: So cùng một tổng qua các round: cột chồng cao bằng nhau cho thấy ngay \"không đổi\".\n\n2. Case types of the 113 unit tests: Normal 22 · Abnormal 68 · Boundary 23.Loại ca của 113 unit test: Normal 22 · Abnormal 68 · Boundary 23.\n   Answer: d) One horizontal 100% bar (or a 3-row table with counts and %)\n   Three parts of one whole. The table version is also fine if you want people to quote 60.2%.VI: Ba phần của một tổng. Dạng bảng cũng được nếu muốn người nghe trích con số 60,2%.\n\n3. Daily count of open defects over a 3-week sprint.Số lỗi còn mở mỗi ngày trong sprint 3 tuần.\n   Answer: c) Line chart over days\n   Change over time → line (it is a burn-down).VI: Thay đổi theo thời gian → đường (một dạng burn-down).\n\n4. Line and branch coverage for 2 classes (AuthFilter 100%/100%, UserDAO 98.4%/83%).Độ phủ dòng và nhánh của 2 lớp (AuthFilter 100%/100%, UserDAO 98,4%/83%).\n   Answer: d) A 2×2 table with the four percentages, the 83% highlighted\n   Four exact numbers: a table, with the one number you will talk about highlighted.VI: Bốn con số chính xác: bảng, tô nổi con số bạn sẽ nói tới.\n\n5. Defects found per module (A 15, B 7, C 4, D 9, E 3).Số lỗi theo module (A 15, B 7, C 4, D 9, E 3).\n   Answer: b) Bar chart sorted from most to fewest, values labelled\n   Categories with no natural order → sort by value; a line would suggest a trend that does not exist.VI: Các nhóm không có thứ tự tự nhiên → sắp theo giá trị; đường sẽ gợi một xu hướng không có thật.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · d · c · d · b.</p>",
+      "solutionExplanationHtmlVi": "<p>Đáp án: a · d · c · d · b.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Pass/fail of the 22 integration cases in Round 1, 2 and 3.</p><p style=\"opacity:.75;font-size:.92em\"><i>Pass/fail của 22 ca tích hợp ở Round 1, 2, 3.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Stacked bar per round (pass + fail = 22), values labelled"
+              },
+              {
+                "ma": "b",
+                "noiDung": "3D cylinder chart"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Line chart of the case IDs"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Three pie charts side by side"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Comparing the same total across rounds: stacked bars of equal height make “nothing changed” obvious.</p><p><i>VI: So cùng một tổng qua các round: cột chồng cao bằng nhau cho thấy ngay \"không đổi\".</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Case types of the 113 unit tests: Normal 22 · Abnormal 68 · Boundary 23.</p><p style=\"opacity:.75;font-size:.92em\"><i>Loại ca của 113 unit test: Normal 22 · Abnormal 68 · Boundary 23.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Line chart"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Scatter plot"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A word cloud"
+              },
+              {
+                "ma": "d",
+                "noiDung": "One horizontal 100% bar (or a 3-row table with counts and %)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Three parts of one whole. The table version is also fine if you want people to quote 60.2%.</p><p><i>VI: Ba phần của một tổng. Dạng bảng cũng được nếu muốn người nghe trích con số 60,2%.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Daily count of open defects over a 3-week sprint.</p><p style=\"opacity:.75;font-size:.92em\"><i>Số lỗi còn mở mỗi ngày trong sprint 3 tuần.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Pie chart"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Bulleted list of defect titles"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Line chart over days"
+              },
+              {
+                "ma": "d",
+                "noiDung": "One big number"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Change over time → line (it is a burn-down).</p><p><i>VI: Thay đổi theo thời gian → đường (một dạng burn-down).</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Line and branch coverage for 2 classes (AuthFilter 100%/100%, UserDAO 98.4%/83%).</p><p style=\"opacity:.75;font-size:.92em\"><i>Độ phủ dòng và nhánh của 2 lớp (AuthFilter 100%/100%, UserDAO 98,4%/83%).</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A radar chart"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A screenshot of the full JaCoCo page at small size"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Four pie charts"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A 2×2 table with the four percentages, the 83% highlighted"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Four exact numbers: a table, with the one number you will talk about highlighted.</p><p><i>VI: Bốn con số chính xác: bảng, tô nổi con số bạn sẽ nói tới.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>Defects found per module (A 15, B 7, C 4, D 9, E 3).</p><p style=\"opacity:.75;font-size:.92em\"><i>Số lỗi theo module (A 15, B 7, C 4, D 9, E 3).</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Donut chart with a legend"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Bar chart sorted from most to fewest, values labelled"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Bar chart in alphabetical order with no labels"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Line chart A→E"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Categories with no natural order → sort by value; a line would suggest a trend that does not exist.</p><p><i>VI: Các nhóm không có thứ tự tự nhiên → sắp theo giá trị; đường sẽ gợi một xu hướng không có thật.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng biểu đồ tròn cho dữ liệu theo thời gian."
+        },
+        {
+          "loi": "Biểu đồ 3D làm sai cảm nhận độ lớn."
+        },
+        {
+          "loi": "Không ghi giá trị trên cột ⇒ người nghe phải đoán."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "stacked bar chart",
+          "vi": "biểu đồ cột chồng"
+        },
+        {
+          "en": "line chart",
+          "vi": "biểu đồ đường"
+        },
+        {
+          "en": "data label",
+          "vi": "nhãn giá trị ghi trên cột/điểm"
+        }
+      ]
+    },
+    {
+      "title": "Slides 2 — Spot every problem on these slides",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "slide design",
+        "readability"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "ky-nang",
+        "ssg105"
+      ],
+      "problemHtml": "<p>Each question describes a real-looking slide. Tick <b>every</b> problem it has (several answers per question). Typical problems: a wall of text read aloud, numbers without a source, a screenshot nobody can read, code at a size nobody can read, more than one message, a topic-label headline.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi câu mô tả một slide trông như thật. Tích <b>mọi</b> lỗi của nó (nhiều đáp án mỗi câu). Lỗi điển hình: mảng chữ dày đọc nguyên văn, số không nguồn, ảnh chụp không ai đọc nổi, code cỡ chữ không ai đọc nổi, nhiều hơn một thông điệp, tiêu đề chỉ là tên chủ đề.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Mỗi câu có nhiều lỗi — tích hết mới đúng.",
+        "Bẫy: \"có code trên slide\" không phải lỗi; code khó đọc mới là lỗi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Slides 2 — Spot every problem on these slides\n\nAnswer in the answer panel (no code needed).\n\n1. Title “Unit Test”. Body: 14 bullet lines, font 14 pt, copied from the report; the speaker reads them.Tiêu đề \"Unit Test\". Thân: 14 dòng gạch đầu dòng, cỡ 14, chép từ báo cáo; người nói đọc nguyên văn.\n2. Title “Coverage is 99%”. Body: full-page JaCoCo screenshot, no highlight, no date, no project name.Tiêu đề \"Coverage is 99%\". Thân: ảnh JaCoCo cả trang, không khoanh, không ngày, không tên dự án.\n3. Title “Bug SS-28”. Body: 60 lines of UpdateProfileServlet.java in 10 pt, no line highlighted.Tiêu đề \"Bug SS-28\". Thân: 60 dòng UpdateProfileServlet.java cỡ 10, không tô dòng nào.\n4. Title “Results and Lessons and Next steps”. Body: a table of 3 rounds, a list of 6 bugs and 4 lessons.Tiêu đề \"Results and Lessons and Next steps\". Thân: bảng 3 round, danh sách 6 lỗi và 4 bài học.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Slides 2 — Spot every problem on these slides — answer key\n\n1. Title “Unit Test”. Body: 14 bullet lines, font 14 pt, copied from the report; the speaker reads them.Tiêu đề \"Unit Test\". Thân: 14 dòng gạch đầu dòng, cỡ 14, chép từ báo cáo; người nói đọc nguyên văn.\n   Answer: b) Topic-label headline + c) Wall of text read aloud + d) Font too small for a projector\n   Rule of thumb: ≤ 6 short lines, ≥ 24 pt, and you SAY more than the slide shows.VI: Quy tắc: ≤ 6 dòng ngắn, ≥ 24 pt, và bạn NÓI nhiều hơn slide ghi.\n\n2. Title “Coverage is 99%”. Body: full-page JaCoCo screenshot, no highlight, no date, no project name.Tiêu đề \"Coverage is 99%\". Thân: ảnh JaCoCo cả trang, không khoanh, không ngày, không tên dự án.\n   Answer: a) Screenshot unreadable and not highlighted + c) Number without a source (which run? which classes?) + d) 99% is ambiguous: lines or branches?\n   Crop to the 2–3 rows that matter, circle the number, write “JaCoCo, module A, run 28/10” under it, say “line coverage”.VI: Cắt còn 2–3 dòng cần nói, khoanh con số, ghi \"JaCoCo, module A, chạy 28/10\" bên dưới, nói rõ \"độ phủ dòng\".\n\n3. Title “Bug SS-28”. Body: 60 lines of UpdateProfileServlet.java in 10 pt, no line highlighted.Tiêu đề \"Bug SS-28\". Thân: 60 dòng UpdateProfileServlet.java cỡ 10, không tô dòng nào.\n   Answer: a) Nothing tells the eye where to look (line 77) + b) Headline does not say what the bug does + d) Code unreadable from the back row\n   Code on slides is fine: 5–10 lines, ≥ 20 pt, the guilty line highlighted, file:line in the caption.VI: Code trên slide được: 5–10 dòng, ≥ 20 pt, tô dòng gây lỗi, chú thích tệp:dòng.\n\n4. Title “Results and Lessons and Next steps”. Body: a table of 3 rounds, a list of 6 bugs and 4 lessons.Tiêu đề \"Results and Lessons and Next steps\". Thân: bảng 3 round, danh sách 6 lỗi và 4 bài học.\n   Answer: a) More than one message on one slide + b) Too much to read while listening + d) Topic-label headline\n   Split into three slides, each with an assertion headline. A logo is decoration, not a problem.VI: Tách thành ba slide, mỗi slide một tiêu đề khẳng định. Logo là trang trí, không phải lỗi.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b+c+d · a+c+d · a+b+d · a+b+d.</p>",
+      "solutionExplanationHtmlVi": "<p>Đáp án: b+c+d · a+c+d · a+b+d · a+b+d.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Title “Unit Test”. Body: 14 bullet lines, font 14 pt, copied from the report; the speaker reads them.</p><p style=\"opacity:.75;font-size:.92em\"><i>Tiêu đề \"Unit Test\". Thân: 14 dòng gạch đầu dòng, cỡ 14, chép từ báo cáo; người nói đọc nguyên văn.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Uses a chart"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Topic-label headline"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Wall of text read aloud"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Font too small for a projector"
+              }
+            ],
+            "dapAn": [
+              [
+                "b",
+                "c",
+                "d"
+              ]
+            ],
+            "nhieu": true,
+            "giaiThich": "<p>Rule of thumb: ≤ 6 short lines, ≥ 24 pt, and you SAY more than the slide shows.</p><p><i>VI: Quy tắc: ≤ 6 dòng ngắn, ≥ 24 pt, và bạn NÓI nhiều hơn slide ghi.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Title “Coverage is 99%”. Body: full-page JaCoCo screenshot, no highlight, no date, no project name.</p><p style=\"opacity:.75;font-size:.92em\"><i>Tiêu đề \"Coverage is 99%\". Thân: ảnh JaCoCo cả trang, không khoanh, không ngày, không tên dự án.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Screenshot unreadable and not highlighted"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Headline states a conclusion"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Number without a source (which run? which classes?)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "99% is ambiguous: lines or branches?"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "c",
+                "d"
+              ]
+            ],
+            "nhieu": true,
+            "giaiThich": "<p>Crop to the 2–3 rows that matter, circle the number, write “JaCoCo, module A, run 28/10” under it, say “line coverage”.</p><p><i>VI: Cắt còn 2–3 dòng cần nói, khoanh con số, ghi \"JaCoCo, module A, chạy 28/10\" bên dưới, nói rõ \"độ phủ dòng\".</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Title “Bug SS-28”. Body: 60 lines of UpdateProfileServlet.java in 10 pt, no line highlighted.</p><p style=\"opacity:.75;font-size:.92em\"><i>Tiêu đề \"Bug SS-28\". Thân: 60 dòng UpdateProfileServlet.java cỡ 10, không tô dòng nào.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Nothing tells the eye where to look (line 77)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Headline does not say what the bug does"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Shows source code at all is forbidden"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Code unreadable from the back row"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "b",
+                "d"
+              ]
+            ],
+            "nhieu": true,
+            "giaiThich": "<p>Code on slides is fine: 5–10 lines, ≥ 20 pt, the guilty line highlighted, file:line in the caption.</p><p><i>VI: Code trên slide được: 5–10 dòng, ≥ 20 pt, tô dòng gây lỗi, chú thích tệp:dòng.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Title “Results and Lessons and Next steps”. Body: a table of 3 rounds, a list of 6 bugs and 4 lessons.</p><p style=\"opacity:.75;font-size:.92em\"><i>Tiêu đề \"Results and Lessons and Next steps\". Thân: bảng 3 round, danh sách 6 lỗi và 4 bài học.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "More than one message on one slide"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Too much to read while listening"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Missing a logo"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Topic-label headline"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "b",
+                "d"
+              ]
+            ],
+            "nhieu": true,
+            "giaiThich": "<p>Split into three slides, each with an assertion headline. A logo is decoration, not a problem.</p><p><i>VI: Tách thành ba slide, mỗi slide một tiêu đề khẳng định. Logo là trang trí, không phải lỗi.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chỉ tích lỗi rõ nhất, bỏ sót lỗi \"số không nguồn\"."
+        },
+        {
+          "loi": "Cho rằng không được đưa code lên slide."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "assertion headline (action title)",
+          "vi": "tiêu đề slide nói KẾT LUẬN, không chỉ nói chủ đề"
+        },
+        {
+          "en": "callout / highlight",
+          "vi": "khoanh/tô nổi chỗ cần nhìn"
+        },
+        {
+          "en": "caption",
+          "vi": "chú thích dưới hình (nguồn, ngày)"
+        }
+      ]
+    },
+    {
+      "title": "Slides 3 — One message per slide: pick the headline for each body",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "one message per slide"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "ky-nang",
+        "ssg105"
+      ],
+      "problemHtml": "<p>The SportShop deck has six slides with their bodies finished and headlines missing. Give each slide the assertion headline that its body actually proves. A headline that the body does not prove is worse than no headline — the teacher will ask for the evidence.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bộ slide SportShop có sáu slide đã xong thân, thiếu tiêu đề. Gán cho mỗi slide tiêu đề khẳng định mà thân slide thật sự chứng minh. Tiêu đề không được thân slide chứng minh còn tệ hơn không có — cô sẽ hỏi bằng chứng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Đọc thân slide trước, rồi hỏi: \"slide này chứng minh câu nào?\"",
+        "Bảng ưu tiên lỗi ⇒ tiêu đề nói thứ tự sửa."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Slides 3 — One message per slide: pick the headline for each body\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Slides 3 — One message per slide: pick the headline for each body — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Module A = 9 classes I own end-to-end\n   - r1.k: 113 unit tests, no database: Mockito fakes every dependency\n   - r2.k: 93/113 unit tests pass — the 20 fails point at real defects\n   - r3.k: Integration on the real API + test database: 16/22, same in 3 rounds\n   - r4.k: SS-28: any user can change another account’s password\n   - r5.k: Fix order: SS-28 → SS-23 → SS-19\n   Each body proves exactly one sentence. If two headlines seem to fit, the body is carrying two messages — split it.VI: Mỗi thân slide chứng minh đúng một câu. Thấy hai tiêu đề cùng hợp ⇒ thân đang mang hai thông điệp — tách ra.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Rows map to the headlines in the order listed.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Slide body"
+              },
+              {
+                "ma": "k",
+                "ten": "Headline",
+                "luaChon": [
+                  "Module A = 9 classes I own end-to-end",
+                  "113 unit tests, no database: Mockito fakes every dependency",
+                  "93/113 unit tests pass — the 20 fails point at real defects",
+                  "Integration on the real API + test database: 16/22, same in 3 rounds",
+                  "SS-28: any user can change another account’s password",
+                  "Fix order: SS-28 → SS-23 → SS-19"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "List: Login, Register, Logout, Forgot, ChangePassword, Profile, UpdateProfile, AuthFilter, UserDAO."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Code: when(req.getParameter(\"username\")).thenReturn(\"john_doe\"); mockConstruction(UserDAO.class) …"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Bar: Pass 93 · Fail 20 (82.3%); list of the tickets linked to the fails."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Stacked bars R1/R2/R3, each 16 + 6; Newman report.html thumbnail."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Two DB rows before/after IT17: user A edits the read-only username field to B’s name; B’s password changes."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Table: ticket · user impact · effort — SS-28 account takeover, SS-23 passwords readable in the DB, SS-19 guests get HTTP 500."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Module A = 9 classes I own end-to-end",
+              "r1.k": "113 unit tests, no database: Mockito fakes every dependency",
+              "r2.k": "93/113 unit tests pass — the 20 fails point at real defects",
+              "r3.k": "Integration on the real API + test database: 16/22, same in 3 rounds",
+              "r4.k": "SS-28: any user can change another account’s password",
+              "r5.k": "Fix order: SS-28 → SS-23 → SS-19"
+            },
+            "giaiThich": "<p>Each body proves exactly one sentence. If two headlines seem to fit, the body is carrying two messages — split it.</p><p><i>VI: Mỗi thân slide chứng minh đúng một câu. Thấy hai tiêu đề cùng hợp ⇒ thân đang mang hai thông điệp — tách ra.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gán tiêu đề hay nhất cho slide đẹp nhất, không theo bằng chứng."
+        },
+        {
+          "loi": "Nhầm slide \"Mockito\" với slide kết quả unit test."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "assertion headline (action title)",
+          "vi": "tiêu đề slide nói KẾT LUẬN, không chỉ nói chủ đề"
+        },
+        {
+          "en": "evidence",
+          "vi": "bằng chứng: log, ảnh chụp, dòng trong báo cáo, dòng mã"
+        }
+      ]
+    },
+    {
+      "title": "Slides 4 — Numbers with a source, code people can read",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "data credibility",
+        "code on slides"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "ky-nang",
+        "ssg105"
+      ],
+      "problemHtml": "<p>Teachers and reviewers trust a number when they can see <b>where it came from</b> (tool, run, date) and they understand code when they can see <b>which line matters</b>. Choose the better practice in each case — these are the questions a committee asks when a number looks too good.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Thầy cô và người review tin một con số khi thấy <b>nó đến từ đâu</b> (công cụ, lần chạy, ngày), và hiểu code khi thấy <b>dòng nào quan trọng</b>. Chọn cách làm tốt hơn trong mỗi trường hợp — đây là những câu hội đồng hỏi khi một con số trông quá đẹp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Số đáng tin = số đếm gốc + tỉ lệ + nguồn.",
+        "Code trên slide: ít dòng, chữ to, tô một dòng, ghi tệp:dòng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Slides 4 — Numbers with a source, code people can read\n\nAnswer in the answer panel (no code needed).\n\n1. How do you show “82.3% of unit tests pass”?Thể hiện \"82,3% unit test đạt\" thế nào?\n2. A number on your slide does not match the Excel report.Một con số trên slide lệch với báo cáo Excel.\n3. You need to show the cause of SS-19 (AuthFilter.java line 45).Cần chỉ nguyên nhân SS-19 (AuthFilter.java dòng 45).\n4. Where should exact numbers you will be asked about live?Các con số chính xác sẽ bị hỏi nên nằm ở đâu?\n5. Which caption is best under a screenshot of Lab 4 evidence?Chú thích nào tốt nhất dưới ảnh bằng chứng Lab 4?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Slides 4 — Numbers with a source, code people can read — answer key\n\n1. How do you show “82.3% of unit tests pass”?Thể hiện \"82,3% unit test đạt\" thế nào?\n   Answer: a) “93 / 113 = 82.3% — JUnit run 28/10, Report 5.1 › Test Report”\n   Raw counts + the ratio + the source. The teacher can open Report 5.1 and find the same 93 and 113.VI: Số đếm gốc + tỉ lệ + nguồn. Cô mở Report 5.1 là thấy đúng 93 và 113.\n\n2. A number on your slide does not match the Excel report.Một con số trên slide lệch với báo cáo Excel.\n   Answer: a) Fix the slide before the talk; the report is the source of truth\n   One mismatched number makes every other number suspect.VI: Một con số lệch khiến mọi con số khác bị nghi.\n\n3. You need to show the cause of SS-19 (AuthFilter.java line 45).Cần chỉ nguyên nhân SS-19 (AuthFilter.java dòng 45).\n   Answer: a) Show 6–8 lines around line 45, ≥ 20 pt, line 45 highlighted, caption “AuthFilter.java:45”\n   Small window, big font, one highlight, file:line caption — the teacher can open the same line during Q&A.VI: Cửa sổ nhỏ, chữ to, tô một dòng, chú thích tệp:dòng — cô mở đúng dòng đó khi hỏi đáp.\n\n4. Where should exact numbers you will be asked about live?Các con số chính xác sẽ bị hỏi nên nằm ở đâu?\n   Answer: c) On the slide AND in a backup slide/table you can jump to in Q&A\n   Backup (appendix) slides let you answer “show me” questions in seconds.VI: Slide dự phòng (phụ lục) giúp trả lời câu \"cho cô xem\" trong vài giây.\n\n5. Which caption is best under a screenshot of Lab 4 evidence?Chú thích nào tốt nhất dưới ảnh bằng chứng Lab 4?\n   Answer: c) “RL02 step 1, Round 1 — guest opens /dashboard → HTTP 500 (SS-19)”\n   Case, step, round, what you see, ticket — the same naming as the file RL02_S1_R1.jpg.VI: Ca, bước, round, thấy gì, mã lỗi — cùng cách đặt tên với tệp RL02_S1_R1.jpg.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · a · a · c · c.</p>",
+      "solutionExplanationHtmlVi": "<p>Đáp án: a · a · a · c · c.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>How do you show “82.3% of unit tests pass”?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thể hiện \"82,3% unit test đạt\" thế nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "“93 / 113 = 82.3% — JUnit run 28/10, Report 5.1 › Test Report”"
+              },
+              {
+                "ma": "b",
+                "noiDung": "“About 80%”"
+              },
+              {
+                "ma": "c",
+                "noiDung": "“Most tests pass”"
+              },
+              {
+                "ma": "d",
+                "noiDung": "“82.3%” in huge font, nothing else"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Raw counts + the ratio + the source. The teacher can open Report 5.1 and find the same 93 and 113.</p><p><i>VI: Số đếm gốc + tỉ lệ + nguồn. Cô mở Report 5.1 là thấy đúng 93 và 113.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>A number on your slide does not match the Excel report.</p><p style=\"opacity:.75;font-size:.92em\"><i>Một con số trên slide lệch với báo cáo Excel.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Fix the slide before the talk; the report is the source of truth"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Remove all numbers from the deck"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Leave it, nobody will check"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Round it so the difference disappears"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>One mismatched number makes every other number suspect.</p><p><i>VI: Một con số lệch khiến mọi con số khác bị nghi.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>You need to show the cause of SS-19 (AuthFilter.java line 45).</p><p style=\"opacity:.75;font-size:.92em\"><i>Cần chỉ nguyên nhân SS-19 (AuthFilter.java dòng 45).</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Show 6–8 lines around line 45, ≥ 20 pt, line 45 highlighted, caption “AuthFilter.java:45”"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Show a photo of your monitor"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Describe it in words only"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Show the whole file"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Small window, big font, one highlight, file:line caption — the teacher can open the same line during Q&A.</p><p><i>VI: Cửa sổ nhỏ, chữ to, tô một dòng, chú thích tệp:dòng — cô mở đúng dòng đó khi hỏi đáp.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Where should exact numbers you will be asked about live?</p><p style=\"opacity:.75;font-size:.92em\"><i>Các con số chính xác sẽ bị hỏi nên nằm ở đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Only in your memory"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Only in the report, which you will not open"
+              },
+              {
+                "ma": "c",
+                "noiDung": "On the slide AND in a backup slide/table you can jump to in Q&A"
+              },
+              {
+                "ma": "d",
+                "noiDung": "In the speaker notes only"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Backup (appendix) slides let you answer “show me” questions in seconds.</p><p><i>VI: Slide dự phòng (phụ lục) giúp trả lời câu \"cho cô xem\" trong vài giây.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>Which caption is best under a screenshot of Lab 4 evidence?</p><p style=\"opacity:.75;font-size:.92em\"><i>Chú thích nào tốt nhất dưới ảnh bằng chứng Lab 4?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "“Image 3”"
+              },
+              {
+                "ma": "b",
+                "noiDung": "No caption"
+              },
+              {
+                "ma": "c",
+                "noiDung": "“RL02 step 1, Round 1 — guest opens /dashboard → HTTP 500 (SS-19)”"
+              },
+              {
+                "ma": "d",
+                "noiDung": "“Screenshot”"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Case, step, round, what you see, ticket — the same naming as the file RL02_S1_R1.jpg.</p><p><i>VI: Ca, bước, round, thấy gì, mã lỗi — cùng cách đặt tên với tệp RL02_S1_R1.jpg.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Làm tròn số cho đẹp (\"khoảng 80%\") — mất khả năng đối chiếu."
+        },
+        {
+          "loi": "Không có slide dự phòng, bị hỏi chi tiết phải mở Excel lục tìm trước cả lớp."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "evidence",
+          "vi": "bằng chứng: log, ảnh chụp, dòng trong báo cáo, dòng mã"
+        },
+        {
+          "en": "backup slide / appendix",
+          "vi": "slide dự phòng / phụ lục — mở khi bị hỏi"
+        },
+        {
+          "en": "source of truth",
+          "vi": "nguồn sự thật — nơi con số gốc nằm"
+        }
+      ]
+    }
+  ]
+}

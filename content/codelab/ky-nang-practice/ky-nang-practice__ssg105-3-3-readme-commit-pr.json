@@ -1,0 +1,908 @@
+{
+  "trackSlug": "ky-nang-practice",
+  "moduleSlug": "ssg105-3-3-readme-commit-pr",
+  "lesson": {
+    "course": "ssg105-communication-and-in-group-working-skills",
+    "slug": "ssg105-3-1-writing"
+  },
+  "exercises": [
+    {
+      "title": "Docs 1 — Audit a bad README",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "README"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "ky-nang",
+        "ssg105"
+      ],
+      "problemHtml": "<p>A teammate cloned the repository on a new laptop and gave up after 40 minutes. Here is the README they found:</p><pre># sportshop\nOur SWT301 project.\n\n## Setup\nInstall everything and run.\n\n## Database\nCopy db.properties.example to db.properties and set url, user, password\n(SQL Server, database SportShop; the script is db/sportshop.sql).\n\n## Run\nOpen in NetBeans → Run Project (F6) → http://localhost:8080/SportShop\n\n## Tests\nTODO</pre>\n<p>A README that works answers, in order: <b>what is this</b>, <b>what do I need</b> (with versions), <b>how do I install and configure it</b>, <b>how do I run it</b>, <b>how do I run the tests and what result to expect</b>, <b>where things are</b>, and <b>what to do when it breaks</b>. Mark each expected section.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một bạn trong nhóm clone kho mã về máy mới và bỏ cuộc sau 40 phút với README ở trên. README dùng được trả lời theo thứ tự: <b>đây là gì</b>, <b>cần gì</b> (kèm phiên bản), <b>cài và cấu hình thế nào</b>, <b>chạy thế nào</b>, <b>chạy test thế nào và kết quả mong đợi</b>, <b>cái gì nằm ở đâu</b>, <b>hỏng thì làm gì</b>. Đánh giá từng mục cần có.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Một mục có tiêu đề nhưng nội dung không làm theo được (\"Install everything\", \"TODO\") = có nhưng không dùng được.",
+        "Mục cần phiên bản mà không có số phiên bản ⇒ chưa đủ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Docs 1 — Audit a bad README\n\nAnswer in the answer panel (no code needed).\n\n1. Section → state in this READMEMục → tình trạng trong README này\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Docs 1 — Audit a bad README — answer key\n\n1. Section → state in this READMEMục → tình trạng trong README này\n   - r0.t: Present but unusable\n   - r1.t: Missing\n   - r2.t: Present but unusable\n   - r3.t: Present and usable\n   - r4.t: Present and usable\n   - r5.t: Present but unusable\n   - r6.t: Missing\n   - r7.t: Missing\n   “Our SWT301 project” names no stack; “Install everything” and “TODO” are headings without content; database and run steps are concrete and work; prerequisites, structure and troubleshooting do not exist.VI: \"Our SWT301 project\" không nói công nghệ; \"Install everything\" và \"TODO\" là tiêu đề rỗng ruột; phần CSDL và chạy cụ thể và dùng được; điều kiện cần, cấu trúc và xử lý lỗi không có.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Unusable · Missing · Unusable · Usable · Usable · Unusable · Missing · Missing.</p>",
+      "solutionExplanationHtmlVi": "<p>Không dùng được · Thiếu · Không dùng được · Dùng được · Dùng được · Không dùng được · Thiếu · Thiếu.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Section → state in this README</p><p style=\"opacity:.75;font-size:.92em\"><i>Mục → tình trạng trong README này</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Expected section"
+              },
+              {
+                "ma": "t",
+                "ten": "State",
+                "luaChon": [
+                  "Present and usable",
+                  "Present but unusable",
+                  "Missing"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "What the project is (stack in one line)"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Prerequisites with versions (JDK, Tomcat, SQL Server / Docker)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Install steps"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Database configuration"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "How to run the web app"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "How to run the tests + expected result"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "Folder structure (where code and tests live)"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "s": "Troubleshooting (known errors and fixes)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.t": "Present but unusable",
+              "r1.t": "Missing",
+              "r2.t": "Present but unusable",
+              "r3.t": "Present and usable",
+              "r4.t": "Present and usable",
+              "r5.t": "Present but unusable",
+              "r6.t": "Missing",
+              "r7.t": "Missing"
+            },
+            "giaiThich": "<p>“Our SWT301 project” names no stack; “Install everything” and “TODO” are headings without content; database and run steps are concrete and work; prerequisites, structure and troubleshooting do not exist.</p><p><i>VI: \"Our SWT301 project\" không nói công nghệ; \"Install everything\" và \"TODO\" là tiêu đề rỗng ruột; phần CSDL và chạy cụ thể và dùng được; điều kiện cần, cấu trúc và xử lý lỗi không có.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Tính \"có tiêu đề\" là \"có mục\"."
+        },
+        {
+          "loi": "Quên mục kết quả mong đợi của test — người mới không biết 20 ca fail là bình thường hay là máy mình hỏng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "README",
+          "vi": "tệp hướng dẫn đầu tiên của một kho mã: là gì, cài, chạy, test"
+        },
+        {
+          "en": "prerequisites",
+          "vi": "điều kiện cần cài trước"
+        },
+        {
+          "en": "troubleshooting",
+          "vi": "xử lý sự cố thường gặp"
+        }
+      ]
+    },
+    {
+      "title": "Docs 2 — Which README section does each real line belong to?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "README"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "ky-nang",
+        "ssg105"
+      ],
+      "problemHtml": "<p>These lines come from the README the owner finally wrote for SportShop (translated). Good READMEs are scanned, not read: a line in the wrong section is as lost as a missing line. Put each line where a newcomer would look for it.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các dòng này lấy từ README mà chủ dự án cuối cùng viết cho SportShop (đã dịch). README tốt được lướt, không được đọc: một dòng đặt sai mục cũng mất như dòng không có. Đặt mỗi dòng vào chỗ người mới sẽ tìm.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Lệnh chạy test (unit hay Postman) đều thuộc mục chạy test.",
+        "\"Nhóm không sửa nghiệp vụ, fail là lỗi thật\" là giới hạn/quy ước của dự án."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Docs 2 — Which README section does each real line belong to?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Docs 2 — Which README section does each real line belong to? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: What it is\n   - r1.k: Folder structure\n   - r2.k: Install / configure\n   - r3.k: Run the tests\n   - r4.k: Sample data / accounts\n   - r5.k: Known limitations\n   - r6.k: Run the tests\n   Note the test line states the EXPECTED result — that single number saves a newcomer an hour of “is my machine broken?”.VI: Để ý dòng chạy test ghi kết quả MONG ĐỢI — một con số đó tiết kiệm cho người mới cả giờ \"máy mình hỏng à?\".\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>What it is · Structure · Install · Tests · Sample data · Limitations · Tests.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "README line"
+              },
+              {
+                "ma": "k",
+                "ten": "Section",
+                "luaChon": [
+                  "What it is",
+                  "Folder structure",
+                  "Install / configure",
+                  "Run the tests",
+                  "Sample data / accounts",
+                  "Known limitations"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "“A sport shop in Java Servlet/JSP (Jakarta EE 10, Tomcat 10.1) + SQL Server, a NetBeans (Ant) project.”"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "“test/ — *Test = unit (Lab 2), *IT = integration (Lab 3); e2e/ — Lab 4 Playwright scripts.”"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "“macOS has no SQL Server: run it in Docker with bash scripts/mac-sqlserver.sh.”"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "“bash scripts/test.sh unit ⇒ expect 113 tests found, 93 successful, 20 failed.”"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "“10 sample users are created by db/sportshop.sql (admin and customers, passwords in the table).”"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "“The team does NOT change business code; FAILED tests are real defects with SS-xx tickets.”"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "“node postman/run-round.js 1 runs Lab 3 round 1 with Newman and writes bao-cao/lab3/postman/R1/.”"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "What it is",
+              "r1.k": "Folder structure",
+              "r2.k": "Install / configure",
+              "r3.k": "Run the tests",
+              "r4.k": "Sample data / accounts",
+              "r5.k": "Known limitations",
+              "r6.k": "Run the tests"
+            },
+            "giaiThich": "<p>Note the test line states the EXPECTED result — that single number saves a newcomer an hour of “is my machine broken?”.</p><p><i>VI: Để ý dòng chạy test ghi kết quả MONG ĐỢI — một con số đó tiết kiệm cho người mới cả giờ \"máy mình hỏng à?\".</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt lệnh Docker vào mục chạy test thay vì cài đặt."
+        },
+        {
+          "loi": "Bỏ dòng \"kết quả mong đợi\" vì nghĩ thừa."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "README",
+          "vi": "tệp hướng dẫn đầu tiên của một kho mã: là gì, cài, chạy, test"
+        },
+        {
+          "en": "expected output",
+          "vi": "kết quả mong đợi khi chạy lệnh"
+        }
+      ]
+    },
+    {
+      "title": "Docs 3 — Pick the commit message (Conventional Commits)",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "commit messages"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "ky-nang",
+        "ssg105"
+      ],
+      "problemHtml": "<p><b>Conventional Commits</b>: <code>type(scope): summary</code> — type is <code>feat</code> (new behaviour), <code>fix</code> (bug fix), <code>test</code>, <code>docs</code>, <code>refactor</code> (no behaviour change), <code>chore</code> (build, tooling); the summary is imperative (“add”, not “added”), specific, about 50–72 characters, and can carry the ticket id. Pick the best message for each change.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Conventional Commits</b>: <code>type(scope): mô tả</code> — type là <code>feat</code> (hành vi mới), <code>fix</code> (sửa lỗi), <code>test</code>, <code>docs</code>, <code>refactor</code> (không đổi hành vi), <code>chore</code> (build, công cụ); mô tả ở thể mệnh lệnh (\"add\", không \"added\"), cụ thể, khoảng 50–72 ký tự, có thể kèm mã ticket. Chọn message tốt nhất cho mỗi thay đổi.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Có đổi hành vi không? Không ⇒ refactor/chore/docs/test; có, sửa lỗi ⇒ fix; có, mới ⇒ feat.",
+        "Mô tả bắt đầu bằng động từ mệnh lệnh: add, fix, move, rename, export."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Docs 3 — Pick the commit message (Conventional Commits)\n\nAnswer in the answer panel (no code needed).\n\n1. You added the 22 integration tests of module A.Bạn thêm 22 integration test của module A.\n2. You fixed the guest NullPointerException in AuthFilter.Bạn sửa NullPointerException của khách trong AuthFilter.\n3. You documented the Postman/Newman steps in the README.Bạn viết hướng dẫn Postman/Newman vào README.\n4. You renamed variables in UserDAO; behaviour is identical and all tests still give 93/20.Bạn đổi tên biến trong UserDAO; hành vi y nguyên, test vẫn 93/20.\n5. You moved JaCoCo jars to lib/test and updated build.xml.Bạn chuyển jar JaCoCo sang lib/test và sửa build.xml.\n6. You added CSV export of the test statistics.Bạn thêm xuất CSV thống kê test.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Docs 3 — Pick the commit message (Conventional Commits) — answer key\n\n1. You added the 22 integration tests of module A.Bạn thêm 22 integration test của module A.\n   Answer: c) test(auth): add 22 integration cases IT01–IT22 for module A\n   Type test, scope, imperative, specific count and ids.VI: Type test, phạm vi, mệnh lệnh, số lượng và mã cụ thể.\n\n2. You fixed the guest NullPointerException in AuthFilter.Bạn sửa NullPointerException của khách trong AuthFilter.\n   Answer: a) fix(auth): redirect guests instead of throwing NPE in AuthFilter (SS-19)\n   fix + what the user now gets + the ticket. refactor would claim “no behaviour change”, which is false.VI: fix + người dùng giờ nhận gì + ticket. refactor nghĩa là \"không đổi hành vi\" — sai.\n\n3. You documented the Postman/Newman steps in the README.Bạn viết hướng dẫn Postman/Newman vào README.\n   Answer: c) docs(readme): add Postman/Newman steps for Lab 3 rounds\n   Documentation only ⇒ docs.VI: Chỉ tài liệu ⇒ docs.\n\n4. You renamed variables in UserDAO; behaviour is identical and all tests still give 93/20.Bạn đổi tên biến trong UserDAO; hành vi y nguyên, test vẫn 93/20.\n   Answer: a) refactor(dao): rename UserDAO locals for readability, no behaviour change\n   refactor = same behaviour; saying so explicitly helps reviewers.VI: refactor = cùng hành vi; nói rõ giúp người review.\n\n5. You moved JaCoCo jars to lib/test and updated build.xml.Bạn chuyển jar JaCoCo sang lib/test và sửa build.xml.\n   Answer: c) chore(build): move JaCoCo jars to lib/test and update build.xml\n   Build/tooling with no product behaviour ⇒ chore (or build).VI: Build/công cụ, không đổi hành vi sản phẩm ⇒ chore (hoặc build).\n\n6. You added CSV export of the test statistics.Bạn thêm xuất CSV thống kê test.\n   Answer: b) feat(report): export test statistics as CSV\n   New user-visible behaviour ⇒ feat.VI: Hành vi mới người dùng thấy ⇒ feat.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: c · a · c · a · c · b.</p>",
+      "solutionExplanationHtmlVi": "<p>Đáp án: c · a · c · a · c · b.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>You added the 22 integration tests of module A.</p><p style=\"opacity:.75;font-size:.92em\"><i>Bạn thêm 22 integration test của module A.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "update"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Added tests!!!"
+              },
+              {
+                "ma": "c",
+                "noiDung": "test(auth): add 22 integration cases IT01–IT22 for module A"
+              },
+              {
+                "ma": "d",
+                "noiDung": "feat: tests"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Type test, scope, imperative, specific count and ids.</p><p><i>VI: Type test, phạm vi, mệnh lệnh, số lượng và mã cụ thể.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>You fixed the guest NullPointerException in AuthFilter.</p><p style=\"opacity:.75;font-size:.92em\"><i>Bạn sửa NullPointerException của khách trong AuthFilter.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "fix(auth): redirect guests instead of throwing NPE in AuthFilter (SS-19)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "fix bug"
+              },
+              {
+                "ma": "c",
+                "noiDung": "refactor: AuthFilter"
+              },
+              {
+                "ma": "d",
+                "noiDung": "AuthFilter"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>fix + what the user now gets + the ticket. refactor would claim “no behaviour change”, which is false.</p><p><i>VI: fix + người dùng giờ nhận gì + ticket. refactor nghĩa là \"không đổi hành vi\" — sai.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>You documented the Postman/Newman steps in the README.</p><p style=\"opacity:.75;font-size:.92em\"><i>Bạn viết hướng dẫn Postman/Newman vào README.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "readme"
+              },
+              {
+                "ma": "b",
+                "noiDung": "WIP"
+              },
+              {
+                "ma": "c",
+                "noiDung": "docs(readme): add Postman/Newman steps for Lab 3 rounds"
+              },
+              {
+                "ma": "d",
+                "noiDung": "feat(readme): Postman"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Documentation only ⇒ docs.</p><p><i>VI: Chỉ tài liệu ⇒ docs.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>You renamed variables in UserDAO; behaviour is identical and all tests still give 93/20.</p><p style=\"opacity:.75;font-size:.92em\"><i>Bạn đổi tên biến trong UserDAO; hành vi y nguyên, test vẫn 93/20.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "refactor(dao): rename UserDAO locals for readability, no behaviour change"
+              },
+              {
+                "ma": "b",
+                "noiDung": "feat(dao): better DAO"
+              },
+              {
+                "ma": "c",
+                "noiDung": "changes"
+              },
+              {
+                "ma": "d",
+                "noiDung": "fix(dao): clean code"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>refactor = same behaviour; saying so explicitly helps reviewers.</p><p><i>VI: refactor = cùng hành vi; nói rõ giúp người review.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>You moved JaCoCo jars to lib/test and updated build.xml.</p><p style=\"opacity:.75;font-size:.92em\"><i>Bạn chuyển jar JaCoCo sang lib/test và sửa build.xml.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "fix: build"
+              },
+              {
+                "ma": "b",
+                "noiDung": "feat: jacoco"
+              },
+              {
+                "ma": "c",
+                "noiDung": "chore(build): move JaCoCo jars to lib/test and update build.xml"
+              },
+              {
+                "ma": "d",
+                "noiDung": "final version"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Build/tooling with no product behaviour ⇒ chore (or build).</p><p><i>VI: Build/công cụ, không đổi hành vi sản phẩm ⇒ chore (hoặc build).</i></p>"
+          },
+          {
+            "ma": "q6",
+            "de": "<p>You added CSV export of the test statistics.</p><p style=\"opacity:.75;font-size:.92em\"><i>Bạn thêm xuất CSV thống kê test.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "test(report): csv"
+              },
+              {
+                "ma": "b",
+                "noiDung": "feat(report): export test statistics as CSV"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Added a new feature"
+              },
+              {
+                "ma": "d",
+                "noiDung": "chore: csv"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>New user-visible behaviour ⇒ feat.</p><p><i>VI: Hành vi mới người dùng thấy ⇒ feat.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Message \"update\", \"fix bug\", \"final\" — sau một tuần không ai biết commit làm gì."
+        },
+        {
+          "loi": "Gắn refactor cho một commit có sửa hành vi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Conventional Commits",
+          "vi": "quy ước commit \"type(scope): mô tả\" — feat, fix, docs, test, refactor, chore…"
+        },
+        {
+          "en": "imperative mood",
+          "vi": "thể mệnh lệnh — \"add\", \"fix\""
+        },
+        {
+          "en": "scope",
+          "vi": "phạm vi trong ngoặc: (auth), (dao), (readme)"
+        }
+      ]
+    },
+    {
+      "title": "Docs 4 — Pull request and issue titles that work",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "pull requests",
+        "issues"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "ky-nang",
+        "ssg105"
+      ],
+      "problemHtml": "<p>A pull request is read by someone who did not write the code and has ten minutes. Its title says what changes; its description says <b>why</b>, <b>what</b>, and <b>how it was tested</b>. An issue title names the observed problem and where it happens. (Writing full defect reports is practised in SWT301 Code Lab; here you only pick titles and PR content.)</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Pull request được đọc bởi người không viết code và chỉ có mười phút. Tiêu đề nói thay đổi gì; mô tả nói <b>vì sao</b>, <b>làm gì</b>, và <b>đã kiểm thế nào</b>. Tiêu đề issue nêu vấn đề quan sát được và nơi xảy ra. (Viết defect report đầy đủ đã có ở Code Lab SWT301; ở đây chỉ chọn tiêu đề và nội dung PR.)</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Tiêu đề tốt đọc riêng vẫn hiểu thay đổi/vấn đề.",
+        "\"How tested\" = lệnh + con số."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Docs 4 — Pull request and issue titles that work\n\nAnswer in the answer panel (no code needed).\n\n1. Best PR title for the SS-28 fixTiêu đề PR tốt nhất cho bản sửa SS-28\n2. Which “How tested” section is useful?Mục \"How tested\" nào hữu ích?\n3. Best issue titleTiêu đề issue tốt nhất\n4. What must a PR description NOT do?Mô tả PR KHÔNG được làm gì?\n5. A feature request titleTiêu đề yêu cầu tính năng\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Docs 4 — Pull request and issue titles that work — answer key\n\n1. Best PR title for the SS-28 fixTiêu đề PR tốt nhất cho bản sửa SS-28\n   Answer: a) Take the profile owner from the session, not the form (SS-28)\n   Behaviour-level title + ticket. File lists belong in the description.VI: Tiêu đề ở mức hành vi + ticket. Danh sách tệp để trong mô tả.\n\n2. Which “How tested” section is useful?Mục \"How tested\" nào hữu ích?\n   Answer: c) “bash scripts/test.sh it → 22 found, 17 pass, 5 fail (IT17 now passes); IT17 re-run 3× on a clean DB.”\n   Command + numbers before/after + the specific case that changed.VI: Lệnh + số trước/sau + đúng ca thay đổi.\n\n3. Best issue titleTiêu đề issue tốt nhất\n   Answer: c) Logout from /profile returns HTTP 405 (POST not supported by LogoutServlet)\n   Action, place, observed result, and the cause if already known.VI: Thao tác, vị trí, kết quả quan sát, và nguyên nhân nếu đã biết.\n\n4. What must a PR description NOT do?Mô tả PR KHÔNG được làm gì?\n   Answer: a) Hide that one test still fails\n   Reviewers decide based on the description; hiding a red test is the fastest way to lose their trust.VI: Người review quyết dựa trên mô tả; giấu một test đỏ là cách nhanh nhất mất lòng tin.\n\n5. A feature request titleTiêu đề yêu cầu tính năng\n   Answer: c) Let customers reset a forgotten password by e-mail link (currently /reset is 404)\n   Who, what capability, and the current state.VI: Ai, khả năng gì, và hiện trạng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · c · c · a · c.</p>",
+      "solutionExplanationHtmlVi": "<p>Đáp án: a · c · c · a · c.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Best PR title for the SS-28 fix</p><p style=\"opacity:.75;font-size:.92em\"><i>Tiêu đề PR tốt nhất cho bản sửa SS-28</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Take the profile owner from the session, not the form (SS-28)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Fix"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Please review my code"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Changes to UpdateProfileServlet and UserDAO and some other files"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Behaviour-level title + ticket. File lists belong in the description.</p><p><i>VI: Tiêu đề ở mức hành vi + ticket. Danh sách tệp để trong mô tả.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Which “How tested” section is useful?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mục \"How tested\" nào hữu ích?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "“Tested, works.”"
+              },
+              {
+                "ma": "b",
+                "noiDung": "“I tested everything carefully.”"
+              },
+              {
+                "ma": "c",
+                "noiDung": "“bash scripts/test.sh it → 22 found, 17 pass, 5 fail (IT17 now passes); IT17 re-run 3× on a clean DB.”"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Empty"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Command + numbers before/after + the specific case that changed.</p><p><i>VI: Lệnh + số trước/sau + đúng ca thay đổi.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Best issue title</p><p style=\"opacity:.75;font-size:.92em\"><i>Tiêu đề issue tốt nhất</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Bug!!!"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Logout not working sometimes"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Logout from /profile returns HTTP 405 (POST not supported by LogoutServlet)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Problem with the website"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Action, place, observed result, and the cause if already known.</p><p><i>VI: Thao tác, vị trí, kết quả quan sát, và nguyên nhân nếu đã biết.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>What must a PR description NOT do?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mô tả PR KHÔNG được làm gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Hide that one test still fails"
+              },
+              {
+                "ma": "b",
+                "noiDung": "List risks and how to roll back"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Include a screenshot of the changed page"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Link the issue it closes"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Reviewers decide based on the description; hiding a red test is the fastest way to lose their trust.</p><p><i>VI: Người review quyết dựa trên mô tả; giấu một test đỏ là cách nhanh nhất mất lòng tin.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>A feature request title</p><p style=\"opacity:.75;font-size:.92em\"><i>Tiêu đề yêu cầu tính năng</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Urgent!!!"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Feature"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Let customers reset a forgotten password by e-mail link (currently /reset is 404)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Make the site better"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Who, what capability, and the current state.</p><p><i>VI: Ai, khả năng gì, và hiện trạng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Tiêu đề PR là danh sách tệp."
+        },
+        {
+          "loi": "Giấu ca test còn đỏ trong mô tả PR."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "pull request (PR)",
+          "vi": "yêu cầu gộp mã — kèm mô tả: làm gì, vì sao, đã kiểm thế nào"
+        },
+        {
+          "en": "issue",
+          "vi": "phiếu việc/lỗi trên GitHub/Jira/CT Work"
+        },
+        {
+          "en": "rollback",
+          "vi": "quay lại bản trước khi bản mới hỏng"
+        }
+      ]
+    },
+    {
+      "title": "Docs 5 — Order a PR description and a commit message",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "PR description",
+        "commit anatomy"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "ky-nang",
+        "ssg105"
+      ],
+      "problemHtml": "<p>Reviewers read top-down and stop when they have enough. So the PR description starts with the one-paragraph <b>why + what</b>, then the details a reviewer checks, then the safety net. A commit message has a fixed anatomy that tools (git log, changelog generators) depend on. Order both.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Người review đọc từ trên xuống và dừng khi đủ. Vậy mô tả PR mở bằng một đoạn <b>vì sao + làm gì</b>, rồi chi tiết người review cần kiểm, rồi lưới an toàn. Commit message có cấu trúc cố định mà công cụ (git log, bộ sinh changelog) dựa vào. Sắp cả hai.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Thứ người review cần đầu tiên là vì sao và làm gì.",
+        "Commit: tiêu đề — dòng trống — thân — footer."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Docs 5 — Order a PR description and a commit message\n\nAnswer in the answer panel (no code needed).\n\n1. PR descriptionMô tả PR\n2. Commit message anatomyCấu trúc một commit message\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Docs 5 — Order a PR description and a commit message — answer key\n\n1. PR descriptionMô tả PR\n   Answer: a) Summary: why and what in 2–3 sentences, with “Closes #28”  →  b) Changes: bullet list by file or area  →  c) How tested: commands and results (before → after)  →  d) Screenshots / evidence of the changed behaviour  →  e) Risks and how to roll back  →  f) Reviewer checklist / open questions\n   Context first, verification in the middle, safety at the end.VI: Bối cảnh trước, kiểm chứng ở giữa, an toàn ở cuối.\n\n2. Commit message anatomyCấu trúc một commit message\n   Answer: a) Subject: type(scope): imperative summary, ≤ 72 characters  →  b) A blank line  →  c) Body: why the change was needed and what it does  →  d) Footer: Refs/Closes ticket, BREAKING CHANGE if any\n   git uses the first line as the title; the blank line separates title from body; footers are machine-readable.VI: git lấy dòng đầu làm tiêu đề; dòng trống tách tiêu đề với thân; footer cho máy đọc.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>PR description</b>: Summary: why and what in 2–3 sentences, with “Closes #28” → Changes: bullet list by file or area → How tested: commands and results (before → after) → Screenshots / evidence of the changed behaviour → Risks and how to roll back → Reviewer checklist / open questions.</p><p><b>Commit message anatomy</b>: Subject: type(scope): imperative summary, ≤ 72 characters → A blank line → Body: why the change was needed and what it does → Footer: Refs/Closes ticket, BREAKING CHANGE if any.</p>",
+      "solutionExplanationHtmlVi": "<p><b>Mô tả PR</b>: Bối cảnh trước, kiểm chứng ở giữa, an toàn ở cuối.</p><p><b>Cấu trúc một commit message</b>: git lấy dòng đầu làm tiêu đề; dòng trống tách tiêu đề với thân; footer cho máy đọc.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>PR description</p><p style=\"opacity:.75;font-size:.92em\"><i>Mô tả PR</i></p>",
+            "muc": [
+              {
+                "ma": "a",
+                "noiDung": "Summary: why and what in 2–3 sentences, with “Closes #28”"
+              },
+              {
+                "ma": "c",
+                "noiDung": "How tested: commands and results (before → after)"
+              },
+              {
+                "ma": "e",
+                "noiDung": "Risks and how to roll back"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Screenshots / evidence of the changed behaviour"
+              },
+              {
+                "ma": "f",
+                "noiDung": "Reviewer checklist / open questions"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Changes: bullet list by file or area"
+              }
+            ],
+            "dapAn": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e",
+              "f"
+            ],
+            "giaiThich": "<p>Context first, verification in the middle, safety at the end.</p><p><i>VI: Bối cảnh trước, kiểm chứng ở giữa, an toàn ở cuối.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Commit message anatomy</p><p style=\"opacity:.75;font-size:.92em\"><i>Cấu trúc một commit message</i></p>",
+            "muc": [
+              {
+                "ma": "c",
+                "noiDung": "Body: why the change was needed and what it does"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Footer: Refs/Closes ticket, BREAKING CHANGE if any"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A blank line"
+              },
+              {
+                "ma": "a",
+                "noiDung": "Subject: type(scope): imperative summary, ≤ 72 characters"
+              }
+            ],
+            "dapAn": [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            "giaiThich": "<p>git uses the first line as the title; the blank line separates title from body; footers are machine-readable.</p><p><i>VI: git lấy dòng đầu làm tiêu đề; dòng trống tách tiêu đề với thân; footer cho máy đọc.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Mở mô tả PR bằng danh sách tệp."
+        },
+        {
+          "loi": "Viết thân commit ngay dưới tiêu đề, không có dòng trống — git gộp thành một tiêu đề dài."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "pull request (PR)",
+          "vi": "yêu cầu gộp mã — kèm mô tả: làm gì, vì sao, đã kiểm thế nào"
+        },
+        {
+          "en": "Conventional Commits",
+          "vi": "quy ước commit \"type(scope): mô tả\" — feat, fix, docs, test, refactor, chore…"
+        },
+        {
+          "en": "footer",
+          "vi": "phần cuối commit: Refs/Closes, BREAKING CHANGE"
+        }
+      ]
+    }
+  ]
+}

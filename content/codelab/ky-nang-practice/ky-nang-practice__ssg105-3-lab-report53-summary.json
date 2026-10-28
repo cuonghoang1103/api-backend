@@ -1,0 +1,238 @@
+{
+  "trackSlug": "ky-nang-practice",
+  "moduleSlug": "ssg105-3-lab-report53-summary",
+  "lesson": {
+    "course": "ssg105-communication-and-in-group-working-skills",
+    "slug": "ssg105-3-1-writing"
+  },
+  "exercises": [
+    {
+      "title": "Capstone 3 — Summary + Conclusion of Report 5.3 (Lab 4)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 60,
+      "points": 50,
+      "concepts": [
+        "executive summary",
+        "conclusion",
+        "numbers consistency",
+        "residual risk"
+      ],
+      "prerequisites": [
+        "3.1 Technical writing",
+        "3.2 Lab report structure",
+        "3.5 Report linter"
+      ],
+      "tags": [
+        "swt301",
+        "report-5.3",
+        "technical-writing",
+        "capstone"
+      ],
+      "problemHtml": "<h1>Capstone — Summary and Conclusion of Report 5.3 (Lab 4)</h1>\n<p class=\"bi-phu\">Technical writing · SportShop module A · ≤ 200 words · numbers checked against the real statistics · 10 marks (structural grading + self-rubric)</p>\n<h2>1. Overview</h2>\n<p>Report 5.3 is due on Saturday. Most readers — the teacher, a reviewer, your future OJT mentor — read only the <b>Summary</b> and the <b>Conclusion</b>. Write both for your real Lab 4 run, in at most <b>200 words together</b>.</p>\n<p>Your statistics (Report 5.3, module A, run of 28/10/2026): <b>5</b> workflows (A-WF1…A-WF5), <b>18</b> cases, <b>48</b> steps, <b>3</b> rounds, one screenshot per step per round (144), every round <b>12 pass / 6 fail</b>. Failed: RG01 (SS-33 “Member Since” shows the birth date) · AC05 (SS-27 duplicate e-mail reported as saved) · AC06, AC07 (SS-31 logout returns 405 / does not log out) · FP01 (SS-32 password reset not implemented, /reset 404) · RL02 (SS-19 guest on /dashboard gets HTTP 500).</p>\n<p><b>What the grader can and cannot do.</b> It checks length, the first-sentence rule, that every number and percentage agrees with the statistics above, that the defect ids are the Lab 4 ones, and that the conclusion has a verdict, a risk and a recommendation. It cannot tell whether your sentences are clear — the 6-point self-rubric and a classmate reading it for 30 seconds can. AI grading is not available yet.</p>\n<h3>Main features</h3>\n<ul>\n  <li>RESULTS: the six numbers copied from the statistics sheet.</li>\n  <li>SUMMARY: result first, then scope and method, then the failed cases with their tickets.</li>\n  <li>CONCLUSION: verdict, the biggest residual risk, what to fix and re-run first.</li>\n  <li>RUBRIC: six honest self-checks.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>⚠ Honest note: the grader checks <b>structure, length, numbers and banned words only</b> — it cannot judge whether your argument is clear or convincing. AI rubric grading is not available yet; use the self-rubric and record yourself.</li>\n  <li>Use the numbers of THIS lab only — 72.73% (Lab 3) or 82.30% (Lab 2) in a Lab 4 summary is a classic copy-paste error.</li>\n  <li>Run your text through your Linter 2 (lesson 3.5) before submitting.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>report53.js\n├── RESULTS     ← { workflows, cases, steps, rounds, passed, failed }\n├── SUMMARY     ← string\n├── CONCLUSION  ← string\n└── RUBRIC      ← { 6 self-checks: true | false }</pre>\n<h2>3. Data model</h2>\n<p><b>report53.js — the four constants</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>RESULTS</code></td><td>object of numbers</td><td>must equal the statistics sheet</td></tr><tr><td><code>SUMMARY</code></td><td>string</td><td>first sentence ≤ 35 words with a number; names the failed cases’ tickets</td></tr><tr><td><code>CONCLUSION</code></td><td>string</td><td>verdict + residual risk + recommendation; no vague or blame words</td></tr><tr><td><code>RUBRIC.&lt;check&gt;</code></td><td>boolean</td><td>all six answered</td></tr></tbody></table>\n<h3>Sample data</h3>\n<pre>SUMMARY    = `Module A passes 12 of 18 system test cases (66.67%) in each of 3 rounds; … `\nCONCLUSION = `Module A is not ready for release. The highest residual risk is … We recommend … `</pre>\n<h2>4. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. Length and first sentence <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>SUMMARY + CONCLUSION: 60–200 words.</li>\n  <li>The first sentence of SUMMARY has ≤ 35 words and contains a number.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">BLUF</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. Numbers agree with the table <span class=\"bi-diem\">3 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>RESULTS equals the statistics; passed + failed = cases.</li>\n  <li>SUMMARY states 12, 18 and the pass rate 66.67% (66.7% accepted).</li>\n  <li>Every percentage in the text is one the table supports (66.67 / 66.7 / 33.33 / 33.3 / 100).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>3. Defects named correctly <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>At least 3 of the Lab 4 tickets SS-19, SS-27, SS-31, SS-32, SS-33; no ticket from another lab.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>4. A real conclusion <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>CONCLUSION gives a verdict (ready / not ready / release…), a residual risk and a recommendation.</li>\n  <li>No vague words and no blame in SUMMARY or CONCLUSION.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. Self-rubric <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>All six checks answered true or false.</li>\n</ul>\n</div>\n<h2>5. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>Length and first sentence</td><td>2</td></tr><tr><td>2</td><td>Numbers agree with the table</td><td>3</td></tr><tr><td>3</td><td>Defects named correctly</td><td>2</td></tr><tr><td>4</td><td>A real conclusion</td><td>2</td></tr><tr><td>5</td><td>Self-rubric</td><td>1</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Using the Lab 3 rate (72.73%) or counting 6 failures as 6 defects (AC06 and AC07 share SS-31).</li>\n  <li>“We learned a lot” as the conclusion.</li>\n  <li>Statistics taken from Round 1 when the report is about the latest round.</li>\n</ul>\n<h2>6. Submission</h2>\n<p>Submit report53.js; paste the two texts into Report 5.3 (or the Docs page on CT Work).</p>",
+      "problemHtmlVi": "<h1>Capstone — Summary and Conclusion of Report 5.3 (Lab 4)</h1>\n<p class=\"bi-phu\">Viết kỹ thuật · SportShop module A · ≤ 200 từ · số liệu đối chiếu với thống kê thật · 10 điểm (máy chấm cấu trúc + rubric tự chấm)</p>\n<h2>1. Tổng quan</h2>\n<p>Report 5.3 nộp thứ Bảy. Phần lớn người đọc — cô, người review, mentor OJT sau này — chỉ đọc <b>Summary</b> và <b>Conclusion</b>. Viết cả hai cho lần chạy Lab 4 thật của bạn, tổng cộng tối đa <b>200 từ</b>.</p>\n<p>Thống kê (Report 5.3, module A, lần chạy 28/10/2026): <b>5</b> workflow, <b>18</b> ca, <b>48</b> bước, <b>3</b> round, mỗi bước mỗi round một ảnh (144), mỗi round <b>12 đạt / 6 fail</b>. Fail: RG01 (SS-33) · AC05 (SS-27) · AC06, AC07 (SS-31) · FP01 (SS-32) · RL02 (SS-19).</p>\n<p><b>Máy chấm làm được gì và không.</b> Nó kiểm độ dài, luật câu đầu, mọi con số/phần trăm khớp thống kê, mã lỗi đúng của Lab 4, và kết luận có phán quyết, rủi ro, đề xuất. Nó không biết câu của bạn có rõ không — rubric 6 điểm và một bạn đọc thử 30 giây mới biết. Chưa có chấm bằng AI.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>RESULTS: sáu con số chép từ sheet thống kê.</li>\n  <li>SUMMARY: kết quả trước, rồi phạm vi và cách làm, rồi các ca fail kèm mã lỗi.</li>\n  <li>CONCLUSION: phán quyết, rủi ro còn lại lớn nhất, sửa và chạy lại gì trước.</li>\n  <li>RUBRIC: sáu tự kiểm trung thực.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>⚠ Nói thật: máy chấm chỉ kiểm <b>cấu trúc, độ dài, số liệu và từ cấm</b> — không đánh giá được lập luận có rõ, có thuyết phục không. Chưa có chấm bằng AI theo rubric; hãy dùng rubric tự chấm và tự ghi âm.</li>\n  <li>Chỉ dùng số của lab NÀY — 72,73% (Lab 3) hay 82,30% (Lab 2) trong tóm tắt Lab 4 là lỗi chép-dán kinh điển.</li>\n  <li>Chạy văn bản qua Linter 2 của bạn (bài 3.5) trước khi nộp.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>report53.js\n├── RESULTS     ← { workflows, cases, steps, rounds, passed, failed }\n├── SUMMARY     ← string\n├── CONCLUSION  ← string\n└── RUBRIC      ← { 6 self-checks: true | false }</pre>\n<h2>3. Mô hình dữ liệu</h2>\n<p><b>report53.js — the four constants</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>RESULTS</code></td><td>object of numbers</td><td>phải bằng sheet thống kê</td></tr><tr><td><code>SUMMARY</code></td><td>string</td><td>câu đầu ≤ 35 từ có số; nêu mã lỗi của các ca fail</td></tr><tr><td><code>CONCLUSION</code></td><td>string</td><td>phán quyết + rủi ro còn lại + đề xuất; không từ mơ hồ/đổ lỗi</td></tr><tr><td><code>RUBRIC.&lt;check&gt;</code></td><td>boolean</td><td>trả lời đủ sáu</td></tr></tbody></table>\n<h3>Dữ liệu mẫu</h3>\n<pre>SUMMARY    = `Module A passes 12 of 18 system test cases (66.67%) in each of 3 rounds; … `\nCONCLUSION = `Module A is not ready for release. The highest residual risk is … We recommend … `</pre>\n<h2>4. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. Độ dài và câu đầu <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>SUMMARY + CONCLUSION: 60–200 từ.</li>\n  <li>Câu đầu của SUMMARY ≤ 35 từ và có con số.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">BLUF</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. Số liệu khớp bảng <span class=\"bi-diem\">3 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>RESULTS bằng thống kê; passed + failed = cases.</li>\n  <li>SUMMARY nêu 12, 18 và tỉ lệ đạt 66.67% (chấp nhận 66.7%).</li>\n  <li>Mọi phần trăm trong văn bản đều được bảng chứng minh (66.67 / 66.7 / 33.33 / 33.3 / 100).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>3. Nêu đúng lỗi <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Ít nhất 3 trong các thẻ Lab 4 SS-19, SS-27, SS-31, SS-32, SS-33; không có thẻ của lab khác.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>4. Kết luận đúng nghĩa <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>CONCLUSION có phán quyết (sẵn sàng / chưa / phát hành…), rủi ro còn lại và đề xuất.</li>\n  <li>Không từ mơ hồ, không đổ lỗi trong SUMMARY và CONCLUSION.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. Rubric tự chấm <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Cả sáu mục trả lời true hoặc false.</li>\n</ul>\n</div>\n<h2>5. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>Độ dài và câu đầu</td><td>2</td></tr><tr><td>2</td><td>Số liệu khớp bảng</td><td>3</td></tr><tr><td>3</td><td>Nêu đúng lỗi</td><td>2</td></tr><tr><td>4</td><td>Kết luận đúng nghĩa</td><td>2</td></tr><tr><td>5</td><td>Rubric tự chấm</td><td>1</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Dùng tỉ lệ Lab 3 (72,73%) hoặc đếm 6 ca fail thành 6 lỗi (AC06 và AC07 chung SS-31).</li>\n  <li>\"Em học được nhiều\" làm kết luận.</li>\n  <li>Thống kê lấy Round 1 trong khi báo cáo nói về round mới nhất.</li>\n</ul>\n<h2>6. Nộp bài</h2>\n<p>Nộp report53.js; dán hai đoạn vào Report 5.3 (hoặc trang Docs trên CT Work).</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "⚠ Honest note: the grader checks <b>structure, length, numbers and banned words only</b> — it cannot judge whether your argument is clear or convincing. AI rubric grading is not available yet; use the self-rubric and record yourself.|||⚠ Nói thật: máy chấm chỉ kiểm <b>cấu trúc, độ dài, số liệu và từ cấm</b> — không đánh giá được lập luận có rõ, có thuyết phục không. Chưa có chấm bằng AI theo rubric; hãy dùng rubric tự chấm và tự ghi âm.\nUse the numbers of THIS lab only — 72.73% (Lab 3) or 82.30% (Lab 2) in a Lab 4 summary is a classic copy-paste error.|||Chỉ dùng số của lab NÀY — 72,73% (Lab 3) hay 82,30% (Lab 2) trong tóm tắt Lab 4 là lỗi chép-dán kinh điển.\nRun your text through your Linter 2 (lesson 3.5) before submitting.|||Chạy văn bản qua Linter 2 của bạn (bài 3.5) trước khi nộp.",
+      "examplesJson": [
+        {
+          "input": "SUMMARY = `In this report we present the system testing of module A …`",
+          "output": "✗ First sentence: ≤ 35 words with a number",
+          "explanation": "Start with the result: “Module A passes 12 of 18 system test cases (66.67%) in each of 3 rounds …”|||Mở bằng kết quả: \"Module A đạt 12/18 ca test hệ thống (66,67%) ở cả 3 round …\""
+        }
+      ],
+      "hintsJson": [
+        "Câu đầu: \"Module A passes 12 of 18 … (66.67%) in each of 3 rounds; the 6 failures trace to 5 open defects.\"",
+        "Đếm mã lỗi KHÁC NHAU: AC06 và AC07 cùng SS-31 ⇒ 6 ca fail = 5 lỗi.",
+        "Rủi ro còn lại = lỗi nào hại người dùng nhất nếu phát hành hôm nay — giải thích bằng một hậu quả cụ thể.",
+        "Đề xuất = sửa gì trước + chạy lại ca nào ở round 4."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "report53.js",
+          "language": "javascript",
+          "code": "// SWT301 Lab 4 — Report 5.3, module A: write the Summary and the Conclusion (≤ 200 words together).\n// English or Vietnamese. Write inside the backticks (no backtick or ${ in your text).\n\n// 1) Copy the numbers from YOUR Test Statistics sheet (latest round).\nconst RESULTS = { workflows: 0, cases: 0, steps: 0, rounds: 0, passed: 0, failed: 0 };\n\n// 2) Summary: first sentence = the result with numbers (someone who reads only it knows the outcome).\nconst SUMMARY = ``;\n\n// 3) Conclusion: verdict + residual risk + recommendation (what to fix first, what to re-run).\nconst CONCLUSION = ``;\n\n// 4) Self-check, honestly (true / false).\nconst RUBRIC = {\n  thirtySeconds: null,     // a classmate who reads it for 30 s can tell the result\n  numbersMatchTable: null, // every number appears in the statistics sheet\n  residualRisk: null,      // the conclusion names the biggest remaining risk for users\n  recommendation: null,    // it says what to fix first and what to re-run\n  noBlame: null,           // no person or team is blamed\n  ticketsTraceable: null,  // every defect id can be found in CT Work / the bug list\n};\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "report53.js",
+          "language": "javascript",
+          "code": "// SWT301 Lab 4 — Report 5.3, module A — Summary + Conclusion (model answer, run of 28/10/2026).\n\nconst RESULTS = { workflows: 5, cases: 18, steps: 48, rounds: 3, passed: 12, failed: 6 };\n\nconst SUMMARY = `Module A passes 12 of 18 system test cases (66.67%) in each of 3 rounds; the 6 failures trace to 5 open defects. The 5 customer workflows (A-WF1 to A-WF5, 48 steps) were run end to end in Chromium with one screenshot per step and round, 144 in total. Results were identical across rounds on a freshly loaded database, so the failures are reproducible. Failed cases: RL02 (SS-19, a guest gets HTTP 500 on /dashboard), AC05 (SS-27, a duplicate e-mail is reported as saved), AC06 and AC07 (SS-31, logout fails from two pages), FP01 (SS-32, password reset is not implemented) and RG01 (SS-33, “Member Since” shows the birth date).`;\n\nconst CONCLUSION = `Module A is not ready for release. The highest residual risk is SS-31: a customer who cannot log out on a shared computer leaves the account open to the next person. We recommend fixing SS-31 and SS-19 first, then SS-27, and re-running AC05 to AC07 and RL02 in round 4; SS-32 and SS-33 can follow in the next release.`;\n\nconst RUBRIC = {\n  thirtySeconds: true, numbersMatchTable: true, residualRisk: true,\n  recommendation: true, noBlame: true, ticketsTraceable: true,\n};\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The model summary puts the outcome, the ratio and the defect count in its first sentence, then scope and method in one sentence, the stability argument in one, and the failed cases with their tickets and user-visible symptoms. The conclusion gives a verdict, explains the biggest residual risk as a user consequence (a shared computer), and orders the fixes and the re-runs. 160-odd words, every number traceable to the statistics sheet.</p>",
+      "solutionExplanationHtmlVi": "<p>Bản tóm tắt mẫu đặt kết quả, tỉ lệ và số lỗi ngay câu đầu, rồi phạm vi và cách làm trong một câu, lập luận về độ ổn định một câu, và các ca fail kèm mã lỗi và triệu chứng người dùng thấy. Kết luận có phán quyết, giải thích rủi ro còn lại lớn nhất bằng hậu quả cho người dùng (máy dùng chung), và sắp thứ tự sửa và chạy lại. Khoảng 160 từ, mọi con số truy được về sheet thống kê.</p>\n<p>Bản tiếng Việt tham khảo: \"Module A đạt 12/18 ca kiểm thử hệ thống (66,67%) ở cả 3 round; 6 ca fail ứng với 5 lỗi đang mở. … Module A chưa sẵn sàng phát hành. Rủi ro còn lại lớn nhất là SS-31: khách không đăng xuất được trên máy dùng chung thì tài khoản bị người sau dùng tiếp. Đề xuất sửa SS-31 và SS-19 trước, rồi SS-27, chạy lại AC05–AC07 và RL02 ở round 4; SS-32, SS-33 để bản sau.\"</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "report53.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Length: SUMMARY + CONCLUSION 60–200 words",
+              "vi": "Độ dài: SUMMARY + CONCLUSION 60–200 từ"
+            },
+            "chuanBi": "const __KQ = (function () { var __V = (((function(){const o=t=>typeof t==\"string\"?t:\"\",s=t=>o(t).toLowerCase(),i=t=>o(t).split(/\\s+/).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),h=t=>t.replace(/[.*+?^${}()|[\\]\\\\]/g,\"\\\\$&\"),n=(t,e)=>{const u=s(t);return e.filter(r=>new RegExp(`(?<![\\\\p{L}\\\\p{N}])${h(r.toLowerCase())}(?![\\\\p{L}\\\\p{N}])`,\"u\").test(u))},l=[\"fast\",\"slow\",\"quickly\",\"many\",\"some\",\"a lot\",\"lots of\",\"good\",\"bad\",\"better\",\"quite\",\"fairly\",\"several\",\"soon\",\"etc\",\"stable\",\"pretty much\",\"kh\\xE1\",\"\\u1ED5n\",\"nhanh\",\"ch\\u1EADm\",\"nhi\\u1EC1u\",\"m\\u1ED9t s\\u1ED1\",\"t\\u1ED1t\",\"h\\u01A1i\",\"t\\u01B0\\u01A1ng \\u0111\\u1ED1i\",\"v\\xE2n v\\xE2n\"],a=[\"careless\",\"lazy\",\"stupid\",\"fault of\",\"his fault\",\"her fault\",\"their fault\",\"should have known\",\"someone forgot\",\"blame\",\"b\\u1EA5t c\\u1EA9n\",\"l\\u01B0\\u1EDDi\",\"l\\u1ED7i c\\u1EE7a b\\u1EA1n\",\"l\\u1ED7i c\\u1EE7a anh\",\"l\\u1ED7i c\\u1EE7a em\",\"t\\u1EA1i b\\u1EA1n\",\"t\\u1EA1i anh\",\"\\u0111\\u1ED5 l\\u1ED7i\"],c=[\"basically\",\"actually\",\"you know\",\"kind of\",\"sort of\",\"um\",\"uh\",\"so yeah\",\"like i said\",\"ki\\u1EC3u nh\\u01B0\",\"th\\xEC l\\xE0\",\"\\u1EDD\",\"\\xE0 th\\xEC\"];return{s:o,low:s,tok:i,coTu:n,VAGUE:l,BLAME:a,FILLER:c,w:t=>i(t).length,nums:t=>o(t).match(/\\d+(?:[.,]\\d+)?%?/g)||[],cau:t=>o(t).split(/(?<=[.!?])\\s+/).map(e=>e.trim()).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),vague:t=>n(t,l),blame:t=>n(t,a),filler:t=>n(t,c),chao:t=>/^\\s*(hello|hi|good (morning|afternoon|evening)|my name is|xin chào|chào (cô|thầy|các bạn)|em (tên là|xin tự giới thiệu)|em là)(?![\\p{L}\\p{N}])/iu.test(o(t))}})))(); try { return (((()=>{const _=__V.w(SUMMARY)+__V.w(CONCLUSION);return _>=60&&_<=200?\"OK\":_+\" words \\u2014 need 60\\u2013200\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "First sentence: ≤ 35 words with a number",
+              "vi": "Câu đầu: ≤ 35 từ, có số"
+            },
+            "chuanBi": "const __KQ = (function () { var __V = (((function(){const o=t=>typeof t==\"string\"?t:\"\",s=t=>o(t).toLowerCase(),i=t=>o(t).split(/\\s+/).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),h=t=>t.replace(/[.*+?^${}()|[\\]\\\\]/g,\"\\\\$&\"),n=(t,e)=>{const u=s(t);return e.filter(r=>new RegExp(`(?<![\\\\p{L}\\\\p{N}])${h(r.toLowerCase())}(?![\\\\p{L}\\\\p{N}])`,\"u\").test(u))},l=[\"fast\",\"slow\",\"quickly\",\"many\",\"some\",\"a lot\",\"lots of\",\"good\",\"bad\",\"better\",\"quite\",\"fairly\",\"several\",\"soon\",\"etc\",\"stable\",\"pretty much\",\"kh\\xE1\",\"\\u1ED5n\",\"nhanh\",\"ch\\u1EADm\",\"nhi\\u1EC1u\",\"m\\u1ED9t s\\u1ED1\",\"t\\u1ED1t\",\"h\\u01A1i\",\"t\\u01B0\\u01A1ng \\u0111\\u1ED1i\",\"v\\xE2n v\\xE2n\"],a=[\"careless\",\"lazy\",\"stupid\",\"fault of\",\"his fault\",\"her fault\",\"their fault\",\"should have known\",\"someone forgot\",\"blame\",\"b\\u1EA5t c\\u1EA9n\",\"l\\u01B0\\u1EDDi\",\"l\\u1ED7i c\\u1EE7a b\\u1EA1n\",\"l\\u1ED7i c\\u1EE7a anh\",\"l\\u1ED7i c\\u1EE7a em\",\"t\\u1EA1i b\\u1EA1n\",\"t\\u1EA1i anh\",\"\\u0111\\u1ED5 l\\u1ED7i\"],c=[\"basically\",\"actually\",\"you know\",\"kind of\",\"sort of\",\"um\",\"uh\",\"so yeah\",\"like i said\",\"ki\\u1EC3u nh\\u01B0\",\"th\\xEC l\\xE0\",\"\\u1EDD\",\"\\xE0 th\\xEC\"];return{s:o,low:s,tok:i,coTu:n,VAGUE:l,BLAME:a,FILLER:c,w:t=>i(t).length,nums:t=>o(t).match(/\\d+(?:[.,]\\d+)?%?/g)||[],cau:t=>o(t).split(/(?<=[.!?])\\s+/).map(e=>e.trim()).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),vague:t=>n(t,l),blame:t=>n(t,a),filler:t=>n(t,c),chao:t=>/^\\s*(hello|hi|good (morning|afternoon|evening)|my name is|xin chào|chào (cô|thầy|các bạn)|em (tên là|xin tự giới thiệu)|em là)(?![\\p{L}\\p{N}])/iu.test(o(t))}})))(); try { return (((()=>{const t=__V.cau(SUMMARY)[0]||\"\";return t?__V.w(t)>35?\"the first sentence has \"+__V.w(t)+\" words\":/\\d/.test(t)?\"OK\":\"the first sentence has no number \\u2014 put the result first\":\"SUMMARY is empty\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "RESULTS equals the statistics sheet",
+              "vi": "RESULTS bằng sheet thống kê"
+            },
+            "chuanBi": "const __KQ = (function () { var __V = (((function(){const o=t=>typeof t==\"string\"?t:\"\",s=t=>o(t).toLowerCase(),i=t=>o(t).split(/\\s+/).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),h=t=>t.replace(/[.*+?^${}()|[\\]\\\\]/g,\"\\\\$&\"),n=(t,e)=>{const u=s(t);return e.filter(r=>new RegExp(`(?<![\\\\p{L}\\\\p{N}])${h(r.toLowerCase())}(?![\\\\p{L}\\\\p{N}])`,\"u\").test(u))},l=[\"fast\",\"slow\",\"quickly\",\"many\",\"some\",\"a lot\",\"lots of\",\"good\",\"bad\",\"better\",\"quite\",\"fairly\",\"several\",\"soon\",\"etc\",\"stable\",\"pretty much\",\"kh\\xE1\",\"\\u1ED5n\",\"nhanh\",\"ch\\u1EADm\",\"nhi\\u1EC1u\",\"m\\u1ED9t s\\u1ED1\",\"t\\u1ED1t\",\"h\\u01A1i\",\"t\\u01B0\\u01A1ng \\u0111\\u1ED1i\",\"v\\xE2n v\\xE2n\"],a=[\"careless\",\"lazy\",\"stupid\",\"fault of\",\"his fault\",\"her fault\",\"their fault\",\"should have known\",\"someone forgot\",\"blame\",\"b\\u1EA5t c\\u1EA9n\",\"l\\u01B0\\u1EDDi\",\"l\\u1ED7i c\\u1EE7a b\\u1EA1n\",\"l\\u1ED7i c\\u1EE7a anh\",\"l\\u1ED7i c\\u1EE7a em\",\"t\\u1EA1i b\\u1EA1n\",\"t\\u1EA1i anh\",\"\\u0111\\u1ED5 l\\u1ED7i\"],c=[\"basically\",\"actually\",\"you know\",\"kind of\",\"sort of\",\"um\",\"uh\",\"so yeah\",\"like i said\",\"ki\\u1EC3u nh\\u01B0\",\"th\\xEC l\\xE0\",\"\\u1EDD\",\"\\xE0 th\\xEC\"];return{s:o,low:s,tok:i,coTu:n,VAGUE:l,BLAME:a,FILLER:c,w:t=>i(t).length,nums:t=>o(t).match(/\\d+(?:[.,]\\d+)?%?/g)||[],cau:t=>o(t).split(/(?<=[.!?])\\s+/).map(e=>e.trim()).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),vague:t=>n(t,l),blame:t=>n(t,a),filler:t=>n(t,c),chao:t=>/^\\s*(hello|hi|good (morning|afternoon|evening)|my name is|xin chào|chào (cô|thầy|các bạn)|em (tên là|xin tự giới thiệu)|em là)(?![\\p{L}\\p{N}])/iu.test(o(t))}})))(); try { return (((()=>{const s={workflows:5,cases:18,steps:48,rounds:3,passed:12,failed:6},e=Object.keys(s).filter(a=>!RESULTS||RESULTS[a]!==s[a]);return e.length?\"check: \"+e.join(\", \"):RESULTS.passed+RESULTS.failed===RESULTS.cases?\"OK\":\"passed + failed \\u2260 cases\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "SUMMARY states 12, 18 and 66.67%",
+              "vi": "SUMMARY nêu 12, 18 và 66.67%"
+            },
+            "chuanBi": "const __KQ = (function () { var __V = (((function(){const o=t=>typeof t==\"string\"?t:\"\",s=t=>o(t).toLowerCase(),i=t=>o(t).split(/\\s+/).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),h=t=>t.replace(/[.*+?^${}()|[\\]\\\\]/g,\"\\\\$&\"),n=(t,e)=>{const u=s(t);return e.filter(r=>new RegExp(`(?<![\\\\p{L}\\\\p{N}])${h(r.toLowerCase())}(?![\\\\p{L}\\\\p{N}])`,\"u\").test(u))},l=[\"fast\",\"slow\",\"quickly\",\"many\",\"some\",\"a lot\",\"lots of\",\"good\",\"bad\",\"better\",\"quite\",\"fairly\",\"several\",\"soon\",\"etc\",\"stable\",\"pretty much\",\"kh\\xE1\",\"\\u1ED5n\",\"nhanh\",\"ch\\u1EADm\",\"nhi\\u1EC1u\",\"m\\u1ED9t s\\u1ED1\",\"t\\u1ED1t\",\"h\\u01A1i\",\"t\\u01B0\\u01A1ng \\u0111\\u1ED1i\",\"v\\xE2n v\\xE2n\"],a=[\"careless\",\"lazy\",\"stupid\",\"fault of\",\"his fault\",\"her fault\",\"their fault\",\"should have known\",\"someone forgot\",\"blame\",\"b\\u1EA5t c\\u1EA9n\",\"l\\u01B0\\u1EDDi\",\"l\\u1ED7i c\\u1EE7a b\\u1EA1n\",\"l\\u1ED7i c\\u1EE7a anh\",\"l\\u1ED7i c\\u1EE7a em\",\"t\\u1EA1i b\\u1EA1n\",\"t\\u1EA1i anh\",\"\\u0111\\u1ED5 l\\u1ED7i\"],c=[\"basically\",\"actually\",\"you know\",\"kind of\",\"sort of\",\"um\",\"uh\",\"so yeah\",\"like i said\",\"ki\\u1EC3u nh\\u01B0\",\"th\\xEC l\\xE0\",\"\\u1EDD\",\"\\xE0 th\\xEC\"];return{s:o,low:s,tok:i,coTu:n,VAGUE:l,BLAME:a,FILLER:c,w:t=>i(t).length,nums:t=>o(t).match(/\\d+(?:[.,]\\d+)?%?/g)||[],cau:t=>o(t).split(/(?<=[.!?])\\s+/).map(e=>e.trim()).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),vague:t=>n(t,l),blame:t=>n(t,a),filler:t=>n(t,c),chao:t=>/^\\s*(hello|hi|good (morning|afternoon|evening)|my name is|xin chào|chào (cô|thầy|các bạn)|em (tên là|xin tự giới thiệu)|em là)(?![\\p{L}\\p{N}])/iu.test(o(t))}})))(); try { return (((()=>{const n=i=>__V.coTu(SUMMARY,[i]).length>0,s=[];return n(\"12\")||s.push(\"12\"),n(\"18\")||s.push(\"18\"),n(\"66.67%\")||n(\"66.7%\")||n(\"66,67%\")||n(\"66,7%\")||s.push(\"66.67%\"),s.length?\"missing: \"+s.join(\", \"):\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "Every percentage is supported by the table",
+              "vi": "Mọi phần trăm đều có trong bảng"
+            },
+            "chuanBi": "const __KQ = (function () { var __V = (((function(){const o=t=>typeof t==\"string\"?t:\"\",s=t=>o(t).toLowerCase(),i=t=>o(t).split(/\\s+/).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),h=t=>t.replace(/[.*+?^${}()|[\\]\\\\]/g,\"\\\\$&\"),n=(t,e)=>{const u=s(t);return e.filter(r=>new RegExp(`(?<![\\\\p{L}\\\\p{N}])${h(r.toLowerCase())}(?![\\\\p{L}\\\\p{N}])`,\"u\").test(u))},l=[\"fast\",\"slow\",\"quickly\",\"many\",\"some\",\"a lot\",\"lots of\",\"good\",\"bad\",\"better\",\"quite\",\"fairly\",\"several\",\"soon\",\"etc\",\"stable\",\"pretty much\",\"kh\\xE1\",\"\\u1ED5n\",\"nhanh\",\"ch\\u1EADm\",\"nhi\\u1EC1u\",\"m\\u1ED9t s\\u1ED1\",\"t\\u1ED1t\",\"h\\u01A1i\",\"t\\u01B0\\u01A1ng \\u0111\\u1ED1i\",\"v\\xE2n v\\xE2n\"],a=[\"careless\",\"lazy\",\"stupid\",\"fault of\",\"his fault\",\"her fault\",\"their fault\",\"should have known\",\"someone forgot\",\"blame\",\"b\\u1EA5t c\\u1EA9n\",\"l\\u01B0\\u1EDDi\",\"l\\u1ED7i c\\u1EE7a b\\u1EA1n\",\"l\\u1ED7i c\\u1EE7a anh\",\"l\\u1ED7i c\\u1EE7a em\",\"t\\u1EA1i b\\u1EA1n\",\"t\\u1EA1i anh\",\"\\u0111\\u1ED5 l\\u1ED7i\"],c=[\"basically\",\"actually\",\"you know\",\"kind of\",\"sort of\",\"um\",\"uh\",\"so yeah\",\"like i said\",\"ki\\u1EC3u nh\\u01B0\",\"th\\xEC l\\xE0\",\"\\u1EDD\",\"\\xE0 th\\xEC\"];return{s:o,low:s,tok:i,coTu:n,VAGUE:l,BLAME:a,FILLER:c,w:t=>i(t).length,nums:t=>o(t).match(/\\d+(?:[.,]\\d+)?%?/g)||[],cau:t=>o(t).split(/(?<=[.!?])\\s+/).map(e=>e.trim()).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),vague:t=>n(t,l),blame:t=>n(t,a),filler:t=>n(t,c),chao:t=>/^\\s*(hello|hi|good (morning|afternoon|evening)|my name is|xin chào|chào (cô|thầy|các bạn)|em (tên là|xin tự giới thiệu)|em là)(?![\\p{L}\\p{N}])/iu.test(o(t))}})))(); try { return (((()=>{const n=((__V.s(SUMMARY)+\" \"+__V.s(CONCLUSION)).match(/\\d+(?:[.,]\\d+)?\\s*%/g)||[]).map(t=>parseFloat(t.replace(\",\",\".\"))),o=[66.67,66.7,33.33,33.3,100],l=n.filter(t=>o.indexOf(t)<0);return l.length?\"not from this table: \"+l.join(\"%, \")+\"%\":\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "Defects: ≥ 3 Lab 4 tickets, none from other labs",
+              "vi": "Lỗi: ≥ 3 thẻ Lab 4, không thẻ của lab khác"
+            },
+            "chuanBi": "const __KQ = (function () { var __V = (((function(){const o=t=>typeof t==\"string\"?t:\"\",s=t=>o(t).toLowerCase(),i=t=>o(t).split(/\\s+/).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),h=t=>t.replace(/[.*+?^${}()|[\\]\\\\]/g,\"\\\\$&\"),n=(t,e)=>{const u=s(t);return e.filter(r=>new RegExp(`(?<![\\\\p{L}\\\\p{N}])${h(r.toLowerCase())}(?![\\\\p{L}\\\\p{N}])`,\"u\").test(u))},l=[\"fast\",\"slow\",\"quickly\",\"many\",\"some\",\"a lot\",\"lots of\",\"good\",\"bad\",\"better\",\"quite\",\"fairly\",\"several\",\"soon\",\"etc\",\"stable\",\"pretty much\",\"kh\\xE1\",\"\\u1ED5n\",\"nhanh\",\"ch\\u1EADm\",\"nhi\\u1EC1u\",\"m\\u1ED9t s\\u1ED1\",\"t\\u1ED1t\",\"h\\u01A1i\",\"t\\u01B0\\u01A1ng \\u0111\\u1ED1i\",\"v\\xE2n v\\xE2n\"],a=[\"careless\",\"lazy\",\"stupid\",\"fault of\",\"his fault\",\"her fault\",\"their fault\",\"should have known\",\"someone forgot\",\"blame\",\"b\\u1EA5t c\\u1EA9n\",\"l\\u01B0\\u1EDDi\",\"l\\u1ED7i c\\u1EE7a b\\u1EA1n\",\"l\\u1ED7i c\\u1EE7a anh\",\"l\\u1ED7i c\\u1EE7a em\",\"t\\u1EA1i b\\u1EA1n\",\"t\\u1EA1i anh\",\"\\u0111\\u1ED5 l\\u1ED7i\"],c=[\"basically\",\"actually\",\"you know\",\"kind of\",\"sort of\",\"um\",\"uh\",\"so yeah\",\"like i said\",\"ki\\u1EC3u nh\\u01B0\",\"th\\xEC l\\xE0\",\"\\u1EDD\",\"\\xE0 th\\xEC\"];return{s:o,low:s,tok:i,coTu:n,VAGUE:l,BLAME:a,FILLER:c,w:t=>i(t).length,nums:t=>o(t).match(/\\d+(?:[.,]\\d+)?%?/g)||[],cau:t=>o(t).split(/(?<=[.!?])\\s+/).map(e=>e.trim()).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),vague:t=>n(t,l),blame:t=>n(t,a),filler:t=>n(t,c),chao:t=>/^\\s*(hello|hi|good (morning|afternoon|evening)|my name is|xin chào|chào (cô|thầy|các bạn)|em (tên là|xin tự giới thiệu)|em là)(?![\\p{L}\\p{N}])/iu.test(o(t))}})))(); try { return (((()=>{const e=__V.s(SUMMARY)+\" \"+__V.s(CONCLUSION),t=Array.from(new Set((e.match(/SS-\\d+/gi)||[]).map(n=>n.toUpperCase()))),S=[\"SS-19\",\"SS-27\",\"SS-31\",\"SS-32\",\"SS-33\"],a=t.filter(n=>S.indexOf(n)<0);return a.length?\"not a Lab 4 failure: \"+a.join(\", \"):t.length>=3?\"OK\":\"name at least 3 of \"+S.join(\", \")})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "Conclusion: verdict + residual risk + recommendation",
+              "vi": "Kết luận: phán quyết + rủi ro còn lại + đề xuất"
+            },
+            "chuanBi": "const __KQ = (function () { var __V = (((function(){const o=t=>typeof t==\"string\"?t:\"\",s=t=>o(t).toLowerCase(),i=t=>o(t).split(/\\s+/).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),h=t=>t.replace(/[.*+?^${}()|[\\]\\\\]/g,\"\\\\$&\"),n=(t,e)=>{const u=s(t);return e.filter(r=>new RegExp(`(?<![\\\\p{L}\\\\p{N}])${h(r.toLowerCase())}(?![\\\\p{L}\\\\p{N}])`,\"u\").test(u))},l=[\"fast\",\"slow\",\"quickly\",\"many\",\"some\",\"a lot\",\"lots of\",\"good\",\"bad\",\"better\",\"quite\",\"fairly\",\"several\",\"soon\",\"etc\",\"stable\",\"pretty much\",\"kh\\xE1\",\"\\u1ED5n\",\"nhanh\",\"ch\\u1EADm\",\"nhi\\u1EC1u\",\"m\\u1ED9t s\\u1ED1\",\"t\\u1ED1t\",\"h\\u01A1i\",\"t\\u01B0\\u01A1ng \\u0111\\u1ED1i\",\"v\\xE2n v\\xE2n\"],a=[\"careless\",\"lazy\",\"stupid\",\"fault of\",\"his fault\",\"her fault\",\"their fault\",\"should have known\",\"someone forgot\",\"blame\",\"b\\u1EA5t c\\u1EA9n\",\"l\\u01B0\\u1EDDi\",\"l\\u1ED7i c\\u1EE7a b\\u1EA1n\",\"l\\u1ED7i c\\u1EE7a anh\",\"l\\u1ED7i c\\u1EE7a em\",\"t\\u1EA1i b\\u1EA1n\",\"t\\u1EA1i anh\",\"\\u0111\\u1ED5 l\\u1ED7i\"],c=[\"basically\",\"actually\",\"you know\",\"kind of\",\"sort of\",\"um\",\"uh\",\"so yeah\",\"like i said\",\"ki\\u1EC3u nh\\u01B0\",\"th\\xEC l\\xE0\",\"\\u1EDD\",\"\\xE0 th\\xEC\"];return{s:o,low:s,tok:i,coTu:n,VAGUE:l,BLAME:a,FILLER:c,w:t=>i(t).length,nums:t=>o(t).match(/\\d+(?:[.,]\\d+)?%?/g)||[],cau:t=>o(t).split(/(?<=[.!?])\\s+/).map(e=>e.trim()).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),vague:t=>n(t,l),blame:t=>n(t,a),filler:t=>n(t,c),chao:t=>/^\\s*(hello|hi|good (morning|afternoon|evening)|my name is|xin chào|chào (cô|thầy|các bạn)|em (tên là|xin tự giới thiệu)|em là)(?![\\p{L}\\p{N}])/iu.test(o(t))}})))(); try { return (((()=>{const e=__V.s(CONCLUSION),n=[];return __V.coTu(e,[\"ready\",\"not ready\",\"release\",\"go\",\"no-go\",\"s\\u1EB5n s\\xE0ng\",\"ph\\xE1t h\\xE0nh\",\"ch\\u01B0a \\u0111\\u1EA1t\",\"\\u0111\\u1EA1t\"]).length||n.push(\"a verdict\"),__V.coTu(e,[\"risk\",\"r\\u1EE7i ro\"]).length||n.push(\"the residual risk\"),__V.coTu(e,[\"recommend\",\"should\",\"must\",\"fix\",\"\\u0111\\u1EC1 xu\\u1EA5t\",\"n\\xEAn\",\"c\\u1EA7n\",\"s\\u1EEDa\"]).length||n.push(\"a recommendation\"),n.length?\"the conclusion needs \"+n.join(\", \"):\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "No vague words, no blame",
+              "vi": "Không từ mơ hồ, không đổ lỗi"
+            },
+            "chuanBi": "const __KQ = (function () { var __V = (((function(){const o=t=>typeof t==\"string\"?t:\"\",s=t=>o(t).toLowerCase(),i=t=>o(t).split(/\\s+/).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),h=t=>t.replace(/[.*+?^${}()|[\\]\\\\]/g,\"\\\\$&\"),n=(t,e)=>{const u=s(t);return e.filter(r=>new RegExp(`(?<![\\\\p{L}\\\\p{N}])${h(r.toLowerCase())}(?![\\\\p{L}\\\\p{N}])`,\"u\").test(u))},l=[\"fast\",\"slow\",\"quickly\",\"many\",\"some\",\"a lot\",\"lots of\",\"good\",\"bad\",\"better\",\"quite\",\"fairly\",\"several\",\"soon\",\"etc\",\"stable\",\"pretty much\",\"kh\\xE1\",\"\\u1ED5n\",\"nhanh\",\"ch\\u1EADm\",\"nhi\\u1EC1u\",\"m\\u1ED9t s\\u1ED1\",\"t\\u1ED1t\",\"h\\u01A1i\",\"t\\u01B0\\u01A1ng \\u0111\\u1ED1i\",\"v\\xE2n v\\xE2n\"],a=[\"careless\",\"lazy\",\"stupid\",\"fault of\",\"his fault\",\"her fault\",\"their fault\",\"should have known\",\"someone forgot\",\"blame\",\"b\\u1EA5t c\\u1EA9n\",\"l\\u01B0\\u1EDDi\",\"l\\u1ED7i c\\u1EE7a b\\u1EA1n\",\"l\\u1ED7i c\\u1EE7a anh\",\"l\\u1ED7i c\\u1EE7a em\",\"t\\u1EA1i b\\u1EA1n\",\"t\\u1EA1i anh\",\"\\u0111\\u1ED5 l\\u1ED7i\"],c=[\"basically\",\"actually\",\"you know\",\"kind of\",\"sort of\",\"um\",\"uh\",\"so yeah\",\"like i said\",\"ki\\u1EC3u nh\\u01B0\",\"th\\xEC l\\xE0\",\"\\u1EDD\",\"\\xE0 th\\xEC\"];return{s:o,low:s,tok:i,coTu:n,VAGUE:l,BLAME:a,FILLER:c,w:t=>i(t).length,nums:t=>o(t).match(/\\d+(?:[.,]\\d+)?%?/g)||[],cau:t=>o(t).split(/(?<=[.!?])\\s+/).map(e=>e.trim()).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),vague:t=>n(t,l),blame:t=>n(t,a),filler:t=>n(t,c),chao:t=>/^\\s*(hello|hi|good (morning|afternoon|evening)|my name is|xin chào|chào (cô|thầy|các bạn)|em (tên là|xin tự giới thiệu)|em là)(?![\\p{L}\\p{N}])/iu.test(o(t))}})))(); try { return (((()=>{const _=__V.s(SUMMARY)+\" \"+__V.s(CONCLUSION),n=__V.vague(_).concat(__V.blame(_));return n.length?\"remove: \"+n.join(\", \"):\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "Self-rubric: all six checks answered",
+              "vi": "Rubric tự chấm: đủ sáu mục"
+            },
+            "chuanBi": "const __KQ = (function () { var __V = (((function(){const o=t=>typeof t==\"string\"?t:\"\",s=t=>o(t).toLowerCase(),i=t=>o(t).split(/\\s+/).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),h=t=>t.replace(/[.*+?^${}()|[\\]\\\\]/g,\"\\\\$&\"),n=(t,e)=>{const u=s(t);return e.filter(r=>new RegExp(`(?<![\\\\p{L}\\\\p{N}])${h(r.toLowerCase())}(?![\\\\p{L}\\\\p{N}])`,\"u\").test(u))},l=[\"fast\",\"slow\",\"quickly\",\"many\",\"some\",\"a lot\",\"lots of\",\"good\",\"bad\",\"better\",\"quite\",\"fairly\",\"several\",\"soon\",\"etc\",\"stable\",\"pretty much\",\"kh\\xE1\",\"\\u1ED5n\",\"nhanh\",\"ch\\u1EADm\",\"nhi\\u1EC1u\",\"m\\u1ED9t s\\u1ED1\",\"t\\u1ED1t\",\"h\\u01A1i\",\"t\\u01B0\\u01A1ng \\u0111\\u1ED1i\",\"v\\xE2n v\\xE2n\"],a=[\"careless\",\"lazy\",\"stupid\",\"fault of\",\"his fault\",\"her fault\",\"their fault\",\"should have known\",\"someone forgot\",\"blame\",\"b\\u1EA5t c\\u1EA9n\",\"l\\u01B0\\u1EDDi\",\"l\\u1ED7i c\\u1EE7a b\\u1EA1n\",\"l\\u1ED7i c\\u1EE7a anh\",\"l\\u1ED7i c\\u1EE7a em\",\"t\\u1EA1i b\\u1EA1n\",\"t\\u1EA1i anh\",\"\\u0111\\u1ED5 l\\u1ED7i\"],c=[\"basically\",\"actually\",\"you know\",\"kind of\",\"sort of\",\"um\",\"uh\",\"so yeah\",\"like i said\",\"ki\\u1EC3u nh\\u01B0\",\"th\\xEC l\\xE0\",\"\\u1EDD\",\"\\xE0 th\\xEC\"];return{s:o,low:s,tok:i,coTu:n,VAGUE:l,BLAME:a,FILLER:c,w:t=>i(t).length,nums:t=>o(t).match(/\\d+(?:[.,]\\d+)?%?/g)||[],cau:t=>o(t).split(/(?<=[.!?])\\s+/).map(e=>e.trim()).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),vague:t=>n(t,l),blame:t=>n(t,a),filler:t=>n(t,c),chao:t=>/^\\s*(hello|hi|good (morning|afternoon|evening)|my name is|xin chào|chào (cô|thầy|các bạn)|em (tên là|xin tự giới thiệu)|em là)(?![\\p{L}\\p{N}])/iu.test(o(t))}})))(); try { return (((()=>{const n=RUBRIC||{},e=[\"thirtySeconds\",\"numbersMatchTable\",\"residualRisk\",\"recommendation\",\"noBlame\",\"ticketsTraceable\"].filter(t=>typeof n[t]!=\"boolean\");return e.length?\"answer true/false: \"+e.join(\", \"):\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f5"
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. Length and first sentence",
+            "diem": 2
+          },
+          {
+            "ma": "f2",
+            "ten": "2. Numbers agree with the table",
+            "diem": 3
+          },
+          {
+            "ma": "f3",
+            "ten": "3. Defects named correctly",
+            "diem": 2
+          },
+          {
+            "ma": "f4",
+            "ten": "4. A real conclusion",
+            "diem": 2
+          },
+          {
+            "ma": "f5",
+            "ten": "5. Self-rubric",
+            "diem": 1
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Chép tỉ lệ 72,73% của Lab 3 sang Lab 4."
+        },
+        {
+          "loi": "Mở bằng \"In this report we present…\" — câu đầu không có kết quả."
+        },
+        {
+          "loi": "Nêu SS-28 (lỗi của Lab 3) trong báo cáo Lab 4."
+        },
+        {
+          "loi": "Kết luận \"the system works quite well\" — vừa mơ hồ vừa sai với 6 ca fail."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "BLUF (bottom line up front)",
+          "vi": "nói kết luận ngay câu đầu"
+        },
+        {
+          "en": "residual risk",
+          "vi": "rủi ro còn lại khi phát hành với lỗi chưa sửa"
+        },
+        {
+          "en": "successful coverage",
+          "vi": "Pass ÷ Tổng ca — tỉ lệ ca đạt (Report 5.x)"
+        },
+        {
+          "en": "measurable statement",
+          "vi": "câu đo được — có số, đơn vị, mốc so sánh"
+        },
+        {
+          "en": "verdict",
+          "vi": "phán quyết — sẵn sàng / chưa sẵn sàng phát hành"
+        },
+        {
+          "en": "executive summary",
+          "vi": "tóm tắt cho người đọc bận — kết quả trước, chi tiết sau"
+        }
+      ]
+    }
+  ]
+}

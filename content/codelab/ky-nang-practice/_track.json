@@ -1,0 +1,25 @@
+{
+  "groupSlug": "fptu",
+  "slug": "ky-nang-practice",
+  "name": "Kỹ năng nghề — Thuyết trình & Báo cáo kỹ thuật",
+  "language": "javascript",
+  "color": "#db2777",
+  "docsUrl": "https://developers.google.com/tech-writing",
+  "status": "PUBLISHED",
+  "level": "BEGINNER",
+  "description": "Luyện hai kỹ năng nghề ngay trong Code Lab, gắn môn SSG105 (Ch3 Giao tiếp văn bản, Ch4 Thuyết trình): 🎤 thuyết trình & bảo vệ hỏi đáp (dàn ý 3 phút, câu mở, tiêu đề slide nói kết luận, chọn biểu đồ, chia giờ bài nhóm, câu cô hay hỏi ↔ bằng chứng, khung PREP, nói \"em chưa biết\" trung thực, đo và cắt kịch bản) và 📝 viết báo cáo kỹ thuật (câu đo được, kết luận trước, số khớp bảng, cấu trúc báo cáo lab, README, commit/PR, post-mortem từ sự cố thật của cuongthai.com, tự viết linter báo cáo). Dữ liệu thật SWT301 SportShop. Hai bài lớn: kịch bản 3 phút Lab 2+3 và Summary + Conclusion của Report 5.3. Máy chấm kiểm cấu trúc và số liệu; chất lượng lập luận dùng rubric tự chấm + ghi âm (chưa có chấm bằng AI).",
+  "modules": [
+    { "slug": "ssg105-3-1-writing", "name": "3.1 Technical writing: measurable sentences, BLUF, consistency, no blame", "level": "BEGINNER", "description": "Viết lại câu mơ hồ thành câu đo được, phân biệt câu đo được / mơ hồ / ý kiến / đổ lỗi, câu đầu theo BLUF và người đọc, đối chiếu câu tóm tắt với bảng kết quả Lab 4 thật, viết chủ động không đổ lỗi, thay từ mơ hồ." },
+    { "slug": "ssg105-3-2-lab-report-structure", "name": "3.2 Lab report structure: sections, statistics, results vs analysis", "level": "BEGINNER", "description": "Thứ tự mục báo cáo lab/Report 5.x, xếp nội dung báo cáo Lab 4 vào đúng mục, tính thống kê đúng định dạng (82,30% · 72,73% · 66,67% · 290,49 ca/KLOC), kết quả vs phân tích vs kết luận, hình bảng và dẫn chứng." },
+    { "slug": "ssg105-3-3-readme-commit-pr", "name": "3.3 README, commits, pull requests and issue titles", "level": "BEGINNER", "description": "Soi README tồi, xếp dòng README thật của SportShop vào đúng mục, commit message theo Conventional Commits, tiêu đề PR/issue và mục How tested, cấu trúc mô tả PR và commit." },
+    { "slug": "ssg105-3-4-postmortem", "name": "3.4 Post-mortems from real cuongthai.com incidents", "level": "INTERMEDIATE", "description": "Thứ tự mục post-mortem, dòng thời gian sự cố đĩa VPS, 5 whys của lần API 502 bảy phút, ngăn/phát hiện/giảm nhẹ, câu không đổ lỗi, tự viết post-mortem sự cố nginx bind-mount theo inode." },
+    { "slug": "ssg105-3-5-report-linter", "name": "3.5 Build a report linter (vague words, sections, numbers, blame)", "level": "INTERMEDIATE", "description": "Tự viết findVague() (ranh giới Unicode — bẫy \\b ASCII) và lintReport() cho báo cáo Markdown: đủ mục, có bảng, ≥ 3 con số ngoài bảng, không từ mơ hồ, không đổ lỗi." },
+    { "slug": "ssg105-3-lab-report53-summary", "name": "Capstone 3 — Summary + Conclusion of your Report 5.3 (Lab 4)", "level": "ADVANCED", "description": "Bài lớn (bản in): Summary + Conclusion ≤ 200 từ cho Report 5.3 Lab 4 thật — câu đầu nói kết quả, số khớp bảng, đúng mã lỗi Lab 4, phán quyết/rủi ro/đề xuất, rubric tự chấm." },
+    { "slug": "ssg105-4-1-presentation", "name": "4.1 A 3-minute technical talk: structure, hook, headlines, close", "level": "BEGINNER", "description": "Bộ khung bài nói 3 phút trên bài Lab 2+3 SportShop thật, câu mở mạnh, tiêu đề slide nói kết luận, kết bài và giữ giờ, câu chuyển ý." },
+    { "slug": "ssg105-4-2-slides-charts", "name": "4.2 Slides and charts: right chart, one message, sourced numbers", "level": "BEGINNER", "description": "Chọn biểu đồ/bảng theo câu hỏi của slide, soi mọi lỗi slide, gán tiêu đề khẳng định cho thân slide, số có nguồn và code đọc được." },
+    { "slug": "ssg105-4-3-team-talk-evidence", "name": "4.3 Team talk and evidence: time-box, “show me”, the demo", "level": "INTERMEDIATE", "description": "Chia giờ bài nhóm 15 phút và ngân sách từ, câu cô hay hỏi ↔ tệp bằng chứng thật, demo \"một lỗi – ba cấp\" + danh sách kiểm, xử lý khi demo hỏng." },
+    { "slug": "ssg105-4-4-qa-prep", "name": "4.4 Defence and Q&A: PREP, honest “I don’t know”, question strategies", "level": "INTERMEDIATE", "description": "Khung PREP cho câu hỏi thật của hội đồng SWT301, chọn câu trả lời tốt nhất, nói \"em chưa biết\" trung thực có hẹn, chiến lược theo loại câu hỏi, kỹ thuật thi nói." },
+    { "slug": "ssg105-4-5-script-timing", "name": "4.5 Script and clock: measure, then cut to 3 minutes", "level": "INTERMEDIATE", "description": "Tự viết talkStats() đo kịch bản (đúng cả tiếng Việt), rồi cắt bản nháp Lab 2 500 từ xuống 250–390 từ mà giữ số liệu và lỗi, bỏ lời chào, từ đệm, từ mơ hồ." },
+    { "slug": "ssg105-4-lab-swt301-talk", "name": "Capstone 4 — Your 3-minute SWT301 Lab 2+3 talk (script + PREP + recording)", "level": "ADVANCED", "description": "Bài lớn (bản in): kịch bản 3 phút THẬT cho buổi trình bày SWT301 Lab 2+3, 2 câu trả lời PREP, một lần ghi âm + rubric tự chấm 10 tiêu chí." }
+  ]
+}

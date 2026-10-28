@@ -1,0 +1,336 @@
+{
+  "trackSlug": "ky-nang-practice",
+  "moduleSlug": "ssg105-3-5-report-linter",
+  "lesson": {
+    "course": "ssg105-communication-and-in-group-working-skills",
+    "slug": "ssg105-3-1-writing"
+  },
+  "exercises": [
+    {
+      "title": "Linter 1 — findVague(): vague words, in any language",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "report linter",
+        "Unicode regex"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "ky-nang",
+        "ssg105"
+      ],
+      "problemHtml": "<p>Start the report linter with its most useful rule. <code>findVague(text)</code> returns the entries of the given <code>VAGUE</code> list (English + Vietnamese) that appear in <code>text</code> <b>as whole words</b>, lower-case, each <b>once</b>, in <b>order of first appearance</b>. Case-insensitive. Multi-word entries (“a lot”, “một số”) match as phrases.</p>\n<p>“Whole word” means the match is not preceded or followed by a letter or a digit — so “fast” does not match “fastest”. <b>Trap:</b> JavaScript’s <code>\\b</code> only understands ASCII letters, so <code>/\\bổn\\b/</code> never matches “ổn”. This exact bug once corrupted this site’s Vietnamese subtitles (“một” became “mộti”).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Use the VAGUE list as given (do not edit it).</li>\n  <li>Return [] when nothing is found.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bắt đầu linter báo cáo bằng luật hữu ích nhất. <code>findVague(text)</code> trả các mục của danh sách <code>VAGUE</code> (Anh + Việt) xuất hiện trong <code>text</code> <b>như một từ trọn vẹn</b>, chữ thường, mỗi mục <b>một lần</b>, theo <b>thứ tự xuất hiện đầu tiên</b>. Không phân biệt hoa thường. Mục nhiều chữ (\"a lot\", \"một số\") khớp cả cụm.</p>\n<p>\"Từ trọn vẹn\" nghĩa là trước và sau chỗ khớp không phải chữ cái hay chữ số — \"fast\" không khớp \"fastest\". <b>Bẫy:</b> <code>\\b</code> của JavaScript chỉ hiểu chữ ASCII, nên <code>/\\bổn\\b/</code> không bao giờ khớp \"ổn\". Chính lỗi này từng làm hỏng phụ đề tiếng Việt của web (\"một\" thành \"mộti\").</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Dùng danh sách VAGUE như cho sẵn (đừng sửa).</li>\n  <li>Không có gì thì trả [].</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "findVague('The API is fast and quite stable.')",
+          "output": "['fast', 'quite', 'stable']",
+          "explanation": "Order of first appearance.|||Theo thứ tự xuất hiện."
+        },
+        {
+          "input": "findVague('Hệ thống khá ổn, chạy nhanh.')",
+          "output": "['khá', 'ổn', 'nhanh']",
+          "explanation": "Vietnamese words must match — \\b would miss them.|||Từ tiếng Việt phải khớp — \\b sẽ bỏ sót."
+        }
+      ],
+      "hintsJson": [
+        "Ranh giới Unicode: new RegExp(\"(?<![\\\\p{L}\\\\p{N}])\" + từ + \"(?![\\\\p{L}\\\\p{N}])\", \"u\").",
+        "Lưu vị trí khớp đầu tiên (m.index) của từng mục rồi sắp theo vị trí.",
+        "Đưa cả văn bản về chữ thường một lần ở đầu hàm."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "find-vague.js",
+          "language": "javascript",
+          "code": "const VAGUE = ['fast', 'slow', 'quickly', 'many', 'some', 'a lot', 'lots of', 'good', 'bad', 'better', 'quite', 'fairly',\n  'several', 'soon', 'etc', 'stable', 'pretty much', 'khá', 'ổn', 'nhanh', 'chậm', 'nhiều', 'một số', 'tốt', 'hơi', 'tương đối', 'vân vân'];\n\n/**\n * Return the vague words/phrases of VAGUE that appear in text as whole words,\n * lower-case, each once, in order of first appearance.\n */\nfunction findVague(text) {\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "find-vague.js",
+          "language": "javascript",
+          "code": "const VAGUE = ['fast', 'slow', 'quickly', 'many', 'some', 'a lot', 'lots of', 'good', 'bad', 'better', 'quite', 'fairly',\n  'several', 'soon', 'etc', 'stable', 'pretty much', 'khá', 'ổn', 'nhanh', 'chậm', 'nhiều', 'một số', 'tốt', 'hơi', 'tương đối', 'vân vân'];\n\n// Escape regex metacharacters in a phrase (\"etc.\" has none here, but a list grows).\nconst escapeRe = (s) => s.replace(/[.*+?^$\\{\\}()|[\\]\\\\]/g, '\\\\$&');\n\n/**\n * Whole-word match in ANY language: \"not preceded / followed by a letter or digit\".\n * \\b would be wrong here — in JavaScript \\b only knows [A-Za-z0-9_], so /\\bổn\\b/ never matches \"ổn\"\n * (and /\\bt\\b/ matches the \"t\" at the end of \"một\").\n */\nfunction findVague(text) {\n  const t = String(text || '').toLowerCase();\n  const hits = [];\n  for (const w of VAGUE) {\n    const re = new RegExp('(?<![\\\\p{L}\\\\p{N}])' + escapeRe(w) + '(?![\\\\p{L}\\\\p{N}])', 'u');\n    const m = re.exec(t);\n    if (m) hits.push({ w, i: m.index });\n  }\n  return hits.sort((a, b) => a.i - b.i).map((h) => h.w);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>One regular expression per list entry, with Unicode lookarounds instead of <code>\\b</code>. The <code>u</code> flag is required for <code>\\p{L}</code>. Known limit, worth writing in your report: a single-syllable Vietnamese entry like “tốt” also matches inside the compound “tốt nghiệp” (graduate) — a word-level rule cannot see compounds; a real linter would use an allow-list.</p>",
+      "solutionExplanationHtmlVi": "<p>Mỗi mục một biểu thức chính quy, dùng lookaround Unicode thay cho <code>\\b</code>. Cờ <code>u</code> bắt buộc để <code>\\p{L}</code> hoạt động. Giới hạn đã biết, nên ghi vào báo cáo: mục một tiếng như \"tốt\" cũng khớp trong từ ghép \"tốt nghiệp\" — luật mức từ không thấy từ ghép; linter thật sẽ dùng danh sách ngoại lệ.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "find-vague.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "example 1 (order of first appearance)",
+              "vi": "ví dụ 1 (thứ tự xuất hiện)"
+            },
+            "chuanBi": "const __KQ = (function () { var __V = (((function(){const o=t=>typeof t==\"string\"?t:\"\",s=t=>o(t).toLowerCase(),i=t=>o(t).split(/\\s+/).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),h=t=>t.replace(/[.*+?^${}()|[\\]\\\\]/g,\"\\\\$&\"),n=(t,e)=>{const u=s(t);return e.filter(r=>new RegExp(`(?<![\\\\p{L}\\\\p{N}])${h(r.toLowerCase())}(?![\\\\p{L}\\\\p{N}])`,\"u\").test(u))},l=[\"fast\",\"slow\",\"quickly\",\"many\",\"some\",\"a lot\",\"lots of\",\"good\",\"bad\",\"better\",\"quite\",\"fairly\",\"several\",\"soon\",\"etc\",\"stable\",\"pretty much\",\"kh\\xE1\",\"\\u1ED5n\",\"nhanh\",\"ch\\u1EADm\",\"nhi\\u1EC1u\",\"m\\u1ED9t s\\u1ED1\",\"t\\u1ED1t\",\"h\\u01A1i\",\"t\\u01B0\\u01A1ng \\u0111\\u1ED1i\",\"v\\xE2n v\\xE2n\"],a=[\"careless\",\"lazy\",\"stupid\",\"fault of\",\"his fault\",\"her fault\",\"their fault\",\"should have known\",\"someone forgot\",\"blame\",\"b\\u1EA5t c\\u1EA9n\",\"l\\u01B0\\u1EDDi\",\"l\\u1ED7i c\\u1EE7a b\\u1EA1n\",\"l\\u1ED7i c\\u1EE7a anh\",\"l\\u1ED7i c\\u1EE7a em\",\"t\\u1EA1i b\\u1EA1n\",\"t\\u1EA1i anh\",\"\\u0111\\u1ED5 l\\u1ED7i\"],c=[\"basically\",\"actually\",\"you know\",\"kind of\",\"sort of\",\"um\",\"uh\",\"so yeah\",\"like i said\",\"ki\\u1EC3u nh\\u01B0\",\"th\\xEC l\\xE0\",\"\\u1EDD\",\"\\xE0 th\\xEC\"];return{s:o,low:s,tok:i,coTu:n,VAGUE:l,BLAME:a,FILLER:c,w:t=>i(t).length,nums:t=>o(t).match(/\\d+(?:[.,]\\d+)?%?/g)||[],cau:t=>o(t).split(/(?<=[.!?])\\s+/).map(e=>e.trim()).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),vague:t=>n(t,l),blame:t=>n(t,a),filler:t=>n(t,c),chao:t=>/^\\s*(hello|hi|good (morning|afternoon|evening)|my name is|xin chào|chào (cô|thầy|các bạn)|em (tên là|xin tự giới thiệu)|em là)(?![\\p{L}\\p{N}])/iu.test(o(t))}})))(); try { return (((()=>{const t=findVague(\"The API is fast and quite stable.\");return JSON.stringify(t)===JSON.stringify([\"fast\",\"quite\",\"stable\"])?\"OK\":\"got \"+JSON.stringify(t)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Vietnamese words (the \\b trap)",
+              "vi": "từ tiếng Việt (bẫy \\b)"
+            },
+            "chuanBi": "const __KQ = (function () { var __V = (((function(){const o=t=>typeof t==\"string\"?t:\"\",s=t=>o(t).toLowerCase(),i=t=>o(t).split(/\\s+/).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),h=t=>t.replace(/[.*+?^${}()|[\\]\\\\]/g,\"\\\\$&\"),n=(t,e)=>{const u=s(t);return e.filter(r=>new RegExp(`(?<![\\\\p{L}\\\\p{N}])${h(r.toLowerCase())}(?![\\\\p{L}\\\\p{N}])`,\"u\").test(u))},l=[\"fast\",\"slow\",\"quickly\",\"many\",\"some\",\"a lot\",\"lots of\",\"good\",\"bad\",\"better\",\"quite\",\"fairly\",\"several\",\"soon\",\"etc\",\"stable\",\"pretty much\",\"kh\\xE1\",\"\\u1ED5n\",\"nhanh\",\"ch\\u1EADm\",\"nhi\\u1EC1u\",\"m\\u1ED9t s\\u1ED1\",\"t\\u1ED1t\",\"h\\u01A1i\",\"t\\u01B0\\u01A1ng \\u0111\\u1ED1i\",\"v\\xE2n v\\xE2n\"],a=[\"careless\",\"lazy\",\"stupid\",\"fault of\",\"his fault\",\"her fault\",\"their fault\",\"should have known\",\"someone forgot\",\"blame\",\"b\\u1EA5t c\\u1EA9n\",\"l\\u01B0\\u1EDDi\",\"l\\u1ED7i c\\u1EE7a b\\u1EA1n\",\"l\\u1ED7i c\\u1EE7a anh\",\"l\\u1ED7i c\\u1EE7a em\",\"t\\u1EA1i b\\u1EA1n\",\"t\\u1EA1i anh\",\"\\u0111\\u1ED5 l\\u1ED7i\"],c=[\"basically\",\"actually\",\"you know\",\"kind of\",\"sort of\",\"um\",\"uh\",\"so yeah\",\"like i said\",\"ki\\u1EC3u nh\\u01B0\",\"th\\xEC l\\xE0\",\"\\u1EDD\",\"\\xE0 th\\xEC\"];return{s:o,low:s,tok:i,coTu:n,VAGUE:l,BLAME:a,FILLER:c,w:t=>i(t).length,nums:t=>o(t).match(/\\d+(?:[.,]\\d+)?%?/g)||[],cau:t=>o(t).split(/(?<=[.!?])\\s+/).map(e=>e.trim()).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),vague:t=>n(t,l),blame:t=>n(t,a),filler:t=>n(t,c),chao:t=>/^\\s*(hello|hi|good (morning|afternoon|evening)|my name is|xin chào|chào (cô|thầy|các bạn)|em (tên là|xin tự giới thiệu)|em là)(?![\\p{L}\\p{N}])/iu.test(o(t))}})))(); try { return (((()=>{const n=findVague(\"H\\u1EC7 th\\u1ED1ng kh\\xE1 \\u1ED5n, ch\\u1EA1y nhanh.\");return JSON.stringify(n)===JSON.stringify([\"kh\\xE1\",\"\\u1ED5n\",\"nhanh\"])?\"OK\":\"got \"+JSON.stringify(n)+\" \\u2014 \\\\b does not work with Vietnamese letters\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "whole words only, each once (“fastest” is not “fast”)",
+              "vi": "chỉ từ trọn vẹn, mỗi từ một lần (\"fastest\" không phải \"fast\")"
+            },
+            "chuanBi": "const __KQ = (function () { var __V = (((function(){const o=t=>typeof t==\"string\"?t:\"\",s=t=>o(t).toLowerCase(),i=t=>o(t).split(/\\s+/).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),h=t=>t.replace(/[.*+?^${}()|[\\]\\\\]/g,\"\\\\$&\"),n=(t,e)=>{const u=s(t);return e.filter(r=>new RegExp(`(?<![\\\\p{L}\\\\p{N}])${h(r.toLowerCase())}(?![\\\\p{L}\\\\p{N}])`,\"u\").test(u))},l=[\"fast\",\"slow\",\"quickly\",\"many\",\"some\",\"a lot\",\"lots of\",\"good\",\"bad\",\"better\",\"quite\",\"fairly\",\"several\",\"soon\",\"etc\",\"stable\",\"pretty much\",\"kh\\xE1\",\"\\u1ED5n\",\"nhanh\",\"ch\\u1EADm\",\"nhi\\u1EC1u\",\"m\\u1ED9t s\\u1ED1\",\"t\\u1ED1t\",\"h\\u01A1i\",\"t\\u01B0\\u01A1ng \\u0111\\u1ED1i\",\"v\\xE2n v\\xE2n\"],a=[\"careless\",\"lazy\",\"stupid\",\"fault of\",\"his fault\",\"her fault\",\"their fault\",\"should have known\",\"someone forgot\",\"blame\",\"b\\u1EA5t c\\u1EA9n\",\"l\\u01B0\\u1EDDi\",\"l\\u1ED7i c\\u1EE7a b\\u1EA1n\",\"l\\u1ED7i c\\u1EE7a anh\",\"l\\u1ED7i c\\u1EE7a em\",\"t\\u1EA1i b\\u1EA1n\",\"t\\u1EA1i anh\",\"\\u0111\\u1ED5 l\\u1ED7i\"],c=[\"basically\",\"actually\",\"you know\",\"kind of\",\"sort of\",\"um\",\"uh\",\"so yeah\",\"like i said\",\"ki\\u1EC3u nh\\u01B0\",\"th\\xEC l\\xE0\",\"\\u1EDD\",\"\\xE0 th\\xEC\"];return{s:o,low:s,tok:i,coTu:n,VAGUE:l,BLAME:a,FILLER:c,w:t=>i(t).length,nums:t=>o(t).match(/\\d+(?:[.,]\\d+)?%?/g)||[],cau:t=>o(t).split(/(?<=[.!?])\\s+/).map(e=>e.trim()).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),vague:t=>n(t,l),blame:t=>n(t,a),filler:t=>n(t,c),chao:t=>/^\\s*(hello|hi|good (morning|afternoon|evening)|my name is|xin chào|chào (cô|thầy|các bạn)|em (tên là|xin tự giới thiệu)|em là)(?![\\p{L}\\p{N}])/iu.test(o(t))}})))(); try { return (((()=>{const g=findVague(\"The fastest path is good, good enough.\");return JSON.stringify(g)===JSON.stringify([\"good\"])?\"OK\":\"got \"+JSON.stringify(g)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "phrases and case-insensitivity",
+              "vi": "cụm từ và không phân biệt hoa thường"
+            },
+            "chuanBi": "const __KQ = (function () { var __V = (((function(){const o=t=>typeof t==\"string\"?t:\"\",s=t=>o(t).toLowerCase(),i=t=>o(t).split(/\\s+/).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),h=t=>t.replace(/[.*+?^${}()|[\\]\\\\]/g,\"\\\\$&\"),n=(t,e)=>{const u=s(t);return e.filter(r=>new RegExp(`(?<![\\\\p{L}\\\\p{N}])${h(r.toLowerCase())}(?![\\\\p{L}\\\\p{N}])`,\"u\").test(u))},l=[\"fast\",\"slow\",\"quickly\",\"many\",\"some\",\"a lot\",\"lots of\",\"good\",\"bad\",\"better\",\"quite\",\"fairly\",\"several\",\"soon\",\"etc\",\"stable\",\"pretty much\",\"kh\\xE1\",\"\\u1ED5n\",\"nhanh\",\"ch\\u1EADm\",\"nhi\\u1EC1u\",\"m\\u1ED9t s\\u1ED1\",\"t\\u1ED1t\",\"h\\u01A1i\",\"t\\u01B0\\u01A1ng \\u0111\\u1ED1i\",\"v\\xE2n v\\xE2n\"],a=[\"careless\",\"lazy\",\"stupid\",\"fault of\",\"his fault\",\"her fault\",\"their fault\",\"should have known\",\"someone forgot\",\"blame\",\"b\\u1EA5t c\\u1EA9n\",\"l\\u01B0\\u1EDDi\",\"l\\u1ED7i c\\u1EE7a b\\u1EA1n\",\"l\\u1ED7i c\\u1EE7a anh\",\"l\\u1ED7i c\\u1EE7a em\",\"t\\u1EA1i b\\u1EA1n\",\"t\\u1EA1i anh\",\"\\u0111\\u1ED5 l\\u1ED7i\"],c=[\"basically\",\"actually\",\"you know\",\"kind of\",\"sort of\",\"um\",\"uh\",\"so yeah\",\"like i said\",\"ki\\u1EC3u nh\\u01B0\",\"th\\xEC l\\xE0\",\"\\u1EDD\",\"\\xE0 th\\xEC\"];return{s:o,low:s,tok:i,coTu:n,VAGUE:l,BLAME:a,FILLER:c,w:t=>i(t).length,nums:t=>o(t).match(/\\d+(?:[.,]\\d+)?%?/g)||[],cau:t=>o(t).split(/(?<=[.!?])\\s+/).map(e=>e.trim()).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),vague:t=>n(t,l),blame:t=>n(t,a),filler:t=>n(t,c),chao:t=>/^\\s*(hello|hi|good (morning|afternoon|evening)|my name is|xin chào|chào (cô|thầy|các bạn)|em (tên là|xin tự giới thiệu)|em là)(?![\\p{L}\\p{N}])/iu.test(o(t))}})))(); try { return (((()=>{const i=findVague(\"We fixed A LOT of bugs, lots of them minor.\"),t=findVague(\"Some tests are SLOW.\");return JSON.stringify(i)===JSON.stringify([\"a lot\",\"lots of\"])&&JSON.stringify(t)===JSON.stringify([\"some\",\"slow\"])?\"OK\":\"got \"+JSON.stringify(i)+\" / \"+JSON.stringify(t)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "a measurable sentence has no vague words",
+              "vi": "câu đo được không có từ mơ hồ"
+            },
+            "chuanBi": "const __KQ = (function () { var __V = (((function(){const o=t=>typeof t==\"string\"?t:\"\",s=t=>o(t).toLowerCase(),i=t=>o(t).split(/\\s+/).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),h=t=>t.replace(/[.*+?^${}()|[\\]\\\\]/g,\"\\\\$&\"),n=(t,e)=>{const u=s(t);return e.filter(r=>new RegExp(`(?<![\\\\p{L}\\\\p{N}])${h(r.toLowerCase())}(?![\\\\p{L}\\\\p{N}])`,\"u\").test(u))},l=[\"fast\",\"slow\",\"quickly\",\"many\",\"some\",\"a lot\",\"lots of\",\"good\",\"bad\",\"better\",\"quite\",\"fairly\",\"several\",\"soon\",\"etc\",\"stable\",\"pretty much\",\"kh\\xE1\",\"\\u1ED5n\",\"nhanh\",\"ch\\u1EADm\",\"nhi\\u1EC1u\",\"m\\u1ED9t s\\u1ED1\",\"t\\u1ED1t\",\"h\\u01A1i\",\"t\\u01B0\\u01A1ng \\u0111\\u1ED1i\",\"v\\xE2n v\\xE2n\"],a=[\"careless\",\"lazy\",\"stupid\",\"fault of\",\"his fault\",\"her fault\",\"their fault\",\"should have known\",\"someone forgot\",\"blame\",\"b\\u1EA5t c\\u1EA9n\",\"l\\u01B0\\u1EDDi\",\"l\\u1ED7i c\\u1EE7a b\\u1EA1n\",\"l\\u1ED7i c\\u1EE7a anh\",\"l\\u1ED7i c\\u1EE7a em\",\"t\\u1EA1i b\\u1EA1n\",\"t\\u1EA1i anh\",\"\\u0111\\u1ED5 l\\u1ED7i\"],c=[\"basically\",\"actually\",\"you know\",\"kind of\",\"sort of\",\"um\",\"uh\",\"so yeah\",\"like i said\",\"ki\\u1EC3u nh\\u01B0\",\"th\\xEC l\\xE0\",\"\\u1EDD\",\"\\xE0 th\\xEC\"];return{s:o,low:s,tok:i,coTu:n,VAGUE:l,BLAME:a,FILLER:c,w:t=>i(t).length,nums:t=>o(t).match(/\\d+(?:[.,]\\d+)?%?/g)||[],cau:t=>o(t).split(/(?<=[.!?])\\s+/).map(e=>e.trim()).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),vague:t=>n(t,l),blame:t=>n(t,a),filler:t=>n(t,c),chao:t=>/^\\s*(hello|hi|good (morning|afternoon|evening)|my name is|xin chào|chào (cô|thầy|các bạn)|em (tên là|xin tự giới thiệu)|em là)(?![\\p{L}\\p{N}])/iu.test(o(t))}})))(); try { return (((()=>{const r=findVague(\"p95 fell from 840 ms to 120 ms (index on bookings.user_id).\");return Array.isArray(r)&&r.length===0?\"OK\":\"got \"+JSON.stringify(r)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Vietnamese phrases",
+              "vi": "cụm tiếng Việt"
+            },
+            "chuanBi": "const __KQ = (function () { var __V = (((function(){const o=t=>typeof t==\"string\"?t:\"\",s=t=>o(t).toLowerCase(),i=t=>o(t).split(/\\s+/).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),h=t=>t.replace(/[.*+?^${}()|[\\]\\\\]/g,\"\\\\$&\"),n=(t,e)=>{const u=s(t);return e.filter(r=>new RegExp(`(?<![\\\\p{L}\\\\p{N}])${h(r.toLowerCase())}(?![\\\\p{L}\\\\p{N}])`,\"u\").test(u))},l=[\"fast\",\"slow\",\"quickly\",\"many\",\"some\",\"a lot\",\"lots of\",\"good\",\"bad\",\"better\",\"quite\",\"fairly\",\"several\",\"soon\",\"etc\",\"stable\",\"pretty much\",\"kh\\xE1\",\"\\u1ED5n\",\"nhanh\",\"ch\\u1EADm\",\"nhi\\u1EC1u\",\"m\\u1ED9t s\\u1ED1\",\"t\\u1ED1t\",\"h\\u01A1i\",\"t\\u01B0\\u01A1ng \\u0111\\u1ED1i\",\"v\\xE2n v\\xE2n\"],a=[\"careless\",\"lazy\",\"stupid\",\"fault of\",\"his fault\",\"her fault\",\"their fault\",\"should have known\",\"someone forgot\",\"blame\",\"b\\u1EA5t c\\u1EA9n\",\"l\\u01B0\\u1EDDi\",\"l\\u1ED7i c\\u1EE7a b\\u1EA1n\",\"l\\u1ED7i c\\u1EE7a anh\",\"l\\u1ED7i c\\u1EE7a em\",\"t\\u1EA1i b\\u1EA1n\",\"t\\u1EA1i anh\",\"\\u0111\\u1ED5 l\\u1ED7i\"],c=[\"basically\",\"actually\",\"you know\",\"kind of\",\"sort of\",\"um\",\"uh\",\"so yeah\",\"like i said\",\"ki\\u1EC3u nh\\u01B0\",\"th\\xEC l\\xE0\",\"\\u1EDD\",\"\\xE0 th\\xEC\"];return{s:o,low:s,tok:i,coTu:n,VAGUE:l,BLAME:a,FILLER:c,w:t=>i(t).length,nums:t=>o(t).match(/\\d+(?:[.,]\\d+)?%?/g)||[],cau:t=>o(t).split(/(?<=[.!?])\\s+/).map(e=>e.trim()).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),vague:t=>n(t,l),blame:t=>n(t,a),filler:t=>n(t,c),chao:t=>/^\\s*(hello|hi|good (morning|afternoon|evening)|my name is|xin chào|chào (cô|thầy|các bạn)|em (tên là|xin tự giới thiệu)|em là)(?![\\p{L}\\p{N}])/iu.test(o(t))}})))(); try { return (((()=>{const t=findVague(\"M\\u1ED9t s\\u1ED1 ca test t\\u01B0\\u01A1ng \\u0111\\u1ED1i ch\\u1EADm.\");return JSON.stringify(t)===JSON.stringify([\"m\\u1ED9t s\\u1ED1\",\"t\\u01B0\\u01A1ng \\u0111\\u1ED1i\",\"ch\\u1EADm\"])?\"OK\":\"got \"+JSON.stringify(t)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "no false hit at the end of “một”",
+              "vi": "không khớp nhầm ở cuối chữ \"một\""
+            },
+            "chuanBi": "const __KQ = (function () { var __V = (((function(){const o=t=>typeof t==\"string\"?t:\"\",s=t=>o(t).toLowerCase(),i=t=>o(t).split(/\\s+/).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),h=t=>t.replace(/[.*+?^${}()|[\\]\\\\]/g,\"\\\\$&\"),n=(t,e)=>{const u=s(t);return e.filter(r=>new RegExp(`(?<![\\\\p{L}\\\\p{N}])${h(r.toLowerCase())}(?![\\\\p{L}\\\\p{N}])`,\"u\").test(u))},l=[\"fast\",\"slow\",\"quickly\",\"many\",\"some\",\"a lot\",\"lots of\",\"good\",\"bad\",\"better\",\"quite\",\"fairly\",\"several\",\"soon\",\"etc\",\"stable\",\"pretty much\",\"kh\\xE1\",\"\\u1ED5n\",\"nhanh\",\"ch\\u1EADm\",\"nhi\\u1EC1u\",\"m\\u1ED9t s\\u1ED1\",\"t\\u1ED1t\",\"h\\u01A1i\",\"t\\u01B0\\u01A1ng \\u0111\\u1ED1i\",\"v\\xE2n v\\xE2n\"],a=[\"careless\",\"lazy\",\"stupid\",\"fault of\",\"his fault\",\"her fault\",\"their fault\",\"should have known\",\"someone forgot\",\"blame\",\"b\\u1EA5t c\\u1EA9n\",\"l\\u01B0\\u1EDDi\",\"l\\u1ED7i c\\u1EE7a b\\u1EA1n\",\"l\\u1ED7i c\\u1EE7a anh\",\"l\\u1ED7i c\\u1EE7a em\",\"t\\u1EA1i b\\u1EA1n\",\"t\\u1EA1i anh\",\"\\u0111\\u1ED5 l\\u1ED7i\"],c=[\"basically\",\"actually\",\"you know\",\"kind of\",\"sort of\",\"um\",\"uh\",\"so yeah\",\"like i said\",\"ki\\u1EC3u nh\\u01B0\",\"th\\xEC l\\xE0\",\"\\u1EDD\",\"\\xE0 th\\xEC\"];return{s:o,low:s,tok:i,coTu:n,VAGUE:l,BLAME:a,FILLER:c,w:t=>i(t).length,nums:t=>o(t).match(/\\d+(?:[.,]\\d+)?%?/g)||[],cau:t=>o(t).split(/(?<=[.!?])\\s+/).map(e=>e.trim()).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),vague:t=>n(t,l),blame:t=>n(t,a),filler:t=>n(t,c),chao:t=>/^\\s*(hello|hi|good (morning|afternoon|evening)|my name is|xin chào|chào (cô|thầy|các bạn)|em (tên là|xin tự giới thiệu)|em là)(?![\\p{L}\\p{N}])/iu.test(o(t))}})))(); try { return (((()=>{const r=findVague(\"M\\u1ED9t l\\u1EA7n ch\\u1EA1y, m\\u1ED9t k\\u1EBFt qu\\u1EA3.\");return Array.isArray(r)&&r.length===0?\"OK\":\"got \"+JSON.stringify(r)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng \\b ⇒ không bắt được \"ổn\", \"khá\", \"tốt\"; còn bắt nhầm \"t\" cuối chữ \"một\"."
+        },
+        {
+          "loi": "Dùng text.includes(w) ⇒ \"fast\" khớp \"fastest\", \"tốt\" khớp \"tốt nghiệp\"… (lỗi thứ hai thì luật từ đơn giản này vẫn mắc — ghi nhận giới hạn)."
+        },
+        {
+          "loi": "Trả theo thứ tự danh sách thay vì thứ tự xuất hiện."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "linter",
+          "vi": "công cụ soi văn bản/mã theo luật và báo chỗ vi phạm"
+        },
+        {
+          "en": "vague word (weasel word)",
+          "vi": "từ mơ hồ: \"khá\", \"nhanh\", \"nhiều\", \"ổn\"…"
+        },
+        {
+          "en": "lookbehind / lookahead",
+          "vi": "điều kiện nhìn trước/sau chỗ khớp mà không \"ăn\" ký tự"
+        },
+        {
+          "en": "word boundary (\\b)",
+          "vi": "ranh giới từ — trong JS chỉ hiểu ASCII"
+        }
+      ]
+    },
+    {
+      "title": "Linter 2 — lintReport(): the whole report linter",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 35,
+      "points": 30,
+      "concepts": [
+        "report linter",
+        "Markdown parsing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "ky-nang",
+        "ssg105"
+      ],
+      "problemHtml": "<p>Write <code>lintReport(md)</code> for Markdown lab reports. It returns <code>{ ok, issues }</code>; <code>issues</code> is an array of codes (any order), <code>ok</code> is <code>issues.length === 0</code>.</p>\n<ol>\n<li><b>Required sections</b> — for each of Summary, Method, Results, Conclusion: some heading line (<code>#</code>…<code>######</code> + space) whose text, lower-cased, <b>starts with</b> the English name or its Vietnamese alias (<i>tóm tắt, phương pháp, kết quả, kết luận</i>). Otherwise <code>MISSING_SECTION:Summary</code> (English name in the code).</li>\n<li><b>A results table</b> — a line <code>| … |</code> immediately followed by a separator line made of <code>|</code>, <code>-</code> (at least 3), <code>:</code> and spaces. Otherwise <code>NO_TABLE</code>.</li>\n<li><b>Body text</b> = every line that is not a heading, not a table row and not a separator. If the body has fewer than <b>3 numbers</b> (matches of <code>/\\d+(?:[.,]\\d+)?%?/g</code>) ⇒ <code>FEW_NUMBERS</code> — numbers only inside the table do not count.</li>\n<li>Each entry of <code>VAGUE</code> found in the body as a whole word/phrase (case-insensitive, any language) ⇒ <code>VAGUE:&lt;entry&gt;</code>; same with <code>BLAME</code> ⇒ <code>BLAME:&lt;entry&gt;</code>. Words in headings are ignored.</li>\n</ol>\n<p>Both lists are given in the starter. Reuse your idea from Linter 1.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Compare codes exactly as specified (e.g. MISSING_SECTION:Results, VAGUE:a lot).</li>\n  <li>Then run it on your own Report 5.3 summary before you submit it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>lintReport(md)</code> cho báo cáo lab Markdown, trả <code>{ ok, issues }</code> (issues là mảng mã, thứ tự tuỳ ý; ok = không có mã nào). Bốn luật: (1) đủ mục Summary/Method/Results/Conclusion — một dòng tiêu đề (<code>#</code>… + dấu cách) có chữ (viết thường) <b>bắt đầu bằng</b> tên tiếng Anh hoặc tên Việt (tóm tắt, phương pháp, kết quả, kết luận), thiếu ⇒ <code>MISSING_SECTION:&lt;tên Anh&gt;</code>; (2) có bảng — một dòng <code>| … |</code> ngay sau là dòng phân cách (<code>|</code>, ≥ 3 <code>-</code>, <code>:</code>, dấu cách), không có ⇒ <code>NO_TABLE</code>; (3) phần thân (bỏ tiêu đề, dòng bảng, dòng phân cách) có ít hơn <b>3 con số</b> ⇒ <code>FEW_NUMBERS</code> — số chỉ nằm trong bảng không tính; (4) mỗi mục VAGUE / BLAME có trong phần thân như từ trọn vẹn ⇒ <code>VAGUE:&lt;mục&gt;</code> / <code>BLAME:&lt;mục&gt;</code>; chữ trong tiêu đề bỏ qua.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Mã phải đúng y như đặc tả (vd MISSING_SECTION:Results, VAGUE:a lot).</li>\n  <li>Rồi chạy nó trên phần tóm tắt Report 5.3 của chính bạn trước khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "lintReport(goodReport)   // the report in lint-report.js comments",
+          "output": "{ ok: true, issues: [] }",
+          "explanation": "All four sections, a table, ≥ 3 numbers in the text, no vague or blame words.|||Đủ bốn mục, có bảng, ≥ 3 con số trong thân, không từ mơ hồ/đổ lỗi."
+        },
+        {
+          "input": "lintReport('# Report\\n## Summary\\nTesting went fine, many tests pass.')",
+          "output": "{ ok: false, issues: ['MISSING_SECTION:Method', 'MISSING_SECTION:Results', 'MISSING_SECTION:Conclusion', 'NO_TABLE', 'FEW_NUMBERS', 'VAGUE:many'] }",
+          "explanation": "“fine” is not in the list — a linter is only as good as its word list.|||\"fine\" không có trong danh sách — linter chỉ giỏi bằng danh sách từ của nó."
+        }
+      ],
+      "hintsJson": [
+        "Tách dòng một lần; tạo ba hàm nhỏ isHeading / isTableRow / isSeparator rồi dùng lại.",
+        "Bảng: tìm chỉ số i sao cho dòng i là hàng bảng và dòng i + 1 là dòng phân cách.",
+        "Phần thân = lines.filter(dòng không phải tiêu đề, không phải bảng). Đếm số, tìm từ trên phần thân.",
+        "Ranh giới từ Unicode như bài Linter 1 — \\b không dùng được với tiếng Việt."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "lint-report.js",
+          "language": "javascript",
+          "code": "/* A report that passes:\n# Lab 3 — Integration Test Report (module A)\n\n## Summary\n16 of 22 integration cases pass in all 3 rounds (72.73%). The 6 failures are open defects.\n\n## Method\nPostman/Newman against Tomcat 10.1 and the SportShop_Test database, reset before every case.\n\n## Results\n| Round | Pass | Fail |\n|---|---|---|\n| R1 | 16 | 6 |\n| R2 | 16 | 6 |\n| R3 | 16 | 6 |\n\n## Conclusion\nFix SS-28 first: IT17 shows one user can change another account's password.\n*/\n\nconst VAGUE = ['fast', 'slow', 'quickly', 'many', 'some', 'a lot', 'lots of', 'good', 'bad', 'better', 'quite', 'fairly',\n  'several', 'soon', 'etc', 'stable', 'pretty much', 'khá', 'ổn', 'nhanh', 'chậm', 'nhiều', 'một số', 'tốt', 'hơi', 'tương đối', 'vân vân'];\nconst BLAME = ['careless', 'lazy', 'stupid', 'fault of', 'should have known', 'someone forgot', 'bất cẩn', 'lười', 'lỗi của bạn', 'tại bạn'];\n\n/**\n * lintReport(md) → { ok, issues }   (issues: array of strings, any order; ok = issues.length === 0)\n *   MISSING_SECTION:<Summary|Method|Results|Conclusion>\n *   NO_TABLE\n *   FEW_NUMBERS\n *   VAGUE:<entry>\n *   BLAME:<entry>\n * See the statement for the exact rules.\n */\nfunction lintReport(md) {\n  return { ok: true, issues: [] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "lint-report.js",
+          "language": "javascript",
+          "code": "/* A report that passes:\n# Lab 3 — Integration Test Report (module A)\n\n## Summary\n16 of 22 integration cases pass in all 3 rounds (72.73%). The 6 failures are open defects.\n\n## Method\nPostman/Newman against Tomcat 10.1 and the SportShop_Test database, reset before every case.\n\n## Results\n| Round | Pass | Fail |\n|---|---|---|\n| R1 | 16 | 6 |\n| R2 | 16 | 6 |\n| R3 | 16 | 6 |\n\n## Conclusion\nFix SS-28 first: IT17 shows one user can change another account's password.\n*/\n\nconst VAGUE = ['fast', 'slow', 'quickly', 'many', 'some', 'a lot', 'lots of', 'good', 'bad', 'better', 'quite', 'fairly',\n  'several', 'soon', 'etc', 'stable', 'pretty much', 'khá', 'ổn', 'nhanh', 'chậm', 'nhiều', 'một số', 'tốt', 'hơi', 'tương đối', 'vân vân'];\nconst BLAME = ['careless', 'lazy', 'stupid', 'fault of', 'should have known', 'someone forgot', 'bất cẩn', 'lười', 'lỗi của bạn', 'tại bạn'];\n\nconst SECTIONS = [\n  ['Summary', ['summary', 'tóm tắt']],\n  ['Method', ['method', 'phương pháp']],\n  ['Results', ['results', 'kết quả']],\n  ['Conclusion', ['conclusion', 'kết luận']],\n];\nconst escapeRe = (s) => s.replace(/[.*+?^$\\{\\}()|[\\]\\\\]/g, '\\\\$&');\n// Whole word/phrase in any language (\\b is ASCII-only in JavaScript).\nconst has = (text, w) => new RegExp('(?<![\\\\p{L}\\\\p{N}])' + escapeRe(w) + '(?![\\\\p{L}\\\\p{N}])', 'u').test(text);\nconst isHeading = (l) => /^\\s{0,3}#{1,6}\\s+/.test(l);\nconst isTableRow = (l) => /^\\s*\\|.*\\|\\s*$/.test(l);\nconst isSeparator = (l) => /^\\s*\\|?\\s*:?-{3,}:?\\s*(\\|\\s*:?-{3,}:?\\s*)*\\|?\\s*$/.test(l);\n\nfunction lintReport(md) {\n  const lines = String(md || '').split(/\\r?\\n/);\n  const issues = [];\n\n  // 1. required sections: a heading whose text STARTS with the name (EN or VI)\n  const headings = lines.filter(isHeading).map((l) => l.replace(/^\\s*#+\\s+/, '').trim().toLowerCase());\n  for (const [code, names] of SECTIONS) {\n    if (!headings.some((h) => names.some((n) => h.startsWith(n)))) issues.push('MISSING_SECTION:' + code);\n  }\n\n  // 2. a table = a row \"| … |\" immediately followed by a separator row \"|---|---|\"\n  const tableAt = lines.findIndex((l, i) => isTableRow(l) && i + 1 < lines.length && isSeparator(lines[i + 1]));\n  if (tableAt < 0) issues.push('NO_TABLE');\n\n  // body text = every line that is not a heading and not part of a table\n  const body = lines.filter((l) => !isHeading(l) && !isTableRow(l) && !isSeparator(l)).join('\\n');\n\n  // 3. numbers in the body text (the table alone is not enough)\n  const numbers = body.match(/\\d+(?:[.,]\\d+)?%?/g) || [];\n  if (numbers.length < 3) issues.push('FEW_NUMBERS');\n\n  // 4–5. vague and blame words in the body text\n  const low = body.toLowerCase();\n  for (const w of VAGUE) if (has(low, w)) issues.push('VAGUE:' + w);\n  for (const w of BLAME) if (has(low, w)) issues.push('BLAME:' + w);\n\n  return { ok: issues.length === 0, issues };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The linter is three small predicates and four rules over one list of lines. Excluding headings and tables from the body is what makes the rules meaningful: a report whose only numbers sit in a table still fails FEW_NUMBERS, because the reader of the summary never sees them. Remember the limit: it checks form, not truth — a report can pass with wrong numbers. That is why the capstone also checks the numbers against the real table.</p>",
+      "solutionExplanationHtmlVi": "<p>Linter là ba hàm nhỏ và bốn luật trên một danh sách dòng. Loại tiêu đề và bảng khỏi phần thân là điều làm các luật có nghĩa: báo cáo chỉ có số trong bảng vẫn trượt FEW_NUMBERS, vì người đọc phần tóm tắt không thấy số nào. Nhớ giới hạn: nó kiểm hình thức, không kiểm đúng sai — báo cáo số sai vẫn qua. Vì vậy bài lớn còn đối chiếu số với bảng thật.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "lint-report.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "a good report passes",
+              "vi": "báo cáo tốt thì đạt"
+            },
+            "chuanBi": "const __KQ = (function () { var __V = (((function(){const o=t=>typeof t==\"string\"?t:\"\",s=t=>o(t).toLowerCase(),i=t=>o(t).split(/\\s+/).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),h=t=>t.replace(/[.*+?^${}()|[\\]\\\\]/g,\"\\\\$&\"),n=(t,e)=>{const u=s(t);return e.filter(r=>new RegExp(`(?<![\\\\p{L}\\\\p{N}])${h(r.toLowerCase())}(?![\\\\p{L}\\\\p{N}])`,\"u\").test(u))},l=[\"fast\",\"slow\",\"quickly\",\"many\",\"some\",\"a lot\",\"lots of\",\"good\",\"bad\",\"better\",\"quite\",\"fairly\",\"several\",\"soon\",\"etc\",\"stable\",\"pretty much\",\"kh\\xE1\",\"\\u1ED5n\",\"nhanh\",\"ch\\u1EADm\",\"nhi\\u1EC1u\",\"m\\u1ED9t s\\u1ED1\",\"t\\u1ED1t\",\"h\\u01A1i\",\"t\\u01B0\\u01A1ng \\u0111\\u1ED1i\",\"v\\xE2n v\\xE2n\"],a=[\"careless\",\"lazy\",\"stupid\",\"fault of\",\"his fault\",\"her fault\",\"their fault\",\"should have known\",\"someone forgot\",\"blame\",\"b\\u1EA5t c\\u1EA9n\",\"l\\u01B0\\u1EDDi\",\"l\\u1ED7i c\\u1EE7a b\\u1EA1n\",\"l\\u1ED7i c\\u1EE7a anh\",\"l\\u1ED7i c\\u1EE7a em\",\"t\\u1EA1i b\\u1EA1n\",\"t\\u1EA1i anh\",\"\\u0111\\u1ED5 l\\u1ED7i\"],c=[\"basically\",\"actually\",\"you know\",\"kind of\",\"sort of\",\"um\",\"uh\",\"so yeah\",\"like i said\",\"ki\\u1EC3u nh\\u01B0\",\"th\\xEC l\\xE0\",\"\\u1EDD\",\"\\xE0 th\\xEC\"];return{s:o,low:s,tok:i,coTu:n,VAGUE:l,BLAME:a,FILLER:c,w:t=>i(t).length,nums:t=>o(t).match(/\\d+(?:[.,]\\d+)?%?/g)||[],cau:t=>o(t).split(/(?<=[.!?])\\s+/).map(e=>e.trim()).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),vague:t=>n(t,l),blame:t=>n(t,a),filler:t=>n(t,c),chao:t=>/^\\s*(hello|hi|good (morning|afternoon|evening)|my name is|xin chào|chào (cô|thầy|các bạn)|em (tên là|xin tự giới thiệu)|em là)(?![\\p{L}\\p{N}])/iu.test(o(t))}})))(); try { return (((()=>{const n=lintReport(`# Lab 3 \\u2014 Integration Test Report (module A)\n\n## Summary\n16 of 22 integration cases pass in all 3 rounds (72.73%). The 6 failures are open defects.\n\n## Method\nPostman/Newman against Tomcat 10.1 and the SportShop_Test database, reset before every case.\n\n## Results\n| Round | Pass | Fail |\n|---|---|---|\n| R1 | 16 | 6 |\n| R2 | 16 | 6 |\n| R3 | 16 | 6 |\n\n## Conclusion\nFix SS-28 first: IT17 shows one user can change another account's password.`);return n&&n.ok===!0&&Array.isArray(n.issues)&&n.issues.length===0?\"OK\":\"got \"+JSON.stringify(n)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "example 2: missing sections, no table, few numbers, vague word",
+              "vi": "ví dụ 2: thiếu mục, không bảng, ít số, từ mơ hồ"
+            },
+            "chuanBi": "const __KQ = (function () { var __V = (((function(){const o=t=>typeof t==\"string\"?t:\"\",s=t=>o(t).toLowerCase(),i=t=>o(t).split(/\\s+/).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),h=t=>t.replace(/[.*+?^${}()|[\\]\\\\]/g,\"\\\\$&\"),n=(t,e)=>{const u=s(t);return e.filter(r=>new RegExp(`(?<![\\\\p{L}\\\\p{N}])${h(r.toLowerCase())}(?![\\\\p{L}\\\\p{N}])`,\"u\").test(u))},l=[\"fast\",\"slow\",\"quickly\",\"many\",\"some\",\"a lot\",\"lots of\",\"good\",\"bad\",\"better\",\"quite\",\"fairly\",\"several\",\"soon\",\"etc\",\"stable\",\"pretty much\",\"kh\\xE1\",\"\\u1ED5n\",\"nhanh\",\"ch\\u1EADm\",\"nhi\\u1EC1u\",\"m\\u1ED9t s\\u1ED1\",\"t\\u1ED1t\",\"h\\u01A1i\",\"t\\u01B0\\u01A1ng \\u0111\\u1ED1i\",\"v\\xE2n v\\xE2n\"],a=[\"careless\",\"lazy\",\"stupid\",\"fault of\",\"his fault\",\"her fault\",\"their fault\",\"should have known\",\"someone forgot\",\"blame\",\"b\\u1EA5t c\\u1EA9n\",\"l\\u01B0\\u1EDDi\",\"l\\u1ED7i c\\u1EE7a b\\u1EA1n\",\"l\\u1ED7i c\\u1EE7a anh\",\"l\\u1ED7i c\\u1EE7a em\",\"t\\u1EA1i b\\u1EA1n\",\"t\\u1EA1i anh\",\"\\u0111\\u1ED5 l\\u1ED7i\"],c=[\"basically\",\"actually\",\"you know\",\"kind of\",\"sort of\",\"um\",\"uh\",\"so yeah\",\"like i said\",\"ki\\u1EC3u nh\\u01B0\",\"th\\xEC l\\xE0\",\"\\u1EDD\",\"\\xE0 th\\xEC\"];return{s:o,low:s,tok:i,coTu:n,VAGUE:l,BLAME:a,FILLER:c,w:t=>i(t).length,nums:t=>o(t).match(/\\d+(?:[.,]\\d+)?%?/g)||[],cau:t=>o(t).split(/(?<=[.!?])\\s+/).map(e=>e.trim()).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),vague:t=>n(t,l),blame:t=>n(t,a),filler:t=>n(t,c),chao:t=>/^\\s*(hello|hi|good (morning|afternoon|evening)|my name is|xin chào|chào (cô|thầy|các bạn)|em (tên là|xin tự giới thiệu)|em là)(?![\\p{L}\\p{N}])/iu.test(o(t))}})))(); try { return (((()=>{const s=lintReport(`# Report\n## Summary\nTesting went fine, many tests pass.`),t=[\"MISSING_SECTION:Method\",\"MISSING_SECTION:Results\",\"MISSING_SECTION:Conclusion\",\"NO_TABLE\",\"FEW_NUMBERS\",\"VAGUE:many\"];return s&&s.ok===!1&&JSON.stringify((s.issues||[]).slice().sort())===JSON.stringify(t.slice().sort())?\"OK\":\"got \"+JSON.stringify(s)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Vietnamese headings and prefixes (“## Kết quả (round 3)”) count",
+              "vi": "tiêu đề tiếng Việt và tiền tố (\"## Kết quả (round 3)\") được tính"
+            },
+            "chuanBi": "const __KQ = (function () { var __V = (((function(){const o=t=>typeof t==\"string\"?t:\"\",s=t=>o(t).toLowerCase(),i=t=>o(t).split(/\\s+/).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),h=t=>t.replace(/[.*+?^${}()|[\\]\\\\]/g,\"\\\\$&\"),n=(t,e)=>{const u=s(t);return e.filter(r=>new RegExp(`(?<![\\\\p{L}\\\\p{N}])${h(r.toLowerCase())}(?![\\\\p{L}\\\\p{N}])`,\"u\").test(u))},l=[\"fast\",\"slow\",\"quickly\",\"many\",\"some\",\"a lot\",\"lots of\",\"good\",\"bad\",\"better\",\"quite\",\"fairly\",\"several\",\"soon\",\"etc\",\"stable\",\"pretty much\",\"kh\\xE1\",\"\\u1ED5n\",\"nhanh\",\"ch\\u1EADm\",\"nhi\\u1EC1u\",\"m\\u1ED9t s\\u1ED1\",\"t\\u1ED1t\",\"h\\u01A1i\",\"t\\u01B0\\u01A1ng \\u0111\\u1ED1i\",\"v\\xE2n v\\xE2n\"],a=[\"careless\",\"lazy\",\"stupid\",\"fault of\",\"his fault\",\"her fault\",\"their fault\",\"should have known\",\"someone forgot\",\"blame\",\"b\\u1EA5t c\\u1EA9n\",\"l\\u01B0\\u1EDDi\",\"l\\u1ED7i c\\u1EE7a b\\u1EA1n\",\"l\\u1ED7i c\\u1EE7a anh\",\"l\\u1ED7i c\\u1EE7a em\",\"t\\u1EA1i b\\u1EA1n\",\"t\\u1EA1i anh\",\"\\u0111\\u1ED5 l\\u1ED7i\"],c=[\"basically\",\"actually\",\"you know\",\"kind of\",\"sort of\",\"um\",\"uh\",\"so yeah\",\"like i said\",\"ki\\u1EC3u nh\\u01B0\",\"th\\xEC l\\xE0\",\"\\u1EDD\",\"\\xE0 th\\xEC\"];return{s:o,low:s,tok:i,coTu:n,VAGUE:l,BLAME:a,FILLER:c,w:t=>i(t).length,nums:t=>o(t).match(/\\d+(?:[.,]\\d+)?%?/g)||[],cau:t=>o(t).split(/(?<=[.!?])\\s+/).map(e=>e.trim()).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),vague:t=>n(t,l),blame:t=>n(t,a),filler:t=>n(t,c),chao:t=>/^\\s*(hello|hi|good (morning|afternoon|evening)|my name is|xin chào|chào (cô|thầy|các bạn)|em (tên là|xin tự giới thiệu)|em là)(?![\\p{L}\\p{N}])/iu.test(o(t))}})))(); try { return (((()=>{const n=lintReport(`## T\\xF3m t\\u1EAFt\n12 tr\\xEAn 18 ca \\u0111\\u1EA1t (66.67%) \\u1EDF c\\u1EA3 3 round.\n## Ph\\u01B0\\u01A1ng ph\\xE1p\nPlaywright, m\\u1ED7i b\\u01B0\\u1EDBc m\\u1ED9t \\u1EA3nh.\n## K\\u1EBFt qu\\u1EA3 (round 3)\n| Ca | KQ |\n| --- | :---: |\n| RG01 | F |\n## K\\u1EBFt lu\\u1EADn\nS\\u1EEDa SS-31 tr\\u01B0\\u1EDBc.`);return n&&n.ok===!0?\"OK\":\"got \"+JSON.stringify(n)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "numbers only inside the table ⇒ FEW_NUMBERS",
+              "vi": "số chỉ nằm trong bảng ⇒ FEW_NUMBERS"
+            },
+            "chuanBi": "const __KQ = (function () { var __V = (((function(){const o=t=>typeof t==\"string\"?t:\"\",s=t=>o(t).toLowerCase(),i=t=>o(t).split(/\\s+/).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),h=t=>t.replace(/[.*+?^${}()|[\\]\\\\]/g,\"\\\\$&\"),n=(t,e)=>{const u=s(t);return e.filter(r=>new RegExp(`(?<![\\\\p{L}\\\\p{N}])${h(r.toLowerCase())}(?![\\\\p{L}\\\\p{N}])`,\"u\").test(u))},l=[\"fast\",\"slow\",\"quickly\",\"many\",\"some\",\"a lot\",\"lots of\",\"good\",\"bad\",\"better\",\"quite\",\"fairly\",\"several\",\"soon\",\"etc\",\"stable\",\"pretty much\",\"kh\\xE1\",\"\\u1ED5n\",\"nhanh\",\"ch\\u1EADm\",\"nhi\\u1EC1u\",\"m\\u1ED9t s\\u1ED1\",\"t\\u1ED1t\",\"h\\u01A1i\",\"t\\u01B0\\u01A1ng \\u0111\\u1ED1i\",\"v\\xE2n v\\xE2n\"],a=[\"careless\",\"lazy\",\"stupid\",\"fault of\",\"his fault\",\"her fault\",\"their fault\",\"should have known\",\"someone forgot\",\"blame\",\"b\\u1EA5t c\\u1EA9n\",\"l\\u01B0\\u1EDDi\",\"l\\u1ED7i c\\u1EE7a b\\u1EA1n\",\"l\\u1ED7i c\\u1EE7a anh\",\"l\\u1ED7i c\\u1EE7a em\",\"t\\u1EA1i b\\u1EA1n\",\"t\\u1EA1i anh\",\"\\u0111\\u1ED5 l\\u1ED7i\"],c=[\"basically\",\"actually\",\"you know\",\"kind of\",\"sort of\",\"um\",\"uh\",\"so yeah\",\"like i said\",\"ki\\u1EC3u nh\\u01B0\",\"th\\xEC l\\xE0\",\"\\u1EDD\",\"\\xE0 th\\xEC\"];return{s:o,low:s,tok:i,coTu:n,VAGUE:l,BLAME:a,FILLER:c,w:t=>i(t).length,nums:t=>o(t).match(/\\d+(?:[.,]\\d+)?%?/g)||[],cau:t=>o(t).split(/(?<=[.!?])\\s+/).map(e=>e.trim()).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),vague:t=>n(t,l),blame:t=>n(t,a),filler:t=>n(t,c),chao:t=>/^\\s*(hello|hi|good (morning|afternoon|evening)|my name is|xin chào|chào (cô|thầy|các bạn)|em (tên là|xin tự giới thiệu)|em là)(?![\\p{L}\\p{N}])/iu.test(o(t))}})))(); try { return (((()=>{const n=lintReport(`## Summary\nAll results are in the table.\n## Method\nPostman.\n## Results\n| R | P | F |\n|---|---|---|\n| 1 | 16 | 6 |\n| 2 | 16 | 6 |\n## Conclusion\nFix the open defects first.`);return n&&JSON.stringify(n.issues)===JSON.stringify([\"FEW_NUMBERS\"])?\"OK\":\"got \"+JSON.stringify(n)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "blame and phrase codes; words in headings ignored",
+              "vi": "mã đổ lỗi và cụm từ; chữ trong tiêu đề bỏ qua"
+            },
+            "chuanBi": "const __KQ = (function () { var __V = (((function(){const o=t=>typeof t==\"string\"?t:\"\",s=t=>o(t).toLowerCase(),i=t=>o(t).split(/\\s+/).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),h=t=>t.replace(/[.*+?^${}()|[\\]\\\\]/g,\"\\\\$&\"),n=(t,e)=>{const u=s(t);return e.filter(r=>new RegExp(`(?<![\\\\p{L}\\\\p{N}])${h(r.toLowerCase())}(?![\\\\p{L}\\\\p{N}])`,\"u\").test(u))},l=[\"fast\",\"slow\",\"quickly\",\"many\",\"some\",\"a lot\",\"lots of\",\"good\",\"bad\",\"better\",\"quite\",\"fairly\",\"several\",\"soon\",\"etc\",\"stable\",\"pretty much\",\"kh\\xE1\",\"\\u1ED5n\",\"nhanh\",\"ch\\u1EADm\",\"nhi\\u1EC1u\",\"m\\u1ED9t s\\u1ED1\",\"t\\u1ED1t\",\"h\\u01A1i\",\"t\\u01B0\\u01A1ng \\u0111\\u1ED1i\",\"v\\xE2n v\\xE2n\"],a=[\"careless\",\"lazy\",\"stupid\",\"fault of\",\"his fault\",\"her fault\",\"their fault\",\"should have known\",\"someone forgot\",\"blame\",\"b\\u1EA5t c\\u1EA9n\",\"l\\u01B0\\u1EDDi\",\"l\\u1ED7i c\\u1EE7a b\\u1EA1n\",\"l\\u1ED7i c\\u1EE7a anh\",\"l\\u1ED7i c\\u1EE7a em\",\"t\\u1EA1i b\\u1EA1n\",\"t\\u1EA1i anh\",\"\\u0111\\u1ED5 l\\u1ED7i\"],c=[\"basically\",\"actually\",\"you know\",\"kind of\",\"sort of\",\"um\",\"uh\",\"so yeah\",\"like i said\",\"ki\\u1EC3u nh\\u01B0\",\"th\\xEC l\\xE0\",\"\\u1EDD\",\"\\xE0 th\\xEC\"];return{s:o,low:s,tok:i,coTu:n,VAGUE:l,BLAME:a,FILLER:c,w:t=>i(t).length,nums:t=>o(t).match(/\\d+(?:[.,]\\d+)?%?/g)||[],cau:t=>o(t).split(/(?<=[.!?])\\s+/).map(e=>e.trim()).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),vague:t=>n(t,l),blame:t=>n(t,a),filler:t=>n(t,c),chao:t=>/^\\s*(hello|hi|good (morning|afternoon|evening)|my name is|xin chào|chào (cô|thầy|các bạn)|em (tên là|xin tự giới thiệu)|em là)(?![\\p{L}\\p{N}])/iu.test(o(t))}})))(); try { return (((()=>{const n=lintReport(`## Summary \\u2014 good news\n16 of 22 pass, 3 rounds, a lot of retesting.\n## Method\nNewman.\n## Results\n| a | b |\n|---|---|\n| 1 | 2 |\n## Conclusion\nThe failure was the fault of the dev team.`),t=[\"VAGUE:a lot\",\"BLAME:fault of\"];return n&&JSON.stringify((n.issues||[]).slice().sort())===JSON.stringify(t.slice().sort())?\"OK\":\"got \"+JSON.stringify(n)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "“A | B” in a sentence is not a table",
+              "vi": "\"A | B\" trong câu không phải bảng"
+            },
+            "chuanBi": "const __KQ = (function () { var __V = (((function(){const o=t=>typeof t==\"string\"?t:\"\",s=t=>o(t).toLowerCase(),i=t=>o(t).split(/\\s+/).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),h=t=>t.replace(/[.*+?^${}()|[\\]\\\\]/g,\"\\\\$&\"),n=(t,e)=>{const u=s(t);return e.filter(r=>new RegExp(`(?<![\\\\p{L}\\\\p{N}])${h(r.toLowerCase())}(?![\\\\p{L}\\\\p{N}])`,\"u\").test(u))},l=[\"fast\",\"slow\",\"quickly\",\"many\",\"some\",\"a lot\",\"lots of\",\"good\",\"bad\",\"better\",\"quite\",\"fairly\",\"several\",\"soon\",\"etc\",\"stable\",\"pretty much\",\"kh\\xE1\",\"\\u1ED5n\",\"nhanh\",\"ch\\u1EADm\",\"nhi\\u1EC1u\",\"m\\u1ED9t s\\u1ED1\",\"t\\u1ED1t\",\"h\\u01A1i\",\"t\\u01B0\\u01A1ng \\u0111\\u1ED1i\",\"v\\xE2n v\\xE2n\"],a=[\"careless\",\"lazy\",\"stupid\",\"fault of\",\"his fault\",\"her fault\",\"their fault\",\"should have known\",\"someone forgot\",\"blame\",\"b\\u1EA5t c\\u1EA9n\",\"l\\u01B0\\u1EDDi\",\"l\\u1ED7i c\\u1EE7a b\\u1EA1n\",\"l\\u1ED7i c\\u1EE7a anh\",\"l\\u1ED7i c\\u1EE7a em\",\"t\\u1EA1i b\\u1EA1n\",\"t\\u1EA1i anh\",\"\\u0111\\u1ED5 l\\u1ED7i\"],c=[\"basically\",\"actually\",\"you know\",\"kind of\",\"sort of\",\"um\",\"uh\",\"so yeah\",\"like i said\",\"ki\\u1EC3u nh\\u01B0\",\"th\\xEC l\\xE0\",\"\\u1EDD\",\"\\xE0 th\\xEC\"];return{s:o,low:s,tok:i,coTu:n,VAGUE:l,BLAME:a,FILLER:c,w:t=>i(t).length,nums:t=>o(t).match(/\\d+(?:[.,]\\d+)?%?/g)||[],cau:t=>o(t).split(/(?<=[.!?])\\s+/).map(e=>e.trim()).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),vague:t=>n(t,l),blame:t=>n(t,a),filler:t=>n(t,c),chao:t=>/^\\s*(hello|hi|good (morning|afternoon|evening)|my name is|xin chào|chào (cô|thầy|các bạn)|em (tên là|xin tự giới thiệu)|em là)(?![\\p{L}\\p{N}])/iu.test(o(t))}})))(); try { return (((()=>{const n=lintReport(`## Summary\nWe compared Postman | Newman on 22 cases in 3 rounds.\n## Method\nx\n## Results\ny\n## Conclusion\nz`);return n&&(n.issues||[]).indexOf(\"NO_TABLE\")>=0?\"OK\":\"got \"+JSON.stringify(n)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Vietnamese vague words in the body (Unicode boundaries)",
+              "vi": "từ mơ hồ tiếng Việt trong phần thân (ranh giới Unicode)"
+            },
+            "chuanBi": "const __KQ = (function () { var __V = (((function(){const o=t=>typeof t==\"string\"?t:\"\",s=t=>o(t).toLowerCase(),i=t=>o(t).split(/\\s+/).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),h=t=>t.replace(/[.*+?^${}()|[\\]\\\\]/g,\"\\\\$&\"),n=(t,e)=>{const u=s(t);return e.filter(r=>new RegExp(`(?<![\\\\p{L}\\\\p{N}])${h(r.toLowerCase())}(?![\\\\p{L}\\\\p{N}])`,\"u\").test(u))},l=[\"fast\",\"slow\",\"quickly\",\"many\",\"some\",\"a lot\",\"lots of\",\"good\",\"bad\",\"better\",\"quite\",\"fairly\",\"several\",\"soon\",\"etc\",\"stable\",\"pretty much\",\"kh\\xE1\",\"\\u1ED5n\",\"nhanh\",\"ch\\u1EADm\",\"nhi\\u1EC1u\",\"m\\u1ED9t s\\u1ED1\",\"t\\u1ED1t\",\"h\\u01A1i\",\"t\\u01B0\\u01A1ng \\u0111\\u1ED1i\",\"v\\xE2n v\\xE2n\"],a=[\"careless\",\"lazy\",\"stupid\",\"fault of\",\"his fault\",\"her fault\",\"their fault\",\"should have known\",\"someone forgot\",\"blame\",\"b\\u1EA5t c\\u1EA9n\",\"l\\u01B0\\u1EDDi\",\"l\\u1ED7i c\\u1EE7a b\\u1EA1n\",\"l\\u1ED7i c\\u1EE7a anh\",\"l\\u1ED7i c\\u1EE7a em\",\"t\\u1EA1i b\\u1EA1n\",\"t\\u1EA1i anh\",\"\\u0111\\u1ED5 l\\u1ED7i\"],c=[\"basically\",\"actually\",\"you know\",\"kind of\",\"sort of\",\"um\",\"uh\",\"so yeah\",\"like i said\",\"ki\\u1EC3u nh\\u01B0\",\"th\\xEC l\\xE0\",\"\\u1EDD\",\"\\xE0 th\\xEC\"];return{s:o,low:s,tok:i,coTu:n,VAGUE:l,BLAME:a,FILLER:c,w:t=>i(t).length,nums:t=>o(t).match(/\\d+(?:[.,]\\d+)?%?/g)||[],cau:t=>o(t).split(/(?<=[.!?])\\s+/).map(e=>e.trim()).filter(e=>/[\\p{L}\\p{N}]/u.test(e)),vague:t=>n(t,l),blame:t=>n(t,a),filler:t=>n(t,c),chao:t=>/^\\s*(hello|hi|good (morning|afternoon|evening)|my name is|xin chào|chào (cô|thầy|các bạn)|em (tên là|xin tự giới thiệu)|em là)(?![\\p{L}\\p{N}])/iu.test(o(t))}})))(); try { return (((()=>{const n=lintReport(`## T\\xF3m t\\u1EAFt\nH\\u1EC7 th\\u1ED1ng kh\\xE1 \\u1ED5n: 16/22 ca, 3 round.\n## Ph\\u01B0\\u01A1ng ph\\xE1p\nNewman.\n## K\\u1EBFt qu\\u1EA3\n| a | b |\n|---|---|\n| 1 | 2 |\n## K\\u1EBFt lu\\u1EADn\nM\\u1ED9t l\\u1EA7n ch\\u1EA1y, m\\u1ED9t k\\u1EBFt qu\\u1EA3.`),t=[\"VAGUE:kh\\xE1\",\"VAGUE:\\u1ED5n\"];return n&&JSON.stringify((n.issues||[]).slice().sort())===JSON.stringify(t.slice().sort())?\"OK\":\"got \"+JSON.stringify(n)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đếm số trên cả văn bản ⇒ báo cáo chỉ có bảng mà vẫn qua FEW_NUMBERS."
+        },
+        {
+          "loi": "Coi mọi dòng có \"|\" là bảng ⇒ câu \"A | B\" trong văn bản thành bảng."
+        },
+        {
+          "loi": "Báo từ mơ hồ trong tiêu đề (\"## Good practices\") — luật nói bỏ qua tiêu đề."
+        },
+        {
+          "loi": "So khớp tiêu đề bằng \"bằng\" thay vì \"bắt đầu bằng\" ⇒ \"## Results (round 3)\" bị coi là thiếu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "linter",
+          "vi": "công cụ soi văn bản/mã theo luật và báo chỗ vi phạm"
+        },
+        {
+          "en": "vague word (weasel word)",
+          "vi": "từ mơ hồ: \"khá\", \"nhanh\", \"nhiều\", \"ổn\"…"
+        },
+        {
+          "en": "Markdown table separator",
+          "vi": "dòng phân cách bảng Markdown: |---|---|"
+        },
+        {
+          "en": "false positive",
+          "vi": "báo nhầm — luật bắt cái không phải lỗi"
+        }
+      ]
+    }
+  ]
+}

@@ -28,6 +28,8 @@ export const PRACTICE_TRACK_BY_COURSE: Readonly<Record<string, string>> = Object
   // Academy ôn thi kỳ này (28/10/2026) — track tạo khi bộ đề đầu tiên lên; trước đó thẻ dưới video ghi "đang soạn".
   'software-testing': 'swt301-practice',
   'software-requirements': 'swr302-practice',
+  // Kỹ năng nghề (28/10/2026): thuyết trình + báo cáo kỹ thuật, gắn SSG105 Ch3/Ch4 (content/codelab/ky-nang-practice).
+  'ssg105-communication-and-in-group-working-skills': 'ky-nang-practice',
 });
 
 /**
@@ -48,6 +50,7 @@ export const PRACTICE_CATALOG: readonly MucDanhMuc[] = Object.freeze([
   { loai: 'academy', ma: 'FER202', ten: 'Front-End Web Development with React', courseSlug: 'front-end-web-development-with-react', trackSlug: 'fer202-practice' },
   { loai: 'academy', ma: 'SWT301', ten: 'Software Testing', courseSlug: 'software-testing', trackSlug: 'swt301-practice' },
   { loai: 'academy', ma: 'SWR302', ten: 'Software Requirements', courseSlug: 'software-requirements', trackSlug: 'swr302-practice' },
+  { loai: 'academy', ma: 'SSG105', ten: 'Kỹ năng nghề: Thuyết trình & Báo cáo kỹ thuật', courseSlug: 'ssg105-communication-and-in-group-working-skills', trackSlug: 'ky-nang-practice' },
   { loai: 'academy', ma: 'PRO192', ten: 'Object-Oriented Programming (Java)', courseSlug: 'object-oriented-programming', trackSlug: 'pro192-practice' },
   { loai: 'academy', ma: 'DBI202', ten: 'Database Systems', courseSlug: 'introduction-to-databases', trackSlug: 'dbi202-practice' },
   { loai: 'academy', ma: 'LAB211', ten: 'OOP with Java Lab', courseSlug: 'oop-with-java-lab', trackSlug: 'lab211' },

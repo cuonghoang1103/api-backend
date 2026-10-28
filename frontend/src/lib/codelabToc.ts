@@ -26,6 +26,7 @@ export const KHOA_CUA_TRACK: Readonly<Record<string, string>> = Object.freeze({
   'fer202-practice': 'front-end-web-development-with-react',
   'swt301-practice': 'software-testing',
   'swr302-practice': 'software-requirements',
+  'ky-nang-practice': 'ssg105-communication-and-in-group-working-skills',
 });
 
 /**
@@ -95,6 +96,11 @@ export const TEN_CHUONG: Readonly<Record<string, Readonly<Record<number, string>
     10: 'Xếp ưu tiên & yêu cầu cho AI/ML',
     11: 'Luyện PE — đề thực hành có đồng hồ',
     12: 'Chuyên đề: nâng cấp/thay thế, gói có sẵn, công cụ, cải tiến, rủi ro',
+  },
+  // Kỹ năng nghề — số chương theo SSG105 (Ch3 Written communication, Ch4 Presentations).
+  'ky-nang-practice': {
+    3: '📝 Báo cáo kỹ thuật (SSG105 Ch3)',
+    4: '🎤 Thuyết trình & bảo vệ Q&A (SSG105 Ch4)',
   },
 });
 

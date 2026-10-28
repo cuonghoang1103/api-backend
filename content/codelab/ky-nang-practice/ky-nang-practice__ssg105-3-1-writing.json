@@ -1,0 +1,1064 @@
+{
+  "trackSlug": "ky-nang-practice",
+  "moduleSlug": "ssg105-3-1-writing",
+  "lesson": {
+    "course": "ssg105-communication-and-in-group-working-skills",
+    "slug": "ssg105-3-1-writing"
+  },
+  "exercises": [
+    {
+      "title": "Writing 1 — Rewrite vague sentences into measurable ones",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "measurable writing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "ky-nang",
+        "ssg105"
+      ],
+      "problemHtml": "<p>A technical sentence is <b>measurable</b> when a reader could check it: it has a number, a unit, and a point of comparison (before/after, target, total). “The API is faster” cannot be checked; “p95 latency fell from 840 ms to 120 ms after adding an index on <code>bookings(user_id)</code>” can. Pick the best rewrite of each vague sentence.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một câu kỹ thuật <b>đo được</b> khi người đọc có thể kiểm: có con số, đơn vị và mốc so sánh (trước/sau, mục tiêu, tổng). \"API nhanh hơn\" không kiểm được; \"p95 giảm từ 840 ms xuống 120 ms sau khi thêm index trên <code>bookings(user_id)</code>\" thì kiểm được. Chọn bản viết lại tốt nhất cho mỗi câu mơ hồ.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Câu đo được trả lời: bao nhiêu? so với gì? đo ở đâu, khi nào?",
+        "Thấy \"nhanh\", \"nhiều\", \"ổn\", \"cao\" ⇒ thay bằng con số + đơn vị."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Writing 1 — Rewrite vague sentences into measurable ones\n\nAnswer in the answer panel (no code needed).\n\n1. “The API is faster now.”\"API giờ nhanh hơn.\"\n2. “Most tests passed.”\"Phần lớn test đạt.\"\n3. “The system is stable.”\"Hệ thống ổn định.\"\n4. “The page loads slowly on mobile.”\"Trang tải chậm trên điện thoại.\"\n5. “We fixed a lot of bugs this sprint.”\"Sprint này sửa được nhiều lỗi.\"\n6. “Coverage is high.”\"Độ phủ cao.\"\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Writing 1 — Rewrite vague sentences into measurable ones — answer key\n\n1. “The API is faster now.”\"API giờ nhanh hơn.\"\n   Answer: c) “p95 latency of GET /bookings fell from 840 ms to 120 ms after adding an index on bookings(user_id).”\n   Metric (p95), endpoint, before → after, unit, and the cause.VI: Thước đo (p95), endpoint, trước → sau, đơn vị, và nguyên nhân.\n\n2. “Most tests passed.”\"Phần lớn test đạt.\"\n   Answer: d) “93 of 113 unit tests passed (82.3%); the 20 fails map to tickets SS-19 … SS-33.”\n   Counts + ratio + where the rest went.VI: Số đếm + tỉ lệ + phần còn lại đi đâu.\n\n3. “The system is stable.”\"Hệ thống ổn định.\"\n   Answer: d) “0 restarts and 0 HTTP 5xx in the last 7 days; error rate 0.02% over 1.2 million requests.”\n   “Stable” becomes counts over a stated window.VI: \"Ổn định\" thành số đếm trong một khoảng thời gian nêu rõ.\n\n4. “The page loads slowly on mobile.”\"Trang tải chậm trên điện thoại.\"\n   Answer: c) “On a mid-range Android over 4G, Largest Contentful Paint is 6.1 s (target ≤ 2.5 s); the 2.4 MB hero image is the largest request.”\n   Device and network, a named metric, the target, and the suspected cause.VI: Thiết bị và mạng, thước đo có tên, mục tiêu, và nguyên nhân nghi ngờ.\n\n5. “We fixed a lot of bugs this sprint.”\"Sprint này sửa được nhiều lỗi.\"\n   Answer: a) “14 bugs closed (3 Critical, 6 Major, 5 Minor); 4 reopened bugs from the last sprint remain open.”\n   Count, breakdown by severity, and what is still open.VI: Số lượng, chia theo mức độ, và những gì vẫn mở.\n\n6. “Coverage is high.”\"Độ phủ cao.\"\n   Answer: c) “Line coverage 99.3% (299/301), branch coverage 93.5% (116/124) — JaCoCo, module A, run of 28/10.”\n   Which coverage, the raw fraction, the tool, the scope and the date.VI: Độ phủ loại nào, phân số gốc, công cụ, phạm vi và ngày.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: c · d · d · c · a · c.</p>",
+      "solutionExplanationHtmlVi": "<p>Đáp án: c · d · d · c · a · c.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>“The API is faster now.”</p><p style=\"opacity:.75;font-size:.92em\"><i>\"API giờ nhanh hơn.\"</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "“The API is much, much faster now.”"
+              },
+              {
+                "ma": "b",
+                "noiDung": "“The API is optimised.”"
+              },
+              {
+                "ma": "c",
+                "noiDung": "“p95 latency of GET /bookings fell from 840 ms to 120 ms after adding an index on bookings(user_id).”"
+              },
+              {
+                "ma": "d",
+                "noiDung": "“Users will love the new speed.”"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Metric (p95), endpoint, before → after, unit, and the cause.</p><p><i>VI: Thước đo (p95), endpoint, trước → sau, đơn vị, và nguyên nhân.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>“Most tests passed.”</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Phần lớn test đạt.\"</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "“Almost all tests passed.”"
+              },
+              {
+                "ma": "b",
+                "noiDung": "“Tests were mostly OK.”"
+              },
+              {
+                "ma": "c",
+                "noiDung": "“A good number of tests passed.”"
+              },
+              {
+                "ma": "d",
+                "noiDung": "“93 of 113 unit tests passed (82.3%); the 20 fails map to tickets SS-19 … SS-33.”"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Counts + ratio + where the rest went.</p><p><i>VI: Số đếm + tỉ lệ + phần còn lại đi đâu.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>“The system is stable.”</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Hệ thống ổn định.\"</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "“The system has been very stable lately.”"
+              },
+              {
+                "ma": "b",
+                "noiDung": "“The system works well.”"
+              },
+              {
+                "ma": "c",
+                "noiDung": "“No complaints so far.”"
+              },
+              {
+                "ma": "d",
+                "noiDung": "“0 restarts and 0 HTTP 5xx in the last 7 days; error rate 0.02% over 1.2 million requests.”"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>“Stable” becomes counts over a stated window.</p><p><i>VI: \"Ổn định\" thành số đếm trong một khoảng thời gian nêu rõ.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>“The page loads slowly on mobile.”</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Trang tải chậm trên điện thoại.\"</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "“The page is too slow on phones.”"
+              },
+              {
+                "ma": "b",
+                "noiDung": "“Mobile performance is bad.”"
+              },
+              {
+                "ma": "c",
+                "noiDung": "“On a mid-range Android over 4G, Largest Contentful Paint is 6.1 s (target ≤ 2.5 s); the 2.4 MB hero image is the largest request.”"
+              },
+              {
+                "ma": "d",
+                "noiDung": "“Mobile is a problem.”"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Device and network, a named metric, the target, and the suspected cause.</p><p><i>VI: Thiết bị và mạng, thước đo có tên, mục tiêu, và nguyên nhân nghi ngờ.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>“We fixed a lot of bugs this sprint.”</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Sprint này sửa được nhiều lỗi.\"</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "“14 bugs closed (3 Critical, 6 Major, 5 Minor); 4 reopened bugs from the last sprint remain open.”"
+              },
+              {
+                "ma": "b",
+                "noiDung": "“Bug count is down.”"
+              },
+              {
+                "ma": "c",
+                "noiDung": "“We worked hard on bugs.”"
+              },
+              {
+                "ma": "d",
+                "noiDung": "“Many bugs were fixed.”"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Count, breakdown by severity, and what is still open.</p><p><i>VI: Số lượng, chia theo mức độ, và những gì vẫn mở.</i></p>"
+          },
+          {
+            "ma": "q6",
+            "de": "<p>“Coverage is high.”</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Độ phủ cao.\"</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "“Coverage is almost 100%.”"
+              },
+              {
+                "ma": "b",
+                "noiDung": "“We covered everything important.”"
+              },
+              {
+                "ma": "c",
+                "noiDung": "“Line coverage 99.3% (299/301), branch coverage 93.5% (116/124) — JaCoCo, module A, run of 28/10.”"
+              },
+              {
+                "ma": "d",
+                "noiDung": "“Coverage is very high.”"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Which coverage, the raw fraction, the tool, the scope and the date.</p><p><i>VI: Độ phủ loại nào, phân số gốc, công cụ, phạm vi và ngày.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thêm trạng từ (\"rất\", \"much\") thay vì thêm số."
+        },
+        {
+          "loi": "Đưa phần trăm mà không đưa số đếm gốc — người đọc không đối chiếu được."
+        },
+        {
+          "loi": "Bỏ mốc so sánh: \"120 ms\" mà không nói trước đó là bao nhiêu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "measurable statement",
+          "vi": "câu đo được — có số, đơn vị, mốc so sánh"
+        },
+        {
+          "en": "vague word (weasel word)",
+          "vi": "từ mơ hồ: \"khá\", \"nhanh\", \"nhiều\", \"ổn\"…"
+        },
+        {
+          "en": "p95 latency",
+          "vi": "độ trễ phân vị 95 — 95% request nhanh hơn mức này"
+        }
+      ]
+    },
+    {
+      "title": "Writing 2 — Measurable, vague, opinion or blame?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "sentence quality"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "ky-nang",
+        "ssg105"
+      ],
+      "problemHtml": "<p>Before you rewrite, you must recognise the problem. Sentences in reports and tickets fall into four groups: <b>measurable</b> (a reader can check it), <b>vague</b> (no number, no comparison), <b>opinion without evidence</b> (“I think the design is bad”), and <b>blame</b> (makes a person the cause). Classify each sentence from real project chats and reports.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Muốn sửa phải nhận ra lỗi trước. Câu trong báo cáo và ticket chia bốn nhóm: <b>đo được</b> (người đọc kiểm được), <b>mơ hồ</b> (không số, không so sánh), <b>ý kiến không bằng chứng</b> (\"em nghĩ thiết kế tệ\"), và <b>đổ lỗi</b> (biến một người thành nguyên nhân). Phân loại từng câu lấy từ chat và báo cáo dự án thật.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Có tên người + lời chê ⇒ đổ lỗi.",
+        "\"Em nghĩ… tệ / rõ ràng đẹp hơn\" mà không số liệu ⇒ ý kiến không bằng chứng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Writing 2 — Measurable, vague, opinion or blame?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Writing 2 — Measurable, vague, opinion or blame? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Measurable\n   - r1.k: Vague\n   - r2.k: Blames a person\n   - r3.k: Opinion without evidence\n   - r4.k: Measurable\n   - r5.k: Vague\n   - r6.k: Blames a person\n   - r7.k: Opinion without evidence\n   Blame names a person as the cause; an opinion judges without data; vague has no number; measurable can be checked.VI: Đổ lỗi gọi tên một người làm nguyên nhân; ý kiến phán xét không dữ liệu; mơ hồ không có số; đo được thì kiểm được.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Measurable · Vague · Blame · Opinion · Measurable · Vague · Blame · Opinion.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Type",
+                "luaChon": [
+                  "Measurable",
+                  "Vague",
+                  "Opinion without evidence",
+                  "Blames a person"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "“The deploy failed at 14:32 with ‘no space left on device’; free disk was 1.8 GB.” — <i>“Deploy hỏng lúc 14:32 với ‘no space left on device’; đĩa còn trống 1,8 GB.”</i>"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "“The server is kind of slow these days.” — <i>“Dạo này server hơi chậm.”</i>"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "“Minh forgot to run the migration, as usual.” — <i>“Minh lại quên chạy migration như mọi khi.”</i>"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "“I think React is a bad choice for this project.” — <i>“Em nghĩ React là lựa chọn tệ cho dự án này.”</i>"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "“16 of 22 integration cases pass in all 3 rounds.” — <i>“16/22 ca tích hợp đạt ở cả 3 round.”</i>"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "“Testing went fine overall.” — <i>“Nhìn chung test ổn.”</i>"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "“The bug exists because the developer was careless.” — <i>“Lỗi có vì developer bất cẩn.”</i>"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "s": "“The new layout is obviously better.” — <i>“Bố cục mới rõ ràng đẹp hơn.”</i>"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Measurable",
+              "r1.k": "Vague",
+              "r2.k": "Blames a person",
+              "r3.k": "Opinion without evidence",
+              "r4.k": "Measurable",
+              "r5.k": "Vague",
+              "r6.k": "Blames a person",
+              "r7.k": "Opinion without evidence"
+            },
+            "giaiThich": "<p>Blame names a person as the cause; an opinion judges without data; vague has no number; measurable can be checked.</p><p><i>VI: Đổ lỗi gọi tên một người làm nguyên nhân; ý kiến phán xét không dữ liệu; mơ hồ không có số; đo được thì kiểm được.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng câu có tên người luôn là đổ lỗi — \"Minh đã chạy migration lúc 10:05\" là câu đo được."
+        },
+        {
+          "loi": "Nhầm ý kiến (có phán xét) với câu mơ hồ (chỉ thiếu số)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "measurable statement",
+          "vi": "câu đo được — có số, đơn vị, mốc so sánh"
+        },
+        {
+          "en": "vague word (weasel word)",
+          "vi": "từ mơ hồ: \"khá\", \"nhanh\", \"nhiều\", \"ổn\"…"
+        },
+        {
+          "en": "blameless",
+          "vi": "không đổ lỗi cá nhân — tìm lỗ hổng của quy trình/hệ thống"
+        }
+      ]
+    },
+    {
+      "title": "Writing 3 — Bottom line up front: choose the first sentence",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "BLUF",
+        "audience"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "ky-nang",
+        "ssg105"
+      ],
+      "problemHtml": "<p>Busy readers read the first sentence and decide whether to read more. <b>BLUF — bottom line up front</b>: the first sentence says the conclusion or the decision needed, with the key number; details follow. The right first sentence also depends on <b>who reads</b>: a teacher wants the result against the requirement, a team lead wants status and blockers, a manager wants the decision. Choose the best opening sentence.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Người đọc bận đọc câu đầu rồi quyết định có đọc tiếp không. <b>BLUF — kết luận trước</b>: câu đầu nói kết luận hoặc quyết định cần đưa ra, kèm con số chính; chi tiết theo sau. Câu đầu đúng còn phụ thuộc <b>ai đọc</b>: thầy cô muốn kết quả so với yêu cầu, trưởng nhóm muốn tình trạng và điểm tắc, quản lý muốn quyết định. Chọn câu mở đầu tốt nhất.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Câu đầu phải đứng một mình được: người chỉ đọc câu đó vẫn biết kết quả/quyết định.",
+        "Đổi người đọc ⇒ đổi câu đầu."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Writing 3 — Bottom line up front: choose the first sentence\n\nAnswer in the answer panel (no code needed).\n\n1. Summary of Report 5.3 (Lab 4) for the teacher.Tóm tắt Report 5.3 (Lab 4) gửi cô.\n2. Daily update in the team chat for the leader.Cập nhật hằng ngày trong chat nhóm cho trưởng nhóm.\n3. Message to the mentor asking for a decision.Tin nhắn hỏi mentor một quyết định.\n4. First line of an incident report to the whole team.Dòng đầu báo cáo sự cố gửi cả nhóm.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Writing 3 — Bottom line up front: choose the first sentence — answer key\n\n1. Summary of Report 5.3 (Lab 4) for the teacher.Tóm tắt Report 5.3 (Lab 4) gửi cô.\n   Answer: d) “Module A passes 12 of 18 system test cases (66.7%) in all 3 rounds; the 6 failures are 5 open defects (SS-19, SS-27, SS-31, SS-32, SS-33).”\n   Result, ratio, stability, and what the failures are.VI: Kết quả, tỉ lệ, độ ổn định, và các ca fail là gì.\n\n2. Daily update in the team chat for the leader.Cập nhật hằng ngày trong chat nhóm cho trưởng nhóm.\n   Answer: c) “Status: Report 5.2 done (22 cases, 3 rounds); blocked on Lab 4 screenshots until the SQL Server container is fixed — need 30 minutes with the team leader tonight.”\n   Done, blocked, and the exact help needed.VI: Đã xong, đang tắc, và cần giúp gì cụ thể.\n\n3. Message to the mentor asking for a decision.Tin nhắn hỏi mentor một quyết định.\n   Answer: a) “Decision needed by Friday: ship release 2.1 with 3 open Minor defects, or delay one week to fix them. I recommend shipping; details below.”\n   The decision, the options, the deadline and your recommendation — in the first two sentences.VI: Quyết định, các phương án, hạn chót và đề xuất của bạn — ngay hai câu đầu.\n\n4. First line of an incident report to the whole team.Dòng đầu báo cáo sự cố gửi cả nhóm.\n   Answer: a) “On 18/08 the API returned HTTP 502 for 7 minutes after a deploy shipped an image with the wrong Prisma engine; it is fixed and a pre-push check now blocks it.”\n   What, when, how long, cause in one clause, current state.VI: Chuyện gì, khi nào, bao lâu, nguyên nhân một vế, tình trạng hiện tại.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: d · c · a · a.</p>",
+      "solutionExplanationHtmlVi": "<p>Đáp án: d · c · a · a.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Summary of Report 5.3 (Lab 4) for the teacher.</p><p style=\"opacity:.75;font-size:.92em\"><i>Tóm tắt Report 5.3 (Lab 4) gửi cô.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "“In this report we will present the system testing of module A.”"
+              },
+              {
+                "ma": "b",
+                "noiDung": "“We worked very hard on Lab 4.”"
+              },
+              {
+                "ma": "c",
+                "noiDung": "“System testing is the third level of testing.”"
+              },
+              {
+                "ma": "d",
+                "noiDung": "“Module A passes 12 of 18 system test cases (66.7%) in all 3 rounds; the 6 failures are 5 open defects (SS-19, SS-27, SS-31, SS-32, SS-33).”"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Result, ratio, stability, and what the failures are.</p><p><i>VI: Kết quả, tỉ lệ, độ ổn định, và các ca fail là gì.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Daily update in the team chat for the leader.</p><p style=\"opacity:.75;font-size:.92em\"><i>Cập nhật hằng ngày trong chat nhóm cho trưởng nhóm.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "“Things are going OK.”"
+              },
+              {
+                "ma": "b",
+                "noiDung": "“Hi everyone, hope you are well!”"
+              },
+              {
+                "ma": "c",
+                "noiDung": "“Status: Report 5.2 done (22 cases, 3 rounds); blocked on Lab 4 screenshots until the SQL Server container is fixed — need 30 minutes with the team leader tonight.”"
+              },
+              {
+                "ma": "d",
+                "noiDung": "“Yesterday I opened the project and…”"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Done, blocked, and the exact help needed.</p><p><i>VI: Đã xong, đang tắc, và cần giúp gì cụ thể.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Message to the mentor asking for a decision.</p><p style=\"opacity:.75;font-size:.92em\"><i>Tin nhắn hỏi mentor một quyết định.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "“Decision needed by Friday: ship release 2.1 with 3 open Minor defects, or delay one week to fix them. I recommend shipping; details below.”"
+              },
+              {
+                "ma": "b",
+                "noiDung": "“Here is the full test log.”"
+              },
+              {
+                "ma": "c",
+                "noiDung": "“There are some defects, what do you think?”"
+              },
+              {
+                "ma": "d",
+                "noiDung": "“Can we have a meeting?”"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The decision, the options, the deadline and your recommendation — in the first two sentences.</p><p><i>VI: Quyết định, các phương án, hạn chót và đề xuất của bạn — ngay hai câu đầu.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>First line of an incident report to the whole team.</p><p style=\"opacity:.75;font-size:.92em\"><i>Dòng đầu báo cáo sự cố gửi cả nhóm.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "“On 18/08 the API returned HTTP 502 for 7 minutes after a deploy shipped an image with the wrong Prisma engine; it is fixed and a pre-push check now blocks it.”"
+              },
+              {
+                "ma": "b",
+                "noiDung": "“As we all know, deploys are complicated.”"
+              },
+              {
+                "ma": "c",
+                "noiDung": "“I want to explain a long story.”"
+              },
+              {
+                "ma": "d",
+                "noiDung": "“Something went wrong with the server yesterday.”"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>What, when, how long, cause in one clause, current state.</p><p><i>VI: Chuyện gì, khi nào, bao lâu, nguyên nhân một vế, tình trạng hiện tại.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Mở bằng \"Trong báo cáo này em xin trình bày…\" — câu không mang thông tin."
+        },
+        {
+          "loi": "Giấu điểm tắc ở cuối tin nhắn dài."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "BLUF (bottom line up front)",
+          "vi": "nói kết luận ngay câu đầu"
+        },
+        {
+          "en": "audience",
+          "vi": "người đọc mục tiêu"
+        },
+        {
+          "en": "blocker",
+          "vi": "điểm tắc — thứ chặn việc tiếp theo"
+        }
+      ]
+    },
+    {
+      "title": "Writing 4 — Do the sentences match the results table?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "numbers consistency"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "ky-nang",
+        "ssg105"
+      ],
+      "problemHtml": "<p>One number in the text that disagrees with the table makes the reader distrust everything. Here is the Lab 4 statistics table (Report 5.3, module A, run of 28/10):</p>\n<table><thead><tr><th>Workflows</th><th>Cases</th><th>Steps</th><th>Rounds</th><th>Pass / round</th><th>Fail / round</th><th>Screenshots</th></tr></thead>\n<tbody><tr><td>5</td><td>18</td><td>48</td><td>3</td><td>12</td><td>6</td><td>144</td></tr></tbody></table>\n<p>Failed cases: RG01 (SS-33) · AC05 (SS-27) · AC06, AC07 (SS-31) · FP01 (SS-32) · RL02 (SS-19). Decide whether each sentence of a draft summary is consistent with the table.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một con số trong văn bản lệch với bảng khiến người đọc nghi mọi thứ. Bảng thống kê Lab 4 ở trên (Report 5.3, module A, lần chạy 28/10): 5 workflow, 18 ca, 48 bước, 3 round, mỗi round 12 đạt / 6 fail, 144 ảnh. Ca fail: RG01 (SS-33) · AC05 (SS-27) · AC06, AC07 (SS-31) · FP01 (SS-32) · RL02 (SS-19). Xét từng câu của bản tóm tắt nháp có khớp bảng không.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Đếm số mã lỗi KHÁC NHAU trong danh sách ca fail.",
+        "Số phần trăm phải tính lại từ chính bảng này, không chép từ lab khác."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Writing 4 — Do the sentences match the results table?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Writing 4 — Do the sentences match the results table? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Consistent with the table\n   - r1.k: Inconsistent with the table\n   - r2.k: Consistent with the table\n   - r3.k: Inconsistent with the table\n   - r4.k: Consistent with the table\n   - r5.k: Inconsistent with the table\n   - r6.k: Consistent with the table\n   72.7% is the Lab 3 rate (16/22); the rounds are identical, so nothing “improved”; AC06 and AC07 share SS-31, so 6 failures = 5 defects.VI: 72,7% là tỉ lệ Lab 3 (16/22); các round giống nhau nên không có gì \"tốt lên\"; AC06 và AC07 chung SS-31 nên 6 ca fail = 5 lỗi.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Consistent · Inconsistent · Consistent · Inconsistent · Consistent · Inconsistent · Consistent.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Verdict",
+                "luaChon": [
+                  "Consistent with the table",
+                  "Inconsistent with the table"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "“12 of 18 cases pass (66.7%).” — <i>“12/18 ca đạt (66,7%).”</i>"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "“The pass rate is 72.7%.” — <i>“Tỉ lệ đạt 72,7%.” (đó là số của Lab 3)</i>"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "“Every step has one screenshot per round: 48 × 3 = 144.” — <i>“Mỗi bước mỗi round một ảnh: 48 × 3 = 144.”</i>"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "“6 failures correspond to 6 different defects.” — <i>“6 ca fail ứng với 6 lỗi khác nhau.” (AC06 và AC07 cùng SS-31)</i>"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "“The 6 failures correspond to 5 distinct defects.” — <i>“6 ca fail ứng với 5 lỗi khác nhau.”</i>"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "“Results improved from round 1 to round 3.” — <i>“Kết quả tốt lên từ round 1 tới round 3.”</i>"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "“The logout defect SS-31 causes two of the failures.” — <i>“Lỗi đăng xuất SS-31 gây ra hai ca fail.”</i>"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Consistent with the table",
+              "r1.k": "Inconsistent with the table",
+              "r2.k": "Consistent with the table",
+              "r3.k": "Inconsistent with the table",
+              "r4.k": "Consistent with the table",
+              "r5.k": "Inconsistent with the table",
+              "r6.k": "Consistent with the table"
+            },
+            "giaiThich": "<p>72.7% is the Lab 3 rate (16/22); the rounds are identical, so nothing “improved”; AC06 and AC07 share SS-31, so 6 failures = 5 defects.</p><p><i>VI: 72,7% là tỉ lệ Lab 3 (16/22); các round giống nhau nên không có gì \"tốt lên\"; AC06 và AC07 chung SS-31 nên 6 ca fail = 5 lỗi.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chép tỉ lệ của Lab 3 sang báo cáo Lab 4."
+        },
+        {
+          "loi": "Đếm số ca fail làm số lỗi khi hai ca chung một lỗi."
+        },
+        {
+          "loi": "Viết \"cải thiện\" khi các round giống hệt nhau."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "consistency",
+          "vi": "tính nhất quán — văn bản và bảng nói cùng một số"
+        },
+        {
+          "en": "successful coverage",
+          "vi": "Pass ÷ Tổng ca — tỉ lệ ca đạt (Report 5.x)"
+        }
+      ]
+    },
+    {
+      "title": "Writing 5 — Active voice, clear actor, no blame",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "blameless writing",
+        "active voice"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "ky-nang",
+        "ssg105"
+      ],
+      "problemHtml": "<p>Two opposite mistakes: the <b>passive fog</b> (“mistakes were made”, “it was decided”) hides who did what and what happens next; <b>blame</b> (“Minh broke the build”) names a person as the cause and makes everyone hide information next time. Good technical writing names the <b>system, the step or the role</b> as the actor and states facts. Pick the best sentence.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hai lỗi ngược nhau: <b>sương mù bị động</b> (\"đã có sai sót\", \"đã được quyết định\") giấu ai làm gì và việc tiếp theo; <b>đổ lỗi</b> (\"Minh làm hỏng build\") biến một người thành nguyên nhân và khiến mọi người giấu thông tin lần sau. Viết kỹ thuật tốt gọi tên <b>hệ thống, bước hoặc vai trò</b> làm chủ ngữ và nêu sự việc. Chọn câu tốt nhất.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Chủ ngữ tốt là hệ thống / bước / vai trò; động từ chủ động; kèm cơ chế hoặc con số.",
+        "Loại câu có tính từ chê người (\"lazy\", \"careless\") và câu bị động không chủ thể."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Writing 5 — Active voice, clear actor, no blame\n\nAnswer in the answer panel (no code needed).\n\n1. The nginx change did not take effect.Thay đổi nginx không có hiệu lực.\n2. A test was skipped.Một test bị bỏ qua.\n3. A deploy shipped a broken image.Một lần deploy đẩy lên ảnh hỏng.\n4. Data in a report was wrong.Số liệu trong báo cáo sai.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Writing 5 — Active voice, clear actor, no blame — answer key\n\n1. The nginx change did not take effect.Thay đổi nginx không có hiệu lực.\n   Answer: c) “The deploy step replaced nginx.conf with mv, so the container kept reading the old inode.”\n   Actor = the deploy step; mechanism = mv + inode; no person blamed.VI: Chủ ngữ = bước deploy; cơ chế = mv + inode; không đổ lỗi người.\n\n2. A test was skipped.Một test bị bỏ qua.\n   Answer: a) “The tester skipped IT19 because the logout button was missing in build 0.4; it is scheduled for round 2.”\n   Role + reason + what happens next.VI: Vai trò + lý do + việc tiếp theo.\n\n3. A deploy shipped a broken image.Một lần deploy đẩy lên ảnh hỏng.\n   Answer: c) “The deploy script built the image from the default Dockerfile instead of Dockerfile.backend; no check verified that the image could start.”\n   Two facts: what the script did, and which safety check was missing — the second points at the fix.VI: Hai sự việc: script đã làm gì, và chốt kiểm nào thiếu — cái thứ hai chỉ ra cách sửa.\n\n4. Data in a report was wrong.Số liệu trong báo cáo sai.\n   Answer: a) “The Test Statistics sheet used Round 1 instead of the latest round, so the coverage showed 85.00% instead of 94.44%.”\n   Which artefact, what was wrong, the size of the error.VI: Sản phẩm nào, sai chỗ nào, sai bao nhiêu.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: c · a · c · a.</p>",
+      "solutionExplanationHtmlVi": "<p>Đáp án: c · a · c · a.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>The nginx change did not take effect.</p><p style=\"opacity:.75;font-size:.92em\"><i>Thay đổi nginx không có hiệu lực.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "“Mistakes were made with nginx.”"
+              },
+              {
+                "ma": "b",
+                "noiDung": "“Whoever wrote that script did not understand Docker.”"
+              },
+              {
+                "ma": "c",
+                "noiDung": "“The deploy step replaced nginx.conf with mv, so the container kept reading the old inode.”"
+              },
+              {
+                "ma": "d",
+                "noiDung": "“Nginx was weird.”"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Actor = the deploy step; mechanism = mv + inode; no person blamed.</p><p><i>VI: Chủ ngữ = bước deploy; cơ chế = mv + inode; không đổ lỗi người.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>A test was skipped.</p><p style=\"opacity:.75;font-size:.92em\"><i>Một test bị bỏ qua.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "“The tester skipped IT19 because the logout button was missing in build 0.4; it is scheduled for round 2.”"
+              },
+              {
+                "ma": "b",
+                "noiDung": "“It was decided that IT19 would not be run.”"
+              },
+              {
+                "ma": "c",
+                "noiDung": "“IT19 happened to not run.”"
+              },
+              {
+                "ma": "d",
+                "noiDung": "“Someone lazy skipped IT19.”"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Role + reason + what happens next.</p><p><i>VI: Vai trò + lý do + việc tiếp theo.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>A deploy shipped a broken image.</p><p style=\"opacity:.75;font-size:.92em\"><i>Một lần deploy đẩy lên ảnh hỏng.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "“Nam broke production again.”"
+              },
+              {
+                "ma": "b",
+                "noiDung": "“Bad things happened during the deploy.”"
+              },
+              {
+                "ma": "c",
+                "noiDung": "“The deploy script built the image from the default Dockerfile instead of Dockerfile.backend; no check verified that the image could start.”"
+              },
+              {
+                "ma": "d",
+                "noiDung": "“Production was broken.”"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Two facts: what the script did, and which safety check was missing — the second points at the fix.</p><p><i>VI: Hai sự việc: script đã làm gì, và chốt kiểm nào thiếu — cái thứ hai chỉ ra cách sửa.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Data in a report was wrong.</p><p style=\"opacity:.75;font-size:.92em\"><i>Số liệu trong báo cáo sai.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "“The Test Statistics sheet used Round 1 instead of the latest round, so the coverage showed 85.00% instead of 94.44%.”"
+              },
+              {
+                "ma": "b",
+                "noiDung": "“The numbers were a bit off.”"
+              },
+              {
+                "ma": "c",
+                "noiDung": "“My teammate made a mess of the Excel file.”"
+              },
+              {
+                "ma": "d",
+                "noiDung": "“Errors were found.”"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Which artefact, what was wrong, the size of the error.</p><p><i>VI: Sản phẩm nào, sai chỗ nào, sai bao nhiêu.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết bị động cho \"lịch sự\" ⇒ không ai biết phải làm gì."
+        },
+        {
+          "loi": "Gọi tên người làm nguyên nhân — lần sau không ai báo lỗi sớm nữa."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "blameless",
+          "vi": "không đổ lỗi cá nhân — tìm lỗ hổng của quy trình/hệ thống"
+        },
+        {
+          "en": "active voice",
+          "vi": "câu chủ động — chủ ngữ là bên thực hiện"
+        },
+        {
+          "en": "passive voice",
+          "vi": "câu bị động — dễ giấu bên thực hiện"
+        }
+      ]
+    },
+    {
+      "title": "Writing 6 — Replace the vague word",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "measurable writing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "ky-nang",
+        "ssg105"
+      ],
+      "problemHtml": "<p>Each sentence from a draft report has one vague word (in bold). Choose the replacement that turns it into something a reader could check. Vietnamese drafts have the same words: “khá”, “nhanh”, “nhiều”, “ổn”, “tốt”.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi câu trong bản nháp báo cáo có một từ mơ hồ (in đậm). Chọn cụm thay thế để người đọc kiểm được. Bản nháp tiếng Việt có đúng những từ đó: \"khá\", \"nhanh\", \"nhiều\", \"ổn\", \"tốt\".</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "\"Sớm\" ⇒ một hạn có đơn vị thời gian.",
+        "\"Một số / phần lớn\" ⇒ x trên tổng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Writing 6 — Replace the vague word\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Writing 6 — Replace the vague word — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: in 1.4 s (target ≤ 2 s)\n   - r1.k: 20 of 113\n   - r2.k: with 0 failed requests in 3 rounds\n   - r3.k: from 7 to 3 clicks\n   - r4.k: 4 of 5 workflows\n   - r5.k: within 24 hours\n   Each replacement adds a number with its reference: a target, a total, a before/after or a deadline.VI: Mỗi cụm thay thêm một con số kèm mốc: mục tiêu, tổng, trước/sau hoặc hạn.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>1.4 s · 20 of 113 · 0 failed requests · 7 → 3 clicks · 4 of 5 · within 24 hours.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Draft sentence"
+              },
+              {
+                "ma": "k",
+                "ten": "Replace with",
+                "luaChon": [
+                  "in 1.4 s (target ≤ 2 s)",
+                  "20 of 113",
+                  "with 0 failed requests in 3 rounds",
+                  "from 7 to 3 clicks",
+                  "4 of 5 workflows",
+                  "within 24 hours"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "“The login page loads <b>quickly</b>.” — <i>“Trang đăng nhập tải <b>nhanh</b>.”</i>"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "“<b>Some</b> unit tests fail.” — <i>“<b>Một số</b> unit test fail.”</i>"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "“The Postman suite runs <b>fine</b>.” — <i>“Bộ Postman chạy <b>ổn</b>.”</i>"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "“The new checkout is <b>much simpler</b>.” — <i>“Trang thanh toán mới <b>đơn giản hơn nhiều</b>.”</i>"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "“<b>Most</b> workflows are covered by screenshots.” — <i>“<b>Phần lớn</b> workflow có ảnh.”</i>"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "“We will fix it <b>soon</b>.” — <i>“Bọn em sẽ sửa <b>sớm</b>.”</i>"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "in 1.4 s (target ≤ 2 s)",
+              "r1.k": "20 of 113",
+              "r2.k": "with 0 failed requests in 3 rounds",
+              "r3.k": "from 7 to 3 clicks",
+              "r4.k": "4 of 5 workflows",
+              "r5.k": "within 24 hours"
+            },
+            "giaiThich": "<p>Each replacement adds a number with its reference: a target, a total, a before/after or a deadline.</p><p><i>VI: Mỗi cụm thay thêm một con số kèm mốc: mục tiêu, tổng, trước/sau hoặc hạn.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thay \"nhanh\" bằng \"rất nhanh\" — vẫn mơ hồ."
+        },
+        {
+          "loi": "Đưa con số không có mốc: \"1,4 giây\" mà không nói mục tiêu là bao nhiêu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "vague word (weasel word)",
+          "vi": "từ mơ hồ: \"khá\", \"nhanh\", \"nhiều\", \"ổn\"…"
+        },
+        {
+          "en": "measurable statement",
+          "vi": "câu đo được — có số, đơn vị, mốc so sánh"
+        }
+      ]
+    }
+  ]
+}

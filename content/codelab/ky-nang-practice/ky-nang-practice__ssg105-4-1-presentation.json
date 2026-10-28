@@ -1,0 +1,907 @@
+{
+  "trackSlug": "ky-nang-practice",
+  "moduleSlug": "ssg105-4-1-presentation",
+  "lesson": {
+    "course": "ssg105-communication-and-in-group-working-skills",
+    "slug": "ssg105-4-1-presentation"
+  },
+  "exercises": [
+    {
+      "title": "Talk 1 — Order the blocks of a 3-minute technical talk",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "talk structure",
+        "hook",
+        "takeaway"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "ky-nang",
+        "ssg105"
+      ],
+      "problemHtml": "<p>A short technical talk (a lab defence, a sprint demo, an OJT stand-up update) has the same skeleton: <b>hook → context → what I did → results with numbers → the bug worth telling → lessons → close</b>. The listener first needs a reason to listen, then just enough context, then proof. Put the seven blocks in order — first the generic skeleton, then the real blocks of the SportShop Lab 2+3 talk.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một bài nói kỹ thuật ngắn (bảo vệ lab, demo sprint, cập nhật khi OJT) có chung bộ khung: <b>câu mở gây chú ý → bối cảnh → mình đã làm gì → kết quả có số → lỗi đáng kể nhất → bài học → câu chốt</b>. Người nghe cần một lý do để nghe trước, rồi vừa đủ bối cảnh, rồi bằng chứng. Sắp bảy khối — trước là bộ khung chung, sau là các khối thật của bài trình bày Lab 2+3 SportShop.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Câu đầu phải khiến người nghe muốn nghe tiếp — không phải lời chào hay tên đề tài.",
+        "Số liệu đứng TRƯỚC câu chuyện lỗi: người nghe cần biết quy mô rồi mới nghe ví dụ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Talk 1 — Order the blocks of a 3-minute technical talk\n\nAnswer in the answer panel (no code needed).\n\n1. Generic skeleton of a 3-minute talkBộ khung chung của bài nói 3 phút\n2. The SportShop Lab 2+3 talk (module A — Authentication & Account)Bài nói Lab 2+3 SportShop (module A — Xác thực & Tài khoản)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Talk 1 — Order the blocks of a 3-minute technical talk — answer key\n\n1. Generic skeleton of a 3-minute talkBộ khung chung của bài nói 3 phút\n   Answer: a) Hook — a problem, a number or a question  →  b) Context — what system, which part is mine  →  c) What I did — method and tools  →  d) Results — with numbers  →  e) The bug worth telling — one story  →  f) Lessons — what I would do again / differently  →  g) Close — one-sentence takeaway, then invite questions\n   Problem first, proof in the middle, takeaway last. Context is short: one or two sentences.VI: Vấn đề trước, bằng chứng ở giữa, điều mang về ở cuối. Bối cảnh ngắn: một hai câu.\n\n2. The SportShop Lab 2+3 talk (module A — Authentication & Account)Bài nói Lab 2+3 SportShop (module A — Xác thực & Tài khoản)\n   Answer: a) “With one hidden form field, any logged-in user could change ANOTHER account’s password — our integration tests caught it.”  →  b) SportShop: Java Servlet/JSP on Tomcat 10 + SQL Server; I own module A (Login, Register, Profile, ChangePassword, AuthFilter, UserDAO).  →  c) Lab 2: 113 unit tests with Mockito (no database). Lab 3: 22 integration cases through the real API with Postman/Newman on a test database, 3 rounds.  →  d) Unit 93 pass / 20 fail (82.3%); integration 16 pass / 6 fail (72.7%) in all 3 rounds; line coverage 99.3%, branch 93.5%.  →  e) SS-28: UpdateProfileServlet takes the username from the form and UserDAO updates WHERE USER_name = ? — IT17 proves it.  →  f) Expected results come from the spec; we never change an expected value to match buggy code; validate on the server, not only in JavaScript.  →  g) “Every fail on our sheet is a real defect with a ticket — the next step is fixing SS-28 first. I’m happy to take questions.”\n   Hook (SS-28 as a story) → context (system + my module) → method (Lab 2/Lab 3) → numbers → the bug with file and line → lessons → takeaway + questions.VI: Mở (SS-28 kể như chuyện) → bối cảnh (hệ thống + module của mình) → cách làm (Lab 2/Lab 3) → số liệu → lỗi kèm tệp và dòng → bài học → câu chốt + mời hỏi.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Both questions follow the same skeleton. Notice that the SportShop hook IS the bug story compressed to one sentence — the talk opens and closes on the same idea.</p>",
+      "solutionExplanationHtmlVi": "<p>Hai câu theo cùng bộ khung. Để ý câu mở SportShop CHÍNH là câu chuyện lỗi nén còn một câu — bài nói mở và kết cùng một ý.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Generic skeleton of a 3-minute talk</p><p style=\"opacity:.75;font-size:.92em\"><i>Bộ khung chung của bài nói 3 phút</i></p>",
+            "muc": [
+              {
+                "ma": "d",
+                "noiDung": "Results — with numbers"
+              },
+              {
+                "ma": "e",
+                "noiDung": "The bug worth telling — one story"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Context — what system, which part is mine"
+              },
+              {
+                "ma": "f",
+                "noiDung": "Lessons — what I would do again / differently"
+              },
+              {
+                "ma": "a",
+                "noiDung": "Hook — a problem, a number or a question"
+              },
+              {
+                "ma": "g",
+                "noiDung": "Close — one-sentence takeaway, then invite questions"
+              },
+              {
+                "ma": "c",
+                "noiDung": "What I did — method and tools"
+              }
+            ],
+            "dapAn": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e",
+              "f",
+              "g"
+            ],
+            "giaiThich": "<p>Problem first, proof in the middle, takeaway last. Context is short: one or two sentences.</p><p><i>VI: Vấn đề trước, bằng chứng ở giữa, điều mang về ở cuối. Bối cảnh ngắn: một hai câu.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>The SportShop Lab 2+3 talk (module A — Authentication & Account)</p><p style=\"opacity:.75;font-size:.92em\"><i>Bài nói Lab 2+3 SportShop (module A — Xác thực & Tài khoản)</i></p>",
+            "muc": [
+              {
+                "ma": "a",
+                "noiDung": "“With one hidden form field, any logged-in user could change ANOTHER account’s password — our integration tests caught it.”"
+              },
+              {
+                "ma": "g",
+                "noiDung": "“Every fail on our sheet is a real defect with a ticket — the next step is fixing SS-28 first. I’m happy to take questions.”"
+              },
+              {
+                "ma": "e",
+                "noiDung": "SS-28: UpdateProfileServlet takes the username from the form and UserDAO updates WHERE USER_name = ? — IT17 proves it."
+              },
+              {
+                "ma": "f",
+                "noiDung": "Expected results come from the spec; we never change an expected value to match buggy code; validate on the server, not only in JavaScript."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Lab 2: 113 unit tests with Mockito (no database). Lab 3: 22 integration cases through the real API with Postman/Newman on a test database, 3 rounds."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Unit 93 pass / 20 fail (82.3%); integration 16 pass / 6 fail (72.7%) in all 3 rounds; line coverage 99.3%, branch 93.5%."
+              },
+              {
+                "ma": "b",
+                "noiDung": "SportShop: Java Servlet/JSP on Tomcat 10 + SQL Server; I own module A (Login, Register, Profile, ChangePassword, AuthFilter, UserDAO)."
+              }
+            ],
+            "dapAn": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e",
+              "f",
+              "g"
+            ],
+            "giaiThich": "<p>Hook (SS-28 as a story) → context (system + my module) → method (Lab 2/Lab 3) → numbers → the bug with file and line → lessons → takeaway + questions.</p><p><i>VI: Mở (SS-28 kể như chuyện) → bối cảnh (hệ thống + module của mình) → cách làm (Lab 2/Lab 3) → số liệu → lỗi kèm tệp và dòng → bài học → câu chốt + mời hỏi.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Mở bằng \"Em xin chào cô và các bạn, hôm nay em xin trình bày…\" — mất 10 giây đầu, lúc người nghe tập trung nhất."
+        },
+        {
+          "loi": "Đặt bài học trước kết quả — chưa có bằng chứng thì bài học nghe như khẩu hiệu."
+        },
+        {
+          "loi": "Kết bằng \"Em xin hết\" không có câu chốt — người nghe không biết phải nhớ gì."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "hook",
+          "vi": "câu mở gây chú ý — một vấn đề, một con số, một câu hỏi (không phải \"em xin chào\")"
+        },
+        {
+          "en": "takeaway",
+          "vi": "điều người nghe mang về — một câu chốt"
+        },
+        {
+          "en": "signposting",
+          "vi": "câu chuyển ý báo cho người nghe đang ở đâu (\"Phần tiếp: kết quả…\")"
+        }
+      ]
+    },
+    {
+      "title": "Talk 2 — Pick the strongest opening line",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "hook",
+        "opening"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "ky-nang",
+        "ssg105"
+      ],
+      "problemHtml": "<p>The first 10 seconds decide whether the room listens. A strong opening is a <b>problem, a surprising number, or a question</b> that the rest of the talk answers. Greetings and “today I will present…” can come after the hook, in one short sentence, or be skipped. Pick the strongest opening for each situation.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>10 giây đầu quyết định cả phòng có nghe hay không. Câu mở mạnh là <b>một vấn đề, một con số bất ngờ, hoặc một câu hỏi</b> mà phần còn lại trả lời. Lời chào và \"hôm nay em xin trình bày…\" có thể đặt sau câu mở, một câu ngắn, hoặc bỏ. Chọn câu mở mạnh nhất cho từng tình huống.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Câu mở tốt chứa một con số hoặc một vấn đề cụ thể.",
+        "Hỏi: nếu người nghe chỉ nghe câu này, họ có muốn nghe tiếp không?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Talk 2 — Pick the strongest opening line\n\nAnswer in the answer panel (no code needed).\n\n1. SWT301 Lab 3 defence (integration tests of module A).Bảo vệ Lab 3 SWT301 (kiểm thử tích hợp module A).\n2. Sprint demo of a new search feature to the product owner.Demo sprint tính năng tìm kiếm mới cho product owner.\n3. OJT weekly update to your mentor (2 minutes).Cập nhật tuần OJT với mentor (2 phút).\n4. Lab 2 (unit tests) — the room has already heard 4 groups present the same lab.Lab 2 (unit test) — cả phòng đã nghe 4 nhóm trình bày cùng lab.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Talk 2 — Pick the strongest opening line — answer key\n\n1. SWT301 Lab 3 defence (integration tests of module A).Bảo vệ Lab 3 SWT301 (kiểm thử tích hợp module A).\n   Answer: c) “6 of our 22 integration cases fail — and every one of them is a real bug a customer could hit.”\n   A number plus a consequence. (a) wastes the hook, (c) is a definition nobody needs, (d) apologises before giving value.VI: Con số kèm hệ quả. (a) phí câu mở, (c) là định nghĩa không ai cần, (d) xin lỗi trước khi đưa ra giá trị.\n\n2. Sprint demo of a new search feature to the product owner.Demo sprint tính năng tìm kiếm mới cho product owner.\n   Answer: a) “Last sprint, finding an order took 4 clicks and 20 seconds. Watch this.”\n   The PO cares about the user problem and the before/after. Tools come later, if asked.VI: PO quan tâm vấn đề của người dùng và trước/sau. Công cụ để sau, nếu được hỏi.\n\n3. OJT weekly update to your mentor (2 minutes).Cập nhật tuần OJT với mentor (2 phút).\n   Answer: c) “Short version: login API is done and tested, payment is blocked on the sandbox key — I need your help with that.”\n   Bottom line first: status + the one thing you need. A day-by-day diary hides the blocker.VI: Kết luận trước: tình trạng + điều mình cần. Kể từng ngày làm chìm điểm tắc.\n\n4. Lab 2 (unit tests) — the room has already heard 4 groups present the same lab.Lab 2 (unit test) — cả phòng đã nghe 4 nhóm trình bày cùng lab.\n   Answer: c) “Our 113 tests never touch a database — so why did 20 of them fail?”\n   A question the talk answers (the 20 fails are real defects in the code). It also tells the room what is DIFFERENT about your work.VI: Một câu hỏi mà bài nói trả lời (20 ca fail là lỗi thật của code). Nó cũng cho cả phòng biết bài của bạn KHÁC ở đâu.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: c · a · c · c.</p>",
+      "solutionExplanationHtmlVi": "<p>Đáp án: c · a · c · c.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>SWT301 Lab 3 defence (integration tests of module A).</p><p style=\"opacity:.75;font-size:.92em\"><i>Bảo vệ Lab 3 SWT301 (kiểm thử tích hợp module A).</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "“Sorry, our slides are not finished yet, but…”"
+              },
+              {
+                "ma": "b",
+                "noiDung": "“Good morning teacher and friends, my name is Cuong, today I present Lab 3.”"
+              },
+              {
+                "ma": "c",
+                "noiDung": "“6 of our 22 integration cases fail — and every one of them is a real bug a customer could hit.”"
+              },
+              {
+                "ma": "d",
+                "noiDung": "“Integration testing is a very important level of testing.”"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A number plus a consequence. (a) wastes the hook, (c) is a definition nobody needs, (d) apologises before giving value.</p><p><i>VI: Con số kèm hệ quả. (a) phí câu mở, (c) là định nghĩa không ai cần, (d) xin lỗi trước khi đưa ra giá trị.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Sprint demo of a new search feature to the product owner.</p><p style=\"opacity:.75;font-size:.92em\"><i>Demo sprint tính năng tìm kiếm mới cho product owner.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "“Last sprint, finding an order took 4 clicks and 20 seconds. Watch this.”"
+              },
+              {
+                "ma": "b",
+                "noiDung": "“This sprint we did a lot of work.”"
+              },
+              {
+                "ma": "c",
+                "noiDung": "“We used Elasticsearch 8 with a custom analyzer.”"
+              },
+              {
+                "ma": "d",
+                "noiDung": "“Let me first explain our folder structure.”"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The PO cares about the user problem and the before/after. Tools come later, if asked.</p><p><i>VI: PO quan tâm vấn đề của người dùng và trước/sau. Công cụ để sau, nếu được hỏi.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>OJT weekly update to your mentor (2 minutes).</p><p style=\"opacity:.75;font-size:.92em\"><i>Cập nhật tuần OJT với mentor (2 phút).</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "“On Monday I opened VS Code, then…”"
+              },
+              {
+                "ma": "b",
+                "noiDung": "“I have nothing special to report.”"
+              },
+              {
+                "ma": "c",
+                "noiDung": "“Short version: login API is done and tested, payment is blocked on the sandbox key — I need your help with that.”"
+              },
+              {
+                "ma": "d",
+                "noiDung": "“This week was quite busy.”"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Bottom line first: status + the one thing you need. A day-by-day diary hides the blocker.</p><p><i>VI: Kết luận trước: tình trạng + điều mình cần. Kể từng ngày làm chìm điểm tắc.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Lab 2 (unit tests) — the room has already heard 4 groups present the same lab.</p><p style=\"opacity:.75;font-size:.92em\"><i>Lab 2 (unit test) — cả phòng đã nghe 4 nhóm trình bày cùng lab.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "“Like the other groups, we also did unit tests.”"
+              },
+              {
+                "ma": "b",
+                "noiDung": "“I will read the slide now.”"
+              },
+              {
+                "ma": "c",
+                "noiDung": "“Our 113 tests never touch a database — so why did 20 of them fail?”"
+              },
+              {
+                "ma": "d",
+                "noiDung": "“Unit testing tests units.”"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A question the talk answers (the 20 fails are real defects in the code). It also tells the room what is DIFFERENT about your work.</p><p><i>VI: Một câu hỏi mà bài nói trả lời (20 ca fail là lỗi thật của code). Nó cũng cho cả phòng biết bài của bạn KHÁC ở đâu.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Mở bằng định nghĩa sách giáo khoa."
+        },
+        {
+          "loi": "Xin lỗi trước (\"slide chưa đẹp\", \"em chưa chuẩn bị kỹ\") — tự hạ giá trị trước khi bắt đầu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "hook",
+          "vi": "câu mở gây chú ý — một vấn đề, một con số, một câu hỏi (không phải \"em xin chào\")"
+        },
+        {
+          "en": "BLUF (bottom line up front)",
+          "vi": "nói kết luận ngay câu đầu"
+        }
+      ]
+    },
+    {
+      "title": "Talk 3 — Slide headlines that state the conclusion",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "assertion headline",
+        "slide design"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "ky-nang",
+        "ssg105"
+      ],
+      "problemHtml": "<p>A topic label (“Test results”) makes the audience work out the message themselves. An <b>assertion headline</b> is a short sentence that states the conclusion of the slide (“16 of 22 integration cases pass — the 6 fails are real defects”). The body of the slide is then the evidence for that sentence. Choose the best headline for each slide.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Nhãn chủ đề (\"Test results\") bắt người nghe tự rút ra thông điệp. <b>Tiêu đề khẳng định</b> là một câu ngắn nói kết luận của slide (\"16/22 ca tích hợp đạt — 6 ca fail là lỗi thật\"). Thân slide là bằng chứng cho câu đó. Chọn tiêu đề tốt nhất cho từng slide.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Tiêu đề tốt là một CÂU, có động từ, có con số khi slide có số.",
+        "Đọc mỗi tiêu đề và tự hỏi: \"rồi sao?\" — nếu vẫn phải hỏi thì chưa phải kết luận."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Talk 3 — Slide headlines that state the conclusion\n\nAnswer in the answer panel (no code needed).\n\n1. A slide with the Lab 3 table: 22 cases, 3 rounds, 16 P / 6 F every round.Slide bảng Lab 3: 22 ca, 3 round, mỗi round 16 P / 6 F.\n2. A slide with JaCoCo coverage: lines 99.3%, branches 93.5%; the 8 missed branches are in UserDAO.Slide độ phủ JaCoCo: dòng 99,3%, nhánh 93,5%; 8 nhánh thiếu nằm ở UserDAO.\n3. A slide showing AuthFilter.java line 45 and the failing test.Slide chiếu AuthFilter.java dòng 45 và ca test fail.\n4. A slide comparing three test levels (unit / integration / system) for module A.Slide so sánh ba cấp test (unit / integration / system) cho module A.\n5. A slide listing lessons learned.Slide bài học rút ra.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Talk 3 — Slide headlines that state the conclusion — answer key\n\n1. A slide with the Lab 3 table: 22 cases, 3 rounds, 16 P / 6 F every round.Slide bảng Lab 3: 22 ca, 3 round, mỗi round 16 P / 6 F.\n   Answer: d) Integration: 16/22 pass in all 3 rounds — the 6 fails are real defects, not flaky tests\n   States the number AND what it means (stable across rounds ⇒ not flaky).VI: Nói con số VÀ ý nghĩa (ổn định qua các round ⇒ không chập chờn).\n\n2. A slide with JaCoCo coverage: lines 99.3%, branches 93.5%; the 8 missed branches are in UserDAO.Slide độ phủ JaCoCo: dòng 99,3%, nhánh 93,5%; 8 nhánh thiếu nằm ở UserDAO.\n   Answer: b) Coverage is high: 99.3% lines, 93.5% branches — the 8 missed branches cannot be reached\n   Answers the question the teacher will ask (“why not 100%?”) before it is asked.VI: Trả lời trước câu cô sẽ hỏi (\"sao không 100%?\").\n\n3. A slide showing AuthFilter.java line 45 and the failing test.Slide chiếu AuthFilter.java dòng 45 và ca test fail.\n   Answer: d) A guest opening /dashboard gets HTTP 500: AuthFilter calls getRole() on a null account (SS-19)\n   Who is hurt, what they see, the cause and the ticket — in one line.VI: Ai bị ảnh hưởng, thấy gì, nguyên nhân và mã lỗi — trong một dòng.\n\n4. A slide comparing three test levels (unit / integration / system) for module A.Slide so sánh ba cấp test (unit / integration / system) cho module A.\n   Answer: a) One bug, three levels: SS-19 shows up as a unit fail, IT10 and the RL02 screenshot\n   Turns a textbook comparison into YOUR evidence chain.VI: Biến một phép so sánh sách vở thành chuỗi bằng chứng của BẠN.\n\n5. A slide listing lessons learned.Slide bài học rút ra.\n   Answer: a) Validate on the server: IT05 bypassed the JavaScript-only password rule with one direct POST\n   A lesson tied to your own evidence is believable. Check before you say it: the claim must match your table.VI: Bài học gắn với số của chính mình mới đáng tin. Kiểm trước khi nói: câu phải khớp bảng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: d · b · d · a · a.</p><p>Tip for tonight: read only your slide headlines aloud, in order. If that alone tells the story, the deck works.</p>",
+      "solutionExplanationHtmlVi": "<p>Đáp án: d · b · d · a · a.</p><p>Mẹo tối nay: đọc to chỉ các tiêu đề slide theo thứ tự. Nếu chỉ vậy đã kể đủ câu chuyện thì bộ slide ổn.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>A slide with the Lab 3 table: 22 cases, 3 rounds, 16 P / 6 F every round.</p><p style=\"opacity:.75;font-size:.92em\"><i>Slide bảng Lab 3: 22 ca, 3 round, mỗi round 16 P / 6 F.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Test results"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Results of the integration testing of module A of SportShop in Lab 3"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Round 1, Round 2, Round 3"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Integration: 16/22 pass in all 3 rounds — the 6 fails are real defects, not flaky tests"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>States the number AND what it means (stable across rounds ⇒ not flaky).</p><p><i>VI: Nói con số VÀ ý nghĩa (ổn định qua các round ⇒ không chập chờn).</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>A slide with JaCoCo coverage: lines 99.3%, branches 93.5%; the 8 missed branches are in UserDAO.</p><p style=\"opacity:.75;font-size:.92em\"><i>Slide độ phủ JaCoCo: dòng 99,3%, nhánh 93,5%; 8 nhánh thiếu nằm ở UserDAO.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "JaCoCo report"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Coverage is high: 99.3% lines, 93.5% branches — the 8 missed branches cannot be reached"
+              },
+              {
+                "ma": "c",
+                "noiDung": "We tried our best on coverage"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Coverage"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Answers the question the teacher will ask (“why not 100%?”) before it is asked.</p><p><i>VI: Trả lời trước câu cô sẽ hỏi (\"sao không 100%?\").</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>A slide showing AuthFilter.java line 45 and the failing test.</p><p style=\"opacity:.75;font-size:.92em\"><i>Slide chiếu AuthFilter.java dòng 45 và ca test fail.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Code"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Bug"
+              },
+              {
+                "ma": "c",
+                "noiDung": "AuthFilter"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A guest opening /dashboard gets HTTP 500: AuthFilter calls getRole() on a null account (SS-19)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Who is hurt, what they see, the cause and the ticket — in one line.</p><p><i>VI: Ai bị ảnh hưởng, thấy gì, nguyên nhân và mã lỗi — trong một dòng.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>A slide comparing three test levels (unit / integration / system) for module A.</p><p style=\"opacity:.75;font-size:.92em\"><i>Slide so sánh ba cấp test (unit / integration / system) cho module A.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "One bug, three levels: SS-19 shows up as a unit fail, IT10 and the RL02 screenshot"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Testing levels in ISTQB"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Unit vs Integration vs System"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Three levels"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Turns a textbook comparison into YOUR evidence chain.</p><p><i>VI: Biến một phép so sánh sách vở thành chuỗi bằng chứng của BẠN.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>A slide listing lessons learned.</p><p style=\"opacity:.75;font-size:.92em\"><i>Slide bài học rút ra.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Validate on the server: IT05 bypassed the JavaScript-only password rule with one direct POST"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Thank you"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Conclusion"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Lessons learned"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>A lesson tied to your own evidence is believable. Check before you say it: the claim must match your table.</p><p><i>VI: Bài học gắn với số của chính mình mới đáng tin. Kiểm trước khi nói: câu phải khớp bảng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng tên chủ đề làm tiêu đề (\"Results\", \"Coverage\")."
+        },
+        {
+          "loi": "Tiêu đề dài hai dòng, chép lại cả nội dung slide."
+        },
+        {
+          "loi": "Tiêu đề khẳng định điều bảng không chứng minh được."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "assertion headline (action title)",
+          "vi": "tiêu đề slide nói KẾT LUẬN, không chỉ nói chủ đề"
+        },
+        {
+          "en": "evidence",
+          "vi": "bằng chứng: log, ảnh chụp, dòng trong báo cáo, dòng mã"
+        }
+      ]
+    },
+    {
+      "title": "Talk 4 — Close strongly and handle the clock",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "closing",
+        "time management"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "ky-nang",
+        "ssg105"
+      ],
+      "problemHtml": "<p>The last 15 seconds are what people remember, and the clock is what teachers grade without saying so. A strong close repeats the one idea (the takeaway) and opens the floor. When time runs short you cut <b>detail</b>, never the results or the close. Choose the best move in each situation.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>15 giây cuối là thứ người nghe nhớ, còn đồng hồ là thứ thầy cô chấm mà không nói ra. Kết mạnh là nhắc lại một ý (điều mang về) rồi mời hỏi. Khi thiếu giờ thì cắt <b>chi tiết</b>, không bao giờ cắt kết quả hay câu chốt. Chọn cách làm tốt nhất cho mỗi tình huống.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Thiếu giờ ⇒ cắt chi tiết, giữ kết quả + câu chốt.",
+        "Câu chốt = một câu người nghe có thể nhắc lại."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Talk 4 — Close strongly and handle the clock\n\nAnswer in the answer panel (no code needed).\n\n1. Which closing line is best?Câu kết nào tốt nhất?\n2. You are at 2:30 of a 3:00 slot and still on the method slide. What do you do?Đang ở 2:30 trên 3:00 mà vẫn ở slide phương pháp. Làm gì?\n3. How do you make sure a 3-minute talk really fits in 3 minutes?Làm sao chắc bài nói 3 phút vừa đúng 3 phút?\n4. In a team talk, the speaker before you runs 1 minute over. Your part is 2 minutes.Trong bài nhóm, người trước bạn lố 1 phút. Phần bạn có 2 phút.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Talk 4 — Close strongly and handle the clock — answer key\n\n1. Which closing line is best?Câu kết nào tốt nhất?\n   Answer: d) “So: every fail on our sheet is a real defect with a ticket, and SS-28 must be fixed first. Questions?”\n   Takeaway + priority + invitation. “Thank you” is fine AFTER the takeaway, not instead of it.VI: Điều mang về + ưu tiên + mời hỏi. \"Cảm ơn\" được, nhưng SAU câu chốt, không thay nó.\n\n2. You are at 2:30 of a 3:00 slot and still on the method slide. What do you do?Đang ở 2:30 trên 3:00 mà vẫn ở slide phương pháp. Làm gì?\n   Answer: b) Skip to the results slide, give the two numbers and the takeaway in 30 seconds.\n   Results and close are what is graded; method details can come back in Q&A.VI: Kết quả và câu chốt là thứ được chấm; chi tiết phương pháp có thể quay lại khi hỏi đáp.\n\n3. How do you make sure a 3-minute talk really fits in 3 minutes?Làm sao chắc bài nói 3 phút vừa đúng 3 phút?\n   Answer: b) Write the script, keep it ≤ 390 words (≈ 130 words per minute), then rehearse aloud with a timer and a recording.\n   Silent rehearsal is ~30% faster than speaking aloud. Only an out-loud, timed run is real data.VI: Tập thầm nhanh hơn nói to ~30%. Chỉ lần nói to có bấm giờ mới là số liệu thật.\n\n4. In a team talk, the speaker before you runs 1 minute over. Your part is 2 minutes.Trong bài nhóm, người trước bạn lố 1 phút. Phần bạn có 2 phút.\n   Answer: c) Deliver your 1-minute version: headline, the key number, your one bug — prepared in advance.\n   Prepare a short version of your part before the day; the slot belongs to the team, not to one speaker.VI: Chuẩn bị sẵn bản rút gọn trước buổi; khung giờ là của cả nhóm, không của một người.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: d · b · b · c.</p>",
+      "solutionExplanationHtmlVi": "<p>Đáp án: d · b · b · c.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which closing line is best?</p><p style=\"opacity:.75;font-size:.92em\"><i>Câu kết nào tốt nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "“That’s all, thank you.”"
+              },
+              {
+                "ma": "b",
+                "noiDung": "“I think that’s it… any questions? No? OK.”"
+              },
+              {
+                "ma": "c",
+                "noiDung": "“I hope you enjoyed my presentation.”"
+              },
+              {
+                "ma": "d",
+                "noiDung": "“So: every fail on our sheet is a real defect with a ticket, and SS-28 must be fixed first. Questions?”"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Takeaway + priority + invitation. “Thank you” is fine AFTER the takeaway, not instead of it.</p><p><i>VI: Điều mang về + ưu tiên + mời hỏi. \"Cảm ơn\" được, nhưng SAU câu chốt, không thay nó.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>You are at 2:30 of a 3:00 slot and still on the method slide. What do you do?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đang ở 2:30 trên 3:00 mà vẫn ở slide phương pháp. Làm gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Continue normally and go over time — content matters more."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Skip to the results slide, give the two numbers and the takeaway in 30 seconds."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Speak faster to fit everything."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Stop and say you ran out of time."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Results and close are what is graded; method details can come back in Q&A.</p><p><i>VI: Kết quả và câu chốt là thứ được chấm; chi tiết phương pháp có thể quay lại khi hỏi đáp.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>How do you make sure a 3-minute talk really fits in 3 minutes?</p><p style=\"opacity:.75;font-size:.92em\"><i>Làm sao chắc bài nói 3 phút vừa đúng 3 phút?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Rehearse silently in your head."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Write the script, keep it ≤ 390 words (≈ 130 words per minute), then rehearse aloud with a timer and a recording."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Count slides: 1 minute per slide."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Improvise — scripts sound robotic."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Silent rehearsal is ~30% faster than speaking aloud. Only an out-loud, timed run is real data.</p><p><i>VI: Tập thầm nhanh hơn nói to ~30%. Chỉ lần nói to có bấm giờ mới là số liệu thật.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>In a team talk, the speaker before you runs 1 minute over. Your part is 2 minutes.</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong bài nhóm, người trước bạn lố 1 phút. Phần bạn có 2 phút.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Give your full 2 minutes anyway."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Complain to the teammate on stage."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Deliver your 1-minute version: headline, the key number, your one bug — prepared in advance."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Skip your part."
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Prepare a short version of your part before the day; the slot belongs to the team, not to one speaker.</p><p><i>VI: Chuẩn bị sẵn bản rút gọn trước buổi; khung giờ là của cả nhóm, không của một người.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Kết bằng \"Em xin hết ạ\" và im lặng."
+        },
+        {
+          "loi": "Nói nhanh hơn để nhồi cho đủ — người nghe bỏ cuộc trước."
+        },
+        {
+          "loi": "Không có bản rút gọn cho phần của mình trong bài nhóm."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "takeaway",
+          "vi": "điều người nghe mang về — một câu chốt"
+        },
+        {
+          "en": "time-box",
+          "vi": "khung giờ cố định cho từng phần, hết giờ là chuyển"
+        },
+        {
+          "en": "words per minute (wpm)",
+          "vi": "số từ mỗi phút — thuyết trình rõ ràng ≈ 130"
+        }
+      ]
+    },
+    {
+      "title": "Talk 5 — Signposts: which block does each sentence open?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "signposting"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "ky-nang",
+        "ssg105"
+      ],
+      "problemHtml": "<p>Signposts are the short sentences that tell the listener where they are in the talk. Without them, a listener who drifted for five seconds is lost for the rest. Match each sentence (from a real rehearsal of the SportShop talk) to the block it opens.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu chuyển ý là những câu ngắn cho người nghe biết đang ở đâu trong bài. Thiếu chúng, người nghe lơ đãng 5 giây là lạc tới hết bài. Ghép mỗi câu (từ một lần tập bài SportShop) với khối mà nó mở ra.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Câu hỏi \"Vậy các con số nói gì?\" mở phần kết quả.",
+        "\"Bằng chứng\" của một lỗi cụ thể vẫn thuộc khối lỗi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Talk 5 — Signposts: which block does each sentence open?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Talk 5 — Signposts: which block does each sentence open? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Context\n   - r1.k: What I did\n   - r2.k: Results\n   - r3.k: The bug\n   - r4.k: Lessons\n   - r5.k: Close\n   - r6.k: The bug\n   - r7.k: Results\n   A signpost names the next block or asks the question the next block answers.VI: Câu chuyển ý gọi tên khối tiếp theo hoặc đặt câu hỏi mà khối đó trả lời.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Context · What I did · Results · The bug · Lessons · Close · The bug · Results.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Block",
+                "luaChon": [
+                  "Context",
+                  "What I did",
+                  "Results",
+                  "The bug",
+                  "Lessons",
+                  "Close"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "“First, where this happens: SportShop’s login and account module, which I own.” — <i>“Trước hết, chuyện xảy ra ở đâu: module đăng nhập và tài khoản của SportShop, phần em phụ trách.”</i>"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "“To find these problems I tested at two levels.” — <i>“Để tìm các vấn đề này em kiểm ở hai cấp.”</i>"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "“So what did the numbers say?” — <i>“Vậy các con số nói gì?”</i>"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "“Let me show you the one fail that worried me most.” — <i>“Em xin chỉ ca fail khiến em lo nhất.”</i>"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "“If I did this lab again, I would do two things differently.” — <i>“Nếu làm lại lab này, em sẽ làm khác hai điều.”</i>"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "“If you remember one thing from this talk…” — <i>“Nếu chỉ nhớ một điều từ bài này…”</i>"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "“Here is the evidence: the database row before and after IT17.” — <i>“Đây là bằng chứng: dòng dữ liệu trước và sau IT17.”</i>"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "s": "“Across three rounds the picture did not change.” — <i>“Qua ba round, bức tranh không đổi.”</i>"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Context",
+              "r1.k": "What I did",
+              "r2.k": "Results",
+              "r3.k": "The bug",
+              "r4.k": "Lessons",
+              "r5.k": "Close",
+              "r6.k": "The bug",
+              "r7.k": "Results"
+            },
+            "giaiThich": "<p>A signpost names the next block or asks the question the next block answers.</p><p><i>VI: Câu chuyển ý gọi tên khối tiếp theo hoặc đặt câu hỏi mà khối đó trả lời.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng mãi một câu chuyển \"Tiếp theo là…\" — người nghe không biết phần sau quan trọng ra sao."
+        },
+        {
+          "loi": "Nhầm câu chuyển sang bài học với câu chốt cuối."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "signposting",
+          "vi": "câu chuyển ý báo cho người nghe đang ở đâu (\"Phần tiếp: kết quả…\")"
+        }
+      ]
+    }
+  ]
+}

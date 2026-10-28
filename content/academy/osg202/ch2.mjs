@@ -201,7 +201,13 @@ $ ps -o pid,ppid,comm --forest<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;23 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 ps<br>
 $ kill %1 %2</div>
 <p>PID 1 is the first process (inside a container it is the shell that started the session; on a full Linux it is <code>systemd</code>, case 1). Typing <code>sleep 30 &amp;</code> made the shell fork + exec (case 3). The <code>bash -c</code> process itself called fork twice: its two <code>sleep</code> children appear indented under it in the <code>--forest</code> view, with PPID = its PID (case 2). Every process except PID 1 has a parent — that is the <strong>process tree</strong> of lesson 1.A, slide 22.</p>
-<p class="pitfall">⚠️ FE: "In UNIX, which POSIX system call creates a new process?" — <strong>fork</strong> (FE6#5, FE7#7, FE9#10). <code>exec</code> does NOT create a process; it replaces the program of an existing one. "What does the OS do first to execute a new process?" — creates its <strong>PCB</strong> (process table entry) (FE2#8, FE5#14).</p>`,
+<p class="pitfall">⚠️ FE: "In UNIX, which POSIX system call creates a new process?" — <strong>fork</strong> (FE6#5, FE7#7, FE9#10). <code>exec</code> does NOT create a process; it replaces the program of an existing one. "What does the OS do first to execute a new process?" — creates its <strong>PCB</strong> (process table entry) (FE2#8, FE5#14).</p>
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>Slide 5 in motion: a shell creates a process with fork(), the child replaces itself with exec(), the parent waits.</p>
+<div class="os-lab os-lab-sim-process os-lab-p-shell os-lab-t-process-shell"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> fork, exec, wait — step by step <a href="/os-lab?sim=process&amp;preset=shell&amp;lang=en&amp;tour=process-shell" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Step until the child exists: note that it starts as a copy of the shell (same code, new PID).</li><li>Step through exec: what changes in the child, and what stays (PID, open files)?</li><li>Find the moment the parent is blocked in wait() and the state it is in.</li></ol></div>
+</div>`,
         `<p class="y-chinh">🎯 Bốn sự kiện chính tạo ra tiến trình: (1) <strong>khởi động hệ thống</strong>, (2) một tiến trình đang chạy thực thi <strong>lời gọi hệ thống tạo tiến trình</strong>, (3) <strong>người dùng yêu cầu</strong> tạo tiến trình mới, (4) <strong>bắt đầu một job lô (batch job)</strong>.</p>
 <p>(1) Khi HĐH khởi động, nó chạy một số tiến trình: loại tiền cảnh giao tiếp với người dùng và loại hậu cảnh gọi là <strong>daemon</strong> (máy chủ web, thư điện tử, hàng đợi in). (2) Một tiến trình đang chạy có thể sinh tiến trình phụ — một chương trình tải xuống mở vài tiến trình để tải song song từng phần. (3) Gõ một lệnh hay nhấp đúp một biểu tượng khiến shell hay giao diện đồ hoạ tạo tiến trình. (4) Trên máy lớn, khi đủ tài nguyên HĐH lấy job lô kế tiếp trong hàng đợi. Về kỹ thuật cả bốn là một: <strong>một tiến trình đã có</strong> thực thi lời gọi hệ thống tạo tiến trình. Trong UNIX đó là <code>fork</code> (một bản sao y hệt của bên gọi), thường theo sau là <code>execve</code> để nạp chương trình mới; trong Windows <code>CreateProcess</code> làm cả hai trong một lời gọi (bài 1.B, slide 37).</p>
 <p>➕ Ai tạo ra ai, trên Linux của môn học:</p>
@@ -225,7 +231,13 @@ $ ps -o pid,ppid,comm --forest<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;23 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 ps<br>
 $ kill %1 %2</div>
 <p>PID 1 là tiến trình đầu tiên (trong container đó là shell khởi động phiên; trên Linux đầy đủ là <code>systemd</code>, trường hợp 1). Gõ <code>sleep 30 &amp;</code> làm shell fork + exec (trường hợp 3). Bản thân tiến trình <code>bash -c</code> gọi fork hai lần: hai con <code>sleep</code> của nó hiện thụt vào dưới nó trong chế độ xem <code>--forest</code>, với PPID = PID của nó (trường hợp 2). Mọi tiến trình trừ PID 1 đều có cha — đó là <strong>cây tiến trình</strong> của bài 1.A, slide 22.</p>
-<p class="pitfall">⚠️ FE: "Trong UNIX, lời gọi hệ thống POSIX nào tạo tiến trình mới?" — <strong>fork</strong> (FE6#5, FE7#7, FE9#10). <code>exec</code> KHÔNG tạo tiến trình; nó thay chương trình của một tiến trình đã có. "Để chạy một tiến trình mới, HĐH làm gì trước?" — tạo <strong>PCB</strong> (mục bảng tiến trình) cho nó (FE2#8, FE5#14).</p>`],
+<p class="pitfall">⚠️ FE: "Trong UNIX, lời gọi hệ thống POSIX nào tạo tiến trình mới?" — <strong>fork</strong> (FE6#5, FE7#7, FE9#10). <code>exec</code> KHÔNG tạo tiến trình; nó thay chương trình của một tiến trình đã có. "Để chạy một tiến trình mới, HĐH làm gì trước?" — tạo <strong>PCB</strong> (mục bảng tiến trình) cho nó (FE2#8, FE5#14).</p>
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Slide 5 chạy thành hình: shell tạo tiến trình bằng fork(), con tự thay mình bằng exec(), cha chờ.</p>
+<div class="os-lab os-lab-sim-process os-lab-p-shell os-lab-t-process-shell"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> fork, exec, wait — từng bước <a href="/os-lab?sim=process&amp;preset=shell&amp;lang=vi&amp;tour=process-shell" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Bấm tới lúc tiến trình con xuất hiện: để ý nó bắt đầu là bản sao của shell (cùng mã, PID mới).</li><li>Bấm qua exec: cái gì trong tiến trình con đổi, cái gì giữ nguyên (PID, tệp đang mở)?</li><li>Tìm lúc cha bị chặn trong wait() và trạng thái của nó khi đó.</li></ol></div>
+</div>`],
       [6, 'Process Termination',
         `<p class="y-chinh">🎯 Four typical reasons a process ends: (1) <strong>normal exit</strong> (voluntary), (2) <strong>error exit</strong> (voluntary), (3) <strong>fatal error</strong> (involuntary), (4) <strong>killed by another process</strong> (involuntary).</p>
 <p>(1) The work is done: a compiler finishes and calls <code>exit</code> (UNIX) / <code>ExitProcess</code> (Windows). (2) The program itself finds a problem — <code>cc foo.c</code> when <code>foo.c</code> does not exist — and exits with a non-zero status. (3) A bug the CPU catches: an illegal instruction, a reference to nonexistent memory, a division by zero; the hardware traps and the kernel kills the process (unless it handles the signal itself). (4) Another process calls <code>kill</code> (UNIX) / <code>TerminateProcess</code> (Windows) — it needs permission to do so.</p>
@@ -2000,7 +2012,13 @@ final in &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: 1871314<br>
 files lost &nbsp;&nbsp;&nbsp;&nbsp;: 128686 (overwritten in the directory)</div>
 <p class="chu-thich">🎲 This is ONE real run — run it again and the numbers (PIDs, timings, race results…) may differ; the property stated in the lesson always holds.</p>
 <p>Hundreds of thousands of files lost in a fraction of a second, and a different number on each run — that is what makes races dangerous: the program passes a test and fails in production. (The ⭐ "Start here" lesson showed the same with a counter, <code>dem-hai-luong.c</code>.)</p>
-<p class="pitfall">⚠️ FE9#47: "Which best describes a race condition?" — <strong>multiple processes access and manipulate shared data concurrently</strong> (and the outcome depends on the order). An infinite loop, a process waiting forever, or running out of memory are other problems.</p>`,
+<p class="pitfall">⚠️ FE9#47: "Which best describes a race condition?" — <strong>multiple processes access and manipulate shared data concurrently</strong> (and the outcome depends on the order). An infinite loop, a process waiting forever, or running out of memory are other problems.</p>
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>The race of slide 28 with two threads and one shared counter: each <code>counter++</code> is three machine steps.</p>
+<div class="os-lab os-lab-sim-race os-lab-p-none os-lab-t-race-lost-update"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> counter++ as load, add, store <a href="/os-lab?sim=race&amp;preset=none&amp;lang=en&amp;tour=race-lost-update" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Step both threads so that each one loads the same value before either stores.</li><li>Count how many increments were lost and explain it with the three steps.</li><li>Switch the mode to mutex and check that the same interleaving is now impossible.</li></ol></div>
+</div>`,
         `<p class="y-chinh">🎯 Hình 2-21: một <strong>thư mục spooler</strong> (hàng đợi in) với các ô 0, 1, 2, … chứa tệp cần in; hai biến dùng chung <code>out</code> = 4 (tệp kế tiếp sẽ in) và <code>in</code> = 7 (ô trống kế tiếp). Tiến trình A và B gần như cùng lúc quyết định in một tệp — cả hai đều đọc <code>in</code> = 7.</p>
 <p>Câu chuyện của sách: A đọc <code>in</code> (7) vào biến cục bộ <code>next_free_slot</code>; một ngắt đồng hồ tới và CPU chuyển sang B. B cũng đọc <code>in</code> (vẫn là 7), ghi tên tệp của mình vào ô 7, đặt <code>in</code> = 8, rồi đi tiếp. Sau đó A chạy lại đúng từ chỗ đã dừng: nó ghi tên tệp của mình vào ô 7 — xoá mất tệp của B — và đặt <code>in</code> = 8. Thư mục trông vẫn nhất quán, daemon máy in không thấy gì sai, và tệp của B không bao giờ được in. <strong>Tình trạng tranh chấp (race condition)</strong> chính là thế này: hai hay nhiều tiến trình đọc hoặc ghi dữ liệu dùng chung và kết quả cuối cùng phụ thuộc vào việc ai chạy đúng lúc nào. Bộ mô phỏng thực thi ba câu lệnh của mỗi tiến trình theo lịch chạy xấu:</p>
 <div class="anh-slide uml sim"><img src="https://media.cuongthai.com/images/academy/OSG202/hinh/0936cd38fbebb507cefb3ad7a193f4645d06ce23.svg" alt="Hình 2-21 từng bước: A bị chuyển ra giữa lúc đọc &quot;in&quot; và lúc cập nhật nó" loading="lazy" /><p class="chu-thich">🧮 Hình 2-21 từng bước: A bị chuyển ra giữa lúc đọc "in" và lúc cập nhật nó</p></div>
@@ -2116,7 +2134,13 @@ final in &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: 1871314<br>
 files lost &nbsp;&nbsp;&nbsp;&nbsp;: 128686 (overwritten in the directory)</div>
 <p class="chu-thich">🎲 Đây là MỘT lần chạy thật — chạy lại, các con số (PID, thời gian, kết quả tranh chấp…) có thể khác; tính chất ghi trong bài thì luôn đúng.</p>
 <p>Hàng trăm nghìn tệp mất trong chưa tới một giây, và mỗi lần chạy ra một số khác — đó là điều làm tranh chấp nguy hiểm: chương trình qua được phép thử rồi hỏng trên môi trường thật. (Bài ⭐ "Bắt đầu tại đây" đã cho thấy điều tương tự với một bộ đếm, <code>dem-hai-luong.c</code>.)</p>
-<p class="pitfall">⚠️ FE9#47: "Mô tả nào đúng nhất về race condition?" — <strong>nhiều tiến trình cùng truy cập và thao tác trên dữ liệu dùng chung một cách đồng thời</strong> (và kết quả phụ thuộc thứ tự). Vòng lặp vô hạn, tiến trình chờ mãi, hay hết bộ nhớ là những vấn đề khác.</p>`],
+<p class="pitfall">⚠️ FE9#47: "Mô tả nào đúng nhất về race condition?" — <strong>nhiều tiến trình cùng truy cập và thao tác trên dữ liệu dùng chung một cách đồng thời</strong> (và kết quả phụ thuộc thứ tự). Vòng lặp vô hạn, tiến trình chờ mãi, hay hết bộ nhớ là những vấn đề khác.</p>
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Tranh chấp của slide 28 với hai luồng và một bộ đếm chung: mỗi <code>counter++</code> là ba bước máy.</p>
+<div class="os-lab os-lab-sim-race os-lab-p-none os-lab-t-race-lost-update"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> counter++ là nạp, cộng, ghi <a href="/os-lab?sim=race&amp;preset=none&amp;lang=vi&amp;tour=race-lost-update" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Bấm cho hai luồng cùng nạp một giá trị trước khi luồng nào kịp ghi.</li><li>Đếm số lần tăng bị mất và giải thích bằng ba bước đó.</li><li>Đổi chế độ sang mutex và kiểm rằng cách xen kẽ đó không còn xảy ra được.</li></ol></div>
+</div>`],
       [29, 'Critical Regions (1)',
         `<p class="y-chinh">🎯 Four requirements for a good solution to race conditions: (1) no two processes may be simultaneously inside their critical regions; (2) no assumptions may be made about speeds or the number of CPUs; (3) no process running outside its critical region may block other processes; (4) no process should have to wait forever to enter its critical region.</p>
 <p>The part of a program that accesses shared memory is its <strong>critical region</strong> (or critical section). Races disappear if we arrange that no two processes are ever in their critical regions at the same time — <strong>mutual exclusion</strong>. But mutual exclusion alone is easy to get in a useless way (never let anyone in!), so conditions 2–4 rule out cheating: the solution must work on any hardware and any timing (2), a process that is not even interested must not hold others up (3, often called <strong>progress</strong>), and nobody may starve (4, <strong>bounded waiting</strong>).</p>
@@ -3370,7 +3394,13 @@ consumer: wants an item<br>
 consumer: there are items, now wants the mutex<br>
 watchdog after 2 s: mutex = 0, empty = 0, full = 1 — both threads blocked: DEADLOCK</div>
 <p>Deadlock, measured: <code>mutex</code> = 0 (held by the sleeping producer), <code>empty</code> = 0, both threads blocked. The rule: <strong>acquire the counting semaphore first, the mutex last</strong>; and keep the mutex only around the buffer operations. (Order of the two <code>up</code>s does not matter.)</p>
-<p class="pitfall">⚠️ "Swap down(&amp;empty) and down(&amp;mutex) in the producer — what happens?" → <strong>deadlock</strong> when the buffer is full (similarly, swapping down(&amp;full) and down(&amp;mutex) in the consumer deadlocks when the buffer is empty). This is Chapter 6's "hold and wait" in four lines.</p>`,
+<p class="pitfall">⚠️ "Swap down(&amp;empty) and down(&amp;mutex) in the producer — what happens?" → <strong>deadlock</strong> when the buffer is full (similarly, swapping down(&amp;full) and down(&amp;mutex) in the consumer deadlocks when the buffer is empty). This is Chapter 6's "hold and wait" in four lines.</p>
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>down and up on a counting semaphore: down takes a permit or blocks, up returns one and wakes a sleeper.</p>
+<div class="os-lab os-lab-sim-sync os-lab-p-semaphore os-lab-t-sync-start"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> a semaphore as a counter of permits <a href="/os-lab?sim=sync&amp;preset=semaphore&amp;lang=en&amp;tour=sync-start" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Run until the counter is 0 and the next down blocks: who is in the waiting list?</li><li>Do one up and watch exactly one sleeper wake.</li><li>Say in one sentence why down and up must be atomic.</li></ol></div>
+</div>`,
         `<p class="y-chinh">🎯 Hình 2-28 (bên tiêu thụ): <code>down(&amp;full); down(&amp;mutex); item = remove_item(); up(&amp;mutex); up(&amp;empty); consume_item(item);</code> — ảnh gương của bên sản xuất.</p>
 <p>Bên tiêu thụ chờ tới khi có ít nhất một ô đầy, lấy mutex, lấy một món ra, nhả mutex, báo có thêm một ô trống, và chỉ sau đó mới dùng món hàng — ngoài vùng găng, để bộ đệm bị giữ trong thời gian ngắn nhất. Mỗi semaphore được một bên "up" và bên kia "down": <code>full</code> đi từ sản xuất sang tiêu thụ, <code>empty</code> đi ngược lại từ tiêu thụ về sản xuất. Trong bản của sách cả ba được khởi tạo trước khi tiến trình nào chạy, và down/up là các lời gọi hệ thống mà HĐH thực hiện một cách nguyên tử.</p>
 <p>➕ Hình 2-28 với semaphore POSIX thật (<code>sem_wait</code> = down, <code>sem_post</code> = up), bộ đệm 4 ô và 20 món:</p>
@@ -3528,7 +3558,13 @@ consumer: wants an item<br>
 consumer: there are items, now wants the mutex<br>
 watchdog after 2 s: mutex = 0, empty = 0, full = 1 — both threads blocked: DEADLOCK</div>
 <p>Bế tắc, đo thật: <code>mutex</code> = 0 (bên sản xuất đang ngủ giữ nó), <code>empty</code> = 0, cả hai luồng bị chặn. Quy tắc: <strong>lấy semaphore đếm trước, lấy mutex sau cùng</strong>; và chỉ giữ mutex quanh các thao tác trên bộ đệm. (Thứ tự hai lệnh <code>up</code> thì không quan trọng.)</p>
-<p class="pitfall">⚠️ "Đảo down(&amp;empty) và down(&amp;mutex) ở bên sản xuất — chuyện gì xảy ra?" → <strong>bế tắc (deadlock)</strong> khi bộ đệm đầy (tương tự, đảo down(&amp;full) và down(&amp;mutex) ở bên tiêu thụ thì bế tắc khi bộ đệm rỗng). Đây là điều kiện "giữ và chờ" của Chương 6 gói trong bốn dòng.</p>`],
+<p class="pitfall">⚠️ "Đảo down(&amp;empty) và down(&amp;mutex) ở bên sản xuất — chuyện gì xảy ra?" → <strong>bế tắc (deadlock)</strong> khi bộ đệm đầy (tương tự, đảo down(&amp;full) và down(&amp;mutex) ở bên tiêu thụ thì bế tắc khi bộ đệm rỗng). Đây là điều kiện "giữ và chờ" của Chương 6 gói trong bốn dòng.</p>
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>down và up trên một semaphore đếm: down lấy một giấy phép hoặc bị chặn, up trả lại một cái và đánh thức một tiến trình đang ngủ.</p>
+<div class="os-lab os-lab-sim-sync os-lab-p-semaphore os-lab-t-sync-start"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> semaphore là bộ đếm giấy phép <a href="/os-lab?sim=sync&amp;preset=semaphore&amp;lang=vi&amp;tour=sync-start" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Chạy tới khi bộ đếm về 0 và lần down kế tiếp bị chặn: ai đang nằm trong danh sách chờ?</li><li>Làm một lần up và xem đúng một tiến trình đang ngủ được đánh thức.</li><li>Nói trong một câu vì sao down và up phải là nguyên tử.</li></ol></div>
+</div>`],
       [39, 'Mutexes',
         `<p class="y-chinh">🎯 Figure 2-29: implementation of <code>mutex_lock</code> and <code>mutex_unlock</code> for user-level threads: <code>mutex_lock: TSL REGISTER,MUTEX | CMP REGISTER,#0 | JZE ok | CALL thread_yield | JMP mutex_lock | ok: RET</code>; <code>mutex_unlock: MOVE MUTEX,#0 | RET</code>.</p>
 <p>A <strong>mutex</strong> is a simplified semaphore with two states, unlocked (0) and locked: it only does mutual exclusion, no counting. Compare it with <code>enter_region</code> of Figure 2-25: the only difference is what happens when the lock is taken. <code>enter_region</code> loops (busy waiting); <code>mutex_lock</code> calls <code>thread_yield</code> to give the CPU to another thread, then tries again. With user-level threads there is no clock to stop a spinning thread, so a thread that spins would spin <em>forever</em> — the lock holder never gets to run. Yielding solves it, and because <code>thread_yield</code> is just a call into the user-space run-time system, the whole lock needs no kernel call.</p>
@@ -4650,7 +4686,13 @@ chrt: failed to set pid 0's policy: Operation not permitted</div>
   fe25: [{ ten: 'A', den: 0, chay: 5 }, { ten: 'B', den: 0, chay: 2 }, { ten: 'C', den: 0, chay: 6 }, { ten: 'D', den: 0, chay: 4 }],
 };</code></pre></details>
 <p>Average waiting 8.75 with FCFS, 6.5 with SRTN (this is also the textbook example of Silberschatz, whose published answer is 6.5). Note how in SRTN the long job C waits until everybody else is done: preemptive shortest-first can <strong>starve</strong> long jobs if short ones keep arriving.</p>
-<p class="pitfall">⚠️ FE5#15 / FE8#13 / FE9#13 / FE12#13: "A preemptive version of SJF is" — <strong>Shortest Remaining Time Next</strong>. FE6#13: "not a batch algorithm" — <strong>Round-Robin</strong>. FE9#9: "nonpreemptive, CPU in the order requested" — <strong>FCFS</strong>. FE24#50's answer key marks "Shortest Job First" as preemptive — wrong for the book's SJF, which is nonpreemptive; the correct pair is SRTN and Round Robin (as in FE23#18).</p>`,
+<p class="pitfall">⚠️ FE5#15 / FE8#13 / FE9#13 / FE12#13: "A preemptive version of SJF is" — <strong>Shortest Remaining Time Next</strong>. FE6#13: "not a batch algorithm" — <strong>Round-Robin</strong>. FE9#9: "nonpreemptive, CPU in the order requested" — <strong>FCFS</strong>. FE24#50's answer key marks "Shortest Job First" as preemptive — wrong for the book's SJF, which is nonpreemptive; the correct pair is SRTN and Round Robin (as in FE23#18).</p>
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>The batch algorithms of slides 59–60 (and RR, priority of 61–63) on the same jobs: switch the policy and watch the Gantt chart and the averages change.</p>
+<div class="os-lab os-lab-sim-scheduler os-lab-p-textbook os-lab-t-sched-policies"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> FCFS, SJF, SRTF, RR and priority on one job table <a href="/os-lab?sim=scheduler&amp;preset=textbook&amp;lang=en&amp;tour=sched-policies" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Run FCFS, then SJF: which job gains the most and why (the convoy effect)?</li><li>Run SRTF and find each moment a new arrival preempts the running job.</li><li>Write down the average waiting time of each policy and rank them.</li></ol></div>
+</div>`,
         `<p class="y-chinh">🎯 Ba thuật toán cho hệ lô: <strong>First-Come First-Served</strong> (FCFS — đến trước phục vụ trước), <strong>Shortest Job First</strong> (SJF — việc ngắn nhất trước), <strong>Shortest Remaining Time Next</strong> (SRTN — thời gian còn lại ngắn nhất kế tiếp).</p>
 <p><strong>FCFS</strong> (không chiếm quyền): tiến trình được CPU theo thứ tự yêu cầu, một hàng đợi sẵn sàng; job đang chạy chạy tới khi xong hoặc bị chặn. Dễ hiểu, dễ lập trình — và bị <strong>hiệu ứng đoàn xe (convoy effect)</strong>: job ngắn kẹt sau job dài. <strong>SJF</strong> (không chiếm quyền): khi CPU rảnh, chọn job sẵn sàng có thời gian chạy ngắn nhất — cần biết trước thời gian chạy (job lô thường có ước lượng). <strong>SRTN</strong> (còn gọi SRTF, SJF <strong>có chiếm quyền</strong>): luôn chạy job có thời gian <em>còn lại</em> ngắn nhất; khi một job mới tới với thời gian ngắn hơn phần còn lại của job đang chạy, job đang chạy bị tạm dừng.</p>
 <p>➕ Bộ bốn job của nhiều câu FE thật (A 0/8, B 1/4, C 2/9, D 3/5 dạng đến/chạy), trước là FCFS, sau là SRTN, do bộ mô phỏng tính (quy ước hoà của môn ghi trong <code>_thuat-toan/lap-lich.mjs</code>: hoà thì ai đến trước được trước, và SRTN chỉ chiếm quyền khi job mới tới ngắn hơn hẳn):</p>
@@ -4691,7 +4733,13 @@ chrt: failed to set pid 0's policy: Operation not permitted</div>
   fe25: [{ ten: 'A', den: 0, chay: 5 }, { ten: 'B', den: 0, chay: 2 }, { ten: 'C', den: 0, chay: 6 }, { ten: 'D', den: 0, chay: 4 }],
 };</code></pre></details>
 <p>Chờ trung bình 8,75 với FCFS, 6,5 với SRTN (đây cũng là ví dụ giáo khoa của Silberschatz, đáp án công bố là 6,5). Để ý trong SRTN job dài C phải chờ tới khi mọi người khác xong: ngắn-nhất-trước có chiếm quyền có thể <strong>bỏ đói (starve)</strong> job dài nếu job ngắn cứ tới liên tục.</p>
-<p class="pitfall">⚠️ FE5#15 / FE8#13 / FE9#13 / FE12#13: "Phiên bản chiếm quyền của SJF là" — <strong>Shortest Remaining Time Next</strong>. FE6#13: "không phải thuật toán hệ lô" — <strong>Round-Robin</strong>. FE9#9: "không chiếm quyền, CPU theo thứ tự yêu cầu" — <strong>FCFS</strong>. Đáp án của FE24#50 đánh dấu "Shortest Job First" là có chiếm quyền — sai với SJF của sách, vốn không chiếm quyền; cặp đúng là SRTN và Round Robin (như FE23#18).</p>`],
+<p class="pitfall">⚠️ FE5#15 / FE8#13 / FE9#13 / FE12#13: "Phiên bản chiếm quyền của SJF là" — <strong>Shortest Remaining Time Next</strong>. FE6#13: "không phải thuật toán hệ lô" — <strong>Round-Robin</strong>. FE9#9: "không chiếm quyền, CPU theo thứ tự yêu cầu" — <strong>FCFS</strong>. Đáp án của FE24#50 đánh dấu "Shortest Job First" là có chiếm quyền — sai với SJF của sách, vốn không chiếm quyền; cặp đúng là SRTN và Round Robin (như FE23#18).</p>
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Các thuật toán hệ lô của slide 59–60 (và RR, ưu tiên của 61–63) trên cùng các việc: đổi chính sách và xem biểu đồ Gantt cùng các số trung bình thay đổi.</p>
+<div class="os-lab os-lab-sim-scheduler os-lab-p-textbook os-lab-t-sched-policies"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> FCFS, SJF, SRTF, RR và ưu tiên trên một bảng việc <a href="/os-lab?sim=scheduler&amp;preset=textbook&amp;lang=vi&amp;tour=sched-policies" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Chạy FCFS rồi SJF: việc nào được lợi nhiều nhất và vì sao (hiệu ứng đoàn xe)?</li><li>Chạy SRTF và tìm từng thời điểm một tiến trình mới đến chiếm quyền tiến trình đang chạy.</li><li>Ghi thời gian chờ trung bình của từng chính sách rồi xếp hạng.</li></ol></div>
+</div>`],
       [60, 'Shortest Job First',
         `<p class="y-chinh">🎯 Figure 2-41: four jobs A (8), B (4), C (4), D (4), all available at time 0. (a) In the original order A, B, C, D; (b) in shortest-job-first order B, C, D, A.</p>
 <p>The book's arithmetic, done by the simulator. In order (a), the turnaround times are 8, 12, 16 and 20 minutes — average 14. In SJF order (b) they are 4, 8, 12 and 20 — average 11:</p>
@@ -4751,7 +4799,13 @@ chrt: failed to set pid 0's policy: Operation not permitted</div>
   fe9: [10, 1, 2, 4, 5].map((chay, i) =&gt; ({ ten: &#96;P&#36;{i + 1}&#96;, den: 0, chay })),
   fe25: [{ ten: 'A', den: 0, chay: 5 }, { ten: 'B', den: 0, chay: 2 }, { ten: 'C', den: 0, chay: 6 }, { ten: 'D', den: 0, chay: 4 }],
 };</code></pre></details>
-<p class="pitfall">⚠️ FE20#3 / FE21#42: "Which is correct about SJF?" — <strong>minimizes average waiting time</strong>; it does NOT avoid starvation. Turnaround vs waiting: in (b), waiting = turnaround − burst = 0, 4, 8, 12 (average 6). Read which one the question asks.</p>`,
+<p class="pitfall">⚠️ FE20#3 / FE21#42: "Which is correct about SJF?" — <strong>minimizes average waiting time</strong>; it does NOT avoid starvation. Turnaround vs waiting: in (b), waiting = turnaround − burst = 0, 4, 8, 12 (average 6). Read which one the question asks.</p>
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>Now do it the exam way: five batch jobs, you paint the chart and fill the table, the page grades every cell.</p>
+<div class="os-lab os-lab-sim-gantt-exam os-lab-p-s1 os-lab-t-gantt-exam-grade"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> paint the Gantt chart yourself, then press Check <a href="/os-lab?sim=gantt-exam&amp;preset=s1&amp;lang=en&amp;tour=gantt-exam-grade" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Pick a job, then tap or drag across the cells to paint FCFS; fill finish, turnaround and waiting.</li><li>Press Check my answer: a wrong cell is named by the rule you broke (FCFS order, waiting = turnaround − burst…).</li><li>Switch to 📖 Worked solution and replay the chart moment by moment with the ready queue.</li></ol></div>
+</div>`,
         `<p class="y-chinh">🎯 Hình 2-41: bốn job A (8), B (4), C (4), D (4), cùng có mặt lúc 0. (a) Theo thứ tự ban đầu A, B, C, D; (b) theo thứ tự việc ngắn nhất trước B, C, D, A.</p>
 <p>Phép tính của sách, do bộ mô phỏng làm. Ở thứ tự (a), thời gian hoàn thành là 8, 12, 16 và 20 phút — trung bình 14. Ở thứ tự SJF (b) là 4, 8, 12 và 20 — trung bình 11:</p>
 <div class="anh-slide uml sim"><img src="https://media.cuongthai.com/images/academy/OSG202/hinh/7bdd324bed4bbdbb3ccb2f8136f8f6c82472653b.svg" alt="Hình 2-41(a): thứ tự ban đầu, hoàn thành trung bình 14" loading="lazy" /><p class="chu-thich">🧮 Hình 2-41(a): thứ tự ban đầu, hoàn thành trung bình 14</p></div>
@@ -4810,7 +4864,13 @@ chrt: failed to set pid 0's policy: Operation not permitted</div>
   fe9: [10, 1, 2, 4, 5].map((chay, i) =&gt; ({ ten: &#96;P&#36;{i + 1}&#96;, den: 0, chay })),
   fe25: [{ ten: 'A', den: 0, chay: 5 }, { ten: 'B', den: 0, chay: 2 }, { ten: 'C', den: 0, chay: 6 }, { ten: 'D', den: 0, chay: 4 }],
 };</code></pre></details>
-<p class="pitfall">⚠️ FE20#3 / FE21#42: "Phát biểu nào đúng về SJF?" — <strong>tối thiểu thời gian chờ trung bình</strong>; nó KHÔNG tránh được bỏ đói. Hoàn thành khác chờ: ở (b), chờ = hoàn thành − chạy = 0, 4, 8, 12 (trung bình 6). Đọc kỹ đề hỏi cái nào.</p>`],
+<p class="pitfall">⚠️ FE20#3 / FE21#42: "Phát biểu nào đúng về SJF?" — <strong>tối thiểu thời gian chờ trung bình</strong>; nó KHÔNG tránh được bỏ đói. Hoàn thành khác chờ: ở (b), chờ = hoàn thành − chạy = 0, 4, 8, 12 (trung bình 6). Đọc kỹ đề hỏi cái nào.</p>
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Giờ làm theo kiểu đề thi: năm việc theo lô, bạn tự tô biểu đồ và điền bảng, trang chấm từng ô.</p>
+<div class="os-lab os-lab-sim-gantt-exam os-lab-p-s1 os-lab-t-gantt-exam-grade"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> tự tô biểu đồ Gantt rồi bấm Chấm bài <a href="/os-lab?sim=gantt-exam&amp;preset=s1&amp;lang=vi&amp;tour=gantt-exam-grade" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Chọn một việc rồi chạm hoặc kéo qua các ô để tô FCFS; điền lúc xong, hoàn thành và chờ.</li><li>Bấm Chấm bài: ô sai được gọi tên đúng luật bạn làm sai (thứ tự FCFS, chờ = hoàn thành − burst…).</li><li>Chuyển sang 📖 Lời giải và phát lại biểu đồ từng thời điểm cùng hàng sẵn sàng.</li></ol></div>
+</div>`],
       [61, 'Scheduling in Interactive Systems',
         `<p class="y-chinh">🎯 Seven algorithms for interactive systems: <strong>Round-Robin</strong>, <strong>Priority</strong>, <strong>Multiple Queues</strong>, <strong>Shortest Process Next</strong>, <strong>Guaranteed</strong>, <strong>Lottery</strong>, <strong>Fair-Share</strong> scheduling.</p>
 <p>Round robin and priority have their own slides (62–63). <strong>Multiple queues</strong> (CTSS, 1962): priority classes where lower classes get longer quanta — a process that uses up its quantum moves down a class, so CPU-bound jobs sink and get fewer but longer turns (the ancestor of MLFQ, old lesson 2.4). <strong>Shortest Process Next</strong> applies SJF to interactive commands by <em>estimating</em> the next burst from past ones with <strong>aging</strong>: estimate = a·T<sub>last</sub> + (1 − a)·estimate; with a = 1/2 the successive estimates are T0, T0/2 + T1/2, T0/4 + T1/4 + T2/2, … — old measurements fade by half at each step:</p>
@@ -4891,7 +4951,13 @@ const Q = [1, 4, 10, 20, 50, 100];</code></pre></details>
   fe25: [{ ten: 'A', den: 0, chay: 5 }, { ten: 'B', den: 0, chay: 2 }, { ten: 'C', den: 0, chay: 6 }, { ten: 'D', den: 0, chay: 4 }],
 };</code></pre></details>
 <p>B (4 units) finishes in its first quantum: turnaround 8 − 1 = 7 (FE17#19). A finishes at 20 (FE24#10), D at 25 ⇒ 25 − 3 = 22 (FE21#5); average turnaround (20 + 7 + 24 + 22) / 4 = 18.25 (FE22#46). The bank's answers all match the simulator. Exercise 5 of lesson 2.D and the quiz include more.</p>
-<p class="pitfall">⚠️ FE20#31 / FE28#19: the quantum should be long enough that <strong>80%</strong> of CPU bursts finish within it (a rule of thumb from Silberschatz). FE26#14: all three statements (large quantum ⇒ FCFS; small ⇒ low efficiency; 20–50 ms reasonable) are correct, so the "wrong statement" is <strong>None of the other choices</strong>.</p>`,
+<p class="pitfall">⚠️ FE20#31 / FE28#19: the quantum should be long enough that <strong>80%</strong> of CPU bursts finish within it (a rule of thumb from Silberschatz). FE26#14: all three statements (large quantum ⇒ FCFS; small ⇒ low efficiency; 20–50 ms reasonable) are correct, so the "wrong statement" is <strong>None of the other choices</strong>.</p>
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>The round-robin trap the FE loves: a process arrives at exactly the moment another one’s quantum ends.</p>
+<div class="os-lab os-lab-sim-gantt-exam os-lab-p-rr os-lab-t-gantt-exam-rr"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> round robin, q = 3, with the queue-order trap <a href="/os-lab?sim=gantt-exam&amp;preset=rr&amp;lang=en&amp;tour=gantt-exam-rr" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Paint the chart up to t = 6 and decide who enters the ready queue first.</li><li>Check: if the grader names the rr-order rule, the newcomer should have queued BEFORE the preempted process.</li><li>Finish the chart and compare your turnaround of P2 with the worked solution.</li></ol></div>
+</div>`,
         `<p class="y-chinh">🎯 Hình 2-42: round robin (xoay vòng). (a) Danh sách tiến trình chạy được B, F, D, G, A với B đang chạy; (b) sau khi B dùng hết <strong>lượng tử (quantum)</strong>, nó về cuối danh sách: F, D, G, A, B.</p>
 <p>Round robin là thuật toán tương tác lâu đời nhất, đơn giản nhất, công bằng nhất và được dùng rộng rãi nhất: mỗi tiến trình được giao một khoảng thời gian, gọi là <strong>lượng tử</strong>; nếu hết lượng tử mà nó vẫn chạy, CPU bị lấy lại và giao cho tiến trình kế tiếp; nếu nó bị chặn hoặc xong sớm hơn, việc chuyển xảy ra lúc đó. Tham số đáng bàn duy nhất là độ dài lượng tử, vì chuyển tiến trình tốn thời gian. Số của sách, máy tính hộ: chuyển = 1 ms, lượng tử = 4 ms ⇒ phí 20% CPU; lượng tử = 100 ms ⇒ chỉ phí 1%, nhưng có 50 người dùng thì người cuối chờ khoảng 5 giây:</p>
 <div class="anh-slide uml sim"><img src="https://media.cuongthai.com/images/academy/OSG202/hinh/88e9f1a23ac2753181125e9ff1d4770f06ece6b4.svg" alt="Lượng tử đổi chi phí (thanh) lấy thời gian chờ của tiến trình cuối trong hàng 50 người" loading="lazy" /><p class="chu-thich">🧮 Lượng tử đổi chi phí (thanh) lấy thời gian chờ của tiến trình cuối trong hàng 50 người</p></div>
@@ -4920,7 +4986,13 @@ const Q = [1, 4, 10, 20, 50, 100];</code></pre></details>
   fe25: [{ ten: 'A', den: 0, chay: 5 }, { ten: 'B', den: 0, chay: 2 }, { ten: 'C', den: 0, chay: 6 }, { ten: 'D', den: 0, chay: 4 }],
 };</code></pre></details>
 <p>B (4 đơn vị) xong ngay trong lượng tử đầu tiên: hoàn thành 8 − 1 = 7 (FE17#19). A xong lúc 20 (FE24#10), D lúc 25 ⇒ 25 − 3 = 22 (FE21#5); hoàn thành trung bình (20 + 7 + 24 + 22) / 4 = 18,25 (FE22#46). Đáp án ngân hàng đều khớp bộ mô phỏng. Bài tập 5 của bài 2.D và quiz có thêm.</p>
-<p class="pitfall">⚠️ FE20#31 / FE28#19: lượng tử nên đủ dài để <strong>80%</strong> số đợt CPU xong gọn trong nó (kinh nghiệm từ Silberschatz). FE26#14: cả ba phát biểu (lượng tử lớn ⇒ thành FCFS; nhỏ ⇒ hiệu suất thấp; 20–50 ms là hợp lý) đều đúng, nên "phát biểu sai" là <strong>None of the other choices</strong>.</p>`],
+<p class="pitfall">⚠️ FE20#31 / FE28#19: lượng tử nên đủ dài để <strong>80%</strong> số đợt CPU xong gọn trong nó (kinh nghiệm từ Silberschatz). FE26#14: cả ba phát biểu (lượng tử lớn ⇒ thành FCFS; nhỏ ⇒ hiệu suất thấp; 20–50 ms là hợp lý) đều đúng, nên "phát biểu sai" là <strong>None of the other choices</strong>.</p>
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Cái bẫy round robin mà đề FE rất thích: một tiến trình đến đúng lúc lượng tử của tiến trình khác vừa hết.</p>
+<div class="os-lab os-lab-sim-gantt-exam os-lab-p-rr os-lab-t-gantt-exam-rr"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> round robin, q = 3, có bẫy thứ tự hàng đợi <a href="/os-lab?sim=gantt-exam&amp;preset=rr&amp;lang=vi&amp;tour=gantt-exam-rr" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Tô biểu đồ tới t = 6 và quyết định ai vào hàng sẵn sàng trước.</li><li>Chấm bài: nếu máy chấm gọi tên luật rr-order, tiến trình mới đến phải xếp TRƯỚC tiến trình vừa bị ngắt.</li><li>Tô nốt biểu đồ và so thời gian hoàn thành của P2 với lời giải.</li></ol></div>
+</div>`],
       [63, 'Priority Scheduling',
         `<p class="y-chinh">🎯 Figure 2-43: a scheduling algorithm with <strong>four priority classes</strong> — queue headers Priority 4 (highest) down to Priority 1 (lowest), each with its list of runnable processes; run the processes of the highest non-empty class round robin, ignore the lower classes while it has work.</p>
 <p>Round robin assumes all processes are equally important. <strong>Priority scheduling</strong> gives each process a priority and runs the runnable process with the highest one. Priorities can be <strong>static</strong> (a military example: the general's jobs first) or <strong>dynamic</strong>: the book suggests 1/f, where f is the fraction of its last quantum a process used — a process that used 1 ms of a 50 ms quantum gets priority 50, one that used all 50 ms gets 1, so I/O-bound processes come first. To stop high-priority processes from running forever, the scheduler may lower the running process's priority at each clock tick, or give each a maximum quantum. If lower classes are never served they <strong>starve</strong>; the cure is <strong>aging</strong> — raising the priority of processes that wait long.</p>
@@ -4957,7 +5029,13 @@ $ kill %1 %2<br>
 # the weights of the fair scheduler: nice 0 = 1024, nice 10 = 110, so about 1024 / (1024 + 110) = 90% vs 10%</div>
 <p class="chu-thich">🎲 This is ONE real run — run it again and the numbers (PIDs, timings, race results…) may differ; the property stated in the lesson always holds.</p>
 <p>About 90% versus 10% — the fair scheduler's weights (1024 for nice 0, 110 for nice 10; man7 sched(7): each nice step is a factor of about 1.25). Unlike Figure 2-43, the low-priority process is not starved: Linux's normal policy gives it a smaller share, never zero.</p>
-<p class="pitfall">⚠️ FE3#20: "Which algorithm could potentially lead to starvation?" — <strong>Priority scheduling</strong> (SJF/SRTN too, for long jobs; FCFS and RR never starve). FE5#9: in preemptive priority scheduling, an arriving process's priority is compared with that of the <strong>currently running process</strong>. Always check whether "1" means highest or lowest in the question.</p>`,
+<p class="pitfall">⚠️ FE3#20: "Which algorithm could potentially lead to starvation?" — <strong>Priority scheduling</strong> (SJF/SRTN too, for long jobs; FCFS and RR never starve). FE5#9: in preemptive priority scheduling, an arriving process's priority is compared with that of the <strong>currently running process</strong>. Always check whether "1" means highest or lowest in the question.</p>
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>Priority scheduling as a graded exercise: the first thing to read in the question is which number means higher priority.</p>
+<div class="os-lab os-lab-sim-gantt-exam os-lab-p-prio os-lab-t-gantt-exam-grade"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> priority with preemption — mind the direction <a href="/os-lab?sim=gantt-exam&amp;preset=prio&amp;lang=en&amp;tour=gantt-exam-grade" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Set the priority-direction switch to match the question before painting anything.</li><li>Paint the preemptive chart: every arrival with a higher priority takes the CPU at once.</li><li>Press Check my answer and read which convention, if any, you got wrong.</li></ol></div>
+</div>`,
         `<p class="y-chinh">🎯 Hình 2-43: một thuật toán lập lịch với <strong>bốn lớp ưu tiên</strong> — các đầu hàng đợi từ Priority 4 (cao nhất) xuống Priority 1 (thấp nhất), mỗi lớp có danh sách tiến trình chạy được; chạy round robin các tiến trình của lớp cao nhất còn việc, bỏ qua các lớp thấp hơn chừng nào lớp đó còn việc.</p>
 <p>Round robin giả định mọi tiến trình quan trọng như nhau. <strong>Lập lịch ưu tiên</strong> cho mỗi tiến trình một độ ưu tiên và chạy tiến trình chạy được có ưu tiên cao nhất. Ưu tiên có thể <strong>tĩnh</strong> (ví dụ quân đội: việc của tướng trước) hoặc <strong>động</strong>: sách gợi ý 1/f, với f là tỉ lệ lượng tử gần nhất mà tiến trình đã dùng — tiến trình dùng 1 ms trong lượng tử 50 ms được ưu tiên 50, tiến trình dùng hết 50 ms được 1, nên tiến trình nặng I/O được trước. Để tiến trình ưu tiên cao không chạy mãi, bộ lập lịch có thể hạ ưu tiên của tiến trình đang chạy ở mỗi nhịp đồng hồ, hoặc cho mỗi tiến trình một lượng tử tối đa. Nếu các lớp thấp không bao giờ được phục vụ, chúng bị <strong>bỏ đói (starvation)</strong>; thuốc chữa là <strong>lão hoá (aging)</strong> — tăng ưu tiên cho tiến trình chờ lâu.</p>
 <p>➕ Một bài tính ưu tiên từ ngân hàng đề (FE19#45 / FE24#15 / FE29#3): năm job lúc 0 với thời gian chạy 8, 6, 2, 10, 4 và ưu tiên 3, 5, 2, 1, 4, trong đó <strong>5 là cao nhất</strong>. (Bộ mô phỏng của môn dùng quy ước "số nhỏ = ưu tiên cao" bên trong, nên đổi thành 6 − p; bảng hiện ưu tiên gốc.)</p>
@@ -4993,7 +5071,13 @@ $ kill %1 %2<br>
 # trọng số của bộ lập lịch công bằng: nice 0 = 1024, nice 10 = 110, nên khoảng 1024 / (1024 + 110) = 90% và 10%</div>
 <p class="chu-thich">🎲 Đây là MỘT lần chạy thật — chạy lại, các con số (PID, thời gian, kết quả tranh chấp…) có thể khác; tính chất ghi trong bài thì luôn đúng.</p>
 <p>Khoảng 90% so với 10% — trọng số của bộ lập lịch công bằng (1024 cho nice 0, 110 cho nice 10; man7 sched(7): mỗi bậc nice khoảng hệ số 1,25). Khác Hình 2-43, tiến trình ưu tiên thấp không bị bỏ đói: chính sách thường của Linux cho nó phần nhỏ hơn, không bao giờ bằng 0.</p>
-<p class="pitfall">⚠️ FE3#20: "Thuật toán nào có thể dẫn tới bỏ đói?" — <strong>Priority scheduling</strong> (SJF/SRTN cũng có, với job dài; FCFS và RR không bao giờ bỏ đói). FE5#9: trong lập lịch ưu tiên chiếm quyền, ưu tiên của tiến trình vừa tới được so với ưu tiên của <strong>tiến trình đang chạy</strong>. Luôn xem đề cho "1" là cao nhất hay thấp nhất.</p>`],
+<p class="pitfall">⚠️ FE3#20: "Thuật toán nào có thể dẫn tới bỏ đói?" — <strong>Priority scheduling</strong> (SJF/SRTN cũng có, với job dài; FCFS và RR không bao giờ bỏ đói). FE5#9: trong lập lịch ưu tiên chiếm quyền, ưu tiên của tiến trình vừa tới được so với ưu tiên của <strong>tiến trình đang chạy</strong>. Luôn xem đề cho "1" là cao nhất hay thấp nhất.</p>
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Lập lịch ưu tiên thành bài tập có chấm: thứ đầu tiên phải đọc trong đề là số nào nghĩa là ưu tiên cao hơn.</p>
+<div class="os-lab os-lab-sim-gantt-exam os-lab-p-prio os-lab-t-gantt-exam-grade"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> ưu tiên có cắt ngang — để ý chiều ưu tiên <a href="/os-lab?sim=gantt-exam&amp;preset=prio&amp;lang=vi&amp;tour=gantt-exam-grade" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Đặt công tắc chiều ưu tiên cho khớp đề trước khi tô bất cứ ô nào.</li><li>Tô biểu đồ có cắt ngang: mỗi tiến trình đến có ưu tiên cao hơn giành CPU ngay.</li><li>Bấm Chấm bài và đọc xem bạn sai quy ước nào (nếu có).</li></ol></div>
+</div>`],
       [64, 'Scheduling in Real-Time Systems',
         `<p class="y-chinh">🎯 Real-time scheduling: time plays an essential role. Categories: <strong>hard real time</strong>, <strong>soft real time</strong>; events are <strong>periodic</strong> or <strong>aperiodic</strong>. A set of m periodic events, event i with period P<sub>i</sub> needing C<sub>i</sub> seconds of CPU, is <strong>schedulable</strong> if Σ C<sub>i</sub>/P<sub>i</sub> ≤ 1.</p>
 <p>A real-time system must react to external events within a fixed time: a CD player must convert bits to sound on time, an aircraft's autopilot must respond before it is too late. <strong>Hard</strong> real time = deadlines must be met absolutely (missing one is a failure: a car's ABS); <strong>soft</strong> = missing an occasional deadline is undesirable but tolerable (a dropped video frame). Each event needs a fraction C/P of one CPU; if the fractions add up to more than 1, no algorithm can keep up. The book's example: three periodic events with periods 100, 200 and 500 ms needing 50, 30 and 100 ms of CPU: 0.5 + 0.15 + 0.2 = 0.85 ≤ 1 ⇒ schedulable; a fourth event with period 1 second can be added only if it needs at most 150 ms (process-switching overhead ignored).</p>
@@ -5360,7 +5444,13 @@ function giai() {
   }
   return { doan, t: t - 1, maxAn };
 }</code></pre></details>
-<p>P1 became hungry at t = 3 while P0 was eating, so P1 waited; when P0 finished, P2 was eating, so P1 still waited; it ate only after P2 put its forks down. No cycle can form, because nobody waits holding a fork.</p>`,
+<p>P1 became hungry at t = 3 while P0 was eating, so P1 waited; when P0 finished, P2 was eating, so P1 still waited; it ate only after P2 put its forks down. No cycle can form, because nobody waits holding a fork.</p>
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>The naive solution of the dining philosophers, step by step: everyone takes the left fork, and nobody can take the right one.</p>
+<div class="os-lab os-lab-sim-deadlock os-lab-p-philosophers"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> five philosophers, five forks <a href="/os-lab?sim=deadlock&amp;preset=philosophers&amp;lang=en" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Step until every philosopher holds one fork and waits for the next: find the cycle.</li><li>Name the four deadlock conditions that hold at that moment.</li><li>Explain which condition the solution of Figure 2-47 breaks.</li></ol></div>
+</div>`,
         `<p class="y-chinh">🎯 Hình 2-47 (phần 1): một lời giải. <code>#define N 5, LEFT (i+N−1)%N, RIGHT (i+1)%N, THINKING 0, HUNGRY 1, EATING 2; int state[N]; semaphore mutex = 1; semaphore s[N];</code> — <code>philosopher(i)</code>: <code>while (TRUE) { think(); take_forks(i); eat(); put_forks(i); }</code></p>
 <p>Sách nhắc trước một lời giải đúng nhưng kém: bảo vệ năm câu lệnh sau <code>think()</code> bằng một semaphore nhị phân — không bế tắc, nhưng mỗi lúc chỉ một triết gia được ăn, dù năm chiếc nĩa cho phép hai. Hình 2-47 cho song song tối đa. Nó giữ một mảng <code>state</code> ghi mỗi triết gia đang nghĩ, đói (đang cố lấy nĩa) hay đang ăn, được bảo vệ bằng <code>mutex</code>; một triết gia chỉ được chuyển sang trạng thái ăn khi cả hai hàng xóm đều không ăn. <code>LEFT</code> và <code>RIGHT</code> là số của hai hàng xóm (với i = 2: 1 và 3). Mỗi triết gia còn có một semaphore <code>s[i]</code>, ban đầu bằng 0, để bị chặn trên đó nếu nĩa ông cần đang bận.</p>
 <p>➕ Thay đổi then chốt so với Hình 2-46: không triết gia nào giữ <em>một</em> chiếc nĩa trong lúc chờ chiếc kia. Lấy nĩa là "cả hai hoặc không", quyết định trong vùng găng — điều đó loại bỏ điều kiện <strong>giữ và chờ</strong>. Đây là lời giải chạy trên dòng thời gian, từ bộ mô phỏng (triết gia i nghĩ 2 + i đơn vị, ăn 3 đơn vị, hai bữa; ô sọc = đói, đang chờ):</p>
@@ -5387,7 +5477,13 @@ function giai() {
   }
   return { doan, t: t - 1, maxAn };
 }</code></pre></details>
-<p>P1 đói lúc t = 3 khi P0 đang ăn, nên P1 chờ; khi P0 ăn xong thì P2 đang ăn, nên P1 vẫn chờ; nó chỉ được ăn sau khi P2 đặt nĩa xuống. Không chu trình nào hình thành được, vì không ai vừa giữ nĩa vừa chờ.</p>`],
+<p>P1 đói lúc t = 3 khi P0 đang ăn, nên P1 chờ; khi P0 ăn xong thì P2 đang ăn, nên P1 vẫn chờ; nó chỉ được ăn sau khi P2 đặt nĩa xuống. Không chu trình nào hình thành được, vì không ai vừa giữ nĩa vừa chờ.</p>
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Lời giải ngây thơ của bài triết gia ăn tối, từng bước: ai cũng cầm nĩa trái, và không ai cầm được nĩa phải.</p>
+<div class="os-lab os-lab-sim-deadlock os-lab-p-philosophers"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> năm triết gia, năm chiếc nĩa <a href="/os-lab?sim=deadlock&amp;preset=philosophers&amp;lang=vi" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Bấm tới khi mỗi triết gia cầm một nĩa và chờ chiếc kế bên: tìm chu trình.</li><li>Kể bốn điều kiện bế tắc đang đúng ở thời điểm đó.</li><li>Giải thích lời giải ở Hình 2-47 phá điều kiện nào.</li></ol></div>
+</div>`],
       [70, 'The Dining Philosophers Problem (4)',
         `<p class="y-chinh">🎯 Figure 2-47 (part 2): <code>void take_forks(int i) { down(&amp;mutex); state[i] = HUNGRY; test(i); up(&amp;mutex); down(&amp;s[i]); }</code></p>
 <p>Line by line: enter the critical region (<code>mutex</code>) so that nobody else changes <code>state</code> meanwhile; record "I am hungry"; call <code>test(i)</code>, which gives me both forks <em>if</em> neither neighbour is eating (it sets my state to EATING and does <code>up(&amp;s[i])</code>); leave the critical region; finally <code>down(&amp;s[i])</code>. If <code>test</code> succeeded, <code>s[i]</code> is 1 and the down passes at once; if not, <code>s[i]</code> is 0 and I block here — <em>outside</em> the critical region, holding no fork, until a neighbour who finishes eating calls <code>test(i)</code> for me and ups my semaphore.</p>
@@ -5733,7 +5829,13 @@ int main(void) {
 --- grandchild: my parent is 20<br>
 --- grandchild after its parent exited: my parent is now 1</div>
 <p>Before <code>waitpid</code>, the finished child is still in the process table with STAT <code>Z</code> and name <code>&lt;defunct&gt;</code>: a <strong>zombie</strong> keeps its PID and exit status until the parent collects them. After <code>waitpid</code> the parent got status 7 and the entry is gone. The grandchild's parent changed to <strong>1</strong> when its parent exited: orphans are adopted by PID 1 (here the container's first process, on a full Linux <code>systemd</code> — or a "subreaper"), which waits for them. A server that forks without waiting fills the process table with zombies; old lesson 2.3 tells that story.</p>
-</details>`,
+</details>
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>Before or after your C program: watch a zombie appear and disappear.</p>
+<div class="os-lab os-lab-sim-process os-lab-p-zombie"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> a child that exited, and a parent that never waited <a href="/os-lab?sim=process&amp;preset=zombie&amp;lang=en" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Step until the child has exited but the parent has not called wait: what does ps show (state Z)?</li><li>Let the parent wait and watch the entry vanish.</li></ol></div>
+</div>`,
     `<h3>🧪 Bài 1 — tạo zombie, thu dọn nó, và gặp tiến trình mồ côi (15 phút)</h3>
 <p>(a) Chuyển đổi nào sau đây hợp lệ trong Hình 2-2: Running → Blocked, Ready → Blocked, Blocked → Running, Blocked → Ready, Running → Ready, Ready → Running? (b) Viết chương trình C có tiến trình con thoát với mã 7 trong lúc cha ngủ một giây mà không gọi <code>wait</code>; dùng <code>ps</code> cho thấy con, rồi thu dọn nó và in mã thoát. (c) Tạo một tiến trình cháu có cha thoát trước: sau đó cha của nó là ai?</p>
 <details><summary>Lời giải — kèm lần chạy thật</summary>
@@ -5778,7 +5880,13 @@ int main(void) {
 --- grandchild: my parent is 20<br>
 --- grandchild after its parent exited: my parent is now 1</div>
 <p>Trước <code>waitpid</code>, tiến trình con đã xong vẫn nằm trong bảng tiến trình với STAT <code>Z</code> và tên <code>&lt;defunct&gt;</code>: một <strong>zombie (xác sống)</strong> giữ PID và mã thoát tới khi cha lấy chúng. Sau <code>waitpid</code> cha nhận mã 7 và mục đó biến mất. Cha của tiến trình cháu đổi thành <strong>1</strong> khi cha nó thoát: tiến trình mồ côi được PID 1 nhận nuôi (ở đây là tiến trình đầu tiên của container, trên Linux đầy đủ là <code>systemd</code> — hoặc một "subreaper"), tiến trình này wait hộ chúng. Một máy chủ fork mà không wait sẽ làm đầy bảng tiến trình bằng zombie; bài cũ 2.3 kể chuyện đó.</p>
-</details>`),
+</details>
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Trước hoặc sau chương trình C của bạn: xem một zombie xuất hiện rồi biến mất.</p>
+<div class="os-lab os-lab-sim-process os-lab-p-zombie"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> tiến trình con đã thoát, cha chưa từng wait <a href="/os-lab?sim=process&amp;preset=zombie&amp;lang=vi" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Bấm tới khi con đã thoát mà cha chưa gọi wait: ps hiện gì (trạng thái Z)?</li><li>Cho cha gọi wait và xem mục đó biến mất.</li></ol></div>
+</div>`),
     bi(`<h3>🧪 Exercise 2 — predict the output: threads share, fork copies (10 min)</h3>
 <p>Without running it, write down the three lines this program prints. <code>x</code> starts at 10; a thread adds 5; then a child created by <code>fork</code> doubles <code>x</code>.</p>
 <pre><code class="language-c">// Exercise 2: predict the output — one global variable, changed once by a THREAD and once by a forked CHILD
@@ -5901,7 +6009,13 @@ mutex &nbsp;&nbsp;: total = 12000000 &nbsp;&nbsp;time &nbsp;392 ms<br>
 atomic &nbsp;: total = 12000000 &nbsp;&nbsp;time &nbsp;310 ms</div>
 <p class="chu-thich">🎲 This is ONE real run — run it again and the numbers (PIDs, timings, race results…) may differ; the property stated in the lesson always holds.</p>
 <p>(a) is fast and wrong: a large share of the 12 000 000 updates is lost (a different number on every run) (slide 28 explains the LOAD/ADD/STORE race). (b) and (c) are both exact. The atomic version is faster than the mutex here because one atomic instruction (slide 34) replaces lock + increment + unlock; the mutex still wins when the critical region is more than one variable — you cannot update a list, a map or two balances with one atomic instruction. Both are much slower than (a): with four threads hammering one variable, the cache line holding it bounces between cores on every increment. The real cure for a hot counter is to give each thread its own counter and add them up at the end (Java's <code>LongAdder</code> does exactly that).</p>
-</details>`,
+</details>
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>Check your fix in motion: with a mutex, the load–add–store of one thread can no longer be cut in the middle.</p>
+<div class="os-lab os-lab-sim-race os-lab-p-mutex os-lab-t-race-lost-update"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> the same counter, now behind a mutex <a href="/os-lab?sim=race&amp;preset=mutex&amp;lang=en&amp;tour=race-lost-update" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Step both threads and count how often one of them has to wait for the lock.</li><li>Switch the mode to atomic and compare: what is still serialized?</li></ol></div>
+</div>`,
     `<h3>🧪 Bài 3 — sửa tranh chấp: mutex hay atomic? (20 phút)</h3>
 <p>Bốn luồng, mỗi luồng cộng 1 vào một bộ đếm dùng chung 3 000 000 lần. Cả bốn luồng xuất phát cùng lúc nhờ một rào chắn. Viết ba bản — (a) không bảo vệ, (b) một <code>pthread_mutex_t</code> quanh phép tăng, (c) <code>atomic_fetch_add</code> của <code>&lt;stdatomic.h&gt;</code> — rồi đo tổng và thời gian của từng bản.</p>
 <details><summary>Lời giải — một lần chạy thật</summary>
@@ -5952,7 +6066,13 @@ mutex &nbsp;&nbsp;: total = 12000000 &nbsp;&nbsp;time &nbsp;392 ms<br>
 atomic &nbsp;: total = 12000000 &nbsp;&nbsp;time &nbsp;310 ms</div>
 <p class="chu-thich">🎲 Đây là MỘT lần chạy thật — chạy lại, các con số (PID, thời gian, kết quả tranh chấp…) có thể khác; tính chất ghi trong bài thì luôn đúng.</p>
 <p>(a) nhanh và sai: mất một phần lớn trong 12 000 000 lần cập nhật (mỗi lần chạy một số khác) (slide 28 giải thích tranh chấp LOAD/ADD/STORE). (b) và (c) đều đúng tuyệt đối. Bản atomic nhanh hơn bản mutex ở đây vì một lệnh nguyên tử (slide 34) thay cho khoá + tăng + mở khoá; mutex vẫn thắng khi vùng găng nhiều hơn một biến — bạn không cập nhật được một danh sách, một map hay hai số dư tài khoản bằng một lệnh nguyên tử. Cả hai đều chậm hơn nhiều so với (a): bốn luồng cùng dội vào một biến khiến dòng cache chứa nó bị chuyền qua lại giữa các lõi ở mỗi lần tăng. Cách chữa thật cho một bộ đếm "nóng" là cho mỗi luồng một bộ đếm riêng rồi cộng lại ở cuối (<code>LongAdder</code> của Java làm đúng như vậy).</p>
-</details>`),
+</details>
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Kiểm cách sửa của bạn bằng hình: có mutex, bộ ba nạp–cộng–ghi của một luồng không còn bị cắt giữa chừng.</p>
+<div class="os-lab os-lab-sim-race os-lab-p-mutex os-lab-t-race-lost-update"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> cùng bộ đếm đó, giờ có mutex <a href="/os-lab?sim=race&amp;preset=mutex&amp;lang=vi&amp;tour=race-lost-update" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Bấm cho cả hai luồng chạy và đếm số lần một luồng phải chờ khoá.</li><li>Đổi chế độ sang atomic rồi so: thứ gì vẫn phải xếp hàng?</li></ol></div>
+</div>`),
     bi(`<h3>🧪 Exercise 4 — a bounded buffer with two producers and two consumers (25 min)</h3>
 <p>Extend Figure 2-28: a buffer of N = 3 slots, two producers (one makes 1…1000, the other 1001…2000), two consumers that each take 1000 items. Do the three semaphores <code>mutex</code>, <code>empty</code>, <code>full</code> still suffice, or do you need more? Check by summing everything consumed.</p>
 <details><summary>Solution — with the real run</summary>
@@ -6006,7 +6126,13 @@ int main(void) {
 items consumed: 2000<br>
 sum of items &nbsp;: 2001000 (1 + 2 + ... + 2000 = 2001000)</div>
 <p>They suffice. <code>empty</code> and <code>full</code> count slots no matter how many processes produce or consume, and <code>mutex</code> makes the buffer operations — including the shared indices <code>in</code> and <code>out</code> — one-at-a-time. All 2000 items arrived exactly once (sum 2 001 000 = 2000·2001/2). The two traps: (1) <code>in</code> and <code>out</code> must be updated <em>inside</em> the mutex, otherwise two producers write the same slot (the spooler race of slide 28 again); (2) never take <code>mutex</code> before <code>empty</code>/<code>full</code> (slide 38). In Java this whole exercise is one <code>ArrayBlockingQueue</code> (slide 50).</p>
-</details>`,
+</details>
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>The bounded buffer of this exercise, animated: producers sleep when it is full, consumers sleep when it is empty.</p>
+<div class="os-lab os-lab-sim-sync os-lab-p-pcwhile os-lab-t-sync-start"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> bounded buffer with condition variables <a href="/os-lab?sim=sync&amp;preset=pcwhile&amp;lang=en&amp;tour=sync-start" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Fill the buffer and watch which thread sleeps, and who wakes it.</li><li>Set the guard to if (…) wait instead of while (…) wait and find the wake-up that breaks it.</li></ol></div>
+</div>`,
     `<h3>🧪 Bài 4 — bộ đệm có giới hạn với hai bên sản xuất và hai bên tiêu thụ (25 phút)</h3>
 <p>Mở rộng Hình 2-28: bộ đệm N = 3 ô, hai bên sản xuất (một bên làm 1…1000, bên kia 1001…2000), hai bên tiêu thụ mỗi bên lấy 1000 món. Ba semaphore <code>mutex</code>, <code>empty</code>, <code>full</code> còn đủ không, hay cần thêm? Kiểm bằng cách cộng mọi thứ đã tiêu thụ.</p>
 <details><summary>Lời giải — kèm lần chạy thật</summary>
@@ -6060,7 +6186,13 @@ int main(void) {
 items consumed: 2000<br>
 sum of items &nbsp;: 2001000 (1 + 2 + ... + 2000 = 2001000)</div>
 <p>Vẫn đủ. <code>empty</code> và <code>full</code> đếm số ô bất kể có bao nhiêu tiến trình sản xuất hay tiêu thụ, còn <code>mutex</code> làm cho các thao tác trên bộ đệm — kể cả hai chỉ số dùng chung <code>in</code> và <code>out</code> — diễn ra lần lượt từng cái một. Cả 2000 món tới đúng một lần (tổng 2 001 000 = 2000·2001/2). Hai cái bẫy: (1) <code>in</code> và <code>out</code> phải được cập nhật <em>bên trong</em> mutex, không thì hai bên sản xuất ghi cùng một ô (lại tranh chấp spooler của slide 28); (2) không bao giờ lấy <code>mutex</code> trước <code>empty</code>/<code>full</code> (slide 38). Trong Java cả bài này chỉ là một <code>ArrayBlockingQueue</code> (slide 50).</p>
-</details>`),
+</details>
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Bộ đệm giới hạn của bài này thành hình động: producer ngủ khi đầy, consumer ngủ khi rỗng.</p>
+<div class="os-lab os-lab-sim-sync os-lab-p-pcwhile os-lab-t-sync-start"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> bộ đệm giới hạn với biến điều kiện <a href="/os-lab?sim=sync&amp;preset=pcwhile&amp;lang=vi&amp;tour=sync-start" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Làm đầy bộ đệm và xem luồng nào ngủ, ai đánh thức nó.</li><li>Đặt điều kiện thành if (…) wait thay cho while (…) wait và tìm lần đánh thức làm nó hỏng.</li></ol></div>
+</div>`),
     bi(`<h3>🧪 Exercise 5 — the scheduling calculation, FE style (30 min)</h3>
 <p>Five processes (arrival / burst / priority, where <strong>1 = highest</strong>): A 0/6/3, B 1/3/1, C 2/8/4, D 3/2/2, E 5/4/5. For FCFS, SJF (nonpreemptive), SRTF, Round Robin with q = 2, Priority (nonpreemptive) and Priority (preemptive): draw the Gantt chart and compute the average waiting time. Conventions (as in the course simulator and most exam keys): ties go to the earlier arrival; in RR a process arriving during a slice joins the queue before the preempted one; preemption only by a strictly better process.</p>
 <details><summary>Solution — every chart computed by the simulator</summary>
@@ -6199,7 +6331,13 @@ const TAT_CA = [['fcfs'], ['sjf'], ['srtf'], ['rr', 2], ['prio'], ['prio-p']];</
 ];
 const TAT_CA = [['fcfs'], ['sjf'], ['srtf'], ['rr', 2], ['prio'], ['prio-p']];</code></pre></details>
 <p>Check by hand at least FCFS and SRTF. FCFS: A 0–6, B 6–9, C 9–17, D 17–19, E 19–23 ⇒ waiting 0, 5, 7, 14, 14 ⇒ 40 / 5 = 8. SRTF: A runs 0–1; B (3) is shorter than A's remaining 5 ⇒ B 1–4 (D arrives at 3 with 2, not shorter than B's remaining 1); then D 4–6, E 6–10 (4 &lt; A's 5), A 10–15, C 15–23 ⇒ waiting 9, 0, 13, 1, 1 ⇒ 4.8. RR has the worst average here but the best response time — the trade of slide 62. The most common error: computing waiting as completion − arrival (that is turnaround) — always subtract the burst.</p>
-</details>`,
+</details>
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>More practice after this exercise: New exam gives a random problem; you paint and fill, the page grades.</p>
+<div class="os-lab os-lab-sim-gantt-exam os-lab-p-random os-lab-t-gantt-exam-grade"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> a new graded scheduling problem every time <a href="/os-lab?sim=gantt-exam&amp;preset=random&amp;lang=en&amp;tour=gantt-exam-grade" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Do one problem for each of FCFS, SJF, SRTF, RR and priority until every cell is green.</li><li>When a cell is red, read the name of the broken convention before looking at the solution.</li></ol></div>
+</div>`,
     `<h3>🧪 Bài 5 — bài tính lập lịch, kiểu FE (30 phút)</h3>
 <p>Năm tiến trình (đến / chạy / ưu tiên, trong đó <strong>1 = cao nhất</strong>): A 0/6/3, B 1/3/1, C 2/8/4, D 3/2/2, E 5/4/5. Với FCFS, SJF (không chiếm quyền), SRTF, Round Robin q = 2, Priority (không chiếm quyền) và Priority (chiếm quyền): vẽ biểu đồ Gantt và tính thời gian chờ trung bình. Quy ước (như bộ mô phỏng của môn và phần lớn đáp án đề thi): hoà thì ai đến trước được trước; trong RR tiến trình tới trong lúc một lát đang chạy vào hàng trước tiến trình vừa bị lấy CPU; chỉ chiếm quyền khi tiến trình mới tốt hơn hẳn.</p>
 <details><summary>Lời giải — mọi biểu đồ do bộ mô phỏng tính</summary>
@@ -6338,7 +6476,13 @@ const TAT_CA = [['fcfs'], ['sjf'], ['srtf'], ['rr', 2], ['prio'], ['prio-p']];</
 ];
 const TAT_CA = [['fcfs'], ['sjf'], ['srtf'], ['rr', 2], ['prio'], ['prio-p']];</code></pre></details>
 <p>Tự kiểm tay ít nhất FCFS và SRTF. FCFS: A 0–6, B 6–9, C 9–17, D 17–19, E 19–23 ⇒ chờ 0, 5, 7, 14, 14 ⇒ 40 / 5 = 8. SRTF: A chạy 0–1; B (3) ngắn hơn phần còn lại 5 của A ⇒ B 1–4 (D tới lúc 3 với 2, không ngắn hơn phần còn lại 1 của B); rồi D 4–6, E 6–10 (4 &lt; 5 còn lại của A), A 10–15, C 15–23 ⇒ chờ 9, 0, 13, 1, 1 ⇒ 4,8. RR có trung bình tệ nhất ở đây nhưng thời gian đáp ứng tốt nhất — phép đánh đổi của slide 62. Lỗi hay gặp nhất: tính chờ bằng thời điểm xong − thời điểm đến (đó là thời gian hoàn thành) — luôn trừ thêm thời gian chạy.</p>
-</details>`),
+</details>
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Luyện thêm sau bài này: Đề mới cho một đề ngẫu nhiên; bạn tô và điền, trang chấm.</p>
+<div class="os-lab os-lab-sim-gantt-exam os-lab-p-random os-lab-t-gantt-exam-grade"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> mỗi lần một đề lập lịch mới, có chấm <a href="/os-lab?sim=gantt-exam&amp;preset=random&amp;lang=vi&amp;tour=gantt-exam-grade" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Làm mỗi thuật toán FCFS, SJF, SRTF, RR và ưu tiên một đề tới khi mọi ô đều xanh.</li><li>Khi có ô đỏ, đọc tên quy ước bị sai trước khi xem lời giải.</li></ol></div>
+</div>`),
     bi(`<h3>🧪 Exercise 6 — break the philosophers' deadlock in one line (15 min)</h3>
 <p>Take the deadlocking program of slide 68 (each philosopher locks the left fork, pauses, locks the right fork). Change <em>only the order</em> in which some philosophers take their forks so that a deadlock becomes impossible, run it with 50 meals each, and explain which of the four deadlock conditions you removed.</p>
 <details><summary>Solution — with the real run</summary>
@@ -6384,7 +6528,13 @@ philosopher 3 ate 50 times<br>
 philosopher 4 ate 50 times<br>
 finished: no deadlock</div>
 <p>Even-numbered philosophers take the left fork first, odd-numbered ones the right fork first. Same pause between the two forks as the naive version — yet every philosopher ate 50 times. A cycle P0 → P1 → … → P4 → P0 needs every philosopher to hold one fork and wait for the next one in the <em>same</em> direction around the table; philosophers 0 and 1 now compete for fork 1 <em>first</em>, so one of them holds nothing while waiting. The <strong>circular wait</strong> condition can no longer hold. The general version, used everywhere from the Linux kernel to databases: number all resources and always lock them in increasing order (Chapter 6, resource ordering; FE1#29: "forcing all processes to request resources in a predefined order eliminates circular wait").</p>
-</details>`,
+</details>
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>See the deadlock of this exercise before you fix it in code.</p>
+<div class="os-lab os-lab-sim-deadlock os-lab-p-philosophers"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> the deadlock you are about to break <a href="/os-lab?sim=deadlock&amp;preset=philosophers&amp;lang=en" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Step until all five wait: read the cycle in the wait-for graph.</li><li>Decide which single change (order, a waiter, one left-handed philosopher) breaks the cycle.</li></ol></div>
+</div>`,
     `<h3>🧪 Bài 6 — phá bế tắc của các triết gia bằng một dòng (15 phút)</h3>
 <p>Lấy chương trình bế tắc của slide 68 (mỗi triết gia khoá nĩa trái, dừng một chút, khoá nĩa phải). Chỉ đổi <em>thứ tự</em> lấy nĩa của một số triết gia sao cho bế tắc trở thành không thể, chạy với mỗi người 50 bữa, và giải thích bạn đã loại bỏ điều kiện nào trong bốn điều kiện bế tắc.</p>
 <details><summary>Lời giải — kèm lần chạy thật</summary>
@@ -6430,7 +6580,13 @@ philosopher 3 ate 50 times<br>
 philosopher 4 ate 50 times<br>
 finished: no deadlock</div>
 <p>Triết gia số chẵn lấy nĩa trái trước, số lẻ lấy nĩa phải trước. Cùng khoảng dừng giữa hai chiếc nĩa như bản ngây thơ — vậy mà ai cũng ăn đủ 50 bữa. Một chu trình P0 → P1 → … → P4 → P0 đòi mọi triết gia đều giữ một nĩa và chờ chiếc kế tiếp theo <em>cùng</em> một chiều quanh bàn; giờ triết gia 0 và 1 tranh nĩa 1 <em>trước tiên</em>, nên một trong hai không giữ gì trong lúc chờ. Điều kiện <strong>chờ vòng tròn</strong> không còn thoả được. Bản tổng quát, dùng ở mọi nơi từ nhân Linux tới cơ sở dữ liệu: đánh số mọi tài nguyên và luôn khoá theo thứ tự tăng dần (Chương 6, sắp thứ tự tài nguyên; FE1#29: "buộc mọi tiến trình xin tài nguyên theo một thứ tự định trước sẽ loại bỏ chờ vòng tròn").</p>
-</details>`),
+</details>
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Nhìn thấy bế tắc của bài này trước khi sửa nó trong mã.</p>
+<div class="os-lab os-lab-sim-deadlock os-lab-p-philosophers"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> bế tắc bạn sắp phá <a href="/os-lab?sim=deadlock&amp;preset=philosophers&amp;lang=vi" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Bấm tới khi cả năm cùng chờ: đọc chu trình trên đồ thị chờ.</li><li>Quyết định một thay đổi duy nhất (thứ tự, người phục vụ, một triết gia cầm tay trái) để phá chu trình.</li></ol></div>
+</div>`),
     bi(`<h3>🧪 Exercise 7 — drive the Linux scheduler (10 min)</h3>
 <p>Start a busy loop in the background. Read what the scheduler knows about it in <code>/proc/&lt;pid&gt;/sched</code>; switch it to the batch policy with <code>chrt</code>; lower its priority with <code>renice</code>; pin it to CPU 0 with <code>taskset</code>; verify each change.</p>
 <details><summary>Solution — one real session</summary>

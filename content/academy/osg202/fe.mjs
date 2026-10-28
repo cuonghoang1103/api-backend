@@ -271,7 +271,13 @@ const LO = [10, 4, 20, 15, 9], XIN = [8, 12, 10];                               
 const tinhFit = () =&gt; datCho(LO, XIN, 'best');
 const MOI_KHOI = 1024 / 4, TOI_DA_KB = (10 + MOI_KHOI) * 1024 / 1024;                // FE21#16: (trực tiếp + gián tiếp) × cỡ khối
 const N_DC = (4 - 2) / 1, P_IO = 0.5, HIEU_SUAT = 1 - P_IO ** N_DC;                 // FE5#11: 1 − pⁿ</code></pre></details>
-<p class="pitfall">⚠️ Read what is asked: <em>turnaround</em> (finish − arrival) or <em>waiting</em> (turnaround − burst) — the options always contain both. "Almost the same time" means all arrive at 0, in the listed order. If the question gives a picture of the table (FE9#16), copy it before computing.</p>`,
+<p class="pitfall">⚠️ Read what is asked: <em>turnaround</em> (finish − arrival) or <em>waiting</em> (turnaround − burst) — the options always contain both. "Almost the same time" means all arrive at 0, in the listed order. If the question gives a picture of the table (FE9#16), copy it before computing.</p>
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>Type 3.1 under exam conditions: a new problem each time, graded the moment you finish.</p>
+<div class="os-lab os-lab-sim-gantt-exam os-lab-p-random os-lab-t-gantt-exam-grade"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> a random scheduling question, graded cell by cell <a href="/os-lab?sim=gantt-exam&amp;preset=random&amp;lang=en&amp;tour=gantt-exam-grade" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Give yourself 3 minutes per problem: paint the Gantt chart, fill turnaround and waiting.</li><li>Do at least one FCFS, SJF, SRTF, RR and priority problem.</li><li>For every red cell, read the convention named before redoing it.</li></ol></div>
+</div>`,
     `<h2>3. Câu tính toán — mười hai dạng, mỗi dạng một cách làm</h2>
 <div class="anh-slide uml sim"><img src="https://media.cuongthai.com/images/academy/OSG202/hinh/3f82aac668716166cf8827d0ede293a67ec5df74.svg" alt="Các dạng câu tính trên 29 đề: bao nhiêu câu, có ở bao nhiêu đề — bảng ghi rõ câu nào nằm trong FE1–FE3" loading="lazy" /><p class="chu-thich">🧮 Các dạng câu tính trên 29 đề: bao nhiêu câu, có ở bao nhiêu đề — bảng ghi rõ câu nào nằm trong FE1–FE3</p></div>
 <table>
@@ -341,7 +347,13 @@ const LO = [10, 4, 20, 15, 9], XIN = [8, 12, 10];                               
 const tinhFit = () =&gt; datCho(LO, XIN, 'best');
 const MOI_KHOI = 1024 / 4, TOI_DA_KB = (10 + MOI_KHOI) * 1024 / 1024;                // FE21#16: (trực tiếp + gián tiếp) × cỡ khối
 const N_DC = (4 - 2) / 1, P_IO = 0.5, HIEU_SUAT = 1 - P_IO ** N_DC;                 // FE5#11: 1 − pⁿ</code></pre></details>
-<p class="pitfall">⚠️ Đọc đúng thứ được hỏi: <em>turnaround</em> (xong − đến) hay <em>waiting</em> (turnaround − burst) — phương án luôn có cả hai. "Almost the same time" nghĩa là cùng đến lúc 0, theo thứ tự liệt kê. Đề cho bảng bằng hình (FE9#16) thì chép bảng ra giấy trước khi tính.</p>`),
+<p class="pitfall">⚠️ Đọc đúng thứ được hỏi: <em>turnaround</em> (xong − đến) hay <em>waiting</em> (turnaround − burst) — phương án luôn có cả hai. "Almost the same time" nghĩa là cùng đến lúc 0, theo thứ tự liệt kê. Đề cho bảng bằng hình (FE9#16) thì chép bảng ra giấy trước khi tính.</p>
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Dạng 3.1 trong điều kiện thi: mỗi lần một đề mới, chấm ngay khi bạn làm xong.</p>
+<div class="os-lab os-lab-sim-gantt-exam os-lab-p-random os-lab-t-gantt-exam-grade"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> một câu lập lịch ngẫu nhiên, chấm từng ô <a href="/os-lab?sim=gantt-exam&amp;preset=random&amp;lang=vi&amp;tour=gantt-exam-grade" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Cho mình 3 phút mỗi đề: tô biểu đồ Gantt, điền thời gian hoàn thành và chờ.</li><li>Làm ít nhất một đề FCFS, SJF, SRTF, RR và ưu tiên.</li><li>Với mỗi ô đỏ, đọc tên quy ước bị sai trước khi làm lại.</li></ol></div>
+</div>`),
     bi(`<h3>3.2 Modelling multiprogramming — CPU utilization = 1 − pⁿ (Ch.2, <a href="/courses/operating-systems/learn?lessonSlug=osg202-slide-osg2-1">2.A</a>, slide 12)</h3>
 <ol>
 <li>n = how many processes fit in memory: (RAM − OS) ÷ process size, <strong>rounded down</strong> (2 GB − 1 GB = 1 024 MB holds two 450 MB processes, not 2.27).</li>
@@ -410,7 +422,13 @@ const LO = [10, 4, 20, 15, 9], XIN = [8, 12, 10];                               
 const tinhFit = () =&gt; datCho(LO, XIN, 'best');
 const MOI_KHOI = 1024 / 4, TOI_DA_KB = (10 + MOI_KHOI) * 1024 / 1024;                // FE21#16: (trực tiếp + gián tiếp) × cỡ khối
 const N_DC = (4 - 2) / 1, P_IO = 0.5, HIEU_SUAT = 1 - P_IO ** N_DC;                 // FE5#11: 1 − pⁿ</code></pre></details>
-<p class="pitfall">⚠️ "0172327103" is a reference string written without spaces — ten references, not one number (FE3#17 = FE1 original question 17). FIFO can get <em>worse</em> with more frames (Belady's anomaly, FE4#19 → FIFO); LRU and OPT never do.</p>`,
+<p class="pitfall">⚠️ "0172327103" is a reference string written without spaces — ten references, not one number (FE3#17 = FE1 original question 17). FIFO can get <em>worse</em> with more frames (Belady's anomaly, FE4#19 → FIFO); LRU and OPT never do.</p>
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>Type 3.3 drill: any reference string, any frame count.</p>
+<div class="os-lab os-lab-sim-vm os-lab-p-exam"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> FIFO, LRU, OPT, Clock — the frame table <a href="/os-lab?sim=vm&amp;preset=exam&amp;lang=en" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Type the string of FE1/FE3 Q17 (0 1 7 2 3 2 7 1 0 3) with 4 frames and FIFO; count on paper first.</li><li>Then the same string with LRU and OPT.</li></ol></div>
+</div>`,
     `<h3>3.2 Mô hình đa chương — hiệu suất CPU = 1 − pⁿ (Ch.2, <a href="/courses/operating-systems/learn?lessonSlug=osg202-slide-osg2-1">2.A</a>, slide 12)</h3>
 <ol>
 <li>n = số tiến trình vừa bộ nhớ: (RAM − HĐH) ÷ cỡ tiến trình, <strong>làm tròn XUỐNG</strong> (2 GB − 1 GB = 1 024 MB chứa được hai tiến trình 450 MB, không phải 2,27).</li>
@@ -479,7 +497,13 @@ const LO = [10, 4, 20, 15, 9], XIN = [8, 12, 10];                               
 const tinhFit = () =&gt; datCho(LO, XIN, 'best');
 const MOI_KHOI = 1024 / 4, TOI_DA_KB = (10 + MOI_KHOI) * 1024 / 1024;                // FE21#16: (trực tiếp + gián tiếp) × cỡ khối
 const N_DC = (4 - 2) / 1, P_IO = 0.5, HIEU_SUAT = 1 - P_IO ** N_DC;                 // FE5#11: 1 − pⁿ</code></pre></details>
-<p class="pitfall">⚠️ "0172327103" là chuỗi tham chiếu viết liền không cách — mười tham chiếu, không phải một con số (FE3#17 = câu 17 đề gốc FE1). FIFO có thể TỆ hơn khi thêm khung (nghịch lý Belady, FE4#19 → FIFO); LRU và OPT thì không bao giờ.</p>`),
+<p class="pitfall">⚠️ "0172327103" là chuỗi tham chiếu viết liền không cách — mười tham chiếu, không phải một con số (FE3#17 = câu 17 đề gốc FE1). FIFO có thể TỆ hơn khi thêm khung (nghịch lý Belady, FE4#19 → FIFO); LRU và OPT thì không bao giờ.</p>
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Luyện dạng 3.3: chuỗi tham chiếu bất kỳ, số khung bất kỳ.</p>
+<div class="os-lab os-lab-sim-vm os-lab-p-exam"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> FIFO, LRU, OPT, Clock — bảng khung <a href="/os-lab?sim=vm&amp;preset=exam&amp;lang=vi" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Gõ chuỗi của câu 17 FE1/FE3 (0 1 7 2 3 2 7 1 0 3) với 4 khung và FIFO; tự đếm trên giấy trước.</li><li>Rồi cùng chuỗi đó với LRU và OPT.</li></ol></div>
+</div>`),
     bi(`<h3>3.4 Addresses — page number, offset, levels, table size (Ch.3, <a href="/courses/operating-systems/learn?lessonSlug=osg202-slide-osg3-1">3.A</a>, slides 12–18)</h3>
 <p>Everything here is one rule: <strong>an address is a row of bits cut into fields</strong>. Offset bits = log₂(page size). The fields on the left index the page table(s).</p>
 <ul>
@@ -543,6 +567,12 @@ const tinhFit = () =&gt; datCho(LO, XIN, 'best');
 const MOI_KHOI = 1024 / 4, TOI_DA_KB = (10 + MOI_KHOI) * 1024 / 1024;                // FE21#16: (trực tiếp + gián tiếp) × cỡ khối
 const N_DC = (4 - 2) / 1, P_IO = 0.5, HIEU_SUAT = 1 - P_IO ** N_DC;                 // FE5#11: 1 − pⁿ</code></pre></details>
 <p class="pitfall">⚠️ The variants of FE3#16 change the field widths (9 + 11, 10 + 10, 9 + 12…): never memorise "1 KB", recompute 2^(32 − a − b) every time. "Words" and "bytes" are just units — the bit count is the same arithmetic.</p>
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>Type 3.4 drill: write the address in binary, draw the field boundaries, read each field.</p>
+<div class="os-lab os-lab-sim-addr-split os-lab-p-split os-lab-t-addr-split-walk"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> split the bits, read every field <a href="/os-lab?sim=addr-split&amp;preset=split&amp;lang=en&amp;tour=addr-split-walk" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Try FE3 Q16: a 32-bit address with 10 + 12 bits of table fields — how many offset bits are left?</li><li>Switch to the table-size view and check a page-table size question the same way.</li></ol></div>
+</div>
 <h3>3.5 Contiguous allocation — first, next, best, worst fit (Ch.3, <a href="/courses/operating-systems/learn?lessonSlug=osg202-slide-osg3-1">3.A</a>, slides 9–10)</h3>
 <ol>
 <li>Write the holes in address order. For each request, mark the holes that are big enough.</li>
@@ -640,6 +670,12 @@ const tinhFit = () =&gt; datCho(LO, XIN, 'best');
 const MOI_KHOI = 1024 / 4, TOI_DA_KB = (10 + MOI_KHOI) * 1024 / 1024;                // FE21#16: (trực tiếp + gián tiếp) × cỡ khối
 const N_DC = (4 - 2) / 1, P_IO = 0.5, HIEU_SUAT = 1 - P_IO ** N_DC;                 // FE5#11: 1 − pⁿ</code></pre></details>
 <p class="pitfall">⚠️ Các biến thể của FE3#16 đổi độ rộng trường (9 + 11, 10 + 10, 9 + 12…): đừng học thuộc "1 KB", lần nào cũng tính lại 2^(32 − a − b). "Word" (từ) hay "byte" chỉ là đơn vị — phép tính số bit y hệt.</p>
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Luyện dạng 3.4: viết địa chỉ ra nhị phân, kẻ ranh giới trường, đọc từng trường.</p>
+<div class="os-lab os-lab-sim-addr-split os-lab-p-split os-lab-t-addr-split-walk"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> tách bit, đọc từng trường <a href="/os-lab?sim=addr-split&amp;preset=split&amp;lang=vi&amp;tour=addr-split-walk" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Thử câu 16 FE3: địa chỉ 32 bit với 10 + 12 bit trường bảng — còn bao nhiêu bit độ dời?</li><li>Chuyển sang chế độ cỡ bảng trang và kiểm một câu cỡ bảng trang theo cùng cách.</li></ol></div>
+</div>
 <h3>3.5 Cấp phát liên tục — first, next, best, worst fit (Ch.3, <a href="/courses/operating-systems/learn?lessonSlug=osg202-slide-osg3-1">3.A</a>, slide 9–10)</h3>
 <ol>
 <li>Viết các lỗ trống (hole) theo thứ tự địa chỉ. Với mỗi yêu cầu, đánh dấu các lỗ đủ lớn.</li>
@@ -745,6 +781,12 @@ const tinhFit = () =&gt; datCho(LO, XIN, 'best');
 const MOI_KHOI = 1024 / 4, TOI_DA_KB = (10 + MOI_KHOI) * 1024 / 1024;                // FE21#16: (trực tiếp + gián tiếp) × cỡ khối
 const N_DC = (4 - 2) / 1, P_IO = 0.5, HIEU_SUAT = 1 - P_IO ** N_DC;                 // FE5#11: 1 − pⁿ</code></pre></details>
 <p class="pitfall">⚠️ <strong>Unsafe is not deadlocked.</strong> In FE3#48 nobody has asked for more yet; "unsafe" only means the OS can no longer <em>guarantee</em> that all can finish. Options "deadlock" and "starvation" are there to catch that. Single-resource "Has / Max / Free" pictures (Fig. A, B, C in FE20#39, FE21#2, FE22#31, FE25#15) are the same method with one column — and note that FE18#12, FE20#39, FE22#31 key "Fig. B" although Fig. A is safe too.</p>
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>Type 3.6 drill: the banker’s safety scan exactly as the method above writes it.</p>
+<div class="os-lab os-lab-sim-deadlock os-lab-p-banker os-lab-t-deadlock-banker"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> Work, Need, Finish — one row at a time <a href="/os-lab?sim=deadlock&amp;preset=banker&amp;lang=en&amp;tour=deadlock-banker" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Compute Need, then step the scan and write each new Work.</li><li>If the options are sequences, check each option against Work instead of comparing with your own order.</li></ol></div>
+</div>
 <h3>3.7 Disk-arm scheduling (Ch.5, <a href="/courses/operating-systems/learn?lessonSlug=osg202-slide-osg5-2">5.B</a>, slides 31–33)</h3>
 <ol>
 <li>Draw a number line with the start position and all requested cylinders.</li>
@@ -788,7 +830,13 @@ const LO = [10, 4, 20, 15, 9], XIN = [8, 12, 10];                               
 const tinhFit = () =&gt; datCho(LO, XIN, 'best');
 const MOI_KHOI = 1024 / 4, TOI_DA_KB = (10 + MOI_KHOI) * 1024 / 1024;                // FE21#16: (trực tiếp + gián tiếp) × cỡ khối
 const N_DC = (4 - 2) / 1, P_IO = 0.5, HIEU_SUAT = 1 - P_IO ** N_DC;                 // FE5#11: 1 − pⁿ</code></pre></details>
-<p class="pitfall">⚠️ FCFS needs no thinking — and FE1#13 still has a wrong key (135 is correct, no option matches): see the <a href="/courses/operating-systems/learn?lessonSlug=osg202-chua-fe1">FE1 walkthrough</a>. SCAN and C-SCAN need the disk size; if the question does not give it, the intended algorithm is FCFS, SSF or LOOK.</p>`,
+<p class="pitfall">⚠️ FCFS needs no thinking — and FE1#13 still has a wrong key (135 is correct, no option matches): see the <a href="/courses/operating-systems/learn?lessonSlug=osg202-chua-fe1">FE1 walkthrough</a>. SCAN and C-SCAN need the disk size; if the question does not give it, the intended algorithm is FCFS, SSF or LOOK.</p>
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>Type 3.7 drill in exam mode — and the “which algorithm is this?” question.</p>
+<div class="os-lab os-lab-sim-disk-arm os-lab-p-exam os-lab-t-disk-arm-exam"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> type the order and the total, then check <a href="/os-lab?sim=disk-arm&amp;preset=exam&amp;lang=en&amp;tour=disk-arm-exam" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Type the order and the total for FCFS, SSF and the elevator.</li><li>Check, then answer the “which algorithm?” question at the bottom.</li></ol></div>
+</div>`,
     `<h3>3.6 Bế tắc — thuật toán nhà băng và phát hiện bế tắc (Ch.6, <a href="/courses/operating-systems/learn?lessonSlug=osg202-slide-osg6-1">6.A</a>, slide 16–25)</h3>
 <ol>
 <li>Xác định đề cho ma trận gì. <strong>Max</strong> (nhu cầu tối đa) ⇒ nhà băng (banker): Need = Max − Allocation. <strong>Request / Requested</strong> (đang xin) ⇒ phát hiện bế tắc: dùng nguyên như vậy.</li>
@@ -860,6 +908,12 @@ const tinhFit = () =&gt; datCho(LO, XIN, 'best');
 const MOI_KHOI = 1024 / 4, TOI_DA_KB = (10 + MOI_KHOI) * 1024 / 1024;                // FE21#16: (trực tiếp + gián tiếp) × cỡ khối
 const N_DC = (4 - 2) / 1, P_IO = 0.5, HIEU_SUAT = 1 - P_IO ** N_DC;                 // FE5#11: 1 − pⁿ</code></pre></details>
 <p class="pitfall">⚠️ <strong>Không an toàn chưa phải là bế tắc.</strong> Ở FE3#48 chưa ai xin thêm; "không an toàn" (unsafe) chỉ có nghĩa HĐH không còn <em>bảo đảm</em> mọi tiến trình chạy xong. Phương án "deadlock" và "starvation" đặt ra để bắt chỗ đó. Các hình một loại tài nguyên "Has / Max / Free" (Fig. A, B, C ở FE20#39, FE21#2, FE22#31, FE25#15) là cùng cách làm với một cột — và lưu ý FE18#12, FE20#39, FE22#31 có khoá "Fig. B" dù Fig. A cũng an toàn.</p>
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Luyện dạng 3.6: vòng kiểm an toàn của nhà băng đúng như cách làm ở trên.</p>
+<div class="os-lab os-lab-sim-deadlock os-lab-p-banker os-lab-t-deadlock-banker"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> Work, Need, Finish — từng dòng một <a href="/os-lab?sim=deadlock&amp;preset=banker&amp;lang=vi&amp;tour=deadlock-banker" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Tính Need, rồi bấm vòng quét và ghi từng Work mới.</li><li>Nếu phương án là các chuỗi, chấm từng phương án với Work thay vì so với thứ tự của mình.</li></ol></div>
+</div>
 <h3>3.7 Lập lịch đầu từ đĩa (Ch.5, <a href="/courses/operating-systems/learn?lessonSlug=osg202-slide-osg5-2">5.B</a>, slide 31–33)</h3>
 <ol>
 <li>Vẽ một trục số với vị trí xuất phát và mọi cylinder được yêu cầu.</li>
@@ -903,7 +957,13 @@ const LO = [10, 4, 20, 15, 9], XIN = [8, 12, 10];                               
 const tinhFit = () =&gt; datCho(LO, XIN, 'best');
 const MOI_KHOI = 1024 / 4, TOI_DA_KB = (10 + MOI_KHOI) * 1024 / 1024;                // FE21#16: (trực tiếp + gián tiếp) × cỡ khối
 const N_DC = (4 - 2) / 1, P_IO = 0.5, HIEU_SUAT = 1 - P_IO ** N_DC;                 // FE5#11: 1 − pⁿ</code></pre></details>
-<p class="pitfall">⚠️ FCFS không cần nghĩ — vậy mà FE1#13 vẫn có khoá sai (đúng là 135, không phương án nào khớp): xem <a href="/courses/operating-systems/learn?lessonSlug=osg202-chua-fe1">bài chữa FE1</a>. SCAN và C-SCAN cần biết cỡ đĩa; đề không cho thì thuật toán được nhắm tới là FCFS, SSF hoặc LOOK.</p>`),
+<p class="pitfall">⚠️ FCFS không cần nghĩ — vậy mà FE1#13 vẫn có khoá sai (đúng là 135, không phương án nào khớp): xem <a href="/courses/operating-systems/learn?lessonSlug=osg202-chua-fe1">bài chữa FE1</a>. SCAN và C-SCAN cần biết cỡ đĩa; đề không cho thì thuật toán được nhắm tới là FCFS, SSF hoặc LOOK.</p>
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Luyện dạng 3.7 ở chế độ thi — kèm câu “thuật toán nào đây?”.</p>
+<div class="os-lab os-lab-sim-disk-arm os-lab-p-exam os-lab-t-disk-arm-exam"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> gõ thứ tự và tổng rồi chấm <a href="/os-lab?sim=disk-arm&amp;preset=exam&amp;lang=vi&amp;tour=disk-arm-exam" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Gõ thứ tự và tổng cho FCFS, SSF và thang máy.</li><li>Chấm, rồi trả lời câu “thuật toán nào?” ở cuối.</li></ol></div>
+</div>`),
     bi(`<h3>3.8 i-nodes and FAT (Ch.4, <a href="/courses/operating-systems/learn?lessonSlug=osg202-slide-osg4-1">4.A</a> slide 21, <a href="/courses/operating-systems/learn?lessonSlug=osg202-slide-osg4-2">4.B</a> slides 41–45)</h3>
 <ul>
 <li><strong>Largest file with an i-node</strong> = (direct pointers + block ÷ address size for each single-indirect block + (block ÷ address)² for a double-indirect…) × block size.</li>
@@ -1744,6 +1804,12 @@ function tinhG11(coTrang) {
 <p class="dap-an">✅ <strong>C — 6.</strong> Four cold faults (0, 1, 7, 2), then 3 evicts 0, then 0 evicts 1. Same question in FE3#17, FE7#22, FE11#20, FE14#26, key C.</p>
 <ul><li>A — forgets the two replacements. B, D — off by one: count the F row, do not estimate.</li></ul>
 <p>📖 <a href="/courses/operating-systems/learn?lessonSlug=osg202-slide-osg3-1">3.A</a>, slide 20.</p>
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>Redo Q17 yourself: 0 1 7 2 3 2 7 1 0 3, four frames.</p>
+<div class="os-lab os-lab-sim-vm os-lab-p-exam"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> redo Q17 with any algorithm <a href="/os-lab?sim=vm&amp;preset=exam&amp;lang=en" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Type the string, pick FIFO and 4 frames, and compare each column with the table above.</li><li>Change to LRU: does the answer change?</li></ol></div>
+</div>
 <h3>Q18 · original paper only — what makes translation fast</h3>
 <p><em>When designing a paging system, which of the following factors is the most critical in minimizing translation overhead?</em><br>A. Increasing the number of page table entries per process. · B. Using a Translation Lookaside Buffer (TLB) for faster lookups. · C. Storing page tables in slower secondary storage. · D. Assigning fixed-size page frames without considering process needs.</p>
 <p class="dap-an">✅ <strong>B.</strong> Without a TLB every memory reference costs at least one extra reference to the page table; the TLB caches recent translations and hits most of the time. Same question in FE3#18, key B.</p>
@@ -1914,6 +1980,12 @@ function tinhG11(coTrang) {
 <p class="dap-an">✅ <strong>C — 6.</strong> Bốn lỗi nạp đầu (0, 1, 7, 2), rồi 3 đẩy 0 ra, rồi 0 đẩy 1 ra. Cùng câu ở FE3#17, FE7#22, FE11#20, FE14#26, khoá C.</p>
 <ul><li>A — quên hai lần thay. B, D — lệch một: đếm hàng F, đừng ước lượng.</li></ul>
 <p>📖 <a href="/courses/operating-systems/learn?lessonSlug=osg202-slide-osg3-1">3.A</a>, slide 20.</p>
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Tự làm lại câu 17: 0 1 7 2 3 2 7 1 0 3, bốn khung.</p>
+<div class="os-lab os-lab-sim-vm os-lab-p-exam"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> làm lại câu 17 với thuật toán bất kỳ <a href="/os-lab?sim=vm&amp;preset=exam&amp;lang=vi" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Gõ chuỗi, chọn FIFO và 4 khung, so từng cột với bảng ở trên.</li><li>Đổi sang LRU: đáp án có đổi không?</li></ol></div>
+</div>
 <h3>Câu 18 · chỉ có trong đề gốc — điều gì làm dịch địa chỉ nhanh</h3>
 <p>🇬🇧 <em>When designing a paging system, which of the following factors is the most critical in minimizing translation overhead?</em><br>A. Increasing the number of page table entries per process. · B. Using a Translation Lookaside Buffer (TLB) for faster lookups. · C. Storing page tables in slower secondary storage. · D. Assigning fixed-size page frames without considering process needs.</p>
 <p>🇻🇳 Khi thiết kế hệ thống phân trang, yếu tố nào quan trọng nhất để giảm chi phí dịch địa chỉ? A. Tăng số mục bảng trang mỗi tiến trình · B. Dùng TLB để tra nhanh · C. Để bảng trang ở bộ nhớ phụ chậm hơn · D. Cấp khung cỡ cố định bất kể nhu cầu tiến trình.</p>
@@ -2182,6 +2254,12 @@ function tinhG11(coTrang) {
 <div class="callout danger"><p><strong>Bank key: D (114). Correct answer: 135 — none of the options.</strong> The original image was checked: the numbers are as printed. Proof without any arithmetic doubt: whatever the starting cylinder, the moves after the first request are 48 − 5 + 48 − 32 + 50 − 32 + 50 − 12 = 115, already more than 114. No other standard algorithm gives 108, 96, 83 or 114 either.</p></div>
 <p class="dap-an">✅ <strong>In the exam: choose D (114)</strong> — the closest to 135 and the key the bank expects — after one recomputation, then move on. Know that the true FCFS total is 135.</p>
 <p>📖 <a href="/courses/operating-systems/learn?lessonSlug=osg202-slide-osg5-2">5.B</a>, slide 31.</p>
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>Q33’s key is wrong, so check it with a second tool: type the start cylinder and the queue of the question.</p>
+<div class="os-lab os-lab-sim-disk-arm os-lab-p-fcfs os-lab-t-disk-arm-cscan"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> FCFS and the others on one queue <a href="/os-lab?sim=disk-arm&amp;preset=fcfs&amp;lang=en&amp;tour=disk-arm-cscan" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Set the head and the requests of Q33 and step FCFS: does the running total end at 135?</li><li>Switch to SSTF and LOOK on the same queue for comparison.</li></ol></div>
+</div>
 <h3>Q34 · Exam Room #14 — watchdog timer</h3>
 <details><summary>🖼 Original question image</summary><p><img src="https://media.cuongthai.com/images/exam-questions/OSG202/D1/q34.png" alt="Original question 34" loading="lazy" /></p></details>
 <p><em>What is the main function of a watchdog timer in an operating system?</em><br>A. Measure the performance of user programs and evaluate them. · B. Detect system crashes and reset the system if necessary. · C. Schedule tasks to execute at predetermined real-time intervals. · D. Manage memory allocation.</p>
@@ -2348,6 +2426,12 @@ function tinhG11(coTrang) {
 <div class="callout danger"><p><strong>Khoá ngân hàng: D (114). Đáp án đúng: 135 — không phương án nào.</strong> Đã đối chiếu ảnh đề gốc: số liệu đúng như in. Chứng minh khỏi ngờ phép cộng: dù đầu từ xuất phát ở đâu, các bước sau yêu cầu đầu tiên là 48 − 5 + 48 − 32 + 50 − 32 + 50 − 12 = 115, đã lớn hơn 114. Không thuật toán chuẩn nào khác ra 108, 96, 83 hay 114.</p></div>
 <p class="dap-an">✅ <strong>Khi thi: chọn D (114)</strong> — gần 135 nhất và là khoá ngân hàng mong đợi — sau khi tính lại một lần, rồi đi tiếp. Nhưng hãy biết tổng FCFS thật là 135.</p>
 <p>📖 <a href="/courses/operating-systems/learn?lessonSlug=osg202-slide-osg5-2">5.B</a>, slide 31.</p>
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Khoá của câu 33 sai, nên kiểm bằng một công cụ thứ hai: gõ trụ xuất phát và hàng đợi của đề.</p>
+<div class="os-lab os-lab-sim-disk-arm os-lab-p-fcfs os-lab-t-disk-arm-cscan"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> FCFS và các thuật toán khác trên một hàng đợi <a href="/os-lab?sim=disk-arm&amp;preset=fcfs&amp;lang=vi&amp;tour=disk-arm-cscan" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Đặt đầu đọc và các yêu cầu của câu 33 rồi bấm FCFS: tổng cộng dồn có ra 135 không?</li><li>Đổi sang SSTF và LOOK trên cùng hàng đợi để so.</li></ol></div>
+</div>
 <h3>Câu 34 · Phòng thi #14 — bộ định thời watchdog</h3>
 <details><summary>🖼 Ảnh đề gốc</summary><p><img src="https://media.cuongthai.com/images/exam-questions/OSG202/D1/q34.png" alt="Ảnh đề gốc câu 34" loading="lazy" /></p></details>
 <p>🇬🇧 <em>What is the main function of a watchdog timer in an operating system?</em><br>A. Measure the performance of user programs and evaluate them. · B. Detect system crashes and reset the system if necessary. · C. Schedule tasks to execute at predetermined real-time intervals. · D. Manage memory allocation.</p>
@@ -2462,6 +2546,12 @@ function tinhG11(coTrang) {
 <ul><li>B — P0 needs (7 4 3) at once. C — after P1, P0 still needs (7 4 3) &gt; (5 3 2). D — P2 needs (6 0 0) &gt; (3 3 2).</li></ul>
 <p class="pitfall">⚠️ The trap is forgetting that Available is <em>not</em> given: it is Total − the column sums of Allocation (7 2 5).</p>
 <p>📖 <a href="/courses/operating-systems/learn?lessonSlug=osg202-slide-osg6-1">6.A</a>, slides 24–25.</p>
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>Q47–Q48 are the two halves of the same skill: Available, Need, then the scan.</p>
+<div class="os-lab os-lab-sim-deadlock os-lab-p-banker os-lab-t-deadlock-banker"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> check every option against Work <a href="/os-lab?sim=deadlock&amp;preset=banker&amp;lang=en&amp;tour=deadlock-banker" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Step the safety scan and write Work after each process.</li><li>Take each option of Q48 and play it against Work: the first step that does not fit kills the option.</li></ol></div>
+</div>
 <h3>Q49 · Exam Room #29 — attacking circular wait</h3>
 <details><summary>🖼 Original question image</summary><p><img src="https://media.cuongthai.com/images/exam-questions/OSG202/D1/q49.png" alt="Original question 49" loading="lazy" /></p></details>
 <p><em>Which approach to deadlock prevention eliminates circular wait?</em><br>A. Forcing all processes to request resources in a predefined order · B. Allowing processes to hold and wait for resources indefinitely · C. Preventing mutual exclusion for critical resources · D. Granting all resources to a process before execution begins</p>
@@ -2586,6 +2676,12 @@ function tinhG11(coTrang) {
 <ul><li>B — P0 cần (7 4 3) ngay từ đầu. C — sau P1, P0 vẫn cần (7 4 3) &gt; (5 3 2). D — P2 cần (6 0 0) &gt; (3 3 2).</li></ul>
 <p class="pitfall">⚠️ Bẫy là quên rằng đề KHÔNG cho Available: phải lấy Tổng − tổng cột Allocation (7 2 5).</p>
 <p>📖 <a href="/courses/operating-systems/learn?lessonSlug=osg202-slide-osg6-1">6.A</a>, slide 24–25.</p>
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Câu 47–48 là hai nửa của cùng một kỹ năng: Available, Need, rồi vòng quét.</p>
+<div class="os-lab os-lab-sim-deadlock os-lab-p-banker os-lab-t-deadlock-banker"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> chấm từng phương án với Work <a href="/os-lab?sim=deadlock&amp;preset=banker&amp;lang=vi&amp;tour=deadlock-banker" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Bấm vòng kiểm an toàn và ghi Work sau mỗi tiến trình.</li><li>Lấy từng phương án của câu 48 chạy thử với Work: bước đầu tiên không vừa là loại phương án đó.</li></ol></div>
+</div>
 <h3>Câu 49 · Phòng thi #29 — tấn công chờ vòng tròn</h3>
 <details><summary>🖼 Ảnh đề gốc</summary><p><img src="https://media.cuongthai.com/images/exam-questions/OSG202/D1/q49.png" alt="Ảnh đề gốc câu 49" loading="lazy" /></p></details>
 <p>🇬🇧 <em>Which approach to deadlock prevention eliminates circular wait?</em><br>A. Forcing all processes to request resources in a predefined order · B. Allowing processes to hold and wait for resources indefinitely · C. Preventing mutual exclusion for critical resources · D. Granting all resources to a process before execution begins</p>
@@ -3091,7 +3187,13 @@ const kiem46 = (chuoi) =&gt; kiemChuoi({ conLai: A46, giuLai: C46, canThem: R46,
 const HAS48 = [3, 4, 3], MAX48 = [8, 6, 5], TONG48 = 15, FREE48 = 5;</code></pre></details>
 <p class="dap-an">✅ <strong>A — 140.</strong> Two steps, always in this order: (1) offset &lt; limit? 50 &lt; 100 — legal; (2) physical = base + offset = 90 + 50 = 140. Bank key A.</p>
 <ul><li>B — no rule gives 130. C — 150 = limit + offset: the two columns swapped (the image prints Limit first, then Base — read the header). D — only when the offset is ≥ the limit (try (1, 20): 20 ≥ 14 ⇒ trap).</li></ul>
-<p>📖 <a href="/courses/operating-systems/learn?lessonSlug=osg202-slide-osg3-2">3.B</a>, slides 44–46.</p>`,
+<p>📖 <a href="/courses/operating-systems/learn?lessonSlug=osg202-slide-osg3-2">3.B</a>, slides 44–46.</p>
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>Q45 in one move: compare the offset with the limit, then add the base.</p>
+<div class="os-lab os-lab-sim-addr-split os-lab-p-seg os-lab-t-addr-split-size"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> limit first, then base <a href="/os-lab?sim=addr-split&amp;preset=seg&amp;lang=en&amp;tour=addr-split-size" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Try (2, 250) and (1, 130) and say the answer before the page shows it.</li><li>Then apply the same two steps to the segment table of Q45 on paper and check the option.</li></ol></div>
+</div>`,
     `<h2>Chương 3 — Quản lý bộ nhớ (8 câu)</h2>
 <h3>Câu 11 — lợi ích của phân trang</h3>
 <details><summary>🖼 Ảnh đề gốc</summary><p><img src="https://media.cuongthai.com/images/exam-questions/OSG202/D2/q11.png" alt="Ảnh đề gốc câu 11" loading="lazy" /></p></details>
@@ -3177,7 +3279,13 @@ const kiem46 = (chuoi) =&gt; kiemChuoi({ conLai: A46, giuLai: C46, canThem: R46,
 const HAS48 = [3, 4, 3], MAX48 = [8, 6, 5], TONG48 = 15, FREE48 = 5;</code></pre></details>
 <p class="dap-an">✅ <strong>A — 140.</strong> Hai bước, luôn theo thứ tự này: (1) độ dời &lt; limit? 50 &lt; 100 — hợp lệ; (2) vật lý = base + độ dời = 90 + 50 = 140. Khoá ngân hàng A.</p>
 <ul><li>B — không quy tắc nào ra 130. C — 150 = limit + độ dời: đọc lẫn hai cột (ảnh in Limit trước rồi mới tới Base — đọc tiêu đề cột). D — chỉ khi độ dời ≥ limit (thử (1, 20): 20 ≥ 14 ⇒ bẫy).</li></ul>
-<p>📖 <a href="/courses/operating-systems/learn?lessonSlug=osg202-slide-osg3-2">3.B</a>, slide 44–46.</p>`),
+<p>📖 <a href="/courses/operating-systems/learn?lessonSlug=osg202-slide-osg3-2">3.B</a>, slide 44–46.</p>
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Câu 45 trong một bước: so độ dời với limit, rồi cộng base.</p>
+<div class="os-lab os-lab-sim-addr-split os-lab-p-seg os-lab-t-addr-split-size"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> limit trước, base sau <a href="/os-lab?sim=addr-split&amp;preset=seg&amp;lang=vi&amp;tour=addr-split-size" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Thử (2, 250) và (1, 130) và nói đáp án trước khi trang hiện ra.</li><li>Rồi áp đúng hai bước đó cho bảng đoạn của câu 45 trên giấy và kiểm phương án.</li></ol></div>
+</div>`),
     bi(`<h2>Chapter 4 — File systems (8 questions)</h2>
 <h3>Q20 — contiguous allocation</h3>
 <details><summary>🖼 Original question image</summary><p><img src="https://media.cuongthai.com/images/exam-questions/OSG202/D2/q20.png" alt="Original question 20" loading="lazy" /></p></details>
@@ -3469,6 +3577,12 @@ const HAS48 = [3, 4, 3], MAX48 = [8, 6, 5], TONG48 = 15, FREE48 = 5;</code></pre
 <ul><li>B, D — P2 first is impossible: it needs one RS3 and none is free. C — after P1, Available is (3 1 0 2): still no RS3 for P2.</li></ul>
 <p class="pitfall">⚠️ Check the options, do not compute "your" order and look for it. The book's loop (scan from P1) finds <strong>P1 → P3 → P2</strong> — also valid, and not among the options. Whoever stops there wastes minutes looking for an answer that is not printed.</p>
 <p>📖 <a href="/courses/operating-systems/learn?lessonSlug=osg202-slide-osg6-1">6.A</a>, slides 16–18 (detection with a Request matrix, Fig. 6-6/6-7).</p>
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>Q46 uses the detection scan (Request, not Need).</p>
+<div class="os-lab os-lab-sim-deadlock os-lab-p-detect os-lab-t-deadlock-detect"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> detection: Request against Available <a href="/os-lab?sim=deadlock&amp;preset=detect&amp;lang=en&amp;tour=deadlock-detect" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Step the scan and note the order in which processes can finish.</li><li>Play each option of Q46 the same way and keep only the ones that never get stuck.</li></ol></div>
+</div>
 <h3>Q47 — prevention in embedded and real-time systems</h3>
 <details><summary>🖼 Original question image</summary><p><img src="https://media.cuongthai.com/images/exam-questions/OSG202/D2/q47.png" alt="Original question 47" loading="lazy" /></p></details>
 <p><em>Why is deadlock prevention often favored in embedded or real-time systems over avoidance?</em><br>A. Guarantees fixed timing without complex runtime checks · B. Allows resource sharing in dynamic threads · C. Uses fewer memory segments during paging · D. Facilitate integration with authentication systems across process layers</p>
@@ -3587,6 +3701,12 @@ const HAS48 = [3, 4, 3], MAX48 = [8, 6, 5], TONG48 = 15, FREE48 = 5;</code></pre
 <ul><li>B, D — P2 không thể chạy đầu: nó cần một RS3 mà RS3 đang rảnh 0. C — sau P1, Available là (3 1 0 2): vẫn chưa có RS3 cho P2.</li></ul>
 <p class="pitfall">⚠️ Chấm từng phương án, đừng tự tính thứ tự "của mình" rồi đi tìm. Vòng lặp của sách (quét từ P1) ra <strong>P1 → P3 → P2</strong> — cũng hợp lệ, nhưng không có trong phương án. Ai dừng ở đó sẽ mất vài phút tìm một đáp án không được in ra.</p>
 <p>📖 <a href="/courses/operating-systems/learn?lessonSlug=osg202-slide-osg6-1">6.A</a>, slide 16–18 (phát hiện bế tắc với ma trận Request, Hình 6-6/6-7).</p>
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Câu 46 dùng vòng quét phát hiện (Request, không phải Need).</p>
+<div class="os-lab os-lab-sim-deadlock os-lab-p-detect os-lab-t-deadlock-detect"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> phát hiện: Request so với Available <a href="/os-lab?sim=deadlock&amp;preset=detect&amp;lang=vi&amp;tour=deadlock-detect" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Bấm vòng quét và ghi thứ tự các tiến trình xong được.</li><li>Chạy từng phương án của câu 46 theo cùng cách, chỉ giữ phương án không bao giờ kẹt.</li></ol></div>
+</div>
 <h3>Câu 47 — ngăn ngừa trong hệ nhúng và thời gian thực</h3>
 <details><summary>🖼 Ảnh đề gốc</summary><p><img src="https://media.cuongthai.com/images/exam-questions/OSG202/D2/q47.png" alt="Ảnh đề gốc câu 47" loading="lazy" /></p></details>
 <p>🇬🇧 <em>Why is deadlock prevention often favored in embedded or real-time systems over avoidance?</em><br>A. Guarantees fixed timing without complex runtime checks · B. Allows resource sharing in dynamic threads · C. Uses fewer memory segments during paging · D. Facilitate integration with authentication systems across process layers</p>
@@ -4192,6 +4312,12 @@ const HAS48 = [3, 4, 3], MAX48 = [6, 5, 7], TONG48 = 10;</code></pre></details>
 <ul><li>D — 4 KB is the trap: it is the book's own split (10 | 10 | 12, Fig. 3-13), memorised instead of recomputed. A, C — 9- and 11-bit offsets.</li></ul>
 <p class="pitfall">⚠️ This is the most repeated question of the whole bank (15 papers), with changing field widths. Never remember "1 KB" — recompute 2^(32 − a − b).</p>
 <p>📖 <a href="/courses/operating-systems/learn?lessonSlug=osg202-slide-osg3-1">3.A</a>, slide 18.</p>
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>Q16 is a bit split: 32 − 10 − 12 bits of offset, and the page size is 2 to that power.</p>
+<div class="os-lab os-lab-sim-addr-split os-lab-p-split os-lab-t-addr-split-walk"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> the offset is what is left <a href="/os-lab?sim=addr-split&amp;preset=split&amp;lang=en&amp;tour=addr-split-walk" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Set the bit widths of Q16 and read the offset field.</li><li>Change one field by a bit and watch the page size double or halve.</li></ol></div>
+</div>
 <h3>Q17 — FIFO with four frames (computed, = FE1 Q17)</h3>
 <details><summary>🖼 Original question image</summary><p><img src="https://media.cuongthai.com/images/exam-questions/OSG202/D3/q17.png" alt="Original question 17" loading="lazy" /></p></details>
 <p><em>If FIFO page replacement algorithm is used with four page frames, how many page faults will occur with the reference string 0172327103 if the four frames are initially empty?</em><br>A. 4 Pages · B. 5 Pages · C. 6 Pages · D. 7 Pages</p>
@@ -4440,6 +4566,12 @@ const HAS48 = [3, 4, 3], MAX48 = [6, 5, 7], TONG48 = 10;</code></pre></details>
 <ul><li>D — 4 KB là bẫy: đó là cách chia của chính sách (10 | 10 | 12, Hình 3-13), học thuộc thay vì tính lại. A, C — độ dời 9 và 11 bit.</li></ul>
 <p class="pitfall">⚠️ Đây là câu lặp nhiều nhất của cả ngân hàng (15 đề), độ rộng trường thay đổi. Đừng nhớ "1 KB" — lần nào cũng tính lại 2^(32 − a − b).</p>
 <p>📖 <a href="/courses/operating-systems/learn?lessonSlug=osg202-slide-osg3-1">3.A</a>, slide 18.</p>
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Câu 16 là một phép tách bit: 32 − 10 − 12 bit độ dời, và cỡ trang là 2 mũ số đó.</p>
+<div class="os-lab os-lab-sim-addr-split os-lab-p-split os-lab-t-addr-split-walk"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> độ dời là phần còn lại <a href="/os-lab?sim=addr-split&amp;preset=split&amp;lang=vi&amp;tour=addr-split-walk" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Đặt số bit của câu 16 và đọc trường độ dời.</li><li>Đổi một trường đi một bit và xem cỡ trang gấp đôi hoặc giảm nửa.</li></ol></div>
+</div>
 <h3>Câu 17 — FIFO bốn khung (câu tính, = câu 17 FE1)</h3>
 <details><summary>🖼 Ảnh đề gốc</summary><p><img src="https://media.cuongthai.com/images/exam-questions/OSG202/D3/q17.png" alt="Ảnh đề gốc câu 17" loading="lazy" /></p></details>
 <p>🇬🇧 <em>If FIFO page replacement algorithm is used with four page frames, how many page faults will occur with the reference string 0172327103 if the four frames are initially empty?</em><br>A. 4 Pages · B. 5 Pages · C. 6 Pages · D. 7 Pages</p>
@@ -4894,6 +5026,12 @@ const HAS48 = [3, 4, 3], MAX48 = [6, 5, 7], TONG48 = 10;</code></pre></details>
 <p class="dap-an">✅ <strong>A — yes.</strong> Need = Max − Allocation; P1's need (1 2 2) fits (3 3 2) ⇒ work (5 3 2); then P3, P4, P0, P2 all fit in turn. These are exactly the numbers of FE1 Q48 (Silberschatz's classic example), asked the other way. Bank key A.</p>
 <ul><li>B — the loop finishes everybody. C, D — "only if" is false: safe sequences can start with P1 <em>or</em> with P3 (P3's need (0 1 1) also fits at the start); the simulation finds 16 safe orders. E — Available is given, nothing is missing (in FE1 Q48 it had to be computed from the totals).</li></ul>
 <p>📖 <a href="/courses/operating-systems/learn?lessonSlug=osg202-slide-osg6-1">6.A</a>, slides 24–25.</p>
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>Q36 is the banker on FE1’s data: practise the scan until it takes you under two minutes.</p>
+<div class="os-lab os-lab-sim-deadlock os-lab-p-banker os-lab-t-deadlock-banker"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> Need, Work, Finish <a href="/os-lab?sim=deadlock&amp;preset=banker&amp;lang=en&amp;tour=deadlock-banker" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Compute Need = Max − Allocation, then step the scan.</li><li>Count how many different safe orders exist and why any one of them proves “safe”.</li></ol></div>
+</div>
 <h3>Q37 — a preemptable resource (= FE1 Q37)</h3>
 <details><summary>🖼 Original question image</summary><p><img src="https://media.cuongthai.com/images/exam-questions/OSG202/D3/q37.png" alt="Original question 37" loading="lazy" /></p></details>
 <p><em>What is a preemtable resource?</em><br>A. The one that can be taken away from the process owning it with no ill effects · B. The one that can be taken away from the process owning it with ill effects · C. The one that can not be taken away from the process owning it with no ill effects · D. The one that can not be taken away from the process owning it with ill effects</p>
@@ -5008,6 +5146,12 @@ const HAS48 = [3, 4, 3], MAX48 = [6, 5, 7], TONG48 = 10;</code></pre></details>
 <p class="dap-an">✅ <strong>A — có.</strong> Need = Max − Allocation; need (1 2 2) của P1 vừa (3 3 2) ⇒ work (5 3 2); rồi P3, P4, P0, P2 lần lượt đều vừa. Đây đúng là bộ số của câu 48 FE1 (ví dụ kinh điển của Silberschatz), hỏi theo chiều khác. Khoá ngân hàng A.</p>
 <ul><li>B — vòng lặp cho mọi tiến trình chạy xong. C, D — "chỉ khi" là sai: chuỗi an toàn có thể bắt đầu bằng P1 <em>hoặc</em> P3 (need (0 1 1) của P3 cũng vừa ngay từ đầu); mô phỏng đếm được 16 thứ tự an toàn. E — đề cho sẵn Available, chẳng thiếu gì (ở câu 48 FE1 mới phải tự tính từ tổng).</li></ul>
 <p>📖 <a href="/courses/operating-systems/learn?lessonSlug=osg202-slide-osg6-1">6.A</a>, slide 24–25.</p>
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Câu 36 là nhà băng trên dữ liệu của FE1: luyện vòng quét tới khi bạn làm dưới hai phút.</p>
+<div class="os-lab os-lab-sim-deadlock os-lab-p-banker os-lab-t-deadlock-banker"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> Need, Work, Finish <a href="/os-lab?sim=deadlock&amp;preset=banker&amp;lang=vi&amp;tour=deadlock-banker" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Tính Need = Max − Allocation, rồi bấm vòng quét.</li><li>Đếm có bao nhiêu thứ tự an toàn khác nhau và vì sao chỉ cần một là đủ chứng minh “an toàn”.</li></ol></div>
+</div>
 <h3>Câu 37 — tài nguyên trưng dụng được (= câu 37 FE1)</h3>
 <details><summary>🖼 Ảnh đề gốc</summary><p><img src="https://media.cuongthai.com/images/exam-questions/OSG202/D3/q37.png" alt="Ảnh đề gốc câu 37" loading="lazy" /></p></details>
 <p>🇬🇧 <em>What is a preemtable resource?</em><br>A. The one that can be taken away from the process owning it with no ill effects · B. The one that can be taken away from the process owning it with ill effects · C. The one that can not be taken away from the process owning it with no ill effects · D. The one that can not be taken away from the process owning it with ill effects</p>

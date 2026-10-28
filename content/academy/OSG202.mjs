@@ -973,6 +973,12 @@ Gantt: | P1 0–7 | P2 7–11 | P4 11–15 | P3 15–16 | → waiting = (0 + 5 +
 <tr><td>MLFQ</td><td>adaptive</td><td>yes</td><td>no (with boosting)</td><td><b>general purpose</b></td></tr>
 </tbody></table>
 
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>Now do one yourself: a round-robin problem with the queue-order trap, graded cell by cell.</p>
+<div class="os-lab os-lab-sim-gantt-exam os-lab-p-rr os-lab-t-gantt-exam-rr"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> round robin q = 3 — paint it, then check <a href="/os-lab?sim=gantt-exam&amp;preset=rr&amp;lang=en&amp;tour=gantt-exam-rr" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Paint the chart; at t = 6 decide who enters the ready queue first.</li><li>Fill finish, turnaround and waiting, then press Check my answer.</li><li>Pick SJF, SRTF or Prio-P in the policy switch (or press New exam) and repeat.</li></ol></div>
+</div>
 <div class="pitfall"><b>Waiting time is not "time until it starts".</b> With preemption a process waits every time it is taken off the CPU, so waiting = turnaround − burst, not first-run − arrival. Using the wrong formula on SRTF or RR gives a plausible but wrong answer — and it is the single most common error in the progress test.</div>
 
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Linux CFS schedules by fairness, not by queues.</b> The Completely Fair Scheduler gives every runnable task a <em>virtual runtime</em> and always runs the one with the smallest — a red-black tree lookup (CSD201, lesson A.1) instead of priority queues. Weighted by <span class="badge">nice</span> value, this approximates "every process gets 1/n of the CPU" without any fixed quantum. Since 2024 the newer EEVDF scheduler adds an explicit deadline so latency-sensitive tasks get served first. <em>Beyond syllabus because the textbook's six algorithms are the vocabulary, while production kernels have moved to fairness models built on data structures from your algorithms course.</em></div>
@@ -1040,6 +1046,12 @@ Gantt: | P1 0–7 | P2 7–11 | P4 11–15 | P3 15–16 | → chờ = (0 + 5 + 1
 <tr><td>MLFQ</td><td>thích nghi</td><td>có</td><td>không (nếu có nâng bậc)</td><td><b>đa dụng</b></td></tr>
 </tbody></table>
 
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Giờ tự làm một bài: round robin có bẫy thứ tự hàng đợi, chấm từng ô.</p>
+<div class="os-lab os-lab-sim-gantt-exam os-lab-p-rr os-lab-t-gantt-exam-rr"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> round robin q = 3 — tự tô rồi chấm <a href="/os-lab?sim=gantt-exam&amp;preset=rr&amp;lang=vi&amp;tour=gantt-exam-rr" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Tô biểu đồ; ở t = 6 quyết định ai vào hàng sẵn sàng trước.</li><li>Điền lúc xong, hoàn thành và chờ rồi bấm Chấm bài.</li><li>Chọn SJF, SRTF hoặc Prio-P ở công tắc thuật toán (hoặc bấm Đề mới) rồi làm lại.</li></ol></div>
+</div>
 <div class="pitfall"><b>Thời gian chờ không phải "thời gian tới lúc bắt đầu chạy".</b> Khi có chiếm quyền, tiến trình phải chờ ở mỗi lần bị đẩy khỏi CPU, nên chờ = hoàn thành − thời gian chạy, chứ không phải lần chạy đầu − thời điểm đến. Dùng nhầm công thức ở SRTF hay RR sẽ ra đáp án nghe hợp lý nhưng sai — và đó là lỗi phổ biến nhất trong progress test.</div>
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>CFS của Linux lập lịch theo tính công bằng, không theo hàng đợi.</b> Bộ lập lịch Hoàn toàn Công bằng gán cho mỗi tác vụ sẵn sàng một <em>thời gian chạy ảo</em> và luôn chạy tác vụ có giá trị nhỏ nhất — một phép tra cây đỏ-đen (CSD201, bài A.1) thay cho các hàng đợi ưu tiên. Có trọng số theo giá trị <span class="badge">nice</span>, cách này xấp xỉ "mỗi tiến trình được 1/n CPU" mà không cần lượng tử cố định nào. Từ 2024, bộ lập lịch EEVDF mới hơn thêm một hạn chót tường minh để các tác vụ nhạy độ trễ được phục vụ trước. <em>Ngoài giáo trình vì sáu thuật toán trong sách là vốn từ vựng, còn nhân sản xuất đã chuyển sang các mô hình công bằng dựng trên chính cấu trúc dữ liệu của môn giải thuật.</em></div>
@@ -1389,6 +1401,12 @@ Muốn ăn, mỗi triết gia cần CẢ chiếc bên trái lẫn chiếc bên p
 </div>
 <h3>Worked example · FIFO vs LRU on the same reference string</h3>
 <div class="out"><b>Given:</b> reference string 7, 0, 1, 2, 0, 3, 0, 4, 2, 3, with 3 frames.<br><b>FIFO</b> (evict the oldest-loaded): 7→[7] fault · 0→[7,0] fault · 1→[7,0,1] fault · 2→evict 7 (oldest)→[0,1,2] fault · 0→hit (already in) · 3→evict 0→[1,2,3] fault · 0→evict 1→[2,3,0] fault · 4→evict 2→[3,0,4] fault · 2→evict 3→[0,4,2] fault · 3→evict 0→[4,2,3] fault → <b>9 faults</b>.<br><b>LRU</b> (evict least-recently-used): 7→fault · 0→fault · 1→fault · 2→evict 7 (LRU)→fault · 0→hit, refresh 0's recency · 3→evict 1 (now LRU, not 7)→fault · 0→hit · 4→evict 2 (LRU)→fault · 2→evict 3 (LRU)→fault · 3→evict 0 (LRU)→fault → <b>8 faults</b>.<br><b>Reading the result:</b> LRU beats FIFO by one fault here because it kept page 0 in memory (recently reused) instead of evicting it purely by age — exactly the locality bet FIFO ignores.</div>
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>Check the worked example above, then use it on any string from a past paper.</p>
+<div class="os-lab os-lab-sim-vm os-lab-p-exam"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> FIFO, LRU, OPT and Clock on your string <a href="/os-lab?sim=vm&amp;preset=exam&amp;lang=en" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Type the reference string of the worked example and compare FIFO with LRU column by column.</li><li>Try 3 and 4 frames with FIFO on 1 2 3 4 1 2 5 1 2 3 4 5 (Belady).</li></ol></div>
+</div>
 <div class="pitfall">If a system has too little RAM for its workload, it spends all its time swapping pages in and out instead of doing real work — this is <strong>thrashing</strong>. The machine grinds to a halt even though the CPU is "busy." Adding RAM or running fewer programs fixes it.</div>
 <div class="callout"><span class="badge">Syllabus §3.4 · session 26</span> <b>Belady's anomaly — more RAM, more faults.</b> You would expect adding frames to always reduce page faults, but with <strong>FIFO</strong> replacement that is not guaranteed: <strong>Belady's anomaly</strong> is a real reference string where adding a frame <em>increases</em> the number of faults. LRU and other "stack algorithms" are provably immune — a deep reason production kernels approximate LRU with the <em>clock</em> algorithm and never use FIFO. <em>Belady's anomaly belongs to §3.4 Page Replacement (session 26) — it is examinable, and it explains why FIFO is abandoned in practice.</em></div>
 <div class="note-ct">Notice the deep parallel with CEA201&#39;s cache: RAM caches the disk, cache caches RAM. Page replacement (LRU) and cache replacement are the same idea at different levels of the memory hierarchy.</div>
@@ -1410,6 +1428,12 @@ Muốn ăn, mỗi triết gia cần CẢ chiếc bên trái lẫn chiếc bên p
 </div>
 <h3>Ví dụ có lời giải · FIFO vs LRU trên cùng chuỗi tham chiếu</h3>
 <div class="out"><b>Đề bài:</b> chuỗi tham chiếu 7, 0, 1, 2, 0, 3, 0, 4, 2, 3, với 3 khung.<br><b>FIFO</b> (đẩy trang nạp lâu nhất): 7→[7] lỗi · 0→[7,0] lỗi · 1→[7,0,1] lỗi · 2→đẩy 7 (cũ nhất)→[0,1,2] lỗi · 0→trúng (đã có) · 3→đẩy 0→[1,2,3] lỗi · 0→đẩy 1→[2,3,0] lỗi · 4→đẩy 2→[3,0,4] lỗi · 2→đẩy 3→[0,4,2] lỗi · 3→đẩy 0→[4,2,3] lỗi → <b>9 lỗi trang</b>.<br><b>LRU</b> (đẩy trang lâu không dùng nhất): 7→lỗi · 0→lỗi · 1→lỗi · 2→đẩy 7 (LRU)→lỗi · 0→trúng, làm mới độ "gần đây" của 0 · 3→đẩy 1 (giờ là LRU, không phải 7)→lỗi · 0→trúng · 4→đẩy 2 (LRU)→lỗi · 2→đẩy 3 (LRU)→lỗi · 3→đẩy 0 (LRU)→lỗi → <b>8 lỗi trang</b>.<br><b>Đọc kết quả:</b> LRU thắng FIFO 1 lỗi ở đây vì nó giữ trang 0 trong bộ nhớ (vừa dùng lại) thay vì đẩy nó chỉ vì tuổi — đúng cái cược cục bộ mà FIFO bỏ qua.</div>
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Kiểm ví dụ có lời giải ở trên, rồi dùng cho mọi chuỗi trong đề cũ.</p>
+<div class="os-lab os-lab-sim-vm os-lab-p-exam"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> FIFO, LRU, OPT và Clock trên chuỗi của bạn <a href="/os-lab?sim=vm&amp;preset=exam&amp;lang=vi" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Gõ chuỗi tham chiếu của ví dụ ở trên rồi so FIFO với LRU từng cột.</li><li>Thử 3 và 4 khung với FIFO trên 1 2 3 4 1 2 5 1 2 3 4 5 (Belady).</li></ol></div>
+</div>
 <div class="pitfall">Nếu một hệ thống có quá ít RAM cho khối lượng công việc, nó dành hết thời gian swap trang ra/vào thay vì làm việc thật — đây là <strong>thrashing</strong>. Máy đứng hình dù CPU "bận." Thêm RAM hoặc chạy ít chương trình hơn để chữa.</div>
 <div class="callout"><span class="badge">Syllabus §3.4 · session 26</span> <b>Nghịch lý Belady — thêm RAM, nhiều lỗi hơn.</b> Bạn sẽ nghĩ thêm khung luôn giảm lỗi trang, nhưng với thay trang <strong>FIFO</strong> điều đó không được bảo đảm: <strong>nghịch lý Belady (Belady's anomaly)</strong> là một chuỗi tham chiếu thật mà thêm một khung lại <em>làm tăng</em> số lỗi trang. LRU và các "thuật toán ngăn xếp" khác miễn nhiễm điều này (chứng minh được) — một lý do sâu vì sao kernel thật xấp xỉ LRU bằng thuật toán <em>clock</em> và không bao giờ dùng FIFO. <em>Nghịch lý Belady thuộc §3.4 Thay trang (session 26) — nó nằm trong phạm vi thi, và giải thích vì sao FIFO bị bỏ trong thực tế.</em></div>
 <div class="note-ct">Để ý song song sâu với cache CEA201: RAM cache cho đĩa, cache cache cho RAM. Thay trang (LRU) và thay cache là cùng một ý tưởng ở các tầng khác nhau của phân cấp bộ nhớ.</div>
@@ -1465,6 +1489,12 @@ Compare with no TLB at all: every access would cost 200 ns. A tiny cache of 64�
 <tr><td>Caching disabled</td><td>do not cache this page</td><td>memory-mapped device registers</td></tr>
 </tbody></table>
 
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>The two calculations of this lesson in one tool: split an address into fields, then the cost of a TLB miss.</p>
+<div class="os-lab os-lab-sim-addr-split os-lab-p-split os-lab-t-addr-split-walk"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> split, walk, and the TLB <a href="/os-lab?sim=addr-split&amp;preset=split&amp;lang=en&amp;tour=addr-split-walk" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Type the address of worked example 1 with its bit widths and compare every field.</li><li>Switch to the TLB view and drag the hit rate: how much slower is 90 % than 99 %?</li></ol></div>
+</div>
 <div class="pitfall"><b>Internal fragmentation is the price of paging.</b> A 5 KB process with 4 KB pages occupies two frames — 8 KB — wasting 3 KB inside the last page. On average half a page is lost per process, which is why the page size is a compromise: larger pages mean smaller page tables but more waste, and 4 KB has been the sweet spot for decades.</div>
 
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Huge pages: when 4 KB is the bottleneck.</b> A database with a 64 GB buffer pool needs 16 million page-table entries, and its random access pattern misses the TLB constantly — the CPU can spend 20–30% of its time walking page tables. Linux offers 2 MB and 1 GB "huge pages": the same 64 GB then needs 32,768 entries, which fit in the TLB, and translation almost disappears from the profile. PostgreSQL, Oracle and the JVM all document how to enable them. <em>Beyond syllabus because the course treats the page size as fixed, while tuning it is standard practice for large in-memory systems.</em></div>
@@ -1512,6 +1542,12 @@ So với hoàn toàn không có TLB: mọi lần truy cập đều tốn 200 ns.
 <tr><td>Cấm đưa vào cache</td><td>đừng cache trang này</td><td>thanh ghi thiết bị ánh xạ vào bộ nhớ</td></tr>
 </tbody></table>
 
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Hai phép tính của bài trong một công cụ: tách địa chỉ thành các trường, rồi cái giá của một lần trượt TLB.</p>
+<div class="os-lab os-lab-sim-addr-split os-lab-p-split os-lab-t-addr-split-walk"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> tách, tra bảng, và TLB <a href="/os-lab?sim=addr-split&amp;preset=split&amp;lang=vi&amp;tour=addr-split-walk" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Gõ địa chỉ của ví dụ 1 với đúng số bit và so từng trường.</li><li>Chuyển sang chế độ TLB và kéo tỉ lệ trúng: 90 % chậm hơn 99 % bao nhiêu?</li></ol></div>
+</div>
 <div class="pitfall"><b>Phân mảnh trong là cái giá của phân trang.</b> Một tiến trình 5 KB với trang 4 KB chiếm hai khung — 8 KB — lãng phí 3 KB bên trong trang cuối. Trung bình mỗi tiến trình mất nửa trang, và vì thế kích thước trang là một thoả hiệp: trang lớn thì bảng trang nhỏ nhưng lãng phí nhiều, và 4 KB đã là điểm cân bằng suốt mấy chục năm.</div>
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Trang khổng lồ: khi 4 KB trở thành nút thắt.</b> Một cơ sở dữ liệu có vùng đệm 64 GB cần 16 triệu mục bảng trang, và mẫu truy cập ngẫu nhiên của nó làm trượt TLB liên tục — CPU có thể tiêu 20–30% thời gian chỉ để đi bảng trang. Linux cung cấp "trang khổng lồ" 2 MB và 1 GB: cũng 64 GB đó khi ấy chỉ cần 32.768 mục, vừa vặn trong TLB, và phép dịch địa chỉ gần như biến mất khỏi hồ sơ đo. PostgreSQL, Oracle và JVM đều có tài liệu hướng dẫn bật chúng. <em>Ngoài giáo trình vì môn học coi kích thước trang là cố định, trong khi tinh chỉnh nó là việc thường ngày với các hệ thống lớn chạy trong bộ nhớ.</em></div>
@@ -1911,6 +1947,12 @@ LOOK and C-LOOK are what real drivers implement, because travelling to a cylinde
 <tr><td>C-LOOK</td><td>322</td><td>no</td><td><b>what Linux and Windows actually use</b></td></tr>
 </tbody></table>
 
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>Grade yourself on a fresh queue: the path stays hidden until you check.</p>
+<div class="os-lab os-lab-sim-disk-arm os-lab-p-exam os-lab-t-disk-arm-exam"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> type the order and the total, then check <a href="/os-lab?sim=disk-arm&amp;preset=exam&amp;lang=en&amp;tour=disk-arm-exam" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Type the order and the total for FCFS, SSTF, SCAN, C-SCAN, LOOK and C-LOOK.</li><li>Flip the return-jump switch and see why C-SCAN answers differ between papers.</li></ol></div>
+</div>
 <div class="pitfall"><b>Always state the head's starting direction.</b> SCAN and C-SCAN give completely different numbers if the head starts moving downward — 53 → 37 → 14 → 0 → then up. An answer without the direction stated is incomplete, and half the marks in this question are for the working, not the total.</div>
 
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>On an SSD every algorithm above is pointless.</b> There is no arm and no rotation: any block costs the same ~100 µs, so seek optimisation buys nothing. What matters instead is the <em>erase block</em>: flash can be written per page (4 KB) but only erased per block (a few MB), so overwriting one page means read-modify-erase-write of the whole block — <b>write amplification</b>. The controller therefore does wear levelling and needs the <span class="badge">TRIM</span> command to know which pages the file system has freed. Linux ships the <span class="badge">none</span> (no-op) scheduler for NVMe devices for exactly this reason. <em>Beyond syllabus because the textbook's disk chapter predates flash, and the correct modern answer to "which disk scheduler?" is often "none".</em></div>
@@ -1961,6 +2003,12 @@ LOOK và C-LOOK mới là thứ trình điều khiển thật sự cài đặt, 
 <tr><td>C-LOOK</td><td>322</td><td>không</td><td><b>thứ Linux và Windows thật sự dùng</b></td></tr>
 </tbody></table>
 
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Tự chấm trên một hàng đợi mới: đường đi bị ẩn cho tới khi bạn chấm.</p>
+<div class="os-lab os-lab-sim-disk-arm os-lab-p-exam os-lab-t-disk-arm-exam"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> gõ thứ tự và tổng rồi chấm <a href="/os-lab?sim=disk-arm&amp;preset=exam&amp;lang=vi&amp;tour=disk-arm-exam" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Gõ thứ tự và tổng cho FCFS, SSTF, SCAN, C-SCAN, LOOK và C-LOOK.</li><li>Lật công tắc cú nhảy về và xem vì sao đáp án C-SCAN khác nhau giữa các đề.</li></ol></div>
+</div>
 <div class="pitfall"><b>Luôn nêu rõ chiều di chuyển ban đầu của đầu từ.</b> SCAN và C-SCAN cho con số hoàn toàn khác nếu đầu từ bắt đầu đi xuống — 53 → 37 → 14 → 0 → rồi mới lên. Đáp án không nêu chiều là chưa đầy đủ, và một nửa số điểm của câu này nằm ở phần trình bày chứ không ở con số tổng.</div>
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Trên SSD, mọi thuật toán ở trên đều vô nghĩa.</b> Không có cần trục, không có vòng quay: mọi khối đều tốn như nhau ~100 µs, nên tối ưu quãng dịch chẳng mang lại gì. Thứ quan trọng thay vào đó là <em>khối xoá</em>: bộ nhớ flash ghi được theo trang (4 KB) nhưng chỉ xoá được theo khối (vài MB), nên ghi đè một trang là phải đọc-sửa-xoá-ghi cả khối — <b>khuếch đại ghi</b>. Vì vậy bộ điều khiển phải san đều hao mòn và cần lệnh <span class="badge">TRIM</span> để biết hệ thống tệp đã giải phóng những trang nào. Linux xuất xưởng với bộ lập lịch <span class="badge">none</span> (không làm gì) cho thiết bị NVMe đúng vì lý do đó. <em>Ngoài giáo trình vì chương về đĩa trong sách ra đời trước bộ nhớ flash, và câu trả lời hiện đại đúng cho "dùng bộ lập lịch đĩa nào?" thường là "không dùng cái nào".</em></div>
@@ -2107,6 +2155,12 @@ Safety: P1 Need (0,2,0) ≤ (2,3,0) ✓ → Work (5,3,2) · P3 (0,1,1) ≤ (5,3,
 </tbody></table>
 <p>So general-purpose systems use the fourth strategy — the <b>ostrich algorithm</b>: ignore deadlock, because it is rare, and reboot or kill a process if it happens. Databases instead <em>detect</em> deadlock (a wait-for graph, DBI202 lesson 8.3) and roll one transaction back, which is cheap because a transaction is designed to be undoable.</p>
 
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>The routine of the worked example on the simulator’s table: Need, then the scan, then a request.</p>
+<div class="os-lab os-lab-sim-deadlock os-lab-p-banker os-lab-t-deadlock-banker"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> the safety scan, one Work vector at a time <a href="/os-lab?sim=deadlock&amp;preset=banker&amp;lang=en&amp;tour=deadlock-banker" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Step the scan and write the safe sequence, exactly as the worked example above does.</li><li>Type a request in the Request boxes: the page pretends to grant it, rescans and says grant or wait.</li></ol></div>
+</div>
 <div class="pitfall"><b>Unsafe is not the same as deadlocked.</b> An unsafe state merely means a deadlock <em>could</em> occur if every process later demanded its declared maximum. Many unsafe states never deadlock in practice. The Banker's algorithm is conservative on purpose — it refuses requests that would probably have been fine.</div>
 
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Lock ordering is the deadlock prevention you will actually use.</b> No production codebase runs the Banker's algorithm; instead it imposes a global order on locks — "always take the account lock before the ledger lock" — which breaks the circular-wait condition by construction. Tools enforce it: Java's <span class="badge">jstack</span> prints detected deadlocks, Go's runtime stops the program only when <em>every</em> goroutine is stuck ("all goroutines are asleep - deadlock!") — its race detector finds data races, not deadlocks — and Linux's lockdep validates every kernel lock acquisition against the observed order and prints a warning ("possible circular locking dependency detected") on a violation <em>before</em> a real deadlock happens. <em>Beyond syllabus because the course teaches avoidance mathematics, while the industry solved the problem with a coding convention plus tooling.</em></div>
@@ -2170,6 +2224,12 @@ Kiểm: P1 Need (0,2,0) ≤ (2,3,0) ✓ → Work (5,3,2) · P3 (0,1,1) ≤ (5,3,
 </tbody></table>
 <p>Nên hệ thống đa dụng dùng chiến lược thứ tư — <b>thuật toán đà điểu</b>: mặc kệ khoá chết, vì nó hiếm, và khởi động lại hoặc giết một tiến trình nếu xảy ra. Cơ sở dữ liệu thì thay vào đó <em>phát hiện</em> khoá chết (đồ thị chờ, DBI202 bài 8.3) rồi quay lui một giao dịch, việc này rẻ vì giao dịch vốn được thiết kế để hoàn tác được.</p>
 
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Quy trình của ví dụ có lời giải trên bảng của mô phỏng: Need, rồi vòng quét, rồi một yêu cầu.</p>
+<div class="os-lab os-lab-sim-deadlock os-lab-p-banker os-lab-t-deadlock-banker"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> vòng kiểm an toàn, từng vector Work một <a href="/os-lab?sim=deadlock&amp;preset=banker&amp;lang=vi&amp;tour=deadlock-banker" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Bấm vòng quét và ghi chuỗi an toàn, đúng như ví dụ ở trên làm.</li><li>Gõ một yêu cầu vào các ô Request: trang giả vờ cấp, quét lại và nói cấp hay chờ.</li></ol></div>
+</div>
 <div class="pitfall"><b>Không an toàn không đồng nghĩa với đã khoá chết.</b> Trạng thái không an toàn chỉ nghĩa là khoá chết <em>có thể</em> xảy ra nếu về sau mọi tiến trình đều đòi đúng mức tối đa đã khai. Rất nhiều trạng thái không an toàn thực tế chẳng bao giờ khoá chết. Thuật toán Nhà băng bảo thủ một cách cố ý — nó từ chối cả những yêu cầu mà lẽ ra vẫn ổn.</div>
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Quy ước thứ tự khoá mới là cách phòng khoá chết bạn thật sự sẽ dùng.</b> Không mã nguồn sản xuất nào chạy thuật toán Nhà băng; thay vào đó người ta áp một thứ tự toàn cục cho các khoá — "luôn lấy khoá tài khoản trước khoá sổ cái" — và điều đó phá điều kiện chờ vòng tròn ngay từ trong thiết kế. Có công cụ áp đặt: <span class="badge">jstack</span> của Java in ra các khoá chết phát hiện được, runtime của Go chỉ dừng chương trình khi <em>mọi</em> goroutine đều kẹt ("all goroutines are asleep - deadlock!") — bộ dò race của Go tìm data race chứ không tìm khoá chết — còn lockdep của Linux kiểm mọi lần lấy khoá trong nhân theo thứ tự đã quan sát và in cảnh báo ("possible circular locking dependency detected") ngay khi có vi phạm — <em>trước khi</em> khoá chết thật xảy ra. <em>Ngoài giáo trình vì môn học dạy toán học của phép phòng tránh, còn ngành công nghiệp giải bài toán này bằng một quy ước viết mã cộng công cụ.</em></div>

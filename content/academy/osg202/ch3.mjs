@@ -698,7 +698,13 @@ physical address = 0x11e82b050 = frame * 4096 + offset<br>
 same offset: yes</div>
 <p class="chu-thich">🎲 This is ONE real run — run it again and the numbers (PIDs, timings, race results…) may differ; the property stated in the lesson always holds.</p>
 <p>The variable <code>counter</code> has a virtual address around <code>0xaaaaaac10050</code>; the kernel's table says that page sits in physical frame <code>0x11e82b</code>, so the physical address is frame × 4096 + offset. The two addresses look nothing alike, yet the <strong>last 12 bits (<code>0x050</code>) are identical</strong>: the MMU replaces only the page number. (Normal users see frame number 0: since Linux 4.0 physical addresses are hidden, because they help attacks such as Rowhammer — the program needs <code>--privileged</code> in the container.)</p>
-<p class="pitfall">⚠️ FE2 question 14 / FE6 question 14: the role of the MMU = <strong>translates virtual addresses into physical addresses</strong>. It does not decide which page to evict (that is the OS) and it is hardware, not "a data structure".</p>`,
+<p class="pitfall">⚠️ FE2 question 14 / FE6 question 14: the role of the MMU = <strong>translates virtual addresses into physical addresses</strong>. It does not decide which page to evict (that is the OS) and it is hardware, not "a data structure".</p>
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>Slide 12 as a running program: each memory access goes through the page table, and a page not in RAM causes a fault.</p>
+<div class="os-lab os-lab-sim-vm os-lab-p-program os-lab-t-vm-translate"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> virtual pages, physical frames and a page fault <a href="/os-lab?sim=vm&amp;preset=program&amp;lang=en&amp;tour=vm-translate" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Step the accesses and say for each one: page number, hit or fault, which frame.</li><li>Find the first page fault and what the OS has to do before the instruction can run again.</li></ol></div>
+</div>`,
         `<p class="y-chinh">🎯 Hình 3-8: CPU gửi <strong>địa chỉ ảo (virtual address)</strong> tới <strong>MMU</strong> (memory management unit — bộ quản lý bộ nhớ); MMU gửi <strong>địa chỉ vật lý (physical address)</strong> lên bus tới bộ nhớ. Ngày nay MMU nằm ngay trên chip CPU; về logic nó có thể là chip riêng, như nhiều năm trước.</p>
 <p>Mọi địa chỉ chương trình sinh ra — khi nạp có chỉ số, khi đẩy vào ngăn xếp, khi nạp lệnh — đều là <strong>địa chỉ ảo</strong>, và gộp lại thành <strong>không gian địa chỉ ảo</strong>. Trên máy không có bộ nhớ ảo, địa chỉ đi thẳng lên bus; có bộ nhớ ảo thì nó đi qua MMU để được ánh xạ thành địa chỉ bộ nhớ vật lý. Đĩa và các thiết bị khác trên bus chỉ thấy địa chỉ vật lý (vì thế bộ điều khiển DMA dùng địa chỉ bộ nhớ vật lý — FE6 câu 34).</p>
 <p>➕ Ta xem được kết quả của MMU cho một biến thật. Với quyền root, <code>/proc/self/pagemap</code> cho biết khung trang vật lý nào đang chứa từng trang ảo của tiến trình:</p>
@@ -736,7 +742,13 @@ physical address = 0x11e82b050 = frame * 4096 + offset<br>
 same offset: yes</div>
 <p class="chu-thich">🎲 Đây là MỘT lần chạy thật — chạy lại, các con số (PID, thời gian, kết quả tranh chấp…) có thể khác; tính chất ghi trong bài thì luôn đúng.</p>
 <p>Biến <code>counter</code> có địa chỉ ảo khoảng <code>0xaaaaaac10050</code>; bảng của nhân nói trang đó nằm ở khung vật lý <code>0x11e82b</code>, nên địa chỉ vật lý = khung × 4096 + độ dời. Hai địa chỉ trông chẳng giống nhau, vậy mà <strong>12 bit cuối (<code>0x050</code>) y hệt</strong>: MMU chỉ thay số hiệu trang. (Người dùng thường chỉ thấy số khung 0: từ Linux 4.0, địa chỉ vật lý bị giấu vì nó giúp các kiểu tấn công như Rowhammer — chương trình cần <code>--privileged</code> trong container.)</p>
-<p class="pitfall">⚠️ FE2 câu 14 / FE6 câu 14: vai trò của MMU = <strong>dịch địa chỉ ảo thành địa chỉ vật lý</strong>. Nó không quyết định đuổi trang nào (đó là việc của HĐH) và nó là phần cứng, không phải "một cấu trúc dữ liệu".</p>`],
+<p class="pitfall">⚠️ FE2 câu 14 / FE6 câu 14: vai trò của MMU = <strong>dịch địa chỉ ảo thành địa chỉ vật lý</strong>. Nó không quyết định đuổi trang nào (đó là việc của HĐH) và nó là phần cứng, không phải "một cấu trúc dữ liệu".</p>
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Slide 12 thành một chương trình đang chạy: mỗi lần truy cập bộ nhớ đi qua bảng trang, và trang không ở RAM gây lỗi trang.</p>
+<div class="os-lab os-lab-sim-vm os-lab-p-program os-lab-t-vm-translate"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> trang ảo, khung vật lý và lỗi trang <a href="/os-lab?sim=vm&amp;preset=program&amp;lang=vi&amp;tour=vm-translate" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Bấm từng lần truy cập và nói với mỗi lần: số trang, trúng hay lỗi, khung nào.</li><li>Tìm lỗi trang đầu tiên và việc HĐH phải làm trước khi lệnh chạy lại được.</li></ol></div>
+</div>`],
       [13, 'Paging (2)',
         `<p class="y-chinh">🎯 Figure 3-9: a computer with 16-bit addresses (a 64-KB virtual address space) but only 32 KB of physical memory. The virtual space is divided into 16 <strong>pages</strong> of 4 KB, physical memory into 8 <strong>page frames</strong> of 4 KB; the <strong>page table</strong> says which frame holds each page — X means "not in memory". Every page starts at a multiple of 4096: "4K–8K" means 4096–8191.</p>
 <p>Pages and page frames always have the <strong>same size</strong> (here 4 KB; real systems use 512 bytes to 1 GB, 4 KB being the classic). Transfers between RAM and disk are always whole pages. A 64-KB program can run on this 32-KB machine, but not all of it can be in memory at once — the rest stays on disk. The simulator replays the book's translations; the first one, <code>MOV REG,20500</code>:</p>
@@ -766,13 +778,25 @@ const BANG = [2, 1, 6, 0, 4, 3, null, null, null, 5, null, 7, null, null, null, 
 <div class="anh-slide uml sim"><img src="https://media.cuongthai.com/images/academy/OSG202/hinh/f656c900e6710095497310d16718f98cbfbf79c3.svg" alt="Inside the MMU: 0010|000000000100 → page 2 → frame 110 → 110|000000000100 = 24580" loading="lazy" /><p class="chu-thich">🧮 Inside the MMU: 0010|000000000100 → page 2 → frame 110 → 110|000000000100 = 24580</p></div>
 <details><summary>This picture is COMPUTED, not drawn by hand — see the simulator code (JavaScript)</summary><pre><code class="language-javascript">const BANG = [2, 1, 6, 0, 4, 3, null, null, null, 5, null, 7, null, null, null, null];   // Figure 3-10 (same mapping as 3-9)</code></pre></details>
 <p>The output is 15 bits (8 frames × 4 KB = 32 KB of physical memory) while the input is 16 bits (64 KB of virtual memory): virtual and physical address sizes are independent. If the present bit had been 0 (pages 6, 7, 8, 10, 12–15), the MMU would have trapped instead of producing an address.</p>
-<p class="pitfall">⚠️ FE5 question 20 = FE16 question 24: 16-bit virtual address, 4-KB pages → offset 12 bits, page number 4 bits → a one-level page table has <strong>16</strong> entries. FE17 question 37 / FE18 question 11 / FE21 question 11: page size 2¹² words means the last 3 hex digits are the offset, so virtual 0x12345678 is in page <strong>0x12345</strong>, 0x123456 in page <strong>0x123</strong>, 0x1234567 in page <strong>0x1234</strong>.</p>`,
+<p class="pitfall">⚠️ FE5 question 20 = FE16 question 24: 16-bit virtual address, 4-KB pages → offset 12 bits, page number 4 bits → a one-level page table has <strong>16</strong> entries. FE17 question 37 / FE18 question 11 / FE21 question 11: page size 2¹² words means the last 3 hex digits are the offset, so virtual 0x12345678 is in page <strong>0x12345</strong>, 0x123456 in page <strong>0x123</strong>, 0x1234567 in page <strong>0x1234</strong>.</p>
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>The MMU of slide 14 does one thing first: split the virtual address into bits. Practise the split the way the FE asks it.</p>
+<div class="os-lab os-lab-sim-addr-split os-lab-p-split os-lab-t-addr-split-walk"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> split an address into page number and offset <a href="/os-lab?sim=addr-split&amp;preset=split&amp;lang=en&amp;tour=addr-split-walk" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Read how 0x12345678 splits 10/10/12 into 72 / 837 / 1656 on the coloured binary.</li><li>Type your own address and bit widths (try 4/12 bits as in Figure 3-10) and check each field.</li><li>Say why reading hex digits directly gives the wrong page number.</li></ol></div>
+</div>`,
         `<p class="y-chinh">🎯 Hình 3-10: hoạt động bên trong MMU với 16 trang 4 KB. Địa chỉ ảo 16 bit 8196 được tách thành <strong>4 bit số trang</strong> (2) và <strong>12 bit độ dời (offset)</strong> (4). Số trang làm chỉ số vào bảng trang; mục 2 giữ khung 110 (6) với bit có mặt bằng 1; 3 bit số khung ghép với độ dời giữ nguyên → địa chỉ vật lý 24580.</p>
 <p>Vì sao 4 + 12? Một trang là 4096 = 2¹² byte, nên cần 12 bit để gọi tên một byte trong trang; các bit cao còn lại gọi tên trang. Vì thế kích thước trang luôn là luỹ thừa của 2: MMU không bao giờ chia, nó chỉ <strong>cắt chuỗi bit</strong> và chép phần thấp. Bộ mô phỏng vẽ từng bit:</p>
 <div class="anh-slide uml sim"><img src="https://media.cuongthai.com/images/academy/OSG202/hinh/90a5c9d709ff0487d19cb56e76aba23675c9eea8.svg" alt="Bên trong MMU: 0010|000000000100 → trang 2 → khung 110 → 110|000000000100 = 24580" loading="lazy" /><p class="chu-thich">🧮 Bên trong MMU: 0010|000000000100 → trang 2 → khung 110 → 110|000000000100 = 24580</p></div>
 <details><summary>Hình này do máy TÍNH thật — xem mã mô phỏng (JavaScript)</summary><pre><code class="language-javascript">const BANG = [2, 1, 6, 0, 4, 3, null, null, null, 5, null, 7, null, null, null, null];   // Figure 3-10 (same mapping as 3-9)</code></pre></details>
 <p>Đầu ra 15 bit (8 khung × 4 KB = 32 KB bộ nhớ vật lý) trong khi đầu vào 16 bit (64 KB bộ nhớ ảo): cỡ địa chỉ ảo và vật lý độc lập với nhau. Nếu bit có mặt bằng 0 (trang 6, 7, 8, 10, 12–15), MMU sẽ bẫy thay vì sinh ra địa chỉ.</p>
-<p class="pitfall">⚠️ FE5 câu 20 = FE16 câu 24: địa chỉ ảo 16 bit, trang 4 KB → độ dời 12 bit, số trang 4 bit → bảng trang một mức có <strong>16</strong> mục. FE17 câu 37 / FE18 câu 11 / FE21 câu 11: cỡ trang 2¹² từ nghĩa là 3 chữ số hex cuối là độ dời, nên địa chỉ ảo 0x12345678 thuộc trang <strong>0x12345</strong>, 0x123456 thuộc trang <strong>0x123</strong>, 0x1234567 thuộc trang <strong>0x1234</strong>.</p>`],
+<p class="pitfall">⚠️ FE5 câu 20 = FE16 câu 24: địa chỉ ảo 16 bit, trang 4 KB → độ dời 12 bit, số trang 4 bit → bảng trang một mức có <strong>16</strong> mục. FE17 câu 37 / FE18 câu 11 / FE21 câu 11: cỡ trang 2¹² từ nghĩa là 3 chữ số hex cuối là độ dời, nên địa chỉ ảo 0x12345678 thuộc trang <strong>0x12345</strong>, 0x123456 thuộc trang <strong>0x123</strong>, 0x1234567 thuộc trang <strong>0x1234</strong>.</p>
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>MMU của slide 14 làm trước một việc: tách địa chỉ ảo thành các nhóm bit. Luyện phép tách đúng kiểu đề FE hỏi.</p>
+<div class="os-lab os-lab-sim-addr-split os-lab-p-split os-lab-t-addr-split-walk"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> tách địa chỉ thành số trang và độ dời <a href="/os-lab?sim=addr-split&amp;preset=split&amp;lang=vi&amp;tour=addr-split-walk" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Đọc cách 0x12345678 tách 10/10/12 thành 72 / 837 / 1656 trên dãy nhị phân tô màu.</li><li>Gõ địa chỉ và số bit của bạn (thử 4/12 bit như Hình 3-10) rồi kiểm từng trường.</li><li>Nói vì sao đọc thẳng chữ số hex cho ra số trang sai.</li></ol></div>
+</div>`],
       [15, 'Structure of a Page Table Entry',
         `<p class="y-chinh">🎯 Figure 3-11: a typical <strong>page table entry</strong> (PTE): the <strong>page frame number</strong> (the most important field), the <strong>present/absent</strong> bit, <strong>protection</strong> bits (what kinds of access are allowed), the <strong>modified</strong> (dirty) bit, the <strong>referenced</strong> bit, and <strong>caching disabled</strong>.</p>
 <p>What each bit is for: <strong>present/absent</strong> = 1 means the entry is valid and usable; 0 → page fault. <strong>Protection</strong>: 1 bit (read/write vs read-only) or 3 bits (read, write, execute). <strong>Modified (M)</strong>: set by the hardware on a write; when the page is evicted, a dirty page must be written back to disk, a clean one can simply be dropped. <strong>Referenced (R)</strong>: set on every read or write — the page replacement algorithms of slides 20–28 live on it. <strong>Caching disabled</strong>: for pages that map device registers, so the CPU reads the device, not a stale cached copy (Chapter 5). The <strong>disk address</strong> of a page that is not in memory is not in the PTE — the OS keeps it in its own tables.</p>
@@ -1057,7 +1081,13 @@ int main(void) {
 the 4 KB run is 1.4x slower: the difference is mostly page-table walks after TLB misses</div>
 <p class="chu-thich">🎲 This is ONE real run — run it again and the numbers (PIDs, timings, race results…) may differ; the property stated in the lesson always holds.</p>
 <p>Same data, same cache misses — only the number of translations changed, and every load got tens of nanoseconds faster. That is why PostgreSQL (<code>huge_pages</code>), the JVM (<code>-XX:+UseLargePages</code>) and Linux's transparent huge pages exist. ➕ Book §3.3.3 vocabulary: a <strong>soft miss</strong> (page in RAM, only the TLB lacks it) vs a <strong>hard miss</strong> (page must come from disk); some CPUs (MIPS, old SPARC) leave TLB misses to software. Modern TLBs tag entries with an address-space ID (ASID on ARM, PCID on x86) so a context switch need not flush them.</p>
-<p class="pitfall">⚠️ FE5 question 17: the percentage of times a page number is found in the TLB = <strong>hit ratio</strong>. FE17 question 26: the TLB does NOT remove the need for a page table in memory; FE19 question 9: a TLB miss does NOT imply a disk operation (only a page-table walk, unless the page is absent).</p>`,
+<p class="pitfall">⚠️ FE5 question 17: the percentage of times a page number is found in the TLB = <strong>hit ratio</strong>. FE17 question 26: the TLB does NOT remove the need for a page table in memory; FE19 question 9: a TLB miss does NOT imply a disk operation (only a page-table walk, unless the page is absent).</p>
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>Why the TLB matters, in numbers: the effective access time for a given hit rate, memory time and number of table levels.</p>
+<div class="os-lab os-lab-sim-addr-split os-lab-p-tlb os-lab-t-addr-split-size"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> effective access time with a TLB <a href="/os-lab?sim=addr-split&amp;preset=tlb&amp;lang=en&amp;tour=addr-split-size" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Drag the hit rate from 98 % down to 80 % and watch EAT grow.</li><li>Change the number of table levels from 1 to 4: a miss now costs one access per level.</li><li>Compare the TLB reach with 4 KiB pages and with 2 MiB pages.</li></ol></div>
+</div>`,
         `<p class="y-chinh">🎯 Hình 3-12: một <strong>TLB</strong> (translation lookaside buffer — bộ đệm tra cứu dịch địa chỉ, còn gọi là bộ nhớ kết hợp) — một bảng phần cứng nhỏ trong MMU lưu các phép dịch gần đây: bit hợp lệ, trang ảo, bit đã sửa, bảo vệ, khung trang. Chương trình ví dụ chạy vòng lặp trong các trang mã 19–21, dùng trang dữ liệu 129, 130, 140 và trang ngăn xếp 860–861.</p>
 <p>Phần lớn chương trình tham chiếu rất nhiều lần vào một số ít trang, nên vài chục mục đã bắt được gần hết. Mỗi lần tham chiếu, MMU so số trang ảo với <strong>mọi mục cùng lúc (song song)</strong>: trúng (hit) thì có khung ngay, không đụng bảng trang (vi phạm bảo vệ vẫn bị bẫy); trượt (miss) thì phải đi tra bảng trang, rồi đuổi một mục TLB và nạp mục mới. Bộ mô phỏng chạy một TLB 4 mục (thay LRU) trên bảng trang của Hình 3-9:</p>
 <div class="anh-slide uml sim"><img src="https://media.cuongthai.com/images/academy/OSG202/hinh/aeaaa967aff08f9b09ae5af8e7237ce038bfd095.svg" alt="Mười một tham chiếu qua TLB 4 mục: trúng, trượt, lỗi trang" loading="lazy" /><p class="chu-thich">🧮 Mười một tham chiếu qua TLB 4 mục: trúng, trượt, lỗi trang</p></div>
@@ -1131,7 +1161,13 @@ int main(void) {
 the 4 KB run is 1.4x slower: the difference is mostly page-table walks after TLB misses</div>
 <p class="chu-thich">🎲 Đây là MỘT lần chạy thật — chạy lại, các con số (PID, thời gian, kết quả tranh chấp…) có thể khác; tính chất ghi trong bài thì luôn đúng.</p>
 <p>Cùng dữ liệu, cùng số lần trượt cache — chỉ số phép dịch thay đổi, mà mỗi lần đọc nhanh hơn hàng chục nano giây. Đó là lý do có <code>huge_pages</code> của PostgreSQL, <code>-XX:+UseLargePages</code> của JVM và transparent huge pages của Linux. ➕ Từ vựng của sách §3.3.3: <strong>soft miss</strong> (trang đang ở RAM, chỉ TLB thiếu) và <strong>hard miss</strong> (trang phải lấy từ đĩa); một số CPU (MIPS, SPARC đời cũ) để phần mềm xử lý trượt TLB. TLB hiện đại gắn mỗi mục một mã không gian địa chỉ (ASID trên ARM, PCID trên x86) để chuyển ngữ cảnh không phải xoá sạch TLB.</p>
-<p class="pitfall">⚠️ FE5 câu 17: phần trăm số lần tìm thấy số trang trong TLB = <strong>hit ratio</strong>. FE17 câu 26: TLB KHÔNG bỏ được bảng trang trong bộ nhớ; FE19 câu 9: trượt TLB KHÔNG có nghĩa là sẽ có thao tác đĩa (chỉ là đi tra bảng trang, trừ khi trang vắng mặt).</p>`],
+<p class="pitfall">⚠️ FE5 câu 17: phần trăm số lần tìm thấy số trang trong TLB = <strong>hit ratio</strong>. FE17 câu 26: TLB KHÔNG bỏ được bảng trang trong bộ nhớ; FE19 câu 9: trượt TLB KHÔNG có nghĩa là sẽ có thao tác đĩa (chỉ là đi tra bảng trang, trừ khi trang vắng mặt).</p>
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Vì sao TLB quan trọng, bằng con số: thời gian truy cập hiệu dụng theo tỉ lệ trúng, thời gian bộ nhớ và số mức bảng.</p>
+<div class="os-lab os-lab-sim-addr-split os-lab-p-tlb os-lab-t-addr-split-size"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> thời gian truy cập hiệu dụng có TLB <a href="/os-lab?sim=addr-split&amp;preset=tlb&amp;lang=vi&amp;tour=addr-split-size" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Kéo tỉ lệ trúng từ 98 % xuống 80 % và xem EAT tăng.</li><li>Đổi số mức bảng từ 1 lên 4: một lần trượt giờ tốn một lần truy cập cho mỗi mức.</li><li>So TLB reach với trang 4 KiB và trang 2 MiB.</li></ol></div>
+</div>`],
       [18, 'Multilevel Page Tables',
         `<p class="y-chinh">🎯 Figure 3-13: (a) a 32-bit address split into a 10-bit <strong>PT1</strong> field, a 10-bit <strong>PT2</strong> field and a 12-bit offset; (b) a <strong>two-level page table</strong>: the top-level table has 1024 entries, each covering 4 MB and pointing to a second-level table whose 1024 entries point to 4-KB page frames.</p>
 <p>The secret: <strong>avoid keeping all the page tables in memory all the time</strong>. A process with 4 MB of code at the bottom, 4 MB of data above it and 4 MB of stack at the top needs the top-level table plus just three second-level tables; the other 1021 top-level entries are marked absent and cost nothing. The book's example, virtual address 0x00403004 (4,206,596):</p>
@@ -1215,7 +1251,13 @@ int main(void) {
 A: 4096 pages side by side (16 MB): &nbsp;data +16 MB, page tables +36 kB<br>
 B: 4096 pages, one every 16 MB: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data +16 MB, page tables +16640 kB</div>
 <p>Dense: 36 kB of page tables. Sparse: 16,640 kB — every scattered page needed its own last-level table (4096 tables × 4 KB). Multilevel tables are cheap only when memory is used in clusters, which is what real programs do.</p>
-<p class="pitfall">⚠️ FE4 question 17 = FE12 q18 = FE14 q23: 0x00403008 → <strong>PT1 = 1, PT2 = 3, offset = 8</strong> (verified by the simulator, variant <code>fe</code>). FE3 q16 = FE4 q18 (10-bit + 12-bit fields): offset = 32 − 22 = 10 bits → <strong>1-KB</strong> pages; 9 + 11 → 12 bits → 4 KB (FE21 q32); 10 + 11 → 2 KB (FE22 q43); 9 + 12 → 2 KB (FE29 q16); 9 + 11 + 12 → 2²⁰ pages (FE17 q2). FE9 q20: multilevel tables reduce the <strong>size of the page table</strong>.</p>`,
+<p class="pitfall">⚠️ FE4 question 17 = FE12 q18 = FE14 q23: 0x00403008 → <strong>PT1 = 1, PT2 = 3, offset = 8</strong> (verified by the simulator, variant <code>fe</code>). FE3 q16 = FE4 q18 (10-bit + 12-bit fields): offset = 32 − 22 = 10 bits → <strong>1-KB</strong> pages; 9 + 11 → 12 bits → 4 KB (FE21 q32); 10 + 11 → 2 KB (FE22 q43); 9 + 12 → 2 KB (FE29 q16); 9 + 11 + 12 → 2²⁰ pages (FE17 q2). FE9 q20: multilevel tables reduce the <strong>size of the page table</strong>.</p>
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>The reason for multilevel page tables (slide 18): a sparse process needs only a few small tables instead of one huge one.</p>
+<div class="os-lab os-lab-sim-addr-split os-lab-p-table os-lab-t-addr-split-size"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> one-level vs multilevel page tables <a href="/os-lab?sim=addr-split&amp;preset=table&amp;lang=en&amp;tour=addr-split-size" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Read the size of the one-level table for a 32-bit address, 4 KiB pages and 4-byte entries.</li><li>Compare it with the tables a sparse process really needs on two levels.</li><li>Change the page size and the entry size and predict the new numbers before you look.</li></ol></div>
+</div>`,
         `<p class="y-chinh">🎯 Hình 3-13: (a) địa chỉ 32 bit chia thành trường <strong>PT1</strong> 10 bit, trường <strong>PT2</strong> 10 bit và độ dời 12 bit; (b) <strong>bảng trang hai mức (two-level page table)</strong>: bảng mức trên có 1024 mục, mỗi mục phủ 4 MB và trỏ tới một bảng mức hai, mà 1024 mục của nó trỏ tới các khung trang 4 KB.</p>
 <p>Bí quyết: <strong>không giữ mọi bảng trang trong bộ nhớ mọi lúc</strong>. Một tiến trình có 4 MB mã ở dưới cùng, 4 MB dữ liệu phía trên và 4 MB ngăn xếp ở trên cùng chỉ cần bảng mức trên cộng đúng ba bảng mức hai; 1021 mục mức trên còn lại đánh dấu vắng mặt và không tốn gì. Ví dụ của sách, địa chỉ ảo 0x00403004 (4.206.596):</p>
 <div class="anh-slide uml sim"><img src="https://media.cuongthai.com/images/academy/OSG202/hinh/fceadadabc07708fef31bbef8bbd726330ead114.svg" alt="0x00403004 → PT1 = 1 (vùng 4M–8M), PT2 = 3, độ dời = 4" loading="lazy" /><p class="chu-thich">🧮 0x00403004 → PT1 = 1 (vùng 4M–8M), PT2 = 3, độ dời = 4</p></div>
@@ -1298,7 +1340,13 @@ int main(void) {
 A: 4096 pages side by side (16 MB): &nbsp;data +16 MB, page tables +36 kB<br>
 B: 4096 pages, one every 16 MB: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data +16 MB, page tables +16640 kB</div>
 <p>Liền nhau: 36 kB bảng trang. Rải rác: 16.640 kB — mỗi trang lẻ loi cần một bảng mức cuối riêng (4096 bảng × 4 KB). Bảng nhiều mức chỉ rẻ khi bộ nhớ được dùng thành từng cụm — mà chương trình thật đúng là dùng như vậy.</p>
-<p class="pitfall">⚠️ FE4 câu 17 = FE12 c18 = FE14 c23: 0x00403008 → <strong>PT1 = 1, PT2 = 3, offset = 8</strong> (bộ mô phỏng kiểm, biến thể <code>fe</code>). FE3 c16 = FE4 c18 (trường 10 bit + 12 bit): độ dời = 32 − 22 = 10 bit → trang <strong>1 KB</strong>; 9 + 11 → 12 bit → 4 KB (FE21 c32); 10 + 11 → 2 KB (FE22 c43); 9 + 12 → 2 KB (FE29 c16); 9 + 11 + 12 → 2²⁰ trang (FE17 c2). FE9 c20: bảng nhiều mức giảm <strong>kích thước bảng trang</strong>.</p>`],
+<p class="pitfall">⚠️ FE4 câu 17 = FE12 c18 = FE14 c23: 0x00403008 → <strong>PT1 = 1, PT2 = 3, offset = 8</strong> (bộ mô phỏng kiểm, biến thể <code>fe</code>). FE3 c16 = FE4 c18 (trường 10 bit + 12 bit): độ dời = 32 − 22 = 10 bit → trang <strong>1 KB</strong>; 9 + 11 → 12 bit → 4 KB (FE21 c32); 10 + 11 → 2 KB (FE22 c43); 9 + 12 → 2 KB (FE29 c16); 9 + 11 + 12 → 2²⁰ trang (FE17 c2). FE9 c20: bảng nhiều mức giảm <strong>kích thước bảng trang</strong>.</p>
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Lý do có bảng trang nhiều mức (slide 18): một tiến trình thưa chỉ cần vài bảng nhỏ thay cho một bảng khổng lồ.</p>
+<div class="os-lab os-lab-sim-addr-split os-lab-p-table os-lab-t-addr-split-size"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> bảng trang một mức vs nhiều mức <a href="/os-lab?sim=addr-split&amp;preset=table&amp;lang=vi&amp;tour=addr-split-size" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Đọc cỡ bảng một mức cho địa chỉ 32 bit, trang 4 KiB và mục 4 byte.</li><li>So với số bảng mà một tiến trình thưa thật sự cần khi chia hai mức.</li><li>Đổi cỡ trang và cỡ mục, đoán con số mới trước khi nhìn.</li></ol></div>
+</div>`],
       [19, 'Inverted Page Tables',
         `<p class="y-chinh">🎯 Figure 3-14: a traditional page table has one entry per <strong>virtual page</strong> (2⁵² entries for 64-bit addresses and 4-KB pages); an <strong>inverted page table</strong> has one entry per <strong>page frame</strong> of physical memory (2¹⁸ entries for 1 GB of RAM), found through a <strong>hash table</strong> indexed by a hash of the virtual page.</p>
 <p>Each inverted entry says which (process, virtual page) occupies that frame. The saving is huge, but translation gets hard: the virtual page can no longer be used as an index — the MMU must <strong>search</strong> the table for the pair (process n, virtual page p), on every reference. The fixes: the TLB (on a hit, no search at all), and a hash table on the virtual address so all pages with the same hash value are chained together. The numbers, computed:</p>
@@ -1376,7 +1424,13 @@ inverted table, 256 GB of RAM: 2^26 frames x 16 B = 1 GB for the whole machine</
   bel4: { ref: [1, 2, 3, 4, 1, 2, 5, 1, 2, 3, 4, 5], khung: 4 },
 };</code></pre></details>
 <p>Read the tables column by column: the reference on top, the three frames below (yellow = page just loaded), F = fault. Every algorithm also pays the <strong>compulsory</strong> faults at the start, when frames are empty — FE questions always count them ("frames initially empty").</p>
-<p class="pitfall">⚠️ Exam strings checked by the simulator: FE3 q17 = FE7 q22 = FE11 q20 = FE14 q26 (FIFO, 4 frames, 0172327103) → <strong>6</strong>; FE4 q20 = FE13 q19 = FE14 q27 (OPT, 4 frames, 7,0,1,2,0,3,0) → <strong>5</strong>; FE6 q20 = FE8 q21 = FE15 q24 (FIFO, 3 frames, 1,2,3,4,1,2) → <strong>6</strong>; FE4 q14 (FIFO, 3 frames, 1,2,3,4,1,2,5): loading 5 evicts page <strong>4</strong>. FE5 q8: FIFO is implemented with a <strong>queue</strong>.</p>`,
+<p class="pitfall">⚠️ Exam strings checked by the simulator: FE3 q17 = FE7 q22 = FE11 q20 = FE14 q26 (FIFO, 4 frames, 0172327103) → <strong>6</strong>; FE4 q20 = FE13 q19 = FE14 q27 (OPT, 4 frames, 7,0,1,2,0,3,0) → <strong>5</strong>; FE6 q20 = FE8 q21 = FE15 q24 (FIFO, 3 frames, 1,2,3,4,1,2) → <strong>6</strong>; FE4 q14 (FIFO, 3 frames, 1,2,3,4,1,2,5): loading 5 evicts page <strong>4</strong>. FE5 q8: FIFO is implemented with a <strong>queue</strong>.</p>
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>The page-replacement table of slides 20–29, filled column by column for any reference string you type.</p>
+<div class="os-lab os-lab-sim-vm os-lab-p-exam"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> FIFO, LRU, OPT and Clock on any reference string <a href="/os-lab?sim=vm&amp;preset=exam&amp;lang=en" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Type a reference string from a past FE, pick FIFO and the frame count, and count the faults on paper first.</li><li>Run the simulator and compare column by column.</li><li>Repeat with LRU and OPT on the same string and rank the three.</li></ol></div>
+</div>`,
         `<p class="y-chinh">🎯 Khi có lỗi trang mà bộ nhớ đã đầy, HĐH phải chọn một trang để <strong>đuổi (evict)</strong>. Các thuật toán của mục này: <strong>tối ưu (optimal)</strong>, <strong>NRU — chưa dùng gần đây</strong>, <strong>FIFO</strong>, <strong>cơ hội thứ hai (second chance)</strong>, <strong>đồng hồ (clock)</strong>, <strong>LRU — lâu nhất chưa dùng</strong> (cùng hai "anh em" phần mềm NFU và aging), <strong>tập làm việc (working set)</strong> và <strong>WSClock</strong>.</p>
 <p>Nếu trang bị đuổi đã bị sửa, nó phải được ghi xuống đĩa trước; nếu chưa, bản trên đĩa vẫn còn đúng và khung dùng lại được ngay. Đuổi một trang đang dùng nhiều là sai lầm phải trả bằng một lần lỗi nữa ngay sau đó. Thuật toán <strong>tối ưu</strong> (OPT của Belady) đuổi trang mà <strong>lần dùng kế tiếp xa nhất trong tương lai</strong> — không cài đặt được (HĐH không nhìn thấy tương lai), nhưng là chuẩn so sánh hoàn hảo: chạy chương trình một lần, ghi lại chuỗi tham chiếu, rồi so các thuật toán thật với OPT trên cùng chuỗi. <strong>FIFO</strong> đuổi trang được nạp sớm nhất — một hàng đợi, như siêu thị bỏ món hàng bán lâu nhất, kể cả khi đó là bánh mì. Cả hai trên chuỗi kinh điển 20 tham chiếu, 3 khung:</p>
 <div class="anh-slide uml sim"><img src="https://media.cuongthai.com/images/academy/OSG202/hinh/501d7e7a11df943c519b494de453df86c58dcdcb.svg" alt="OPT: 9 lỗi trang — không thuật toán nào làm tốt hơn trên chuỗi này" loading="lazy" /><p class="chu-thich">🧮 OPT: 9 lỗi trang — không thuật toán nào làm tốt hơn trên chuỗi này</p></div>
@@ -1406,7 +1460,13 @@ inverted table, 256 GB of RAM: 2^26 frames x 16 B = 1 GB for the whole machine</
   bel4: { ref: [1, 2, 3, 4, 1, 2, 5, 1, 2, 3, 4, 5], khung: 4 },
 };</code></pre></details>
 <p>Đọc bảng theo từng cột: tham chiếu ở trên, ba khung bên dưới (ô vàng = trang vừa nạp), F = lỗi. Thuật toán nào cũng phải trả các lỗi <strong>bắt buộc (compulsory)</strong> lúc đầu, khi khung còn trống — câu FE luôn tính chúng ("frames initially empty").</p>
-<p class="pitfall">⚠️ Chuỗi trong đề đã kiểm bằng mô phỏng: FE3 c17 = FE7 c22 = FE11 c20 = FE14 c26 (FIFO, 4 khung, 0172327103) → <strong>6</strong>; FE4 c20 = FE13 c19 = FE14 c27 (OPT, 4 khung, 7,0,1,2,0,3,0) → <strong>5</strong>; FE6 c20 = FE8 c21 = FE15 c24 (FIFO, 3 khung, 1,2,3,4,1,2) → <strong>6</strong>; FE4 c14 (FIFO, 3 khung, 1,2,3,4,1,2,5): nạp 5 thì trang <strong>4</strong> bị đuổi. FE5 c8: FIFO được cài bằng <strong>hàng đợi (queue)</strong>.</p>`],
+<p class="pitfall">⚠️ Chuỗi trong đề đã kiểm bằng mô phỏng: FE3 c17 = FE7 c22 = FE11 c20 = FE14 c26 (FIFO, 4 khung, 0172327103) → <strong>6</strong>; FE4 c20 = FE13 c19 = FE14 c27 (OPT, 4 khung, 7,0,1,2,0,3,0) → <strong>5</strong>; FE6 c20 = FE8 c21 = FE15 c24 (FIFO, 3 khung, 1,2,3,4,1,2) → <strong>6</strong>; FE4 c14 (FIFO, 3 khung, 1,2,3,4,1,2,5): nạp 5 thì trang <strong>4</strong> bị đuổi. FE5 c8: FIFO được cài bằng <strong>hàng đợi (queue)</strong>.</p>
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Bảng thay trang của slide 20–29, điền từng cột cho bất kỳ chuỗi tham chiếu nào bạn gõ.</p>
+<div class="os-lab os-lab-sim-vm os-lab-p-exam"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> FIFO, LRU, OPT và Clock trên chuỗi tham chiếu bất kỳ <a href="/os-lab?sim=vm&amp;preset=exam&amp;lang=vi" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Gõ một chuỗi tham chiếu từ đề FE cũ, chọn FIFO và số khung, rồi tự đếm lỗi trang trên giấy trước.</li><li>Chạy mô phỏng và so từng cột.</li><li>Làm lại với LRU và OPT trên cùng chuỗi rồi xếp hạng ba thuật toán.</li></ol></div>
+</div>`],
       [21, 'Not Recently Used Algorithm',
         `<p class="y-chinh">🎯 <strong>NRU</strong>: at a page fault, the OS inspects all pages and puts each into one of four classes using its R and M bits — class 0: not referenced, not modified; class 1: not referenced, modified; class 2: referenced, not modified; class 3: referenced, modified. It evicts a page (at random) from the <strong>lowest non-empty class</strong>.</p>
 <p>The R and M bits come from the page table entries (slide 15). Periodically — on each clock interrupt — the R bits are <strong>cleared</strong>, so R = 1 means "used recently", not "used once long ago". That is how class 1 can exist (modified but not referenced): a class 3 page whose R bit was cleared by the clock. The rule prefers to evict a modified page that has not been used in the last tick over a clean page that is in heavy use. The simulator plays it on a string of reads (r) and writes (w), with a clock tick every 4 references (marked "|"):</p>
@@ -2542,7 +2602,13 @@ const don = (mem) =&gt; { const s = mem.filter((b) =&gt; b.ten !== null), lo = m
 const A = [{ ten: 0, co: 4 }, { ten: 1, co: 8 }, { ten: 2, co: 5 }, { ten: 3, co: 8 }, { ten: 4, co: 7 }];
 const B = thay(A, 1, 7, 5), C = thay(B, 4, 5, 4), D = thay(C, 3, 6, 4), E = don(D);</code></pre></details>
 <p>After (d), 10 KB are free, but the biggest hole is only 4 KB — a 5-KB segment cannot be placed. Compaction (e) moves all segments together so the free space becomes one 10-KB hole; it costs copying, which is why pure segmentation is rare. Placing segments in holes uses the same first/best/worst fit choices as slide 10. ➕ The same problem appears in user space: a long-running process that <code>malloc</code>s and <code>free</code>s objects of many sizes fragments its heap — one reason Java and .NET use <strong>compacting garbage collectors</strong> that move objects together.</p>
-<p class="meo">🧠 Internal fragmentation = waste <em>inside</em> a fixed-size block (paging). External fragmentation = waste <em>between</em> variable-size blocks (segmentation, contiguous allocation).</p>`,
+<p class="meo">🧠 Internal fragmentation = waste <em>inside</em> a fixed-size block (paging). External fragmentation = waste <em>between</em> variable-size blocks (segmentation, contiguous allocation).</p>
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>Segmentation the way the FE asks it: check the offset against the limit first, then add the base.</p>
+<div class="os-lab os-lab-sim-addr-split os-lab-p-seg os-lab-t-addr-split-size"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> segment table: base + offset, or a trap <a href="/os-lab?sim=addr-split&amp;preset=seg&amp;lang=en&amp;tour=addr-split-size" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Read (2, 250) ⇒ 900 + 250 = 1150 and (1, 130) ⇒ TRAP, because 130 is not below the limit 120.</li><li>Try other (segment, offset) pairs and say the answer before the page shows it.</li></ol></div>
+</div>`,
         `<p class="y-chinh">🎯 Hình 3-33: (a)–(d) sự hình thành <strong>bàn cờ (checkerboarding)</strong> — khi các đoạn bị thay bằng đoạn nhỏ hơn, bộ nhớ đầy những lỗ xen giữa các đoạn; (e) xoá bàn cờ bằng <strong>dồn bộ nhớ (compaction)</strong>.</p>
 <p>Phân đoạn thuần khác phân trang ở một điểm cốt lõi: trang đều cùng cỡ, đoạn thì không. Khi một đoạn bị thay bằng đoạn nhỏ hơn, phần dư thành một lỗ. Lâu dần bộ nhớ chia thành nhiều khúc, khúc thì chứa đoạn, khúc thì là lỗ — gọi là <strong>bàn cờ</strong> hay <strong>phân mảnh ngoài (external fragmentation)</strong>. Bộ mô phỏng chạy lại hình trong bộ nhớ 32 KB:</p>
 <div class="anh-slide uml sim"><img src="https://media.cuongthai.com/images/academy/OSG202/hinh/76855127add251b404d2945a53105c4ae17b5d6d.svg" alt="Bàn cờ: trống 10K chia ba lỗ, nhưng đoạn 5K không vừa; dồn bộ nhớ gom chúng lại" loading="lazy" /><p class="chu-thich">🧮 Bàn cờ: trống 10K chia ba lỗ, nhưng đoạn 5K không vừa; dồn bộ nhớ gom chúng lại</p></div>
@@ -2562,7 +2628,13 @@ const don = (mem) =&gt; { const s = mem.filter((b) =&gt; b.ten !== null), lo = m
 const A = [{ ten: 0, co: 4 }, { ten: 1, co: 8 }, { ten: 2, co: 5 }, { ten: 3, co: 8 }, { ten: 4, co: 7 }];
 const B = thay(A, 1, 7, 5), C = thay(B, 4, 5, 4), D = thay(C, 3, 6, 4), E = don(D);</code></pre></details>
 <p>Sau (d), có 10 KB trống, nhưng lỗ lớn nhất chỉ 4 KB — không đặt được đoạn 5 KB. Dồn bộ nhớ (e) dời mọi đoạn sát nhau để chỗ trống thành một lỗ 10 KB; cái giá là chép dữ liệu, vì thế phân đoạn thuần hiếm gặp. Đặt đoạn vào lỗ dùng đúng các lựa chọn first/best/worst fit của slide 10. ➕ Bài toán y hệt xuất hiện ở không gian người dùng: một tiến trình chạy lâu, <code>malloc</code> và <code>free</code> đủ loại kích thước sẽ làm phân mảnh heap của nó — một lý do Java và .NET dùng <strong>bộ thu gom rác có dồn (compacting GC)</strong>, dời các đối tượng sát lại với nhau.</p>
-<p class="meo">🧠 Phân mảnh trong = phí <em>bên trong</em> một khối cỡ cố định (phân trang). Phân mảnh ngoài = phí <em>giữa</em> các khối cỡ thay đổi (phân đoạn, cấp phát liên tục).</p>`],
+<p class="meo">🧠 Phân mảnh trong = phí <em>bên trong</em> một khối cỡ cố định (phân trang). Phân mảnh ngoài = phí <em>giữa</em> các khối cỡ thay đổi (phân đoạn, cấp phát liên tục).</p>
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Phân đoạn đúng kiểu đề FE hỏi: so độ dời với limit trước, rồi mới cộng base.</p>
+<div class="os-lab os-lab-sim-addr-split os-lab-p-seg os-lab-t-addr-split-size"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> bảng đoạn: base + độ dời, hoặc trap <a href="/os-lab?sim=addr-split&amp;preset=seg&amp;lang=vi&amp;tour=addr-split-size" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Đọc (2, 250) ⇒ 900 + 250 = 1150 và (1, 130) ⇒ TRAP, vì 130 không nhỏ hơn limit 120.</li><li>Thử các cặp (đoạn, độ dời) khác và nói đáp án trước khi trang hiện ra.</li></ol></div>
+</div>`],
       [47, 'Segmentation with Paging: MULTICS (1)',
         `<p class="y-chinh">🎯 Figure 3-34(a), the MULTICS virtual memory: each process has a <strong>descriptor segment</strong> — a table with one 36-bit descriptor per segment (segment 0, 1, 2, …). Each descriptor points to the <strong>page table of its segment</strong>: every segment is itself paged.</p>
 <p>MULTICS (designed at MIT from the mid-1960s, running until 2000) wanted both worlds: segmentation's logical structure and paging's freedom from external fragmentation. Large segments are a problem for pure segmentation — a segment must fit entirely in memory. The answer: <strong>page the segments</strong>. Only the pages of a segment that are actually needed are in memory. A MULTICS program could have up to 2¹⁸ = 262,144 segments, each up to 65,536 (36-bit) words long. The descriptor segment itself was paged too.</p>
@@ -2917,7 +2989,13 @@ int main(void) {
 <div class="anh-slide uml sim"><img src="https://media.cuongthai.com/images/academy/OSG202/hinh/61e021d4b8e3217f28af1d1746c4e2fbacad2fa0.svg" alt="Virtual 45060 = page 11, offset 4 → frame 7 → 28676" loading="lazy" /><p class="chu-thich">🧮 Virtual 45060 = page 11, offset 4 → frame 7 → 28676</p></div>
 <details><summary>This picture is COMPUTED, not drawn by hand — see the simulator code (JavaScript)</summary><pre><code class="language-javascript">const TRANG = 4096;
 const BANG = [2, 1, 6, 0, 4, 3, null, null, null, 5, null, 7, null, null, null, null];   // Figure 3-9 (X = null)</code></pre></details>
-</details>`,
+</details>
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>After you have worked the exercise on paper, check every field here.</p>
+<div class="os-lab os-lab-sim-addr-split os-lab-p-split os-lab-t-addr-split-walk"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> check your split and your translation <a href="/os-lab?sim=addr-split&amp;preset=split&amp;lang=en&amp;tour=addr-split-walk" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Type the addresses of the exercise with the same bit widths.</li><li>Compare page number and offset with your paper, then follow the page walk.</li></ol></div>
+</div>`,
     `<h3>🧪 Bài 1 — dịch địa chỉ bằng bảng trang (10 phút)</h3>
 <p>Dùng bảng trang của Hình 3-9 (trang 4 KB; trang 0→khung 2, 1→1, 2→6, 3→0, 4→4, 5→3, 9→5, 11→7, các trang khác vắng mặt). Dịch các địa chỉ ảo 0, 8192, 20500, 32780, 45060, 4095 và 4096. Địa chỉ nào gây lỗi trang?</p>
 <details><summary>Lời giải — một chương trình C làm việc của MMU</summary>
@@ -2950,7 +3028,13 @@ int main(void) {
 <div class="anh-slide uml sim"><img src="https://media.cuongthai.com/images/academy/OSG202/hinh/41782ed090d733aac31f4827ff2a7c579528caec.svg" alt="Ảo 45060 = trang 11, độ dời 4 → khung 7 → 28676" loading="lazy" /><p class="chu-thich">🧮 Ảo 45060 = trang 11, độ dời 4 → khung 7 → 28676</p></div>
 <details><summary>Hình này do máy TÍNH thật — xem mã mô phỏng (JavaScript)</summary><pre><code class="language-javascript">const TRANG = 4096;
 const BANG = [2, 1, 6, 0, 4, 3, null, null, null, 5, null, 7, null, null, null, null];   // Figure 3-9 (X = null)</code></pre></details>
-</details>`),
+</details>
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Làm bài trên giấy xong rồi kiểm từng trường ở đây.</p>
+<div class="os-lab os-lab-sim-addr-split os-lab-p-split os-lab-t-addr-split-walk"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> kiểm phép tách và phép dịch của bạn <a href="/os-lab?sim=addr-split&amp;preset=split&amp;lang=vi&amp;tour=addr-split-walk" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Gõ các địa chỉ của bài với đúng số bit đó.</li><li>So số trang và độ dời với bài làm, rồi đi theo bước tra bảng trang.</li></ol></div>
+</div>`),
     bi(`<h3>🧪 Exercise 2 — split, size, count (15 min)</h3>
 <p>(a) A 32-bit address uses a two-level table with 10-bit PT1 and 10-bit PT2. Split 0x00403008. (b) For 32-bit addresses, what is the page size and the number of pages when the two table fields are 10 + 12, 9 + 11, 10 + 11, 9 + 12 bits? (c) 32-bit addresses, 16-KB pages, 4-byte entries: size of a one-level page table? (d) 2³² words, 2¹²-word pages: page number of 0x12345678? (e) TLB 20 ns, memory 100 ns: effective access time at 80% and 98% hit ratio?</p>
 <details><summary>Solution — computed by a program</summary>
@@ -2986,7 +3070,13 @@ console.log(&#96;(e) TLB 20 ns, memory 100 ns: EAT at 80% hits = &#36;{eat(0.8, 
 <li>(d) 12 offset bits = 3 hex digits, so drop them: <strong>0x12345</strong> (FE17 q37).</li>
 <li>(e) EAT = h(t<sub>TLB</sub> + t<sub>mem</sub>) + (1 − h)(t<sub>TLB</sub> + 2t<sub>mem</sub>) = 0.8 × 120 + 0.2 × 220 = <strong>140 ns</strong>; at 98%, 122 ns. Same formula as old lesson 3.3.</li>
 </ul>
-</details>`,
+</details>
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>Check your sizes: number of pages, entries per table and bytes, one level versus many.</p>
+<div class="os-lab os-lab-sim-addr-split os-lab-p-table os-lab-t-addr-split-size"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> page-table size from address bits, page size and entry size <a href="/os-lab?sim=addr-split&amp;preset=table&amp;lang=en&amp;tour=addr-split-size" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Set the address bits, page size and entry size of the exercise.</li><li>Compare each number with your paper; if one differs, find the power of two you missed.</li></ol></div>
+</div>`,
     `<h3>🧪 Bài 2 — tách, cỡ, đếm (15 phút)</h3>
 <p>(a) Địa chỉ 32 bit dùng bảng hai mức với PT1 10 bit và PT2 10 bit. Tách 0x00403008. (b) Với địa chỉ 32 bit, cỡ trang và số trang là bao nhiêu khi hai trường bảng là 10 + 12, 9 + 11, 10 + 11, 9 + 12 bit? (c) Địa chỉ 32 bit, trang 16 KB, mục 4 byte: cỡ bảng trang một mức? (d) 2³² từ, trang 2¹² từ: số trang của 0x12345678? (e) TLB 20 ns, bộ nhớ 100 ns: thời gian truy cập hiệu dụng khi tỉ lệ trúng 80% và 98%?</p>
 <details><summary>Lời giải — chương trình tính</summary>
@@ -3022,7 +3112,13 @@ console.log(&#96;(e) TLB 20 ns, memory 100 ns: EAT at 80% hits = &#36;{eat(0.8, 
 <li>(d) 12 bit độ dời = 3 chữ số hex, bỏ chúng đi: <strong>0x12345</strong> (FE17 c37).</li>
 <li>(e) EAT = h(t<sub>TLB</sub> + t<sub>mem</sub>) + (1 − h)(t<sub>TLB</sub> + 2t<sub>mem</sub>) = 0,8 × 120 + 0,2 × 220 = <strong>140 ns</strong>; ở 98% là 122 ns. Cùng công thức của bài cũ 3.3.</li>
 </ul>
-</details>`),
+</details>
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Kiểm các con số của bạn: số trang, số mục mỗi bảng và số byte, một mức so với nhiều mức.</p>
+<div class="os-lab os-lab-sim-addr-split os-lab-p-table os-lab-t-addr-split-size"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> cỡ bảng trang từ số bit địa chỉ, cỡ trang và cỡ mục <a href="/os-lab?sim=addr-split&amp;preset=table&amp;lang=vi&amp;tour=addr-split-size" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Đặt số bit địa chỉ, cỡ trang và cỡ mục của bài.</li><li>So từng số với bài làm; số nào lệch thì tìm lũy thừa của 2 bạn bỏ sót.</li></ol></div>
+</div>`),
     bi(`<h3>🧪 Exercise 3 — choose the hole (15 min)</h3>
 <p>(a) Holes 10, 18, 9, 14 MB (memory order); best fit for requests 11, 2, 9, 8 MB (FE3 q23 = FE5 q30). (b) Holes as (start, size): 4075/105, 5225/5, 6785/600, 7560/20, 7600/205, 10250/4050; a request of 200: start address under first, best and worst fit (FE19 q14, FE23 q34, FE24 q4). (c) Holes 10, 4, 20, 15, 9 K; worst fit for 8, 12, 10 K (FE18 q21). (d) Blocks 300, 600, 380, 200, 750, 125 KB; best fit for 115, 500, 358, 200, 375 KB — where does P5 go (FE5 q19)?</p>
 <details><summary>Solution — run by the placement simulator</summary>
@@ -3171,7 +3267,13 @@ console.log(&#96;(e) TLB 20 ns, memory 100 ns: EAT at 80% hits = &#36;{eat(0.8, 
   bel4: { ref: [1, 2, 3, 4, 1, 2, 5, 1, 2, 3, 4, 5], khung: 4 },
 };</code></pre></details>
 <p>(a) <strong>6</strong>, (b) <strong>6</strong>, (c) <strong>5</strong>, (d) page <strong>4</strong> — all four match the bank's keys. (e) clock gives <strong>14</strong> (slide 23's table). Method for paper: write the frames as columns, mark F on every miss, and for LRU keep a small "last used at" note per frame; for OPT look ahead in the string; for FIFO only the load order matters — a hit changes nothing.</p>
-</details>`,
+</details>
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>Check your fault count for every algorithm of the exercise.</p>
+<div class="os-lab os-lab-sim-vm os-lab-p-exam"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> fill the frame table column by column <a href="/os-lab?sim=vm&amp;preset=exam&amp;lang=en" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Type the reference string and the number of frames.</li><li>Run FIFO, LRU and OPT and compare each column, not only the total.</li></ol></div>
+</div>`,
     `<h3>🧪 Bài 4 — đếm lỗi trang (15 phút)</h3>
 <p>Khung ban đầu trống. (a) FIFO, 4 khung: 0, 1, 7, 2, 3, 2, 7, 1, 0, 3 (FE3 c17). (b) LRU, 3 khung: 4, 7, 6, 1, 7, 6, 1, 2, 7, 2 (FE5 c22). (c) OPT, 4 khung: 7, 0, 1, 2, 0, 3, 0 (FE4 c20). (d) FIFO, 3 khung: 1, 2, 3, 4, 1, 2, 5 — nạp 5 thì trang nào bị thay (FE4 c14)? (e) Clock trên chuỗi kinh điển 7,0,1,2,0,3,0,4,2,3,0,3,2,1,2,0,1,7,0,1 với 3 khung.</p>
 <details><summary>Lời giải — bảng của bộ mô phỏng thay trang</summary>
@@ -3228,7 +3330,13 @@ console.log(&#96;(e) TLB 20 ns, memory 100 ns: EAT at 80% hits = &#36;{eat(0.8, 
   bel4: { ref: [1, 2, 3, 4, 1, 2, 5, 1, 2, 3, 4, 5], khung: 4 },
 };</code></pre></details>
 <p>(a) <strong>6</strong>, (b) <strong>6</strong>, (c) <strong>5</strong>, (d) trang <strong>4</strong> — cả bốn khớp khoá của ngân hàng. (e) clock ra <strong>14</strong> (bảng của slide 23). Cách làm trên giấy: viết các khung thành cột, đánh F ở mỗi lần trượt, với LRU ghi chú nhỏ "dùng lần cuối lúc" cho từng khung; với OPT nhìn về phía trước trong chuỗi; với FIFO chỉ thứ tự nạp là quan trọng — trúng thì không đổi gì.</p>
-</details>`),
+</details>
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Kiểm số lỗi trang của bạn cho từng thuật toán của bài.</p>
+<div class="os-lab os-lab-sim-vm os-lab-p-exam"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> điền bảng khung từng cột <a href="/os-lab?sim=vm&amp;preset=exam&amp;lang=vi" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Gõ chuỗi tham chiếu và số khung.</li><li>Chạy FIFO, LRU và OPT rồi so từng cột, không chỉ tổng.</li></ol></div>
+</div>`),
     bi(`<h3>🧪 Exercise 5 — find Belady's anomaly (10 min)</h3>
 <p>Run FIFO on 1, 2, 3, 4, 1, 2, 5, 1, 2, 3, 4, 5 with 3 frames and with 4 frames. Then run LRU with the same frame counts. What is strange, and why can it never happen to LRU?</p>
 <details><summary>Solution</summary>
@@ -3270,7 +3378,13 @@ const REF = Array.from({ length: 400 }, () =&gt; {
 const BELADY = [1, 2, 3, 4, 1, 2, 5, 1, 2, 3, 4, 5];
 const A = 30, B = 10;</code></pre></details>
 <p>FIFO: 3 frames → <strong>9</strong> faults, 4 frames → <strong>10</strong>. LRU: 10 → 8, never up. LRU is a <strong>stack algorithm</strong>: with n + 1 frames it keeps every page it would keep with n frames, plus one more, so it can only fault less. FIFO's choice depends on load order, which changes completely with the number of frames. (FE4 q19, FE7 q21, FE12 q19, FE13 q20.)</p>
-</details>`,
+</details>
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>Belady’s anomaly on the classic string: more frames, more faults.</p>
+<div class="os-lab os-lab-sim-vm os-lab-p-belady"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> FIFO with 3 frames, then 4 <a href="/os-lab?sim=vm&amp;preset=belady&amp;lang=en" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Run FIFO with 3 frames, then 4, and write both fault counts.</li><li>Run LRU with the same frames and explain why a stack algorithm can never do this.</li></ol></div>
+</div>`,
     `<h3>🧪 Bài 5 — tìm nghịch lý Belady (10 phút)</h3>
 <p>Chạy FIFO trên 1, 2, 3, 4, 1, 2, 5, 1, 2, 3, 4, 5 với 3 khung và 4 khung. Rồi chạy LRU với cùng số khung. Có gì lạ, và vì sao LRU không bao giờ bị?</p>
 <details><summary>Lời giải</summary>
@@ -3312,7 +3426,13 @@ const REF = Array.from({ length: 400 }, () =&gt; {
 const BELADY = [1, 2, 3, 4, 1, 2, 5, 1, 2, 3, 4, 5];
 const A = 30, B = 10;</code></pre></details>
 <p>FIFO: 3 khung → <strong>9</strong> lỗi, 4 khung → <strong>10</strong>. LRU: 10 → 8, không bao giờ tăng. LRU là <strong>thuật toán ngăn xếp</strong>: với n + 1 khung nó giữ mọi trang nó sẽ giữ với n khung, cộng thêm một, nên chỉ có thể lỗi ít đi. Lựa chọn của FIFO phụ thuộc thứ tự nạp, mà thứ tự đó đổi hẳn khi số khung đổi. (FE4 c19, FE7 c21, FE12 c19, FE13 c20.)</p>
-</details>`),
+</details>
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Nghịch lý Belady trên chuỗi kinh điển: thêm khung, thêm lỗi trang.</p>
+<div class="os-lab os-lab-sim-vm os-lab-p-belady"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> FIFO với 3 khung, rồi 4 khung <a href="/os-lab?sim=vm&amp;preset=belady&amp;lang=vi" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Chạy FIFO với 3 khung rồi 4 khung, ghi cả hai số lỗi trang.</li><li>Chạy LRU với cùng số khung và giải thích vì sao thuật toán ngăn xếp không bao giờ bị như vậy.</li></ol></div>
+</div>`),
     bi(`<h3>🧪 Exercise 6 — aging and NRU by hand (15 min)</h3>
 <p>Four pages, 8-bit aging counters starting at 0. R bits per tick (pages 0–3): tick 0: 1100, tick 1: 0110, tick 2: 1001, tick 3: 0100. After tick 3, which page does aging evict? At the same moment (R = the bits of tick 3) the M bits are 0, 1, 1, 0: which class is each page in for NRU, and which pages may NRU evict?</p>
 <details><summary>Solution — computed by a program</summary>

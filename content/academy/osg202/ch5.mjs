@@ -1879,7 +1879,13 @@ const THUAT_TOAN = ['fcfs', 'sstf', 'look', 'scan', 'cscan', 'clook'];</code></p
 const THUAT_TOAN = ['fcfs', 'sstf', 'look', 'scan', 'cscan', 'clook'];</code></pre></details>
 <p>1 + 3 + 7 + 15 + 33 + 2 = <strong>61 cylinders</strong>, the book's number. The FE wraps it in time: "a seek takes 6 msec per cylinder" ⇒ 61 × 6 = <strong>366 ms</strong> (FE1#9, the latest SU26 exam; FE10#38). The distractors are traps: 666 ms is FCFS (111 × 6) and 360 ms is the elevator (60 × 6) — slide 33.</p>
 <p>➕ The old web lesson 5.2's data (head at 53, 98 183 37 122 14 124 65 67) gives SSTF = 236, which the simulator reproduces; the 🧪 lesson 5.C has more practice.</p>
-<p class="pitfall">⚠️ FE7#38 and FE9#41: SSF total = <strong>61</strong> (111 = FCFS, 60 = elevator, 108 is nothing). FE5#41 and FE9#36: SSF order from 53 over 98, 37, 14, 65, 67 = <strong>53, 65, 67, 37, 14, 98</strong> — at 67 the nearest is 37 (distance 30), not 98 (distance 31).</p>`,
+<p class="pitfall">⚠️ FE7#38 and FE9#41: SSF total = <strong>61</strong> (111 = FCFS, 60 = elevator, 108 is nothing). FE5#41 and FE9#36: SSF order from 53 over 98, 37, 14, 65, 67 = <strong>53, 65, 67, 37, 14, 98</strong> — at 67 the nearest is 37 (distance 30), not 98 (distance 31).</p>
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>SSF (SSTF) on a disk seen from above: the arm always goes to the nearest pending request.</p>
+<div class="os-lab os-lab-sim-disk-arm os-lab-p-sstf os-lab-t-disk-arm-cscan"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> shortest seek first, cylinder by cylinder <a href="/os-lab?sim=disk-arm&amp;preset=sstf&amp;lang=en&amp;tour=disk-arm-cscan" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Step the arm and add each move to the running total yourself before the page does.</li><li>Find a request that waits a long time because closer ones keep arriving (starvation).</li></ol></div>
+</div>`,
         `<p class="y-chinh">🎯 Hình 5-24: <strong>Shortest Seek First (SSF)</strong> — dịch ngắn nhất trước: luôn phục vụ yêu cầu đang chờ GẦN vị trí đầu từ hiện tại nhất. Từ 11, chuỗi các lần dịch là 12, 9, 16, 1, 34, 36.</p>
 <p>SSF là thuật toán tham lam, giống SJF cho CPU (Chương 2): mỗi bước chọn bước rẻ nhất đang có. Trên ví dụ, nó cắt quãng đường đi gần một nửa. Khuyết điểm là <strong>công bằng</strong>: với đĩa bận, cần đĩa có xu hướng quanh quẩn ở giữa, nơi yêu cầu mới cứ liên tục tới gần nó, và các yêu cầu ở mép xa có thể phải chờ vô hạn — <strong>chết đói (starvation)</strong>. (Sách khác gọi là SSTF, Shortest Seek Time First — cùng một thuật toán. Khi hai yêu cầu cách đều nhau, bộ mô phỏng của môn đi tiếp theo chiều đang đi; quy ước này được ghi rõ vì có đáp án phụ thuộc vào nó.)</p>
 <div class="anh-slide uml sim"><img src="https://media.cuongthai.com/images/academy/OSG202/hinh/bb680e9a0e6d97091d38bc38defa55dd7e1f6f62.svg" alt="SSF trên ví dụ của sách: 61 cylinder = 366 ms với 6 ms mỗi cylinder" loading="lazy" /><p class="chu-thich">🧮 SSF trên ví dụ của sách: 61 cylinder = 366 ms với 6 ms mỗi cylinder</p></div>
@@ -1905,7 +1911,13 @@ const THUAT_TOAN = ['fcfs', 'sstf', 'look', 'scan', 'cscan', 'clook'];</code></p
 const THUAT_TOAN = ['fcfs', 'sstf', 'look', 'scan', 'cscan', 'clook'];</code></pre></details>
 <p>1 + 3 + 7 + 15 + 33 + 2 = <strong>61 cylinder</strong>, đúng con số của sách. FE bọc nó vào thời gian: "mỗi cylinder seek mất 6 ms" ⇒ 61 × 6 = <strong>366 ms</strong> (FE1#9, đề SU26 mới nhất; FE10#38). Các phương án nhiễu là bẫy: 666 ms là FCFS (111 × 6), 360 ms là thang máy (60 × 6) — slide 33.</p>
 <p>➕ Dữ liệu của bài web cũ 5.2 (đầu từ ở 53, 98 183 37 122 14 124 65 67) cho SSTF = 236, bộ mô phỏng ra đúng số đó; bài 🧪 5.C có thêm bài luyện.</p>
-<p class="pitfall">⚠️ FE7#38 và FE9#41: tổng của SSF = <strong>61</strong> (111 = FCFS, 60 = thang máy, 108 chẳng là gì). FE5#41 và FE9#36: thứ tự SSF từ 53 qua 98, 37, 14, 65, 67 = <strong>53, 65, 67, 37, 14, 98</strong> — ở 67, yêu cầu gần nhất là 37 (cách 30), không phải 98 (cách 31).</p>`],
+<p class="pitfall">⚠️ FE7#38 và FE9#41: tổng của SSF = <strong>61</strong> (111 = FCFS, 60 = thang máy, 108 chẳng là gì). FE5#41 và FE9#36: thứ tự SSF từ 53 qua 98, 37, 14, 65, 67 = <strong>53, 65, 67, 37, 14, 98</strong> — ở 67, yêu cầu gần nhất là 37 (cách 30), không phải 98 (cách 31).</p>
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>SSF (SSTF) trên mặt đĩa nhìn từ trên xuống: tay đĩa luôn tới yêu cầu gần nhất đang chờ.</p>
+<div class="os-lab os-lab-sim-disk-arm os-lab-p-sstf os-lab-t-disk-arm-cscan"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> tìm ngắn nhất trước, từng trụ một <a href="/os-lab?sim=disk-arm&amp;preset=sstf&amp;lang=vi&amp;tour=disk-arm-cscan" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Bấm cho tay đĩa chạy và tự cộng từng bước vào tổng trước khi trang cộng.</li><li>Tìm một yêu cầu phải chờ lâu vì các yêu cầu gần hơn cứ tới (bỏ đói).</li></ol></div>
+</div>`],
       [33, 'Disk Arm Scheduling Algorithms (3)',
         `<p class="y-chinh">🎯 Figure 5-25: the <strong>elevator algorithm</strong> — keep moving in the same direction until there are no more outstanding requests in that direction, then switch direction. Starting at 11 and moving up: 12, 16, 34, 36, then down to 9, 1.</p>
 <p>A lift in a tall building does the same: it does not turn around just because someone nearer pressed a button behind it. The driver keeps one bit — the current direction, UP or DOWN. The book's property: for any collection of requests, the upper bound on total motion is fixed at twice the number of cylinders, and no request starves — each one is served within two sweeps. On the example it moves <strong>60 cylinders</strong> — slightly better than SSF here, though usually a bit worse. The book also mentions a variant that always sweeps in the same direction and jumps back after the highest request (smaller variance in response time) — what other books call C-SCAN / C-LOOK.</p>
@@ -1941,7 +1953,13 @@ const THUAT_TOAN = ['fcfs', 'sstf', 'look', 'scan', 'cscan', 'clook'];</code></p
 };
 const THUAT_TOAN = ['fcfs', 'sstf', 'look', 'scan', 'cscan', 'clook'];</code></pre></details>
 <p class="pitfall">⚠️ FE22#26 / FE28#1: requests 10, 22, 20, 2, 40, 6, 38, head at 20, elevator ⇒ 20 (served at once), 22, 38, 40, then 10, 6, 2 = <strong>58</strong> (if you start downward you get 56, not an option — the exam assumes "up" first, like the book). FE26#26: head at 37 ⇒ <strong>37 38 40 22 20 10 6 2</strong>. FE6#41: the path 53, 65, 67, 98, 37, 14 is the elevator. ALWAYS write the starting direction in a written answer.</p>
-<div class="callout">🧭 On a real server: <code>cat /sys/block/vda/queue/scheduler</code> printed <code>none [mq-deadline] kyber</code> on slide 24 — Linux's multi-queue block layer (since version 5.0, 2019) no longer has a pure elevator; mq-deadline sorts requests but gives each a deadline, and NVMe SSDs usually run <code>none</code>, because without an arm there is nothing to optimise.</div>`,
+<div class="callout">🧭 On a real server: <code>cat /sys/block/vda/queue/scheduler</code> printed <code>none [mq-deadline] kyber</code> on slide 24 — Linux's multi-queue block layer (since version 5.0, 2019) no longer has a pure elevator; mq-deadline sorts requests but gives each a deadline, and NVMe SSDs usually run <code>none</code>, because without an arm there is nothing to optimise.</div>
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>The elevator algorithm and its variants on one queue: pick the algorithm and watch the staircase path and the total.</p>
+<div class="os-lab os-lab-sim-disk-arm os-lab-p-cscan os-lab-t-disk-arm-cscan"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> the elevator family: SCAN, LOOK, C-SCAN, C-LOOK <a href="/os-lab?sim=disk-arm&amp;preset=cscan&amp;lang=en&amp;tour=disk-arm-cscan" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Compare SCAN with LOOK: who goes to the edge of the disk and who turns at the last request?</li><li>Flip the return-jump switch for C-SCAN: 385 counted, 186 not counted — read which one your question wants.</li><li>Rank all six algorithms by total head movement on this queue.</li></ol></div>
+</div>`,
         `<p class="y-chinh">🎯 Hình 5-25: <strong>thuật toán thang máy (elevator)</strong> — cứ đi theo một chiều cho tới khi chiều đó hết yêu cầu đang chờ, rồi đổi chiều. Xuất phát ở 11 và đang đi lên: 12, 16, 34, 36, rồi đi xuống 9, 1.</p>
 <p>Thang máy trong toà nhà cao tầng làm y như vậy: nó không quay đầu chỉ vì có người ở gần hơn bấm nút phía sau. Driver giữ một bit — chiều hiện tại, LÊN hay XUỐNG. Tính chất sách nêu: với bất kỳ tập yêu cầu nào, cận trên của tổng quãng đường cố định ở mức gấp đôi số cylinder, và không yêu cầu nào chết đói — yêu cầu nào cũng được phục vụ trong vòng hai lượt quét. Trên ví dụ, nó đi <strong>60 cylinder</strong> — ở đây nhỉnh hơn SSF một chút, dù thường thì kém hơn chút ít. Sách còn nhắc một biến thể luôn quét theo một chiều và nhảy về sau yêu cầu cao nhất (thời gian đáp ứng ít dao động hơn) — sách khác gọi là C-SCAN / C-LOOK.</p>
 <div class="anh-slide uml sim"><img src="https://media.cuongthai.com/images/academy/OSG202/hinh/1c86705d50f52fa5771554290f3df0327e2ea88e.svg" alt="Thang máy của sách trên chính ví dụ của sách: 60 cylinder" loading="lazy" /><p class="chu-thich">🧮 Thang máy của sách trên chính ví dụ của sách: 60 cylinder</p></div>
@@ -1976,7 +1994,13 @@ const THUAT_TOAN = ['fcfs', 'sstf', 'look', 'scan', 'cscan', 'clook'];</code></p
 };
 const THUAT_TOAN = ['fcfs', 'sstf', 'look', 'scan', 'cscan', 'clook'];</code></pre></details>
 <p class="pitfall">⚠️ FE22#26 / FE28#1: yêu cầu 10, 22, 20, 2, 40, 6, 38, đầu từ ở 20, thang máy ⇒ 20 (phục vụ ngay), 22, 38, 40, rồi 10, 6, 2 = <strong>58</strong> (nếu bắt đầu đi xuống sẽ ra 56, không có trong phương án — đề ngầm định đi "lên" trước, như sách). FE26#26: đầu từ ở 37 ⇒ <strong>37 38 40 22 20 10 6 2</strong>. FE6#41: đường đi 53, 65, 67, 98, 37, 14 là thang máy. Bài tự luận thì LUÔN ghi chiều xuất phát.</p>
-<div class="callout">🧭 Trên server thật: <code>cat /sys/block/vda/queue/scheduler</code> in ra <code>none [mq-deadline] kyber</code> ở slide 24 — tầng khối đa hàng đợi của Linux (từ bản 5.0, 2019) không còn thang máy thuần tuý; mq-deadline sắp xếp yêu cầu nhưng đặt hạn chót cho thời gian chờ, còn SSD NVMe thường chạy <code>none</code>, vì không có cần đĩa thì chẳng có gì để tối ưu.</div>`],
+<div class="callout">🧭 Trên server thật: <code>cat /sys/block/vda/queue/scheduler</code> in ra <code>none [mq-deadline] kyber</code> ở slide 24 — tầng khối đa hàng đợi của Linux (từ bản 5.0, 2019) không còn thang máy thuần tuý; mq-deadline sắp xếp yêu cầu nhưng đặt hạn chót cho thời gian chờ, còn SSD NVMe thường chạy <code>none</code>, vì không có cần đĩa thì chẳng có gì để tối ưu.</div>
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Thuật toán thang máy và các biến thể trên một hàng đợi: chọn thuật toán và xem đường bậc thang cùng tổng quãng đường.</p>
+<div class="os-lab os-lab-sim-disk-arm os-lab-p-cscan os-lab-t-disk-arm-cscan"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> họ thang máy: SCAN, LOOK, C-SCAN, C-LOOK <a href="/os-lab?sim=disk-arm&amp;preset=cscan&amp;lang=vi&amp;tour=disk-arm-cscan" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>So SCAN với LOOK: ai chạy tới mép đĩa, ai quay đầu ở yêu cầu cuối?</li><li>Lật công tắc cú nhảy về của C-SCAN: tính là 385, không tính là 186 — đọc kỹ đề của bạn muốn cái nào.</li><li>Xếp hạng cả sáu thuật toán theo tổng quãng đường trên hàng đợi này.</li></ol></div>
+</div>`],
       [34, 'Error Handling',
         `<p class="y-chinh">🎯 Figure 5-26: (a) a track with a <strong>bad sector</strong> (sector 7); (b) substituting one of the <strong>spare sectors</strong> for it; (c) shifting all the sectors by one to bypass the bad one.</p>
 <p>Manufacturing defects are unavoidable on dense media. When a disk is tested, bad sectors are found and remapped: the controller keeps a list of bad sectors and spares, and either redirects requests for sector 7 to a spare (b) — simple, but reading the track in order now needs an extra rotation — or renumbers all following sectors (c), which keeps the order but means rewriting the preambles. Errors that develop later are handled the same way, by the controller or by the OS. Other error types: <strong>seek errors</strong> (the arm lands on the wrong cylinder) are corrected by recalibrating — moving the arm as far out as it goes and resetting its position to 0. Transient read errors are retried; if the ECC cannot correct the data, the error goes up to the OS (slide 10's "handle errors close to the hardware").</p>
@@ -2898,7 +2922,13 @@ const THUAT_TOAN = ['fcfs', 'sstf', 'look', 'scan', 'cscan', 'clook'];</code></p
   fe26: { dau: 37, yeuCau: [10, 22, 20, 2, 40, 6, 38], min: 0, max: 49 },
 };
 const THUAT_TOAN = ['fcfs', 'sstf', 'look', 'scan', 'cscan', 'clook'];</code></pre></details>
-</details>`,
+</details>
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>Grade yourself: the path stays hidden until you check.</p>
+<div class="os-lab os-lab-sim-disk-arm os-lab-p-exam os-lab-t-disk-arm-exam"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> exam mode: type the order and the total, then check <a href="/os-lab?sim=disk-arm&amp;preset=exam&amp;lang=en&amp;tour=disk-arm-exam" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>For each algorithm, type the service order and the total head movement.</li><li>Press Check, then answer “which algorithm visited the cylinders in this order?”.</li></ol></div>
+</div>`,
     `<h3>🧪 Bài 1 — lập lịch cần đĩa trên dữ liệu mới (25 phút)</h3>
 <p>Một đĩa có cylinder 0–99; mỗi cylinder seek mất 5 ms. Cần đĩa đang ở cylinder <strong>30</strong>, lần cuối đang đi <strong>lên</strong> (về phía 99). Các yêu cầu tới theo thứ tự: <strong>12, 85, 40, 7, 63, 51, 92, 20</strong>. (a) Cho thứ tự phục vụ và tổng quãng đường của FCFS, SSF, thang máy (LOOK), SCAN, C-SCAN và C-LOOK (bản C- có tính cú nhảy về). (b) SSF tốn bao lâu để seek? (c) Để ý bước đầu tiên của SSF — có gì đặc biệt? (d) Thêm, FE1#13: đầu từ ở 25, yêu cầu 5, 48, 32, 50, 12, FCFS — các phương án là 108, 96, 83, 114. Cái nào đúng?</p>
 <details><summary>Lời giải — bộ mô phỏng tính</summary>
@@ -2948,7 +2978,13 @@ const THUAT_TOAN = ['fcfs', 'sstf', 'look', 'scan', 'cscan', 'clook'];</code></p
   fe26: { dau: 37, yeuCau: [10, 22, 20, 2, 40, 6, 38], min: 0, max: 49 },
 };
 const THUAT_TOAN = ['fcfs', 'sstf', 'look', 'scan', 'cscan', 'clook'];</code></pre></details>
-</details>`),
+</details>
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Tự chấm: đường đi bị ẩn cho tới khi bạn chấm.</p>
+<div class="os-lab os-lab-sim-disk-arm os-lab-p-exam os-lab-t-disk-arm-exam"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> chế độ thi: gõ thứ tự và tổng rồi chấm <a href="/os-lab?sim=disk-arm&amp;preset=exam&amp;lang=vi&amp;tour=disk-arm-exam" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Với mỗi thuật toán, gõ thứ tự phục vụ và tổng quãng đường.</li><li>Bấm Chấm, rồi trả lời “thuật toán nào đi qua các trụ theo thứ tự này?”.</li></ol></div>
+</div>`),
     bi(`<h3>🧪 Exercise 2 — the FE arithmetic of Chapter 5 (20 min)</h3>
 <p>(a) A modem delivers 7,000 characters/s and every character costs one interrupt of 10 µs in total. What fraction of the CPU goes to interrupts? Same for a printer at 400 characters/s with 50 µs per interrupt. (b) A programmable clock is driven by a 500-MHz crystal in square-wave mode. What value must be loaded into the holding register for a tick every 10 ms? Every 100 µs? (c) Cylinder skew for a 3600-rpm and a 5400-rpm disk with 200 sectors per track and a 1 ms track-to-track seek. (d) Copying one byte takes 10 ns: how long to rewrite a 150 × 20 text-mode memory-mapped screen?</p>
 <details><summary>Solution — computed by a program</summary>

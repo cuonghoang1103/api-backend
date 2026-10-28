@@ -857,7 +857,13 @@ const H65 = {
   viTri: { R: [0, 0], A: [1, 0], B: [3, 0], C: [0, 1], S: [1, 1], D: [2, 1], T: [3, 1], E: [4, 1], F: [1, 2], U: [2, 2], V: [4, 2], W: [1, 3], G: [2, 3] },
 };</code></pre></details>
 <p>➕ Two general facts follow. First, a graph with no cycle is always "reducible": find a process that is not blocked, let it finish, delete its arcs, repeat — this is exactly the matrix detection algorithm of slide 17 in graph form. Second, the sequence that avoided the deadlock here was found by looking ahead at what each process would request — the next slides formalise that "look ahead" into safe states and the banker's algorithm.</p>
-<p class="meo">🧠 In (q) R is "handed over" from A to C at the moment A releases it — the waiting process wakes up already owning the resource. That is how <code>pthread_mutex_unlock</code>, Java's <code>ReentrantLock(true)</code> (fair mode) and PostgreSQL's lock queue behave too: a release wakes the next waiter.</p>`,
+<p class="meo">🧠 In (q) R is "handed over" from A to C at the moment A releases it — the waiting process wakes up already owning the resource. That is how <code>pthread_mutex_unlock</code>, Java's <code>ReentrantLock(true)</code> (fair mode) and PostgreSQL's lock queue behave too: a release wakes the next waiter.</p>
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>Resource-allocation graphs like slides 7–11: one instance per resource, so a cycle means deadlock.</p>
+<div class="os-lab os-lab-sim-deadlock os-lab-p-cycle os-lab-t-deadlock-detect"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> a resource-allocation graph with a cycle <a href="/os-lab?sim=deadlock&amp;preset=cycle&amp;lang=en&amp;tour=deadlock-detect" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Step the requests until the cycle closes and name the processes in it.</li><li>Change the order of one request and show that the cycle no longer forms.</li></ol></div>
+</div>`,
         `<p class="y-chinh">🎯 Hình 6-4 (l)–(q): lịch trình tránh bế tắc từng bước. A được R, C được T, A được S; yêu cầu R của C bị chặn; A chạy xong và trả R lẫn S; R được trao cho C đang chờ. Ở (q) C giữ R và T và chạy xong được — không chu trình nào hình thành, và B được chạy sau đó.</p>
 <p>Cái giá của việc tránh bế tắc hiện rõ trong hình: B không làm gì suốt sáu bước này, còn C phải chờ ở bước 4. HĐH đã đổi một phần song song lấy sự an toàn. Ở (o) có một lúc C bị chặn ở R, nhưng đồ thị không có chu trình: A, chủ của R, không chờ thứ gì C đang giữ, nên A chạy được tới cùng và trả R. Một tiến trình bị chặn chưa phải là tiến trình bế tắc — điều quan trọng là sự chờ của nó có kết thúc được không.</p>
 <div class="anh-slide uml sim"><img src="https://media.cuongthai.com/images/academy/OSG202/hinh/666e4d41af790780b21915e54975e803d7c792c7.svg" alt="Diễn lại Hình 6-4 (k)–(q): khi B bị hoãn, R được trao cho C ngay lúc A trả — không có chu trình" loading="lazy" /><p class="chu-thich">🧮 Diễn lại Hình 6-4 (k)–(q): khi B bị hoãn, R được trao cho C ngay lúc A trả — không có chu trình</p></div>
@@ -908,7 +914,13 @@ const H65 = {
   viTri: { R: [0, 0], A: [1, 0], B: [3, 0], C: [0, 1], S: [1, 1], D: [2, 1], T: [3, 1], E: [4, 1], F: [1, 2], U: [2, 2], V: [4, 2], W: [1, 3], G: [2, 3] },
 };</code></pre></details>
 <p>➕ Từ đây rút ra hai sự thật tổng quát. Thứ nhất, một đồ thị không có chu trình luôn "rút gọn được": tìm một tiến trình không bị chặn, cho nó chạy xong, xoá các cạnh của nó, lặp lại — đó chính là thuật toán phát hiện bằng ma trận ở slide 17 dưới dạng đồ thị. Thứ hai, thứ tự tránh được bế tắc ở đây được tìm ra nhờ nhìn trước xem mỗi tiến trình sẽ xin gì — các slide sau chính thức hoá việc "nhìn trước" đó thành trạng thái an toàn và thuật toán nhà băng.</p>
-<p class="meo">🧠 Ở (q), R được "trao tay" từ A sang C ngay lúc A trả — tiến trình đang chờ tỉnh dậy với tài nguyên đã thuộc về mình. <code>pthread_mutex_unlock</code>, <code>ReentrantLock(true)</code> của Java (chế độ công bằng) và hàng đợi khoá của PostgreSQL cũng hoạt động như vậy: một lần trả đánh thức kẻ chờ kế tiếp.</p>`],
+<p class="meo">🧠 Ở (q), R được "trao tay" từ A sang C ngay lúc A trả — tiến trình đang chờ tỉnh dậy với tài nguyên đã thuộc về mình. <code>pthread_mutex_unlock</code>, <code>ReentrantLock(true)</code> của Java (chế độ công bằng) và hàng đợi khoá của PostgreSQL cũng hoạt động như vậy: một lần trả đánh thức kẻ chờ kế tiếp.</p>
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Đồ thị cấp phát tài nguyên như slide 7–11: mỗi tài nguyên một thể hiện, nên có chu trình là bế tắc.</p>
+<div class="os-lab os-lab-sim-deadlock os-lab-p-cycle os-lab-t-deadlock-detect"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> đồ thị cấp phát tài nguyên có chu trình <a href="/os-lab?sim=deadlock&amp;preset=cycle&amp;lang=vi&amp;tour=deadlock-detect" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Bấm các yêu cầu tới khi chu trình khép lại và gọi tên các tiến trình trong đó.</li><li>Đổi thứ tự một yêu cầu và chỉ ra chu trình không còn hình thành.</li></ol></div>
+</div>`],
       [11, 'Deadlock Modeling (5)',
         `<p class="y-chinh">🎯 Four strategies for dealing with deadlocks: <strong>1. ignore the problem</strong> (maybe it will go away); <strong>2. detection and recovery</strong> — let deadlocks occur, detect them, take action; <strong>3. dynamic avoidance</strong> by careful resource allocation; <strong>4. prevention</strong> — structurally negate one of the four conditions.</p>
 <p>The rest of the chapter takes them in this order: the ostrich (§6.3), detection and recovery (slides 12–19), avoidance (20–25), prevention (26–28). They differ in <em>when</em> they act. Prevention acts at design time: the rules make a deadlock impossible. Avoidance acts at every request: the OS refuses requests that could lead to trouble. Detection acts afterwards: deadlocks happen, are found, and are broken. The ostrich does not act at all.</p>
@@ -1162,12 +1174,24 @@ Found 1 deadlock.</div>
 <p>The idea in one sentence: <em>pretend every process that could get what it is waiting for does get it, runs to completion and gives back everything it holds — then see who is left.</em> Step 1 asks "can this process's current request be satisfied with what is free?". If yes, it is not stuck: it will finish (we assume optimistically that it then asks for nothing more) and return its row of C, so A grows. Marking means "can finish". If at some point no unmarked process fits, the remaining ones are each waiting for something that only the others hold — exactly the definition of slide 5.</p>
 <p>The optimistic assumption ("once satisfied, a process finishes without asking for more") is fine for detection: if it later asks for more and blocks, the next run of the detector will see it. Running the algorithm takes up to m × n² comparisons (n rounds, each scanning n rows of m numbers) — cheap enough to run every few seconds.</p>
 <p>➕ When to run the detector? The book lists three choices: on every resource request (finds deadlocks early, costs CPU on every request), every k minutes, or when CPU utilisation drops below some threshold — a deadlock leaves processes blocked, so the CPU becomes idle. PostgreSQL uses a fourth, smarter rule: a transaction that has been waiting for a lock longer than <code>deadlock_timeout</code> (1 s by default) runs the check itself. Most lock waits end within milliseconds, so the expensive check runs only for the suspicious ones.</p>
-<p class="pitfall">⚠️ FE9#46: "Every time a request cannot be granted immediately, the detection algorithm is invoked. This helps identify ___." The bank keys "the specific process that caused the deadlock"; "the set of processes that have been deadlocked" is also identified (Silberschatz names both) — a poorly-built question. Pick the bank's answer, know both.</p>`,
+<p class="pitfall">⚠️ FE9#46: "Every time a request cannot be granted immediately, the detection algorithm is invoked. This helps identify ___." The bank keys "the specific process that caused the deadlock"; "the set of processes that have been deadlocked" is also identified (Silberschatz names both) — a poorly-built question. Pick the bank's answer, know both.</p>
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>The detection algorithm of slides 16–18: find a process whose request fits in A, let it finish, give back its allocation, repeat.</p>
+<div class="os-lab os-lab-sim-deadlock os-lab-p-detect os-lab-t-deadlock-detect"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> detection with E, A, C and R <a href="/os-lab?sim=deadlock&amp;preset=detect&amp;lang=en&amp;tour=deadlock-detect" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Step the scan and write A after every process that finishes.</li><li>Find the processes that can never finish: those are the deadlocked ones.</li></ol></div>
+</div>`,
         `<p class="y-chinh">🎯 Thuật toán phát hiện: <strong>1.</strong> tìm một tiến trình P<sub>i</sub> chưa đánh dấu có hàng R của nó ≤ A; <strong>2.</strong> nếu tìm thấy, cộng hàng C của nó vào A, đánh dấu nó, rồi quay lại bước 1; <strong>3.</strong> nếu không còn tiến trình nào như vậy thì dừng. Mọi tiến trình vẫn <strong>chưa được đánh dấu</strong> lúc kết thúc đều <strong>bế tắc</strong>.</p>
 <p>Ý tưởng trong một câu: <em>giả sử mọi tiến trình có thể nhận được thứ nó đang chờ thì đều nhận được, chạy xong và trả lại hết những gì nó giữ — rồi xem còn ai sót lại.</em> Bước 1 hỏi "yêu cầu hiện tại của tiến trình này có được đáp ứng bằng phần đang rảnh không?". Có thì nó không kẹt: nó sẽ chạy xong (ta giả định lạc quan rằng sau đó nó không xin gì thêm) và trả lại hàng C của mình, nên A lớn lên. Đánh dấu nghĩa là "chạy xong được". Nếu tới lúc không tiến trình chưa đánh dấu nào vừa, thì những kẻ còn lại đều đang chờ thứ mà chỉ những kẻ khác trong nhóm giữ — đúng định nghĩa ở slide 5.</p>
 <p>Giả định lạc quan ("đã được đáp ứng thì chạy xong, không xin thêm") là chấp nhận được với việc phát hiện: nếu về sau nó xin thêm và bị chặn, lần chạy kế tiếp của bộ dò sẽ thấy. Chạy thuật toán tốn tối đa m × n² phép so (n vòng, mỗi vòng quét n hàng m số) — đủ rẻ để chạy vài giây một lần.</p>
 <p>➕ Khi nào chạy bộ dò? Sách kể ba lựa chọn: ở mỗi lần xin tài nguyên (bắt bế tắc sớm, tốn CPU ở mọi lần xin), mỗi k phút, hoặc khi mức dùng CPU tụt dưới một ngưỡng — bế tắc làm các tiến trình bị chặn nên CPU rảnh ra. PostgreSQL dùng luật thứ tư, khôn hơn: giao dịch nào đã chờ khoá lâu hơn <code>deadlock_timeout</code> (mặc định 1 giây) thì tự chạy phép kiểm. Phần lớn lần chờ khoá kết thúc trong vài mili giây, nên phép kiểm đắt chỉ chạy cho những ca đáng ngờ.</p>
-<p class="pitfall">⚠️ FE9#46: "Mỗi khi một yêu cầu không được đáp ứng ngay, thuật toán phát hiện được gọi. Điều này giúp xác định ___." Ngân hàng đánh dấu "chính tiến trình đã gây ra bế tắc"; còn "tập các tiến trình đã bế tắc" cũng xác định được (Silberschatz nêu cả hai) — một câu ra đề không chặt. Chọn theo ngân hàng, nhưng biết cả hai.</p>`],
+<p class="pitfall">⚠️ FE9#46: "Mỗi khi một yêu cầu không được đáp ứng ngay, thuật toán phát hiện được gọi. Điều này giúp xác định ___." Ngân hàng đánh dấu "chính tiến trình đã gây ra bế tắc"; còn "tập các tiến trình đã bế tắc" cũng xác định được (Silberschatz nêu cả hai) — một câu ra đề không chặt. Chọn theo ngân hàng, nhưng biết cả hai.</p>
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Thuật toán phát hiện của slide 16–18: tìm tiến trình có yêu cầu vừa với A, cho nó xong, thu lại phần nó giữ, lặp lại.</p>
+<div class="os-lab os-lab-sim-deadlock os-lab-p-detect os-lab-t-deadlock-detect"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> phát hiện với E, A, C và R <a href="/os-lab?sim=deadlock&amp;preset=detect&amp;lang=vi&amp;tour=deadlock-detect" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Bấm từng bước quét và ghi A sau mỗi tiến trình xong.</li><li>Tìm các tiến trình không bao giờ xong được: đó là các tiến trình bị bế tắc.</li></ol></div>
+</div>`],
       [18, 'Deadlock Detection with Multiple Resources of Each Type (3)',
         `<p class="y-chinh">🎯 Figure 6-7: four resource types — tape drives, plotters, scanners, CD-ROMs — with E = (4 2 3 1) and A = (2 1 0 0); three processes with C and R as in the figure. Running the algorithm: process 3 can be satisfied, then process 2, then process 1 — <strong>no deadlock</strong>.</p>
 <p>Check the invariant first: column sums of C are (2 1 3 1); plus A (2 1 0 0) gives (4 2 3 1) = E. Then the run, every comparison recorded by the simulator:</p>
@@ -2581,7 +2605,13 @@ function bangMaTran({ ten, loai, giu, can, max, t }) {
   return &#96;&lt;table&gt;\\n&lt;thead&gt;&#36;{th}&lt;/thead&gt;\\n&lt;tbody&gt;\\n&#36;{rows}\\n&lt;/tbody&gt;\\n&lt;/table&gt;&#96;;
 }</code></pre></details>
 <p>➕ Why nobody runs it: the banker's algorithm is beautiful and almost useless in practice (the book says so). Processes rarely know their maximum needs in advance; the number of processes changes all the time (users log in and out, requests come and go); resources can disappear (a disk fails). And the check costs m × n² operations on every single request. General-purpose systems therefore use the ostrich plus prevention; databases use detection. Avoidance survives in special places — some real-time and embedded systems with a fixed set of tasks, and admission control (a cluster scheduler that admits a job only if its declared maximum memory can be guaranteed).</p>
-<p class="pitfall">⚠️ FE: the weakness of the banker's algorithm → <strong>requiring that processes state their maximum needs in advance</strong> (FE18#34, FE20#35, FE25#23); before granting, it checks <strong>whether granting will lead to a safe state</strong> (FE2#36). FE2#49 keys "avoidance using banker's algorithm" for safety-critical systems while FE2#47 says prevention is favoured in real-time systems "without complex runtime checks" — both are bank keys; remember the reason in each.</p>`,
+<p class="pitfall">⚠️ FE: the weakness of the banker's algorithm → <strong>requiring that processes state their maximum needs in advance</strong> (FE18#34, FE20#35, FE25#23); before granting, it checks <strong>whether granting will lead to a safe state</strong> (FE2#36). FE2#49 keys "avoidance using banker's algorithm" for safety-critical systems while FE2#47 says prevention is favoured in real-time systems "without complex runtime checks" — both are bank keys; remember the reason in each.</p>
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>The banker’s algorithm for several resource types, one Work vector at a time — exactly what you write on the exam paper.</p>
+<div class="os-lab os-lab-sim-deadlock os-lab-p-banker os-lab-t-deadlock-banker"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> Need = Max − Allocation, then the safety scan <a href="/os-lab?sim=deadlock&amp;preset=banker&amp;lang=en&amp;tour=deadlock-banker" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Compute the Need matrix yourself, then compare with the simulator.</li><li>Step the scan and write the safe sequence it finds.</li><li>Make one request that leads to an unsafe state and see it refused.</li></ol></div>
+</div>`,
         `<p class="y-chinh">🎯 Phép kiểm an toàn: <strong>1.</strong> tìm một hàng R mà mọi nhu cầu chưa đáp ứng đều ≤ A — không có thì trạng thái không an toàn (hệ thống <em>có thể</em> bế tắc); <strong>2.</strong> giả sử tiến trình đó nhận đủ mọi thứ nó cần và chạy xong: đánh dấu nó đã kết thúc và cộng tài nguyên của nó vào A; <strong>3.</strong> lặp lại tới khi mọi tiến trình đều kết thúc (trạng thái <strong>an toàn</strong>) hoặc không còn tiến trình nào được đáp ứng (<strong>không an toàn</strong>).</p>
 <p>⚠️ Slide viết "system will eventually deadlock" ở bước 1 và "(deadlock)" ở bước 3. Đó là cách nói tắt theo trường hợp xấu nhất của sách; chữ chính xác là <em>không an toàn</em>: bế tắc là có thể, không phải chắc chắn (slide 22). Khi có nhiều hàng cùng vừa, chọn hàng nào cũng được — kết luận như nhau — nhưng <em>chuỗi</em> bạn viết ra phụ thuộc lựa chọn đó. Vì thế câu thi hỏi "chuỗi an toàn là chuỗi nào?" luôn đi kèm phương án, và bạn kiểm từng phương án thay vì mong chuỗi của mình trùng đáp án.</p>
 <p>Thuật toán xin tài nguyên đầy đủ (tên Silberschatz đặt, dùng trong bài web cũ 6.2) kiểm ba điều theo thứ tự khi tiến trình i xin một vector Request: (1) Request ≤ Need<sub>i</sub>, nếu không là <strong>lỗi</strong> (nó phá lời hứa); (2) Request ≤ A, nếu không thì phải <strong>chờ</strong> (lúc này chưa đủ chỗ trống); (3) giả vờ cấp rồi chạy phép kiểm an toàn — an toàn ⇒ <strong>cấp</strong>, không an toàn ⇒ <strong>hoãn</strong>. Đề FE mới nhất hỏi đúng phép kiểm an toàn:</p>
@@ -2835,7 +2865,13 @@ function bangMaTran({ ten, loai, giu, can, max, t }) {
   return &#96;&lt;table&gt;\\n&lt;thead&gt;&#36;{th}&lt;/thead&gt;\\n&lt;tbody&gt;\\n&#36;{rows}\\n&lt;/tbody&gt;\\n&lt;/table&gt;&#96;;
 }</code></pre></details>
 <p>➕ Vì sao chẳng ai chạy nó: thuật toán nhà băng đẹp nhưng gần như vô dụng trong thực tế (chính sách nói vậy). Tiến trình hiếm khi biết trước nhu cầu tối đa của mình; số tiến trình thay đổi liên tục (người dùng đăng nhập, đăng xuất, request tới rồi đi); tài nguyên có thể biến mất (một ổ đĩa hỏng). Và phép kiểm tốn m × n² phép tính ở từng lần xin. Vì vậy các hệ thống đa dụng dùng đà điểu cộng ngăn ngừa; cơ sở dữ liệu dùng phát hiện. Việc tránh bế tắc chỉ sống sót ở những chỗ đặc biệt — vài hệ thời gian thực và nhúng có tập tác vụ cố định, và kiểm soát nhận việc (admission control: một bộ lập lịch cụm chỉ nhận một job nếu bảo đảm được lượng bộ nhớ tối đa nó khai).</p>
-<p class="pitfall">⚠️ FE: điểm yếu của thuật toán nhà băng → <strong>đòi tiến trình khai trước nhu cầu tối đa</strong> (FE18#34, FE20#35, FE25#23); trước khi cấp, nó kiểm <strong>việc cấp có dẫn tới trạng thái an toàn không</strong> (FE2#36). FE2#49 đánh dấu "tránh bằng thuật toán nhà băng" cho hệ thống an toàn-sống-còn, trong khi FE2#47 nói hệ thời gian thực ưa ngăn ngừa vì "không cần kiểm tra phức tạp lúc chạy" — cả hai đều là đáp án ngân hàng; hãy nhớ lý do của từng câu.</p>`],
+<p class="pitfall">⚠️ FE: điểm yếu của thuật toán nhà băng → <strong>đòi tiến trình khai trước nhu cầu tối đa</strong> (FE18#34, FE20#35, FE25#23); trước khi cấp, nó kiểm <strong>việc cấp có dẫn tới trạng thái an toàn không</strong> (FE2#36). FE2#49 đánh dấu "tránh bằng thuật toán nhà băng" cho hệ thống an toàn-sống-còn, trong khi FE2#47 nói hệ thời gian thực ưa ngăn ngừa vì "không cần kiểm tra phức tạp lúc chạy" — cả hai đều là đáp án ngân hàng; hãy nhớ lý do của từng câu.</p>
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Thuật toán nhà băng cho nhiều loại tài nguyên, từng vector Work một — đúng thứ bạn viết lên giấy thi.</p>
+<div class="os-lab os-lab-sim-deadlock os-lab-p-banker os-lab-t-deadlock-banker"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> Need = Max − Allocation, rồi vòng kiểm an toàn <a href="/os-lab?sim=deadlock&amp;preset=banker&amp;lang=vi&amp;tour=deadlock-banker" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Tự tính ma trận Need rồi so với mô phỏng.</li><li>Bấm từng bước quét và ghi chuỗi an toàn nó tìm ra.</li><li>Tạo một yêu cầu dẫn tới trạng thái không an toàn và xem nó bị từ chối.</li></ol></div>
+</div>`],
       [26, 'Deadlock Prevention',
         `<p class="y-chinh">🎯 Prevention: make sure at least one of the four conditions can <strong>never</strong> be satisfied — attack <strong>mutual exclusion</strong>, <strong>hold and wait</strong>, <strong>no preemption</strong> or <strong>circular wait</strong>. Then deadlock is impossible by construction, with no detector and no banker.</p>
 <p><strong>Attacking mutual exclusion</strong> (§6.6.1): if no resource were ever assigned exclusively to one process, there would be no deadlock. Data that is read-only can be shared freely. For printers the book proposes <em>spooling</em>: processes write output to a spool directory, and only the printer daemon touches the real printer — the daemon never requests another resource, so no deadlock involves the printer. But spooling only moves the problem: if two processes fill the spool disk with half-finished output and the daemon waits for complete jobs, they deadlock on the disk. General lesson: avoid assigning a resource unless absolutely necessary, and let as few processes as possible claim it.</p>
@@ -3455,7 +3491,13 @@ const v = (a) =&gt; &#96;(&#36;{a.join(' ')})&#96;;</code></pre></details>
 <li>(b) <strong>Safe</strong>: P1 → P2 → P3 → P4 → P0. P0 is skipped first (needs 4 tapes, only 3 free); after P1 finishes A = (5 2 3) and P2's (5 0 2) fits.</li>
 <li>(c) Three checks in order — ≤ Need? ≤ A? still safe? P1 (1 0 1): passes all three → <strong>grant</strong>. P4 (2 2 0): fits Need and A, but the new A (1 0 3) leaves nobody able to finish → <strong>defer</strong> (unsafe). P4 (3 3 0): more plotters than available → <strong>wait</strong>. P3 (2 0 0): more than its own Need (1 1 2) → <strong>error</strong> — it broke its declared maximum.</li>
 </ul>
-</details>`,
+</details>
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>Rehearse the request routine on the simulator’s table, then apply it to the exercise: pretend to grant, run the safety scan, keep it only if the state stays safe.</p>
+<div class="os-lab os-lab-sim-deadlock os-lab-p-request os-lab-t-deadlock-banker"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> grant or wait: a request against the banker <a href="/os-lab?sim=deadlock&amp;preset=request&amp;lang=en&amp;tour=deadlock-banker" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Type a request in the Request boxes: check Request ≤ Need and Request ≤ Available first.</li><li>Step the safety scan on the pretended state and decide: grant or wait.</li></ol></div>
+</div>`,
     `<h3>🧪 Bài 1 — thuật toán nhà băng trên dữ liệu mới (25 phút)</h3>
 <p>Ba loại tài nguyên với E = (7 4 8). Năm tiến trình:</p>
 <table>
@@ -3503,7 +3545,13 @@ const v = (a) =&gt; &#96;(&#36;{a.join(' ')})&#96;;</code></pre></details>
 <li>(b) <strong>An toàn</strong>: P1 → P2 → P3 → P4 → P0. P0 bị bỏ qua lúc đầu (cần 4 ổ băng, chỉ còn 3); sau khi P1 xong A = (5 2 3) và (5 0 2) của P2 vừa.</li>
 <li>(c) Ba phép kiểm theo thứ tự — ≤ Need? ≤ A? còn an toàn? P1 (1 0 1): qua cả ba → <strong>cấp</strong>. P4 (2 2 0): vừa Need và A, nhưng A mới (1 0 3) không để ai chạy xong được → <strong>hoãn</strong> (không an toàn). P4 (3 3 0): xin nhiều máy vẽ hơn số đang có → <strong>chờ</strong>. P3 (2 0 0): vượt chính Need của nó (1 1 2) → <strong>lỗi</strong> — nó phá mức tối đa đã khai.</li>
 </ul>
-</details>`),
+</details>
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Tập quy trình xử lý yêu cầu trên bảng của mô phỏng, rồi áp vào bài: giả vờ cấp, chạy vòng kiểm an toàn, chỉ giữ nếu trạng thái còn an toàn.</p>
+<div class="os-lab os-lab-sim-deadlock os-lab-p-request os-lab-t-deadlock-banker"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> cấp hay chờ: một yêu cầu trước nhà băng <a href="/os-lab?sim=deadlock&amp;preset=request&amp;lang=vi&amp;tour=deadlock-banker" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Gõ một yêu cầu vào các ô Request: kiểm Request ≤ Need và Request ≤ Available trước.</li><li>Bấm vòng kiểm an toàn trên trạng thái giả định rồi quyết: cấp hay chờ.</li></ol></div>
+</div>`),
     bi(`<h3>🧪 Exercise 2 — who is deadlocked? (15 min)</h3>
 <p>Three resource types X, Y, Z with E = (3 1 1) and A = (1 0 0). Current allocation C and request matrix R:</p>
 <table>
@@ -3536,7 +3584,13 @@ const v = (a) =&gt; &#96;(&#36;{a.join(' ')})&#96;;</code></pre></details>
 <li>(b) Only P3's request (1 0 0) fits A: P3 finishes and returns (1 0 0), A = (2 0 0). Now P0 needs Y, P1 needs Z, P2 needs Y — none is free. <strong>P0, P1 and P2 are deadlocked.</strong></li>
 <li>(c) No. The cycle is P1 → Z → P2 → Y → P1 (P1 holds Y and wants Z, P2 holds Z and wants Y). P0 is not on it, but it waits for Y, which only a member of the cycle can release — by the definition of slide 5 it is deadlocked too. The matrix algorithm finds such processes automatically; a picture-based search for cycles would miss P0.</li>
 </ul>
-</details>`,
+</details>
+<div class="lab-try">
+<h3>🔬 Try it now</h3>
+<p>The scan of this exercise on the simulator’s table: detection uses Request instead of Need.</p>
+<div class="os-lab os-lab-sim-deadlock os-lab-p-detect os-lab-t-deadlock-detect"><p class="os-lab-cap">🧪 <strong>OS lab:</strong> detection with a Request matrix <a href="/os-lab?sim=deadlock&amp;preset=detect&amp;lang=en&amp;tour=deadlock-detect" target="_blank" rel="noopener">Open full screen →</a></p></div>
+<div class="callout"><b>Your tasks:</b><ol><li>Step the scan and cross out each process that can finish.</li><li>The processes left at the end are the deadlocked ones — then run the same scan on the exercise on paper.</li></ol></div>
+</div>`,
     `<h3>🧪 Bài 2 — ai bế tắc? (15 phút)</h3>
 <p>Ba loại tài nguyên X, Y, Z với E = (3 1 1) và A = (1 0 0). Ma trận cấp phát hiện tại C và ma trận yêu cầu R:</p>
 <table>
@@ -3569,7 +3623,13 @@ const v = (a) =&gt; &#96;(&#36;{a.join(' ')})&#96;;</code></pre></details>
 <li>(b) Chỉ yêu cầu (1 0 0) của P3 vừa A: P3 chạy xong và trả (1 0 0), A = (2 0 0). Giờ P0 cần Y, P1 cần Z, P2 cần Y — không cái nào rảnh. <strong>P0, P1 và P2 bế tắc.</strong></li>
 <li>(c) Không. Chu trình là P1 → Z → P2 → Y → P1 (P1 giữ Y và muốn Z, P2 giữ Z và muốn Y). P0 không nằm trên đó, nhưng nó chờ Y, thứ chỉ một thành viên của chu trình mới trả được — theo định nghĩa ở slide 5 nó cũng bế tắc. Thuật toán ma trận tự tìm ra những tiến trình như vậy; tìm chu trình bằng mắt trên hình sẽ bỏ sót P0.</li>
 </ul>
-</details>`),
+</details>
+<div class="lab-try">
+<h3>🔬 Thử ngay</h3>
+<p>Vòng quét của bài này trên bảng của mô phỏng: phát hiện dùng Request thay cho Need.</p>
+<div class="os-lab os-lab-sim-deadlock os-lab-p-detect os-lab-t-deadlock-detect"><p class="os-lab-cap">🧪 <strong>Phòng lab hệ điều hành:</strong> phát hiện với ma trận Request <a href="/os-lab?sim=deadlock&amp;preset=detect&amp;lang=vi&amp;tour=deadlock-detect" target="_blank" rel="noopener">Mở toàn màn hình →</a></p></div>
+<div class="callout"><b>Việc cần làm:</b><ol><li>Bấm vòng quét và gạch từng tiến trình xong được.</li><li>Các tiến trình còn lại cuối cùng là các tiến trình bế tắc — rồi chạy cùng vòng quét đó cho bài trên giấy.</li></ol></div>
+</div>`),
     bi(`<h3>🧪 Exercise 3 — safe or unsafe, one resource type (10 min)</h3>
 <p>12 units of one resource. For each state, decide safe or unsafe and give a safe sequence if there is one: (a) A has 2 / max 8, B 4 / 6, C 3 / 5, free 3; (b) A 3 / 8, B 3 / 6, C 4 / 9, free 2; (c) A 5 / 8, B 2 / 6, C 3 / 5, free 2. (d) FE type: "10 units; P1 has 3 of max 6, P2 4 of 5, P3 3 of 7 — what is the state?"</p>
 <details><summary>Solution — computed by the simulator</summary>

@@ -1,0 +1,625 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-5-deep-ui-kit",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-5-1-components-props"
+  },
+  "exercises": [
+    {
+      "title": "Deep Lab 5 — mini UI Kit (Button · Rating · DataTable · Accordion · class Stepper)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 120,
+      "points": 100,
+      "concepts": [
+        "props pass-through (...rest)",
+        "controlled components",
+        "configuration-driven rendering",
+        "render functions per column",
+        "controlled vs uncontrolled",
+        "class components",
+        "PropTypes"
+      ],
+      "prerequisites": [
+        "Lab 5 — Task Board",
+        "Exercise 19 — PropTypes"
+      ],
+      "tags": [
+        "fer202",
+        "deep-lab",
+        "components",
+        "proptypes"
+      ],
+      "problemHtml": "<h1>DEEP LAB 5: mini UI Kit — designing reusable component APIs</h1>\n<p class=\"bi-phu\">FER202 · Chapter 5 (deep) · Suggested time: 120 minutes · Total: 10 marks</p>\n<h2>1. Overview</h2>\n<p>Writing a component is easy; designing one that other people can reuse is the real skill. Build five kit components in <code>src/kit/</code> — <b>Button</b>, <b>Rating</b>, <b>DataTable</b>, <b>Accordion</b> and a class-based <b>Stepper</b> — and a demo page that uses only them. You will practise: passing unknown props through, controlled components, configuration-driven rendering with per-column render functions, internal sorting state, supporting both controlled and uncontrolled modes, and documenting the API with PropTypes.</p>\n<h3>Main features</h3>\n<ul>\n  <li>Button · Rating · DataTable (config + sort) · Accordion (controlled/uncontrolled) · Stepper (class) · PropTypes · demo page.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>One component per file in <code>src/kit/</code>, default export, PropTypes on each (install <code>prop-types</code>).</li>\n  <li><code>App.js</code> must not contain raw <code>&lt;button&gt;</code> elements — only kit components.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>src/\n├── kit/\n│   ├── Button.js       # variant · size · className · ...rest\n│   ├── Rating.js       # controlled (value, onChange), keyboard, readOnly\n│   ├── DataTable.js    # columns config, render per column, sort, emptyMessage\n│   ├── Accordion.js    # defaultOpenIndex | openIndex + onToggle\n│   └── Stepper.js      # class component\n├── data/products.js    # (given)\n├── App.js              # demo page (sections with ids below)\n└── index.css (given)</pre>\n<h2>3. UI wireframe</h2>\n<pre class=\"bi-wire\">#buttons     [Save] [Delete] [Disabled]        Saved 0 times\n#my-rating   ★★★☆☆  You rated 3/5\n#products    Product ▲ | Price ▲        | Rating\n             Keyboard  |   590,000 ₫    | ★★★★☆ …\n#empty-table No products match your search\n#faq-…       ▸ Shipping  ▾ Returns  (30 days…)  ▸ Warranty\n#qty         [−] 1 [+]   Quantity: 1</pre>\n<h2>4. Data model</h2>\n<p><b>Component APIs</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>Button</code></td><td>{ variant: 'primary'|'danger'|'ghost', size?: 'sm', className?, type='button', children, ...rest }</td><td></td></tr><tr><td><code>Rating</code></td><td>{ value, max=5, onChange?, readOnly?, label? }</td><td>controlled</td></tr><tr><td><code>DataTable</code></td><td>{ columns: [{ key, header, render?, align?, sortable? }], rows, rowKey=\"id\", emptyMessage }</td><td></td></tr><tr><td><code>Accordion</code></td><td>{ items: [{ title, content }], defaultOpenIndex? | openIndex + onToggle }</td><td>controlled when openIndex !== undefined</td></tr><tr><td><code>Stepper (class)</code></td><td>{ min=0, max=10, initial=0, onChange? }</td><td></td></tr></tbody></table>\n<h2>5. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. Button: props pass-through <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>btn btn-&lt;variant&gt;</code> (+ <code>btn-sm</code>, + caller <code>className</code>), <code>type=\"button\"</code> by default, every other prop (<code>id</code>, <code>onClick</code>, <code>disabled</code>, <code>aria-*</code>) spread onto the element.</li>\n</ul>\n<p><b>Example:</b></p>\n<pre>&lt;Button variant=\"danger\" size=\"sm\" className=\"ms-2\"&gt; ⇒ class \"btn btn-danger btn-sm ms-2\"</pre>\n</div>\n<div class=\"bi-cn\"><h3>2. Rating: controlled component <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>No internal value state: stars <code>.star</code> (<code>.on</code> when ≤ value) call <code>onChange(n)</code>; ArrowLeft/ArrowRight on <code>.rating</code> change by 1 within 1..max; <code>readOnly</code> disables the stars.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>3. DataTable: configuration-driven <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Headers and cells from <code>columns</code>; a column's <code>render(row)</code> decides its cell (price formatting, a read-only Rating); <code>align: 'right'</code> ⇒ <code>.align-right</code>; empty rows ⇒ <code>p.empty</code> with <code>emptyMessage</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>4. DataTable: sorting <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Sortable headers are buttons; first click ascending, second descending; numbers compare numerically, text with <code>localeCompare</code>; <code>aria-sort</code> on the <code>th</code>; sort a copy.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. Accordion: controlled &amp; uncontrolled <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>One panel open at a time; clicking the open header closes it. Without <code>openIndex</code> it keeps its own state from <code>defaultOpenIndex</code>; with <code>openIndex</code> it only reports via <code>onToggle(nextIndex | null)</code>. Headers carry <code>aria-expanded</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>6. Stepper: class component <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>class Stepper extends Component</code>, <code>this.state.value</code>, functional <code>setState(prev =&gt; …)</code>, clamped to [min, max], buttons <code>.step-dec</code>/<code>.step-inc</code> disabled at the limits, <code>onChange</code> after the update.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>7. PropTypes <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Every kit component declares PropTypes; variants with <code>oneOf</code>, columns with <code>arrayOf(shape(…))</code>; defaults via default parameters (or <code>defaultProps</code> for the class).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>8. Demo page composition <span class=\"bi-diem\">0.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Sections <code>#buttons #my-rating #products #empty-table #faq-uncontrolled #faq-controlled #qty</code>, built only from kit components.</li>\n</ul>\n</div>\n<h2>6. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>#btn-save · #btn-delete · #btn-disabled · #clicks</code></td><td>Button demo</td></tr><tr><td><code>.rating · .star(.on) · #rating-text</code></td><td>Rating</td></tr><tr><td><code>.data-table · th[aria-sort] · td.align-right · p.empty</code></td><td>DataTable</td></tr><tr><td><code>.acc-item · .acc-header[aria-expanded] · .acc-panel · #faq-state · #close-all</code></td><td>Accordion</td></tr><tr><td><code>.step-dec · .step-value · .step-inc · #qty-text</code></td><td>Stepper</td></tr></tbody></table>\n<h2>7. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>Button: props pass-through</td><td>1</td></tr><tr><td>2</td><td>Rating: controlled component</td><td>1.5</td></tr><tr><td>3</td><td>DataTable: configuration-driven</td><td>2</td></tr><tr><td>4</td><td>DataTable: sorting</td><td>1.5</td></tr><tr><td>5</td><td>Accordion: controlled &amp; uncontrolled</td><td>1.5</td></tr><tr><td>6</td><td>Stepper: class component</td><td>1</td></tr><tr><td>7</td><td>PropTypes</td><td>1</td></tr><tr><td>8</td><td>Demo page composition</td><td>0.5</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Rating copies <code>value</code> into its own <code>useState</code> — parent and child disagree after the first change.</li>\n  <li>Button that drops unknown props — callers cannot add <code>id</code>, <code>aria-label</code> or <code>disabled</code>.</li>\n  <li><code>rows.sort(…)</code> in render — mutates the parent's data.</li>\n  <li>Accordion that ignores <code>openIndex</code> when given (a \"controlled\" prop that does nothing).</li>\n</ul>\n<h2>8. Submission</h2>\n<p>Work directly in the editor (files on the right) or download the starter, run it locally with Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> when the paper uses an API) and paste the files back. Press <b>Run</b> for the sample checks and <b>Submit</b> for full grading (hidden checks included).</p>",
+      "problemHtmlVi": "<h1>DEEP LAB 5: Bộ UI Kit mini — thiết kế API cho component dùng lại</h1>\n<p class=\"bi-phu\">FER202 · Chương 5 (chuyên sâu) · Thời gian gợi ý: 120 phút · Tổng: 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p>Viết một component thì dễ; thiết kế component người khác dùng lại được mới là kỹ năng thật. Dựng năm component trong <code>src/kit/</code> — <b>Button</b>, <b>Rating</b>, <b>DataTable</b>, <b>Accordion</b> và <b>Stepper</b> dạng class — cùng trang trình diễn chỉ dùng chúng. Bạn sẽ luyện: chuyển tiếp props lạ, component điều khiển, vẽ theo cấu hình với hàm render từng cột, state sắp xếp nội bộ, hỗ trợ cả hai chế độ controlled/uncontrolled, và mô tả API bằng PropTypes.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>Button · Rating · DataTable (cấu hình + sắp xếp) · Accordion (controlled/uncontrolled) · Stepper (class) · PropTypes · trang trình diễn.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Mỗi component một tệp trong <code>src/kit/</code>, export default, có PropTypes (cài <code>prop-types</code>).</li>\n  <li><code>App.js</code> không chứa thẻ <code>&lt;button&gt;</code> thô — chỉ dùng component trong kit.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>src/\n├── kit/\n│   ├── Button.js       # variant · size · className · ...rest\n│   ├── Rating.js       # controlled (value, onChange), keyboard, readOnly\n│   ├── DataTable.js    # columns config, render per column, sort, emptyMessage\n│   ├── Accordion.js    # defaultOpenIndex | openIndex + onToggle\n│   └── Stepper.js      # class component\n├── data/products.js    # (given)\n├── App.js              # demo page (sections with ids below)\n└── index.css (given)</pre>\n<h2>3. Wireframe giao diện</h2>\n<pre class=\"bi-wire\">#buttons     [Save] [Delete] [Disabled]        Saved 0 times\n#my-rating   ★★★☆☆  You rated 3/5\n#products    Product ▲ | Price ▲        | Rating\n             Keyboard  |   590,000 ₫    | ★★★★☆ …\n#empty-table No products match your search\n#faq-…       ▸ Shipping  ▾ Returns  (30 days…)  ▸ Warranty\n#qty         [−] 1 [+]   Quantity: 1</pre>\n<h2>4. Mô hình dữ liệu</h2>\n<p><b>Component APIs</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>Button</code></td><td>{ variant: 'primary'|'danger'|'ghost', size?: 'sm', className?, type='button', children, ...rest }</td><td></td></tr><tr><td><code>Rating</code></td><td>{ value, max=5, onChange?, readOnly?, label? }</td><td>điều khiển</td></tr><tr><td><code>DataTable</code></td><td>{ columns: [{ key, header, render?, align?, sortable? }], rows, rowKey=\"id\", emptyMessage }</td><td></td></tr><tr><td><code>Accordion</code></td><td>{ items: [{ title, content }], defaultOpenIndex? | openIndex + onToggle }</td><td>controlled khi openIndex !== undefined</td></tr><tr><td><code>Stepper (class)</code></td><td>{ min=0, max=10, initial=0, onChange? }</td><td></td></tr></tbody></table>\n<h2>5. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. Button: chuyển tiếp props <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>btn btn-&lt;variant&gt;</code> (+ <code>btn-sm</code>, + <code>className</code> của nơi dùng), mặc định <code>type=\"button\"</code>, mọi prop khác (<code>id</code>, <code>onClick</code>, <code>disabled</code>, <code>aria-*</code>) trải lên phần tử.</li>\n</ul>\n<p><b>Ví dụ:</b></p>\n<pre>&lt;Button variant=\"danger\" size=\"sm\" className=\"ms-2\"&gt; ⇒ class \"btn btn-danger btn-sm ms-2\"</pre>\n</div>\n<div class=\"bi-cn\"><h3>2. Rating: component điều khiển <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Không giữ state giá trị: các sao <code>.star</code> (<code>.on</code> khi ≤ value) gọi <code>onChange(n)</code>; ArrowLeft/ArrowRight trên <code>.rating</code> đổi 1 trong khoảng 1..max; <code>readOnly</code> vô hiệu các sao.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>3. DataTable: vẽ theo cấu hình <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Tiêu đề và ô lấy từ <code>columns</code>; <code>render(row)</code> của cột quyết định ô (định dạng giá, Rating chỉ đọc); <code>align: 'right'</code> ⇒ <code>.align-right</code>; không có dòng ⇒ <code>p.empty</code> với <code>emptyMessage</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>4. DataTable: sắp xếp <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Tiêu đề sắp xếp được là nút; lần đầu tăng dần, lần hai giảm dần; số so theo số, chữ bằng <code>localeCompare</code>; <code>aria-sort</code> trên <code>th</code>; sắp xếp bản sao.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. Accordion: controlled &amp; uncontrolled <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Mỗi lúc mở một mục; bấm tiêu đề đang mở thì đóng. Không có <code>openIndex</code> thì tự giữ state từ <code>defaultOpenIndex</code>; có <code>openIndex</code> thì chỉ báo qua <code>onToggle(chỉ số kế | null)</code>. Tiêu đề có <code>aria-expanded</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>6. Stepper: class component <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>class Stepper extends Component</code>, <code>this.state.value</code>, <code>setState(prev =&gt; …)</code> dạng hàm, kẹp trong [min, max], nút <code>.step-dec</code>/<code>.step-inc</code> vô hiệu ở biên, gọi <code>onChange</code> sau khi cập nhật.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>7. PropTypes <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Mọi component kit khai PropTypes; biến thể dùng <code>oneOf</code>, cột dùng <code>arrayOf(shape(…))</code>; mặc định bằng tham số mặc định (hoặc <code>defaultProps</code> cho class).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>8. Trang trình diễn <span class=\"bi-diem\">0.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Các phần <code>#buttons #my-rating #products #empty-table #faq-uncontrolled #faq-controlled #qty</code>, chỉ dựng từ component kit.</li>\n</ul>\n</div>\n<h2>6. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>#btn-save · #btn-delete · #btn-disabled · #clicks</code></td><td>Button</td></tr><tr><td><code>.rating · .star(.on) · #rating-text</code></td><td>Rating</td></tr><tr><td><code>.data-table · th[aria-sort] · td.align-right · p.empty</code></td><td>DataTable</td></tr><tr><td><code>.acc-item · .acc-header[aria-expanded] · .acc-panel · #faq-state · #close-all</code></td><td>Accordion</td></tr><tr><td><code>.step-dec · .step-value · .step-inc · #qty-text</code></td><td>Stepper</td></tr></tbody></table>\n<h2>7. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>Button: chuyển tiếp props</td><td>1</td></tr><tr><td>2</td><td>Rating: component điều khiển</td><td>1.5</td></tr><tr><td>3</td><td>DataTable: vẽ theo cấu hình</td><td>2</td></tr><tr><td>4</td><td>DataTable: sắp xếp</td><td>1.5</td></tr><tr><td>5</td><td>Accordion: controlled &amp; uncontrolled</td><td>1.5</td></tr><tr><td>6</td><td>Stepper: class component</td><td>1</td></tr><tr><td>7</td><td>PropTypes</td><td>1</td></tr><tr><td>8</td><td>Trang trình diễn</td><td>0.5</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Rating chép <code>value</code> vào <code>useState</code> riêng — cha và con lệch nhau sau lần đổi đầu.</li>\n  <li>Button bỏ mất props lạ — nơi dùng không thêm được <code>id</code>, <code>aria-label</code> hay <code>disabled</code>.</li>\n  <li><code>rows.sort(…)</code> lúc render — sửa dữ liệu của cha.</li>\n  <li>Accordion bỏ qua <code>openIndex</code> khi được truyền (prop \"controlled\" vô tác dụng).</li>\n</ul>\n<h2>8. Nộp bài</h2>\n<p>Làm thẳng trong editor (các tệp bên phải) hoặc tải starter, chạy trên máy bằng Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> khi đề dùng API) rồi dán lại tệp. Bấm <b>Chạy thử</b> để chạy kiểm mẫu, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn).</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "One component per file in <code>src/kit/</code>, default export, PropTypes on each (install <code>prop-types</code>).|||Mỗi component một tệp trong <code>src/kit/</code>, export default, có PropTypes (cài <code>prop-types</code>).\n<code>App.js</code> must not contain raw <code>&lt;button&gt;</code> elements — only kit components.|||<code>App.js</code> không chứa thẻ <code>&lt;button&gt;</code> thô — chỉ dùng component trong kit.",
+      "examplesJson": [
+        {
+          "input": "Button: props pass-through|||Button: chuyển tiếp props",
+          "output": "<Button variant=\"danger\" size=\"sm\" className=\"ms-2\"> ⇒ class \"btn btn-danger btn-sm ms-2\"",
+          "explanation": "See the brief / Xem đề."
+        }
+      ],
+      "hintsJson": [
+        "Button: function Button({ variant = \"primary\", size, className = \"\", type = \"button\", children, ...rest }) — ghép class bằng mảng + filter(Boolean).join(\" \").",
+        "Rating không có useState: vẽ từ value, gọi onChange(n). Bàn phím: onKeyDown trên khung .rating.",
+        "Accordion: const isControlled = openIndex !== undefined; const open = isControlled ? openIndex : inner;",
+        "DataTable sắp xếp: [...rows].sort(...) với state { key, dir }; aria-sort = \"ascending\" | \"descending\" | \"none\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER: các phần tử viết tay lặp đi lặp lại; hãy thay bằng component trong src/kit\nexport default function App() {\n  return (\n    <main>\n      <section id=\"buttons\">\n        <button id=\"btn-save\" className=\"btn btn-primary\">Save</button>\n      </section>\n    </main>\n  );\n}\n"
+        },
+        {
+          "name": "src/kit/Button.js",
+          "language": "javascript",
+          "code": "// src/kit/Button.js — STARTER\n// button.btn.btn-<variant> (+ btn-sm, + className), type mặc định \"button\", ...rest\nexport default function Button() {\n  return null;\n}\n"
+        },
+        {
+          "name": "src/kit/Rating.js",
+          "language": "javascript",
+          "code": "// src/kit/Rating.js — STARTER\n// controlled: value + onChange; .star.on; ArrowLeft/ArrowRight; readOnly\nexport default function Rating() {\n  return null;\n}\n"
+        },
+        {
+          "name": "src/kit/DataTable.js",
+          "language": "javascript",
+          "code": "// src/kit/DataTable.js — STARTER\n// columns [{ key, header, render?, align?, sortable? }], rows, emptyMessage; sort + aria-sort\nexport default function DataTable() {\n  return null;\n}\n"
+        },
+        {
+          "name": "src/kit/Accordion.js",
+          "language": "javascript",
+          "code": "// src/kit/Accordion.js — STARTER\n// items; uncontrolled defaultOpenIndex / controlled openIndex + onToggle\nexport default function Accordion() {\n  return null;\n}\n"
+        },
+        {
+          "name": "src/kit/Stepper.js",
+          "language": "javascript",
+          "code": "// src/kit/Stepper.js — STARTER: viết thành CLASS component\nexport default function Stepper() {\n  return null;\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport './index.css';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "src/index.css",
+          "language": "css",
+          "code": "/* src/index.css (đã cho) */\nbody { font-family: system-ui, sans-serif; margin: 0; padding: 24px; background: #f8fafc; color: #0f172a; }\nsection { background: #fff; border-radius: 10px; padding: 16px; margin-bottom: 16px; box-shadow: 0 1px 2px rgba(0,0,0,.08); }\n.btn { border: 0; border-radius: 6px; padding: 6px 14px; cursor: pointer; font: inherit; }\n.btn-primary { background: #2563eb; color: #fff; } .btn-danger { background: #dc2626; color: #fff; } .btn-ghost { background: transparent; color: #2563eb; }\n.btn-sm { padding: 3px 10px; font-size: 13px; } .btn:disabled { opacity: .5; cursor: not-allowed; }\n.rating { display: inline-flex; gap: 2px; } .star { border: 0; background: none; font-size: 22px; color: #cbd5e1; cursor: pointer; } .star.on { color: #f59e0b; }\ntable { border-collapse: collapse; width: 100%; } th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid #e2e8f0; } th button { all: unset; cursor: pointer; font-weight: 600; }\n.align-right { text-align: right; }\n.acc-item { border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 6px; } .acc-header { width: 100%; text-align: left; padding: 8px 12px; border: 0; background: #f1f5f9; cursor: pointer; } .acc-panel { padding: 8px 12px; }\n.stepper { display: inline-flex; align-items: center; gap: 8px; }\n"
+        },
+        {
+          "name": "src/data/products.js",
+          "language": "javascript",
+          "code": "// src/data/products.js (đã cho)\nexport const PRODUCTS = [\n  { id: 1, name: 'Keyboard', price: 590000, rating: 4 },\n  { id: 2, name: 'Monitor', price: 3290000, rating: 5 },\n  { id: 3, name: 'Mouse', price: 250000, rating: 3 },\n  { id: 4, name: 'Headset', price: 890000, rating: 4 },\n];\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — trang trình diễn: dùng bộ kit để dựng màn hình sản phẩm\nimport { useState } from 'react';\nimport Button from './kit/Button';\nimport Rating from './kit/Rating';\nimport DataTable from './kit/DataTable';\nimport Accordion from './kit/Accordion';\nimport Stepper from './kit/Stepper';\nimport { PRODUCTS } from './data/products';\n\nconst vnd = (n) => n.toLocaleString('en-US') + ' ₫';\nconst FAQ = [\n  { title: 'Shipping', content: 'Free shipping over 500,000 ₫.' },\n  { title: 'Returns', content: '30 days, no questions asked.' },\n  { title: 'Warranty', content: '12 months for all hardware.' },\n];\n\nexport default function App() {\n  const [myRating, setMyRating] = useState(3);\n  const [faqOpen, setFaqOpen] = useState(0);\n  const [qty, setQty] = useState(1);\n  const [clicks, setClicks] = useState(0);\n\n  const columns = [\n    { key: 'name', header: 'Product', sortable: true },\n    { key: 'price', header: 'Price', align: 'right', sortable: true, render: (p) => vnd(p.price) },\n    { key: 'rating', header: 'Rating', render: (p) => <Rating value={p.rating} readOnly label={`${p.name} rating`} /> },\n  ];\n\n  return (\n    <main>\n      <section id=\"buttons\">\n        <Button id=\"btn-save\" onClick={() => setClicks((c) => c + 1)}>Save</Button>{' '}\n        <Button id=\"btn-delete\" variant=\"danger\" size=\"sm\" className=\"ms-2\" aria-label=\"Delete item\">Delete</Button>{' '}\n        <Button id=\"btn-disabled\" variant=\"ghost\" disabled>Disabled</Button>\n        <p id=\"clicks\">Saved {clicks} times</p>\n      </section>\n\n      <section id=\"my-rating\">\n        <Rating value={myRating} onChange={setMyRating} label=\"Your rating\" />\n        <p id=\"rating-text\">You rated {myRating}/5</p>\n      </section>\n\n      <section id=\"products\">\n        <DataTable columns={columns} rows={PRODUCTS} />\n      </section>\n\n      <section id=\"empty-table\">\n        <DataTable columns={columns} rows={[]} emptyMessage=\"No products match your search\" />\n      </section>\n\n      <section id=\"faq-uncontrolled\">\n        <Accordion items={FAQ} defaultOpenIndex={1} />\n      </section>\n\n      <section id=\"faq-controlled\">\n        <Accordion items={FAQ} openIndex={faqOpen} onToggle={setFaqOpen} />\n        <p id=\"faq-state\">Open: {faqOpen === null ? 'none' : FAQ[faqOpen].title}</p>\n        <Button id=\"close-all\" variant=\"ghost\" onClick={() => setFaqOpen(null)}>Close all</Button>\n      </section>\n\n      <section id=\"qty\">\n        <Stepper min={1} max={5} initial={1} onChange={setQty} />\n        <p id=\"qty-text\">Quantity: {qty}</p>\n      </section>\n    </main>\n  );\n}\n"
+        },
+        {
+          "name": "src/kit/Button.js",
+          "language": "javascript",
+          "code": "// src/kit/Button.js — props + children + ...rest; className ghép, type mặc định \"button\"\nimport PropTypes from 'prop-types';\n\nexport default function Button({ variant = 'primary', size, className = '', children, type = 'button', ...rest }) {\n  const classes = ['btn', `btn-${variant}`, size === 'sm' ? 'btn-sm' : '', className].filter(Boolean).join(' ');\n  return (\n    <button type={type} className={classes} {...rest}>\n      {children}\n    </button>\n  );\n}\n\nButton.propTypes = {\n  variant: PropTypes.oneOf(['primary', 'danger', 'ghost']),\n  size: PropTypes.oneOf(['sm']),\n  className: PropTypes.string,\n  type: PropTypes.oneOf(['button', 'submit', 'reset']),\n  children: PropTypes.node.isRequired,\n};\n"
+        },
+        {
+          "name": "src/kit/Rating.js",
+          "language": "javascript",
+          "code": "// src/kit/Rating.js — component ĐIỀU KHIỂN: không tự giữ giá trị, cha truyền value + onChange\nimport PropTypes from 'prop-types';\n\nexport default function Rating({ value, max = 5, onChange, readOnly = false, label = 'Rating' }) {\n  const set = (v) => {\n    if (!readOnly && onChange) onChange(Math.min(max, Math.max(1, v)));\n  };\n  const onKeyDown = (e) => {\n    if (e.key === 'ArrowRight') set(value + 1);\n    if (e.key === 'ArrowLeft') set(value - 1);\n  };\n  return (\n    <div className=\"rating\" role=\"radiogroup\" aria-label={label} tabIndex={readOnly ? -1 : 0} onKeyDown={onKeyDown}>\n      {Array.from({ length: max }, (_, i) => i + 1).map((n) => (\n        <button\n          key={n}\n          type=\"button\"\n          className={n <= value ? 'star on' : 'star'}\n          aria-label={`${n} star${n > 1 ? 's' : ''}`}\n          aria-checked={n === value}\n          role=\"radio\"\n          disabled={readOnly}\n          onClick={() => set(n)}\n        >\n          ★\n        </button>\n      ))}\n    </div>\n  );\n}\n\nRating.propTypes = {\n  value: PropTypes.number.isRequired,\n  max: PropTypes.number,\n  onChange: PropTypes.func,\n  readOnly: PropTypes.bool,\n  label: PropTypes.string,\n};\n"
+        },
+        {
+          "name": "src/kit/DataTable.js",
+          "language": "javascript",
+          "code": "// src/kit/DataTable.js — bảng theo CẤU HÌNH CỘT; cột có thể tự vẽ ô bằng render(row); sắp xếp theo cột\nimport { useState } from 'react';\nimport PropTypes from 'prop-types';\n\nexport default function DataTable({ columns, rows, rowKey = 'id', emptyMessage = 'No data' }) {\n  const [sort, setSort] = useState({ key: null, dir: 'asc' });\n\n  const toggleSort = (key) =>\n    setSort((s) => (s.key === key ? { key, dir: s.dir === 'asc' ? 'desc' : 'asc' } : { key, dir: 'asc' }));\n\n  const sorted = sort.key\n    ? [...rows].sort((a, b) => {\n        const x = a[sort.key];\n        const y = b[sort.key];\n        const c = typeof x === 'number' && typeof y === 'number' ? x - y : String(x).localeCompare(String(y));\n        return sort.dir === 'asc' ? c : -c;\n      })\n    : rows;\n\n  if (rows.length === 0) return <p className=\"empty\">{emptyMessage}</p>;\n\n  return (\n    <table className=\"data-table\">\n      <thead>\n        <tr>\n          {columns.map((col) => {\n            const ariaSort = sort.key === col.key ? (sort.dir === 'asc' ? 'ascending' : 'descending') : 'none';\n            return (\n              <th key={col.key} className={col.align === 'right' ? 'align-right' : undefined} aria-sort={col.sortable ? ariaSort : undefined}>\n                {col.sortable ? <button type=\"button\" onClick={() => toggleSort(col.key)}>{col.header}</button> : col.header}\n              </th>\n            );\n          })}\n        </tr>\n      </thead>\n      <tbody>\n        {sorted.map((row) => (\n          <tr key={row[rowKey]}>\n            {columns.map((col) => (\n              <td key={col.key} className={col.align === 'right' ? 'align-right' : undefined}>\n                {col.render ? col.render(row) : row[col.key]}\n              </td>\n            ))}\n          </tr>\n        ))}\n      </tbody>\n    </table>\n  );\n}\n\nDataTable.propTypes = {\n  columns: PropTypes.arrayOf(\n    PropTypes.shape({\n      key: PropTypes.string.isRequired,\n      header: PropTypes.node.isRequired,\n      render: PropTypes.func,\n      align: PropTypes.oneOf(['left', 'right']),\n      sortable: PropTypes.bool,\n    }),\n  ).isRequired,\n  rows: PropTypes.arrayOf(PropTypes.object).isRequired,\n  rowKey: PropTypes.string,\n  emptyMessage: PropTypes.node,\n};\n"
+        },
+        {
+          "name": "src/kit/Accordion.js",
+          "language": "javascript",
+          "code": "// src/kit/Accordion.js — vừa UNCONTROLLED (defaultOpenIndex) vừa CONTROLLED (openIndex + onToggle)\nimport { useState } from 'react';\nimport PropTypes from 'prop-types';\n\nexport default function Accordion({ items, defaultOpenIndex = null, openIndex, onToggle }) {\n  const [inner, setInner] = useState(defaultOpenIndex);\n  const isControlled = openIndex !== undefined;\n  const open = isControlled ? openIndex : inner;\n\n  const toggle = (i) => {\n    const next = open === i ? null : i;\n    if (!isControlled) setInner(next);\n    if (onToggle) onToggle(next);\n  };\n\n  return (\n    <div className=\"accordion\">\n      {items.map((item, i) => (\n        <div key={item.title} className=\"acc-item\">\n          <button type=\"button\" className=\"acc-header\" aria-expanded={open === i} onClick={() => toggle(i)}>{item.title}</button>\n          {open === i && <div className=\"acc-panel\">{item.content}</div>}\n        </div>\n      ))}\n    </div>\n  );\n}\n\nAccordion.propTypes = {\n  items: PropTypes.arrayOf(PropTypes.shape({ title: PropTypes.string.isRequired, content: PropTypes.node.isRequired })).isRequired,\n  defaultOpenIndex: PropTypes.number,\n  openIndex: PropTypes.number,\n  onToggle: PropTypes.func,\n};\n"
+        },
+        {
+          "name": "src/kit/Stepper.js",
+          "language": "javascript",
+          "code": "// src/kit/Stepper.js — CLASS component: state riêng + setState dạng hàm; báo cha qua onChange\nimport { Component } from 'react';\nimport PropTypes from 'prop-types';\n\nexport default class Stepper extends Component {\n  static propTypes = {\n    min: PropTypes.number,\n    max: PropTypes.number,\n    initial: PropTypes.number,\n    onChange: PropTypes.func,\n  };\n\n  static defaultProps = { min: 0, max: 10, initial: 0 };\n\n  constructor(props) {\n    super(props);\n    this.state = { value: props.initial };\n  }\n\n  change(delta) {\n    this.setState(\n      (prev) => ({ value: Math.min(this.props.max, Math.max(this.props.min, prev.value + delta)) }),\n      () => this.props.onChange && this.props.onChange(this.state.value),\n    );\n  }\n\n  render() {\n    const { min, max } = this.props;\n    const { value } = this.state;\n    return (\n      <div className=\"stepper\">\n        <button type=\"button\" className=\"step-dec\" disabled={value <= min} onClick={() => this.change(-1)}>−</button>\n        <output className=\"step-value\">{value}</output>\n        <button type=\"button\" className=\"step-inc\" disabled={value >= max} onClick={() => this.change(1)}>+</button>\n      </div>\n    );\n  }\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport './index.css';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "src/index.css",
+          "language": "css",
+          "code": "/* src/index.css (đã cho) */\nbody { font-family: system-ui, sans-serif; margin: 0; padding: 24px; background: #f8fafc; color: #0f172a; }\nsection { background: #fff; border-radius: 10px; padding: 16px; margin-bottom: 16px; box-shadow: 0 1px 2px rgba(0,0,0,.08); }\n.btn { border: 0; border-radius: 6px; padding: 6px 14px; cursor: pointer; font: inherit; }\n.btn-primary { background: #2563eb; color: #fff; } .btn-danger { background: #dc2626; color: #fff; } .btn-ghost { background: transparent; color: #2563eb; }\n.btn-sm { padding: 3px 10px; font-size: 13px; } .btn:disabled { opacity: .5; cursor: not-allowed; }\n.rating { display: inline-flex; gap: 2px; } .star { border: 0; background: none; font-size: 22px; color: #cbd5e1; cursor: pointer; } .star.on { color: #f59e0b; }\ntable { border-collapse: collapse; width: 100%; } th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid #e2e8f0; } th button { all: unset; cursor: pointer; font-weight: 600; }\n.align-right { text-align: right; }\n.acc-item { border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 6px; } .acc-header { width: 100%; text-align: left; padding: 8px 12px; border: 0; background: #f1f5f9; cursor: pointer; } .acc-panel { padding: 8px 12px; }\n.stepper { display: inline-flex; align-items: center; gap: 8px; }\n"
+        },
+        {
+          "name": "src/data/products.js",
+          "language": "javascript",
+          "code": "// src/data/products.js (đã cho)\nexport const PRODUCTS = [\n  { id: 1, name: 'Keyboard', price: 590000, rating: 4 },\n  { id: 2, name: 'Monitor', price: 3290000, rating: 5 },\n  { id: 3, name: 'Mouse', price: 250000, rating: 3 },\n  { id: 4, name: 'Headset', price: 890000, rating: 4 },\n];\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Mỗi component là một <b>hợp đồng</b>: Button nhận vài props có nghĩa và trải phần còn lại lên thẻ thật nên dùng được mọi nơi; Rating không tự giữ giá trị nên cha luôn là nguồn sự thật; DataTable nhận <b>dữ liệu mô tả</b> (cấu hình cột) và hàm <code>render</code> để nơi dùng quyết định ô; Accordion hỗ trợ cả hai chế độ bằng cách kiểm <code>openIndex !== undefined</code> — đúng cách các thư viện như React-Bootstrap làm (<code>activeKey</code> / <code>defaultActiveKey</code>). PropTypes ghi lại hợp đồng đó và cảnh báo khi bị dùng sai.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://react.dev/learn/sharing-state-between-components#controlled-and-uncontrolled-components",
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "thuVien": [
+          "prop-types"
+        ],
+        "kiem": [
+          {
+            "nhom": "f1",
+            "moTa": "Variant, size and extra className merged",
+            "kiem": "thuoc-tinh",
+            "selector": "#btn-delete",
+            "thuocTinh": "class",
+            "giaTri": "btn btn-danger btn-sm ms-2"
+          },
+          {
+            "nhom": "f1",
+            "moTa": "Default type=\"button\" and default variant",
+            "kiem": "danh-sach-text",
+            "selector": "button#btn-save.btn.btn-primary[type=\"button\"]",
+            "mongDoi": [
+              "Save"
+            ]
+          },
+          {
+            "nhom": "f1",
+            "moTa": "Other props pass through (...rest): onClick, disabled, aria-label",
+            "kiem": "danh-sach-text",
+            "selector": "#clicks, #btn-disabled:disabled, #btn-delete[aria-label=\"Delete item\"]",
+            "mongDoi": [
+              "Delete",
+              "Disabled",
+              "Saved 2 times"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-save",
+                "lan": 2
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Clicking a star sets the value (controlled)",
+            "kiem": "danh-sach-text",
+            "selector": "#my-rating .star.on, #rating-text",
+            "mongDoi": [
+              "★",
+              "★",
+              "★",
+              "★",
+              "You rated 4/5"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#my-rating .star:nth-child(4)",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Arrow keys change the rating within 1..5",
+            "kiem": "text",
+            "selector": "#rating-text",
+            "giaTri": "You rated 5/5",
+            "truoc": [
+              {
+                "hanhDong": "phim",
+                "selector": "#my-rating .rating",
+                "phim": "ArrowRight"
+              },
+              {
+                "hanhDong": "phim",
+                "selector": "#my-rating .rating",
+                "phim": "ArrowRight"
+              },
+              {
+                "hanhDong": "phim",
+                "selector": "#my-rating .rating",
+                "phim": "ArrowRight"
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Read-only ratings are disabled",
+            "kiem": "so-luong",
+            "selector": "#products .star:disabled",
+            "giaTri": 20
+          },
+          {
+            "nhom": "f2",
+            "an": true,
+            "moTa": "ArrowLeft never goes below 1",
+            "kiem": "text",
+            "selector": "#rating-text",
+            "giaTri": "You rated 1/5",
+            "truoc": [
+              {
+                "hanhDong": "phim",
+                "selector": "#my-rating .rating",
+                "phim": "ArrowLeft"
+              },
+              {
+                "hanhDong": "phim",
+                "selector": "#my-rating .rating",
+                "phim": "ArrowLeft"
+              },
+              {
+                "hanhDong": "phim",
+                "selector": "#my-rating .rating",
+                "phim": "ArrowLeft"
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "an": true,
+            "moTa": "Rating keeps no internal value state",
+            "kiem": "ma-nguon",
+            "tep": "src/kit/Rating.js",
+            "khop": "useState",
+            "phuDinh": true
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Headers from column config",
+            "kiem": "danh-sach-text",
+            "selector": "#products thead th",
+            "mongDoi": [
+              "Product",
+              "Price",
+              "Rating"
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Custom render per column",
+            "kiem": "danh-sach-text",
+            "selector": "#products tbody td:nth-child(2)",
+            "mongDoi": [
+              "590,000 ₫",
+              "3,290,000 ₫",
+              "250,000 ₫",
+              "890,000 ₫"
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Right-aligned column",
+            "kiem": "so-luong",
+            "selector": "#products td.align-right",
+            "giaTri": 4
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Empty rows ⇒ emptyMessage",
+            "kiem": "text",
+            "selector": "#empty-table .empty",
+            "giaTri": "No products match your search"
+          },
+          {
+            "nhom": "f3",
+            "an": true,
+            "moTa": "Rendered stars inside table cells",
+            "kiem": "so-luong",
+            "selector": "#products td .rating",
+            "giaTri": 4
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Sort by product name ascending",
+            "kiem": "danh-sach-text",
+            "selector": "#products tbody td:first-child",
+            "mongDoi": [
+              "Headset",
+              "Keyboard",
+              "Monitor",
+              "Mouse"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#products th:nth-child(1) button",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Second click sorts descending (numeric for price)",
+            "kiem": "danh-sach-text",
+            "selector": "#products tbody td:first-child",
+            "mongDoi": [
+              "Monitor",
+              "Headset",
+              "Keyboard",
+              "Mouse"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#products th:nth-child(2) button",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#products th:nth-child(2) button",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "aria-sort reflects the state",
+            "kiem": "thuoc-tinh",
+            "selector": "#products th:nth-child(2)",
+            "thuocTinh": "aria-sort",
+            "giaTri": "ascending",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#products th:nth-child(2) button",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "an": true,
+            "moTa": "Original rows array not mutated (sort a copy)",
+            "kiem": "ma-nguon",
+            "tep": "src/kit/DataTable.js",
+            "khop": "\\[\\s*\\.\\.\\.\\s*rows\\s*\\]\\s*\\.sort\\("
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Uncontrolled: starts with defaultOpenIndex",
+            "kiem": "danh-sach-text",
+            "selector": "#faq-uncontrolled .acc-panel",
+            "mongDoi": [
+              "30 days, no questions asked."
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Uncontrolled: one open at a time, toggles closed",
+            "kiem": "so-luong",
+            "selector": "#faq-uncontrolled .acc-panel",
+            "giaTri": 0,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#faq-uncontrolled .acc-item:nth-child(2) .acc-header",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Controlled: parent state follows",
+            "kiem": "danh-sach-text",
+            "selector": "#faq-controlled .acc-panel, #faq-state",
+            "mongDoi": [
+              "12 months for all hardware.",
+              "Open: Warranty"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#faq-controlled .acc-item:nth-child(3) .acc-header",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "an": true,
+            "moTa": "Controlled: parent can close everything",
+            "kiem": "danh-sach-text",
+            "selector": "#faq-controlled .acc-panel, #faq-state",
+            "mongDoi": [
+              "Open: none"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#close-all",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "an": true,
+            "moTa": "aria-expanded on headers",
+            "kiem": "thuoc-tinh",
+            "selector": "#faq-uncontrolled .acc-item:nth-child(2) .acc-header",
+            "thuocTinh": "aria-expanded",
+            "giaTri": "true"
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Stepper clamps between min and max",
+            "kiem": "danh-sach-text",
+            "selector": "#qty .step-value, #qty-text",
+            "mongDoi": [
+              "5",
+              "Quantity: 5"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#qty .step-inc",
+                "lan": 7
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Buttons disabled at the limits",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#qty .step-dec",
+            "thuocTinh": "disabled",
+            "giaTri": true
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Stepper is a class with functional setState",
+            "kiem": "ma-nguon",
+            "tep": "src/kit/Stepper.js",
+            "khop": "class\\s+Stepper\\s+extends\\s+(React\\.)?Component[\\s\\S]*this\\.setState\\(\\s*\\(\\s*prev"
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Button declares PropTypes",
+            "kiem": "ma-nguon",
+            "tep": "src/kit/Button.js",
+            "khop": "Button\\.propTypes\\s*="
+          },
+          {
+            "nhom": "f7",
+            "an": true,
+            "moTa": "Rating declares PropTypes",
+            "kiem": "ma-nguon",
+            "tep": "src/kit/Rating.js",
+            "khop": "Rating\\.propTypes\\s*="
+          },
+          {
+            "nhom": "f7",
+            "an": true,
+            "moTa": "Accordion declares PropTypes",
+            "kiem": "ma-nguon",
+            "tep": "src/kit/Accordion.js",
+            "khop": "Accordion\\.propTypes\\s*="
+          },
+          {
+            "nhom": "f7",
+            "an": true,
+            "moTa": "Stepper declares PropTypes",
+            "kiem": "ma-nguon",
+            "tep": "src/kit/Stepper.js",
+            "khop": "propTypes\\s*=\\s*\\{"
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Column shape described with PropTypes.shape",
+            "kiem": "ma-nguon",
+            "tep": "src/kit/DataTable.js",
+            "khop": "PropTypes\\.arrayOf\\(\\s*PropTypes\\.shape\\("
+          },
+          {
+            "nhom": "f7",
+            "an": true,
+            "moTa": "Enumerated variants use oneOf",
+            "kiem": "ma-nguon",
+            "tep": "src/kit/Button.js",
+            "khop": "PropTypes\\.oneOf\\("
+          },
+          {
+            "nhom": "f8",
+            "moTa": "App builds the page only from kit components",
+            "kiem": "ma-nguon",
+            "tep": "src/App.js",
+            "khop": "^(?=[\\s\\S]*<DataTable)(?=[\\s\\S]*<Rating)(?=[\\s\\S]*<Accordion)(?=[\\s\\S]*<Stepper)(?![\\s\\S]*className=\"btn)"
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. Button: props pass-through",
+            "diem": 1
+          },
+          {
+            "ma": "f2",
+            "ten": "2. Rating: controlled component",
+            "diem": 1.5
+          },
+          {
+            "ma": "f3",
+            "ten": "3. DataTable: configuration-driven",
+            "diem": 2
+          },
+          {
+            "ma": "f4",
+            "ten": "4. DataTable: sorting",
+            "diem": 1.5
+          },
+          {
+            "ma": "f5",
+            "ten": "5. Accordion: controlled & uncontrolled",
+            "diem": 1.5
+          },
+          {
+            "ma": "f6",
+            "ten": "6. Stepper: class component",
+            "diem": 1
+          },
+          {
+            "ma": "f7",
+            "ten": "7. PropTypes",
+            "diem": 1
+          },
+          {
+            "ma": "f8",
+            "ten": "8. Demo page composition",
+            "diem": 0.5
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "deep-lab",
+      "mistakesJson": [
+        {
+          "loi": "Trải <code>{...props}</code> TRƯỚC <code>className</code> ⇒ className của nơi dùng bị ghi đè hoặc ngược lại — chọn thứ tự có chủ đích."
+        },
+        {
+          "loi": "Quên <code>type=\"button\"</code> ⇒ nút trong form thành nút submit."
+        },
+        {
+          "loi": "Class component dùng <code>this.state.value + 1</code> ngoài setState dạng hàm ⇒ bấm nhanh bị mất bước."
+        },
+        {
+          "loi": "Dùng index làm key cho dòng bảng có sắp xếp ⇒ state trong ô đi lạc."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "component API",
+          "vi": "bộ props mà component nhận — \"hợp đồng\" với nơi dùng"
+        },
+        {
+          "en": "controlled / uncontrolled",
+          "vi": "giá trị do cha giữ / do chính component giữ"
+        },
+        {
+          "en": "rest props",
+          "vi": "các props còn lại được gom bằng ...rest để chuyển tiếp"
+        },
+        {
+          "en": "aria-sort / aria-expanded",
+          "vi": "thuộc tính trợ năng báo trạng thái sắp xếp / mở rộng"
+        },
+        {
+          "en": "rubric",
+          "vi": "thang điểm theo tiêu chí"
+        }
+      ],
+      "demoHtml": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>Deep Lab 5 — mini UI Kit (Button · Rating · DataTable · Accordion · class Stepper) — Live demo</title>\n<script src=\"https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/prop-types@15.8.1/prop-types.min.js\" crossorigin=\"anonymous\"></script>\n\n</head><body><div id=\"root\"></div><script>(function(){\nvar M={\"src/App.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/App.js — trang trình diễn: dùng bộ kit để dựng màn hình sản phẩm\\nvar _react = require('react');\\nvar _Button = require('./kit/Button'); var _Button2 = _interopRequireDefault(_Button);\\nvar _Rating = require('./kit/Rating'); var _Rating2 = _interopRequireDefault(_Rating);\\nvar _DataTable = require('./kit/DataTable'); var _DataTable2 = _interopRequireDefault(_DataTable);\\nvar _Accordion = require('./kit/Accordion'); var _Accordion2 = _interopRequireDefault(_Accordion);\\nvar _Stepper = require('./kit/Stepper'); var _Stepper2 = _interopRequireDefault(_Stepper);\\nvar _products = require('./data/products');\\n\\nconst vnd = (n) => n.toLocaleString('en-US') + ' ₫';\\nconst FAQ = [\\n  { title: 'Shipping', content: 'Free shipping over 500,000 ₫.' },\\n  { title: 'Returns', content: '30 days, no questions asked.' },\\n  { title: 'Warranty', content: '12 months for all hardware.' },\\n];\\n\\n function App() {\\n  const [myRating, setMyRating] = _react.useState.call(void 0, 3);\\n  const [faqOpen, setFaqOpen] = _react.useState.call(void 0, 0);\\n  const [qty, setQty] = _react.useState.call(void 0, 1);\\n  const [clicks, setClicks] = _react.useState.call(void 0, 0);\\n\\n  const columns = [\\n    { key: 'name', header: 'Product', sortable: true },\\n    { key: 'price', header: 'Price', align: 'right', sortable: true, render: (p) => vnd(p.price) },\\n    { key: 'rating', header: 'Rating', render: (p) => _jsxruntime.jsx.call(void 0, _Rating2.default, { value: p.rating, readOnly: true, label: `${p.name} rating`,} ) },\\n  ];\\n\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'main', { children: [\\n      _jsxruntime.jsxs.call(void 0, 'section', { id: \\\"buttons\\\", children: [\\n        _jsxruntime.jsx.call(void 0, _Button2.default, { id: \\\"btn-save\\\", onClick: () => setClicks((c) => c + 1), children: \\\"Save\\\"}), ' '\\n        , _jsxruntime.jsx.call(void 0, _Button2.default, { id: \\\"btn-delete\\\", variant: \\\"danger\\\", size: \\\"sm\\\", className: \\\"ms-2\\\", 'aria-label': \\\"Delete item\\\" , children: \\\"Delete\\\"}), ' '\\n        , _jsxruntime.jsx.call(void 0, _Button2.default, { id: \\\"btn-disabled\\\", variant: \\\"ghost\\\", disabled: true, children: \\\"Disabled\\\"})\\n        , _jsxruntime.jsxs.call(void 0, 'p', { id: \\\"clicks\\\", children: [\\\"Saved \\\" , clicks, \\\" times\\\" ]})\\n      ]})\\n\\n      , _jsxruntime.jsxs.call(void 0, 'section', { id: \\\"my-rating\\\", children: [\\n        _jsxruntime.jsx.call(void 0, _Rating2.default, { value: myRating, onChange: setMyRating, label: \\\"Your rating\\\" ,} )\\n        , _jsxruntime.jsxs.call(void 0, 'p', { id: \\\"rating-text\\\", children: [\\\"You rated \\\"  , myRating, \\\"/5\\\"]})\\n      ]})\\n\\n      , _jsxruntime.jsx.call(void 0, 'section', { id: \\\"products\\\", children: \\n        _jsxruntime.jsx.call(void 0, _DataTable2.default, { columns: columns, rows: _products.PRODUCTS,} )\\n      })\\n\\n      , _jsxruntime.jsx.call(void 0, 'section', { id: \\\"empty-table\\\", children: \\n        _jsxruntime.jsx.call(void 0, _DataTable2.default, { columns: columns, rows: [], emptyMessage: \\\"No products match your search\\\"    ,} )\\n      })\\n\\n      , _jsxruntime.jsx.call(void 0, 'section', { id: \\\"faq-uncontrolled\\\", children: \\n        _jsxruntime.jsx.call(void 0, _Accordion2.default, { items: FAQ, defaultOpenIndex: 1,} )\\n      })\\n\\n      , _jsxruntime.jsxs.call(void 0, 'section', { id: \\\"faq-controlled\\\", children: [\\n        _jsxruntime.jsx.call(void 0, _Accordion2.default, { items: FAQ, openIndex: faqOpen, onToggle: setFaqOpen,} )\\n        , _jsxruntime.jsxs.call(void 0, 'p', { id: \\\"faq-state\\\", children: [\\\"Open: \\\" , faqOpen === null ? 'none' : FAQ[faqOpen].title]})\\n        , _jsxruntime.jsx.call(void 0, _Button2.default, { id: \\\"close-all\\\", variant: \\\"ghost\\\", onClick: () => setFaqOpen(null), children: \\\"Close all\\\" })\\n      ]})\\n\\n      , _jsxruntime.jsxs.call(void 0, 'section', { id: \\\"qty\\\", children: [\\n        _jsxruntime.jsx.call(void 0, _Stepper2.default, { min: 1, max: 5, initial: 1, onChange: setQty,} )\\n        , _jsxruntime.jsxs.call(void 0, 'p', { id: \\\"qty-text\\\", children: [\\\"Quantity: \\\" , qty]})\\n      ]})\\n    ]})\\n  );\\n} exports.default = App;\\n\",\"src/kit/Button.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/kit/Button.js — props + children + ...rest; className ghép, type mặc định \\\"button\\\"\\nvar _proptypes = require('prop-types'); var _proptypes2 = _interopRequireDefault(_proptypes);\\n\\n function Button({ variant = 'primary', size, className = '', children, type = 'button', ...rest }) {\\n  const classes = ['btn', `btn-${variant}`, size === 'sm' ? 'btn-sm' : '', className].filter(Boolean).join(' ');\\n  return (\\n    _jsxruntime.jsx.call(void 0, 'button', { type: type, className: classes, ...rest, children: \\n      children\\n    })\\n  );\\n} exports.default = Button;\\n\\nButton.propTypes = {\\n  variant: _proptypes2.default.oneOf(['primary', 'danger', 'ghost']),\\n  size: _proptypes2.default.oneOf(['sm']),\\n  className: _proptypes2.default.string,\\n  type: _proptypes2.default.oneOf(['button', 'submit', 'reset']),\\n  children: _proptypes2.default.node.isRequired,\\n};\\n\",\"src/kit/Rating.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/kit/Rating.js — component ĐIỀU KHIỂN: không tự giữ giá trị, cha truyền value + onChange\\nvar _proptypes = require('prop-types'); var _proptypes2 = _interopRequireDefault(_proptypes);\\n\\n function Rating({ value, max = 5, onChange, readOnly = false, label = 'Rating' }) {\\n  const set = (v) => {\\n    if (!readOnly && onChange) onChange(Math.min(max, Math.max(1, v)));\\n  };\\n  const onKeyDown = (e) => {\\n    if (e.key === 'ArrowRight') set(value + 1);\\n    if (e.key === 'ArrowLeft') set(value - 1);\\n  };\\n  return (\\n    _jsxruntime.jsx.call(void 0, 'div', { className: \\\"rating\\\", role: \\\"radiogroup\\\", 'aria-label': label, tabIndex: readOnly ? -1 : 0, onKeyDown: onKeyDown, children: \\n      Array.from({ length: max }, (_, i) => i + 1).map((n) => (\\n        _jsxruntime.jsx.call(void 0, 'button', {\\n\\n          type: \\\"button\\\",\\n          className: n \\u003c= value ? 'star on' : 'star',\\n          'aria-label': `${n} star${n > 1 ? 's' : ''}`,\\n          'aria-checked': n === value,\\n          role: \\\"radio\\\",\\n          disabled: readOnly,\\n          onClick: () => set(n),\\n children: \\\"★\\\"\\n\\n        }, n)\\n      ))\\n    })\\n  );\\n} exports.default = Rating;\\n\\nRating.propTypes = {\\n  value: _proptypes2.default.number.isRequired,\\n  max: _proptypes2.default.number,\\n  onChange: _proptypes2.default.func,\\n  readOnly: _proptypes2.default.bool,\\n  label: _proptypes2.default.string,\\n};\\n\",\"src/kit/DataTable.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/kit/DataTable.js — bảng theo CẤU HÌNH CỘT; cột có thể tự vẽ ô bằng render(row); sắp xếp theo cột\\nvar _react = require('react');\\nvar _proptypes = require('prop-types'); var _proptypes2 = _interopRequireDefault(_proptypes);\\n\\n function DataTable({ columns, rows, rowKey = 'id', emptyMessage = 'No data' }) {\\n  const [sort, setSort] = _react.useState.call(void 0, { key: null, dir: 'asc' });\\n\\n  const toggleSort = (key) =>\\n    setSort((s) => (s.key === key ? { key, dir: s.dir === 'asc' ? 'desc' : 'asc' } : { key, dir: 'asc' }));\\n\\n  const sorted = sort.key\\n    ? [...rows].sort((a, b) => {\\n        const x = a[sort.key];\\n        const y = b[sort.key];\\n        const c = typeof x === 'number' && typeof y === 'number' ? x - y : String(x).localeCompare(String(y));\\n        return sort.dir === 'asc' ? c : -c;\\n      })\\n    : rows;\\n\\n  if (rows.length === 0) return _jsxruntime.jsx.call(void 0, 'p', { className: \\\"empty\\\", children: emptyMessage});\\n\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'table', { className: \\\"data-table\\\", children: [\\n      _jsxruntime.jsx.call(void 0, 'thead', { children: \\n        _jsxruntime.jsx.call(void 0, 'tr', { children: \\n          columns.map((col) => {\\n            const ariaSort = sort.key === col.key ? (sort.dir === 'asc' ? 'ascending' : 'descending') : 'none';\\n            return (\\n              _jsxruntime.jsx.call(void 0, 'th', { className: col.align === 'right' ? 'align-right' : undefined, 'aria-sort': col.sortable ? ariaSort : undefined, children: \\n                col.sortable ? _jsxruntime.jsx.call(void 0, 'button', { type: \\\"button\\\", onClick: () => toggleSort(col.key), children: col.header}) : col.header\\n              }, col.key)\\n            );\\n          })\\n        })\\n      })\\n      , _jsxruntime.jsx.call(void 0, 'tbody', { children: \\n        sorted.map((row) => (\\n          _jsxruntime.jsx.call(void 0, 'tr', { children: \\n            columns.map((col) => (\\n              _jsxruntime.jsx.call(void 0, 'td', { className: col.align === 'right' ? 'align-right' : undefined, children: \\n                col.render ? col.render(row) : row[col.key]\\n              }, col.key)\\n            ))\\n          }, row[rowKey])\\n        ))\\n      })\\n    ]})\\n  );\\n} exports.default = DataTable;\\n\\nDataTable.propTypes = {\\n  columns: _proptypes2.default.arrayOf(\\n    _proptypes2.default.shape({\\n      key: _proptypes2.default.string.isRequired,\\n      header: _proptypes2.default.node.isRequired,\\n      render: _proptypes2.default.func,\\n      align: _proptypes2.default.oneOf(['left', 'right']),\\n      sortable: _proptypes2.default.bool,\\n    }),\\n  ).isRequired,\\n  rows: _proptypes2.default.arrayOf(_proptypes2.default.object).isRequired,\\n  rowKey: _proptypes2.default.string,\\n  emptyMessage: _proptypes2.default.node,\\n};\\n\",\"src/kit/Accordion.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/kit/Accordion.js — vừa UNCONTROLLED (defaultOpenIndex) vừa CONTROLLED (openIndex + onToggle)\\nvar _react = require('react');\\nvar _proptypes = require('prop-types'); var _proptypes2 = _interopRequireDefault(_proptypes);\\n\\n function Accordion({ items, defaultOpenIndex = null, openIndex, onToggle }) {\\n  const [inner, setInner] = _react.useState.call(void 0, defaultOpenIndex);\\n  const isControlled = openIndex !== undefined;\\n  const open = isControlled ? openIndex : inner;\\n\\n  const toggle = (i) => {\\n    const next = open === i ? null : i;\\n    if (!isControlled) setInner(next);\\n    if (onToggle) onToggle(next);\\n  };\\n\\n  return (\\n    _jsxruntime.jsx.call(void 0, 'div', { className: \\\"accordion\\\", children: \\n      items.map((item, i) => (\\n        _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"acc-item\\\", children: [\\n          _jsxruntime.jsx.call(void 0, 'button', { type: \\\"button\\\", className: \\\"acc-header\\\", 'aria-expanded': open === i, onClick: () => toggle(i), children: item.title})\\n          , open === i && _jsxruntime.jsx.call(void 0, 'div', { className: \\\"acc-panel\\\", children: item.content})\\n        ]}, item.title)\\n      ))\\n    })\\n  );\\n} exports.default = Accordion;\\n\\nAccordion.propTypes = {\\n  items: _proptypes2.default.arrayOf(_proptypes2.default.shape({ title: _proptypes2.default.string.isRequired, content: _proptypes2.default.node.isRequired })).isRequired,\\n  defaultOpenIndex: _proptypes2.default.number,\\n  openIndex: _proptypes2.default.number,\\n  onToggle: _proptypes2.default.func,\\n};\\n\",\"src/kit/Stepper.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/kit/Stepper.js — CLASS component: state riêng + setState dạng hàm; báo cha qua onChange\\nvar _react = require('react');\\nvar _proptypes = require('prop-types'); var _proptypes2 = _interopRequireDefault(_proptypes);\\n\\n class Stepper extends _react.Component {\\n  static __initStatic() {this.propTypes = {\\n    min: _proptypes2.default.number,\\n    max: _proptypes2.default.number,\\n    initial: _proptypes2.default.number,\\n    onChange: _proptypes2.default.func,\\n  }}\\n\\n  static __initStatic2() {this.defaultProps = { min: 0, max: 10, initial: 0 }}\\n\\n  constructor(props) {\\n    super(props);\\n    this.state = { value: props.initial };\\n  }\\n\\n  change(delta) {\\n    this.setState(\\n      (prev) => ({ value: Math.min(this.props.max, Math.max(this.props.min, prev.value + delta)) }),\\n      () => this.props.onChange && this.props.onChange(this.state.value),\\n    );\\n  }\\n\\n  render() {\\n    const { min, max } = this.props;\\n    const { value } = this.state;\\n    return (\\n      _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"stepper\\\", children: [\\n        _jsxruntime.jsx.call(void 0, 'button', { type: \\\"button\\\", className: \\\"step-dec\\\", disabled: value \\u003c= min, onClick: () => this.change(-1), children: \\\"−\\\"})\\n        , _jsxruntime.jsx.call(void 0, 'output', { className: \\\"step-value\\\", children: value})\\n        , _jsxruntime.jsx.call(void 0, 'button', { type: \\\"button\\\", className: \\\"step-inc\\\", disabled: value >= max, onClick: () => this.change(1), children: \\\"+\\\"})\\n      ]})\\n    );\\n  }\\n} Stepper.__initStatic(); Stepper.__initStatic2(); exports.default = Stepper;\\n\",\"src/index.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\"); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\\nvar _react = require('react'); var _react2 = _interopRequireDefault(_react);\\nvar _client = require('react-dom/client'); var _client2 = _interopRequireDefault(_client);\\nrequire('./index.css');\\nvar _App = require('./App'); var _App2 = _interopRequireDefault(_App);\\n\\nconst root = _client2.default.createRoot(document.getElementById('root'));\\nroot.render(\\n  _jsxruntime.jsx.call(void 0, _react2.default.StrictMode, { children: \\n    _jsxruntime.jsx.call(void 0, _App2.default, {} )\\n  })\\n);\\n\",\"src/data/products.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/data/products.js (đã cho)\\n const PRODUCTS = [\\n  { id: 1, name: 'Keyboard', price: 590000, rating: 4 },\\n  { id: 2, name: 'Monitor', price: 3290000, rating: 5 },\\n  { id: 3, name: 'Mouse', price: 250000, rating: 3 },\\n  { id: 4, name: 'Headset', price: 890000, rating: 4 },\\n]; exports.PRODUCTS = PRODUCTS;\\n\"};var CSS={\"src/index.css\":\"/* src/index.css (đã cho) */\\nbody { font-family: system-ui, sans-serif; margin: 0; padding: 24px; background: #f8fafc; color: #0f172a; }\\nsection { background: #fff; border-radius: 10px; padding: 16px; margin-bottom: 16px; box-shadow: 0 1px 2px rgba(0,0,0,.08); }\\n.btn { border: 0; border-radius: 6px; padding: 6px 14px; cursor: pointer; font: inherit; }\\n.btn-primary { background: #2563eb; color: #fff; } .btn-danger { background: #dc2626; color: #fff; } .btn-ghost { background: transparent; color: #2563eb; }\\n.btn-sm { padding: 3px 10px; font-size: 13px; } .btn:disabled { opacity: .5; cursor: not-allowed; }\\n.rating { display: inline-flex; gap: 2px; } .star { border: 0; background: none; font-size: 22px; color: #cbd5e1; cursor: pointer; } .star.on { color: #f59e0b; }\\ntable { border-collapse: collapse; width: 100%; } th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid #e2e8f0; } th button { all: unset; cursor: pointer; font-weight: 600; }\\n.align-right { text-align: right; }\\n.acc-item { border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 6px; } .acc-header { width: 100%; text-align: left; padding: 8px 12px; border: 0; background: #f1f5f9; cursor: pointer; } .acc-panel { padding: 8px 12px; }\\n.stepper { display: inline-flex; align-items: center; gap: 8px; }\\n\"};var DB=null;var BASE=\"http://localhost:9999\";var URL0=null;var THANH=false;\nfunction kho(){var m={};var k={getItem:function(x){x=String(x);return Object.prototype.hasOwnProperty.call(m,x)?m[x]:null},setItem:function(x,v){m[String(x)]=String(v)},removeItem:function(x){delete m[String(x)]},clear:function(){m={}},key:function(i){return Object.keys(m)[i]||null}};Object.defineProperty(k,'length',{get:function(){return Object.keys(m).length}});return k}\ntry{Object.defineProperty(window,'localStorage',{value:kho(),configurable:true})}catch(e){}\ntry{Object.defineProperty(window,'sessionStorage',{value:kho(),configurable:true})}catch(e){}\nwindow.confirm=function(){return true};window.alert=function(m){console.log('[alert]',m);var t=document.getElementById('cl-demo-alert');if(!t){t=document.createElement('div');t.id='cl-demo-alert';t.style.cssText='position:fixed;right:12px;bottom:12px;z-index:99999;max-width:320px;padding:10px 14px;border-radius:10px;background:#0f172a;color:#fff;font:13px system-ui;box-shadow:0 6px 24px rgba(0,0,0,.25)';document.body.appendChild(t)}t.textContent='alert: '+m;clearTimeout(t.__h);t.__h=setTimeout(function(){t.remove()},2600)};\nvar ENV={NODE_ENV:'production',MODE:'production',PROD:true,DEV:false,BASE_URL:'/'};\nString(M['.env']||'').split(/\\r?\\n/).forEach(function(d){var m=/^\\s*(?:export\\s+)?([A-Za-z_][A-Za-z0-9_]*)\\s*=\\s*(.*)\\s*$/.exec(d);if(m)ENV[m[1]]=m[2].replace(/^(['\"])(.*)\\1$/,'$2')});\nwindow.__CL_ENV__=ENV;if(!window.process)window.process={env:ENV};\n// json-server giả (bản sao domAgent.ts)\nvar jsDb=DB?JSON.parse(JSON.stringify(DB)):null;\nfunction tl(st,b){return new Response(b===undefined?'{}':JSON.stringify(b),{status:st,headers:{'content-type':'application/json'}})}\nfunction lay(o,k){return String(k).split('.').reduce(function(a,p){return a==null?undefined:a[p]},o)}\nfunction mot(t){return /ies$/.test(t)?t.slice(0,-3)+'y':t.replace(/s$/,'')}\nfunction xuLy(method,url,body){var u=new URL(url);var ph=u.pathname.replace(/^\\/+|\\/+$/g,'').split('/').filter(Boolean).map(decodeURIComponent);var ten=ph[0],id=ph[1];\nif(!ten||!(ten in jsDb))return tl(404,{});var bang=jsDb[ten];var dl=null;if(body!=null&&body!==''){try{dl=JSON.parse(body)}catch(e){return tl(400,{})}}\nif(!Array.isArray(bang)){if(method==='GET')return tl(200,bang);if(method==='PUT'||method==='POST'){jsDb[ten]=dl||{};return tl(200,jsDb[ten])}if(method==='PATCH'){jsDb[ten]=Object.assign({},bang,dl||{});return tl(200,jsDb[ten])}return tl(404,{})}\nvar vt=function(x){return bang.findIndex(function(r){return String(r.id)===String(x)})};\nvar mr=function(r){var o=Object.assign({},r);u.searchParams.getAll('_expand').forEach(function(e){var b=jsDb[e+'s']||jsDb[e];if(Array.isArray(b))o[e]=b.find(function(x){return String(x.id)===String(r[e+'Id'])})});u.searchParams.getAll('_embed').forEach(function(e){var b=jsDb[e];if(Array.isArray(b)){var k=mot(ten)+'Id';o[e]=b.filter(function(x){return String(x[k])===String(r.id)})}});return o};\nif(method==='GET'){if(id!=null){var i=vt(id);return i<0?tl(404,{}):tl(200,mr(bang[i]))}var ds=bang.slice();var loc={};u.searchParams.forEach(function(v,k){if(k.charAt(0)!=='_'&&k!=='q')(loc[k]=loc[k]||[]).push(v)});\nObject.keys(loc).forEach(function(k){var vs=loc[k],m=/^(.*)_(like|gte|lte|ne)$/.exec(k);ds=ds.filter(function(r){if(m){var gv=lay(r,m[1]);return vs.every(function(v){if(m[2]==='like')return new RegExp(v,'i').test(String(gv));if(m[2]==='ne')return String(gv)!==v;var a=Number(gv),b=Number(v);var so=!isNaN(a)&&!isNaN(b);return m[2]==='gte'?(so?a>=b:String(gv)>=v):(so?a<=b:String(gv)<=v)})}var g=lay(r,k);return vs.some(function(v){return String(g)===v})})});\nvar qq=u.searchParams.get('q');if(qq)ds=ds.filter(function(r){return JSON.stringify(r).toLowerCase().indexOf(qq.toLowerCase())>=0});\nvar sx=u.searchParams.get('_sort');if(sx){var tr=sx.split(','),th=(u.searchParams.get('_order')||'asc').split(',');ds.sort(function(a,b){for(var t=0;t<tr.length;t++){var f=tr[t].replace(/^-/,''),gi=tr[t].charAt(0)==='-'||(th[t]||th[0])==='desc';var x=lay(a,f),y=lay(b,f);var c=(typeof x==='number'&&typeof y==='number')?x-y:String(x).localeCompare(String(y));if(c)return gi?-c:c}return 0})}\nvar gh=u.searchParams.get('_limit'),pg=u.searchParams.get('_page');var tong=ds.length;if(pg){var n=Number(gh)||10;ds=ds.slice((Number(pg)-1)*n,Number(pg)*n)}else if(gh)ds=ds.slice(0,Number(gh));var rr=tl(200,ds.map(mr));try{rr.headers.set('X-Total-Count',String(tong))}catch(e){}return rr}\nif(method==='POST'){if(id!=null)return tl(404,{});var mo=Object.assign({},dl||{});if(mo.id==null){var so2=bang.length&&bang.every(function(r){return typeof r.id==='number'});mo.id=so2||!bang.length?bang.reduce(function(mx,r){return Math.max(mx,Number(r.id)||0)},0)+1:Math.random().toString(16).slice(2,6)}bang.push(mo);return tl(201,mo)}\nif(id==null)return tl(404,{});var j=vt(id);if(j<0)return tl(404,{});\nif(method==='PUT'){bang[j]=Object.assign({},dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='PATCH'){bang[j]=Object.assign({},bang[j],dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='DELETE'){bang.splice(j,1);return tl(200,{})}return tl(404,{})}\nif(jsDb){window.fetch=function(url,init){init=init||{};var s=String(url&&url.url?url.url:url);var me=String(init.method||'GET').toUpperCase();return new Promise(function(res){setTimeout(function(){if(s.indexOf(BASE+'/')!==0)return res(new Response('Not Found',{status:404}));try{res(xuLy(me,s,init.body))}catch(e){res(tl(500,{error:String(e)}))}},120)})}}\nfunction axiosGia(){function goi(method,url,data,cfg){cfg=cfg||{};var u=(cfg.baseURL||'')+url;if(cfg.params){var sp=new URLSearchParams(cfg.params).toString();if(sp)u+=(u.indexOf('?')>=0?'&':'?')+sp}var init={method:method.toUpperCase(),headers:Object.assign({'Content-Type':'application/json'},cfg.headers||{})};if(data!==undefined)init.body=typeof data==='string'?data:JSON.stringify(data);\nreturn window.fetch(u,init).then(function(res){return res.text().then(function(t){var d;try{d=JSON.parse(t)}catch(e){d=t}var hd={};try{res.headers.forEach(function(v,k){hd[k.toLowerCase()]=v})}catch(e){}var out={data:d,status:res.status,statusText:res.statusText,headers:hd,config:cfg};if(res.status>=200&&res.status<300)return out;var err=new Error('Request failed with status code '+res.status);err.response=out;err.name='AxiosError';throw err})})}\nfunction tao(base){var a=function(cfg){return goi(cfg.method||'get',cfg.url,cfg.data,Object.assign({},base,cfg))};['get','delete','head'].forEach(function(m){a[m]=function(url,cfg){return goi(m,url,undefined,Object.assign({},base,cfg))}});['post','put','patch'].forEach(function(m){a[m]=function(url,data,cfg){return goi(m,url,data,Object.assign({},base,cfg))}});a.create=function(c){return tao(Object.assign({},base,c))};a.defaults=base;a.interceptors={request:{use:function(){}},response:{use:function(){}}};a.isAxiosError=function(e){return!!(e&&e.name==='AxiosError')};return a}\nvar ax=tao({});ax.default=ax;return ax}\nvar R=window.React;var tach=function(p,k){var q=Object.assign({},p);var c=q.children;delete q.children;if(k!==undefined)q.key=k;return[q,c]};\nvar j=function(t,p,k){var x=tach(p,k);return x[1]===undefined?R.createElement(t,x[0]):R.createElement(t,x[0],x[1])};\nvar js=function(t,p,k){var x=tach(p,k);return R.createElement.apply(null,[t,x[0]].concat(x[1]||[]))};\n// React Router: MemoryRouter + thanh địa chỉ (gõ URL được — thử ?status=ACTIVE, /items/2…)\nvar viTri=null,routerBoc=null,dieuHuong=null;\nfunction datThanh(v){var o=document.getElementById('cl-demo-url');if(o&&document.activeElement!==o)o.value='http://localhost:3000'+v}\nfunction routerGia(){var RRD=window.ReactRouterDOM;if(!RRD)return null;if(routerBoc)return routerBoc;\nfunction Ghi(){var l=RRD.useLocation();var nav=RRD.useNavigate();dieuHuong=nav;viTri=l.pathname+l.search+l.hash;R.useEffect(function(){datThanh(viTri)});return null}\nfunction RG(p){var d=R.useState(function(){return[viTri||URL0||'/']})[0];return R.createElement(RRD.MemoryRouter,{initialEntries:d,basename:p.basename},R.createElement(Ghi),p.children)}\nfunction tr(routes,opts){var r=RRD.createMemoryRouter(routes,Object.assign({},opts||{},{initialEntries:[viTri||URL0||'/']}));var g=function(s){viTri=s.location.pathname+s.location.search+s.location.hash;datThanh(viTri)};g(r.state);r.subscribe(g);dieuHuong=function(to){r.navigate(to)};return r}\nrouterBoc=Object.assign({},RRD,{BrowserRouter:RG,HashRouter:RG,createBrowserRouter:tr,createHashRouter:tr});return routerBoc}\nvar thunk=function(api){return function(next){return function(a){return typeof a==='function'?a(api.dispatch,api.getState):next(a)}}};\nvar LIB={'react':R,'react-dom':window.ReactDOM,'react-dom/client':window.ReactDOM,'react/jsx-runtime':{jsx:j,jsxs:js,Fragment:R.Fragment},'react/jsx-dev-runtime':{jsxDEV:j,Fragment:R.Fragment},'prop-types':window.PropTypes,'react-bootstrap':window.ReactBootstrap,'@reduxjs/toolkit':window.RTK,'redux':window.RTK,'react-redux':window.ReactRedux,'redux-thunk':{'default':thunk,thunk:thunk}};\nvar C={};\nfunction dd(tu,s){var p=tu.split('/').slice(0,-1);s.split('/').forEach(function(x){if(x==='.'||x==='')return;if(x==='..')p.pop();else p.push(x)});return p.join('/')}\nfunction tim(p){var d=['','.js','.jsx','.ts','.tsx','.json','/index.js','/index.jsx'];for(var i=0;i<d.length;i++){if(M[p+d[i]]!=null||CSS[p+d[i]]!=null)return p+d[i]}return null}\nfunction req(tu,s){if(s==='axios')return axiosGia();if(s==='react-router-dom'||s==='react-router')return routerGia();if(LIB[s])return LIB[s];if(/\\.css$/.test(s)&&!/^\\./.test(s))return{};var p=tim(dd(tu,s));if(!p)throw new Error('Cannot find module '+s);return nap(p)}\nfunction nap(p){if(C[p])return C[p].exports;if(CSS[p]!=null){var st=document.createElement('style');st.textContent=CSS[p];document.head.appendChild(st);C[p]={exports:{}};return{}}var m={exports:{}};C[p]=m;if(/\\.json$/.test(p)){m.exports=JSON.parse(M[p]);return m.exports}new Function('require','module','exports',M[p])(function(s){return req(p,s)},m,m.exports);return m.exports}\nif(THANH){var bar=document.createElement('form');bar.style.cssText='position:sticky;top:0;z-index:99998;display:flex;gap:6px;align-items:center;padding:6px 10px;background:#e2e8f0;border-bottom:1px solid #cbd5e1;font:12px system-ui';bar.innerHTML='<span style=\"color:#475569\">URL</span><input id=\"cl-demo-url\" style=\"flex:1;padding:4px 8px;border:1px solid #cbd5e1;border-radius:6px;font:12px ui-monospace,monospace\" aria-label=\"Address bar\"><button style=\"padding:3px 10px;border-radius:6px;border:1px solid #94a3b8;background:#fff;cursor:pointer\">Go</button>';\nbar.addEventListener('submit',function(e){e.preventDefault();var v=document.getElementById('cl-demo-url').value.replace(/^https?:\\/\\/[^/]+/,'')||'/';if(dieuHuong)dieuHuong(v)});document.body.insertBefore(bar,document.body.firstChild);datThanh(URL0||'/')}\nnap(\"src/index.js\");\n})();</script></body></html>"
+    }
+  ]
+}

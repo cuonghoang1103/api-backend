@@ -1,0 +1,713 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-4-deep-admin-dashboard",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-4-4-slot7-react-bootstrap-slides"
+  },
+  "exercises": [
+    {
+      "title": "Deep Lab 4 — Bootstrap Admin Dashboard (grid · table · modal validation · toast)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 120,
+      "points": 100,
+      "concepts": [
+        "responsive grid breakpoints",
+        "Navbar collapse",
+        "Card / Table / Badge",
+        "ButtonGroup filters",
+        "Pagination",
+        "Modal",
+        "Bootstrap form validation",
+        "Toast"
+      ],
+      "prerequisites": [
+        "Lab 4 — Café landing page",
+        "Exercise 10 — React-Bootstrap"
+      ],
+      "tags": [
+        "fer202",
+        "deep-lab",
+        "react-bootstrap",
+        "bootstrap"
+      ],
+      "problemHtml": "<h1>DEEP LAB 4: Bootstrap Admin Dashboard — React-Bootstrap in depth</h1>\n<p class=\"bi-phu\">FER202 · Chapter 4 (deep) · Suggested time: 120 minutes · Total: 10 marks</p>\n<h2>1. Overview</h2>\n<p>Build the kind of admin screen every PE and every intern project has, using <b>React-Bootstrap</b> components instead of hand-written CSS: a collapsing navbar, a responsive grid of statistic cards computed from data, a responsive table with coloured badges, filter buttons, pagination, a modal form with <b>Bootstrap validation styles</b>, and a toast notification.</p>\n<h3>Main features</h3>\n<ul>\n  <li>Navbar · stat cards · orders table · status filters · pagination · new-order modal with validation · toast.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>Use React-Bootstrap components (<code>Navbar, Container, Row, Col, Card, Table, Badge, ButtonGroup, Pagination, Modal, Form, Toast</code>); <code>index.js</code> already imports <code>bootstrap.min.css</code>.</li>\n  <li>No inline <code>style={{…}}</code>: spacing and colours come from Bootstrap utilities and variants.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>src/\n├── data/orders.js            # ORDERS, STATUS_VARIANT (given)\n├── utils/format.js           # vnd (given)\n├── components/\n│   ├── AppNavbar.js\n│   ├── StatCards.js\n│   ├── OrdersTable.js\n│   └── NewOrderModal.js\n├── App.js\n└── index.js                  # imports bootstrap.min.css</pre>\n<h2>3. UI wireframe</h2>\n<pre class=\"bi-wire\">+----------------------------------------------------------------------+\n| CT Admin   Dashboard  Orders                                   [≡]   |\n+----------------------------------------------------------------------+\n| [Total orders 6] [Revenue 1,740,000 ₫] [Pending 2] [Cancelled 1]     |  xl: 4 cols · md: 2 · xs: 1\n| [All][Paid][Pending][Cancelled]                       [+ New order]  |\n| # | Customer | Amount        | Status                                |\n| 1 | An       |   250,000 ₫   | (Paid)                                |\n| 2 | Binh     |   120,000 ₫   | (Pending)  …                          |\n| ( 1 ) ( 2 )                                                          |\n+----------------------------------------------------------------------+\n                                            +----------------------+\n                                            | Order #7 created     |  ← toast top-end\n                                            +----------------------+</pre>\n<h2>4. Data model</h2>\n<p><b>Order</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>id</code></td><td>number</td><td>new id = max + 1</td></tr><tr><td><code>customer</code></td><td>string</td><td>≥ 2 characters</td></tr><tr><td><code>amount</code></td><td>number (₫)</td><td>≥ 1,000</td></tr><tr><td><code>status</code></td><td>'Paid' | 'Pending' | 'Cancelled'</td><td>new orders start as Pending</td></tr></tbody></table>\n<h2>5. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. Responsive layout &amp; navbar <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>Navbar#main-nav</code> dark, <code>expand=\"lg\"</code>, Brand <code>#brand</code> <code>CT Admin</code>, <code>Navbar.Toggle aria-controls=\"main-nav-collapse\"</code> + <code>Navbar.Collapse#main-nav-collapse</code>. Stat cards: <code>Col xs={12} md={6} xl={3}</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>2. Statistic cards <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>Card.stat-card#stat-total|revenue|pending|cancelled</code> with <code>.stat-value</code>: 6 · 1,740,000 ₫ (Paid only) · 2 · 1 — computed from state.</li>\n</ul>\n<p><b>Example:</b></p>\n<pre>add a Pending order of 75,000 ⇒ Total orders 7 · Pending 3 · Revenue unchanged</pre>\n</div>\n<div class=\"bi-cn\"><h3>3. Orders table <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>Table#orders-table striped hover responsive</code>; rows <code>tr.order-row</code> with <code>.customer</code>, <code>.amount</code>, <code>Badge.status</code> using <code>STATUS_VARIANT</code> (Paid success, Pending warning, Cancelled danger).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>4. Status filters <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>ButtonGroup#filters</code> with <code>#filter-all|paid|pending|cancelled</code>; active = <code>variant=\"primary\"</code>, others <code>outline-primary</code>. Changing the filter returns to page 1.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. Pagination <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>Pagination#pager</code>, 3 rows per page, the current page item <code>active</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>6. New order modal + validation <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>#btn-new</code> opens a <code>Modal</code> (title <code>New order</code>) with <code>Form#order-form noValidate validated</code>, fields <code>#customer</code> (≥ 2 chars) and <code>#amount</code> (≥ 1000) using <code>isInvalid</code> + <code>Form.Control.Feedback</code>. Valid ⇒ order added at the top as Pending, modal closes, form resets. <code>#btn-cancel</code> closes and resets.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>7. Toast <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>ToastContainer position=\"top-end\"</code>; after creating, <code>Toast</code> shows <code>#toast-msg</code> <code>Order #7 created</code> (autohide).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>8. Bootstrap-only styling <span class=\"bi-diem\">0.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Layout with <code>Container/Row/Col</code>; no inline style objects.</li>\n</ul>\n</div>\n<h2>6. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>#main-nav · #brand · #main-nav-collapse</code></td><td>navbar</td></tr><tr><td><code>.stat-card#stat-total|revenue|pending|cancelled · .stat-value</code></td><td>stats</td></tr><tr><td><code>#orders-table · .order-row · .customer · .amount · .status</code></td><td>table</td></tr><tr><td><code>#filters · #filter-all|paid|pending|cancelled · #pager</code></td><td>filter & pages</td></tr><tr><td><code>#btn-new · #order-form · #customer · #amount · #btn-save · #btn-cancel · #toast-msg</code></td><td>modal & toast</td></tr></tbody></table>\n<h2>7. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>Responsive layout &amp; navbar</td><td>1.5</td></tr><tr><td>2</td><td>Statistic cards</td><td>1</td></tr><tr><td>3</td><td>Orders table</td><td>1.5</td></tr><tr><td>4</td><td>Status filters</td><td>1.5</td></tr><tr><td>5</td><td>Pagination</td><td>1</td></tr><tr><td>6</td><td>New order modal + validation</td><td>2</td></tr><tr><td>7</td><td>Toast</td><td>1</td></tr><tr><td>8</td><td>Bootstrap-only styling</td><td>0.5</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Using raw <code>&lt;div className=\"modal\"&gt;</code> markup copied from the Bootstrap docs — it needs Bootstrap's JS and does not open.</li>\n  <li>Forgetting <code>noValidate</code> — the browser shows its own bubbles instead of Bootstrap feedback.</li>\n  <li>Stats typed as constants instead of computed from the orders.</li>\n  <li>A filter that keeps you on page 2 with an empty table.</li>\n</ul>\n<h2>8. Submission</h2>\n<p>Work directly in the editor (files on the right) or download the starter, run it locally with Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> when the paper uses an API) and paste the files back. Press <b>Run</b> for the sample checks and <b>Submit</b> for full grading (hidden checks included).</p>",
+      "problemHtmlVi": "<h1>DEEP LAB 4: Bảng quản trị Bootstrap — React-Bootstrap chuyên sâu</h1>\n<p class=\"bi-phu\">FER202 · Chương 4 (chuyên sâu) · Thời gian gợi ý: 120 phút · Tổng: 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p>Dựng loại màn hình quản trị mà đề PE nào và dự án thực tập nào cũng có, bằng component <b>React-Bootstrap</b> thay vì tự viết CSS: navbar thu gọn, lưới thẻ thống kê đáp ứng tính từ dữ liệu, bảng responsive với badge màu, nút lọc, phân trang, form trong modal với <b>kiểu kiểm hợp lệ của Bootstrap</b>, và toast thông báo.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>Navbar · thẻ thống kê · bảng đơn hàng · lọc trạng thái · phân trang · modal tạo đơn có kiểm hợp lệ · toast.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Dùng component React-Bootstrap (<code>Navbar, Container, Row, Col, Card, Table, Badge, ButtonGroup, Pagination, Modal, Form, Toast</code>); <code>index.js</code> đã import <code>bootstrap.min.css</code>.</li>\n  <li>Không <code>style={{…}}</code> inline: khoảng cách và màu lấy từ tiện ích và biến thể của Bootstrap.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>src/\n├── data/orders.js            # ORDERS, STATUS_VARIANT (given)\n├── utils/format.js           # vnd (given)\n├── components/\n│   ├── AppNavbar.js\n│   ├── StatCards.js\n│   ├── OrdersTable.js\n│   └── NewOrderModal.js\n├── App.js\n└── index.js                  # imports bootstrap.min.css</pre>\n<h2>3. Wireframe giao diện</h2>\n<pre class=\"bi-wire\">+----------------------------------------------------------------------+\n| CT Admin   Dashboard  Orders                                   [≡]   |\n+----------------------------------------------------------------------+\n| [Total orders 6] [Revenue 1,740,000 ₫] [Pending 2] [Cancelled 1]     |  xl: 4 cols · md: 2 · xs: 1\n| [All][Paid][Pending][Cancelled]                       [+ New order]  |\n| # | Customer | Amount        | Status                                |\n| 1 | An       |   250,000 ₫   | (Paid)                                |\n| 2 | Binh     |   120,000 ₫   | (Pending)  …                          |\n| ( 1 ) ( 2 )                                                          |\n+----------------------------------------------------------------------+\n                                            +----------------------+\n                                            | Order #7 created     |  ← toast top-end\n                                            +----------------------+</pre>\n<h2>4. Mô hình dữ liệu</h2>\n<p><b>Order</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>id</code></td><td>number</td><td>id mới = max + 1</td></tr><tr><td><code>customer</code></td><td>string</td><td>≥ 2 ký tự</td></tr><tr><td><code>amount</code></td><td>number (₫)</td><td>≥ 1.000</td></tr><tr><td><code>status</code></td><td>'Paid' | 'Pending' | 'Cancelled'</td><td>đơn mới là Pending</td></tr></tbody></table>\n<h2>5. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. Bố cục đáp ứng &amp; navbar <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>Navbar#main-nav</code> nền tối, <code>expand=\"lg\"</code>, Brand <code>#brand</code> <code>CT Admin</code>, <code>Navbar.Toggle aria-controls=\"main-nav-collapse\"</code> + <code>Navbar.Collapse#main-nav-collapse</code>. Thẻ thống kê: <code>Col xs={12} md={6} xl={3}</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>2. Thẻ thống kê <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>Card.stat-card#stat-total|revenue|pending|cancelled</code> có <code>.stat-value</code>: 6 · 1,740,000 ₫ (chỉ Paid) · 2 · 1 — tính từ state.</li>\n</ul>\n<p><b>Ví dụ:</b></p>\n<pre>thêm đơn Pending 75,000 ⇒ Total orders 7 · Pending 3 · Revenue không đổi</pre>\n</div>\n<div class=\"bi-cn\"><h3>3. Bảng đơn hàng <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>Table#orders-table striped hover responsive</code>; dòng <code>tr.order-row</code> có <code>.customer</code>, <code>.amount</code>, <code>Badge.status</code> dùng <code>STATUS_VARIANT</code> (Paid success, Pending warning, Cancelled danger).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>4. Lọc trạng thái <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>ButtonGroup#filters</code> gồm <code>#filter-all|paid|pending|cancelled</code>; đang chọn = <code>variant=\"primary\"</code>, còn lại <code>outline-primary</code>. Đổi bộ lọc thì về trang 1.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. Phân trang <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>Pagination#pager</code>, 3 dòng mỗi trang, trang hiện tại <code>active</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>6. Modal tạo đơn + kiểm hợp lệ <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>#btn-new</code> mở <code>Modal</code> (tiêu đề <code>New order</code>) có <code>Form#order-form noValidate validated</code>, ô <code>#customer</code> (≥ 2 ký tự) và <code>#amount</code> (≥ 1000) dùng <code>isInvalid</code> + <code>Form.Control.Feedback</code>. Hợp lệ ⇒ đơn thêm lên đầu với trạng thái Pending, modal đóng, form xoá trắng. <code>#btn-cancel</code> đóng và xoá trắng.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>7. Toast <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>ToastContainer position=\"top-end\"</code>; sau khi tạo, <code>Toast</code> hiện <code>#toast-msg</code> <code>Order #7 created</code> (tự ẩn).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>8. Chỉ dùng kiểu Bootstrap <span class=\"bi-diem\">0.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Bố cục bằng <code>Container/Row/Col</code>; không dùng object style inline.</li>\n</ul>\n</div>\n<h2>6. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>#main-nav · #brand · #main-nav-collapse</code></td><td>navbar</td></tr><tr><td><code>.stat-card#stat-total|revenue|pending|cancelled · .stat-value</code></td><td>thống kê</td></tr><tr><td><code>#orders-table · .order-row · .customer · .amount · .status</code></td><td>bảng</td></tr><tr><td><code>#filters · #filter-all|paid|pending|cancelled · #pager</code></td><td>lọc & trang</td></tr><tr><td><code>#btn-new · #order-form · #customer · #amount · #btn-save · #btn-cancel · #toast-msg</code></td><td>modal & toast</td></tr></tbody></table>\n<h2>7. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>Bố cục đáp ứng &amp; navbar</td><td>1.5</td></tr><tr><td>2</td><td>Thẻ thống kê</td><td>1</td></tr><tr><td>3</td><td>Bảng đơn hàng</td><td>1.5</td></tr><tr><td>4</td><td>Lọc trạng thái</td><td>1.5</td></tr><tr><td>5</td><td>Phân trang</td><td>1</td></tr><tr><td>6</td><td>Modal tạo đơn + kiểm hợp lệ</td><td>2</td></tr><tr><td>7</td><td>Toast</td><td>1</td></tr><tr><td>8</td><td>Chỉ dùng kiểu Bootstrap</td><td>0.5</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Chép markup <code>&lt;div className=\"modal\"&gt;</code> từ tài liệu Bootstrap — cần JS của Bootstrap nên không mở được.</li>\n  <li>Quên <code>noValidate</code> — trình duyệt hiện bong bóng riêng thay vì phản hồi của Bootstrap.</li>\n  <li>Số thống kê viết cứng thay vì tính từ đơn hàng.</li>\n  <li>Đổi bộ lọc mà vẫn ở trang 2 với bảng rỗng.</li>\n</ul>\n<h2>8. Nộp bài</h2>\n<p>Làm thẳng trong editor (các tệp bên phải) hoặc tải starter, chạy trên máy bằng Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> khi đề dùng API) rồi dán lại tệp. Bấm <b>Chạy thử</b> để chạy kiểm mẫu, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn).</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "Use React-Bootstrap components (<code>Navbar, Container, Row, Col, Card, Table, Badge, ButtonGroup, Pagination, Modal, Form, Toast</code>); <code>index.js</code> already imports <code>bootstrap.min.css</code>.|||Dùng component React-Bootstrap (<code>Navbar, Container, Row, Col, Card, Table, Badge, ButtonGroup, Pagination, Modal, Form, Toast</code>); <code>index.js</code> đã import <code>bootstrap.min.css</code>.\nNo inline <code>style={{…}}</code>: spacing and colours come from Bootstrap utilities and variants.|||Không <code>style={{…}}</code> inline: khoảng cách và màu lấy từ tiện ích và biến thể của Bootstrap.",
+      "examplesJson": [
+        {
+          "input": "Statistic cards|||Thẻ thống kê",
+          "output": "add a Pending order of 75,000 ⇒ Total orders 7 · Pending 3 · Revenue unchanged|||thêm đơn Pending 75,000 ⇒ Total orders 7 · Pending 3 · Revenue không đổi",
+          "explanation": "See the brief / Xem đề."
+        }
+      ],
+      "hintsJson": [
+        "Lưới: <Row className=\"g-3\"><Col xs={12} md={6} xl={3}>…</Col></Row> ⇒ 1 cột trên điện thoại, 2 trên tablet, 4 trên màn rộng.",
+        "Form Bootstrap: <Form noValidate validated={validated} onSubmit={…}>; mỗi ô isInvalid={validated && !ok} + <Form.Control.Feedback type=\"invalid\">.",
+        "Phân trang: pages = Math.ceil(filtered.length / 3); visible = filtered.slice((page − 1) * 3, page * 3); đổi lọc ⇒ setPage(1).",
+        "Toast: <ToastContainer position=\"top-end\"><Toast show={!!msg} onClose={() => setMsg(null)} autohide delay={4000}>…"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER: bảng HTML thuần, chưa dùng React-Bootstrap\nimport { ORDERS } from './data/orders';\n\nexport default function App() {\n  return (\n    <div>\n      <h1>CT Admin</h1>\n      <table>\n        <tbody>\n          {ORDERS.map((o) => <tr key={o.id}><td>{o.customer}</td><td>{o.status}</td></tr>)}\n        </tbody>\n      </table>\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/AppNavbar.js",
+          "language": "javascript",
+          "code": "// src/components/AppNavbar.js — STARTER\n// Navbar#main-nav bg dark expand lg · Brand #brand \"CT Admin\" · Toggle + Collapse #main-nav-collapse\nexport default function AppNavbar() {\n  return null;\n}\n"
+        },
+        {
+          "name": "src/components/StatCards.js",
+          "language": "javascript",
+          "code": "// src/components/StatCards.js — STARTER\n// Row > 4 × Col xs=12 md=6 xl=3 > Card.stat-card#stat-total|revenue|pending|cancelled .stat-value\nexport default function StatCards() {\n  return null;\n}\n"
+        },
+        {
+          "name": "src/components/OrdersTable.js",
+          "language": "javascript",
+          "code": "// src/components/OrdersTable.js — STARTER\n// Table#orders-table striped hover responsive · tr.order-row .customer .amount Badge.status\nexport default function OrdersTable() {\n  return null;\n}\n"
+        },
+        {
+          "name": "src/components/NewOrderModal.js",
+          "language": "javascript",
+          "code": "// src/components/NewOrderModal.js — STARTER\n// Modal + Form#order-form noValidate validated · #customer #amount · .invalid-feedback · #btn-save #btn-cancel\nexport default function NewOrderModal() {\n  return null;\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport 'bootstrap/dist/css/bootstrap.min.css';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "src/data/orders.js",
+          "language": "javascript",
+          "code": "// src/data/orders.js — dữ liệu mẫu (đã cho)\nexport const ORDERS = [\n  { id: 1, customer: 'An', amount: 250000, status: 'Paid' },\n  { id: 2, customer: 'Binh', amount: 120000, status: 'Pending' },\n  { id: 3, customer: 'Cuong', amount: 990000, status: 'Paid' },\n  { id: 4, customer: 'Dung', amount: 45000, status: 'Cancelled' },\n  { id: 5, customer: 'Em', amount: 310000, status: 'Pending' },\n  { id: 6, customer: 'Giang', amount: 500000, status: 'Paid' },\n];\n\nexport const STATUS_VARIANT = { Paid: 'success', Pending: 'warning', Cancelled: 'danger' };\n"
+        },
+        {
+          "name": "src/utils/format.js",
+          "language": "javascript",
+          "code": "// src/utils/format.js (đã cho)\nexport const vnd = (n) => n.toLocaleString('en-US') + ' ₫';\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — ghép dashboard: state đơn hàng, lọc, trang, modal, toast\nimport { useState } from 'react';\nimport { Button, ButtonGroup, Col, Container, Pagination, Row, Toast, ToastContainer } from 'react-bootstrap';\nimport AppNavbar from './components/AppNavbar';\nimport StatCards from './components/StatCards';\nimport OrdersTable from './components/OrdersTable';\nimport NewOrderModal from './components/NewOrderModal';\nimport { ORDERS } from './data/orders';\n\nconst FILTERS = ['All', 'Paid', 'Pending', 'Cancelled'];\nconst PAGE_SIZE = 3;\n\nexport default function App() {\n  const [orders, setOrders] = useState(ORDERS);\n  const [filter, setFilter] = useState('All');\n  const [page, setPage] = useState(1);\n  const [showModal, setShowModal] = useState(false);\n  const [toast, setToast] = useState(null);\n\n  const filtered = filter === 'All' ? orders : orders.filter((o) => o.status === filter);\n  const pages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));\n  const current = Math.min(page, pages);\n  const visible = filtered.slice((current - 1) * PAGE_SIZE, current * PAGE_SIZE);\n\n  const chooseFilter = (f) => {\n    setFilter(f);\n    setPage(1);\n  };\n\n  const create = ({ customer, amount }) => {\n    const id = Math.max(0, ...orders.map((o) => o.id)) + 1;\n    setOrders((list) => [{ id, customer, amount, status: 'Pending' }, ...list]);\n    setFilter('All');\n    setPage(1);\n    setToast(`Order #${id} created`);\n  };\n\n  return (\n    <>\n      <AppNavbar />\n      <Container fluid className=\"py-4\">\n        <StatCards orders={orders} />\n        <Row className=\"align-items-center mb-3 g-2\">\n          <Col xs={12} md>\n            <ButtonGroup id=\"filters\">\n              {FILTERS.map((f) => (\n                <Button key={f} id={`filter-${f.toLowerCase()}`} variant={filter === f ? 'primary' : 'outline-primary'} onClick={() => chooseFilter(f)}>{f}</Button>\n              ))}\n            </ButtonGroup>\n          </Col>\n          <Col xs={12} md=\"auto\">\n            <Button id=\"btn-new\" variant=\"success\" onClick={() => setShowModal(true)}>+ New order</Button>\n          </Col>\n        </Row>\n        <OrdersTable orders={visible} />\n        <Pagination id=\"pager\">\n          {Array.from({ length: pages }, (_, i) => i + 1).map((n) => (\n            <Pagination.Item key={n} active={n === current} activeLabel=\"\" onClick={() => setPage(n)}>{n}</Pagination.Item>\n          ))}\n        </Pagination>\n      </Container>\n      <NewOrderModal show={showModal} onHide={() => setShowModal(false)} onCreate={create} />\n      <ToastContainer position=\"top-end\" className=\"p-3\">\n        <Toast show={toast !== null} onClose={() => setToast(null)} delay={4000} autohide bg=\"success\">\n          <Toast.Body id=\"toast-msg\" className=\"text-white\">{toast}</Toast.Body>\n        </Toast>\n      </ToastContainer>\n    </>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/AppNavbar.js",
+          "language": "javascript",
+          "code": "// src/components/AppNavbar.js — Navbar thu gọn dưới mốc lg\nimport { Container, Nav, Navbar } from 'react-bootstrap';\n\nexport default function AppNavbar() {\n  return (\n    <Navbar id=\"main-nav\" bg=\"dark\" variant=\"dark\" expand=\"lg\">\n      <Container fluid>\n        <Navbar.Brand id=\"brand\" href=\"#\">CT Admin</Navbar.Brand>\n        <Navbar.Toggle aria-controls=\"main-nav-collapse\" />\n        <Navbar.Collapse id=\"main-nav-collapse\">\n          <Nav className=\"me-auto\">\n            <Nav.Link href=\"#\" active>Dashboard</Nav.Link>\n            <Nav.Link href=\"#orders\">Orders</Nav.Link>\n          </Nav>\n        </Navbar.Collapse>\n      </Container>\n    </Navbar>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/StatCards.js",
+          "language": "javascript",
+          "code": "// src/components/StatCards.js — 4 thẻ thống kê, lưới 1 / 2 / 4 cột theo màn hình\nimport { Card, Col, Row } from 'react-bootstrap';\nimport { vnd } from '../utils/format';\n\nexport default function StatCards({ orders }) {\n  const revenue = orders.filter((o) => o.status === 'Paid').reduce((s, o) => s + o.amount, 0);\n  const stats = [\n    { key: 'total', label: 'Total orders', value: orders.length },\n    { key: 'revenue', label: 'Revenue', value: vnd(revenue) },\n    { key: 'pending', label: 'Pending', value: orders.filter((o) => o.status === 'Pending').length },\n    { key: 'cancelled', label: 'Cancelled', value: orders.filter((o) => o.status === 'Cancelled').length },\n  ];\n  return (\n    <Row className=\"g-3 mb-4\">\n      {stats.map((s) => (\n        <Col key={s.key} xs={12} md={6} xl={3}>\n          <Card className=\"stat-card h-100\" id={`stat-${s.key}`}>\n            <Card.Body>\n              <Card.Subtitle className=\"text-muted\">{s.label}</Card.Subtitle>\n              <Card.Title className=\"stat-value fs-3 mt-2\">{s.value}</Card.Title>\n            </Card.Body>\n          </Card>\n        </Col>\n      ))}\n    </Row>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/OrdersTable.js",
+          "language": "javascript",
+          "code": "// src/components/OrdersTable.js — bảng responsive + Badge theo trạng thái\nimport { Badge, Table } from 'react-bootstrap';\nimport { STATUS_VARIANT } from '../data/orders';\nimport { vnd } from '../utils/format';\n\nexport default function OrdersTable({ orders }) {\n  if (orders.length === 0) return <p id=\"no-orders\" className=\"text-muted\">No orders</p>;\n  return (\n    <Table striped hover responsive id=\"orders-table\">\n      <thead>\n        <tr><th>#</th><th>Customer</th><th className=\"text-end\">Amount</th><th>Status</th></tr>\n      </thead>\n      <tbody>\n        {orders.map((o) => (\n          <tr key={o.id} className=\"order-row\">\n            <td>{o.id}</td>\n            <td className=\"customer\">{o.customer}</td>\n            <td className=\"text-end amount\">{vnd(o.amount)}</td>\n            <td><Badge bg={STATUS_VARIANT[o.status]} className=\"status\">{o.status}</Badge></td>\n          </tr>\n        ))}\n      </tbody>\n    </Table>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/NewOrderModal.js",
+          "language": "javascript",
+          "code": "// src/components/NewOrderModal.js — Form validation kiểu Bootstrap: noValidate + validated + isInvalid\nimport { useState } from 'react';\nimport { Button, Form, Modal } from 'react-bootstrap';\n\nconst EMPTY = { customer: '', amount: '' };\n\nexport default function NewOrderModal({ show, onHide, onCreate }) {\n  const [form, setForm] = useState(EMPTY);\n  const [validated, setValidated] = useState(false);\n\n  const customerOk = form.customer.trim().length >= 2;\n  const amountOk = Number(form.amount) >= 1000;\n\n  const change = (e) => setForm({ ...form, [e.target.name]: e.target.value });\n\n  const close = () => {\n    setForm(EMPTY);\n    setValidated(false);\n    onHide();\n  };\n\n  const submit = (e) => {\n    e.preventDefault();\n    setValidated(true);\n    if (!customerOk || !amountOk) return;\n    onCreate({ customer: form.customer.trim(), amount: Number(form.amount) });\n    close();\n  };\n\n  return (\n    <Modal show={show} onHide={close} centered>\n      <Form noValidate validated={validated} onSubmit={submit} id=\"order-form\">\n        <Modal.Header closeButton>\n          <Modal.Title>New order</Modal.Title>\n        </Modal.Header>\n        <Modal.Body>\n          <Form.Group className=\"mb-3\" controlId=\"customer\">\n            <Form.Label>Customer</Form.Label>\n            <Form.Control name=\"customer\" value={form.customer} onChange={change} isInvalid={validated && !customerOk} isValid={validated && customerOk} />\n            <Form.Control.Feedback type=\"invalid\">Customer name needs at least 2 characters</Form.Control.Feedback>\n          </Form.Group>\n          <Form.Group controlId=\"amount\">\n            <Form.Label>Amount (₫)</Form.Label>\n            <Form.Control name=\"amount\" type=\"number\" value={form.amount} onChange={change} isInvalid={validated && !amountOk} isValid={validated && amountOk} />\n            <Form.Control.Feedback type=\"invalid\">Amount must be at least 1,000</Form.Control.Feedback>\n          </Form.Group>\n        </Modal.Body>\n        <Modal.Footer>\n          <Button id=\"btn-cancel\" variant=\"secondary\" onClick={close}>Cancel</Button>\n          <Button id=\"btn-save\" type=\"submit\" variant=\"primary\">Save</Button>\n        </Modal.Footer>\n      </Form>\n    </Modal>\n  );\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport 'bootstrap/dist/css/bootstrap.min.css';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "src/data/orders.js",
+          "language": "javascript",
+          "code": "// src/data/orders.js — dữ liệu mẫu (đã cho)\nexport const ORDERS = [\n  { id: 1, customer: 'An', amount: 250000, status: 'Paid' },\n  { id: 2, customer: 'Binh', amount: 120000, status: 'Pending' },\n  { id: 3, customer: 'Cuong', amount: 990000, status: 'Paid' },\n  { id: 4, customer: 'Dung', amount: 45000, status: 'Cancelled' },\n  { id: 5, customer: 'Em', amount: 310000, status: 'Pending' },\n  { id: 6, customer: 'Giang', amount: 500000, status: 'Paid' },\n];\n\nexport const STATUS_VARIANT = { Paid: 'success', Pending: 'warning', Cancelled: 'danger' };\n"
+        },
+        {
+          "name": "src/utils/format.js",
+          "language": "javascript",
+          "code": "// src/utils/format.js (đã cho)\nexport const vnd = (n) => n.toLocaleString('en-US') + ' ₫';\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>React-Bootstrap biến các mẫu Bootstrap thành component React có state thật (Modal mở bằng prop <code>show</code>, Toast bằng <code>show</code>/<code>onClose</code>) — không cần JS của Bootstrap. Bố cục đáp ứng đến từ thuộc tính <code>xs/md/xl</code> của <code>Col</code>. Kiểm hợp lệ: <code>noValidate</code> tắt bong bóng của trình duyệt, <code>validated</code> bật kiểu <code>.was-validated</code>, <code>isInvalid</code> + <code>Feedback</code> hiện thông báo. Mọi con số thống kê, danh sách lọc và trang đều suy ra từ state <code>orders</code>, <code>filter</code>, <code>page</code>.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://react-bootstrap.github.io/docs/forms/validation",
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "thuVien": [
+          "react-bootstrap",
+          "bootstrap"
+        ],
+        "kiem": [
+          {
+            "nhom": "f1",
+            "moTa": "Dark navbar that collapses below lg",
+            "kiem": "ton-tai",
+            "selector": "nav#main-nav.navbar.navbar-expand-lg.bg-dark"
+          },
+          {
+            "nhom": "f1",
+            "moTa": "Brand + toggle + collapse wired by id",
+            "kiem": "danh-sach-text",
+            "selector": "#brand, button.navbar-toggler[aria-controls=\"main-nav-collapse\"]",
+            "mongDoi": [
+              "CT Admin",
+              ""
+            ]
+          },
+          {
+            "nhom": "f1",
+            "moTa": "Stat cards use the responsive grid col-12 col-md-6 col-xl-3",
+            "kiem": "so-luong",
+            "selector": ".row > .col-12.col-md-6.col-xl-3 > .stat-card",
+            "giaTri": 4
+          },
+          {
+            "nhom": "f1",
+            "an": true,
+            "moTa": "Collapse target exists",
+            "kiem": "ton-tai",
+            "selector": "#main-nav-collapse.navbar-collapse"
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Stat values derived from orders",
+            "kiem": "danh-sach-text",
+            "selector": ".stat-card .stat-value",
+            "mongDoi": [
+              "6",
+              "1,740,000 ₫",
+              "2",
+              "1"
+            ]
+          },
+          {
+            "nhom": "f2",
+            "an": true,
+            "moTa": "Stats update after a new order",
+            "kiem": "danh-sach-text",
+            "selector": "#stat-total .stat-value, #stat-pending .stat-value",
+            "mongDoi": [
+              "7",
+              "3"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-new",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 400
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#customer",
+                "giaTri": "Hoa"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#amount",
+                "giaTri": "75000"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-save",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 600
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Responsive striped hover table",
+            "kiem": "ton-tai",
+            "selector": ".table-responsive > table#orders-table.table.table-striped.table-hover"
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Badges coloured by status",
+            "kiem": "danh-sach-text",
+            "selector": ".order-row .status.bg-success, .order-row .status.bg-warning",
+            "mongDoi": [
+              "Paid",
+              "Pending",
+              "Paid"
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Amounts formatted",
+            "kiem": "danh-sach-text",
+            "selector": ".order-row .amount",
+            "mongDoi": [
+              "250,000 ₫",
+              "120,000 ₫",
+              "990,000 ₫"
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Filter Pending",
+            "kiem": "danh-sach-text",
+            "selector": ".order-row .customer",
+            "mongDoi": [
+              "Binh",
+              "Em"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#filter-pending",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Active filter button is solid primary",
+            "kiem": "danh-sach-text",
+            "selector": "#filters .btn-primary",
+            "mongDoi": [
+              "Cancelled"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#filter-cancelled",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "an": true,
+            "moTa": "Other filters are outline",
+            "kiem": "so-luong",
+            "selector": "#filters .btn-outline-primary",
+            "giaTri": 3,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#filter-paid",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "3 rows per page, 2 pages",
+            "kiem": "danh-sach-text",
+            "selector": "#pager .page-item",
+            "mongDoi": [
+              "1",
+              "2"
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Page 2 shows the rest",
+            "kiem": "danh-sach-text",
+            "selector": ".order-row .customer",
+            "mongDoi": [
+              "Dung",
+              "Em",
+              "Giang"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#pager .page-item:nth-child(2) .page-link",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "an": true,
+            "moTa": "Changing filter goes back to page 1",
+            "kiem": "text",
+            "selector": "#pager .page-item.active",
+            "khop": "^1",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#pager .page-item:nth-child(2) .page-link",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#filter-paid",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "moTa": "New order opens a modal",
+            "kiem": "text",
+            "selector": ".modal.show .modal-title",
+            "giaTri": "New order",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-new",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 400
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Empty submit ⇒ Bootstrap validation, no new row",
+            "kiem": "danh-sach-text",
+            "selector": "#order-form.was-validated .is-invalid",
+            "mongDoi": [
+              "",
+              ""
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-new",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 400
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-save",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Valid order is added at the top and the modal closes",
+            "kiem": "danh-sach-text",
+            "selector": ".order-row:first-child .customer, .order-row:first-child .status, .modal.show",
+            "mongDoi": [
+              "Hoa",
+              "Pending"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-new",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 400
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#customer",
+                "giaTri": "Hoa"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#amount",
+                "giaTri": "75000"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-save",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 600
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "an": true,
+            "moTa": "Amount below 1,000 shows its feedback",
+            "kiem": "ton-tai",
+            "selector": "#amount.is-invalid",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-new",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 400
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#customer",
+                "giaTri": "Hoa"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#amount",
+                "giaTri": "500"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-save",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "an": true,
+            "moTa": "Form uses noValidate (no native bubbles)",
+            "kiem": "thuoc-tinh",
+            "selector": "#order-form",
+            "thuocTinh": "novalidate",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-new",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 400
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "an": true,
+            "moTa": "Cancel resets the form",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#customer",
+            "thuocTinh": "value",
+            "giaTri": "",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-new",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 400
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#customer",
+                "giaTri": "Temp"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-cancel",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 600
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-new",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 400
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Toast confirms the new order id",
+            "kiem": "text",
+            "selector": ".toast.show #toast-msg",
+            "giaTri": "Order #7 created",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-new",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 400
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#customer",
+                "giaTri": "Hoa"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#amount",
+                "giaTri": "75000"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-save",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 600
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "an": true,
+            "moTa": "Toast lives in a top-end ToastContainer",
+            "kiem": "ton-tai",
+            "selector": ".toast-container.top-0.end-0 .toast",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-new",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 400
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#customer",
+                "giaTri": "Hoa"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#amount",
+                "giaTri": "75000"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-save",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 600
+              }
+            ]
+          },
+          {
+            "nhom": "f8",
+            "moTa": "Layout built with Container/Row/Col, no inline styles",
+            "kiem": "ma-nguon",
+            "khop": "^(?=[\\s\\S]*<Container)(?=[\\s\\S]*<Row)(?=[\\s\\S]*<Col)(?![\\s\\S]*style=\\{\\{)"
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. Responsive layout & navbar",
+            "diem": 1.5
+          },
+          {
+            "ma": "f2",
+            "ten": "2. Statistic cards",
+            "diem": 1
+          },
+          {
+            "ma": "f3",
+            "ten": "3. Orders table",
+            "diem": 1.5
+          },
+          {
+            "ma": "f4",
+            "ten": "4. Status filters",
+            "diem": 1.5
+          },
+          {
+            "ma": "f5",
+            "ten": "5. Pagination",
+            "diem": 1
+          },
+          {
+            "ma": "f6",
+            "ten": "6. New order modal + validation",
+            "diem": 2
+          },
+          {
+            "ma": "f7",
+            "ten": "7. Toast",
+            "diem": 1
+          },
+          {
+            "ma": "f8",
+            "ten": "8. Bootstrap-only styling",
+            "diem": 0.5
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "deep-lab",
+      "mistakesJson": [
+        {
+          "loi": "Dùng <code>class=</code> thay vì <code>className=</code> khi chép HTML Bootstrap."
+        },
+        {
+          "loi": "Đặt <code>validated</code> = true ngay từ đầu ⇒ form mới mở đã đỏ toàn bộ."
+        },
+        {
+          "loi": "Tạo id mới bằng <code>orders.length + 1</code> ⇒ trùng id khi đã có xoá."
+        },
+        {
+          "loi": "Quên <code>responsive</code> trên Table ⇒ bảng tràn ngang trên điện thoại."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "breakpoint",
+          "vi": "mốc độ rộng màn hình (sm, md, lg, xl)"
+        },
+        {
+          "en": "variant",
+          "vi": "biến thể màu/kiểu của component (primary, outline-primary…)"
+        },
+        {
+          "en": "collapse",
+          "vi": "thu gọn menu thành nút ≡ trên màn hình hẹp"
+        },
+        {
+          "en": "validation feedback",
+          "vi": "thông báo hợp lệ/không hợp lệ dưới ô nhập"
+        },
+        {
+          "en": "toast",
+          "vi": "thông báo nhỏ tự ẩn"
+        },
+        {
+          "en": "rubric",
+          "vi": "thang điểm theo tiêu chí"
+        }
+      ],
+      "demoHtml": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>Deep Lab 4 — Bootstrap Admin Dashboard (grid · table · modal validation · toast) — Live demo</title>\n<script src=\"https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-bootstrap@2.10.5/dist/react-bootstrap.min.js\" crossorigin=\"anonymous\"></script>\n<script>fetch(\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css\").then(function(r){return r.text()}).then(function(t){var s=document.createElement('style');s.textContent=t;document.head.insertBefore(s,document.head.firstChild)}).catch(function(){})</script>\n</head><body><div id=\"root\"></div><script>(function(){\nvar M={\"src/App.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/App.js — ghép dashboard: state đơn hàng, lọc, trang, modal, toast\\nvar _react = require('react');\\nvar _reactbootstrap = require('react-bootstrap');\\nvar _AppNavbar = require('./components/AppNavbar'); var _AppNavbar2 = _interopRequireDefault(_AppNavbar);\\nvar _StatCards = require('./components/StatCards'); var _StatCards2 = _interopRequireDefault(_StatCards);\\nvar _OrdersTable = require('./components/OrdersTable'); var _OrdersTable2 = _interopRequireDefault(_OrdersTable);\\nvar _NewOrderModal = require('./components/NewOrderModal'); var _NewOrderModal2 = _interopRequireDefault(_NewOrderModal);\\nvar _orders = require('./data/orders');\\n\\nconst FILTERS = ['All', 'Paid', 'Pending', 'Cancelled'];\\nconst PAGE_SIZE = 3;\\n\\n function App() {\\n  const [orders, setOrders] = _react.useState.call(void 0, _orders.ORDERS);\\n  const [filter, setFilter] = _react.useState.call(void 0, 'All');\\n  const [page, setPage] = _react.useState.call(void 0, 1);\\n  const [showModal, setShowModal] = _react.useState.call(void 0, false);\\n  const [toast, setToast] = _react.useState.call(void 0, null);\\n\\n  const filtered = filter === 'All' ? orders : orders.filter((o) => o.status === filter);\\n  const pages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));\\n  const current = Math.min(page, pages);\\n  const visible = filtered.slice((current - 1) * PAGE_SIZE, current * PAGE_SIZE);\\n\\n  const chooseFilter = (f) => {\\n    setFilter(f);\\n    setPage(1);\\n  };\\n\\n  const create = ({ customer, amount }) => {\\n    const id = Math.max(0, ...orders.map((o) => o.id)) + 1;\\n    setOrders((list) => [{ id, customer, amount, status: 'Pending' }, ...list]);\\n    setFilter('All');\\n    setPage(1);\\n    setToast(`Order #${id} created`);\\n  };\\n\\n  return (\\n    _jsxruntime.jsxs.call(void 0, _jsxruntime.Fragment, { children: [\\n      _jsxruntime.jsx.call(void 0, _AppNavbar2.default, {} )\\n      , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Container, { fluid: true, className: \\\"py-4\\\", children: [\\n        _jsxruntime.jsx.call(void 0, _StatCards2.default, { orders: orders,} )\\n        , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Row, { className: \\\"align-items-center mb-3 g-2\\\"  , children: [\\n          _jsxruntime.jsx.call(void 0, _reactbootstrap.Col, { xs: 12, md: true, children: \\n            _jsxruntime.jsx.call(void 0, _reactbootstrap.ButtonGroup, { id: \\\"filters\\\", children: \\n              FILTERS.map((f) => (\\n                _jsxruntime.jsx.call(void 0, _reactbootstrap.Button, { id: `filter-${f.toLowerCase()}`, variant: filter === f ? 'primary' : 'outline-primary', onClick: () => chooseFilter(f), children: f}, f)\\n              ))\\n            })\\n          })\\n          , _jsxruntime.jsx.call(void 0, _reactbootstrap.Col, { xs: 12, md: \\\"auto\\\", children: \\n            _jsxruntime.jsx.call(void 0, _reactbootstrap.Button, { id: \\\"btn-new\\\", variant: \\\"success\\\", onClick: () => setShowModal(true), children: \\\"+ New order\\\"  })\\n          })\\n        ]})\\n        , _jsxruntime.jsx.call(void 0, _OrdersTable2.default, { orders: visible,} )\\n        , _jsxruntime.jsx.call(void 0, _reactbootstrap.Pagination, { id: \\\"pager\\\", children: \\n          Array.from({ length: pages }, (_, i) => i + 1).map((n) => (\\n            _jsxruntime.jsx.call(void 0, _reactbootstrap.Pagination.Item, { active: n === current, activeLabel: \\\"\\\", onClick: () => setPage(n), children: n}, n)\\n          ))\\n        })\\n      ]})\\n      , _jsxruntime.jsx.call(void 0, _NewOrderModal2.default, { show: showModal, onHide: () => setShowModal(false), onCreate: create,} )\\n      , _jsxruntime.jsx.call(void 0, _reactbootstrap.ToastContainer, { position: \\\"top-end\\\", className: \\\"p-3\\\", children: \\n        _jsxruntime.jsx.call(void 0, _reactbootstrap.Toast, { show: toast !== null, onClose: () => setToast(null), delay: 4000, autohide: true, bg: \\\"success\\\", children: \\n          _jsxruntime.jsx.call(void 0, _reactbootstrap.Toast.Body, { id: \\\"toast-msg\\\", className: \\\"text-white\\\", children: toast})\\n        })\\n      })\\n    ]})\\n  );\\n} exports.default = App;\\n\",\"src/components/AppNavbar.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/components/AppNavbar.js — Navbar thu gọn dưới mốc lg\\nvar _reactbootstrap = require('react-bootstrap');\\n\\n function AppNavbar() {\\n  return (\\n    _jsxruntime.jsx.call(void 0, _reactbootstrap.Navbar, { id: \\\"main-nav\\\", bg: \\\"dark\\\", variant: \\\"dark\\\", expand: \\\"lg\\\", children: \\n      _jsxruntime.jsxs.call(void 0, _reactbootstrap.Container, { fluid: true, children: [\\n        _jsxruntime.jsx.call(void 0, _reactbootstrap.Navbar.Brand, { id: \\\"brand\\\", href: \\\"#\\\", children: \\\"CT Admin\\\" })\\n        , _jsxruntime.jsx.call(void 0, _reactbootstrap.Navbar.Toggle, { 'aria-controls': \\\"main-nav-collapse\\\",} )\\n        , _jsxruntime.jsx.call(void 0, _reactbootstrap.Navbar.Collapse, { id: \\\"main-nav-collapse\\\", children: \\n          _jsxruntime.jsxs.call(void 0, _reactbootstrap.Nav, { className: \\\"me-auto\\\", children: [\\n            _jsxruntime.jsx.call(void 0, _reactbootstrap.Nav.Link, { href: \\\"#\\\", active: true, children: \\\"Dashboard\\\"})\\n            , _jsxruntime.jsx.call(void 0, _reactbootstrap.Nav.Link, { href: \\\"#orders\\\", children: \\\"Orders\\\"})\\n          ]})\\n        })\\n      ]})\\n    })\\n  );\\n} exports.default = AppNavbar;\\n\",\"src/components/StatCards.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/components/StatCards.js — 4 thẻ thống kê, lưới 1 / 2 / 4 cột theo màn hình\\nvar _reactbootstrap = require('react-bootstrap');\\nvar _format = require('../utils/format');\\n\\n function StatCards({ orders }) {\\n  const revenue = orders.filter((o) => o.status === 'Paid').reduce((s, o) => s + o.amount, 0);\\n  const stats = [\\n    { key: 'total', label: 'Total orders', value: orders.length },\\n    { key: 'revenue', label: 'Revenue', value: _format.vnd.call(void 0, revenue) },\\n    { key: 'pending', label: 'Pending', value: orders.filter((o) => o.status === 'Pending').length },\\n    { key: 'cancelled', label: 'Cancelled', value: orders.filter((o) => o.status === 'Cancelled').length },\\n  ];\\n  return (\\n    _jsxruntime.jsx.call(void 0, _reactbootstrap.Row, { className: \\\"g-3 mb-4\\\" , children: \\n      stats.map((s) => (\\n        _jsxruntime.jsx.call(void 0, _reactbootstrap.Col, { xs: 12, md: 6, xl: 3, children: \\n          _jsxruntime.jsx.call(void 0, _reactbootstrap.Card, { className: \\\"stat-card h-100\\\" , id: `stat-${s.key}`, children: \\n            _jsxruntime.jsxs.call(void 0, _reactbootstrap.Card.Body, { children: [\\n              _jsxruntime.jsx.call(void 0, _reactbootstrap.Card.Subtitle, { className: \\\"text-muted\\\", children: s.label})\\n              , _jsxruntime.jsx.call(void 0, _reactbootstrap.Card.Title, { className: \\\"stat-value fs-3 mt-2\\\"  , children: s.value})\\n            ]})\\n          })\\n        }, s.key)\\n      ))\\n    })\\n  );\\n} exports.default = StatCards;\\n\",\"src/components/OrdersTable.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/components/OrdersTable.js — bảng responsive + Badge theo trạng thái\\nvar _reactbootstrap = require('react-bootstrap');\\nvar _orders = require('../data/orders');\\nvar _format = require('../utils/format');\\n\\n function OrdersTable({ orders }) {\\n  if (orders.length === 0) return _jsxruntime.jsx.call(void 0, 'p', { id: \\\"no-orders\\\", className: \\\"text-muted\\\", children: \\\"No orders\\\" });\\n  return (\\n    _jsxruntime.jsxs.call(void 0, _reactbootstrap.Table, { striped: true, hover: true, responsive: true, id: \\\"orders-table\\\", children: [\\n      _jsxruntime.jsx.call(void 0, 'thead', { children: \\n        _jsxruntime.jsxs.call(void 0, 'tr', { children: [_jsxruntime.jsx.call(void 0, 'th', { children: \\\"#\\\"}), _jsxruntime.jsx.call(void 0, 'th', { children: \\\"Customer\\\"}), _jsxruntime.jsx.call(void 0, 'th', { className: \\\"text-end\\\", children: \\\"Amount\\\"}), _jsxruntime.jsx.call(void 0, 'th', { children: \\\"Status\\\"})]})\\n      })\\n      , _jsxruntime.jsx.call(void 0, 'tbody', { children: \\n        orders.map((o) => (\\n          _jsxruntime.jsxs.call(void 0, 'tr', { className: \\\"order-row\\\", children: [\\n            _jsxruntime.jsx.call(void 0, 'td', { children: o.id})\\n            , _jsxruntime.jsx.call(void 0, 'td', { className: \\\"customer\\\", children: o.customer})\\n            , _jsxruntime.jsx.call(void 0, 'td', { className: \\\"text-end amount\\\" , children: _format.vnd.call(void 0, o.amount)})\\n            , _jsxruntime.jsx.call(void 0, 'td', { children: _jsxruntime.jsx.call(void 0, _reactbootstrap.Badge, { bg: _orders.STATUS_VARIANT[o.status], className: \\\"status\\\", children: o.status})})\\n          ]}, o.id)\\n        ))\\n      })\\n    ]})\\n  );\\n} exports.default = OrdersTable;\\n\",\"src/components/NewOrderModal.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/components/NewOrderModal.js — Form validation kiểu Bootstrap: noValidate + validated + isInvalid\\nvar _react = require('react');\\nvar _reactbootstrap = require('react-bootstrap');\\n\\nconst EMPTY = { customer: '', amount: '' };\\n\\n function NewOrderModal({ show, onHide, onCreate }) {\\n  const [form, setForm] = _react.useState.call(void 0, EMPTY);\\n  const [validated, setValidated] = _react.useState.call(void 0, false);\\n\\n  const customerOk = form.customer.trim().length >= 2;\\n  const amountOk = Number(form.amount) >= 1000;\\n\\n  const change = (e) => setForm({ ...form, [e.target.name]: e.target.value });\\n\\n  const close = () => {\\n    setForm(EMPTY);\\n    setValidated(false);\\n    onHide();\\n  };\\n\\n  const submit = (e) => {\\n    e.preventDefault();\\n    setValidated(true);\\n    if (!customerOk || !amountOk) return;\\n    onCreate({ customer: form.customer.trim(), amount: Number(form.amount) });\\n    close();\\n  };\\n\\n  return (\\n    _jsxruntime.jsx.call(void 0, _reactbootstrap.Modal, { show: show, onHide: close, centered: true, children: \\n      _jsxruntime.jsxs.call(void 0, _reactbootstrap.Form, { noValidate: true, validated: validated, onSubmit: submit, id: \\\"order-form\\\", children: [\\n        _jsxruntime.jsx.call(void 0, _reactbootstrap.Modal.Header, { closeButton: true, children: \\n          _jsxruntime.jsx.call(void 0, _reactbootstrap.Modal.Title, { children: \\\"New order\\\" })\\n        })\\n        , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Modal.Body, { children: [\\n          _jsxruntime.jsxs.call(void 0, _reactbootstrap.Form.Group, { className: \\\"mb-3\\\", controlId: \\\"customer\\\", children: [\\n            _jsxruntime.jsx.call(void 0, _reactbootstrap.Form.Label, { children: \\\"Customer\\\"})\\n            , _jsxruntime.jsx.call(void 0, _reactbootstrap.Form.Control, { name: \\\"customer\\\", value: form.customer, onChange: change, isInvalid: validated && !customerOk, isValid: validated && customerOk,} )\\n            , _jsxruntime.jsx.call(void 0, _reactbootstrap.Form.Control.Feedback, { type: \\\"invalid\\\", children: \\\"Customer name needs at least 2 characters\\\"      })\\n          ]})\\n          , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Form.Group, { controlId: \\\"amount\\\", children: [\\n            _jsxruntime.jsx.call(void 0, _reactbootstrap.Form.Label, { children: \\\"Amount (₫)\\\" })\\n            , _jsxruntime.jsx.call(void 0, _reactbootstrap.Form.Control, { name: \\\"amount\\\", type: \\\"number\\\", value: form.amount, onChange: change, isInvalid: validated && !amountOk, isValid: validated && amountOk,} )\\n            , _jsxruntime.jsx.call(void 0, _reactbootstrap.Form.Control.Feedback, { type: \\\"invalid\\\", children: \\\"Amount must be at least 1,000\\\"     })\\n          ]})\\n        ]})\\n        , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Modal.Footer, { children: [\\n          _jsxruntime.jsx.call(void 0, _reactbootstrap.Button, { id: \\\"btn-cancel\\\", variant: \\\"secondary\\\", onClick: close, children: \\\"Cancel\\\"})\\n          , _jsxruntime.jsx.call(void 0, _reactbootstrap.Button, { id: \\\"btn-save\\\", type: \\\"submit\\\", variant: \\\"primary\\\", children: \\\"Save\\\"})\\n        ]})\\n      ]})\\n    })\\n  );\\n} exports.default = NewOrderModal;\\n\",\"src/index.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\"); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\\nvar _react = require('react'); var _react2 = _interopRequireDefault(_react);\\nvar _client = require('react-dom/client'); var _client2 = _interopRequireDefault(_client);\\nrequire('bootstrap/dist/css/bootstrap.min.css');\\nvar _App = require('./App'); var _App2 = _interopRequireDefault(_App);\\n\\nconst root = _client2.default.createRoot(document.getElementById('root'));\\nroot.render(\\n  _jsxruntime.jsx.call(void 0, _react2.default.StrictMode, { children: \\n    _jsxruntime.jsx.call(void 0, _App2.default, {} )\\n  })\\n);\\n\",\"src/data/orders.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/data/orders.js — dữ liệu mẫu (đã cho)\\n const ORDERS = [\\n  { id: 1, customer: 'An', amount: 250000, status: 'Paid' },\\n  { id: 2, customer: 'Binh', amount: 120000, status: 'Pending' },\\n  { id: 3, customer: 'Cuong', amount: 990000, status: 'Paid' },\\n  { id: 4, customer: 'Dung', amount: 45000, status: 'Cancelled' },\\n  { id: 5, customer: 'Em', amount: 310000, status: 'Pending' },\\n  { id: 6, customer: 'Giang', amount: 500000, status: 'Paid' },\\n]; exports.ORDERS = ORDERS;\\n\\n const STATUS_VARIANT = { Paid: 'success', Pending: 'warning', Cancelled: 'danger' }; exports.STATUS_VARIANT = STATUS_VARIANT;\\n\",\"src/utils/format.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/utils/format.js (đã cho)\\n const vnd = (n) => n.toLocaleString('en-US') + ' ₫'; exports.vnd = vnd;\\n\"};var CSS={};var DB=null;var BASE=\"http://localhost:9999\";var URL0=null;var THANH=false;\nfunction kho(){var m={};var k={getItem:function(x){x=String(x);return Object.prototype.hasOwnProperty.call(m,x)?m[x]:null},setItem:function(x,v){m[String(x)]=String(v)},removeItem:function(x){delete m[String(x)]},clear:function(){m={}},key:function(i){return Object.keys(m)[i]||null}};Object.defineProperty(k,'length',{get:function(){return Object.keys(m).length}});return k}\ntry{Object.defineProperty(window,'localStorage',{value:kho(),configurable:true})}catch(e){}\ntry{Object.defineProperty(window,'sessionStorage',{value:kho(),configurable:true})}catch(e){}\nwindow.confirm=function(){return true};window.alert=function(m){console.log('[alert]',m);var t=document.getElementById('cl-demo-alert');if(!t){t=document.createElement('div');t.id='cl-demo-alert';t.style.cssText='position:fixed;right:12px;bottom:12px;z-index:99999;max-width:320px;padding:10px 14px;border-radius:10px;background:#0f172a;color:#fff;font:13px system-ui;box-shadow:0 6px 24px rgba(0,0,0,.25)';document.body.appendChild(t)}t.textContent='alert: '+m;clearTimeout(t.__h);t.__h=setTimeout(function(){t.remove()},2600)};\nvar ENV={NODE_ENV:'production',MODE:'production',PROD:true,DEV:false,BASE_URL:'/'};\nString(M['.env']||'').split(/\\r?\\n/).forEach(function(d){var m=/^\\s*(?:export\\s+)?([A-Za-z_][A-Za-z0-9_]*)\\s*=\\s*(.*)\\s*$/.exec(d);if(m)ENV[m[1]]=m[2].replace(/^(['\"])(.*)\\1$/,'$2')});\nwindow.__CL_ENV__=ENV;if(!window.process)window.process={env:ENV};\n// json-server giả (bản sao domAgent.ts)\nvar jsDb=DB?JSON.parse(JSON.stringify(DB)):null;\nfunction tl(st,b){return new Response(b===undefined?'{}':JSON.stringify(b),{status:st,headers:{'content-type':'application/json'}})}\nfunction lay(o,k){return String(k).split('.').reduce(function(a,p){return a==null?undefined:a[p]},o)}\nfunction mot(t){return /ies$/.test(t)?t.slice(0,-3)+'y':t.replace(/s$/,'')}\nfunction xuLy(method,url,body){var u=new URL(url);var ph=u.pathname.replace(/^\\/+|\\/+$/g,'').split('/').filter(Boolean).map(decodeURIComponent);var ten=ph[0],id=ph[1];\nif(!ten||!(ten in jsDb))return tl(404,{});var bang=jsDb[ten];var dl=null;if(body!=null&&body!==''){try{dl=JSON.parse(body)}catch(e){return tl(400,{})}}\nif(!Array.isArray(bang)){if(method==='GET')return tl(200,bang);if(method==='PUT'||method==='POST'){jsDb[ten]=dl||{};return tl(200,jsDb[ten])}if(method==='PATCH'){jsDb[ten]=Object.assign({},bang,dl||{});return tl(200,jsDb[ten])}return tl(404,{})}\nvar vt=function(x){return bang.findIndex(function(r){return String(r.id)===String(x)})};\nvar mr=function(r){var o=Object.assign({},r);u.searchParams.getAll('_expand').forEach(function(e){var b=jsDb[e+'s']||jsDb[e];if(Array.isArray(b))o[e]=b.find(function(x){return String(x.id)===String(r[e+'Id'])})});u.searchParams.getAll('_embed').forEach(function(e){var b=jsDb[e];if(Array.isArray(b)){var k=mot(ten)+'Id';o[e]=b.filter(function(x){return String(x[k])===String(r.id)})}});return o};\nif(method==='GET'){if(id!=null){var i=vt(id);return i<0?tl(404,{}):tl(200,mr(bang[i]))}var ds=bang.slice();var loc={};u.searchParams.forEach(function(v,k){if(k.charAt(0)!=='_'&&k!=='q')(loc[k]=loc[k]||[]).push(v)});\nObject.keys(loc).forEach(function(k){var vs=loc[k],m=/^(.*)_(like|gte|lte|ne)$/.exec(k);ds=ds.filter(function(r){if(m){var gv=lay(r,m[1]);return vs.every(function(v){if(m[2]==='like')return new RegExp(v,'i').test(String(gv));if(m[2]==='ne')return String(gv)!==v;var a=Number(gv),b=Number(v);var so=!isNaN(a)&&!isNaN(b);return m[2]==='gte'?(so?a>=b:String(gv)>=v):(so?a<=b:String(gv)<=v)})}var g=lay(r,k);return vs.some(function(v){return String(g)===v})})});\nvar qq=u.searchParams.get('q');if(qq)ds=ds.filter(function(r){return JSON.stringify(r).toLowerCase().indexOf(qq.toLowerCase())>=0});\nvar sx=u.searchParams.get('_sort');if(sx){var tr=sx.split(','),th=(u.searchParams.get('_order')||'asc').split(',');ds.sort(function(a,b){for(var t=0;t<tr.length;t++){var f=tr[t].replace(/^-/,''),gi=tr[t].charAt(0)==='-'||(th[t]||th[0])==='desc';var x=lay(a,f),y=lay(b,f);var c=(typeof x==='number'&&typeof y==='number')?x-y:String(x).localeCompare(String(y));if(c)return gi?-c:c}return 0})}\nvar gh=u.searchParams.get('_limit'),pg=u.searchParams.get('_page');var tong=ds.length;if(pg){var n=Number(gh)||10;ds=ds.slice((Number(pg)-1)*n,Number(pg)*n)}else if(gh)ds=ds.slice(0,Number(gh));var rr=tl(200,ds.map(mr));try{rr.headers.set('X-Total-Count',String(tong))}catch(e){}return rr}\nif(method==='POST'){if(id!=null)return tl(404,{});var mo=Object.assign({},dl||{});if(mo.id==null){var so2=bang.length&&bang.every(function(r){return typeof r.id==='number'});mo.id=so2||!bang.length?bang.reduce(function(mx,r){return Math.max(mx,Number(r.id)||0)},0)+1:Math.random().toString(16).slice(2,6)}bang.push(mo);return tl(201,mo)}\nif(id==null)return tl(404,{});var j=vt(id);if(j<0)return tl(404,{});\nif(method==='PUT'){bang[j]=Object.assign({},dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='PATCH'){bang[j]=Object.assign({},bang[j],dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='DELETE'){bang.splice(j,1);return tl(200,{})}return tl(404,{})}\nif(jsDb){window.fetch=function(url,init){init=init||{};var s=String(url&&url.url?url.url:url);var me=String(init.method||'GET').toUpperCase();return new Promise(function(res){setTimeout(function(){if(s.indexOf(BASE+'/')!==0)return res(new Response('Not Found',{status:404}));try{res(xuLy(me,s,init.body))}catch(e){res(tl(500,{error:String(e)}))}},120)})}}\nfunction axiosGia(){function goi(method,url,data,cfg){cfg=cfg||{};var u=(cfg.baseURL||'')+url;if(cfg.params){var sp=new URLSearchParams(cfg.params).toString();if(sp)u+=(u.indexOf('?')>=0?'&':'?')+sp}var init={method:method.toUpperCase(),headers:Object.assign({'Content-Type':'application/json'},cfg.headers||{})};if(data!==undefined)init.body=typeof data==='string'?data:JSON.stringify(data);\nreturn window.fetch(u,init).then(function(res){return res.text().then(function(t){var d;try{d=JSON.parse(t)}catch(e){d=t}var hd={};try{res.headers.forEach(function(v,k){hd[k.toLowerCase()]=v})}catch(e){}var out={data:d,status:res.status,statusText:res.statusText,headers:hd,config:cfg};if(res.status>=200&&res.status<300)return out;var err=new Error('Request failed with status code '+res.status);err.response=out;err.name='AxiosError';throw err})})}\nfunction tao(base){var a=function(cfg){return goi(cfg.method||'get',cfg.url,cfg.data,Object.assign({},base,cfg))};['get','delete','head'].forEach(function(m){a[m]=function(url,cfg){return goi(m,url,undefined,Object.assign({},base,cfg))}});['post','put','patch'].forEach(function(m){a[m]=function(url,data,cfg){return goi(m,url,data,Object.assign({},base,cfg))}});a.create=function(c){return tao(Object.assign({},base,c))};a.defaults=base;a.interceptors={request:{use:function(){}},response:{use:function(){}}};a.isAxiosError=function(e){return!!(e&&e.name==='AxiosError')};return a}\nvar ax=tao({});ax.default=ax;return ax}\nvar R=window.React;var tach=function(p,k){var q=Object.assign({},p);var c=q.children;delete q.children;if(k!==undefined)q.key=k;return[q,c]};\nvar j=function(t,p,k){var x=tach(p,k);return x[1]===undefined?R.createElement(t,x[0]):R.createElement(t,x[0],x[1])};\nvar js=function(t,p,k){var x=tach(p,k);return R.createElement.apply(null,[t,x[0]].concat(x[1]||[]))};\n// React Router: MemoryRouter + thanh địa chỉ (gõ URL được — thử ?status=ACTIVE, /items/2…)\nvar viTri=null,routerBoc=null,dieuHuong=null;\nfunction datThanh(v){var o=document.getElementById('cl-demo-url');if(o&&document.activeElement!==o)o.value='http://localhost:3000'+v}\nfunction routerGia(){var RRD=window.ReactRouterDOM;if(!RRD)return null;if(routerBoc)return routerBoc;\nfunction Ghi(){var l=RRD.useLocation();var nav=RRD.useNavigate();dieuHuong=nav;viTri=l.pathname+l.search+l.hash;R.useEffect(function(){datThanh(viTri)});return null}\nfunction RG(p){var d=R.useState(function(){return[viTri||URL0||'/']})[0];return R.createElement(RRD.MemoryRouter,{initialEntries:d,basename:p.basename},R.createElement(Ghi),p.children)}\nfunction tr(routes,opts){var r=RRD.createMemoryRouter(routes,Object.assign({},opts||{},{initialEntries:[viTri||URL0||'/']}));var g=function(s){viTri=s.location.pathname+s.location.search+s.location.hash;datThanh(viTri)};g(r.state);r.subscribe(g);dieuHuong=function(to){r.navigate(to)};return r}\nrouterBoc=Object.assign({},RRD,{BrowserRouter:RG,HashRouter:RG,createBrowserRouter:tr,createHashRouter:tr});return routerBoc}\nvar thunk=function(api){return function(next){return function(a){return typeof a==='function'?a(api.dispatch,api.getState):next(a)}}};\nvar LIB={'react':R,'react-dom':window.ReactDOM,'react-dom/client':window.ReactDOM,'react/jsx-runtime':{jsx:j,jsxs:js,Fragment:R.Fragment},'react/jsx-dev-runtime':{jsxDEV:j,Fragment:R.Fragment},'prop-types':window.PropTypes,'react-bootstrap':window.ReactBootstrap,'@reduxjs/toolkit':window.RTK,'redux':window.RTK,'react-redux':window.ReactRedux,'redux-thunk':{'default':thunk,thunk:thunk}};\nvar C={};\nfunction dd(tu,s){var p=tu.split('/').slice(0,-1);s.split('/').forEach(function(x){if(x==='.'||x==='')return;if(x==='..')p.pop();else p.push(x)});return p.join('/')}\nfunction tim(p){var d=['','.js','.jsx','.ts','.tsx','.json','/index.js','/index.jsx'];for(var i=0;i<d.length;i++){if(M[p+d[i]]!=null||CSS[p+d[i]]!=null)return p+d[i]}return null}\nfunction req(tu,s){if(s==='axios')return axiosGia();if(s==='react-router-dom'||s==='react-router')return routerGia();if(LIB[s])return LIB[s];if(/\\.css$/.test(s)&&!/^\\./.test(s))return{};var p=tim(dd(tu,s));if(!p)throw new Error('Cannot find module '+s);return nap(p)}\nfunction nap(p){if(C[p])return C[p].exports;if(CSS[p]!=null){var st=document.createElement('style');st.textContent=CSS[p];document.head.appendChild(st);C[p]={exports:{}};return{}}var m={exports:{}};C[p]=m;if(/\\.json$/.test(p)){m.exports=JSON.parse(M[p]);return m.exports}new Function('require','module','exports',M[p])(function(s){return req(p,s)},m,m.exports);return m.exports}\nif(THANH){var bar=document.createElement('form');bar.style.cssText='position:sticky;top:0;z-index:99998;display:flex;gap:6px;align-items:center;padding:6px 10px;background:#e2e8f0;border-bottom:1px solid #cbd5e1;font:12px system-ui';bar.innerHTML='<span style=\"color:#475569\">URL</span><input id=\"cl-demo-url\" style=\"flex:1;padding:4px 8px;border:1px solid #cbd5e1;border-radius:6px;font:12px ui-monospace,monospace\" aria-label=\"Address bar\"><button style=\"padding:3px 10px;border-radius:6px;border:1px solid #94a3b8;background:#fff;cursor:pointer\">Go</button>';\nbar.addEventListener('submit',function(e){e.preventDefault();var v=document.getElementById('cl-demo-url').value.replace(/^https?:\\/\\/[^/]+/,'')||'/';if(dieuHuong)dieuHuong(v)});document.body.insertBefore(bar,document.body.firstChild);datThanh(URL0||'/')}\nnap(\"src/index.js\");\n})();</script></body></html>"
+    }
+  ]
+}

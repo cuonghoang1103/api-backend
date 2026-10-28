@@ -566,6 +566,18 @@
       "name": "Deep Lab 3 — Invoice Renderer (advanced JSX)",
       "level": "ADVANCED",
       "description": "Deep lab chương 3: bảng nhóm bằng Fragment có key, giảm giá, coupon + VAT suy ra, nhánh trạng thái, trạng thái rỗng. Thang 10."
+    },
+    {
+      "slug": "fer202-4-deep-admin-dashboard",
+      "name": "Deep Lab 4 — Bootstrap Admin Dashboard (React-Bootstrap)",
+      "level": "ADVANCED",
+      "description": "Deep lab chương 4: navbar thu gọn, lưới thống kê đáp ứng, bảng + badge, lọc, Pagination, Modal + validation Bootstrap, Toast. Thang 10."
+    },
+    {
+      "slug": "fer202-5-deep-ui-kit",
+      "name": "Deep Lab 5 — mini UI Kit (reusable component APIs)",
+      "level": "ADVANCED",
+      "description": "Deep lab chương 5: Button chuyển tiếp props, Rating điều khiển, DataTable theo cấu hình + sắp xếp, Accordion controlled/uncontrolled, Stepper class, PropTypes. Thang 10."
     }
   ]
 }

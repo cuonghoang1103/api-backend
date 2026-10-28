@@ -1,0 +1,1221 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-11-deep-optimistic-todos",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-11-2-axios-json-server"
+  },
+  "exercises": [
+    {
+      "title": "Deep Lab 11 — Team Todos (HTTP layer · Load more · optimistic updates · Undo · SWR cache)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 140,
+      "points": 100,
+      "concepts": [
+        "API client layer",
+        "environment variables",
+        "server-side pagination",
+        "optimistic updates & rollback",
+        "temporary ids",
+        "delayed delete with undo",
+        "stale-while-revalidate"
+      ],
+      "prerequisites": [
+        "Lab 11 — Contact manager",
+        "11.2 axios & json-server"
+      ],
+      "tags": [
+        "fer202",
+        "deep-lab",
+        "http",
+        "optimistic-ui"
+      ],
+      "problemHtml": "<h1>DEEP LAB 11: Team Todos — HTTP client layer &amp; optimistic UI</h1>\n<p class=\"bi-phu\">FER202 · Chapter 11 (deep) · Suggested time: 140 minutes · Total: 10 marks</p>\n<h2>1. Overview</h2>\n<p>Real apps feel fast because they do not wait for the server. Build a todo list on json-server with a proper <b>HTTP layer</b> (<code>src/api/http.js</code>), server-side <b>\"Load more\"</b> pagination, <b>optimistic</b> toggling and creating that roll back with a toast when the server fails, deletion with a short <b>Undo</b> window before the request is sent, and a <b>stale-while-revalidate</b> cache so returning to the tab shows data instantly while it refreshes in the background.</p>\n<h3>Main features</h3>\n<ul>\n  <li>HTTP layer · Load more · optimistic update & create with rollback · delete with Undo · SWR cache · error + retry.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>Only <code>src/api/*</code> knows URLs; components call <code>fetchTodos / updateTodo / createTodo / deleteTodo</code>.</li>\n  <li>List order: newest first (<code>_sort=id&amp;_order=desc</code>), 5 per page, total from <code>X-Total-Count</code>.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>.env                         # REACT_APP_API_URL=http://localhost:9999 (given)\nsrc/\n├── api/\n│   ├── http.js              # request · ApiError · http.get/post/patch/del\n│   └── todos.js             # fetchTodos(page, limit) · updateTodo · createTodo · deleteTodo\n├── components/TodosPage.js  # the whole feature\n├── App.js                   # tabs Todos / About (given)\n└── index.css (given)</pre>\n<h2>3. UI wireframe</h2>\n<pre class=\"bi-wire\">+-------------------------------------------------------------+\n| Team Todos      [Todos] [About]                             |\n| [New todo                ] [Add]                            |\n| Showing 5 of 12   Updating…                                 |\n| [x] Task 12 (strikethrough)                      [Delete]   |\n| [ ] Task 11                                      [Delete]   |\n| …                                                           |\n| [Load more]                                                 |\n| | Deleted \"Task 10\"  [Undo] |              | Could not … |  |\n+-------------------------------------------------------------+</pre>\n<h2>4. Data model</h2>\n<p><b>todos (json-server)</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>id</code></td><td>number</td><td>temporary id \"tmp-…\" while a create is pending</td></tr><tr><td><code>title</code></td><td>string</td><td></td></tr><tr><td><code>done</code></td><td>boolean</td><td></td></tr></tbody></table>\n<h2>5. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. HTTP layer <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>request(method, path, body)</code>: base URL from <code>process.env.REACT_APP_API_URL</code>, JSON headers, <code>Authorization: Bearer &lt;token&gt;</code> when localStorage has <code>token</code>, non-2xx ⇒ <code>throw new ApiError(status, \"HTTP 404\")</code>, returns <code>{ data, total }</code> (from <code>X-Total-Count</code>).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>2. Load more <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>#count</code> <code>Showing 5 of 12</code>; <code>#load-more</code> fetches the next page and appends; hidden when everything is shown.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>3. Optimistic update <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>.toggle</code> flips <code>.done</code> immediately, then PATCHes. On failure: restore the previous value and show <code>#toast</code> <code>Could not update \"Task 12\"</code>.</li>\n</ul>\n<p><b>Example:</b></p>\n<pre>server answers 500 ⇒ checkbox jumps back, toast appears</pre>\n</div>\n<div class=\"bi-cn\"><h3>4. Optimistic create <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>#new-form</code> / <code>#new-title</code>: insert a <code>.pending</code> row with a temporary id at the top (count +1), replace it with the server record when the POST succeeds; on failure remove it and toast <code>Could not add \"…\"</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. Delete with Undo <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>.delete</code> removes the row at once and shows <code>#undo-bar</code> (<code>Deleted \"Task 12\"</code> + <code>#undo</code>) for 1.5 s; Undo puts it back in place and no request is sent; otherwise DELETE is sent when the time is up.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>6. Stale-while-revalidate <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>A module-level cache keeps <code>{ items, total, page }</code>; returning from <code>#tab-about</code> renders cached rows instantly (no <code>#loading</code>) with <code>#refreshing</code> <code>Updating…</code> while all loaded pages are fetched again.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>7. Load error &amp; retry <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>#loading</code> <code>Loading todos…</code>; failure ⇒ <code>#load-error</code> <code>Could not load todos (HTTP 404)</code> + <code>#retry</code>.</li>\n</ul>\n</div>\n<h2>6. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>#tab-todos · #tab-about</code></td><td>tabs (given)</td></tr><tr><td><code>#new-form · #new-title · #count · #refreshing · #load-more</code></td><td>list controls</td></tr><tr><td><code>.todo(.done/.pending) · .toggle · .title · .delete</code></td><td>rows</td></tr><tr><td><code>#undo-bar · #undo · #toast · #loading · #load-error · #retry</code></td><td>feedback</td></tr></tbody></table>\n<h2>7. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>HTTP layer</td><td>1.5</td></tr><tr><td>2</td><td>Load more</td><td>1.5</td></tr><tr><td>3</td><td>Optimistic update</td><td>2</td></tr><tr><td>4</td><td>Optimistic create</td><td>1.5</td></tr><tr><td>5</td><td>Delete with Undo</td><td>1.5</td></tr><tr><td>6</td><td>Stale-while-revalidate</td><td>1</td></tr><tr><td>7</td><td>Load error &amp; retry</td><td>1</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Waiting for the server before updating the checkbox (sluggish UI).</li>\n  <li>Optimistic update without rollback — the screen lies after a failure.</li>\n  <li>Sending DELETE immediately and \"undoing\" with a POST — the record gets a new id.</li>\n  <li><code>fetch('http://localhost:9999/…')</code> scattered in components.</li>\n</ul>\n<h2>8. Submission</h2>\n<p>Work directly in the editor (files on the right) or download the starter, run it locally with Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> when the paper uses an API) and paste the files back. Press <b>Run</b> for the sample checks and <b>Submit</b> for full grading (hidden checks included).</p>",
+      "problemHtmlVi": "<h1>DEEP LAB 11: Team Todos — lớp HTTP client &amp; giao diện lạc quan</h1>\n<p class=\"bi-phu\">FER202 · Chương 11 (chuyên sâu) · Thời gian gợi ý: 140 phút · Tổng: 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p>Ứng dụng thật có cảm giác nhanh vì chúng không chờ server. Dựng danh sách việc trên json-server với <b>lớp HTTP</b> đàng hoàng (<code>src/api/http.js</code>), phân trang <b>\"Load more\"</b> phía server, bật/tắt và thêm mới <b>lạc quan</b> có hoàn tác kèm toast khi server lỗi, xoá có khoảng <b>Undo</b> ngắn trước khi gửi request, và cache <b>stale-while-revalidate</b> để quay lại tab là thấy dữ liệu ngay trong khi làm mới chạy nền.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>Lớp HTTP · Load more · sửa & thêm lạc quan có hoàn tác · xoá có Undo · cache SWR · lỗi + thử lại.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Chỉ <code>src/api/*</code> biết URL; component gọi <code>fetchTodos / updateTodo / createTodo / deleteTodo</code>.</li>\n  <li>Thứ tự: mới nhất trước (<code>_sort=id&amp;_order=desc</code>), 5 mỗi trang, tổng lấy từ <code>X-Total-Count</code>.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>.env                         # REACT_APP_API_URL=http://localhost:9999 (given)\nsrc/\n├── api/\n│   ├── http.js              # request · ApiError · http.get/post/patch/del\n│   └── todos.js             # fetchTodos(page, limit) · updateTodo · createTodo · deleteTodo\n├── components/TodosPage.js  # the whole feature\n├── App.js                   # tabs Todos / About (given)\n└── index.css (given)</pre>\n<h2>3. Wireframe giao diện</h2>\n<pre class=\"bi-wire\">+-------------------------------------------------------------+\n| Team Todos      [Todos] [About]                             |\n| [New todo                ] [Add]                            |\n| Showing 5 of 12   Updating…                                 |\n| [x] Task 12 (strikethrough)                      [Delete]   |\n| [ ] Task 11                                      [Delete]   |\n| …                                                           |\n| [Load more]                                                 |\n| | Deleted \"Task 10\"  [Undo] |              | Could not … |  |\n+-------------------------------------------------------------+</pre>\n<h2>4. Mô hình dữ liệu</h2>\n<p><b>todos (json-server)</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>id</code></td><td>number</td><td>id tạm \"tmp-…\" khi đang chờ tạo</td></tr><tr><td><code>title</code></td><td>string</td><td></td></tr><tr><td><code>done</code></td><td>boolean</td><td></td></tr></tbody></table>\n<h2>5. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. Lớp HTTP <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>request(method, path, body)</code>: base URL từ <code>process.env.REACT_APP_API_URL</code>, header JSON, <code>Authorization: Bearer &lt;token&gt;</code> khi localStorage có <code>token</code>, không phải 2xx ⇒ <code>throw new ApiError(status, \"HTTP 404\")</code>, trả <code>{ data, total }</code> (từ <code>X-Total-Count</code>).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>2. Load more <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>#count</code> <code>Showing 5 of 12</code>; <code>#load-more</code> tải trang kế và nối thêm; ẩn khi đã hiện hết.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>3. Sửa lạc quan <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>.toggle</code> đổi <code>.done</code> ngay, rồi PATCH. Lỗi: trả giá trị cũ và hiện <code>#toast</code> <code>Could not update \"Task 12\"</code>.</li>\n</ul>\n<p><b>Ví dụ:</b></p>\n<pre>server trả 500 ⇒ ô chọn bật lại như cũ, hiện toast</pre>\n</div>\n<div class=\"bi-cn\"><h3>4. Thêm lạc quan <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>#new-form</code> / <code>#new-title</code>: chèn dòng <code>.pending</code> có id tạm lên đầu (đếm +1), thay bằng bản ghi server khi POST thành công; lỗi thì gỡ và toast <code>Could not add \"…\"</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. Xoá có Undo <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>.delete</code> gỡ dòng ngay và hiện <code>#undo-bar</code> (<code>Deleted \"Task 12\"</code> + <code>#undo</code>) trong 1,5 s; Undo đặt lại đúng chỗ và không gửi request; không thì gửi DELETE khi hết giờ.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>6. Stale-while-revalidate <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Cache cấp module giữ <code>{ items, total, page }</code>; quay lại từ <code>#tab-about</code> vẽ ngay dữ liệu cache (không <code>#loading</code>) kèm <code>#refreshing</code> <code>Updating…</code> trong lúc tải lại đủ các trang đã xem.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>7. Lỗi tải &amp; thử lại <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>#loading</code> <code>Loading todos…</code>; lỗi ⇒ <code>#load-error</code> <code>Could not load todos (HTTP 404)</code> + <code>#retry</code>.</li>\n</ul>\n</div>\n<h2>6. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>#tab-todos · #tab-about</code></td><td>tab (có sẵn)</td></tr><tr><td><code>#new-form · #new-title · #count · #refreshing · #load-more</code></td><td>điều khiển danh sách</td></tr><tr><td><code>.todo(.done/.pending) · .toggle · .title · .delete</code></td><td>dòng</td></tr><tr><td><code>#undo-bar · #undo · #toast · #loading · #load-error · #retry</code></td><td>phản hồi</td></tr></tbody></table>\n<h2>7. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>Lớp HTTP</td><td>1.5</td></tr><tr><td>2</td><td>Load more</td><td>1.5</td></tr><tr><td>3</td><td>Sửa lạc quan</td><td>2</td></tr><tr><td>4</td><td>Thêm lạc quan</td><td>1.5</td></tr><tr><td>5</td><td>Xoá có Undo</td><td>1.5</td></tr><tr><td>6</td><td>Stale-while-revalidate</td><td>1</td></tr><tr><td>7</td><td>Lỗi tải &amp; thử lại</td><td>1</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Chờ server xong mới đổi ô chọn (giao diện ì).</li>\n  <li>Cập nhật lạc quan mà không hoàn tác — màn hình \"nói dối\" sau khi lỗi.</li>\n  <li>Gửi DELETE ngay rồi \"hoàn tác\" bằng POST — bản ghi có id mới.</li>\n  <li><code>fetch('http://localhost:9999/…')</code> rải trong component.</li>\n</ul>\n<h2>8. Nộp bài</h2>\n<p>Làm thẳng trong editor (các tệp bên phải) hoặc tải starter, chạy trên máy bằng Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> khi đề dùng API) rồi dán lại tệp. Bấm <b>Chạy thử</b> để chạy kiểm mẫu, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn).</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "Only <code>src/api/*</code> knows URLs; components call <code>fetchTodos / updateTodo / createTodo / deleteTodo</code>.|||Chỉ <code>src/api/*</code> biết URL; component gọi <code>fetchTodos / updateTodo / createTodo / deleteTodo</code>.\nList order: newest first (<code>_sort=id&amp;_order=desc</code>), 5 per page, total from <code>X-Total-Count</code>.|||Thứ tự: mới nhất trước (<code>_sort=id&amp;_order=desc</code>), 5 mỗi trang, tổng lấy từ <code>X-Total-Count</code>.",
+      "examplesJson": [
+        {
+          "input": "Optimistic update|||Sửa lạc quan",
+          "output": "server answers 500 ⇒ checkbox jumps back, toast appears|||server trả 500 ⇒ ô chọn bật lại như cũ, hiện toast",
+          "explanation": "See the brief / Xem đề."
+        }
+      ],
+      "hintsJson": [
+        "Lạc quan: lưu giá trị cũ trong biến (todo.done) TRƯỚC khi setItems; catch ⇒ setItems trả lại giá trị đó.",
+        "Thêm: tempId = `tmp-${Date.now()}`; thành công ⇒ map thay dòng tempId bằng saved; lỗi ⇒ filter bỏ.",
+        "Undo: setTimeout(DELETE, 1500) lưu timer trong state; Undo ⇒ clearTimeout + chèn lại ở index cũ.",
+        "SWR: let cache = null ngoài component; useState(cache?.items ?? []); có cache ⇒ status \"ready\" + refreshing = true."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/api/http.js",
+          "language": "javascript",
+          "code": "// src/api/http.js — STARTER: viết request(method, path, body) + ApiError + http.get/post/patch/del\nexport const http = {};\nexport class ApiError extends Error {}\n"
+        },
+        {
+          "name": "src/api/todos.js",
+          "language": "javascript",
+          "code": "// src/api/todos.js — STARTER: fetchTodos(page, limit) · updateTodo · createTodo · deleteTodo\nexport const PAGE_SIZE = 5;\n"
+        },
+        {
+          "name": "src/components/TodosPage.js",
+          "language": "javascript",
+          "code": "// src/components/TodosPage.js — STARTER: chờ server rồi mới cập nhật, tải hết một lần, không xử lý lỗi\nimport { useEffect, useState } from 'react';\n\nexport default function TodosPage() {\n  const [items, setItems] = useState([]);\n  useEffect(() => {\n    fetch('http://localhost:9999/todos').then((r) => r.json()).then(setItems);\n  }, []);\n  const toggle = async (t) => {\n    await fetch('http://localhost:9999/todos/' + t.id, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ done: !t.done }) });\n    setItems(items.map((x) => (x.id === t.id ? { ...x, done: !x.done } : x)));\n  };\n  return (\n    <ul id=\"todos\">\n      {items.map((t) => (\n        <li key={t.id} className={t.done ? 'todo done' : 'todo'}>\n          <input type=\"checkbox\" className=\"toggle\" checked={t.done} onChange={() => toggle(t)} />\n          <span className=\"title\">{t.title}</span>\n        </li>\n      ))}\n    </ul>\n  );\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport './index.css';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "src/index.css",
+          "language": "css",
+          "code": "/* src/index.css (đã cho) */\nbody { font-family: system-ui, sans-serif; margin: 0; padding: 20px; background: #f8fafc; color: #0f172a; }\n.tabs button.active { background: #2563eb; color: #fff; }\n.todo { display: flex; gap: 8px; align-items: center; padding: 6px 0; border-bottom: 1px solid #e2e8f0; }\n.todo.done .title { text-decoration: line-through; color: #64748b; } .todo.pending { opacity: .55; }\n#toast { position: fixed; bottom: 16px; right: 16px; background: #b91c1c; color: #fff; padding: 8px 14px; border-radius: 8px; }\n#undo-bar { background: #1e293b; color: #fff; padding: 6px 12px; border-radius: 8px; display: inline-flex; gap: 10px; }\n#refreshing { font-size: 12px; color: #2563eb; margin-left: 8px; }\n"
+        },
+        {
+          "name": ".env",
+          "language": "text",
+          "code": "REACT_APP_API_URL=http://localhost:9999\n"
+        },
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — hai tab: rời tab Todos rồi quay lại ⇒ cache hiện ngay, làm mới chạy nền\nimport { useState } from 'react';\nimport TodosPage from './components/TodosPage';\n\nexport default function App() {\n  const [tab, setTab] = useState('todos');\n  return (\n    <main>\n      <h1>Team Todos</h1>\n      <nav className=\"tabs\">\n        <button id=\"tab-todos\" type=\"button\" className={tab === 'todos' ? 'active' : ''} onClick={() => setTab('todos')}>Todos</button>{' '}\n        <button id=\"tab-about\" type=\"button\" className={tab === 'about' ? 'active' : ''} onClick={() => setTab('about')}>About</button>\n      </nav>\n      {tab === 'todos' ? <TodosPage /> : <p id=\"about\">A tiny app to practise optimistic UI.</p>}\n    </main>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/api/http.js",
+          "language": "javascript",
+          "code": "// src/api/http.js — MỘT lớp gọi HTTP cho cả app: base URL từ .env, token, lỗi có status, đọc tổng số\nconst BASE = process.env.REACT_APP_API_URL || 'http://localhost:9999';\n\nexport class ApiError extends Error {\n  constructor(status, message) {\n    super(message);\n    this.name = 'ApiError';\n    this.status = status;\n  }\n}\n\nasync function request(method, path, body) {\n  const headers = { Accept: 'application/json' };\n  const token = localStorage.getItem('token');\n  if (token) headers.Authorization = `Bearer ${token}`;\n  if (body !== undefined) headers['Content-Type'] = 'application/json';\n\n  const res = await fetch(BASE + path, { method, headers, body: body === undefined ? undefined : JSON.stringify(body) });\n  if (!res.ok) throw new ApiError(res.status, `HTTP ${res.status}`);\n  const totalHeader = res.headers && res.headers.get ? res.headers.get('X-Total-Count') : null;\n  const data = res.status === 204 ? null : await res.json();\n  return { data, total: totalHeader === null ? null : Number(totalHeader) };\n}\n\nexport const http = {\n  get: (path) => request('GET', path),\n  post: (path, body) => request('POST', path, body),\n  patch: (path, body) => request('PATCH', path, body),\n  del: (path) => request('DELETE', path),\n};\n"
+        },
+        {
+          "name": "src/api/todos.js",
+          "language": "javascript",
+          "code": "// src/api/todos.js — các lời gọi theo nghiệp vụ (component không tự dựng URL)\nimport { http } from './http';\n\nexport const PAGE_SIZE = 5;\n\nexport async function fetchTodos(page, limit = PAGE_SIZE) {\n  const { data, total } = await http.get(`/todos?_sort=id&_order=desc&_page=${page}&_limit=${limit}`);\n  return { items: data, total: total ?? data.length };\n}\n\nexport const updateTodo = (id, patch) => http.patch(`/todos/${id}`, patch).then((r) => r.data);\nexport const createTodo = (title) => http.post('/todos', { title, done: false }).then((r) => r.data);\nexport const deleteTodo = (id) => http.del(`/todos/${id}`);\n"
+        },
+        {
+          "name": "src/components/TodosPage.js",
+          "language": "javascript",
+          "code": "// src/components/TodosPage.js — lạc quan + hoàn tác, Load more, Undo khi xoá, cache stale-while-revalidate\nimport { useEffect, useRef, useState } from 'react';\nimport { PAGE_SIZE, createTodo, deleteTodo, fetchTodos, updateTodo } from '../api/todos';\n\nlet cache = null; // { items, total, page } — sống qua lần unmount/mount của trang (đổi tab)\nconst UNDO_MS = 1500;\n\nexport default function TodosPage() {\n  const [items, setItems] = useState(cache?.items ?? []);\n  const [total, setTotal] = useState(cache?.total ?? 0);\n  const [page, setPage] = useState(cache?.page ?? 1);\n  const [status, setStatus] = useState(cache ? 'ready' : 'loading');\n  const [refreshing, setRefreshing] = useState(Boolean(cache));\n  const [error, setError] = useState(null);\n  const [toast, setToast] = useState(null);\n  const [title, setTitle] = useState('');\n  const [undo, setUndo] = useState(null); // { item, index, timer }\n  const [reload, setReload] = useState(0);\n  const pagesRef = useRef(cache?.page ?? 1);\n\n  // tải lần đầu / làm mới nền (stale-while-revalidate): có cache thì hiện ngay rồi lấy lại đủ số trang đã xem\n  useEffect(() => {\n    let ignore = false;\n    const pages = pagesRef.current;\n    fetchTodos(1, pages * PAGE_SIZE)\n      .then(({ items: fresh, total: t }) => {\n        if (ignore) return;\n        setItems(fresh);\n        setTotal(t);\n        setStatus('ready');\n      })\n      .catch((err) => {\n        if (ignore) return;\n        if (!cache) setStatus('error');\n        setError(`Could not load todos (${err.message})`);\n      })\n      .finally(() => { if (!ignore) setRefreshing(false); });\n    return () => { ignore = true; };\n  }, [reload]);\n\n  // ghi cache (bỏ các dòng còn đang chờ server)\n  useEffect(() => {\n    if (status === 'ready') cache = { items: items.filter((t) => !t.pending), total, page };\n  }, [items, total, page, status]);\n\n  useEffect(() => {\n    if (!toast) return undefined;\n    const id = setTimeout(() => setToast(null), 3000);\n    return () => clearTimeout(id);\n  }, [toast]);\n\n  const loadMore = async () => {\n    const next = page + 1;\n    const { items: more, total: t } = await fetchTodos(next);\n    setItems((list) => [...list, ...more.filter((m) => !list.some((x) => x.id === m.id))]);\n    setTotal(t);\n    setPage(next);\n    pagesRef.current = next;\n  };\n\n  // SỬA lạc quan: đổi ngay, lỗi thì trả lại\n  const toggle = async (todo) => {\n    const nextDone = !todo.done;\n    setItems((list) => list.map((t) => (t.id === todo.id ? { ...t, done: nextDone } : t)));\n    try {\n      await updateTodo(todo.id, { done: nextDone });\n    } catch {\n      setItems((list) => list.map((t) => (t.id === todo.id ? { ...t, done: todo.done } : t)));\n      setToast(`Could not update \"${todo.title}\"`);\n    }\n  };\n\n  // THÊM lạc quan: id tạm, thay bằng bản ghi server; lỗi thì gỡ\n  const add = async (e) => {\n    e.preventDefault();\n    const text = title.trim();\n    if (!text) return;\n    const tempId = `tmp-${Date.now()}`;\n    setItems((list) => [{ id: tempId, title: text, done: false, pending: true }, ...list]);\n    setTotal((t) => t + 1);\n    setTitle('');\n    try {\n      const saved = await createTodo(text);\n      setItems((list) => list.map((t) => (t.id === tempId ? saved : t)));\n    } catch {\n      setItems((list) => list.filter((t) => t.id !== tempId));\n      setTotal((t) => t - 1);\n      setToast(`Could not add \"${text}\"`);\n    }\n  };\n\n  // XOÁ có Undo: gỡ khỏi giao diện ngay, gửi DELETE sau UNDO_MS nếu không bị huỷ\n  const remove = (todo) => {\n    if (undo) clearTimeout(undo.timer);\n    const index = items.findIndex((t) => t.id === todo.id);\n    setItems((list) => list.filter((t) => t.id !== todo.id));\n    setTotal((t) => t - 1);\n    const timer = setTimeout(async () => {\n      setUndo(null);\n      try {\n        await deleteTodo(todo.id);\n      } catch {\n        setItems((list) => [...list.slice(0, index), todo, ...list.slice(index)]);\n        setTotal((t) => t + 1);\n        setToast(`Could not delete \"${todo.title}\"`);\n      }\n    }, UNDO_MS);\n    setUndo({ item: todo, index, timer });\n  };\n\n  const undoDelete = () => {\n    clearTimeout(undo.timer);\n    setItems((list) => [...list.slice(0, undo.index), undo.item, ...list.slice(undo.index)]);\n    setTotal((t) => t + 1);\n    setUndo(null);\n  };\n\n  if (status === 'loading') return <p id=\"loading\">Loading todos…</p>;\n  if (status === 'error') {\n    return (\n      <div>\n        <p id=\"load-error\">{error}</p>\n        <button id=\"retry\" type=\"button\" onClick={() => { setStatus('loading'); setReload((n) => n + 1); }}>Retry</button>\n      </div>\n    );\n  }\n\n  return (\n    <section>\n      <form id=\"new-form\" onSubmit={add}>\n        <input id=\"new-title\" value={title} onChange={(e) => setTitle(e.target.value)} placeholder=\"New todo\" />\n        <button type=\"submit\">Add</button>\n      </form>\n      <p>\n        <span id=\"count\">Showing {items.length} of {total}</span>\n        {refreshing && <span id=\"refreshing\">Updating…</span>}\n      </p>\n      <ul id=\"todos\">\n        {items.map((t) => (\n          <li key={t.id} className={['todo', t.done ? 'done' : '', t.pending ? 'pending' : ''].filter(Boolean).join(' ')}>\n            <input type=\"checkbox\" className=\"toggle\" checked={t.done} disabled={t.pending} onChange={() => toggle(t)} />\n            <span className=\"title\">{t.title}</span>\n            <button type=\"button\" className=\"delete\" disabled={t.pending} onClick={() => remove(t)}>Delete</button>\n          </li>\n        ))}\n      </ul>\n      {items.length < total && <button id=\"load-more\" type=\"button\" onClick={loadMore}>Load more</button>}\n      {undo && (\n        <div id=\"undo-bar\">\n          <span>Deleted \"{undo.item.title}\"</span>\n          <button id=\"undo\" type=\"button\" onClick={undoDelete}>Undo</button>\n        </div>\n      )}\n      {toast && <div id=\"toast\" role=\"alert\">{toast}</div>}\n    </section>\n  );\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport './index.css';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "src/index.css",
+          "language": "css",
+          "code": "/* src/index.css (đã cho) */\nbody { font-family: system-ui, sans-serif; margin: 0; padding: 20px; background: #f8fafc; color: #0f172a; }\n.tabs button.active { background: #2563eb; color: #fff; }\n.todo { display: flex; gap: 8px; align-items: center; padding: 6px 0; border-bottom: 1px solid #e2e8f0; }\n.todo.done .title { text-decoration: line-through; color: #64748b; } .todo.pending { opacity: .55; }\n#toast { position: fixed; bottom: 16px; right: 16px; background: #b91c1c; color: #fff; padding: 8px 14px; border-radius: 8px; }\n#undo-bar { background: #1e293b; color: #fff; padding: 6px 12px; border-radius: 8px; display: inline-flex; gap: 10px; }\n#refreshing { font-size: 12px; color: #2563eb; margin-left: 8px; }\n"
+        },
+        {
+          "name": ".env",
+          "language": "text",
+          "code": "REACT_APP_API_URL=http://localhost:9999\n"
+        },
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — hai tab: rời tab Todos rồi quay lại ⇒ cache hiện ngay, làm mới chạy nền\nimport { useState } from 'react';\nimport TodosPage from './components/TodosPage';\n\nexport default function App() {\n  const [tab, setTab] = useState('todos');\n  return (\n    <main>\n      <h1>Team Todos</h1>\n      <nav className=\"tabs\">\n        <button id=\"tab-todos\" type=\"button\" className={tab === 'todos' ? 'active' : ''} onClick={() => setTab('todos')}>Todos</button>{' '}\n        <button id=\"tab-about\" type=\"button\" className={tab === 'about' ? 'active' : ''} onClick={() => setTab('about')}>About</button>\n      </nav>\n      {tab === 'todos' ? <TodosPage /> : <p id=\"about\">A tiny app to practise optimistic UI.</p>}\n    </main>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Mọi URL nằm sau một lớp <code>http</code> duy nhất nên đổi server, thêm token hay xử lý lỗi chỉ sửa một chỗ. Cập nhật lạc quan = sửa state ngay, gửi request, và nếu thất bại thì <b>khôi phục giá trị đã lưu</b> (không \"đảo lại\") rồi báo người dùng. Xoá có Undo trì hoãn request thật thay vì xoá rồi tạo lại. Cache cấp module cho phép hiện dữ liệu ngay khi component mount lại, còn effect làm mới chạy nền — đúng mô hình mà SWR/React Query tự động hoá.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://tanstack.com/query/latest/docs/framework/react/guides/optimistic-updates",
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "jsonServer": {
+          "base": "http://localhost:9999",
+          "db": {
+            "todos": [
+              {
+                "id": 1,
+                "title": "Task 1",
+                "done": true
+              },
+              {
+                "id": 2,
+                "title": "Task 2",
+                "done": false
+              },
+              {
+                "id": 3,
+                "title": "Task 3",
+                "done": false
+              },
+              {
+                "id": 4,
+                "title": "Task 4",
+                "done": false
+              },
+              {
+                "id": 5,
+                "title": "Task 5",
+                "done": true
+              },
+              {
+                "id": 6,
+                "title": "Task 6",
+                "done": false
+              },
+              {
+                "id": 7,
+                "title": "Task 7",
+                "done": false
+              },
+              {
+                "id": 8,
+                "title": "Task 8",
+                "done": false
+              },
+              {
+                "id": 9,
+                "title": "Task 9",
+                "done": true
+              },
+              {
+                "id": 10,
+                "title": "Task 10",
+                "done": false
+              },
+              {
+                "id": 11,
+                "title": "Task 11",
+                "done": false
+              },
+              {
+                "id": 12,
+                "title": "Task 12",
+                "done": false
+              }
+            ]
+          }
+        },
+        "kiem": [
+          {
+            "nhom": "f1",
+            "moTa": "Base URL from .env",
+            "kiem": "ma-nguon",
+            "tep": "src/api/http.js",
+            "khop": "process\\.env\\.REACT_APP_API_URL"
+          },
+          {
+            "nhom": "f1",
+            "moTa": "Bearer token header when a token is stored",
+            "kiem": "ma-nguon",
+            "tep": "src/api/http.js",
+            "khop": "Authorization\\s*=\\s*`?[`'\"]?Bearer"
+          },
+          {
+            "nhom": "f1",
+            "moTa": "ApiError carries the HTTP status",
+            "kiem": "ma-nguon",
+            "tep": "src/api/http.js",
+            "khop": "class\\s+ApiError\\s+extends\\s+Error[\\s\\S]*this\\.status\\s*="
+          },
+          {
+            "nhom": "f1",
+            "an": true,
+            "moTa": "Components do not build URLs themselves",
+            "kiem": "ma-nguon",
+            "tep": "src/components/TodosPage.js",
+            "khop": "fetch\\(|localhost:9999",
+            "phuDinh": true
+          },
+          {
+            "nhom": "f2",
+            "moTa": "First page: 5 newest of 12",
+            "kiem": "danh-sach-text",
+            "selector": "#count, .todo .title",
+            "mongDoi": [
+              "Showing 5 of 12",
+              "Task 12",
+              "Task 11",
+              "Task 10",
+              "Task 9",
+              "Task 8"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Load more appends the next page",
+            "kiem": "text",
+            "selector": "#count",
+            "giaTri": "Showing 10 of 12",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#load-more",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Load more disappears at the end",
+            "kiem": "khong-ton-tai",
+            "selector": "#load-more",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#load-more",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#load-more",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "an": true,
+            "moTa": "Server-side paging (_page & _limit)",
+            "kiem": "goi-fetch",
+            "khop": "/todos\\?.*_page=2.*_limit=5",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#load-more",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Toggle shows immediately (before the server answers)",
+            "jsonServer": {
+              "base": "http://localhost:9999",
+              "db": {
+                "todos": [
+                  {
+                    "id": 1,
+                    "title": "Task 1",
+                    "done": true
+                  },
+                  {
+                    "id": 2,
+                    "title": "Task 2",
+                    "done": false
+                  },
+                  {
+                    "id": 3,
+                    "title": "Task 3",
+                    "done": false
+                  },
+                  {
+                    "id": 4,
+                    "title": "Task 4",
+                    "done": false
+                  },
+                  {
+                    "id": 5,
+                    "title": "Task 5",
+                    "done": true
+                  },
+                  {
+                    "id": 6,
+                    "title": "Task 6",
+                    "done": false
+                  },
+                  {
+                    "id": 7,
+                    "title": "Task 7",
+                    "done": false
+                  },
+                  {
+                    "id": 8,
+                    "title": "Task 8",
+                    "done": false
+                  },
+                  {
+                    "id": 9,
+                    "title": "Task 9",
+                    "done": true
+                  },
+                  {
+                    "id": 10,
+                    "title": "Task 10",
+                    "done": false
+                  },
+                  {
+                    "id": 11,
+                    "title": "Task 11",
+                    "done": false
+                  },
+                  {
+                    "id": 12,
+                    "title": "Task 12",
+                    "done": false
+                  }
+                ]
+              },
+              "treMs": 800
+            },
+            "kiem": "ton-tai",
+            "selector": ".todo:nth-child(1).done",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 1100
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".todo:nth-child(1) .toggle",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 100
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Server receives the PATCH",
+            "kiem": "du-lieu-server",
+            "bang": "todos",
+            "chua": {
+              "id": 12,
+              "done": true
+            },
+            "chat": true,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".todo:nth-child(1) .toggle",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Failure rolls back and shows a toast",
+            "fetchGia": {
+              "PATCH http://localhost:9999/todos/12": {
+                "status": 500,
+                "text": "boom"
+              }
+            },
+            "kiem": "danh-sach-text",
+            "selector": ".todo.done .title, #toast",
+            "mongDoi": [
+              "Task 9",
+              "Could not update \"Task 12\""
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".todo:nth-child(1) .toggle",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "an": true,
+            "moTa": "Rolled-back checkbox is unchecked again",
+            "fetchGia": {
+              "PATCH http://localhost:9999/todos/12": {
+                "status": 500,
+                "text": "boom"
+              }
+            },
+            "kiem": "thuoc-tinh-js",
+            "selector": ".todo:nth-child(1) .toggle",
+            "thuocTinh": "checked",
+            "giaTri": false,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".todo:nth-child(1) .toggle",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "New todo appears at once as pending",
+            "jsonServer": {
+              "base": "http://localhost:9999",
+              "db": {
+                "todos": [
+                  {
+                    "id": 1,
+                    "title": "Task 1",
+                    "done": true
+                  },
+                  {
+                    "id": 2,
+                    "title": "Task 2",
+                    "done": false
+                  },
+                  {
+                    "id": 3,
+                    "title": "Task 3",
+                    "done": false
+                  },
+                  {
+                    "id": 4,
+                    "title": "Task 4",
+                    "done": false
+                  },
+                  {
+                    "id": 5,
+                    "title": "Task 5",
+                    "done": true
+                  },
+                  {
+                    "id": 6,
+                    "title": "Task 6",
+                    "done": false
+                  },
+                  {
+                    "id": 7,
+                    "title": "Task 7",
+                    "done": false
+                  },
+                  {
+                    "id": 8,
+                    "title": "Task 8",
+                    "done": false
+                  },
+                  {
+                    "id": 9,
+                    "title": "Task 9",
+                    "done": true
+                  },
+                  {
+                    "id": 10,
+                    "title": "Task 10",
+                    "done": false
+                  },
+                  {
+                    "id": 11,
+                    "title": "Task 11",
+                    "done": false
+                  },
+                  {
+                    "id": 12,
+                    "title": "Task 12",
+                    "done": false
+                  }
+                ]
+              },
+              "treMs": 800
+            },
+            "kiem": "danh-sach-text",
+            "selector": ".todo.pending .title, #count",
+            "mongDoi": [
+              "Showing 6 of 13",
+              "Write report"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 1100
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#new-title",
+                "giaTri": "Write report"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#new-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 100
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Replaced by the server record (no longer pending)",
+            "kiem": "danh-sach-text",
+            "selector": ".todo:nth-child(1) .title, .todo.pending",
+            "mongDoi": [
+              "Write report"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#new-title",
+                "giaTri": "Write report"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#new-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Saved on the server",
+            "kiem": "du-lieu-server",
+            "bang": "todos",
+            "chua": {
+              "id": 13,
+              "title": "Write report",
+              "done": false
+            },
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#new-title",
+                "giaTri": "Write report"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#new-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "an": true,
+            "moTa": "Failed create is removed with a toast",
+            "fetchGia": {
+              "POST http://localhost:9999/todos": {
+                "status": 500,
+                "text": "boom"
+              }
+            },
+            "kiem": "danh-sach-text",
+            "selector": "#count, #toast",
+            "mongDoi": [
+              "Showing 5 of 12",
+              "Could not add \"Write report\""
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#new-title",
+                "giaTri": "Write report"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#new-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Delete hides the row and offers Undo",
+            "kiem": "danh-sach-text",
+            "selector": "#undo-bar span, #count",
+            "mongDoi": [
+              "Showing 4 of 11",
+              "Deleted \"Task 12\""
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".todo:nth-child(1) .delete",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Undo restores the row and sends nothing",
+            "kiem": "goi-fetch",
+            "khop": "^DELETE",
+            "min": 0,
+            "max": 0,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".todo:nth-child(1) .delete",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#undo",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 1800
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Without Undo the server record is deleted after the delay",
+            "kiem": "du-lieu-server",
+            "bang": "todos",
+            "khongChua": {
+              "id": 12
+            },
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".todo:nth-child(1) .delete",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 1800
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "an": true,
+            "moTa": "Restored row goes back to its place",
+            "kiem": "danh-sach-text",
+            "selector": ".todo:nth-child(-n+2) .title",
+            "mongDoi": [
+              "Task 12",
+              "Task 11"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".todo:nth-child(1) .delete",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#undo",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Returning to the tab shows cached data immediately",
+            "jsonServer": {
+              "base": "http://localhost:9999",
+              "db": {
+                "todos": [
+                  {
+                    "id": 1,
+                    "title": "Task 1",
+                    "done": true
+                  },
+                  {
+                    "id": 2,
+                    "title": "Task 2",
+                    "done": false
+                  },
+                  {
+                    "id": 3,
+                    "title": "Task 3",
+                    "done": false
+                  },
+                  {
+                    "id": 4,
+                    "title": "Task 4",
+                    "done": false
+                  },
+                  {
+                    "id": 5,
+                    "title": "Task 5",
+                    "done": true
+                  },
+                  {
+                    "id": 6,
+                    "title": "Task 6",
+                    "done": false
+                  },
+                  {
+                    "id": 7,
+                    "title": "Task 7",
+                    "done": false
+                  },
+                  {
+                    "id": 8,
+                    "title": "Task 8",
+                    "done": false
+                  },
+                  {
+                    "id": 9,
+                    "title": "Task 9",
+                    "done": true
+                  },
+                  {
+                    "id": 10,
+                    "title": "Task 10",
+                    "done": false
+                  },
+                  {
+                    "id": 11,
+                    "title": "Task 11",
+                    "done": false
+                  },
+                  {
+                    "id": 12,
+                    "title": "Task 12",
+                    "done": false
+                  }
+                ]
+              },
+              "treMs": 800
+            },
+            "kiem": "danh-sach-text",
+            "selector": "#loading, #count",
+            "mongDoi": [
+              "Showing 5 of 12"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 1100
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#tab-about",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#tab-todos",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 50
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "moTa": "and revalidates in the background",
+            "jsonServer": {
+              "base": "http://localhost:9999",
+              "db": {
+                "todos": [
+                  {
+                    "id": 1,
+                    "title": "Task 1",
+                    "done": true
+                  },
+                  {
+                    "id": 2,
+                    "title": "Task 2",
+                    "done": false
+                  },
+                  {
+                    "id": 3,
+                    "title": "Task 3",
+                    "done": false
+                  },
+                  {
+                    "id": 4,
+                    "title": "Task 4",
+                    "done": false
+                  },
+                  {
+                    "id": 5,
+                    "title": "Task 5",
+                    "done": true
+                  },
+                  {
+                    "id": 6,
+                    "title": "Task 6",
+                    "done": false
+                  },
+                  {
+                    "id": 7,
+                    "title": "Task 7",
+                    "done": false
+                  },
+                  {
+                    "id": 8,
+                    "title": "Task 8",
+                    "done": false
+                  },
+                  {
+                    "id": 9,
+                    "title": "Task 9",
+                    "done": true
+                  },
+                  {
+                    "id": 10,
+                    "title": "Task 10",
+                    "done": false
+                  },
+                  {
+                    "id": 11,
+                    "title": "Task 11",
+                    "done": false
+                  },
+                  {
+                    "id": 12,
+                    "title": "Task 12",
+                    "done": false
+                  }
+                ]
+              },
+              "treMs": 800
+            },
+            "kiem": "ton-tai",
+            "selector": "#refreshing",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 1100
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#tab-about",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#tab-todos",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 50
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "an": true,
+            "moTa": "Background refresh keeps loaded pages",
+            "kiem": "text",
+            "selector": "#count",
+            "giaTri": "Showing 10 of 12",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#load-more",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#tab-about",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#tab-todos",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 400
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Load error message with the status",
+            "jsonServer": {
+              "base": "http://localhost:9999",
+              "db": {}
+            },
+            "kiem": "text",
+            "selector": "#load-error",
+            "giaTri": "Could not load todos (HTTP 404)",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Retry sends the request again",
+            "jsonServer": {
+              "base": "http://localhost:9999",
+              "db": {}
+            },
+            "kiem": "goi-fetch",
+            "khop": "^GET .*/todos",
+            "min": 2,
+            "max": 2,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#retry",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "an": true,
+            "moTa": "Loading state first",
+            "jsonServer": {
+              "base": "http://localhost:9999",
+              "db": {
+                "todos": [
+                  {
+                    "id": 1,
+                    "title": "Task 1",
+                    "done": true
+                  },
+                  {
+                    "id": 2,
+                    "title": "Task 2",
+                    "done": false
+                  },
+                  {
+                    "id": 3,
+                    "title": "Task 3",
+                    "done": false
+                  },
+                  {
+                    "id": 4,
+                    "title": "Task 4",
+                    "done": false
+                  },
+                  {
+                    "id": 5,
+                    "title": "Task 5",
+                    "done": true
+                  },
+                  {
+                    "id": 6,
+                    "title": "Task 6",
+                    "done": false
+                  },
+                  {
+                    "id": 7,
+                    "title": "Task 7",
+                    "done": false
+                  },
+                  {
+                    "id": 8,
+                    "title": "Task 8",
+                    "done": false
+                  },
+                  {
+                    "id": 9,
+                    "title": "Task 9",
+                    "done": true
+                  },
+                  {
+                    "id": 10,
+                    "title": "Task 10",
+                    "done": false
+                  },
+                  {
+                    "id": 11,
+                    "title": "Task 11",
+                    "done": false
+                  },
+                  {
+                    "id": 12,
+                    "title": "Task 12",
+                    "done": false
+                  }
+                ]
+              },
+              "treMs": 800
+            },
+            "kiem": "text",
+            "selector": "#loading",
+            "giaTri": "Loading todos…"
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. HTTP layer",
+            "diem": 1.5
+          },
+          {
+            "ma": "f2",
+            "ten": "2. Load more",
+            "diem": 1.5
+          },
+          {
+            "ma": "f3",
+            "ten": "3. Optimistic update",
+            "diem": 2
+          },
+          {
+            "ma": "f4",
+            "ten": "4. Optimistic create",
+            "diem": 1.5
+          },
+          {
+            "ma": "f5",
+            "ten": "5. Delete with Undo",
+            "diem": 1.5
+          },
+          {
+            "ma": "f6",
+            "ten": "6. Stale-while-revalidate",
+            "diem": 1
+          },
+          {
+            "ma": "f7",
+            "ten": "7. Load error & retry",
+            "diem": 1
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "deep-lab",
+      "mistakesJson": [
+        {
+          "loi": "Hoàn tác bằng cách đảo lại (<code>!done</code>) thay vì trả giá trị cũ ⇒ sai khi bấm hai lần liên tiếp."
+        },
+        {
+          "loi": "Dùng <code>items</code> từ closure trong catch ⇒ ghi đè mất các thay đổi khác xảy ra trong lúc chờ; dùng setState dạng hàm."
+        },
+        {
+          "loi": "Dòng tạm (pending) vẫn cho bấm Delete ⇒ gửi DELETE /todos/tmp-… lỗi 404."
+        },
+        {
+          "loi": "Ghi cache cả dòng pending ⇒ quay lại tab thấy dòng \"ma\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "optimistic UI",
+          "vi": "giao diện lạc quan: cập nhật trước, xác nhận với server sau"
+        },
+        {
+          "en": "rollback",
+          "vi": "hoàn tác về trạng thái trước khi lỗi"
+        },
+        {
+          "en": "stale-while-revalidate",
+          "vi": "hiện dữ liệu cũ ngay, lấy dữ liệu mới ở nền"
+        },
+        {
+          "en": "temporary id",
+          "vi": "id tạm cho bản ghi chưa được server tạo"
+        },
+        {
+          "en": "rubric",
+          "vi": "thang điểm theo tiêu chí"
+        }
+      ],
+      "demoHtml": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>Deep Lab 11 — Team Todos (HTTP layer · Load more · optimistic updates · Undo · SWR cache) — Live demo</title>\n<script src=\"https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js\" crossorigin=\"anonymous\"></script>\n\n</head><body><div id=\"root\"></div><script>(function(){\nvar M={\"src/api/http.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/api/http.js — MỘT lớp gọi HTTP cho cả app: base URL từ .env, token, lỗi có status, đọc tổng số\\nconst BASE = process.env.REACT_APP_API_URL || 'http://localhost:9999';\\n\\n class ApiError extends Error {\\n  constructor(status, message) {\\n    super(message);\\n    this.name = 'ApiError';\\n    this.status = status;\\n  }\\n} exports.ApiError = ApiError;\\n\\nasync function request(method, path, body) {\\n  const headers = { Accept: 'application/json' };\\n  const token = localStorage.getItem('token');\\n  if (token) headers.Authorization = `Bearer ${token}`;\\n  if (body !== undefined) headers['Content-Type'] = 'application/json';\\n\\n  const res = await fetch(BASE + path, { method, headers, body: body === undefined ? undefined : JSON.stringify(body) });\\n  if (!res.ok) throw new ApiError(res.status, `HTTP ${res.status}`);\\n  const totalHeader = res.headers && res.headers.get ? res.headers.get('X-Total-Count') : null;\\n  const data = res.status === 204 ? null : await res.json();\\n  return { data, total: totalHeader === null ? null : Number(totalHeader) };\\n}\\n\\n const http = {\\n  get: (path) => request('GET', path),\\n  post: (path, body) => request('POST', path, body),\\n  patch: (path, body) => request('PATCH', path, body),\\n  del: (path) => request('DELETE', path),\\n}; exports.http = http;\\n\",\"src/api/todos.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _nullishCoalesce(lhs, rhsFn) { if (lhs != null) { return lhs; } else { return rhsFn(); } }// src/api/todos.js — các lời gọi theo nghiệp vụ (component không tự dựng URL)\\nvar _http = require('./http');\\n\\n const PAGE_SIZE = 5; exports.PAGE_SIZE = PAGE_SIZE;\\n\\n async function fetchTodos(page, limit = exports.PAGE_SIZE) {\\n  const { data, total } = await _http.http.get(`/todos?_sort=id&_order=desc&_page=${page}&_limit=${limit}`);\\n  return { items: data, total: _nullishCoalesce(total, () => ( data.length)) };\\n} exports.fetchTodos = fetchTodos;\\n\\n const updateTodo = (id, patch) => _http.http.patch(`/todos/${id}`, patch).then((r) => r.data); exports.updateTodo = updateTodo;\\n const createTodo = (title) => _http.http.post('/todos', { title, done: false }).then((r) => r.data); exports.createTodo = createTodo;\\n const deleteTodo = (id) => _http.http.del(`/todos/${id}`); exports.deleteTodo = deleteTodo;\\n\",\"src/components/TodosPage.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _nullishCoalesce(lhs, rhsFn) { if (lhs != null) { return lhs; } else { return rhsFn(); } } function _optionalChain(ops) { let lastAccessLHS = undefined; let value = ops[0]; let i = 1; while (i \\u003c ops.length) { const op = ops[i]; const fn = ops[i + 1]; i += 2; if ((op === 'optionalAccess' || op === 'optionalCall') && value == null) { return undefined; } if (op === 'access' || op === 'optionalAccess') { lastAccessLHS = value; value = fn(value); } else if (op === 'call' || op === 'optionalCall') { value = fn((...args) => value.call(lastAccessLHS, ...args)); lastAccessLHS = undefined; } } return value; }// src/components/TodosPage.js — lạc quan + hoàn tác, Load more, Undo khi xoá, cache stale-while-revalidate\\nvar _react = require('react');\\nvar _todos = require('../api/todos');\\n\\nlet cache = null; // { items, total, page } — sống qua lần unmount/mount của trang (đổi tab)\\nconst UNDO_MS = 1500;\\n\\n function TodosPage() {\\n  const [items, setItems] = _react.useState.call(void 0, _nullishCoalesce(_optionalChain([cache, 'optionalAccess', _ => _.items]), () => ( [])));\\n  const [total, setTotal] = _react.useState.call(void 0, _nullishCoalesce(_optionalChain([cache, 'optionalAccess', _2 => _2.total]), () => ( 0)));\\n  const [page, setPage] = _react.useState.call(void 0, _nullishCoalesce(_optionalChain([cache, 'optionalAccess', _3 => _3.page]), () => ( 1)));\\n  const [status, setStatus] = _react.useState.call(void 0, cache ? 'ready' : 'loading');\\n  const [refreshing, setRefreshing] = _react.useState.call(void 0, Boolean(cache));\\n  const [error, setError] = _react.useState.call(void 0, null);\\n  const [toast, setToast] = _react.useState.call(void 0, null);\\n  const [title, setTitle] = _react.useState.call(void 0, '');\\n  const [undo, setUndo] = _react.useState.call(void 0, null); // { item, index, timer }\\n  const [reload, setReload] = _react.useState.call(void 0, 0);\\n  const pagesRef = _react.useRef.call(void 0, _nullishCoalesce(_optionalChain([cache, 'optionalAccess', _4 => _4.page]), () => ( 1)));\\n\\n  // tải lần đầu / làm mới nền (stale-while-revalidate): có cache thì hiện ngay rồi lấy lại đủ số trang đã xem\\n  _react.useEffect.call(void 0, () => {\\n    let ignore = false;\\n    const pages = pagesRef.current;\\n    _todos.fetchTodos.call(void 0, 1, pages * _todos.PAGE_SIZE)\\n      .then(({ items: fresh, total: t }) => {\\n        if (ignore) return;\\n        setItems(fresh);\\n        setTotal(t);\\n        setStatus('ready');\\n      })\\n      .catch((err) => {\\n        if (ignore) return;\\n        if (!cache) setStatus('error');\\n        setError(`Could not load todos (${err.message})`);\\n      })\\n      .finally(() => { if (!ignore) setRefreshing(false); });\\n    return () => { ignore = true; };\\n  }, [reload]);\\n\\n  // ghi cache (bỏ các dòng còn đang chờ server)\\n  _react.useEffect.call(void 0, () => {\\n    if (status === 'ready') cache = { items: items.filter((t) => !t.pending), total, page };\\n  }, [items, total, page, status]);\\n\\n  _react.useEffect.call(void 0, () => {\\n    if (!toast) return undefined;\\n    const id = setTimeout(() => setToast(null), 3000);\\n    return () => clearTimeout(id);\\n  }, [toast]);\\n\\n  const loadMore = async () => {\\n    const next = page + 1;\\n    const { items: more, total: t } = await _todos.fetchTodos.call(void 0, next);\\n    setItems((list) => [...list, ...more.filter((m) => !list.some((x) => x.id === m.id))]);\\n    setTotal(t);\\n    setPage(next);\\n    pagesRef.current = next;\\n  };\\n\\n  // SỬA lạc quan: đổi ngay, lỗi thì trả lại\\n  const toggle = async (todo) => {\\n    const nextDone = !todo.done;\\n    setItems((list) => list.map((t) => (t.id === todo.id ? { ...t, done: nextDone } : t)));\\n    try {\\n      await _todos.updateTodo.call(void 0, todo.id, { done: nextDone });\\n    } catch (e2) {\\n      setItems((list) => list.map((t) => (t.id === todo.id ? { ...t, done: todo.done } : t)));\\n      setToast(`Could not update \\\"${todo.title}\\\"`);\\n    }\\n  };\\n\\n  // THÊM lạc quan: id tạm, thay bằng bản ghi server; lỗi thì gỡ\\n  const add = async (e) => {\\n    e.preventDefault();\\n    const text = title.trim();\\n    if (!text) return;\\n    const tempId = `tmp-${Date.now()}`;\\n    setItems((list) => [{ id: tempId, title: text, done: false, pending: true }, ...list]);\\n    setTotal((t) => t + 1);\\n    setTitle('');\\n    try {\\n      const saved = await _todos.createTodo.call(void 0, text);\\n      setItems((list) => list.map((t) => (t.id === tempId ? saved : t)));\\n    } catch (e3) {\\n      setItems((list) => list.filter((t) => t.id !== tempId));\\n      setTotal((t) => t - 1);\\n      setToast(`Could not add \\\"${text}\\\"`);\\n    }\\n  };\\n\\n  // XOÁ có Undo: gỡ khỏi giao diện ngay, gửi DELETE sau UNDO_MS nếu không bị huỷ\\n  const remove = (todo) => {\\n    if (undo) clearTimeout(undo.timer);\\n    const index = items.findIndex((t) => t.id === todo.id);\\n    setItems((list) => list.filter((t) => t.id !== todo.id));\\n    setTotal((t) => t - 1);\\n    const timer = setTimeout(async () => {\\n      setUndo(null);\\n      try {\\n        await _todos.deleteTodo.call(void 0, todo.id);\\n      } catch (e4) {\\n        setItems((list) => [...list.slice(0, index), todo, ...list.slice(index)]);\\n        setTotal((t) => t + 1);\\n        setToast(`Could not delete \\\"${todo.title}\\\"`);\\n      }\\n    }, UNDO_MS);\\n    setUndo({ item: todo, index, timer });\\n  };\\n\\n  const undoDelete = () => {\\n    clearTimeout(undo.timer);\\n    setItems((list) => [...list.slice(0, undo.index), undo.item, ...list.slice(undo.index)]);\\n    setTotal((t) => t + 1);\\n    setUndo(null);\\n  };\\n\\n  if (status === 'loading') return _jsxruntime.jsx.call(void 0, 'p', { id: \\\"loading\\\", children: \\\"Loading todos…\\\" });\\n  if (status === 'error') {\\n    return (\\n      _jsxruntime.jsxs.call(void 0, 'div', { children: [\\n        _jsxruntime.jsx.call(void 0, 'p', { id: \\\"load-error\\\", children: error})\\n        , _jsxruntime.jsx.call(void 0, 'button', { id: \\\"retry\\\", type: \\\"button\\\", onClick: () => { setStatus('loading'); setReload((n) => n + 1); }, children: \\\"Retry\\\"})\\n      ]})\\n    );\\n  }\\n\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'section', { children: [\\n      _jsxruntime.jsxs.call(void 0, 'form', { id: \\\"new-form\\\", onSubmit: add, children: [\\n        _jsxruntime.jsx.call(void 0, 'input', { id: \\\"new-title\\\", value: title, onChange: (e) => setTitle(e.target.value), placeholder: \\\"New todo\\\" ,} )\\n        , _jsxruntime.jsx.call(void 0, 'button', { type: \\\"submit\\\", children: \\\"Add\\\"})\\n      ]})\\n      , _jsxruntime.jsxs.call(void 0, 'p', { children: [\\n        _jsxruntime.jsxs.call(void 0, 'span', { id: \\\"count\\\", children: [\\\"Showing \\\" , items.length, \\\" of \\\"  , total]})\\n        , refreshing && _jsxruntime.jsx.call(void 0, 'span', { id: \\\"refreshing\\\", children: \\\"Updating…\\\"})\\n      ]})\\n      , _jsxruntime.jsx.call(void 0, 'ul', { id: \\\"todos\\\", children: \\n        items.map((t) => (\\n          _jsxruntime.jsxs.call(void 0, 'li', { className: ['todo', t.done ? 'done' : '', t.pending ? 'pending' : ''].filter(Boolean).join(' '), children: [\\n            _jsxruntime.jsx.call(void 0, 'input', { type: \\\"checkbox\\\", className: \\\"toggle\\\", checked: t.done, disabled: t.pending, onChange: () => toggle(t),} )\\n            , _jsxruntime.jsx.call(void 0, 'span', { className: \\\"title\\\", children: t.title})\\n            , _jsxruntime.jsx.call(void 0, 'button', { type: \\\"button\\\", className: \\\"delete\\\", disabled: t.pending, onClick: () => remove(t), children: \\\"Delete\\\"})\\n          ]}, t.id)\\n        ))\\n      })\\n      , items.length \\u003c total && _jsxruntime.jsx.call(void 0, 'button', { id: \\\"load-more\\\", type: \\\"button\\\", onClick: loadMore, children: \\\"Load more\\\" })\\n      , undo && (\\n        _jsxruntime.jsxs.call(void 0, 'div', { id: \\\"undo-bar\\\", children: [\\n          _jsxruntime.jsxs.call(void 0, 'span', { children: [\\\"Deleted \\\\\\\"\\\" , undo.item.title, \\\"\\\\\\\"\\\"]})\\n          , _jsxruntime.jsx.call(void 0, 'button', { id: \\\"undo\\\", type: \\\"button\\\", onClick: undoDelete, children: \\\"Undo\\\"})\\n        ]})\\n      )\\n      , toast && _jsxruntime.jsx.call(void 0, 'div', { id: \\\"toast\\\", role: \\\"alert\\\", children: toast})\\n    ]})\\n  );\\n} exports.default = TodosPage;\\n\",\"src/index.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\"); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\\nvar _react = require('react'); var _react2 = _interopRequireDefault(_react);\\nvar _client = require('react-dom/client'); var _client2 = _interopRequireDefault(_client);\\nrequire('./index.css');\\nvar _App = require('./App'); var _App2 = _interopRequireDefault(_App);\\n\\nconst root = _client2.default.createRoot(document.getElementById('root'));\\nroot.render(\\n  _jsxruntime.jsx.call(void 0, _react2.default.StrictMode, { children: \\n    _jsxruntime.jsx.call(void 0, _App2.default, {} )\\n  })\\n);\\n\",\".env\":\"REACT_APP_API_URL=http://localhost:9999\\n\",\"src/App.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/App.js — hai tab: rời tab Todos rồi quay lại ⇒ cache hiện ngay, làm mới chạy nền\\nvar _react = require('react');\\nvar _TodosPage = require('./components/TodosPage'); var _TodosPage2 = _interopRequireDefault(_TodosPage);\\n\\n function App() {\\n  const [tab, setTab] = _react.useState.call(void 0, 'todos');\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'main', { children: [\\n      _jsxruntime.jsx.call(void 0, 'h1', { children: \\\"Team Todos\\\" })\\n      , _jsxruntime.jsxs.call(void 0, 'nav', { className: \\\"tabs\\\", children: [\\n        _jsxruntime.jsx.call(void 0, 'button', { id: \\\"tab-todos\\\", type: \\\"button\\\", className: tab === 'todos' ? 'active' : '', onClick: () => setTab('todos'), children: \\\"Todos\\\"}), ' '\\n        , _jsxruntime.jsx.call(void 0, 'button', { id: \\\"tab-about\\\", type: \\\"button\\\", className: tab === 'about' ? 'active' : '', onClick: () => setTab('about'), children: \\\"About\\\"})\\n      ]})\\n      , tab === 'todos' ? _jsxruntime.jsx.call(void 0, _TodosPage2.default, {} ) : _jsxruntime.jsx.call(void 0, 'p', { id: \\\"about\\\", children: \\\"A tiny app to practise optimistic UI.\\\"      })\\n    ]})\\n  );\\n} exports.default = App;\\n\"};var CSS={\"src/index.css\":\"/* src/index.css (đã cho) */\\nbody { font-family: system-ui, sans-serif; margin: 0; padding: 20px; background: #f8fafc; color: #0f172a; }\\n.tabs button.active { background: #2563eb; color: #fff; }\\n.todo { display: flex; gap: 8px; align-items: center; padding: 6px 0; border-bottom: 1px solid #e2e8f0; }\\n.todo.done .title { text-decoration: line-through; color: #64748b; } .todo.pending { opacity: .55; }\\n#toast { position: fixed; bottom: 16px; right: 16px; background: #b91c1c; color: #fff; padding: 8px 14px; border-radius: 8px; }\\n#undo-bar { background: #1e293b; color: #fff; padding: 6px 12px; border-radius: 8px; display: inline-flex; gap: 10px; }\\n#refreshing { font-size: 12px; color: #2563eb; margin-left: 8px; }\\n\"};var DB={\"todos\":[{\"id\":1,\"title\":\"Task 1\",\"done\":true},{\"id\":2,\"title\":\"Task 2\",\"done\":false},{\"id\":3,\"title\":\"Task 3\",\"done\":false},{\"id\":4,\"title\":\"Task 4\",\"done\":false},{\"id\":5,\"title\":\"Task 5\",\"done\":true},{\"id\":6,\"title\":\"Task 6\",\"done\":false},{\"id\":7,\"title\":\"Task 7\",\"done\":false},{\"id\":8,\"title\":\"Task 8\",\"done\":false},{\"id\":9,\"title\":\"Task 9\",\"done\":true},{\"id\":10,\"title\":\"Task 10\",\"done\":false},{\"id\":11,\"title\":\"Task 11\",\"done\":false},{\"id\":12,\"title\":\"Task 12\",\"done\":false}]};var BASE=\"http://localhost:9999\";var URL0=null;var THANH=false;\nfunction kho(){var m={};var k={getItem:function(x){x=String(x);return Object.prototype.hasOwnProperty.call(m,x)?m[x]:null},setItem:function(x,v){m[String(x)]=String(v)},removeItem:function(x){delete m[String(x)]},clear:function(){m={}},key:function(i){return Object.keys(m)[i]||null}};Object.defineProperty(k,'length',{get:function(){return Object.keys(m).length}});return k}\ntry{Object.defineProperty(window,'localStorage',{value:kho(),configurable:true})}catch(e){}\ntry{Object.defineProperty(window,'sessionStorage',{value:kho(),configurable:true})}catch(e){}\nwindow.confirm=function(){return true};window.alert=function(m){console.log('[alert]',m);var t=document.getElementById('cl-demo-alert');if(!t){t=document.createElement('div');t.id='cl-demo-alert';t.style.cssText='position:fixed;right:12px;bottom:12px;z-index:99999;max-width:320px;padding:10px 14px;border-radius:10px;background:#0f172a;color:#fff;font:13px system-ui;box-shadow:0 6px 24px rgba(0,0,0,.25)';document.body.appendChild(t)}t.textContent='alert: '+m;clearTimeout(t.__h);t.__h=setTimeout(function(){t.remove()},2600)};\nvar ENV={NODE_ENV:'production',MODE:'production',PROD:true,DEV:false,BASE_URL:'/'};\nString(M['.env']||'').split(/\\r?\\n/).forEach(function(d){var m=/^\\s*(?:export\\s+)?([A-Za-z_][A-Za-z0-9_]*)\\s*=\\s*(.*)\\s*$/.exec(d);if(m)ENV[m[1]]=m[2].replace(/^(['\"])(.*)\\1$/,'$2')});\nwindow.__CL_ENV__=ENV;if(!window.process)window.process={env:ENV};\n// json-server giả (bản sao domAgent.ts)\nvar jsDb=DB?JSON.parse(JSON.stringify(DB)):null;\nfunction tl(st,b){return new Response(b===undefined?'{}':JSON.stringify(b),{status:st,headers:{'content-type':'application/json'}})}\nfunction lay(o,k){return String(k).split('.').reduce(function(a,p){return a==null?undefined:a[p]},o)}\nfunction mot(t){return /ies$/.test(t)?t.slice(0,-3)+'y':t.replace(/s$/,'')}\nfunction xuLy(method,url,body){var u=new URL(url);var ph=u.pathname.replace(/^\\/+|\\/+$/g,'').split('/').filter(Boolean).map(decodeURIComponent);var ten=ph[0],id=ph[1];\nif(!ten||!(ten in jsDb))return tl(404,{});var bang=jsDb[ten];var dl=null;if(body!=null&&body!==''){try{dl=JSON.parse(body)}catch(e){return tl(400,{})}}\nif(!Array.isArray(bang)){if(method==='GET')return tl(200,bang);if(method==='PUT'||method==='POST'){jsDb[ten]=dl||{};return tl(200,jsDb[ten])}if(method==='PATCH'){jsDb[ten]=Object.assign({},bang,dl||{});return tl(200,jsDb[ten])}return tl(404,{})}\nvar vt=function(x){return bang.findIndex(function(r){return String(r.id)===String(x)})};\nvar mr=function(r){var o=Object.assign({},r);u.searchParams.getAll('_expand').forEach(function(e){var b=jsDb[e+'s']||jsDb[e];if(Array.isArray(b))o[e]=b.find(function(x){return String(x.id)===String(r[e+'Id'])})});u.searchParams.getAll('_embed').forEach(function(e){var b=jsDb[e];if(Array.isArray(b)){var k=mot(ten)+'Id';o[e]=b.filter(function(x){return String(x[k])===String(r.id)})}});return o};\nif(method==='GET'){if(id!=null){var i=vt(id);return i<0?tl(404,{}):tl(200,mr(bang[i]))}var ds=bang.slice();var loc={};u.searchParams.forEach(function(v,k){if(k.charAt(0)!=='_'&&k!=='q')(loc[k]=loc[k]||[]).push(v)});\nObject.keys(loc).forEach(function(k){var vs=loc[k],m=/^(.*)_(like|gte|lte|ne)$/.exec(k);ds=ds.filter(function(r){if(m){var gv=lay(r,m[1]);return vs.every(function(v){if(m[2]==='like')return new RegExp(v,'i').test(String(gv));if(m[2]==='ne')return String(gv)!==v;var a=Number(gv),b=Number(v);var so=!isNaN(a)&&!isNaN(b);return m[2]==='gte'?(so?a>=b:String(gv)>=v):(so?a<=b:String(gv)<=v)})}var g=lay(r,k);return vs.some(function(v){return String(g)===v})})});\nvar qq=u.searchParams.get('q');if(qq)ds=ds.filter(function(r){return JSON.stringify(r).toLowerCase().indexOf(qq.toLowerCase())>=0});\nvar sx=u.searchParams.get('_sort');if(sx){var tr=sx.split(','),th=(u.searchParams.get('_order')||'asc').split(',');ds.sort(function(a,b){for(var t=0;t<tr.length;t++){var f=tr[t].replace(/^-/,''),gi=tr[t].charAt(0)==='-'||(th[t]||th[0])==='desc';var x=lay(a,f),y=lay(b,f);var c=(typeof x==='number'&&typeof y==='number')?x-y:String(x).localeCompare(String(y));if(c)return gi?-c:c}return 0})}\nvar gh=u.searchParams.get('_limit'),pg=u.searchParams.get('_page');var tong=ds.length;if(pg){var n=Number(gh)||10;ds=ds.slice((Number(pg)-1)*n,Number(pg)*n)}else if(gh)ds=ds.slice(0,Number(gh));var rr=tl(200,ds.map(mr));try{rr.headers.set('X-Total-Count',String(tong))}catch(e){}return rr}\nif(method==='POST'){if(id!=null)return tl(404,{});var mo=Object.assign({},dl||{});if(mo.id==null){var so2=bang.length&&bang.every(function(r){return typeof r.id==='number'});mo.id=so2||!bang.length?bang.reduce(function(mx,r){return Math.max(mx,Number(r.id)||0)},0)+1:Math.random().toString(16).slice(2,6)}bang.push(mo);return tl(201,mo)}\nif(id==null)return tl(404,{});var j=vt(id);if(j<0)return tl(404,{});\nif(method==='PUT'){bang[j]=Object.assign({},dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='PATCH'){bang[j]=Object.assign({},bang[j],dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='DELETE'){bang.splice(j,1);return tl(200,{})}return tl(404,{})}\nif(jsDb){window.fetch=function(url,init){init=init||{};var s=String(url&&url.url?url.url:url);var me=String(init.method||'GET').toUpperCase();return new Promise(function(res){setTimeout(function(){if(s.indexOf(BASE+'/')!==0)return res(new Response('Not Found',{status:404}));try{res(xuLy(me,s,init.body))}catch(e){res(tl(500,{error:String(e)}))}},120)})}}\nfunction axiosGia(){function goi(method,url,data,cfg){cfg=cfg||{};var u=(cfg.baseURL||'')+url;if(cfg.params){var sp=new URLSearchParams(cfg.params).toString();if(sp)u+=(u.indexOf('?')>=0?'&':'?')+sp}var init={method:method.toUpperCase(),headers:Object.assign({'Content-Type':'application/json'},cfg.headers||{})};if(data!==undefined)init.body=typeof data==='string'?data:JSON.stringify(data);\nreturn window.fetch(u,init).then(function(res){return res.text().then(function(t){var d;try{d=JSON.parse(t)}catch(e){d=t}var hd={};try{res.headers.forEach(function(v,k){hd[k.toLowerCase()]=v})}catch(e){}var out={data:d,status:res.status,statusText:res.statusText,headers:hd,config:cfg};if(res.status>=200&&res.status<300)return out;var err=new Error('Request failed with status code '+res.status);err.response=out;err.name='AxiosError';throw err})})}\nfunction tao(base){var a=function(cfg){return goi(cfg.method||'get',cfg.url,cfg.data,Object.assign({},base,cfg))};['get','delete','head'].forEach(function(m){a[m]=function(url,cfg){return goi(m,url,undefined,Object.assign({},base,cfg))}});['post','put','patch'].forEach(function(m){a[m]=function(url,data,cfg){return goi(m,url,data,Object.assign({},base,cfg))}});a.create=function(c){return tao(Object.assign({},base,c))};a.defaults=base;a.interceptors={request:{use:function(){}},response:{use:function(){}}};a.isAxiosError=function(e){return!!(e&&e.name==='AxiosError')};return a}\nvar ax=tao({});ax.default=ax;return ax}\nvar R=window.React;var tach=function(p,k){var q=Object.assign({},p);var c=q.children;delete q.children;if(k!==undefined)q.key=k;return[q,c]};\nvar j=function(t,p,k){var x=tach(p,k);return x[1]===undefined?R.createElement(t,x[0]):R.createElement(t,x[0],x[1])};\nvar js=function(t,p,k){var x=tach(p,k);return R.createElement.apply(null,[t,x[0]].concat(x[1]||[]))};\n// React Router: MemoryRouter + thanh địa chỉ (gõ URL được — thử ?status=ACTIVE, /items/2…)\nvar viTri=null,routerBoc=null,dieuHuong=null;\nfunction datThanh(v){var o=document.getElementById('cl-demo-url');if(o&&document.activeElement!==o)o.value='http://localhost:3000'+v}\nfunction routerGia(){var RRD=window.ReactRouterDOM;if(!RRD)return null;if(routerBoc)return routerBoc;\nfunction Ghi(){var l=RRD.useLocation();var nav=RRD.useNavigate();dieuHuong=nav;viTri=l.pathname+l.search+l.hash;R.useEffect(function(){datThanh(viTri)});return null}\nfunction RG(p){var d=R.useState(function(){return[viTri||URL0||'/']})[0];return R.createElement(RRD.MemoryRouter,{initialEntries:d,basename:p.basename},R.createElement(Ghi),p.children)}\nfunction tr(routes,opts){var r=RRD.createMemoryRouter(routes,Object.assign({},opts||{},{initialEntries:[viTri||URL0||'/']}));var g=function(s){viTri=s.location.pathname+s.location.search+s.location.hash;datThanh(viTri)};g(r.state);r.subscribe(g);dieuHuong=function(to){r.navigate(to)};return r}\nrouterBoc=Object.assign({},RRD,{BrowserRouter:RG,HashRouter:RG,createBrowserRouter:tr,createHashRouter:tr});return routerBoc}\nvar thunk=function(api){return function(next){return function(a){return typeof a==='function'?a(api.dispatch,api.getState):next(a)}}};\nvar LIB={'react':R,'react-dom':window.ReactDOM,'react-dom/client':window.ReactDOM,'react/jsx-runtime':{jsx:j,jsxs:js,Fragment:R.Fragment},'react/jsx-dev-runtime':{jsxDEV:j,Fragment:R.Fragment},'prop-types':window.PropTypes,'react-bootstrap':window.ReactBootstrap,'@reduxjs/toolkit':window.RTK,'redux':window.RTK,'react-redux':window.ReactRedux,'redux-thunk':{'default':thunk,thunk:thunk}};\nvar C={};\nfunction dd(tu,s){var p=tu.split('/').slice(0,-1);s.split('/').forEach(function(x){if(x==='.'||x==='')return;if(x==='..')p.pop();else p.push(x)});return p.join('/')}\nfunction tim(p){var d=['','.js','.jsx','.ts','.tsx','.json','/index.js','/index.jsx'];for(var i=0;i<d.length;i++){if(M[p+d[i]]!=null||CSS[p+d[i]]!=null)return p+d[i]}return null}\nfunction req(tu,s){if(s==='axios')return axiosGia();if(s==='react-router-dom'||s==='react-router')return routerGia();if(LIB[s])return LIB[s];if(/\\.css$/.test(s)&&!/^\\./.test(s))return{};var p=tim(dd(tu,s));if(!p)throw new Error('Cannot find module '+s);return nap(p)}\nfunction nap(p){if(C[p])return C[p].exports;if(CSS[p]!=null){var st=document.createElement('style');st.textContent=CSS[p];document.head.appendChild(st);C[p]={exports:{}};return{}}var m={exports:{}};C[p]=m;if(/\\.json$/.test(p)){m.exports=JSON.parse(M[p]);return m.exports}new Function('require','module','exports',M[p])(function(s){return req(p,s)},m,m.exports);return m.exports}\nif(THANH){var bar=document.createElement('form');bar.style.cssText='position:sticky;top:0;z-index:99998;display:flex;gap:6px;align-items:center;padding:6px 10px;background:#e2e8f0;border-bottom:1px solid #cbd5e1;font:12px system-ui';bar.innerHTML='<span style=\"color:#475569\">URL</span><input id=\"cl-demo-url\" style=\"flex:1;padding:4px 8px;border:1px solid #cbd5e1;border-radius:6px;font:12px ui-monospace,monospace\" aria-label=\"Address bar\"><button style=\"padding:3px 10px;border-radius:6px;border:1px solid #94a3b8;background:#fff;cursor:pointer\">Go</button>';\nbar.addEventListener('submit',function(e){e.preventDefault();var v=document.getElementById('cl-demo-url').value.replace(/^https?:\\/\\/[^/]+/,'')||'/';if(dieuHuong)dieuHuong(v)});document.body.insertBefore(bar,document.body.firstChild);datThanh(URL0||'/')}\nnap(\"src/index.js\");\n})();</script></body></html>"
+    }
+  ]
+}

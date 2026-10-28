@@ -1,0 +1,904 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-12-deep-issue-tracker",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-12-1-redux-toolkit"
+  },
+  "exercises": [
+    {
+      "title": "Deep Lab 12 — Issue Tracker (createEntityAdapter · createSelector · optimistic thunk · listener middleware)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 140,
+      "points": 100,
+      "concepts": [
+        "normalised state",
+        "createEntityAdapter",
+        "memoised selectors & joins",
+        "optimistic thunks",
+        "action.meta.arg",
+        "createListenerMiddleware",
+        "side effects outside reducers"
+      ],
+      "prerequisites": [
+        "Lab 12 — Redux bookstore",
+        "12.2 Thunk & middleware"
+      ],
+      "tags": [
+        "fer202",
+        "deep-lab",
+        "redux",
+        "redux-toolkit"
+      ],
+      "problemHtml": "<h1>DEEP LAB 12: Issue Tracker — Redux Toolkit in depth</h1>\n<p class=\"bi-phu\">FER202 · Chapter 12 (deep) · Suggested time: 140 minutes · Total: 10 marks</p>\n<h2>1. Overview</h2>\n<p>A three-column issue board (To do · In progress · Done) built the way large Redux apps are built: <b>normalised</b> data with <code>createEntityAdapter</code>, <b>memoised selectors</b> that join users and group issues into columns, an <b>optimistic</b> \"move\" thunk that rolls back from <code>meta.arg</code> when the server fails, and side effects — an activity log and saving filters — handled by <code>createListenerMiddleware</code> instead of components or reducers.</p>\n<h3>Main features</h3>\n<ul>\n  <li>Entity adapters · board columns · optimistic move with rollback · filters + memoised selectors · listener activity log · persisted filters · error state.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>Slices: <code>issues</code>, <code>users</code> (both entity adapters), <code>filters</code>, <code>activity</code>. Given: <code>src/app/api.js</code>.</li>\n  <li>No side effects in reducers; components only read selectors and dispatch.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>src/\n├── app/\n│   ├── api.js               # (given)\n│   ├── store.js             # configureStore + listener middleware\n│   └── selectors.js         # selectVisibleIssues · selectColumns\n├── features/\n│   ├── issues/issuesSlice.js     # adapter · fetchIssues · moveIssue\n│   ├── users/usersSlice.js       # adapter · fetchUsers\n│   ├── filters/filtersSlice.js   # assigneeChanged · textChanged · filtersCleared\n│   └── activity/activitySlice.js # activityAdded\n├── App.js\n└── index.css (given)</pre>\n<h2>3. UI wireframe</h2>\n<pre class=\"bi-wire\">+----------------------------------------------------------------------+\n| CT Issues  5 issues                                                   |\n| [Everyone v] [Search      ] [Clear]                                   |\n| +- To do (2) ------+ +- In progress (2) --+ +- Done (1) ---------+    |\n| | CT-1 Login page  | | CT-2 Fix 500 …     | | CT-4 Deploy …      |    |\n| | An   [→ In prog.]| | Binh   [→ Done]    | | An                 |    |\n| | CT-3 Write tests | | CT-5 Review PR     | +--------------------+    |\n| +------------------+ +--------------------+                           |\n| • CT-1: todo → doing                                     (#activity)  |\n+----------------------------------------------------------------------+</pre>\n<h2>4. Data model</h2>\n<p><b>State shape</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>issues</code></td><td>{ ids, entities, status, error }</td><td>sorted by priority, then id</td></tr><tr><td><code>users</code></td><td>{ ids, entities }</td><td></td></tr><tr><td><code>filters</code></td><td>{ assigneeId: 'all' | '1'…, text }</td><td>localStorage \"filters\"</td></tr><tr><td><code>activity</code></td><td>string[]</td><td>newest first, max 5</td></tr></tbody></table>\n<h3>Sample data</h3>\n<pre>{\n \"issues\": [\n  {\n   \"id\": 1,\n   \"key\": \"CT-1\",\n   \"title\": \"Login page\",\n   \"status\": \"todo\",\n   \"assigneeId\": 1,\n   \"priority\": 2\n  },\n  {\n   \"id\": 2,\n   \"key\": \"CT-2\",\n   \"title\": \"Fix 500 on save\",\n   \"status\": \"doing\",\n   \"assigneeId\": 2,\n   \"priority\": 1\n  },\n  {\n   \"id\": 3,\n   \"key\": \"CT-3\",\n   \"title\": \"Write tests\",\n   \"status\": \"todo\",\n   \"assigneeId\": 3,\n   \"priority\": 3\n  },\n  {\n   \"id\": 4,\n   \"key\": \"CT-4\",\n   \"title\": \"Deploy staging\",\n   \"status\": \"done\",\n   \"assigneeId\": 1,\n   \"priority\": 2\n  },\n  {\n   \"id\": 5,\n   \"key\": \"CT-5\",\n   \"title\": \"Review PR\",\n   \"status\": \"doing\",\n   \"assigneeId\": 1,\n   \"priority\": 2\n  }\n ],\n \"users\": [\n  {\n   \"id\": 1,\n   \"name\": \"An\"\n  },\n  {\n   \"id\": 2,\n   \"name\": \"Binh\"\n  },\n  {\n   \"id\": 3,\n   \"name\": \"Cuong\"\n  }\n ]\n}</pre>\n<h2>5. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. Normalised store <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>createEntityAdapter({ sortComparer })</code> for issues (priority, then id) and users; <code>fetchIssues</code>/<code>fetchUsers</code> thunks; <code>#loading</code>; <code>#total</code> <code>5 issues</code> via <code>selectTotal</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>2. Board columns <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>section.column[data-status]</code> × 3 with <code>h2</code> <code>To do (2)</code>; cards <code>.card[data-key]</code> with <code>.key</code>, <code>.title</code>, <code>.assignee</code> (name joined from users), <code>.move-next</code> (not in Done).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>3. Optimistic move <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>moveIssue({ id, from, to })</code>: <code>pending</code> moves the card at once, <code>fulfilled</code> upserts the server copy, <code>rejected</code> restores <code>from</code> (read from <code>action.meta.arg</code>) and sets <code>#error</code> <code>Could not move CT-1</code>.</li>\n</ul>\n<p><b>Example:</b></p>\n<pre>PATCH answers 500 ⇒ CT-1 goes back to To do and the error shows</pre>\n</div>\n<div class=\"bi-cn\"><h3>4. Filters &amp; memoised selectors <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>#filter-assignee</code> (Everyone / user), <code>#filter-text</code> (title or key), <code>#clear-filters</code>; <code>selectVisibleIssues</code> and <code>selectColumns</code> built with <code>createSelector</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. Activity log via listener <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>A listener on <code>moveIssue.fulfilled</code> dispatches <code>activityAdded(\"CT-1: todo → doing\")</code>; <code>#activity li</code> newest first; failures log nothing.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>6. Persisted filters via listener <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>A listener matching the three filter actions writes <code>filters</code> to localStorage; the slice's initial state reads it back (corrupted ⇒ defaults).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>7. Error state <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>#load-error</code> <code>Could not load issues (HTTP 404)</code>.</li>\n</ul>\n</div>\n<h2>6. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>#loading · #load-error · #total · #error</code></td><td>status</td></tr><tr><td><code>#filter-assignee · #filter-text · #clear-filters</code></td><td>filters</td></tr><tr><td><code>.column[data-status] h2 · .card[data-key] .key .title .assignee .move-next</code></td><td>board</td></tr><tr><td><code>#activity li</code></td><td>activity</td></tr></tbody></table>\n<h2>7. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>Normalised store</td><td>1.5</td></tr><tr><td>2</td><td>Board columns</td><td>1.5</td></tr><tr><td>3</td><td>Optimistic move</td><td>2</td></tr><tr><td>4</td><td>Filters &amp; memoised selectors</td><td>1.5</td></tr><tr><td>5</td><td>Activity log via listener</td><td>1.5</td></tr><tr><td>6</td><td>Persisted filters via listener</td><td>1</td></tr><tr><td>7</td><td>Error state</td><td>1</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Storing issues as a nested array per column — moving a card means editing two arrays.</li>\n  <li>Filtering inside <code>useSelector</code> without memoisation — new arrays every render.</li>\n  <li>Writing localStorage or dispatching from a reducer.</li>\n  <li>Rollback that guesses the old status instead of reading <code>meta.arg</code>.</li>\n</ul>\n<h2>8. Submission</h2>\n<p>Work directly in the editor (files on the right) or download the starter, run it locally with Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> when the paper uses an API) and paste the files back. Press <b>Run</b> for the sample checks and <b>Submit</b> for full grading (hidden checks included).</p>",
+      "problemHtmlVi": "<h1>DEEP LAB 12: Theo dõi công việc — Redux Toolkit chuyên sâu</h1>\n<p class=\"bi-phu\">FER202 · Chương 12 (chuyên sâu) · Thời gian gợi ý: 140 phút · Tổng: 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p>Bảng công việc ba cột (To do · In progress · Done) dựng theo cách các ứng dụng Redux lớn làm: dữ liệu <b>chuẩn hoá</b> bằng <code>createEntityAdapter</code>, <b>selector có ghi nhớ</b> nối tên người và nhóm công việc theo cột, thunk \"chuyển cột\" <b>lạc quan</b> hoàn tác từ <code>meta.arg</code> khi server lỗi, và tác dụng phụ — nhật ký hoạt động, lưu bộ lọc — do <code>createListenerMiddleware</code> lo thay vì component hay reducer.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>Entity adapter · cột bảng · chuyển cột lạc quan có hoàn tác · bộ lọc + selector ghi nhớ · nhật ký qua listener · lưu bộ lọc · trạng thái lỗi.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Slice: <code>issues</code>, <code>users</code> (đều dùng entity adapter), <code>filters</code>, <code>activity</code>. Có sẵn: <code>src/app/api.js</code>.</li>\n  <li>Không có tác dụng phụ trong reducer; component chỉ đọc selector và dispatch.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>src/\n├── app/\n│   ├── api.js               # (given)\n│   ├── store.js             # configureStore + listener middleware\n│   └── selectors.js         # selectVisibleIssues · selectColumns\n├── features/\n│   ├── issues/issuesSlice.js     # adapter · fetchIssues · moveIssue\n│   ├── users/usersSlice.js       # adapter · fetchUsers\n│   ├── filters/filtersSlice.js   # assigneeChanged · textChanged · filtersCleared\n│   └── activity/activitySlice.js # activityAdded\n├── App.js\n└── index.css (given)</pre>\n<h2>3. Wireframe giao diện</h2>\n<pre class=\"bi-wire\">+----------------------------------------------------------------------+\n| CT Issues  5 issues                                                   |\n| [Everyone v] [Search      ] [Clear]                                   |\n| +- To do (2) ------+ +- In progress (2) --+ +- Done (1) ---------+    |\n| | CT-1 Login page  | | CT-2 Fix 500 …     | | CT-4 Deploy …      |    |\n| | An   [→ In prog.]| | Binh   [→ Done]    | | An                 |    |\n| | CT-3 Write tests | | CT-5 Review PR     | +--------------------+    |\n| +------------------+ +--------------------+                           |\n| • CT-1: todo → doing                                     (#activity)  |\n+----------------------------------------------------------------------+</pre>\n<h2>4. Mô hình dữ liệu</h2>\n<p><b>State shape</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>issues</code></td><td>{ ids, entities, status, error }</td><td>sắp theo priority rồi id</td></tr><tr><td><code>users</code></td><td>{ ids, entities }</td><td></td></tr><tr><td><code>filters</code></td><td>{ assigneeId: 'all' | '1'…, text }</td><td>localStorage \"filters\"</td></tr><tr><td><code>activity</code></td><td>string[]</td><td>mới nhất trước, tối đa 5</td></tr></tbody></table>\n<h3>Dữ liệu mẫu</h3>\n<pre>{\n \"issues\": [\n  {\n   \"id\": 1,\n   \"key\": \"CT-1\",\n   \"title\": \"Login page\",\n   \"status\": \"todo\",\n   \"assigneeId\": 1,\n   \"priority\": 2\n  },\n  {\n   \"id\": 2,\n   \"key\": \"CT-2\",\n   \"title\": \"Fix 500 on save\",\n   \"status\": \"doing\",\n   \"assigneeId\": 2,\n   \"priority\": 1\n  },\n  {\n   \"id\": 3,\n   \"key\": \"CT-3\",\n   \"title\": \"Write tests\",\n   \"status\": \"todo\",\n   \"assigneeId\": 3,\n   \"priority\": 3\n  },\n  {\n   \"id\": 4,\n   \"key\": \"CT-4\",\n   \"title\": \"Deploy staging\",\n   \"status\": \"done\",\n   \"assigneeId\": 1,\n   \"priority\": 2\n  },\n  {\n   \"id\": 5,\n   \"key\": \"CT-5\",\n   \"title\": \"Review PR\",\n   \"status\": \"doing\",\n   \"assigneeId\": 1,\n   \"priority\": 2\n  }\n ],\n \"users\": [\n  {\n   \"id\": 1,\n   \"name\": \"An\"\n  },\n  {\n   \"id\": 2,\n   \"name\": \"Binh\"\n  },\n  {\n   \"id\": 3,\n   \"name\": \"Cuong\"\n  }\n ]\n}</pre>\n<h2>5. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. Store chuẩn hoá <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>createEntityAdapter({ sortComparer })</code> cho issues (priority, rồi id) và users; thunk <code>fetchIssues</code>/<code>fetchUsers</code>; <code>#loading</code>; <code>#total</code> <code>5 issues</code> qua <code>selectTotal</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>2. Các cột <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>section.column[data-status]</code> × 3 có <code>h2</code> <code>To do (2)</code>; thẻ <code>.card[data-key]</code> có <code>.key</code>, <code>.title</code>, <code>.assignee</code> (tên nối từ users), <code>.move-next</code> (không có ở Done).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>3. Chuyển cột lạc quan <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>moveIssue({ id, from, to })</code>: <code>pending</code> chuyển thẻ ngay, <code>fulfilled</code> upsert bản server, <code>rejected</code> trả về <code>from</code> (đọc từ <code>action.meta.arg</code>) và đặt <code>#error</code> <code>Could not move CT-1</code>.</li>\n</ul>\n<p><b>Ví dụ:</b></p>\n<pre>PATCH trả 500 ⇒ CT-1 quay lại To do và hiện lỗi</pre>\n</div>\n<div class=\"bi-cn\"><h3>4. Bộ lọc &amp; selector ghi nhớ <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>#filter-assignee</code> (Everyone / người), <code>#filter-text</code> (tiêu đề hoặc key), <code>#clear-filters</code>; <code>selectVisibleIssues</code> và <code>selectColumns</code> dựng bằng <code>createSelector</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. Nhật ký qua listener <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Listener trên <code>moveIssue.fulfilled</code> dispatch <code>activityAdded(\"CT-1: todo → doing\")</code>; <code>#activity li</code> mới nhất trước; lỗi thì không ghi.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>6. Lưu bộ lọc qua listener <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Listener khớp ba action bộ lọc ghi <code>filters</code> vào localStorage; initialState của slice đọc lại (hỏng ⇒ mặc định).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>7. Trạng thái lỗi <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>#load-error</code> <code>Could not load issues (HTTP 404)</code>.</li>\n</ul>\n</div>\n<h2>6. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>#loading · #load-error · #total · #error</code></td><td>trạng thái</td></tr><tr><td><code>#filter-assignee · #filter-text · #clear-filters</code></td><td>bộ lọc</td></tr><tr><td><code>.column[data-status] h2 · .card[data-key] .key .title .assignee .move-next</code></td><td>bảng</td></tr><tr><td><code>#activity li</code></td><td>nhật ký</td></tr></tbody></table>\n<h2>7. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>Store chuẩn hoá</td><td>1.5</td></tr><tr><td>2</td><td>Các cột</td><td>1.5</td></tr><tr><td>3</td><td>Chuyển cột lạc quan</td><td>2</td></tr><tr><td>4</td><td>Bộ lọc &amp; selector ghi nhớ</td><td>1.5</td></tr><tr><td>5</td><td>Nhật ký qua listener</td><td>1.5</td></tr><tr><td>6</td><td>Lưu bộ lọc qua listener</td><td>1</td></tr><tr><td>7</td><td>Trạng thái lỗi</td><td>1</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Lưu issue thành mảng lồng theo cột — chuyển thẻ phải sửa hai mảng.</li>\n  <li>Lọc trong <code>useSelector</code> không ghi nhớ — mảng mới mỗi lần render.</li>\n  <li>Ghi localStorage hay dispatch trong reducer.</li>\n  <li>Hoàn tác bằng cách đoán trạng thái cũ thay vì đọc <code>meta.arg</code>.</li>\n</ul>\n<h2>8. Nộp bài</h2>\n<p>Làm thẳng trong editor (các tệp bên phải) hoặc tải starter, chạy trên máy bằng Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> khi đề dùng API) rồi dán lại tệp. Bấm <b>Chạy thử</b> để chạy kiểm mẫu, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn).</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "Slices: <code>issues</code>, <code>users</code> (both entity adapters), <code>filters</code>, <code>activity</code>. Given: <code>src/app/api.js</code>.|||Slice: <code>issues</code>, <code>users</code> (đều dùng entity adapter), <code>filters</code>, <code>activity</code>. Có sẵn: <code>src/app/api.js</code>.\nNo side effects in reducers; components only read selectors and dispatch.|||Không có tác dụng phụ trong reducer; component chỉ đọc selector và dispatch.",
+      "examplesJson": [
+        {
+          "input": "Optimistic move|||Chuyển cột lạc quan",
+          "output": "PATCH answers 500 ⇒ CT-1 goes back to To do and the error shows|||PATCH trả 500 ⇒ CT-1 quay lại To do và hiện lỗi",
+          "explanation": "See the brief / Xem đề."
+        }
+      ],
+      "hintsJson": [
+        "const adapter = createEntityAdapter({ sortComparer: (a, b) => a.priority - b.priority || a.id - b.id }); initialState: adapter.getInitialState({ status: \"idle\", error: null }).",
+        "moveIssue.pending: adapter.updateOne(state, { id, changes: { status: to } }); rejected: changes: { status: action.meta.arg.from }.",
+        "selectColumns = createSelector([selectVisibleIssues], (issues) => STATUSES.map(s => ({ ...s, issues: issues.filter(i => i.status === s.id) }))).",
+        "listener.startListening({ actionCreator: moveIssue.fulfilled, effect: (action, api) => api.dispatch(activityAdded(…)) }); middleware: getDefault().prepend(listener.middleware)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER: mảng lồng trong một slice, lọc trong component, cập nhật chờ server\nimport { useEffect, useState } from 'react';\n\nexport default function App() {\n  const [issues, setIssues] = useState([]);\n  useEffect(() => {\n    fetch('http://localhost:9999/issues').then((r) => r.json()).then(setIssues);\n  }, []);\n  return (\n    <main>\n      <h1>CT Issues</h1>\n      {issues.map((i) => <div key={i.id} className=\"card\"><span className=\"key\">{i.key}</span></div>)}\n    </main>\n  );\n}\n"
+        },
+        {
+          "name": "src/app/store.js",
+          "language": "javascript",
+          "code": "// src/app/store.js — STARTER\nimport { configureStore } from '@reduxjs/toolkit';\n\nexport const store = configureStore({ reducer: { placeholder: (s = {}) => s } });\n"
+        },
+        {
+          "name": "src/app/selectors.js",
+          "language": "javascript",
+          "code": "// src/app/selectors.js — STARTER: selectVisibleIssues · selectColumns (createSelector)\nexport {};\n"
+        },
+        {
+          "name": "src/features/issues/issuesSlice.js",
+          "language": "javascript",
+          "code": "// src/features/issues/issuesSlice.js — STARTER\n// createEntityAdapter({ sortComparer }) · fetchIssues · moveIssue (lạc quan + hoàn tác) · selectors\nexport default function reducer(state = {}) {\n  return state;\n}\n"
+        },
+        {
+          "name": "src/features/users/usersSlice.js",
+          "language": "javascript",
+          "code": "// src/features/users/usersSlice.js — STARTER\n// createEntityAdapter · fetchUsers · selectAllUsers · selectUserEntities\nexport default function reducer(state = {}) {\n  return state;\n}\n"
+        },
+        {
+          "name": "src/features/filters/filtersSlice.js",
+          "language": "javascript",
+          "code": "// src/features/filters/filtersSlice.js — STARTER\n// assigneeChanged · textChanged · filtersCleared · initialState từ localStorage \"filters\"\nexport default function reducer(state = {}) {\n  return state;\n}\n"
+        },
+        {
+          "name": "src/features/activity/activitySlice.js",
+          "language": "javascript",
+          "code": "// src/features/activity/activitySlice.js — STARTER\n// activityAdded (mới nhất trước, tối đa 5)\nexport default function reducer(state = {}) {\n  return state;\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { Provider } from 'react-redux';\nimport { store } from './app/store';\nimport './index.css';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <Provider store={store}>\n        <App />\n      </Provider>\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "src/index.css",
+          "language": "css",
+          "code": "/* src/index.css (đã cho) */\nbody { font-family: system-ui, sans-serif; margin: 0; padding: 20px; background: #f1f5f9; color: #0f172a; }\n.filters { display: flex; gap: 8px; margin-bottom: 12px; }\n.board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }\n.column { background: #e2e8f0; border-radius: 10px; padding: 10px; } .column h2 { font-size: 15px; margin: 0 0 8px; }\n.card { background: #fff; border-radius: 8px; padding: 8px; margin-bottom: 8px; box-shadow: 0 1px 2px rgba(0,0,0,.08); }\n.card .key { font-weight: 700; margin-right: 6px; } .card .assignee { color: #475569; font-size: 13px; display: block; }\n#error { color: #b91c1c; } #activity { font-size: 13px; color: #334155; }\n"
+        },
+        {
+          "name": "src/app/api.js",
+          "language": "javascript",
+          "code": "// src/app/api.js (đã cho)\nconst BASE = 'http://localhost:9999';\nasync function call(path, options) {\n  const res = await fetch(BASE + path, options);\n  if (!res.ok) throw new Error(`HTTP ${res.status}`);\n  return res.json();\n}\nexport const api = {\n  issues: () => call('/issues'),\n  users: () => call('/users'),\n  patchIssue: (id, patch) => call(`/issues/${id}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(patch) }),\n};\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — bảng 3 cột đọc từ selector; nút chuyển trạng thái dispatch thunk lạc quan\nimport { useEffect } from 'react';\nimport { useDispatch, useSelector } from 'react-redux';\nimport { NEXT, fetchIssues, moveIssue, selectIssueCount } from './features/issues/issuesSlice';\nimport { fetchUsers, selectAllUsers } from './features/users/usersSlice';\nimport { assigneeChanged, filtersCleared, textChanged } from './features/filters/filtersSlice';\nimport { STATUSES, selectColumns } from './app/selectors';\n\nconst LABEL = Object.fromEntries(STATUSES.map((s) => [s.id, s.label]));\n\nfunction Card({ issue }) {\n  const dispatch = useDispatch();\n  const to = NEXT[issue.status];\n  return (\n    <div className=\"card\" data-key={issue.key}>\n      <span className=\"key\">{issue.key}</span>\n      <span className=\"title\">{issue.title}</span>\n      <span className=\"assignee\">{issue.assigneeName}</span>\n      {to && (\n        <button type=\"button\" className=\"move-next\" onClick={() => dispatch(moveIssue({ id: issue.id, from: issue.status, to }))}>\n          → {LABEL[to]}\n        </button>\n      )}\n    </div>\n  );\n}\n\nexport default function App() {\n  const dispatch = useDispatch();\n  const columns = useSelector(selectColumns);\n  const total = useSelector(selectIssueCount);\n  const users = useSelector(selectAllUsers);\n  const filters = useSelector((s) => s.filters);\n  const { status, error } = useSelector((s) => s.issues);\n  const activity = useSelector((s) => s.activity);\n\n  useEffect(() => {\n    dispatch(fetchUsers());\n    dispatch(fetchIssues());\n  }, [dispatch]);\n\n  if (status === 'loading' || status === 'idle') return <p id=\"loading\">Loading issues…</p>;\n  if (status === 'failed') return <p id=\"load-error\">Could not load issues ({error})</p>;\n\n  return (\n    <main>\n      <h1>CT Issues <small id=\"total\">{total} issues</small></h1>\n      <div className=\"filters\">\n        <select id=\"filter-assignee\" value={filters.assigneeId} onChange={(e) => dispatch(assigneeChanged(e.target.value))}>\n          <option value=\"all\">Everyone</option>\n          {users.map((u) => <option key={u.id} value={String(u.id)}>{u.name}</option>)}\n        </select>\n        <input id=\"filter-text\" value={filters.text} onChange={(e) => dispatch(textChanged(e.target.value))} placeholder=\"Search\" />\n        <button id=\"clear-filters\" type=\"button\" onClick={() => dispatch(filtersCleared())}>Clear</button>\n      </div>\n      {error && <p id=\"error\">{error}</p>}\n      <div className=\"board\">\n        {columns.map((col) => (\n          <section key={col.id} className=\"column\" data-status={col.id}>\n            <h2>{col.label} ({col.issues.length})</h2>\n            {col.issues.map((i) => <Card key={i.id} issue={i} />)}\n          </section>\n        ))}\n      </div>\n      <ul id=\"activity\">{activity.map((a, idx) => <li key={idx + a}>{a}</li>)}</ul>\n    </main>\n  );\n}\n"
+        },
+        {
+          "name": "src/app/store.js",
+          "language": "javascript",
+          "code": "// src/app/store.js — listener middleware cho tác dụng phụ: nhật ký hoạt động + lưu bộ lọc\nimport { configureStore, createListenerMiddleware, isAnyOf } from '@reduxjs/toolkit';\nimport issuesReducer, { moveIssue } from '../features/issues/issuesSlice';\nimport usersReducer from '../features/users/usersSlice';\nimport filtersReducer, { assigneeChanged, filtersCleared, textChanged } from '../features/filters/filtersSlice';\nimport activityReducer, { activityAdded } from '../features/activity/activitySlice';\n\nconst listener = createListenerMiddleware();\n\n// chuyển trạng thái thành công ⇒ ghi nhật ký\nlistener.startListening({\n  actionCreator: moveIssue.fulfilled,\n  effect: (action, api) => {\n    const { from, to } = action.meta.arg;\n    api.dispatch(activityAdded(`${action.payload.key}: ${from} → ${to}`));\n  },\n});\n\n// đổi bộ lọc ⇒ lưu localStorage (tác dụng phụ KHÔNG nằm trong reducer)\nlistener.startListening({\n  matcher: isAnyOf(assigneeChanged, textChanged, filtersCleared),\n  effect: (_action, api) => {\n    localStorage.setItem('filters', JSON.stringify(api.getState().filters));\n  },\n});\n\nexport const store = configureStore({\n  reducer: { issues: issuesReducer, users: usersReducer, filters: filtersReducer, activity: activityReducer },\n  middleware: (getDefault) => getDefault().prepend(listener.middleware),\n});\n"
+        },
+        {
+          "name": "src/app/selectors.js",
+          "language": "javascript",
+          "code": "// src/app/selectors.js — selector có ghi nhớ: lọc + nối tên người + nhóm theo cột\nimport { createSelector } from '@reduxjs/toolkit';\nimport { selectAllIssues } from '../features/issues/issuesSlice';\nimport { selectUserEntities } from '../features/users/usersSlice';\n\nconst selectFilters = (state) => state.filters;\n\nexport const selectVisibleIssues = createSelector([selectAllIssues, selectUserEntities, selectFilters], (issues, users, f) => {\n  const text = f.text.trim().toLowerCase();\n  return issues\n    .filter((i) => f.assigneeId === 'all' || String(i.assigneeId) === String(f.assigneeId))\n    .filter((i) => !text || i.title.toLowerCase().includes(text) || i.key.toLowerCase().includes(text))\n    .map((i) => ({ ...i, assigneeName: users[i.assigneeId]?.name ?? 'Unassigned' }));\n});\n\nexport const STATUSES = [\n  { id: 'todo', label: 'To do' },\n  { id: 'doing', label: 'In progress' },\n  { id: 'done', label: 'Done' },\n];\n\nexport const selectColumns = createSelector([selectVisibleIssues], (issues) =>\n  STATUSES.map((s) => ({ ...s, issues: issues.filter((i) => i.status === s.id) })),\n);\n"
+        },
+        {
+          "name": "src/features/issues/issuesSlice.js",
+          "language": "javascript",
+          "code": "// src/features/issues/issuesSlice.js — entity adapter + thunk cập nhật lạc quan\nimport { createAsyncThunk, createEntityAdapter, createSlice } from '@reduxjs/toolkit';\nimport { api } from '../../app/api';\n\nexport const NEXT = { todo: 'doing', doing: 'done' };\n\nconst adapter = createEntityAdapter({\n  // thứ tự ổn định: ưu tiên cao (số nhỏ) trước, rồi theo id\n  sortComparer: (a, b) => a.priority - b.priority || a.id - b.id,\n});\n\nexport const fetchIssues = createAsyncThunk('issues/fetch', () => api.issues());\n\n// arg = { id, from, to }: pending đổi ngay, rejected trả về \"from\"\nexport const moveIssue = createAsyncThunk('issues/move', ({ id, to }) => api.patchIssue(id, { status: to }));\n\nconst issuesSlice = createSlice({\n  name: 'issues',\n  initialState: adapter.getInitialState({ status: 'idle', error: null }),\n  reducers: {},\n  extraReducers: (builder) => {\n    builder\n      .addCase(fetchIssues.pending, (state) => { state.status = 'loading'; })\n      .addCase(fetchIssues.fulfilled, (state, action) => {\n        state.status = 'succeeded';\n        adapter.setAll(state, action.payload);\n      })\n      .addCase(fetchIssues.rejected, (state, action) => {\n        state.status = 'failed';\n        state.error = action.error.message;\n      })\n      .addCase(moveIssue.pending, (state, action) => {\n        const { id, to } = action.meta.arg;\n        adapter.updateOne(state, { id, changes: { status: to } }); // lạc quan\n        state.error = null;\n      })\n      .addCase(moveIssue.fulfilled, (state, action) => {\n        adapter.upsertOne(state, action.payload);\n      })\n      .addCase(moveIssue.rejected, (state, action) => {\n        const { id, from } = action.meta.arg;\n        adapter.updateOne(state, { id, changes: { status: from } }); // hoàn tác\n        state.error = `Could not move ${state.entities[id]?.key}`;\n      });\n  },\n});\n\nexport const { selectAll: selectAllIssues, selectById: selectIssueById, selectTotal: selectIssueCount } =\n  adapter.getSelectors((state) => state.issues);\n\nexport default issuesSlice.reducer;\n"
+        },
+        {
+          "name": "src/features/users/usersSlice.js",
+          "language": "javascript",
+          "code": "// src/features/users/usersSlice.js — người dùng cũng chuẩn hoá bằng adapter\nimport { createAsyncThunk, createEntityAdapter, createSlice } from '@reduxjs/toolkit';\nimport { api } from '../../app/api';\n\nconst adapter = createEntityAdapter();\n\nexport const fetchUsers = createAsyncThunk('users/fetch', () => api.users());\n\nconst usersSlice = createSlice({\n  name: 'users',\n  initialState: adapter.getInitialState(),\n  reducers: {},\n  extraReducers: (builder) => {\n    builder.addCase(fetchUsers.fulfilled, (state, action) => {\n      adapter.setAll(state, action.payload);\n    });\n  },\n});\n\nexport const { selectAll: selectAllUsers, selectEntities: selectUserEntities } = adapter.getSelectors((state) => state.users);\nexport default usersSlice.reducer;\n"
+        },
+        {
+          "name": "src/features/filters/filtersSlice.js",
+          "language": "javascript",
+          "code": "// src/features/filters/filtersSlice.js — bộ lọc (khôi phục từ localStorage khi khởi động)\nimport { createSlice } from '@reduxjs/toolkit';\n\nexport const DEFAULT_FILTERS = { assigneeId: 'all', text: '' };\n\nexport function loadFilters() {\n  try {\n    const saved = JSON.parse(localStorage.getItem('filters'));\n    return saved && typeof saved === 'object' ? { ...DEFAULT_FILTERS, ...saved } : DEFAULT_FILTERS;\n  } catch {\n    return DEFAULT_FILTERS;\n  }\n}\n\nconst filtersSlice = createSlice({\n  name: 'filters',\n  initialState: loadFilters,\n  reducers: {\n    assigneeChanged(state, action) { state.assigneeId = action.payload; },\n    textChanged(state, action) { state.text = action.payload; },\n    filtersCleared() { return DEFAULT_FILTERS; },\n  },\n});\n\nexport const { assigneeChanged, textChanged, filtersCleared } = filtersSlice.actions;\nexport default filtersSlice.reducer;\n"
+        },
+        {
+          "name": "src/features/activity/activitySlice.js",
+          "language": "javascript",
+          "code": "// src/features/activity/activitySlice.js — nhật ký (do listener ghi, không phải component)\nimport { createSlice } from '@reduxjs/toolkit';\n\nconst activitySlice = createSlice({\n  name: 'activity',\n  initialState: [],\n  reducers: {\n    activityAdded(state, action) {\n      state.unshift(action.payload);\n      if (state.length > 5) state.pop();\n    },\n  },\n});\n\nexport const { activityAdded } = activitySlice.actions;\nexport default activitySlice.reducer;\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { Provider } from 'react-redux';\nimport { store } from './app/store';\nimport './index.css';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <Provider store={store}>\n        <App />\n      </Provider>\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "src/index.css",
+          "language": "css",
+          "code": "/* src/index.css (đã cho) */\nbody { font-family: system-ui, sans-serif; margin: 0; padding: 20px; background: #f1f5f9; color: #0f172a; }\n.filters { display: flex; gap: 8px; margin-bottom: 12px; }\n.board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }\n.column { background: #e2e8f0; border-radius: 10px; padding: 10px; } .column h2 { font-size: 15px; margin: 0 0 8px; }\n.card { background: #fff; border-radius: 8px; padding: 8px; margin-bottom: 8px; box-shadow: 0 1px 2px rgba(0,0,0,.08); }\n.card .key { font-weight: 700; margin-right: 6px; } .card .assignee { color: #475569; font-size: 13px; display: block; }\n#error { color: #b91c1c; } #activity { font-size: 13px; color: #334155; }\n"
+        },
+        {
+          "name": "src/app/api.js",
+          "language": "javascript",
+          "code": "// src/app/api.js (đã cho)\nconst BASE = 'http://localhost:9999';\nasync function call(path, options) {\n  const res = await fetch(BASE + path, options);\n  if (!res.ok) throw new Error(`HTTP ${res.status}`);\n  return res.json();\n}\nexport const api = {\n  issues: () => call('/issues'),\n  users: () => call('/users'),\n  patchIssue: (id, patch) => call(`/issues/${id}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(patch) }),\n};\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Chuẩn hoá biến danh sách thành <code>{ ids, entities }</code>: chuyển cột chỉ là <code>updateOne</code> một bản ghi, cột được TÍNH bằng selector nên không bao giờ lệch. <code>createSelector</code> ghi nhớ kết quả lọc/nối nên component chỉ vẽ lại khi dữ liệu thật đổi. Thunk lạc quan dùng <code>meta.arg</code> — có trong cả ba action vòng đời — để biết trạng thái cũ mà hoàn tác. Listener middleware là chỗ chuẩn cho \"khi X xảy ra thì làm Y\": nhật ký và lưu bộ lọc không làm bẩn reducer hay component.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://redux-toolkit.js.org/api/createListenerMiddleware",
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "thuVien": [
+          "@reduxjs/toolkit",
+          "react-redux"
+        ],
+        "jsonServer": {
+          "base": "http://localhost:9999",
+          "db": {
+            "issues": [
+              {
+                "id": 1,
+                "key": "CT-1",
+                "title": "Login page",
+                "status": "todo",
+                "assigneeId": 1,
+                "priority": 2
+              },
+              {
+                "id": 2,
+                "key": "CT-2",
+                "title": "Fix 500 on save",
+                "status": "doing",
+                "assigneeId": 2,
+                "priority": 1
+              },
+              {
+                "id": 3,
+                "key": "CT-3",
+                "title": "Write tests",
+                "status": "todo",
+                "assigneeId": 3,
+                "priority": 3
+              },
+              {
+                "id": 4,
+                "key": "CT-4",
+                "title": "Deploy staging",
+                "status": "done",
+                "assigneeId": 1,
+                "priority": 2
+              },
+              {
+                "id": 5,
+                "key": "CT-5",
+                "title": "Review PR",
+                "status": "doing",
+                "assigneeId": 1,
+                "priority": 2
+              }
+            ],
+            "users": [
+              {
+                "id": 1,
+                "name": "An"
+              },
+              {
+                "id": 2,
+                "name": "Binh"
+              },
+              {
+                "id": 3,
+                "name": "Cuong"
+              }
+            ]
+          }
+        },
+        "kiem": [
+          {
+            "nhom": "f1",
+            "moTa": "Issues load into the store",
+            "kiem": "text",
+            "selector": "#total",
+            "giaTri": "5 issues",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f1",
+            "moTa": "Loading state first",
+            "jsonServer": {
+              "base": "http://localhost:9999",
+              "db": {
+                "issues": [
+                  {
+                    "id": 1,
+                    "key": "CT-1",
+                    "title": "Login page",
+                    "status": "todo",
+                    "assigneeId": 1,
+                    "priority": 2
+                  },
+                  {
+                    "id": 2,
+                    "key": "CT-2",
+                    "title": "Fix 500 on save",
+                    "status": "doing",
+                    "assigneeId": 2,
+                    "priority": 1
+                  },
+                  {
+                    "id": 3,
+                    "key": "CT-3",
+                    "title": "Write tests",
+                    "status": "todo",
+                    "assigneeId": 3,
+                    "priority": 3
+                  },
+                  {
+                    "id": 4,
+                    "key": "CT-4",
+                    "title": "Deploy staging",
+                    "status": "done",
+                    "assigneeId": 1,
+                    "priority": 2
+                  },
+                  {
+                    "id": 5,
+                    "key": "CT-5",
+                    "title": "Review PR",
+                    "status": "doing",
+                    "assigneeId": 1,
+                    "priority": 2
+                  }
+                ],
+                "users": [
+                  {
+                    "id": 1,
+                    "name": "An"
+                  },
+                  {
+                    "id": 2,
+                    "name": "Binh"
+                  },
+                  {
+                    "id": 3,
+                    "name": "Cuong"
+                  }
+                ]
+              },
+              "treMs": 900
+            },
+            "kiem": "text",
+            "selector": "#loading",
+            "giaTri": "Loading issues…"
+          },
+          {
+            "nhom": "f1",
+            "an": true,
+            "moTa": "createEntityAdapter with a sortComparer",
+            "kiem": "ma-nguon",
+            "tep": "src/features/issues/issuesSlice.js",
+            "khop": "createEntityAdapter\\(\\s*\\{[\\s\\S]*sortComparer"
+          },
+          {
+            "nhom": "f1",
+            "an": true,
+            "moTa": "Adapter selectors exported",
+            "kiem": "ma-nguon",
+            "tep": "src/features/issues/issuesSlice.js",
+            "khop": "getSelectors\\("
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Three columns with counts",
+            "kiem": "danh-sach-text",
+            "selector": ".column h2",
+            "mongDoi": [
+              "To do (2)",
+              "In progress (2)",
+              "Done (1)"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Cards sorted by priority within a column",
+            "kiem": "danh-sach-text",
+            "selector": ".column[data-status=\"doing\"] .card .key",
+            "mongDoi": [
+              "CT-2",
+              "CT-5"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Assignee names joined from users",
+            "kiem": "danh-sach-text",
+            "selector": ".column[data-status=\"todo\"] .assignee",
+            "mongDoi": [
+              "An",
+              "Cuong"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "an": true,
+            "moTa": "Done cards have no move button",
+            "kiem": "khong-ton-tai",
+            "selector": ".column[data-status=\"done\"] .move-next",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Move is optimistic (card jumps before the server answers)",
+            "jsonServer": {
+              "base": "http://localhost:9999",
+              "db": {
+                "issues": [
+                  {
+                    "id": 1,
+                    "key": "CT-1",
+                    "title": "Login page",
+                    "status": "todo",
+                    "assigneeId": 1,
+                    "priority": 2
+                  },
+                  {
+                    "id": 2,
+                    "key": "CT-2",
+                    "title": "Fix 500 on save",
+                    "status": "doing",
+                    "assigneeId": 2,
+                    "priority": 1
+                  },
+                  {
+                    "id": 3,
+                    "key": "CT-3",
+                    "title": "Write tests",
+                    "status": "todo",
+                    "assigneeId": 3,
+                    "priority": 3
+                  },
+                  {
+                    "id": 4,
+                    "key": "CT-4",
+                    "title": "Deploy staging",
+                    "status": "done",
+                    "assigneeId": 1,
+                    "priority": 2
+                  },
+                  {
+                    "id": 5,
+                    "key": "CT-5",
+                    "title": "Review PR",
+                    "status": "doing",
+                    "assigneeId": 1,
+                    "priority": 2
+                  }
+                ],
+                "users": [
+                  {
+                    "id": 1,
+                    "name": "An"
+                  },
+                  {
+                    "id": 2,
+                    "name": "Binh"
+                  },
+                  {
+                    "id": 3,
+                    "name": "Cuong"
+                  }
+                ]
+              },
+              "treMs": 700
+            },
+            "kiem": "danh-sach-text",
+            "selector": ".column[data-status=\"doing\"] .card .key",
+            "mongDoi": [
+              "CT-2",
+              "CT-1",
+              "CT-5"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 1000
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".card[data-key=\"CT-1\"] .move-next",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 100
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Server updated",
+            "kiem": "du-lieu-server",
+            "bang": "issues",
+            "chua": {
+              "id": 1,
+              "status": "doing"
+            },
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".card[data-key=\"CT-1\"] .move-next",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Failure rolls the card back with an error",
+            "fetchGia": {
+              "PATCH http://localhost:9999/issues/1": {
+                "status": 500,
+                "text": "boom"
+              }
+            },
+            "kiem": "danh-sach-text",
+            "selector": "#error, .column[data-status=\"todo\"] .card .key",
+            "mongDoi": [
+              "Could not move CT-1",
+              "CT-1",
+              "CT-3"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".card[data-key=\"CT-1\"] .move-next",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "an": true,
+            "moTa": "Rollback uses meta.arg in the rejected case",
+            "kiem": "ma-nguon",
+            "tep": "src/features/issues/issuesSlice.js",
+            "khop": "moveIssue\\.rejected[\\s\\S]*meta\\.arg"
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Filter by assignee",
+            "kiem": "danh-sach-text",
+            "selector": ".card .key",
+            "mongDoi": [
+              "CT-1",
+              "CT-5",
+              "CT-4"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#filter-assignee",
+                "giaTri": "1"
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Search by text",
+            "kiem": "danh-sach-text",
+            "selector": ".card .key",
+            "mongDoi": [
+              "CT-3"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#filter-text",
+                "giaTri": "test"
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Column counts follow the filter",
+            "kiem": "danh-sach-text",
+            "selector": ".column h2",
+            "mongDoi": [
+              "To do (1)",
+              "In progress (1)",
+              "Done (1)"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#filter-assignee",
+                "giaTri": "1"
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "an": true,
+            "moTa": "createSelector used for visible issues",
+            "kiem": "ma-nguon",
+            "tep": "src/app/selectors.js",
+            "khop": "createSelector\\("
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Successful move logs an activity entry",
+            "kiem": "danh-sach-text",
+            "selector": "#activity li",
+            "mongDoi": [
+              "CT-1: todo → doing"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".card[data-key=\"CT-1\"] .move-next",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Newest entry first",
+            "kiem": "danh-sach-text",
+            "selector": "#activity li",
+            "mongDoi": [
+              "CT-1: doing → done",
+              "CT-1: todo → doing"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".card[data-key=\"CT-1\"] .move-next",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".card[data-key=\"CT-1\"] .move-next",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "an": true,
+            "moTa": "Failed move logs nothing",
+            "fetchGia": {
+              "PATCH http://localhost:9999/issues/1": {
+                "status": 500,
+                "text": "boom"
+              }
+            },
+            "kiem": "so-luong",
+            "selector": "#activity li",
+            "giaTri": 0,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".card[data-key=\"CT-1\"] .move-next",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "an": true,
+            "moTa": "Uses createListenerMiddleware",
+            "kiem": "ma-nguon",
+            "tep": "src/app/store.js",
+            "khop": "createListenerMiddleware\\(\\)[\\s\\S]*startListening"
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Filters saved to localStorage",
+            "kiem": "kho-cuc-bo",
+            "khoa": "filters",
+            "khop": "^\\{\"assigneeId\":\"2\",\"text\":\"\"\\}$",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#filter-assignee",
+                "giaTri": "2"
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Filters restored after reload",
+            "kiem": "danh-sach-text",
+            "selector": ".card .key",
+            "mongDoi": [
+              "CT-2"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#filter-assignee",
+                "giaTri": "2"
+              },
+              {
+                "hanhDong": "tai-lai"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "an": true,
+            "moTa": "Clear resets and saves the defaults",
+            "kiem": "kho-cuc-bo",
+            "khoa": "filters",
+            "khop": "^\\{\"assigneeId\":\"all\",\"text\":\"\"\\}$",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#filter-text",
+                "giaTri": "x"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#clear-filters",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "an": true,
+            "moTa": "No localStorage writes inside reducers",
+            "kiem": "ma-nguon",
+            "tep": "src/features/filters/filtersSlice.js",
+            "khop": "localStorage\\.setItem",
+            "phuDinh": true
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Load error",
+            "jsonServer": {
+              "base": "http://localhost:9999",
+              "db": {
+                "users": [
+                  {
+                    "id": 1,
+                    "name": "An"
+                  },
+                  {
+                    "id": 2,
+                    "name": "Binh"
+                  },
+                  {
+                    "id": 3,
+                    "name": "Cuong"
+                  }
+                ]
+              }
+            },
+            "kiem": "text",
+            "selector": "#load-error",
+            "giaTri": "Could not load issues (HTTP 404)",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. Normalised store",
+            "diem": 1.5
+          },
+          {
+            "ma": "f2",
+            "ten": "2. Board columns",
+            "diem": 1.5
+          },
+          {
+            "ma": "f3",
+            "ten": "3. Optimistic move",
+            "diem": 2
+          },
+          {
+            "ma": "f4",
+            "ten": "4. Filters & memoised selectors",
+            "diem": 1.5
+          },
+          {
+            "ma": "f5",
+            "ten": "5. Activity log via listener",
+            "diem": 1.5
+          },
+          {
+            "ma": "f6",
+            "ten": "6. Persisted filters via listener",
+            "diem": 1
+          },
+          {
+            "ma": "f7",
+            "ten": "7. Error state",
+            "diem": 1
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "deep-lab",
+      "mistakesJson": [
+        {
+          "loi": "Gọi <code>adapter.getSelectors()</code> không truyền hàm chọn nhánh ⇒ selector nhận cả state gốc và trả rỗng."
+        },
+        {
+          "loi": "Thêm <code>useSelector(state =&gt; state.issues.ids.map(...))</code> ⇒ mảng mới mỗi lần, cảnh báo của react-redux."
+        },
+        {
+          "loi": "Ghi nhật ký trong component sau <code>await dispatch(...)</code> ⇒ dễ quên trường hợp lỗi, nhân đôi khi nhiều nơi gọi."
+        },
+        {
+          "loi": "Dùng <code>concat(listener.middleware)</code> cũng được, nhưng thứ tự với thunk/serializable check nên có chủ đích."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "normalisation",
+          "vi": "chuẩn hoá: lưu mỗi bản ghi một lần, tra theo id"
+        },
+        {
+          "en": "entity adapter",
+          "vi": "bộ hàm có sẵn quản lý { ids, entities }"
+        },
+        {
+          "en": "listener middleware",
+          "vi": "middleware chạy hiệu ứng khi gặp action phù hợp"
+        },
+        {
+          "en": "meta.arg",
+          "vi": "đối số gốc của thunk, có trong cả pending/fulfilled/rejected"
+        },
+        {
+          "en": "rubric",
+          "vi": "thang điểm theo tiêu chí"
+        },
+        {
+          "en": "persist",
+          "vi": "lưu bền — còn sau khi tải lại trang"
+        }
+      ],
+      "demoHtml": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>Deep Lab 12 — Issue Tracker (createEntityAdapter · createSelector · optimistic thunk · listener middleware) — Live demo</title>\n<script src=\"https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/@reduxjs/toolkit@1.9.7/dist/redux-toolkit.umd.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-redux@8.1.3/dist/react-redux.min.js\" crossorigin=\"anonymous\"></script>\n\n</head><body><div id=\"root\"></div><script>(function(){\nvar M={\"src/App.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/App.js — bảng 3 cột đọc từ selector; nút chuyển trạng thái dispatch thunk lạc quan\\nvar _react = require('react');\\nvar _reactredux = require('react-redux');\\nvar _issuesSlice = require('./features/issues/issuesSlice');\\nvar _usersSlice = require('./features/users/usersSlice');\\nvar _filtersSlice = require('./features/filters/filtersSlice');\\nvar _selectors = require('./app/selectors');\\n\\nconst LABEL = Object.fromEntries(_selectors.STATUSES.map((s) => [s.id, s.label]));\\n\\nfunction Card({ issue }) {\\n  const dispatch = _reactredux.useDispatch.call(void 0, );\\n  const to = _issuesSlice.NEXT[issue.status];\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"card\\\", 'data-key': issue.key, children: [\\n      _jsxruntime.jsx.call(void 0, 'span', { className: \\\"key\\\", children: issue.key})\\n      , _jsxruntime.jsx.call(void 0, 'span', { className: \\\"title\\\", children: issue.title})\\n      , _jsxruntime.jsx.call(void 0, 'span', { className: \\\"assignee\\\", children: issue.assigneeName})\\n      , to && (\\n        _jsxruntime.jsxs.call(void 0, 'button', { type: \\\"button\\\", className: \\\"move-next\\\", onClick: () => dispatch(_issuesSlice.moveIssue.call(void 0, { id: issue.id, from: issue.status, to })), children: [\\\"→ \\\"\\n           , LABEL[to]\\n        ]})\\n      )\\n    ]})\\n  );\\n}\\n\\n function App() {\\n  const dispatch = _reactredux.useDispatch.call(void 0, );\\n  const columns = _reactredux.useSelector.call(void 0, _selectors.selectColumns);\\n  const total = _reactredux.useSelector.call(void 0, _issuesSlice.selectIssueCount);\\n  const users = _reactredux.useSelector.call(void 0, _usersSlice.selectAllUsers);\\n  const filters = _reactredux.useSelector.call(void 0, (s) => s.filters);\\n  const { status, error } = _reactredux.useSelector.call(void 0, (s) => s.issues);\\n  const activity = _reactredux.useSelector.call(void 0, (s) => s.activity);\\n\\n  _react.useEffect.call(void 0, () => {\\n    dispatch(_usersSlice.fetchUsers.call(void 0, ));\\n    dispatch(_issuesSlice.fetchIssues.call(void 0, ));\\n  }, [dispatch]);\\n\\n  if (status === 'loading' || status === 'idle') return _jsxruntime.jsx.call(void 0, 'p', { id: \\\"loading\\\", children: \\\"Loading issues…\\\" });\\n  if (status === 'failed') return _jsxruntime.jsxs.call(void 0, 'p', { id: \\\"load-error\\\", children: [\\\"Could not load issues (\\\"    , error, \\\")\\\"]});\\n\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'main', { children: [\\n      _jsxruntime.jsxs.call(void 0, 'h1', { children: [\\\"CT Issues \\\"  , _jsxruntime.jsxs.call(void 0, 'small', { id: \\\"total\\\", children: [total, \\\" issues\\\" ]})]})\\n      , _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"filters\\\", children: [\\n        _jsxruntime.jsxs.call(void 0, 'select', { id: \\\"filter-assignee\\\", value: filters.assigneeId, onChange: (e) => dispatch(_filtersSlice.assigneeChanged.call(void 0, e.target.value)), children: [\\n          _jsxruntime.jsx.call(void 0, 'option', { value: \\\"all\\\", children: \\\"Everyone\\\"})\\n          , users.map((u) => _jsxruntime.jsx.call(void 0, 'option', { value: String(u.id), children: u.name}, u.id))\\n        ]})\\n        , _jsxruntime.jsx.call(void 0, 'input', { id: \\\"filter-text\\\", value: filters.text, onChange: (e) => dispatch(_filtersSlice.textChanged.call(void 0, e.target.value)), placeholder: \\\"Search\\\",} )\\n        , _jsxruntime.jsx.call(void 0, 'button', { id: \\\"clear-filters\\\", type: \\\"button\\\", onClick: () => dispatch(_filtersSlice.filtersCleared.call(void 0, )), children: \\\"Clear\\\"})\\n      ]})\\n      , error && _jsxruntime.jsx.call(void 0, 'p', { id: \\\"error\\\", children: error})\\n      , _jsxruntime.jsx.call(void 0, 'div', { className: \\\"board\\\", children: \\n        columns.map((col) => (\\n          _jsxruntime.jsxs.call(void 0, 'section', { className: \\\"column\\\", 'data-status': col.id, children: [\\n            _jsxruntime.jsxs.call(void 0, 'h2', { children: [col.label, \\\" (\\\" , col.issues.length, \\\")\\\"]})\\n            , col.issues.map((i) => _jsxruntime.jsx.call(void 0, Card, { issue: i,}, i.id ))\\n          ]}, col.id)\\n        ))\\n      })\\n      , _jsxruntime.jsx.call(void 0, 'ul', { id: \\\"activity\\\", children: activity.map((a, idx) => _jsxruntime.jsx.call(void 0, 'li', { children: a}, idx + a))})\\n    ]})\\n  );\\n} exports.default = App;\\n\",\"src/app/store.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/app/store.js — listener middleware cho tác dụng phụ: nhật ký hoạt động + lưu bộ lọc\\nvar _toolkit = require('@reduxjs/toolkit');\\nvar _issuesSlice = require('../features/issues/issuesSlice'); var _issuesSlice2 = _interopRequireDefault(_issuesSlice);\\nvar _usersSlice = require('../features/users/usersSlice'); var _usersSlice2 = _interopRequireDefault(_usersSlice);\\nvar _filtersSlice = require('../features/filters/filtersSlice'); var _filtersSlice2 = _interopRequireDefault(_filtersSlice);\\nvar _activitySlice = require('../features/activity/activitySlice'); var _activitySlice2 = _interopRequireDefault(_activitySlice);\\n\\nconst listener = _toolkit.createListenerMiddleware.call(void 0, );\\n\\n// chuyển trạng thái thành công ⇒ ghi nhật ký\\nlistener.startListening({\\n  actionCreator: _issuesSlice.moveIssue.fulfilled,\\n  effect: (action, api) => {\\n    const { from, to } = action.meta.arg;\\n    api.dispatch(_activitySlice.activityAdded.call(void 0, `${action.payload.key}: ${from} → ${to}`));\\n  },\\n});\\n\\n// đổi bộ lọc ⇒ lưu localStorage (tác dụng phụ KHÔNG nằm trong reducer)\\nlistener.startListening({\\n  matcher: _toolkit.isAnyOf.call(void 0, _filtersSlice.assigneeChanged, _filtersSlice.textChanged, _filtersSlice.filtersCleared),\\n  effect: (_action, api) => {\\n    localStorage.setItem('filters', JSON.stringify(api.getState().filters));\\n  },\\n});\\n\\n const store = _toolkit.configureStore.call(void 0, {\\n  reducer: { issues: _issuesSlice2.default, users: _usersSlice2.default, filters: _filtersSlice2.default, activity: _activitySlice2.default },\\n  middleware: (getDefault) => getDefault().prepend(listener.middleware),\\n}); exports.store = store;\\n\",\"src/app/selectors.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _nullishCoalesce(lhs, rhsFn) { if (lhs != null) { return lhs; } else { return rhsFn(); } } function _optionalChain(ops) { let lastAccessLHS = undefined; let value = ops[0]; let i = 1; while (i \\u003c ops.length) { const op = ops[i]; const fn = ops[i + 1]; i += 2; if ((op === 'optionalAccess' || op === 'optionalCall') && value == null) { return undefined; } if (op === 'access' || op === 'optionalAccess') { lastAccessLHS = value; value = fn(value); } else if (op === 'call' || op === 'optionalCall') { value = fn((...args) => value.call(lastAccessLHS, ...args)); lastAccessLHS = undefined; } } return value; }// src/app/selectors.js — selector có ghi nhớ: lọc + nối tên người + nhóm theo cột\\nvar _toolkit = require('@reduxjs/toolkit');\\nvar _issuesSlice = require('../features/issues/issuesSlice');\\nvar _usersSlice = require('../features/users/usersSlice');\\n\\nconst selectFilters = (state) => state.filters;\\n\\n const selectVisibleIssues = _toolkit.createSelector.call(void 0, [_issuesSlice.selectAllIssues, _usersSlice.selectUserEntities, selectFilters], (issues, users, f) => {\\n  const text = f.text.trim().toLowerCase();\\n  return issues\\n    .filter((i) => f.assigneeId === 'all' || String(i.assigneeId) === String(f.assigneeId))\\n    .filter((i) => !text || i.title.toLowerCase().includes(text) || i.key.toLowerCase().includes(text))\\n    .map((i) => ({ ...i, assigneeName: _nullishCoalesce(_optionalChain([users, 'access', _ => _[i.assigneeId], 'optionalAccess', _2 => _2.name]), () => ( 'Unassigned')) }));\\n}); exports.selectVisibleIssues = selectVisibleIssues;\\n\\n const STATUSES = [\\n  { id: 'todo', label: 'To do' },\\n  { id: 'doing', label: 'In progress' },\\n  { id: 'done', label: 'Done' },\\n]; exports.STATUSES = STATUSES;\\n\\n const selectColumns = _toolkit.createSelector.call(void 0, [exports.selectVisibleIssues], (issues) =>\\n  exports.STATUSES.map((s) => ({ ...s, issues: issues.filter((i) => i.status === s.id) })),\\n); exports.selectColumns = selectColumns;\\n\",\"src/features/issues/issuesSlice.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _optionalChain(ops) { let lastAccessLHS = undefined; let value = ops[0]; let i = 1; while (i \\u003c ops.length) { const op = ops[i]; const fn = ops[i + 1]; i += 2; if ((op === 'optionalAccess' || op === 'optionalCall') && value == null) { return undefined; } if (op === 'access' || op === 'optionalAccess') { lastAccessLHS = value; value = fn(value); } else if (op === 'call' || op === 'optionalCall') { value = fn((...args) => value.call(lastAccessLHS, ...args)); lastAccessLHS = undefined; } } return value; }// src/features/issues/issuesSlice.js — entity adapter + thunk cập nhật lạc quan\\nvar _toolkit = require('@reduxjs/toolkit');\\nvar _api = require('../../app/api');\\n\\n const NEXT = { todo: 'doing', doing: 'done' }; exports.NEXT = NEXT;\\n\\nconst adapter = _toolkit.createEntityAdapter.call(void 0, {\\n  // thứ tự ổn định: ưu tiên cao (số nhỏ) trước, rồi theo id\\n  sortComparer: (a, b) => a.priority - b.priority || a.id - b.id,\\n});\\n\\n const fetchIssues = _toolkit.createAsyncThunk.call(void 0, 'issues/fetch', () => _api.api.issues()); exports.fetchIssues = fetchIssues;\\n\\n// arg = { id, from, to }: pending đổi ngay, rejected trả về \\\"from\\\"\\n const moveIssue = _toolkit.createAsyncThunk.call(void 0, 'issues/move', ({ id, to }) => _api.api.patchIssue(id, { status: to })); exports.moveIssue = moveIssue;\\n\\nconst issuesSlice = _toolkit.createSlice.call(void 0, {\\n  name: 'issues',\\n  initialState: adapter.getInitialState({ status: 'idle', error: null }),\\n  reducers: {},\\n  extraReducers: (builder) => {\\n    builder\\n      .addCase(exports.fetchIssues.pending, (state) => { state.status = 'loading'; })\\n      .addCase(exports.fetchIssues.fulfilled, (state, action) => {\\n        state.status = 'succeeded';\\n        adapter.setAll(state, action.payload);\\n      })\\n      .addCase(exports.fetchIssues.rejected, (state, action) => {\\n        state.status = 'failed';\\n        state.error = action.error.message;\\n      })\\n      .addCase(exports.moveIssue.pending, (state, action) => {\\n        const { id, to } = action.meta.arg;\\n        adapter.updateOne(state, { id, changes: { status: to } }); // lạc quan\\n        state.error = null;\\n      })\\n      .addCase(exports.moveIssue.fulfilled, (state, action) => {\\n        adapter.upsertOne(state, action.payload);\\n      })\\n      .addCase(exports.moveIssue.rejected, (state, action) => {\\n        const { id, from } = action.meta.arg;\\n        adapter.updateOne(state, { id, changes: { status: from } }); // hoàn tác\\n        state.error = `Could not move ${_optionalChain([state, 'access', _ => _.entities, 'access', _2 => _2[id], 'optionalAccess', _3 => _3.key])}`;\\n      });\\n  },\\n});\\n\\n( { selectAll: exports.selectAllIssues, selectById: exports.selectIssueById, selectTotal: exports.selectIssueCount } =\\n  adapter.getSelectors((state) => state.issues));\\n\\nexports. default = issuesSlice.reducer;\\n\",\"src/features/users/usersSlice.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/features/users/usersSlice.js — người dùng cũng chuẩn hoá bằng adapter\\nvar _toolkit = require('@reduxjs/toolkit');\\nvar _api = require('../../app/api');\\n\\nconst adapter = _toolkit.createEntityAdapter.call(void 0, );\\n\\n const fetchUsers = _toolkit.createAsyncThunk.call(void 0, 'users/fetch', () => _api.api.users()); exports.fetchUsers = fetchUsers;\\n\\nconst usersSlice = _toolkit.createSlice.call(void 0, {\\n  name: 'users',\\n  initialState: adapter.getInitialState(),\\n  reducers: {},\\n  extraReducers: (builder) => {\\n    builder.addCase(exports.fetchUsers.fulfilled, (state, action) => {\\n      adapter.setAll(state, action.payload);\\n    });\\n  },\\n});\\n\\n( { selectAll: exports.selectAllUsers, selectEntities: exports.selectUserEntities } = adapter.getSelectors((state) => state.users));\\nexports. default = usersSlice.reducer;\\n\",\"src/features/filters/filtersSlice.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/features/filters/filtersSlice.js — bộ lọc (khôi phục từ localStorage khi khởi động)\\nvar _toolkit = require('@reduxjs/toolkit');\\n\\n const DEFAULT_FILTERS = { assigneeId: 'all', text: '' }; exports.DEFAULT_FILTERS = DEFAULT_FILTERS;\\n\\n function loadFilters() {\\n  try {\\n    const saved = JSON.parse(localStorage.getItem('filters'));\\n    return saved && typeof saved === 'object' ? { ...exports.DEFAULT_FILTERS, ...saved } : exports.DEFAULT_FILTERS;\\n  } catch (e) {\\n    return exports.DEFAULT_FILTERS;\\n  }\\n} exports.loadFilters = loadFilters;\\n\\nconst filtersSlice = _toolkit.createSlice.call(void 0, {\\n  name: 'filters',\\n  initialState: loadFilters,\\n  reducers: {\\n    assigneeChanged(state, action) { state.assigneeId = action.payload; },\\n    textChanged(state, action) { state.text = action.payload; },\\n    filtersCleared() { return exports.DEFAULT_FILTERS; },\\n  },\\n});\\n\\n( { assigneeChanged: exports.assigneeChanged, textChanged: exports.textChanged, filtersCleared: exports.filtersCleared } = filtersSlice.actions);\\nexports. default = filtersSlice.reducer;\\n\",\"src/features/activity/activitySlice.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/features/activity/activitySlice.js — nhật ký (do listener ghi, không phải component)\\nvar _toolkit = require('@reduxjs/toolkit');\\n\\nconst activitySlice = _toolkit.createSlice.call(void 0, {\\n  name: 'activity',\\n  initialState: [],\\n  reducers: {\\n    activityAdded(state, action) {\\n      state.unshift(action.payload);\\n      if (state.length > 5) state.pop();\\n    },\\n  },\\n});\\n\\n( { activityAdded: exports.activityAdded } = activitySlice.actions);\\nexports. default = activitySlice.reducer;\\n\",\"src/index.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\"); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\\nvar _react = require('react'); var _react2 = _interopRequireDefault(_react);\\nvar _client = require('react-dom/client'); var _client2 = _interopRequireDefault(_client);\\nvar _reactredux = require('react-redux');\\nvar _store = require('./app/store');\\nrequire('./index.css');\\nvar _App = require('./App'); var _App2 = _interopRequireDefault(_App);\\n\\nconst root = _client2.default.createRoot(document.getElementById('root'));\\nroot.render(\\n  _jsxruntime.jsx.call(void 0, _react2.default.StrictMode, { children: \\n    _jsxruntime.jsx.call(void 0, _reactredux.Provider, { store: _store.store, children: \\n        _jsxruntime.jsx.call(void 0, _App2.default, {} )\\n      })\\n  })\\n);\\n\",\"src/app/api.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/app/api.js (đã cho)\\nconst BASE = 'http://localhost:9999';\\nasync function call(path, options) {\\n  const res = await fetch(BASE + path, options);\\n  if (!res.ok) throw new Error(`HTTP ${res.status}`);\\n  return res.json();\\n}\\n const api = {\\n  issues: () => call('/issues'),\\n  users: () => call('/users'),\\n  patchIssue: (id, patch) => call(`/issues/${id}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(patch) }),\\n}; exports.api = api;\\n\"};var CSS={\"src/index.css\":\"/* src/index.css (đã cho) */\\nbody { font-family: system-ui, sans-serif; margin: 0; padding: 20px; background: #f1f5f9; color: #0f172a; }\\n.filters { display: flex; gap: 8px; margin-bottom: 12px; }\\n.board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }\\n.column { background: #e2e8f0; border-radius: 10px; padding: 10px; } .column h2 { font-size: 15px; margin: 0 0 8px; }\\n.card { background: #fff; border-radius: 8px; padding: 8px; margin-bottom: 8px; box-shadow: 0 1px 2px rgba(0,0,0,.08); }\\n.card .key { font-weight: 700; margin-right: 6px; } .card .assignee { color: #475569; font-size: 13px; display: block; }\\n#error { color: #b91c1c; } #activity { font-size: 13px; color: #334155; }\\n\"};var DB={\"issues\":[{\"id\":1,\"key\":\"CT-1\",\"title\":\"Login page\",\"status\":\"todo\",\"assigneeId\":1,\"priority\":2},{\"id\":2,\"key\":\"CT-2\",\"title\":\"Fix 500 on save\",\"status\":\"doing\",\"assigneeId\":2,\"priority\":1},{\"id\":3,\"key\":\"CT-3\",\"title\":\"Write tests\",\"status\":\"todo\",\"assigneeId\":3,\"priority\":3},{\"id\":4,\"key\":\"CT-4\",\"title\":\"Deploy staging\",\"status\":\"done\",\"assigneeId\":1,\"priority\":2},{\"id\":5,\"key\":\"CT-5\",\"title\":\"Review PR\",\"status\":\"doing\",\"assigneeId\":1,\"priority\":2}],\"users\":[{\"id\":1,\"name\":\"An\"},{\"id\":2,\"name\":\"Binh\"},{\"id\":3,\"name\":\"Cuong\"}]};var BASE=\"http://localhost:9999\";var URL0=null;var THANH=false;\nfunction kho(){var m={};var k={getItem:function(x){x=String(x);return Object.prototype.hasOwnProperty.call(m,x)?m[x]:null},setItem:function(x,v){m[String(x)]=String(v)},removeItem:function(x){delete m[String(x)]},clear:function(){m={}},key:function(i){return Object.keys(m)[i]||null}};Object.defineProperty(k,'length',{get:function(){return Object.keys(m).length}});return k}\ntry{Object.defineProperty(window,'localStorage',{value:kho(),configurable:true})}catch(e){}\ntry{Object.defineProperty(window,'sessionStorage',{value:kho(),configurable:true})}catch(e){}\nwindow.confirm=function(){return true};window.alert=function(m){console.log('[alert]',m);var t=document.getElementById('cl-demo-alert');if(!t){t=document.createElement('div');t.id='cl-demo-alert';t.style.cssText='position:fixed;right:12px;bottom:12px;z-index:99999;max-width:320px;padding:10px 14px;border-radius:10px;background:#0f172a;color:#fff;font:13px system-ui;box-shadow:0 6px 24px rgba(0,0,0,.25)';document.body.appendChild(t)}t.textContent='alert: '+m;clearTimeout(t.__h);t.__h=setTimeout(function(){t.remove()},2600)};\nvar ENV={NODE_ENV:'production',MODE:'production',PROD:true,DEV:false,BASE_URL:'/'};\nString(M['.env']||'').split(/\\r?\\n/).forEach(function(d){var m=/^\\s*(?:export\\s+)?([A-Za-z_][A-Za-z0-9_]*)\\s*=\\s*(.*)\\s*$/.exec(d);if(m)ENV[m[1]]=m[2].replace(/^(['\"])(.*)\\1$/,'$2')});\nwindow.__CL_ENV__=ENV;if(!window.process)window.process={env:ENV};\n// json-server giả (bản sao domAgent.ts)\nvar jsDb=DB?JSON.parse(JSON.stringify(DB)):null;\nfunction tl(st,b){return new Response(b===undefined?'{}':JSON.stringify(b),{status:st,headers:{'content-type':'application/json'}})}\nfunction lay(o,k){return String(k).split('.').reduce(function(a,p){return a==null?undefined:a[p]},o)}\nfunction mot(t){return /ies$/.test(t)?t.slice(0,-3)+'y':t.replace(/s$/,'')}\nfunction xuLy(method,url,body){var u=new URL(url);var ph=u.pathname.replace(/^\\/+|\\/+$/g,'').split('/').filter(Boolean).map(decodeURIComponent);var ten=ph[0],id=ph[1];\nif(!ten||!(ten in jsDb))return tl(404,{});var bang=jsDb[ten];var dl=null;if(body!=null&&body!==''){try{dl=JSON.parse(body)}catch(e){return tl(400,{})}}\nif(!Array.isArray(bang)){if(method==='GET')return tl(200,bang);if(method==='PUT'||method==='POST'){jsDb[ten]=dl||{};return tl(200,jsDb[ten])}if(method==='PATCH'){jsDb[ten]=Object.assign({},bang,dl||{});return tl(200,jsDb[ten])}return tl(404,{})}\nvar vt=function(x){return bang.findIndex(function(r){return String(r.id)===String(x)})};\nvar mr=function(r){var o=Object.assign({},r);u.searchParams.getAll('_expand').forEach(function(e){var b=jsDb[e+'s']||jsDb[e];if(Array.isArray(b))o[e]=b.find(function(x){return String(x.id)===String(r[e+'Id'])})});u.searchParams.getAll('_embed').forEach(function(e){var b=jsDb[e];if(Array.isArray(b)){var k=mot(ten)+'Id';o[e]=b.filter(function(x){return String(x[k])===String(r.id)})}});return o};\nif(method==='GET'){if(id!=null){var i=vt(id);return i<0?tl(404,{}):tl(200,mr(bang[i]))}var ds=bang.slice();var loc={};u.searchParams.forEach(function(v,k){if(k.charAt(0)!=='_'&&k!=='q')(loc[k]=loc[k]||[]).push(v)});\nObject.keys(loc).forEach(function(k){var vs=loc[k],m=/^(.*)_(like|gte|lte|ne)$/.exec(k);ds=ds.filter(function(r){if(m){var gv=lay(r,m[1]);return vs.every(function(v){if(m[2]==='like')return new RegExp(v,'i').test(String(gv));if(m[2]==='ne')return String(gv)!==v;var a=Number(gv),b=Number(v);var so=!isNaN(a)&&!isNaN(b);return m[2]==='gte'?(so?a>=b:String(gv)>=v):(so?a<=b:String(gv)<=v)})}var g=lay(r,k);return vs.some(function(v){return String(g)===v})})});\nvar qq=u.searchParams.get('q');if(qq)ds=ds.filter(function(r){return JSON.stringify(r).toLowerCase().indexOf(qq.toLowerCase())>=0});\nvar sx=u.searchParams.get('_sort');if(sx){var tr=sx.split(','),th=(u.searchParams.get('_order')||'asc').split(',');ds.sort(function(a,b){for(var t=0;t<tr.length;t++){var f=tr[t].replace(/^-/,''),gi=tr[t].charAt(0)==='-'||(th[t]||th[0])==='desc';var x=lay(a,f),y=lay(b,f);var c=(typeof x==='number'&&typeof y==='number')?x-y:String(x).localeCompare(String(y));if(c)return gi?-c:c}return 0})}\nvar gh=u.searchParams.get('_limit'),pg=u.searchParams.get('_page');var tong=ds.length;if(pg){var n=Number(gh)||10;ds=ds.slice((Number(pg)-1)*n,Number(pg)*n)}else if(gh)ds=ds.slice(0,Number(gh));var rr=tl(200,ds.map(mr));try{rr.headers.set('X-Total-Count',String(tong))}catch(e){}return rr}\nif(method==='POST'){if(id!=null)return tl(404,{});var mo=Object.assign({},dl||{});if(mo.id==null){var so2=bang.length&&bang.every(function(r){return typeof r.id==='number'});mo.id=so2||!bang.length?bang.reduce(function(mx,r){return Math.max(mx,Number(r.id)||0)},0)+1:Math.random().toString(16).slice(2,6)}bang.push(mo);return tl(201,mo)}\nif(id==null)return tl(404,{});var j=vt(id);if(j<0)return tl(404,{});\nif(method==='PUT'){bang[j]=Object.assign({},dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='PATCH'){bang[j]=Object.assign({},bang[j],dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='DELETE'){bang.splice(j,1);return tl(200,{})}return tl(404,{})}\nif(jsDb){window.fetch=function(url,init){init=init||{};var s=String(url&&url.url?url.url:url);var me=String(init.method||'GET').toUpperCase();return new Promise(function(res){setTimeout(function(){if(s.indexOf(BASE+'/')!==0)return res(new Response('Not Found',{status:404}));try{res(xuLy(me,s,init.body))}catch(e){res(tl(500,{error:String(e)}))}},120)})}}\nfunction axiosGia(){function goi(method,url,data,cfg){cfg=cfg||{};var u=(cfg.baseURL||'')+url;if(cfg.params){var sp=new URLSearchParams(cfg.params).toString();if(sp)u+=(u.indexOf('?')>=0?'&':'?')+sp}var init={method:method.toUpperCase(),headers:Object.assign({'Content-Type':'application/json'},cfg.headers||{})};if(data!==undefined)init.body=typeof data==='string'?data:JSON.stringify(data);\nreturn window.fetch(u,init).then(function(res){return res.text().then(function(t){var d;try{d=JSON.parse(t)}catch(e){d=t}var hd={};try{res.headers.forEach(function(v,k){hd[k.toLowerCase()]=v})}catch(e){}var out={data:d,status:res.status,statusText:res.statusText,headers:hd,config:cfg};if(res.status>=200&&res.status<300)return out;var err=new Error('Request failed with status code '+res.status);err.response=out;err.name='AxiosError';throw err})})}\nfunction tao(base){var a=function(cfg){return goi(cfg.method||'get',cfg.url,cfg.data,Object.assign({},base,cfg))};['get','delete','head'].forEach(function(m){a[m]=function(url,cfg){return goi(m,url,undefined,Object.assign({},base,cfg))}});['post','put','patch'].forEach(function(m){a[m]=function(url,data,cfg){return goi(m,url,data,Object.assign({},base,cfg))}});a.create=function(c){return tao(Object.assign({},base,c))};a.defaults=base;a.interceptors={request:{use:function(){}},response:{use:function(){}}};a.isAxiosError=function(e){return!!(e&&e.name==='AxiosError')};return a}\nvar ax=tao({});ax.default=ax;return ax}\nvar R=window.React;var tach=function(p,k){var q=Object.assign({},p);var c=q.children;delete q.children;if(k!==undefined)q.key=k;return[q,c]};\nvar j=function(t,p,k){var x=tach(p,k);return x[1]===undefined?R.createElement(t,x[0]):R.createElement(t,x[0],x[1])};\nvar js=function(t,p,k){var x=tach(p,k);return R.createElement.apply(null,[t,x[0]].concat(x[1]||[]))};\n// React Router: MemoryRouter + thanh địa chỉ (gõ URL được — thử ?status=ACTIVE, /items/2…)\nvar viTri=null,routerBoc=null,dieuHuong=null;\nfunction datThanh(v){var o=document.getElementById('cl-demo-url');if(o&&document.activeElement!==o)o.value='http://localhost:3000'+v}\nfunction routerGia(){var RRD=window.ReactRouterDOM;if(!RRD)return null;if(routerBoc)return routerBoc;\nfunction Ghi(){var l=RRD.useLocation();var nav=RRD.useNavigate();dieuHuong=nav;viTri=l.pathname+l.search+l.hash;R.useEffect(function(){datThanh(viTri)});return null}\nfunction RG(p){var d=R.useState(function(){return[viTri||URL0||'/']})[0];return R.createElement(RRD.MemoryRouter,{initialEntries:d,basename:p.basename},R.createElement(Ghi),p.children)}\nfunction tr(routes,opts){var r=RRD.createMemoryRouter(routes,Object.assign({},opts||{},{initialEntries:[viTri||URL0||'/']}));var g=function(s){viTri=s.location.pathname+s.location.search+s.location.hash;datThanh(viTri)};g(r.state);r.subscribe(g);dieuHuong=function(to){r.navigate(to)};return r}\nrouterBoc=Object.assign({},RRD,{BrowserRouter:RG,HashRouter:RG,createBrowserRouter:tr,createHashRouter:tr});return routerBoc}\nvar thunk=function(api){return function(next){return function(a){return typeof a==='function'?a(api.dispatch,api.getState):next(a)}}};\nvar LIB={'react':R,'react-dom':window.ReactDOM,'react-dom/client':window.ReactDOM,'react/jsx-runtime':{jsx:j,jsxs:js,Fragment:R.Fragment},'react/jsx-dev-runtime':{jsxDEV:j,Fragment:R.Fragment},'prop-types':window.PropTypes,'react-bootstrap':window.ReactBootstrap,'@reduxjs/toolkit':window.RTK,'redux':window.RTK,'react-redux':window.ReactRedux,'redux-thunk':{'default':thunk,thunk:thunk}};\nvar C={};\nfunction dd(tu,s){var p=tu.split('/').slice(0,-1);s.split('/').forEach(function(x){if(x==='.'||x==='')return;if(x==='..')p.pop();else p.push(x)});return p.join('/')}\nfunction tim(p){var d=['','.js','.jsx','.ts','.tsx','.json','/index.js','/index.jsx'];for(var i=0;i<d.length;i++){if(M[p+d[i]]!=null||CSS[p+d[i]]!=null)return p+d[i]}return null}\nfunction req(tu,s){if(s==='axios')return axiosGia();if(s==='react-router-dom'||s==='react-router')return routerGia();if(LIB[s])return LIB[s];if(/\\.css$/.test(s)&&!/^\\./.test(s))return{};var p=tim(dd(tu,s));if(!p)throw new Error('Cannot find module '+s);return nap(p)}\nfunction nap(p){if(C[p])return C[p].exports;if(CSS[p]!=null){var st=document.createElement('style');st.textContent=CSS[p];document.head.appendChild(st);C[p]={exports:{}};return{}}var m={exports:{}};C[p]=m;if(/\\.json$/.test(p)){m.exports=JSON.parse(M[p]);return m.exports}new Function('require','module','exports',M[p])(function(s){return req(p,s)},m,m.exports);return m.exports}\nif(THANH){var bar=document.createElement('form');bar.style.cssText='position:sticky;top:0;z-index:99998;display:flex;gap:6px;align-items:center;padding:6px 10px;background:#e2e8f0;border-bottom:1px solid #cbd5e1;font:12px system-ui';bar.innerHTML='<span style=\"color:#475569\">URL</span><input id=\"cl-demo-url\" style=\"flex:1;padding:4px 8px;border:1px solid #cbd5e1;border-radius:6px;font:12px ui-monospace,monospace\" aria-label=\"Address bar\"><button style=\"padding:3px 10px;border-radius:6px;border:1px solid #94a3b8;background:#fff;cursor:pointer\">Go</button>';\nbar.addEventListener('submit',function(e){e.preventDefault();var v=document.getElementById('cl-demo-url').value.replace(/^https?:\\/\\/[^/]+/,'')||'/';if(dieuHuong)dieuHuong(v)});document.body.insertBefore(bar,document.body.firstChild);datThanh(URL0||'/')}\nnap(\"src/index.js\");\n})();</script></body></html>"
+    }
+  ]
+}

@@ -608,6 +608,18 @@
       "name": "Deep Lab 10 — Widget Dashboard (lazy registry · transitions)",
       "level": "ADVANCED",
       "description": "Deep lab chương 10: sổ đăng ký widget tải lười, Suspense + error boundary từng widget có thử lại, bố cục lưu, useTransition, tải trước. Thang 10."
+    },
+    {
+      "slug": "fer202-11-deep-optimistic-todos",
+      "name": "Deep Lab 11 — Team Todos (HTTP layer · optimistic UI)",
+      "level": "ADVANCED",
+      "description": "Deep lab chương 11: lớp http.js (.env, token, ApiError), Load more, sửa/thêm lạc quan có hoàn tác, xoá có Undo, cache stale-while-revalidate. Thang 10."
+    },
+    {
+      "slug": "fer202-12-deep-issue-tracker",
+      "name": "Deep Lab 12 — Issue Tracker (entity adapter · listener middleware)",
+      "level": "ADVANCED",
+      "description": "Deep lab chương 12: createEntityAdapter, createSelector nối + nhóm cột, thunk lạc quan hoàn tác từ meta.arg, createListenerMiddleware cho nhật ký và lưu bộ lọc. Thang 10."
     }
   ]
 }

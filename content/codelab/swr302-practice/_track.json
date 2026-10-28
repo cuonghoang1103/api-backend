@@ -40,6 +40,12 @@
       "description": "Lab chương 1: phân loại 14 phát biểu theo Hình 1-1 của Wiegers, tài liệu chứa từng loại, yêu cầu sản phẩm vs dự án, xếp 8 việc vào năm hoạt động kỹ nghệ yêu cầu, gọi tên sáu vấn đề yêu cầu kinh điển."
     },
     {
+      "slug": "swr302-1-deep-requirement-hierarchy",
+      "name": "Deep Lab 1 — Requirement information model validator",
+      "level": "ADVANCED",
+      "description": "Deep Lab chương 1: biến Hình 1-1 của Wiegers thành bộ kiểm — cấp và loại yêu cầu, cha hợp lệ theo cấp, trùng id, chu trình, tổ tiên, FR \"mạ vàng\" không truy được tới yêu cầu nghiệp vụ, thống kê theo cấp — chấm dữ liệu mẫu + ẩn."
+    },
+    {
       "slug": "swr302-2-1-stakeholder-user-class",
       "name": "2.1 Stakeholders, user classes and the product champion",
       "level": "BEGINNER",
@@ -86,6 +92,12 @@
       "name": "Lab 2 — Customer, Vision & Scope: ParkSmart Campus Parking",
       "level": "ADVANCED",
       "description": "Lab chương 2: xếp 13 phát biểu vào mục tài liệu Vision & Scope, chọn mục tiêu nghiệp vụ SMART, viết tuyên bố tầm nhìn theo khuôn Moore, lưới quyền lực–quan tâm và lớp người dùng ưu tiên/không mong muốn/bỏ qua, quyền và trách nhiệm của khách hàng."
+    },
+    {
+      "slug": "swr302-2-deep-stakeholder-raci",
+      "name": "Deep Lab 2 — Stakeholder grid, RACI and decision rules",
+      "level": "ADVANCED",
+      "description": "Deep Lab chương 2: tự viết công cụ phân tích bên liên quan — lưới quyền lực/quan tâm, kiểm ma trận RACI (đúng một A, ít nhất một R, ô sai, hoạt động thiếu/thừa) và áp quy tắc ra quyết định (nhất trí, đa số, trưởng nhóm) — chấm mẫu ClinicCare + dữ liệu ẩn."
     },
     {
       "slug": "swr302-3-1-ky-thuat-elicitation",
@@ -274,6 +286,12 @@
       "description": "Lab chương 5: đặt 13 phát biểu vào đúng mục template SRS Wiegers, chẩn đoán và viết lại 8 yêu cầu tồi (mơ hồ, không kiểm chứng, ghép, thiết kế, thiếu, mâu thuẫn), 8 thuộc tính chất lượng, viết 3 NFR đo được, một yêu cầu bằng Planguage."
     },
     {
+      "slug": "swr302-5-deep-srs-quality-gate",
+      "name": "Deep Lab 5 — SRS quality gate",
+      "level": "ADVANCED",
+      "description": "Deep Lab chương 5: tự viết cổng chất lượng SRS — linter yêu cầu (không shall, nhiều shall, từ mơ hồ, bị động, phủ định, TBD, biên \"between\", NFR không số), kiểm nhãn (trùng, sai định dạng/loại), sổ TBD (người phụ trách, hạn) và quyết định qua cổng — chấm mẫu LibraNet + dữ liệu ẩn."
+    },
+    {
       "slug": "swr302-6-1-tham-dinh",
       "name": "6.1 Validation vs verification and validation techniques",
       "level": "BEGINNER",
@@ -410,6 +428,12 @@
       "name": "Lab 9 — Agile Requirements: the ClubHub Backlog",
       "level": "ADVANCED",
       "description": "Lab chương 9: viết 5 user story đúng khuôn, đúng vai trò, phủ đề; vi phạm INVEST của 6 story tồi; tiêu chí chấp nhận Given/When/Then kiểm luật sức chứa và hạn 24 giờ; Definition of Ready vs Done; đúng/sai về yêu cầu trong agile."
+    },
+    {
+      "slug": "swr302-9-deep-release-forecast",
+      "name": "Deep Lab 9 — Release forecast from the backlog",
+      "level": "ADVANCED",
+      "description": "Deep Lab chương 9: tự viết công cụ dự báo bản phát hành agile — velocity trung bình gần nhất, chia backlog thành sprint theo thứ tự ưu tiên (story quá lớn phải tách), burndown, ngày phát hành của một story — chấm mẫu ClubHub + dữ liệu ẩn."
     },
     {
       "slug": "swr302-10-1-prioritization",

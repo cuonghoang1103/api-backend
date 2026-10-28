@@ -1,0 +1,241 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-9-deep-release-forecast",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-9-3-ch20-essentials-1"
+  },
+  "exercises": [
+    {
+      "title": "Deep Lab 9 — Release forecast (velocity, sprint plan, burndown)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 60,
+      "points": 100,
+      "concepts": [
+        "velocity",
+        "release planning",
+        "burndown"
+      ],
+      "prerequisites": [
+        "Lab 9",
+        "SWR302 lessons 9.1 and 9.3"
+      ],
+      "tags": [
+        "swr302",
+        "deep-lab"
+      ],
+      "problemHtml": "<h1>Deep Lab 9 — Release forecast (velocity, sprint plan, burndown)</h1>\n<p class=\"bi-phu\">Chapter 9 deep lab · when will this story ship? · 10 marks · hidden data on Submit</p>\n<h2>1. Overview</h2>\n<p>The <b>ClubHub</b> product owner keeps one ordered backlog and asks: \"When will S8 ship?\" Build the forecast.</p>\n<ul>\n<li><b>A. <code>velocity(history, n)</code></b> — the average of the last <code>n</code> values of <code>history</code> (all of them if fewer), 1 decimal; 0 when there is no data or <code>n</code> ≤ 0.</li>\n<li><b>B/C. <code>forecast(backlog, vel)</code></b> — fill sprints in backlog order without reordering: an item goes into the current sprint if it fits (sum ≤ <code>vel</code>), otherwise a new sprint starts. An item larger than <code>vel</code> cannot fit any sprint: list it in <code>tooBig</code> (it must be split) and continue. Return <code>{ plan: [{ sprint, items, points }], tooBig }</code>, sprints numbered from 1.</li>\n<li><b>D. <code>burndown(total, done)</code></b> — remaining points after each sprint, never below 0.</li>\n<li><b>E. <code>releaseDate(plan, startDate, sprintDays, targetId)</code></b> — the last day (YYYY-MM-DD) of the sprint that contains <code>targetId</code>; sprint 1 starts on <code>startDate</code> and every sprint lasts <code>sprintDays</code> calendar days; <code>null</code> if the item is not planned. Use UTC dates.</li>\n</ul>\n<p><b>Sample data</b>:</p><pre><code>const HISTORY = [18,22,15,20,25];</code></pre><pre><code>const BACKLOG = [\n  {\"id\": \"S1\", \"points\": 5},\n  {\"id\": \"S2\", \"points\": 8},\n  {\"id\": \"S3\", \"points\": 3},\n  {\"id\": \"S4\", \"points\": 13},\n  {\"id\": \"S5\", \"points\": 2},\n  {\"id\": \"S6\", \"points\": 21},\n  {\"id\": \"S7\", \"points\": 8},\n  {\"id\": \"S8\", \"points\": 5},\n  {\"id\": \"S9\", \"points\": 1}\n];</code></pre>\n<h3>Main features</h3>\n<ul>\n  <li>A. Velocity.</li>\n  <li>B. Sprint plan.</li>\n  <li>C. Stories to split.</li>\n  <li>D. Burndown.</li>\n  <li>E. Release date.</li>\n  <li>F. Inputs untouched.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>Pure functions; UTC dates.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>answers/\n├── sample-data.js   ← HISTORY, BACKLOG\n└── forecast.js      ← velocity, forecast, burndown, releaseDate</pre>\n<h2>3. Data model</h2>\n<p><b>Data shapes</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>history</code></td><td>number[]</td><td>oldest first</td></tr><tr><td><code>backlog item</code></td><td>{ id, points }</td><td>ordered by the PO</td></tr><tr><td><code>plan</code></td><td>[{ sprint, items[], points }]</td><td></td></tr></tbody></table>\n<h2>4. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. A. velocity <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Last n, 1 decimal.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">velocity</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. B. forecast plan <span class=\"bi-diem\">3 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Backlog order kept.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">release planning</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. C. tooBig <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Larger than the velocity.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">story splitting</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. D. burndown <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Never negative.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">burndown</span></p>\n</div>\n<div class=\"bi-cn\"><h3>5. E. releaseDate <span class=\"bi-diem\">2.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Calendar arithmetic in UTC.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">forecasting</span></p>\n</div>\n<div class=\"bi-cn\"><h3>6. F. Inputs untouched <span class=\"bi-diem\">0.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>No mutation.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">immutability</span></p>\n</div>\n<h2>5. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>velocity · forecast · burndown · releaseDate</code></td><td>answers/forecast.js</td></tr></tbody></table>\n<h2>6. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>A. velocity</td><td>1.5</td></tr><tr><td>2</td><td>B. forecast plan</td><td>3</td></tr><tr><td>3</td><td>C. tooBig</td><td>1</td></tr><tr><td>4</td><td>D. burndown</td><td>1.5</td></tr><tr><td>5</td><td>E. releaseDate</td><td>2.5</td></tr><tr><td>6</td><td>F. Inputs untouched</td><td>0.5</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Pulling a small later story into an earlier sprint — the product owner’s order is the contract.</li>\n  <li>Off-by-one in the release date: a 14-day sprint starting 2 Nov ends 15 Nov.</li>\n</ul>\n<h2>7. Submission</h2>\n<p>Write your answers in the files of <code>answers/</code> on the right. Diagrams are written as text in the syntax of a real tool (Mermaid or PlantUML — paste them into <a href=\"https://mermaid.live\" target=\"_blank\" rel=\"noopener\">mermaid.live</a> or <a href=\"https://www.plantuml.com/plantuml\" target=\"_blank\" rel=\"noopener\">plantuml.com</a> to SEE the picture); tables are JavaScript arrays, one object per row of the school template. Press <b>Run</b> for the visible checks and <b>Submit</b> for full grading, hidden checks included. Your mark per question appears in the rubric table.</p>",
+      "problemHtmlVi": "<h1>Deep Lab 9 — Release forecast (velocity, sprint plan, burndown)</h1>\n<p class=\"bi-phu\">Deep lab chương 9 · khi nào story này lên? · 10 điểm · dữ liệu ẩn khi Nộp</p>\n<h2>1. Tổng quan</h2>\n<p>PO của ClubHub giữ một backlog có thứ tự và hỏi: \"Khi nào S8 lên?\" Hãy viết công cụ dự báo.</p><ul><li>A. <code>velocity</code> — trung bình n sprint gần nhất, 1 chữ số.</li><li>B/C. <code>forecast</code> — xếp theo đúng thứ tự backlog; không vừa thì mở sprint mới; story lớn hơn velocity ⇒ tooBig.</li><li>D. <code>burndown</code> — điểm còn lại sau mỗi sprint, không âm.</li><li>E. <code>releaseDate</code> — ngày cuối của sprint chứa story (UTC).</li></ul>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>A. Velocity.</li>\n  <li>B. Kế hoạch sprint.</li>\n  <li>C. Story phải tách.</li>\n  <li>D. Burndown.</li>\n  <li>E. Ngày phát hành.</li>\n  <li>F. Không sửa đầu vào.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Hàm thuần; ngày theo UTC.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>answers/\n├── sample-data.js   ← HISTORY, BACKLOG\n└── forecast.js      ← velocity, forecast, burndown, releaseDate</pre>\n<h2>3. Mô hình dữ liệu</h2>\n<p><b>Data shapes</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>history</code></td><td>number[]</td><td>cũ nhất trước</td></tr><tr><td><code>backlog item</code></td><td>{ id, points }</td><td>PO sắp thứ tự</td></tr><tr><td><code>plan</code></td><td>[{ sprint, items[], points }]</td><td></td></tr></tbody></table>\n<h2>4. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. A. velocity <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>n gần nhất, 1 chữ số.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">velocity</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. B. forecast — kế hoạch <span class=\"bi-diem\">3 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Giữ thứ tự backlog.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">release planning</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. C. tooBig <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Lớn hơn velocity.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">story splitting</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. D. burndown <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Không âm.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">burndown</span></p>\n</div>\n<div class=\"bi-cn\"><h3>5. E. releaseDate <span class=\"bi-diem\">2.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Tính ngày theo UTC.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">forecasting</span></p>\n</div>\n<div class=\"bi-cn\"><h3>6. F. Không sửa đầu vào <span class=\"bi-diem\">0.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Không sửa đầu vào.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">immutability</span></p>\n</div>\n<h2>5. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>velocity · forecast · burndown · releaseDate</code></td><td>answers/forecast.js</td></tr></tbody></table>\n<h2>6. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>A. velocity</td><td>1.5</td></tr><tr><td>2</td><td>B. forecast — kế hoạch</td><td>3</td></tr><tr><td>3</td><td>C. tooBig</td><td>1</td></tr><tr><td>4</td><td>D. burndown</td><td>1.5</td></tr><tr><td>5</td><td>E. releaseDate</td><td>2.5</td></tr><tr><td>6</td><td>F. Không sửa đầu vào</td><td>0.5</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Kéo story nhỏ phía sau lên sprint trước — thứ tự của PO là cam kết.</li>\n  <li>Lệch một ngày: sprint 14 ngày bắt đầu 2/11 kết thúc 15/11.</li>\n</ul>\n<h2>7. Nộp bài</h2>\n<p>Viết câu trả lời vào các tệp trong <code>answers/</code> bên phải. Sơ đồ viết bằng chữ theo cú pháp của công cụ thật (Mermaid hoặc PlantUML — dán vào <a href=\"https://mermaid.live\" target=\"_blank\" rel=\"noopener\">mermaid.live</a> hoặc <a href=\"https://www.plantuml.com/plantuml\" target=\"_blank\" rel=\"noopener\">plantuml.com</a> để XEM hình); bảng là mảng JavaScript, mỗi object là một dòng của template trường. Bấm <b>Chạy thử</b> để chạy kiểm hiện, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn). Điểm từng câu hiện trong bảng thang điểm.</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "Pure functions; UTC dates.|||Hàm thuần; ngày theo UTC.",
+      "examplesJson": [
+        {
+          "input": "answers/*.js — one object per row of the template",
+          "output": "Rubric table: marks per question (e.g. B. 2.5/3)",
+          "explanation": "Every rubric line is checked separately; hidden checks run on Submit.|||Mỗi dòng rubric được kiểm riêng; kiểm ẩn chạy khi Nộp."
+        }
+      ],
+      "hintsJson": [
+        "history.slice(-n) lấy n phần tử cuối.",
+        "Ngày cuối = start + (sprint × sprintDays − 1) ngày, dùng Date.UTC."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers/sample-data.js",
+          "language": "javascript",
+          "code": "// Sample data (read-only) — ClubHub team.\nconst HISTORY = [18,22,15,20,25];   // completed points of past sprints, oldest first\nconst BACKLOG = [\n {\n  \"id\": \"S1\",\n  \"points\": 5\n },\n {\n  \"id\": \"S2\",\n  \"points\": 8\n },\n {\n  \"id\": \"S3\",\n  \"points\": 3\n },\n {\n  \"id\": \"S4\",\n  \"points\": 13\n },\n {\n  \"id\": \"S5\",\n  \"points\": 2\n },\n {\n  \"id\": \"S6\",\n  \"points\": 21\n },\n {\n  \"id\": \"S7\",\n  \"points\": 8\n },\n {\n  \"id\": \"S8\",\n  \"points\": 5\n },\n {\n  \"id\": \"S9\",\n  \"points\": 1\n }\n];   // ordered by the product owner\n"
+        },
+        {
+          "name": "answers/forecast.js",
+          "language": "javascript",
+          "code": "function velocity(history, n) { return 0; }\nfunction forecast(backlog, vel) { return { plan: [], tooBig: [] }; }\nfunction burndown(total, done) { return []; }\nfunction releaseDate(plan, startDate, sprintDays, targetId) { return null; }\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers/sample-data.js",
+          "language": "javascript",
+          "code": "// Sample data (read-only) — ClubHub team.\nconst HISTORY = [18,22,15,20,25];   // completed points of past sprints, oldest first\nconst BACKLOG = [\n {\n  \"id\": \"S1\",\n  \"points\": 5\n },\n {\n  \"id\": \"S2\",\n  \"points\": 8\n },\n {\n  \"id\": \"S3\",\n  \"points\": 3\n },\n {\n  \"id\": \"S4\",\n  \"points\": 13\n },\n {\n  \"id\": \"S5\",\n  \"points\": 2\n },\n {\n  \"id\": \"S6\",\n  \"points\": 21\n },\n {\n  \"id\": \"S7\",\n  \"points\": 8\n },\n {\n  \"id\": \"S8\",\n  \"points\": 5\n },\n {\n  \"id\": \"S9\",\n  \"points\": 1\n }\n];   // ordered by the product owner\n"
+        },
+        {
+          "name": "answers/forecast.js",
+          "language": "javascript",
+          "code": "function velocity(history, n) {\n  var h = history.slice(-n);\n  if (!h.length || n <= 0) return 0;\n  return Math.round(h.reduce(function (s, x) { return s + x; }, 0) / h.length * 10) / 10;\n}\n\nfunction forecast(backlog, vel) {\n  var plan = [], tooBig = [], cur = null;\n  backlog.forEach(function (it) {\n    if (it.points > vel) { tooBig.push(it.id); return; }\n    if (!cur || cur.points + it.points > vel) { cur = { sprint: plan.length + 1, items: [], points: 0 }; plan.push(cur); }\n    cur.items.push(it.id); cur.points += it.points;\n  });\n  return { plan: plan, tooBig: tooBig };\n}\n\nfunction burndown(total, done) {\n  var left = total, out = [];\n  done.forEach(function (d) { left = Math.max(0, left - d); out.push(left); });\n  return out;\n}\n\nfunction releaseDate(plan, startDate, sprintDays, targetId) {\n  var s = plan.filter(function (p) { return p.items.indexOf(targetId) >= 0; })[0];\n  if (!s) return null;\n  var p = startDate.split('-').map(Number);\n  var t = Date.UTC(p[0], p[1] - 1, p[2]) + (s.sprint * sprintDays - 1) * 86400000;\n  return new Date(t).toISOString().slice(0, 10);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>With a velocity of 20 (last three sprints), S6 (21 points) cannot fit any sprint — it is an epic to split before planning. The rest needs three sprints; S8 lands in sprint 3, so with two-week sprints from 2 Nov 2026 it ships on 13 Dec 2026. Forecasts like this are only as good as the backlog order and the story sizes — revisit them every sprint.</p>",
+      "solutionExplanationHtmlVi": "<p>Velocity 20 (ba sprint gần nhất) ⇒ S6 (21 điểm) không vừa sprint nào — là epic phải tách trước khi lập kế hoạch. Phần còn lại cần ba sprint; S8 ở sprint 3, nên với sprint hai tuần từ 2/11/2026 sẽ lên ngày 13/12/2026. Dự báo chỉ tốt bằng thứ tự backlog và kích thước story — xem lại mỗi sprint.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "answers/sample-data.js",
+          "answers/forecast.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "velocity: average of the last 3 sprints",
+              "vi": "velocity: trung bình 3 sprint gần nhất"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var n;try{n=[velocity(HISTORY,3),velocity(HISTORY,10),velocity([],3)]}catch(r){return(r&&r.name===\"ReferenceError\"?\"missing: \":\"error: \")+(r&&r.message)}var e=JSON.stringify(n===void 0?null:n),t=\"[20,20,0]\";return e===t?\"OK\":\"expected [20,20,0], got \"+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "velocity (hidden): rounding to 1 decimal",
+              "vi": "velocity (ẩn): làm tròn 1 chữ số"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var n;try{n=[velocity([10,11,11],3),velocity([7],2),velocity([5,6],0)]}catch(r){return(r&&r.name===\"ReferenceError\"?\"missing: \":\"error: \")+(r&&r.message)}var e=JSON.stringify(n===void 0?null:n),t=\"[10.7,7,0]\";return e===t?\"OK\":\"got \"+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "forecast: sprints at velocity 20 (order is kept)",
+              "vi": "forecast: các sprint với velocity 20 (giữ thứ tự)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var e;try{e=forecast(BACKLOG,20).plan}catch(t){return(t&&t.name===\"ReferenceError\"?\"missing: \":\"error: \")+(t&&t.message)}var n=JSON.stringify(e===void 0?null:e),i='[{\"sprint\":1,\"items\":[\"S1\",\"S2\",\"S3\"],\"points\":16},{\"sprint\":2,\"items\":[\"S4\",\"S5\"],\"points\":15},{\"sprint\":3,\"items\":[\"S7\",\"S8\",\"S9\"],\"points\":14}]';return n===i?\"OK\":'expected [{\"sprint\":1,\"items\":[\"S1\",\"S2\",\"S3\"],\"points\":16},{\"sprint\":2,\"items\":[\"S4\",\"S5\"],\"points\":15},{\"sprint\":3,\"items\":[\"S7\",\"S8\",\"S9\"],\"points\":14}], got '+(n.length>220?n.slice(0,220)+\"\\u2026\":n)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "forecast: stories bigger than the velocity must be split",
+              "vi": "forecast: story lớn hơn velocity phải tách"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var n;try{n=forecast(BACKLOG,20).tooBig}catch(r){return(r&&r.name===\"ReferenceError\"?\"missing: \":\"error: \")+(r&&r.message)}var e=JSON.stringify(n===void 0?null:n),t='[\"S6\"]';return e===t?\"OK\":'expected [\"S6\"], got '+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "forecast (hidden): exact fits and a low velocity",
+              "vi": "forecast (ẩn): vừa khít và velocity thấp"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var n;try{n=[forecast([{id:\"a\",points:4},{id:\"b\",points:6},{id:\"c\",points:10},{id:\"d\",points:1}],10),forecast(BACKLOG,8)]}catch(t){return(t&&t.name===\"ReferenceError\"?\"missing: \":\"error: \")+(t&&t.message)}var i=JSON.stringify(n===void 0?null:n),s='[{\"plan\":[{\"sprint\":1,\"items\":[\"a\",\"b\"],\"points\":10},{\"sprint\":2,\"items\":[\"c\"],\"points\":10},{\"sprint\":3,\"items\":[\"d\"],\"points\":1}],\"tooBig\":[]},{\"plan\":[{\"sprint\":1,\"items\":[\"S1\"],\"points\":5},{\"sprint\":2,\"items\":[\"S2\"],\"points\":8},{\"sprint\":3,\"items\":[\"S3\",\"S5\"],\"points\":5},{\"sprint\":4,\"items\":[\"S7\"],\"points\":8},{\"sprint\":5,\"items\":[\"S8\",\"S9\"],\"points\":6}],\"tooBig\":[\"S4\",\"S6\"]}]';return i===s?\"OK\":\"got \"+(i.length>220?i.slice(0,220)+\"\\u2026\":i)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "burndown: remaining points never below zero",
+              "vi": "burndown: điểm còn lại không âm"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var n;try{n=burndown(66,[16,15,14,30])}catch(r){return(r&&r.name===\"ReferenceError\"?\"missing: \":\"error: \")+(r&&r.message)}var e=JSON.stringify(n===void 0?null:n),t=\"[50,35,21,0]\";return e===t?\"OK\":\"expected [50,35,21,0], got \"+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "releaseDate: last day of the sprint that holds S8",
+              "vi": "releaseDate: ngày cuối của sprint chứa S8"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var n;try{n=releaseDate(forecast(BACKLOG,20).plan,\"2026-11-02\",14,\"S8\")}catch(r){return(r&&r.name===\"ReferenceError\"?\"missing: \":\"error: \")+(r&&r.message)}var e=JSON.stringify(n===void 0?null:n),t='\"2026-12-13\"';return e===t?\"OK\":'expected \"2026-12-13\", got '+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f5"
+          },
+          {
+            "moTa": {
+              "en": "releaseDate (hidden): month/year boundaries, missing stories",
+              "vi": "releaseDate (ẩn): qua tháng/năm, story không có"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var n;try{n=[releaseDate(forecast(BACKLOG,20).plan,\"2026-12-21\",7,\"S4\"),releaseDate(forecast(BACKLOG,20).plan,\"2026-11-02\",14,\"S6\"),releaseDate([{sprint:1,items:[\"x\"],points:1}],\"2028-02-28\",2,\"x\")]}catch(r){return(r&&r.name===\"ReferenceError\"?\"missing: \":\"error: \")+(r&&r.message)}var e=JSON.stringify(n===void 0?null:n),a='[\"2027-01-03\",null,\"2028-02-29\"]';return e===a?\"OK\":\"got \"+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f5",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "inputs are not modified",
+              "vi": "không sửa đầu vào"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var n;try{n=(function(){var r=JSON.stringify([HISTORY,BACKLOG]);return velocity(HISTORY,3),forecast(BACKLOG,20),r===JSON.stringify([HISTORY,BACKLOG])})()}catch(r){return(r&&r.name===\"ReferenceError\"?\"missing: \":\"error: \")+(r&&r.message)}var e=JSON.stringify(n===void 0?null:n),t=\"true\";return e===t?\"OK\":\"expected true, got \"+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f6"
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. A. velocity",
+            "diem": 1.5
+          },
+          {
+            "ma": "f2",
+            "ten": "2. B. forecast plan",
+            "diem": 3
+          },
+          {
+            "ma": "f3",
+            "ten": "3. C. tooBig",
+            "diem": 1
+          },
+          {
+            "ma": "f4",
+            "ten": "4. D. burndown",
+            "diem": 1.5
+          },
+          {
+            "ma": "f5",
+            "ten": "5. E. releaseDate",
+            "diem": 2.5
+          },
+          {
+            "ma": "f6",
+            "ten": "6. F. Inputs untouched",
+            "diem": 0.5
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "deep-lab",
+      "mistakesJson": [
+        {
+          "loi": "Dùng new Date(\"2026-11-02\") rồi getDate() theo giờ địa phương."
+        },
+        {
+          "loi": "Bỏ S6 khỏi kế hoạch mà không báo cần tách."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "product backlog",
+          "vi": "danh sách việc của sản phẩm, xếp theo ưu tiên"
+        },
+        {
+          "en": "epic",
+          "vi": "story lớn, phải tách thành nhiều story"
+        },
+        {
+          "en": "user story",
+          "vi": "câu chuyện người dùng — \"As a <role>, I want <goal> so that <benefit>\""
+        },
+        {
+          "en": "velocity",
+          "vi": "vận tốc — số điểm đội hoàn thành mỗi sprint"
+        },
+        {
+          "en": "burndown",
+          "vi": "biểu đồ điểm còn lại theo thời gian"
+        }
+      ]
+    }
+  ]
+}

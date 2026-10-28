@@ -1,0 +1,209 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-2-deep-stakeholder-raci",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-2-5-ch2-agreement"
+  },
+  "exercises": [
+    {
+      "title": "Deep Lab 2 — Stakeholder grid, RACI and decision rules",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 60,
+      "points": 100,
+      "concepts": [
+        "stakeholder analysis",
+        "RACI",
+        "decision rules"
+      ],
+      "prerequisites": [
+        "Lab 2",
+        "SWR302 lessons 2.1 and 2.5"
+      ],
+      "tags": [
+        "swr302",
+        "deep-lab"
+      ],
+      "problemHtml": "<h1>Deep Lab 2 — Stakeholder grid, RACI and decision rules</h1>\n<p class=\"bi-phu\">Chapter 2 deep lab · who to involve and who decides · 10 marks · hidden data on Submit</p>\n<h2>1. Overview</h2>\n<p>Wiegers Ch.2: identify the decision makers and agree on a decision rule <i>before</i> conflicts arise. Build three small tools for the <b>ClinicCare</b> BA.</p>\n<ul>\n<li><b>A. <code>grid(stakeholders)</code></b> — power and interest are integers 1–5; \"high\" means ≥ 3. Return <code>{ manageClosely, keepSatisfied, keepInformed, monitor, invalid }</code> (high/high, high power, high interest, low/low; invalid scores), each sorted.</li>\n<li><b>B. <code>checkRaci(activities, matrix)</code></b> — <code>matrix[activity][person]</code> is a cell of letters from R, A, C, I (case-insensitive, each letter at most once, e.g. \"RA\"). Sorted, unique codes: <code>MISSING:act</code> (activity without a row), <code>EXTRA:act</code> (row for an unlisted activity), <code>BAD_CELL:act/person</code> (empty, other letters or repeated letters — the cell is then ignored), <code>NO_A:act</code>, <code>MULTI_A:act</code> (exactly one person must be Accountable), <code>NO_R:act</code> (someone must be Responsible).</li>\n<li><b>C. <code>decide(votes, rule)</code></b> — votes are \"yes\", \"no\" or \"abstain\" (abstentions ignored). <code>unanimous</code>: approved if at least one yes and no \"no\", rejected if any \"no\", otherwise no decision; <code>majority</code>: more yes than no ⇒ approved, more no ⇒ rejected, tie ⇒ no decision; <code>leader</code>: the leader’s vote decides (abstain or absent ⇒ no decision); unknown rule ⇒ no decision.</li>\n</ul>\n<p><b>Sample data</b>:</p><pre><code>const STAKEHOLDERS = [\n  {\"name\": \"Clinic owner\", \"power\": 5, \"interest\": 4},\n  {\"name\": \"Health ministry\", \"power\": 5, \"interest\": 2},\n  {\"name\": \"Patients\", \"power\": 2, \"interest\": 5},\n  {\"name\": \"Receptionists\", \"power\": 3, \"interest\": 5},\n  {\"name\": \"Cleaning staff\", \"power\": 1, \"interest\": 1},\n  {\"name\": \"Insurance partner\", \"power\": 3, \"interest\": 2},\n  {\"name\": \"Lab supplier\", \"power\": 0, \"interest\": 3}\n];</code></pre><pre><code>const ACTIVITIES = [\"Approve vision\", \"Write use cases\", \"Review SRS\", \"Approve changes\", \"Train users\"];</code></pre><pre><code>const RACI = {\n  Approve vision: {\n    Clinic owner: \"A\",\n    BA: \"R\",\n    Head doctor: \"C\"\n  },\n  Write use cases: {\n    BA: \"RA\",\n    Receptionists: \"C\",\n    Patients: \"c\"\n  },\n  Review SRS: {\n    BA: \"R\",\n    Head doctor: \"A\",\n    Developers: \"C\",\n    Testers: \"C\",\n    Clinic owner: \"A\"\n  },\n  Approve changes: {\n    Clinic owner: \"I\",\n    BA: \"C\",\n    Project manager: \"C\"\n  },\n  Retire: {\n    BA: \"R\"\n  }\n};</code></pre>\n<h3>Main features</h3>\n<ul>\n  <li>A. Power/interest grid.</li>\n  <li>B. RACI validation.</li>\n  <li>C. Decision rules.</li>\n  <li>D. Inputs untouched.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>Pure functions; activity names such as \"toString\" must work.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>answers/\n├── sample-data.js     ← STAKEHOLDERS, ACTIVITIES, RACI\n└── stakeholders.js    ← grid, checkRaci, decide</pre>\n<h2>3. Data model</h2>\n<p><b>Data shapes</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>stakeholder</code></td><td>{ name, power, interest }</td><td>integers 1–5</td></tr><tr><td><code>RACI</code></td><td>{ activity: { person: \"R\" | \"A\" | \"C\" | \"I\" | \"RA\" … } }</td><td>case-insensitive</td></tr><tr><td><code>vote / rule</code></td><td>{ person, vote } / { type: 'unanimous' | 'majority' | 'leader', leader? }</td><td></td></tr></tbody></table>\n<h2>4. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. A. grid <span class=\"bi-diem\">2.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Four quadrants and invalid scores.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">stakeholder analysis</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. B. checkRaci <span class=\"bi-diem\">4 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>All problem codes.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">RACI</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. C. decide <span class=\"bi-diem\">3 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Three decision rules.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">decision rules</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. D. Inputs untouched <span class=\"bi-diem\">0.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>No mutation.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">immutability</span></p>\n</div>\n<h2>5. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>grid · checkRaci · decide</code></td><td>answers/stakeholders.js</td></tr></tbody></table>\n<h2>6. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>A. grid</td><td>2.5</td></tr><tr><td>2</td><td>B. checkRaci</td><td>4</td></tr><tr><td>3</td><td>C. decide</td><td>3</td></tr><tr><td>4</td><td>D. Inputs untouched</td><td>0.5</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Allowing two Accountable people — accountability that is shared is accountability nobody has.</li>\n  <li>Counting abstentions as \"no\".</li>\n</ul>\n<h2>7. Submission</h2>\n<p>Write your answers in the files of <code>answers/</code> on the right. Diagrams are written as text in the syntax of a real tool (Mermaid or PlantUML — paste them into <a href=\"https://mermaid.live\" target=\"_blank\" rel=\"noopener\">mermaid.live</a> or <a href=\"https://www.plantuml.com/plantuml\" target=\"_blank\" rel=\"noopener\">plantuml.com</a> to SEE the picture); tables are JavaScript arrays, one object per row of the school template. Press <b>Run</b> for the visible checks and <b>Submit</b> for full grading, hidden checks included. Your mark per question appears in the rubric table.</p>",
+      "problemHtmlVi": "<h1>Deep Lab 2 — Stakeholder grid, RACI and decision rules</h1>\n<p class=\"bi-phu\">Deep lab chương 2 · ai tham gia và ai quyết · 10 điểm · dữ liệu ẩn khi Nộp</p>\n<h2>1. Tổng quan</h2>\n<p>Wiegers Ch.2: xác định người quyết định và thống nhất quy tắc ra quyết định <i>trước</i> khi có xung đột. Viết ba công cụ cho BA của ClinicCare.</p>\n<ul><li>A. <code>grid</code> — lưới quyền lực/quan tâm (\"cao\" ≥ 3), điểm sai ⇒ invalid.</li><li>B. <code>checkRaci</code> — MISSING, EXTRA, BAD_CELL, NO_A, MULTI_A, NO_R.</li><li>C. <code>decide</code> — nhất trí, đa số, trưởng nhóm; phiếu trắng bị bỏ qua.</li></ul>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>A. Lưới quyền lực/quan tâm.</li>\n  <li>B. Kiểm RACI.</li>\n  <li>C. Quy tắc ra quyết định.</li>\n  <li>D. Không sửa đầu vào.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Hàm thuần; tên hoạt động như \"toString\" phải chạy đúng.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>answers/\n├── sample-data.js     ← STAKEHOLDERS, ACTIVITIES, RACI\n└── stakeholders.js    ← grid, checkRaci, decide</pre>\n<h2>3. Mô hình dữ liệu</h2>\n<p><b>Data shapes</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>stakeholder</code></td><td>{ name, power, interest }</td><td>số nguyên 1–5</td></tr><tr><td><code>RACI</code></td><td>{ activity: { person: \"R\" | \"A\" | \"C\" | \"I\" | \"RA\" … } }</td><td>không phân biệt hoa thường</td></tr><tr><td><code>vote / rule</code></td><td>{ person, vote } / { type: 'unanimous' | 'majority' | 'leader', leader? }</td><td></td></tr></tbody></table>\n<h2>4. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. A. grid <span class=\"bi-diem\">2.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Bốn ô và điểm sai.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">stakeholder analysis</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. B. checkRaci <span class=\"bi-diem\">4 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Đủ mã lỗi.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">RACI</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. C. decide <span class=\"bi-diem\">3 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Ba quy tắc ra quyết định.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">decision rules</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. D. Không sửa đầu vào <span class=\"bi-diem\">0.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Không sửa đầu vào.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">immutability</span></p>\n</div>\n<h2>5. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>grid · checkRaci · decide</code></td><td>answers/stakeholders.js</td></tr></tbody></table>\n<h2>6. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>A. grid</td><td>2.5</td></tr><tr><td>2</td><td>B. checkRaci</td><td>4</td></tr><tr><td>3</td><td>C. decide</td><td>3</td></tr><tr><td>4</td><td>D. Không sửa đầu vào</td><td>0.5</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Cho hai người Accountable — trách nhiệm chia đôi là không ai chịu trách nhiệm.</li>\n  <li>Coi phiếu trắng là \"no\".</li>\n</ul>\n<h2>7. Nộp bài</h2>\n<p>Viết câu trả lời vào các tệp trong <code>answers/</code> bên phải. Sơ đồ viết bằng chữ theo cú pháp của công cụ thật (Mermaid hoặc PlantUML — dán vào <a href=\"https://mermaid.live\" target=\"_blank\" rel=\"noopener\">mermaid.live</a> hoặc <a href=\"https://www.plantuml.com/plantuml\" target=\"_blank\" rel=\"noopener\">plantuml.com</a> để XEM hình); bảng là mảng JavaScript, mỗi object là một dòng của template trường. Bấm <b>Chạy thử</b> để chạy kiểm hiện, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn). Điểm từng câu hiện trong bảng thang điểm.</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "Pure functions; activity names such as \"toString\" must work.|||Hàm thuần; tên hoạt động như \"toString\" phải chạy đúng.",
+      "examplesJson": [
+        {
+          "input": "answers/*.js — one object per row of the template",
+          "output": "Rubric table: marks per question (e.g. B. 2.5/3)",
+          "explanation": "Every rubric line is checked separately; hidden checks run on Submit.|||Mỗi dòng rubric được kiểm riêng; kiểm ẩn chạy khi Nộp."
+        }
+      ],
+      "hintsJson": [
+        "RACI: kiểm ô bằng /^[RACI]+$/ sau khi viết hoa, và không có chữ lặp.",
+        "Đa số: chỉ đếm yes/no."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers/sample-data.js",
+          "language": "javascript",
+          "code": "// Sample data (read-only) — ClinicCare.\nconst STAKEHOLDERS = [\n {\n  \"name\": \"Clinic owner\",\n  \"power\": 5,\n  \"interest\": 4\n },\n {\n  \"name\": \"Health ministry\",\n  \"power\": 5,\n  \"interest\": 2\n },\n {\n  \"name\": \"Patients\",\n  \"power\": 2,\n  \"interest\": 5\n },\n {\n  \"name\": \"Receptionists\",\n  \"power\": 3,\n  \"interest\": 5\n },\n {\n  \"name\": \"Cleaning staff\",\n  \"power\": 1,\n  \"interest\": 1\n },\n {\n  \"name\": \"Insurance partner\",\n  \"power\": 3,\n  \"interest\": 2\n },\n {\n  \"name\": \"Lab supplier\",\n  \"power\": 0,\n  \"interest\": 3\n }\n];\nconst ACTIVITIES = [\"Approve vision\",\"Write use cases\",\"Review SRS\",\"Approve changes\",\"Train users\"];\nconst RACI = {\n \"Approve vision\": {\n  \"Clinic owner\": \"A\",\n  \"BA\": \"R\",\n  \"Head doctor\": \"C\"\n },\n \"Write use cases\": {\n  \"BA\": \"RA\",\n  \"Receptionists\": \"C\",\n  \"Patients\": \"c\"\n },\n \"Review SRS\": {\n  \"BA\": \"R\",\n  \"Head doctor\": \"A\",\n  \"Developers\": \"C\",\n  \"Testers\": \"C\",\n  \"Clinic owner\": \"A\"\n },\n \"Approve changes\": {\n  \"Clinic owner\": \"I\",\n  \"BA\": \"C\",\n  \"Project manager\": \"C\"\n },\n \"Retire\": {\n  \"BA\": \"R\"\n }\n};\n"
+        },
+        {
+          "name": "answers/stakeholders.js",
+          "language": "javascript",
+          "code": "function grid(stakeholders) { return { manageClosely: [], keepSatisfied: [], keepInformed: [], monitor: [], invalid: [] }; }\nfunction checkRaci(activities, matrix) { return []; }\nfunction decide(votes, rule) { return 'no decision'; }\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers/sample-data.js",
+          "language": "javascript",
+          "code": "// Sample data (read-only) — ClinicCare.\nconst STAKEHOLDERS = [\n {\n  \"name\": \"Clinic owner\",\n  \"power\": 5,\n  \"interest\": 4\n },\n {\n  \"name\": \"Health ministry\",\n  \"power\": 5,\n  \"interest\": 2\n },\n {\n  \"name\": \"Patients\",\n  \"power\": 2,\n  \"interest\": 5\n },\n {\n  \"name\": \"Receptionists\",\n  \"power\": 3,\n  \"interest\": 5\n },\n {\n  \"name\": \"Cleaning staff\",\n  \"power\": 1,\n  \"interest\": 1\n },\n {\n  \"name\": \"Insurance partner\",\n  \"power\": 3,\n  \"interest\": 2\n },\n {\n  \"name\": \"Lab supplier\",\n  \"power\": 0,\n  \"interest\": 3\n }\n];\nconst ACTIVITIES = [\"Approve vision\",\"Write use cases\",\"Review SRS\",\"Approve changes\",\"Train users\"];\nconst RACI = {\n \"Approve vision\": {\n  \"Clinic owner\": \"A\",\n  \"BA\": \"R\",\n  \"Head doctor\": \"C\"\n },\n \"Write use cases\": {\n  \"BA\": \"RA\",\n  \"Receptionists\": \"C\",\n  \"Patients\": \"c\"\n },\n \"Review SRS\": {\n  \"BA\": \"R\",\n  \"Head doctor\": \"A\",\n  \"Developers\": \"C\",\n  \"Testers\": \"C\",\n  \"Clinic owner\": \"A\"\n },\n \"Approve changes\": {\n  \"Clinic owner\": \"I\",\n  \"BA\": \"C\",\n  \"Project manager\": \"C\"\n },\n \"Retire\": {\n  \"BA\": \"R\"\n }\n};\n"
+        },
+        {
+          "name": "answers/stakeholders.js",
+          "language": "javascript",
+          "code": "function grid(stakeholders) {\n  var out = { manageClosely: [], keepSatisfied: [], keepInformed: [], monitor: [], invalid: [] };\n  function ok(v) { return typeof v === 'number' && v >= 1 && v <= 5 && Math.floor(v) === v; }\n  stakeholders.forEach(function (s) {\n    if (!ok(s.power) || !ok(s.interest)) { out.invalid.push(s.name); return; }\n    var p = s.power >= 3, i = s.interest >= 3;\n    (p && i ? out.manageClosely : p ? out.keepSatisfied : i ? out.keepInformed : out.monitor).push(s.name);\n  });\n  Object.keys(out).forEach(function (k) { out[k].sort(); });\n  return out;\n}\n\nfunction checkRaci(activities, matrix) {\n  var out = Object.create(null);\n  activities.forEach(function (a) {\n    if (!Object.prototype.hasOwnProperty.call(matrix, a)) { out['MISSING:' + a] = true; return; }\n    var row = matrix[a], nA = 0, nR = 0;\n    Object.keys(row).forEach(function (person) {\n      var cell = String(row[person]).toUpperCase();\n      if (!/^[RACI]+$/.test(cell) || cell.split('').some(function (c, i) { return cell.indexOf(c) !== i; })) { out['BAD_CELL:' + a + '/' + person] = true; return; }\n      if (cell.indexOf('A') >= 0) nA++;\n      if (cell.indexOf('R') >= 0) nR++;\n    });\n    if (nA === 0) out['NO_A:' + a] = true;\n    if (nA > 1) out['MULTI_A:' + a] = true;\n    if (nR === 0) out['NO_R:' + a] = true;\n  });\n  Object.keys(matrix).forEach(function (a) { if (activities.indexOf(a) < 0) out['EXTRA:' + a] = true; });\n  return Object.keys(out).sort();\n}\n\nfunction decide(votes, rule) {\n  var cast = votes.filter(function (v) { return v.vote === 'yes' || v.vote === 'no'; });\n  var yes = cast.filter(function (v) { return v.vote === 'yes'; }).length, no = cast.length - yes;\n  if (rule.type === 'unanimous') return cast.length && no === 0 ? 'approved' : no > 0 ? 'rejected' : 'no decision';\n  if (rule.type === 'majority') return yes > no ? 'approved' : no > yes ? 'rejected' : 'no decision';\n  if (rule.type === 'leader') {\n    var l = votes.filter(function (v) { return v.person === rule.leader; })[0];\n    return l && l.vote === 'yes' ? 'approved' : l && l.vote === 'no' ? 'rejected' : 'no decision';\n  }\n  return 'no decision';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>On ClinicCare: the clinic owner and receptionists must be managed closely; the ministry and the insurer kept satisfied. In the RACI, \"Review SRS\" has two accountable people, \"Approve changes\" has nobody responsible or accountable (the owner is only informed — a recipe for change requests nobody approves), \"Train users\" is missing and \"Retire\" is not a listed activity.</p>",
+      "solutionExplanationHtmlVi": "<p>Trên ClinicCare: chủ phòng khám và lễ tân cần quản lý sát; bộ y tế và đối tác bảo hiểm cần giữ hài lòng. Trong RACI, \"Review SRS\" có hai người Accountable, \"Approve changes\" không ai R hay A (chủ phòng khám chỉ được thông báo — CR sẽ không ai duyệt), thiếu \"Train users\" và thừa \"Retire\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "answers/sample-data.js",
+          "answers/stakeholders.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "grid: the four quadrants",
+              "vi": "grid: bốn ô"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var i;try{i=grid(STAKEHOLDERS)}catch(n){return(n&&n.name===\"ReferenceError\"?\"missing: \":\"error: \")+(n&&n.message)}var e=JSON.stringify(i===void 0?null:i),r='{\"manageClosely\":[\"Clinic owner\",\"Receptionists\"],\"keepSatisfied\":[\"Health ministry\",\"Insurance partner\"],\"keepInformed\":[\"Patients\"],\"monitor\":[\"Cleaning staff\"],\"invalid\":[\"Lab supplier\"]}';return e===r?\"OK\":'expected {\"manageClosely\":[\"Clinic owner\",\"Receptionists\"],\"keepSatisfied\":[\"Health ministry\",\"Insurance partner\"],\"keepInformed\":[\"Patients\"],\"monitor\":[\"Cleaning staff\"],\"invalid\":[\"Lab supplier\"]}, got '+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "grid (hidden): boundaries at 3, non-integer scores",
+              "vi": "grid (ẩn): biên ở 3, điểm không nguyên"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var n;try{n=grid([{name:\"b\",power:3,interest:3},{name:\"a\",power:2,interest:3},{name:\"c\",power:3,interest:2.5},{name:\"d\",power:\"5\",interest:5},{name:\"e\",power:1,interest:2}])}catch(r){return(r&&r.name===\"ReferenceError\"?\"missing: \":\"error: \")+(r&&r.message)}var e=JSON.stringify(n===void 0?null:n),t='{\"manageClosely\":[\"b\"],\"keepSatisfied\":[],\"keepInformed\":[\"a\"],\"monitor\":[\"e\"],\"invalid\":[\"c\",\"d\"]}';return e===t?\"OK\":\"got \"+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "checkRaci: ClinicCare matrix",
+              "vi": "checkRaci: ma trận ClinicCare"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var n;try{n=checkRaci(ACTIVITIES,RACI)}catch(r){return(r&&r.name===\"ReferenceError\"?\"missing: \":\"error: \")+(r&&r.message)}var e=JSON.stringify(n===void 0?null:n),i='[\"EXTRA:Retire\",\"MISSING:Train users\",\"MULTI_A:Review SRS\",\"NO_A:Approve changes\",\"NO_R:Approve changes\"]';return e===i?\"OK\":'expected [\"EXTRA:Retire\",\"MISSING:Train users\",\"MULTI_A:Review SRS\",\"NO_A:Approve changes\",\"NO_R:Approve changes\"], got '+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "checkRaci: a correct row has no problem; \"RA\" counts as both",
+              "vi": "checkRaci: dòng đúng không lỗi; \"RA\" tính cả hai"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var n;try{n=checkRaci([\"X\"],{X:{p:\"RA\",q:\"i\",r:\"C\"}})}catch(r){return(r&&r.name===\"ReferenceError\"?\"missing: \":\"error: \")+(r&&r.message)}var e=JSON.stringify(n===void 0?null:n),i=\"[]\";return e===i?\"OK\":\"expected [], got \"+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "checkRaci (hidden): bad cells, repeated letters, tricky names",
+              "vi": "checkRaci (ẩn): ô sai, chữ lặp, tên đánh lừa"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var e;try{e=checkRaci([\"toString\",\"Y\"],{toString:{a:\"R\",b:\"AA\",c:\"X\"},Y:{d:\"A\",e:\"\"}})}catch(n){return(n&&n.name===\"ReferenceError\"?\"missing: \":\"error: \")+(n&&n.message)}var r=JSON.stringify(e===void 0?null:e),t='[\"BAD_CELL:Y/e\",\"BAD_CELL:toString/b\",\"BAD_CELL:toString/c\",\"NO_A:toString\",\"NO_R:Y\"]';return r===t?\"OK\":\"got \"+(r.length>220?r.slice(0,220)+\"\\u2026\":r)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "decide: majority, unanimous and leader rules",
+              "vi": "decide: quy tắc đa số, nhất trí, trưởng nhóm"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var o;try{o=[decide([{person:\"Owner\",vote:\"no\"},{person:\"BA\",vote:\"yes\"},{person:\"Doctor\",vote:\"yes\"},{person:\"IT\",vote:\"abstain\"}],{type:\"majority\"}),decide([{person:\"Owner\",vote:\"no\"},{person:\"BA\",vote:\"yes\"},{person:\"Doctor\",vote:\"yes\"},{person:\"IT\",vote:\"abstain\"}],{type:\"unanimous\"}),decide([{person:\"Owner\",vote:\"no\"},{person:\"BA\",vote:\"yes\"},{person:\"Doctor\",vote:\"yes\"},{person:\"IT\",vote:\"abstain\"}],{type:\"leader\",leader:\"Owner\"})]}catch(r){return(r&&r.name===\"ReferenceError\"?\"missing: \":\"error: \")+(r&&r.message)}var e=JSON.stringify(o===void 0?null:o),n='[\"approved\",\"rejected\",\"rejected\"]';return e===n?\"OK\":'expected [\"approved\",\"rejected\",\"rejected\"], got '+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "decide (hidden): ties, abstentions, absent leader",
+              "vi": "decide (ẩn): hoà, phiếu trắng, trưởng nhóm vắng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var o;try{o=[decide([{person:\"a\",vote:\"yes\"},{person:\"b\",vote:\"no\"}],{type:\"majority\"}),decide([{person:\"a\",vote:\"abstain\"}],{type:\"unanimous\"}),decide([{person:\"a\",vote:\"yes\"}],{type:\"leader\",leader:\"z\"}),decide([],{type:\"vote-by-loudness\"})]}catch(n){return(n&&n.name===\"ReferenceError\"?\"missing: \":\"error: \")+(n&&n.message)}var e=JSON.stringify(o===void 0?null:o),r='[\"no decision\",\"no decision\",\"no decision\",\"no decision\"]';return e===r?\"OK\":\"got \"+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "inputs are not modified",
+              "vi": "không sửa đầu vào"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var n;try{n=(function(){var r=JSON.stringify([STAKEHOLDERS,RACI]);return grid(STAKEHOLDERS),checkRaci(ACTIVITIES,RACI),r===JSON.stringify([STAKEHOLDERS,RACI])})()}catch(r){return(r&&r.name===\"ReferenceError\"?\"missing: \":\"error: \")+(r&&r.message)}var e=JSON.stringify(n===void 0?null:n),t=\"true\";return e===t?\"OK\":\"expected true, got \"+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. A. grid",
+            "diem": 2.5
+          },
+          {
+            "ma": "f2",
+            "ten": "2. B. checkRaci",
+            "diem": 4
+          },
+          {
+            "ma": "f3",
+            "ten": "3. C. decide",
+            "diem": 3
+          },
+          {
+            "ma": "f4",
+            "ten": "4. D. Inputs untouched",
+            "diem": 0.5
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "deep-lab",
+      "mistakesJson": [
+        {
+          "loi": "Đọc matrix[\"toString\"] mà không dùng hasOwnProperty."
+        },
+        {
+          "loi": "Bỏ sót hoạt động \"Train users\" không có dòng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "stakeholder",
+          "vi": "bên liên quan — người/tổ chức bị ảnh hưởng hoặc ảnh hưởng tới dự án"
+        },
+        {
+          "en": "RACI",
+          "vi": "Responsible (làm) · Accountable (chịu trách nhiệm cuối, đúng 1 người) · Consulted (được hỏi) · Informed (được báo)"
+        }
+      ]
+    }
+  ]
+}

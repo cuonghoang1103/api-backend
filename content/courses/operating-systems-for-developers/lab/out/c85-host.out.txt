@@ -1,0 +1,52 @@
+$ for m in 256m 512m 1g 2g 4g; do printf '%-5s ' $m; docker run --rm --name os-c85n --label oslab=1 --memory $m os-lab node -p "'heap limit ' + Math.round(require('v8').getHeapStatistics().heap_size_limit / 2**20) + ' MB'"; done
+256m  heap limit 259 MB
+512m  heap limit 259 MB
+1g    heap limit 524 MB
+2g    heap limit 1048 MB
+4g    heap limit 2096 MB
+$ docker run --rm --name os-c85j --label oslab=1 --memory 512m os-lab java -XshowSettings:system -version 2>&1 | grep -E 'Provider|Memory Limit|Effective CPU'
+    Provider: cgroupv2
+    Effective CPU Count: 10
+    Memory Limit: 512.00M
+$ docker run --rm --name os-c85j --label oslab=1 --memory 512m os-lab java -XX:+PrintFlagsFinal -version 2>/dev/null | grep -E ' (MaxHeapSize|MaxRAMPercentage) '
+   size_t MaxHeapSize                              = 134217728                                 {product} {ergonomic}
+   double MaxRAMPercentage                         = 25.000000                                 {product} {default}
+$ docker run --rm --name os-c85j --label oslab=1 --memory 512m os-lab java -XX:MaxRAMPercentage=75 -XX:+PrintFlagsFinal -version 2>/dev/null | grep -E ' MaxHeapSize '
+   size_t MaxHeapSize                              = 402653184                                 {product} {ergonomic}
+$ docker run --rm --name os-c85h --label oslab=1 --memory 256m --memory-swap 256m -v "$PWD":/lab -w /lab os-lab java -Xmx1g Hog
+max heap 989 MB
+holding 32 MB
+holding 64 MB
+holding 96 MB
+holding 128 MB
+holding 160 MB
+holding 192 MB
+$ echo "exit $?"
+exit 137
+$ docker run --rm --name os-c85h --label oslab=1 --memory 256m --memory-swap 256m -v "$PWD":/lab -w /lab os-lab java -XX:MaxRAMPercentage=75 Hog
+max heap 185 MB
+holding 32 MB
+holding 64 MB
+holding 96 MB
+holding 128 MB
+holding 160 MB
+Exception in thread "main" java.lang.OutOfMemoryError: Java heap space
+	at Hog.main(Hog.java:13)
+$ echo "exit $?"
+exit 1
+$ docker run --rm --name os-c85h --label oslab=1 --memory 256m --memory-swap 256m -v "$PWD":/lab -w /lab os-lab java -XX:MaxRAMPercentage=75 -XX:+ExitOnOutOfMemoryError Hog 2>&1 | tail -2; echo "exit ${PIPESTATUS[0]}"
+holding 160 MB
+Terminating due to java.lang.OutOfMemoryError: Java heap space
+exit 3
+$ docker run --rm --name os-c85f --label oslab=1 --memory 256m os-lab cat /sys/fs/cgroup/memory.max /sys/fs/cgroup/memory.swap.max
+268435456
+268435456
+$ docker run --rm --name os-c85f --label oslab=1 --memory 256m --memory-swap 256m os-lab cat /sys/fs/cgroup/memory.swap.max
+0
+$ docker run --rm --name os-c85f --label oslab=1 --memory 256m --memory-reservation 128m --oom-score-adj 500 os-lab cat /sys/fs/cgroup/memory.low /sys/fs/cgroup/memory.high /proc/1/oom_score_adj
+134217728
+max
+500
+$ docker run --rm --name os-c85f --label oslab=1 --memory 256m --memory-swappiness 10 os-lab cat /proc/sys/vm/swappiness
+WARNING: Your kernel does not support memory swappiness capabilities or the cgroup is not mounted. Memory swappiness discarded.
+60

@@ -1,0 +1,84 @@
+$ free -m
+               total        used        free      shared  buff/cache   available
+Mem:            7934        2950        3682         156        1656        4984
+Swap:           1023           1        1022
+$ grep -E '^(MemTotal|MemFree|MemAvailable|Buffers|Cached|Active\(anon\)|Inactive\(anon\)|Active\(file\)|Inactive\(file\)|Dirty|Shmem|SwapTotal|SwapFree):' /proc/meminfo
+MemTotal:        8124516 kB
+MemFree:         3770012 kB
+MemAvailable:    5103160 kB
+Buffers:          104140 kB
+Cached:          1314312 kB
+Active(anon):    2158480 kB
+Inactive(anon):   385408 kB
+Active(file):     760180 kB
+Inactive(file):   498288 kB
+SwapTotal:       1048572 kB
+SwapFree:        1047276 kB
+Dirty:               116 kB
+Shmem:            160004 kB
+$ cat /sys/fs/cgroup/memory.max
+1073741824
+$ grep -E '^(anon|file|file_dirty|active_file|inactive_file) ' /sys/fs/cgroup/memory.stat
+anon 1302528
+file 118784
+file_dirty 0
+inactive_file 118784
+active_file 0
+$ dd if=/dev/urandom of=/tmp/big bs=1M count=200 status=none
+$ ./incore /tmp/big
+/tmp/big: 200 MiB, 51200 of 51200 pages in page cache (100%)
+$ grep -E '^(anon|file|file_dirty) ' /sys/fs/cgroup/memory.stat
+anon 1294336
+file 209907712
+file_dirty 0
+$ sync; grep -E '^(file|file_dirty) ' /sys/fs/cgroup/memory.stat
+file 209907712
+file_dirty 0
+$ ./incore /tmp/big evict
+/tmp/big: 200 MiB, 0 of 51200 pages in page cache (0%)
+$ time cat /tmp/big > /dev/null
+real 0.044 s
+$ ./incore /tmp/big
+/tmp/big: 200 MiB, 51200 of 51200 pages in page cache (100%)
+$ time cat /tmp/big > /dev/null
+real 0.003 s
+$ free -m | head -2
+               total        used        free      shared  buff/cache   available
+Mem:            7934        2953        3478         156        1856        4980
+$ dd if=/dev/zero of=/tmp/huge bs=1M count=1000 status=none; cat /tmp/huge > /dev/null
+$ free -m | head -2
+               total        used        free      shared  buff/cache   available
+Mem:            7934        2966        2651         156        2671        4967
+$ ./incore /tmp/big; ./incore /tmp/huge
+/tmp/big: 200 MiB, 26112 of 51200 pages in page cache (51%)
+/tmp/huge: 1000 MiB, 229123 of 256000 pages in page cache (90%)
+$ cat /sys/fs/cgroup/memory.current /sys/fs/cgroup/memory.peak
+1071300608
+1073741824
+$ grep -E '^(pgscan|pgsteal|pgscan_kswapd|pgscan_direct|workingset_refault_file) ' /sys/fs/cgroup/memory.stat
+workingset_refault_file 76823
+pgscan 134910
+pgsteal 128794
+pgscan_kswapd 0
+pgscan_direct 134910
+$ cat /sys/fs/cgroup/memory.events
+low 0
+high 0
+max 427
+oom 0
+oom_kill 0
+oom_group_kill 0
+sock_throttled 0
+$ grep -A5 'zone   Normal' /proc/zoneinfo | grep -E 'zone|min|low|high'
+Node 0, zone   Normal
+        min      8136
+        low      10170
+        high     12204
+$ grep -E '^(pgscan_kswapd|pgscan_direct|allocstall_movable) ' /proc/vmstat
+allocstall_movable 589
+pgscan_kswapd 738648
+pgscan_direct 119569
+$ sync; echo 1 > /proc/sys/vm/drop_caches
+$ free -m | head -2
+               total        used        free      shared  buff/cache   available
+Mem:            7934        2977        4447         156         864        4956

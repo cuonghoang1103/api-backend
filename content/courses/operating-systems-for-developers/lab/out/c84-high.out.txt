@@ -1,0 +1,52 @@
+$ cat /proc/self/cgroup
+0::/
+$ mkdir /sys/fs/cgroup/init /sys/fs/cgroup/job
+$ echo $$ > /sys/fs/cgroup/init/cgroup.procs
+$ echo +memory > /sys/fs/cgroup/cgroup.subtree_control
+$ echo 96M > /sys/fs/cgroup/job/memory.high; echo 160M > /sys/fs/cgroup/job/memory.max; echo 32M > /sys/fs/cgroup/job/memory.swap.max
+$ grep . /sys/fs/cgroup/job/memory.{high,max,swap.max}
+/sys/fs/cgroup/job/memory.high:100663296
+/sys/fs/cgroup/job/memory.max:167772160
+/sys/fs/cgroup/job/memory.swap.max:33554432
+$ sh -c 'echo $$ > /sys/fs/cgroup/job/cgroup.procs; exec ./fill 240 8'; echo "exit code $?"
+./fill pid 31: filling 240 MiB in 8 MiB chunks (cgroup /job)
+   8 MiB  +    1.0 ms  t=     1 ms  current    8 MiB  swap    0 MiB  high 0  max 0  oom_kill 0
+  16 MiB  +    1.2 ms  t=     2 ms  current   16 MiB  swap    0 MiB  high 0  max 0  oom_kill 0
+  24 MiB  +    1.1 ms  t=     4 ms  current   24 MiB  swap    0 MiB  high 0  max 0  oom_kill 0
+  32 MiB  +    1.0 ms  t=     5 ms  current   32 MiB  swap    0 MiB  high 0  max 0  oom_kill 0
+  40 MiB  +    1.0 ms  t=     6 ms  current   40 MiB  swap    0 MiB  high 0  max 0  oom_kill 0
+  48 MiB  +    1.3 ms  t=     7 ms  current   48 MiB  swap    0 MiB  high 0  max 0  oom_kill 0
+  56 MiB  +    0.8 ms  t=     8 ms  current   56 MiB  swap    0 MiB  high 0  max 0  oom_kill 0
+  64 MiB  +    1.2 ms  t=     9 ms  current   64 MiB  swap    0 MiB  high 0  max 0  oom_kill 0
+  72 MiB  +    1.2 ms  t=    11 ms  current   72 MiB  swap    0 MiB  high 0  max 0  oom_kill 0
+  80 MiB  +    0.8 ms  t=    12 ms  current   80 MiB  swap    0 MiB  high 0  max 0  oom_kill 0
+  88 MiB  +    0.8 ms  t=    12 ms  current   88 MiB  swap    0 MiB  high 0  max 0  oom_kill 0
+  96 MiB  +    6.6 ms  t=    19 ms  current   93 MiB  swap    4 MiB  high 1  max 0  oom_kill 0
+ 104 MiB  +   10.2 ms  t=    30 ms  current   96 MiB  swap   12 MiB  high 3  max 0  oom_kill 0
+ 112 MiB  +    9.5 ms  t=    40 ms  current   94 MiB  swap   19 MiB  high 11  max 0  oom_kill 0
+ 120 MiB  +    8.2 ms  t=    48 ms  current   94 MiB  swap   27 MiB  high 14  max 0  oom_kill 0
+ 128 MiB  +  166.7 ms  t=   216 ms  current   97 MiB  swap   32 MiB  high 52  max 0  oom_kill 0
+ 136 MiB  + 7217.4 ms  t=  7433 ms  current  105 MiB  swap   32 MiB  high 156  max 0  oom_kill 0
+ 144 MiB  +25598.8 ms  t= 33032 ms  current  113 MiB  swap   32 MiB  high 379  max 0  oom_kill 0
+ 152 MiB  +43007.5 ms  t= 76040 ms  current  121 MiB  swap   32 MiB  high 738  max 0  oom_kill 0
+ 160 MiB  +24576.1 ms  t=100616 ms  current  129 MiB  swap   32 MiB  high 982  max 0  oom_kill 0
+ 168 MiB  +26622.9 ms  t=131336 ms  current  137 MiB  swap   32 MiB  high 1243  max 0  oom_kill 0
+ 176 MiB  +26617.7 ms  t=162056 ms  current  145 MiB  swap   32 MiB  high 1485  max 0  oom_kill 0
+ 184 MiB  +24575.7 ms  t=188680 ms  current  153 MiB  swap   32 MiB  high 1691  max 0  oom_kill 0
+/usr/local/bin/phien: line 24:    31 Killed                     sh -c 'echo $$ > /sys/fs/cgroup/job/cgroup.procs; exec ./fill 240 8'
+exit code 137
+$ cat /sys/fs/cgroup/job/memory.events
+low 0
+high 1948
+max 35
+oom 1
+oom_kill 1
+oom_group_kill 0
+sock_throttled 0
+$ grep -E '^(pgscan|pgsteal|pswpout) ' /sys/fs/cgroup/job/memory.stat
+pgscan 38779
+pgsteal 8011
+pswpout 8194
+$ cat /sys/fs/cgroup/job/memory.pressure
+some avg10=99.76 avg60=94.60 avg300=49.53 total=203095446
+full avg10=99.76 avg60=94.60 avg300=49.53 total=203095446

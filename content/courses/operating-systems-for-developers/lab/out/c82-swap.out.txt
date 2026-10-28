@@ -1,0 +1,70 @@
+$ swapon --show
+NAME          TYPE  SIZE USED PRIO
+/var/lib/swap file 1024M 1.3M   -1
+$ cat /proc/sys/vm/swappiness
+60
+$ cat /sys/module/zswap/parameters/enabled; ls /sys/block | grep zram || echo "no zram device"
+N
+no zram device
+$ cat /sys/fs/cgroup/memory.max /sys/fs/cgroup/memory.swap.max
+134217728
+268435456
+$ ./hold 40 &
+./hold pid 36 holds 40 MiB
+$ grep -E '^(anon|file) ' /sys/fs/cgroup/memory.stat; cat /sys/fs/cgroup/memory.swap.current
+anon 43315200
+file 40472576
+0
+$ echo "200M swappiness=0" | tee /sys/fs/cgroup/memory.reclaim > /dev/null
+/sys/fs/cgroup/memory.reclaim: Resource temporarily unavailable (os error 11)
+$ grep -E '^(anon|file) ' /sys/fs/cgroup/memory.stat; cat /sys/fs/cgroup/memory.swap.current
+anon 43319296
+file 0
+0
+$ echo "10M swappiness=200" | tee /sys/fs/cgroup/memory.reclaim > /dev/null
+$ grep -E '^(anon|file) ' /sys/fs/cgroup/memory.stat; cat /sys/fs/cgroup/memory.swap.current
+anon 31870976
+file 0
+11522048
+$ dd if=/dev/zero of=/tmp/f bs=1M count=20 status=none; cat /tmp/f > /dev/null
+$ grep -E '^(anon|file) ' /sys/fs/cgroup/memory.stat; cat /sys/fs/cgroup/memory.swap.current
+anon 31870976
+file 20971520
+11522048
+$ echo "10M swappiness=0" | tee /sys/fs/cgroup/memory.reclaim > /dev/null
+$ grep -E '^(anon|file) ' /sys/fs/cgroup/memory.stat; cat /sys/fs/cgroup/memory.swap.current
+anon 31870976
+file 10485760
+11522048
+$ ./ws 64 3 rand
+working set 64 MiB (16384 pages, anon, random order)
+pass 1:      7.6 ms      462 ns/page  major faults      0
+pass 2:      0.2 ms       11 ns/page  major faults      0
+pass 3:      0.2 ms       12 ns/page  major faults      0
+$ ./ws 160 3 rand
+working set 160 MiB (40960 pages, anon, random order)
+pass 1:   1208.3 ms    29499 ns/page  major faults  14628
+pass 2:   1574.5 ms    38439 ns/page  major faults  17584
+pass 3:   1403.5 ms    34266 ns/page  major faults  18905
+$ grep -E '^(pswpin|pswpout) ' /sys/fs/cgroup/memory.stat; cat /sys/fs/cgroup/memory.swap.current
+pswpin 53267
+pswpout 64527
+950272
+$ cat /sys/fs/cgroup/memory.pressure
+some avg10=3.44 avg60=0.67 avg300=0.14 total=456959
+full avg10=3.44 avg60=0.67 avg300=0.14 total=456959
+$ ./ws 160 3 seq
+working set 160 MiB (40960 pages, anon, sequential)
+pass 1:   1193.2 ms    29131 ns/page  major faults   7670
+pass 2:   1084.7 ms    26481 ns/page  major faults   6167
+pass 3:   1524.0 ms    37208 ns/page  major faults   7993
+$ ./hold 150 &
+./hold pid 99 holds 150 MiB
+$ ./ws 80 3 rand
+working set 80 MiB (20480 pages, anon, random order)
+pass 1:     12.0 ms      587 ns/page  major faults      0
+pass 2:      0.3 ms       15 ns/page  major faults      0
+pass 3:      0.3 ms       14 ns/page  major faults      0
+$ grep -E 'VmRSS|VmSwap' /proc/$(pidof hold)/status
+VmRSS:	   45900 kB
+VmSwap:	  109216 kB

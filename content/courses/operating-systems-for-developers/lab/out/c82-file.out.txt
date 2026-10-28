@@ -1,0 +1,26 @@
+$ cat /sys/fs/cgroup/memory.swap.max
+0
+$ dd if=/dev/urandom of=/tmp/data bs=1M count=200 status=none
+$ ./ws 64 3 rand /tmp/data
+working set 64 MiB (16384 pages, file, random order)
+pass 1:     36.6 ms     2231 ns/page  major faults     12
+pass 2:      0.1 ms        8 ns/page  major faults      0
+pass 3:      0.1 ms        8 ns/page  major faults      0
+$ ./ws 200 3 rand /tmp/data
+working set 200 MiB (51200 pages, file, random order)
+pass 1:  50480.0 ms   985938 ns/page  major faults  19946
+pass 2:  62180.3 ms  1214459 ns/page  major faults  19883
+pass 3:  59738.4 ms  1166766 ns/page  major faults  19916
+$ grep -E '^(workingset_refault_file|pgscan|pgsteal) ' /sys/fs/cgroup/memory.stat
+workingset_refault_file 91379236
+pgscan 92819810
+pgsteal 91399760
+$ cat /sys/fs/cgroup/memory.pressure
+some avg10=34.87 avg60=30.35 avg300=14.51 total=57733091
+full avg10=34.87 avg60=30.35 avg300=14.51 total=57733091
+$ cat /sys/fs/cgroup/memory.events | head -5
+low 0
+high 0
+max 1782535
+oom 0
+oom_kill 0

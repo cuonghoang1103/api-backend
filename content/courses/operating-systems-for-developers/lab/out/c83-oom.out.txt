@@ -1,0 +1,66 @@
+$ cat /proc/sys/vm/overcommit_memory /proc/sys/vm/overcommit_ratio
+1
+50
+$ grep -E '^(MemTotal|SwapTotal|CommitLimit|Committed_AS):' /proc/meminfo
+MemTotal:        8124516 kB
+SwapTotal:       1048572 kB
+CommitLimit:     5110828 kB
+Committed_AS:    5029980 kB
+$ ./overc 64
+malloc(64 GiB) = 0xffefaa98f010  OK — nothing touched yet
+CommitLimit 4991 MiB · Committed_AS 4911 → 70447 MiB
+$ ./overc 4096
+malloc(4096 GiB) = 0xfbff8aabf010  OK — nothing touched yet
+CommitLimit 4991 MiB · Committed_AS 4911 → 4199215 MiB
+$ (ulimit -v 1048576; ./overc 2)
+malloc(2 GiB) = NULL  (Cannot allocate memory)
+CommitLimit 4991 MiB · Committed_AS 4912 → 4912 MiB
+$ cat /proc/self/oom_score_adj /proc/self/oom_score
+0
+666
+$ ./postgres 140 &
+./postgres pid 44 holds 140 MiB
+$ cat /proc/$(pidof postgres)/oom_score /proc/$(pidof postgres)/oom_score_adj
+676
+0
+$ ./api 200 16 q; echo "api exit code $?"
+./api pid 55: filling 200 MiB in 16 MiB chunks (cgroup /)
+  64 MiB  +    1.8 ms  t=     9 ms  current  208 MiB  swap    0 MiB  high 0  max 0  oom_kill 0
+ 128 MiB  +    4.2 ms  t=    22 ms  current  131 MiB  swap    0 MiB  high 0  max 40  oom_kill 1
+ 192 MiB  +    1.5 ms  t=    29 ms  current  195 MiB  swap    0 MiB  high 0  max 40  oom_kill 1
+./api: done, holding 200 MiB
+api exit code 0
+/usr/local/bin/phien: line 47:    44 Killed                     ./postgres 140
+$ pidof postgres || echo "postgres is gone"
+postgres is gone
+$ dmesg | grep -E '(api|postgres) invoked oom-killer|\] \[ +pid +\]|[0-9] (postgres|api)$|oom-kill:.*task=(postgres|api),|Killed process [0-9]+ \((postgres|api)\)' | tail -6 | sed -E 's/(gfp_mask=[^,]+).*(, oom_score_adj)/\1 …\2/; s/(oom-kill:constraint=[A-Z_]+).*(,task=.*)/\1 …\2/'
+[29964.105868] api invoked oom-killer: gfp_mask=0x440dc0(GFP_KERNEL_ACCOUNT|__GFP_ZERO|__GFP_COMP) …, oom_score_adj=0
+[29964.106019] [ pid  ]   uid  tgid total_vm      rss rss_anon rss_file rss_shmem pgtables_bytes swapents oom_score_adj name
+[29964.106026] [ 97819]     0 97819    36919    36219    35863      356         0   331776        0             0 postgres
+[29964.106028] [ 97830]     0 97830    33635    29243    28885      358         0   274432        0             0 api
+[29964.106029] oom-kill:constraint=CONSTRAINT_MEMCG …,task=postgres,pid=97819,uid=0
+[29964.106066] Memory cgroup out of memory: Killed process 97819 (postgres) total-vm:147676kB, anon-rss:143452kB, file-rss:1424kB, shmem-rss:0kB, UID:0 pgtables:324kB oom_score_adj:0
+$ ./postgres 140 &
+./postgres pid 67 holds 140 MiB
+$ echo -1000 > /proc/$(pidof postgres)/oom_score_adj
+$ cat /proc/$(pidof postgres)/oom_score /proc/$(pidof postgres)/oom_score_adj
+0
+-1000
+$ ./api 200 16 q; echo "api exit code $?"
+./api pid 81: filling 200 MiB in 16 MiB chunks (cgroup /)
+  64 MiB  +    1.4 ms  t=     5 ms  current  209 MiB  swap    0 MiB  high 0  max 40  oom_kill 1
+/usr/local/bin/phien: line 24:    81 Killed                     ./api 200 16 q
+api exit code 137
+$ pidof postgres && echo "postgres survived"
+67
+postgres survived
+$ dmesg | grep -E 'Killed process [0-9]+ \((postgres|api)\)' | tail -1
+[29965.169865] Memory cgroup out of memory: Killed process 97895 (api) total-vm:133916kB, anon-rss:115572kB, file-rss:1432kB, shmem-rss:0kB, UID:0 pgtables:280kB oom_score_adj:0
+$ cat /sys/fs/cgroup/memory.events
+low 0
+high 0
+max 96
+oom 2
+oom_kill 2
+oom_group_kill 0
+sock_throttled 0

@@ -1,0 +1,66 @@
+$ docker run --name os-c84a --label oslab=1 --memory 512m --memory-swap 512m -v "$PWD":/lab -w /lab os-lab bash -c 'node build.js A 300 & A=$!; node build.js B 300 & B=$!; wait $A; echo "A exit $?"; wait $B; echo "B exit $?"; echo "peak $(( $(cat /sys/fs/cgroup/memory.peak) >> 20 )) MiB"; grep oom_kill /sys/fs/cgroup/memory.events'
+B: start (pid 7)
+A: start (pid 6)
+B: 96 MB
+A: 96 MB
+A: 192 MB
+B: 192 MB
+bash: line 1:     6 Killed                     node build.js A 300
+A exit 137
+bash: line 1:     7 Killed                     node build.js B 300
+B exit 137
+peak 512 MiB
+oom_kill 2
+$ echo "container exit $?"
+container exit 0
+$ docker inspect -f 'OOMKilled={{.State.OOMKilled}} ExitCode={{.State.ExitCode}}' os-c84a
+OOMKilled=true ExitCode=0
+$ docker run --name os-c84b --label oslab=1 --memory 512m --memory-swap 512m -v "$PWD":/lab -w /lab os-lab bash -c 'node build.js A 300 && node build.js B 300; echo "peak $(( $(cat /sys/fs/cgroup/memory.peak) >> 20 )) MiB"; grep oom_kill /sys/fs/cgroup/memory.events'
+A: start (pid 6)
+A: 96 MB
+A: 192 MB
+A: 288 MB
+A: done, peak 300 MB, rss 342 MB
+B: start (pid 13)
+B: 96 MB
+B: 192 MB
+B: 288 MB
+B: done, peak 300 MB, rss 342 MB
+peak 310 MiB
+oom_kill 0
+$ docker inspect -f 'OOMKilled={{.State.OOMKilled}} ExitCode={{.State.ExitCode}}' os-c84b
+OOMKilled=false ExitCode=0
+$ docker run --name os-c84c --label oslab=1 --memory 256m --memory-swap 256m -v "$PWD":/lab -w /lab os-lab node build.js next-build 400
+next-build: start (pid 1)
+next-build: 96 MB
+next-build: 192 MB
+$ echo "container exit $?"
+container exit 137
+$ docker inspect -f 'OOMKilled={{.State.OOMKilled}} ExitCode={{.State.ExitCode}}' os-c84c
+OOMKilled=true ExitCode=137
+$ docker run --rm --name os-c84d --label oslab=1 --memory 512m -v "$PWD":/lab -w /lab os-lab node --max-old-space-size=64 grow.js 2>&1 | grep -E 'heap|FATAL'; echo "exit ${PIPESTATUS[0]}"
+heap_size_limit 67 MB
+heapUsed 42 MB  rss 100 MB
+FATAL ERROR: Reached heap limit Allocation failed - JavaScript heap out of memory
+exit 133
+$ docker run --rm --init --name os-c84g --label oslab=1 --memory 512m -v "$PWD":/lab -w /lab os-lab node --max-old-space-size=64 grow.js 2>&1 | grep -E 'FATAL'; echo "exit ${PIPESTATUS[0]}"
+FATAL ERROR: Reached heap limit Allocation failed - JavaScript heap out of memory
+exit 134
+$ docker run --rm --name os-c84e --label oslab=1 --memory 256m --memory-swap 256m -v "$PWD":/lab -w /lab os-lab node --max-old-space-size=8192 grow.js
+heap_size_limit 8195 MB
+heapUsed 43 MB  rss 103 MB
+heapUsed 85 MB  rss 146 MB
+heapUsed 114 MB  rss 189 MB
+heapUsed 156 MB  rss 227 MB
+heapUsed 199 MB  rss 270 MB
+$ echo "exit $?"
+exit 137
+$ docker run --rm --name os-c84f --label oslab=1 --memory 256m --memory-swap 256m -v "$PWD":/lab -w /lab os-lab node grow.js
+heap_size_limit 259 MB
+heapUsed 40 MB  rss 102 MB
+heapUsed 78 MB  rss 141 MB
+heapUsed 116 MB  rss 180 MB
+heapUsed 152 MB  rss 226 MB
+heapUsed 189 MB  rss 254 MB
+$ echo "exit $?"
+exit 137

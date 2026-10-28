@@ -424,6 +424,7 @@ ${run('c133-dacquyen', 'runuser -u dev -- env PATH=/srv/evil /srv/lab/greetexec'
 <p>Now the planted binary runs with <strong>euid 0</strong> — root. The fix is the same for both: drop the privilege yourself, then exec an absolute path with a clean environment — no shell, no <code>$PATH</code> search:</p>
 ${run('c133-dacquyen', 'runuser -u dev -- env PATH=/srv/evil /srv/lab/greetfix', 1)}
 <p><code>euid=1001</code> and the real <code>/bin/hostname</code> runs. And remember lesson 13.2: a buffer overflow in a program that runs as root is not a crashed request — it is privilege escalation. A SUID program must be tiny, audited, and memory-safe.</p>
+${lab('perm', 'setuid', 'en', 'What the setuid bit does to the permission check: dev runs a root-owned setuid helper, the kernel sets the effective uid to 0, and a file dev could never read (.env, mode 600) opens. Watch the real and effective uid split.', { tour: 'perm-acl' })}
 ${lab('memory', 'overflow', 'en', 'Recall what an overflow reaches. In a setuid-root program, reaching the return address is not a crashed request — it is root. This is why SUID binaries must be tiny and bounded.')}
 
 <h3>Capabilities: one power instead of all of them</h3>
@@ -434,6 +435,7 @@ ${run('c133-dacquyen', 'runuser -u dev -- /srv/lab/bind80   # now', 1)}
 <p>One capability on the file, not a setuid-root binary that can do everything. The capabilities a running process actually holds are in <code>/proc/&lt;pid&gt;/status</code>; <code>capsh</code> decodes the bitmask:</p>
 ${run('c133-dacquyen', "grep -E '^Cap(Prm|Eff):'", 1)}
 <p>This is exactly how to run a service that needs port 80 without running it as root — and it is what Chapter 12 shows Docker doing when it drops all but a handful of capabilities.</p>
+${lab('perm', 'caps', 'en', 'Root’s power, one capability at a time: CAP_DAC_OVERRIDE lets root read a mode-000 file; drop it (--cap-drop dac_override) and root is refused like anyone else. The same split lets bind80 hold CAP_NET_BIND_SERVICE and nothing more.', { tour: 'perm-acl' })}
 
 <h3>Misconfigured permissions</h3>
 <p>A config file with the wrong mode is a quiet door. World-writable means anyone on the box can rewrite it:</p>
@@ -442,6 +444,7 @@ ${run('c133-dacquyen', 'find /srv/app', 1)}
 <p><code>find -perm -0002</code> lists everything world-writable — a standard audit step. And <code>find -perm -4000</code> lists the setuid-root binaries present, each a piece of attack surface to review:</p>
 ${run('c133-dacquyen', 'find /usr/bin -perm -4000', 1)}
 <p>The rule is least privilege on the filesystem too: config files mode <code>640</code> or <code>600</code> owned by the service user, secrets never world-readable, and no SUID binary you cannot justify.</p>
+${lab('perm', 'owner', 'en', 'Run the permission check yourself before trusting a mode: owner, then group, then other — the first match wins. A mode like 077 locks the owner out while everyone else reads.', { tour: 'perm-check' })}
 
 <h3>TOCTOU: the gap between check and use</h3>
 <p>A <strong>time-of-check to time-of-use</strong> race happens when a program verifies something about a path, then acts on the path again — and the path changed in between. Our toy checks with <code>access()</code>, then opens with <code>open()</code>:</p>
@@ -451,6 +454,7 @@ ${run('c133-dacquyen', 'ln -sf secret.txt link', 1)}
 <p>The symlink pointed at a public file when it was checked; an attacker repoints it at a secret before the <code>open()</code>, and the vulnerable path follows it. The fix never re-resolves the path by name: open once with <code>O_NOFOLLOW</code> (refuse a symlink at the final component), or open a directory and use <code>openat</code> with a file descriptor:</p>
 ${run('c133-dacquyen', '/tmp/toctou fixed', 1)}
 <p><code>O_NOFOLLOW</code> refuses the symlink outright (<code>ELOOP</code>, exit 1). The general lesson: check and use must act on the <em>same</em> object — hold a file descriptor and <code>fstat</code>/<code>openat</code> through it, don't check a name and then trust the name again.</p>
+${lab('fdtable', 'links', 'en', 'Why “hold the fd” works: a name is resolved to an inode only at the moment you look it up, and a symlink is just stored text that can be repointed. An open fd keeps pointing at the same open file description and inode, whatever happens to the names.', { tour: 'fdtable-deleted' })}
 
 <h3>Secrets leaking through /proc</h3>
 <p>A process's environment and command line are visible through <code>/proc</code>. Environment variables are owner-only (mode 0400) — but any process running as the <em>same user</em> can read them, which is exactly a compromised sidecar or a second service sharing the account:</p>
@@ -515,6 +519,7 @@ ${run('c133-dacquyen', 'runuser -u dev -- env PATH=/srv/evil /srv/lab/greetexec'
 <p>Giờ tệp cài vào chạy với <strong>euid 0</strong> — root. Bản sửa cho cả hai là một: tự bỏ đặc quyền đi, rồi exec một đường dẫn tuyệt đối với môi trường sạch — không shell, không tìm <code>$PATH</code>:</p>
 ${run('c133-dacquyen', 'runuser -u dev -- env PATH=/srv/evil /srv/lab/greetfix', 1)}
 <p><code>euid=1001</code> và đúng <code>/bin/hostname</code> chạy. Và nhớ bài 13.2: một cú tràn bộ đệm trong một chương trình chạy với quyền root không phải là một yêu cầu bị sập — nó là leo thang đặc quyền. Một chương trình SUID phải bé xíu, được soát kỹ, và an toàn bộ nhớ.</p>
+${lab('perm', 'setuid', 'vi', 'Bit setuid làm gì với phép kiểm quyền: dev chạy một helper setuid của root, nhân đặt uid hiệu lực = 0, và một file dev không bao giờ đọc được (.env, mode 600) mở ra. Nhìn uid thật và uid hiệu lực tách nhau.', { tour: 'perm-acl' })}
 ${lab('memory', 'overflow', 'vi', 'Nhớ lại cú tràn chạm tới đâu. Trong một chương trình setuid-root, chạm tới địa chỉ trả về không phải là một yêu cầu bị sập — mà là root. Đó là lý do tệp SUID phải bé xíu và có chặn.')}
 
 <h3>Capabilities: một quyền thay cho tất cả</h3>
@@ -525,6 +530,7 @@ ${run('c133-dacquyen', 'runuser -u dev -- /srv/lab/bind80   # now', 1)}
 <p>Một capability trên tệp, không phải một tệp setuid-root làm được mọi thứ. Các capability một tiến trình đang giữ nằm ở <code>/proc/&lt;pid&gt;/status</code>; <code>capsh</code> giải mã bitmask:</p>
 ${run('c133-dacquyen', "grep -E '^Cap(Prm|Eff):'", 1)}
 <p>Đây chính là cách chạy một dịch vụ cần cổng 80 mà không chạy nó với quyền root — và là điều Chương 12 cho thấy Docker làm khi nó bỏ hết chỉ chừa một nhúm capability.</p>
+${lab('perm', 'caps', 'vi', 'Quyền của root, từng capability một: CAP_DAC_OVERRIDE cho root đọc file mode 000; bỏ nó (--cap-drop dac_override) thì root bị từ chối như mọi người. Cũng cách chia đó cho bind80 giữ đúng CAP_NET_BIND_SERVICE và không gì thêm.', { tour: 'perm-acl' })}
 
 <h3>Quyền bị cấu hình sai</h3>
 <p>Một tệp cấu hình sai mode là một cánh cửa âm thầm. Ai-cũng-ghi-được nghĩa là bất kỳ ai trên máy đều viết lại được nó:</p>
@@ -533,6 +539,7 @@ ${run('c133-dacquyen', 'find /srv/app', 1)}
 <p><code>find -perm -0002</code> liệt kê mọi thứ ai-cũng-ghi-được — một bước rà soát chuẩn. Và <code>find -perm -4000</code> liệt kê các tệp setuid-root đang có, mỗi cái là một mảnh bề mặt tấn công cần soát:</p>
 ${run('c133-dacquyen', 'find /usr/bin -perm -4000', 1)}
 <p>Luật vẫn là quyền tối thiểu, cả trên hệ thống file: tệp cấu hình mode <code>640</code> hoặc <code>600</code> do người dùng dịch vụ sở hữu, bí mật không bao giờ ai-cũng-đọc-được, và không có tệp SUID nào bạn không giải thích được.</p>
+${lab('perm', 'owner', 'vi', 'Tự chạy phép kiểm quyền trước khi tin một mode: chủ, rồi nhóm, rồi other — khớp đầu tiên là chốt. Một mode như 077 khoá chính chủ ngoài cửa trong khi ai khác cũng đọc được.', { tour: 'perm-check' })}
 
 <h3>TOCTOU: khoảng hở giữa kiểm và dùng</h3>
 <p>Một race <strong>time-of-check to time-of-use</strong> xảy ra khi một chương trình xác minh điều gì đó về một đường dẫn, rồi tác động lên đường dẫn đó lần nữa — và đường dẫn đã đổi ở giữa. Đồ chơi của ta kiểm bằng <code>access()</code>, rồi mở bằng <code>open()</code>:</p>
@@ -542,6 +549,7 @@ ${run('c133-dacquyen', 'ln -sf secret.txt link', 1)}
 <p>Symlink trỏ tới một tệp công khai lúc được kiểm; kẻ tấn công trỏ lại nó sang một tệp bí mật trước khi <code>open()</code>, và đường dễ bị khai thác theo nó. Bản sửa không bao giờ phân giải lại đường dẫn theo tên: mở một lần với <code>O_NOFOLLOW</code> (từ chối symlink ở thành phần cuối), hoặc mở một thư mục rồi dùng <code>openat</code> với một file descriptor:</p>
 ${run('c133-dacquyen', '/tmp/toctou fixed', 1)}
 <p><code>O_NOFOLLOW</code> từ chối symlink thẳng (<code>ELOOP</code>, exit 1). Bài học chung: kiểm và dùng phải tác động lên <em>cùng</em> một đối tượng — giữ một file descriptor và <code>fstat</code>/<code>openat</code> qua nó, đừng kiểm một cái tên rồi lại tin cái tên đó lần nữa.</p>
+${lab('fdtable', 'links', 'vi', 'Vì sao “giữ fd” hiệu quả: một cái tên chỉ được giải ra inode đúng lúc bạn tra nó, còn symlink chỉ là chữ lưu sẵn, có thể trỏ sang chỗ khác. Một fd đang mở luôn trỏ vào cùng mô tả file mở và inode, bất kể các cái tên bị đổi thế nào.', { tour: 'fdtable-deleted' })}
 
 <h3>Bí mật rò qua /proc</h3>
 <p>Môi trường và dòng lệnh của một tiến trình nhìn thấy được qua <code>/proc</code>. Biến môi trường chỉ chủ-đọc-được (mode 0400) — nhưng bất kỳ tiến trình nào chạy dưới <em>cùng người dùng</em> đều đọc được, mà đó chính là một sidecar bị chiếm hay một dịch vụ thứ hai dùng chung tài khoản:</p>
@@ -613,6 +621,7 @@ ${run('c134-container', 'capsh --decode=0x000001ffffffffff', 1)}
 <p>14 capabilities, not 41. And only a handful of device nodes are exposed — not the host's disks:</p>
 ${run('c134-container', 'ls /dev | wc -l', 1)}
 <p>Fifteen entries: the terminal, null, zero, random — nothing that reaches the host. The kernel built this fence before your process started. That is the baseline a container gives you for free.</p>
+${lab('nslayers', 'docker', 'en', 'The namespaces of a default container, one by one: pid, mnt, net, uts, ipc, cgroup and time are new — user is the host’s, so uid 0 inside is uid 0 of the kernel, held back only by capabilities and seccomp.', { tour: 'nslayers-views' })}
 
 <h3>Why --privileged is dangerous</h3>
 <p>Now the same readout inside a <code>--privileged</code> container (only ever a throwaway one):</p>
@@ -628,7 +637,7 @@ ${run('c134-container', 'ls -l /var/run/docker.sock', 1)}
 <p>A <strong>user namespace</strong> lets an unprivileged user be root <em>inside</em> a new namespace while staying unprivileged outside. As <code>dev</code>:</p>
 ${run('c134-userns', 'runuser -u dev -- unshare', 1)}
 <p>Inside, <code>id -u</code> is 0 — root. But <code>uid_map</code> reads <code>0 1001 1</code>: UID 0 inside maps to UID 1001 (the unprivileged <code>dev</code>) outside. Its power stops at the namespace edge — it is root over its own files and nothing of the host's. This is how <strong>rootless</strong> Docker and Podman run: a compromise of "root in the container" is a compromise of one ordinary user account, not of the machine. Prefer rootless, user-namespace-remapped containers for anything you do not fully trust.</p>
-${lab('process', 'sandbox', 'en', 'A container is a process tree the kernel fences in. Poke a small tree — states, children, what the fence lets through — to build intuition for namespaces.')}
+${lab('nslayers', 'userns', 'en', 'Rootless “root”, seen from both sides: inside, dev is uid 0 with a full CapEff; the map 0 1001 1 says it is dev outside, and the host’s /etc still refuses it. Then remap 0 100000 65536, as rootless Docker does.', { tour: 'nslayers-views' })}
 
 <h3>NoNewPrivileges: a one-way switch that neutralises setuid</h3>
 <p><code>no_new_privs</code> is a per-process flag: once set, no <code>exec</code> can ever gain privilege, so a setuid binary simply does not elevate. Watch the setuid helper from lesson 13.3 work normally, then run it under the flag (this is what Docker's <code>--security-opt no-new-privileges</code> and systemd's <code>NoNewPrivileges=</code> set):</p>
@@ -638,6 +647,7 @@ ${run('c134-container', 'runuser -u dev -- setpriv', 1)}
 
 <h3>seccomp and AppArmor, in one line each</h3>
 <p>Two more kernel fences, at the concept level. <strong>seccomp</strong> (secure computing) filters which <em>syscalls</em> a process may make — you saw <code>Seccomp: 2</code> above, Docker's default profile that denies the dangerous ones; you can tighten it further per service. <strong>AppArmor</strong> (and SELinux on Red Hat systems) is a mandatory access control layer that confines a program to a declared set of files and operations regardless of Unix permissions — Docker ships a default AppArmor profile too. You rarely write these by hand; you keep the defaults on and only loosen them deliberately, the way the lab in Chapters 7–8 used <code>--security-opt seccomp=unconfined</code> for one measurement and never for a real workload.</p>
+${lab('syscall', 'seccomp', 'en', 'seccomp at work: one filter, a few programs and actions — EPERM, ENOSYS, KILL (exit 159) — and the misleading errors a blocked call produces.', { tour: 'syscall-errno' })}
 
 <h3>A hardening checklist for a backend service</h3>
 <p>Pulling the chapter together into what you actually do for a service like the CuongThai backend:</p>
@@ -720,6 +730,7 @@ ${run('c134-container', 'capsh --decode=0x000001ffffffffff', 1)}
 <p>14 capability, không phải 41. Và chỉ một nhúm device node được lộ ra — không có đĩa của máy chủ:</p>
 ${run('c134-container', 'ls /dev | wc -l', 1)}
 <p>Mười lăm mục: terminal, null, zero, random — không gì chạm tới máy chủ. Nhân đã dựng hàng rào này trước khi tiến trình của bạn khởi động. Đó là mức nền một container cho bạn miễn phí.</p>
+${lab('nslayers', 'docker', 'vi', 'Các namespace của một container mặc định, từng cái một: pid, mnt, net, uts, ipc, cgroup và time là mới — user là của máy chủ, nên uid 0 bên trong là uid 0 của nhân, chỉ bị capability và seccomp kìm lại.', { tour: 'nslayers-views' })}
 
 <h3>Vì sao --privileged nguy hiểm</h3>
 <p>Giờ cùng số đọc đó bên trong một container <code>--privileged</code> (chỉ bao giờ là một container vứt đi):</p>
@@ -735,7 +746,7 @@ ${run('c134-container', 'ls -l /var/run/docker.sock', 1)}
 <p>Một <strong>user namespace</strong> cho một người dùng không đặc quyền làm root <em>bên trong</em> một namespace mới trong khi vẫn không đặc quyền bên ngoài. Với tư cách <code>dev</code>:</p>
 ${run('c134-userns', 'runuser -u dev -- unshare', 1)}
 <p>Bên trong, <code>id -u</code> là 0 — root. Nhưng <code>uid_map</code> đọc <code>0 1001 1</code>: UID 0 bên trong ánh xạ tới UID 1001 (chính <code>dev</code> không đặc quyền) bên ngoài. Quyền của nó dừng ở biên namespace — nó là root trên các tệp của riêng nó chứ không phải của máy chủ. Đây là cách Docker và Podman <strong>rootless</strong> chạy: một cú chiếm "root trong container" là một cú chiếm một tài khoản người dùng thường, không phải của cả máy. Hãy ưu tiên container rootless, ánh xạ user namespace cho bất cứ thứ gì bạn chưa hoàn toàn tin.</p>
-${lab('process', 'sandbox', 'vi', 'Một container là một cây tiến trình mà nhân rào lại. Chọc vào một cây nhỏ — trạng thái, tiến trình con, hàng rào cho gì đi qua — để xây trực giác về namespace.')}
+${lab('nslayers', 'userns', 'vi', '“root” rootless nhìn từ hai phía: bên trong dev là uid 0 với CapEff đầy đủ; ánh xạ 0 1001 1 cho biết bên ngoài nó là dev, và /etc của máy chủ vẫn từ chối nó. Rồi ánh xạ lại 0 100000 65536, như Docker rootless làm.', { tour: 'nslayers-views' })}
 
 <h3>NoNewPrivileges: một công tắc một chiều vô hiệu setuid</h3>
 <p><code>no_new_privs</code> là một cờ theo từng tiến trình: bật rồi thì không <code>exec</code> nào lấy thêm quyền được, nên một tệp setuid đơn giản là không leo quyền. Nhìn helper setuid của bài 13.3 chạy bình thường, rồi chạy nó dưới cờ đó (đây là thứ <code>--security-opt no-new-privileges</code> của Docker và <code>NoNewPrivileges=</code> của systemd đặt):</p>
@@ -745,6 +756,7 @@ ${run('c134-container', 'runuser -u dev -- setpriv', 1)}
 
 <h3>seccomp và AppArmor, mỗi cái một dòng</h3>
 <p>Thêm hai hàng rào của nhân, ở mức khái niệm. <strong>seccomp</strong> (secure computing) lọc những <em>syscall</em> một tiến trình được gọi — bạn vừa thấy <code>Seccomp: 2</code>, hồ sơ mặc định của Docker từ chối những cái nguy hiểm; bạn siết thêm được theo từng dịch vụ. <strong>AppArmor</strong> (và SELinux trên hệ Red Hat) là một lớp kiểm soát truy cập bắt buộc, giam một chương trình vào một tập tệp và thao tác đã khai báo bất kể quyền Unix — Docker cũng kèm một hồ sơ AppArmor mặc định. Bạn hiếm khi viết chúng bằng tay; bạn giữ mặc định bật và chỉ nới ra một cách có chủ đích, đúng như lab ở Chương 7–8 dùng <code>--security-opt seccomp=unconfined</code> cho một phép đo và không bao giờ cho một tải thật.</p>
+${lab('syscall', 'seccomp', 'vi', 'seccomp khi chạy thật: một bộ lọc, vài chương trình và hành động — EPERM, ENOSYS, KILL (exit 159) — và những lỗi gây hiểu nhầm mà một lời gọi bị chặn sinh ra.', { tour: 'syscall-errno' })}
 
 <h3>Danh sách cứng hoá cho một dịch vụ backend</h3>
 <p>Gom cả chương lại thành những việc bạn thật sự làm cho một dịch vụ như backend CuongThai:</p>

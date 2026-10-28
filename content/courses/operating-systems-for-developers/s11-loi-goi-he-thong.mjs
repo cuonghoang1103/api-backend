@@ -89,6 +89,7 @@ ${run('c111-hanh-trinh', "gdb -q -batch -ex 'catch syscall write'", 1, { drop: /
 <tr><td>number of <code>write</code></td><td>64</td><td>1</td></tr>
 </table>
 <p>(From <code>man 2 syscall</code>; we run only the arm64 column in this lab.) The numbers differ between architectures and some calls exist on only one — x86-64 still has <code>open</code> and <code>fork</code>, arm64 only <code>openat</code> and <code>clone</code>. Never hard-code a number; use <code>SYS_write</code> from the headers.</p>
+${lab('syscall', 'write', 'en', 'The whole journey of one write(): the stdio buffer, the wrapper loading x8 = 64, svc #0, the kernel entry, the syscall table, the driver and the way back — with a cost counter adding up the nanoseconds. Switch arm64/x86-64 and the target (/dev/null, a file, TCP).', { tour: 'syscall-journey' })}
 ${lab('latency', 'default', 'en', 'Put the measured round trip on the ladder: a system call (~0.18 µs here) sits between a RAM access (~0.1 µs) and an SSD read (~50 µs) — about 100× a function call.', { tour: 'latency-start' })}
 
 <h3>Step 4 — inside the kernel</h3>
@@ -108,6 +109,7 @@ ${run('c111-hanh-trinh', 'gcc -O2 -static fail.c', 2)}
 <p>The program sees <code>-1</code> and <code>errno = 2</code>; strace shows <code>-1 ENOENT</code>. But neither is what the kernel actually returned. Stop at the syscall again and read x0 when it comes back:</p>
 ${run('c111-hanh-trinh', "gdb -q -batch -ex 'catch syscall openat'")}
 <p>The kernel returned <strong>-2</strong> in x0 — a negative error number. That is the kernel's convention: success is ≥ 0, failure is <code>-errno</code> (values −4095…−1). The libc wrapper checks for that range, stores <code>2</code> in the thread-local variable <code>errno</code> and returns <code>-1</code> — the C convention. strace decodes the raw value for you (<code>ENOENT</code>, "No such file or directory"). Lesson 11.5 lists the errno values a backend developer meets and the two that are not errors at all (<code>EINTR</code>, <code>EAGAIN</code>).</p>
+${lab('syscall', 'fail', 'en', 'The failure path: openat of a missing file returns −2 in x0, the wrapper turns it into −1 with errno = 2, strace prints ENOENT. Then open /etc/hostname instead and get fd 3.', { tour: 'syscall-errno' })}
 
 <div class="pitfall co-tieu-de">
 <p><strong>Reading errno after a call that succeeded — or too late.</strong> <code>errno</code> is only meaningful right after a call returned −1. Successful calls are allowed to leave garbage in it, and any call in between (a <code>printf</code>, a log line, <code>free</code>) can overwrite it. Check the return value first, then copy <code>errno</code> into a local variable immediately — exactly what <code>fail.c</code> would need if it logged something before printing. Higher-level languages do this for you: Node puts it in <code>err.code</code> (<code>'ENOENT'</code>), Python in <code>e.errno</code> on an <code>OSError</code>, Java in the exception message.</p>
@@ -197,6 +199,7 @@ ${run('c111-hanh-trinh', "gdb -q -batch -ex 'catch syscall write'", 1, { drop: /
 <tr><td>số hiệu của <code>write</code></td><td>64</td><td>1</td></tr>
 </table>
 <p>(Theo <code>man 2 syscall</code>; lab này chỉ chạy cột arm64.) Số hiệu khác nhau giữa các kiến trúc và có lời gọi chỉ có ở một bên — x86-64 vẫn còn <code>open</code> và <code>fork</code>, arm64 chỉ có <code>openat</code> và <code>clone</code>. Đừng bao giờ viết cứng con số; dùng <code>SYS_write</code> từ tệp tiêu đề.</p>
+${lab('syscall', 'write', 'vi', 'Trọn hành trình của một write(): bộ đệm stdio, wrapper nạp x8 = 64, svc #0, cửa vào nhân, bảng syscall, driver và đường quay về — kèm bộ đếm giá cộng dồn từng nano giây. Đổi arm64/x86-64 và đích ghi (/dev/null, file, TCP).', { tour: 'syscall-journey' })}
 ${lab('latency', 'default', 'vi', 'Đặt vòng đi-về vừa đo lên thang: một lời gọi hệ thống (~0,18 µs ở đây) nằm giữa một lần đọc RAM (~0,1 µs) và một lần đọc SSD (~50 µs) — khoảng 100 lần một lời gọi hàm.', { tour: 'latency-start' })}
 
 <h3>Bước 4 — bên trong nhân</h3>
@@ -216,6 +219,7 @@ ${run('c111-hanh-trinh', 'gcc -O2 -static fail.c', 2)}
 <p>Chương trình thấy <code>-1</code> và <code>errno = 2</code>; strace hiện <code>-1 ENOENT</code>. Nhưng cả hai đều không phải thứ nhân thật sự trả về. Dừng ở lời gọi lần nữa và đọc x0 lúc nó quay về:</p>
 ${run('c111-hanh-trinh', "gdb -q -batch -ex 'catch syscall openat'")}
 <p>Nhân trả <strong>-2</strong> trong x0 — một số lỗi âm. Đó là quy ước của nhân: thành công là ≥ 0, thất bại là <code>-errno</code> (giá trị −4095…−1). Hàm bọc của libc kiểm khoảng đó, cất <code>2</code> vào biến <code>errno</code> riêng của từng luồng và trả <code>-1</code> — quy ước của C. strace giải mã giá trị thô giùm bạn (<code>ENOENT</code>, "No such file or directory"). Bài 11.5 liệt kê các giá trị errno một lập trình viên backend hay gặp, và hai cái hoàn toàn không phải lỗi (<code>EINTR</code>, <code>EAGAIN</code>).</p>
+${lab('syscall', 'fail', 'vi', 'Đường thất bại: openat một file không tồn tại trả −2 trong x0, wrapper đổi thành −1 kèm errno = 2, strace in ENOENT. Rồi mở /etc/hostname thay vào và nhận fd 3.', { tour: 'syscall-errno' })}
 
 <div class="pitfall co-tieu-de">
 <p><strong>Đọc errno sau một lời gọi thành công — hoặc đọc quá muộn.</strong> <code>errno</code> chỉ có nghĩa ngay sau khi một lời gọi trả −1. Lời gọi thành công được phép để rác trong đó, và bất kỳ lời gọi nào chen giữa (một <code>printf</code>, một dòng log, <code>free</code>) đều có thể ghi đè nó. Hãy kiểm giá trị trả về trước, rồi chép <code>errno</code> ra biến cục bộ ngay lập tức — đúng thứ <code>fail.c</code> cần nếu nó ghi log trước khi in. Ngôn ngữ cấp cao làm giùm bạn: Node đặt nó vào <code>err.code</code> (<code>'ENOENT'</code>), Python vào <code>e.errno</code> của một <code>OSError</code>, Java vào thông điệp ngoại lệ.</p>
@@ -508,6 +512,7 @@ ${run('c113-strace', 'strace -qq -tt -T -e trace=sendto,recvfrom -o client.txt')
 <p>For request 2, the 111 bytes of headers arrive at .922405; curl asks for the 6-byte body and gets <code>EAGAIN</code> (non-blocking socket, nothing there yet); the body arrives at .963545 — <strong>41 ms later</strong>. The server wrote headers and body in two separate <code>sendto</code> calls, and TCP held the second one back. Two mechanisms meet: <strong>Nagle's algorithm</strong> on the server keeps a small segment until all earlier data is acknowledged, and <strong>delayed ACK</strong> on the client waits up to ~40 ms before acknowledging, hoping to piggyback the ACK on a reply. Each waits for the other until the ACK timer fires. (Request 1 was fast only because nothing was outstanding yet.)</p>
 ${run('c113-strace', 'NODELAY=1 python3 pyserver.py', 2)}
 <p>With <code>TCP_NODELAY</code> (Python's <code>disable_nagle_algorithm = True</code>) the same 200 requests take <strong>0.028 s</strong> — 300 times faster. The JDK's built-in <code>com.sun.net.httpserver</code> had the same problem:</p>
+${lab('nagle', 'nagle', 'en', 'The 41 ms on a sequence diagram: headers and body in two writes, Nagle holds the body until the headers are ACKed, the client delays its ACK — 200 requests take 8.4 s. Switch TCP_NODELAY on (0.028 s) or send everything in one write.', { tour: 'nagle-delay' })}
 ${src('ch11/HelloServer.java', 'java')}
 ${run('c113-strace', 'javac HelloServer.java && java HelloServer', 2)}
 ${run('c113-strace', 'java -Dsun.net.httpserver.nodelay=true', 6, { max: 18 })}
@@ -528,6 +533,7 @@ ${lab('eventloop', 'block', 'en', 'Every request to Node is epoll_pwait → read
 <h3>What strace costs</h3>
 ${run('c113-strace', 'time dd if=/dev/zero', 4)}
 <p>strace uses <code>ptrace</code>: the kernel stops the traced program at every syscall entry and exit and wakes strace to look at it. For <code>dd</code> copying one byte at a time (200,000 syscalls) that turns 0.05 s into 8 s — about 160×. Filtering with <code>-e trace=openat</code> alone does not help, because the program still stops at every call. <code>--seccomp-bpf</code> does: strace installs a seccomp filter (lesson 11.7) so the kernel stops the program only for the calls you asked for, and the run is back to 0.05 s. On a busy production process, use a narrow <code>-e</code> with <code>--seccomp-bpf</code>, attach briefly with <code>-p</code>, or use eBPF tools that count in the kernel without stopping anyone (preview in lesson 11.6).</p>
+${lab('syscall', 'strace', 'en', 'What strace adds to every call: two ptrace stops (entry and exit), about 41 µs of extra round trips — and the dd table: about 0.05 s without strace, over 8 s under it, back to about 0.05 s with --seccomp-bpf.', { tour: 'syscall-journey' })}
 
 <h3>-k: which code made this call?</h3>
 ${run('c113-strace', 'strace -k')}
@@ -628,6 +634,7 @@ ${run('c113-strace', 'strace -qq -tt -T -e trace=sendto,recvfrom -o client.txt')
 <p>Ở request 2, 111 byte header tới lúc .922405; curl xin phần thân 6 byte và nhận <code>EAGAIN</code> (socket không chặn, chưa có gì); phần thân tới lúc .963545 — <strong>trễ 41 ms</strong>. Máy chủ ghi header và thân bằng hai lời gọi <code>sendto</code> riêng, và TCP đã giữ lần thứ hai lại. Hai cơ chế gặp nhau: <strong>thuật toán Nagle</strong> ở máy chủ giữ một đoạn nhỏ cho tới khi mọi dữ liệu trước đó được báo nhận, còn <strong>ACK trễ</strong> ở client chờ tới ~40 ms mới báo nhận, mong gửi ACK kèm một câu trả lời. Bên nào cũng chờ bên kia cho tới khi bộ hẹn giờ ACK nổ. (Request 1 nhanh chỉ vì lúc đó chưa có gì đang chờ báo nhận.)</p>
 ${run('c113-strace', 'NODELAY=1 python3 pyserver.py', 2)}
 <p>Bật <code>TCP_NODELAY</code> (trong Python là <code>disable_nagle_algorithm = True</code>), cùng 200 request chỉ mất <strong>0,028 s</strong> — nhanh gấp 300 lần. Máy chủ <code>com.sun.net.httpserver</code> có sẵn trong JDK mắc đúng lỗi đó:</p>
+${lab('nagle', 'nagle', 'vi', '41 ms trên sơ đồ trình tự: header và thân trong hai lần ghi, Nagle giữ phần thân tới khi header được báo nhận, client lại báo nhận trễ — 200 request mất 8,4 s. Bật TCP_NODELAY (0,028 s) hoặc gửi tất cả trong một lần ghi.', { tour: 'nagle-delay' })}
 ${src('ch11/HelloServer.java', 'java')}
 ${run('c113-strace', 'javac HelloServer.java && java HelloServer', 2)}
 ${run('c113-strace', 'java -Dsun.net.httpserver.nodelay=true', 6, { max: 18 })}
@@ -648,6 +655,7 @@ ${lab('eventloop', 'block', 'vi', 'Mỗi request tới Node là epoll_pwait → 
 <h3>strace tốn bao nhiêu</h3>
 ${run('c113-strace', 'time dd if=/dev/zero', 4)}
 <p>strace dùng <code>ptrace</code>: nhân dừng chương trình bị dò ở mỗi lần vào và ra khỏi syscall rồi đánh thức strace để xem. Với <code>dd</code> chép từng byte một (200.000 syscall), 0,05 s thành 8 s — khoảng 160 lần. Chỉ lọc bằng <code>-e trace=openat</code> không giúp gì, vì chương trình vẫn dừng ở mọi lời gọi. <code>--seccomp-bpf</code> thì giúp: strace cài một bộ lọc seccomp (bài 11.7) để nhân chỉ dừng chương trình ở những lời gọi bạn xin, và lượt chạy trở lại 0,05 s. Với một tiến trình production đang bận, hãy dùng <code>-e</code> hẹp kèm <code>--seccomp-bpf</code>, gắn <code>-p</code> thật ngắn, hoặc dùng công cụ eBPF đếm ngay trong nhân mà không dừng ai (xem trước ở bài 11.6).</p>
+${lab('syscall', 'strace', 'vi', 'strace thêm gì vào mỗi lời gọi: hai lần dừng ptrace (vào và ra), khoảng 41 µs đi về thêm — và bảng dd: khoảng 0,05 s khi không strace, hơn 8 s dưới strace, về lại khoảng 0,05 s với --seccomp-bpf.', { tour: 'syscall-journey' })}
 
 <h3>-k: đoạn mã nào gọi lời gọi này?</h3>
 ${run('c113-strace', 'strace -k')}
@@ -729,6 +737,7 @@ ${run('c114-chi-phi', "strace -f -qq -e trace=clock_gettime,gettimeofday -o k.tx
 ${run('c114-chi-phi', "strace -f -qq -e trace=clock_gettime,gettimeofday -o k.txt python3")}
 ${run('c114-chi-phi', 'javac Clock.java')}
 <p>Two million clock reads in each language, zero clock syscalls. Timestamps in request logs, latency metrics, <code>performance.now()</code> around a query — practically free.</p>
+${lab('syscall', 'vdso', 'en', 'clock_gettime through the vDSO: no trap — the time is read from a page the kernel shares with every process, about 18.5 ns. Force a real syscall and the same read costs about 202 ns.', { tour: 'syscall-journey' })}
 
 <div class="pitfall co-tieu-de">
 <p><strong>A clock source the vDSO cannot read.</strong> The fast path only works if user space can read the hardware clock. On some virtual machines the kernel's clock source is one it must read itself (for example <code>xen</code> or <code>hpet</code>), and then every <code>clock_gettime</code> silently falls back to a real syscall — 10× slower, and a service that timestamps every request, every log line and every metric pays it millions of times per minute. Check <code>/sys/devices/system/clocksource/clocksource0/current_clocksource</code> and <code>available_clocksource</code> on your VPS, and verify the way we did: <code>strace -c</code> on a loop of clock reads should show <em>no</em> <code>clock_gettime</code>.</p>
@@ -740,6 +749,7 @@ ${src('ch11/batch.c', 'c')}
 ${run('c114-chi-phi', 'gcc -O2 -Wall batch.c')}
 ${run('c114-chi-phi', 'for m in line writev stdio big; do strace')}
 <p>One syscall per line: 31.7 ms, 317 ns per line — almost exactly the round-trip cost. Any batching: 1.6–2.2 ms, <strong>15–20× faster</strong>. <code>writev</code> sends 64 separate buffers in one call (no copying them together first — it is how Node wrote headers and body in lesson 11.3); stdio fills a 4,096-byte buffer and writes it (3.2 MB ÷ 4,096 ≈ 782 writes, plus 1 for the result line). The one big write is not faster than writev here because it first copies 3.2 MB into a new buffer. The same lesson in Java, where it bites most often:</p>
+${lab('syscall', 'batch', 'en', 'Batching on the journey: writev carries 64 buffers through one crossing instead of 64. Compare the cost counter with single writes, and the 100,000-line table.', { tour: 'syscall-journey' })}
 ${src('ch11/Ghi.java', 'java')}
 ${run('c114-chi-phi', 'javac Ghi.java')}
 ${run('c114-chi-phi', 'strace -f -qq -c -e trace=write -o g.sc java Ghi raw', 2)}
@@ -830,6 +840,7 @@ ${run('c114-chi-phi', "strace -f -qq -e trace=clock_gettime,gettimeofday -o k.tx
 ${run('c114-chi-phi', "strace -f -qq -e trace=clock_gettime,gettimeofday -o k.txt python3")}
 ${run('c114-chi-phi', 'javac Clock.java')}
 <p>Hai triệu lần đọc đồng hồ ở mỗi ngôn ngữ, không một syscall đồng hồ nào. Dấu thời gian trong log request, số đo độ trễ, <code>performance.now()</code> quanh một câu truy vấn — gần như miễn phí.</p>
+${lab('syscall', 'vdso', 'vi', 'clock_gettime qua vDSO: không bẫy — thời gian được đọc từ một trang nhân chia sẻ với mọi tiến trình, khoảng 18,5 ns. Ép một syscall thật thì cùng lần đọc đó tốn khoảng 202 ns.', { tour: 'syscall-journey' })}
 
 <div class="pitfall co-tieu-de">
 <p><strong>Một nguồn đồng hồ vDSO không đọc được.</strong> Đường nhanh chỉ chạy khi phía người dùng đọc được đồng hồ phần cứng. Trên một số máy ảo, nguồn đồng hồ của nhân là loại nhân phải tự đọc (ví dụ <code>xen</code> hay <code>hpet</code>), và khi đó mỗi <code>clock_gettime</code> lặng lẽ lùi về một syscall thật — chậm gấp 10, và một dịch vụ gắn dấu giờ cho mọi request, mọi dòng log, mọi số đo sẽ trả cái giá đó hàng triệu lần mỗi phút. Hãy xem <code>/sys/devices/system/clocksource/clocksource0/current_clocksource</code> và <code>available_clocksource</code> trên VPS của bạn, và kiểm theo cách ta vừa làm: <code>strace -c</code> trên một vòng đọc giờ phải <em>không</em> có <code>clock_gettime</code> nào.</p>
@@ -841,6 +852,7 @@ ${src('ch11/batch.c', 'c')}
 ${run('c114-chi-phi', 'gcc -O2 -Wall batch.c')}
 ${run('c114-chi-phi', 'for m in line writev stdio big; do strace')}
 <p>Mỗi dòng một syscall: 31,7 ms, 317 ns mỗi dòng — gần đúng bằng giá một vòng đi-về. Gộp kiểu gì cũng được: 1,6–2,2 ms, <strong>nhanh hơn 15–20 lần</strong>. <code>writev</code> gửi 64 bộ đệm riêng rẽ trong một lời gọi (không phải chép chúng vào một chỗ trước — chính là cách Node gửi header và thân cùng lúc ở bài 11.3); stdio đổ đầy bộ đệm 4.096 byte rồi mới ghi (3,2 MB ÷ 4.096 ≈ 782 lần, cộng 1 cho dòng kết quả). Một lần write lớn không nhanh hơn writev ở đây vì nó phải chép 3,2 MB vào một bộ đệm mới trước. Bài học y vậy ở Java, nơi nó hay cắn nhất:</p>
+${lab('syscall', 'batch', 'vi', 'Gộp lượt trên hành trình: writev mang 64 bộ đệm qua một lần vượt ranh giới thay vì 64 lần. So bộ đếm giá với các lần write đơn, và bảng 100.000 dòng.', { tour: 'syscall-journey' })}
 ${src('ch11/Ghi.java', 'java')}
 ${run('c114-chi-phi', 'javac Ghi.java')}
 ${run('c114-chi-phi', 'strace -f -qq -c -e trace=write -o g.sc java Ghi raw', 2)}
@@ -936,6 +948,7 @@ ${run('c115-eintr', 'strace -qq -e trace=read,rt_sigreturn ./eintr restart')}
 <p><code>rt_sigreturn</code> returned 3 — the original first argument, the pipe's fd, put back into x0 — and the kernel re-executed the same <code>read</code>. The program never saw the interruption. But not every call can be restarted:</p>
 ${run('c115-eintr', 'strace -qq -e trace=ppoll,rt_sigreturn ./eintr poll')}
 <p><code>ERESTARTNOHAND</code>, then <code>-1 EINTR</code> despite <code>SA_RESTART</code>. <code>man 7 signal</code> lists the calls that are <strong>never</strong> restarted: <code>poll</code>, <code>epoll_wait</code>, <code>select</code>, <code>nanosleep</code>/<code>clock_nanosleep</code>, <code>sigtimedwait</code> and a few socket calls with timeouts. They all wait with a deadline, and silently restarting would extend it. Every event loop's wait call must therefore treat EINTR as "loop again".</p>
+${lab('eintr', 'norestart', 'en', 'read() blocked for 2 s, SIGALRM at 1 s: without SA_RESTART the kernel aborts with ERESTARTSYS, runs the handler, and read returns EINTR; with SA_RESTART rt_sigreturn puts the fd back and the read restarts; poll returns EINTR either way.', { tour: 'eintr-signal' })}
 
 <div class="pitfall co-tieu-de">
 <p><strong>"Interrupted system call" crashes that appear only sometimes.</strong> A C program, a native addon or a hand-written Go syscall that treats every −1 as fatal works in testing and then fails in production — when a profiler sends <code>SIGPROF</code>, a child exits (<code>SIGCHLD</code>), someone resizes the terminal (<code>SIGWINCH</code>) or a supervisor sends a signal. The fix is boring and universal: on <code>EINTR</code>, call again (or install handlers with <code>SA_RESTART</code>, which still does not cover the wait calls above).</p>
@@ -949,6 +962,7 @@ ${run('c115-eintr', 'strace -qq -e trace=read,rt_sigreturn -e signal=SIGALRM pyt
 ${src('ch11/spin.go', 'go')}
 ${run('c115-eintr', 'TIMEFORMAT', 3)}
 <p>49 <code>SIGURG</code> in 1.5 s — about 33 per second, sent by the process to itself (<code>SI_TKILL</code>, same pid). Each one interrupts whatever the thread is doing, including a slow system call. The Go 1.14 release notes warned exactly about this: programs using <code>syscall</code> or <code>golang.org/x/sys/unix</code> directly "will see more slow system calls fail with EINTR errors". The standard library retries; your raw calls must too.</p>
+${lab('eintr', 'go', 'en', 'Go’s preemption signal on a timeline: two spinning goroutines on one thread, SIGURG about 33 times a second (49 in 1.475 s), each one interrupting whatever the thread is doing — a slow system call included.', { tour: 'eintr-signal' })}
 
 <h3>EAGAIN: "not now" instead of waiting</h3>
 <p>The other "try again" comes from <strong>non-blocking</strong> I/O. The same empty pipe, read two ways:</p>
@@ -1031,6 +1045,7 @@ ${run('c115-eintr', 'strace -qq -e trace=read,rt_sigreturn ./eintr restart')}
 <p><code>rt_sigreturn</code> trả 3 — đối số đầu tiên ban đầu, fd của ống, được đặt lại vào x0 — và nhân chạy lại đúng lần <code>read</code> đó. Chương trình không hề thấy mình bị cắt ngang. Nhưng không phải lời gọi nào cũng chạy lại được:</p>
 ${run('c115-eintr', 'strace -qq -e trace=ppoll,rt_sigreturn ./eintr poll')}
 <p><code>ERESTARTNOHAND</code>, rồi <code>-1 EINTR</code> dù đã có <code>SA_RESTART</code>. <code>man 7 signal</code> liệt kê những lời gọi <strong>không bao giờ</strong> được chạy lại: <code>poll</code>, <code>epoll_wait</code>, <code>select</code>, <code>nanosleep</code>/<code>clock_nanosleep</code>, <code>sigtimedwait</code> và vài lời gọi socket có hạn chờ. Chúng đều chờ có hạn, và lặng lẽ chạy lại sẽ kéo dài hạn đó. Vì vậy lời gọi chờ của mọi vòng lặp sự kiện phải coi EINTR là "lặp tiếp".</p>
+${lab('eintr', 'norestart', 'vi', 'read() chặn 2 s, SIGALRM tới lúc 1 s: không có SA_RESTART thì nhân huỷ với ERESTARTSYS, chạy handler, và read trả EINTR; có SA_RESTART thì rt_sigreturn trả fd về và read chạy lại; poll thì đằng nào cũng EINTR.', { tour: 'eintr-signal' })}
 
 <div class="pitfall co-tieu-de">
 <p><strong>Lỗi "Interrupted system call" chỉ thỉnh thoảng mới xuất hiện.</strong> Một chương trình C, một addon gốc hay một syscall Go tự viết mà coi mọi −1 là chết người sẽ chạy ổn khi thử rồi hỏng trên production — khi một profiler gửi <code>SIGPROF</code>, một tiến trình con thoát (<code>SIGCHLD</code>), ai đó đổi cỡ terminal (<code>SIGWINCH</code>) hay một trình giám sát gửi tín hiệu. Cách sửa nhàm chán và áp dụng mọi nơi: gặp <code>EINTR</code> thì gọi lại (hoặc cài hàm xử lý với <code>SA_RESTART</code>, nhưng nó vẫn không che được các lời gọi chờ nói trên).</p>
@@ -1044,6 +1059,7 @@ ${run('c115-eintr', 'strace -qq -e trace=read,rt_sigreturn -e signal=SIGALRM pyt
 ${src('ch11/spin.go', 'go')}
 ${run('c115-eintr', 'TIMEFORMAT', 3)}
 <p>49 lần <code>SIGURG</code> trong 1,5 s — khoảng 33 lần mỗi giây, do chính tiến trình gửi cho mình (<code>SI_TKILL</code>, cùng pid). Mỗi lần cắt ngang bất cứ việc gì luồng đang làm, kể cả một syscall chậm. Ghi chú phát hành Go 1.14 cảnh báo đúng điều này: chương trình dùng thẳng <code>syscall</code> hay <code>golang.org/x/sys/unix</code> "sẽ thấy nhiều syscall chậm hỏng với lỗi EINTR hơn". Thư viện chuẩn tự thử lại; lời gọi trần của bạn cũng phải vậy.</p>
+${lab('eintr', 'go', 'vi', 'Tín hiệu giành quyền của Go trên dòng thời gian: hai goroutine quay vòng trên một luồng, SIGURG khoảng 33 lần mỗi giây (49 lần trong 1,475 s), lần nào cũng cắt ngang việc luồng đang làm — kể cả một lời gọi hệ thống chậm.', { tour: 'eintr-signal' })}
 
 <h3>EAGAIN: "chưa phải lúc" thay vì đứng chờ</h3>
 <p>Kiểu "thử lại" thứ hai đến từ I/O <strong>không chặn</strong>. Cùng một ống rỗng, đọc theo hai cách:</p>
@@ -1323,6 +1339,7 @@ ${src('ch11/sandbox.c', 'c')}
 <h3>EPERM: the filter answers, the handler never runs</h3>
 ${run('c117-seccomp', 'gcc -O2 -Wall sandbox.c', 2)}
 <p><code>mkdirat</code> returned <code>-1 EPERM</code> without the kernel's directory code ever running; <code>gnumkdir</code> printed an ordinary "Operation not permitted". (<code>gnumkdir</code> is GNU's <code>mkdir</code>; Ubuntu 26.04 installs it next to the default Rust rewrite, uutils.) Filters stack and are inherited:</p>
+${lab('syscall', 'seccomp', 'en', 'A seccomp filter in front of the syscall table: pick a program (mkdir, curl, a Python thread) and an action (ALLOW, EPERM, ENOSYS, KILL, LOG) and see the measured outcome — exit 1, “Could not resolve host” exit 6, “Bad system call” 159, clone3 ENOSYS falling back to clone.', { tour: 'syscall-errno' })}
 ${run('c117-seccomp', "grep -E '^(Seccomp|Seccomp_filters|NoNewPrivs):'")}
 ${run('c117-seccomp', './sandbox eperm:mkdirat grep')}
 <p>Inside Docker there is already one filter; under our sandbox there are two, and <code>NoNewPrivs</code> became 1 (which also disables setuid, as lesson 13.4 showed). Every filter runs on every call and the strictest answer wins; filters pass to every child and survive <code>exec</code>; and no process can remove one. A sandbox can only get tighter.</p>
@@ -1421,6 +1438,7 @@ ${src('ch11/sandbox.c', 'c')}
 <h3>EPERM: bộ lọc trả lời, hàm xử lý không hề chạy</h3>
 ${run('c117-seccomp', 'gcc -O2 -Wall sandbox.c', 2)}
 <p><code>mkdirat</code> trả <code>-1 EPERM</code> mà mã tạo thư mục của nhân không hề chạy; <code>gnumkdir</code> in ra một câu "Operation not permitted" bình thường. (<code>gnumkdir</code> là <code>mkdir</code> của GNU; Ubuntu 26.04 cài nó bên cạnh bản viết lại bằng Rust mặc định, uutils.) Bộ lọc chồng lên nhau và được kế thừa:</p>
+${lab('syscall', 'seccomp', 'vi', 'Một bộ lọc seccomp đứng trước bảng syscall: chọn chương trình (mkdir, curl, một luồng Python) và hành động (ALLOW, EPERM, ENOSYS, KILL, LOG) rồi xem kết cục đo thật — exit 1, “Could not resolve host” exit 6, “Bad system call” 159, clone3 ENOSYS lùi về clone.', { tour: 'syscall-errno' })}
 ${run('c117-seccomp', "grep -E '^(Seccomp|Seccomp_filters|NoNewPrivs):'")}
 ${run('c117-seccomp', './sandbox eperm:mkdirat grep')}
 <p>Trong Docker đã có sẵn một bộ lọc; dưới sandbox của ta có hai, và <code>NoNewPrivs</code> thành 1 (điều này cũng vô hiệu setuid, như bài 13.4 đã cho thấy). Mọi bộ lọc đều chạy ở mọi lời gọi và câu trả lời chặt nhất thắng; bộ lọc truyền sang mọi tiến trình con và sống qua <code>exec</code>; và không tiến trình nào gỡ được. Một sandbox chỉ có thể chặt thêm.</p>

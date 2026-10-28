@@ -272,6 +272,7 @@ ${src('ch05/pc.c', 'c')}
 ${run('c52-mutex', './pc while')}
 ${run('c52-mutex', './pc if', 2)}
 <p>With <code>while</code> every item is consumed exactly once and no consumer ever finds the buffer empty after waking. With <code>if</code>, consumers woke up to an <strong>empty</strong> buffer tens of thousands of times. The reason: one <code>broadcast</code> wakes all sleeping consumers; the first one to re-acquire the mutex takes the item; the others return from <code>wait</code> with the buffer empty again. POSIX also allows <em>spurious wakeups</em> (waking with no signal at all). Our program counts those cases instead of crashing; real code written with <code>if</code> would read an empty slot, drive <code>count</code> negative and hand garbage to the next request.</p>
+${lab('sync', 'pcif', 'en', 'A bounded buffer (2 slots), one producer, two consumers, Guard = if: a “stolen wakeup” lets a consumer return from wait() to an empty buffer and take from it 💥. Switch Guard to while and replay the same schedule — the woken consumer re-checks and goes back to sleep.')}
 <div class="callout warn"><p><strong>Rule:</strong> always wait in a loop that re-checks the condition: <code>while (!condition) wait(cv, mu);</code>. Java's <code>Object.wait()</code> and <code>Condition.await()</code> have the same rule in their documentation. This is the exact pattern inside every job queue you use: Java's <code>ArrayBlockingQueue</code>, the task queue of Tomcat's thread pool, the work queue of Node's libuv thread pool.</p></div>
 
 <h3>🧪 Practice (25 min)</h3>
@@ -358,6 +359,7 @@ ${src('ch05/pc.c', 'c')}
 ${run('c52-mutex', './pc while')}
 ${run('c52-mutex', './pc if', 2)}
 <p>Với <code>while</code>, mọi phần tử được lấy đúng một lần và không consumer nào tỉnh dậy mà thấy bộ đệm rỗng. Với <code>if</code>, các consumer tỉnh dậy trước một bộ đệm <strong>rỗng</strong> hàng chục nghìn lần. Lý do: một lần <code>broadcast</code> đánh thức mọi consumer đang ngủ; người đầu tiên lấy lại được mutex lấy mất phần tử; những người còn lại trả về từ <code>wait</code> với bộ đệm lại rỗng. POSIX còn cho phép <em>đánh thức giả (spurious wakeup)</em> (tỉnh dậy mà chẳng có tín hiệu nào). Chương trình của ta đếm những trường hợp đó thay vì sập; code thật viết bằng <code>if</code> sẽ đọc một ô rỗng, đẩy <code>count</code> xuống âm và trao rác cho yêu cầu kế tiếp.</p>
+${lab('sync', 'pcif', 'vi', 'Bộ đệm giới hạn (2 ô), một producer, hai consumer, Điều kiện = if: một lần “cướp đánh thức” làm consumer trở về từ wait() với bộ đệm rỗng và lấy từ đó 💥. Đổi Điều kiện sang while và chạy lại cùng lịch — consumer bị đánh thức kiểm lại rồi ngủ tiếp.')}
 <div class="callout warn"><p><strong>Luật:</strong> luôn chờ trong một vòng lặp kiểm lại điều kiện: <code>while (!điều_kiện) wait(cv, mu);</code>. Tài liệu của <code>Object.wait()</code> và <code>Condition.await()</code> trong Java ghi đúng luật đó. Đây chính là khuôn bên trong mọi hàng đợi việc bạn dùng: <code>ArrayBlockingQueue</code> của Java, hàng đợi tác vụ của thread pool Tomcat, hàng đợi việc của thread pool libuv trong Node.</p></div>
 
 <h3>🧪 Thực hành (25 phút)</h3>
@@ -416,6 +418,7 @@ ${src('ch05/sem.c', 'c')}
 ${run('c53-sem', './sem 0')}
 ${run('c53-sem', './sem 3')}
 <p>Without the semaphore all ten ran together (peak 10, 101 ms). With it, never more than three at once, and the ten requests went through in four waves — ⌈10 / 3⌉ = 4 × 100 ms ≈ 404 ms. This is exactly what your <strong>database connection pool</strong> is: Prisma's <code>connection_limit</code>, HikariCP's <code>maximumPoolSize</code>, <code>pg.Pool({ max })</code>. Request number 4 does not fail; it waits — which is why a pool that is too small shows up as latency, not as errors. A semaphore initialised to 1 behaves like a mutex, with one difference: it has no owner, so any thread may <code>post</code> — useful for signalling, dangerous as a lock.</p>
+${lab('sync', 'semaphore', 'en', 'A counting semaphore with N permits is a pool of N connections: P() takes a permit or sleeps in the queue, V() hands it straight to a waiter. Change N from 1 to 4 and watch the number inside never exceed it; then tick the bug where T3 forgets release().')}
 
 <h3>Read-write lock: the readers–writers problem</h3>
 <p>Many shared structures are read far more than written — a config table, a cache, a routing table. A mutex makes readers queue behind each other for no reason. A <strong>read-write lock</strong> lets any number of readers in together, or exactly one writer alone:</p>
@@ -423,6 +426,7 @@ ${src('ch05/rw.c', 'c')}
 ${run('c53-sem', './rw mutex')}
 ${run('c53-sem', './rw rwlock')}
 <p>With 99% reads, the read-write lock roughly doubled throughput (638 → 1,348 operations per ms) on the same 8 threads. Two caveats, both from the classic <em>readers–writers problem</em>: if readers keep arriving, a writer can wait forever (<strong>writer starvation</strong>) — glibc's default prefers readers, and <code>pthread_rwlockattr_setkind_np</code> can change that; and when the critical section is only a few instructions long, the read-write lock's own bookkeeping can make it slower than a plain mutex. Measure before switching. Java has <code>ReentrantReadWriteLock</code>; PostgreSQL's <code>FOR SHARE</code> vs <code>FOR UPDATE</code> row locks (lesson 5.4) are the same idea.</p>
+${lab('sync', 'readers', 'en', 'Readers–writers with a lock that prefers readers: new readers keep joining while others read, the reader count never reaches zero, and the writer gets 0 turns. Switch “Lock prefers” to writers and the writer gets in.')}
 
 <h3>Atomics and compare-and-swap: no lock at all</h3>
 <p>For a single word of memory the CPU offers indivisible read-modify-write instructions. The most general is <strong>compare-and-swap (CAS)</strong>: "if this location still holds <em>old</em>, write <em>new</em>; tell me whether you did". Every lock-free algorithm is built from it. Here is <code>counter++</code> rebuilt with CAS, counting how often a thread lost the race and had to retry:</p>
@@ -506,6 +510,7 @@ ${src('ch05/sem.c', 'c')}
 ${run('c53-sem', './sem 0')}
 ${run('c53-sem', './sem 3')}
 <p>Không có semaphore, cả mười chạy cùng lúc (đỉnh 10, 101 ms). Có nó, không bao giờ quá ba cùng lúc, và mười yêu cầu đi qua trong bốn đợt — ⌈10 / 3⌉ = 4 × 100 ms ≈ 404 ms. Đây đúng là thứ mà <strong>pool kết nối CSDL</strong> của bạn đang là: <code>connection_limit</code> của Prisma, <code>maximumPoolSize</code> của HikariCP, <code>pg.Pool({ max })</code>. Yêu cầu thứ 4 không lỗi; nó chờ — vì thế một pool quá nhỏ hiện ra thành độ trễ, không phải thành lỗi. Semaphore khởi tạo bằng 1 hành xử như mutex, khác một điểm: nó không có chủ, nên luồng nào cũng <code>post</code> được — hữu ích để báo hiệu, nguy hiểm khi dùng làm khoá.</p>
+${lab('sync', 'semaphore', 'vi', 'Semaphore đếm với N chỗ chính là pool N kết nối: P() lấy một chỗ hoặc ngủ trong hàng chờ, V() trao thẳng cho người đang chờ. Đổi N từ 1 tới 4 và nhìn số người bên trong không bao giờ vượt N; rồi bật lỗi T3 quên release().')}
 
 <h3>Khoá đọc-ghi: bài toán readers–writers</h3>
 <p>Nhiều cấu trúc dùng chung được đọc nhiều hơn ghi rất nhiều — bảng cấu hình, cache, bảng định tuyến. Mutex bắt người đọc xếp hàng sau nhau vô ích. <strong>Khoá đọc-ghi (read-write lock)</strong> cho bao nhiêu người đọc cũng được vào cùng lúc, hoặc đúng một người ghi vào một mình:</p>
@@ -513,6 +518,7 @@ ${src('ch05/rw.c', 'c')}
 ${run('c53-sem', './rw mutex')}
 ${run('c53-sem', './rw rwlock')}
 <p>Với 99% là đọc, khoá đọc-ghi tăng thông lượng khoảng gấp đôi (638 → 1.348 thao tác mỗi ms) trên cùng 8 luồng. Hai lưu ý, đều từ <em>bài toán readers–writers</em> kinh điển: nếu người đọc cứ đến liên tục, người ghi có thể chờ mãi (<strong>người ghi bị đói — writer starvation</strong>) — mặc định của glibc ưu tiên người đọc, và <code>pthread_rwlockattr_setkind_np</code> đổi được điều đó; và khi vùng găng chỉ dài vài lệnh, phần sổ sách của chính khoá đọc-ghi có thể làm nó chậm hơn mutex thường. Đo trước khi đổi. Java có <code>ReentrantReadWriteLock</code>; khoá dòng <code>FOR SHARE</code> vs <code>FOR UPDATE</code> của PostgreSQL (bài 5.4) là cùng ý tưởng.</p>
+${lab('sync', 'readers', 'vi', 'Readers–writers với khoá ưu tiên người đọc: người đọc mới cứ nhập vào khi người khác đang đọc, số người đọc không bao giờ về 0, và người ghi được 0 lượt. Đổi “Khoá ưu tiên” sang người ghi thì người ghi vào được.')}
 
 <h3>Nguyên tử và compare-and-swap: không khoá gì cả</h3>
 <p>Với một từ nhớ (word), CPU cung cấp các lệnh đọc-sửa-ghi không chia cắt. Tổng quát nhất là <strong>compare-and-swap (CAS — so sánh rồi hoán đổi)</strong>: "nếu ô này vẫn giữ <em>old</em> thì ghi <em>new</em>; cho tôi biết đã ghi hay chưa". Mọi thuật toán không khoá (lock-free) đều dựng từ nó. Đây là <code>counter++</code> dựng lại bằng CAS, có đếm số lần một luồng thua và phải thử lại:</p>
@@ -603,6 +609,7 @@ ${L('https://docs.oracle.com/javase/specs/jls/se21/html/jls-17.html', '☕', 'JL
 ${src('ch05/async-race.js', 'javascript')}
 ${run('c54-node', 'node async-race.js', 2)}
 <p>No threads, no shared memory, and both customers got the last seat. Every <code>await</code> is a point where the event loop runs <em>other</em> requests: alice reads "1 seat left", awaits; bob reads "1 seat left", awaits; both write. It is lesson 5.1's load–add–store with <code>await</code> in place of a context switch. The in-process lock (<code>lock</code> mode) fixes it — for <strong>one</strong> process. Run two instances (PM2 cluster, two containers, a second VPS) and each has its own lock and its own idea of the truth. The shared state lives in the database, so the lock must live there too.</p>
+${lab('eventloop', 'race', 'en', 'The seat sale above, on one thread: alice and bob each read “1 seat left”, hit an await, and the loop runs the other in between — both buy the last seat. Switch the lock on: a promise-chain mutex makes read–check–write one unit again, in this process only.')}
 
 <h3>Double booking, reproduced in PostgreSQL</h3>
 <p>Two sessions run the same "read, check, then write" script at the same time (each <code>psql</code> is one connection, like one request in your app):</p>
@@ -703,6 +710,7 @@ ${L('https://docs.stripe.com/api/idempotent_requests', '💳', 'Stripe — Idemp
 ${src('ch05/async-race.js', 'javascript')}
 ${run('c54-node', 'node async-race.js', 2)}
 <p>Không có luồng, không có bộ nhớ chung, vậy mà cả hai khách đều nhận ghế cuối. Mỗi <code>await</code> là một điểm mà event loop chạy các yêu cầu <em>khác</em>: alice đọc "còn 1 ghế", await; bob đọc "còn 1 ghế", await; cả hai cùng ghi. Đó chính là nạp–cộng–ghi của bài 5.1 với <code>await</code> thay cho chuyển ngữ cảnh. Khoá trong tiến trình (chế độ <code>lock</code>) sửa được — cho <strong>một</strong> tiến trình. Chạy hai instance (PM2 cluster, hai container, một VPS thứ hai) là mỗi cái có khoá riêng và "sự thật" riêng. Trạng thái dùng chung nằm trong CSDL, nên khoá cũng phải nằm ở đó.</p>
+${lab('eventloop', 'race', 'vi', 'Vụ bán ghế ở trên, trên một luồng: alice và bob đều đọc “còn 1 ghế”, gặp await, và vòng lặp chạy người kia xen vào giữa — cả hai mua được ghế cuối. Bật khoá lên: một mutex bằng chuỗi Promise gộp đọc–kiểm–ghi thành một khối lại, nhưng chỉ trong tiến trình này.')}
 
 <h3>Đặt ghế trùng, tái hiện trong PostgreSQL</h3>
 <p>Hai phiên chạy cùng một kịch bản "đọc, kiểm, rồi ghi" cùng lúc (mỗi <code>psql</code> là một kết nối, như một yêu cầu trong app của bạn):</p>

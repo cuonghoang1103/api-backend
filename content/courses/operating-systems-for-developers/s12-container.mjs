@@ -60,6 +60,7 @@ ${run('c121-host', 'docker run --rm --label oslab=1 --name os-c121-vm --pid=host
 <p>What makes the views different is a set of <strong>namespace</strong> memberships. Compare the container's with PID 1 of the VM:</p>
 ${run('c121-host', 'docker run --rm --label oslab=1 --name os-c121-vm --pid=host --privileged os-lab bash -c "for n')}
 <p>Six of the seven differ — the container has its own PID, network, mount, UTS, IPC and cgroup namespaces. One is the <strong>same</strong>: <code>user</code>. Docker does not use a user namespace by default, so UID 0 in this container is UID 0 of the VM's kernel, held back only by capabilities, seccomp and the other fences of <a href="${OS('os-13-4-container-escape')}">lesson 13.4</a>. Keep that in mind; we come back to it below and in lesson 12.6.</p>
+${lab('nslayers', 'docker', 'en', 'One process, two views: the same sleep is PID 1 inside and PID 71743 outside. Switch the namespaces on one at a time — uts, mnt, pid, net, ipc, cgroup, time — and watch the inside view change; user stays the SAME as the host’s.', { tour: 'nslayers-views' })}
 
 <h3>Eight namespaces, eight links in /proc</h3>
 <p>Every process — containerised or not — belongs to exactly one namespace of each type. The kernel shows them as symbolic links whose target names the type and an inode number; two processes are in the same namespace exactly when the numbers match:</p>
@@ -94,7 +95,7 @@ ${run('c121-ns', 'unshare --pid --fork --mount-proc sh -c')}
 ${run('c121-ns', 'unshare --pid --fork --mount-proc sleep 300 &', 3)}
 <p>The third trap is the one from <a href="${OS('os-1-5-pid1')}">lesson 1.5</a>, now visible at its source: the kernel does not deliver a signal to a namespace's PID 1 unless PID 1 installed a handler for it. <code>sleep</code> has none, so SIGTERM is simply dropped — only SIGKILL gets through:</p>
 ${run('c121-ns', 'kill $S; sleep 0.5', 2)}
-${lab('process', 'sandbox', 'en', 'A container is a process tree the kernel fences in: step through it and watch which processes the fenced tree can see and signal — then compare with the NSpid line above.', { tour: 'process-start' })}
+${lab('nslayers', 'unshare', 'en', 'unshare by hand, with its traps: --pid without --fork (“Cannot fork”), --fork without --mount-proc (“fatal library error, lookup self”), a new net namespace where curl exits 6, and nsenter walking back in.', { tour: 'nslayers-views' })}
 
 <div class="pitfall co-tieu-de">
 <p><strong>"unshare --pid works on my laptop, but in the script every second command fails."</strong> Without <code>--fork</code>, the first command you run becomes PID 1 and dies, and the namespace is closed for good: "Cannot fork", or <code>fork: Cannot allocate memory</code> in bash. Without <code>--mount-proc</code>, <code>ps</code>, <code>top</code> and anything that reads <code>/proc</code> either show the host's processes or crash. The working recipe is always the three together: <code>unshare --pid --fork --mount-proc</code>. Container runtimes do the same: fork into the new namespace first, then mount a fresh <code>/proc</code> inside it.</p>
@@ -119,6 +120,7 @@ ${run('c121-ns', "runuser -u dev -- unshare --user --map-root-user sh -c 'id", 2
 <p>Inside, <code>dev</code> is <code>uid=0(root)</code> with a <em>full</em> set of capabilities (<code>CapEff 000001ffffffffff</code>). Yet it cannot create <code>/etc/hacked</code>. The mapping <code>0 1001 1</code> says "UID 0 here is UID 1001 out there", and capabilities in a user namespace only count for objects <em>owned by that namespace</em> — the host's <code>/etc</code> is not. <code>setgroups</code> reads <code>deny</code>: an unprivileged user may not drop supplementary groups, or it could escape a "deny group" permission. This is the basis of <strong>rootless</strong> containers (lesson 12.6). Root can map whole ranges, like Docker's <code>userns-remap</code> or Podman:</p>
 ${run('c121-ns', 'unshare --user --map-users')}
 <p>Container UIDs 0…65535 are host UIDs 100000…165535. Our own shell (host UID 0) is not in that range, so inside it appears as <code>nobody</code> — exactly how files owned by the host's root look from inside a remapped container.</p>
+${lab('nslayers', 'userns', 'en', 'A user namespace from both sides: dev becomes uid 0 with a full CapEff, the map 0 1001 1 says who that really is, and touch /etc is still refused; then remap 0 100000 65536 and host-owned files appear as nobody.', { tour: 'nslayers-views' })}
 
 <h3>cgroup: your cgroup looks like the root</h3>
 ${run('c121-ns', 'mkdir /sys/fs/cgroup/demo', 3)}
@@ -183,6 +185,7 @@ ${run('c121-host', 'docker run --rm --label oslab=1 --name os-c121-vm --pid=host
 <p>Thứ làm hai góc nhìn khác nhau là tập <strong>namespace</strong> mà tiến trình thuộc về. So của container với PID 1 của máy ảo:</p>
 ${run('c121-host', 'docker run --rm --label oslab=1 --name os-c121-vm --pid=host --privileged os-lab bash -c "for n')}
 <p>Sáu trên bảy khác nhau — container có PID, mạng, mount, UTS, IPC và cgroup namespace riêng. Một cái <strong>giống</strong>: <code>user</code>. Mặc định Docker không dùng user namespace, nên UID 0 trong container này chính là UID 0 của nhân máy ảo, chỉ bị kìm bởi capabilities, seccomp và các hàng rào khác ở <a href="${OS('os-13-4-container-escape')}">bài 13.4</a>. Nhớ điều đó; ta quay lại ở dưới và ở bài 12.6.</p>
+${lab('nslayers', 'docker', 'vi', 'Một tiến trình, hai góc nhìn: cùng tiến trình sleep là PID 1 bên trong và PID 71743 bên ngoài. Bật từng namespace — uts, mnt, pid, net, ipc, cgroup, time — và nhìn khung bên trong đổi; user vẫn GIỐNG của máy chủ.', { tour: 'nslayers-views' })}
 
 <h3>Tám namespace, tám liên kết trong /proc</h3>
 <p>Mọi tiến trình — trong container hay không — thuộc đúng một namespace của mỗi loại. Nhân hiện chúng thành các liên kết tượng trưng mà đích ghi loại và một số inode; hai tiến trình chung một namespace khi và chỉ khi hai con số trùng nhau:</p>
@@ -217,7 +220,7 @@ ${run('c121-ns', 'unshare --pid --fork --mount-proc sh -c')}
 ${run('c121-ns', 'unshare --pid --fork --mount-proc sleep 300 &', 3)}
 <p>Cái bẫy thứ ba là cái ở <a href="${OS('os-1-5-pid1')}">bài 1.5</a>, giờ thấy tận gốc: nhân không giao tín hiệu cho PID 1 của một namespace trừ khi PID 1 đã cài handler cho tín hiệu đó. <code>sleep</code> không có handler nào, nên SIGTERM bị bỏ qua luôn — chỉ SIGKILL lọt qua:</p>
 ${run('c121-ns', 'kill $S; sleep 0.5', 2)}
-${lab('process', 'sandbox', 'vi', 'Container là một cây tiến trình bị nhân rào lại: chạy từng bước và xem cây bị rào thấy được, gửi tín hiệu được cho những tiến trình nào — rồi so với dòng NSpid ở trên.', { tour: 'process-start' })}
+${lab('nslayers', 'unshare', 'vi', 'unshare bằng tay, cùng các cái bẫy: --pid không --fork (“Cannot fork”), --fork không --mount-proc (“fatal library error, lookup self”), net namespace mới nơi curl thoát mã 6, và nsenter bước ngược vào trong.', { tour: 'nslayers-views' })}
 
 <div class="pitfall co-tieu-de">
 <p><strong>"unshare --pid chạy được trên máy tôi, nhưng trong script cứ lệnh thứ hai là hỏng."</strong> Thiếu <code>--fork</code>, lệnh đầu tiên bạn chạy thành PID 1 rồi chết, và namespace bị đóng vĩnh viễn: "Cannot fork", hay <code>fork: Cannot allocate memory</code> trong bash. Thiếu <code>--mount-proc</code>, <code>ps</code>, <code>top</code> và mọi thứ đọc <code>/proc</code> hoặc hiện tiến trình của máy chủ, hoặc sập. Công thức chạy được luôn là cả ba cùng nhau: <code>unshare --pid --fork --mount-proc</code>. Các container runtime cũng làm vậy: fork vào namespace mới trước, rồi mount một <code>/proc</code> mới bên trong.</p>
@@ -242,6 +245,7 @@ ${run('c121-ns', "runuser -u dev -- unshare --user --map-root-user sh -c 'id", 2
 <p>Bên trong, <code>dev</code> là <code>uid=0(root)</code> với tập capabilities <em>đầy đủ</em> (<code>CapEff 000001ffffffffff</code>). Thế mà không tạo nổi <code>/etc/hacked</code>. Ánh xạ <code>0 1001 1</code> nói "UID 0 ở đây là UID 1001 ở ngoài kia", và capabilities trong một user namespace chỉ có giá trị với những đối tượng <em>thuộc về namespace đó</em> — <code>/etc</code> của máy chủ thì không. <code>setgroups</code> đọc ra <code>deny</code>: người dùng thường không được bỏ nhóm phụ, nếu không sẽ lách được quyền kiểu "cấm nhóm này". Đây là nền móng của container <strong>rootless</strong> (bài 12.6). Root thì ánh xạ được cả dải, như <code>userns-remap</code> của Docker hay Podman:</p>
 ${run('c121-ns', 'unshare --user --map-users')}
 <p>UID 0…65535 trong container là UID 100000…165535 của máy chủ. Shell của chính ta (UID 0 ở máy chủ) không nằm trong dải đó, nên bên trong nó hiện thành <code>nobody</code> — đúng như file của root máy chủ trông ra sao khi nhìn từ trong một container đã ánh xạ lại.</p>
+${lab('nslayers', 'userns', 'vi', 'User namespace nhìn từ hai phía: dev thành uid 0 với CapEff đầy đủ, ánh xạ 0 1001 1 cho biết thật ra đó là ai, và touch /etc vẫn bị từ chối; rồi ánh xạ lại 0 100000 65536 và file của máy chủ hiện thành nobody.', { tour: 'nslayers-views' })}
 
 <h3>cgroup: cgroup của bạn trông như gốc</h3>
 ${run('c121-ns', 'mkdir /sys/fs/cgroup/demo', 3)}
@@ -512,6 +516,7 @@ ${run('c123-overlay', "cat /proc/self/mountinfo | grep -E ' / / ' | grep -oE 'lo
 ${run('c123-host', "docker image inspect os-lab -f")}
 ${run('c126-host', 'docker run --rm --label oslab=1 alpine:latest sh -c "grep')}
 <p>Fourteen read-only <strong>lower</strong> directories for an image of 13 layers, and two for the one-layer Alpine image: every image layer is one lower directory, plus one small layer Docker adds per container (its "init" layer, with empty placeholders such as <code>/etc/hosts</code> and <code>/etc/resolv.conf</code> that it later bind-mounts over — you can see those mounts in lesson 12.6). On top sits one <strong>upper</strong> directory that belongs to this container only, and a <strong>work</strong> directory overlayfs needs for atomic operations. The snapshot numbers are directories inside the Docker VM.</p>
+${lab('overlay', 'image', 'en', 'An image is a stack of lower directories: os-lab’s 13 layers plus Docker’s init layer make 14 lowerdirs, Alpine 1 + 1 = 2. The container’s writable upper dir is exactly what docker diff lists.', { tour: 'overlay-copyup' })}
 
 <h3>Build an overlay by hand</h3>
 <p>Two "image layers" (<code>base</code>, like a <code>FROM</code>, and <code>app</code>, like a <code>COPY</code>), an empty upper and work directory, all on a tmpfs — an upper directory cannot itself sit on another overlay, and our lab's root is one:</p>
@@ -519,6 +524,7 @@ ${run('c123-overlay', 'mkdir /ovl', 4)}
 ${run('c123-overlay', 'mount -t overlay', 2)}
 ${run('c123-overlay', 'ls merged merged/etc')}
 <p>The merged view contains files from both layers. Where both have <code>etc/app.conf</code>, the <strong>leftmost</strong> lower directory wins: <code>lowerdir=app:base</code> means <code>app</code> is on top, so we see <code>port=8080</code> and <code>base</code>'s <code>port=80</code> is hidden. That is exactly why a later Dockerfile instruction overrides an earlier one.</p>
+${lab('overlay', 'layers', 'en', 'lowerdir, upperdir, workdir and merged as columns: read a file and see which layer answers — the leftmost lower dir wins, which is why a later Dockerfile instruction overrides an earlier one.', { tour: 'overlay-copyup' })}
 
 <h3>Writes go up: new files and copy-up</h3>
 ${run('c123-overlay', 'echo "GET /" > merged/access.log')}
@@ -530,10 +536,12 @@ ${run('c123-overlay', 'rm merged/etc/legacy.conf')}
 <p>A lower layer cannot be changed, so deleting <code>legacy.conf</code> creates a <strong>whiteout</strong> in <code>upper</code>: a character device with device number 0,0 that means "hide this name". The file is still in <code>base</code>. Deleting a whole directory and creating it again marks the new one <strong>opaque</strong> (an extended attribute), so nothing from below shows through:</p>
 ${run('c123-overlay', 'rm -rf merged/etc')}
 <p>Image layers store deletes the same way, which is why <code>RUN rm -rf /var/lib/apt/lists</code> in a <em>separate</em> instruction makes the image no smaller: the files still sit in the layer below, merely hidden.</p>
+${lab('overlay', 'whiteout', 'en', 'Delete a file that lives in a lower layer: upper gets a whiteout (a character device 0,0), the name disappears from merged — and the file still sits in the layer below, still taking space in the image.', { tour: 'overlay-copyup' })}
 
 <h3>Copy-up has a price: one byte costs 200 MB</h3>
 ${run('c123-overlay', 'du -sm upper', 2)}
 <p>Appending two bytes to a 200 MB file from a lower layer took <strong>0.93 s</strong> and grew <code>upper</code> from 1 MB to 201 MB: the first write copied the whole file up. The second append took 1 ms, because the file was already in <code>upper</code>.</p>
+${lab('overlay', 'copyup', 'en', 'Copy-up with a progress bar: the first write to a 200 MB file from a lower layer copies all of it (0.93 s, upper 1 → 201 MB); the second write takes 1 ms.', { tour: 'overlay-copyup' })}
 
 <div class="pitfall co-tieu-de">
 <p><strong>A database (or a log) inside the container's writable layer.</strong> If an image ships a SQLite file, a pre-filled data directory or a large log, the first write copies all of it into the container's upper layer: a slow first request, double the disk, and every byte disappears with <code>docker rm</code>. Data that changes belongs on a <strong>volume</strong> or bind mount — a plain directory mounted over that path, bypassing overlayfs entirely (lesson 9.6). Postgres in this project keeps its data in a named volume for exactly this reason.</p>
@@ -551,6 +559,7 @@ ${run('c123-host', 'docker build -q', 2)}
 ${run('c123-host', 'echo "console.log', 2)}
 ${run('c123-host', "echo '{\"name\":\"demo\",\"version\":\"1.0.1\"}'", 3)}
 <p>Unchanged: every step <code>CACHED</code>. A new <code>server.js</code>: only step 5 runs again (0.1 s). A new <code>package.json</code>: its <code>COPY</code> changes the key of every later step, so the slow "install" (3.1 s here, minutes for a real <code>npm ci</code>) runs again. Hence the rule: <strong>copy the dependency manifest and install first, copy the source last</strong>. A Dockerfile that starts with <code>COPY . .</code> reinstalls everything on every commit.</p>
+${lab('overlay', 'cache', 'en', 'The build cache as a chain of keys: change server.js and only the last step reruns (0.1 s); change package.json and the install reruns (3.2 s). Then move “COPY . .” before the install and watch every edit pay for it.', { tour: 'overlay-cache' })}
 ${run('c123-host', 'docker system df')}
 <p>Each of those rebuilds left layers behind; on this Mac the build cache holds 115 entries, 5.7 GB. On a server that is a disk-space problem waiting to happen — the incident of <a href="${OS('os-2-4-dia-io')}">lesson 2.4</a>, where build cache and old images filled the disk that also held Postgres. Clean it deliberately (<code>docker builder prune</code> with a filter such as <code>until=168h</code>, keep the last N deploy images) or, as this project did, stop building on the production machine.</p>
 ${lab('sysmon', 'diskfull', 'en', 'The other end of the build cache: a disk at 100 %. Watch which process fails first when the volume holding the database runs out of space.', { tour: 'sysmon-start' })}
@@ -601,6 +610,7 @@ ${run('c123-overlay', "cat /proc/self/mountinfo | grep -E ' / / ' | grep -oE 'lo
 ${run('c123-host', "docker image inspect os-lab -f")}
 ${run('c126-host', 'docker run --rm --label oslab=1 alpine:latest sh -c "grep')}
 <p>Mười bốn thư mục <strong>lower</strong> chỉ-đọc cho một ảnh 13 lớp, và hai cho ảnh Alpine một lớp: mỗi lớp ảnh là một thư mục lower, cộng một lớp nhỏ Docker thêm cho từng container (lớp "init" của nó, chứa các chỗ giữ chỗ rỗng như <code>/etc/hosts</code> và <code>/etc/resolv.conf</code> mà sau đó nó bind mount đè lên — bạn sẽ thấy các mount đó ở bài 12.6). Trên cùng là một thư mục <strong>upper</strong> chỉ thuộc về container này, và một thư mục <strong>work</strong> mà overlayfs cần cho các thao tác nguyên tử. Các con số snapshot là thư mục bên trong máy ảo Docker.</p>
+${lab('overlay', 'image', 'vi', 'Một image là một chồng thư mục lower: 13 lớp của os-lab cộng lớp init của Docker thành 14 lowerdir, Alpine 1 + 1 = 2. Thư mục upper ghi được của container chính là thứ docker diff liệt kê.', { tour: 'overlay-copyup' })}
 
 <h3>Dựng một overlay bằng tay</h3>
 <p>Hai "lớp ảnh" (<code>base</code>, như một <code>FROM</code>, và <code>app</code>, như một <code>COPY</code>), một thư mục upper và work rỗng, tất cả trên một tmpfs — thư mục upper không được nằm trên một overlay khác, mà gốc của lab chính là một overlay:</p>
@@ -608,6 +618,7 @@ ${run('c123-overlay', 'mkdir /ovl', 4)}
 ${run('c123-overlay', 'mount -t overlay', 2)}
 ${run('c123-overlay', 'ls merged merged/etc')}
 <p>Góc nhìn gộp chứa file từ cả hai lớp. Chỗ nào cả hai cùng có <code>etc/app.conf</code> thì thư mục lower <strong>bên trái nhất</strong> thắng: <code>lowerdir=app:base</code> nghĩa là <code>app</code> nằm trên, nên ta thấy <code>port=8080</code> còn <code>port=80</code> của <code>base</code> bị che. Đó chính là lý do một lệnh Dockerfile phía sau đè được lệnh phía trước.</p>
+${lab('overlay', 'layers', 'vi', 'lowerdir, upperdir, workdir và merged thành từng cột: đọc một file và xem lớp nào trả lời — thư mục lower bên trái nhất thắng, đó là lý do lệnh Dockerfile sau đè lệnh trước.', { tour: 'overlay-copyup' })}
 
 <h3>Ghi thì đi lên: file mới và copy-up</h3>
 ${run('c123-overlay', 'echo "GET /" > merged/access.log')}
@@ -619,10 +630,12 @@ ${run('c123-overlay', 'rm merged/etc/legacy.conf')}
 <p>Lớp dưới không sửa được, nên xoá <code>legacy.conf</code> tạo ra một <strong>whiteout</strong> trong <code>upper</code>: một thiết bị ký tự số hiệu 0,0 mang nghĩa "giấu cái tên này". File vẫn nằm trong <code>base</code>. Xoá cả một thư mục rồi tạo lại thì thư mục mới bị đánh dấu <strong>opaque</strong> (một thuộc tính mở rộng), để không gì từ bên dưới lọt lên:</p>
 ${run('c123-overlay', 'rm -rf merged/etc')}
 <p>Lớp ảnh lưu thao tác xoá y như vậy, nên <code>RUN rm -rf /var/lib/apt/lists</code> đặt ở một lệnh <em>riêng</em> không làm ảnh nhỏ đi: các file vẫn nằm ở lớp dưới, chỉ bị giấu.</p>
+${lab('overlay', 'whiteout', 'vi', 'Xoá một file nằm ở lớp lower: upper nhận một whiteout (thiết bị ký tự 0,0), cái tên biến khỏi merged — còn file vẫn nằm ở lớp dưới, vẫn chiếm chỗ trong image.', { tour: 'overlay-copyup' })}
 
 <h3>Copy-up có giá: một byte tốn 200 MB</h3>
 ${run('c123-overlay', 'du -sm upper', 2)}
 <p>Nối hai byte vào một file 200 MB của lớp dưới mất <strong>0,93 s</strong> và làm <code>upper</code> phình từ 1 MB lên 201 MB: lần ghi đầu đã chép cả file lên. Lần nối thứ hai mất 1 ms, vì file đã nằm sẵn trong <code>upper</code>.</p>
+${lab('overlay', 'copyup', 'vi', 'Copy-up có thanh tiến độ: lần ghi đầu vào một file 200 MB ở lớp lower chép nguyên file (0,93 s, upper 1 → 201 MB); lần ghi thứ hai mất 1 ms.', { tour: 'overlay-copyup' })}
 
 <div class="pitfall co-tieu-de">
 <p><strong>Cơ sở dữ liệu (hay log) nằm trong lớp ghi được của container.</strong> Nếu một ảnh mang sẵn file SQLite, một thư mục dữ liệu điền sẵn hay một log lớn, lần ghi đầu tiên chép toàn bộ nó lên lớp upper của container: request đầu chậm, đĩa tốn gấp đôi, và mọi byte biến mất theo <code>docker rm</code>. Dữ liệu thay đổi phải nằm trên <strong>volume</strong> hoặc bind mount — một thư mục thường mount đè lên đường dẫn đó, đi vòng qua overlayfs hoàn toàn (bài 9.6). Postgres của dự án này giữ dữ liệu trong một volume có tên chính vì lý do đó.</p>
@@ -640,6 +653,7 @@ ${run('c123-host', 'docker build -q', 2)}
 ${run('c123-host', 'echo "console.log', 2)}
 ${run('c123-host', "echo '{\"name\":\"demo\",\"version\":\"1.0.1\"}'", 3)}
 <p>Không đổi gì: mọi bước <code>CACHED</code>. <code>server.js</code> mới: chỉ bước 5 chạy lại (0,1 s). <code>package.json</code> mới: lệnh <code>COPY</code> của nó đổi khoá của mọi bước sau, nên bước "cài đặt" chậm (3,1 s ở đây, vài phút với một <code>npm ci</code> thật) chạy lại. Từ đó có luật: <strong>chép file khai báo thư viện và cài trước, chép mã nguồn sau cùng</strong>. Một Dockerfile mở đầu bằng <code>COPY . .</code> sẽ cài lại tất cả ở mỗi commit.</p>
+${lab('overlay', 'cache', 'vi', 'Build cache là một chuỗi khoá: đổi server.js thì chỉ bước cuối chạy lại (0,1 s); đổi package.json thì bước cài chạy lại (3,2 s). Rồi đưa “COPY . .” lên trước bước cài và xem lần sửa nào cũng phải trả giá.', { tour: 'overlay-cache' })}
 ${run('c123-host', 'docker system df')}
 <p>Mỗi lần build lại đó để lại lớp; trên máy Mac này build cache giữ 115 mục, 5,7 GB. Trên máy chủ, đó là một vụ hết đĩa đang chờ xảy ra — chính sự cố ở <a href="${OS('os-2-4-dia-io')}">bài 2.4</a>, khi build cache và ảnh cũ lấp đầy cái đĩa chứa luôn Postgres. Hãy dọn có chủ đích (<code>docker builder prune</code> kèm bộ lọc như <code>until=168h</code>, giữ N ảnh deploy gần nhất) hoặc, như dự án này đã làm, thôi build trên máy production.</p>
 ${lab('sysmon', 'diskfull', 'vi', 'Đầu kia của build cache: một ổ đĩa đầy 100 %. Xem tiến trình nào hỏng trước khi phân vùng chứa cơ sở dữ liệu hết chỗ.', { tour: 'sysmon-start' })}
@@ -1278,6 +1292,7 @@ ${L('https://docs.docker.com/engine/security/rootless/', '📄', 'Rootless mode 
 <p>Kubernetes starts a tiny "pause" process first; it does nothing but hold the pod's network and IPC namespaces (and, if you ask, its PID namespace). Every app container of the pod then <em>joins</em> those namespaces. Docker can do the same with <code>--network container:X</code>, <code>--pid container:X</code> and <code>--ipc container:X</code>; an Alpine <code>sleep</code> plays the pause process:</p>
 ${run('c127-host', 'docker run -d --name os-c127-pause', 5)}
 <p>What the measurements show: a third container (the "sidecar") reached the app on <strong>127.0.0.1:8000</strong> — one network namespace, one <code>lo</code>, one IP address and one port space for the whole pod, which is why two containers of one pod cannot both listen on 8000. With the PID namespace shared, the app sees the pause process as PID 1 and itself as PID 7. The namespace table: <code>net</code>, <code>pid</code> and <code>ipc</code> identical; <code>mnt</code> different — each container keeps its own file system — and <code>uts</code> different here because Docker copies the hostname <code>pod-a</code> rather than sharing the namespace (Kubernetes does share UTS). Kubernetes shares the PID namespace only with <code>shareProcessNamespace: true</code>; by default each container keeps its own PID 1.</p>
+${lab('nslayers', 'pod', 'en', 'A pod as shared namespaces: switch net, ipc, uts and pid sharing on and off — the sidecar reaches 127.0.0.1:8000 or not, ps shows /pause as PID 1, two containers on port 8000 hit EADDRINUSE, and the pod IP survives an app restart.', { tour: 'nslayers-pod' })}
 <p>The pause process exists for the reason of lesson 12.1: a namespace lives while something holds it. If the network namespace belonged to the app container, restarting the app would destroy the pod's IP address. Because pause holds it, app containers can crash and restart while the pod keeps its network identity.</p>
 
 <h3>The checklist, measured</h3>
@@ -1310,6 +1325,7 @@ ${lab('cgroup', 'high', 'en', 'memory.high below memory.max: the group is slowed
 <h3>3 — ulimits</h3>
 ${run('c127-host', "docker run --rm --label oslab=1 os-lab bash -c 'echo \"nofile", 2)}
 <p>A default container here may open over a million files (<code>RLIMIT_NOFILE</code> soft = hard = 1048576), may start unlimited processes per user (the cgroup <code>pids.max</code> is the real cap) and writes no core dumps. A huge <code>nofile</code> hides descriptor leaks until memory runs out; a tiny one gives "Too many open files" under load (<a href="${OS('os-2-5-mang-fd')}">lesson 2.5</a>). <code>--ulimit nofile=1024:4096</code> sets soft and hard; note that Node raised its own soft limit to the hard one at start-up (its child shell sees 4096), so for Node the <em>hard</em> limit is what counts.</p>
+${lab('fdtable', 'emfile', 'en', 'What a small nofile limit looks like from inside: a server leaking one socket per request fills its fd table to 1024 and gets EMFILE (“Too many open files”); raising the limit only delays it.', { tour: 'fdtable-deleted' })}
 
 <h3>4 — A read-only root file system</h3>
 ${run('c127-host', 'docker run --rm --label oslab=1 --read-only os-lab')}
@@ -1378,6 +1394,7 @@ ${L('https://docs.docker.com/build/building/best-practices/', '📄', 'Dockerfil
 <p>Kubernetes khởi động trước một tiến trình "pause" tí hon; nó không làm gì ngoài giữ network namespace và IPC namespace của pod (và, nếu bạn yêu cầu, PID namespace). Mỗi container ứng dụng của pod sau đó <em>gia nhập</em> các namespace đó. Docker làm được y vậy với <code>--network container:X</code>, <code>--pid container:X</code> và <code>--ipc container:X</code>; một lệnh <code>sleep</code> Alpine đóng vai tiến trình pause:</p>
 ${run('c127-host', 'docker run -d --name os-c127-pause', 5)}
 <p>Số đo cho thấy: container thứ ba (cái "sidecar") gọi được ứng dụng ở <strong>127.0.0.1:8000</strong> — cả pod có một network namespace, một <code>lo</code>, một địa chỉ IP và một không gian cổng, vì thế hai container trong một pod không thể cùng nghe cổng 8000. Khi PID namespace được dùng chung, ứng dụng thấy tiến trình pause là PID 1 và chính nó là PID 7. Bảng namespace: <code>net</code>, <code>pid</code> và <code>ipc</code> trùng nhau; <code>mnt</code> khác — mỗi container giữ hệ thống file riêng — và <code>uts</code> khác ở đây vì Docker chép hostname <code>pod-a</code> sang chứ không dùng chung namespace (Kubernetes thì có dùng chung UTS). Kubernetes chỉ dùng chung PID namespace khi đặt <code>shareProcessNamespace: true</code>; mặc định mỗi container giữ PID 1 riêng.</p>
+${lab('nslayers', 'pod', 'vi', 'Pod là các namespace dùng chung: bật/tắt chia sẻ net, ipc, uts và pid — sidecar gọi được 127.0.0.1:8000 hay không, ps thấy /pause là PID 1, hai container cùng cổng 8000 bị EADDRINUSE, và IP pod sống sót qua lần app khởi động lại.', { tour: 'nslayers-pod' })}
 <p>Tiến trình pause tồn tại vì lý do của bài 12.1: namespace sống chừng nào còn thứ giữ nó. Nếu network namespace thuộc về container ứng dụng, khởi động lại ứng dụng sẽ huỷ luôn địa chỉ IP của pod. Vì pause giữ nó, container ứng dụng có thể sập và khởi động lại mà pod vẫn giữ danh tính mạng.</p>
 
 <h3>Checklist, có đo</h3>
@@ -1410,6 +1427,7 @@ ${lab('cgroup', 'high', 'vi', 'memory.high dưới memory.max: nhóm bị làm c
 <h3>3 — ulimit</h3>
 ${run('c127-host', "docker run --rm --label oslab=1 os-lab bash -c 'echo \"nofile", 2)}
 <p>Một container mặc định ở đây được mở hơn một triệu file (<code>RLIMIT_NOFILE</code> soft = hard = 1048576), được khởi động không giới hạn tiến trình mỗi người dùng (trần thật là <code>pids.max</code> của cgroup) và không ghi core dump. <code>nofile</code> quá lớn giấu rò rỉ descriptor cho tới khi hết bộ nhớ; quá nhỏ thì gặp "Too many open files" lúc tải cao (<a href="${OS('os-2-5-mang-fd')}">bài 2.5</a>). <code>--ulimit nofile=1024:4096</code> đặt soft và hard; để ý Node đã tự nâng soft lên bằng hard lúc khởi động (shell con của nó thấy 4096), nên với Node thì giới hạn <em>hard</em> mới là thứ quyết định.</p>
+${lab('fdtable', 'emfile', 'vi', 'Giới hạn nofile nhỏ nhìn từ bên trong: một máy chủ rò một socket mỗi request làm đầy bảng fd tới 1024 và nhận EMFILE (“Too many open files”); nâng giới hạn chỉ làm nó tới muộn hơn.', { tour: 'fdtable-deleted' })}
 
 <h3>4 — Hệ thống file gốc chỉ-đọc</h3>
 ${run('c127-host', 'docker run --rm --label oslab=1 --read-only os-lab')}

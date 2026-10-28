@@ -82,6 +82,7 @@ ${run('c31-luong', "node -e 'setTimeout")}
 ${src('ch03/Vt.java', 'java')}
 ${run('c31-luong', 'java Vt platform', 2)}
 <p>With one kernel thread per task, creating 10 000 of them took several seconds here (about 0.45 ms each in this VM), so they never all overlapped: one second after the last submit only 2 464 were still alive, and the whole job took 6.6 s instead of 2. With virtual threads the kernel saw <strong>31 threads</strong>, RAM was about half, and all 10 000 waits overlapped: 2.07 s. Node's event loop and Go's goroutines are the same idea — many cheap waits multiplexed onto few kernel threads — and lesson 3.5 measures it on a real HTTP server.</p>
+${lab('threadpool', 'virtual', 'en', 'Virtual threads in a server: one virtual thread per request, so the worker limit disappears and 380 req/s go through — until the next pool (10 database connections) becomes the ceiling. Switch “Threads” back to a platform pool and watch the queue return.')}
 
 <h3>If you have done OSG202 lesson 2.2</h3>
 <p>There you learned the textbook picture: thread = PC + registers + stack, user-level vs kernel-level threads, many-to-one, one-to-one, many-to-many. Here you have seen each of those words as a number: TIDs in <code>/proc/&lt;pid&gt;/task</code>, 8 MB stacks, 1:1 pthreads, and an M:N runtime (virtual threads) using 31 kernel threads for 10 000 tasks.</p>
@@ -172,6 +173,7 @@ ${run('c31-luong', "node -e 'setTimeout")}
 ${src('ch03/Vt.java', 'java')}
 ${run('c31-luong', 'java Vt platform', 2)}
 <p>Với một luồng nhân cho mỗi tác vụ, tạo 10 000 luồng mất mấy giây ở đây (khoảng 0,45 ms mỗi luồng trong VM này), nên chúng không bao giờ cùng chờ một lúc: một giây sau lần submit cuối chỉ còn 2 464 luồng sống, và cả việc mất 6,6 s thay vì 2. Với luồng ảo, nhân chỉ thấy <strong>31 luồng</strong>, RAM còn khoảng một nửa, và cả 10 000 lần chờ chồng lên nhau: 2,07 s. Event loop của Node và goroutine của Go cùng một ý — rất nhiều lần chờ rẻ dồn lên vài luồng nhân — và bài 3.5 sẽ đo nó trên một máy chủ HTTP thật.</p>
+${lab('threadpool', 'virtual', 'vi', 'Luồng ảo trong một máy chủ: mỗi request một luồng ảo nên giới hạn worker biến mất và 380 req/s chạy được — cho tới khi pool kế tiếp (10 kết nối CSDL) thành trần. Đổi “Luồng” về thread pool thường và nhìn hàng đợi quay lại.')}
 
 <h3>Nếu bạn đã học OSG202 bài 2.2</h3>
 <p>Ở đó bạn học bức tranh giáo trình: luồng = PC + thanh ghi + stack, luồng mức người dùng vs mức nhân, nhiều-một, một-một, nhiều-nhiều. Ở đây bạn đã thấy từng chữ đó thành con số: TID trong <code>/proc/&lt;pid&gt;/task</code>, stack 8 MB, pthreads 1:1, và một runtime M:N (luồng ảo) dùng 31 luồng nhân cho 10 000 tác vụ.</p>
@@ -652,11 +654,13 @@ ${run('c34-quota', 'bash cores.sh')}
 ${run('c34-quota', 'cat /sys/fs/cgroup/cpu.stat')}
 ${run('c34-quota', 'time ./crowd 4 cpu', 2)}
 <p>Even before our test, 4 of the first 8 periods were throttled — that was the JVM compiling <code>Cores.java</code> with several threads at once. The 4-thread job then ran at <code>user 0.903 s</code> in <code>real 0.576 s</code>: 1.57 CPUs on average, pinned to the quota no matter how many cores were idle, and 6 more periods throttled. (<code>throttled_usec</code> is summed over the CPUs the container's threads were stopped on.)</p>
+${lab('cgroup', 'cpuquota', 'en', 'cpu.max on a timeline: one thread needs 120 ms of CPU under a quota of 50 ms per 100 ms period. It spends the budget early in each period, is frozen for the rest, and finishes at 220 ms instead of 120. Watch nr_throttled in cpu.stat climb.')}
 
 <h3>What throttling does to latency</h3>
 <p><code>lat.c</code> serves 300 "requests" that each need 2 ms of CPU, while a background job in the same container burns 3 threads — the shape of an API container that also runs a report or an image resize:</p>
 ${run('c34-quota', './lat 0', 2)}
 <p>Median unchanged at 2.0 ms, but <strong>p99 from 2.4 ms to 60.4 ms</strong>. Four busy threads use up the 150 ms quota in about 37 ms of wall time; then every thread in the container — including the request handler — is frozen for the rest of the 100 ms period. A request that arrives in that window waits up to ~62 ms (max measured: 63.3). Average CPU usage graphs look fine the whole time; only <code>cpu.stat</code> and the p99 show it.</p>
+${lab('cgroup', 'cputhreads', 'en', 'Why parallel work makes it worse: 4 threads × 30 ms of CPU under the same 50/100 quota finish at about 205 ms instead of 30 — together they burn each period’s budget in a few milliseconds, then every thread in the group (a request handler too) waits for the next period.')}
 
 <div class="pitfall co-tieu-de">
 <p><strong>"CPU is at 40% but p99 is terrible" in a container: look at nr_throttled first.</strong> A quota is enforced in 100 ms windows, so a burst of parallel work can be throttled even when the per-minute average is low. Fixes, in order of preference: size thread pools and worker counts to the <em>quota</em> (Node: <code>os.availableParallelism()</code>, never <code>os.cpus().length</code>; JVM: it reads the quota itself, or set <code>-XX:ActiveProcessorCount</code>); move background CPU work out of the latency-sensitive container; raise the quota; or use a relative weight (<code>cpu.weight</code>, Docker <code>--cpu-shares</code>) instead of a hard cap when the machine is not shared with strangers.</p>
@@ -742,11 +746,13 @@ ${run('c34-quota', 'bash cores.sh')}
 ${run('c34-quota', 'cat /sys/fs/cgroup/cpu.stat')}
 ${run('c34-quota', 'time ./crowd 4 cpu', 2)}
 <p>Ngay cả trước phép thử, 4 trong 8 chu kỳ đầu đã bị bóp — đó là JVM biên dịch <code>Cores.java</code> bằng nhiều luồng cùng lúc. Việc 4 luồng sau đó chạy <code>user 0.903 s</code> trong <code>real 0.576 s</code>: trung bình 1,57 CPU, dính đúng quota bất kể bao nhiêu lõi đang rảnh, và thêm 6 chu kỳ bị bóp. (<code>throttled_usec</code> là tổng cộng trên các CPU nơi luồng của container bị dừng.)</p>
+${lab('cgroup', 'cpuquota', 'vi', 'cpu.max trên dòng thời gian: một luồng cần 120 ms CPU dưới quota 50 ms mỗi chu kỳ 100 ms. Nó tiêu hết ngân sách sớm trong mỗi chu kỳ, bị đóng băng phần còn lại, và xong lúc 220 ms thay vì 120. Nhìn nr_throttled trong cpu.stat tăng dần.')}
 
 <h3>Throttling làm gì với độ trễ</h3>
 <p><code>lat.c</code> phục vụ 300 "request", mỗi cái cần 2 ms CPU, trong khi một job nền trong cùng container đốt 3 luồng — đúng dáng một container API kiêm chạy báo cáo hay thu nhỏ ảnh:</p>
 ${run('c34-quota', './lat 0', 2)}
 <p>Trung vị vẫn 2,0 ms, nhưng <strong>p99 từ 2,4 ms lên 60,4 ms</strong>. Bốn luồng bận dùng hết quota 150 ms chỉ trong khoảng 37 ms đồng hồ; sau đó mọi luồng trong container — kể cả handler đang xử lý request — bị đóng băng hết phần còn lại của chu kỳ 100 ms. Request nào rơi vào khoảng đó phải chờ tới ~62 ms (max đo được: 63,3). Biểu đồ CPU trung bình nhìn vẫn ổn suốt; chỉ <code>cpu.stat</code> và p99 cho thấy nó.</p>
+${lab('cgroup', 'cputhreads', 'vi', 'Vì sao việc song song làm tệ hơn: 4 luồng × 30 ms CPU dưới cùng quota 50/100 xong lúc khoảng 205 ms thay vì 30 — cùng nhau chúng đốt ngân sách của mỗi chu kỳ trong vài mili giây, rồi mọi luồng trong nhóm (cả handler request) chờ chu kỳ sau.')}
 
 <div class="pitfall co-tieu-de">
 <p><strong>"CPU mới 40% mà p99 tệ quá" trong container: nhìn nr_throttled trước tiên.</strong> Quota được áp theo từng cửa sổ 100 ms, nên một đợt việc song song có thể bị bóp dù trung bình theo phút vẫn thấp. Cách sửa, theo thứ tự nên dùng: chọn cỡ thread pool và số worker theo <em>quota</em> (Node: <code>os.availableParallelism()</code>, đừng bao giờ dùng <code>os.cpus().length</code>; JVM: nó tự đọc quota, hoặc đặt <code>-XX:ActiveProcessorCount</code>); dời việc nặng CPU chạy nền ra khỏi container nhạy độ trễ; nâng quota; hoặc dùng trọng số tương đối (<code>cpu.weight</code>, Docker <code>--cpu-shares</code>) thay cho trần cứng khi máy không dùng chung với người lạ.</p>
@@ -816,7 +822,7 @@ ${run('c35-loop', "curl -s 'http://localhost:8080/lag'")}
 ${run('c35-loop', "curl -s 'http://localhost:8080/cpu?ms=1500'", 2)}
 <p><code>/fast</code> took <strong>1.39 s</strong>, and the event loop was blocked for 1 491 ms. JavaScript callbacks are never preempted: the scheduler of the event loop is pure FCFS, so one long callback is a convoy for every user of the process. Ten CPU requests of 100 ms each are served strictly one after another:</p>
 ${run('c35-loop', "node load.js 'http://localhost:8080/cpu", 2)}
-${lab('scheduler', 'convoy', 'en', 'Keep the policy on FCFS: that is the event loop — a long CPU job at the front, three quick ones stuck behind. Switching to RR is what preemptive threads would give you; Node cannot do that for JavaScript.')}
+${lab('eventloop', 'block', 'en', 'The real event loop: one request runs 200 ms of synchronous work on the only JavaScript thread, and the requests that arrive meanwhile — almost no work each — wait about 197 and 194 ms. Watch the call stack stay busy while their callbacks pile up; then switch to “offload”.', { tour: 'eventloop-block' })}
 <div class="pitfall co-tieu-de">
 <p><strong>"I made it async, so it can't block."</strong> <code>async</code>/<code>await</code> does not move work off the thread; it only lets you wait for work that happens <em>elsewhere</em> (the kernel, the libuv pool, another server). A CPU-heavy <code>await</code>ed function — <code>JSON.parse</code> of a 50 MB body, a synchronous <code>bcrypt</code>, a catastrophic regex, <code>fs.readFileSync</code> in a handler, building a big PDF — still blocks the loop for everyone. Move such work to <code>worker_threads</code> (Chapter 4), to a job queue, or chunk it.</p>
 </div>
@@ -827,14 +833,16 @@ ${src('ch03/pool.js', 'javascript')}
 ${run('c35-loop', 'node pool.js')}
 ${run('c35-loop', 'UV_THREADPOOL_SIZE=8')}
 <p>Default pool: <strong>4 finish at 176 ms, the other 4 at ~351 ms</strong> — two waves, exactly like a 4-core scheduler with 8 jobs. With 8 threads all finish at ~180 ms. And you can see the pool appear: 7 threads before, 11 after (four <code>libuv-worker</code>), 15 with size 8. Set the size from the CPUs you really have (<code>os.availableParallelism()</code>, lesson 3.4) and before the first use — the pool is created once. Network sockets do <em>not</em> use this pool.</p>
+${lab('eventloop', 'pool', 'en', 'The same experiment in slow motion: 8 pbkdf2 calls on a pool of 4 threads finish in two waves (100 and 200 ms), a 1 ms readFile queued behind them waits until 201 ms, and an https request (epoll, no pool thread) is not delayed. Change UV_THREADPOOL_SIZE to 1, 2, 4, 8.')}
 
 <h3>Spring Boot / Tomcat: one request, one thread</h3>
 <p>The JVM side, shrunk to its essence: an HTTP server whose handler blocks for 200 ms (as a JDBC call does), run on a fixed pool of N threads — which is what Tomcat inside Spring Boot is — or on virtual threads:</p>
 ${src('ch03/PoolServer.java', 'java')}
 ${run('c35-loop', 'javac -d . PoolServer.java', 4)}
 <p>Pool of <strong>10</strong>: 100 requests took <strong>2.17 s</strong> — ten waves of 200 ms. Pool of <strong>200</strong>: 0.57 s, with 173 threads alive. <strong>Virtual threads</strong>: 0.36 s with only 31 kernel threads. The pool size is a hard ceiling on concurrency, given by <strong>Little's law</strong>: throughput ≤ threads ÷ time per request = 10 ÷ 0.2 s = <strong>50 requests/s</strong> — and 100 requests in 2.17 s is 46/s.</p>
-${lab('scheduler', 'multicore', 'en', 'Read "cores" as "threads in the pool": six requests on a pool of two. Raise cores to 4 and the waves shrink — the same effect as raising Tomcat’s thread count.')}
+${lab('threadpool', 'overload', 'en', 'A real worker pool instead of “cores”: capacity = threads ÷ time per request (8 ÷ 25 ms = 320 req/s). At 360 req/s — only 12% too much — the queue grows without end and latency climbs in a straight line. Raise the worker threads and watch the capacity line move.')}
 <p>What that means in Spring Boot (defaults from the official property reference): Tomcat's <code>server.tomcat.threads.max</code> is <strong>200</strong> (with 10 kept idle, <code>threads.min-spare</code>), and up to 100 further connections wait in the accept queue (<code>server.tomcat.accept-count</code>). With <code>spring.threads.virtual.enabled=true</code> (Java 21+, default <code>false</code>) requests run on virtual threads instead and <code>threads.max</code> no longer applies. Two caveats from the measurements above: a bigger pool helps only while threads <em>wait</em> — for CPU-bound handlers the cores are the limit (lesson 3.3); and the bottleneck moves to the next pool: HikariCP's default <code>maximumPoolSize</code> is <strong>10</strong> connections, so 200 Tomcat threads (or 10 000 virtual threads) still reach the database ten at a time.</p>
+${lab('threadpool', 'dbpool', 'en', 'The next pool: 50 worker threads but only 5 database connections. Adding threads does nothing — they sit waiting for a connection (yellow). The ceiling is the pool behind you, just like 200 Tomcat threads in front of HikariCP’s 10.')}
 
 <h3>Choosing between them</h3>
 <table>
@@ -903,7 +911,7 @@ ${run('c35-loop', "curl -s 'http://localhost:8080/lag'")}
 ${run('c35-loop', "curl -s 'http://localhost:8080/cpu?ms=1500'", 2)}
 <p><code>/fast</code> mất <strong>1,39 s</strong>, và event loop bị chặn 1 491 ms. Callback JavaScript không bao giờ bị giành CPU: bộ lập lịch của event loop là FCFS thuần, nên một callback dài là một đoàn xe cho mọi người dùng của tiến trình. Mười request CPU, mỗi cái 100 ms, được phục vụ lần lượt từng cái một:</p>
 ${run('c35-loop', "node load.js 'http://localhost:8080/cpu", 2)}
-${lab('scheduler', 'convoy', 'vi', 'Giữ chính sách FCFS: đó chính là event loop — một việc CPU dài đứng đầu, ba việc nhanh kẹt phía sau. Đổi sang RR là thứ mà luồng có giành CPU sẽ cho bạn; Node không làm được vậy với JavaScript.')}
+${lab('eventloop', 'block', 'vi', 'Event loop thật: một request chạy 200 ms việc đồng bộ trên luồng JavaScript duy nhất, và các request tới trong lúc đó — mỗi cái gần như không tốn việc — phải chờ khoảng 197 và 194 ms. Nhìn call stack bận suốt trong khi callback của chúng dồn lại; rồi chuyển sang “offload”.', { tour: 'eventloop-block' })}
 <div class="pitfall co-tieu-de">
 <p><strong>"Tôi đã viết async rồi, nên nó không chặn được."</strong> <code>async</code>/<code>await</code> không dời việc ra khỏi luồng; nó chỉ cho bạn chờ những việc diễn ra <em>ở chỗ khác</em> (nhân, pool libuv, một máy chủ khác). Một hàm nặng CPU được <code>await</code> — <code>JSON.parse</code> một body 50 MB, <code>bcrypt</code> đồng bộ, một regex thảm hoạ, <code>fs.readFileSync</code> trong handler, dựng một PDF lớn — vẫn chặn event loop của mọi người. Dời việc đó sang <code>worker_threads</code> (Chương 4), sang hàng đợi job, hoặc chia nhỏ ra.</p>
 </div>
@@ -914,14 +922,16 @@ ${src('ch03/pool.js', 'javascript')}
 ${run('c35-loop', 'node pool.js')}
 ${run('c35-loop', 'UV_THREADPOOL_SIZE=8')}
 <p>Pool mặc định: <strong>4 cái xong lúc 176 ms, 4 cái còn lại lúc ~351 ms</strong> — hai đợt, y như bộ lập lịch 4 lõi gặp 8 việc. Với 8 luồng, tất cả xong khoảng 180 ms. Và bạn thấy được pool xuất hiện: 7 luồng lúc trước, 11 lúc sau (bốn <code>libuv-worker</code>), 15 khi cỡ là 8. Hãy đặt cỡ theo số CPU bạn thật sự có (<code>os.availableParallelism()</code>, bài 3.4) và đặt trước lần dùng đầu tiên — pool chỉ được tạo một lần. Socket mạng <em>không</em> dùng pool này.</p>
+${lab('eventloop', 'pool', 'vi', 'Cùng thí nghiệm, chiếu chậm: 8 lần pbkdf2 trên pool 4 luồng xong thành hai đợt (100 và 200 ms), một readFile 1 ms xếp sau chúng phải chờ tới 201 ms, còn request https (epoll, không cần luồng pool) không bị trễ. Đổi UV_THREADPOOL_SIZE thành 1, 2, 4, 8.')}
 
 <h3>Spring Boot / Tomcat: một request, một luồng</h3>
 <p>Phía JVM, thu gọn tới cốt lõi: một máy chủ HTTP có handler bị chặn 200 ms (như một lời gọi JDBC), chạy trên một pool cố định N luồng — chính là Tomcat bên trong Spring Boot — hoặc trên luồng ảo:</p>
 ${src('ch03/PoolServer.java', 'java')}
 ${run('c35-loop', 'javac -d . PoolServer.java', 4)}
 <p>Pool <strong>10</strong>: 100 request mất <strong>2,17 s</strong> — mười đợt 200 ms. Pool <strong>200</strong>: 0,57 s, với 173 luồng đang sống. <strong>Luồng ảo</strong>: 0,36 s với chỉ 31 luồng nhân. Cỡ pool là trần cứng của số việc làm đồng thời, cho bởi <strong>định luật Little</strong>: thông lượng ≤ số luồng ÷ thời gian mỗi request = 10 ÷ 0,2 s = <strong>50 request/giây</strong> — và 100 request trong 2,17 s là 46/giây.</p>
-${lab('scheduler', 'multicore', 'vi', 'Đọc "lõi" thành "luồng trong pool": sáu request trên một pool hai luồng. Tăng số lõi lên 4 thì số đợt giảm — đúng hiệu ứng của việc tăng số luồng Tomcat.')}
+${lab('threadpool', 'overload', 'vi', 'Một pool worker thật thay cho “lõi”: sức chứa = số luồng ÷ thời gian mỗi request (8 ÷ 25 ms = 320 req/s). Ở 360 req/s — chỉ thừa 12% — hàng đợi dài ra mãi và độ trễ leo theo đường thẳng. Tăng số luồng worker và nhìn đường sức chứa dịch chuyển.')}
 <p>Điều đó nghĩa là gì trong Spring Boot (mặc định lấy từ bảng thuộc tính chính thức): <code>server.tomcat.threads.max</code> của Tomcat là <strong>200</strong> (giữ sẵn 10 luồng rảnh, <code>threads.min-spare</code>), và thêm tối đa 100 kết nối nữa chờ trong hàng nhận (<code>server.tomcat.accept-count</code>). Với <code>spring.threads.virtual.enabled=true</code> (Java 21+, mặc định <code>false</code>) request chạy trên luồng ảo và <code>threads.max</code> không còn tác dụng. Hai lưu ý từ số đo ở trên: pool to hơn chỉ giúp khi luồng đang <em>chờ</em> — với handler nặng CPU thì số lõi mới là giới hạn (bài 3.3); và nút cổ chai dời sang pool kế tiếp: <code>maximumPoolSize</code> mặc định của HikariCP là <strong>10</strong> kết nối, nên 200 luồng Tomcat (hay 10 000 luồng ảo) vẫn tới cơ sở dữ liệu mười cái một lúc.</p>
+${lab('threadpool', 'dbpool', 'vi', 'Pool kế tiếp: 50 luồng worker nhưng chỉ 5 kết nối CSDL. Thêm luồng chẳng được gì — chúng ngồi chờ kết nối (màu vàng). Trần là cái pool phía sau, y như 200 luồng Tomcat đứng trước 10 kết nối của HikariCP.')}
 
 <h3>Chọn giữa hai cách</h3>
 <table>

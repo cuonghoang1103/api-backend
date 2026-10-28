@@ -528,13 +528,16 @@ ${run('c73-fault', './filemap evict /tmp/data; ./filemap cached', 1)}
 ${run('c73-fault', '/usr/bin/time -v ./filemap rand', 1)}
 ${run('c73-fault', './filemap rand', 1)}
 <p><strong>65,536 major faults, 3.4 seconds</strong> — about 52 µs each, every one a disk read the process had to sleep through. Run it again: the pages are now in the page cache, 0 major faults, <strong>11.6 ms</strong>. Same code, same data, ~300× faster, purely because of where the pages were. (The 4,098 minor faults of the warm run are 65,536 / 16: on a fault the kernel maps up to 16 neighbouring pages that are already cached — "fault-around".) And this VM's "disk" is a file on a fast Mac SSD; on a cloud volume each major fault can cost several times more.</p>
+${lab('pagecache', 'random', 'en', 'Random reads of a cold file, page by page: read-ahead cannot guess the next page, so every page is a trip to the disk — a major fault you sleep through. Compare the disk-read counter with the sequential read below.')}
 <p>Sequential access hides most of this:</p>
 ${run('c73-fault', './filemap evict /tmp/data; ./filemap mmap', 1)}
 <p>Cold, read front to back: <strong>one</strong> major fault and 35 ms. The first fault noticed a sequential pattern and started <strong>read-ahead</strong>: the kernel fetched the following pages in the background, so later faults found them already arriving and counted as minor. Random access defeats read-ahead — and that is why a database whose working set does not fit in RAM is slow, and why the size of the page cache (Chapter 8) matters so much.</p>
+${lab('pagecache', 'seq', 'en', 'A sequential read of a cold file: after the first miss the kernel detects the pattern and reads ahead in growing windows — 4, 8, 16, 32 pages — so later accesses find their page already arriving.')}
 
 <h3>mmap or read?</h3>
 ${run('c73-fault', './filemap evict /tmp/data; ./filemap read', 1)}
 <p>Two ways to get file data. <code>read()</code> asks the kernel to <em>copy</em> bytes from the page cache into your buffer: no page faults on the file at all (the 259 minor faults are the 1 MiB buffer), one syscall per chunk. <code>mmap()</code> maps the page-cache pages <em>directly</em> into your address space: no copy and no syscalls, but a page fault per (group of) page(s) on first touch, page-table entries and TLB pressure. Warm, mmap won here (19.4 vs 23.4 ms); cold, they tied (~34 ms) because both waited for the same disk. Real systems pick both ways: SQLite (optional <code>mmap_size</code>), LMDB, Lucene/Elasticsearch and Prometheus's TSDB map files; PostgreSQL deliberately uses <code>read</code>/<code>write</code> into its own <code>shared_buffers</code>, to control exactly when a page is written and flushed.</p>
+${lab('pagecache', 'mmap', 'en', 'read() vs mmap() on a warm file: read copies each page from the page cache into your buffer (a syscall plus a 4 KiB memcpy); mmap maps the cache page itself, so the first touch is a minor fault and the rest are plain loads — zero copies.')}
 
 <div class="pitfall co-tieu-de">
 <p><strong>With mmap, an I/O error is a signal, not a return code.</strong> <code>read()</code> returns −1 and sets <code>errno</code> when the disk fails. A mapped file that hits a bad sector, or that another process truncated, delivers <strong>SIGBUS</strong> to whichever line of code touched the page — usually somewhere deep in a loop that "only reads memory". Unhandled, the process dies (exit 135 = 128 + 7). If you mmap files that can change or live on network storage, plan for that, or use <code>read</code>/<code>pread</code>.</p>
@@ -545,6 +548,7 @@ ${run('c73-fault', './filemap evict /tmp/data; ./filemap read', 1)}
 ${src('ch07/cowpfn.c', 'c')}
 ${run('c73-fault', './cowpfn', 1)}
 <p>Right after <code>fork</code>, parent and child map the same virtual address to the <strong>same physical frame</strong> <code>0x10f8f5</code>: one copy in RAM, marked read-only in both page tables. The child's first write faults (exactly 1 page fault); the kernel copies that one page into a new frame <code>0x115db4</code>, points the child's page table at it and lets the write proceed. The parent still sees <code>'P'</code> in the original frame. Nothing else was copied.</p>
+${lab('cow', 'fork', 'en', 'fork() with copy-on-write: the parent’s and child’s page tables point at the same frames, marked read-only. Make one of them write: one fault, one 4 KiB page copied, everything else still shared.')}
 
 <h3>The Redis BGSAVE pattern</h3>
 <p>Redis saves a snapshot by forking: the child writes the dataset to disk while the parent keeps serving writes. The child sees a frozen copy for free — until the parent writes. This program reproduces that with 512 MiB and a parent that rewrites one byte in W% of the pages while the "save" runs:</p>
@@ -554,8 +558,10 @@ ${run('c73-fault', 'for w in 0 1 10 50 100', 1)}
 <li><code>fork</code> of 512 MiB took <strong>~4 ms</strong>: the kernel copies page tables (131,072 entries), not data.</li>
 <li>Each first write to a shared page = one fault = one 4 KiB copy: 10% of pages written ⇒ 51 MiB copied; 100% ⇒ the full 512 MiB is now duplicated. <strong>The memory cost of a snapshot is proportional to the pages written during it, not the bytes.</strong></li>
 </ul>
+${lab('cow', 'bgsave', 'en', 'The BGSAVE calculator: dataset size × writes per second × save duration ⇒ how many pages get touched and how many MiB are copied. The cost follows pages written, not bytes — try a write-heavy minute against a quiet one.')}
 ${run('c73-fault', './cow 512 10 huge', 1)}
 <p>With 2 MiB pages the fork took 0.3 ms (512 entries to copy instead of 131,072), and writing 10% of the 4 KiB slices still copied 51 MiB, not the whole huge pages. Since Linux 5.8, a write to a shared transparent huge page splits it and copies only the 4 KiB that changed; on older kernels it copied the whole 2 MiB, which is why Redis's docs and logs have long warned about THP. Now the real thing — Redis 7.4 in a throw-away container, 260 k keys of 1 KiB, a background save, and 30,000 <code>SET</code>s while it runs:</p>
+${lab('cow', 'hugepage', 'en', 'The behaviour Redis warns about — kernels before 5.8, where a write to a shared transparent huge page copied the whole 2 MiB: the same writes now duplicate almost the entire dataset. Toggle the page size between 4 KiB and 2 MiB and compare the MiB copied.')}
 ${run('c73-redis', 'redis-benchmark -q -t set -n 600000', 3)}
 ${run('c73-redis', 'redis-cli BGSAVE', 2)}
 ${run('c73-redis', 'redis-cli INFO persistence', 3)}
@@ -657,13 +663,16 @@ ${run('c73-fault', './filemap evict /tmp/data; ./filemap cached', 1)}
 ${run('c73-fault', '/usr/bin/time -v ./filemap rand', 1)}
 ${run('c73-fault', './filemap rand', 1)}
 <p><strong>65.536 major fault, 3,4 giây</strong> — khoảng 52 µs mỗi lần, lần nào cũng là một lần đọc đĩa mà tiến trình phải ngủ chờ. Chạy lại: các trang giờ đã nằm trong page cache, 0 major fault, <strong>11,6 ms</strong>. Cùng code, cùng dữ liệu, nhanh hơn ~300 lần, chỉ vì các trang nằm ở đâu. (4.098 minor fault của lần chạy "ấm" là 65.536 / 16: khi có fault, nhân ánh xạ luôn tới 16 trang lân cận đã có trong cache — "fault-around".) Và "đĩa" của VM này là một file trên SSD nhanh của Mac; trên ổ đĩa đám mây, mỗi major fault có thể đắt gấp vài lần.</p>
+${lab('pagecache', 'random', 'vi', 'Đọc ngẫu nhiên một file nguội, từng trang một: read-ahead không đoán được trang kế nên trang nào cũng là một chuyến xuống đĩa — một major fault bạn phải ngủ chờ. So bộ đếm lần đọc đĩa với lần đọc tuần tự bên dưới.')}
 <p>Truy cập tuần tự che đi phần lớn chuyện này:</p>
 ${run('c73-fault', './filemap evict /tmp/data; ./filemap mmap', 1)}
 <p>Nguội, đọc từ đầu tới cuối: <strong>một</strong> major fault và 35 ms. Fault đầu tiên nhận ra kiểu tuần tự và khởi động <strong>đọc trước (read-ahead)</strong>: nhân lấy các trang tiếp theo ở chế độ nền, nên các fault sau thấy trang đang tới và được tính là minor. Truy cập ngẫu nhiên vô hiệu hoá đọc trước — đó là lý do một CSDL có tập dữ liệu làm việc không vừa RAM sẽ chậm, và vì sao cỡ page cache (Chương 8) quan trọng tới vậy.</p>
+${lab('pagecache', 'seq', 'vi', 'Đọc tuần tự một file nguội: sau lần trượt đầu tiên nhân nhận ra kiểu truy cập và đọc trước theo cửa sổ lớn dần — 4, 8, 16, 32 trang — nên các lần sau thấy trang của mình đã đang tới.')}
 
 <h3>mmap hay read?</h3>
 ${run('c73-fault', './filemap evict /tmp/data; ./filemap read', 1)}
 <p>Hai cách lấy dữ liệu file. <code>read()</code> nhờ nhân <em>chép</em> byte từ page cache vào bộ đệm của bạn: không có page fault nào trên file (259 minor fault là của bộ đệm 1 MiB), mỗi khúc một syscall. <code>mmap()</code> ánh xạ <em>thẳng</em> các trang page cache vào không gian địa chỉ của bạn: không chép, không syscall, nhưng mỗi (nhóm) trang tốn một page fault ở lần chạm đầu, cộng mục bảng trang và áp lực lên TLB. Khi ấm, mmap thắng ở đây (19,4 so với 23,4 ms); khi nguội, hai bên ngang nhau (~34 ms) vì cùng chờ một cái đĩa. Hệ thống thật chọn cả hai: SQLite (tuỳ chọn <code>mmap_size</code>), LMDB, Lucene/Elasticsearch và TSDB của Prometheus ánh xạ file; PostgreSQL cố ý dùng <code>read</code>/<code>write</code> vào <code>shared_buffers</code> của riêng nó, để kiểm soát chính xác lúc một trang được ghi và đẩy xuống đĩa.</p>
+${lab('pagecache', 'mmap', 'vi', 'read() so với mmap() trên file ấm: read chép từng trang từ page cache vào bộ đệm của bạn (một syscall cộng một lần memcpy 4 KiB); mmap ánh xạ thẳng trang cache, nên lần chạm đầu là một minor fault, còn lại là lệnh nạp bộ nhớ thường — không chép lần nào.')}
 
 <div class="pitfall co-tieu-de">
 <p><strong>Với mmap, lỗi I/O là một tín hiệu, không phải mã trả về.</strong> <code>read()</code> trả −1 và đặt <code>errno</code> khi đĩa hỏng. Một file đã ánh xạ gặp sector hỏng, hay bị tiến trình khác cắt ngắn, sẽ giao <strong>SIGBUS</strong> cho đúng dòng code chạm vào trang đó — thường nằm sâu trong một vòng lặp "chỉ đọc bộ nhớ". Không xử lý thì tiến trình chết (exit 135 = 128 + 7). Nếu bạn mmap những file có thể đổi hoặc nằm trên ổ mạng, hãy tính trước chuyện đó, hoặc dùng <code>read</code>/<code>pread</code>.</p>
@@ -674,6 +683,7 @@ ${run('c73-fault', './filemap evict /tmp/data; ./filemap read', 1)}
 ${src('ch07/cowpfn.c', 'c')}
 ${run('c73-fault', './cowpfn', 1)}
 <p>Ngay sau <code>fork</code>, cha và con ánh xạ cùng địa chỉ ảo tới <strong>cùng một khung vật lý</strong> <code>0x10f8f5</code>: một bản trong RAM, đánh dấu chỉ-đọc trong cả hai bảng trang. Lần ghi đầu của con gây fault (đúng 1 page fault); nhân chép đúng trang đó sang khung mới <code>0x115db4</code>, trỏ bảng trang của con vào đó và cho lần ghi đi tiếp. Cha vẫn thấy <code>'P'</code> trong khung gốc. Không có gì khác bị chép.</p>
+${lab('cow', 'fork', 'vi', 'fork() với copy-on-write: bảng trang của cha và con trỏ chung các khung, đánh dấu chỉ đọc. Cho một bên ghi: một fault, một trang 4 KiB được chép, phần còn lại vẫn dùng chung.')}
 
 <h3>Kiểu BGSAVE của Redis</h3>
 <p>Redis lưu ảnh chụp bằng cách fork: tiến trình con ghi tập dữ liệu xuống đĩa trong khi cha tiếp tục phục vụ lệnh ghi. Con thấy một bản đóng băng miễn phí — cho tới khi cha ghi. Chương trình này tái hiện điều đó với 512 MiB và một tiến trình cha ghi lại một byte trong W% số trang trong lúc "lưu":</p>
@@ -683,8 +693,10 @@ ${run('c73-fault', 'for w in 0 1 10 50 100', 1)}
 <li><code>fork</code> 512 MiB tốn <strong>~4 ms</strong>: nhân chép bảng trang (131.072 mục), không chép dữ liệu.</li>
 <li>Mỗi lần ghi đầu vào một trang dùng chung = một fault = chép 4 KiB: ghi 10% số trang ⇒ chép 51 MiB; 100% ⇒ cả 512 MiB giờ bị nhân đôi. <strong>Giá bộ nhớ của một ảnh chụp tỉ lệ với số trang bị ghi trong lúc chụp, không phải số byte.</strong></li>
 </ul>
+${lab('cow', 'bgsave', 'vi', 'Máy tính BGSAVE: cỡ dữ liệu × số lệnh ghi mỗi giây × thời gian lưu ⇒ bao nhiêu trang bị chạm và bao nhiêu MiB bị chép. Tốn bộ nhớ theo số trang bị ghi, không theo số byte — thử một phút ghi dồn dập so với một phút yên ả.')}
 ${run('c73-fault', './cow 512 10 huge', 1)}
 <p>Với trang 2 MiB, fork chỉ mất 0,3 ms (chép 512 mục thay vì 131.072), và ghi 10% các lát 4 KiB vẫn chỉ chép 51 MiB, không phải nguyên các huge page. Từ Linux 5.8, ghi vào một transparent huge page dùng chung sẽ tách nó ra và chỉ chép 4 KiB bị đổi; nhân cũ hơn chép nguyên 2 MiB, nên tài liệu và log của Redis từ lâu đã cảnh báo về THP. Giờ tới đồ thật — Redis 7.4 trong một container vứt đi, 260 nghìn khoá 1 KiB, một lần lưu nền, và 30.000 lệnh <code>SET</code> trong lúc nó chạy:</p>
+${lab('cow', 'hugepage', 'vi', 'Hành vi Redis cảnh báo — nhân trước 5.8, khi một lần ghi vào trang lớn trong suốt dùng chung chép nguyên 2 MiB: cùng số lệnh ghi giờ nhân đôi gần hết dữ liệu. Đổi cỡ trang giữa 4 KiB và 2 MiB và so số MiB bị chép.')}
 ${run('c73-redis', 'redis-benchmark -q -t set -n 600000', 3)}
 ${run('c73-redis', 'redis-cli BGSAVE', 2)}
 ${run('c73-redis', 'redis-cli INFO persistence', 3)}

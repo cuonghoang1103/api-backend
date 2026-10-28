@@ -75,6 +75,7 @@ ${lab('race', 'deadlock', 'en', 'Two bank transfers, T1 locks A then B, T2 locks
 <tr><td>resource-allocation</td><td>threads + resources</td><td>request (T → R), assignment (R → T)</td><td>deadlock if every resource has one instance; otherwise maybe</td></tr>
 <tr><td>wait-for</td><td>threads only</td><td>T1 → T2 if T1 waits for something T2 holds</td><td>deadlock (single-instance resources) — what gdb, jstack and PostgreSQL look for</td></tr>
 </table>
+${lab('deadlock', 'cycle', 'en', 'A resource-allocation graph with multi-instance resources: there is a cycle, yet no deadlock — one process can still finish and free what the others wait for. Step the detection algorithm to see why, then compare with the single-instance case above.', { tour: 'deadlock-detect' })}
 
 <h3>Java: jstack finds the cycle for you</h3>
 <p>The same two transfers with <code>synchronized</code>:</p>
@@ -188,6 +189,7 @@ ${lab('race', 'deadlock', 'vi', 'Hai lệnh chuyển tiền, T1 khoá A rồi B,
 <tr><td>cấp phát tài nguyên</td><td>luồng + tài nguyên</td><td>yêu cầu (T → R), cấp phát (R → T)</td><td>deadlock nếu mỗi tài nguyên có một bản; nếu không thì "có thể"</td></tr>
 <tr><td>đồ thị chờ</td><td>chỉ luồng</td><td>T1 → T2 nếu T1 chờ thứ T2 đang giữ</td><td>deadlock (tài nguyên một bản) — thứ mà gdb, jstack và PostgreSQL đi tìm</td></tr>
 </table>
+${lab('deadlock', 'cycle', 'vi', 'Đồ thị cấp phát tài nguyên với tài nguyên nhiều bản: có vòng, nhưng không deadlock — vẫn có một tiến trình chạy xong và trả lại thứ người khác đang chờ. Bước thuật toán phát hiện để thấy vì sao, rồi so với trường hợp mỗi tài nguyên một bản ở trên.', { tour: 'deadlock-detect' })}
 
 <h3>Java: jstack tìm vòng giúp bạn</h3>
 <p>Cùng hai lệnh chuyển, viết bằng <code>synchronized</code>:</p>
@@ -303,6 +305,7 @@ ${run('c62-live', '/usr/bin/time -f "%e s wall, %U s user + %S s kernel CPU" ./l
 ${details('starve.c — readers / writers', src('ch06/starve.c', 'c'))}
 ${run('c62-live', './starve readers', 2)}
 <p>glibc's default read-write lock <strong>prefers readers</strong>: a new reader may enter while a writer waits, and with overlapping readers the writer never finds a gap. It gave up after 3 seconds while almost 31,000 reads went by. (Yes, <code>ETIMEDOUT</code>'s message really is "Connection timed out".) With <code>PTHREAD_RWLOCK_PREFER_WRITER_NONRECURSIVE_NP</code>, new readers queue behind a waiting writer and it gets in after 0.2 ms.</p>
+${lab('sync', 'readers', 'en', 'The same starvation, step by step: overlapping readers keep the read lock busy, so the writer never finds a gap (0 writes). Switch “Lock prefers” to writers: new readers queue behind the waiting writer and it gets in.')}
 <p>The same thing happens in CPU schedulers. With strict preemptive priority, a low-priority job runs only when nothing more important is ready — keep important work arriving and it never runs. The classic fix is <strong>aging</strong>: the longer a job waits, the higher its priority. Linux CFS/EEVDF avoid the problem differently: priorities (nice values) are <em>weights</em>, so even nice 19 gets a small share. See it in the scheduler lab: switch the policy to <strong>Prio-P</strong> and watch the least important process wait for everyone else:</p>
 ${lab('scheduler', 'textbook', 'en', 'Four processes with priorities. Choose Prio-P (preemptive priority): the lowest-priority job waits until every more important job is done — add more important arrivals and it may never run. Compare with RR or CFS.', { tour: 'sched-policies' })}
 
@@ -322,6 +325,7 @@ ${run('c62-live', './pi none')}
 <p>H waited <strong>540.2 ms</strong> — for M, a thread it shares nothing with. M preempted L, L could not finish its critical section, and H sat behind both.</p>
 ${run('c62-live', './pi inherit')}
 <p>With a <code>PTHREAD_PRIO_INHERIT</code> mutex, the moment H blocks, L runs at H's priority 30. M (20) can no longer preempt it, L finishes its remaining 40 ms, H gets the mutex after <strong>40.0 ms</strong>, and M runs afterwards. One attribute line, and the kernel does the rest:</p>
+${lab('deadlock', 'inversion', 'en', 'H, M and L on one core, as in pi.c: without inheritance H waits 540 ms behind M; switch priority inheritance on and it waits 40 ms. Turn on the 125 ms watchdog to see what happened on Mars: RESET.')}
 ${run('c62-live', 'strace -f -e trace=futex ./pi none', 2)}
 <p>With the inherit protocol glibc uses <code>FUTEX_LOCK_PI</code> / <code>FUTEX_UNLOCK_PI</code>: the futex word holds the owner's thread id, so the kernel (its <code>rt_mutex</code> code) knows whom to boost while a higher-priority thread waits.</p>
 <p>How JPL fixed it: engineers reproduced a reset on an identical replica with VxWorks' full event trace switched on and found the mutex had been created with priority inheritance <em>off</em> — it had been judged too slow for such a frequent, time-critical task. VxWorks' built-in C interpreter was still enabled on the spacecraft, so they uploaded a short program that flipped the global flags to TRUE. The resets stopped. One or two unexplained resets had appeared during pre-flight testing and had been written off as hardware glitches.</p>
@@ -395,6 +399,7 @@ ${run('c62-live', '/usr/bin/time -f "%e s wall, %U s user + %S s kernel CPU" ./l
 ${details('starve.c — readers / writers', src('ch06/starve.c', 'c'))}
 ${run('c62-live', './starve readers', 2)}
 <p>Khoá đọc-ghi mặc định của glibc <strong>ưu tiên người đọc</strong>: người đọc mới được vào trong lúc người ghi đang chờ, và khi người đọc chồng lên nhau thì người ghi không bao giờ tìm được khe hở. Nó bỏ cuộc sau 3 giây trong lúc gần 31.000 lượt đọc trôi qua. (Đúng vậy, thông điệp của <code>ETIMEDOUT</code> là "Connection timed out".) Với <code>PTHREAD_RWLOCK_PREFER_WRITER_NONRECURSIVE_NP</code>, người đọc mới phải xếp sau người ghi đang chờ và nó vào được sau 0,2 ms.</p>
+${lab('sync', 'readers', 'vi', 'Cùng cơn đói đó, từng bước: người đọc chồng nhau giữ khoá đọc liên tục nên người ghi không bao giờ tìm được khe (0 lượt ghi). Đổi “Khoá ưu tiên” sang người ghi: người đọc mới xếp sau người ghi đang chờ và người ghi vào được.')}
 <p>Bộ lập lịch CPU cũng gặp đúng chuyện này. Với ưu tiên cắt ngang thuần tuý, việc ưu tiên thấp chỉ chạy khi không còn việc nào quan trọng hơn sẵn sàng — cứ có việc quan trọng đến liên tục là nó không bao giờ chạy. Cách sửa kinh điển là <strong>lão hoá (aging)</strong>: chờ càng lâu, ưu tiên càng cao. Linux CFS/EEVDF tránh vấn đề theo cách khác: mức ưu tiên (nice) là <em>trọng số</em>, nên kể cả nice 19 vẫn có một phần nhỏ CPU. Xem trong lab lập lịch: chuyển chính sách sang <strong>Prio-P</strong> và nhìn tiến trình kém quan trọng nhất chờ mọi người khác:</p>
 ${lab('scheduler', 'textbook', 'vi', 'Bốn tiến trình có mức ưu tiên. Chọn Prio-P (ưu tiên có cắt ngang): việc ưu tiên thấp nhất phải chờ tới khi mọi việc quan trọng hơn xong — cho thêm việc quan trọng đến là nó có thể không bao giờ chạy. So với RR hoặc CFS.', { tour: 'sched-policies' })}
 
@@ -414,6 +419,7 @@ ${run('c62-live', './pi none')}
 <p>H chờ <strong>540,2 ms</strong> — vì M, một luồng nó chẳng dùng chung gì. M giành CPU khỏi L, L không làm xong vùng găng, và H ngồi sau cả hai.</p>
 ${run('c62-live', './pi inherit')}
 <p>Với mutex <code>PTHREAD_PRIO_INHERIT</code>, ngay khi H bị chặn, L chạy với ưu tiên 30 của H. M (20) không giành được CPU nữa, L làm nốt 40 ms còn lại, H có mutex sau <strong>40,0 ms</strong>, và M chạy sau đó. Một dòng thuộc tính, phần còn lại nhân lo:</p>
+${lab('deadlock', 'inversion', 'vi', 'H, M và L trên một lõi, như pi.c: không kế thừa ưu tiên thì H chờ 540 ms sau M; bật kế thừa ưu tiên thì chỉ chờ 40 ms. Bật watchdog 125 ms để thấy chuyện đã xảy ra trên sao Hoả: RESET.')}
 ${run('c62-live', 'strace -f -e trace=futex ./pi none', 2)}
 <p>Với giao thức kế thừa, glibc dùng <code>FUTEX_LOCK_PI</code> / <code>FUTEX_UNLOCK_PI</code>: ô futex chứa id luồng chủ sở hữu, nên nhân (phần <code>rt_mutex</code>) biết cần nâng ưu tiên cho ai trong lúc một luồng ưu tiên cao hơn đang chờ.</p>
 <p>JPL sửa thế nào: các kỹ sư tái hiện được một lần khởi động lại trên bản sao giống hệt với tính năng ghi vết sự kiện đầy đủ của VxWorks, và thấy mutex đã được tạo với kế thừa ưu tiên <em>tắt</em> — vì bị cho là quá chậm với một tác vụ chạy dày đặc và gấp như thế. Bộ thông dịch C có sẵn của VxWorks vẫn còn bật trên tàu, nên họ gửi lên một chương trình ngắn đổi các cờ toàn cục thành TRUE. Lỗi khởi động lại chấm dứt. Trước khi phóng, một hai lần khởi động lại không giải thích được đã xuất hiện khi thử nghiệm và bị cho là trục trặc phần cứng.</p>
@@ -475,6 +481,7 @@ ${run('c63-philo', './philo naive')}
 <p>Zero meals. Everyone picked up the left fork, and each right fork is someone else's left fork. The watchdog even shows it: every philosopher holds exactly one fork. Java's built-in detector draws the cycle for us:</p>
 ${run('c63-philo', 'java Philo.java naive')}
 <p>0 → 1 → 2 → 3 → 4 → 0: all four Coffman conditions hold. The three classic solutions each break one of them.</p>
+${lab('deadlock', 'philosophers', 'en', 'Five philosophers, five forks, four strategies: naive (everyone hungry at once ⇒ deadlock), ordered forks, a waiter (N − 1 seats) and try-lock + random pause. Watch each philosopher’s meal counter — it shows deadlock and starvation alike.')}
 
 <h3>Solution 1: order the forks (break circular wait)</h3>
 <p>Always pick up the <strong>lower-numbered</strong> fork first. For philosophers 0–3 nothing changes; philosopher 4 now reaches for fork 0 before fork 4, so the cycle cannot close — the same rule as "lock the smaller account id first" in 6.1.</p>
@@ -537,6 +544,7 @@ ${cmd('semaphore rw = 1, mutex = 1;  int readers = 0;',
   '                   if (--readers == 0) signal(rw); // last reader lets them in',
   '                   signal(mutex);')}
 <p>Many readers read together; a writer writes alone. This is the <em>first</em> readers–writers solution, and it prefers readers: as long as readers keep overlapping, <code>rw</code> is never released and the writer starves — exactly what <code>./starve readers</code> measured in 6.2 (gave up after 3,000 ms). The second solution gives writers priority (then readers can starve); a fair queue serves both in arrival order. In real code use <code>pthread_rwlock_t</code> or <code>ReentrantReadWriteLock</code> (lesson 5.3).</p>
+${lab('sync', 'writerpref', 'en', 'The second readers–writers solution: a waiting writer blocks new readers, so it gets in quickly. Switch “Lock prefers” back to readers to watch the first solution starve it.')}
 ${L(OSG26, '🎓', 'OSG202 · 2.6 — Classic IPC problems', 'Dining philosophers, readers–writers and the sleeping barber as in the course textbook.', 'Open')}
 
 <h3>How to answer in an exam or an interview</h3>
@@ -596,6 +604,7 @@ ${run('c63-philo', './philo naive')}
 <p>Không bữa nào. Ai cũng cầm đũa trái, mà đũa phải của mỗi người lại là đũa trái của người khác. Bộ canh cho thấy rõ: mỗi triết gia cầm đúng một chiếc. Bộ phát hiện có sẵn của Java vẽ vòng giúp ta:</p>
 ${run('c63-philo', 'java Philo.java naive')}
 <p>0 → 1 → 2 → 3 → 4 → 0: cả bốn điều kiện Coffman đều đúng. Ba lời giải kinh điển, mỗi cái phá một điều.</p>
+${lab('deadlock', 'philosophers', 'vi', 'Năm triết gia, năm chiếc đũa, bốn chiến lược: ngây thơ (cùng đói một lúc ⇒ deadlock), đánh số đũa, người phục vụ (N − 1 chỗ ngồi) và trylock + nghỉ ngẫu nhiên. Nhìn bộ đếm bữa của từng người — nó cho thấy cả deadlock lẫn chết đói.')}
 
 <h3>Lời giải 1: sắp thứ tự đũa (phá chờ vòng tròn)</h3>
 <p>Luôn cầm chiếc đũa <strong>số nhỏ</strong> trước. Với triết gia 0–3 không gì thay đổi; triết gia 4 giờ với đũa 0 trước đũa 4, nên vòng không thể khép — đúng luật "khoá tài khoản id nhỏ trước" ở bài 6.1.</p>
@@ -658,6 +667,7 @@ ${cmd('semaphore rw = 1, mutex = 1;  int readers = 0;',
   '                   if (--readers == 0) signal(rw); // người đọc cuối cùng mở cửa',
   '                   signal(mutex);')}
 <p>Nhiều người đọc cùng lúc; người ghi ghi một mình. Đây là lời giải đọc-ghi <em>thứ nhất</em>, và nó ưu tiên người đọc: chừng nào người đọc còn chồng lên nhau, <code>rw</code> không bao giờ được nhả và người ghi bị đói — đúng điều <code>./starve readers</code> đã đo ở bài 6.2 (bỏ cuộc sau 3.000 ms). Lời giải thứ hai ưu tiên người ghi (khi đó người đọc có thể bị đói); một hàng đợi công bằng phục vụ cả hai theo thứ tự đến. Trong code thật hãy dùng <code>pthread_rwlock_t</code> hoặc <code>ReentrantReadWriteLock</code> (bài 5.3).</p>
+${lab('sync', 'writerpref', 'vi', 'Lời giải readers–writers thứ hai: người ghi đang chờ chặn người đọc mới, nên nó vào được nhanh. Đổi “Khoá ưu tiên” về người đọc để thấy lời giải thứ nhất bỏ đói nó.')}
 ${L(OSG26, '🎓', 'OSG202 · 2.6 — Các bài toán IPC kinh điển', 'Triết gia ăn tối, đọc-ghi và thợ cắt tóc ngủ gật theo giáo trình môn học.', 'Mở')}
 
 <h3>Trả lời thế nào khi đi thi hay phỏng vấn</h3>
@@ -738,14 +748,17 @@ ${L('https://pages.cs.wisc.edu/~remzi/OSTEP/threads-sema.pdf', '📘', 'OSTEP �
 ${details('banker.py — safety / request / detect / pool', src('ch06/banker.py', 'python'))}
 ${run('c64-bank', 'python3 banker.py safety')}
 <p>The safety algorithm: <strong>Work = Available</strong>; find any unfinished process whose <strong>Need ≤ Work</strong>; it can run to the end and give back its Allocation, so <strong>Work += Allocation</strong>; repeat. Everyone finishes ⇒ safe. Our scan gives &lt;P1, P3, P4, P0, P2&gt;; other orders (for example the textbook's &lt;P1, P3, P4, P2, P0&gt;) are also safe — any one is enough.</p>
+${lab('deadlock', 'banker', 'en', 'The Banker’s algorithm on the textbook example (A B C = 10 5 7): step the safety check, watch Work grow as each process finishes and returns its Allocation, and read off the safe sequence ⟨P1, P3, P4, P0, P2⟩ — the same scan order as banker.py.', { tour: 'deadlock-banker' })}
 <p>Now requests. For each one: (1) Request ≤ Need, or the process lied about its maximum; (2) Request ≤ Available, or it must wait; (3) <em>pretend</em> to grant, run safety on the new state, keep it if safe, roll back if not.</p>
 ${run('c64-bank', 'python3 banker.py request')}
 <p>P1's (1,0,2) is granted — the new state is still safe. P4's (3,3,0) waits because only (2,3,0) is free. P0's (0,2,0) <strong>fits</strong> in Available, yet it is <strong>denied</strong>: afterwards Work = (2,1,0) satisfies nobody's Need, so the state would be unsafe. That is avoidance in one line: it refuses requests that <em>could</em> lead to deadlock, even when the resources are sitting free. Unsafe is not the same as deadlocked — it means that if everyone asked for their maximum, a deadlock could not be ruled out.</p>
+${lab('deadlock', 'request', 'en', 'Three requests through the same check: P1 (1,0,2) is granted, P4 (3,3,0) must wait, and P0 (0,2,0) is refused although it fits in Available — granting it would leave no safe sequence.', { tour: 'deadlock-banker' })}
 
 <h3>Detection: the same loop, with current requests</h3>
 <p>Detection needs no maximums. Replace Need with the <strong>Request</strong> matrix (what each process is waiting for right now) and run the same loop starting from what is free:</p>
 ${run('c64-bank', 'python3 banker.py detect', 2)}
 <p>In the first state everyone can finish. When P2 asks for one more C, only P0 can finish and <strong>P1–P4 are deadlocked</strong> — each waits for something only another stuck process holds. With single-instance resources this loop is just "find a cycle in the wait-for graph" from 6.1.</p>
+${lab('deadlock', 'detect', 'en', 'Detection with the Request matrix (A, B, C = 7, 2, 6 instances): in the first state everyone can finish. Choose “P2 asks for one more C” and only P0 finishes — P1 to P4 are stuck. The graph shows who waits for whom.', { tour: 'deadlock-detect' })}
 <p><strong>Recovery</strong> means somebody loses: abort every process in the cycle (lots of lost work), abort one victim at a time and re-run detection (pick the cheapest: least work done, fewest locks, lowest priority), or preempt resources and roll back to a checkpoint. A database transaction is exactly a unit you can roll back — which is why databases chose detection.</p>
 
 <h3>PostgreSQL: a real deadlock, detected in one second</h3>
@@ -776,6 +789,7 @@ ${run('c64-bank', 'node pool-deadlock.js 2;')}
 <p>One order at a time works. Two at once, with a pool of two: each order holds one connection for its transaction, then <code>getPrice()</code> asks the same pool for a second — and there is none, and none will come back. "2 in use, 0 idle, 2 waiting", forever. That is a resource-allocation cycle through a multi-instance resource: exactly the case the Banker's algorithm reasons about.</p>
 ${run('c64-bank', 'python3 banker.py pool')}
 <p>With two requests each holding one connection, the state is <strong>unsafe</strong>. The pool-sizing rule that falls out: with <em>c</em> concurrent requests each holding up to <em>m</em> connections, the pool needs more than <em>c × (m − 1)</em> connections. Better: never hold two. With a timeout, one request becomes the victim, as in PostgreSQL; passing the transaction's client down removes the cycle:</p>
+${lab('deadlock', 'pool', 'en', 'The pool deadlock as a graph: 2 connections, each request holds one and asks for one more. Every instance is held by someone who is waiting — a cycle through a multi-instance resource, and this time a real deadlock.', { tour: 'deadlock-detect' })}
 ${run('c64-bank', 'node pool-deadlock.js 2 timeout')}
 ${run('c64-bank', 'node pool-deadlock.js 2 pass-client')}
 
@@ -863,14 +877,17 @@ ${L('https://node-postgres.com/apis/pool', '🟩', 'node-postgres — Pool', 'ma
 ${details('banker.py — safety / request / detect / pool', src('ch06/banker.py', 'python'))}
 ${run('c64-bank', 'python3 banker.py safety')}
 <p>Thuật toán an toàn: <strong>Work = Available</strong>; tìm một tiến trình chưa xong có <strong>Need ≤ Work</strong>; nó chạy được tới cuối và trả lại Allocation, nên <strong>Work += Allocation</strong>; lặp lại. Mọi tiến trình đều xong ⇒ an toàn. Cách quét của ta cho &lt;P1, P3, P4, P0, P2&gt;; các thứ tự khác (ví dụ &lt;P1, P3, P4, P2, P0&gt; trong giáo trình) cũng an toàn — chỉ cần một.</p>
+${lab('deadlock', 'banker', 'vi', 'Thuật toán Banker trên ví dụ giáo trình (A B C = 10 5 7): bước từng lần kiểm an toàn, nhìn Work tăng khi mỗi tiến trình chạy xong và trả lại Allocation, rồi đọc dãy an toàn ⟨P1, P3, P4, P0, P2⟩ — đúng thứ tự quét của banker.py.', { tour: 'deadlock-banker' })}
 <p>Giờ tới các yêu cầu. Với mỗi yêu cầu: (1) Request ≤ Need, không thì tiến trình đã khai sai mức tối đa; (2) Request ≤ Available, không thì phải chờ; (3) <em>giả vờ</em> cấp, chạy thuật toán an toàn trên trạng thái mới, an toàn thì giữ, không thì quay lui.</p>
 ${run('c64-bank', 'python3 banker.py request')}
 <p>Yêu cầu (1,0,2) của P1 được cấp — trạng thái mới vẫn an toàn. Yêu cầu (3,3,0) của P4 phải chờ vì chỉ còn (2,3,0). Yêu cầu (0,2,0) của P0 <strong>vừa</strong> trong Available, vậy mà bị <strong>từ chối</strong>: sau đó Work = (2,1,0) không đáp ứng được Need của ai, nên trạng thái sẽ không an toàn. Tránh deadlock gói gọn trong một dòng: nó từ chối những yêu cầu <em>có thể</em> dẫn tới deadlock, kể cả khi tài nguyên đang nằm rảnh. Không an toàn không phải là đang deadlock — nó nghĩa là nếu mọi người cùng xin mức tối đa thì không loại trừ được deadlock.</p>
+${lab('deadlock', 'request', 'vi', 'Ba yêu cầu qua cùng phép kiểm: P1 (1,0,2) được cấp, P4 (3,3,0) phải chờ, còn P0 (0,2,0) bị từ chối dù vừa với Available — cấp nó thì không còn dãy an toàn nào.', { tour: 'deadlock-banker' })}
 
 <h3>Phát hiện: cùng vòng lặp, với yêu cầu hiện tại</h3>
 <p>Phát hiện không cần mức tối đa. Thay Need bằng ma trận <strong>Request</strong> (thứ mỗi tiến trình đang chờ ngay lúc này) và chạy cùng vòng lặp bắt đầu từ phần đang rảnh:</p>
 ${run('c64-bank', 'python3 banker.py detect', 2)}
 <p>Ở trạng thái đầu, ai cũng xong được. Khi P2 xin thêm một C, chỉ P0 xong được và <strong>P1–P4 bị deadlock</strong> — mỗi bên chờ thứ chỉ một tiến trình đang kẹt khác giữ. Với tài nguyên một bản, vòng lặp này chính là "tìm vòng trong đồ thị chờ" của bài 6.1.</p>
+${lab('deadlock', 'detect', 'vi', 'Phát hiện bằng ma trận Request (A, B, C = 7, 2, 6 bản): ở trạng thái đầu ai cũng chạy xong được. Chọn “P2 xin thêm một C” thì chỉ P0 xong — P1 tới P4 kẹt. Đồ thị cho thấy ai chờ ai.', { tour: 'deadlock-detect' })}
 <p><strong>Phục hồi</strong> nghĩa là ai đó phải thua: huỷ mọi tiến trình trong vòng (mất nhiều công), huỷ từng nạn nhân một rồi chạy lại phát hiện (chọn bên rẻ nhất: làm được ít việc nhất, giữ ít khoá nhất, ưu tiên thấp nhất), hoặc giành lại tài nguyên và quay lui về một điểm lưu. Giao dịch CSDL đúng là một đơn vị quay lui được — vì thế CSDL chọn phát hiện.</p>
 
 <h3>PostgreSQL: một deadlock thật, phát hiện trong một giây</h3>
@@ -901,6 +918,7 @@ ${run('c64-bank', 'node pool-deadlock.js 2;')}
 <p>Một đơn một lúc thì chạy. Hai đơn cùng lúc, pool hai kết nối: mỗi đơn giữ một kết nối cho giao dịch, rồi <code>getPrice()</code> xin cùng pool đó kết nối thứ hai — mà không còn cái nào, và sẽ không cái nào quay về. "2 đang dùng, 0 rảnh, 2 đang chờ", mãi mãi. Đó là một vòng cấp phát tài nguyên qua một tài nguyên nhiều bản: đúng trường hợp mà thuật toán Banker suy luận.</p>
 ${run('c64-bank', 'python3 banker.py pool')}
 <p>Hai yêu cầu, mỗi bên giữ một kết nối, là trạng thái <strong>không an toàn</strong>. Luật tính cỡ pool rút ra được: với <em>c</em> yêu cầu đồng thời, mỗi yêu cầu giữ tối đa <em>m</em> kết nối, pool cần nhiều hơn <em>c × (m − 1)</em> kết nối. Tốt hơn: đừng bao giờ giữ hai. Có thời hạn thì một yêu cầu thành nạn nhân, như PostgreSQL; truyền client của giao dịch xuống thì vòng biến mất:</p>
+${lab('deadlock', 'pool', 'vi', 'Deadlock pool nhìn thành đồ thị: 2 kết nối, mỗi request giữ một và xin thêm một. Bản nào cũng bị một kẻ đang chờ giữ — một vòng đi qua tài nguyên nhiều bản, và lần này là deadlock thật.', { tour: 'deadlock-detect' })}
 ${run('c64-bank', 'node pool-deadlock.js 2 timeout')}
 ${run('c64-bank', 'node pool-deadlock.js 2 pass-client')}
 

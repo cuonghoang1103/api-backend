@@ -76,6 +76,7 @@ ${run('c91-inode', 'mkdir -p releases', 2)}
 ${run('c91-inode', 'rm app.env', 4)}
 <p>After <code>rm app.env</code> the data is still reachable as <code>app.env.bak</code>: the inode lost one name and its link count went back to 1. The symlink, which only stored the <em>text</em> "app.env", is now dangling: <code>ls</code> still shows it, <code>cat</code> fails. The kernel frees an inode and its blocks only when <strong>both</strong> counters reach zero: names (link count) and open file descriptions. Chapter 2 met the second counter in production — the 30 MB log that <code>rm</code> did not free because the app still held it open (<a href="${OS('os-2-4-dia-io')}">lesson 2.4</a>). Here is the mechanism behind it.</p>
 ${lab('sysmon', 'diskfull', 'en', 'A log fills the disk; rm it while the app still holds it and df does not move — the inode has 0 names but 1 open file. Find it with lsof +L1, then truncate.')}
+${lab('fdtable', 'deleted', 'en', 'The same thing one layer down — a name, an open file description, an inode: rm while the file is still open, du shows 0 while df still counts 900 MiB; then close the fd and watch the inode and its blocks finally go.', { tour: 'fdtable-deleted' })}
 
 <h3>Looking at the disk with debugfs</h3>
 <p><code>debugfs</code> reads an ext4 file system straight from the device, bypassing the kernel. We unmount the disk and ask it what is really stored:</p>
@@ -95,6 +96,7 @@ ${run('c91-inode', 'ln /mnt/lab/app.env.bak', 3)}
 <h3>Inode numbers get reused</h3>
 ${run('c91-inode', 'rm /mnt/lab/current.env')}
 <p>The <code>mv</code> above moved <code>app.env.bak</code> to another file system (copy, then delete — so inode 14 was freed), and now we delete the symlink. The very next new file gets inode <strong>14</strong> again. An inode number identifies a file only while it exists. Anything that remembers files by inode number alone — a backup tool, a cache keyed by <code>st_ino</code>, a "has this file changed?" check — can be fooled after a delete and a create. Use (device, inode, change time), the ext4 <em>generation</em> number, or a content hash.</p>
+${lab('fdtable', 'links', 'en', 'Names → inodes, by hand: ln adds a name and bumps the link count, ln -s makes a new inode that stores only text (and dangles when its target goes), a move to another file system is copy + delete, and the freed inode number (14) is handed out again.', { tour: 'fdtable-deleted' })}
 
 <h3>The kernel's caches of names and inodes</h3>
 ${run('c91-inode', 'cat /proc/sys/fs/dentry-state', 2)}
@@ -169,6 +171,7 @@ ${run('c91-inode', 'mkdir -p releases', 2)}
 ${run('c91-inode', 'rm app.env', 4)}
 <p>Sau <code>rm app.env</code>, dữ liệu vẫn tới được qua <code>app.env.bak</code>: inode mất một tên và số liên kết về lại 1. Symlink, vốn chỉ lưu <em>chuỗi</em> "app.env", giờ trỏ vào hư không: <code>ls</code> vẫn thấy nó, <code>cat</code> thì hỏng. Nhân chỉ giải phóng inode và các khối của nó khi <strong>cả hai</strong> bộ đếm về 0: số tên (link count) và số mô tả file đang mở. Chương 2 đã gặp bộ đếm thứ hai ngoài production — file log 30 MB mà <code>rm</code> không giải phóng vì app vẫn đang mở nó (<a href="${OS('os-2-4-dia-io')}">bài 2.4</a>). Đây là cơ chế nằm bên dưới.</p>
 ${lab('sysmon', 'diskfull', 'vi', 'Log làm đầy đĩa; rm nó khi app vẫn đang giữ thì df không nhúc nhích — inode còn 0 tên nhưng 1 file đang mở. Tìm bằng lsof +L1 rồi truncate.')}
+${lab('fdtable', 'deleted', 'vi', 'Cùng chuyện đó nhìn xuống một tầng — một cái tên, một mô tả file mở, một inode: rm khi file còn mở, du báo 0 trong khi df vẫn tính 900 MiB; rồi close fd và nhìn inode cùng các khối cuối cùng mới được giải phóng.', { tour: 'fdtable-deleted' })}
 
 <h3>Nhìn đĩa bằng debugfs</h3>
 <p><code>debugfs</code> đọc thẳng hệ thống file ext4 từ thiết bị, không qua nhân. Ta tháo đĩa ra rồi hỏi nó thật sự đang lưu gì:</p>
@@ -188,6 +191,7 @@ ${run('c91-inode', 'ln /mnt/lab/app.env.bak', 3)}
 <h3>Số inode bị dùng lại</h3>
 ${run('c91-inode', 'rm /mnt/lab/current.env')}
 <p>Lệnh <code>mv</code> ở trên đã chuyển <code>app.env.bak</code> sang hệ thống file khác (chép rồi xoá — nên inode 14 được giải phóng), giờ ta xoá thêm symlink. File mới ngay sau đó lại nhận inode <strong>14</strong>. Số inode chỉ định danh một file khi file đó còn tồn tại. Thứ gì nhớ file chỉ bằng số inode — công cụ sao lưu, cache dùng <code>st_ino</code> làm khoá, phép kiểm "file này đổi chưa?" — đều có thể bị lừa sau một lần xoá rồi tạo. Hãy dùng (thiết bị, inode, thời điểm change), số <em>generation</em> của ext4, hoặc băm nội dung.</p>
+${lab('fdtable', 'links', 'vi', 'Tên → inode, tự tay làm: ln thêm một tên và tăng link count, ln -s tạo inode mới chỉ chứa chữ (và treo khi đích mất), mv sang file system khác là chép + xoá, và số inode vừa giải phóng (14) được cấp lại.', { tour: 'fdtable-deleted' })}
 
 <h3>Cache tên và inode của nhân</h3>
 ${run('c91-inode', 'cat /proc/sys/fs/dentry-state', 2)}
@@ -271,6 +275,7 @@ ${run('c92-fd', './ofd twice')}
 <p>Opening the file a second time creates a <em>second</em> description with its own offset starting at 0. Worker A writes 26 bytes (offset 26); worker B writes "worker B: hi\n" at its own offset 0 — <strong>over</strong> A's line. The file now holds <code>worker B: hi</code> followed by the leftover tail <code>er 1001 paid</code>. No error, no warning: one order record quietly destroyed.</p>
 ${run('c92-fd', './ofd append')}
 <p>With <code>O_APPEND</code>, every <code>write()</code> first moves that description's offset to the current end of the file, as one step in the kernel. B's offset jumped to 39 and both lines survived.</p>
+${lab('fdtable', 'twice', 'en', 'The three layers — fd table, open file description, inode — for the two-worker log: two opens ⇒ two offsets (26 and 13) and “er 1001 paid” left over; dup ⇒ one shared offset; O_APPEND ⇒ B jumps to 39. Step it and watch which layer each call changes.', { tour: 'fdtable-offsets' })}
 
 <div class="pitfall co-tieu-de">
 <p><strong>Several processes, one log file, opened without O_APPEND.</strong> PM2 cluster mode, gunicorn workers, two cron jobs: each process opens the log itself, gets its own description and its own offset, and they overwrite each other exactly as above. In Node, <code>fs.createWriteStream(path, { flags: 'a' })</code> (and <code>appendFileSync</code>) open with O_APPEND; the default <code>'w'</code> does not and also truncates the file on open. Safer still: log to stdout and let Docker/systemd collect it — one writer, one offset.</p>
@@ -279,13 +284,14 @@ ${run('c92-fd', './ofd append')}
 <h3>fork() shares the description</h3>
 ${run('c92-fd', './ofd fork')}
 <p>After <code>fork()</code> the child gets a <strong>copy of the fd table</strong>, but the copies point to the <strong>same</strong> open file descriptions. The child wrote two lines (offset 28), and the parent's next write continued at 28, not at 0 — the final offset is 42 and all three lines are intact. This is why <code>(npm run build; npm test) &gt; ci.log</code> produces one coherent log: every child of that shell shares stdout's offset.</p>
-${lab('process', 'shell', 'en', 'A shell runs one command: fork copies the fd table, the child rearranges fds 0–2 (redirection), then exec replaces the program but keeps the table.')}
+${lab('fdtable', 'fork', 'en', 'fork() copies the fd table, not the descriptions behind it: the child writes two lines (offset 28), the parent continues at 28, and the file ends at 42 with every line intact.', { tour: 'fdtable-offsets' })}
 
 <h3>Redirection is dup2()</h3>
 ${run('c92-fd', "strace -f -e trace=openat,dup2,dup3,close,execve bash")}
 <p>Between <code>fork()</code> and <code>exec()</code>, the child shell builds the new program's descriptor table: <code>openat</code> returns 3, <code>dup3(3, 1)</code> makes fd 1 point to that description (<code>&gt; /tmp/out.txt</code>), <code>dup3(1, 2)</code> makes fd 2 point to whatever fd 1 points to <em>right now</em> (<code>2&gt;&amp;1</code>), then <code>execve</code> starts <code>ls</code>, which simply writes to 1 and 2. Redirections are applied left to right, and each <code>2&gt;&amp;1</code> copies the current target of fd 1. So the order matters:</p>
 ${run('c92-fd', 'ls /nope > /tmp/out.txt 2>&1', 2)}
 <p>In the second command, <code>2&gt;&amp;1</code> ran first, while fd 1 was still the terminal; only then did fd 1 move to the file. The error went to the screen and the file is empty. Read redirections as "dup2 from left to right" and you will never get this wrong again.</p>
+${lab('fdtable', 'redirect', 'en', 'Redirections as dup2 from left to right: compare “&gt; out.txt 2&gt;&amp;1” with the swapped order and see where fd 2 ends up pointing; exec then replaces the program but keeps the table.', { tour: 'fdtable-offsets' })}
 
 <h3>Descriptors survive exec — unless O_CLOEXEC</h3>
 ${src('ch09/leak.c', 'c')}
@@ -358,6 +364,7 @@ ${run('c92-fd', './ofd twice')}
 <p>Mở file lần thứ hai tạo ra một mô tả <em>thứ hai</em> với offset riêng bắt đầu từ 0. Worker A ghi 26 byte (offset 26); worker B ghi "worker B: hi\n" tại offset 0 của nó — <strong>đè lên</strong> dòng của A. File giờ chứa <code>worker B: hi</code> rồi tới phần đuôi sót lại <code>er 1001 paid</code>. Không lỗi, không cảnh báo: một bản ghi đơn hàng bị huỷ âm thầm.</p>
 ${run('c92-fd', './ofd append')}
 <p>Với <code>O_APPEND</code>, mỗi lần <code>write()</code> trước tiên dời offset của mô tả đó tới cuối file hiện tại, trong một bước duy nhất trong nhân. Offset của B nhảy tới 39 và cả hai dòng còn nguyên.</p>
+${lab('fdtable', 'twice', 'vi', 'Ba tầng — bảng fd, mô tả file mở, inode — cho log của hai worker: open hai lần ⇒ hai offset (26 và 13) và còn sót “er 1001 paid”; dup ⇒ một offset chung; O_APPEND ⇒ B nhảy tới 39. Bước từng lệnh và nhìn mỗi lời gọi đổi tầng nào.', { tour: 'fdtable-offsets' })}
 
 <div class="pitfall co-tieu-de">
 <p><strong>Nhiều tiến trình, một file log, mở không có O_APPEND.</strong> PM2 chế độ cluster, các worker của gunicorn, hai cron job: mỗi tiến trình tự mở log, có mô tả riêng và offset riêng, và chúng ghi đè lên nhau đúng như trên. Trong Node, <code>fs.createWriteStream(path, { flags: 'a' })</code> (và <code>appendFileSync</code>) mở với O_APPEND; cờ mặc định <code>'w'</code> thì không và còn cắt rỗng file lúc mở. An toàn hơn nữa: ghi log ra stdout và để Docker/systemd gom lại — một người ghi, một offset.</p>
@@ -366,13 +373,14 @@ ${run('c92-fd', './ofd append')}
 <h3>fork() dùng chung mô tả</h3>
 ${run('c92-fd', './ofd fork')}
 <p>Sau <code>fork()</code>, tiến trình con nhận một <strong>bản sao bảng fd</strong>, nhưng các bản sao trỏ tới <strong>cùng</strong> những mô tả file mở. Con ghi hai dòng (offset 28), và lần ghi kế của cha tiếp tục tại 28, không phải 0 — offset cuối là 42 và cả ba dòng nguyên vẹn. Vì vậy <code>(npm run build; npm test) &gt; ci.log</code> cho ra một log liền mạch: mọi tiến trình con của shell đó dùng chung offset của stdout.</p>
-${lab('process', 'shell', 'vi', 'Shell chạy một lệnh: fork chép bảng fd, con sắp lại fd 0–2 (chuyển hướng), rồi exec thay chương trình nhưng giữ nguyên bảng.')}
+${lab('fdtable', 'fork', 'vi', 'fork() chép bảng fd, không chép các mô tả phía sau: con ghi hai dòng (offset 28), cha ghi tiếp từ 28, và file kết thúc ở 42 với đủ mọi dòng.', { tour: 'fdtable-offsets' })}
 
 <h3>Chuyển hướng chính là dup2()</h3>
 ${run('c92-fd', "strace -f -e trace=openat,dup2,dup3,close,execve bash")}
 <p>Giữa <code>fork()</code> và <code>exec()</code>, shell con dựng bảng descriptor cho chương trình mới: <code>openat</code> trả về 3, <code>dup3(3, 1)</code> cho fd 1 trỏ tới mô tả đó (<code>&gt; /tmp/out.txt</code>), <code>dup3(1, 2)</code> cho fd 2 trỏ tới thứ fd 1 đang trỏ <em>ngay lúc này</em> (<code>2&gt;&amp;1</code>), rồi <code>execve</code> chạy <code>ls</code>, vốn chỉ việc ghi vào 1 và 2. Các chuyển hướng được áp từ trái sang phải, và mỗi <code>2&gt;&amp;1</code> chép đích hiện tại của fd 1. Nên thứ tự quan trọng:</p>
 ${run('c92-fd', 'ls /nope > /tmp/out.txt 2>&1', 2)}
 <p>Ở lệnh thứ hai, <code>2&gt;&amp;1</code> chạy trước, lúc fd 1 vẫn là terminal; sau đó fd 1 mới chuyển sang file. Lỗi hiện ra màn hình và file rỗng. Hãy đọc chuyển hướng là "dup2 từ trái sang phải" và bạn sẽ không bao giờ nhầm nữa.</p>
+${lab('fdtable', 'redirect', 'vi', 'Chuyển hướng là dup2 từ trái sang phải: so “&gt; out.txt 2&gt;&amp;1” với thứ tự đảo ngược và xem fd 2 rốt cuộc trỏ vào đâu; exec sau đó thay chương trình nhưng giữ nguyên bảng.', { tour: 'fdtable-offsets' })}
 
 <h3>Descriptor sống qua exec — trừ khi có O_CLOEXEC</h3>
 ${src('ch09/leak.c', 'c')}
@@ -1036,6 +1044,7 @@ ${lab('sysmon', 'calm', 'en', 'A live process table: read the USER column — ev
 <p>"Only" matters. Watch:</p>
 ${run('c96-quyen', 'ls -l /tmp/own.txt', 3)}
 <p>Mode 077: nothing for the owner, everything for group and others. <code>dev</code> owns the file, so step 1 applies, the owner bits say <code>---</code>, and dev is refused. <code>bob</code> is not the owner and not in group <code>dev</code>, so he gets the "other" bits — and reads it. The kernel does not fall through to a more generous class. (Nobody sets 077 on purpose; but <code>chmod 604</code> on a file whose group should read it, or <code>chmod o+r</code> "because the group bits did not work", produce the same surprise.)</p>
+${lab('perm', 'owner', 'en', 'Ask the kernel “may dev read /tmp/own.txt?” and watch the check run in order: dev is the owner, so only the owner bits (---) count and the answer is no — while bob falls through to “other” and reads it.', { tour: 'perm-check' })}
 
 <h3>umask: the bits you never asked for</h3>
 ${run('c96-quyen', 'umask', 4)}
@@ -1047,6 +1056,7 @@ ${run('c96-quyen', 'chmod 744 /srv/box')}
 <p>With r but no x, dev can read the <em>names</em> (<code>q3.txt</code>) but not reach the inodes: <code>ls -l</code> prints question marks for everything it would need to <code>stat</code>, and <code>cat</code> is refused.</p>
 ${run('c96-quyen', 'chmod 711 /srv/box')}
 <p>With x but no r, it is the opposite: dev cannot list the folder, but anyone who knows the exact name can open the file. That is how home directories are often set (711) so a web server can reach <code>~/public_html</code> without listing the home.</p>
+${lab('perm', 'dirx', 'en', 'r and x on a directory, separately: with 744 dev reads the names but cannot reach the inodes (ls -l prints ????); with 711 he opens a file he can name but cannot list the folder.', { tour: 'perm-check' })}
 
 <h3>Who may delete a file? The directory decides</h3>
 ${run('c96-quyen', 'ls -l /srv/devdir/owned-by-root')}
@@ -1055,10 +1065,12 @@ ${run('c96-quyen', 'ls -ld /srv/app; ls -l')}
 <p>And the reverse: dev owns <code>dev-notes.txt</code> but cannot delete it, because the directory <code>/srv/app</code> (755, root) does not let him change its list of names.</p>
 ${run('c96-quyen', 'ls -ld /tmp', 2)}
 <p>So in a world-writable directory anyone could delete anyone's files — exactly what <code>/srv/drop</code> (777) allowed: dev deleted bob's session file. <code>/tmp</code> has the <strong>sticky bit</strong> (the <code>t</code> in <code>drwxrwxrwt</code>, mode 1777): there you may delete a name only if you own the file or the directory. Note the different error: <code>Operation not permitted</code> (EPERM, a rule) instead of <code>Permission denied</code> (EACCES, the rwx bits).</p>
+${lab('perm', 'sticky', 'en', 'Deleting is a write to the directory: dev removes bob’s file in /srv/drop (777), gets EPERM in /tmp (sticky bit), and EACCES for his own file inside /srv/app (755, root). Watch which inode the check looks at.', { tour: 'perm-check' })}
 
 <h3>setgid on a directory: a folder a team can share</h3>
 ${run('c96-quyen', 'mkdir /srv/team', 2)}
 <p>Normally a new file gets the creator's primary group (dev's file would be group <code>dev</code>, bob's group <code>bob</code>) and teammates cannot edit each other's work. With the setgid bit on the directory (the <code>s</code> in <code>rwxrwsr-x</code>, mode 2775), new files inherit the <strong>directory's</strong> group: both files are group <code>team</code>. Add <code>umask 002</code> for the team's processes and the group can write them too.</p>
+${lab('perm', 'setgid', 'en', 'A shared team folder: with mode 2775 new files inherit the directory’s group (team) instead of the creator’s; then compare umask 022 with 077 to see whether teammates can actually write them.', { tour: 'perm-acl' })}
 
 <h3>setuid: running with the file owner's identity</h3>
 ${src('ch09/ids.c', 'c')}
@@ -1067,6 +1079,7 @@ ${run('c96-quyen', 'chmod 600 /srv/app/.env; runuser -u dev -- ids', 2)}
 <p>A process has a <em>real</em> uid (who started it) and an <em>effective</em> uid (whose permissions it uses). Normally they are equal. When a process <code>exec</code>s a file with the <strong>setuid</strong> bit (the <code>s</code> in <code>rwsr-xr-x</code>), the kernel sets the effective uid to the <strong>file's owner</strong>: our <code>ids</code>, owned by root, ran for dev with effective uid 0 and opened the root-only <code>.env</code>. That is how <code>passwd</code> lets you change your own line in <code>/etc/shadow</code>. It is also why every setuid-root program is a privilege boundary: any bug in it is a bug running as root. Know which ones you have:</p>
 ${run('c96-quyen', 'find / -xdev -perm -4000')}
 <p>A clean image has a handful (passwd, su, mount…). Our <code>/usr/local/bin/ids</code> stands out — exactly what an attacker's backdoor looks like. Chapter 13 shows how misplaced setuid bits are abused; the kernel already ignores setuid on scripts (<code>#!</code> files) and on file systems mounted <code>nosuid</code> (lesson 9.5).</p>
+${lab('perm', 'setuid', 'en', 'The setuid helper ids: dev runs it, the kernel sets the effective uid to the file’s owner (0), and the check on .env (600) now passes. Watch the real and effective uid split.', { tour: 'perm-acl' })}
 
 <h3>And root?</h3>
 ${run('c96-quyen', 'chmod 000 /srv/app/.env')}
@@ -1137,6 +1150,7 @@ ${lab('sysmon', 'calm', 'vi', 'Bảng tiến trình đang chạy: đọc cột U
 <p>Chữ "chỉ" rất quan trọng. Xem này:</p>
 ${run('c96-quyen', 'ls -l /tmp/own.txt', 3)}
 <p>Mode 077: chủ không có gì, nhóm và người khác có tất cả. <code>dev</code> là chủ file, nên áp bước 1, bit chủ là <code>---</code>, và dev bị từ chối. <code>bob</code> không phải chủ và không thuộc nhóm <code>dev</code>, nên nhận bit "người khác" — và đọc được. Nhân không trượt xuống một lớp hào phóng hơn. (Chẳng ai cố ý đặt 077; nhưng <code>chmod 604</code> cho một file mà nhóm lẽ ra được đọc, hay <code>chmod o+r</code> "vì bit nhóm không ăn", tạo ra đúng sự bất ngờ này.)</p>
+${lab('perm', 'owner', 'vi', 'Hỏi nhân “dev có đọc được /tmp/own.txt không?” và nhìn phép kiểm chạy theo thứ tự: dev là chủ nên chỉ bit chủ (---) được tính và câu trả lời là không — còn bob rơi xuống “other” và đọc được.', { tour: 'perm-check' })}
 
 <h3>umask: những bit bạn chưa từng xin</h3>
 ${run('c96-quyen', 'umask', 4)}
@@ -1148,6 +1162,7 @@ ${run('c96-quyen', 'chmod 744 /srv/box')}
 <p>Có r mà không có x, dev đọc được <em>tên</em> (<code>q3.txt</code>) nhưng không tới được inode: <code>ls -l</code> in dấu hỏi cho mọi thứ nó cần <code>stat</code>, và <code>cat</code> bị từ chối.</p>
 ${run('c96-quyen', 'chmod 711 /srv/box')}
 <p>Có x mà không có r thì ngược lại: dev không liệt kê được thư mục, nhưng ai biết chính xác tên thì mở được file. Thư mục home hay được đặt như vậy (711) để web server tới được <code>~/public_html</code> mà không liệt kê được home.</p>
+${lab('perm', 'dirx', 'vi', 'r và x trên thư mục, tách riêng: với 744 dev đọc được tên nhưng không tới được inode (ls -l in ra ????); với 711 mở được file nếu biết tên nhưng không liệt kê được thư mục.', { tour: 'perm-check' })}
 
 <h3>Ai được xoá một file? Thư mục quyết định</h3>
 ${run('c96-quyen', 'ls -l /srv/devdir/owned-by-root')}
@@ -1156,10 +1171,12 @@ ${run('c96-quyen', 'ls -ld /srv/app; ls -l')}
 <p>Và chiều ngược lại: dev là chủ <code>dev-notes.txt</code> nhưng không xoá được, vì thư mục <code>/srv/app</code> (755, root) không cho anh ấy sửa danh sách tên của nó.</p>
 ${run('c96-quyen', 'ls -ld /tmp', 2)}
 <p>Vậy trong một thư mục ai cũng ghi được, ai cũng xoá được file của bất kỳ ai — đúng thứ <code>/srv/drop</code> (777) cho phép: dev đã xoá file phiên của bob. <code>/tmp</code> có <strong>sticky bit</strong> (chữ <code>t</code> trong <code>drwxrwxrwt</code>, mode 1777): ở đó bạn chỉ được xoá một tên nếu bạn là chủ file hoặc chủ thư mục. Để ý lỗi khác đi: <code>Operation not permitted</code> (EPERM, một luật) thay vì <code>Permission denied</code> (EACCES, các bit rwx).</p>
+${lab('perm', 'sticky', 'vi', 'Xoá là ghi vào thư mục: dev xoá được file của bob trong /srv/drop (777), bị EPERM ở /tmp (sticky bit), và EACCES với chính file của mình trong /srv/app (755, root). Nhìn xem phép kiểm soi vào inode nào.', { tour: 'perm-check' })}
 
 <h3>setgid trên thư mục: một thư mục cả nhóm dùng chung</h3>
 ${run('c96-quyen', 'mkdir /srv/team', 2)}
 <p>Bình thường file mới nhận nhóm chính của người tạo (file của dev sẽ thuộc nhóm <code>dev</code>, của bob thuộc <code>bob</code>) và đồng đội không sửa được bài của nhau. Với bit setgid trên thư mục (chữ <code>s</code> trong <code>rwxrwsr-x</code>, mode 2775), file mới thừa hưởng nhóm của <strong>thư mục</strong>: cả hai file đều thuộc nhóm <code>team</code>. Thêm <code>umask 002</code> cho các tiến trình của nhóm là cả nhóm ghi được.</p>
+${lab('perm', 'setgid', 'vi', 'Thư mục chung của nhóm: với mode 2775 file mới thừa hưởng nhóm của thư mục (team) thay vì nhóm của người tạo; rồi so umask 022 với 077 để xem đồng đội có thật sự ghi được không.', { tour: 'perm-acl' })}
 
 <h3>setuid: chạy với danh tính của chủ file</h3>
 ${src('ch09/ids.c', 'c')}
@@ -1168,6 +1185,7 @@ ${run('c96-quyen', 'chmod 600 /srv/app/.env; runuser -u dev -- ids', 2)}
 <p>Một tiến trình có uid <em>thật</em> (ai khởi động nó) và uid <em>hiệu lực</em> (dùng quyền của ai). Bình thường hai số bằng nhau. Khi một tiến trình <code>exec</code> một file có bit <strong>setuid</strong> (chữ <code>s</code> trong <code>rwsr-xr-x</code>), nhân đặt uid hiệu lực thành <strong>chủ của file</strong>: <code>ids</code> của ta, chủ là root, chạy cho dev với uid hiệu lực 0 và mở được <code>.env</code> chỉ-root. Đó là cách <code>passwd</code> cho bạn sửa dòng của chính mình trong <code>/etc/shadow</code>. Cũng vì vậy mỗi chương trình setuid-root là một ranh giới đặc quyền: lỗi nào trong nó cũng là lỗi chạy dưới quyền root. Hãy biết máy mình có những cái nào:</p>
 ${run('c96-quyen', 'find / -xdev -perm -4000')}
 <p>Một ảnh sạch có vài cái (passwd, su, mount…). <code>/usr/local/bin/ids</code> của ta nổi bật hẳn — đúng hình dạng một cửa hậu của kẻ tấn công. Chương 13 cho thấy bit setuid đặt sai chỗ bị lạm dụng ra sao; nhân vốn đã bỏ qua setuid trên script (file <code>#!</code>) và trên hệ thống file gắn <code>nosuid</code> (bài 9.5).</p>
+${lab('perm', 'setuid', 'vi', 'Helper setuid ids: dev chạy nó, nhân đặt uid hiệu lực thành chủ của file (0), và phép kiểm trên .env (600) giờ lọt qua. Nhìn uid thật và uid hiệu lực tách ra.', { tour: 'perm-acl' })}
 
 <h3>Còn root?</h3>
 ${run('c96-quyen', 'chmod 000 /srv/app/.env')}
@@ -1236,6 +1254,7 @@ ${run('c97-cap', 'runuser -u dev -- grep CapEff')}
 <p>Since Linux 2.2, the power of root is split into about 40 <strong>capabilities</strong>: <code>CAP_DAC_OVERRIDE</code> (ignore rwx), <code>CAP_CHOWN</code>, <code>CAP_NET_BIND_SERVICE</code> (ports below 1024), <code>CAP_NET_RAW</code> (raw sockets), <code>CAP_SYS_ADMIN</code> (mount and much more)… The kernel checks the specific capability, not "uid == 0". Root in a default Docker container holds only <strong>14</strong> (the mask <code>a80425fb</code> decoded above); <code>CAP_SYS_ADMIN</code>, <code>CAP_NET_ADMIN</code> and the rest are gone from the bounding set, so they can never be gained inside. A normal user holds none.</p>
 ${run('c97-cap', 'ls -l /srv/app/.env; cat')}
 <p>The same root, the same file (600, owned by dev): with <code>CAP_DAC_OVERRIDE</code> it reads it, after <code>capsh --drop=cap_dac_override</code> it gets <code>Permission denied</code> like anybody else. "Root can read everything" is really "this capability can".</p>
+${lab('perm', 'caps', 'en', 'Root as a set of capabilities: root reads a mode-000 .env because CAP_DAC_OVERRIDE overrides the rwx check, cannot execute a file with no x bit at all, and after --cap-drop dac_override is refused like anyone else.', { tour: 'perm-acl' })}
 
 <h3>Giving one capability to one program: Node on port 80</h3>
 ${run('c97-cap', 'sysctl net.ipv4.ip_unprivileged_port_start', 4)}
@@ -1253,6 +1272,7 @@ ${run('c97-cap', 'getfacl -p /srv/app/uploads/a.jpg', 3)}
 <p>An <strong>ACL</strong> adds entries for named users and groups: www-data gets traverse on the folder and read on the file. <code>ls</code> shows a <code>+</code>; <code>getfacl</code> lists the entries. Now www-data can read the file by name but still cannot list the folder — exactly the least privilege it needs. The <strong>mask</strong> line is the ceiling for all named entries and the group; it is what <code>ls</code> shows in the group position.</p>
 ${run('c97-cap', 'setfacl -d -m')}
 <p>A <strong>default ACL</strong> on the folder is copied to every new file, so new uploads are readable by www-data without anyone remembering to run setfacl.</p>
+${lab('perm', 'acl', 'en', 'The ACL entry user:www-data inside the check: the named-user entry grants read, the mask caps it. Then chmod 600 and watch the mask turn that entry into #effective:--- (the trap right below); a default ACL on the folder covers new uploads.', { tour: 'perm-acl' })}
 ${run('c97-cap', 'chmod 600 /srv/app/uploads/a.jpg')}
 <div class="pitfall co-tieu-de">
 <p><strong>chmod silently disables ACLs.</strong> On a file with an ACL, the group bits of <code>chmod</code> set the <em>mask</em>. A routine <code>chmod 600</code> (or an app that sets mode 0600 on upload) turned the mask into <code>---</code>: the entry still says <code>user:www-data:r--</code>, but <code>#effective:---</code>, and nginx gets 403 again. Read <code>getfacl</code>'s <em>effective</em> column, and prefer setting the mode through the default ACL or <code>chmod g+r</code> (which raises the mask) on ACL'd trees.</p>
@@ -1340,6 +1360,7 @@ ${run('c97-cap', 'runuser -u dev -- grep CapEff')}
 <p>Từ Linux 2.2, quyền lực của root được chia thành khoảng 40 <strong>capability</strong>: <code>CAP_DAC_OVERRIDE</code> (bỏ qua rwx), <code>CAP_CHOWN</code>, <code>CAP_NET_BIND_SERVICE</code> (cổng dưới 1024), <code>CAP_NET_RAW</code> (socket thô), <code>CAP_SYS_ADMIN</code> (mount và rất nhiều thứ khác)… Nhân kiểm đúng capability cần thiết, không kiểm "uid == 0". Root trong một container Docker mặc định chỉ giữ <strong>14</strong> cái (mặt nạ <code>a80425fb</code> giải mã ở trên); <code>CAP_SYS_ADMIN</code>, <code>CAP_NET_ADMIN</code> và phần còn lại đã bị gỡ khỏi bounding set, nên ở bên trong không bao giờ lấy lại được. Người dùng thường không giữ cái nào.</p>
 ${run('c97-cap', 'ls -l /srv/app/.env; cat')}
 <p>Cùng root, cùng file (600, chủ là dev): có <code>CAP_DAC_OVERRIDE</code> thì đọc được, sau <code>capsh --drop=cap_dac_override</code> thì nhận <code>Permission denied</code> như bất kỳ ai. "Root đọc được mọi thứ" thật ra là "capability này đọc được".</p>
+${lab('perm', 'caps', 'vi', 'Root là một tập capability: root đọc được .env mode 000 vì CAP_DAC_OVERRIDE vượt qua phép kiểm rwx, không chạy được file không có bit x nào, và sau --cap-drop dac_override thì bị từ chối như mọi người.', { tour: 'perm-acl' })}
 
 <h3>Trao một capability cho một chương trình: Node ở cổng 80</h3>
 ${run('c97-cap', 'sysctl net.ipv4.ip_unprivileged_port_start', 4)}
@@ -1357,6 +1378,7 @@ ${run('c97-cap', 'getfacl -p /srv/app/uploads/a.jpg', 3)}
 <p>Một <strong>ACL (danh sách kiểm soát truy cập)</strong> thêm các mục cho user và nhóm có tên: www-data được đi qua thư mục và đọc file. <code>ls</code> hiện dấu <code>+</code>; <code>getfacl</code> liệt kê các mục. Giờ www-data đọc được file theo tên nhưng vẫn không liệt kê được thư mục — đúng mức quyền tối thiểu nó cần. Dòng <strong>mask</strong> là trần cho mọi mục có tên và cho nhóm; nó là thứ <code>ls</code> hiện ở vị trí bit nhóm.</p>
 ${run('c97-cap', 'setfacl -d -m')}
 <p>Một <strong>ACL mặc định</strong> trên thư mục được chép sang mọi file mới, nên file upload mới tự đọc được bởi www-data mà không cần ai nhớ chạy setfacl.</p>
+${lab('perm', 'acl', 'vi', 'Mục ACL user:www-data trong phép kiểm: mục người dùng có tên cho quyền đọc, mask chặn trần. Rồi chmod 600 và nhìn mask biến mục đó thành #effective:--- (cái bẫy ngay dưới); ACL mặc định trên thư mục lo cho các upload mới.', { tour: 'perm-acl' })}
 ${run('c97-cap', 'chmod 600 /srv/app/uploads/a.jpg')}
 <div class="pitfall co-tieu-de">
 <p><strong>chmod âm thầm vô hiệu hoá ACL.</strong> Trên file có ACL, bit nhóm của <code>chmod</code> đặt <em>mask</em>. Một lệnh <code>chmod 600</code> thường ngày (hay app đặt mode 0600 cho file upload) biến mask thành <code>---</code>: mục vẫn ghi <code>user:www-data:r--</code>, nhưng <code>#effective:---</code>, và nginx lại trả 403. Hãy đọc cột <em>effective</em> của <code>getfacl</code>, và trên cây có ACL hãy ưu tiên đặt mode qua ACL mặc định hoặc <code>chmod g+r</code> (nâng mask lên).</p>

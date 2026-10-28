@@ -13,8 +13,14 @@
  * ⚠️ Danh sách dưới đây PHẢI khớp frontend/src/components/{os-lab,cpu-lab}/registry.ts — kiểm bằng
  *    npx tsx --test frontend/src/components/labs/registry.test.ts
  * Danh sách os-lab lấy THẲNG từ _lab.mjs của khoá OS (một nguồn, không chép).
+ *
+ * Hướng dẫn từng bước (28/10/2026): tham số cuối `{ tour }` chọn bài hướng dẫn cho khối nhúng —
+ *   ${labEmbed('cpu-lab', 'cpu', 'sum', 'vi', 'Tổng 1..N', { tour: 'fetch-decode' })}
+ *   ${thuNgay('vi', 'cpu', 'sum', 'Câu dẫn…', ['Việc 1'], { tour: 'fetch-decode' })}
+ * ⇒ thêm class `<ns>-t-<tour>` (trang học hiện dải "Hướng dẫn từng bước" + nút Bắt đầu) và link toàn màn hình mở luôn
+ * tour. Kịch bản nằm trong mã web (frontend/src/components/labs/tour/); id phải có trong LAB_TOURS bên dưới.
  */
-import { SIMS as OS_SIMS } from './courses/operating-systems-for-developers/_lab.mjs';
+import { SIMS as OS_SIMS, TOURS as OS_TOURS } from './courses/operating-systems-for-developers/_lab.mjs';
 
 export const CPU_SIMS = {
   bits: ['play', 'intro', 'convert', 'signed', 'ops'],
@@ -25,21 +31,34 @@ export const CPU_SIMS = {
   cache: ['textbook', 'sequential', 'loop', 'conflict', 'matrix'],
 };
 
-export const LAB_NS = {
-  'os-lab': { sims: OS_SIMS, gallery: '/os-lab', vi: 'Phòng lab hệ điều hành', en: 'OS lab' },
-  'cpu-lab': { sims: CPU_SIMS, gallery: '/cpu-lab', vi: 'Phòng lab máy tính', en: 'Computer lab' },
+/** Bài hướng dẫn từng bước có cho từng mô phỏng (`<tên>-start` = tour làm quen, mô phỏng nào cũng có). */
+export const CPU_TOURS = {
+  bits: ['bits-basics', 'bits-convert', 'bits-signed', 'bits-ops', 'bits-start'],
+  data: ['data-text', 'data-float', 'data-start'],
+  logic: ['logic-gates', 'logic-adder', 'logic-ripple', 'logic-start'],
+  cpu: ['cpu-first', 'fetch-decode', 'cpu-bus', 'cpu-start'],
+  pipeline: ['pipeline-stages', 'pipeline-start'],
+  cache: ['cache-basics', 'cache-mapping', 'cache-start'],
 };
 
-export function labEmbed(ns, sim, preset, lang, caption) {
+export const LAB_NS = {
+  'os-lab': { sims: OS_SIMS, tours: OS_TOURS, gallery: '/os-lab', vi: 'Phòng lab hệ điều hành', en: 'OS lab' },
+  'cpu-lab': { sims: CPU_SIMS, tours: CPU_TOURS, gallery: '/cpu-lab', vi: 'Phòng lab máy tính', en: 'Computer lab' },
+};
+
+/** @param {{ tour?: string }} [opts] */
+export function labEmbed(ns, sim, preset, lang, caption, opts = {}) {
+  const { tour } = opts;
   const N = LAB_NS[ns];
   if (!N) throw new Error(`labs: không gian tên lạ "${ns}"`);
   if (!N.sims[sim]) throw new Error(`${ns}: mô phỏng lạ "${sim}"`);
   if (!N.sims[sim].includes(preset)) throw new Error(`${ns}: ${sim} không có preset "${preset}"`);
   if (lang !== 'en' && lang !== 'vi') throw new Error(`${ns}: lang phải là en|vi`);
   if (/[<>`]/.test(caption)) throw new Error(`${ns}: chú thích không được chứa < > hay backtick`);
+  if (tour !== undefined && !(N.tours[sim] ?? []).includes(tour)) throw new Error(`${ns}: ${sim} không có tour "${tour}"`);
   const vi = lang === 'vi';
-  const href = `${N.gallery}?sim=${sim}&amp;preset=${preset}&amp;lang=${lang}`;
-  return `<div class="${ns} ${ns}-sim-${sim} ${ns}-p-${preset}"><p class="${ns}-cap">🧪 <strong>${vi ? N.vi : N.en}:</strong> ${caption} ` +
+  const href = `${N.gallery}?sim=${sim}&amp;preset=${preset}&amp;lang=${lang}${tour ? `&amp;tour=${tour}` : ''}`;
+  return `<div class="${ns} ${ns}-sim-${sim} ${ns}-p-${preset}${tour ? ` ${ns}-t-${tour}` : ''}"><p class="${ns}-cap">🧪 <strong>${vi ? N.vi : N.en}:</strong> ${caption} ` +
     `<a href="${href}" target="_blank" rel="noopener">${vi ? 'Mở toàn màn hình →' : 'Open full screen →'}</a></p></div>`;
 }
 
@@ -47,13 +66,15 @@ export function labEmbed(ns, sim, preset, lang, caption) {
  * Khối "🔬 Thử ngay": một câu dẫn + mô phỏng + 2–3 việc có hướng dẫn. `tasks` là mảng chuỗi (được dùng <b>, <code>).
  * Tuỳ chọn ns (mặc định cpu-lab) để nhúng cả mô phỏng của phòng lab OS.
  */
-export function thuNgay(lang, sim, preset, lead, tasks, { ns = 'cpu-lab', caption, heading = true } = {}) {
+/** @param {{ ns?: string, caption?: string, heading?: boolean, tour?: string }} [opts] */
+export function thuNgay(lang, sim, preset, lead, tasks, opts = {}) {
+  const { ns = 'cpu-lab', caption, heading = true, tour } = opts;
   const vi = lang === 'vi';
   if (!Array.isArray(tasks) || tasks.length < 1) throw new Error('thuNgay: cần ít nhất một việc');
   for (const t of [lead, ...tasks]) if (/`|\$\{/.test(t)) throw new Error('thuNgay: không dùng backtick / ${ trong chữ');
   return `<div class="lab-try">
 ${heading ? `<h3>🔬 ${vi ? 'Thử ngay' : 'Try it now'}</h3>\n` : ''}<p>${lead}</p>
-${labEmbed(ns, sim, preset, lang, caption ?? (vi ? 'kéo, bấm, chạy từng bước' : 'drag, click, step through'))}
+${labEmbed(ns, sim, preset, lang, caption ?? (vi ? 'kéo, bấm, chạy từng bước' : 'drag, click, step through'), { tour })}
 <div class="callout"><b>${vi ? 'Việc cần làm' : 'Your tasks'}:</b><ol>${tasks.map((t) => `<li>${t}</li>`).join('')}</ol></div>
 </div>`;
 }

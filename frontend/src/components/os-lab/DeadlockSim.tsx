@@ -5,6 +5,8 @@ import { Dices } from 'lucide-react';
 import { availOf, detectExamples, hasCycle, initDine, priorityInversion, request, safety, stepDine, textbookBank, type Bank, type Detect, type Dine, type PMode, type SafeStep, type Vec } from './engine/deadlock';
 import { useWidth } from './charts';
 import { Controls, Explain, Frame, Kpi, Seg, colorOf, css as s, cx, rng, tx, usePlayer, type Lang } from './ui';
+import { useLabBridge } from '../labs/bus';
+import { labSfx } from '../labs/sfx';
 
 type Tab = 'banker' | 'detect' | 'philo' | 'pi';
 const TAB_OF: Record<string, Tab> = { banker: 'banker', request: 'banker', detect: 'detect', cycle: 'detect', pool: 'detect', philosophers: 'philo', inversion: 'pi' };
@@ -13,11 +15,12 @@ const v = (x: Vec) => `(${x.join(',')})`;
 export default function DeadlockSim({ lang = 'vi', preset = 'banker' }: { lang?: Lang; preset?: string }) {
   const [tab, setTab] = useState<Tab>(TAB_OF[preset] ?? 'banker');
   const t = (en: string, vi: string) => tx(lang, en, vi);
+  useLabBridge('deadlock', { tab }, { tab: (x) => setTab(x as Tab) });
   return (
     <Frame badge={t('OS lab', 'Phòng lab OS')} title={t('Deadlock lab', 'Phòng lab deadlock')} sub={t('Avoid it, detect it, provoke it — and the priority bug that rebooted a Mars rover', 'Tránh nó, phát hiện nó, gây ra nó — và lỗi ưu tiên đã làm xe tự hành sao Hoả khởi động lại')}>
-      <div className={s.tabs}>
+      <div className={s.tabs} role="tablist" data-tour="tabs">
         {([['banker', "Banker's algorithm", 'Thuật toán Banker'], ['detect', 'Detection (multi-instance)', 'Phát hiện (nhiều bản)'], ['philo', 'Dining philosophers', 'Triết gia ăn tối'], ['pi', 'Priority inversion', 'Đảo ngược ưu tiên']] as const).map(([k, en, vi]) => (
-          <button type="button" key={k} className={cx(s.tab, tab === k && s.on)} onClick={() => setTab(k)}>{t(en, vi)}</button>
+          <button type="button" role="tab" aria-selected={tab === k} key={k} className={cx(s.tab, tab === k && s.on)} onClick={() => setTab(k)}>{t(en, vi)}</button>
         ))}
       </div>
       {tab === 'banker' && <BankerTab lang={lang} startRequest={preset === 'request'} />}
@@ -82,23 +85,28 @@ function BankerTab({ lang, startRequest }: { lang: Lang; startRequest: boolean }
   const p = usePlayer(res.steps.length + 1, 900);
   const st = p.i === 0 ? null : res.steps[p.i - 1];
   const doneOrder = st ? (st.k === 'end' ? st.order : res.order.slice(0, st.finish.filter(Boolean).length)) : [];
-  const ask = () => {
+  const ask = (who: number, req: Vec) => {
     const r = request(bank, who, req);
     const pretend: Bank = { ...bank, avail: bank.avail.map((x, k) => x - req[k]), alloc: bank.alloc.map((a, k) => (k === who ? a.map((x, j) => x + req[j]) : a)), need: bank.need.map((n, k) => (k === who ? n.map((x, j) => x - req[j]) : n)) };
     setLast({ verdict: r.verdict, i: who, req, pretend: r.verdict === 'grant' || r.verdict === 'deny' ? pretend : null });
     if (r.verdict === 'grant') setBank(r.after);
+    labSfx(r.verdict === 'grant' ? 'right' : r.verdict === 'wait' ? 'tick' : 'wrong');
     p.reset();
   };
   const end = res.steps[res.steps.length - 1] as Extract<SafeStep, { k: 'end' }>;
+  useLabBridge('banker', { verdict: last?.verdict ?? '', who: last?.i ?? -1, i: p.i, atEnd: p.atEnd, safe: end ? !end.stuck.length : null }, {
+    request: (x) => { const [w, r] = x as [number, Vec]; setWho(w); setReq(r); ask(w, r); },
+    reset: () => { setBank(textbookBank()); setLast(null); p.reset(); },
+  });
   return (
     <>
       <Explain>{t('Each process declares its MAXIMUM need in advance. The OS only grants a request if, afterwards, there is still some order in which every process could get its maximum and finish (a safe sequence). The safety check below is exactly what you do by hand in the exam — and what ch06/banker.py prints.', 'Mỗi tiến trình khai trước nhu cầu TỐI ĐA. Hệ điều hành chỉ cấp một yêu cầu nếu sau đó vẫn còn một thứ tự để mọi tiến trình lấy đủ tối đa rồi chạy xong (dãy an toàn). Phép kiểm an toàn bên dưới đúng là thứ bạn làm tay trong bài thi — và là thứ ch06/banker.py in ra.')}</Explain>
-      <div className={s.panel} style={{ marginTop: 8 }}>
+      <div className={s.panel} style={{ marginTop: 8 }} data-tour="bank-request">
         <div className={s.panelTitle}>{t('Request resources', 'Xin tài nguyên')} {startRequest && !last ? t('— try P1 (1,0,2), then P4 (3,3,0), then P0 (0,2,0)', '— thử P1 (1,0,2), rồi P4 (3,3,0), rồi P0 (0,2,0)') : ''}</div>
         <div className={s.bar} style={{ margin: 0 }}>
           <select value={who} onChange={(e) => setWho(Number(e.target.value))}>{bank.names.map((n, i) => <option key={n} value={i}>{n}</option>)}</select>
           {bank.res.map((r, k) => <span key={r} className={s.lbl}>{r}<input type="number" min={0} max={9} value={req[k]} onChange={(e) => setReq(req.map((x, j) => (j === k ? Math.max(0, Math.min(9, Number(e.target.value) || 0)) : x)))} /></span>)}
-          <button type="button" className={cx(s.btn, s.primary)} onClick={ask}>{t('Request', 'Xin')}</button>
+          <button type="button" className={cx(s.btn, s.primary)} onClick={() => ask(who, req)} data-tour="bank-ask">{t('Request', 'Xin')}</button>
           <button type="button" className={s.btn} onClick={() => { setBank(textbookBank()); setLast(null); p.reset(); }}>{t('Reset to textbook state', 'Về trạng thái của sách')}</button>
         </div>
         {last && (
@@ -116,10 +124,10 @@ function BankerTab({ lang, startRequest }: { lang: Lang; startRequest: boolean }
       <div className={s.small} style={{ margin: '8px 0 0' }}>{last?.pretend ? t(`Showing the safety check of the PRETEND state (after granting ${bank.names[last.i]} ${v(last.req)}).`, `Đang kiểm an toàn cho trạng thái GIẢ VỜ (sau khi cấp cho ${bank.names[last.i]} ${v(last.req)}).`) : t('Showing the safety check of the current state.', 'Đang kiểm an toàn cho trạng thái hiện tại.')}</div>
       <Controls p={p} lang={lang} />
       <Explain tone={st?.k === 'end' ? (st.stuck.length ? 'bad' : 'ok') : undefined}>{narrate(lang, st, shown.names, ['Need', 'Need'])}</Explain>
-      <div style={{ marginTop: 8 }}>
+      <div style={{ marginTop: 8 }} data-tour="bank-table">
         <StepTable lang={lang} names={shown.names} res={shown.res} alloc={shown.alloc} mid={shown.max} need={shown.need} needLabel="Need = Max − Alloc" avail={shown.avail} step={st} />
       </div>
-      <div className={s.bar}>
+      <div className={s.bar} data-tour="bank-sequence">
         <span className={s.lbl}>{t('Safe sequence so far', 'Dãy an toàn tới giờ')}:</span>
         <div className={s.chips}>{doneOrder.length ? doneOrder.map((i) => <span key={i} className={s.chip} style={{ background: colorOf(i) }}>{shown.names[i]}</span>) : <span className={s.empty}>—</span>}</div>
         {p.atEnd && <b style={{ color: end.stuck.length ? 'var(--ol-bad)' : 'var(--ol-ok)' }}>{end.stuck.length ? t('UNSAFE', 'KHÔNG AN TOÀN') : t('SAFE', 'AN TOÀN')}</b>}
@@ -171,14 +179,18 @@ function DetectTab({ lang, start }: { lang: Lang; start: string }) {
   const p = usePlayer(res.steps.length + 1, 900);
   const st = p.i === 0 ? null : res.steps[p.i - 1];
   const cyc = hasCycle(d);
+  const endSt = res.steps[res.steps.length - 1] as Extract<SafeStep, { k: 'end' }>;
+  useLabBridge('detect', { key, i: p.i, atEnd: p.atEnd, cycle: cyc, stuck: endSt ? endSt.stuck.length : 0 }, {
+    example: (x) => { setKey(String(x)); p.reset(); },
+  });
   return (
     <>
       <Explain>{t('Detection does not need maximums — only what each process holds now (Allocation) and what it is waiting for now (Request). Same scan as Banker: whoever can be satisfied finishes and returns everything. Whoever is left at the end is DEADLOCKED.', 'Phát hiện không cần mức tối đa — chỉ cần mỗi tiến trình đang giữ gì (Allocation) và đang chờ gì (Request). Quét giống Banker: ai được đáp ứng thì chạy xong và trả hết. Ai còn lại cuối cùng là bị DEADLOCK.')}</Explain>
-      <div className={s.bar}>
+      <div className={s.bar} data-tour="det-pick">
         <select value={key} onChange={(e) => { setKey(e.target.value); p.reset(); }} style={{ maxWidth: '100%' }}>{ex.map((x) => <option key={x.key} value={x.key}>{t(x.en, x.vi)}</option>)}</select>
       </div>
       <div className={s.grid2} style={{ alignItems: 'start' }}>
-        <div className={s.panel}><div className={s.panelTitle}>{t('Resource-allocation graph', 'Đồ thị cấp phát tài nguyên')}</div><Rag d={d} lang={lang} />
+        <div className={s.panel} data-tour="det-graph"><div className={s.panelTitle}>{t('Resource-allocation graph', 'Đồ thị cấp phát tài nguyên')}</div><Rag d={d} lang={lang} />
           <div className={s.small}>{t('Cycle in the wait-for graph', 'Có vòng trong đồ thị chờ')}: <b>{cyc ? t('yes', 'có') : t('no', 'không')}</b>. {cyc && res.safe ? t('A cycle with multi-instance resources only means deadlock is POSSIBLE — here another holder can still finish and free an instance.', 'Có vòng với tài nguyên nhiều bản chỉ nghĩa là CÓ THỂ deadlock — ở đây vẫn có người giữ chạy xong và nhả ra một bản.') : ''}</div>
         </div>
         <div>
@@ -186,7 +198,7 @@ function DetectTab({ lang, start }: { lang: Lang; start: string }) {
           <Explain tone={st?.k === 'end' ? (st.stuck.length ? 'bad' : 'ok') : undefined}>{narrate(lang, st, d.names, ['Request', 'Request'])}
             {st?.k === 'end' && st.stuck.length > 0 && key === 'pool' && t(' This is the classic pool deadlock: pool.connect() inside a handler that already holds a connection. Fix: pass the client down, or give the inner call a timeout.', ' Đây là deadlock pool kinh điển: gọi pool.connect() trong một handler đang giữ sẵn một kết nối. Sửa: truyền client xuống, hoặc cho lời gọi bên trong một thời hạn.')}
           </Explain>
-          <div style={{ marginTop: 8 }}>
+          <div style={{ marginTop: 8 }} data-tour="det-table">
             <StepTable lang={lang} names={d.names} res={d.res} alloc={d.alloc} mid={null} need={d.req} needLabel="Request" avail={av} step={st} zeroDone />
           </div>
         </div>
@@ -219,9 +231,10 @@ function PhiloTab({ lang }: { lang: Lang }) {
   const fpos = (f: number, r: number) => { const a = -Math.PI / 2 + (2 * Math.PI * (f + 0.5)) / D.n; return [C + r * Math.cos(a), C + r * Math.sin(a)]; };
   const ST: Record<string, [string, string, string]> = { think: ['#64748b', 'thinking', 'đang nghĩ'], hungry: ['#d97706', 'hungry', 'đói'], eat: ['#16a34a', 'eating', 'đang ăn'], backoff: ['#7c3aed', 'backing off', 'lùi lại'] };
   const m = MODES.find((x) => x[0] === mode)!;
+  useLabBridge('philo', { mode, together, deadlock: !!D.deadlock, t: D.t }, { mode: (x) => { setMode(x as PMode); p.reset(); }, together: (x) => { setTogether(!!x); p.reset(); } });
   return (
     <>
-      <div className={s.bar}>
+      <div className={s.bar} data-tour="philo-mode">
         <Seg value={mode} options={MODES.map((x) => [x[0], t(x[1], x[2])])} onChange={(v) => { setMode(v); p.reset(); }} />
       </div>
       <div className={s.bar}>
@@ -231,7 +244,7 @@ function PhiloTab({ lang }: { lang: Lang }) {
       <Explain>{t(m[3], m[4])}</Explain>
       <Controls p={p} lang={lang} label={`tick ${D.t}`} />
       <div className={s.grid2} style={{ alignItems: 'center' }}>
-        <svg viewBox="0 0 280 280" width="100%" style={{ maxWidth: 320, margin: '0 auto', display: 'block' }} role="img" aria-label="dining philosophers">
+        <svg viewBox="0 0 280 280" width="100%" style={{ maxWidth: 320, margin: '0 auto', display: 'block' }} role="img" aria-label="dining philosophers" data-tour="philo-table">
           <circle cx={C} cy={C} r={62} className={s.svgPanel} stroke="var(--ol-border)" strokeWidth={2} />
           <text x={C} y={C + 4} fontSize={12} textAnchor="middle" className={s.svgMuted}>{mode === 'waiter' ? `${t('seated', 'đang ngồi')} ${D.seated}/4` : '🍜'}</text>
           {D.forks.map((o, f) => {

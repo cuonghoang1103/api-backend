@@ -1,9 +1,11 @@
 'use client';
 /** Race condition từng lệnh máy: counter++ = load/add/store; sửa bằng mutex/atomic; deadlock hai khoá và cách sửa. */
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { BarChart3, Dices } from 'lucide-react';
 import { autoRun, histogram, init, runnable, step, finished, type RMode, type RState } from './engine/race';
 import { Controls, Explain, Frame, Kpi, Seg, colorOf, css as s, cx, rng, tx, usePlayer, type Lang } from './ui';
+import { useLabBridge, useOwnStepSound } from '../labs/bus';
+import { labSfx } from '../labs/sfx';
 
 const MODES: Array<[RMode, string, string]> = [
   ['none', 'No lock', 'Không khoá'], ['mutex', 'Mutex', 'Mutex'], ['atomic', 'Atomic', 'Nguyên tử'],
@@ -41,12 +43,27 @@ export default function RaceSim({ lang = 'vi', preset = 'none' }: { lang?: Lang;
   };
 
   const W = 300, lineH = 21;
+  useLabBridge('race', {
+    mode, sched, n, counter: S.mem, lost: S.lost, deadlock: !!S.deadlock, finished: finished(S), expected, i: p.i, hist: !!hist,
+  }, {
+    mode: (v) => { setMode(v as RMode); reset(v as RMode); }, sched: (v) => { setSched(v as 'alt' | 'rand' | 'manual' | 'seq'); reset(); },
+    n: (v) => { const k = Math.max(1, Math.min(5, Number(v) || 1)); setN(k); reset(mode, k); },
+    t1: () => manualStep(0), t2: () => manualStep(1),
+    hist: () => setHist(histogram(mode, n, 1000, rng(seed * 31 + n))),
+  });
+  // âm thanh: mất một lần tăng = "ôi", deadlock = "bịch", xong đúng = chuông
+  useOwnStepSound();
+  const lastI = useRef(p.i);
+  useEffect(() => {
+    if (p.i > lastI.current) labSfx(S.deadlock ? 'thud' : S.lastLost ? 'oops' : finished(S) && expected !== null && S.mem === expected ? 'done' : 'tick');
+    lastI.current = p.i;
+  }, [p.i, S, expected]);
   const lockOwner = (L: string) => S.locks[L];
 
   return (
     <Frame badge={tx(lang, 'OS lab', 'Phòng lab OS')} title={tx(lang, 'Race condition, instruction by instruction', 'Race condition, từng lệnh máy một')}
       sub={tx(lang, 'Two threads, one shared variable — and how locks fix it (or deadlock)', 'Hai luồng, một biến chung — và khoá sửa nó ra sao (hoặc gây deadlock)')}>
-      <div className={s.bar}>
+      <div className={s.bar} data-tour="race-mode">
         <Seg label={tx(lang, 'Mode', 'Chế độ')} value={mode} options={MODES.map(([v, en, vi]) => [v, tx(lang, en, vi)])} onChange={(v) => { setMode(v); reset(v); }} />
       </div>
       <div className={s.bar}>
@@ -54,24 +71,24 @@ export default function RaceSim({ lang = 'vi', preset = 'none' }: { lang?: Lang;
           <span className={s.lbl}>{tx(lang, 'Increments per thread', 'Số lần tăng mỗi luồng')}
             <input type="number" min={1} max={5} value={n} onChange={(e) => { const k = Math.max(1, Math.min(5, Number(e.target.value) || 1)); setN(k); reset(mode, k); }} /></span>
         )}
-        <Seg label={tx(lang, 'Interleaving', 'Cách xen kẽ')} value={sched}
+        <span data-tour="race-sched"><Seg label={tx(lang, 'Interleaving', 'Cách xen kẽ')} value={sched}
           options={[['alt', tx(lang, 'alternate (worst case)', 'luân phiên (xấu nhất)')], ['rand', tx(lang, 'random', 'ngẫu nhiên')], ['seq', tx(lang, 'one after another', 'lần lượt')], ['manual', tx(lang, 'you choose', 'bạn chọn')]]}
-          onChange={(v) => { setSched(v); reset(); }} />
+          onChange={(v) => { setSched(v); reset(); }} /></span>
         {sched === 'rand' && <button type="button" className={s.btn} onClick={() => { setSeed((x) => x + 1); p.reset(); }}><Dices />{tx(lang, 'new random run', 'lần chạy ngẫu nhiên mới')} #{seed}</button>}
       </div>
       <Explain>{tx(lang, NOTE[mode][0], NOTE[mode][1])}</Explain>
       <Controls p={p} lang={lang} extra={sched === 'manual' ? (
         <>
-          <button type="button" className={s.btn} style={{ borderColor: colorOf(0) }} disabled={!runnable(S, 0) || finished(S) || p.i < manual.length - 1} onClick={() => manualStep(0)}>▶ T1</button>
-          <button type="button" className={s.btn} style={{ borderColor: colorOf(1) }} disabled={!runnable(S, 1) || finished(S) || p.i < manual.length - 1} onClick={() => manualStep(1)}>▶ T2</button>
+          <button type="button" className={s.btn} data-tour="race-t1" style={{ borderColor: colorOf(0) }} disabled={!runnable(S, 0) || finished(S) || p.i < manual.length - 1} onClick={() => manualStep(0)}>▶ T1</button>
+          <button type="button" className={s.btn} data-tour="race-t2" style={{ borderColor: colorOf(1) }} disabled={!runnable(S, 1) || finished(S) || p.i < manual.length - 1} onClick={() => manualStep(1)}>▶ T2</button>
         </>
       ) : undefined} />
 
-      <div className={s.grid3} style={{ alignItems: 'start' }}>
+      <div className={s.grid3} style={{ alignItems: 'start' }} data-tour="race-threads">
         {[0, 1].map((t) => {
           const T = S.th[t], c = colorOf(t);
           return (
-            <div key={t} className={s.panel} style={{ borderColor: S.ranThread === t ? c : undefined, borderWidth: S.ranThread === t ? 2 : 1 }}>
+            <div key={t} className={s.panel} data-tour={`race-thread-${t + 1}`} style={{ borderColor: S.ranThread === t ? c : undefined, borderWidth: S.ranThread === t ? 2 : 1 }}>
               <div className={s.panelTitle} style={{ color: c }}>
                 {tx(lang, `Thread T${t + 1}`, `Luồng T${t + 1}`)} · {T.done ? tx(lang, 'done', 'xong') : T.blockedOn && lockOwner(T.blockedOn) !== null ? tx(lang, `blocked on ${T.blockedOn}`, `chờ khoá ${T.blockedOn}`) : tx(lang, 'runnable', 'chạy được')}
               </div>
@@ -92,7 +109,7 @@ export default function RaceSim({ lang = 'vi', preset = 'none' }: { lang?: Lang;
         })}
         <div className={s.stack}>
           {mode !== 'deadlock' && mode !== 'ordered' ? (
-            <div className={cx(s.panel, S.lastLost && s.flash)} key={S.steps} style={{ borderColor: S.lastLost ? 'var(--ol-bad)' : undefined }}>
+            <div className={cx(s.panel, S.lastLost && s.flash)} key={S.steps} data-tour="race-memory" style={{ borderColor: S.lastLost ? 'var(--ol-bad)' : undefined }}>
               <div className={s.panelTitle}>{tx(lang, 'Shared memory', 'Bộ nhớ chung')}</div>
               <div className={s.mono} style={{ fontSize: 26, fontWeight: 800 }}>counter = {S.mem}</div>
               <div className={s.kpis} style={{ marginTop: 6 }}>
@@ -101,7 +118,7 @@ export default function RaceSim({ lang = 'vi', preset = 'none' }: { lang?: Lang;
               </div>
             </div>
           ) : (
-            <div className={s.panel} style={{ borderColor: S.deadlock ? 'var(--ol-bad)' : undefined }}>
+            <div className={s.panel} style={{ borderColor: S.deadlock ? 'var(--ol-bad)' : undefined }} data-tour="race-graph">
               <div className={s.panelTitle}>{tx(lang, 'Locks and the wait-for graph', 'Khoá và đồ thị chờ')}</div>
               <svg width={W} height={170} viewBox={`0 0 ${W} 170`} role="img" aria-label="wait-for graph" style={{ maxWidth: '100%' }}>
                 <defs><marker id="ol-wf" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ol-muted)" /></marker>
@@ -137,7 +154,7 @@ export default function RaceSim({ lang = 'vi', preset = 'none' }: { lang?: Lang;
         </div>
       </div>
 
-      <div style={{ marginTop: 10 }}>
+      <div style={{ marginTop: 10 }} data-tour="race-step">
         <Explain tone={S.deadlock || S.lastLost ? 'bad' : finished(S) ? 'ok' : undefined}>
           <b>{tx(lang, `Step ${p.i}`, `Bước ${p.i}`)}:</b> {tx(lang, S.en, S.vi)}
           {finished(S) && !S.deadlock && expected !== null && (
@@ -149,7 +166,7 @@ export default function RaceSim({ lang = 'vi', preset = 'none' }: { lang?: Lang;
       </div>
 
       {(mode === 'none' || mode === 'mutex' || mode === 'atomic') && (
-        <div className={s.panel} style={{ marginTop: 10 }}>
+        <div className={s.panel} style={{ marginTop: 10 }} data-tour="race-hist">
           <div className={s.bar} style={{ marginTop: 0 }}>
             <button type="button" className={s.btn} onClick={() => setHist(histogram(mode, n, 1000, rng(seed * 31 + n)))}><BarChart3 />{tx(lang, 'Run it 1,000 times with random interleavings', 'Chạy 1.000 lần với xen kẽ ngẫu nhiên')}</button>
             <span className={s.small}>{tx(lang, 'This is what "it works on my machine" hides: the result depends on timing.', 'Đây là điều "máy tôi chạy được mà" che giấu: kết quả phụ thuộc vào thời điểm.')}</span>

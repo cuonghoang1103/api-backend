@@ -9,6 +9,7 @@ import { describe, it } from 'node:test';
 import { LABS } from './registry';
 import { LAB_NAMESPACES, LAB_SELECTOR } from './selector';
 import { LAB_NS, labEmbed, thuNgay } from '../../../../content/_labs.mjs';
+import { tourIdsBySim } from './tour';
 
 describe('lab registries', () => {
   it('every namespace is known on both sides', () => {
@@ -23,6 +24,18 @@ describe('lab registries', () => {
       assert.equal(LABS[ns].gallery, LAB_NS[ns].gallery);
     });
   }
+  it('tour ids: content lists = web registry', () => {
+    const web = tourIdsBySim();
+    for (const ns of LAB_NAMESPACES) assert.deepEqual(LAB_NS[ns].tours, web[ns], ns);
+  });
+  it('tour param becomes a class and a full-screen link; unknown tours are rejected', () => {
+    const html: string = labEmbed('cpu-lab', 'cpu', 'sum', 'vi', 'Tổng 1..N', { tour: 'fetch-decode' });
+    assert.match(html, /^<div class="cpu-lab cpu-lab-sim-cpu cpu-lab-p-sum cpu-lab-t-fetch-decode">/);
+    assert.match(html, /tour=fetch-decode/);
+    assert.throws(() => labEmbed('cpu-lab', 'cpu', 'sum', 'vi', 'x', { tour: 'bits-basics' }));
+    const t: string = thuNgay('vi', 'bits', 'intro', 'Dẫn.', ['Một'], { tour: 'bits-basics' });
+    assert.match(t, /cpu-lab-t-bits-basics/);
+  });
   it('content helper produces only class-based markup and rejects unknown names', () => {
     const html: string = labEmbed('cpu-lab', 'cpu', 'sum', 'vi', 'Tổng 1..N');
     assert.match(html, /^<div class="cpu-lab cpu-lab-sim-cpu cpu-lab-p-sum"><p class="cpu-lab-cap">/);

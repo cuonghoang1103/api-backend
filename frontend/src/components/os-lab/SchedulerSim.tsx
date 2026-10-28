@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import { Plus, Trash2 } from 'lucide-react';
 import { simulate, PRESETS, type Policy, type SProc, type PState } from './engine/scheduler';
 import { Controls, Explain, Frame, Kpi, Seg, colorOf, css as s, inkOn, tx, usePlayer, type Lang } from './ui';
+import { useLabBridge } from '../labs/bus';
 
 const POLICIES: Array<[Policy, string]> = [
   ['fcfs', 'FCFS'], ['sjf', 'SJF'], ['srtf', 'SRTF'], ['rr', 'RR'], ['prio', 'Prio'], ['prio-p', 'Prio-P'], ['mlfq', 'MLFQ'], ['cfs', 'CFS'],
@@ -62,11 +63,17 @@ export default function SchedulerSim({ lang = 'vi', preset = 'textbook' }: { lan
   const cur = Math.min(p.i, end);
 
   const fmt = (v: number) => (Number.isInteger(v) ? String(v) : v.toFixed(2));
+  useLabBridge('sched', {
+    preset: presetKey, policy, cores, quantum, t: tick.t, done: p.atEnd, avgWait: Math.round(res.avg.waiting * 100) / 100, switches: res.switches,
+  }, {
+    load: (k) => loadPreset(String(k)), policy: (v) => { setPolicy(v as Policy); p.reset(); }, quantum: (v) => { setQuantum(Number(v)); p.reset(); },
+    cores: (v) => { setCores(Number(v)); p.reset(); },
+  });
   const finishedBy = (id: string) => res.stats[id].finish >= 0 && res.stats[id].finish <= tick.t;
 
   return (
     <Frame badge={tx(lang, 'OS lab', 'Phòng lab OS')} title={tx(lang, 'CPU scheduling', 'Lập lịch CPU')} sub={tx(lang, 'Who gets the CPU, when, and what it costs everyone else', 'Ai được CPU, lúc nào, và những người khác phải trả giá ra sao')}>
-      <div className={s.bar}>
+      <div className={s.bar} data-tour="sched-policy">
         <span className={s.lbl}>{tx(lang, 'Scenario', 'Kịch bản')}
           <select value={presetKey} onChange={(e) => loadPreset(e.target.value)}>
             {Object.entries(PRESETS).map(([k, v]) => <option key={k} value={k}>{tx(lang, v.en, v.vi)}</option>)}
@@ -84,7 +91,7 @@ export default function SchedulerSim({ lang = 'vi', preset = 'textbook' }: { lan
       </div>
       <Explain>{tx(lang, POLICY_NOTE[policy][0], POLICY_NOTE[policy][1])}</Explain>
 
-      <div className={s.scrollX} style={{ marginTop: 10 }}>
+      <div className={s.scrollX} style={{ marginTop: 10 }} data-tour="sched-procs">
         <table className={s.tbl} style={{ minWidth: 520 }}>
           <thead><tr>
             <th>ID</th><th className={s.num}>{tx(lang, 'Arrival', 'Đến lúc')}</th><th className={s.num}>{tx(lang, 'Burst', 'Cần CPU')}</th>
@@ -117,8 +124,8 @@ export default function SchedulerSim({ lang = 'vi', preset = 'textbook' }: { lan
 
       <Controls p={p} lang={lang} label={`t = ${tick.t}${p.atEnd ? tx(lang, ' · all done', ' · xong hết') : ''}`} />
 
-      <div className={s.grid3}>
-        <div className={s.panel}>
+      <div className={s.grid3} data-tour="sched-now">
+        <div className={s.panel} data-tour="sched-cores">
           <div className={s.panelTitle}>{tx(lang, `CPU cores (${cores})`, `Lõi CPU (${cores})`)}</div>
           <div className={s.chips}>
             {tick.cores.map((c, k) => (
@@ -130,7 +137,7 @@ export default function SchedulerSim({ lang = 'vi', preset = 'textbook' }: { lan
             ))}
           </div>
         </div>
-        <div className={s.panel}>
+        <div className={s.panel} data-tour="sched-ready">
           <div className={s.panelTitle}>{tx(lang, 'Ready queue (head → tail)', 'Hàng sẵn sàng (đầu → cuối)')}</div>
           <div className={s.chips}>
             {tick.ready.length ? tick.ready.map((id) => (
@@ -150,7 +157,7 @@ export default function SchedulerSim({ lang = 'vi', preset = 'textbook' }: { lan
         </div>
       </div>
 
-      <div className={s.svgWrap} style={{ marginTop: 10 }}>
+      <div className={s.svgWrap} style={{ marginTop: 10 }} data-tour="sched-gantt">
         <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} role="img" aria-label={tx(lang, 'Gantt chart', 'Sơ đồ Gantt')}>
           <defs>
             <pattern id="ol-hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
@@ -237,7 +244,7 @@ export default function SchedulerSim({ lang = 'vi', preset = 'textbook' }: { lan
           </table>
         </div>
         <div className={s.stack}>
-          <div className={s.kpis}>
+          <div className={s.kpis} data-tour="sched-kpis">
             <Kpi k={tx(lang, 'avg waiting', 'chờ TB')} v={p.atEnd ? fmt(res.avg.waiting) : '…'} />
             <Kpi k={tx(lang, 'avg turnaround', 'hoàn thành TB')} v={p.atEnd ? fmt(res.avg.turnaround) : '…'} />
             <Kpi k={tx(lang, 'avg response', 'đáp ứng TB')} v={p.atEnd ? fmt(res.avg.response) : '…'} />

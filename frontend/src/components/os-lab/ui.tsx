@@ -6,6 +6,9 @@
  */
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import { Pause, Play, RotateCcw, SkipBack, SkipForward } from 'lucide-react';
+import { useLabBridge, useLabBus } from '../labs/bus';
+import { useLabChrome } from '../labs/chrome';
+import { labSfx } from '../labs/sfx';
 import s from './oslab.module.css';
 
 export type Lang = 'en' | 'vi';
@@ -38,7 +41,7 @@ export function usePlayer(total: number, baseMs = 900): Player {
     const id = window.setTimeout(() => setIRaw((x) => Math.min(totalRef.current - 1, x + 1)), baseMs / speed);
     return () => window.clearTimeout(id);
   }, [playing, i, total, speed, baseMs]);
-  return {
+  const p: Player = {
     i, total, playing, speed, setI, setSpeed, setPlaying,
     atEnd: i >= total - 1,
     next: () => { setPlaying(false); setIRaw((x) => clamp(x + 1)); },
@@ -46,28 +49,50 @@ export function usePlayer(total: number, baseMs = 900): Player {
     reset: () => { setPlaying(false); setIRaw(0); },
     toggle: () => {
       if (!playing && i >= total - 1) { setIRaw(0); setPlaying(true); return; }
-      setPlaying((p) => !p);
+      setPlaying((v) => !v);
     },
   };
+  usePlayerBridge(p);
+  return p;
+}
+
+/**
+ * Bộ phát nào cũng tự đăng ký với tour dưới tên 'player' (labs/bus.tsx): trạng thái i/total/playing/atEnd và các
+ * hành động step/back/reset/play/pause/seek/end/speed. Kèm tiếng "tick" nhỏ mỗi khi tiến đúng một bước — trừ khi
+ * mô phỏng tự phát tiếng riêng cho từng bước (useOwnStepSound).
+ */
+export function usePlayerBridge(p: Player) {
+  const bus = useLabBus();
+  useLabBridge('player', { i: p.i, total: p.total, playing: p.playing, atEnd: p.atEnd, speed: p.speed }, {
+    step: () => p.next(), back: () => p.prev(), reset: () => p.reset(),
+    play: () => { if (p.atEnd) p.setI(0); p.setPlaying(true); }, pause: () => p.setPlaying(false),
+    seek: (v) => { p.setPlaying(false); p.setI(Number(v)); }, end: () => { p.setPlaying(false); p.setI(p.total - 1); },
+    speed: (v) => p.setSpeed(Number(v)),
+  });
+  const prevI = useRef(p.i);
+  useEffect(() => {
+    if (p.i === prevI.current + 1 && !(bus && bus.ownStepSound > 0)) labSfx('tick');
+    prevI.current = p.i;
+  }, [p.i, bus]);
 }
 
 const SPEEDS = [0.5, 1, 2, 4];
 
 export function Controls({ p, lang, label, extra }: { p: Player; lang: Lang; label?: string; extra?: ReactNode }) {
   return (
-    <div className={s.bar}>
+    <div className={s.bar} data-tour="controls">
       <button type="button" className={s.btn} onClick={p.reset} title={tx(lang, 'Back to the start', 'Về đầu')} aria-label={tx(lang, 'Reset', 'Về đầu')}><RotateCcw /></button>
       <button type="button" className={s.btn} onClick={p.prev} disabled={p.i <= 0} title={tx(lang, 'Step back', 'Lùi một bước')} aria-label={tx(lang, 'Step back', 'Lùi một bước')}><SkipBack /></button>
-      <button type="button" className={cx(s.btn, s.primary)} onClick={p.toggle} aria-label={p.playing ? 'Pause' : 'Play'}>
+      <button type="button" className={cx(s.btn, s.primary)} onClick={p.toggle} aria-label={p.playing ? tx(lang, 'Pause', 'Dừng') : tx(lang, 'Play', 'Chạy')} data-tour="play">
         {p.playing ? <Pause /> : <Play />}{p.playing ? tx(lang, 'Pause', 'Dừng') : tx(lang, 'Play', 'Chạy')}
       </button>
-      <button type="button" className={s.btn} onClick={p.next} disabled={p.atEnd} title={tx(lang, 'One step', 'Một bước')} aria-label={tx(lang, 'Step forward', 'Tới một bước')}><SkipForward />{tx(lang, 'Step', 'Bước')}</button>
+      <button type="button" className={s.btn} onClick={p.next} disabled={p.atEnd} title={tx(lang, 'One step', 'Một bước')} aria-label={tx(lang, 'Step forward', 'Tới một bước')} data-tour="step"><SkipForward />{tx(lang, 'Step', 'Bước')}</button>
       <div className={s.seg} role="group" aria-label={tx(lang, 'Speed', 'Tốc độ')}>
         {SPEEDS.map((v) => (
           <button type="button" key={v} className={p.speed === v ? s.on : ''} onClick={() => p.setSpeed(v)}>{v}×</button>
         ))}
       </div>
-      <div className={s.progress}>
+      <div className={s.progress} data-tour="timeline">
         <input type="range" min={0} max={Math.max(0, p.total - 1)} value={p.i} onChange={(e) => { p.setPlaying(false); p.setI(Number(e.target.value)); }} aria-label={tx(lang, 'Timeline', 'Dòng thời gian')} />
         <span className={s.small}>{label ?? `${tx(lang, 'step', 'bước')} ${p.i + 1}/${p.total}`}</span>
       </div>
@@ -96,20 +121,26 @@ export function Kpi({ k, v, tone }: { k: string; v: ReactNode; tone?: 'ok' | 'ba
 }
 
 export function Frame({ title, sub, badge, children }: { title: string; sub?: string; badge?: string; children: ReactNode }) {
+  const chrome = useLabChrome();
   return (
-    <div className={cx(s.root, 'not-prose')} data-os-lab-root="1">
-      <div className={s.head}>
+    <div ref={chrome?.rootRef} className={cx(s.root, 'not-prose', chrome?.touring && s.touring)} data-os-lab-root="1" data-im="">
+      <div className={s.head} data-tour="head">
+        {chrome?.icon && <span className={s.headIcon} aria-hidden>{chrome.icon}</span>}
+        <span className={s.headText}>
+          <span className={s.title}>{title}</span>
+          {sub && <span className={s.sub}>{sub}</span>}
+        </span>
         {badge && <span className={s.badge}>{badge}</span>}
-        <span className={s.title}>{title}</span>
-        {sub && <span className={s.sub}>{sub}</span>}
       </div>
+      {chrome?.toolbar}
       {children}
+      {chrome?.overlay}
     </div>
   );
 }
 
 export function Explain({ children, tone }: { children: ReactNode; tone?: 'ok' | 'bad' | 'warn' }) {
-  return <div className={cx(s.explain, tone && s[tone])} aria-live="polite">{children}</div>;
+  return <div className={cx(s.explain, tone && s[tone])} aria-live="polite" data-tour="explain">{children}</div>;
 }
 
 /** Chữ trắng hay đen trên một màu nền. */

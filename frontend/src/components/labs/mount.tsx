@@ -10,6 +10,8 @@ import { Suspense, lazy, type ComponentType } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { LABS, isLabIn } from './registry';
 import { LAB_NAMESPACES, type LabNs } from './selector';
+import { LabShell } from './LabShell';
+import { TOUR_BY_ID } from './tour';
 import type { Lang } from '../os-lab/ui';
 import s from '../os-lab/oslab.module.css';
 
@@ -20,25 +22,31 @@ function lazyOf(ns: LabNs, name: string) {
   return cache.get(k)!;
 }
 
-export function LabEmbed({ ns, name, preset, lang }: { ns: LabNs; name: string; preset?: string; lang: Lang }) {
+export function LabEmbed({ ns, name, preset, lang, tour, autoStart, record, rate }: {
+  ns: LabNs; name: string; preset?: string; lang: Lang; tour?: string; autoStart?: boolean; record?: boolean; rate?: number;
+}) {
   if (!isLabIn(ns, name)) return null;
   const C = lazyOf(ns, name);
   return (
     <Suspense fallback={<div className={s.loading}>{lang === 'vi' ? 'Đang dựng mô phỏng…' : 'Loading the simulation…'}</div>}>
-      <C lang={lang} preset={preset} />
+      <LabShell ns={ns} name={name} preset={preset} lang={lang} tourId={tour} autoStart={autoStart} record={record} rate={rate}>
+        <C lang={lang} preset={preset} />
+      </LabShell>
     </Suspense>
   );
 }
 
-/** Đọc (ns, tên, preset) từ class của một khối nhúng. */
-export function parseLabEl(el: Element, only: readonly LabNs[] = LAB_NAMESPACES): { ns: LabNs; name: string; preset?: string } | null {
+/** Đọc (ns, tên, preset, tour) từ class của một khối nhúng. */
+export function parseLabEl(el: Element, only: readonly LabNs[] = LAB_NAMESPACES): { ns: LabNs; name: string; preset?: string; tour?: string } | null {
   const cls = Array.from(el.classList);
   const ns = only.find((n) => cls.includes(n));
   if (!ns) return null;
   const name = cls.find((c) => c.startsWith(`${ns}-sim-`))?.slice(`${ns}-sim-`.length) ?? '';
   if (!isLabIn(ns, name)) return null;
   const p = cls.find((c) => c.startsWith(`${ns}-p-`))?.slice(`${ns}-p-`.length);
-  return { ns, name, preset: p && LABS[ns].labs[name].presets.includes(p) ? p : undefined };
+  const t = cls.find((c) => c.startsWith(`${ns}-t-`))?.slice(`${ns}-t-`.length);
+  const tour = t && TOUR_BY_ID.get(t)?.ns === ns && TOUR_BY_ID.get(t)?.sim === name ? t : undefined;
+  return { ns, name, preset: p && LABS[ns].labs[name].presets.includes(p) ? p : undefined, tour };
 }
 
 export function mountLabs(root: HTMLElement, fallbackLang: Lang, only: readonly LabNs[] = LAB_NAMESPACES): () => void {
@@ -54,7 +62,7 @@ export function mountLabs(root: HTMLElement, fallbackLang: Lang, only: readonly 
     const host = document.createElement('div');
     el.insertBefore(host, el.firstChild);
     const r = createRoot(host);
-    r.render(<LabEmbed ns={hit.ns} name={hit.name} preset={hit.preset} lang={lang} />);
+    r.render(<LabEmbed ns={hit.ns} name={hit.name} preset={hit.preset} tour={hit.tour} lang={lang} />);
     roots.push({ r, host });
   };
   const io = typeof IntersectionObserver !== 'undefined'

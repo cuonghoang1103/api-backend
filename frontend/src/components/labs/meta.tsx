@@ -1,0 +1,48 @@
+/**
+ * Mỗi mô phỏng: một biểu tượng (thẻ phòng lab + đầu khung) và MỘT câu "bạn đang xem gì" cho người mới mở ra lần đầu.
+ * Câu gợi ý viết cho người chưa biết gì: nói thẳng nhìn vào đâu và bấm gì trước.
+ */
+import type { ComponentType } from 'react';
+import {
+  Binary, Boxes, Cable, CalendarClock, Cpu, Database, FileCode2, GitFork, Gauge, HardDrive, Layers, Lock, MemoryStick,
+  Network, Route, ScanSearch, ShieldAlert, Shuffle, Timer, Type, Workflow, Zap,
+} from 'lucide-react';
+import type { L } from './tour/types';
+import type { LabNs } from './selector';
+
+export const SIM_ICON: Record<LabNs, Record<string, ComponentType<{ className?: string }>>> = {
+  'cpu-lab': { bits: Binary, data: Type, logic: Cable, cpu: Cpu, pipeline: FileCode2, cache: Zap },
+  'os-lab': {
+    process: GitFork, scheduler: CalendarClock, race: Shuffle, memory: Layers, vm: MemoryStick, sysmon: Gauge, eventloop: Workflow,
+    threadpool: Boxes, sync: Lock, deadlock: ShieldAlert, cgroup: Database, cow: Route, pagecache: HardDrive, latency: Timer,
+  },
+};
+export const FALLBACK_ICON = ScanSearch;
+export const NET_ICON = Network;
+
+export const SIM_HINT: Record<LabNs, Record<string, L>> = {
+  'cpu-lab': {
+    bits: ['Each square is one bit — a tiny switch that is either off (0) or on (1). Click one and watch every number below change.', 'Mỗi ô vuông là một bit — một công tắc tí hon chỉ tắt (0) hoặc bật (1). Bấm thử một ô và xem mọi con số bên dưới đổi theo.'],
+    data: ['Text, real numbers and colours are all stored as bytes. Type something and see the exact bytes behind it.', 'Chữ, số thực và màu sắc đều được lưu bằng byte. Gõ thử một thứ và xem đúng các byte nằm sau nó.'],
+    logic: ['Green glowing wires carry a 1, grey ones a 0. Click the input buttons and follow the signal through the gates.', 'Dây sáng xanh đang mang 1, dây xám mang 0. Bấm các nút đầu vào và lần theo tín hiệu đi qua từng cổng.'],
+    cpu: ['A whole (tiny) computer: the chip on the left, RAM on the right, the bus between. Press Step and watch one register light up at a time.', 'Cả một chiếc máy tính (tí hon): con chip bên trái, RAM bên phải, bus ở giữa. Bấm Bước và xem từng thanh ghi sáng lên một.'],
+    pipeline: ['Six stages from C text to a running program, with real gcc output. Click the stages from 1 to 6.', 'Sáu chặng từ chữ C tới chương trình đang chạy, với output thật của gcc. Bấm lần lượt các chặng 1 → 6.'],
+    cache: ['Each step is one memory access. Green = hit (fast), red = miss (slow trip to RAM). Press Step or Play.', 'Mỗi bước là một lần truy cập bộ nhớ. Xanh = trúng (nhanh), đỏ = trượt (phải chạy ra RAM). Bấm Bước hoặc Chạy.'],
+  },
+  'os-lab': {
+    process: ['The process family tree on the left, their states on the right. Press Step to follow one command from fork to exit.', 'Bên trái là cây gia phả tiến trình, bên phải là trạng thái của từng con. Bấm Bước để theo một lệnh từ fork tới exit.'],
+    scheduler: ['Who gets the CPU, tick by tick. Press Play to fill the Gantt chart, then switch policy and compare the averages.', 'Ai được CPU, từng tick một. Bấm Chạy cho sơ đồ Gantt đầy, rồi đổi chính sách và so các số trung bình.'],
+    race: ['Two threads share one counter. Step one machine instruction at a time and watch an update get lost.', 'Hai luồng dùng chung một biến đếm. Đi từng lệnh máy và xem một lần tăng bị mất.'],
+    memory: ['The memory map of one running program: code, data, heap, stack. Step through and watch the stack grow and shrink.', 'Bản đồ bộ nhớ của một chương trình đang chạy: code, data, heap, stack. Đi từng bước và xem stack lớn lên, co lại.'],
+    vm: ['Each step is one memory access: virtual address → TLB → page table → RAM frame. Red = page fault.', 'Mỗi bước là một lần truy cập bộ nhớ: địa chỉ ảo → TLB → bảng trang → khung RAM. Đỏ = lỗi trang.'],
+    sysmon: ['A virtual Linux server, one second per step. Press Play, read the meters, then break it and fix it.', 'Một máy chủ Linux ảo, mỗi bước một giây. Bấm Chạy, đọc các thanh đo, rồi làm hỏng nó và sửa nó.'],
+    eventloop: ['One JavaScript thread and its queues. Guess the print order, then press Step to see who really runs first.', 'Một luồng JavaScript và các hàng đợi của nó. Đoán thứ tự in, rồi bấm Bước xem ai thật sự chạy trước.'],
+    threadpool: ['Requests arrive, threads serve them, the rest wait in the queue. Push the load up and watch latency explode.', 'Request đến, luồng phục vụ, phần còn lại xếp hàng. Tăng tải lên và xem độ trễ bùng nổ.'],
+    sync: ['Threads waiting on semaphores and condition variables. Step through and watch who sleeps and who wakes whom.', 'Các luồng chờ trên semaphore và biến điều kiện. Đi từng bước và xem ai ngủ, ai đánh thức ai.'],
+    deadlock: ['Processes holding some resources and waiting for others. Run the check and see who can finish — and who is stuck.', 'Tiến trình giữ một số tài nguyên và chờ thêm tài nguyên khác. Chạy phép kiểm và xem ai chạy xong được — ai bị kẹt.'],
+    cgroup: ['A container with a memory or CPU limit. Press Play and watch what the kernel does when the limit is hit.', 'Một container có giới hạn bộ nhớ hoặc CPU. Bấm Chạy và xem nhân làm gì khi chạm giới hạn.'],
+    cow: ['fork() shares memory pages instead of copying them. Write to a page and watch only that one get copied.', 'fork() dùng chung trang nhớ thay vì sao chép. Ghi vào một trang và xem chỉ đúng trang đó bị chép.'],
+    pagecache: ['Files are read through RAM (the page cache). Step through the reads and compare cold and warm.', 'Tệp được đọc qua RAM (page cache). Đi từng lần đọc và so lúc nguội với lúc nóng.'],
+    latency: ['How long things take, scaled to human time: if one CPU cycle were one second…', 'Mọi thứ mất bao lâu, đổi ra thời gian con người: nếu một chu kỳ CPU là một giây…'],
+  },
+};

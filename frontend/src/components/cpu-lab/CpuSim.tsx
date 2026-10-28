@@ -3,95 +3,160 @@
  * CPU đồ chơi (MARIE) — trái tim của phòng lab: tự viết hợp ngữ, xem mã máy từng bit, rồi đi từng vi bước
  * nạp → giải mã → thực thi với dữ liệu chạy trên bus. Chương trình và dữ liệu nằm chung MỘT bộ nhớ (von Neumann).
  */
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { EXAMPLES, OP_HELP, assemble, bin16, disasm, hex3, hex4, instrIndex, run, s16, type Snap, type Unit } from './engine/marie';
 import { Controls, Explain, Seg, css as s, usePlayer } from '../os-lab/ui';
+import { useLabBridge, useOwnStepSound } from '../labs/bus';
+import { labSfx } from '../labs/sfx';
 import { CpuFrame, cc as c, cx, tx, type Lang } from './parts';
 
-/* ── Sơ đồ khối: CPU ⇄ bus ⇄ bộ nhớ, gói dữ liệu chạy theo vi bước ─────────────────────── */
+/* ── Sơ đồ khối: con chip CPU ⇄ bus ⇄ thanh RAM, gói dữ liệu chạy theo vi bước ─────────────── */
+// Phần cứng giữ màu "thật" ở cả nền sáng lẫn tối: vỏ chip xám than, đế silicon, đường đồng, chân mạ vàng, mạch RAM xanh.
 const POS: Record<Unit, [number, number]> = {
-  PC: [62, 52], IR: [62, 112], AC: [62, 172], MAR: [208, 52], MBR: [208, 112], ALU: [208, 172], CU: [135, 228],
-  MEM: [452, 128], INDEV: [330, 240], OUTDEV: [440, 252], IN: [330, 240], OUT: [440, 252],
+  PC: [92, 72], IR: [92, 132], AC: [92, 192], MAR: [226, 72], MBR: [226, 132], ALU: [226, 196], CU: [158, 250],
+  MEM: [378, 128], INDEV: [404, 278], OUTDEV: [500, 278], IN: [404, 278], OUT: [500, 278],
 };
-const BUS_X = 135, SYS_X = 330;
+const BUS_X = 158, SYS_X = 344;
 function routeOf(from: Unit, to: Unit): string {
   const [x1, y1] = POS[from], [x2, y2] = POS[to];
   const inCpu = (u: Unit) => !['MEM', 'INDEV', 'OUTDEV', 'IN', 'OUT'].includes(u);
   if (inCpu(from) && inCpu(to)) return `M ${x1} ${y1} L ${BUS_X} ${y1} L ${BUS_X} ${y2} L ${x2} ${y2}`;
-  if (from === 'MEM') return `M ${x1} ${y1} L ${SYS_X} ${y1} L ${SYS_X} ${y2} L ${x2} ${y2}`;
-  if (to === 'MEM') return `M ${x1} ${y1} L ${SYS_X} ${y1} L ${SYS_X} ${y2} L ${x2} ${y2}`;
   return `M ${x1} ${y1} L ${SYS_X} ${y1} L ${SYS_X} ${y2} L ${x2} ${y2}`;
 }
 
+function useReducedMotion() {
+  const [r, setR] = useState(false);
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return;
+    const m = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setR(m.matches);
+    const f = () => setR(m.matches);
+    m.addEventListener?.('change', f);
+    return () => m.removeEventListener?.('change', f);
+  }, []);
+  return r;
+}
+
+const REG_NOTE: Record<'PC' | 'IR' | 'AC' | 'MAR' | 'MBR', [string, string]> = {
+  PC: ['program counter', 'bộ đếm chương trình'], IR: ['instruction register', 'thanh ghi lệnh'], AC: ['accumulator', 'thanh tích luỹ'],
+  MAR: ['memory address reg.', 'thanh ghi địa chỉ'], MBR: ['memory buffer reg.', 'thanh ghi đệm'],
+};
+
 function Board({ lang, S, mem }: { lang: Lang; S: Snap; mem: Uint16Array }) {
   const R = S.regs;
-  const box = (u: 'PC' | 'IR' | 'AC' | 'MAR' | 'MBR', w = 110) => {
+  const reduced = useReducedMotion();
+  const box = (u: 'PC' | 'IR' | 'AC' | 'MAR' | 'MBR') => {
     const [x, y] = POS[u];
+    const w = 112, h = 46;
     const ch = S.changed.includes(u);
     const v = R[u];
     const shown = u === 'PC' || u === 'MAR' ? hex3(v) : hex4(v);
     return (
-      <g key={u}>
-        <rect x={x - w / 2} y={y - 20} width={w} height={40} rx={8} fill={ch ? 'var(--ol-hl)' : 'var(--ol-bg)'} stroke={ch ? '#f59e0b' : 'var(--ol-border)'} strokeWidth={ch ? 3 : 1.5} />
-        <text x={x - w / 2 + 8} y={y - 5} fontSize={10} fontWeight={800} className={s.svgMuted}>{u}</text>
-        <text x={x + w / 2 - 8} y={y + 12} fontSize={15} fontWeight={800} textAnchor="end" className={s.svgText}>{shown}</text>
-        {u === 'AC' && <text x={x - w / 2 + 8} y={y + 12} fontSize={10} className={s.svgMuted}>{s16(v)}</text>}
+      <g key={u} data-tour={`reg-${u}`} className={cx(c.reg3, ch && c.regHot)}>
+        <rect x={x - w / 2} y={y - h / 2} width={w} height={h} rx={7} className={c.regCase} />
+        <text x={x - w / 2 + 7} y={y - h / 2 + 12} fontSize={10} fontWeight={800} className={c.regName}>{u}</text>
+        <text x={x + w / 2 - 7} y={y - h / 2 + 12} fontSize={8} textAnchor="end" className={c.regNote}>{tx(lang, REG_NOTE[u][0], REG_NOTE[u][1])}</text>
+        <rect x={x - w / 2 + 6} y={y - 5} width={w - 12} height={22} rx={4} className={c.lcd} />
+        {u === 'AC' && <text x={x - w / 2 + 11} y={y + 10} fontSize={9.5} className={c.lcdDim}>{s16(v)}</text>}
+        <text x={x + w / 2 - 11} y={y + 11.5} fontSize={15} fontWeight={800} textAnchor="end" className={c.lcdText}>{shown}</text>
       </g>
     );
   };
   const busOn = S.bus;
   const rows = [-2, -1, 0, 1, 2].map((d) => (R.MAR + d + 4096) % 4096);
   const hot = S.memWrite ?? S.memRead;
+  const phaseIdx = S.phase === 'fetch' ? 0 : S.phase === 'decode' ? 1 : S.phase === 'execute' ? 2 : -1;
+  const aluOn = busOn?.from === 'ALU' || S.rtn.includes('AC + ') || S.rtn.includes('AC - ') || S.rtn.includes('AC − ');
+  const pins = (n: number, f: (k: number) => [number, number, number, number]) => Array.from({ length: n }, (_, k) => { const [x, y, w, h] = f(k); return <rect key={k} x={x} y={y} width={w} height={h} rx={1} className={c.pin} />; });
   return (
-    <svg className={c.busSvg} viewBox="0 0 540 278" width="100%" role="img" aria-label={tx(lang, 'CPU, bus and memory', 'CPU, bus và bộ nhớ')}>
-      <rect x={4} y={14} width={282} height={250} rx={14} fill="var(--ol-panel)" stroke="var(--ol-border)" />
-      <text x={14} y={30} fontSize={11} fontWeight={800} className={s.svgMuted}>CPU</text>
-      <line x1={BUS_X} y1={40} x2={BUS_X} y2={210} stroke="var(--ol-border)" strokeWidth={6} strokeLinecap="round" />
-      <line x1={SYS_X} y1={40} x2={SYS_X} y2={250} stroke="var(--ol-border)" strokeWidth={8} strokeLinecap="round" />
-      <line x1={263} y1={52} x2={SYS_X} y2={52} stroke="var(--ol-border)" strokeWidth={4} />
-      <line x1={263} y1={112} x2={SYS_X} y2={112} stroke="var(--ol-border)" strokeWidth={4} />
-      <line x1={SYS_X} y1={128} x2={390} y2={128} stroke="var(--ol-border)" strokeWidth={8} />
-      <text x={SYS_X - 4} y={34} fontSize={9.5} textAnchor="middle" className={s.svgMuted}>{tx(lang, 'system bus', 'bus hệ thống')}</text>
-      <text x={BUS_X + 5} y={206} fontSize={9.5} className={s.svgMuted}>{tx(lang, 'internal', 'bus trong')}</text>
+    <svg className={c.busSvg} viewBox="0 0 560 304" width="100%" role="img" aria-label={tx(lang, 'CPU chip, bus and memory', 'Chip CPU, bus và bộ nhớ')} data-tour="cpu-board">
+      <defs>
+        <pattern id="cl-die" width="12" height="12" patternUnits="userSpaceOnUse"><path d="M 12 0 L 0 0 0 12" fill="none" className={c.dieGrid} strokeWidth={0.6} /></pattern>
+        <filter id="cl-glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.4" result="b" /><feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
+      </defs>
+      {/* vỏ chip + chân */}
+      {pins(14, (k) => [30 + k * 18.5, 2, 8, 9])}
+      {pins(14, (k) => [30 + k * 18.5, 293, 8, 9])}
+      {pins(13, (k) => [0, 30 + k * 19, 9, 8])}
+      <rect x={8} y={10} width={302} height={284} rx={14} className={c.pkg} />
+      <rect x={24} y={28} width={270} height={248} rx={8} className={c.die} />
+      <rect x={24} y={28} width={270} height={248} rx={8} fill="url(#cl-die)" />
+      <circle cx={34} cy={38} r={3.5} className={c.pin1} />
+      <text x={286} y={42} fontSize={9.5} textAnchor="end" fontWeight={800} className={c.silk}>MARIE · 16-bit</text>
+      {/* bus trong chip (đồng) */}
+      <line x1={BUS_X} y1={52} x2={BUS_X} y2={232} className={c.trace} strokeWidth={6} strokeLinecap="round" />
+      <text x={BUS_X + 5} y={226} fontSize={8.5} className={c.silk}>{tx(lang, 'internal bus', 'bus trong')}</text>
+      {/* bus hệ thống: dải nhiều đường đồng */}
+      {[-6, -2, 2, 6].map((d) => <line key={d} x1={SYS_X + d} y1={40} x2={SYS_X + d} y2={286} className={c.traceThin} strokeWidth={1.6} />)}
+      {[72, 132].map((y) => [-3, 0, 3].map((d) => <line key={`${y}${d}`} x1={282} y1={y + d} x2={SYS_X} y2={y + d} className={c.traceThin} strokeWidth={1.4} />))}
+      {[-4, 0, 4].map((d) => <line key={`m${d}`} x1={SYS_X} y1={128 + d} x2={378} y2={128 + d} className={c.traceThin} strokeWidth={1.6} />)}
+      <text x={SYS_X} y={33} fontSize={9} textAnchor="middle" className={s.svgMuted}>{tx(lang, 'system bus', 'bus hệ thống')}</text>
       {(['PC', 'IR', 'AC', 'MAR', 'MBR'] as const).map((u) => box(u))}
-      <g>
-        <path d={`M ${POS.ALU[0] - 50} ${POS.ALU[1] - 20} L ${POS.ALU[0] + 50} ${POS.ALU[1] - 20} L ${POS.ALU[0] + 30} ${POS.ALU[1] + 20} L ${POS.ALU[0] - 30} ${POS.ALU[1] + 20} Z`}
-          fill={busOn?.from === 'ALU' ? 'var(--ol-hl)' : 'var(--ol-panel2)'} stroke={busOn?.from === 'ALU' ? '#f59e0b' : 'var(--ol-border)'} strokeWidth={2} />
-        <text x={POS.ALU[0]} y={POS.ALU[1] + 5} textAnchor="middle" fontSize={13} fontWeight={800} className={s.svgText}>ALU</text>
+      {/* ALU */}
+      <g data-tour="alu" className={cx(c.alu, aluOn && c.aluOn)}>
+        <path d={`M ${POS.ALU[0] - 54} ${POS.ALU[1] - 20} L ${POS.ALU[0] - 10} ${POS.ALU[1] - 20} L ${POS.ALU[0]} ${POS.ALU[1] - 8} L ${POS.ALU[0] + 10} ${POS.ALU[1] - 20} L ${POS.ALU[0] + 54} ${POS.ALU[1] - 20} L ${POS.ALU[0] + 30} ${POS.ALU[1] + 22} L ${POS.ALU[0] - 30} ${POS.ALU[1] + 22} Z`} />
+        <text x={POS.ALU[0]} y={POS.ALU[1] + 13} textAnchor="middle" fontSize={12.5} fontWeight={800}>ALU</text>
       </g>
-      <g>
-        <rect x={POS.CU[0] - 70} y={POS.CU[1] - 16} width={140} height={30} rx={8} fill={S.phase === 'decode' ? 'var(--ol-hl)' : 'var(--ol-panel2)'} stroke="var(--ol-border)" />
-        <text x={POS.CU[0]} y={POS.CU[1] + 4} textAnchor="middle" fontSize={10.5} fontWeight={800} className={s.svgText}>{tx(lang, 'Control unit', 'Khối điều khiển')}: {S.phase === 'start' ? '—' : disasm(R.IR).split(' ')[0]}</text>
+      {/* khối điều khiển + 3 đèn pha */}
+      <g data-tour="cu">
+        <rect x={POS.CU[0] - 112} y={POS.CU[1] - 16} width={224} height={32} rx={7} className={cx(c.cuBox, S.phase === 'decode' && c.cuHot)} />
+        <text x={POS.CU[0] - 104} y={POS.CU[1] + 4} fontSize={10} fontWeight={800} className={c.regName}>{tx(lang, 'Control unit', 'Khối điều khiển')}</text>
+        <text x={POS.CU[0] + 8} y={POS.CU[1] + 4} fontSize={10.5} fontWeight={800} className={c.lcdText}>{S.phase === 'start' ? '—' : disasm(R.IR).split(' ')[0]}</text>
+        {(['F', 'D', 'E'] as const).map((l, k) => (
+          <g key={l}>
+            <circle cx={POS.CU[0] + 62 + k * 16} cy={POS.CU[1]} r={5.5} className={cx(c.led, phaseIdx === k && [c.ledF, c.ledD, c.ledE][k])} />
+            <text x={POS.CU[0] + 62 + k * 16} y={POS.CU[1] + 13.5} fontSize={6.5} textAnchor="middle" className={c.silk}>{l}</text>
+          </g>
+        ))}
       </g>
-      {/* bộ nhớ */}
-      <rect x={390} y={14} width={146} height={210} rx={12} fill="var(--ol-panel)" stroke="var(--ol-border)" />
-      <text x={400} y={30} fontSize={11} fontWeight={800} className={s.svgMuted}>{tx(lang, 'MEMORY 4096×16', 'BỘ NHỚ 4096×16')}</text>
-      {rows.map((a, k) => {
-        const y = 48 + k * 34;
-        const isHot = hot === a && (S.memRead !== undefined || S.memWrite !== undefined);
+      {/* thanh RAM: mạch xanh, chân vàng, mỗi ô nhớ 16 bit */}
+      <g data-tour="ram">
+        <rect x={378} y={12} width={174} height={236} rx={8} className={c.dimm} />
+        {Array.from({ length: 16 }, (_, k) => <rect key={k} x={386 + k * 10.2} y={240} width={6} height={8} className={c.pin} />)}
+        <text x={388} y={27} fontSize={9.5} fontWeight={800} className={c.silkLight}>RAM 4096 × 16 bit</text>
+        {rows.map((a, k) => {
+          const y = 34 + k * 40;
+          const isHot = hot === a && (S.memRead !== undefined || S.memWrite !== undefined);
+          const w = mem[a];
+          return (
+            <g key={k} className={cx(c.cell, a === R.MAR && c.cellSel, isHot && (S.memWrite !== undefined ? c.cellWr : c.cellRd))}>
+              <rect x={386} y={y} width={158} height={35} rx={5} className={c.cellCase} />
+              <text x={392} y={y + 13} fontSize={9.5} className={c.cellAddr}>{hex3(a)}</text>
+              <text x={538} y={y + 13.5} fontSize={12} fontWeight={800} textAnchor="end" className={c.lcdText}>{hex4(w)}</text>
+              {Array.from({ length: 16 }, (_, b) => (
+                <rect key={b} x={392 + b * 9.1 + (b >= 4 ? 2 : 0) + (b >= 8 ? 2 : 0) + (b >= 12 ? 2 : 0)} y={y + 20} width={6.5} height={8} rx={1.5}
+                  className={(w >> (15 - b)) & 1 ? c.bitOn : c.bitOff} />
+              ))}
+            </g>
+          );
+        })}
+      </g>
+      <text x={386} y={262} fontSize={8.5} className={s.svgMuted}>{tx(lang, 'blue frame = cell MAR points at', 'khung xanh = ô MAR đang trỏ')}</text>
+      {/* thiết bị vào/ra */}
+      <g className={cx(c.dev, busOn?.from === 'INDEV' && c.devOn)} data-tour="io">
+        <rect x={370} y={268} width={68} height={24} rx={6} />
+        <text x={404} y={284} fontSize={10} textAnchor="middle" fontWeight={800}>⌨ In {R.IN ? s16(R.IN) : ''}</text>
+      </g>
+      <g className={cx(c.dev, busOn?.to === 'OUTDEV' && c.devOn)}>
+        <rect x={456} y={268} width={88} height={24} rx={6} />
+        <text x={500} y={284} fontSize={10} textAnchor="middle" fontWeight={800}>🖥 Out {S.output.length ? s16(S.output[S.output.length - 1]) : ''}</text>
+      </g>
+      {busOn && (() => {
+        const d = routeOf(busOn.from, busOn.to);
+        const [ex, ey] = POS[busOn.to];
+        const pill = (
+          <>
+            <rect x={-27} y={-10} width={54} height={20} rx={10} className={busOn.kind === 'addr' ? c.pkAddr : c.pkData} filter="url(#cl-glow)" />
+            <text x={0} y={4} fontSize={10.5} fontWeight={800} textAnchor="middle" fill="#fff">{busOn.kind === 'addr' ? hex3(busOn.value) : hex4(busOn.value)}</text>
+          </>
+        );
         return (
-          <g key={k}>
-            <rect x={398} y={y} width={130} height={28} rx={6} fill={isHot ? (S.memWrite !== undefined ? 'var(--ol-bad-bg)' : 'var(--ol-ok-bg)') : a === R.MAR ? 'var(--ol-accent-bg)' : 'var(--ol-bg)'} stroke={a === R.MAR ? 'var(--ol-accent)' : 'var(--ol-border)'} />
-            <text x={404} y={y + 18} fontSize={11} className={s.svgMuted}>{hex3(a)}</text>
-            <text x={522} y={y + 18} fontSize={13} fontWeight={800} textAnchor="end" className={s.svgText}>{hex4(mem[a])}</text>
+          <g key={`${busOn.from}-${busOn.to}-${S.memVer}-${S.done}-${S.rtn}`}>
+            <path d={d} fill="none" className={busOn.kind === 'addr' ? c.routeAddr : c.routeData} strokeWidth={3} strokeDasharray="6 4" />
+            {reduced ? <g transform={`translate(${ex} ${ey})`}>{pill}</g> : <g>{pill}<animateMotion dur="0.75s" fill="freeze" path={d} calcMode="spline" keySplines="0.4 0 0.2 1" keyTimes="0;1" /></g>}
           </g>
         );
-      })}
-      <text x={398} y={238} fontSize={9.5} className={s.svgMuted}>{tx(lang, 'blue = cell addressed by MAR', 'xanh = ô MAR đang trỏ')}</text>
-      <rect x={300} y={246} width={68} height={24} rx={6} fill={busOn?.from === 'INDEV' ? 'var(--ol-hl)' : 'var(--ol-panel2)'} stroke="var(--ol-border)" />
-      <text x={334} y={262} fontSize={10.5} textAnchor="middle" fontWeight={800} className={s.svgText}>Input {R.IN ? s16(R.IN) : ''}</text>
-      <rect x={400} y={246} width={80} height={24} rx={6} fill={busOn?.to === 'OUTDEV' ? 'var(--ol-hl)' : 'var(--ol-panel2)'} stroke="var(--ol-border)" />
-      <text x={440} y={262} fontSize={10.5} textAnchor="middle" fontWeight={800} className={s.svgText}>Output {S.output.length ? s16(S.output[S.output.length - 1]) : ''}</text>
-      {busOn && (
-        <g key={`${busOn.from}-${busOn.to}-${S.memVer}-${S.done}-${S.rtn}`}>
-          <path d={routeOf(busOn.from, busOn.to)} fill="none" stroke={busOn.kind === 'addr' ? '#2563eb' : '#059669'} strokeWidth={3} strokeDasharray="6 4" opacity={0.8} />
-          <g>
-            <rect x={-26} y={-10} width={52} height={20} rx={10} fill={busOn.kind === 'addr' ? '#2563eb' : '#059669'} />
-            <text x={0} y={4} fontSize={10.5} fontWeight={800} textAnchor="middle" fill="#fff">{busOn.kind === 'addr' ? hex3(busOn.value) : hex4(busOn.value)}</text>
-            <animateMotion dur="0.7s" fill="freeze" path={routeOf(busOn.from, busOn.to)} />
-          </g>
-        </g>
-      )}
+      })()}
     </svg>
   );
 }
@@ -132,15 +197,31 @@ export default function CpuSim({ lang = 'vi', preset }: { lang?: Lang; preset?: 
   const trace = res && S ? res.trace.slice(0, doneN).slice(-10) : [];
   const tone = S?.phase === 'halt' ? 'ok' : S?.phase === 'stop' ? 'bad' : undefined;
 
+  useLabBridge('cpu', {
+    ex, mode, i: p.i, ok: prog.ok, pc: S?.regs.PC ?? -1, ir: S?.regs.IR ?? 0, ac: S ? s16(S.regs.AC) : 0, mar: S?.regs.MAR ?? 0,
+    mbr: S?.regs.MBR ?? 0, phase: S?.phase ?? 'start', at: S?.at ?? 0, done: S ? S.done + (S.last || S.phase === 'halt' ? 1 : 0) : 0, halted: S?.phase === 'halt',
+    out: S && S.output.length ? s16(S.output[S.output.length - 1]) : null,
+  }, {
+    load: (k) => { const key = String(k); if (EXAMPLES[key]) pick(key); }, mode: (m) => { setMode(m as 'micro' | 'instr'); p.reset(); },
+    inputs: (v) => setInputs(String(v)), ref: (v) => setShowRef(!!v),
+  });
+  // tiếng riêng cho từng vi bước: nạp (cao) · giải mã · thực thi · dừng
+  useOwnStepSound();
+  const lastI = useRef(p.i);
+  useEffect(() => {
+    if (S && p.i > lastI.current) labSfx(S.phase === 'fetch' ? 'blip-fetch' : S.phase === 'decode' ? 'blip-decode' : S.phase === 'execute' ? 'blip-exec' : S.phase === 'halt' ? 'done' : S.phase === 'stop' ? 'wrong' : 'tick');
+    lastI.current = p.i;
+  }, [p.i, S]);
+
   return (
     <CpuFrame lang={lang} title={tx(lang, 'Toy CPU — a von Neumann machine (MARIE)', 'CPU đồ chơi — cỗ máy von Neumann (MARIE)')} sub={tx(lang, 'Write a program, see its machine code, watch every step', 'Viết chương trình, xem mã máy, nhìn từng bước')}>
-      <div className={s.bar}>
+      <div className={s.bar} data-tour="cpu-setup">
         <span className={s.lbl}>{tx(lang, 'Program', 'Chương trình')}
           <select value={ex} onChange={(e) => pick(e.target.value)}>
             {Object.entries(EXAMPLES).map(([k, v]) => <option key={k} value={k}>{tx(lang, v.en, v.vi)}</option>)}
           </select></span>
         <span className={s.lbl}>Input <input type="text" value={inputs} onChange={(e) => setInputs(e.target.value)} placeholder="12, 30" style={{ width: 110 }} /></span>
-        <Seg value={mode} options={[['micro', tx(lang, 'micro-steps', 'vi bước')], ['instr', tx(lang, 'whole instructions', 'từng lệnh')]]} onChange={(m) => { setMode(m); p.reset(); }} />
+        <span data-tour="cpu-mode"><Seg value={mode} options={[['micro', tx(lang, 'micro-steps', 'vi bước')], ['instr', tx(lang, 'whole instructions', 'từng lệnh')]]} onChange={(m) => { setMode(m); p.reset(); }} /></span>
         <button type="button" className={cx(s.btn, showRef && s.on)} onClick={() => setShowRef(!showRef)}>{tx(lang, 'Instruction set', 'Tập lệnh')}</button>
       </div>
       {showRef && (
@@ -154,13 +235,13 @@ export default function CpuSim({ lang = 'vi', preset }: { lang?: Lang; preset?: 
       )}
       <div className={c.cpuGrid}>
         <div className={s.stack} style={{ gap: 8, minWidth: 0 }}>
-          <textarea className={c.editor} value={src} spellCheck={false} onChange={(e) => setSrc(e.target.value)} aria-label={tx(lang, 'assembly source', 'mã hợp ngữ')} rows={Math.min(18, Math.max(9, src.split('\n').length))} />
+          <textarea data-tour="cpu-editor" className={c.editor} value={src} spellCheck={false} onChange={(e) => setSrc(e.target.value)} aria-label={tx(lang, 'assembly source', 'mã hợp ngữ')} rows={Math.min(18, Math.max(9, src.split('\n').length))} />
           {!prog.ok && (
             <Explain tone="bad">{prog.errors.slice(0, 6).map((e, k) => <div key={k}>{tx(lang, 'Line', 'Dòng')} {e.line}: {tx(lang, e.en, e.vi)}</div>)}</Explain>
           )}
           <div>
             <div className={s.panelTitle}>{tx(lang, 'Assembled: address · machine code · bits (opcode | address) · source', 'Đã hợp dịch: địa chỉ · mã máy · bit (mã lệnh | địa chỉ) · nguồn')}</div>
-            <div className={c.listing}>
+            <div className={c.listing} data-tour="cpu-listing">
               {prog.lines.filter((l) => l.word !== null || l.label || l.src.trim()).map((l, k) => (
                 <div key={k} className={cx(c.row, curLine === l.line && l.word !== null && c.cur)}>
                   <span className={c.a}>{l.addr !== null && l.word !== null ? hex3(l.addr) : ''}</span>
@@ -176,8 +257,8 @@ export default function CpuSim({ lang = 'vi', preset }: { lang?: Lang; preset?: 
           {res && S ? (
             <>
               <Controls p={p} lang={lang} label={`${tx(lang, 'instr.', 'lệnh')} ${doneN}${S.phase !== 'start' && !S.last ? '+' : ''} · ${tx(lang, 'step', 'bước')} ${p.i + 1}/${idx.length}`}
-                extra={<button type="button" className={s.btn} onClick={() => { p.setPlaying(false); p.setI(idx.length - 1); }} disabled={p.atEnd}>⏭ {tx(lang, 'End', 'Cuối')}</button>} />
-              <div className={s.bar} style={{ margin: 0 }}>
+                extra={<button type="button" className={s.btn} data-tour="cpu-end" onClick={() => { p.setPlaying(false); p.setI(idx.length - 1); }} disabled={p.atEnd}>⏭ {tx(lang, 'End', 'Cuối')}</button>} />
+              <div className={s.bar} style={{ margin: 0 }} data-tour="cpu-phase">
                 <span className={cx(c.phase, c[S.phase])}>{S.phase === 'start' ? tx(lang, 'power on', 'bật máy') : S.phase === 'fetch' ? tx(lang, 'fetch', 'nạp lệnh') : S.phase === 'decode' ? tx(lang, 'decode', 'giải mã') : S.phase === 'execute' ? tx(lang, 'execute', 'thực thi') : S.phase === 'halt' ? 'halt' : tx(lang, 'stopped', 'dừng')}</span>
                 <b className={s.mono}>{S.rtn}</b>
                 {S.phase !== 'start' && <span className={s.small}>{tx(lang, 'running', 'đang chạy')}: {hex3(S.at)} {disasm(mem[S.at] ?? 0)}</span>}
@@ -185,7 +266,7 @@ export default function CpuSim({ lang = 'vi', preset }: { lang?: Lang; preset?: 
               <Explain tone={tone}>{tx(lang, S.en, S.vi)}</Explain>
               <div className={s.svgWrap}><Board lang={lang} S={S} mem={mem} /></div>
               <div>
-                <div className={s.panelTitle}>Output</div>
+                <div className={s.panelTitle} data-tour="cpu-output">Output</div>
                 <div className={c.out}>{S.output.length ? S.output.map((v) => s16(v)).join('  ') : <span style={{ opacity: 0.5 }}>—</span>}</div>
               </div>
             </>
@@ -193,7 +274,7 @@ export default function CpuSim({ lang = 'vi', preset }: { lang?: Lang; preset?: 
         </div>
       </div>
       <div className={s.grid2} style={{ marginTop: 10 }}>
-        <div className={s.panel}>
+        <div className={s.panel} data-tour="cpu-memory">
           <div className={s.panelTitle}>{tx(lang, 'Memory — program AND data live here together', 'Bộ nhớ — chương trình VÀ dữ liệu ở chung một chỗ')}</div>
           <div className={c.mem}>
             <table>
@@ -215,7 +296,7 @@ export default function CpuSim({ lang = 'vi', preset }: { lang?: Lang; preset?: 
           </div>
           <div className={s.small} style={{ marginTop: 4 }}>{tx(lang, 'blue row = instruction running · green = being read · red = being written · red value = changed since loading', 'hàng xanh dương = lệnh đang chạy · xanh lá = đang đọc · đỏ = đang ghi · số đỏ = đã đổi so với lúc nạp')}</div>
         </div>
-        <div className={s.panel}>
+        <div className={s.panel} data-tour="cpu-trace">
           <div className={s.panelTitle}>{tx(lang, 'Trace (last instructions) — like the CEA201 lab tables', 'Vết chạy (các lệnh gần nhất) — như bảng trong buổi lab CEA201')}</div>
           <div className={s.scrollX}>
             <table className={cx(s.tbl, s.compact)}>

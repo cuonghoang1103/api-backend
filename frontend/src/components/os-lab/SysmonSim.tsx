@@ -8,6 +8,7 @@ import { Flame, RotateCcw, Stethoscope, Terminal } from 'lucide-react';
 import { act, cmd, COMMANDS, initSys, inject, SCENS, symptoms, tick, TOP_COLS, topHeader, topLine, topRows, type Action, type Cmd, type Scen, type Sys } from './engine/sysmon';
 import { useLivePlayer } from './live';
 import { LineChart, Meter } from './charts';
+import { useLabBridge, useLabRecord } from '../labs/bus';
 import { Controls, Explain, Frame, Kpi, Seg, css as s, cx, tx, type Lang } from './ui';
 
 const SC: Record<Scen, { en: string; vi: string; icon: string }> = {
@@ -55,7 +56,9 @@ function readings(S: Sys, lang: Lang): Array<{ tone: 'ok' | 'warn' | 'bad'; t: s
 
 export default function SysmonSim({ lang = 'vi', preset = 'calm' }: { lang?: Lang; preset?: string }) {
   const pre = PRESETS.includes(preset) ? preset : 'calm';
-  const [mystery] = useState<Scen>(() => SCENS[Math.floor(Math.random() * SCENS.length)]);
+  const record = useLabRecord();
+  // chế độ quay video: không ngẫu nhiên — luôn là sự cố đầu tiên
+  const [mystery] = useState<Scen>(() => (record ? SCENS[0] : SCENS[Math.floor(Math.random() * SCENS.length)]));
   const first = (): Sys => (pre === 'mystery' ? initSys([mystery]) : pre === 'calm' ? initSys([]) : initSys([pre as Scen]));
   const { p, S, hist, apply, restart } = useLivePlayer<Sys>(first, tick, 1000, 900);
   const [sort, setSort] = useState<'cpu' | 'mem'>('cpu');
@@ -82,12 +85,20 @@ export default function SysmonSim({ lang = 'vi', preset = 'calm' }: { lang?: Lan
 
   const C = { us: '#16a34a', ni: '#2563eb', sy: '#dc2626', wa: '#94a3b8', used: '#16a34a', cache: '#d97706', swap: '#dc2626', disk: '#7c3aed' };
   const lpc = S.load[0] / S.cores;
+  useLabBridge('sysmon', {
+    t: S.t, scen: S.scen.join(','), load1: Math.round(S.load[0] * 100) / 100, availPct: Math.round(y.availPct), diskPct: Math.round(y.diskPct),
+    wa: Math.round(S.cpu.wa), sort, sel, term: term ?? '', answer: answer ?? '', correct: answer ? truth.includes(answer as Scen | 'none') : false,
+    api: S.apiMs === null ? -1 : Math.round(S.apiMs),
+  }, {
+    inject: (k) => add(k as Scen), fresh: () => reset(), sort: (v) => setSort(v === 'mem' ? 'mem' : 'cpu'), term: (v) => setTerm(v as Cmd),
+    answer: (v) => setAnswer(String(v)), selTop: () => setSel(rows[0]?.pid ?? null), act: (v) => doAct(v as Action),
+  });
 
   return (
     <Frame badge={t('OS lab', 'Phòng lab OS')} title={t('System monitor: read top/htop like an SRE', 'Phòng máy: đọc top/htop như người trực hệ thống')}
       sub={t('A virtual 4-core Linux box, one second per step. Break it, read it, fix it.', 'Một máy Linux ảo 4 lõi, mỗi bước một giây. Làm hỏng nó, đọc nó, sửa nó.')}>
       {pre !== 'mystery' || answer ? (
-        <div className={s.bar}>
+        <div className={s.bar} data-tour="sys-inject">
           <span className={s.lbl}><Flame style={{ width: 14, height: 14 }} />{t('Inject an incident', 'Bơm sự cố')}</span>
           {SCENS.map((k) => (
             <button type="button" key={k} className={cx(s.btn, S.scen.includes(k) && s.on)} onClick={() => add(k)} disabled={S.scen.includes(k)}>{SC[k].icon} {t(SC[k].en, SC[k].vi)}</button>
@@ -100,7 +111,7 @@ export default function SysmonSim({ lang = 'vi', preset = 'calm' }: { lang?: Lan
       <Controls p={p} lang={lang} label={`t = ${S.t} s`} />
 
       <div className={s.grid2} style={{ alignItems: 'start' }}>
-        <div className={s.panel}>
+        <div className={s.panel} data-tour="sys-meters">
           <div className={s.panelTitle}>{t('htop-style meters', 'Thanh đo kiểu htop')}</div>
           <div className={s.stack} style={{ gap: 5 }}>
             <Meter label="CPU" total={100} parts={[{ v: S.cpu.us, color: C.us, name: 'us' }, { v: S.cpu.ni, color: C.ni, name: 'ni' }, { v: S.cpu.sy, color: C.sy, name: 'sy' }, { v: S.cpu.wa, color: C.wa, name: 'wa' }]}
@@ -115,14 +126,14 @@ export default function SysmonSim({ lang = 'vi', preset = 'calm' }: { lang?: Lan
               <span key={k} style={{ display: 'inline-flex', gap: 4, alignItems: 'center' }}><span style={{ width: 10, height: 10, background: c, borderRadius: 2, display: 'inline-block' }} />{k} = {n}</span>
             ))}
           </div>
-          <div className={s.kpis} style={{ marginTop: 8 }}>
+          <div className={s.kpis} style={{ marginTop: 8 }} data-tour="sys-kpis">
             <Kpi k={t('load / cores', 'load / lõi')} v={`${S.load[0].toFixed(2)} / ${S.cores}`} tone={lpc > 1.2 ? 'bad' : lpc > 0.8 ? 'warn' : 'ok'} />
             <Kpi k="available" v={`${gb(S.mem.avail)}G`} tone={y.availPct < 10 ? 'bad' : y.availPct < 25 ? 'warn' : 'ok'} />
             <Kpi k={t('tasks', 'tác vụ')} v={y.tasks} tone={y.tasks > 400 ? 'bad' : undefined} />
             <Kpi k={t('API p99 (users feel)', 'API p99 (người dùng thấy)')} v={S.apiMs === null ? 'DOWN' : S.apiMs > 10000 ? t('> 10 s (timeouts)', '> 10 s (timeout)') : `${Math.round(S.apiMs)} ms`} tone={S.apiMs === null || S.apiMs > 300 ? 'bad' : S.apiMs > 80 ? 'warn' : 'ok'} />
           </div>
         </div>
-        <div className={s.panel}>
+        <div className={s.panel} data-tour="sys-charts">
           <div className={s.panelTitle}>{t('Last 2 minutes', '2 phút gần nhất')}</div>
           <LineChart height={92} title={t('load average (1 min) — dashed line = number of cores', 'load average (1 phút) — vạch đứt = số lõi')} series={[{ name: 'load1', color: '#2563eb', data: last.map((x) => x.load[0]), area: true }]} refs={[{ y: S.cores, label: `${S.cores} ${t('cores', 'lõi')}` }]} />
           <LineChart height={92} title={t('available memory (MiB) · disk used (%) · iowait (%)', 'bộ nhớ available (MiB) · đĩa đã dùng (%) · iowait (%)')} yMax={100}
@@ -130,7 +141,7 @@ export default function SysmonSim({ lang = 'vi', preset = 'calm' }: { lang?: Lan
         </div>
       </div>
 
-      <div className={s.panel} style={{ marginTop: 10 }}>
+      <div className={s.panel} style={{ marginTop: 10 }} data-tour="sys-top">
         <div className={s.bar} style={{ marginTop: 0 }}>
           <span className={s.panelTitle} style={{ margin: 0 }}>top</span>
           <Seg value={sort} options={[['cpu', t('sort by %CPU (P)', 'sắp theo %CPU (P)')], ['mem', t('sort by %MEM (M)', 'sắp theo %MEM (M)')]]} onChange={setSort} />
@@ -148,7 +159,7 @@ export default function SysmonSim({ lang = 'vi', preset = 'calm' }: { lang?: Lan
           ))}
         </div>
         {selRow && (
-          <div className={s.bar}>
+          <div className={s.bar} data-tour="sys-actions">
             <span className={s.mono}>PID {selRow.pid} · {selRow.cmd}</span>
             <button type="button" className={cx(s.btn, s.danger)} onClick={() => doAct({ k: 'kill', pid: selRow.pid })}>kill -9 {selRow.pid}</button>
             {selRow.role !== 'zombie' && selRow.role !== 'bomb' && <button type="button" className={s.btn} onClick={() => doAct({ k: 'renice', pid: selRow.pid })}>renice -n 19</button>}
@@ -168,7 +179,7 @@ export default function SysmonSim({ lang = 'vi', preset = 'calm' }: { lang?: Lan
       </div>
 
       <div className={s.grid2} style={{ marginTop: 10, alignItems: 'start' }}>
-        <div className={s.panel}>
+        <div className={s.panel} data-tour="sys-commands">
           <div className={s.panelTitle}><Terminal style={{ width: 13, height: 13, verticalAlign: -2 }} /> {t('Which command shows this? — run one', 'Lệnh nào cho thấy điều này? — chạy thử')}</div>
           <div className={s.bar} style={{ marginTop: 0 }}>
             {COMMANDS.map((c) => <button type="button" key={c} className={cx(s.btn, term === c && s.on)} style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: 12 }} onClick={() => setTerm(c)}>{c}</button>)}
@@ -194,11 +205,11 @@ export default function SysmonSim({ lang = 'vi', preset = 'calm' }: { lang?: Lan
               </ul>
             )}
           </div>
-          <div className={s.panel}>
+          <div className={s.panel} data-tour="sys-log">
             <div className={s.panelTitle}>{t('Recent log lines (dmesg / journal / shell)', 'Log gần nhất (dmesg / journal / shell)')}</div>
             <div className={s.term} style={{ minHeight: 40, fontSize: 11 }}>{S.log.slice(-5).map((l) => `[${l.t}s] ${l.txt}`).join('\n') || t('(quiet)', '(yên ắng)')}</div>
           </div>
-          <div className={s.panel}>
+          <div className={s.panel} data-tour="sys-diagnose">
             <div className={s.panelTitle}><Stethoscope style={{ width: 13, height: 13, verticalAlign: -2 }} /> {t('Your diagnosis: what is wrong?', 'Chẩn đoán của bạn: máy bị gì?')}</div>
             <div className={s.bar} style={{ marginTop: 0 }}>
               {ANSWERS.map(([k, en, vi]) => (

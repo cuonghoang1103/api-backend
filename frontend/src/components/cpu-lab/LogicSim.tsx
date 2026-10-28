@@ -6,6 +6,8 @@ import {
   type Bit, type Gate, type RegEvent,
 } from './engine/logic';
 import { Controls, Explain, Seg, css as s, usePlayer } from '../os-lab/ui';
+import { useLabBridge } from '../labs/bus';
+import { labSfx } from '../labs/sfx';
 import { BitRow, CpuFrame, cc as c, cx, tx, type Lang } from './parts';
 import { toggleBit } from './engine/bits';
 
@@ -34,7 +36,7 @@ function GateShape({ g, x, y, w = 56, h = 40 }: { g: Gate | 'BUF'; x: number; y:
 const outX = (g: Gate, x: number, w = 56, h = 40) => (g === 'NOT' ? x + w * 0.8 + 10 : /AND/.test(g) ? x + w * 0.5 + h / 2 + (g === 'NAND' ? 10 : 0) : x + w + (/^N|XNOR/.test(g) ? 10 : 0));
 
 function InBtn({ v, on, label }: { v: Bit; on: () => void; label: string }) {
-  return <button type="button" className={cx(c.inBtn, v && c.on)} onClick={on} aria-pressed={!!v}>{label}={v}</button>;
+  return <button type="button" className={cx(c.inBtn, v && c.on)} onClick={() => { labSfx(v ? 'off' : 'on'); on(); }} aria-pressed={!!v} aria-label={`${label} = ${v}`}><span className={c.inLed} aria-hidden />{label}={v}</button>;
 }
 
 /* ── Cổng ────────────────────────────────────────────────────────────────────────────────── */
@@ -45,6 +47,7 @@ function Gates({ lang }: { lang: Lang }) {
   const out = gate(g, a, b);
   const one = arity(g) === 1;
   const ox = outX(g, 110);
+  useLabBridge('gates', { gate: g, a, b, out }, { gate: (x) => setG(x as Gate), a: (x) => setA(Number(x) as Bit), b: (x) => setB(Number(x) as Bit) });
   const DESC: Record<Gate, [string, string]> = {
     AND: ['1 only if A AND B are 1 — two switches in series.', 'Ra 1 chỉ khi A VÀ B đều 1 — hai công tắc mắc nối tiếp.'],
     OR: ['1 if A OR B (or both) is 1 — two switches in parallel.', 'Ra 1 nếu A HOẶC B (hoặc cả hai) là 1 — hai công tắc mắc song song.'],
@@ -56,12 +59,12 @@ function Gates({ lang }: { lang: Lang }) {
   };
   return (
     <div className={s.stack}>
-      <div className={s.bar}>
+      <div className={s.bar} data-tour="gate-pick">
         <Seg value={g} options={GATES.map((x) => [x, x] as [Gate, string])} onChange={setG} />
       </div>
       <div className={s.grid2}>
-        <div className={s.panel}>
-          <div className={s.bar}><InBtn v={a} on={() => setA((1 - a) as Bit)} label="A" />{!one && <InBtn v={b} on={() => setB((1 - b) as Bit)} label="B" />}
+        <div className={s.panel} data-tour="gate-circuit">
+          <div className={s.bar} data-tour="gate-inputs"><InBtn v={a} on={() => setA((1 - a) as Bit)} label="A" />{!one && <InBtn v={b} on={() => setB((1 - b) as Bit)} label="B" />}
             <span className={s.lbl}>{tx(lang, 'output', 'đầu ra')} <span className={cx(c.lamp, out && c.on)} /> <b className={s.mono}>{out}</b></span></div>
           <svg className={c.gateSvg} viewBox="0 0 260 110" width="100%" style={{ maxWidth: 320 }} role="img" aria-label={g}>
             <line x1={10} y1={one ? 55 : 45} x2={110} y2={one ? 55 : 45} className={wc(a)} strokeWidth={4} />
@@ -70,10 +73,10 @@ function Gates({ lang }: { lang: Lang }) {
             {!one && <text x={8} y={78} fontSize={11} fontWeight={800}>B</text>}
             <GateShape g={g} x={110} y={35} />
             <line x1={ox} y1={55} x2={240} y2={55} className={wc(out)} strokeWidth={4} />
-            <circle cx={244} cy={55} r={8} fill={out ? '#facc15' : '#64748b'} />
+            <circle cx={244} cy={55} r={8} className={cx(c.svgLamp, out && c.on)} />
           </svg>
         </div>
-        <div className={s.panel}>
+        <div className={s.panel} data-tour="truth">
           <div className={s.panelTitle}>{tx(lang, 'Truth table', 'Bảng chân trị')}</div>
           <table className={cx(s.tbl, s.compact)} style={{ maxWidth: 220 }}>
             <thead><tr><th>A</th>{!one && <th>B</th>}<th>{g}</th></tr></thead>
@@ -97,17 +100,20 @@ function Adder({ lang }: { lang: Lang }) {
   const f = fullAdder(a, b, full ? ci : 0);
   const h = halfAdder(a, b);
   const sum = full ? f.s : h.s, carry = full ? f.cout : h.c;
+  useLabBridge('adder', { full, a, b, ci, sum, carry }, {
+    full: (x) => setFull(!!x), set: (x) => { const [xa, xb, xc] = x as Bit[]; setA(xa); setB(xb); setCi(xc ?? 0); },
+  });
   const L = (x1: number, y1: number, x2: number, y2: number, v: number) => <line x1={x1} y1={y1} x2={x2} y2={y2} className={wc(v)} strokeWidth={3.5} strokeLinecap="round" />;
   return (
     <div className={s.stack}>
-      <div className={s.bar}>
+      <div className={s.bar} data-tour="adder-inputs">
         <Seg value={full ? 'full' : 'half'} options={[['half', 'Half adder'], ['full', 'Full adder']]} onChange={(v) => setFull(v === 'full')} />
         <InBtn v={a} on={() => setA((1 - a) as Bit)} label="A" />
         <InBtn v={b} on={() => setB((1 - b) as Bit)} label="B" />
         {full && <InBtn v={ci} on={() => setCi((1 - ci) as Bit)} label="Cin" />}
         <span className={s.lbl}>S <span className={cx(c.lamp, sum && c.on)} /> C{full ? 'out' : ''} <span className={cx(c.lamp, carry && c.on)} /></span>
       </div>
-      <div className={s.panel} style={{ overflowX: 'auto' }}>
+      <div className={s.panel} style={{ overflowX: 'auto' }} data-tour="adder-circuit">
         <svg className={c.gateSvg} viewBox="0 0 560 230" width="100%" style={{ minWidth: 420, maxWidth: 620 }} role="img" aria-label="adder">
           <text x={6} y={44} fontSize={12} fontWeight={800}>A</text><text x={6} y={84} fontSize={12} fontWeight={800}>B</text>
           {full && <text x={6} y={194} fontSize={12} fontWeight={800}>Cin</text>}
@@ -154,16 +160,19 @@ function Ripple({ lang }: { lang: Lang }) {
   const S = snaps[p.i];
   const A = toBits(a, n), B = toBits(b, n);
   const done = p.i === snaps.length - 1;
+  useLabBridge('ripple', { a, b, stage: p.i, stages: snaps.length - 1, done, carryOut: S.carry[n] ?? null }, {
+    set: (x) => { const [xa, xb] = x as number[]; setA(xa & 255); setB(xb & 255); p.reset(); },
+  });
   return (
     <div className={s.stack}>
-      <div className={s.panel} style={{ overflowX: 'auto' }}>
+      <div className={s.panel} style={{ overflowX: 'auto' }} data-tour="ripple-inputs">
         <div className={s.stack} style={{ gap: 6 }}>
           <BitRow label={`A = ${a}`} value={a} width={8} small onToggle={(k) => { setA(toggleBit(a, k, 8)); p.reset(); }} />
           <BitRow label={`B = ${b}`} value={b} width={8} small onToggle={(k) => { setB(toggleBit(b, k, 8)); p.reset(); }} />
         </div>
       </div>
       <Controls p={p} lang={lang} label={tx(lang, `${p.i} of ${n} stages settled · ${2 * p.i} gate delays`, `${p.i}/${n} tầng đã ổn định · ${2 * p.i} độ trễ cổng`)} />
-      <div className={c.fa}>
+      <div className={c.fa} data-tour="ripple-chain">
         {Array.from({ length: n }, (_, i) => n - 1 - i).map((k) => {
           const settled = S.sum[k] !== null;
           return (
@@ -227,6 +236,10 @@ function Register({ lang }: { lang: Lang }) {
   const setDBit = (k: number) => { const nd = d ^ (1 << k); setD(nd); setEvents([...events, { kind: 'd', value: nd } as RegEvent].slice(-24)); };
   const tick = () => setEvents([...events, { kind: 'tick' } as RegEvent].slice(-24));
   const W = 24 * tl.length + 70;
+  useLabBridge('register', { d, q: last.q, ticks: events.filter((e) => e.kind === 'tick').length }, {
+    d: (x) => { const nd = Number(x) & 15; setD(nd); setEvents((ev) => [...ev, { kind: 'd', value: nd } as RegEvent].slice(-24)); },
+    tick: () => { labSfx('tick'); setEvents((ev) => [...ev, { kind: 'tick' } as RegEvent].slice(-24)); },
+  });
   const wave = (vals: number[], y: number, label: string, digital = true): ReactNode => {
     let path = '';
     vals.forEach((v, i) => { const x = 60 + i * 24, yy = digital ? y + (v ? 0 : 18) : y + 9; path += `${i ? 'L' : 'M'} ${x} ${yy} L ${x + 24} ${yy} `; });
@@ -240,16 +253,16 @@ function Register({ lang }: { lang: Lang }) {
   };
   return (
     <div className={s.stack}>
-      <div className={s.bar}>
+      <div className={s.bar} data-tour="reg-inputs">
         <span className={s.lbl}>D</span>{[3, 2, 1, 0].map((k) => <InBtn key={k} v={((d >> k) & 1) as Bit} label={`D${k}`} on={() => setDBit(k)} />)}
-        <button type="button" className={cx(s.btn, s.primary)} onClick={tick}>⏱ {tx(lang, 'Clock tick', 'Nhịp đồng hồ')}</button>
+        <button type="button" className={cx(s.btn, s.primary)} onClick={() => { labSfx('tick'); tick(); }} data-tour="clock">⏱ {tx(lang, 'Clock tick', 'Nhịp đồng hồ')}</button>
         <button type="button" className={s.btn} onClick={() => { setEvents([{ kind: 'd', value: d }]); }}>{tx(lang, 'Clear history', 'Xoá lịch sử')}</button>
       </div>
       <div className={c.read}>
         <div className={c.readItem}><div className={c.k}>D ({tx(lang, 'input', 'đầu vào')})</div><div className={c.v}>{d.toString(2).padStart(4, '0')} = {d}</div></div>
         <div className={c.readItem}><div className={c.k}>Q ({tx(lang, 'stored', 'đang giữ')})</div><div className={c.v} style={{ color: 'var(--ol-accent)' }}>{last.q.toString(2).padStart(4, '0')} = {last.q}</div></div>
       </div>
-      <div className={s.panel} style={{ overflowX: 'auto' }}>
+      <div className={s.panel} style={{ overflowX: 'auto' }} data-tour="reg-wave">
         <svg viewBox={`0 0 ${W} 100`} width={W} height={100} role="img" aria-label="timing diagram">
           {wave(tl.map((x) => x.clk), 6, 'CLK')}
           {wave(tl.map((x) => x.d), 38, 'D', false)}
@@ -302,13 +315,14 @@ function Nand({ lang }: { lang: Lang }) {
 export default function LogicSim({ lang = 'vi', preset }: { lang?: Lang; preset?: string }) {
   const ALL: Tab[] = ['gates', 'adder', 'ripple', 'mux', 'register', 'nand'];
   const [tab, setTab] = useState<Tab>(ALL.includes(preset as Tab) ? (preset as Tab) : 'gates');
+  useLabBridge('logic', { tab }, { tab: (x) => setTab(x as Tab) });
   const TABS: Array<[Tab, string, string]> = [
     ['gates', 'Gates', 'Cổng'], ['adder', 'Half & full adder', 'Bộ cộng 1 bit'], ['ripple', '8-bit adder', 'Bộ cộng 8 bit'],
     ['mux', 'MUX & decoder', 'MUX & giải mã'], ['register', 'Clock & register', 'Đồng hồ & thanh ghi'], ['nand', 'Everything from NAND', 'Mọi thứ từ NAND'],
   ];
   return (
     <CpuFrame lang={lang} title={tx(lang, 'Logic gates → circuits', 'Cổng logic → mạch')} sub={tx(lang, 'From switches to an adder to memory', 'Từ công tắc tới bộ cộng tới bộ nhớ')}>
-      <div className={s.tabs} role="tablist">
+      <div className={s.tabs} role="tablist" data-tour="tabs">
         {TABS.map(([k, en, vi]) => <button type="button" role="tab" aria-selected={tab === k} key={k} className={cx(s.tab, tab === k && s.on)} onClick={() => setTab(k)}>{tx(lang, en, vi)}</button>)}
       </div>
       {tab === 'gates' && <Gates lang={lang} />}

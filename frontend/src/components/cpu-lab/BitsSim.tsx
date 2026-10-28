@@ -9,6 +9,8 @@ import {
   placeValues, shift, toSigned, toggleBit, voltsToBit, wrap, type BitOp, type ShiftOp, type Width,
 } from './engine/bits';
 import { Controls, Explain, Seg, css as s, usePlayer } from '../os-lab/ui';
+import { useLabBridge } from '../labs/bus';
+import { labSfx } from '../labs/sfx';
 import { BitRow, CpuFrame, ReadItem, asciiName, cc as c, cx, tx, type Lang } from './parts';
 
 type Tab = 'play' | 'intro' | 'convert' | 'signed' | 'ops';
@@ -23,6 +25,9 @@ function Intro({ lang }: { lang: Lang }) {
   // một "dây" có nhiễu: 24 mẫu dao động quanh v
   const samples = useMemo(() => Array.from({ length: 24 }, (_, k) => Math.max(0, Math.min(3.3, v + noise * Math.sin(k * 2.1) * (k % 3 ? 1 : -0.7)))), [v, noise]);
   const misread = samples.filter((sv) => voltsToBit(sv) !== bit).length;
+  useLabBridge('intro', { volts: v, noise, pattern, bit, misread }, {
+    volts: (x) => setV(Number(x)), noise: (x) => setNoise(Number(x)), pattern: (x) => setPattern(Number(x) & 255),
+  });
   return (
     <div className={s.stack}>
       <Explain>
@@ -30,9 +35,9 @@ function Intro({ lang }: { lang: Lang }) {
           'A computer is billions of tiny switches (transistors). A wire is either near 0 volts or near the supply voltage — so each wire carries ONE of two states. We write them 0 and 1. Two states are used because they are easy to tell apart even with electrical noise.',
           'Máy tính là hàng tỉ công tắc tí hon (transistor). Một sợi dây hoặc gần 0 volt, hoặc gần điện áp nguồn — nên mỗi sợi dây mang MỘT trong hai trạng thái. Ta viết chúng là 0 và 1. Dùng hai trạng thái vì chúng dễ phân biệt ngay cả khi có nhiễu điện.')}
       </Explain>
-      <div className={s.panel}>
+      <div className={s.panel} data-tour="wire">
         <div className={s.panelTitle}>{tx(lang, '1 · A wire: voltage → bit (3.3 V logic)', '1 · Một sợi dây: điện áp → bit (logic 3,3 V)')}</div>
-        <div className={s.bar}>
+        <div className={s.bar} data-tour="volt-sliders">
           <span className={s.lbl}>{tx(lang, 'Voltage', 'Điện áp')} <input type="range" min={0} max={3.3} step={0.05} value={v} onChange={(e) => setV(Number(e.target.value))} /><b className={s.mono}>{v.toFixed(2)} V</b></span>
           <span className={s.lbl}>{tx(lang, 'Noise', 'Nhiễu')} <input type="range" min={0} max={1.2} step={0.05} value={noise} onChange={(e) => setNoise(Number(e.target.value))} /><b className={s.mono}>±{noise.toFixed(2)} V</b></span>
         </div>
@@ -58,15 +63,15 @@ function Intro({ lang }: { lang: Lang }) {
       </div>
       <div className={s.panel}>
         <div className={s.panelTitle}>{tx(lang, '2 · Eight wires = one byte = 256 patterns', '2 · Tám sợi dây = một byte = 256 mẫu')}</div>
-        <div className={c.bulbs}>
+        <div className={c.bulbs} data-tour="bulbs">
           {Array.from({ length: 8 }, (_, i) => 7 - i).map((k) => (
-            <button type="button" key={k} className={cx(c.bulb, bitAt(pattern, k) && c.on)} onClick={() => setPattern(toggleBit(pattern, k, 8))} aria-pressed={!!bitAt(pattern, k)}>
+            <button type="button" key={k} className={cx(c.bulb, bitAt(pattern, k) && c.on)} onClick={() => { labSfx(bitAt(pattern, k) ? 'off' : 'on'); setPattern(toggleBit(pattern, k, 8)); }} aria-pressed={!!bitAt(pattern, k)} aria-label={`bit ${k}`}>
               <span className={c.lamp} /><b className={s.mono}>{bitAt(pattern, k)}</b><span className={c.lv}>{bitAt(pattern, k) ? '3.3V' : '0V'}</span>
             </button>
           ))}
         </div>
         <p className={s.small} style={{ margin: '8px 0 4px' }}>{tx(lang, 'The SAME 8 bits mean different things depending on who reads them:', 'CÙNG 8 bit này mang nghĩa khác nhau tuỳ AI đọc nó:')}</p>
-        <div className={c.read}>
+        <div className={c.read} data-tour="readings">
           <ReadItem k={tx(lang, 'bits', 'bit')} v={group(bin(pattern, 8))} />
           <ReadItem k={tx(lang, 'whole number', 'số nguyên không dấu')} v={pattern} />
           <ReadItem k={tx(lang, 'signed number', 'số có dấu')} v={toSigned(pattern, 8)} />
@@ -91,6 +96,10 @@ function Play({ lang }: { lang: Lang }) {
   const setWidth = (nw: Width) => { setW(nw); setU((x) => wrap(x, nw)); };
   const typed = parseNumber(txt);
   const apply = () => { if (typed !== null) { setU(wrap(typed, w)); setLast(null); } };
+  useLabBridge('board', { value: u, width: w, signed: toSigned(u, w) }, {
+    set: (x) => { setU(wrap(Number(x), w)); setLast(null); }, width: (x) => setWidth(Number(x) as Width),
+    inc: () => { labSfx('tap'); setU((x) => wrap(x + 1, w)); setLast(null); },
+  });
   return (
     <div className={s.stack}>
       <div className={s.bar}>
@@ -101,21 +110,21 @@ function Play({ lang }: { lang: Lang }) {
         </span>
       </div>
       <div className={s.panel} style={{ overflowX: 'auto' }}>
-        <BitRow value={u} width={w} showWeights onToggle={(k) => { setU(toggleBit(u, k, w)); setLast(k); }} mark={(k) => k === last} />
+        <BitRow tour="bit-row" value={u} width={w} showWeights onToggle={(k) => { setU(toggleBit(u, k, w)); setLast(k); }} mark={(k) => k === last} />
       </div>
-      <div className={s.bar}>
+      <div className={s.bar} data-tour="board-buttons">
         <button type="button" className={s.btn} onClick={() => setU(0)}>{tx(lang, 'All 0', 'Tất cả 0')}</button>
         <button type="button" className={s.btn} onClick={() => setU(maxUnsigned(w))}>{tx(lang, 'All 1', 'Tất cả 1')}</button>
-        <button type="button" className={s.btn} onClick={() => setU(wrap(u + 1, w))}>+1</button>
+        <button type="button" className={s.btn} onClick={() => setU(wrap(u + 1, w))} data-tour="plus-one">+1</button>
         <button type="button" className={s.btn} onClick={() => setU(wrap(u - 1, w))}>−1</button>
         <button type="button" className={s.btn} onClick={() => setU(maxUnsigned(w) - u)}>{tx(lang, 'Invert (NOT)', 'Đảo bit (NOT)')}</button>
         <button type="button" className={s.btn} onClick={() => setU(wrap(u * 2, w))}>×2 (&lt;&lt; 1)</button>
         <button type="button" className={s.btn} onClick={() => setU(Math.floor(u / 2))}>÷2 (&gt;&gt; 1)</button>
       </div>
-      <div className={c.read}>
+      <div className={c.read} data-tour="board-read">
         <ReadItem k={tx(lang, 'decimal (unsigned)', 'thập phân (không dấu)')} v={u} />
         <ReadItem k={tx(lang, 'decimal (signed, two\'s compl.)', 'thập phân (có dấu, bù hai)')} v={toSigned(u, w)} />
-        <ReadItem k="hex" v={`0x${group(hex(u, w), 4, '_')}`} />
+        <ReadItem k="hex" v={`0x${group(hex(u, w), 4, '_')}`} tour="hex" />
         <ReadItem k={tx(lang, 'octal', 'bát phân')} v={`0o${oct(u, w)}`} />
         <ReadItem k={tx(lang, 'binary', 'nhị phân')} v={<span style={{ fontSize: w > 16 ? 12 : 15 }}>{group(bin(u, w))}</span>} />
         {w === 8 && <ReadItem k="ASCII" v={asciiName(u)} />}
@@ -141,12 +150,15 @@ function Convert({ lang }: { lang: Lang }) {
   const p = usePlayer(steps.length + 3, 1100);
   const shown = Math.min(p.i, steps.length);
   const sub = (k: number) => String(k).split('').map((d) => '₀₁₂₃₄₅₆₇₈₉'[Number(d)]).join('');
+  useLabBridge('convert', { n, base, steps: steps.length, result }, {
+    n: (x) => { setN(Math.max(0, Math.min(65535, Math.trunc(Number(x) || 0)))); p.reset(); }, base: (x) => { setBase(Number(x)); p.reset(); },
+  });
   return (
     <div className={s.stack}>
       <div className={s.bar}>
         <span className={s.lbl}>{tx(lang, 'Decimal number', 'Số thập phân')}
           <input type="number" min={0} max={65535} value={n} style={{ width: 90 }} onChange={(e) => { setN(Math.max(0, Math.min(65535, Math.trunc(Number(e.target.value) || 0)))); p.reset(); }} /></span>
-        <Seg label={tx(lang, 'to base', 'sang cơ số')} value={base} options={[[2, '2'], [8, '8'], [16, '16']]} onChange={(b) => { setBase(b); p.reset(); }} />
+        <span data-tour="base"><Seg label={tx(lang, 'to base', 'sang cơ số')} value={base} options={[[2, '2'], [8, '8'], [16, '16']]} onChange={(b) => { setBase(b); p.reset(); }} /></span>
       </div>
       <Controls p={p} lang={lang} />
       <Explain tone={p.i >= steps.length + 1 ? 'ok' : undefined}>
@@ -156,7 +168,7 @@ function Convert({ lang }: { lang: Lang }) {
         {p.i === steps.length + 2 && tx(lang, `Check by place values: each digit × ${base}^position, added up = ${places.reduce((a, t) => a + t.value, 0)}.`, `Kiểm lại bằng trọng số: mỗi chữ số × ${base}^vị trí, cộng lại = ${places.reduce((a, t) => a + t.value, 0)}.`)}
       </Explain>
       <div className={s.grid2}>
-        <div className={s.panel}>
+        <div className={s.panel} data-tour="division">
           <div className={s.panelTitle}>{tx(lang, 'Repeated division', 'Chia liên tiếp')}</div>
           <table className={cx(s.tbl, s.compact)}>
             <thead><tr><th className={s.num}>{tx(lang, 'number', 'số')}</th><th className={s.num}>÷ {base}</th><th className={s.num}>{tx(lang, 'quotient', 'thương')}</th><th className={s.num}>{tx(lang, 'remainder', 'dư')}</th></tr></thead>
@@ -166,7 +178,7 @@ function Convert({ lang }: { lang: Lang }) {
           </table>
           {p.i > steps.length && <div className={s.mono} style={{ marginTop: 6, fontWeight: 800 }}>↑ {tx(lang, 'read upward', 'đọc ngược lên')}: {result}{sub(base)}</div>}
         </div>
-        <div className={s.panel}>
+        <div className={s.panel} data-tour="places">
           <div className={s.panelTitle}>{tx(lang, 'Place values (back to decimal)', 'Trọng số (đổi ngược về thập phân)')}</div>
           {p.i >= steps.length + 2 ? (
             <div className={s.mono} style={{ lineHeight: 1.9 }}>
@@ -223,6 +235,9 @@ function Signed({ lang }: { lang: Lang }) {
   const lim = (v: number) => Math.max(minSigned(w), Math.min(maxUnsigned(w), v));
   const cols = w;
   const cell = (u: number, k: number) => bitAt(u, k);
+  useLabBridge('signed', { a: toSigned(ua, w), b: toSigned(ub, w), op, width: w, result: toSigned(r.result, w), V: r.signedOverflow ? 1 : 0, C: r.carryOut }, {
+    load: (x) => { const [xa, xb, xo, xw] = x as [number, number, '+' | '-', Width?]; setW(xw ?? 8); setA(xa); setB(xb); setOp(xo); },
+  });
   return (
     <div className={s.stack}>
       <div className={s.bar}>
@@ -232,13 +247,13 @@ function Signed({ lang }: { lang: Lang }) {
         <span className={s.lbl}>B <input type="number" value={b} style={{ width: 80 }} onChange={(e) => setB(lim(Math.trunc(Number(e.target.value) || 0)))} /></span>
         <span className={s.small}>{tx(lang, `range: ${minSigned(w)}…${maxSigned(w)} signed · 0…${maxUnsigned(w)} unsigned`, `phạm vi: ${minSigned(w)}…${maxSigned(w)} có dấu · 0…${maxUnsigned(w)} không dấu`)}</span>
       </div>
-      <div className={s.bar}>
+      <div className={s.bar} data-tour="signed-presets">
         {[[127, 1, '+'], [-128, 1, '-'], [100, 50, '+'], [200, 100, '+'], [5, 9, '-']].map(([x, y, o]) => (
           <button type="button" key={`${x}${o}${y}`} className={s.btn} onClick={() => { setW(8); setA(x as number); setB(y as number); setOp(o as '+' | '-'); }}>{`${x} ${o === '+' ? '+' : '−'} ${y}`}</button>
         ))}
       </div>
       <div className={s.grid2}>
-        <div className={s.panel} style={{ overflowX: 'auto' }}>
+        <div className={s.panel} style={{ overflowX: 'auto' }} data-tour="column-add">
           <div className={s.panelTitle}>{tx(lang, 'Column addition, exactly like the ALU', 'Cộng theo cột, đúng như ALU')}</div>
           <table className={c.colTable}>
             <tbody>
@@ -249,14 +264,14 @@ function Signed({ lang }: { lang: Lang }) {
             </tbody>
           </table>
           {op === '-' && <div className={s.small} style={{ marginTop: 6 }}>{tx(lang, `Subtraction = addition of the two's complement: −B = NOT B + 1 = ${group(bin(neg.inverted, w))} + 1 = ${group(bin(neg.plusOne, w))}. The CPU has no separate subtractor.`, `Phép trừ = cộng với bù hai: −B = NOT B + 1 = ${group(bin(neg.inverted, w))} + 1 = ${group(bin(neg.plusOne, w))}. CPU không cần mạch trừ riêng.`)}</div>}
-          <div className={s.bar} style={{ marginTop: 8 }}>
+          <div className={s.bar} style={{ marginTop: 8 }} data-tour="flags">
             <span className={cx(c.flag, r.carryOut && c.set)}>C={r.carryOut}</span>
             <span className={cx(c.flag, r.signedOverflow && c.bad)}>V={r.signedOverflow ? 1 : 0}</span>
             <span className={cx(c.flag, bitAt(r.result, w - 1) && c.set)}>N={bitAt(r.result, w - 1)}</span>
             <span className={cx(c.flag, r.result === 0 && c.set)}>Z={r.result === 0 ? 1 : 0}</span>
           </div>
         </div>
-        <div className={s.panel}>
+        <div className={s.panel} data-tour="two-readings">
           <div className={s.panelTitle}>{w === 4 ? tx(lang, 'The 4-bit number wheel', 'Vòng số 4 bit') : tx(lang, 'Two readings of the same bits', 'Hai cách đọc cùng dãy bit')}</div>
           {w === 4 ? <Wheel lang={lang} a={ua} r={r.result} op={op} /> : (
             <div className={s.stack} style={{ gap: 6 }}>
@@ -293,6 +308,10 @@ function Ops({ lang }: { lang: Lang }) {
   const [n, setN] = useState(1);
   const isShift = ['shl', 'shr', 'sar', 'rol', 'ror'].includes(op);
   const res = isShift ? shift(a, n, op as ShiftOp, w) : { value: bitwise(a, b, op as BitOp, w), out: [] as number[] };
+  useLabBridge('ops', { a, b, op, n, result: res.value }, {
+    example: (x) => { const m = MASKS[Number(x)]; if (!m) return; setA(m.a); setB(m.b); setOp(m.op); if (m.n) setN(m.n); },
+    op: (x) => setOp(x as BitOp | ShiftOp), a: (x) => setA(Number(x) & 255), b: (x) => setB(Number(x) & 255), n: (x) => setN(Number(x)),
+  });
   const NAME: Record<string, [string, string]> = {
     and: ['AND: 1 only where BOTH are 1 — used to KEEP chosen bits (mask) and clear the rest.', 'AND: chỉ ra 1 khi CẢ HAI là 1 — dùng để GIỮ các bit chọn (mặt nạ) và xoá phần còn lại.'],
     or: ['OR: 1 where EITHER is 1 — used to SET bits.', 'OR: ra 1 khi MỘT TRONG HAI là 1 — dùng để BẬT bit.'],
@@ -306,7 +325,7 @@ function Ops({ lang }: { lang: Lang }) {
   };
   return (
     <div className={s.stack}>
-      <div className={s.bar}>
+      <div className={s.bar} data-tour="ops-pick">
         <span className={s.lbl}>{tx(lang, 'Examples', 'Ví dụ')}
           <select onChange={(e) => { const m = MASKS[Number(e.target.value)]; if (!m) return; setA(m.a); setB(m.b); setOp(m.op); if (m.n) setN(m.n); }} defaultValue="">
             <option value="" disabled>—</option>
@@ -315,11 +334,11 @@ function Ops({ lang }: { lang: Lang }) {
         <Seg value={op} options={[['and', 'AND'], ['or', 'OR'], ['xor', 'XOR'], ['not', 'NOT'], ['shl', '<<'], ['shr', '>>'], ['sar', 'SAR'], ['rol', 'ROL'], ['ror', 'ROR']]} onChange={setOp} />
         {isShift && <span className={s.lbl}>n <input type="number" min={0} max={8} value={n} onChange={(e) => setN(Math.max(0, Math.min(8, Number(e.target.value) || 0)))} /></span>}
       </div>
-      <div className={s.panel} style={{ overflowX: 'auto' }}>
+      <div className={s.panel} style={{ overflowX: 'auto' }} data-tour="ops-rows">
         <div className={s.stack} style={{ gap: 8 }}>
           <BitRow label={`A = ${a} = 0x${hex(a, 8)}${op === 'sar' ? ` (${toSigned(a, 8)})` : ''}`} value={a} width={8} onToggle={(k) => setA(toggleBit(a, k, w))} small />
           {!isShift && op !== 'not' && <BitRow label={`B (${tx(lang, 'mask', 'mặt nạ')}) = 0x${hex(b, 8)}`} value={b} width={8} onToggle={(k) => setB(toggleBit(b, k, w))} small />}
-          <BitRow label={`${tx(lang, 'result', 'kết quả')} = ${res.value} = 0x${hex(res.value, 8)}${op === 'sar' ? ` (${toSigned(res.value, 8)})` : ''}${op === 'xor' && a >= 65 && a <= 122 ? ` = '${String.fromCharCode(res.value)}'` : ''}`} value={res.value} width={8} small mark={(k) => bitAt(res.value, k) !== bitAt(a, k)} />
+          <BitRow tour="ops-result" label={`${tx(lang, 'result', 'kết quả')} = ${res.value} = 0x${hex(res.value, 8)}${op === 'sar' ? ` (${toSigned(res.value, 8)})` : ''}${op === 'xor' && a >= 65 && a <= 122 ? ` = '${String.fromCharCode(res.value)}'` : ''}`} value={res.value} width={8} small mark={(k) => bitAt(res.value, k) !== bitAt(a, k)} />
         </div>
         {isShift && res.out.length > 0 && op !== 'rol' && op !== 'ror' && <div className={s.small} style={{ marginTop: 6 }}>{tx(lang, 'bits that fell off', 'bit rơi ra ngoài')}: {res.out.join(' ')}</div>}
       </div>
@@ -330,13 +349,14 @@ function Ops({ lang }: { lang: Lang }) {
 
 export default function BitsSim({ lang = 'vi', preset }: { lang?: Lang; preset?: string }) {
   const [tab, setTab] = useState<Tab>((['play', 'intro', 'convert', 'signed', 'ops'] as Tab[]).includes(preset as Tab) ? (preset as Tab) : 'play');
+  useLabBridge('bits', { tab }, { tab: (x) => setTab(x as Tab) });
   const TABS: Array<[Tab, string, string]> = [
     ['intro', 'Why only 0 and 1?', 'Vì sao chỉ 0 và 1?'], ['play', 'Bit board', 'Bảng bit'], ['convert', 'Convert step by step', 'Đổi cơ số từng bước'],
     ['signed', 'Negative numbers & overflow', 'Số âm & tràn số'], ['ops', 'Shifts & masks', 'Dịch bit & mặt nạ'],
   ];
   return (
     <CpuFrame lang={lang} title={tx(lang, 'Bits & number systems', 'Bit & hệ đếm')} sub={tx(lang, 'Everything in a computer is a pattern of 0s and 1s', 'Mọi thứ trong máy tính là một dãy 0 và 1')}>
-      <div className={s.tabs} role="tablist">
+      <div className={s.tabs} role="tablist" data-tour="tabs">
         {TABS.map(([k, en, vi]) => <button type="button" role="tab" aria-selected={tab === k} key={k} className={cx(s.tab, tab === k && s.on)} onClick={() => setTab(k)}>{tx(lang, en, vi)}</button>)}
       </div>
       {tab === 'intro' && <Intro lang={lang} />}

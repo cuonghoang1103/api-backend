@@ -5,12 +5,24 @@
 .bits { display: flex; flex-wrap: wrap; gap: 4px 2px; align-items: flex-end; }
 .byteGap { width: 8px; }
 .bitCell { display: inline-flex; flex-direction: column; align-items: center; gap: 2px; }
-.bitBtn { appearance: none; width: 30px; height: 36px; border-radius: 7px; border: 2px solid var(--ol-border); background: var(--ol-panel);
-  color: var(--ol-muted); font: 800 16px/1 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace; cursor: pointer; padding: 0; }
-.bitBtn.on { background: var(--ol-accent); border-color: var(--ol-accent); color: #fff; box-shadow: 0 0 10px rgba(37, 99, 235, 0.35); }
-:global(html.theme-dark) .bitBtn.on { color: #0d1626; }
-.bitBtn.sign { border-color: var(--ol-bad); }
-.bitBtn.sign.on { background: var(--ol-bad); border-color: var(--ol-bad); }
+/* Bit = một bóng LED: tắt là vòm kính xám, bật là hổ phách phát sáng (bit dấu: đỏ). */
+.root2 { --led-off-a: #e7eaf0; --led-off-b: #aab2c0; --led-off-ink: #5b6576; --led-ring: #8d97a8;
+  --led-on-a: #fff6cf; --led-on-b: #ffb627; --led-on-c: #d97706; --led-on-ink: #4a2a00; --led-glow: rgba(255, 176, 32, 0.55);
+  --led-red-b: #ff5a4f; --led-red-c: #b91c1c; --led-red-glow: rgba(255, 80, 70, 0.5);
+  --hw-pkg: #2a313c; --hw-pkg-edge: #3a4350; --hw-die: #141b25; --hw-grid: #1f2a38; --hw-copper: #c27c3c; --hw-copper-dim: #8a5a2e;
+  --hw-gold: #d6a943; --hw-silk: #9fb0c4; --hw-lcd: #08130d; --hw-lcd-ink: #7dffa8; --hw-lcd-dim: #3f8a5a;
+  --hw-pcb: #12512f; --hw-pcb-edge: #1c6b40; --hw-cell: #0d1a12; }
+:global(html.theme-dark) .root2 { --led-off-a: #3b4352; --led-off-b: #242a33; --led-off-ink: #8e98a8; --led-ring: #4a5262; }
+.bitBtn { appearance: none; width: 30px; height: 36px; border-radius: 9px; border: 2px solid var(--led-ring);
+  background: radial-gradient(circle at 38% 30%, var(--led-off-a), var(--led-off-b) 78%);
+  color: var(--led-off-ink); font: 800 16px/1 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace; cursor: pointer; padding: 0;
+  box-shadow: inset 0 -3px 4px rgba(0, 0, 0, 0.18); transition: background .18s, box-shadow .18s, color .18s; }
+.bitBtn.on { background: radial-gradient(circle at 38% 28%, var(--led-on-a), var(--led-on-b) 55%, var(--led-on-c)); border-color: var(--led-on-c);
+  color: var(--led-on-ink); box-shadow: 0 0 12px var(--led-glow), 0 0 2px var(--led-on-b), inset 0 -2px 3px rgba(120, 50, 0, 0.25); }
+.bitBtn.sign { border-color: var(--led-red-c); }
+.bitBtn.sign.on { background: radial-gradient(circle at 38% 28%, #ffe1dc, var(--led-red-b) 55%, var(--led-red-c)); color: #3d0503; box-shadow: 0 0 12px var(--led-red-glow); }
+.bitBtn:not(:disabled):hover { transform: translateY(-1px); }
+@media (prefers-reduced-motion: reduce) { .bitBtn { transition: none; } .bitBtn:not(:disabled):hover { transform: none; } }
 .bitBtn.hl { outline: 3px solid #f59e0b; outline-offset: 1px; }
 .bitBtn:disabled { cursor: default; }
 .bitBtn.small { width: 22px; height: 26px; font-size: 13px; border-radius: 5px; }
@@ -22,14 +34,17 @@
 
 .read { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
 .readItem { background: var(--ol-panel); border: 1px solid var(--ol-border); border-radius: 10px; padding: 6px 10px; min-width: 0; }
-.readItem .k { font-size: 11px; font-weight: 800; color: var(--ol-muted); text-transform: uppercase; letter-spacing: 0.4px; }
+.readItem .k { font-size: 11.5px; font-weight: 700; color: var(--ol-muted); }
 .readItem .v { font: 800 17px/1.3 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace; word-break: break-all; }
 
 .bulbs { display: flex; flex-wrap: wrap; gap: 8px; }
 .bulb { appearance: none; border: 2px solid var(--ol-border); background: var(--ol-panel); border-radius: 12px; width: 52px; padding: 6px 0;
   display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; color: var(--ol-text); }
-.bulb .lamp { width: 22px; height: 22px; border-radius: 50%; background: #64748b; transition: background .2s, box-shadow .2s; }
-.bulb.on .lamp { background: #facc15; box-shadow: 0 0 14px #facc15; }
+.bulb .lamp { width: 24px; height: 24px; border-radius: 50%; background: radial-gradient(circle at 38% 30%, var(--led-off-a), var(--led-off-b) 78%);
+  border: 2px solid var(--led-ring); transition: background .2s, box-shadow .2s; }
+.bulb.on { border-color: var(--led-on-c); }
+.bulb.on .lamp { background: radial-gradient(circle at 38% 28%, var(--led-on-a), var(--led-on-b) 55%, var(--led-on-c)); border-color: var(--led-on-c); box-shadow: 0 0 16px var(--led-glow); }
+@media (prefers-reduced-motion: reduce) { .bulb .lamp { transition: none; } }
 .bulb .lv { font: 700 11px/1 'JetBrains Mono', Menlo, monospace; color: var(--ol-muted); }
 
 .colTable { border-collapse: collapse; font-family: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace; font-size: 15px; }
@@ -92,7 +107,7 @@
 @keyframes pk { from { offset-distance: 0%; } to { offset-distance: 100%; } }
 @media (prefers-reduced-motion: reduce) { .packet { animation: none; offset-distance: 100%; } }
 
-.phase { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.4px; color: #fff; }
+.phase { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 12px; font-weight: 800; color: #fff; }
 .phase.fetch { background: #2563eb; } .phase.decode { background: #7c3aed; } .phase.execute { background: #059669; }
 .phase.halt, .phase.stop { background: #dc2626; } .phase.start { background: #64748b; }
 
@@ -110,17 +125,66 @@
 .tagC { background: #7c3aed; } .idxC { background: #059669; } .offC { background: #d97706; }
 .hitCell { color: var(--ol-ok); font-weight: 800; } .missCell { color: var(--ol-bad); font-weight: 800; }
 
-/* gates */
-.gateSvg .wire0 { stroke: #94a3b8; } .gateSvg .wire1 { stroke: #16a34a; }
+/* gates — dây mang 1 sáng lên như có dòng điện chạy */
+.gateSvg .wire0 { stroke: #a3acba; transition: stroke .2s; }
+.gateSvg .wire1 { stroke: #16a34a; filter: drop-shadow(0 0 3px rgba(34, 197, 94, 0.75)); transition: stroke .2s; }
+:global(html.theme-dark) .gateSvg .wire0 { stroke: #566173; }
 :global(html.theme-dark) .gateSvg .wire1 { stroke: #4ade80; }
+@media (prefers-reduced-motion: reduce) { .gateSvg .wire0, .gateSvg .wire1 { transition: none; } }
+.svgLamp { fill: #64748b; } .svgLamp.on { fill: #ffc531; filter: drop-shadow(0 0 6px rgba(255, 190, 40, 0.9)); }
 .gateSvg .body { fill: var(--ol-panel2); stroke: var(--ol-text); }
 .gateSvg text { fill: var(--ol-text); font-family: Inter, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; }
-.inBtn { appearance: none; min-width: 44px; height: 34px; border-radius: 8px; border: 2px solid var(--ol-border); font: 800 15px/1 'JetBrains Mono', Menlo, monospace; cursor: pointer; background: var(--ol-panel); color: var(--ol-text); }
-.inBtn.on { background: #16a34a; border-color: #16a34a; color: #fff; }
-.lamp { display: inline-block; width: 26px; height: 26px; border-radius: 50%; background: #64748b; vertical-align: middle; }
-.lamp.on { background: #facc15; box-shadow: 0 0 12px #facc15; }
+.inBtn { appearance: none; min-width: 52px; height: 36px; border-radius: 10px; border: 2px solid var(--ol-border); font: 800 14px/1 'JetBrains Mono', Menlo, monospace;
+  cursor: pointer; background: var(--ol-panel); color: var(--ol-text); display: inline-flex; align-items: center; gap: 6px; padding: 0 9px; }
+.inLed { width: 10px; height: 10px; border-radius: 50%; background: #8b95a5; box-shadow: inset 0 -1px 2px rgba(0,0,0,.3); }
+.inBtn.on { border-color: #16a34a; background: rgba(22, 163, 74, 0.12); }
+.inBtn.on .inLed { background: #22c55e; box-shadow: 0 0 8px rgba(34, 197, 94, 0.9); }
+.lamp { display: inline-block; width: 26px; height: 26px; border-radius: 50%; vertical-align: middle;
+  background: radial-gradient(circle at 38% 30%, #cbd2dc, #6b7686 80%); }
+.lamp.on { background: radial-gradient(circle at 38% 28%, #fff6cf, #ffb627 55%, #d97706); box-shadow: 0 0 14px rgba(255, 176, 32, 0.8); }
 .fa { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(64px, 1fr); gap: 4px; overflow-x: auto; }
 .faBox { border: 2px solid var(--ol-border); border-radius: 8px; padding: 4px; text-align: center; font: 700 12px/1.35 'JetBrains Mono', Menlo, monospace; background: var(--ol-bg); }
 .faBox.act { border-color: #f59e0b; background: var(--ol-hl); }
 .faBox.pend { opacity: 0.55; }
 .wave { font: 12px/1 'JetBrains Mono', Menlo, monospace; }
+
+/* ── Chip CPU (CpuSim Board) ─────────────────────────────────────────────────────────────── */
+.pkg { fill: var(--hw-pkg); stroke: var(--hw-pkg-edge); stroke-width: 2; }
+.die { fill: var(--hw-die); }
+.dieGrid { stroke: var(--hw-grid); }
+.pin { fill: var(--hw-gold); }
+.pin1 { fill: none; stroke: var(--hw-silk); stroke-width: 1.2; }
+.silk { fill: var(--hw-silk); font-family: 'JetBrains Mono', Menlo, monospace; }
+.silkLight { fill: #d8f3e3; font-family: 'JetBrains Mono', Menlo, monospace; }
+.trace { stroke: var(--hw-copper); opacity: 0.85; }
+.traceThin { stroke: var(--hw-copper); opacity: 0.75; }
+.regCase { fill: #1d2633; stroke: #3c4a5c; stroke-width: 1.5; transition: stroke .2s; }
+.regName { fill: #e2e8f0; }
+.regNote { fill: #7d8ea3; }
+.lcd { fill: var(--hw-lcd); stroke: #1f3b2a; }
+.lcdText { fill: var(--hw-lcd-ink); font-family: 'JetBrains Mono', Menlo, monospace; }
+.lcdDim { fill: var(--hw-lcd-dim); font-family: 'JetBrains Mono', Menlo, monospace; }
+.regHot .regCase { stroke: #ffb020; stroke-width: 3; filter: drop-shadow(0 0 6px rgba(255, 176, 32, 0.7)); }
+.alu path { fill: #2a3646; stroke: #4b5b70; stroke-width: 2; transition: fill .2s; }
+.alu text { fill: #e2e8f0; }
+.aluOn path { fill: #4a3410; stroke: #ffb020; filter: drop-shadow(0 0 6px rgba(255, 176, 32, 0.6)); }
+.cuBox { fill: #1d2633; stroke: #3c4a5c; stroke-width: 1.5; }
+.cuHot { stroke: #a78bfa; stroke-width: 2.5; filter: drop-shadow(0 0 5px rgba(167, 139, 250, 0.7)); }
+.led { fill: #333c4a; stroke: #4b5566; }
+.ledF { fill: #60a5fa; filter: drop-shadow(0 0 4px #60a5fa); }
+.ledD { fill: #c4b5fd; filter: drop-shadow(0 0 4px #a78bfa); }
+.ledE { fill: #4ade80; filter: drop-shadow(0 0 4px #22c55e); }
+.dimm { fill: var(--hw-pcb); stroke: var(--hw-pcb-edge); stroke-width: 2; }
+.cellCase { fill: var(--hw-cell); stroke: #255a3c; stroke-width: 1.2; transition: stroke .2s; }
+.cellAddr { fill: #7fae92; font-family: 'JetBrains Mono', Menlo, monospace; }
+.bitOn { fill: #ffb627; filter: drop-shadow(0 0 2px rgba(255, 182, 39, 0.8)); }
+.bitOff { fill: #24382c; }
+.cellSel .cellCase { stroke: #60a5fa; stroke-width: 2.4; }
+.cellRd .cellCase { stroke: #4ade80; stroke-width: 3; filter: drop-shadow(0 0 6px rgba(74, 222, 128, 0.75)); }
+.cellWr .cellCase { stroke: #ff6b5f; stroke-width: 3; filter: drop-shadow(0 0 6px rgba(255, 107, 95, 0.8)); }
+.dev rect { fill: var(--ol-panel2); stroke: var(--ol-border); }
+.dev text { fill: var(--ol-text); }
+.devOn rect { fill: var(--ol-hl); stroke: #f59e0b; stroke-width: 2; }
+.pkAddr { fill: #2563eb; } .pkData { fill: #059669; }
+.routeAddr { stroke: #60a5fa; opacity: 0.85; } .routeData { stroke: #34d399; opacity: 0.85; }
+@media (prefers-reduced-motion: reduce) { .regCase, .alu path, .cellCase { transition: none; } }

@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import { GitFork, Hourglass, LogOut, Skull, Cpu, Layers, Play as PlayI, Pause as PauseI, Terminal } from 'lucide-react';
 import { SCENARIOS, STATE_EDGES, apply, psLines, run, stat, type Act, type PSt, type Proc, type World } from './engine/process';
 import { Controls, Explain, Frame, css as s, cx, tx, usePlayer, type Lang } from './ui';
+import { useLabBridge } from '../labs/bus';
 
 const ST_COLOR: Record<PSt, string> = { running: '#15803d', ready: '#2563eb', blocked: '#64748b', stopped: '#d97706', zombie: '#dc2626' };
 const ST_NAME: Record<PSt | 'new' | 'gone', [string, string]> = {
@@ -78,6 +79,10 @@ export default function ProcessSim({ lang = 'vi', preset = 'shell' }: { lang?: L
     window.setTimeout(() => p.setI(nh.length - 1), 0);
   };
   const selP = w.procs.find((x) => x.pid === sel);
+  useLabBridge('process', {
+    mode, i: p.i, procs: w.procs.length, zombies: w.procs.filter((q) => q.st === 'zombie').length,
+    pids: w.procs.map((q) => `${q.pid}:${q.st}`).join(' '),
+  }, { mode: (v) => { setMode(String(v)); p.reset(); } });
 
   // các chuyển trạng thái của bước này (để tô mũi tên)
   const moves = new Set<string>();
@@ -99,7 +104,7 @@ export default function ProcessSim({ lang = 'vi', preset = 'shell' }: { lang?: L
   return (
     <Frame badge={tx(lang, 'OS lab', 'Phòng lab OS')} title={tx(lang, 'Processes: the family tree and the state machine', 'Tiến trình: cây gia phả và máy trạng thái')}
       sub={tx(lang, 'fork, exec, wait, exit — and what ps would show at every step', 'fork, exec, wait, exit — và ps sẽ hiện gì ở từng bước')}>
-      <div className={s.bar}>
+      <div className={s.bar} data-tour="proc-scenario">
         <span className={s.lbl}>{tx(lang, 'Scenario', 'Kịch bản')}
           <select value={mode} onChange={(e) => { setMode(e.target.value); p.reset(); }}>
             {SCENARIOS.map((x) => <option key={x.id} value={x.id}>{tx(lang, x.en, x.vi)}</option>)}
@@ -138,7 +143,7 @@ export default function ProcessSim({ lang = 'vi', preset = 'shell' }: { lang?: L
 
       <div className={s.grid2} style={{ marginTop: 10 }}>
         <div className={s.stack}>
-          <div className={s.panel}>
+          <div className={s.panel} data-tour="proc-tree">
             <div className={s.panelTitle}>{tx(lang, 'Process tree (pstree)', 'Cây tiến trình (pstree)')}</div>
             <div className={s.svgWrap}>
               <svg width={TW} height={TH} viewBox={`0 0 ${TW} ${TH}`} role="img" aria-label="process tree">
@@ -163,11 +168,11 @@ export default function ProcessSim({ lang = 'vi', preset = 'shell' }: { lang?: L
               </svg>
             </div>
           </div>
-          <div className={s.term}>{psLines(w).join('\n')}{w.procs.some((q) => (q.rss ?? 0) >= 100) ? '\n\n' + w.procs.filter((q) => (q.rss ?? 0) >= 100).map((q) => `RSS ${q.pid} ${q.name}: ${q.rss} MB`).join('\n') : ''}</div>
+          <div className={s.term} data-tour="proc-ps">{psLines(w).join('\n')}{w.procs.some((q) => (q.rss ?? 0) >= 100) ? '\n\n' + w.procs.filter((q) => (q.rss ?? 0) >= 100).map((q) => `RSS ${q.pid} ${q.name}: ${q.rss} MB`).join('\n') : ''}</div>
           <div className={s.term} aria-label="terminal"><Terminal style={{ width: 13, height: 13, verticalAlign: '-2px' }} /> {w.term.length ? '\n' + w.term.slice(-8).join('\n') : ''}</div>
         </div>
         <div className={s.stack}>
-          <div className={s.panel}>
+          <div className={s.panel} data-tour="proc-states">
             <div className={s.panelTitle}>{tx(lang, 'State machine (who is where now)', 'Máy trạng thái (ai đang ở đâu)')}</div>
             <div className={s.svgWrap}>
               <svg width="100%" viewBox="0 0 580 250" role="img" aria-label="process states" style={{ maxWidth: 580, height: 'auto' }}>
@@ -200,7 +205,7 @@ export default function ProcessSim({ lang = 'vi', preset = 'shell' }: { lang?: L
             <div className={s.small}>{tx(lang, 'Red arrows = transitions that happened in this step. Linux ps letters: R (ready or running), S (sleeping), D (uninterruptible, usually disk I/O), T (stopped), Z (zombie).', 'Mũi tên đỏ = chuyển trạng thái vừa xảy ra ở bước này. Chữ của ps trên Linux: R (sẵn sàng hoặc đang chạy), S (ngủ), D (ngủ không ngắt được, thường là I/O đĩa), T (tạm dừng), Z (zombie).')}</div>
           </div>
           {!sandbox && (
-            <div className={s.code} aria-label="code">
+            <div className={s.code} aria-label="code" data-tour="proc-code">
               {sc.code.map((ln, k) => <span key={k} className={cx(s.ln, step?.line === k + 1 && s.cur)}>{ln || ' '}</span>)}
             </div>
           )}

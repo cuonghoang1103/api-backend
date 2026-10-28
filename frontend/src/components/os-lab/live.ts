@@ -5,7 +5,7 @@
  * làm khác đi vẫn đúng. Trả về đối tượng khớp interface Player của ui.tsx để dùng chung <Controls>.
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { Player } from './ui';
+import { usePlayerBridge, type Player } from './ui';
 
 export function useLivePlayer<S>(init: () => S, tick: (s: S) => S, baseMs = 700, max = 900) {
   const [hist, setHist] = useState<S[]>(() => [init()]);
@@ -48,5 +48,6 @@ export function useLivePlayer<S>(init: () => S, tick: (s: S) => S, baseMs = 700,
     reset: () => { setPlaying(false); setIRaw(0); },
     toggle: () => setPlaying((v) => !v),
   };
+  usePlayerBridge(p);
   return { p, S: hist[Math.min(i, hist.length - 1)], hist: hist.slice(0, i + 1), apply, restart };
 }

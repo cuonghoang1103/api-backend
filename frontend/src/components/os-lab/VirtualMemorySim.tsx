@@ -3,6 +3,9 @@
 import { useMemo, useState } from 'react';
 import { REF_PRESETS, VM_PRESETS, REGIONS, LAT, replace, translate, type Algo } from './engine/vm';
 import { Controls, Explain, Frame, Kpi, Seg, css as s, cx, tx, usePlayer, type Lang } from './ui';
+import { useLabBridge, useOwnStepSound } from '../labs/bus';
+import { labSfx } from '../labs/sfx';
+import { useEffect, useRef } from 'react';
 
 const REG_COLOR: Record<string, string> = { code: '#b45309', data: '#2563eb', heap: '#059669', stack: '#dc2626', none: '#94a3b8' };
 const fmtNs = (ns: number) => (ns >= 1e6 ? `${(ns / 1e6).toFixed(2)} ms` : ns >= 1e3 ? `${(ns / 1e3).toFixed(1)} µs` : `${Math.round(ns)} ns`);
@@ -36,10 +39,24 @@ function Translate({ lang, preset }: { lang: Lang; preset: string }) {
     }
   }
   const n = Math.max(1, S.i);
+  useLabBridge('vm', {
+    preset: pk, frames, algo, i: p.i, vpn: S.acc ? S.vpn : -1, tlbHit: S.acc ? !!S.tlbHit : null, fault: S.acc ? (S.fault ?? 'none') : null,
+    minor: S.counts.minor, major: S.counts.major,
+  }, {
+    load: (k) => { const v = String(k); if (VM_PRESETS[v]) { setPk(v); setFrames(VM_PRESETS[v].frames); p.reset(); } },
+    frames: (v) => { setFrames(Number(v)); p.reset(); }, algo: (v) => { setAlgo(v as 'fifo' | 'lru' | 'clock'); p.reset(); },
+  });
+  // TLB trúng = "ting", lỗi trang = "bộp", segfault = "bịch"
+  useOwnStepSound();
+  const lastI = useRef(p.i);
+  useEffect(() => {
+    if (p.i > lastI.current && S.acc) labSfx(S.fault === 'segv' ? 'thud' : S.fault === 'major' || S.fault === 'minor' ? 'miss' : S.tlbHit ? 'hit' : 'tick');
+    lastI.current = p.i;
+  }, [p.i, S]);
 
   return (
     <>
-      <div className={s.bar}>
+      <div className={s.bar} data-tour="vm-config">
         <span className={s.lbl}>{tx(lang, 'Scenario', 'Kịch bản')}
           <select value={pk} onChange={(e) => { setPk(e.target.value); setFrames(VM_PRESETS[e.target.value].frames); p.reset(); }}>
             {Object.entries(VM_PRESETS).map(([k, v]) => <option key={k} value={k}>{tx(lang, v.en, v.vi)}</option>)}
@@ -50,7 +67,7 @@ function Translate({ lang, preset }: { lang: Lang; preset: string }) {
       </div>
       <Controls p={p} lang={lang} />
       <Explain tone={tone}>{tx(lang, msgEn, msgVi)}</Explain>
-      <div className={s.panel} style={{ marginTop: 10 }}>
+      <div className={s.panel} style={{ marginTop: 10 }} data-tour="vm-address">
         <div className={s.panelTitle}>{tx(lang, 'Virtual address (16-bit toy; real x86-64 uses 48 bits: 4 × 9-bit levels + 12-bit offset)', 'Địa chỉ ảo (đồ chơi 16 bit; x86-64 thật dùng 48 bit: 4 cấp × 9 bit + 12 bit offset)')}</div>
         <div style={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
           {bits.split('').map((b, k) => (
@@ -60,7 +77,7 @@ function Translate({ lang, preset }: { lang: Lang; preset: string }) {
         <div className={s.small}>{tx(lang, 'blue: page number (VPN) → translated · grey: offset inside the 4 KiB page → copied unchanged', 'xanh: số trang (VPN) → được dịch · xám: vị trí trong trang 4 KiB → giữ nguyên')}</div>
       </div>
       <div className={s.grid3} style={{ marginTop: 10, alignItems: 'start' }}>
-        <div className={s.panel}>
+        <div className={s.panel} data-tour="vm-tlb">
           <div className={s.panelTitle}>TLB (4)</div>
           <table className={s.tbl}><thead><tr><th>VPN</th><th>{tx(lang, 'frame', 'khung')}</th></tr></thead>
             <tbody>{Array.from({ length: 4 }, (_, k) => S.tlb[k]).map((e, k) => (
@@ -70,7 +87,7 @@ function Translate({ lang, preset }: { lang: Lang; preset: string }) {
             <Kpi k={tx(lang, 'TLB hit rate', 'tỉ lệ trúng TLB')} v={`${Math.round((100 * S.counts.tlbHit) / Math.max(1, S.counts.tlbHit + S.counts.tlbMiss))}%`} tone={S.counts.tlbHit >= S.counts.tlbMiss ? 'ok' : 'warn'} />
           </div>
         </div>
-        <div className={s.panel}>
+        <div className={s.panel} data-tour="vm-pagetable">
           <div className={s.panelTitle}>{tx(lang, 'Page table of this process', 'Bảng trang của tiến trình')}</div>
           <div>
             <table className={cx(s.tbl, s.compact)}><thead><tr><th>VPN</th><th>{tx(lang, 'region', 'vùng')}</th><th>P</th><th>{tx(lang, 'frame', 'khung')}</th><th>D</th></tr></thead>
@@ -85,7 +102,7 @@ function Translate({ lang, preset }: { lang: Lang; preset: string }) {
               ))}</tbody></table>
           </div>
         </div>
-        <div className={s.panel}>
+        <div className={s.panel} data-tour="vm-frames">
           <div className={s.panelTitle}>{tx(lang, 'Physical RAM frames', 'Khung RAM vật lý')}</div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0,1fr))', gap: 6 }}>
             {S.frames.map((v, k) => (
@@ -123,6 +140,10 @@ function Thrash({ lang, preset }: { lang: Lang; preset: string }) {
   const eat = (f: number) => (refs.length ? ((refs.length - f) * LAT.ram + f * LAT.major) / refs.length : 0);
   const totalFaults = steps.filter((x) => !x.hit).length;
   const slow = eat(totalFaults) / LAT.ram;
+  useLabBridge('thrash', { preset: pk, frames, algo, faults: totalFaults, ws, shown: upto, thrashing: frames < ws && totalFaults > refs.length * 0.6 }, {
+    load: (k) => { const v = String(k); if (REF_PRESETS[v]) { setPk(v); setRefsText(REF_PRESETS[v].refs.join(' ')); setFrames(REF_PRESETS[v].frames); p.reset(); } },
+    frames: (v) => { setFrames(Number(v)); p.reset(); }, algo: (v) => { setAlgo(v as Algo); p.reset(); },
+  });
 
   return (
     <>
@@ -136,11 +157,11 @@ function Thrash({ lang, preset }: { lang: Lang; preset: string }) {
       <div className={s.bar}>
         <span className={s.lbl} style={{ flex: '1 1 260px' }}>{tx(lang, 'Reference string', 'Chuỗi tham chiếu')}
           <input type="text" value={refsText} onChange={(e) => { setRefsText(e.target.value); p.reset(); }} style={{ flex: 1, minWidth: 180 }} /></span>
-        <span className={s.lbl}>{tx(lang, 'RAM frames (RAM pressure ←)', 'Số khung RAM (← thiếu RAM)')}
+        <span className={s.lbl} data-tour="thrash-frames">{tx(lang, 'RAM frames (RAM pressure ←)', 'Số khung RAM (← thiếu RAM)')}
           <input type="range" min={1} max={8} value={frames} onChange={(e) => { setFrames(Number(e.target.value)); p.reset(); }} /><b>{frames}</b></span>
       </div>
       <Controls p={p} lang={lang} label={tx(lang, `${upto}/${steps.length} references · ${faults} faults`, `${upto}/${steps.length} tham chiếu · ${faults} lỗi trang`)} />
-      <div className={s.scrollX}>
+      <div className={s.scrollX} data-tour="thrash-table">
         <table className={s.tbl} style={{ width: 'auto' }}>
           <tbody>
             <tr><th>{tx(lang, 'ref', 'tham chiếu')}</th>{steps.map((x, k) => <th key={k} className={s.mono} style={{ textAlign: 'center', opacity: k < upto ? 1 : 0.35 }}>{x.ref}</th>)}</tr>
@@ -154,7 +175,7 @@ function Thrash({ lang, preset }: { lang: Lang; preset: string }) {
         </table>
       </div>
       <div className={s.grid2} style={{ marginTop: 10 }}>
-        <div className={s.panel}>
+        <div className={s.panel} data-tour="thrash-curve">
           <div className={s.panelTitle}>{tx(lang, `Page faults vs RAM frames (${algo.toUpperCase()})`, `Lỗi trang theo số khung RAM (${algo.toUpperCase()})`)}</div>
           <svg width="100%" height={170} viewBox="0 0 360 170" role="img" aria-label="faults vs frames">
             {curve.map((v, k) => {
@@ -171,7 +192,7 @@ function Thrash({ lang, preset }: { lang: Lang; preset: string }) {
           </svg>
         </div>
         <div className={s.stack}>
-          <div className={s.kpis}>
+          <div className={s.kpis} data-tour="thrash-kpis">
             <Kpi k={tx(lang, 'faults (whole string)', 'lỗi trang (cả chuỗi)')} v={totalFaults} tone={totalFaults > ws ? 'bad' : 'ok'} />
             <Kpi k={tx(lang, 'avg time per access', 'TB mỗi truy cập')} v={fmtNs(eat(totalFaults))} tone={slow > 100 ? 'bad' : slow > 5 ? 'warn' : 'ok'} />
             <Kpi k={tx(lang, 'slower than all-in-RAM', 'chậm hơn khi đủ RAM')} v={`×${Math.round(slow)}`} tone={slow > 100 ? 'bad' : slow > 5 ? 'warn' : 'ok'} />
@@ -192,9 +213,10 @@ function Thrash({ lang, preset }: { lang: Lang; preset: string }) {
 
 export default function VirtualMemorySim({ lang = 'vi', preset = 'program' }: { lang?: Lang; preset?: string }) {
   const [tab, setTab] = useState<'tr' | 'rep'>(preset in REF_PRESETS ? 'rep' : 'tr');
+  useLabBridge('vmtab', { tab }, { tab: (v) => setTab(v === 'rep' ? 'rep' : 'tr') });
   return (
     <Frame badge={tx(lang, 'OS lab', 'Phòng lab OS')} title={tx(lang, 'Virtual memory', 'Bộ nhớ ảo')} sub={tx(lang, 'From a pointer in your code to a byte in RAM — and why too little RAM makes everything crawl', 'Từ một con trỏ trong code tới một byte trong RAM — và vì sao thiếu RAM làm mọi thứ bò như rùa')}>
-      <div className={s.tabs} role="tablist">
+      <div className={s.tabs} role="tablist" data-tour="tabs">
         <button type="button" role="tab" className={cx(s.tab, tab === 'tr' && s.on)} onClick={() => setTab('tr')}>{tx(lang, 'Address translation & page faults', 'Dịch địa chỉ & lỗi trang')}</button>
         <button type="button" role="tab" className={cx(s.tab, tab === 'rep' && s.on)} onClick={() => setTab('rep')}>{tx(lang, 'Page replacement & thrashing', 'Thay trang & thrashing')}</button>
       </div>

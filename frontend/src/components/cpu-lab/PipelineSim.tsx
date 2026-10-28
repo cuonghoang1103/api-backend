@@ -6,6 +6,7 @@
 import { useState } from 'react';
 import data from './data/pipeline.json';
 import { Controls, Explain, Seg, css as s, usePlayer } from '../os-lab/ui';
+import { useLabBridge } from '../labs/bus';
 import { CpuFrame, cc as c, cx, tx, type Lang } from './parts';
 import { EXAMPLES } from './engine/marie';
 
@@ -44,6 +45,7 @@ export default function PipelineSim({ lang = 'vi', preset }: { lang?: Lang; pres
   const sym = (n: string) => B.symbols.find((x) => x.name === n);
   const data0 = prog === 'add' ? ['x', 'y', 'z'] : prog === 'max' ? ['arr'] : [];
   const entryFn = prog === 'add' ? 'main' : prog === 'sum' ? 'sum_to' : 'max_of';
+  useLabBridge('pipeline', { prog, arch, opt, stage }, { prog: (v) => setProg(v as Prog), arch: (v) => setArch(v as Arch), opt: (v) => setOpt(v as Opt) });
 
   const msg: Array<[string, string]> = [
     [`A human writes C. The CPU cannot read this text at all — it only executes bit patterns. Everything below turns these ${P.source.split('\n').length} lines into bits, step by step, using the real gcc ${isX86 ? 'for x86-64' : 'for ARM64'}.`,
@@ -62,12 +64,12 @@ export default function PipelineSim({ lang = 'vi', preset }: { lang?: Lang; pres
 
   return (
     <CpuFrame lang={lang} title={tx(lang, 'From C source to a running program', 'Từ mã C tới chương trình đang chạy')} sub={tx(lang, 'Real gcc output, not made up', 'Output thật của gcc, không bịa')}>
-      <div className={s.bar}>
+      <div className={s.bar} data-tour="pipe-config">
         <Seg label={tx(lang, 'Program', 'Chương trình')} value={prog} options={[['add', 'add.c'], ['sum', 'sum.c'], ['max', 'max.c']]} onChange={setProg} />
         <Seg label="CPU" value={arch} options={[['x86_64', 'x86-64'], ['aarch64', 'ARM64']]} onChange={setArch} />
         <Seg label={tx(lang, 'Optimise', 'Tối ưu')} value={opt} options={[['O0', '-O0'], ['O2', '-O2']]} onChange={setOpt} />
       </div>
-      <div className={c.stages}>
+      <div className={c.stages} data-tour="pipe-stages">
         {STAGES.map(([en, vi], k) => (
           <span key={k} style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
             <button type="button" className={cx(c.stage, stage === k && c.on)} onClick={() => { p.setPlaying(false); p.setI(k); }}>{k + 1}. {tx(lang, en, vi)}</button>
@@ -78,8 +80,8 @@ export default function PipelineSim({ lang = 'vi', preset }: { lang?: Lang; pres
       <Controls p={p} lang={lang} label={`${stage + 1}/${STAGES.length}`} />
       <Explain tone={stage === 5 ? 'ok' : undefined}>{tx(lang, msg[stage][0], msg[stage][1])}</Explain>
 
-      <div className={s.grid2} style={{ marginTop: 10, alignItems: 'start' }}>
-        <div className={s.panel}>
+      <div className={s.grid2} style={{ marginTop: 10, alignItems: 'start' }} data-tour="pipe-view">
+        <div className={s.panel} data-tour="pipe-source">
           <div className={s.panelTitle}>{prog}.c</div>
           <pre className={s.code} style={{ margin: 0, padding: '8px 12px', whiteSpace: 'pre', maxHeight: 340 }}>{P.source}</pre>
         </div>

@@ -1,0 +1,113 @@
+/*
+ * Trang /cpu-lab và /os-lab. Màu trang theo biến của site (--bg-*, --text-*, --accent-color) nên sáng/tối tự theo
+ * `html.theme-dark`. Món "phần cứng" ở phần mở đầu (bảng mạch xanh, LED hổ phách) giữ màu thật ở cả hai nền.
+ */
+.page { max-width: 1180px; margin: 0 auto; padding: 84px 16px 72px; color: var(--text-primary); }
+
+.hero { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 32px; align-items: center; }
+@media (max-width: 900px) { .hero { grid-template-columns: minmax(0, 1fr); gap: 22px; } }
+.eyebrow { font-size: 13.5px; font-weight: 700; color: var(--accent-color); }
+.h1 { font-family: Nunito, Inter, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; font-weight: 800; font-size: 42px; line-height: 1.08; letter-spacing: -0.5px; margin: 6px 0 12px; }
+@media (max-width: 560px) { .h1 { font-size: 31px; } }
+.lead { font-size: 16px; line-height: 1.6; color: var(--text-secondary); max-width: 62ch; margin: 0; }
+.heroActions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 18px; }
+.primary { appearance: none; display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 10px 20px; border-radius: 999px; border: 0;
+  background: var(--accent-color); color: #fff; font: 800 15px/1 Inter, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; cursor: pointer;
+  box-shadow: 0 10px 24px -12px var(--accent-color); transition: transform .12s; }
+.primary:hover { transform: translateY(-1px); }
+.primary svg { width: 18px; height: 18px; }
+.seg { display: inline-flex; border: 1px solid var(--border-color); border-radius: 999px; overflow: hidden; background: var(--bg-surface); }
+.seg button { appearance: none; border: 0; background: transparent; color: var(--text-secondary); padding: 9px 14px; font: 600 13px/1 Inter, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; cursor: pointer; min-height: 40px; }
+.seg .segOn { background: var(--accent-color); color: #fff; }
+.links { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 16px; font-size: 14px; }
+.links a { color: var(--accent-color); font-weight: 700; text-decoration: none; }
+.links a:hover { text-decoration: underline; }
+.links .linkMuted { color: var(--text-secondary); }
+.page :focus-visible { outline: 2.5px solid var(--accent-color); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { .primary { transition: none; } .primary:hover { transform: none; } }
+
+/* ── Bảng mạch ở phần mở đầu ─────────────────────────────────────────────────────── */
+.heroSide { min-width: 0; }
+.heroToy {
+  position: relative; border-radius: 20px; padding: 18px 18px 16px; color: #d8f3e3; overflow: hidden;
+  background:
+    repeating-linear-gradient(90deg, rgba(194, 124, 60, 0.18) 0 2px, transparent 2px 46px),
+    repeating-linear-gradient(0deg, rgba(194, 124, 60, 0.12) 0 2px, transparent 2px 46px),
+    linear-gradient(160deg, #134a2d, #0c2c1b);
+  border: 2px solid #1c6b40; box-shadow: 0 24px 50px -28px rgba(8, 40, 22, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+.heroToyLabel { font-size: 13px; font-weight: 700; color: #b9e8cc; margin-bottom: 12px; }
+.leds { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 8px; }
+.led { appearance: none; border: 0; background: rgba(0, 0, 0, 0.28); border-radius: 12px; padding: 9px 0 7px; display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; color: inherit; }
+.ledBulb { width: 30px; height: 30px; border-radius: 50%; border: 2px solid #3b4a40; background: radial-gradient(circle at 38% 30%, #59675e, #26302a 80%); transition: background .15s, box-shadow .15s, border-color .15s; }
+.ledOn .ledBulb { border-color: #d97706; background: radial-gradient(circle at 38% 28%, #fff6cf, #ffb627 55%, #d97706); box-shadow: 0 0 18px rgba(255, 176, 32, 0.75); }
+.ledW { font: 600 11px/1 'JetBrains Mono', Menlo, monospace; color: #8fc4a5; }
+@media (max-width: 420px) { .leds { gap: 4px; } .ledBulb { width: 24px; height: 24px; } }
+@media (prefers-reduced-motion: reduce) { .ledBulb { transition: none; } }
+.readout { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 14px; }
+.readout span { background: rgba(0, 0, 0, 0.3); border-radius: 10px; padding: 7px 9px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.readout b { font: 700 17px/1.2 'JetBrains Mono', Menlo, monospace; color: #7dffa8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.readout i { font-style: normal; font-size: 11.5px; color: #9cc9ae; }
+@media (max-width: 420px) { .readout { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+.cores { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.core { background: #141b25; border: 2px solid #2f3a48; border-radius: 12px; padding: 8px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.coreName { font: 700 11px/1 'JetBrains Mono', Menlo, monospace; color: #9fb0c4; }
+.coreProc { display: block; border-radius: 8px; padding: 7px 4px; text-align: center; color: #fff; font: 700 12px/1.1 'JetBrains Mono', Menlo, monospace; animation: procIn .35s ease-out; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+@keyframes procIn { from { transform: translateY(6px); opacity: 0; } to { transform: none; opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .coreProc { animation: none; } }
+.queue { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 12px; }
+.queue i { font-style: normal; font-size: 12px; color: #9cc9ae; margin-right: 4px; }
+.queue span { border: 1.5px dashed; border-radius: 8px; padding: 3px 7px; font: 700 11.5px/1 'JetBrains Mono', Menlo, monospace; background: rgba(0, 0, 0, 0.25); }
+
+.heroNote { display: flex; align-items: center; gap: 10px; margin-top: 12px; font-size: 13px; color: var(--text-secondary); line-height: 1.45; }
+.heroNote > span:nth-child(2) { flex: 1; min-width: 0; }
+.soundWrap button { appearance: none; display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 6px 12px; border-radius: 999px;
+  border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-secondary); font: 600 12.5px/1 Inter, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; cursor: pointer; }
+.soundWrap button[aria-pressed='true'] { color: var(--accent-color); border-color: var(--accent-color); }
+.soundWrap svg { width: 15px; height: 15px; }
+
+/* ── Danh sách mô phỏng ──────────────────────────────────────────────────────────── */
+.listSec { margin-top: 44px; }
+.h2 { font-family: Nunito, Inter, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; font-size: 22px; font-weight: 800; margin: 0 0 14px; }
+.cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(268px, 1fr)); gap: 14px; }
+.cardItem { position: relative; display: flex; flex-direction: column; border: 1.5px solid var(--border-color); border-radius: 18px; background: var(--bg-card, var(--bg-surface)); overflow: hidden; transition: border-color .15s, box-shadow .15s; }
+.cardItem:hover { border-color: color-mix(in srgb, var(--accent-color) 55%, var(--border-color)); }
+.cardSel { border-color: var(--accent-color); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color) 22%, transparent); }
+.cardMain { appearance: none; border: 0; background: transparent; color: inherit; text-align: left; display: flex; gap: 12px; padding: 16px 16px 12px; cursor: pointer; flex: 1; font: inherit; }
+.cardIcon { flex: none; width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center; background: color-mix(in srgb, var(--accent-color) 13%, transparent); color: var(--accent-color); }
+.cardIcon svg { width: 24px; height: 24px; }
+.cardText { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.cardChapter { font-size: 12px; font-weight: 600; color: var(--text-muted); }
+.cardTitle { font-family: Nunito, Inter, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; font-weight: 800; font-size: 16.5px; line-height: 1.25; }
+.cardDesc { font-size: 13px; line-height: 1.5; color: var(--text-secondary); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.cardGuide { appearance: none; border: 0; border-top: 1px solid var(--border-color); background: transparent; color: var(--accent-color); display: flex; align-items: center; gap: 7px;
+  padding: 10px 16px; font: 700 13px/1 Inter, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; cursor: pointer; text-align: left; }
+.cardGuide:hover { background: color-mix(in srgb, var(--accent-color) 8%, transparent); }
+.cardGuide svg { width: 14px; height: 14px; }
+/* lộ trình: số thứ tự như một con chip nhỏ */
+.path .cardMain { padding-left: 54px; }
+.stepNo { position: absolute; left: 14px; top: 18px; width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center;
+  background: #2a313c; color: #ffd27a; font: 800 13px/1 'JetBrains Mono', Menlo, monospace; box-shadow: 0 0 0 2px #d6a943; }
+.path .cardIcon { width: 40px; height: 40px; }
+@media (prefers-reduced-motion: reduce) { .cardItem { transition: none; } }
+
+/* ── Mô phỏng đang mở ───────────────────────────────────────────────────────────── */
+.stage { margin-top: 40px; scroll-margin-top: 76px; }
+.stageHead { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.stageIcon { width: 42px; height: 42px; border-radius: 13px; display: grid; place-items: center; background: var(--accent-color); color: #fff; flex: none; }
+.stageIcon svg { width: 22px; height: 22px; }
+.stageTitles { flex: 1 1 220px; min-width: 0; }
+.stageKicker { font-size: 12.5px; font-weight: 600; color: var(--text-muted); }
+.stageTitle { font-family: Nunito, Inter, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; font-weight: 800; font-size: 21px; line-height: 1.2; }
+.presets { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 13px; color: var(--text-secondary); }
+.presets button { appearance: none; border-radius: 999px; padding: 5px 11px; font: 600 12.5px/1 Inter, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; cursor: pointer;
+  background: var(--bg-surface); color: var(--text-primary); border: 1.5px solid var(--border-color); min-height: 30px; }
+.presets .presetOn { border-color: var(--accent-color); color: var(--accent-color); }
+.after { font-size: 13.5px; color: var(--text-secondary); margin: 6px 0 0; }
+.after a { color: var(--accent-color); font-weight: 700; display: inline-flex; align-items: center; gap: 4px; }
+.after svg { width: 14px; height: 14px; }
+
+/* ── Chế độ quay video: chỉ còn mô phỏng ─────────────────────────────────────────── */
+.recordStage { position: fixed; inset: 0; z-index: 10000; overflow: auto; background: var(--bg-primary, #f4f6fa); }
+.recordInner { max-width: 1120px; margin: 0 auto; padding: 22px 20px 40px; }

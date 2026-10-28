@@ -6,6 +6,8 @@ import {
   type FloatFmt,
 } from './engine/encoding';
 import { Explain, Seg, css as s } from '../os-lab/ui';
+import { useLabBridge } from '../labs/bus';
+import { labSfx } from '../labs/sfx';
 import { CpuFrame, ReadItem, cc as c, cx, tx, visible, type Lang } from './parts';
 
 type Tab = 'text' | 'mojibake' | 'float' | 'color' | 'endian';
@@ -26,25 +28,28 @@ function TextTab({ lang }: { lang: Lang }) {
   const nb = cur?.utf8.length ?? 1;
   const payloadBits = nb === 1 ? 7 : nb === 2 ? 11 : nb === 3 ? 16 : 21;
   const padded = cpBits.padStart(payloadBits, '0');
+  useLabBridge('text', { text, sel, ch: cur?.ch ?? '', cp: cur?.cp ?? 0, nb, total8, chars: chars.length }, {
+    text: (x) => { setText(String(x)); setSel(0); }, sel: (x) => setSel(Number(x)), form: (x) => setForm(x as 'NFC' | 'NFD'),
+  });
   return (
     <div className={s.stack}>
-      <div className={s.bar}>
+      <div className={s.bar} data-tour="text-input">
         <span className={s.lbl} style={{ flex: '1 1 260px' }}>{tx(lang, 'Type any text', 'Gõ chữ bất kỳ')}
           <input type="text" value={text} onChange={(e) => { setText(e.target.value); setSel(0); }} style={{ flex: 1, minWidth: 160 }} /></span>
         <Seg label={tx(lang, 'Unicode form', 'Dạng Unicode')} value={form} options={[['NFC', 'NFC (dựng sẵn)'], ['NFD', 'NFD (tách dấu)']]} onChange={setForm} />
       </div>
-      <div className={c.read}>
+      <div className={c.read} data-tour="text-counts">
         <ReadItem k={tx(lang, 'characters', 'ký tự (mã điểm)')} v={chars.length} />
         <ReadItem k={tx(lang, 'UTF-8 bytes', 'byte UTF-8')} v={total8} />
         <ReadItem k={tx(lang, 'UTF-16 bytes (Java, JS)', 'byte UTF-16 (Java, JS)')} v={total16} />
         <ReadItem k={tx(lang, 'fits in ASCII?', 'vừa ASCII?')} v={allAscii ? tx(lang, 'yes', 'có') : tx(lang, 'no', 'không')} />
       </div>
-      <div className={s.panel} style={{ overflowX: 'auto' }}>
+      <div className={s.panel} style={{ overflowX: 'auto' }} data-tour="char-table">
         <div className={s.panelTitle}>{tx(lang, 'Each character → code point → UTF-8 bytes (click a row)', 'Mỗi ký tự → mã điểm → byte UTF-8 (bấm một hàng)')}</div>
         <table className={cx(s.tbl, s.compact)}>
           <thead><tr><th>{tx(lang, 'char', 'ký tự')}</th><th>{tx(lang, 'code point', 'mã điểm')}</th><th>UTF-8 ({tx(lang, 'red = length marker, blue = data bits', 'đỏ = dấu độ dài, xanh = bit dữ liệu')})</th><th className={s.num}>{tx(lang, 'bytes', 'byte')}</th></tr></thead>
           <tbody>{chars.map((ch, k) => (
-            <tr key={k} className={k === sel ? s.hl : undefined} onClick={() => setSel(k)} style={{ cursor: 'pointer' }}>
+            <tr key={k} className={k === sel ? s.hl : undefined} onClick={() => { labSfx('tap'); setSel(k); }} style={{ cursor: 'pointer' }}>
               <td style={{ fontSize: 18, fontWeight: 700 }}>{ch.ch === ' ' ? '␠' : ch.combining ? `◌${ch.ch}` : ch.ch}</td>
               <td className={s.mono}>{ch.uplus}{ch.combining ? <span className={s.small}> {tx(lang, '(combining)', '(dấu kết hợp)')}</span> : null}</td>
               <td className={s.mono}>{ch.utf8Segs.map((seg, i) => <span key={i} style={{ marginRight: 8, whiteSpace: 'nowrap' }}><span className={c.pre}>{seg[0].bits}</span><span className={c.pay}>{seg[1].bits}</span> <span className={s.small}>{h2(ch.utf8[i])}</span></span>)}</td>
@@ -123,18 +128,19 @@ function FloatTab({ lang }: { lang: Lang }) {
   const frac = /^\s*-?\d*[.,]\d+\s*$/.test(input) && !bits ? fracToBinarySteps('0.' + input.replace(',', '.').split('.')[1], 28) : null;
   const sum = partsFromBits(floatBits(0.1 + 0.2, 'f64'), 'f64'), p3 = partsFromBits(floatBits(0.3, 'f64'), 'f64');
   const pick = (v: string) => { setInput(v); setBits(null); };
+  useLabBridge('float', { input, fmt, flipped: bits !== null, exact: p.exact }, { pick: (v) => pick(String(v)), fmt: (v) => { setFmt(v as FloatFmt); setBits(null); }, flip: (k) => flip(Number(k)) });
   return (
     <div className={s.stack}>
-      <div className={s.bar}>
+      <div className={s.bar} data-tour="float-pick">
         <Seg value={fmt} options={[['f32', 'float (32 bit)'], ['f64', 'double (64 bit)']]} onChange={(f) => { setFmt(f); setBits(null); }} />
         <span className={s.lbl}>{tx(lang, 'Number', 'Số')} <input type="text" value={bits ? String(p.value) : input} onChange={(e) => pick(e.target.value)} style={{ width: 130 }} /></span>
         {['0.1', '0.5', '-2.75', '1', '3.14159', '16777217', '1e-45', 'Infinity', 'NaN'].map((v) => <button type="button" key={v} className={s.btn} onClick={() => pick(v)}>{v}</button>)}
       </div>
       <div className={s.panel} style={{ overflowX: 'auto' }}>
         <div className={s.panelTitle}>{tx(lang, 'The bits (click to flip one)', 'Dãy bit (bấm để lật một bit)')}: <span style={{ color: '#dc2626' }}>{tx(lang, 'sign', 'dấu')}</span> · <span style={{ color: '#059669' }}>{tx(lang, `exponent (${E})`, `số mũ (${E})`)}</span> · <span style={{ color: '#2563eb' }}>{tx(lang, `fraction (${fmt === 'f32' ? 23 : 52})`, `phần định trị (${fmt === 'f32' ? 23 : 52})`)}</span></div>
-        <div className={c.fbits}>
+        <div className={c.fbits} data-tour="float-bits">
           {theBits.split('').map((b, k) => (
-            <button type="button" key={k} onClick={() => flip(k)} className={cx(c.fb, k === 0 ? c.sgn : k <= E ? c.exp : c.frc, b === '0' && c.zero)} style={{ marginRight: k === 0 || k === E ? 4 : 0 }} aria-label={`bit ${theBits.length - 1 - k}`}>{b}</button>
+            <button type="button" key={k} onClick={() => { labSfx(theBits[k] === '1' ? 'off' : 'on'); flip(k); }} className={cx(c.fb, k === 0 ? c.sgn : k <= E ? c.exp : c.frc, b === '0' && c.zero)} style={{ marginRight: k === 0 || k === E ? 4 : 0 }} aria-label={`bit ${theBits.length - 1 - k}`}>{b}</button>
           ))}
         </div>
       </div>
@@ -144,7 +150,7 @@ function FloatTab({ lang }: { lang: Lang }) {
         <ReadItem k={tx(lang, 'scientific form', 'dạng khoa học')} v={<span style={{ fontSize: 13 }}>{p.sci.length > 60 ? p.sci.slice(0, 58) + '…' : p.sci}</span>} />
         <ReadItem k="hex" v={'0x' + BigInt('0b' + theBits).toString(16).toUpperCase().padStart(theBits.length / 4, '0')} />
       </div>
-      <div className={s.panel}>
+      <div className={s.panel} data-tour="float-exact">
         <div className={s.panelTitle}>{tx(lang, 'What is REALLY stored (exact decimal of these bits)', 'Thứ THỰC SỰ được lưu (giá trị thập phân chính xác của dãy bit)')}</div>
         <div className={s.mono} style={{ wordBreak: 'break-all', fontWeight: 800 }}>{p.exact}</div>
         {!bits && (p.kind === 'normal' || p.kind === 'subnormal') && p.exact !== String(x) && (
@@ -152,7 +158,7 @@ function FloatTab({ lang }: { lang: Lang }) {
         )}
       </div>
       {frac && frac.steps.length > 0 && (
-        <div className={s.panel} style={{ overflowX: 'auto' }}>
+        <div className={s.panel} style={{ overflowX: 'auto' }} data-tour="float-why">
           <div className={s.panelTitle}>{tx(lang, 'Why: the fraction in binary (multiply by 2, keep the integer part)', 'Vì sao: phần thập phân sang nhị phân (nhân 2, lấy phần nguyên)')}</div>
           <div className={s.mono} style={{ fontSize: 12, lineHeight: 1.6 }}>
             {frac.steps.slice(0, 10).map((st, k) => <div key={k} style={{ color: frac.repeatsFrom !== null && k >= frac.repeatsFrom ? 'var(--ol-warn)' : undefined }}>{st.x} × 2 = {st.times2} → <b>{st.bit}</b></div>)}
@@ -165,7 +171,7 @@ function FloatTab({ lang }: { lang: Lang }) {
           </div>
         </div>
       )}
-      <div className={s.panel}>
+      <div className={s.panel} data-tour="float-sum">
         <div className={s.panelTitle}>0.1 + 0.2 == 0.3 ? ({tx(lang, 'double, like JavaScript / Java / Python', 'double, như JavaScript / Java / Python')})</div>
         <table className={cx(s.tbl, s.compact)}><tbody>
           <tr><td className={s.mono}>0.1</td><td className={s.mono} style={{ wordBreak: 'break-all' }}>{partsFromBits(floatBits(0.1, 'f64'), 'f64').exact}</td></tr>
@@ -192,10 +198,11 @@ function ColorTab({ lang }: { lang: Lang }) {
   });
   const [brush, setBrush] = useState(5);
   const hexStr = rgbToHex(rgb);
+  useLabBridge('color', { r: rgb.r, g: rgb.g, b: rgb.b, hex: hexStr }, { rgb: (v) => { const [r, g, b] = v as number[]; setRgb({ r, g, b }); } });
   return (
     <div className={s.stack}>
       <div className={s.grid2}>
-        <div className={s.panel}>
+        <div className={s.panel} data-tour="pixel">
           <div className={s.panelTitle}>{tx(lang, 'One pixel = 3 bytes: red, green, blue', 'Một điểm ảnh = 3 byte: đỏ, lục, lam')}</div>
           {(['r', 'g', 'b'] as const).map((k) => (
             <div key={k} className={s.lbl} style={{ display: 'flex', margin: '4px 0' }}>
@@ -213,13 +220,13 @@ function ColorTab({ lang }: { lang: Lang }) {
           </div>
           <div className={s.small} style={{ marginTop: 6 }}>{tx(lang, 'The CSS colour #DA251D is just three bytes written in hex: DA = 218 red, 25 = 37 green, 1D = 29 blue. 256³ ≈ 16.7 million colours.', 'Màu CSS #DA251D chỉ là ba byte viết bằng hex: DA = 218 đỏ, 25 = 37 lục, 1D = 29 lam. 256³ ≈ 16,7 triệu màu.')}</div>
         </div>
-        <div className={s.panel}>
+        <div className={s.panel} data-tour="image">
           <div className={s.panelTitle}>{tx(lang, 'An 8 × 8 image (click to paint)', 'Ảnh 8 × 8 (bấm để tô)')}</div>
           <div className={s.bar} style={{ margin: '0 0 6px' }}>
             {PAL.map((col, k) => <button type="button" key={col} onClick={() => setBrush(k)} aria-label={col} style={{ width: 24, height: 24, borderRadius: 6, background: col, border: `3px solid ${brush === k ? 'var(--ol-accent)' : 'var(--ol-border)'}`, cursor: 'pointer' }} />)}
           </div>
           <div className={c.pixels} style={{ gridTemplateColumns: 'repeat(8, auto)' }}>
-            {grid.map((v, i) => <button type="button" key={i} className={c.px} style={{ background: PAL[v] }} aria-label={`pixel ${i}`} onClick={() => setGrid(grid.map((x, j) => (j === i ? brush : x)))} />)}
+            {grid.map((v, i) => <button type="button" key={i} className={c.px} style={{ background: PAL[v] }} aria-label={`pixel ${i}`} onClick={() => { labSfx('pop'); setGrid(grid.map((x, j) => (j === i ? brush : x))); }} />)}
           </div>
           <div className={s.small} style={{ marginTop: 6 }}>{tx(lang, 'Row 1 in memory:', 'Hàng 1 trong bộ nhớ:')}</div>
           <div className={s.mono} style={{ fontSize: 11, wordBreak: 'break-all' }}>{grid.slice(0, 8).map((v) => PAL[v].slice(1).match(/../g)!.join(' ')).join(' · ')}</div>
@@ -264,13 +271,14 @@ function EndianTab({ lang }: { lang: Lang }) {
 export default function DataSim({ lang = 'vi', preset }: { lang?: Lang; preset?: string }) {
   const ALL: Tab[] = ['text', 'mojibake', 'float', 'color', 'endian'];
   const [tab, setTab] = useState<Tab>(ALL.includes(preset as Tab) ? (preset as Tab) : 'text');
+  useLabBridge('data', { tab }, { tab: (x) => setTab(x as Tab) });
   const TABS: Array<[Tab, string, string]> = [
     ['text', 'Text → bytes', 'Chữ → byte'], ['mojibake', 'Mojibake', 'Lỗi font'], ['float', 'Real numbers (IEEE-754)', 'Số thực (IEEE-754)'],
     ['color', 'Colours & images', 'Màu & ảnh'], ['endian', 'Byte order', 'Thứ tự byte'],
   ];
   return (
     <CpuFrame lang={lang} title={tx(lang, 'Data representation', 'Biểu diễn dữ liệu')} sub={tx(lang, 'Text, real numbers and pictures are all just bytes', 'Chữ, số thực và hình ảnh đều chỉ là byte')}>
-      <div className={s.tabs} role="tablist">
+      <div className={s.tabs} role="tablist" data-tour="tabs">
         {TABS.map(([k, en, vi]) => <button type="button" role="tab" aria-selected={tab === k} key={k} className={cx(s.tab, tab === k && s.on)} onClick={() => setTab(k)}>{tx(lang, en, vi)}</button>)}
       </div>
       {tab === 'text' && <TextTab lang={lang} />}

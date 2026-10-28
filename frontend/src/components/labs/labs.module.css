@@ -1,0 +1,147 @@
+/*
+ * Hướng dẫn từng bước + thanh công cụ của phòng lab. Nằm BÊN TRONG khung mô phỏng (.root của os-lab) nên dùng các biến
+ * màu --ol-* của khung ⇒ sáng/tối tự theo `html.theme-dark`. Mọi luật có 2 lớp (.card .x) để thắng `.rich-content`
+ * của trang học.
+ */
+
+/* ── Chíp, người dẫn đường ─────────────────────────────────────────────────────────── */
+.chip { flex: none; display: block; overflow: visible; }
+.chipPin { fill: #d6a943; }
+.chipBody { fill: #2a313c; }
+.chipFace { fill: #141b25; }
+.chipEye { fill: #7dffa8; }
+.chipLine { fill: none; stroke: #7dffa8; stroke-width: 2.2; stroke-linecap: round; }
+.chipBlush { fill: #ff9fb0; opacity: 0.75; }
+.chipEyes { transform-origin: 24px 21px; animation: blink 4.2s infinite; }
+@keyframes blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(0.12); } }
+@media (prefers-reduced-motion: reduce) { .chipEyes { animation: none; } }
+
+/* ── Thanh công cụ dưới tiêu đề khung ──────────────────────────────────────────────── */
+.toolbarWrap { margin: -2px 0 10px; }
+.toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: -2px 0 8px; }
+.grow { flex: 1 1 0; min-width: 0; }
+.toolbarWrap .hint, .toolbar + .hint { display: flex; align-items: flex-start; gap: 7px; margin: 0; padding: 0; font-size: 13px; line-height: 1.45; color: var(--ol-muted); }
+.toolbarWrap .hint svg { flex: none; width: 15px; height: 15px; margin-top: 2px; color: #d99a1e; }
+.running { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--ol-muted); }
+.running svg { width: 15px; height: 15px; color: var(--ol-accent); }
+.running b { color: var(--ol-text); }
+
+.toolbarWrap .startSmall, .toolbar .startSmall {
+  appearance: none; display: inline-flex; align-items: center; gap: 7px; min-height: 36px; padding: 6px 13px 6px 10px;
+  border-radius: 999px; border: 1.5px solid var(--ol-accent); background: var(--ol-accent-bg); color: var(--ol-accent);
+  font: 700 13.5px/1.2 Inter, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; cursor: pointer; transition: background .15s, color .15s;
+}
+.toolbar .startSmall:hover { background: var(--ol-accent); color: #fff; }
+:global(html.theme-dark) .toolbar .startSmall:hover { color: #0d1626; }
+.toolbar .startSmall svg { width: 16px; height: 16px; }
+.toolbar .tourSelect { min-height: 34px; max-width: 260px; border-radius: 9px; font-size: 12.5px; }
+
+.toolbar .iconBtn, .toolbar .ghostBtn {
+  appearance: none; display: inline-flex; align-items: center; gap: 6px; min-height: 34px; padding: 5px 10px; border-radius: 9px;
+  border: 1px solid var(--ol-border); background: var(--ol-panel); color: var(--ol-muted); font: 600 12.5px/1 Inter, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; cursor: pointer;
+}
+.toolbar .iconBtn svg, .toolbar .ghostBtn svg { width: 15px; height: 15px; }
+.toolbar .iconOn { color: var(--ol-accent); border-color: var(--ol-accent); background: var(--ol-accent-bg); }
+@media (max-width: 520px) { .toolbar .iconLbl { display: none; } }
+
+/* dải giới thiệu khi bài học đã chọn sẵn một tour */
+.banner { display: flex; align-items: center; gap: 12px; padding: 10px 12px; margin-bottom: 8px; border-radius: 14px;
+  background: linear-gradient(0deg, var(--ol-accent-bg), var(--ol-accent-bg)); border: 1.5px solid var(--ol-accent); }
+.bannerText { flex: 1; min-width: 0; }
+.banner .bannerTitle { font: 800 15.5px/1.3 Nunito, Inter, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; color: var(--ol-text); }
+.banner .bannerSub { font-size: 12.5px; color: var(--ol-muted); margin-top: 2px; line-height: 1.4; }
+.banner .startBtn {
+  appearance: none; flex: none; display: inline-flex; align-items: center; gap: 7px; min-height: 40px; padding: 8px 16px; border-radius: 999px; border: 0;
+  background: var(--ol-accent); color: #fff; font: 800 14px/1 Inter, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; cursor: pointer;
+  box-shadow: 0 6px 16px -6px var(--ol-accent);
+}
+:global(html.theme-dark) .banner .startBtn { color: #0d1626; }
+.banner .startBtn svg { width: 16px; height: 16px; }
+@media (max-width: 560px) {
+  .banner { flex-wrap: wrap; }
+  .banner .startBtn { width: 100%; justify-content: center; }
+}
+
+/* ── Vòng sáng quanh vùng đang nói tới ──────────────────────────────────────────────── */
+.ring {
+  position: absolute; z-index: 30; pointer-events: none; border-radius: 12px; border: 3px solid var(--ol-accent);
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--ol-accent) 22%, transparent), 0 0 0 9999px rgba(15, 23, 42, 0.36);
+  transition: top .38s cubic-bezier(.3, .7, .2, 1), left .38s cubic-bezier(.3, .7, .2, 1), width .38s cubic-bezier(.3, .7, .2, 1), height .38s cubic-bezier(.3, .7, .2, 1), border-color .2s;
+  animation: ringPulse 2.2s ease-in-out infinite;
+}
+:global(html.theme-dark) .ring { box-shadow: 0 0 0 5px color-mix(in srgb, var(--ol-accent) 28%, transparent), 0 0 0 9999px rgba(0, 0, 0, 0.5); }
+.ringWait { border-color: #f59e0b; }
+.ringOk { border-color: #16a34a; }
+@keyframes ringPulse { 0%, 100% { outline: 0 solid transparent; } 50% { outline: 4px solid color-mix(in srgb, var(--ol-accent) 30%, transparent); outline-offset: 3px; } }
+.dim { position: absolute; inset: 0; z-index: 30; pointer-events: none; background: rgba(15, 23, 42, 0.16); }
+.still, .still .chipEyes { animation: none !important; transition: none !important; }
+@media (prefers-reduced-motion: reduce) { .ring { animation: none; transition: none; } }
+
+/* ── Thẻ hướng dẫn: dính đáy màn hình trong phạm vi khung ───────────────────────────── */
+.card {
+  position: sticky; bottom: 12px; z-index: 40; margin: 14px auto 2px; width: min(600px, 100%);
+  background: var(--ol-bg); color: var(--ol-text); border: 1.5px solid var(--ol-accent); border-radius: 18px;
+  padding: 12px 14px 12px; box-shadow: 0 18px 40px -16px rgba(15, 23, 42, 0.45), 0 2px 6px rgba(15, 23, 42, 0.08);
+  outline: none; animation: cardIn .28s cubic-bezier(.3, .7, .2, 1);
+}
+@keyframes cardIn { from { transform: translateY(8px); opacity: 0; } to { transform: none; opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .card { animation: none; } }
+.card:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--ol-accent) 40%, transparent), 0 18px 40px -16px rgba(15, 23, 42, 0.45); }
+.cardTop { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+.dots { display: flex; flex-wrap: wrap; gap: 4px; flex: 1; min-width: 0; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ol-border); transition: background .2s, transform .2s; }
+.dotDone { background: color-mix(in srgb, var(--ol-accent) 55%, var(--ol-border)); }
+.dotNow { background: var(--ol-accent); transform: scale(1.35); }
+.dotQuiz { border-radius: 2px; transform: rotate(45deg); }
+.dotQuiz.dotNow { transform: rotate(45deg) scale(1.35); }
+.counter { font-size: 12px; font-weight: 700; color: var(--ol-muted); white-space: nowrap; }
+.card .closeBtn { appearance: none; border: 0; background: transparent; color: var(--ol-muted); width: 32px; height: 32px; border-radius: 8px; display: grid; place-items: center; cursor: pointer; padding: 0; }
+.card .closeBtn:hover { background: var(--ol-panel); color: var(--ol-text); }
+.card .closeBtn svg { width: 17px; height: 17px; }
+.card .cardTitle { margin: 2px 0 4px; padding: 0; font: 800 17px/1.3 Nunito, Inter, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; color: var(--ol-text); border: 0; }
+.card .cardBody { margin: 0; font-size: 14px; line-height: 1.58; color: var(--ol-text); max-width: 68ch; }
+.card .inlineIcon { width: 17px; height: 17px; vertical-align: -3px; margin-right: 6px; color: #f59e0b; }
+
+.card .task { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 10px; padding: 8px 10px; border-radius: 11px;
+  background: var(--ol-warn-bg); border: 1px solid color-mix(in srgb, var(--ol-warn) 45%, transparent); font-size: 13.5px; line-height: 1.45; }
+.card .task > span:not(.pulse) { flex: 1 1 220px; min-width: 0; }
+.card .task svg { width: 18px; height: 18px; color: var(--ol-ok); flex: none; }
+.card .taskOk { background: var(--ol-ok-bg); border-color: color-mix(in srgb, var(--ol-ok) 45%, transparent); }
+.pulse { flex: none; width: 10px; height: 10px; border-radius: 50%; background: #f59e0b; box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.6); animation: pulse 1.4s infinite; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.55); } 70% { box-shadow: 0 0 0 9px rgba(245, 158, 11, 0); } 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); } }
+@media (prefers-reduced-motion: reduce) { .pulse { animation: none; } }
+.card .helpBtn { appearance: none; display: inline-flex; align-items: center; gap: 5px; min-height: 30px; padding: 4px 10px; border-radius: 999px;
+  border: 1px solid var(--ol-border); background: var(--ol-bg); color: var(--ol-text); font: 600 12.5px/1 Inter, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; cursor: pointer; }
+.card .helpBtn svg { width: 14px; height: 14px; color: var(--ol-accent); }
+
+.card .options { display: grid; gap: 6px; margin-top: 8px; }
+.card .option { appearance: none; text-align: left; padding: 9px 12px; border-radius: 11px; border: 1.5px solid var(--ol-border); background: var(--ol-panel);
+  color: var(--ol-text); font: 600 13.5px/1.4 Inter, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; cursor: pointer; }
+.card .option:hover:not(:disabled) { border-color: var(--ol-accent); }
+.card .option:disabled { cursor: default; }
+.card .optRight { border-color: var(--ol-ok); background: var(--ol-ok-bg); }
+.card .optWrong { border-color: var(--ol-bad); background: var(--ol-bad-bg); }
+.card .why { margin: 8px 0 0; font-size: 13.5px; line-height: 1.5; }
+.card .whyOk { color: var(--ol-ok); } .card .whyBad { color: var(--ol-bad); }
+
+.cardNav { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 12px; }
+.card .navBtn, .card .textBtn, .card .nextBtn {
+  appearance: none; display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 6px 12px; border-radius: 10px; cursor: pointer;
+  font: 600 13px/1 Inter, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+}
+.card .navBtn { border: 1px solid var(--ol-border); background: var(--ol-panel); color: var(--ol-text); }
+.card .navBtn:disabled { opacity: 0.45; cursor: not-allowed; }
+.card .textBtn { border: 0; background: transparent; color: var(--ol-muted); }
+.card .textBtn:hover { color: var(--ol-text); text-decoration: underline; }
+.card .nextBtn { border: 0; background: var(--ol-accent); color: #fff; font-weight: 800; padding: 6px 16px; }
+:global(html.theme-dark) .card .nextBtn { color: #0d1626; }
+.card .nextBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+.card .nextSoft { background: var(--ol-panel2); color: var(--ol-text); border: 1px solid var(--ol-border); }
+:global(html.theme-dark) .card .nextSoft { color: var(--ol-text); }
+.card svg { width: 15px; height: 15px; }
+.card .chip { width: 34px; height: 34px; }
+@media (max-width: 520px) {
+  .card { bottom: 8px; padding: 10px 11px; border-radius: 15px; }
+  .card .cardBody { font-size: 13.5px; }
+  .card .navBtn span, .card .textBtn { font-size: 12.5px; }
+}

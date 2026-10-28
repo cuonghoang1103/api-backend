@@ -34,7 +34,12 @@
   text-align: left;
   max-width: 100%;
   overflow: hidden;
+  overflow: clip;
+  position: relative;
+  box-shadow: 0 1px 0 var(--ol-border), 0 10px 30px -22px rgba(15, 23, 42, 0.35);
 }
+/* đang chạy hướng dẫn: chừa chỗ cho thẻ hướng dẫn dính đáy khung */
+.root.touring { padding-bottom: 6px; }
 :global(html.theme-dark) .root {
   --ol-bg: #1d1f23;
   --ol-panel: #25282e;
@@ -55,11 +60,16 @@
 }
 .root * { box-sizing: border-box; }
 
-.head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; margin-bottom: 10px; }
-.title { font-weight: 800; font-size: 16px; letter-spacing: 0.1px; }
+.head { display: flex; align-items: center; gap: 10px 12px; margin-bottom: 10px; }
+.headIcon { flex: none; width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center;
+  background: var(--ol-accent-bg); color: var(--ol-accent); }
+.headIcon svg { width: 22px; height: 22px; }
+.headText { display: flex; flex-direction: column; min-width: 0; flex: 1; gap: 1px; }
+.title { font-family: Nunito, Inter, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; font-weight: 800; font-size: 18px; line-height: 1.25; letter-spacing: 0.1px; }
 .sub { color: var(--ol-muted); font-size: 13px; }
-.badge { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase;
-  padding: 2px 8px; border-radius: 999px; background: var(--ol-accent-bg); color: var(--ol-accent); }
+.badge { flex: none; align-self: flex-start; display: inline-block; font-size: 11.5px; font-weight: 700;
+  padding: 3px 9px; border-radius: 999px; background: var(--ol-panel); border: 1px solid var(--ol-border); color: var(--ol-muted); }
+@media (max-width: 560px) { .badge { display: none; } .title { font-size: 16.5px; } .headIcon { width: 34px; height: 34px; } }
 
 .bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 8px 0; }
 .btn { appearance: none; border: 1px solid var(--ol-border); background: var(--ol-panel); color: var(--ol-text);
@@ -72,6 +82,10 @@
 .btn.danger { border-color: var(--ol-bad); color: var(--ol-bad); background: var(--ol-bad-bg); }
 .btn.on { background: var(--ol-accent-bg); border-color: var(--ol-accent); color: var(--ol-accent); }
 .btn svg { width: 15px; height: 15px; }
+.btn { transition: border-color .15s, background-color .15s, transform .08s; }
+.btn:active:not(:disabled) { transform: translateY(1px); }
+.root :focus-visible { outline: 2.5px solid var(--ol-accent); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { .btn { transition: none; } .btn:active:not(:disabled) { transform: none; } }
 
 .seg { display: inline-flex; border: 1px solid var(--ol-border); border-radius: 9px; overflow: hidden; flex-wrap: wrap; }
 .seg button { appearance: none; border: 0; border-right: 1px solid var(--ol-border); background: var(--ol-panel);
@@ -89,7 +103,7 @@
 .root input[type='range'] { accent-color: var(--ol-accent); }
 
 .panel { background: var(--ol-panel); border: 1px solid var(--ol-border); border-radius: 11px; padding: 10px 12px; min-width: 0; }
-.panelTitle { font-size: 11.5px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; color: var(--ol-muted); margin-bottom: 6px; }
+.panelTitle { font-size: 12.5px; font-weight: 700; color: var(--ol-muted); margin-bottom: 6px; }
 .grid2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; }
 .grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
 .stack { display: flex; flex-direction: column; gap: 10px; }
@@ -133,7 +147,7 @@
 
 .kpis { display: flex; flex-wrap: wrap; gap: 8px; }
 .kpi { background: var(--ol-panel); border: 1px solid var(--ol-border); border-radius: 10px; padding: 6px 10px; min-width: 92px; }
-.kpi .k { font-size: 11px; color: var(--ol-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; }
+.kpi .k { font-size: 11.5px; color: var(--ol-muted); font-weight: 700; }
 .kpi .v { font-size: 18px; font-weight: 800; font-variant-numeric: tabular-nums; }
 .kpi.bad .v { color: var(--ol-bad); } .kpi.ok .v { color: var(--ol-ok); } .kpi.warn .v { color: var(--ol-warn); }
 

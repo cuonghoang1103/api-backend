@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react';
 import { blockScenario, ORDER, poolScenario, raceScenario, run, type ELState, type Inst, type Phase, type Scenario } from './engine/eventloop';
 import { Controls, Explain, Frame, Kpi, Seg, css as s, cx, tx, usePlayer, type Lang } from './ui';
+import { useLabBridge } from '../labs/bus';
 
 type Mode = 'order' | 'block' | 'pool' | 'race';
 const MODES: Array<[Mode, string, string]> = [['order', 'Who prints first?', 'Ai in trước?'], ['block', 'Blocking the loop', 'Chặn vòng lặp'], ['pool', 'libuv thread pool', 'Thread pool của libuv'], ['race', 'Race across await', 'Race qua await']];
@@ -37,14 +38,20 @@ export default function EventLoopSim({ lang = 'vi', preset = 'order' }: { lang?:
   const S: ELState = states[Math.min(p.i, states.length - 1)];
   const reset = () => p.reset();
   const PHASES: Array<[Phase, string]> = [['timers', 'timers'], ['poll', 'poll (I/O)'], ['check', 'check']];
+  useLabBridge('el', {
+    mode, offload, lock, now: S.now, phase: S.phase, printed: S.out.length, last: S.out.length ? S.out[S.out.length - 1].v : '',
+    blocked: S.blockedMs, stack: S.stack.length,
+  }, {
+    mode: (v) => { setMode(v as Mode); reset(); }, offload: (v) => { setOffload(!!v); reset(); }, lock: (v) => { setLock(!!v); reset(); },
+  });
 
   return (
     <Frame badge={t('OS lab', 'Phòng lab OS')} title={t('The Node.js event loop, step by step', 'Event loop của Node.js, từng bước')}
       sub={t('One JavaScript thread, many queues, a thread pool and the kernel', 'Một luồng JavaScript, nhiều hàng đợi, một thread pool và kernel')}>
-      <div className={s.bar}>
+      <div className={s.bar} data-tour="el-mode">
         <Seg value={mode} options={MODES.map(([v, en, vi]) => [v, t(en, vi)])} onChange={(v) => { setMode(v); reset(); }} />
       </div>
-      <div className={s.bar}>
+      <div className={s.bar} data-tour="el-options">
         {mode === 'block' && <Seg label={t('Report handler', 'Handler /report')} value={offload ? 'y' : 'n'} options={[['n', t('synchronous', 'đồng bộ')], ['y', t('offload (async)', 'đẩy ra ngoài (async)')]]} onChange={(v) => { setOffload(v === 'y'); reset(); }} />}
         {mode === 'pool' && <Seg label="UV_THREADPOOL_SIZE" value={poolSize} options={[[1, '1'], [2, '2'], [4, '4'], [8, '8']]} onChange={(v) => { setPoolSize(v); reset(); }} />}
         {mode === 'race' && <Seg label={t('Lock', 'Khoá')} value={lock ? 'y' : 'n'} options={[['n', t('none', 'không')], ['y', t('Promise-chain mutex', 'mutex chuỗi Promise')]]} onChange={(v) => { setLock(v === 'y'); reset(); }} />}
@@ -55,17 +62,17 @@ export default function EventLoopSim({ lang = 'vi', preset = 'order' }: { lang?:
 
       <div className={s.grid2} style={{ marginTop: 10, alignItems: 'start' }}>
         <div className={s.stack}>
-          <div className={s.code}>
+          <div className={s.code} data-tour="el-code">
             {sc.src.map((l, k) => <span key={k} className={cx(s.ln, S.line === k && s.cur)}>{l || ' '}</span>)}
           </div>
-          <div className={s.panel}>
+          <div className={s.panel} data-tour="el-console">
             <div className={s.panelTitle}>{t('Console output', 'Console')}</div>
             <div className={s.term} style={{ minHeight: 70 }}>
               {S.out.length ? S.out.map((o, k) => <div key={k}><span className={s.dim}>{String(o.t).padStart(4)} ms </span>{o.v}</div>) : <span className={s.dim}>{t('(nothing printed yet)', '(chưa in gì)')}</span>}
             </div>
           </div>
           {mode === 'block' && (
-            <table className={s.tbl}>
+            <table className={s.tbl} data-tour="el-requests">
               <thead><tr><th>{t('request', 'request')}</th><th className={s.num}>{t('arrives', 'đến lúc')}</th><th className={s.num}>{t('answered', 'trả lời lúc')}</th><th className={s.num}>{t('latency', 'độ trễ')}</th></tr></thead>
               <tbody>{Object.entries(S.reqs).map(([k, r]) => {
                 const lat = r.done === null ? null : r.done - r.arrive;
@@ -83,7 +90,7 @@ export default function EventLoopSim({ lang = 'vi', preset = 'order' }: { lang?:
         </div>
 
         <div className={s.stack} style={{ gap: 8 }}>
-          <div className={s.panel} style={{ borderColor: S.blockedMs ? 'var(--ol-bad)' : undefined }}>
+          <div className={s.panel} style={{ borderColor: S.blockedMs ? 'var(--ol-bad)' : undefined }} data-tour="el-stack">
             <div className={s.panelTitle}>{t('Call stack (the ONE JavaScript thread)', 'Call stack (MỘT luồng JavaScript duy nhất)')}</div>
             <div style={{ display: 'flex', flexDirection: 'column-reverse', gap: 4, minHeight: 34 }}>
               {S.stack.length ? S.stack.map((f, k) => (
@@ -93,11 +100,11 @@ export default function EventLoopSim({ lang = 'vi', preset = 'order' }: { lang?:
               )) : <span className={s.empty}>{t('empty — the event loop may pick the next callback', 'trống — event loop được chọn callback kế')}</span>}
             </div>
           </div>
-          <div className={s.grid2} style={{ gap: 8 }}>
+          <div className={s.grid2} style={{ gap: 8 }} data-tour="el-micro">
             <Q title="process.nextTick" items={S.tickQ} empty="—" color="#7c3aed" />
             <Q title={t('microtasks (Promise)', 'microtask (Promise)')} items={S.microQ} empty="—" color="#db2777" />
           </div>
-          <div className={s.panel} style={{ padding: '6px 8px' }}>
+          <div className={s.panel} style={{ padding: '6px 8px' }} data-tour="el-phases">
             <div className={s.panelTitle}>{t('Event loop phases (libuv)', 'Các pha của event loop (libuv)')}</div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 4, flexWrap: 'wrap' }}>
               {PHASES.map(([ph, label], k) => (
@@ -114,7 +121,7 @@ export default function EventLoopSim({ lang = 'vi', preset = 'order' }: { lang?:
               <Q title="check (setImmediate)" items={S.checkQ} empty="—" color="#0891b2" />
             </div>
           </div>
-          <div className={s.panel} style={{ padding: '6px 8px' }}>
+          <div className={s.panel} style={{ padding: '6px 8px' }} data-tour="el-pool">
             <div className={s.panelTitle}>{t(`libuv thread pool (${S.pool.length} threads)`, `Thread pool của libuv (${S.pool.length} luồng)`)}</div>
             <div style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(4, S.pool.length)}, minmax(0,1fr))`, gap: 4 }}>
               {S.pool.map((j, k) => {

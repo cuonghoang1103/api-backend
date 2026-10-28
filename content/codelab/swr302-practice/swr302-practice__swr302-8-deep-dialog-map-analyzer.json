@@ -1,0 +1,267 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-8-deep-dialog-map-analyzer",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-8-3-ch15-types"
+  },
+  "exercises": [
+    {
+      "title": "Deep Lab 8 — Dialog map analyser (reachability, dead ends, click paths)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 70,
+      "points": 100,
+      "concepts": [
+        "dialog map",
+        "navigation analysis"
+      ],
+      "prerequisites": [
+        "Lab 8",
+        "SWR302 lessons 4.8 and 8.3"
+      ],
+      "tags": [
+        "swr302",
+        "deep-lab"
+      ],
+      "problemHtml": "<h1>Deep Lab 8 — Dialog map analyser (reachability, dead ends, click paths)</h1>\n<p class=\"bi-phu\">Chapter 8 deep lab · evaluate a UI architecture before drawing screens · 10 marks · hidden maps on Submit</p>\n<h2>1. Overview</h2>\n<p>A dialog map (Wiegers Ch.12/15) models the UI as screens (states) and navigations (transitions). Before anybody draws wireframes you can already ask: can users reach every screen? Do they get stuck? How many taps does a key task take? Build an analyser for the <b>ClinicCare</b> mobile booking map.</p>\n<ul>\n<li><b>A/B. <code>analyze(map)</code></b> — <code>{ unreachable, deadEnds, unknown }</code>: screens not reachable from <code>map.start</code>; reachable screens that are not in <code>map.ends</code> and have no outgoing transition; <code>\"from-&gt;to\"</code> for transitions whose either end is not a listed screen (such transitions are ignored everywhere else). All sorted.</li>\n<li><b>C. <code>clicks(map, target)</code></b> — the minimum number of transitions from the start to <code>target</code>; 0 for the start itself; −1 if unreachable or unknown.</li>\n<li><b>D. <code>path(map, target)</code></b> — the actions of one shortest path; when several shortest paths exist, explore transitions in their listed order (breadth-first search) and keep the first found. <code>[]</code> for the start, <code>null</code> if unreachable.</li>\n<li><b>E. <code>taskCheck(map, tasks)</code></b> — for each task in order whose target is unreachable or needs more than <code>maxClicks</code>, the string <code>\"&lt;name&gt;: unreachable\"</code> or <code>\"&lt;name&gt;: N clicks\"</code>.</li>\n</ul>\n<p><b>Sample data</b>:</p><pre><code>const MAP = {\n  start: \"Home\",\n  ends: [\"Booked\", \"LoggedOut\"],\n  screens: [\"Home\", \"Login\", \"Search\", \"DoctorProfile\", \"SlotPicker\", \"Confirm\", \"Booked\", \"MyAppointments\", \"CancelDialog\", \"Help\", \"LoggedOut\", \"OldPromo\"],\n  transitions: [\n    {\"from\": \"Home\", \"to\": \"Login\", \"action\": \"tap Log in\"},\n    {\"from\": \"Login\", \"to\": \"Home\", \"action\": \"submit valid login\"},\n    {\"from\": \"Home\", \"to\": \"Search\", \"action\": \"tap Find a doctor\"},\n    {\"from\": \"Search\", \"to\": \"DoctorProfile\", \"action\": \"select doctor\"},\n    {\"from\": \"DoctorProfile\", \"to\": \"SlotPicker\", \"action\": \"tap Book\"},\n    {\"from\": \"Search\", \"to\": \"SlotPicker\", \"action\": \"tap Earliest slot\"},\n    {\"from\": \"SlotPicker\", \"to\": \"Confirm\", \"action\": \"select slot\"},\n    {\"from\": \"Confirm\", \"to\": \"Booked\", \"action\": \"tap Confirm\"},\n    {\"from\": \"Confirm\", \"to\": \"SlotPicker\", \"action\": \"tap Back\"},\n    {\"from\": \"Home\", \"to\": \"MyAppointments\", \"action\": \"tap My appointments\"},\n    {\"from\": \"MyAppointments\", \"to\": \"CancelDialog\", \"action\": \"tap Cancel\"},\n    {\"from\": \"Home\", \"to\": \"Help\", \"action\": \"tap Help\"},\n    {\"from\": \"Home\", \"to\": \"LoggedOut\", \"action\": \"tap Log out\"},\n    {\"from\": \"OldPromo\", \"to\": \"Search\", \"action\": \"tap banner\"},\n    {\"from\": \"Booked\", \"to\": \"Receipt\", \"action\": \"tap Receipt\"}\n  ]\n};</code></pre><pre><code>const TASKS = [\n  {\"name\": \"Book the earliest slot\", \"target\": \"Booked\", \"maxClicks\": 4},\n  {\"name\": \"Cancel an appointment\", \"target\": \"CancelDialog\", \"maxClicks\": 2},\n  {\"name\": \"Read help\", \"target\": \"Help\", \"maxClicks\": 1},\n  {\"name\": \"Open an old promotion\", \"target\": \"OldPromo\", \"maxClicks\": 3}\n];</code></pre>\n<h3>Main features</h3>\n<ul>\n  <li>A. Reachability and unknown transitions.</li>\n  <li>B. Dead ends.</li>\n  <li>C. Minimum clicks.</li>\n  <li>D. Shortest path.</li>\n  <li>E. Task budgets.</li>\n  <li>F. Map untouched.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>Pure functions; deterministic tie-breaking by transition order.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>answers/\n├── sample-data.js   ← MAP, TASKS\n└── dialog-map.js    ← analyze, clicks, path, taskCheck</pre>\n<h2>3. Data model</h2>\n<p><b>Data shapes</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>map</code></td><td>{ start, ends[], screens[], transitions[{ from, to, action }] }</td><td>ends: screens where stopping is fine</td></tr><tr><td><code>task</code></td><td>{ name, target, maxClicks }</td><td></td></tr></tbody></table>\n<h2>4. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. A. Reachability <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Unreachable screens; unknown transitions.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">dialog map</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. B. Dead ends <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Reachable, not an end, no exit.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">navigation</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. C. clicks <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Breadth-first search.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">BFS</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. D. path <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Actions of the first shortest path.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">BFS</span></p>\n</div>\n<div class=\"bi-cn\"><h3>5. E. taskCheck <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Failing tasks, in order.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">usability</span></p>\n</div>\n<div class=\"bi-cn\"><h3>6. F. Map untouched <span class=\"bi-diem\">0.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>No mutation.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">immutability</span></p>\n</div>\n<h2>5. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>analyze · clicks · path · taskCheck</code></td><td>answers/dialog-map.js</td></tr></tbody></table>\n<h2>6. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>A. Reachability</td><td>2</td></tr><tr><td>2</td><td>B. Dead ends</td><td>2</td></tr><tr><td>3</td><td>C. clicks</td><td>2</td></tr><tr><td>4</td><td>D. path</td><td>2</td></tr><tr><td>5</td><td>E. taskCheck</td><td>1.5</td></tr><tr><td>6</td><td>F. Map untouched</td><td>0.5</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Using depth-first search: it finds a path, not the shortest one.</li>\n  <li>Reporting the end screens (Booked, LoggedOut) as dead ends.</li>\n</ul>\n<h2>7. Submission</h2>\n<p>Write your answers in the files of <code>answers/</code> on the right. Diagrams are written as text in the syntax of a real tool (Mermaid or PlantUML — paste them into <a href=\"https://mermaid.live\" target=\"_blank\" rel=\"noopener\">mermaid.live</a> or <a href=\"https://www.plantuml.com/plantuml\" target=\"_blank\" rel=\"noopener\">plantuml.com</a> to SEE the picture); tables are JavaScript arrays, one object per row of the school template. Press <b>Run</b> for the visible checks and <b>Submit</b> for full grading, hidden checks included. Your mark per question appears in the rubric table.</p>",
+      "problemHtmlVi": "<h1>Deep Lab 8 — Dialog map analyser (reachability, dead ends, click paths)</h1>\n<p class=\"bi-phu\">Deep lab chương 8 · đánh giá kiến trúc giao diện trước khi vẽ màn hình · 10 điểm · bản đồ ẩn khi Nộp</p>\n<h2>1. Tổng quan</h2>\n<p>Dialog map mô hình hoá giao diện thành màn hình (trạng thái) và điều hướng (chuyển). Trước khi vẽ wireframe đã có thể hỏi: người dùng tới được mọi màn không? Có bị kẹt không? Tác vụ chính mất mấy lần chạm? Viết bộ phân tích cho bản đồ đặt lịch ClinicCare.</p>\n<ul><li>A/B. <code>analyze</code> — màn không tới được; ngõ cụt (tới được, không thuộc ends, không lối ra); chuyển dính màn lạ (bị bỏ qua ở mọi chỗ khác).</li><li>C. <code>clicks</code> — số chuyển tối thiểu; −1 nếu không tới được.</li><li>D. <code>path</code> — hành động của một đường ngắn nhất (BFS theo thứ tự chuyển); [] cho màn bắt đầu, null nếu không tới được.</li><li>E. <code>taskCheck</code> — tác vụ vượt ngân sách click hoặc không tới được.</li></ul>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>A. Khả năng tới và chuyển lạ.</li>\n  <li>B. Ngõ cụt.</li>\n  <li>C. Số click tối thiểu.</li>\n  <li>D. Đường ngắn nhất.</li>\n  <li>E. Ngân sách click.</li>\n  <li>F. Không sửa bản đồ.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Hàm thuần; phá hoà theo thứ tự chuyển.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>answers/\n├── sample-data.js   ← MAP, TASKS\n└── dialog-map.js    ← analyze, clicks, path, taskCheck</pre>\n<h2>3. Mô hình dữ liệu</h2>\n<p><b>Data shapes</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>map</code></td><td>{ start, ends[], screens[], transitions[{ from, to, action }] }</td><td>ends: màn dừng lại là hợp lệ</td></tr><tr><td><code>task</code></td><td>{ name, target, maxClicks }</td><td></td></tr></tbody></table>\n<h2>4. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. A. Khả năng tới <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Màn không tới được; chuyển lạ.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">dialog map</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. B. Ngõ cụt <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Tới được, không phải kết thúc, không lối ra.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">navigation</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. C. clicks <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Tìm kiếm theo chiều rộng.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">BFS</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. D. path <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Hành động của đường ngắn nhất đầu tiên.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">BFS</span></p>\n</div>\n<div class=\"bi-cn\"><h3>5. E. taskCheck <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Tác vụ không đạt, theo thứ tự.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">usability</span></p>\n</div>\n<div class=\"bi-cn\"><h3>6. F. Không sửa bản đồ <span class=\"bi-diem\">0.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Không sửa đầu vào.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">immutability</span></p>\n</div>\n<h2>5. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>analyze · clicks · path · taskCheck</code></td><td>answers/dialog-map.js</td></tr></tbody></table>\n<h2>6. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>A. Khả năng tới</td><td>2</td></tr><tr><td>2</td><td>B. Ngõ cụt</td><td>2</td></tr><tr><td>3</td><td>C. clicks</td><td>2</td></tr><tr><td>4</td><td>D. path</td><td>2</td></tr><tr><td>5</td><td>E. taskCheck</td><td>1.5</td></tr><tr><td>6</td><td>F. Không sửa bản đồ</td><td>0.5</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Dùng tìm kiếm theo chiều sâu: ra một đường, không phải đường ngắn nhất.</li>\n  <li>Báo màn kết thúc (Booked, LoggedOut) là ngõ cụt.</li>\n</ul>\n<h2>7. Nộp bài</h2>\n<p>Viết câu trả lời vào các tệp trong <code>answers/</code> bên phải. Sơ đồ viết bằng chữ theo cú pháp của công cụ thật (Mermaid hoặc PlantUML — dán vào <a href=\"https://mermaid.live\" target=\"_blank\" rel=\"noopener\">mermaid.live</a> hoặc <a href=\"https://www.plantuml.com/plantuml\" target=\"_blank\" rel=\"noopener\">plantuml.com</a> để XEM hình); bảng là mảng JavaScript, mỗi object là một dòng của template trường. Bấm <b>Chạy thử</b> để chạy kiểm hiện, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn). Điểm từng câu hiện trong bảng thang điểm.</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "Pure functions; deterministic tie-breaking by transition order.|||Hàm thuần; phá hoà theo thứ tự chuyển.",
+      "examplesJson": [
+        {
+          "input": "answers/*.js — one object per row of the template",
+          "output": "Rubric table: marks per question (e.g. B. 2.5/3)",
+          "explanation": "Every rubric line is checked separately; hidden checks run on Submit.|||Mỗi dòng rubric được kiểm riêng; kiểm ẩn chạy khi Nộp."
+        }
+      ],
+      "hintsJson": [
+        "BFS từ start, lưu khoảng cách và chuyển dẫn tới mỗi màn; đường đi dựng ngược từ đích.",
+        "Ngõ cụt: tới được + không thuộc ends + không có chuyển ra hợp lệ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers/sample-data.js",
+          "language": "javascript",
+          "code": "// Sample dialog map (read-only) — ClinicCare mobile booking.\nconst MAP = {\n \"start\": \"Home\",\n \"ends\": [\n  \"Booked\",\n  \"LoggedOut\"\n ],\n \"screens\": [\n  \"Home\",\n  \"Login\",\n  \"Search\",\n  \"DoctorProfile\",\n  \"SlotPicker\",\n  \"Confirm\",\n  \"Booked\",\n  \"MyAppointments\",\n  \"CancelDialog\",\n  \"Help\",\n  \"LoggedOut\",\n  \"OldPromo\"\n ],\n \"transitions\": [\n  {\n   \"from\": \"Home\",\n   \"to\": \"Login\",\n   \"action\": \"tap Log in\"\n  },\n  {\n   \"from\": \"Login\",\n   \"to\": \"Home\",\n   \"action\": \"submit valid login\"\n  },\n  {\n   \"from\": \"Home\",\n   \"to\": \"Search\",\n   \"action\": \"tap Find a doctor\"\n  },\n  {\n   \"from\": \"Search\",\n   \"to\": \"DoctorProfile\",\n   \"action\": \"select doctor\"\n  },\n  {\n   \"from\": \"DoctorProfile\",\n   \"to\": \"SlotPicker\",\n   \"action\": \"tap Book\"\n  },\n  {\n   \"from\": \"Search\",\n   \"to\": \"SlotPicker\",\n   \"action\": \"tap Earliest slot\"\n  },\n  {\n   \"from\": \"SlotPicker\",\n   \"to\": \"Confirm\",\n   \"action\": \"select slot\"\n  },\n  {\n   \"from\": \"Confirm\",\n   \"to\": \"Booked\",\n   \"action\": \"tap Confirm\"\n  },\n  {\n   \"from\": \"Confirm\",\n   \"to\": \"SlotPicker\",\n   \"action\": \"tap Back\"\n  },\n  {\n   \"from\": \"Home\",\n   \"to\": \"MyAppointments\",\n   \"action\": \"tap My appointments\"\n  },\n  {\n   \"from\": \"MyAppointments\",\n   \"to\": \"CancelDialog\",\n   \"action\": \"tap Cancel\"\n  },\n  {\n   \"from\": \"Home\",\n   \"to\": \"Help\",\n   \"action\": \"tap Help\"\n  },\n  {\n   \"from\": \"Home\",\n   \"to\": \"LoggedOut\",\n   \"action\": \"tap Log out\"\n  },\n  {\n   \"from\": \"OldPromo\",\n   \"to\": \"Search\",\n   \"action\": \"tap banner\"\n  },\n  {\n   \"from\": \"Booked\",\n   \"to\": \"Receipt\",\n   \"action\": \"tap Receipt\"\n  }\n ]\n};\nconst TASKS = [\n {\n  \"name\": \"Book the earliest slot\",\n  \"target\": \"Booked\",\n  \"maxClicks\": 4\n },\n {\n  \"name\": \"Cancel an appointment\",\n  \"target\": \"CancelDialog\",\n  \"maxClicks\": 2\n },\n {\n  \"name\": \"Read help\",\n  \"target\": \"Help\",\n  \"maxClicks\": 1\n },\n {\n  \"name\": \"Open an old promotion\",\n  \"target\": \"OldPromo\",\n  \"maxClicks\": 3\n }\n];\n"
+        },
+        {
+          "name": "answers/dialog-map.js",
+          "language": "javascript",
+          "code": "function analyze(map) { return { unreachable: [], deadEnds: [], unknown: [] }; }\nfunction clicks(map, target) { return -1; }\nfunction path(map, target) { return null; }\nfunction taskCheck(map, tasks) { return []; }\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers/sample-data.js",
+          "language": "javascript",
+          "code": "// Sample dialog map (read-only) — ClinicCare mobile booking.\nconst MAP = {\n \"start\": \"Home\",\n \"ends\": [\n  \"Booked\",\n  \"LoggedOut\"\n ],\n \"screens\": [\n  \"Home\",\n  \"Login\",\n  \"Search\",\n  \"DoctorProfile\",\n  \"SlotPicker\",\n  \"Confirm\",\n  \"Booked\",\n  \"MyAppointments\",\n  \"CancelDialog\",\n  \"Help\",\n  \"LoggedOut\",\n  \"OldPromo\"\n ],\n \"transitions\": [\n  {\n   \"from\": \"Home\",\n   \"to\": \"Login\",\n   \"action\": \"tap Log in\"\n  },\n  {\n   \"from\": \"Login\",\n   \"to\": \"Home\",\n   \"action\": \"submit valid login\"\n  },\n  {\n   \"from\": \"Home\",\n   \"to\": \"Search\",\n   \"action\": \"tap Find a doctor\"\n  },\n  {\n   \"from\": \"Search\",\n   \"to\": \"DoctorProfile\",\n   \"action\": \"select doctor\"\n  },\n  {\n   \"from\": \"DoctorProfile\",\n   \"to\": \"SlotPicker\",\n   \"action\": \"tap Book\"\n  },\n  {\n   \"from\": \"Search\",\n   \"to\": \"SlotPicker\",\n   \"action\": \"tap Earliest slot\"\n  },\n  {\n   \"from\": \"SlotPicker\",\n   \"to\": \"Confirm\",\n   \"action\": \"select slot\"\n  },\n  {\n   \"from\": \"Confirm\",\n   \"to\": \"Booked\",\n   \"action\": \"tap Confirm\"\n  },\n  {\n   \"from\": \"Confirm\",\n   \"to\": \"SlotPicker\",\n   \"action\": \"tap Back\"\n  },\n  {\n   \"from\": \"Home\",\n   \"to\": \"MyAppointments\",\n   \"action\": \"tap My appointments\"\n  },\n  {\n   \"from\": \"MyAppointments\",\n   \"to\": \"CancelDialog\",\n   \"action\": \"tap Cancel\"\n  },\n  {\n   \"from\": \"Home\",\n   \"to\": \"Help\",\n   \"action\": \"tap Help\"\n  },\n  {\n   \"from\": \"Home\",\n   \"to\": \"LoggedOut\",\n   \"action\": \"tap Log out\"\n  },\n  {\n   \"from\": \"OldPromo\",\n   \"to\": \"Search\",\n   \"action\": \"tap banner\"\n  },\n  {\n   \"from\": \"Booked\",\n   \"to\": \"Receipt\",\n   \"action\": \"tap Receipt\"\n  }\n ]\n};\nconst TASKS = [\n {\n  \"name\": \"Book the earliest slot\",\n  \"target\": \"Booked\",\n  \"maxClicks\": 4\n },\n {\n  \"name\": \"Cancel an appointment\",\n  \"target\": \"CancelDialog\",\n  \"maxClicks\": 2\n },\n {\n  \"name\": \"Read help\",\n  \"target\": \"Help\",\n  \"maxClicks\": 1\n },\n {\n  \"name\": \"Open an old promotion\",\n  \"target\": \"OldPromo\",\n  \"maxClicks\": 3\n }\n];\n"
+        },
+        {
+          "name": "answers/dialog-map.js",
+          "language": "javascript",
+          "code": "function __ke(map) {\n  var ok = Object.create(null), next = Object.create(null);\n  map.screens.forEach(function (s) { ok[s] = true; next[s] = []; });\n  map.transitions.forEach(function (t) { if (ok[t.from] && ok[t.to]) next[t.from].push(t); });\n  return { ok: ok, next: next };\n}\nfunction __bfs(map) {\n  var k = __ke(map), dist = Object.create(null), via = Object.create(null), q = [];\n  if (k.ok[map.start]) { dist[map.start] = 0; q.push(map.start); }\n  while (q.length) {\n    var cur = q.shift();\n    k.next[cur].forEach(function (t) {\n      if (t.to in dist) return;\n      dist[t.to] = dist[cur] + 1; via[t.to] = t; q.push(t.to);\n    });\n  }\n  return { dist: dist, via: via, k: k };\n}\n\nfunction analyze(map) {\n  var b = __bfs(map), ends = Object.create(null);\n  (map.ends || []).forEach(function (e) { ends[e] = true; });\n  var unknown = map.transitions.filter(function (t) { return !b.k.ok[t.from] || !b.k.ok[t.to]; })\n    .map(function (t) { return t.from + '->' + t.to; }).sort();\n  return {\n    unreachable: map.screens.filter(function (s) { return !(s in b.dist); }).sort(),\n    deadEnds: map.screens.filter(function (s) { return (s in b.dist) && !ends[s] && b.k.next[s].length === 0; }).sort(),\n    unknown: unknown,\n  };\n}\n\nfunction clicks(map, target) {\n  var b = __bfs(map);\n  return target in b.dist ? b.dist[target] : -1;\n}\n\nfunction path(map, target) {\n  var b = __bfs(map);\n  if (!(target in b.dist)) return null;\n  var out = [], cur = target;\n  while (cur !== map.start) { out.unshift(b.via[cur].action); cur = b.via[cur].from; }\n  return out;\n}\n\nfunction taskCheck(map, tasks) {\n  return tasks.map(function (t) { return { name: t.name, clicks: clicks(map, t.target), ok: clicks(map, t.target) >= 0 && clicks(map, t.target) <= t.maxClicks }; })\n    .filter(function (r) { return !r.ok; })\n    .map(function (r) { return r.name + ': ' + (r.clicks < 0 ? 'unreachable' : r.clicks + ' clicks'); });\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The analyser finds three design issues before any wireframe exists: the cancel dialog and the help screen have no way back (users must kill the app), the old promotion screen is unreachable (dead code or a missing entry point), and the Receipt screen is referenced but not designed. Booking takes 4 taps via \"Earliest slot\" — within the budget.</p>",
+      "solutionExplanationHtmlVi": "<p>Bộ phân tích lộ ra ba vấn đề thiết kế trước khi có wireframe: hộp thoại huỷ và màn trợ giúp không có đường quay lại (người dùng phải tắt app), màn khuyến mãi cũ không tới được (mã chết hoặc thiếu lối vào), màn Receipt được trỏ tới nhưng chưa thiết kế. Đặt lịch mất 4 lần chạm qua \"Earliest slot\" — trong ngân sách.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "answers/sample-data.js",
+          "answers/dialog-map.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "analyze: unreachable screens",
+              "vi": "analyze: màn hình không tới được"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var n;try{n=analyze(MAP).unreachable}catch(r){return(r&&r.name===\"ReferenceError\"?\"missing: \":\"error: \")+(r&&r.message)}var e=JSON.stringify(n===void 0?null:n),a='[\"OldPromo\"]';return e===a?\"OK\":'expected [\"OldPromo\"], got '+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "analyze: transitions to or from unknown screens",
+              "vi": "analyze: chuyển tới/từ màn hình lạ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var r;try{r=analyze(MAP).unknown}catch(n){return(n&&n.name===\"ReferenceError\"?\"missing: \":\"error: \")+(n&&n.message)}var e=JSON.stringify(r===void 0?null:r),o='[\"Booked->Receipt\"]';return e===o?\"OK\":'expected [\"Booked->Receipt\"], got '+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "analyze: dead ends (reachable, not an end screen, no way out)",
+              "vi": "analyze: ngõ cụt (tới được, không phải màn kết thúc, không lối ra)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var r;try{r=analyze(MAP).deadEnds}catch(n){return(n&&n.name===\"ReferenceError\"?\"missing: \":\"error: \")+(n&&n.message)}var e=JSON.stringify(r===void 0?null:r),a='[\"CancelDialog\",\"Help\"]';return e===a?\"OK\":'expected [\"CancelDialog\",\"Help\"], got '+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "analyze (hidden): self-loops, tricky names",
+              "vi": "analyze (ẩn): vòng tự thân, tên đánh lừa"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var t;try{t=analyze({start:\"A\",ends:[\"E\"],screens:[\"A\",\"B\",\"C\",\"D\",\"E\",\"F\",\"constructor\"],transitions:[{from:\"A\",to:\"B\",action:\"b1\"},{from:\"A\",to:\"C\",action:\"c1\"},{from:\"B\",to:\"D\",action:\"d-from-b\"},{from:\"C\",to:\"D\",action:\"d-from-c\"},{from:\"D\",to:\"E\",action:\"e\"},{from:\"D\",to:\"A\",action:\"home\"},{from:\"F\",to:\"F\",action:\"loop\"},{from:\"C\",to:\"constructor\",action:\"k\"},{from:\"toString\",to:\"A\",action:\"x\"}]})}catch(r){return(r&&r.name===\"ReferenceError\"?\"missing: \":\"error: \")+(r&&r.message)}var o=JSON.stringify(t===void 0?null:t),n='{\"unreachable\":[\"F\"],\"deadEnds\":[\"constructor\"],\"unknown\":[\"toString->A\"]}';return o===n?\"OK\":\"got \"+(o.length>220?o.slice(0,220)+\"\\u2026\":o)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "clicks: minimum number of transitions",
+              "vi": "clicks: số chuyển tối thiểu"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var n;try{n=[clicks(MAP,\"Booked\"),clicks(MAP,\"Home\"),clicks(MAP,\"OldPromo\"),clicks(MAP,\"Nowhere\")]}catch(r){return(r&&r.name===\"ReferenceError\"?\"missing: \":\"error: \")+(r&&r.message)}var e=JSON.stringify(n===void 0?null:n),c=\"[4,0,-1,-1]\";return e===c?\"OK\":\"expected [4,0,-1,-1], got \"+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "clicks (hidden)",
+              "vi": "clicks (ẩn)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var r;try{r=[clicks({start:\"A\",ends:[\"E\"],screens:[\"A\",\"B\",\"C\",\"D\",\"E\",\"F\",\"constructor\"],transitions:[{from:\"A\",to:\"B\",action:\"b1\"},{from:\"A\",to:\"C\",action:\"c1\"},{from:\"B\",to:\"D\",action:\"d-from-b\"},{from:\"C\",to:\"D\",action:\"d-from-c\"},{from:\"D\",to:\"E\",action:\"e\"},{from:\"D\",to:\"A\",action:\"home\"},{from:\"F\",to:\"F\",action:\"loop\"},{from:\"C\",to:\"constructor\",action:\"k\"},{from:\"toString\",to:\"A\",action:\"x\"}]},\"E\"),clicks({start:\"A\",ends:[\"E\"],screens:[\"A\",\"B\",\"C\",\"D\",\"E\",\"F\",\"constructor\"],transitions:[{from:\"A\",to:\"B\",action:\"b1\"},{from:\"A\",to:\"C\",action:\"c1\"},{from:\"B\",to:\"D\",action:\"d-from-b\"},{from:\"C\",to:\"D\",action:\"d-from-c\"},{from:\"D\",to:\"E\",action:\"e\"},{from:\"D\",to:\"A\",action:\"home\"},{from:\"F\",to:\"F\",action:\"loop\"},{from:\"C\",to:\"constructor\",action:\"k\"},{from:\"toString\",to:\"A\",action:\"x\"}]},\"constructor\"),clicks({start:\"A\",ends:[\"E\"],screens:[\"A\",\"B\",\"C\",\"D\",\"E\",\"F\",\"constructor\"],transitions:[{from:\"A\",to:\"B\",action:\"b1\"},{from:\"A\",to:\"C\",action:\"c1\"},{from:\"B\",to:\"D\",action:\"d-from-b\"},{from:\"C\",to:\"D\",action:\"d-from-c\"},{from:\"D\",to:\"E\",action:\"e\"},{from:\"D\",to:\"A\",action:\"home\"},{from:\"F\",to:\"F\",action:\"loop\"},{from:\"C\",to:\"constructor\",action:\"k\"},{from:\"toString\",to:\"A\",action:\"x\"}]},\"F\")]}catch(t){return(t&&t.name===\"ReferenceError\"?\"missing: \":\"error: \")+(t&&t.message)}var o=JSON.stringify(r===void 0?null:r),n=\"[3,2,-1]\";return o===n?\"OK\":\"got \"+(o.length>220?o.slice(0,220)+\"\\u2026\":o)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "path: the shortest action sequence to Booked",
+              "vi": "path: chuỗi hành động ngắn nhất tới Booked"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var r;try{r=path(MAP,\"Booked\")}catch(e){return(e&&e.name===\"ReferenceError\"?\"missing: \":\"error: \")+(e&&e.message)}var t=JSON.stringify(r===void 0?null:r),n='[\"tap Find a doctor\",\"tap Earliest slot\",\"select slot\",\"tap Confirm\"]';return t===n?\"OK\":'expected [\"tap Find a doctor\",\"tap Earliest slot\",\"select slot\",\"tap Confirm\"], got '+(t.length>220?t.slice(0,220)+\"\\u2026\":t)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "path: start screen ⇒ [], unreachable ⇒ null",
+              "vi": "path: màn bắt đầu ⇒ [], không tới được ⇒ null"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var n;try{n=[path(MAP,\"Home\"),path(MAP,\"OldPromo\")]}catch(r){return(r&&r.name===\"ReferenceError\"?\"missing: \":\"error: \")+(r&&r.message)}var e=JSON.stringify(n===void 0?null:n),t=\"[[],null]\";return e===t?\"OK\":\"expected [[],null], got \"+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "path (hidden): ties resolved by transition order",
+              "vi": "path (ẩn): hoà thì theo thứ tự chuyển"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var t;try{t=path({start:\"A\",ends:[\"E\"],screens:[\"A\",\"B\",\"C\",\"D\",\"E\",\"F\",\"constructor\"],transitions:[{from:\"A\",to:\"B\",action:\"b1\"},{from:\"A\",to:\"C\",action:\"c1\"},{from:\"B\",to:\"D\",action:\"d-from-b\"},{from:\"C\",to:\"D\",action:\"d-from-c\"},{from:\"D\",to:\"E\",action:\"e\"},{from:\"D\",to:\"A\",action:\"home\"},{from:\"F\",to:\"F\",action:\"loop\"},{from:\"C\",to:\"constructor\",action:\"k\"},{from:\"toString\",to:\"A\",action:\"x\"}]},\"E\")}catch(r){return(r&&r.name===\"ReferenceError\"?\"missing: \":\"error: \")+(r&&r.message)}var o=JSON.stringify(t===void 0?null:t),n='[\"b1\",\"d-from-b\",\"e\"]';return o===n?\"OK\":\"got \"+(o.length>220?o.slice(0,220)+\"\\u2026\":o)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "taskCheck: tasks that fail their click budget",
+              "vi": "taskCheck: tác vụ vượt ngân sách click"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var r;try{r=taskCheck(MAP,TASKS)}catch(n){return(n&&n.name===\"ReferenceError\"?\"missing: \":\"error: \")+(n&&n.message)}var e=JSON.stringify(r===void 0?null:r),o='[\"Open an old promotion: unreachable\"]';return e===o?\"OK\":'expected [\"Open an old promotion: unreachable\"], got '+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f5"
+          },
+          {
+            "moTa": {
+              "en": "hidden: taskCheck with a tight budget",
+              "vi": "ẩn: taskCheck với ngân sách chặt"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var n;try{n=taskCheck(MAP,[{name:\"Book\",target:\"Booked\",maxClicks:3},{name:\"Help\",target:\"Help\",maxClicks:1}])}catch(r){return(r&&r.name===\"ReferenceError\"?\"missing: \":\"error: \")+(r&&r.message)}var e=JSON.stringify(n===void 0?null:n),a='[\"Book: 4 clicks\"]';return e===a?\"OK\":\"got \"+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f5",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "the map is not modified",
+              "vi": "không sửa bản đồ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var n;try{n=(function(){var e=JSON.stringify(MAP);return analyze(MAP),path(MAP,\"Booked\"),taskCheck(MAP,TASKS),e===JSON.stringify(MAP)})()}catch(e){return(e&&e.name===\"ReferenceError\"?\"missing: \":\"error: \")+(e&&e.message)}var r=JSON.stringify(n===void 0?null:n),t=\"true\";return r===t?\"OK\":\"expected true, got \"+(r.length>220?r.slice(0,220)+\"\\u2026\":r)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f6"
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. A. Reachability",
+            "diem": 2
+          },
+          {
+            "ma": "f2",
+            "ten": "2. B. Dead ends",
+            "diem": 2
+          },
+          {
+            "ma": "f3",
+            "ten": "3. C. clicks",
+            "diem": 2
+          },
+          {
+            "ma": "f4",
+            "ten": "4. D. path",
+            "diem": 2
+          },
+          {
+            "ma": "f5",
+            "ten": "5. E. taskCheck",
+            "diem": 1.5
+          },
+          {
+            "ma": "f6",
+            "ten": "6. F. Map untouched",
+            "diem": 0.5
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "deep-lab",
+      "mistakesJson": [
+        {
+          "loi": "Đếm cả chuyển tới màn lạ (Receipt) là lối ra."
+        },
+        {
+          "loi": "Trả 0 thay vì −1 cho màn không tới được."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "dialog map",
+          "vi": "sơ đồ hội thoại — trạng thái là màn hình, chuyển là hành động người dùng"
+        },
+        {
+          "en": "wireframe / mock-up",
+          "vi": "khung giao diện / bản mô phỏng màn hình"
+        },
+        {
+          "en": "prototype",
+          "vi": "nguyên mẫu — bản thử để làm rõ yêu cầu (throwaway / evolutionary, mock-up / proof of concept)"
+        },
+        {
+          "en": "breadth-first search",
+          "vi": "tìm kiếm theo chiều rộng (BFS)"
+        }
+      ]
+    }
+  ]
+}

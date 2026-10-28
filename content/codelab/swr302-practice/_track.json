@@ -118,6 +118,12 @@
       "description": "Lab chương 3: chọn kỹ thuật khai thác cho 9 tình huống, xếp việc vào pha chuẩn bị/thực hiện/theo dõi, phân loại 12 câu đầu vào khách hàng vào 9 loại của Wiegers, câu hỏi mở/đóng/dẫn dắt, dấu hiệu khai thác đã gần đủ."
     },
     {
+      "slug": "swr302-3-deep-elicitation-tracker",
+      "name": "Deep Lab 3 — Elicitation tracker",
+      "level": "ADVANCED",
+      "description": "Deep Lab chương 3: tự viết bộ theo dõi khai thác — ma trận CRUD tìm yêu cầu còn thiếu (Wiegers Ch.7), độ phủ lớp người dùng theo buổi và kỹ thuật, câu hỏi còn mở/TBD theo chủ đề — chấm mẫu ClinicCare + dữ liệu ẩn."
+    },
+    {
       "slug": "swr302-4-1-use-case-user-story",
       "name": "4.1 Use cases, user stories and actors",
       "level": "BEGINNER",
@@ -298,6 +304,12 @@
       "description": "Lab chương 6: thanh tra trích đoạn SRS 16 dòng của TutorMatch — liệt kê lỗi (dòng, loại, mức, cách sửa) chấm theo ghép cặp, có lỗi nghiêm trọng bắt buộc và trừ khẳng định sai; năm giai đoạn và vai trò inspection; tiêu chí chấp nhận Given/When/Then; verification hay validation."
     },
     {
+      "slug": "swr302-6-deep-inspection-metrics",
+      "name": "Deep Lab 6 — Inspection log and metrics",
+      "level": "ADVANCED",
+      "description": "Deep Lab chương 6: tự viết công cụ của moderator — gộp nhật ký lỗi của các inspector (trùng dòng + loại, giữ mức nặng nhất, ai tìm ra), số đo inspection (mật độ lỗi, tốc độ chuẩn bị, tổng công, giờ/lỗi nặng, người không chuẩn bị) và quyết định tiêu chí ra — chấm mẫu PetCare + dữ liệu ẩn."
+    },
+    {
       "slug": "swr302-7-1-change-control",
       "name": "7.1 Change control and the CCB",
       "level": "INTERMEDIATE",
@@ -362,6 +374,12 @@
       "name": "Lab 8 — Prototyping and Design: CampusBike",
       "level": "ADVANCED",
       "description": "Lab chương 8: chọn loại prototype (mock-up/proof of concept, throwaway/evolutionary, giấy/điện tử), dialog map các màn hình thuê xe có guard và không ngõ cụt, review wireframe so với yêu cầu, rủi ro và yếu tố thành công của prototyping, phân tích danh từ/động từ thành lớp, thuộc tính, thao tác."
+    },
+    {
+      "slug": "swr302-8-deep-dialog-map-analyzer",
+      "name": "Deep Lab 8 — Dialog map analyser",
+      "level": "ADVANCED",
+      "description": "Deep Lab chương 8: tự viết bộ phân tích dialog map — màn hình không tới được, ngõ cụt, chuyển tới màn lạ, số click tối thiểu (BFS), đường đi ngắn nhất theo hành động, kiểm ngân sách click của tác vụ — chấm mẫu ClinicCare + dữ liệu ẩn."
     },
     {
       "slug": "swr302-9-1-agile-requirements",

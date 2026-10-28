@@ -1,0 +1,238 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-6-deep-inspection-metrics",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-6-2-ch17-inspection"
+  },
+  "exercises": [
+    {
+      "title": "Deep Lab 6 — Inspection log and metrics",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 70,
+      "points": 100,
+      "concepts": [
+        "inspection metrics",
+        "exit criteria"
+      ],
+      "prerequisites": [
+        "Lab 6",
+        "SWR302 lesson 6.2"
+      ],
+      "tags": [
+        "swr302",
+        "deep-lab"
+      ],
+      "problemHtml": "<h1>Deep Lab 6 — Inspection log and metrics</h1>\n<p class=\"bi-phu\">Chapter 6 deep lab · the moderator’s tools · 10 marks · hidden data on Submit</p>\n<h2>1. Overview</h2>\n<p>After an inspection the moderator merges the inspectors’ issue lists, measures the inspection, and decides whether the exit criteria are met. Build those tools for the inspection of 12 pages of the <b>PetCare</b> SRS.</p>\n<ul>\n<li><b>A. <code>consolidate(logs)</code></b> — merge issues with the same line and type. Normalise the type (trim, first letter upper case, rest lower case) and the severity the same way; a severity other than Minor or Major counts as Minor. Keep the highest severity (Major &gt; Minor) and the sorted list of inspectors who found it (<code>foundBy</code>). Sort by line, then type.</li>\n<li><b>B/C. <code>metrics(logs, meeting)</code></b> — return <code>{ defects, major, density, avgPrepPagesPerHour, effortHours, hoursPerMajor, unprepared }</code> on the consolidated list: <code>density</code> = defects ÷ pages; <code>avgPrepPagesPerHour</code> = pages ÷ (average preparation hours of the inspectors who prepared, i.e. hours &gt; 0) — 0 if nobody prepared; <code>effortHours</code> = all preparation + meeting hours × number of inspectors in <code>prepHours</code> + rework; <code>hoursPerMajor</code> = effort ÷ majors (null if none); <code>unprepared</code> = sorted names with 0 preparation hours. Round numbers to 2 decimals.</li>\n<li><b>D. <code>exitDecision(issues, closedKeys, maxOpenMinor)</code></b> — issues are consolidated; a closed issue has its key <code>\"line:Type\"</code> in <code>closedKeys</code>. Exit only when no Major is open and at most <code>maxOpenMinor</code> Minor issues are open. Return <code>{ exit, openMajor: [keys in issue order], openMinor }</code>.</li>\n</ul>\n<p><b>Sample data</b>:</p><pre><code>const LOGS = [\n  {\"inspector\": \"An\", \"issues\": [{\"line\": 4, \"type\": \"Ambiguous\", \"severity\": \"Minor\"},{\"line\": 9, \"type\": \"Incorrect\", \"severity\": \"Major\"},{\"line\": 12, \"type\": \"Missing\", \"severity\": \"Major\"}]},\n  {\"inspector\": \"Binh\", \"issues\": [{\"line\": 9, \"type\": \"Incorrect\", \"severity\": \"Minor\"},{\"line\": 15, \"type\": \"Ambiguous\", \"severity\": \"Minor\"},{\"line\": 4, \"type\": \"ambiguous\", \"severity\": \"Major\"}]},\n  {\"inspector\": \"Chi\", \"issues\": [{\"line\": 12, \"type\": \"Missing\", \"severity\": \"Major\"},{\"line\": 20, \"type\": \"Infeasible\", \"severity\": \"Major\"},{\"line\": 9, \"type\": \"Incorrect\", \"severity\": \"Major\"}]},\n  {\"inspector\": \"Dung\", \"issues\": []}\n];</code></pre><pre><code>const MEETING = {\n  pages: 12,\n  prepHours: {\n    An: 2,\n    Binh: 1.5,\n    Chi: 2.5,\n    Dung: 0\n  },\n  meetingHours: 1.5,\n  reworkHours: 6\n};</code></pre>\n<h3>Main features</h3>\n<ul>\n  <li>A. Consolidated issue log.</li>\n  <li>B. Defect metrics.</li>\n  <li>C. Effort metrics.</li>\n  <li>D. Exit decision.</li>\n  <li>E. Inputs untouched.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>Round to 2 decimals for output only.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>answers/\n├── sample-data.js   ← LOGS, MEETING\n└── inspection.js    ← consolidate, metrics, exitDecision</pre>\n<h2>3. Data model</h2>\n<p><b>Data shapes</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>log</code></td><td>{ inspector, issues[{ line, type, severity }] }</td><td>raw, un-normalised</td></tr><tr><td><code>meeting</code></td><td>{ pages, prepHours: { name: h }, meetingHours, reworkHours }</td><td></td></tr><tr><td><code>issue (consolidated)</code></td><td>{ line, type, severity, foundBy[] }</td><td>key \"line:Type\"</td></tr></tbody></table>\n<h2>4. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. A. consolidate <span class=\"bi-diem\">3 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Merge, normalise, highest severity, sorted.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">issue log</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. B. Defect metrics <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Density, preparation rate, unprepared.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">inspection metrics</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. C. Effort metrics <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Effort and hours per major.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">inspection metrics</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. D. exitDecision <span class=\"bi-diem\">2.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>No open Major; Minor within limit.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">exit criteria</span></p>\n</div>\n<div class=\"bi-cn\"><h3>5. E. Inputs untouched <span class=\"bi-diem\">0.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>No mutation of logs.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">immutability</span></p>\n</div>\n<h2>5. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>consolidate · metrics · exitDecision</code></td><td>answers/inspection.js</td></tr></tbody></table>\n<h2>6. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>A. consolidate</td><td>3</td></tr><tr><td>2</td><td>B. Defect metrics</td><td>2</td></tr><tr><td>3</td><td>C. Effort metrics</td><td>2</td></tr><tr><td>4</td><td>D. exitDecision</td><td>2.5</td></tr><tr><td>5</td><td>E. Inputs untouched</td><td>0.5</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Keeping the first severity seen instead of the highest.</li>\n  <li>Averaging preparation over inspectors who did not prepare — an unprepared reviewer is a process problem to report, not a zero to average.</li>\n</ul>\n<h2>7. Submission</h2>\n<p>Write your answers in the files of <code>answers/</code> on the right. Diagrams are written as text in the syntax of a real tool (Mermaid or PlantUML — paste them into <a href=\"https://mermaid.live\" target=\"_blank\" rel=\"noopener\">mermaid.live</a> or <a href=\"https://www.plantuml.com/plantuml\" target=\"_blank\" rel=\"noopener\">plantuml.com</a> to SEE the picture); tables are JavaScript arrays, one object per row of the school template. Press <b>Run</b> for the visible checks and <b>Submit</b> for full grading, hidden checks included. Your mark per question appears in the rubric table.</p>",
+      "problemHtmlVi": "<h1>Deep Lab 6 — Inspection log and metrics</h1>\n<p class=\"bi-phu\">Deep lab chương 6 · công cụ của moderator · 10 điểm · dữ liệu ẩn khi Nộp</p>\n<h2>1. Tổng quan</h2>\n<p>Sau buổi inspection, moderator gộp danh sách lỗi của các inspector, đo inspection và quyết định đã đạt tiêu chí ra chưa. Viết các công cụ đó cho buổi inspection 12 trang SRS PetCare.</p>\n<ul><li>A. <code>consolidate</code> — gộp lỗi cùng dòng + loại (chuẩn hoá chữ), giữ mức nặng nhất, danh sách người tìm ra; mức lạ = Minor.</li><li>B/C. <code>metrics</code> — số lỗi, lỗi nặng, mật độ, tốc độ chuẩn bị (chỉ tính người có chuẩn bị), tổng công, giờ/lỗi nặng, người không chuẩn bị.</li><li>D. <code>exitDecision</code> — chỉ được ra khi không còn lỗi Major mở và lỗi Minor mở ≤ giới hạn.</li></ul>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>A. Nhật ký lỗi đã gộp.</li>\n  <li>B. Số đo lỗi.</li>\n  <li>C. Số đo công sức.</li>\n  <li>D. Quyết định tiêu chí ra.</li>\n  <li>E. Không sửa đầu vào.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Chỉ làm tròn 2 chữ số khi xuất.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>answers/\n├── sample-data.js   ← LOGS, MEETING\n└── inspection.js    ← consolidate, metrics, exitDecision</pre>\n<h2>3. Mô hình dữ liệu</h2>\n<p><b>Data shapes</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>log</code></td><td>{ inspector, issues[{ line, type, severity }] }</td><td>thô, chưa chuẩn hoá</td></tr><tr><td><code>meeting</code></td><td>{ pages, prepHours: { name: h }, meetingHours, reworkHours }</td><td></td></tr><tr><td><code>issue (consolidated)</code></td><td>{ line, type, severity, foundBy[] }</td><td>khoá \"dòng:Loại\"</td></tr></tbody></table>\n<h2>4. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. A. consolidate <span class=\"bi-diem\">3 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Gộp, chuẩn hoá, mức nặng nhất, sắp xếp.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">issue log</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. B. Số đo lỗi <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Mật độ, tốc độ chuẩn bị, người không chuẩn bị.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">inspection metrics</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. C. Số đo công <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Tổng công và giờ/lỗi nặng.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">inspection metrics</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. D. exitDecision <span class=\"bi-diem\">2.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Không còn Major; Minor trong giới hạn.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">exit criteria</span></p>\n</div>\n<div class=\"bi-cn\"><h3>5. E. Không sửa đầu vào <span class=\"bi-diem\">0.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Không sửa nhật ký.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">immutability</span></p>\n</div>\n<h2>5. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>consolidate · metrics · exitDecision</code></td><td>answers/inspection.js</td></tr></tbody></table>\n<h2>6. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>A. consolidate</td><td>3</td></tr><tr><td>2</td><td>B. Số đo lỗi</td><td>2</td></tr><tr><td>3</td><td>C. Số đo công</td><td>2</td></tr><tr><td>4</td><td>D. exitDecision</td><td>2.5</td></tr><tr><td>5</td><td>E. Không sửa đầu vào</td><td>0.5</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Giữ mức gặp đầu tiên thay vì mức nặng nhất.</li>\n  <li>Tính trung bình cả người không chuẩn bị — đó là vấn đề quy trình cần báo, không phải số 0 để chia.</li>\n</ul>\n<h2>7. Nộp bài</h2>\n<p>Viết câu trả lời vào các tệp trong <code>answers/</code> bên phải. Sơ đồ viết bằng chữ theo cú pháp của công cụ thật (Mermaid hoặc PlantUML — dán vào <a href=\"https://mermaid.live\" target=\"_blank\" rel=\"noopener\">mermaid.live</a> hoặc <a href=\"https://www.plantuml.com/plantuml\" target=\"_blank\" rel=\"noopener\">plantuml.com</a> để XEM hình); bảng là mảng JavaScript, mỗi object là một dòng của template trường. Bấm <b>Chạy thử</b> để chạy kiểm hiện, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn). Điểm từng câu hiện trong bảng thang điểm.</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "Round to 2 decimals for output only.|||Chỉ làm tròn 2 chữ số khi xuất.",
+      "examplesJson": [
+        {
+          "input": "answers/*.js — one object per row of the template",
+          "output": "Rubric table: marks per question (e.g. B. 2.5/3)",
+          "explanation": "Every rubric line is checked separately; hidden checks run on Submit.|||Mỗi dòng rubric được kiểm riêng; kiểm ẩn chạy khi Nộp."
+        }
+      ],
+      "hintsJson": [
+        "Khoá gộp: dòng + \"|\" + loại đã chuẩn hoá.",
+        "Tốc độ chuẩn bị: pages ÷ (tổng giờ ÷ số người có giờ > 0).",
+        "Tiêu chí ra: duyệt danh sách đã gộp, bỏ qua khoá đã đóng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers/sample-data.js",
+          "language": "javascript",
+          "code": "// Sample data (read-only) — inspection of 12 pages of the PetCare SRS.\nconst LOGS = [\n {\n  \"inspector\": \"An\",\n  \"issues\": [\n   {\n    \"line\": 4,\n    \"type\": \"Ambiguous\",\n    \"severity\": \"Minor\"\n   },\n   {\n    \"line\": 9,\n    \"type\": \"Incorrect\",\n    \"severity\": \"Major\"\n   },\n   {\n    \"line\": 12,\n    \"type\": \"Missing\",\n    \"severity\": \"Major\"\n   }\n  ]\n },\n {\n  \"inspector\": \"Binh\",\n  \"issues\": [\n   {\n    \"line\": 9,\n    \"type\": \"Incorrect\",\n    \"severity\": \"Minor\"\n   },\n   {\n    \"line\": 15,\n    \"type\": \"Ambiguous\",\n    \"severity\": \"Minor\"\n   },\n   {\n    \"line\": 4,\n    \"type\": \"ambiguous\",\n    \"severity\": \"Major\"\n   }\n  ]\n },\n {\n  \"inspector\": \"Chi\",\n  \"issues\": [\n   {\n    \"line\": 12,\n    \"type\": \"Missing\",\n    \"severity\": \"Major\"\n   },\n   {\n    \"line\": 20,\n    \"type\": \"Infeasible\",\n    \"severity\": \"Major\"\n   },\n   {\n    \"line\": 9,\n    \"type\": \"Incorrect\",\n    \"severity\": \"Major\"\n   }\n  ]\n },\n {\n  \"inspector\": \"Dung\",\n  \"issues\": []\n }\n];\nconst MEETING = {\n \"pages\": 12,\n \"prepHours\": {\n  \"An\": 2,\n  \"Binh\": 1.5,\n  \"Chi\": 2.5,\n  \"Dung\": 0\n },\n \"meetingHours\": 1.5,\n \"reworkHours\": 6\n};\n"
+        },
+        {
+          "name": "answers/inspection.js",
+          "language": "javascript",
+          "code": "function consolidate(logs) { return []; }\nfunction metrics(logs, meeting) { return {}; }\nfunction exitDecision(issues, closedKeys, maxOpenMinor) { return { exit: false, openMajor: [], openMinor: 0 }; }\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers/sample-data.js",
+          "language": "javascript",
+          "code": "// Sample data (read-only) — inspection of 12 pages of the PetCare SRS.\nconst LOGS = [\n {\n  \"inspector\": \"An\",\n  \"issues\": [\n   {\n    \"line\": 4,\n    \"type\": \"Ambiguous\",\n    \"severity\": \"Minor\"\n   },\n   {\n    \"line\": 9,\n    \"type\": \"Incorrect\",\n    \"severity\": \"Major\"\n   },\n   {\n    \"line\": 12,\n    \"type\": \"Missing\",\n    \"severity\": \"Major\"\n   }\n  ]\n },\n {\n  \"inspector\": \"Binh\",\n  \"issues\": [\n   {\n    \"line\": 9,\n    \"type\": \"Incorrect\",\n    \"severity\": \"Minor\"\n   },\n   {\n    \"line\": 15,\n    \"type\": \"Ambiguous\",\n    \"severity\": \"Minor\"\n   },\n   {\n    \"line\": 4,\n    \"type\": \"ambiguous\",\n    \"severity\": \"Major\"\n   }\n  ]\n },\n {\n  \"inspector\": \"Chi\",\n  \"issues\": [\n   {\n    \"line\": 12,\n    \"type\": \"Missing\",\n    \"severity\": \"Major\"\n   },\n   {\n    \"line\": 20,\n    \"type\": \"Infeasible\",\n    \"severity\": \"Major\"\n   },\n   {\n    \"line\": 9,\n    \"type\": \"Incorrect\",\n    \"severity\": \"Major\"\n   }\n  ]\n },\n {\n  \"inspector\": \"Dung\",\n  \"issues\": []\n }\n];\nconst MEETING = {\n \"pages\": 12,\n \"prepHours\": {\n  \"An\": 2,\n  \"Binh\": 1.5,\n  \"Chi\": 2.5,\n  \"Dung\": 0\n },\n \"meetingHours\": 1.5,\n \"reworkHours\": 6\n};\n"
+        },
+        {
+          "name": "answers/inspection.js",
+          "language": "javascript",
+          "code": "var __SEV = { Minor: 1, Major: 2 };\nfunction __cap(s) { s = String(s || '').trim().toLowerCase(); return s.charAt(0).toUpperCase() + s.slice(1); }\n\nfunction consolidate(logs) {\n  var m = Object.create(null);\n  logs.forEach(function (lg) {\n    (lg.issues || []).forEach(function (i) {\n      var type = __cap(i.type), key = i.line + '|' + type;\n      var sev = __SEV[__cap(i.severity)] ? __cap(i.severity) : 'Minor';\n      if (!m[key]) m[key] = { line: i.line, type: type, severity: sev, foundBy: [] };\n      if (__SEV[sev] > __SEV[m[key].severity]) m[key].severity = sev;\n      if (m[key].foundBy.indexOf(lg.inspector) < 0) m[key].foundBy.push(lg.inspector);\n    });\n  });\n  return Object.keys(m).map(function (k) { m[k].foundBy.sort(); return m[k]; })\n    .sort(function (a, b) { return a.line - b.line || (a.type < b.type ? -1 : a.type > b.type ? 1 : 0); });\n}\n\nfunction metrics(logs, meeting) {\n  var issues = consolidate(logs);\n  var names = Object.keys(meeting.prepHours);\n  var prep = names.reduce(function (s, n) { return s + meeting.prepHours[n]; }, 0);\n  var prepared = names.filter(function (n) { return meeting.prepHours[n] > 0; });\n  var effort = prep + meeting.meetingHours * names.length + meeting.reworkHours;\n  var major = issues.filter(function (i) { return i.severity === 'Major'; }).length;\n  function r2(x) { return Math.round(x * 100) / 100; }\n  return {\n    defects: issues.length,\n    major: major,\n    density: meeting.pages ? r2(issues.length / meeting.pages) : 0,\n    avgPrepPagesPerHour: prepared.length ? r2(meeting.pages / (prep / prepared.length)) : 0,\n    effortHours: r2(effort),\n    hoursPerMajor: major ? r2(effort / major) : null,\n    unprepared: names.filter(function (n) { return !(meeting.prepHours[n] > 0); }).sort(),\n  };\n}\n\nfunction exitDecision(issues, closedKeys, maxOpenMinor) {\n  var closed = Object.create(null);\n  closedKeys.forEach(function (k) { closed[k] = true; });\n  var openMajor = [], openMinor = 0;\n  issues.forEach(function (i) {\n    var key = i.line + ':' + i.type;\n    if (closed[key]) return;\n    if (i.severity === 'Major') openMajor.push(key); else openMinor++;\n  });\n  return { exit: openMajor.length === 0 && openMinor <= maxOpenMinor, openMajor: openMajor, openMinor: openMinor };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>On the sample: 9 raw reports become 5 distinct defects (4 Major), density 0.42 per page; Dung did not prepare — the moderator should have postponed or replaced him. Effort = 6 h preparation + 1.5 h × 4 people + 6 h rework = 18 h, i.e. 4.5 h per major defect found, far cheaper than finding those defects in testing.</p>",
+      "solutionExplanationHtmlVi": "<p>Trên mẫu: 9 báo cáo thô gộp lại còn 5 lỗi (4 Major), mật độ 0,42 lỗi/trang; Dung không chuẩn bị — moderator lẽ ra phải hoãn hoặc thay người. Công = 6 giờ chuẩn bị + 1,5 giờ × 4 người + 6 giờ sửa = 18 giờ, tức 4,5 giờ cho mỗi lỗi nặng — rẻ hơn nhiều so với tìm ra chúng lúc kiểm thử.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "answers/sample-data.js",
+          "answers/inspection.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "consolidate: duplicates merged, highest severity kept",
+              "vi": "consolidate: gộp trùng, giữ mức nặng nhất"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var i;try{i=consolidate(LOGS)}catch(n){return(n&&n.name===\"ReferenceError\"?\"missing: \":\"error: \")+(n&&n.message)}var e=JSON.stringify(i===void 0?null:i),r='[{\"line\":4,\"type\":\"Ambiguous\",\"severity\":\"Major\",\"foundBy\":[\"An\",\"Binh\"]},{\"line\":9,\"type\":\"Incorrect\",\"severity\":\"Major\",\"foundBy\":[\"An\",\"Binh\",\"Chi\"]},{\"line\":12,\"type\":\"Missing\",\"severity\":\"Major\",\"foundBy\":[\"An\",\"Chi\"]},{\"line\":15,\"type\":\"Ambiguous\",\"severity\":\"Minor\",\"foundBy\":[\"Binh\"]},{\"line\":20,\"type\":\"Infeasible\",\"severity\":\"Major\",\"foundBy\":[\"Chi\"]}]';return e===r?\"OK\":'expected [{\"line\":4,\"type\":\"Ambiguous\",\"severity\":\"Major\",\"foundBy\":[\"An\",\"Binh\"]},{\"line\":9,\"type\":\"Incorrect\",\"severity\":\"Major\",\"foundBy\":[\"An\",\"Binh\",\"Chi\"]},{\"line\":12,\"type\":\"Missing\",\"severity\":\"Major\",\"foundBy\":[\"An\",\"Chi\\u2026, got '+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "consolidate (hidden): normalised types, unknown severity = Minor, sorting",
+              "vi": "consolidate (ẩn): chuẩn hoá loại, mức lạ = Minor, sắp xếp"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var n;try{n=consolidate([{inspector:\"Z\",issues:[{line:3,type:\"missing\",severity:\"minor\"},{line:3,type:\"Missing\",severity:\"MAJOR\"},{line:1,type:\"Wrong\",severity:\"Critical\"}]},{inspector:\"Y\",issues:[{line:3,type:\" MISSING \",severity:\"Minor\"},{line:10,type:\"Ambiguous\",severity:\"Minor\"},{line:2,type:\"Ambiguous\",severity:\"Minor\"}]}])}catch(i){return(i&&i.name===\"ReferenceError\"?\"missing: \":\"error: \")+(i&&i.message)}var e=JSON.stringify(n===void 0?null:n),r='[{\"line\":1,\"type\":\"Wrong\",\"severity\":\"Minor\",\"foundBy\":[\"Z\"]},{\"line\":2,\"type\":\"Ambiguous\",\"severity\":\"Minor\",\"foundBy\":[\"Y\"]},{\"line\":3,\"type\":\"Missing\",\"severity\":\"Major\",\"foundBy\":[\"Y\",\"Z\"]},{\"line\":10,\"type\":\"Ambiguous\",\"severity\":\"Minor\",\"foundBy\":[\"Y\"]}]';return e===r?\"OK\":\"got \"+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "metrics: defects, majors, density",
+              "vi": "metrics: số lỗi, lỗi nặng, mật độ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var n;try{n=(function(){var e=metrics(LOGS,MEETING);return[e.defects,e.major,e.density]})()}catch(e){return(e&&e.name===\"ReferenceError\"?\"missing: \":\"error: \")+(e&&e.message)}var r=JSON.stringify(n===void 0?null:n),t=\"[5,4,0.42]\";return r===t?\"OK\":\"expected [5,4,0.42], got \"+(r.length>220?r.slice(0,220)+\"\\u2026\":r)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "metrics: preparation rate and the unprepared inspector",
+              "vi": "metrics: tốc độ chuẩn bị và người không chuẩn bị"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var n;try{n=(function(){var r=metrics(LOGS,MEETING);return[r.avgPrepPagesPerHour,r.unprepared]})()}catch(r){return(r&&r.name===\"ReferenceError\"?\"missing: \":\"error: \")+(r&&r.message)}var e=JSON.stringify(n===void 0?null:n),t='[6,[\"Dung\"]]';return e===t?\"OK\":'expected [6,[\"Dung\"]], got '+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "metrics: total effort and hours per major defect",
+              "vi": "metrics: tổng công và giờ cho mỗi lỗi nặng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var n;try{n=(function(){var r=metrics(LOGS,MEETING);return[r.effortHours,r.hoursPerMajor]})()}catch(r){return(r&&r.name===\"ReferenceError\"?\"missing: \":\"error: \")+(r&&r.message)}var e=JSON.stringify(n===void 0?null:n),t=\"[18,4.5]\";return e===t?\"OK\":\"expected [18,4.5], got \"+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "metrics (hidden): no majors ⇒ hoursPerMajor null; nobody prepared ⇒ rate 0",
+              "vi": "metrics (ẩn): không lỗi nặng ⇒ null; không ai chuẩn bị ⇒ 0"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var n;try{n=metrics([{inspector:\"Q\",issues:[{line:1,type:\"Typo\",severity:\"Minor\"}]}],{pages:3,prepHours:{Q:0,R:0},meetingHours:1,reworkHours:.5})}catch(e){return(e&&e.name===\"ReferenceError\"?\"missing: \":\"error: \")+(e&&e.message)}var r=JSON.stringify(n===void 0?null:n),s='{\"defects\":1,\"major\":0,\"density\":0.33,\"avgPrepPagesPerHour\":0,\"effortHours\":2.5,\"hoursPerMajor\":null,\"unprepared\":[\"Q\",\"R\"]}';return r===s?\"OK\":\"got \"+(r.length>220?r.slice(0,220)+\"\\u2026\":r)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "exitDecision: two majors still open ⇒ no exit",
+              "vi": "exitDecision: còn hai lỗi nặng ⇒ chưa được ra"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var r;try{r=exitDecision(consolidate(LOGS),[\"4:Ambiguous\",\"9:Incorrect\"],1)}catch(n){return(n&&n.name===\"ReferenceError\"?\"missing: \":\"error: \")+(n&&n.message)}var e=JSON.stringify(r===void 0?null:r),i='{\"exit\":false,\"openMajor\":[\"12:Missing\",\"20:Infeasible\"],\"openMinor\":1}';return e===i?\"OK\":'expected {\"exit\":false,\"openMajor\":[\"12:Missing\",\"20:Infeasible\"],\"openMinor\":1}, got '+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "exitDecision: all majors closed, minors within the limit ⇒ exit",
+              "vi": "exitDecision: đóng hết lỗi nặng, lỗi nhẹ trong giới hạn ⇒ ra"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var r;try{r=exitDecision(consolidate(LOGS),[\"4:Ambiguous\",\"9:Incorrect\",\"12:Missing\",\"20:Infeasible\"],1)}catch(n){return(n&&n.name===\"ReferenceError\"?\"missing: \":\"error: \")+(n&&n.message)}var e=JSON.stringify(r===void 0?null:r),i='{\"exit\":true,\"openMajor\":[],\"openMinor\":1}';return e===i?\"OK\":'expected {\"exit\":true,\"openMajor\":[],\"openMinor\":1}, got '+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "exitDecision (hidden): too many open minors",
+              "vi": "exitDecision (ẩn): quá nhiều lỗi nhẹ còn mở"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var n;try{n=exitDecision(consolidate([{inspector:\"Z\",issues:[{line:3,type:\"missing\",severity:\"minor\"},{line:3,type:\"Missing\",severity:\"MAJOR\"},{line:1,type:\"Wrong\",severity:\"Critical\"}]},{inspector:\"Y\",issues:[{line:3,type:\" MISSING \",severity:\"Minor\"},{line:10,type:\"Ambiguous\",severity:\"Minor\"},{line:2,type:\"Ambiguous\",severity:\"Minor\"}]}]),[\"3:Missing\"],1)}catch(i){return(i&&i.name===\"ReferenceError\"?\"missing: \":\"error: \")+(i&&i.message)}var e=JSON.stringify(n===void 0?null:n),r='{\"exit\":false,\"openMajor\":[],\"openMinor\":3}';return e===r?\"OK\":\"got \"+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "logs are not modified",
+              "vi": "không sửa nhật ký"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var n;try{n=(function(){var r=JSON.stringify(LOGS);return consolidate(LOGS),metrics(LOGS,MEETING),r===JSON.stringify(LOGS)})()}catch(r){return(r&&r.name===\"ReferenceError\"?\"missing: \":\"error: \")+(r&&r.message)}var e=JSON.stringify(n===void 0?null:n),t=\"true\";return e===t?\"OK\":\"expected true, got \"+(e.length>220?e.slice(0,220)+\"\\u2026\":e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f5"
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. A. consolidate",
+            "diem": 3
+          },
+          {
+            "ma": "f2",
+            "ten": "2. B. Defect metrics",
+            "diem": 2
+          },
+          {
+            "ma": "f3",
+            "ten": "3. C. Effort metrics",
+            "diem": 2
+          },
+          {
+            "ma": "f4",
+            "ten": "4. D. exitDecision",
+            "diem": 2.5
+          },
+          {
+            "ma": "f5",
+            "ten": "5. E. Inputs untouched",
+            "diem": 0.5
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "deep-lab",
+      "mistakesJson": [
+        {
+          "loi": "Không chuẩn hoá \"ambiguous\" và \"Ambiguous\" ⇒ hai lỗi."
+        },
+        {
+          "loi": "Quên nhân giờ họp với số người."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "inspection",
+          "vi": "thanh tra — loại review hình thức nhất, có vai trò và quy trình"
+        },
+        {
+          "en": "defect density",
+          "vi": "mật độ lỗi — lỗi trên mỗi trang"
+        },
+        {
+          "en": "exit criteria",
+          "vi": "tiêu chí ra"
+        }
+      ]
+    }
+  ]
+}

@@ -578,6 +578,18 @@
       "name": "Deep Lab 5 — mini UI Kit (reusable component APIs)",
       "level": "ADVANCED",
       "description": "Deep lab chương 5: Button chuyển tiếp props, Rating điều khiển, DataTable theo cấu hình + sắp xếp, Accordion controlled/uncontrolled, Stepper class, PropTypes. Thang 10."
+    },
+    {
+      "slug": "fer202-6-deep-checkout-wizard",
+      "name": "Deep Lab 6 — Multi-step Checkout Wizard (events & forms)",
+      "level": "ADVANCED",
+      "description": "Deep lab chương 6: wizard bốn bước, kiểm theo bước + thời điểm lỗi, một state/một handler, mảng mặt hàng động, Enter = Next. Thang 10."
+    },
+    {
+      "slug": "fer202-7-deep-permissions-center",
+      "name": "Deep Lab 7 — Permissions & Notifications Center (Context in depth)",
+      "level": "ADVANCED",
+      "description": "Deep lab chương 7: Context + useReducer, tách state/dispatch, ma trận quyền + <Can> + HOC, cờ tính năng lồng, trung tâm thông báo. Thang 10."
     }
   ]
 }

@@ -1,0 +1,527 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-7-deep-permissions-center",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-7-1-context"
+  },
+  "exercises": [
+    {
+      "title": "Deep Lab 7 — Permissions & Notifications Center (reducer + split contexts · <Can> · HOC · nested flags)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 120,
+      "points": 100,
+      "concepts": [
+        "Context + useReducer",
+        "split state/dispatch contexts",
+        "role-based access control",
+        "higher-order components",
+        "nested providers",
+        "feature flags",
+        "lazy reducer init"
+      ],
+      "prerequisites": [
+        "Lab 7 — Team Dashboard",
+        "8.2 useContext & useReducer"
+      ],
+      "tags": [
+        "fer202",
+        "deep-lab",
+        "context",
+        "useReducer"
+      ],
+      "problemHtml": "<h1>DEEP LAB 7: Permissions &amp; Notifications Center — Context in depth</h1>\n<p class=\"bi-phu\">FER202 · Chapter 7 (deep) · Suggested time: 120 minutes · Total: 10 marks</p>\n<h2>1. Overview</h2>\n<p>An operations console where what you can see depends on your <b>role</b>, some features are behind <b>feature flags</b>, and a <b>notification centre</b> is shared across the page. You will combine Context with <code>useReducer</code>, split state and dispatch into two contexts so components that only send actions never re-render, derive permissions from a role matrix, wrap components with a <code>&lt;Can&gt;</code> component and a higher-order component, and build a flag provider that can be <b>nested to override</b> flags for one part of the tree.</p>\n<h3>Main features</h3>\n<ul>\n  <li>Auth reducer · role-based UI with &lt;Can&gt; · HOC guard · nested feature flags · notification centre · split contexts · persisted role.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>Contexts live in <code>src/context/</code>; every <code>useX()</code> hook throws <code>\"useX must be used inside XProvider\"</code> outside its provider.</li>\n  <li>No prop drilling of role, flags or notifications.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>src/\n├── context/\n│   ├── AuthContext.js      # AuthProvider · useAuth · useAuthDispatch · ROLES\n│   ├── permissions.js      # PERMISSIONS · usePermission · Can · withPermission\n│   ├── FeatureFlags.js     # FeatureFlagsProvider (nestable) · useFlag\n│   └── Notifications.js    # NotificationsProvider · useNotifications · useNotificationsDispatch\n├── App.js                  # Header · OrdersPanel · Reports (guarded) · Checkout · Composer · NotificationList\n└── index.css (given)</pre>\n<h2>3. UI wireframe</h2>\n<pre class=\"bi-wire\">+--------------------------------------------------------------------+\n| CT Ops   Lan (editor)                     [editor v]   🔔 2        |\n+--------------------------------------------------------------------+\n| Order #1001        [Edit]  ([Delete] admin only)                   |\n| Reports are for admins            (admin ⇒ Reports panel)          |\n| Classic checkout                                                   |\n|   beta area: New checkout · Dark mode on                           |\n| [Notify order] [Notify stock] [Mark all read]  Composer renders: 1 |\n|   • Low stock: Mouse                                       [×]     |\n|   • New order #1002                                        [×]     |\n+--------------------------------------------------------------------+</pre>\n<h2>4. Data model</h2>\n<p><b>Contexts</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>AuthState</code></td><td>{ user: { name } | null, role: 'admin' | 'editor' | 'viewer' }</td><td>actions: login · logout · switchRole; role in localStorage \"role\"</td></tr><tr><td><code>PERMISSIONS</code></td><td>{ [role]: string[] }</td><td>admin: view/edit/delete orders + reports; editor: view/edit; viewer: view</td></tr><tr><td><code>Flags</code></td><td>{ [flag]: boolean }</td><td>nested provider = { ...parent, ...flags }</td></tr><tr><td><code>Notification</code></td><td>{ id, text, read }</td><td>newest first; actions push · dismiss · markAllRead</td></tr></tbody></table>\n<h2>5. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. Auth with useReducer <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>AuthProvider</code> = <code>useReducer</code> (<code>login</code>, <code>logout</code>, <code>switchRole</code>) with state and dispatch in two contexts. <code>#who</code> <code>Lan (viewer)</code>; <code>#role-select</code> switches role.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>2. Permission matrix &amp; &amp;lt;Can&amp;gt; <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>&lt;Can do=\"orders:edit\" fallback={…}&gt;</code> renders <code>#btn-edit-order</code> (editor, admin) or <code>#read-only</code>; <code>#btn-delete-order</code> only for admin.</li>\n</ul>\n<p><b>Example:</b></p>\n<pre>editor ⇒ [Edit] only · admin ⇒ [Edit] [Delete]</pre>\n</div>\n<div class=\"bi-cn\"><h3>3. Higher-order component <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>withPermission(Reports, 'reports:view', Fallback)</code> ⇒ <code>#reports</code> for admins, otherwise <code>#no-reports</code> <code>Reports are for admins</code>; set a <code>displayName</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>4. Nested feature flags <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Root <code>{ newCheckout: false, darkMode: true }</code>; inside <code>#beta-area</code> a nested provider with <code>{ newCheckout: true }</code>. <code>#checkout-main</code> <code>Classic checkout</code>, <code>#checkout-beta</code> <code>New checkout</code>, <code>#beta-dark</code> <code>Dark mode on</code> (inherited).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. Notification centre <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>#notify-order</code>/<code>#notify-stock</code> push (newest first), <code>#mark-read</code>, <code>.notification(.unread) .text .dismiss</code>, <code>#bell-count</code> = unread in the header, <code>#no-notifications</code> when empty.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>6. Split contexts avoid re-renders <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>The memoized <code>Composer</code> uses only the dispatch context; <code>#composer-renders</code> stays <code>Composer renders: 1</code> while notifications change.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>7. Persisted role <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Role saved in localStorage <code>role</code> and restored (lazy init of the reducer); an unknown saved value falls back to <code>viewer</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>8. Guarded hooks &amp; memo <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Hooks throw outside their providers; the flags value is memoized.</li>\n</ul>\n</div>\n<h2>6. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>#who · #role-select · #bell-count</code></td><td>header</td></tr><tr><td><code>#orders · #btn-edit-order · #btn-delete-order · #read-only</code></td><td>orders</td></tr><tr><td><code>#reports · #no-reports</code></td><td>reports</td></tr><tr><td><code>#checkout-main · #beta-area · #checkout-beta · #beta-dark</code></td><td>flags</td></tr><tr><td><code>#notify-order · #notify-stock · #mark-read · #composer-renders · .notification .text .dismiss · #no-notifications</code></td><td>notifications</td></tr></tbody></table>\n<h2>7. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>Auth with useReducer</td><td>1.5</td></tr><tr><td>2</td><td>Permission matrix &amp; &amp;lt;Can&amp;gt;</td><td>1.5</td></tr><tr><td>3</td><td>Higher-order component</td><td>1</td></tr><tr><td>4</td><td>Nested feature flags</td><td>1.5</td></tr><tr><td>5</td><td>Notification centre</td><td>1.5</td></tr><tr><td>6</td><td>Split contexts avoid re-renders</td><td>1</td></tr><tr><td>7</td><td>Persisted role</td><td>1</td></tr><tr><td>8</td><td>Guarded hooks &amp; memo</td><td>1</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li><code>if (role === 'admin' || role === 'editor')</code> scattered through components instead of one permission matrix.</li>\n  <li>One context holding both state and dispatch — every button re-renders on every notification.</li>\n  <li>Nested flag provider that REPLACES the parent flags (dark mode disappears in the beta area).</li>\n  <li>Hiding the Delete button with CSS only.</li>\n</ul>\n<h2>8. Submission</h2>\n<p>Work directly in the editor (files on the right) or download the starter, run it locally with Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> when the paper uses an API) and paste the files back. Press <b>Run</b> for the sample checks and <b>Submit</b> for full grading (hidden checks included).</p>",
+      "problemHtmlVi": "<h1>DEEP LAB 7: Trung tâm phân quyền &amp; thông báo — Context chuyên sâu</h1>\n<p class=\"bi-phu\">FER202 · Chương 7 (chuyên sâu) · Thời gian gợi ý: 120 phút · Tổng: 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p>Bảng điều khiển vận hành nơi thứ bạn thấy phụ thuộc <b>vai trò</b>, một số tính năng nằm sau <b>cờ tính năng</b>, và <b>trung tâm thông báo</b> dùng chung cả trang. Bạn sẽ kết hợp Context với <code>useReducer</code>, tách state và dispatch thành hai context để component chỉ gửi action không bao giờ vẽ lại, suy quyền từ ma trận vai trò, bọc component bằng <code>&lt;Can&gt;</code> và một HOC, và dựng provider cờ có thể <b>lồng để ghi đè</b> cờ cho một nhánh cây.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>Reducer đăng nhập · giao diện theo vai trò với &lt;Can&gt; · HOC chặn quyền · cờ tính năng lồng nhau · trung tâm thông báo · tách context · lưu vai trò.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Context nằm trong <code>src/context/</code>; mọi hook <code>useX()</code> ném <code>\"useX must be used inside XProvider\"</code> khi ở ngoài provider.</li>\n  <li>Không truyền vai trò, cờ hay thông báo qua props nhiều tầng.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>src/\n├── context/\n│   ├── AuthContext.js      # AuthProvider · useAuth · useAuthDispatch · ROLES\n│   ├── permissions.js      # PERMISSIONS · usePermission · Can · withPermission\n│   ├── FeatureFlags.js     # FeatureFlagsProvider (nestable) · useFlag\n│   └── Notifications.js    # NotificationsProvider · useNotifications · useNotificationsDispatch\n├── App.js                  # Header · OrdersPanel · Reports (guarded) · Checkout · Composer · NotificationList\n└── index.css (given)</pre>\n<h2>3. Wireframe giao diện</h2>\n<pre class=\"bi-wire\">+--------------------------------------------------------------------+\n| CT Ops   Lan (editor)                     [editor v]   🔔 2        |\n+--------------------------------------------------------------------+\n| Order #1001        [Edit]  ([Delete] admin only)                   |\n| Reports are for admins            (admin ⇒ Reports panel)          |\n| Classic checkout                                                   |\n|   beta area: New checkout · Dark mode on                           |\n| [Notify order] [Notify stock] [Mark all read]  Composer renders: 1 |\n|   • Low stock: Mouse                                       [×]     |\n|   • New order #1002                                        [×]     |\n+--------------------------------------------------------------------+</pre>\n<h2>4. Mô hình dữ liệu</h2>\n<p><b>Contexts</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>AuthState</code></td><td>{ user: { name } | null, role: 'admin' | 'editor' | 'viewer' }</td><td>action: login · logout · switchRole; role lưu localStorage \"role\"</td></tr><tr><td><code>PERMISSIONS</code></td><td>{ [role]: string[] }</td><td>admin: xem/sửa/xoá đơn + báo cáo; editor: xem/sửa; viewer: xem</td></tr><tr><td><code>Flags</code></td><td>{ [flag]: boolean }</td><td>provider lồng = { ...cha, ...flags }</td></tr><tr><td><code>Notification</code></td><td>{ id, text, read }</td><td>mới nhất trước; action push · dismiss · markAllRead</td></tr></tbody></table>\n<h2>5. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. Đăng nhập bằng useReducer <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>AuthProvider</code> = <code>useReducer</code> (<code>login</code>, <code>logout</code>, <code>switchRole</code>) với state và dispatch ở hai context. <code>#who</code> <code>Lan (viewer)</code>; <code>#role-select</code> đổi vai trò.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>2. Ma trận quyền &amp; &amp;lt;Can&amp;gt; <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>&lt;Can do=\"orders:edit\" fallback={…}&gt;</code> vẽ <code>#btn-edit-order</code> (editor, admin) hoặc <code>#read-only</code>; <code>#btn-delete-order</code> chỉ cho admin.</li>\n</ul>\n<p><b>Ví dụ:</b></p>\n<pre>editor ⇒ chỉ [Edit] · admin ⇒ [Edit] [Delete]</pre>\n</div>\n<div class=\"bi-cn\"><h3>3. Higher-order component <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>withPermission(Reports, 'reports:view', Fallback)</code> ⇒ <code>#reports</code> cho admin, còn lại <code>#no-reports</code> <code>Reports are for admins</code>; đặt <code>displayName</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>4. Cờ tính năng lồng nhau <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Gốc <code>{ newCheckout: false, darkMode: true }</code>; trong <code>#beta-area</code> có provider lồng <code>{ newCheckout: true }</code>. <code>#checkout-main</code> <code>Classic checkout</code>, <code>#checkout-beta</code> <code>New checkout</code>, <code>#beta-dark</code> <code>Dark mode on</code> (kế thừa).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. Trung tâm thông báo <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>#notify-order</code>/<code>#notify-stock</code> thêm (mới nhất trước), <code>#mark-read</code>, <code>.notification(.unread) .text .dismiss</code>, <code>#bell-count</code> = số chưa đọc ở header, <code>#no-notifications</code> khi rỗng.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>6. Tách context để tránh vẽ lại <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>Composer</code> (memo) chỉ dùng context dispatch; <code>#composer-renders</code> giữ <code>Composer renders: 1</code> khi danh sách thông báo đổi.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>7. Lưu vai trò <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Vai trò lưu localStorage <code>role</code> và khôi phục (khởi tạo lười của reducer); giá trị lưu lạ thì về <code>viewer</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>8. Hook có chốt &amp; memo <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Hook báo lỗi khi ngoài provider; value của cờ được memo.</li>\n</ul>\n</div>\n<h2>6. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>#who · #role-select · #bell-count</code></td><td>header</td></tr><tr><td><code>#orders · #btn-edit-order · #btn-delete-order · #read-only</code></td><td>đơn hàng</td></tr><tr><td><code>#reports · #no-reports</code></td><td>báo cáo</td></tr><tr><td><code>#checkout-main · #beta-area · #checkout-beta · #beta-dark</code></td><td>cờ</td></tr><tr><td><code>#notify-order · #notify-stock · #mark-read · #composer-renders · .notification .text .dismiss · #no-notifications</code></td><td>thông báo</td></tr></tbody></table>\n<h2>7. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>Đăng nhập bằng useReducer</td><td>1.5</td></tr><tr><td>2</td><td>Ma trận quyền &amp; &amp;lt;Can&amp;gt;</td><td>1.5</td></tr><tr><td>3</td><td>Higher-order component</td><td>1</td></tr><tr><td>4</td><td>Cờ tính năng lồng nhau</td><td>1.5</td></tr><tr><td>5</td><td>Trung tâm thông báo</td><td>1.5</td></tr><tr><td>6</td><td>Tách context để tránh vẽ lại</td><td>1</td></tr><tr><td>7</td><td>Lưu vai trò</td><td>1</td></tr><tr><td>8</td><td>Hook có chốt &amp; memo</td><td>1</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li><code>if (role === 'admin' || role === 'editor')</code> rải khắp component thay vì một ma trận quyền.</li>\n  <li>Một context chứa cả state lẫn dispatch — mọi nút vẽ lại với mọi thông báo.</li>\n  <li>Provider cờ lồng THAY THẾ cờ của cha (dark mode mất trong vùng beta).</li>\n  <li>Chỉ ẩn nút Delete bằng CSS.</li>\n</ul>\n<h2>8. Nộp bài</h2>\n<p>Làm thẳng trong editor (các tệp bên phải) hoặc tải starter, chạy trên máy bằng Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> khi đề dùng API) rồi dán lại tệp. Bấm <b>Chạy thử</b> để chạy kiểm mẫu, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn).</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "Contexts live in <code>src/context/</code>; every <code>useX()</code> hook throws <code>\"useX must be used inside XProvider\"</code> outside its provider.|||Context nằm trong <code>src/context/</code>; mọi hook <code>useX()</code> ném <code>\"useX must be used inside XProvider\"</code> khi ở ngoài provider.\nNo prop drilling of role, flags or notifications.|||Không truyền vai trò, cờ hay thông báo qua props nhiều tầng.",
+      "examplesJson": [
+        {
+          "input": "Permission matrix & &lt;Can&gt;|||Ma trận quyền & &lt;Can&gt;",
+          "output": "editor ⇒ [Edit] only · admin ⇒ [Edit] [Delete]|||editor ⇒ chỉ [Edit] · admin ⇒ [Edit] [Delete]",
+          "explanation": "See the brief / Xem đề."
+        }
+      ],
+      "hintsJson": [
+        "Tách context: <DispatchCtx.Provider value={dispatch}><StateCtx.Provider value={state}>…; component chỉ cần gửi action thì useContext(DispatchCtx) — dispatch không bao giờ đổi nên nó không vẽ lại.",
+        "usePermission(p) = (PERMISSIONS[role] ?? []).includes(p); <Can> trả children hoặc fallback.",
+        "Provider lồng: const parent = useContext(FlagsContext); value = useMemo(() => ({ ...parent, ...flags }), [parent, flags]).",
+        "useReducer(reducer, undefined, init) với init đọc localStorage; useEffect ghi lại khi role đổi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER: vai trò truyền qua props, không có Context, không có thông báo\nimport { useState } from 'react';\n\nfunction Header({ role, setRole }) {\n  return (\n    <header>\n      <span id=\"who\">Lan ({role})</span>\n      <select id=\"role-select\" value={role} onChange={(e) => setRole(e.target.value)}>\n        <option>admin</option><option>editor</option><option>viewer</option>\n      </select>\n    </header>\n  );\n}\n\nexport default function App() {\n  const [role, setRole] = useState('viewer');\n  return <Header role={role} setRole={setRole} />;\n}\n"
+        },
+        {
+          "name": "src/context/AuthContext.js",
+          "language": "javascript",
+          "code": "// src/context/AuthContext.js — STARTER\n// AuthProvider (useReducer: login/logout/switchRole) · useAuth · useAuthDispatch · ROLES · lưu localStorage \"role\"\nexport {};\n"
+        },
+        {
+          "name": "src/context/permissions.js",
+          "language": "javascript",
+          "code": "// src/context/permissions.js — STARTER\n// PERMISSIONS · usePermission · <Can do fallback> · withPermission(Component, permission, Fallback)\nexport {};\n"
+        },
+        {
+          "name": "src/context/FeatureFlags.js",
+          "language": "javascript",
+          "code": "// src/context/FeatureFlags.js — STARTER\n// FeatureFlagsProvider (gộp cờ của Provider cha) · useFlag(name)\nexport {};\n"
+        },
+        {
+          "name": "src/context/Notifications.js",
+          "language": "javascript",
+          "code": "// src/context/Notifications.js — STARTER\n// NotificationsProvider (reducer push/dismiss/markAllRead) · useNotifications · useNotificationsDispatch\nexport {};\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport './index.css';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "src/index.css",
+          "language": "css",
+          "code": "/* src/index.css (đã cho) */\nbody { font-family: system-ui, sans-serif; margin: 0; padding: 20px; background: #f8fafc; color: #0f172a; }\nheader { display: flex; align-items: center; gap: 12px; background: #1e293b; color: #fff; padding: 10px 16px; border-radius: 10px; }\nheader .spacer { flex: 1; }\n.bell { position: relative; } #bell-count { background: #ef4444; border-radius: 999px; padding: 0 7px; font-size: 12px; }\nsection { background: #fff; border-radius: 10px; padding: 14px 16px; margin-top: 14px; box-shadow: 0 1px 2px rgba(0,0,0,.08); }\n.notification { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #e2e8f0; } .notification.unread { font-weight: 600; }\nbutton { cursor: pointer; } .muted { color: #64748b; }\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — ghép Provider và các phần giao diện\nimport { memo, useRef } from 'react';\nimport { AuthProvider, ROLES, useAuth, useAuthDispatch } from './context/AuthContext';\nimport { Can, withPermission } from './context/permissions';\nimport { FeatureFlagsProvider, useFlag } from './context/FeatureFlags';\nimport { NotificationsProvider, useNotifications, useNotificationsDispatch } from './context/Notifications';\n\nconst ROOT_FLAGS = { newCheckout: false, darkMode: true };\nconst BETA_FLAGS = { newCheckout: true };\n\nfunction Bell() {\n  const items = useNotifications();\n  const unread = items.filter((n) => !n.read).length;\n  return <span className=\"bell\">🔔 <span id=\"bell-count\">{unread}</span></span>;\n}\n\nfunction RoleSwitcher() {\n  const { role } = useAuth();\n  const dispatch = useAuthDispatch();\n  return (\n    <select id=\"role-select\" value={role} onChange={(e) => dispatch({ type: 'switchRole', role: e.target.value })}>\n      {ROLES.map((r) => <option key={r} value={r}>{r}</option>)}\n    </select>\n  );\n}\n\nfunction Header() {\n  const { user, role } = useAuth();\n  return (\n    <header>\n      <strong>CT Ops</strong>\n      <span id=\"who\">{user ? `${user.name} (${role})` : 'Guest'}</span>\n      <span className=\"spacer\" />\n      <RoleSwitcher />\n      <Bell />\n    </header>\n  );\n}\n\nfunction OrdersPanel() {\n  return (\n    <section id=\"orders\">\n      <h2>Order #1001</h2>\n      <Can do=\"orders:edit\" fallback={<p id=\"read-only\" className=\"muted\">Read-only access</p>}>\n        <button id=\"btn-edit-order\" type=\"button\">Edit</button>\n      </Can>{' '}\n      <Can do=\"orders:delete\">\n        <button id=\"btn-delete-order\" type=\"button\">Delete</button>\n      </Can>\n    </section>\n  );\n}\n\nfunction Reports() {\n  return <section id=\"reports\"><h2>Reports</h2><p>Revenue this month: 1,740,000 ₫</p></section>;\n}\nconst GuardedReports = withPermission(Reports, 'reports:view', () => <p id=\"no-reports\" className=\"muted\">Reports are for admins</p>);\n\nfunction Checkout({ id }) {\n  const isNew = useFlag('newCheckout');\n  return <p id={id}>{isNew ? 'New checkout' : 'Classic checkout'}</p>;\n}\n\n// Composer chỉ dùng dispatch ⇒ không vẽ lại khi danh sách thông báo đổi (nhờ tách context + memo)\nconst Composer = memo(function Composer() {\n  const dispatch = useNotificationsDispatch();\n  const renders = useRef(0);\n  renders.current += 1;\n  return (\n    <div>\n      <button id=\"notify-order\" type=\"button\" onClick={() => dispatch({ type: 'push', text: 'New order #1002' })}>Notify order</button>{' '}\n      <button id=\"notify-stock\" type=\"button\" onClick={() => dispatch({ type: 'push', text: 'Low stock: Mouse' })}>Notify stock</button>{' '}\n      <button id=\"mark-read\" type=\"button\" onClick={() => dispatch({ type: 'markAllRead' })}>Mark all read</button>\n      <p id=\"composer-renders\" className=\"muted\">Composer renders: {renders.current}</p>\n    </div>\n  );\n});\n\nfunction NotificationList() {\n  const items = useNotifications();\n  const dispatch = useNotificationsDispatch();\n  if (items.length === 0) return <p id=\"no-notifications\" className=\"muted\">No notifications</p>;\n  return (\n    <ul id=\"notifications\">\n      {items.map((n) => (\n        <li key={n.id} className={n.read ? 'notification' : 'notification unread'}>\n          <span className=\"text\">{n.text}</span>\n          <button type=\"button\" className=\"dismiss\" onClick={() => dispatch({ type: 'dismiss', id: n.id })}>×</button>\n        </li>\n      ))}\n    </ul>\n  );\n}\n\nexport default function App() {\n  return (\n    <AuthProvider>\n      <FeatureFlagsProvider flags={ROOT_FLAGS}>\n        <NotificationsProvider>\n          <Header />\n          <OrdersPanel />\n          <GuardedReports />\n          <section id=\"checkout\">\n            <Checkout id=\"checkout-main\" />\n            <div id=\"beta-area\">\n              <FeatureFlagsProvider flags={BETA_FLAGS}>\n                <Checkout id=\"checkout-beta\" />\n                <DarkModeLabel />\n              </FeatureFlagsProvider>\n            </div>\n          </section>\n          <section id=\"notify\">\n            <Composer />\n            <NotificationList />\n          </section>\n        </NotificationsProvider>\n      </FeatureFlagsProvider>\n    </AuthProvider>\n  );\n}\n\nfunction DarkModeLabel() {\n  return <p id=\"beta-dark\">{useFlag('darkMode') ? 'Dark mode on' : 'Dark mode off'}</p>;\n}\n"
+        },
+        {
+          "name": "src/context/AuthContext.js",
+          "language": "javascript",
+          "code": "// src/context/AuthContext.js — useReducer + HAI context: state và dispatch tách riêng\nimport { createContext, useContext, useEffect, useReducer } from 'react';\n\nconst AuthStateContext = createContext(null);\nconst AuthDispatchContext = createContext(null);\n\nconst ROLES = ['admin', 'editor', 'viewer'];\n\nfunction authReducer(state, action) {\n  switch (action.type) {\n    case 'login':\n      return { user: { name: action.name }, role: state.role };\n    case 'logout':\n      return { user: null, role: 'viewer' };\n    case 'switchRole':\n      return ROLES.includes(action.role) ? { ...state, role: action.role } : state;\n    default:\n      return state;\n  }\n}\n\nfunction init() {\n  const saved = localStorage.getItem('role');\n  return { user: { name: 'Lan' }, role: ROLES.includes(saved) ? saved : 'viewer' };\n}\n\nexport function AuthProvider({ children }) {\n  const [state, dispatch] = useReducer(authReducer, undefined, init);\n\n  useEffect(() => {\n    localStorage.setItem('role', state.role);\n  }, [state.role]);\n\n  return (\n    <AuthDispatchContext.Provider value={dispatch}>\n      <AuthStateContext.Provider value={state}>{children}</AuthStateContext.Provider>\n    </AuthDispatchContext.Provider>\n  );\n}\n\nexport function useAuth() {\n  const ctx = useContext(AuthStateContext);\n  if (!ctx) throw new Error('useAuth must be used inside AuthProvider');\n  return ctx;\n}\n\nexport function useAuthDispatch() {\n  const ctx = useContext(AuthDispatchContext);\n  if (!ctx) throw new Error('useAuthDispatch must be used inside AuthProvider');\n  return ctx;\n}\n\nexport { ROLES };\n// value không cần useMemo: state của useReducer chỉ đổi tham chiếu khi thật sự đổi, dispatch luôn ổn định\n"
+        },
+        {
+          "name": "src/context/permissions.js",
+          "language": "javascript",
+          "code": "// src/context/permissions.js — ma trận quyền: vai trò ⇒ danh sách quyền (dữ liệu, không if lồng)\nimport { useAuth } from './AuthContext';\n\nexport const PERMISSIONS = {\n  admin: ['orders:view', 'orders:edit', 'orders:delete', 'reports:view'],\n  editor: ['orders:view', 'orders:edit'],\n  viewer: ['orders:view'],\n};\n\nexport function usePermission(permission) {\n  const { role } = useAuth();\n  return (PERMISSIONS[role] ?? []).includes(permission);\n}\n\n// <Can do=\"orders:delete\" fallback={…}>…</Can>\nexport function Can({ do: permission, fallback = null, children }) {\n  return usePermission(permission) ? children : fallback;\n}\n\n// HOC: bọc một component, chỉ vẽ nó khi có quyền\nexport function withPermission(Component, permission, Fallback = () => null) {\n  function Guarded(props) {\n    return usePermission(permission) ? <Component {...props} /> : <Fallback {...props} />;\n  }\n  Guarded.displayName = `withPermission(${Component.displayName || Component.name || 'Component'})`;\n  return Guarded;\n}\n"
+        },
+        {
+          "name": "src/context/FeatureFlags.js",
+          "language": "javascript",
+          "code": "// src/context/FeatureFlags.js — Provider lồng GỘP cờ của cha với phần ghi đè\nimport { createContext, useContext, useMemo } from 'react';\n\nconst FlagsContext = createContext({});\n\nexport function FeatureFlagsProvider({ flags = {}, children }) {\n  const parent = useContext(FlagsContext);\n  const value = useMemo(() => ({ ...parent, ...flags }), [parent, flags]);\n  return <FlagsContext.Provider value={value}>{children}</FlagsContext.Provider>;\n}\n\nexport function useFlag(name) {\n  return Boolean(useContext(FlagsContext)[name]);\n}\n"
+        },
+        {
+          "name": "src/context/Notifications.js",
+          "language": "javascript",
+          "code": "// src/context/Notifications.js — reducer + state/dispatch tách riêng\nimport { createContext, useContext, useReducer } from 'react';\n\nconst StateCtx = createContext(null);\nconst DispatchCtx = createContext(null);\n\nlet nextId = 1;\n\nfunction reducer(state, action) {\n  switch (action.type) {\n    case 'push':\n      return [{ id: nextId++, text: action.text, read: false }, ...state];\n    case 'dismiss':\n      return state.filter((n) => n.id !== action.id);\n    case 'markAllRead':\n      return state.map((n) => (n.read ? n : { ...n, read: true }));\n    default:\n      return state;\n  }\n}\n\nexport function NotificationsProvider({ children }) {\n  const [items, dispatch] = useReducer(reducer, []);\n  return (\n    <DispatchCtx.Provider value={dispatch}>\n      <StateCtx.Provider value={items}>{children}</StateCtx.Provider>\n    </DispatchCtx.Provider>\n  );\n}\n\nexport function useNotifications() {\n  const ctx = useContext(StateCtx);\n  if (!ctx) throw new Error('useNotifications must be used inside NotificationsProvider');\n  return ctx;\n}\n\nexport function useNotificationsDispatch() {\n  const ctx = useContext(DispatchCtx);\n  if (!ctx) throw new Error('useNotificationsDispatch must be used inside NotificationsProvider');\n  return ctx;\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport './index.css';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "src/index.css",
+          "language": "css",
+          "code": "/* src/index.css (đã cho) */\nbody { font-family: system-ui, sans-serif; margin: 0; padding: 20px; background: #f8fafc; color: #0f172a; }\nheader { display: flex; align-items: center; gap: 12px; background: #1e293b; color: #fff; padding: 10px 16px; border-radius: 10px; }\nheader .spacer { flex: 1; }\n.bell { position: relative; } #bell-count { background: #ef4444; border-radius: 999px; padding: 0 7px; font-size: 12px; }\nsection { background: #fff; border-radius: 10px; padding: 14px 16px; margin-top: 14px; box-shadow: 0 1px 2px rgba(0,0,0,.08); }\n.notification { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #e2e8f0; } .notification.unread { font-weight: 600; }\nbutton { cursor: pointer; } .muted { color: #64748b; }\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Mỗi mối quan tâm là một provider nhỏ. Reducer gom mọi thay đổi trạng thái đăng nhập và thông báo; tách <b>state</b> và <b>dispatch</b> ra hai context là mẫu tối ưu của chính đội React: dispatch không bao giờ đổi nên component chỉ gửi action (Composer) không vẽ lại. Quyền là <b>dữ liệu</b> (ma trận) — thêm vai trò mới không phải sửa component; <code>&lt;Can&gt;</code> và HOC chỉ là hai cách đóng gói cùng một câu hỏi <code>usePermission</code>. Provider cờ đọc giá trị của provider cha rồi ghi đè một phần, nên vùng beta có tính năng mới mà vẫn kế thừa phần còn lại.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://react.dev/learn/scaling-up-with-reducer-and-context",
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "kiem": [
+          {
+            "nhom": "f1",
+            "moTa": "Header reads the user and role from context",
+            "kiem": "text",
+            "selector": "#who",
+            "giaTri": "Lan (viewer)"
+          },
+          {
+            "nhom": "f1",
+            "moTa": "Switching role dispatches to the reducer",
+            "kiem": "text",
+            "selector": "#who",
+            "giaTri": "Lan (editor)",
+            "truoc": [
+              {
+                "hanhDong": "doi",
+                "selector": "#role-select",
+                "giaTri": "editor"
+              }
+            ]
+          },
+          {
+            "nhom": "f1",
+            "an": true,
+            "moTa": "Auth uses useReducer with separate state/dispatch contexts",
+            "kiem": "ma-nguon",
+            "tep": "src/context/AuthContext.js",
+            "khop": "^(?=[\\s\\S]*useReducer\\()(?=[\\s\\S]*AuthDispatchContext\\.Provider)(?=[\\s\\S]*AuthStateContext\\.Provider)"
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Viewer: read-only, no edit/delete",
+            "kiem": "danh-sach-text",
+            "selector": "#orders #read-only, #orders button",
+            "mongDoi": [
+              "Read-only access"
+            ]
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Editor: edit but not delete",
+            "kiem": "danh-sach-text",
+            "selector": "#orders button",
+            "mongDoi": [
+              "Edit"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "doi",
+                "selector": "#role-select",
+                "giaTri": "editor"
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Admin: edit and delete",
+            "kiem": "danh-sach-text",
+            "selector": "#orders button",
+            "mongDoi": [
+              "Edit",
+              "Delete"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "doi",
+                "selector": "#role-select",
+                "giaTri": "admin"
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "an": true,
+            "moTa": "Permissions are a data matrix",
+            "kiem": "ma-nguon",
+            "tep": "src/context/permissions.js",
+            "khop": "admin\\s*:\\s*\\[[\\s\\S]*editor\\s*:\\s*\\[[\\s\\S]*viewer\\s*:\\s*\\["
+          },
+          {
+            "nhom": "f3",
+            "moTa": "HOC shows the fallback without permission",
+            "kiem": "text",
+            "selector": "#no-reports",
+            "giaTri": "Reports are for admins"
+          },
+          {
+            "nhom": "f3",
+            "moTa": "HOC renders the component for admins",
+            "kiem": "danh-sach-text",
+            "selector": "#reports h2, #no-reports",
+            "mongDoi": [
+              "Reports"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "doi",
+                "selector": "#role-select",
+                "giaTri": "admin"
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "an": true,
+            "moTa": "withPermission returns a component with a displayName",
+            "kiem": "ma-nguon",
+            "tep": "src/context/permissions.js",
+            "khop": "function\\s+withPermission\\s*\\([\\s\\S]*displayName"
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Root flags: classic checkout outside the beta area",
+            "kiem": "text",
+            "selector": "#checkout-main",
+            "giaTri": "Classic checkout"
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Nested provider overrides one flag",
+            "kiem": "text",
+            "selector": "#checkout-beta",
+            "giaTri": "New checkout"
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Nested provider keeps the parent's other flags (merge)",
+            "kiem": "text",
+            "selector": "#beta-dark",
+            "giaTri": "Dark mode on"
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Pushing notifications updates the bell",
+            "kiem": "danh-sach-text",
+            "selector": "#bell-count, .notification .text",
+            "mongDoi": [
+              "2",
+              "Low stock: Mouse",
+              "New order #1002"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#notify-order",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#notify-stock",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Mark all read clears the badge",
+            "kiem": "danh-sach-text",
+            "selector": "#bell-count, .notification.unread",
+            "mongDoi": [
+              "0"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#notify-order",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#notify-stock",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#mark-read",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Dismiss removes one notification",
+            "kiem": "danh-sach-text",
+            "selector": ".notification .text",
+            "mongDoi": [
+              "New order #1002"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#notify-order",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#notify-stock",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".notification:nth-child(1) .dismiss",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "an": true,
+            "moTa": "Empty state",
+            "kiem": "text",
+            "selector": "#no-notifications",
+            "giaTri": "No notifications"
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Composer does not re-render when the list changes",
+            "kiem": "text",
+            "selector": "#composer-renders",
+            "giaTri": "Composer renders: 1",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#notify-order",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#notify-stock",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#mark-read",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "an": true,
+            "moTa": "Notifications use separate state and dispatch contexts",
+            "kiem": "ma-nguon",
+            "tep": "src/context/Notifications.js",
+            "khop": "^(?=[\\s\\S]*DispatchCtx\\.Provider)(?=[\\s\\S]*StateCtx\\.Provider)|^(?=[\\s\\S]*Dispatch\\w*\\.Provider)(?=[\\s\\S]*State\\w*\\.Provider)"
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Role survives a reload",
+            "kiem": "text",
+            "selector": "#who",
+            "giaTri": "Lan (admin)",
+            "truoc": [
+              {
+                "hanhDong": "doi",
+                "selector": "#role-select",
+                "giaTri": "admin"
+              },
+              {
+                "hanhDong": "tai-lai"
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Saved under localStorage \"role\"",
+            "kiem": "kho-cuc-bo",
+            "khoa": "role",
+            "khop": "^editor$",
+            "truoc": [
+              {
+                "hanhDong": "doi",
+                "selector": "#role-select",
+                "giaTri": "editor"
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "an": true,
+            "moTa": "Invalid saved role falls back to viewer",
+            "khoCucBo": {
+              "role": "superuser"
+            },
+            "kiem": "text",
+            "selector": "#who",
+            "giaTri": "Lan (viewer)"
+          },
+          {
+            "nhom": "f8",
+            "moTa": "Auth hooks throw outside their provider",
+            "kiem": "ma-nguon",
+            "tep": "src/context/AuthContext.js",
+            "khop": "throw new Error\\(['\"]useAuth must be used inside AuthProvider"
+          },
+          {
+            "nhom": "f8",
+            "an": true,
+            "moTa": "Flags value memoized",
+            "kiem": "ma-nguon",
+            "tep": "src/context/FeatureFlags.js",
+            "khop": "useMemo\\("
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. Auth with useReducer",
+            "diem": 1.5
+          },
+          {
+            "ma": "f2",
+            "ten": "2. Permission matrix & &lt;Can&gt;",
+            "diem": 1.5
+          },
+          {
+            "ma": "f3",
+            "ten": "3. Higher-order component",
+            "diem": 1
+          },
+          {
+            "ma": "f4",
+            "ten": "4. Nested feature flags",
+            "diem": 1.5
+          },
+          {
+            "ma": "f5",
+            "ten": "5. Notification centre",
+            "diem": 1.5
+          },
+          {
+            "ma": "f6",
+            "ten": "6. Split contexts avoid re-renders",
+            "diem": 1
+          },
+          {
+            "ma": "f7",
+            "ten": "7. Persisted role",
+            "diem": 1
+          },
+          {
+            "ma": "f8",
+            "ten": "8. Guarded hooks & memo",
+            "diem": 1
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "deep-lab",
+      "mistakesJson": [
+        {
+          "loi": "Dùng <code>createContext(null)</code> cho cờ rồi lồng Provider ⇒ cha null, spread vẫn chạy nhưng useFlag ngoài Provider lỗi; mặc định <code>{}</code> cho cờ là hợp lý."
+        },
+        {
+          "loi": "Component Composer dùng <code>useNotifications()</code> chỉ để lấy dispatch ⇒ vẽ lại mỗi lần danh sách đổi."
+        },
+        {
+          "loi": "HOC tạo component mới BÊN TRONG render ⇒ mỗi lần render là component khác, state bị xoá."
+        },
+        {
+          "loi": "Truyền <code>flags</code> bằng object literal trong JSX ⇒ value mới mỗi render (ở đây dùng hằng ngoài component)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "RBAC (role-based access control)",
+          "vi": "phân quyền theo vai trò"
+        },
+        {
+          "en": "feature flag",
+          "vi": "cờ bật/tắt tính năng không cần deploy lại"
+        },
+        {
+          "en": "HOC",
+          "vi": "hàm nhận component, trả component mới"
+        },
+        {
+          "en": "dispatch context",
+          "vi": "context chỉ chứa hàm dispatch (không bao giờ đổi)"
+        },
+        {
+          "en": "rubric",
+          "vi": "thang điểm theo tiêu chí"
+        },
+        {
+          "en": "persist",
+          "vi": "lưu bền — còn sau khi tải lại trang"
+        }
+      ],
+      "demoHtml": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>Deep Lab 7 — Permissions &amp; Notifications Center (reducer + split contexts · &lt;Can&gt; · HOC · nested flags) — Live demo</title>\n<script src=\"https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js\" crossorigin=\"anonymous\"></script>\n\n</head><body><div id=\"root\"></div><script>(function(){\nvar M={\"src/App.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/App.js — ghép Provider và các phần giao diện\\nvar _react = require('react');\\nvar _AuthContext = require('./context/AuthContext');\\nvar _permissions = require('./context/permissions');\\nvar _FeatureFlags = require('./context/FeatureFlags');\\nvar _Notifications = require('./context/Notifications');\\n\\nconst ROOT_FLAGS = { newCheckout: false, darkMode: true };\\nconst BETA_FLAGS = { newCheckout: true };\\n\\nfunction Bell() {\\n  const items = _Notifications.useNotifications.call(void 0, );\\n  const unread = items.filter((n) => !n.read).length;\\n  return _jsxruntime.jsxs.call(void 0, 'span', { className: \\\"bell\\\", children: [\\\"🔔 \\\" , _jsxruntime.jsx.call(void 0, 'span', { id: \\\"bell-count\\\", children: unread})]});\\n}\\n\\nfunction RoleSwitcher() {\\n  const { role } = _AuthContext.useAuth.call(void 0, );\\n  const dispatch = _AuthContext.useAuthDispatch.call(void 0, );\\n  return (\\n    _jsxruntime.jsx.call(void 0, 'select', { id: \\\"role-select\\\", value: role, onChange: (e) => dispatch({ type: 'switchRole', role: e.target.value }), children: \\n      _AuthContext.ROLES.map((r) => _jsxruntime.jsx.call(void 0, 'option', { value: r, children: r}, r))\\n    })\\n  );\\n}\\n\\nfunction Header() {\\n  const { user, role } = _AuthContext.useAuth.call(void 0, );\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'header', { children: [\\n      _jsxruntime.jsx.call(void 0, 'strong', { children: \\\"CT Ops\\\" })\\n      , _jsxruntime.jsx.call(void 0, 'span', { id: \\\"who\\\", children: user ? `${user.name} (${role})` : 'Guest'})\\n      , _jsxruntime.jsx.call(void 0, 'span', { className: \\\"spacer\\\",} )\\n      , _jsxruntime.jsx.call(void 0, RoleSwitcher, {} )\\n      , _jsxruntime.jsx.call(void 0, Bell, {} )\\n    ]})\\n  );\\n}\\n\\nfunction OrdersPanel() {\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'section', { id: \\\"orders\\\", children: [\\n      _jsxruntime.jsx.call(void 0, 'h2', { children: \\\"Order #1001\\\" })\\n      , _jsxruntime.jsx.call(void 0, _permissions.Can, { do: \\\"orders:edit\\\", fallback: _jsxruntime.jsx.call(void 0, 'p', { id: \\\"read-only\\\", className: \\\"muted\\\", children: \\\"Read-only access\\\" }), children: \\n        _jsxruntime.jsx.call(void 0, 'button', { id: \\\"btn-edit-order\\\", type: \\\"button\\\", children: \\\"Edit\\\"})\\n      }), ' '\\n      , _jsxruntime.jsx.call(void 0, _permissions.Can, { do: \\\"orders:delete\\\", children: \\n        _jsxruntime.jsx.call(void 0, 'button', { id: \\\"btn-delete-order\\\", type: \\\"button\\\", children: \\\"Delete\\\"})\\n      })\\n    ]})\\n  );\\n}\\n\\nfunction Reports() {\\n  return _jsxruntime.jsxs.call(void 0, 'section', { id: \\\"reports\\\", children: [_jsxruntime.jsx.call(void 0, 'h2', { children: \\\"Reports\\\"}), _jsxruntime.jsx.call(void 0, 'p', { children: \\\"Revenue this month: 1,740,000 ₫\\\"    })]});\\n}\\nconst GuardedReports = _permissions.withPermission.call(void 0, Reports, 'reports:view', () => _jsxruntime.jsx.call(void 0, 'p', { id: \\\"no-reports\\\", className: \\\"muted\\\", children: \\\"Reports are for admins\\\"   }));\\n\\nfunction Checkout({ id }) {\\n  const isNew = _FeatureFlags.useFlag.call(void 0, 'newCheckout');\\n  return _jsxruntime.jsx.call(void 0, 'p', { id: id, children: isNew ? 'New checkout' : 'Classic checkout'});\\n}\\n\\n// Composer chỉ dùng dispatch ⇒ không vẽ lại khi danh sách thông báo đổi (nhờ tách context + memo)\\nconst Composer = _react.memo.call(void 0, function Composer() {\\n  const dispatch = _Notifications.useNotificationsDispatch.call(void 0, );\\n  const renders = _react.useRef.call(void 0, 0);\\n  renders.current += 1;\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'div', { children: [\\n      _jsxruntime.jsx.call(void 0, 'button', { id: \\\"notify-order\\\", type: \\\"button\\\", onClick: () => dispatch({ type: 'push', text: 'New order #1002' }), children: \\\"Notify order\\\" }), ' '\\n      , _jsxruntime.jsx.call(void 0, 'button', { id: \\\"notify-stock\\\", type: \\\"button\\\", onClick: () => dispatch({ type: 'push', text: 'Low stock: Mouse' }), children: \\\"Notify stock\\\" }), ' '\\n      , _jsxruntime.jsx.call(void 0, 'button', { id: \\\"mark-read\\\", type: \\\"button\\\", onClick: () => dispatch({ type: 'markAllRead' }), children: \\\"Mark all read\\\"  })\\n      , _jsxruntime.jsxs.call(void 0, 'p', { id: \\\"composer-renders\\\", className: \\\"muted\\\", children: [\\\"Composer renders: \\\"  , renders.current]})\\n    ]})\\n  );\\n});\\n\\nfunction NotificationList() {\\n  const items = _Notifications.useNotifications.call(void 0, );\\n  const dispatch = _Notifications.useNotificationsDispatch.call(void 0, );\\n  if (items.length === 0) return _jsxruntime.jsx.call(void 0, 'p', { id: \\\"no-notifications\\\", className: \\\"muted\\\", children: \\\"No notifications\\\" });\\n  return (\\n    _jsxruntime.jsx.call(void 0, 'ul', { id: \\\"notifications\\\", children: \\n      items.map((n) => (\\n        _jsxruntime.jsxs.call(void 0, 'li', { className: n.read ? 'notification' : 'notification unread', children: [\\n          _jsxruntime.jsx.call(void 0, 'span', { className: \\\"text\\\", children: n.text})\\n          , _jsxruntime.jsx.call(void 0, 'button', { type: \\\"button\\\", className: \\\"dismiss\\\", onClick: () => dispatch({ type: 'dismiss', id: n.id }), children: \\\"×\\\"})\\n        ]}, n.id)\\n      ))\\n    })\\n  );\\n}\\n\\n function App() {\\n  return (\\n    _jsxruntime.jsx.call(void 0, _AuthContext.AuthProvider, { children: \\n      _jsxruntime.jsx.call(void 0, _FeatureFlags.FeatureFlagsProvider, { flags: ROOT_FLAGS, children: \\n        _jsxruntime.jsxs.call(void 0, _Notifications.NotificationsProvider, { children: [\\n          _jsxruntime.jsx.call(void 0, Header, {} )\\n          , _jsxruntime.jsx.call(void 0, OrdersPanel, {} )\\n          , _jsxruntime.jsx.call(void 0, GuardedReports, {} )\\n          , _jsxruntime.jsxs.call(void 0, 'section', { id: \\\"checkout\\\", children: [\\n            _jsxruntime.jsx.call(void 0, Checkout, { id: \\\"checkout-main\\\",} )\\n            , _jsxruntime.jsx.call(void 0, 'div', { id: \\\"beta-area\\\", children: \\n              _jsxruntime.jsxs.call(void 0, _FeatureFlags.FeatureFlagsProvider, { flags: BETA_FLAGS, children: [\\n                _jsxruntime.jsx.call(void 0, Checkout, { id: \\\"checkout-beta\\\",} )\\n                , _jsxruntime.jsx.call(void 0, DarkModeLabel, {} )\\n              ]})\\n            })\\n          ]})\\n          , _jsxruntime.jsxs.call(void 0, 'section', { id: \\\"notify\\\", children: [\\n            _jsxruntime.jsx.call(void 0, Composer, {} )\\n            , _jsxruntime.jsx.call(void 0, NotificationList, {} )\\n          ]})\\n        ]})\\n      })\\n    })\\n  );\\n} exports.default = App;\\n\\nfunction DarkModeLabel() {\\n  return _jsxruntime.jsx.call(void 0, 'p', { id: \\\"beta-dark\\\", children: _FeatureFlags.useFlag.call(void 0, 'darkMode') ? 'Dark mode on' : 'Dark mode off'});\\n}\\n\",\"src/context/AuthContext.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/context/AuthContext.js — useReducer + HAI context: state và dispatch tách riêng\\nvar _react = require('react');\\n\\nconst AuthStateContext = _react.createContext.call(void 0, null);\\nconst AuthDispatchContext = _react.createContext.call(void 0, null);\\n\\nconst ROLES = ['admin', 'editor', 'viewer'];\\n\\nfunction authReducer(state, action) {\\n  switch (action.type) {\\n    case 'login':\\n      return { user: { name: action.name }, role: state.role };\\n    case 'logout':\\n      return { user: null, role: 'viewer' };\\n    case 'switchRole':\\n      return ROLES.includes(action.role) ? { ...state, role: action.role } : state;\\n    default:\\n      return state;\\n  }\\n}\\n\\nfunction init() {\\n  const saved = localStorage.getItem('role');\\n  return { user: { name: 'Lan' }, role: ROLES.includes(saved) ? saved : 'viewer' };\\n}\\n\\n function AuthProvider({ children }) {\\n  const [state, dispatch] = _react.useReducer.call(void 0, authReducer, undefined, init);\\n\\n  _react.useEffect.call(void 0, () => {\\n    localStorage.setItem('role', state.role);\\n  }, [state.role]);\\n\\n  return (\\n    _jsxruntime.jsx.call(void 0, AuthDispatchContext.Provider, { value: dispatch, children: \\n      _jsxruntime.jsx.call(void 0, AuthStateContext.Provider, { value: state, children: children})\\n    })\\n  );\\n} exports.AuthProvider = AuthProvider;\\n\\n function useAuth() {\\n  const ctx = _react.useContext.call(void 0, AuthStateContext);\\n  if (!ctx) throw new Error('useAuth must be used inside AuthProvider');\\n  return ctx;\\n} exports.useAuth = useAuth;\\n\\n function useAuthDispatch() {\\n  const ctx = _react.useContext.call(void 0, AuthDispatchContext);\\n  if (!ctx) throw new Error('useAuthDispatch must be used inside AuthProvider');\\n  return ctx;\\n} exports.useAuthDispatch = useAuthDispatch;\\n\\nexports.ROLES = ROLES;\\n// value không cần useMemo: state của useReducer chỉ đổi tham chiếu khi thật sự đổi, dispatch luôn ổn định\\n\",\"src/context/permissions.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _nullishCoalesce(lhs, rhsFn) { if (lhs != null) { return lhs; } else { return rhsFn(); } }// src/context/permissions.js — ma trận quyền: vai trò ⇒ danh sách quyền (dữ liệu, không if lồng)\\nvar _AuthContext = require('./AuthContext');\\n\\n const PERMISSIONS = {\\n  admin: ['orders:view', 'orders:edit', 'orders:delete', 'reports:view'],\\n  editor: ['orders:view', 'orders:edit'],\\n  viewer: ['orders:view'],\\n}; exports.PERMISSIONS = PERMISSIONS;\\n\\n function usePermission(permission) {\\n  const { role } = _AuthContext.useAuth.call(void 0, );\\n  return (_nullishCoalesce(exports.PERMISSIONS[role], () => ( []))).includes(permission);\\n} exports.usePermission = usePermission;\\n\\n// \\u003cCan do=\\\"orders:delete\\\" fallback={…}>…\\u003c/Can>\\n function Can({ do: permission, fallback = null, children }) {\\n  return usePermission(permission) ? children : fallback;\\n} exports.Can = Can;\\n\\n// HOC: bọc một component, chỉ vẽ nó khi có quyền\\n function withPermission(Component, permission, Fallback = () => null) {\\n  function Guarded(props) {\\n    return usePermission(permission) ? _jsxruntime.jsx.call(void 0, Component, { ...props,} ) : _jsxruntime.jsx.call(void 0, Fallback, { ...props,} );\\n  }\\n  Guarded.displayName = `withPermission(${Component.displayName || Component.name || 'Component'})`;\\n  return Guarded;\\n} exports.withPermission = withPermission;\\n\",\"src/context/FeatureFlags.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/context/FeatureFlags.js — Provider lồng GỘP cờ của cha với phần ghi đè\\nvar _react = require('react');\\n\\nconst FlagsContext = _react.createContext.call(void 0, {});\\n\\n function FeatureFlagsProvider({ flags = {}, children }) {\\n  const parent = _react.useContext.call(void 0, FlagsContext);\\n  const value = _react.useMemo.call(void 0, () => ({ ...parent, ...flags }), [parent, flags]);\\n  return _jsxruntime.jsx.call(void 0, FlagsContext.Provider, { value: value, children: children});\\n} exports.FeatureFlagsProvider = FeatureFlagsProvider;\\n\\n function useFlag(name) {\\n  return Boolean(_react.useContext.call(void 0, FlagsContext)[name]);\\n} exports.useFlag = useFlag;\\n\",\"src/context/Notifications.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/context/Notifications.js — reducer + state/dispatch tách riêng\\nvar _react = require('react');\\n\\nconst StateCtx = _react.createContext.call(void 0, null);\\nconst DispatchCtx = _react.createContext.call(void 0, null);\\n\\nlet nextId = 1;\\n\\nfunction reducer(state, action) {\\n  switch (action.type) {\\n    case 'push':\\n      return [{ id: nextId++, text: action.text, read: false }, ...state];\\n    case 'dismiss':\\n      return state.filter((n) => n.id !== action.id);\\n    case 'markAllRead':\\n      return state.map((n) => (n.read ? n : { ...n, read: true }));\\n    default:\\n      return state;\\n  }\\n}\\n\\n function NotificationsProvider({ children }) {\\n  const [items, dispatch] = _react.useReducer.call(void 0, reducer, []);\\n  return (\\n    _jsxruntime.jsx.call(void 0, DispatchCtx.Provider, { value: dispatch, children: \\n      _jsxruntime.jsx.call(void 0, StateCtx.Provider, { value: items, children: children})\\n    })\\n  );\\n} exports.NotificationsProvider = NotificationsProvider;\\n\\n function useNotifications() {\\n  const ctx = _react.useContext.call(void 0, StateCtx);\\n  if (!ctx) throw new Error('useNotifications must be used inside NotificationsProvider');\\n  return ctx;\\n} exports.useNotifications = useNotifications;\\n\\n function useNotificationsDispatch() {\\n  const ctx = _react.useContext.call(void 0, DispatchCtx);\\n  if (!ctx) throw new Error('useNotificationsDispatch must be used inside NotificationsProvider');\\n  return ctx;\\n} exports.useNotificationsDispatch = useNotificationsDispatch;\\n\",\"src/index.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\"); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\\nvar _react = require('react'); var _react2 = _interopRequireDefault(_react);\\nvar _client = require('react-dom/client'); var _client2 = _interopRequireDefault(_client);\\nrequire('./index.css');\\nvar _App = require('./App'); var _App2 = _interopRequireDefault(_App);\\n\\nconst root = _client2.default.createRoot(document.getElementById('root'));\\nroot.render(\\n  _jsxruntime.jsx.call(void 0, _react2.default.StrictMode, { children: \\n    _jsxruntime.jsx.call(void 0, _App2.default, {} )\\n  })\\n);\\n\"};var CSS={\"src/index.css\":\"/* src/index.css (đã cho) */\\nbody { font-family: system-ui, sans-serif; margin: 0; padding: 20px; background: #f8fafc; color: #0f172a; }\\nheader { display: flex; align-items: center; gap: 12px; background: #1e293b; color: #fff; padding: 10px 16px; border-radius: 10px; }\\nheader .spacer { flex: 1; }\\n.bell { position: relative; } #bell-count { background: #ef4444; border-radius: 999px; padding: 0 7px; font-size: 12px; }\\nsection { background: #fff; border-radius: 10px; padding: 14px 16px; margin-top: 14px; box-shadow: 0 1px 2px rgba(0,0,0,.08); }\\n.notification { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #e2e8f0; } .notification.unread { font-weight: 600; }\\nbutton { cursor: pointer; } .muted { color: #64748b; }\\n\"};var DB=null;var BASE=\"http://localhost:9999\";var URL0=null;var THANH=false;\nfunction kho(){var m={};var k={getItem:function(x){x=String(x);return Object.prototype.hasOwnProperty.call(m,x)?m[x]:null},setItem:function(x,v){m[String(x)]=String(v)},removeItem:function(x){delete m[String(x)]},clear:function(){m={}},key:function(i){return Object.keys(m)[i]||null}};Object.defineProperty(k,'length',{get:function(){return Object.keys(m).length}});return k}\ntry{Object.defineProperty(window,'localStorage',{value:kho(),configurable:true})}catch(e){}\ntry{Object.defineProperty(window,'sessionStorage',{value:kho(),configurable:true})}catch(e){}\nwindow.confirm=function(){return true};window.alert=function(m){console.log('[alert]',m);var t=document.getElementById('cl-demo-alert');if(!t){t=document.createElement('div');t.id='cl-demo-alert';t.style.cssText='position:fixed;right:12px;bottom:12px;z-index:99999;max-width:320px;padding:10px 14px;border-radius:10px;background:#0f172a;color:#fff;font:13px system-ui;box-shadow:0 6px 24px rgba(0,0,0,.25)';document.body.appendChild(t)}t.textContent='alert: '+m;clearTimeout(t.__h);t.__h=setTimeout(function(){t.remove()},2600)};\nvar ENV={NODE_ENV:'production',MODE:'production',PROD:true,DEV:false,BASE_URL:'/'};\nString(M['.env']||'').split(/\\r?\\n/).forEach(function(d){var m=/^\\s*(?:export\\s+)?([A-Za-z_][A-Za-z0-9_]*)\\s*=\\s*(.*)\\s*$/.exec(d);if(m)ENV[m[1]]=m[2].replace(/^(['\"])(.*)\\1$/,'$2')});\nwindow.__CL_ENV__=ENV;if(!window.process)window.process={env:ENV};\n// json-server giả (bản sao domAgent.ts)\nvar jsDb=DB?JSON.parse(JSON.stringify(DB)):null;\nfunction tl(st,b){return new Response(b===undefined?'{}':JSON.stringify(b),{status:st,headers:{'content-type':'application/json'}})}\nfunction lay(o,k){return String(k).split('.').reduce(function(a,p){return a==null?undefined:a[p]},o)}\nfunction mot(t){return /ies$/.test(t)?t.slice(0,-3)+'y':t.replace(/s$/,'')}\nfunction xuLy(method,url,body){var u=new URL(url);var ph=u.pathname.replace(/^\\/+|\\/+$/g,'').split('/').filter(Boolean).map(decodeURIComponent);var ten=ph[0],id=ph[1];\nif(!ten||!(ten in jsDb))return tl(404,{});var bang=jsDb[ten];var dl=null;if(body!=null&&body!==''){try{dl=JSON.parse(body)}catch(e){return tl(400,{})}}\nif(!Array.isArray(bang)){if(method==='GET')return tl(200,bang);if(method==='PUT'||method==='POST'){jsDb[ten]=dl||{};return tl(200,jsDb[ten])}if(method==='PATCH'){jsDb[ten]=Object.assign({},bang,dl||{});return tl(200,jsDb[ten])}return tl(404,{})}\nvar vt=function(x){return bang.findIndex(function(r){return String(r.id)===String(x)})};\nvar mr=function(r){var o=Object.assign({},r);u.searchParams.getAll('_expand').forEach(function(e){var b=jsDb[e+'s']||jsDb[e];if(Array.isArray(b))o[e]=b.find(function(x){return String(x.id)===String(r[e+'Id'])})});u.searchParams.getAll('_embed').forEach(function(e){var b=jsDb[e];if(Array.isArray(b)){var k=mot(ten)+'Id';o[e]=b.filter(function(x){return String(x[k])===String(r.id)})}});return o};\nif(method==='GET'){if(id!=null){var i=vt(id);return i<0?tl(404,{}):tl(200,mr(bang[i]))}var ds=bang.slice();var loc={};u.searchParams.forEach(function(v,k){if(k.charAt(0)!=='_'&&k!=='q')(loc[k]=loc[k]||[]).push(v)});\nObject.keys(loc).forEach(function(k){var vs=loc[k],m=/^(.*)_(like|gte|lte|ne)$/.exec(k);ds=ds.filter(function(r){if(m){var gv=lay(r,m[1]);return vs.every(function(v){if(m[2]==='like')return new RegExp(v,'i').test(String(gv));if(m[2]==='ne')return String(gv)!==v;var a=Number(gv),b=Number(v);var so=!isNaN(a)&&!isNaN(b);return m[2]==='gte'?(so?a>=b:String(gv)>=v):(so?a<=b:String(gv)<=v)})}var g=lay(r,k);return vs.some(function(v){return String(g)===v})})});\nvar qq=u.searchParams.get('q');if(qq)ds=ds.filter(function(r){return JSON.stringify(r).toLowerCase().indexOf(qq.toLowerCase())>=0});\nvar sx=u.searchParams.get('_sort');if(sx){var tr=sx.split(','),th=(u.searchParams.get('_order')||'asc').split(',');ds.sort(function(a,b){for(var t=0;t<tr.length;t++){var f=tr[t].replace(/^-/,''),gi=tr[t].charAt(0)==='-'||(th[t]||th[0])==='desc';var x=lay(a,f),y=lay(b,f);var c=(typeof x==='number'&&typeof y==='number')?x-y:String(x).localeCompare(String(y));if(c)return gi?-c:c}return 0})}\nvar gh=u.searchParams.get('_limit'),pg=u.searchParams.get('_page');var tong=ds.length;if(pg){var n=Number(gh)||10;ds=ds.slice((Number(pg)-1)*n,Number(pg)*n)}else if(gh)ds=ds.slice(0,Number(gh));var rr=tl(200,ds.map(mr));try{rr.headers.set('X-Total-Count',String(tong))}catch(e){}return rr}\nif(method==='POST'){if(id!=null)return tl(404,{});var mo=Object.assign({},dl||{});if(mo.id==null){var so2=bang.length&&bang.every(function(r){return typeof r.id==='number'});mo.id=so2||!bang.length?bang.reduce(function(mx,r){return Math.max(mx,Number(r.id)||0)},0)+1:Math.random().toString(16).slice(2,6)}bang.push(mo);return tl(201,mo)}\nif(id==null)return tl(404,{});var j=vt(id);if(j<0)return tl(404,{});\nif(method==='PUT'){bang[j]=Object.assign({},dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='PATCH'){bang[j]=Object.assign({},bang[j],dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='DELETE'){bang.splice(j,1);return tl(200,{})}return tl(404,{})}\nif(jsDb){window.fetch=function(url,init){init=init||{};var s=String(url&&url.url?url.url:url);var me=String(init.method||'GET').toUpperCase();return new Promise(function(res){setTimeout(function(){if(s.indexOf(BASE+'/')!==0)return res(new Response('Not Found',{status:404}));try{res(xuLy(me,s,init.body))}catch(e){res(tl(500,{error:String(e)}))}},120)})}}\nfunction axiosGia(){function goi(method,url,data,cfg){cfg=cfg||{};var u=(cfg.baseURL||'')+url;if(cfg.params){var sp=new URLSearchParams(cfg.params).toString();if(sp)u+=(u.indexOf('?')>=0?'&':'?')+sp}var init={method:method.toUpperCase(),headers:Object.assign({'Content-Type':'application/json'},cfg.headers||{})};if(data!==undefined)init.body=typeof data==='string'?data:JSON.stringify(data);\nreturn window.fetch(u,init).then(function(res){return res.text().then(function(t){var d;try{d=JSON.parse(t)}catch(e){d=t}var hd={};try{res.headers.forEach(function(v,k){hd[k.toLowerCase()]=v})}catch(e){}var out={data:d,status:res.status,statusText:res.statusText,headers:hd,config:cfg};if(res.status>=200&&res.status<300)return out;var err=new Error('Request failed with status code '+res.status);err.response=out;err.name='AxiosError';throw err})})}\nfunction tao(base){var a=function(cfg){return goi(cfg.method||'get',cfg.url,cfg.data,Object.assign({},base,cfg))};['get','delete','head'].forEach(function(m){a[m]=function(url,cfg){return goi(m,url,undefined,Object.assign({},base,cfg))}});['post','put','patch'].forEach(function(m){a[m]=function(url,data,cfg){return goi(m,url,data,Object.assign({},base,cfg))}});a.create=function(c){return tao(Object.assign({},base,c))};a.defaults=base;a.interceptors={request:{use:function(){}},response:{use:function(){}}};a.isAxiosError=function(e){return!!(e&&e.name==='AxiosError')};return a}\nvar ax=tao({});ax.default=ax;return ax}\nvar R=window.React;var tach=function(p,k){var q=Object.assign({},p);var c=q.children;delete q.children;if(k!==undefined)q.key=k;return[q,c]};\nvar j=function(t,p,k){var x=tach(p,k);return x[1]===undefined?R.createElement(t,x[0]):R.createElement(t,x[0],x[1])};\nvar js=function(t,p,k){var x=tach(p,k);return R.createElement.apply(null,[t,x[0]].concat(x[1]||[]))};\n// React Router: MemoryRouter + thanh địa chỉ (gõ URL được — thử ?status=ACTIVE, /items/2…)\nvar viTri=null,routerBoc=null,dieuHuong=null;\nfunction datThanh(v){var o=document.getElementById('cl-demo-url');if(o&&document.activeElement!==o)o.value='http://localhost:3000'+v}\nfunction routerGia(){var RRD=window.ReactRouterDOM;if(!RRD)return null;if(routerBoc)return routerBoc;\nfunction Ghi(){var l=RRD.useLocation();var nav=RRD.useNavigate();dieuHuong=nav;viTri=l.pathname+l.search+l.hash;R.useEffect(function(){datThanh(viTri)});return null}\nfunction RG(p){var d=R.useState(function(){return[viTri||URL0||'/']})[0];return R.createElement(RRD.MemoryRouter,{initialEntries:d,basename:p.basename},R.createElement(Ghi),p.children)}\nfunction tr(routes,opts){var r=RRD.createMemoryRouter(routes,Object.assign({},opts||{},{initialEntries:[viTri||URL0||'/']}));var g=function(s){viTri=s.location.pathname+s.location.search+s.location.hash;datThanh(viTri)};g(r.state);r.subscribe(g);dieuHuong=function(to){r.navigate(to)};return r}\nrouterBoc=Object.assign({},RRD,{BrowserRouter:RG,HashRouter:RG,createBrowserRouter:tr,createHashRouter:tr});return routerBoc}\nvar thunk=function(api){return function(next){return function(a){return typeof a==='function'?a(api.dispatch,api.getState):next(a)}}};\nvar LIB={'react':R,'react-dom':window.ReactDOM,'react-dom/client':window.ReactDOM,'react/jsx-runtime':{jsx:j,jsxs:js,Fragment:R.Fragment},'react/jsx-dev-runtime':{jsxDEV:j,Fragment:R.Fragment},'prop-types':window.PropTypes,'react-bootstrap':window.ReactBootstrap,'@reduxjs/toolkit':window.RTK,'redux':window.RTK,'react-redux':window.ReactRedux,'redux-thunk':{'default':thunk,thunk:thunk}};\nvar C={};\nfunction dd(tu,s){var p=tu.split('/').slice(0,-1);s.split('/').forEach(function(x){if(x==='.'||x==='')return;if(x==='..')p.pop();else p.push(x)});return p.join('/')}\nfunction tim(p){var d=['','.js','.jsx','.ts','.tsx','.json','/index.js','/index.jsx'];for(var i=0;i<d.length;i++){if(M[p+d[i]]!=null||CSS[p+d[i]]!=null)return p+d[i]}return null}\nfunction req(tu,s){if(s==='axios')return axiosGia();if(s==='react-router-dom'||s==='react-router')return routerGia();if(LIB[s])return LIB[s];if(/\\.css$/.test(s)&&!/^\\./.test(s))return{};var p=tim(dd(tu,s));if(!p)throw new Error('Cannot find module '+s);return nap(p)}\nfunction nap(p){if(C[p])return C[p].exports;if(CSS[p]!=null){var st=document.createElement('style');st.textContent=CSS[p];document.head.appendChild(st);C[p]={exports:{}};return{}}var m={exports:{}};C[p]=m;if(/\\.json$/.test(p)){m.exports=JSON.parse(M[p]);return m.exports}new Function('require','module','exports',M[p])(function(s){return req(p,s)},m,m.exports);return m.exports}\nif(THANH){var bar=document.createElement('form');bar.style.cssText='position:sticky;top:0;z-index:99998;display:flex;gap:6px;align-items:center;padding:6px 10px;background:#e2e8f0;border-bottom:1px solid #cbd5e1;font:12px system-ui';bar.innerHTML='<span style=\"color:#475569\">URL</span><input id=\"cl-demo-url\" style=\"flex:1;padding:4px 8px;border:1px solid #cbd5e1;border-radius:6px;font:12px ui-monospace,monospace\" aria-label=\"Address bar\"><button style=\"padding:3px 10px;border-radius:6px;border:1px solid #94a3b8;background:#fff;cursor:pointer\">Go</button>';\nbar.addEventListener('submit',function(e){e.preventDefault();var v=document.getElementById('cl-demo-url').value.replace(/^https?:\\/\\/[^/]+/,'')||'/';if(dieuHuong)dieuHuong(v)});document.body.insertBefore(bar,document.body.firstChild);datThanh(URL0||'/')}\nnap(\"src/index.js\");\n})();</script></body></html>"
+    }
+  ]
+}

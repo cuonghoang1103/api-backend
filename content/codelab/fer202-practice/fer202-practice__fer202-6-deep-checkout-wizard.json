@@ -1,0 +1,1572 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-6-deep-checkout-wizard",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-6-1-events-forms"
+  },
+  "exercises": [
+    {
+      "title": "Deep Lab 6 — Multi-step Checkout Wizard (step validation · field arrays · Enter = Next)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 120,
+      "points": 100,
+      "concepts": [
+        "multi-step forms",
+        "touched / blur validation",
+        "single state object",
+        "generic change handler",
+        "dynamic field arrays",
+        "form submit semantics",
+        "pure validation"
+      ],
+      "prerequisites": [
+        "Lab 6 — Registration form"
+      ],
+      "tags": [
+        "fer202",
+        "deep-lab",
+        "forms",
+        "events"
+      ],
+      "problemHtml": "<h1>DEEP LAB 6: Multi-step Checkout Wizard — events &amp; forms in depth</h1>\n<p class=\"bi-phu\">FER202 · Chapter 6 (deep) · Suggested time: 120 minutes · Total: 10 marks</p>\n<h2>1. Overview</h2>\n<p>A four-step checkout: <b>Account → Shipping → Items → Review</b>. Each step is validated before moving on; errors appear when the user leaves a field or presses Next — never before. All fields (text, select, radio, checkbox) live in <b>one state object</b> updated by <b>one handler</b>; the item list is a <b>dynamic field array</b>. Pressing Enter submits the form and acts as Next.</p>\n<h3>Main features</h3>\n<ul>\n  <li>Step navigation · per-step validation with blur/next timing · controlled select/radio/checkbox · dynamic item rows · Enter = Next · review · submit & restart.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>The wizard is one <code>&lt;form id=\"wizard\" noValidate&gt;</code>; Next/Place order are <code>type=\"submit\"</code>, every other button <code>type=\"button\"</code>; always <code>preventDefault</code>.</li>\n  <li>Validation in a pure <code>validateStep(step, data)</code> in <code>src/validation.js</code> (exact messages below).</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>src/\n├── validation.js            # STEP_FIELDS · validateStep · DELIVERY · vnd\n├── components/\n│   ├── Field.js             # label + control + #err-&lt;name&gt;\n│   └── Steps.js             # AccountStep · ShippingStep · ItemsStep · ReviewStep\n├── App.js                   # one state object, one handler, step logic\n└── index.css (given)</pre>\n<h2>3. UI wireframe</h2>\n<pre class=\"bi-wire\">+-----------------------------------------------------------+\n| [Account✓] [Shipping] [ Items ] [ Review ]                |\n| Step 2 of 4 — Shipping                                    |\n| Full name [Lan Nguyen        ]                            |\n| Phone     [0912…             ]                            |\n|           Phone must be 10 digits starting with 0         |\n| Address   [12 Tran Phu       ]   City [Hue           v]   |\n| Delivery  (•) Standard  ( ) Express   Delivery: 30,000 ₫  |\n|                                       [Back]      [Next]  |\n+-----------------------------------------------------------+</pre>\n<h2>4. Data model</h2>\n<p><b>Wizard state</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>email · password · confirm</code></td><td>string</td><td>step 1</td></tr><tr><td><code>fullName · phone · address · city · delivery</code></td><td>string · 'standard' | 'express'</td><td>step 2</td></tr><tr><td><code>items</code></td><td>{ id, name, qty }[]</td><td>step 3, at least one row</td></tr><tr><td><code>terms</code></td><td>boolean</td><td>step 3</td></tr><tr><td><code>touched</code></td><td>{ [field]: boolean }</td><td>controls when errors are shown</td></tr></tbody></table>\n<h2>5. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. Step navigation <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>ol#steps</code> with four <code>li.step</code> (<code>.active</code> current, <code>.done</code> before it), <code>#step-label</code> <code>Step 2 of 4 — Shipping</code>. Next only when the step is valid; <code>#btn-back</code> (not on step 1) keeps the values.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>2. Validation &amp; error timing <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Errors <code>#err-&lt;field&gt;</code> appear only after the field is blurred or after pressing Next on that step, and disappear as soon as the value is valid.</li>\n  <li>Messages: <code>Enter a valid email</code> · <code>At least 8 characters with a number</code> · <code>Passwords do not match</code> · <code>Full name is required</code> · <code>Phone must be 10 digits starting with 0</code> · <code>Address is too short</code> (≥ 5) · <code>Choose a city</code>.</li>\n</ul>\n<p><b>Example:</b></p>\n<pre>type \"lan@\" then move to Password ⇒ \"Enter a valid email\" appears</pre>\n</div>\n<div class=\"bi-cn\"><h3>3. Select, radio, checkbox <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>#city</code> select; radios <code>#delivery-standard</code>/<code>#delivery-express</code> (name <code>delivery</code>) update <code>#delivery-fee</code> <code>Delivery: 60,000 ₫</code>; <code>#terms</code> checkbox.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>4. Dynamic item rows <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>.item-row</code> with <code>.item-name</code>, <code>.item-qty</code>, <code>.remove-item</code> (disabled when one row left); <code>#add-item</code>. Rows keyed by a stable id. Errors <code>#err-items</code> <code>Every item needs a name and a quantity of at least 1</code>, <code>#err-terms</code> <code>You must accept the terms</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. Form submit semantics <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Enter in any input submits the form ⇒ same as Next; add/remove buttons never submit; the page never reloads.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>6. Review step <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>dl.review</code>: <code>#review-email</code>, <code>#review-name</code> <code>Lan Nguyen · 0912345678</code>, <code>#review-address</code> <code>12 Tran Phu, Hue</code>, <code>#review-delivery</code> <code>Express — 60,000 ₫</code>, <code>#review-items</code> <code>Pen ×2, Book ×1</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>7. Submit &amp; restart <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>#btn-submit</code> ⇒ <code>#success</code> <code>Order placed for Lan Nguyen</code>; <code>#btn-restart</code> resets data, touched and step.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>8. One state, one handler <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>useState(initial)</code> holds every field; <code>handleChange</code> uses <code>e.target.name</code> and <code>checked</code> for checkboxes.</li>\n</ul>\n</div>\n<h2>6. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>#wizard · #steps .step(.active/.done) · #step-label · #btn-back · #btn-next · #btn-submit</code></td><td>wizard</td></tr><tr><td><code>#email #password #confirm · #fullName #phone #address #city · #delivery-standard #delivery-express · #delivery-fee</code></td><td>fields</td></tr><tr><td><code>.item-row .item-name .item-qty .remove-item · #add-item · #terms</code></td><td>items</td></tr><tr><td><code>#err-&lt;field&gt; · #err-items · #err-terms</code></td><td>errors</td></tr><tr><td><code>.review dd#review-* · #success · #btn-restart</code></td><td>review & result</td></tr></tbody></table>\n<h2>7. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>Step navigation</td><td>1.5</td></tr><tr><td>2</td><td>Validation &amp; error timing</td><td>2</td></tr><tr><td>3</td><td>Select, radio, checkbox</td><td>1</td></tr><tr><td>4</td><td>Dynamic item rows</td><td>1.5</td></tr><tr><td>5</td><td>Form submit semantics</td><td>1</td></tr><tr><td>6</td><td>Review step</td><td>1</td></tr><tr><td>7</td><td>Submit &amp; restart</td><td>1</td></tr><tr><td>8</td><td>One state, one handler</td><td>1</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>All errors shown the moment the page opens.</li>\n  <li>A button without <code>type=\"button\"</code> inside the form — adding an item jumps to the next step.</li>\n  <li><code>key={index}</code> on item rows — removing a row shows the wrong text.</li>\n  <li>Ten separate <code>useState</code> + ten handlers.</li>\n</ul>\n<h2>8. Submission</h2>\n<p>Work directly in the editor (files on the right) or download the starter, run it locally with Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> when the paper uses an API) and paste the files back. Press <b>Run</b> for the sample checks and <b>Submit</b> for full grading (hidden checks included).</p>",
+      "problemHtmlVi": "<h1>DEEP LAB 6: Wizard thanh toán nhiều bước — sự kiện &amp; form chuyên sâu</h1>\n<p class=\"bi-phu\">FER202 · Chương 6 (chuyên sâu) · Thời gian gợi ý: 120 phút · Tổng: 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p>Thanh toán bốn bước: <b>Account → Shipping → Items → Review</b>. Mỗi bước được kiểm trước khi đi tiếp; lỗi hiện khi người dùng rời ô hoặc bấm Next — không bao giờ hiện trước. Mọi ô (text, select, radio, checkbox) nằm trong <b>một state object</b> cập nhật bằng <b>một handler</b>; danh sách mặt hàng là <b>mảng trường động</b>. Nhấn Enter gửi form và có tác dụng như Next.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>Điều hướng bước · kiểm theo bước với thời điểm blur/next · select/radio/checkbox điều khiển · dòng mặt hàng động · Enter = Next · xem lại · gửi & làm lại.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Wizard là một <code>&lt;form id=\"wizard\" noValidate&gt;</code>; Next/Place order là <code>type=\"submit\"</code>, mọi nút khác <code>type=\"button\"</code>; luôn <code>preventDefault</code>.</li>\n  <li>Kiểm hợp lệ bằng hàm thuần <code>validateStep(step, data)</code> trong <code>src/validation.js</code> (thông điệp đúng như dưới).</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>src/\n├── validation.js            # STEP_FIELDS · validateStep · DELIVERY · vnd\n├── components/\n│   ├── Field.js             # label + control + #err-&lt;name&gt;\n│   └── Steps.js             # AccountStep · ShippingStep · ItemsStep · ReviewStep\n├── App.js                   # one state object, one handler, step logic\n└── index.css (given)</pre>\n<h2>3. Wireframe giao diện</h2>\n<pre class=\"bi-wire\">+-----------------------------------------------------------+\n| [Account✓] [Shipping] [ Items ] [ Review ]                |\n| Step 2 of 4 — Shipping                                    |\n| Full name [Lan Nguyen        ]                            |\n| Phone     [0912…             ]                            |\n|           Phone must be 10 digits starting with 0         |\n| Address   [12 Tran Phu       ]   City [Hue           v]   |\n| Delivery  (•) Standard  ( ) Express   Delivery: 30,000 ₫  |\n|                                       [Back]      [Next]  |\n+-----------------------------------------------------------+</pre>\n<h2>4. Mô hình dữ liệu</h2>\n<p><b>Wizard state</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>email · password · confirm</code></td><td>string</td><td>bước 1</td></tr><tr><td><code>fullName · phone · address · city · delivery</code></td><td>string · 'standard' | 'express'</td><td>bước 2</td></tr><tr><td><code>items</code></td><td>{ id, name, qty }[]</td><td>bước 3, ít nhất một dòng</td></tr><tr><td><code>terms</code></td><td>boolean</td><td>bước 3</td></tr><tr><td><code>touched</code></td><td>{ [field]: boolean }</td><td>quyết định khi nào hiện lỗi</td></tr></tbody></table>\n<h2>5. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. Điều hướng bước <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>ol#steps</code> có bốn <code>li.step</code> (<code>.active</code> bước hiện tại, <code>.done</code> các bước trước), <code>#step-label</code> <code>Step 2 of 4 — Shipping</code>. Chỉ đi tiếp khi bước hợp lệ; <code>#btn-back</code> (không có ở bước 1) giữ nguyên giá trị.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>2. Kiểm hợp lệ &amp; thời điểm hiện lỗi <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Lỗi <code>#err-&lt;field&gt;</code> chỉ hiện sau khi rời ô hoặc sau khi bấm Next ở bước đó, và biến mất ngay khi giá trị hợp lệ.</li>\n  <li>Thông điệp: <code>Enter a valid email</code> · <code>At least 8 characters with a number</code> · <code>Passwords do not match</code> · <code>Full name is required</code> · <code>Phone must be 10 digits starting with 0</code> · <code>Address is too short</code> (≥ 5) · <code>Choose a city</code>.</li>\n</ul>\n<p><b>Ví dụ:</b></p>\n<pre>gõ \"lan@\" rồi chuyển sang Password ⇒ hiện \"Enter a valid email\"</pre>\n</div>\n<div class=\"bi-cn\"><h3>3. Select, radio, checkbox <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Select <code>#city</code>; radio <code>#delivery-standard</code>/<code>#delivery-express</code> (name <code>delivery</code>) đổi <code>#delivery-fee</code> <code>Delivery: 60,000 ₫</code>; checkbox <code>#terms</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>4. Dòng mặt hàng động <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>.item-row</code> có <code>.item-name</code>, <code>.item-qty</code>, <code>.remove-item</code> (vô hiệu khi còn một dòng); <code>#add-item</code>. Dòng có key là id ổn định. Lỗi <code>#err-items</code> <code>Every item needs a name and a quantity of at least 1</code>, <code>#err-terms</code> <code>You must accept the terms</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. Ngữ nghĩa gửi form <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Enter trong ô bất kỳ gửi form ⇒ như Next; nút thêm/xoá không bao giờ gửi form; trang không tải lại.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>6. Bước xem lại <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>dl.review</code>: <code>#review-email</code>, <code>#review-name</code> <code>Lan Nguyen · 0912345678</code>, <code>#review-address</code> <code>12 Tran Phu, Hue</code>, <code>#review-delivery</code> <code>Express — 60,000 ₫</code>, <code>#review-items</code> <code>Pen ×2, Book ×1</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>7. Gửi &amp; làm lại <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>#btn-submit</code> ⇒ <code>#success</code> <code>Order placed for Lan Nguyen</code>; <code>#btn-restart</code> đặt lại dữ liệu, touched và bước.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>8. Một state, một handler <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>useState(initial)</code> giữ mọi trường; <code>handleChange</code> dùng <code>e.target.name</code> và <code>checked</code> cho checkbox.</li>\n</ul>\n</div>\n<h2>6. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>#wizard · #steps .step(.active/.done) · #step-label · #btn-back · #btn-next · #btn-submit</code></td><td>wizard</td></tr><tr><td><code>#email #password #confirm · #fullName #phone #address #city · #delivery-standard #delivery-express · #delivery-fee</code></td><td>các ô</td></tr><tr><td><code>.item-row .item-name .item-qty .remove-item · #add-item · #terms</code></td><td>mặt hàng</td></tr><tr><td><code>#err-&lt;field&gt; · #err-items · #err-terms</code></td><td>lỗi</td></tr><tr><td><code>.review dd#review-* · #success · #btn-restart</code></td><td>xem lại & kết quả</td></tr></tbody></table>\n<h2>7. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>Điều hướng bước</td><td>1.5</td></tr><tr><td>2</td><td>Kiểm hợp lệ &amp; thời điểm hiện lỗi</td><td>2</td></tr><tr><td>3</td><td>Select, radio, checkbox</td><td>1</td></tr><tr><td>4</td><td>Dòng mặt hàng động</td><td>1.5</td></tr><tr><td>5</td><td>Ngữ nghĩa gửi form</td><td>1</td></tr><tr><td>6</td><td>Bước xem lại</td><td>1</td></tr><tr><td>7</td><td>Gửi &amp; làm lại</td><td>1</td></tr><tr><td>8</td><td>Một state, một handler</td><td>1</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Hiện mọi lỗi ngay khi vừa mở trang.</li>\n  <li>Nút trong form thiếu <code>type=\"button\"</code> — thêm mặt hàng lại nhảy sang bước kế.</li>\n  <li><code>key={index}</code> cho dòng mặt hàng — xoá một dòng thì chữ hiện sai.</li>\n  <li>Mười <code>useState</code> riêng + mười handler.</li>\n</ul>\n<h2>8. Nộp bài</h2>\n<p>Làm thẳng trong editor (các tệp bên phải) hoặc tải starter, chạy trên máy bằng Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> khi đề dùng API) rồi dán lại tệp. Bấm <b>Chạy thử</b> để chạy kiểm mẫu, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn).</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "The wizard is one <code>&lt;form id=\"wizard\" noValidate&gt;</code>; Next/Place order are <code>type=\"submit\"</code>, every other button <code>type=\"button\"</code>; always <code>preventDefault</code>.|||Wizard là một <code>&lt;form id=\"wizard\" noValidate&gt;</code>; Next/Place order là <code>type=\"submit\"</code>, mọi nút khác <code>type=\"button\"</code>; luôn <code>preventDefault</code>.\nValidation in a pure <code>validateStep(step, data)</code> in <code>src/validation.js</code> (exact messages below).|||Kiểm hợp lệ bằng hàm thuần <code>validateStep(step, data)</code> trong <code>src/validation.js</code> (thông điệp đúng như dưới).",
+      "examplesJson": [
+        {
+          "input": "Validation & error timing|||Kiểm hợp lệ & thời điểm hiện lỗi",
+          "output": "type \"lan@\" then move to Password ⇒ \"Enter a valid email\" appears|||gõ \"lan@\" rồi chuyển sang Password ⇒ hiện \"Enter a valid email\"",
+          "explanation": "See the brief / Xem đề."
+        }
+      ],
+      "hintsJson": [
+        "errors = validateStep(step, data) tính mỗi lần render; lỗi một ô chỉ hiện khi touched[ô] = true.",
+        "Next (onSubmit): có lỗi ⇒ đánh dấu touched mọi ô của bước (STEP_FIELDS[step]) và dừng; không lỗi ⇒ setStep(s => s + 1).",
+        "Một handler: const { name, type, value, checked } = e.target; setData(d => ({ ...d, [name]: type === \"checkbox\" ? checked : value })).",
+        "Mảng mặt hàng: id tăng dần cho key; sửa bằng map, xoá bằng filter, thêm bằng spread."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER: một form dài, không chia bước, không kiểm hợp lệ, mỗi ô một useState\nimport { useState } from 'react';\n\nexport default function App() {\n  const [email, setEmail] = useState('');\n  const [password, setPassword] = useState('');\n  return (\n    <form id=\"wizard\" onSubmit={() => alert('Order placed')}>\n      <input id=\"email\" value={email} onChange={(e) => setEmail(e.target.value)} />\n      <input id=\"password\" type=\"password\" value={password} onChange={(e) => setPassword(e.target.value)} />\n      <button id=\"btn-next\" type=\"submit\">Next</button>\n    </form>\n  );\n}\n"
+        },
+        {
+          "name": "src/validation.js",
+          "language": "javascript",
+          "code": "// src/validation.js — STARTER: viết validateStep(step, data) THUẦN, trả object lỗi\nexport const STEP_FIELDS = { 1: [], 2: [], 3: [], 4: [] };\nexport function validateStep() {\n  return {};\n}\nexport const DELIVERY = { standard: { label: 'Standard', fee: 30000 }, express: { label: 'Express', fee: 60000 } };\nexport const vnd = (n) => n.toLocaleString('en-US') + ' ₫';\n"
+        },
+        {
+          "name": "src/components/Field.js",
+          "language": "javascript",
+          "code": "// src/components/Field.js — STARTER\nexport default function Field({ children }) {\n  return children;\n}\n"
+        },
+        {
+          "name": "src/components/Steps.js",
+          "language": "javascript",
+          "code": "// src/components/Steps.js — STARTER: AccountStep · ShippingStep · ItemsStep · ReviewStep\nexport function AccountStep() { return null; }\nexport function ShippingStep() { return null; }\nexport function ItemsStep() { return null; }\nexport function ReviewStep() { return null; }\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport './index.css';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "src/index.css",
+          "language": "css",
+          "code": "/* src/index.css (đã cho) */\nbody { font-family: system-ui, sans-serif; background: #f1f5f9; margin: 0; padding: 24px; color: #0f172a; }\n.wizard { max-width: 560px; margin: auto; background: #fff; border-radius: 12px; padding: 20px 24px; box-shadow: 0 1px 3px rgba(0,0,0,.1); }\n#steps { display: flex; gap: 8px; list-style: none; padding: 0; margin: 0 0 12px; }\n.step { flex: 1; text-align: center; padding: 6px; border-radius: 6px; background: #e2e8f0; font-size: 13px; }\n.step.done { background: #bbf7d0; } .step.active { background: #2563eb; color: #fff; font-weight: 600; }\nlabel { display: block; margin: 10px 0 4px; font-weight: 500; }\ninput[type=text], input[type=email], input[type=password], input[type=number], select { width: 100%; padding: 7px 9px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; }\n.error { color: #dc2626; font-size: 13px; margin: 4px 0 0; }\n.item-row { display: flex; gap: 6px; margin-bottom: 6px; } .item-row .item-qty { width: 80px; }\n.actions { display: flex; justify-content: space-between; margin-top: 16px; }\nbutton { padding: 7px 16px; border-radius: 6px; border: 0; background: #2563eb; color: #fff; cursor: pointer; }\nbutton.secondary { background: #e2e8f0; color: #0f172a; }\n.review dt { font-weight: 600; } .review dd { margin: 0 0 8px; }\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — MỘT state object + MỘT handler; kiểm theo bước; lỗi hiện sau blur hoặc sau Next\nimport { useState } from 'react';\nimport { AccountStep, ItemsStep, ReviewStep, ShippingStep } from './components/Steps';\nimport { STEP_FIELDS, validateStep } from './validation';\n\nconst TITLES = ['Account', 'Shipping', 'Items', 'Review'];\nlet nextItemId = 2;\nconst initial = () => ({\n  email: '', password: '', confirm: '',\n  fullName: '', phone: '', address: '', city: '', delivery: 'standard',\n  items: [{ id: 1, name: '', qty: 1 }], terms: false,\n});\n\nexport default function App() {\n  const [step, setStep] = useState(1);\n  const [data, setData] = useState(initial);\n  const [touched, setTouched] = useState({});\n  const [done, setDone] = useState(false);\n\n  const errors = validateStep(step, data);\n  const err = (field) => (touched[field] ? errors[field] : undefined);\n\n  // một handler cho text/select/radio/checkbox: đọc name + value/checked\n  const handleChange = (e) => {\n    const { name, type, value, checked } = e.target;\n    setData((d) => ({ ...d, [name]: type === 'checkbox' ? checked : value }));\n  };\n  const handleBlur = (e) => setTouched((t) => ({ ...t, [e.target.name]: true }));\n\n  const changeItem = (id, key, value) =>\n    setData((d) => ({ ...d, items: d.items.map((it) => (it.id === id ? { ...it, [key]: value } : it)) }));\n  const addItem = () => {\n    setData((d) => ({ ...d, items: [...d.items, { id: nextItemId++, name: '', qty: 1 }] }));\n    setTouched((t) => ({ ...t, items: false }));\n  };\n  const removeItem = (id) => setData((d) => ({ ...d, items: d.items.filter((it) => it.id !== id) }));\n\n  const handleSubmit = (e) => {\n    e.preventDefault(); // Enter trong một ô cũng gửi form ⇒ đi tiếp\n    if (step === 4) {\n      setDone(true);\n      return;\n    }\n    const fields = STEP_FIELDS[step];\n    if (Object.keys(errors).length > 0) {\n      setTouched((t) => ({ ...t, ...Object.fromEntries(fields.map((f) => [f, true])) }));\n      return;\n    }\n    setStep((s) => s + 1);\n  };\n\n  const restart = () => {\n    setData(initial());\n    setTouched({});\n    setStep(1);\n    setDone(false);\n  };\n\n  if (done) {\n    return (\n      <div className=\"wizard\">\n        <h2 id=\"success\">Order placed for {data.fullName.trim()}</h2>\n        <button id=\"btn-restart\" type=\"button\" onClick={restart}>Place another order</button>\n      </div>\n    );\n  }\n\n  const props = { data, onChange: handleChange, onBlur: handleBlur, err };\n\n  return (\n    <form id=\"wizard\" className=\"wizard\" onSubmit={handleSubmit} noValidate>\n      <ol id=\"steps\">\n        {TITLES.map((t, i) => (\n          <li key={t} className={['step', i + 1 === step ? 'active' : '', i + 1 < step ? 'done' : ''].filter(Boolean).join(' ')}>{t}</li>\n        ))}\n      </ol>\n      <p id=\"step-label\">Step {step} of 4 — {TITLES[step - 1]}</p>\n\n      {step === 1 && <AccountStep {...props} />}\n      {step === 2 && <ShippingStep {...props} />}\n      {step === 3 && <ItemsStep {...props} onItemChange={changeItem} onAddItem={addItem} onRemoveItem={removeItem} />}\n      {step === 4 && <ReviewStep data={data} />}\n\n      <div className=\"actions\">\n        {step > 1 ? <button id=\"btn-back\" type=\"button\" className=\"secondary\" onClick={() => setStep((s) => s - 1)}>Back</button> : <span />}\n        {step < 4 ? <button id=\"btn-next\" type=\"submit\">Next</button> : <button id=\"btn-submit\" type=\"submit\">Place order</button>}\n      </div>\n    </form>\n  );\n}\n"
+        },
+        {
+          "name": "src/validation.js",
+          "language": "javascript",
+          "code": "// src/validation.js — hàm THUẦN: (bước, dữ liệu) ⇒ object lỗi. Dễ test, dùng chung cho Next và blur\nexport const STEP_FIELDS = {\n  1: ['email', 'password', 'confirm'],\n  2: ['fullName', 'phone', 'address', 'city'],\n  3: ['items', 'terms'],\n  4: [],\n};\n\nexport function validateStep(step, d) {\n  const e = {};\n  if (step === 1) {\n    if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(d.email.trim())) e.email = 'Enter a valid email';\n    if (d.password.length < 8 || !/\\d/.test(d.password)) e.password = 'At least 8 characters with a number';\n    if (d.confirm !== d.password || !d.confirm) e.confirm = 'Passwords do not match';\n  }\n  if (step === 2) {\n    if (d.fullName.trim().length < 2) e.fullName = 'Full name is required';\n    if (!/^0\\d{9}$/.test(d.phone)) e.phone = 'Phone must be 10 digits starting with 0';\n    if (d.address.trim().length < 5) e.address = 'Address is too short';\n    if (!d.city) e.city = 'Choose a city';\n  }\n  if (step === 3) {\n    const bad = d.items.length === 0 || d.items.some((it) => !it.name.trim() || !(Number(it.qty) >= 1));\n    if (bad) e.items = 'Every item needs a name and a quantity of at least 1';\n    if (!d.terms) e.terms = 'You must accept the terms';\n  }\n  return e;\n}\n\nexport const DELIVERY = { standard: { label: 'Standard', fee: 30000 }, express: { label: 'Express', fee: 60000 } };\nexport const vnd = (n) => n.toLocaleString('en-US') + ' ₫';\n"
+        },
+        {
+          "name": "src/components/Field.js",
+          "language": "javascript",
+          "code": "// src/components/Field.js — nhãn + ô + lỗi (lỗi chỉ hiện khi được phép)\nexport default function Field({ label, name, error, children }) {\n  return (\n    <div className=\"field\">\n      <label htmlFor={name}>{label}</label>\n      {children}\n      {error && <p className=\"error\" id={`err-${name}`}>{error}</p>}\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/Steps.js",
+          "language": "javascript",
+          "code": "// src/components/Steps.js — các bước của wizard (component trình bày, nhận dữ liệu + handler từ App)\nimport Field from './Field';\nimport { DELIVERY, vnd } from '../validation';\n\nexport function AccountStep({ data, onChange, onBlur, err }) {\n  return (\n    <>\n      <Field label=\"Email\" name=\"email\" error={err('email')}>\n        <input id=\"email\" name=\"email\" type=\"email\" value={data.email} onChange={onChange} onBlur={onBlur} />\n      </Field>\n      <Field label=\"Password\" name=\"password\" error={err('password')}>\n        <input id=\"password\" name=\"password\" type=\"password\" value={data.password} onChange={onChange} onBlur={onBlur} />\n      </Field>\n      <Field label=\"Confirm password\" name=\"confirm\" error={err('confirm')}>\n        <input id=\"confirm\" name=\"confirm\" type=\"password\" value={data.confirm} onChange={onChange} onBlur={onBlur} />\n      </Field>\n    </>\n  );\n}\n\nexport function ShippingStep({ data, onChange, onBlur, err }) {\n  return (\n    <>\n      <Field label=\"Full name\" name=\"fullName\" error={err('fullName')}>\n        <input id=\"fullName\" name=\"fullName\" type=\"text\" value={data.fullName} onChange={onChange} onBlur={onBlur} />\n      </Field>\n      <Field label=\"Phone\" name=\"phone\" error={err('phone')}>\n        <input id=\"phone\" name=\"phone\" type=\"text\" value={data.phone} onChange={onChange} onBlur={onBlur} />\n      </Field>\n      <Field label=\"Address\" name=\"address\" error={err('address')}>\n        <input id=\"address\" name=\"address\" type=\"text\" value={data.address} onChange={onChange} onBlur={onBlur} />\n      </Field>\n      <Field label=\"City\" name=\"city\" error={err('city')}>\n        <select id=\"city\" name=\"city\" value={data.city} onChange={onChange} onBlur={onBlur}>\n          <option value=\"\">-- choose --</option>\n          <option value=\"Ha Noi\">Ha Noi</option>\n          <option value=\"Hue\">Hue</option>\n          <option value=\"Da Nang\">Da Nang</option>\n          <option value=\"Ho Chi Minh City\">Ho Chi Minh City</option>\n        </select>\n      </Field>\n      <fieldset>\n        <legend>Delivery</legend>\n        {Object.entries(DELIVERY).map(([key, opt]) => (\n          <label key={key}>\n            <input type=\"radio\" id={`delivery-${key}`} name=\"delivery\" value={key} checked={data.delivery === key} onChange={onChange} /> {opt.label}\n          </label>\n        ))}\n      </fieldset>\n      <p id=\"delivery-fee\">Delivery: {vnd(DELIVERY[data.delivery].fee)}</p>\n    </>\n  );\n}\n\nexport function ItemsStep({ data, onItemChange, onAddItem, onRemoveItem, onChange, err }) {\n  return (\n    <>\n      <div id=\"items\">\n        {data.items.map((it) => (\n          <div key={it.id} className=\"item-row\">\n            <input className=\"item-name\" placeholder=\"Item\" value={it.name} onChange={(e) => onItemChange(it.id, 'name', e.target.value)} />\n            <input className=\"item-qty\" type=\"number\" min=\"1\" value={it.qty} onChange={(e) => onItemChange(it.id, 'qty', e.target.value)} />\n            <button type=\"button\" className=\"remove-item secondary\" disabled={data.items.length === 1} onClick={() => onRemoveItem(it.id)}>×</button>\n          </div>\n        ))}\n      </div>\n      <button type=\"button\" id=\"add-item\" className=\"secondary\" onClick={onAddItem}>+ Add item</button>\n      {err('items') && <p className=\"error\" id=\"err-items\">{err('items')}</p>}\n      <label>\n        <input type=\"checkbox\" id=\"terms\" name=\"terms\" checked={data.terms} onChange={onChange} /> I accept the terms\n      </label>\n      {err('terms') && <p className=\"error\" id=\"err-terms\">{err('terms')}</p>}\n    </>\n  );\n}\n\nexport function ReviewStep({ data }) {\n  const d = DELIVERY[data.delivery];\n  return (\n    <dl className=\"review\">\n      <dt>Account</dt><dd id=\"review-email\">{data.email}</dd>\n      <dt>Recipient</dt><dd id=\"review-name\">{data.fullName} · {data.phone}</dd>\n      <dt>Address</dt><dd id=\"review-address\">{data.address}, {data.city}</dd>\n      <dt>Delivery</dt><dd id=\"review-delivery\">{d.label} — {vnd(d.fee)}</dd>\n      <dt>Items</dt><dd id=\"review-items\">{data.items.map((it) => `${it.name.trim()} ×${Number(it.qty)}`).join(', ')}</dd>\n    </dl>\n  );\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport './index.css';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "src/index.css",
+          "language": "css",
+          "code": "/* src/index.css (đã cho) */\nbody { font-family: system-ui, sans-serif; background: #f1f5f9; margin: 0; padding: 24px; color: #0f172a; }\n.wizard { max-width: 560px; margin: auto; background: #fff; border-radius: 12px; padding: 20px 24px; box-shadow: 0 1px 3px rgba(0,0,0,.1); }\n#steps { display: flex; gap: 8px; list-style: none; padding: 0; margin: 0 0 12px; }\n.step { flex: 1; text-align: center; padding: 6px; border-radius: 6px; background: #e2e8f0; font-size: 13px; }\n.step.done { background: #bbf7d0; } .step.active { background: #2563eb; color: #fff; font-weight: 600; }\nlabel { display: block; margin: 10px 0 4px; font-weight: 500; }\ninput[type=text], input[type=email], input[type=password], input[type=number], select { width: 100%; padding: 7px 9px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; }\n.error { color: #dc2626; font-size: 13px; margin: 4px 0 0; }\n.item-row { display: flex; gap: 6px; margin-bottom: 6px; } .item-row .item-qty { width: 80px; }\n.actions { display: flex; justify-content: space-between; margin-top: 16px; }\nbutton { padding: 7px 16px; border-radius: 6px; border: 0; background: #2563eb; color: #fff; cursor: pointer; }\nbutton.secondary { background: #e2e8f0; color: #0f172a; }\n.review dt { font-weight: 600; } .review dd { margin: 0 0 8px; }\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Lỗi là <b>dữ liệu suy ra</b> từ <code>validateStep(step, data)</code>; state <code>touched</code> chỉ quyết định KHI NÀO được hiện. Nhờ vậy lỗi luôn khớp dữ liệu và tự biến mất khi sửa đúng. Cả wizard là một form: nút Next là <code>submit</code> nên Enter trong ô nào cũng đi tiếp, còn các nút khác là <code>type=\"button\"</code>. Một handler đọc <code>name</code>/<code>type</code> của ô nên thêm trường mới không cần thêm hàm. Mảng mặt hàng dùng id ổn định làm key để xoá một dòng không làm chữ của dòng khác nhảy chỗ.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://react.dev/reference/react-dom/components/input",
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "kiem": [
+          {
+            "nhom": "f1",
+            "moTa": "Starts on step 1 of 4",
+            "kiem": "danh-sach-text",
+            "selector": "#step-label, #steps .step.active",
+            "mongDoi": [
+              "Account",
+              "Step 1 of 4 — Account"
+            ]
+          },
+          {
+            "nhom": "f1",
+            "moTa": "Cannot leave step 1 while invalid",
+            "kiem": "text",
+            "selector": "#step-label",
+            "giaTri": "Step 1 of 4 — Account",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-next",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f1",
+            "moTa": "Valid step goes to step 2; previous step marked done",
+            "kiem": "danh-sach-text",
+            "selector": "#steps .step.done, #step-label",
+            "mongDoi": [
+              "Account",
+              "Step 2 of 4 — Shipping"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "lan@fpt.edu.vn"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#password",
+                "giaTri": "secret123"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#confirm",
+                "giaTri": "secret123"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#wizard"
+              }
+            ]
+          },
+          {
+            "nhom": "f1",
+            "moTa": "Back returns and keeps the values",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#email",
+            "thuocTinh": "value",
+            "giaTri": "lan@fpt.edu.vn",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "lan@fpt.edu.vn"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#password",
+                "giaTri": "secret123"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#confirm",
+                "giaTri": "secret123"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#wizard"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-back",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f1",
+            "an": true,
+            "moTa": "No Back button on step 1",
+            "kiem": "khong-ton-tai",
+            "selector": "#btn-back"
+          },
+          {
+            "nhom": "f2",
+            "moTa": "No errors before interaction",
+            "kiem": "so-luong",
+            "selector": ".error",
+            "giaTri": 0
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Error appears after leaving the field (blur)",
+            "kiem": "danh-sach-text",
+            "selector": ".error",
+            "mongDoi": [
+              "Enter a valid email"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "lan@"
+              },
+              {
+                "hanhDong": "focus",
+                "selector": "#password"
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Next shows every error of the step",
+            "kiem": "danh-sach-text",
+            "selector": ".error",
+            "mongDoi": [
+              "Enter a valid email",
+              "At least 8 characters with a number",
+              "Passwords do not match"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-next",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Step 2 rules",
+            "kiem": "danh-sach-text",
+            "selector": ".error",
+            "mongDoi": [
+              "Full name is required",
+              "Phone must be 10 digits starting with 0",
+              "Address is too short",
+              "Choose a city"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "lan@fpt.edu.vn"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#password",
+                "giaTri": "secret123"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#confirm",
+                "giaTri": "secret123"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#wizard"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#phone",
+                "giaTri": "12345"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-next",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "an": true,
+            "moTa": "Password needs a digit",
+            "kiem": "text",
+            "selector": "#err-password",
+            "giaTri": "At least 8 characters with a number",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#password",
+                "giaTri": "abcdefghij"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-next",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "an": true,
+            "moTa": "Fixing a field removes its error",
+            "kiem": "khong-ton-tai",
+            "selector": "#err-email",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-next",
+                "lan": 1
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "lan@fpt.edu.vn"
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "an": true,
+            "moTa": "validateStep is a pure function in validation.js",
+            "kiem": "ma-nguon",
+            "tep": "src/validation.js",
+            "khop": "export\\s+function\\s+validateStep\\s*\\(\\s*step\\s*,"
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Radio changes the delivery fee",
+            "kiem": "text",
+            "selector": "#delivery-fee",
+            "giaTri": "Delivery: 60,000 ₫",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "lan@fpt.edu.vn"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#password",
+                "giaTri": "secret123"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#confirm",
+                "giaTri": "secret123"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#wizard"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#delivery-express",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Select is controlled",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#city",
+            "thuocTinh": "value",
+            "giaTri": "Da Nang",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "lan@fpt.edu.vn"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#password",
+                "giaTri": "secret123"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#confirm",
+                "giaTri": "secret123"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#wizard"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#city",
+                "giaTri": "Da Nang"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#fullName",
+                "giaTri": "X"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-next",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "an": true,
+            "moTa": "Standard by default",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#delivery-standard",
+            "thuocTinh": "checked",
+            "giaTri": true,
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "lan@fpt.edu.vn"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#password",
+                "giaTri": "secret123"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#confirm",
+                "giaTri": "secret123"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#wizard"
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Add item adds a row",
+            "kiem": "so-luong",
+            "selector": ".item-row",
+            "giaTri": 3,
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "lan@fpt.edu.vn"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#password",
+                "giaTri": "secret123"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#confirm",
+                "giaTri": "secret123"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#wizard"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#fullName",
+                "giaTri": "Lan Nguyen"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#phone",
+                "giaTri": "0912345678"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#address",
+                "giaTri": "12 Tran Phu"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#city",
+                "giaTri": "Hue"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#delivery-express",
+                "lan": 1
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#wizard"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#add-item",
+                "lan": 2
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Remove deletes that row only",
+            "kiem": "so-luong",
+            "selector": ".item-row",
+            "giaTri": 1,
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "lan@fpt.edu.vn"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#password",
+                "giaTri": "secret123"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#confirm",
+                "giaTri": "secret123"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#wizard"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#fullName",
+                "giaTri": "Lan Nguyen"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#phone",
+                "giaTri": "0912345678"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#address",
+                "giaTri": "12 Tran Phu"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#city",
+                "giaTri": "Hue"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#delivery-express",
+                "lan": 1
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#wizard"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": ".item-row:nth-child(1) .item-name",
+                "giaTri": "Pen"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#add-item",
+                "lan": 1
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": ".item-row:nth-child(2) .item-name",
+                "giaTri": "Book"
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".item-row:nth-child(1) .remove-item",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Item rule and terms rule",
+            "kiem": "danh-sach-text",
+            "selector": "#err-items, #err-terms",
+            "mongDoi": [
+              "Every item needs a name and a quantity of at least 1",
+              "You must accept the terms"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "lan@fpt.edu.vn"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#password",
+                "giaTri": "secret123"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#confirm",
+                "giaTri": "secret123"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#wizard"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#fullName",
+                "giaTri": "Lan Nguyen"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#phone",
+                "giaTri": "0912345678"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#address",
+                "giaTri": "12 Tran Phu"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#city",
+                "giaTri": "Hue"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#delivery-express",
+                "lan": 1
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#wizard"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-next",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "an": true,
+            "moTa": "Remaining row keeps its own value (stable keys)",
+            "kiem": "thuoc-tinh-js",
+            "selector": ".item-row:nth-child(1) .item-name",
+            "thuocTinh": "value",
+            "giaTri": "Book",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "lan@fpt.edu.vn"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#password",
+                "giaTri": "secret123"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#confirm",
+                "giaTri": "secret123"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#wizard"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#fullName",
+                "giaTri": "Lan Nguyen"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#phone",
+                "giaTri": "0912345678"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#address",
+                "giaTri": "12 Tran Phu"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#city",
+                "giaTri": "Hue"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#delivery-express",
+                "lan": 1
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#wizard"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": ".item-row:nth-child(1) .item-name",
+                "giaTri": "Pen"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#add-item",
+                "lan": 1
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": ".item-row:nth-child(2) .item-name",
+                "giaTri": "Book"
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".item-row:nth-child(1) .remove-item",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "an": true,
+            "moTa": "The last row cannot be removed",
+            "kiem": "thuoc-tinh-js",
+            "selector": ".item-row .remove-item",
+            "thuocTinh": "disabled",
+            "giaTri": true,
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "lan@fpt.edu.vn"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#password",
+                "giaTri": "secret123"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#confirm",
+                "giaTri": "secret123"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#wizard"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#fullName",
+                "giaTri": "Lan Nguyen"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#phone",
+                "giaTri": "0912345678"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#address",
+                "giaTri": "12 Tran Phu"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#city",
+                "giaTri": "Hue"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#delivery-express",
+                "lan": 1
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#wizard"
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Submitting the form (Enter) moves to the next step",
+            "kiem": "text",
+            "selector": "#step-label",
+            "giaTri": "Step 3 of 4 — Items",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "lan@fpt.edu.vn"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#password",
+                "giaTri": "secret123"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#confirm",
+                "giaTri": "secret123"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#wizard"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#fullName",
+                "giaTri": "Lan Nguyen"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#phone",
+                "giaTri": "0912345678"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#address",
+                "giaTri": "12 Tran Phu"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#city",
+                "giaTri": "Hue"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#delivery-express",
+                "lan": 1
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#wizard"
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "No page reload",
+            "kiem": "khong-tai-lai",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "lan@fpt.edu.vn"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#password",
+                "giaTri": "secret123"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#confirm",
+                "giaTri": "secret123"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#wizard"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#fullName",
+                "giaTri": "Lan Nguyen"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#phone",
+                "giaTri": "0912345678"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#address",
+                "giaTri": "12 Tran Phu"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#city",
+                "giaTri": "Hue"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#delivery-express",
+                "lan": 1
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#wizard"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": ".item-row:nth-child(1) .item-name",
+                "giaTri": "Pen"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": ".item-row:nth-child(1) .item-qty",
+                "giaTri": "2"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#add-item",
+                "lan": 1
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": ".item-row:nth-child(2) .item-name",
+                "giaTri": "Book"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#terms"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#wizard"
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "an": true,
+            "moTa": "Add/remove buttons are type=\"button\" (do not submit)",
+            "kiem": "text",
+            "selector": "#step-label",
+            "giaTri": "Step 3 of 4 — Items",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "lan@fpt.edu.vn"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#password",
+                "giaTri": "secret123"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#confirm",
+                "giaTri": "secret123"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#wizard"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#fullName",
+                "giaTri": "Lan Nguyen"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#phone",
+                "giaTri": "0912345678"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#address",
+                "giaTri": "12 Tran Phu"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#city",
+                "giaTri": "Hue"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#delivery-express",
+                "lan": 1
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#wizard"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#add-item",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Review shows every answer",
+            "kiem": "danh-sach-text",
+            "selector": ".review dd",
+            "mongDoi": [
+              "lan@fpt.edu.vn",
+              "Lan Nguyen · 0912345678",
+              "12 Tran Phu, Hue",
+              "Express — 60,000 ₫",
+              "Pen ×2, Book ×1"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "lan@fpt.edu.vn"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#password",
+                "giaTri": "secret123"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#confirm",
+                "giaTri": "secret123"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#wizard"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#fullName",
+                "giaTri": "Lan Nguyen"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#phone",
+                "giaTri": "0912345678"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#address",
+                "giaTri": "12 Tran Phu"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#city",
+                "giaTri": "Hue"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#delivery-express",
+                "lan": 1
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#wizard"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": ".item-row:nth-child(1) .item-name",
+                "giaTri": "Pen"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": ".item-row:nth-child(1) .item-qty",
+                "giaTri": "2"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#add-item",
+                "lan": 1
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": ".item-row:nth-child(2) .item-name",
+                "giaTri": "Book"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#terms"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#wizard"
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "an": true,
+            "moTa": "Step indicator on review",
+            "kiem": "so-luong",
+            "selector": "#steps .step.done",
+            "giaTri": 3,
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "lan@fpt.edu.vn"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#password",
+                "giaTri": "secret123"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#confirm",
+                "giaTri": "secret123"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#wizard"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#fullName",
+                "giaTri": "Lan Nguyen"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#phone",
+                "giaTri": "0912345678"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#address",
+                "giaTri": "12 Tran Phu"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#city",
+                "giaTri": "Hue"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#delivery-express",
+                "lan": 1
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#wizard"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": ".item-row:nth-child(1) .item-name",
+                "giaTri": "Pen"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": ".item-row:nth-child(1) .item-qty",
+                "giaTri": "2"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#add-item",
+                "lan": 1
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": ".item-row:nth-child(2) .item-name",
+                "giaTri": "Book"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#terms"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#wizard"
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Place order shows success",
+            "kiem": "text",
+            "selector": "#success",
+            "giaTri": "Order placed for Lan Nguyen",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "lan@fpt.edu.vn"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#password",
+                "giaTri": "secret123"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#confirm",
+                "giaTri": "secret123"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#wizard"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#fullName",
+                "giaTri": "Lan Nguyen"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#phone",
+                "giaTri": "0912345678"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#address",
+                "giaTri": "12 Tran Phu"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#city",
+                "giaTri": "Hue"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#delivery-express",
+                "lan": 1
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#wizard"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": ".item-row:nth-child(1) .item-name",
+                "giaTri": "Pen"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": ".item-row:nth-child(1) .item-qty",
+                "giaTri": "2"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#add-item",
+                "lan": 1
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": ".item-row:nth-child(2) .item-name",
+                "giaTri": "Book"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#terms"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#wizard"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-submit",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Restart resets everything to step 1",
+            "kiem": "danh-sach-text",
+            "selector": "#step-label, .error",
+            "mongDoi": [
+              "Step 1 of 4 — Account"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "lan@fpt.edu.vn"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#password",
+                "giaTri": "secret123"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#confirm",
+                "giaTri": "secret123"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#wizard"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#fullName",
+                "giaTri": "Lan Nguyen"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#phone",
+                "giaTri": "0912345678"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#address",
+                "giaTri": "12 Tran Phu"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#city",
+                "giaTri": "Hue"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#delivery-express",
+                "lan": 1
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#wizard"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": ".item-row:nth-child(1) .item-name",
+                "giaTri": "Pen"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": ".item-row:nth-child(1) .item-qty",
+                "giaTri": "2"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#add-item",
+                "lan": 1
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": ".item-row:nth-child(2) .item-name",
+                "giaTri": "Book"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#terms"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#wizard"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-submit",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-restart",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "an": true,
+            "moTa": "Fields empty after restart",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#email",
+            "thuocTinh": "value",
+            "giaTri": "",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "lan@fpt.edu.vn"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#password",
+                "giaTri": "secret123"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#confirm",
+                "giaTri": "secret123"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#wizard"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#fullName",
+                "giaTri": "Lan Nguyen"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#phone",
+                "giaTri": "0912345678"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#address",
+                "giaTri": "12 Tran Phu"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#city",
+                "giaTri": "Hue"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#delivery-express",
+                "lan": 1
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#wizard"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": ".item-row:nth-child(1) .item-name",
+                "giaTri": "Pen"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": ".item-row:nth-child(1) .item-qty",
+                "giaTri": "2"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#add-item",
+                "lan": 1
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": ".item-row:nth-child(2) .item-name",
+                "giaTri": "Book"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#terms"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#wizard"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-submit",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-restart",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f8",
+            "moTa": "One change handler using the input name",
+            "kiem": "ma-nguon",
+            "tep": "src/App.js",
+            "khop": "\\[\\s*name\\s*\\]\\s*:\\s*type\\s*===\\s*['\"]checkbox['\"]"
+          },
+          {
+            "nhom": "f8",
+            "an": true,
+            "moTa": "A single data object in state",
+            "kiem": "ma-nguon",
+            "tep": "src/App.js",
+            "khop": "useState\\(\\s*initial\\s*\\)"
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. Step navigation",
+            "diem": 1.5
+          },
+          {
+            "ma": "f2",
+            "ten": "2. Validation & error timing",
+            "diem": 2
+          },
+          {
+            "ma": "f3",
+            "ten": "3. Select, radio, checkbox",
+            "diem": 1
+          },
+          {
+            "ma": "f4",
+            "ten": "4. Dynamic item rows",
+            "diem": 1.5
+          },
+          {
+            "ma": "f5",
+            "ten": "5. Form submit semantics",
+            "diem": 1
+          },
+          {
+            "ma": "f6",
+            "ten": "6. Review step",
+            "diem": 1
+          },
+          {
+            "ma": "f7",
+            "ten": "7. Submit & restart",
+            "diem": 1
+          },
+          {
+            "ma": "f8",
+            "ten": "8. One state, one handler",
+            "diem": 1
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "deep-lab",
+      "mistakesJson": [
+        {
+          "loi": "Kiểm hợp lệ trong onChange và lưu lỗi vào state ⇒ lỗi \"trễ một nhịp\" và dễ lệch với dữ liệu."
+        },
+        {
+          "loi": "Đặt <code>onClick</code> cho nút Next thay vì <code>onSubmit</code> của form ⇒ Enter không hoạt động."
+        },
+        {
+          "loi": "Radio thiếu cùng <code>name</code> ⇒ chọn được cả hai."
+        },
+        {
+          "loi": "Checkbox đọc <code>e.target.value</code> ⇒ luôn là chuỗi \"on\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "wizard",
+          "vi": "form chia nhiều bước nối tiếp"
+        },
+        {
+          "en": "touched",
+          "vi": "ô đã được người dùng chạm/rời khỏi"
+        },
+        {
+          "en": "field array",
+          "vi": "danh sách ô có thể thêm/xoá dòng"
+        },
+        {
+          "en": "blur",
+          "vi": "sự kiện rời khỏi ô (mất focus)"
+        },
+        {
+          "en": "implicit submission",
+          "vi": "Enter trong ô tự gửi form"
+        },
+        {
+          "en": "rubric",
+          "vi": "thang điểm theo tiêu chí"
+        }
+      ],
+      "demoHtml": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>Deep Lab 6 — Multi-step Checkout Wizard (step validation · field arrays · Enter = Next) — Live demo</title>\n<script src=\"https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js\" crossorigin=\"anonymous\"></script>\n\n</head><body><div id=\"root\"></div><script>(function(){\nvar M={\"src/App.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/App.js — MỘT state object + MỘT handler; kiểm theo bước; lỗi hiện sau blur hoặc sau Next\\nvar _react = require('react');\\nvar _Steps = require('./components/Steps');\\nvar _validation = require('./validation');\\n\\nconst TITLES = ['Account', 'Shipping', 'Items', 'Review'];\\nlet nextItemId = 2;\\nconst initial = () => ({\\n  email: '', password: '', confirm: '',\\n  fullName: '', phone: '', address: '', city: '', delivery: 'standard',\\n  items: [{ id: 1, name: '', qty: 1 }], terms: false,\\n});\\n\\n function App() {\\n  const [step, setStep] = _react.useState.call(void 0, 1);\\n  const [data, setData] = _react.useState.call(void 0, initial);\\n  const [touched, setTouched] = _react.useState.call(void 0, {});\\n  const [done, setDone] = _react.useState.call(void 0, false);\\n\\n  const errors = _validation.validateStep.call(void 0, step, data);\\n  const err = (field) => (touched[field] ? errors[field] : undefined);\\n\\n  // một handler cho text/select/radio/checkbox: đọc name + value/checked\\n  const handleChange = (e) => {\\n    const { name, type, value, checked } = e.target;\\n    setData((d) => ({ ...d, [name]: type === 'checkbox' ? checked : value }));\\n  };\\n  const handleBlur = (e) => setTouched((t) => ({ ...t, [e.target.name]: true }));\\n\\n  const changeItem = (id, key, value) =>\\n    setData((d) => ({ ...d, items: d.items.map((it) => (it.id === id ? { ...it, [key]: value } : it)) }));\\n  const addItem = () => {\\n    setData((d) => ({ ...d, items: [...d.items, { id: nextItemId++, name: '', qty: 1 }] }));\\n    setTouched((t) => ({ ...t, items: false }));\\n  };\\n  const removeItem = (id) => setData((d) => ({ ...d, items: d.items.filter((it) => it.id !== id) }));\\n\\n  const handleSubmit = (e) => {\\n    e.preventDefault(); // Enter trong một ô cũng gửi form ⇒ đi tiếp\\n    if (step === 4) {\\n      setDone(true);\\n      return;\\n    }\\n    const fields = _validation.STEP_FIELDS[step];\\n    if (Object.keys(errors).length > 0) {\\n      setTouched((t) => ({ ...t, ...Object.fromEntries(fields.map((f) => [f, true])) }));\\n      return;\\n    }\\n    setStep((s) => s + 1);\\n  };\\n\\n  const restart = () => {\\n    setData(initial());\\n    setTouched({});\\n    setStep(1);\\n    setDone(false);\\n  };\\n\\n  if (done) {\\n    return (\\n      _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"wizard\\\", children: [\\n        _jsxruntime.jsxs.call(void 0, 'h2', { id: \\\"success\\\", children: [\\\"Order placed for \\\"   , data.fullName.trim()]})\\n        , _jsxruntime.jsx.call(void 0, 'button', { id: \\\"btn-restart\\\", type: \\\"button\\\", onClick: restart, children: \\\"Place another order\\\"  })\\n      ]})\\n    );\\n  }\\n\\n  const props = { data, onChange: handleChange, onBlur: handleBlur, err };\\n\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'form', { id: \\\"wizard\\\", className: \\\"wizard\\\", onSubmit: handleSubmit, noValidate: true, children: [\\n      _jsxruntime.jsx.call(void 0, 'ol', { id: \\\"steps\\\", children: \\n        TITLES.map((t, i) => (\\n          _jsxruntime.jsx.call(void 0, 'li', { className: ['step', i + 1 === step ? 'active' : '', i + 1 \\u003c step ? 'done' : ''].filter(Boolean).join(' '), children: t}, t)\\n        ))\\n      })\\n      , _jsxruntime.jsxs.call(void 0, 'p', { id: \\\"step-label\\\", children: [\\\"Step \\\" , step, \\\" of 4 — \\\"    , TITLES[step - 1]]})\\n\\n      , step === 1 && _jsxruntime.jsx.call(void 0, _Steps.AccountStep, { ...props,} )\\n      , step === 2 && _jsxruntime.jsx.call(void 0, _Steps.ShippingStep, { ...props,} )\\n      , step === 3 && _jsxruntime.jsx.call(void 0, _Steps.ItemsStep, { ...props, onItemChange: changeItem, onAddItem: addItem, onRemoveItem: removeItem,} )\\n      , step === 4 && _jsxruntime.jsx.call(void 0, _Steps.ReviewStep, { data: data,} )\\n\\n      , _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"actions\\\", children: [\\n        step > 1 ? _jsxruntime.jsx.call(void 0, 'button', { id: \\\"btn-back\\\", type: \\\"button\\\", className: \\\"secondary\\\", onClick: () => setStep((s) => s - 1), children: \\\"Back\\\"}) : _jsxruntime.jsx.call(void 0, 'span', {} )\\n        , step \\u003c 4 ? _jsxruntime.jsx.call(void 0, 'button', { id: \\\"btn-next\\\", type: \\\"submit\\\", children: \\\"Next\\\"}) : _jsxruntime.jsx.call(void 0, 'button', { id: \\\"btn-submit\\\", type: \\\"submit\\\", children: \\\"Place order\\\" })\\n      ]})\\n    ]})\\n  );\\n} exports.default = App;\\n\",\"src/validation.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/validation.js — hàm THUẦN: (bước, dữ liệu) ⇒ object lỗi. Dễ test, dùng chung cho Next và blur\\n const STEP_FIELDS = {\\n  1: ['email', 'password', 'confirm'],\\n  2: ['fullName', 'phone', 'address', 'city'],\\n  3: ['items', 'terms'],\\n  4: [],\\n}; exports.STEP_FIELDS = STEP_FIELDS;\\n\\n function validateStep(step, d) {\\n  const e = {};\\n  if (step === 1) {\\n    if (!/^[^\\\\s@]+@[^\\\\s@]+\\\\.[^\\\\s@]+$/.test(d.email.trim())) e.email = 'Enter a valid email';\\n    if (d.password.length \\u003c 8 || !/\\\\d/.test(d.password)) e.password = 'At least 8 characters with a number';\\n    if (d.confirm !== d.password || !d.confirm) e.confirm = 'Passwords do not match';\\n  }\\n  if (step === 2) {\\n    if (d.fullName.trim().length \\u003c 2) e.fullName = 'Full name is required';\\n    if (!/^0\\\\d{9}$/.test(d.phone)) e.phone = 'Phone must be 10 digits starting with 0';\\n    if (d.address.trim().length \\u003c 5) e.address = 'Address is too short';\\n    if (!d.city) e.city = 'Choose a city';\\n  }\\n  if (step === 3) {\\n    const bad = d.items.length === 0 || d.items.some((it) => !it.name.trim() || !(Number(it.qty) >= 1));\\n    if (bad) e.items = 'Every item needs a name and a quantity of at least 1';\\n    if (!d.terms) e.terms = 'You must accept the terms';\\n  }\\n  return e;\\n} exports.validateStep = validateStep;\\n\\n const DELIVERY = { standard: { label: 'Standard', fee: 30000 }, express: { label: 'Express', fee: 60000 } }; exports.DELIVERY = DELIVERY;\\n const vnd = (n) => n.toLocaleString('en-US') + ' ₫'; exports.vnd = vnd;\\n\",\"src/components/Field.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/components/Field.js — nhãn + ô + lỗi (lỗi chỉ hiện khi được phép)\\n function Field({ label, name, error, children }) {\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"field\\\", children: [\\n      _jsxruntime.jsx.call(void 0, 'label', { htmlFor: name, children: label})\\n      , children\\n      , error && _jsxruntime.jsx.call(void 0, 'p', { className: \\\"error\\\", id: `err-${name}`, children: error})\\n    ]})\\n  );\\n} exports.default = Field;\\n\",\"src/components/Steps.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/components/Steps.js — các bước của wizard (component trình bày, nhận dữ liệu + handler từ App)\\nvar _Field = require('./Field'); var _Field2 = _interopRequireDefault(_Field);\\nvar _validation = require('../validation');\\n\\n function AccountStep({ data, onChange, onBlur, err }) {\\n  return (\\n    _jsxruntime.jsxs.call(void 0, _jsxruntime.Fragment, { children: [\\n      _jsxruntime.jsx.call(void 0, _Field2.default, { label: \\\"Email\\\", name: \\\"email\\\", error: err('email'), children: \\n        _jsxruntime.jsx.call(void 0, 'input', { id: \\\"email\\\", name: \\\"email\\\", type: \\\"email\\\", value: data.email, onChange: onChange, onBlur: onBlur,} )\\n      })\\n      , _jsxruntime.jsx.call(void 0, _Field2.default, { label: \\\"Password\\\", name: \\\"password\\\", error: err('password'), children: \\n        _jsxruntime.jsx.call(void 0, 'input', { id: \\\"password\\\", name: \\\"password\\\", type: \\\"password\\\", value: data.password, onChange: onChange, onBlur: onBlur,} )\\n      })\\n      , _jsxruntime.jsx.call(void 0, _Field2.default, { label: \\\"Confirm password\\\" , name: \\\"confirm\\\", error: err('confirm'), children: \\n        _jsxruntime.jsx.call(void 0, 'input', { id: \\\"confirm\\\", name: \\\"confirm\\\", type: \\\"password\\\", value: data.confirm, onChange: onChange, onBlur: onBlur,} )\\n      })\\n    ]})\\n  );\\n} exports.AccountStep = AccountStep;\\n\\n function ShippingStep({ data, onChange, onBlur, err }) {\\n  return (\\n    _jsxruntime.jsxs.call(void 0, _jsxruntime.Fragment, { children: [\\n      _jsxruntime.jsx.call(void 0, _Field2.default, { label: \\\"Full name\\\" , name: \\\"fullName\\\", error: err('fullName'), children: \\n        _jsxruntime.jsx.call(void 0, 'input', { id: \\\"fullName\\\", name: \\\"fullName\\\", type: \\\"text\\\", value: data.fullName, onChange: onChange, onBlur: onBlur,} )\\n      })\\n      , _jsxruntime.jsx.call(void 0, _Field2.default, { label: \\\"Phone\\\", name: \\\"phone\\\", error: err('phone'), children: \\n        _jsxruntime.jsx.call(void 0, 'input', { id: \\\"phone\\\", name: \\\"phone\\\", type: \\\"text\\\", value: data.phone, onChange: onChange, onBlur: onBlur,} )\\n      })\\n      , _jsxruntime.jsx.call(void 0, _Field2.default, { label: \\\"Address\\\", name: \\\"address\\\", error: err('address'), children: \\n        _jsxruntime.jsx.call(void 0, 'input', { id: \\\"address\\\", name: \\\"address\\\", type: \\\"text\\\", value: data.address, onChange: onChange, onBlur: onBlur,} )\\n      })\\n      , _jsxruntime.jsx.call(void 0, _Field2.default, { label: \\\"City\\\", name: \\\"city\\\", error: err('city'), children: \\n        _jsxruntime.jsxs.call(void 0, 'select', { id: \\\"city\\\", name: \\\"city\\\", value: data.city, onChange: onChange, onBlur: onBlur, children: [\\n          _jsxruntime.jsx.call(void 0, 'option', { value: \\\"\\\", children: \\\"-- choose --\\\"  })\\n          , _jsxruntime.jsx.call(void 0, 'option', { value: \\\"Ha Noi\\\" , children: \\\"Ha Noi\\\" })\\n          , _jsxruntime.jsx.call(void 0, 'option', { value: \\\"Hue\\\", children: \\\"Hue\\\"})\\n          , _jsxruntime.jsx.call(void 0, 'option', { value: \\\"Da Nang\\\" , children: \\\"Da Nang\\\" })\\n          , _jsxruntime.jsx.call(void 0, 'option', { value: \\\"Ho Chi Minh City\\\"   , children: \\\"Ho Chi Minh City\\\"   })\\n        ]})\\n      })\\n      , _jsxruntime.jsxs.call(void 0, 'fieldset', { children: [\\n        _jsxruntime.jsx.call(void 0, 'legend', { children: \\\"Delivery\\\"})\\n        , Object.entries(_validation.DELIVERY).map(([key, opt]) => (\\n          _jsxruntime.jsxs.call(void 0, 'label', { children: [\\n            _jsxruntime.jsx.call(void 0, 'input', { type: \\\"radio\\\", id: `delivery-${key}`, name: \\\"delivery\\\", value: key, checked: data.delivery === key, onChange: onChange,} ), \\\" \\\" , opt.label\\n          ]}, key)\\n        ))\\n      ]})\\n      , _jsxruntime.jsxs.call(void 0, 'p', { id: \\\"delivery-fee\\\", children: [\\\"Delivery: \\\" , _validation.vnd.call(void 0, _validation.DELIVERY[data.delivery].fee)]})\\n    ]})\\n  );\\n} exports.ShippingStep = ShippingStep;\\n\\n function ItemsStep({ data, onItemChange, onAddItem, onRemoveItem, onChange, err }) {\\n  return (\\n    _jsxruntime.jsxs.call(void 0, _jsxruntime.Fragment, { children: [\\n      _jsxruntime.jsx.call(void 0, 'div', { id: \\\"items\\\", children: \\n        data.items.map((it) => (\\n          _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"item-row\\\", children: [\\n            _jsxruntime.jsx.call(void 0, 'input', { className: \\\"item-name\\\", placeholder: \\\"Item\\\", value: it.name, onChange: (e) => onItemChange(it.id, 'name', e.target.value),} )\\n            , _jsxruntime.jsx.call(void 0, 'input', { className: \\\"item-qty\\\", type: \\\"number\\\", min: \\\"1\\\", value: it.qty, onChange: (e) => onItemChange(it.id, 'qty', e.target.value),} )\\n            , _jsxruntime.jsx.call(void 0, 'button', { type: \\\"button\\\", className: \\\"remove-item secondary\\\" , disabled: data.items.length === 1, onClick: () => onRemoveItem(it.id), children: \\\"×\\\"})\\n          ]}, it.id)\\n        ))\\n      })\\n      , _jsxruntime.jsx.call(void 0, 'button', { type: \\\"button\\\", id: \\\"add-item\\\", className: \\\"secondary\\\", onClick: onAddItem, children: \\\"+ Add item\\\"  })\\n      , err('items') && _jsxruntime.jsx.call(void 0, 'p', { className: \\\"error\\\", id: \\\"err-items\\\", children: err('items')})\\n      , _jsxruntime.jsxs.call(void 0, 'label', { children: [\\n        _jsxruntime.jsx.call(void 0, 'input', { type: \\\"checkbox\\\", id: \\\"terms\\\", name: \\\"terms\\\", checked: data.terms, onChange: onChange,} ), \\\" I accept the terms\\\"\\n      ]})\\n      , err('terms') && _jsxruntime.jsx.call(void 0, 'p', { className: \\\"error\\\", id: \\\"err-terms\\\", children: err('terms')})\\n    ]})\\n  );\\n} exports.ItemsStep = ItemsStep;\\n\\n function ReviewStep({ data }) {\\n  const d = _validation.DELIVERY[data.delivery];\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'dl', { className: \\\"review\\\", children: [\\n      _jsxruntime.jsx.call(void 0, 'dt', { children: \\\"Account\\\"}), _jsxruntime.jsx.call(void 0, 'dd', { id: \\\"review-email\\\", children: data.email})\\n      , _jsxruntime.jsx.call(void 0, 'dt', { children: \\\"Recipient\\\"}), _jsxruntime.jsxs.call(void 0, 'dd', { id: \\\"review-name\\\", children: [data.fullName, \\\" · \\\"  , data.phone]})\\n      , _jsxruntime.jsx.call(void 0, 'dt', { children: \\\"Address\\\"}), _jsxruntime.jsxs.call(void 0, 'dd', { id: \\\"review-address\\\", children: [data.address, \\\", \\\" , data.city]})\\n      , _jsxruntime.jsx.call(void 0, 'dt', { children: \\\"Delivery\\\"}), _jsxruntime.jsxs.call(void 0, 'dd', { id: \\\"review-delivery\\\", children: [d.label, \\\" — \\\"  , _validation.vnd.call(void 0, d.fee)]})\\n      , _jsxruntime.jsx.call(void 0, 'dt', { children: \\\"Items\\\"}), _jsxruntime.jsx.call(void 0, 'dd', { id: \\\"review-items\\\", children: data.items.map((it) => `${it.name.trim()} ×${Number(it.qty)}`).join(', ')})\\n    ]})\\n  );\\n} exports.ReviewStep = ReviewStep;\\n\",\"src/index.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\"); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\\nvar _react = require('react'); var _react2 = _interopRequireDefault(_react);\\nvar _client = require('react-dom/client'); var _client2 = _interopRequireDefault(_client);\\nrequire('./index.css');\\nvar _App = require('./App'); var _App2 = _interopRequireDefault(_App);\\n\\nconst root = _client2.default.createRoot(document.getElementById('root'));\\nroot.render(\\n  _jsxruntime.jsx.call(void 0, _react2.default.StrictMode, { children: \\n    _jsxruntime.jsx.call(void 0, _App2.default, {} )\\n  })\\n);\\n\"};var CSS={\"src/index.css\":\"/* src/index.css (đã cho) */\\nbody { font-family: system-ui, sans-serif; background: #f1f5f9; margin: 0; padding: 24px; color: #0f172a; }\\n.wizard { max-width: 560px; margin: auto; background: #fff; border-radius: 12px; padding: 20px 24px; box-shadow: 0 1px 3px rgba(0,0,0,.1); }\\n#steps { display: flex; gap: 8px; list-style: none; padding: 0; margin: 0 0 12px; }\\n.step { flex: 1; text-align: center; padding: 6px; border-radius: 6px; background: #e2e8f0; font-size: 13px; }\\n.step.done { background: #bbf7d0; } .step.active { background: #2563eb; color: #fff; font-weight: 600; }\\nlabel { display: block; margin: 10px 0 4px; font-weight: 500; }\\ninput[type=text], input[type=email], input[type=password], input[type=number], select { width: 100%; padding: 7px 9px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; }\\n.error { color: #dc2626; font-size: 13px; margin: 4px 0 0; }\\n.item-row { display: flex; gap: 6px; margin-bottom: 6px; } .item-row .item-qty { width: 80px; }\\n.actions { display: flex; justify-content: space-between; margin-top: 16px; }\\nbutton { padding: 7px 16px; border-radius: 6px; border: 0; background: #2563eb; color: #fff; cursor: pointer; }\\nbutton.secondary { background: #e2e8f0; color: #0f172a; }\\n.review dt { font-weight: 600; } .review dd { margin: 0 0 8px; }\\n\"};var DB=null;var BASE=\"http://localhost:9999\";var URL0=null;var THANH=false;\nfunction kho(){var m={};var k={getItem:function(x){x=String(x);return Object.prototype.hasOwnProperty.call(m,x)?m[x]:null},setItem:function(x,v){m[String(x)]=String(v)},removeItem:function(x){delete m[String(x)]},clear:function(){m={}},key:function(i){return Object.keys(m)[i]||null}};Object.defineProperty(k,'length',{get:function(){return Object.keys(m).length}});return k}\ntry{Object.defineProperty(window,'localStorage',{value:kho(),configurable:true})}catch(e){}\ntry{Object.defineProperty(window,'sessionStorage',{value:kho(),configurable:true})}catch(e){}\nwindow.confirm=function(){return true};window.alert=function(m){console.log('[alert]',m);var t=document.getElementById('cl-demo-alert');if(!t){t=document.createElement('div');t.id='cl-demo-alert';t.style.cssText='position:fixed;right:12px;bottom:12px;z-index:99999;max-width:320px;padding:10px 14px;border-radius:10px;background:#0f172a;color:#fff;font:13px system-ui;box-shadow:0 6px 24px rgba(0,0,0,.25)';document.body.appendChild(t)}t.textContent='alert: '+m;clearTimeout(t.__h);t.__h=setTimeout(function(){t.remove()},2600)};\nvar ENV={NODE_ENV:'production',MODE:'production',PROD:true,DEV:false,BASE_URL:'/'};\nString(M['.env']||'').split(/\\r?\\n/).forEach(function(d){var m=/^\\s*(?:export\\s+)?([A-Za-z_][A-Za-z0-9_]*)\\s*=\\s*(.*)\\s*$/.exec(d);if(m)ENV[m[1]]=m[2].replace(/^(['\"])(.*)\\1$/,'$2')});\nwindow.__CL_ENV__=ENV;if(!window.process)window.process={env:ENV};\n// json-server giả (bản sao domAgent.ts)\nvar jsDb=DB?JSON.parse(JSON.stringify(DB)):null;\nfunction tl(st,b){return new Response(b===undefined?'{}':JSON.stringify(b),{status:st,headers:{'content-type':'application/json'}})}\nfunction lay(o,k){return String(k).split('.').reduce(function(a,p){return a==null?undefined:a[p]},o)}\nfunction mot(t){return /ies$/.test(t)?t.slice(0,-3)+'y':t.replace(/s$/,'')}\nfunction xuLy(method,url,body){var u=new URL(url);var ph=u.pathname.replace(/^\\/+|\\/+$/g,'').split('/').filter(Boolean).map(decodeURIComponent);var ten=ph[0],id=ph[1];\nif(!ten||!(ten in jsDb))return tl(404,{});var bang=jsDb[ten];var dl=null;if(body!=null&&body!==''){try{dl=JSON.parse(body)}catch(e){return tl(400,{})}}\nif(!Array.isArray(bang)){if(method==='GET')return tl(200,bang);if(method==='PUT'||method==='POST'){jsDb[ten]=dl||{};return tl(200,jsDb[ten])}if(method==='PATCH'){jsDb[ten]=Object.assign({},bang,dl||{});return tl(200,jsDb[ten])}return tl(404,{})}\nvar vt=function(x){return bang.findIndex(function(r){return String(r.id)===String(x)})};\nvar mr=function(r){var o=Object.assign({},r);u.searchParams.getAll('_expand').forEach(function(e){var b=jsDb[e+'s']||jsDb[e];if(Array.isArray(b))o[e]=b.find(function(x){return String(x.id)===String(r[e+'Id'])})});u.searchParams.getAll('_embed').forEach(function(e){var b=jsDb[e];if(Array.isArray(b)){var k=mot(ten)+'Id';o[e]=b.filter(function(x){return String(x[k])===String(r.id)})}});return o};\nif(method==='GET'){if(id!=null){var i=vt(id);return i<0?tl(404,{}):tl(200,mr(bang[i]))}var ds=bang.slice();var loc={};u.searchParams.forEach(function(v,k){if(k.charAt(0)!=='_'&&k!=='q')(loc[k]=loc[k]||[]).push(v)});\nObject.keys(loc).forEach(function(k){var vs=loc[k],m=/^(.*)_(like|gte|lte|ne)$/.exec(k);ds=ds.filter(function(r){if(m){var gv=lay(r,m[1]);return vs.every(function(v){if(m[2]==='like')return new RegExp(v,'i').test(String(gv));if(m[2]==='ne')return String(gv)!==v;var a=Number(gv),b=Number(v);var so=!isNaN(a)&&!isNaN(b);return m[2]==='gte'?(so?a>=b:String(gv)>=v):(so?a<=b:String(gv)<=v)})}var g=lay(r,k);return vs.some(function(v){return String(g)===v})})});\nvar qq=u.searchParams.get('q');if(qq)ds=ds.filter(function(r){return JSON.stringify(r).toLowerCase().indexOf(qq.toLowerCase())>=0});\nvar sx=u.searchParams.get('_sort');if(sx){var tr=sx.split(','),th=(u.searchParams.get('_order')||'asc').split(',');ds.sort(function(a,b){for(var t=0;t<tr.length;t++){var f=tr[t].replace(/^-/,''),gi=tr[t].charAt(0)==='-'||(th[t]||th[0])==='desc';var x=lay(a,f),y=lay(b,f);var c=(typeof x==='number'&&typeof y==='number')?x-y:String(x).localeCompare(String(y));if(c)return gi?-c:c}return 0})}\nvar gh=u.searchParams.get('_limit'),pg=u.searchParams.get('_page');var tong=ds.length;if(pg){var n=Number(gh)||10;ds=ds.slice((Number(pg)-1)*n,Number(pg)*n)}else if(gh)ds=ds.slice(0,Number(gh));var rr=tl(200,ds.map(mr));try{rr.headers.set('X-Total-Count',String(tong))}catch(e){}return rr}\nif(method==='POST'){if(id!=null)return tl(404,{});var mo=Object.assign({},dl||{});if(mo.id==null){var so2=bang.length&&bang.every(function(r){return typeof r.id==='number'});mo.id=so2||!bang.length?bang.reduce(function(mx,r){return Math.max(mx,Number(r.id)||0)},0)+1:Math.random().toString(16).slice(2,6)}bang.push(mo);return tl(201,mo)}\nif(id==null)return tl(404,{});var j=vt(id);if(j<0)return tl(404,{});\nif(method==='PUT'){bang[j]=Object.assign({},dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='PATCH'){bang[j]=Object.assign({},bang[j],dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='DELETE'){bang.splice(j,1);return tl(200,{})}return tl(404,{})}\nif(jsDb){window.fetch=function(url,init){init=init||{};var s=String(url&&url.url?url.url:url);var me=String(init.method||'GET').toUpperCase();return new Promise(function(res){setTimeout(function(){if(s.indexOf(BASE+'/')!==0)return res(new Response('Not Found',{status:404}));try{res(xuLy(me,s,init.body))}catch(e){res(tl(500,{error:String(e)}))}},120)})}}\nfunction axiosGia(){function goi(method,url,data,cfg){cfg=cfg||{};var u=(cfg.baseURL||'')+url;if(cfg.params){var sp=new URLSearchParams(cfg.params).toString();if(sp)u+=(u.indexOf('?')>=0?'&':'?')+sp}var init={method:method.toUpperCase(),headers:Object.assign({'Content-Type':'application/json'},cfg.headers||{})};if(data!==undefined)init.body=typeof data==='string'?data:JSON.stringify(data);\nreturn window.fetch(u,init).then(function(res){return res.text().then(function(t){var d;try{d=JSON.parse(t)}catch(e){d=t}var hd={};try{res.headers.forEach(function(v,k){hd[k.toLowerCase()]=v})}catch(e){}var out={data:d,status:res.status,statusText:res.statusText,headers:hd,config:cfg};if(res.status>=200&&res.status<300)return out;var err=new Error('Request failed with status code '+res.status);err.response=out;err.name='AxiosError';throw err})})}\nfunction tao(base){var a=function(cfg){return goi(cfg.method||'get',cfg.url,cfg.data,Object.assign({},base,cfg))};['get','delete','head'].forEach(function(m){a[m]=function(url,cfg){return goi(m,url,undefined,Object.assign({},base,cfg))}});['post','put','patch'].forEach(function(m){a[m]=function(url,data,cfg){return goi(m,url,data,Object.assign({},base,cfg))}});a.create=function(c){return tao(Object.assign({},base,c))};a.defaults=base;a.interceptors={request:{use:function(){}},response:{use:function(){}}};a.isAxiosError=function(e){return!!(e&&e.name==='AxiosError')};return a}\nvar ax=tao({});ax.default=ax;return ax}\nvar R=window.React;var tach=function(p,k){var q=Object.assign({},p);var c=q.children;delete q.children;if(k!==undefined)q.key=k;return[q,c]};\nvar j=function(t,p,k){var x=tach(p,k);return x[1]===undefined?R.createElement(t,x[0]):R.createElement(t,x[0],x[1])};\nvar js=function(t,p,k){var x=tach(p,k);return R.createElement.apply(null,[t,x[0]].concat(x[1]||[]))};\n// React Router: MemoryRouter + thanh địa chỉ (gõ URL được — thử ?status=ACTIVE, /items/2…)\nvar viTri=null,routerBoc=null,dieuHuong=null;\nfunction datThanh(v){var o=document.getElementById('cl-demo-url');if(o&&document.activeElement!==o)o.value='http://localhost:3000'+v}\nfunction routerGia(){var RRD=window.ReactRouterDOM;if(!RRD)return null;if(routerBoc)return routerBoc;\nfunction Ghi(){var l=RRD.useLocation();var nav=RRD.useNavigate();dieuHuong=nav;viTri=l.pathname+l.search+l.hash;R.useEffect(function(){datThanh(viTri)});return null}\nfunction RG(p){var d=R.useState(function(){return[viTri||URL0||'/']})[0];return R.createElement(RRD.MemoryRouter,{initialEntries:d,basename:p.basename},R.createElement(Ghi),p.children)}\nfunction tr(routes,opts){var r=RRD.createMemoryRouter(routes,Object.assign({},opts||{},{initialEntries:[viTri||URL0||'/']}));var g=function(s){viTri=s.location.pathname+s.location.search+s.location.hash;datThanh(viTri)};g(r.state);r.subscribe(g);dieuHuong=function(to){r.navigate(to)};return r}\nrouterBoc=Object.assign({},RRD,{BrowserRouter:RG,HashRouter:RG,createBrowserRouter:tr,createHashRouter:tr});return routerBoc}\nvar thunk=function(api){return function(next){return function(a){return typeof a==='function'?a(api.dispatch,api.getState):next(a)}}};\nvar LIB={'react':R,'react-dom':window.ReactDOM,'react-dom/client':window.ReactDOM,'react/jsx-runtime':{jsx:j,jsxs:js,Fragment:R.Fragment},'react/jsx-dev-runtime':{jsxDEV:j,Fragment:R.Fragment},'prop-types':window.PropTypes,'react-bootstrap':window.ReactBootstrap,'@reduxjs/toolkit':window.RTK,'redux':window.RTK,'react-redux':window.ReactRedux,'redux-thunk':{'default':thunk,thunk:thunk}};\nvar C={};\nfunction dd(tu,s){var p=tu.split('/').slice(0,-1);s.split('/').forEach(function(x){if(x==='.'||x==='')return;if(x==='..')p.pop();else p.push(x)});return p.join('/')}\nfunction tim(p){var d=['','.js','.jsx','.ts','.tsx','.json','/index.js','/index.jsx'];for(var i=0;i<d.length;i++){if(M[p+d[i]]!=null||CSS[p+d[i]]!=null)return p+d[i]}return null}\nfunction req(tu,s){if(s==='axios')return axiosGia();if(s==='react-router-dom'||s==='react-router')return routerGia();if(LIB[s])return LIB[s];if(/\\.css$/.test(s)&&!/^\\./.test(s))return{};var p=tim(dd(tu,s));if(!p)throw new Error('Cannot find module '+s);return nap(p)}\nfunction nap(p){if(C[p])return C[p].exports;if(CSS[p]!=null){var st=document.createElement('style');st.textContent=CSS[p];document.head.appendChild(st);C[p]={exports:{}};return{}}var m={exports:{}};C[p]=m;if(/\\.json$/.test(p)){m.exports=JSON.parse(M[p]);return m.exports}new Function('require','module','exports',M[p])(function(s){return req(p,s)},m,m.exports);return m.exports}\nif(THANH){var bar=document.createElement('form');bar.style.cssText='position:sticky;top:0;z-index:99998;display:flex;gap:6px;align-items:center;padding:6px 10px;background:#e2e8f0;border-bottom:1px solid #cbd5e1;font:12px system-ui';bar.innerHTML='<span style=\"color:#475569\">URL</span><input id=\"cl-demo-url\" style=\"flex:1;padding:4px 8px;border:1px solid #cbd5e1;border-radius:6px;font:12px ui-monospace,monospace\" aria-label=\"Address bar\"><button style=\"padding:3px 10px;border-radius:6px;border:1px solid #94a3b8;background:#fff;cursor:pointer\">Go</button>';\nbar.addEventListener('submit',function(e){e.preventDefault();var v=document.getElementById('cl-demo-url').value.replace(/^https?:\\/\\/[^/]+/,'')||'/';if(dieuHuong)dieuHuong(v)});document.body.insertBefore(bar,document.body.firstChild);datThanh(URL0||'/')}\nnap(\"src/index.js\");\n})();</script></body></html>"
+    }
+  ]
+}

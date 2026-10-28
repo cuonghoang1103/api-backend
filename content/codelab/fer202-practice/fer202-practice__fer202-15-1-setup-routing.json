@@ -1,0 +1,1193 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-15-1-setup-routing",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-9-1-router"
+  },
+  "exercises": [
+    {
+      "title": "CodeLearn · F1 — Setup, layout, routing & 404",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 60,
+      "points": 100,
+      "concepts": [
+        "CRA project setup",
+        "json-server 0.17.4 + concurrently",
+        ".env + REACT_APP_*",
+        "layout route + <Outlet />",
+        "NavLink active",
+        "catch-all 404"
+      ],
+      "prerequisites": [
+        "FER202 chapters 9–12 (Router, json-server, Redux)"
+      ],
+      "tags": [
+        "fer202",
+        "assignment",
+        "codelearn",
+        "f1"
+      ],
+      "problemHtml": "<h1>CODELEARN · F1 — SETUP, LAYOUT, ROUTING &amp; 404</h1>\n<p class=\"bi-phu\">FER202 final assignment (mini LMS) · Function 1 of 11 · Starter = reference of F0 (project skeleton) · Suggested time: 60 minutes · Total: 10 marks</p>\n<h2>1. Overview</h2>\n<p>Turn the CRA skeleton into a routed single-page app. The skeleton already holds <code>package.json</code> (scripts <code>start</code>, <code>server</code>, <code>dev</code>), <code>db.json</code>, <code>.env</code> and <code>src/api/axiosClient.js</code> — <b>check them</b>, run <code>npm run dev</code>, and open <code>http://localhost:9999/courses</code> to see json-server answer. Then build the shell every later function plugs into: one <b>Layout</b> route (navbar + <code>&lt;Outlet /&gt;</code> + footer), the Home page, a placeholder Courses page and a catch-all 404.</p>\n<h3>Routes after F1</h3><table><thead><tr><th>Path</th><th>Element</th></tr></thead><tbody><tr><td><code>/</code></td><td>HomePage (inside Layout)</td></tr><tr><td><code>/courses</code></td><td>CoursesPage — placeholder, replaced in F3</td></tr><tr><td><code>*</code></td><td>NotFoundPage (404)</td></tr></tbody></table>\n<h3>Edge cases</h3><ul><li>Any unknown path, at any depth (<code>/abc</code>, <code>/courses/x/y</code>), shows the 404 page <i>inside</i> the layout (navbar still visible).</li><li>\"Home\" is active only on <code>/</code> — not on every page (<code>end</code>).</li></ul>\n<h3>Main features</h3>\n<ul>\n  <li>Project setup · Layout · Routes & navigation · 404 page · Code structure</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>Continue from your own F0 code (or the starter, which is the F0 reference). Files marked NEW/EDIT in the tree are the ones this step touches.</li>\n  <li>Create React App (React 18), React Router v6, Redux Toolkit, Axios, React-Bootstrap; json-server <b>0.17.4</b> on port 9999 (1.x dropped <code>_expand</code>/<code>_embed</code>).</li>\n  <li>Every HTTP call goes through <code>src/api/*.js</code> (one <code>axiosClient</code> with <code>baseURL: process.env.REACT_APP_API_URL</code>); each API function returns <code>response.data</code> itself — do not rely on interceptors (the auto-grader’s axios does not run them).</li>\n  <li>Keep the ids/classes printed in the brief — the auto-grader uses them. Components never call axios directly.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>codelearn/\n├── public/\n│   └── index.html\n├── src/\n│   ├── api/\n│   │   └── axiosClient.js\n│   ├── app/\n│   │   └── store.js\n│   ├── components/\n│   │   ├── AppNavbar.js   # NEW in F1\n│   │   └── Layout.js   # NEW in F1\n│   ├── pages/\n│   │   ├── CoursesPage.js   # NEW in F1\n│   │   ├── HomePage.js   # NEW in F1\n│   │   └── NotFoundPage.js   # NEW in F1\n│   ├── App.js   # EDIT in F1\n│   ├── index.css\n│   └── index.js\n├── .env\n├── db.json\n├── package.json\n└── README.md</pre>\n<h2>3. UI wireframe</h2>\n<pre class=\"bi-wire\">┌─ Navbar (bg dark) ──────────────────────────────────────────┐\n│ 💻 CodeLearn    Home   Courses                              │\n└─────────────────────────────────────────────────────────────┘\n┌─ &lt;main&gt; = &lt;Outlet /&gt; ───────────────────────────────────────┐\n│        Learn to code with CodeLearn          (#home-title)  │\n│        [ Browse courses ]                    (#browse-btn)  │\n│   🎬 Video lessons   📝 Chapter quizzes   📈 Track progress  │\n└─────────────────────────────────────────────────────────────┘\n  © 2026 CodeLearn — FER202 final assignment         (#footer)\n\n/anything-else ⇒   404 · Page not found · [Back to home]</pre>\n<h2>4. Data model</h2>\n<p><b>db.json — 8 collections (json-server 0.17.4, port 9999)</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>users</code></td><td>{ id, fullName, email, password, role: \"admin\" | \"student\", active: boolean, createdAt }</td><td>email stored lower-case and unique · <code>active:false</code> = locked (cannot log in)</td></tr><tr><td><code>categories</code></td><td>{ id, name }</td><td>Frontend · Backend · Database · Mobile</td></tr><tr><td><code>courses</code></td><td>{ id, title, categoryId → categories, level, price, instructor, description, thumbnail, published, createdAt }</td><td>level ∈ Beginner/Intermediate/Advanced · price in VND (0 = Free) · <code>published:false</code> = draft (admin only)</td></tr><tr><td><code>chapters</code></td><td>{ id, courseId → courses, title, order }</td><td>shown sorted by <code>order</code> as \"Chapter 1, 2…\"</td></tr><tr><td><code>lessons</code></td><td>{ id, chapterId → chapters, courseId → courses, title, order, duration (min), videoUrl, content }</td><td><code>videoUrl</code> is a YouTube <b>watch</b> link — convert to <code>/embed/&lt;id&gt;</code> for the iframe</td></tr><tr><td><code>questions</code></td><td>{ id, chapterId → chapters, courseId → courses, content, options: string[4], answerIndex: 0..3, explanation }</td><td>one chapter quiz = all questions of that chapter</td></tr><tr><td><code>enrollments</code></td><td>{ id, userId → users, courseId → courses, enrolledAt, completedLessons: number[] }</td><td>progress lives here (ids of completed lessons, sorted, no duplicates)</td></tr><tr><td><code>results</code></td><td>{ id, userId, courseId, chapterId → chapters, score, total, percent, passed, answers: number[], submittedAt }</td><td>one row per quiz attempt · pass mark 70%</td></tr></tbody></table>\n<h2>5. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. Project setup <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>json-server</code> pinned to <b>0.17.4</b>; scripts <code>server</code> = <code>json-server --watch db.json --port 9999</code> and <code>dev</code> = <code>concurrently</code> running server + start.</li>\n  <li><code>.env</code>: <code>REACT_APP_API_URL=http://localhost:9999</code>; <code>axiosClient</code> uses it as <code>baseURL</code>. React 18.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">concurrently</span> <span class=\"bi-hook\">process.env</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. Layout <span class=\"bi-diem\">2.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>components/Layout.js</code>: <code>AppNavbar</code> + <code>&lt;Container as=\"main\" id=\"main\"&gt;&lt;Outlet /&gt;</code> + <code>&lt;footer id=\"footer\"&gt;</code> containing \"© 2026 CodeLearn\".</li>\n  <li><code>components/AppNavbar.js</code> (React-Bootstrap <code>Navbar</code>): brand <code>#brand</code> \"CodeLearn\" linking to <code>/</code>; <code>#nav-home</code>, <code>#nav-courses</code> as <code>NavLink</code>.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">Outlet</span> <span class=\"bi-hook\">Navbar</span> <span class=\"bi-hook\">NavLink</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. Routes &amp; navigation <span class=\"bi-diem\">2.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>All routes declared in <code>App.js</code> under one layout route: <code>/</code> HomePage (<code>#home-title</code> \"Learn to code with CodeLearn\", <code>#browse-btn</code> → <code>/courses</code>), <code>/courses</code> CoursesPage (<code>#courses-title</code> \"Courses\").</li>\n  <li>The current link gets the <code>active</code> class; Home uses <code>end</code>. No full page reloads (no <code>&lt;a href&gt;</code> for internal links).</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">Routes</span> <span class=\"bi-hook\">Route</span> <span class=\"bi-hook\">Link</span></p>\n<p><b>Example:</b></p>\n<pre>click #nav-courses ⇒ URL /courses, #nav-courses has class \"active\", #nav-home does not</pre>\n</div>\n<div class=\"bi-cn\"><h3>4. 404 page <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>&lt;Route path=\"*\"&gt;</code> LAST, inside the layout: <code>#not-found</code> shows \"404\" and \"Page not found\" and a <code>#back-home</code> link to <code>/</code>.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">path=\"*\"</span></p>\n</div>\n<div class=\"bi-cn\"><h3>5. Code structure <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Pages in <code>src/pages</code>, reusable parts in <code>src/components</code>; <code>index.js</code> keeps <code>&lt;Provider&gt;</code> + <code>&lt;BrowserRouter&gt;</code>.</li>\n</ul>\n</div>\n<h2>6. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>#brand · #nav-home · #nav-courses</code></td><td>navbar</td></tr><tr><td><code>#main · #footer</code></td><td>layout</td></tr><tr><td><code>#home-title · #browse-btn</code></td><td>home page</td></tr><tr><td><code>#courses-title</code></td><td>courses page (placeholder)</td></tr><tr><td><code>#not-found · #back-home</code></td><td>404 page</td></tr></tbody></table>\n<h2>7. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>Project setup</td><td>2</td></tr><tr><td>2</td><td>Layout</td><td>2.5</td></tr><tr><td>3</td><td>Routes &amp; navigation</td><td>2.5</td></tr><tr><td>4</td><td>404 page</td><td>2</td></tr><tr><td>5</td><td>Code structure</td><td>1</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Navbar copied into every page instead of one layout route.</li>\n  <li><code>path=\"*\"</code> placed first (or outside the layout) — it swallows real routes or loses the navbar.</li>\n  <li>Hard-coded <code>http://localhost:9999</code> in components instead of the <code>.env</code> variable.</li>\n  <li>Mutating Redux/React state, or writing localStorage inside a reducer.</li>\n  <li>App crashes (white screen) on an empty list, an unknown id or a server error.</li>\n</ul>\n<h2>8. Submission</h2>\n<p>Work in the editor (files on the right) or download the starter, then <code>npm install</code> and <code>npm run dev</code> (json-server :9999 + React :3000) and paste your files back. Press <b>Run</b> for the sample checks and <b>Submit</b> for full grading (hidden checks included). The reference solution of this step unlocks after an <b>Accepted</b> submission.</p>",
+      "problemHtmlVi": "<h1>CODELEARN · F1 — CÀI ĐẶT, LAYOUT, ROUTING &amp; 404</h1>\n<p class=\"bi-phu\">Assignment cuối kỳ FER202 (mini LMS) · Chức năng 1/11 · Starter = lời giải F0 (khung dự án) · Thời gian gợi ý: 60 phút · Tổng: 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p>Biến khung CRA thành ứng dụng một trang có định tuyến. Khung đã có <code>package.json</code> (script <code>start</code>, <code>server</code>, <code>dev</code>), <code>db.json</code>, <code>.env</code> và <code>src/api/axiosClient.js</code> — <b>kiểm lại chúng</b>, chạy <code>npm run dev</code>, mở <code>http://localhost:9999/courses</code> để thấy json-server trả lời. Sau đó dựng \"bộ khung\" mà mọi chức năng sau cắm vào: một route <b>Layout</b> (navbar + <code>&lt;Outlet /&gt;</code> + footer), trang chủ, trang Courses giữ chỗ và route 404 bắt mọi đường dẫn còn lại.</p>\n<h3>Route sau F1</h3><table><thead><tr><th>Đường dẫn</th><th>Element</th></tr></thead><tbody><tr><td><code>/</code></td><td>HomePage (trong Layout)</td></tr><tr><td><code>/courses</code></td><td>CoursesPage — giữ chỗ, F3 thay</td></tr><tr><td><code>*</code></td><td>NotFoundPage (404)</td></tr></tbody></table>\n<h3>Trường hợp biên</h3><ul><li>Mọi đường dẫn lạ, ở mọi độ sâu (<code>/abc</code>, <code>/courses/x/y</code>), hiện trang 404 <i>bên trong</i> layout (vẫn thấy navbar).</li><li>\"Home\" chỉ active ở <code>/</code> — không active ở mọi trang (<code>end</code>).</li></ul>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>Cài đặt dự án · Layout chung · Route & điều hướng · Trang 404 · Cấu trúc code</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Làm tiếp trên code F0 của chính bạn (hoặc starter = lời giải F0). Tệp đánh dấu NEW/EDIT trong cây là tệp bước này đụng tới.</li>\n  <li>Create React App (React 18), React Router v6, Redux Toolkit, Axios, React-Bootstrap; json-server <b>0.17.4</b> cổng 9999 (bản 1.x bỏ <code>_expand</code>/<code>_embed</code>).</li>\n  <li>Mọi lời gọi HTTP đi qua <code>src/api/*.js</code> (một <code>axiosClient</code> với <code>baseURL: process.env.REACT_APP_API_URL</code>); mỗi hàm API tự trả <code>response.data</code> — đừng dựa vào interceptor (axios của máy chấm không chạy interceptor).</li>\n  <li>Giữ đúng id/class in trong đề — máy chấm dùng chúng. Component không gọi axios trực tiếp.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>codelearn/\n├── public/\n│   └── index.html\n├── src/\n│   ├── api/\n│   │   └── axiosClient.js\n│   ├── app/\n│   │   └── store.js\n│   ├── components/\n│   │   ├── AppNavbar.js   # NEW in F1\n│   │   └── Layout.js   # NEW in F1\n│   ├── pages/\n│   │   ├── CoursesPage.js   # NEW in F1\n│   │   ├── HomePage.js   # NEW in F1\n│   │   └── NotFoundPage.js   # NEW in F1\n│   ├── App.js   # EDIT in F1\n│   ├── index.css\n│   └── index.js\n├── .env\n├── db.json\n├── package.json\n└── README.md</pre>\n<h2>3. Wireframe giao diện</h2>\n<pre class=\"bi-wire\">┌─ Navbar (bg dark) ──────────────────────────────────────────┐\n│ 💻 CodeLearn    Home   Courses                              │\n└─────────────────────────────────────────────────────────────┘\n┌─ &lt;main&gt; = &lt;Outlet /&gt; ───────────────────────────────────────┐\n│        Learn to code with CodeLearn          (#home-title)  │\n│        [ Browse courses ]                    (#browse-btn)  │\n│   🎬 Video lessons   📝 Chapter quizzes   📈 Track progress  │\n└─────────────────────────────────────────────────────────────┘\n  © 2026 CodeLearn — FER202 final assignment         (#footer)\n\n/anything-else ⇒   404 · Page not found · [Back to home]</pre>\n<h2>4. Mô hình dữ liệu</h2>\n<p><b>db.json — 8 collections (json-server 0.17.4, port 9999)</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>users</code></td><td>{ id, fullName, email, password, role: \"admin\" | \"student\", active: boolean, createdAt }</td><td>email lưu chữ thường, không trùng · <code>active:false</code> = bị khoá (không đăng nhập được)</td></tr><tr><td><code>categories</code></td><td>{ id, name }</td><td>Frontend · Backend · Database · Mobile</td></tr><tr><td><code>courses</code></td><td>{ id, title, categoryId → categories, level, price, instructor, description, thumbnail, published, createdAt }</td><td>level ∈ Beginner/Intermediate/Advanced · price tính bằng VND (0 = Free) · <code>published:false</code> = bản nháp (chỉ admin thấy)</td></tr><tr><td><code>chapters</code></td><td>{ id, courseId → courses, title, order }</td><td>hiện theo <code>order</code>, đánh số \"Chapter 1, 2…\"</td></tr><tr><td><code>lessons</code></td><td>{ id, chapterId → chapters, courseId → courses, title, order, duration (min), videoUrl, content }</td><td><code>videoUrl</code> là link YouTube dạng <b>watch</b> — phải đổi sang <code>/embed/&lt;id&gt;</code> để nhúng iframe</td></tr><tr><td><code>questions</code></td><td>{ id, chapterId → chapters, courseId → courses, content, options: string[4], answerIndex: 0..3, explanation }</td><td>quiz một chương = mọi câu hỏi của chương đó</td></tr><tr><td><code>enrollments</code></td><td>{ id, userId → users, courseId → courses, enrolledAt, completedLessons: number[] }</td><td>tiến độ nằm ở đây (id các bài đã xong, tăng dần, không trùng)</td></tr><tr><td><code>results</code></td><td>{ id, userId, courseId, chapterId → chapters, score, total, percent, passed, answers: number[], submittedAt }</td><td>mỗi lượt làm quiz một dòng · đạt khi ≥ 70%</td></tr></tbody></table>\n<h2>5. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. Cài đặt dự án <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>json-server</code> ghim đúng <b>0.17.4</b>; script <code>server</code> = <code>json-server --watch db.json --port 9999</code> và <code>dev</code> = <code>concurrently</code> chạy server + start.</li>\n  <li><code>.env</code>: <code>REACT_APP_API_URL=http://localhost:9999</code>; <code>axiosClient</code> dùng nó làm <code>baseURL</code>. React 18.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">concurrently</span> <span class=\"bi-hook\">process.env</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. Layout chung <span class=\"bi-diem\">2.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>components/Layout.js</code>: <code>AppNavbar</code> + <code>&lt;Container as=\"main\" id=\"main\"&gt;&lt;Outlet /&gt;</code> + <code>&lt;footer id=\"footer\"&gt;</code> có chữ \"© 2026 CodeLearn\".</li>\n  <li><code>components/AppNavbar.js</code> (React-Bootstrap <code>Navbar</code>): brand <code>#brand</code> \"CodeLearn\" trỏ <code>/</code>; <code>#nav-home</code>, <code>#nav-courses</code> là <code>NavLink</code>.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">Outlet</span> <span class=\"bi-hook\">Navbar</span> <span class=\"bi-hook\">NavLink</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. Route &amp; điều hướng <span class=\"bi-diem\">2.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Mọi route khai trong <code>App.js</code> dưới một route layout: <code>/</code> HomePage (<code>#home-title</code> \"Learn to code with CodeLearn\", <code>#browse-btn</code> → <code>/courses</code>), <code>/courses</code> CoursesPage (<code>#courses-title</code> \"Courses\").</li>\n  <li>Link trang hiện tại có class <code>active</code>; Home dùng <code>end</code>. Không tải lại cả trang (không dùng <code>&lt;a href&gt;</code> cho link nội bộ).</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">Routes</span> <span class=\"bi-hook\">Route</span> <span class=\"bi-hook\">Link</span></p>\n<p><b>Ví dụ:</b></p>\n<pre>click #nav-courses ⇒ URL /courses, #nav-courses has class \"active\", #nav-home does not</pre>\n</div>\n<div class=\"bi-cn\"><h3>4. Trang 404 <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>&lt;Route path=\"*\"&gt;</code> đặt CUỐI, trong layout: <code>#not-found</code> hiện \"404\", \"Page not found\" và link <code>#back-home</code> về <code>/</code>.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">path=\"*\"</span></p>\n</div>\n<div class=\"bi-cn\"><h3>5. Cấu trúc code <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Trang ở <code>src/pages</code>, phần dùng lại ở <code>src/components</code>; <code>index.js</code> giữ <code>&lt;Provider&gt;</code> + <code>&lt;BrowserRouter&gt;</code>.</li>\n</ul>\n</div>\n<h2>6. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>#brand · #nav-home · #nav-courses</code></td><td>thanh điều hướng</td></tr><tr><td><code>#main · #footer</code></td><td>layout</td></tr><tr><td><code>#home-title · #browse-btn</code></td><td>trang chủ</td></tr><tr><td><code>#courses-title</code></td><td>trang khoá học (giữ chỗ)</td></tr><tr><td><code>#not-found · #back-home</code></td><td>trang 404</td></tr></tbody></table>\n<h2>7. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>Cài đặt dự án</td><td>2</td></tr><tr><td>2</td><td>Layout chung</td><td>2.5</td></tr><tr><td>3</td><td>Route &amp; điều hướng</td><td>2.5</td></tr><tr><td>4</td><td>Trang 404</td><td>2</td></tr><tr><td>5</td><td>Cấu trúc code</td><td>1</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Chép navbar vào từng trang thay vì một route layout.</li>\n  <li><code>path=\"*\"</code> đặt đầu (hoặc ngoài layout) — nuốt route thật hoặc mất navbar.</li>\n  <li>Viết cứng <code>http://localhost:9999</code> trong component thay vì biến <code>.env</code>.</li>\n  <li>Sửa trực tiếp state Redux/React, hoặc ghi localStorage trong reducer.</li>\n  <li>App sập (màn trắng) khi danh sách rỗng, id không tồn tại hoặc máy chủ lỗi.</li>\n</ul>\n<h2>8. Nộp bài</h2>\n<p>Làm thẳng trong editor (tệp bên phải) hoặc tải starter về, <code>npm install</code> rồi <code>npm run dev</code> (json-server :9999 + React :3000), xong dán lại tệp. <b>Chạy thử</b> = kiểm mẫu, <b>Nộp</b> = chấm đủ (cả kiểm ẩn). Lời giải tham chiếu của bước này chỉ mở sau một lượt Nộp <b>Accepted</b>.</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "Continue from your own F0 code (or the starter, which is the F0 reference). Files marked NEW/EDIT in the tree are the ones this step touches.|||Làm tiếp trên code F0 của chính bạn (hoặc starter = lời giải F0). Tệp đánh dấu NEW/EDIT trong cây là tệp bước này đụng tới.\nCreate React App (React 18), React Router v6, Redux Toolkit, Axios, React-Bootstrap; json-server <b>0.17.4</b> on port 9999 (1.x dropped <code>_expand</code>/<code>_embed</code>).|||Create React App (React 18), React Router v6, Redux Toolkit, Axios, React-Bootstrap; json-server <b>0.17.4</b> cổng 9999 (bản 1.x bỏ <code>_expand</code>/<code>_embed</code>).\nEvery HTTP call goes through <code>src/api/*.js</code> (one <code>axiosClient</code> with <code>baseURL: process.env.REACT_APP_API_URL</code>); each API function returns <code>response.data</code> itself — do not rely on interceptors (the auto-grader’s axios does not run them).|||Mọi lời gọi HTTP đi qua <code>src/api/*.js</code> (một <code>axiosClient</code> với <code>baseURL: process.env.REACT_APP_API_URL</code>); mỗi hàm API tự trả <code>response.data</code> — đừng dựa vào interceptor (axios của máy chấm không chạy interceptor).\nKeep the ids/classes printed in the brief — the auto-grader uses them. Components never call axios directly.|||Giữ đúng id/class in trong đề — máy chấm dùng chúng. Component không gọi axios trực tiếp.",
+      "examplesJson": [
+        {
+          "input": "Open /abc",
+          "output": "Navbar + \"404 · Page not found\" + Back to home",
+          "explanation": "path=\"*\" is the last child of the layout route.|||path=\"*\" là con cuối của route layout."
+        }
+      ],
+      "hintsJson": [
+        "Chạy thử trước: <code>npm run dev</code> rồi mở http://localhost:9999/courses — thấy JSON là json-server + db.json ổn. Nếu thấy lỗi \"concurrently: command not found\" ⇒ chưa <code>npm install</code>.",
+        "Layout là một route KHÔNG có path: <code>&lt;Route element={&lt;Layout /&gt;}&gt; … &lt;/Route&gt;</code>; trong Layout đặt <code>&lt;Outlet /&gt;</code> chỗ nội dung trang.",
+        "React-Bootstrap + Router: <code>&lt;Nav.Link as={NavLink} to=\"/\" end id=\"nav-home\"&gt;</code>. Route 404: <code>&lt;Route path=\"*\" element={&lt;NotFoundPage /&gt;} /&gt;</code> là con CUỐI của route layout."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "package.json",
+          "language": "json",
+          "code": "{\n  \"name\": \"codelearn\",\n  \"version\": \"0.1.0\",\n  \"private\": true,\n  \"dependencies\": {\n    \"@reduxjs/toolkit\": \"^2.2.7\",\n    \"axios\": \"^1.7.7\",\n    \"bootstrap\": \"^5.3.3\",\n    \"react\": \"^18.3.1\",\n    \"react-bootstrap\": \"^2.10.5\",\n    \"react-dom\": \"^18.3.1\",\n    \"react-redux\": \"^9.1.2\",\n    \"react-router-dom\": \"^6.26.2\",\n    \"react-scripts\": \"5.0.1\"\n  },\n  \"devDependencies\": {\n    \"concurrently\": \"^9.0.1\",\n    \"json-server\": \"0.17.4\"\n  },\n  \"scripts\": {\n    \"start\": \"react-scripts start\",\n    \"build\": \"react-scripts build\",\n    \"server\": \"json-server --watch db.json --port 9999\",\n    \"dev\": \"concurrently -n api,web -c blue,green \\\"npm run server\\\" \\\"npm start\\\"\"\n  },\n  \"eslintConfig\": {\n    \"extends\": [\n      \"react-app\"\n    ]\n  },\n  \"browserslist\": {\n    \"production\": [\n      \">0.2%\",\n      \"not dead\",\n      \"not op_mini all\"\n    ],\n    \"development\": [\n      \"last 1 chrome version\",\n      \"last 1 firefox version\",\n      \"last 1 safari version\"\n    ]\n  }\n}\n"
+        },
+        {
+          "name": ".env",
+          "language": "text",
+          "code": "REACT_APP_API_URL=http://localhost:9999\n"
+        },
+        {
+          "name": "db.json",
+          "language": "json",
+          "code": "{\n  \"users\": [\n    {\n      \"id\": 1,\n      \"fullName\": \"Admin CodeLearn\",\n      \"email\": \"admin@codelearn.vn\",\n      \"password\": \"admin123\",\n      \"role\": \"admin\",\n      \"active\": true,\n      \"createdAt\": \"2026-01-01\"\n    },\n    {\n      \"id\": 2,\n      \"fullName\": \"Nguyen Van An\",\n      \"email\": \"an@codelearn.vn\",\n      \"password\": \"123456\",\n      \"role\": \"student\",\n      \"active\": true,\n      \"createdAt\": \"2026-08-20\"\n    },\n    {\n      \"id\": 3,\n      \"fullName\": \"Tran Thi Binh\",\n      \"email\": \"binh@codelearn.vn\",\n      \"password\": \"123456\",\n      \"role\": \"student\",\n      \"active\": true,\n      \"createdAt\": \"2026-08-25\"\n    },\n    {\n      \"id\": 4,\n      \"fullName\": \"Le Van Cuong\",\n      \"email\": \"cuong@codelearn.vn\",\n      \"password\": \"123456\",\n      \"role\": \"student\",\n      \"active\": false,\n      \"createdAt\": \"2026-09-01\"\n    },\n    {\n      \"id\": 5,\n      \"fullName\": \"Pham Minh Duc\",\n      \"email\": \"duc@codelearn.vn\",\n      \"password\": \"123456\",\n      \"role\": \"student\",\n      \"active\": true,\n      \"createdAt\": \"2026-09-28\"\n    }\n  ],\n  \"categories\": [\n    {\n      \"id\": 1,\n      \"name\": \"Frontend\"\n    },\n    {\n      \"id\": 2,\n      \"name\": \"Backend\"\n    },\n    {\n      \"id\": 3,\n      \"name\": \"Database\"\n    },\n    {\n      \"id\": 4,\n      \"name\": \"Mobile\"\n    }\n  ],\n  \"courses\": [\n    {\n      \"id\": 1,\n      \"title\": \"React for Beginners\",\n      \"categoryId\": 1,\n      \"level\": \"Beginner\",\n      \"price\": 0,\n      \"instructor\": \"Hoang Cuong\",\n      \"thumbnail\": \"\",\n      \"published\": true,\n      \"createdAt\": \"2026-01-10\",\n      \"description\": \"Build your first React apps: JSX, components, props, state and the most used hooks — step by step.\"\n    },\n    {\n      \"id\": 2,\n      \"title\": \"Advanced React Patterns\",\n      \"categoryId\": 1,\n      \"level\": \"Advanced\",\n      \"price\": 499000,\n      \"instructor\": \"Hoang Cuong\",\n      \"thumbnail\": \"\",\n      \"published\": true,\n      \"createdAt\": \"2026-03-05\",\n      \"description\": \"Compound components, render props, custom hooks and performance patterns used in large React codebases.\"\n    },\n    {\n      \"id\": 3,\n      \"title\": \"JavaScript Essentials\",\n      \"categoryId\": 1,\n      \"level\": \"Beginner\",\n      \"price\": 199000,\n      \"instructor\": \"Tran Minh\",\n      \"thumbnail\": \"\",\n      \"published\": true,\n      \"createdAt\": \"2026-02-01\",\n      \"description\": \"The JavaScript you need before React: variables, types, functions, arrays and objects.\"\n    },\n    {\n      \"id\": 4,\n      \"title\": \"Node.js & Express REST APIs\",\n      \"categoryId\": 2,\n      \"level\": \"Intermediate\",\n      \"price\": 399000,\n      \"instructor\": \"Le Quang\",\n      \"thumbnail\": \"\",\n      \"published\": true,\n      \"createdAt\": \"2026-04-12\",\n      \"description\": \"Design and build REST APIs with Express: routing, middleware, validation and JSON responses.\"\n    },\n    {\n      \"id\": 5,\n      \"title\": \"Spring Boot Fundamentals\",\n      \"categoryId\": 2,\n      \"level\": \"Intermediate\",\n      \"price\": 449000,\n      \"instructor\": \"Nguyen Hai\",\n      \"thumbnail\": \"\",\n      \"published\": true,\n      \"createdAt\": \"2026-05-20\",\n      \"description\": \"Create production-ready Java back ends with Spring Boot, Spring Web and Spring Data JPA.\"\n    },\n    {\n      \"id\": 6,\n      \"title\": \"SQL Server for Developers\",\n      \"categoryId\": 3,\n      \"level\": \"Beginner\",\n      \"price\": 0,\n      \"instructor\": \"Pham Thu\",\n      \"thumbnail\": \"\",\n      \"published\": true,\n      \"createdAt\": \"2026-06-01\",\n      \"description\": \"Write correct SELECT queries, filter, sort and join tables in Microsoft SQL Server.\"\n    },\n    {\n      \"id\": 7,\n      \"title\": \"PostgreSQL Performance Tuning\",\n      \"categoryId\": 3,\n      \"level\": \"Advanced\",\n      \"price\": 549000,\n      \"instructor\": \"Pham Thu\",\n      \"thumbnail\": \"\",\n      \"published\": true,\n      \"createdAt\": \"2026-07-15\",\n      \"description\": \"Read query plans, design indexes and tune PostgreSQL for real workloads.\"\n    },\n    {\n      \"id\": 8,\n      \"title\": \"Flutter Mobile Apps\",\n      \"categoryId\": 4,\n      \"level\": \"Intermediate\",\n      \"price\": 349000,\n      \"instructor\": \"Vo Thanh\",\n      \"thumbnail\": \"\",\n      \"published\": true,\n      \"createdAt\": \"2026-08-08\",\n      \"description\": \"Build cross-platform mobile apps with Flutter widgets, navigation and state management.\"\n    },\n    {\n      \"id\": 9,\n      \"title\": \"TypeScript in Practice\",\n      \"categoryId\": 1,\n      \"level\": \"Intermediate\",\n      \"price\": 299000,\n      \"instructor\": \"Tran Minh\",\n      \"thumbnail\": \"\",\n      \"published\": true,\n      \"createdAt\": \"2026-09-01\",\n      \"description\": \"Add types to real projects: interfaces, generics, narrowing and typing React components.\"\n    },\n    {\n      \"id\": 10,\n      \"title\": \"MongoDB Basics\",\n      \"categoryId\": 3,\n      \"level\": \"Beginner\",\n      \"price\": 149000,\n      \"instructor\": \"Le Quang\",\n      \"thumbnail\": \"\",\n      \"published\": false,\n      \"createdAt\": \"2026-10-01\",\n      \"description\": \"Documents, collections and queries in MongoDB — draft course, not published yet.\"\n    }\n  ],\n  \"chapters\": [\n    {\n      \"id\": 1,\n      \"courseId\": 1,\n      \"title\": \"Getting Started with React\",\n      \"order\": 1\n    },\n    {\n      \"id\": 2,\n      \"courseId\": 1,\n      \"title\": \"Components, Props & State\",\n      \"order\": 2\n    },\n    {\n      \"id\": 3,\n      \"courseId\": 1,\n      \"title\": \"Hooks in Practice\",\n      \"order\": 3\n    },\n    {\n      \"id\": 4,\n      \"courseId\": 3,\n      \"title\": \"Variables & Types\",\n      \"order\": 1\n    },\n    {\n      \"id\": 5,\n      \"courseId\": 3,\n      \"title\": \"Functions & Arrays\",\n      \"order\": 2\n    },\n    {\n      \"id\": 6,\n      \"courseId\": 4,\n      \"title\": \"Express Basics\",\n      \"order\": 1\n    },\n    {\n      \"id\": 7,\n      \"courseId\": 4,\n      \"title\": \"REST & JSON\",\n      \"order\": 2\n    },\n    {\n      \"id\": 8,\n      \"courseId\": 6,\n      \"title\": \"SELECT Fundamentals\",\n      \"order\": 1\n    }\n  ],\n  \"lessons\": [\n    {\n      \"id\": 1,\n      \"chapterId\": 1,\n      \"courseId\": 1,\n      \"order\": 1,\n      \"title\": \"What is React?\",\n      \"duration\": 8,\n      \"videoUrl\": \"https://www.youtube.com/watch?v=SqcY0GlETPk\",\n      \"content\": \"React is a JavaScript library for building user interfaces from small, reusable components.\\nIn this lesson you see how a React app is just a tree of components that turn data into UI.\"\n    },\n    {\n      \"id\": 2,\n      \"chapterId\": 1,\n      \"courseId\": 1,\n      \"order\": 2,\n      \"title\": \"Create React App & project structure\",\n      \"duration\": 12,\n      \"videoUrl\": \"https://www.youtube.com/watch?v=bMknfKXIFA8\",\n      \"content\": \"Create the project with npx create-react-app, then walk through public/index.html, src/index.js and src/App.js.\\nRun it with npm start on http://localhost:3000.\"\n    },\n    {\n      \"id\": 3,\n      \"chapterId\": 2,\n      \"courseId\": 1,\n      \"order\": 1,\n      \"title\": \"JSX and components\",\n      \"duration\": 15,\n      \"videoUrl\": \"https://www.youtube.com/watch?v=w7ejDZ8SWv8\",\n      \"content\": \"JSX looks like HTML but compiles to React.createElement calls.\\nA component is a function that returns JSX; its name must start with a capital letter.\"\n    },\n    {\n      \"id\": 4,\n      \"chapterId\": 2,\n      \"courseId\": 1,\n      \"order\": 2,\n      \"title\": \"Props vs State\",\n      \"duration\": 14,\n      \"videoUrl\": \"https://www.youtube.com/watch?v=IYvD9oBCuJI\",\n      \"content\": \"Props are read-only data passed from a parent; state is data a component owns and changes with its setter.\\nChanging state re-renders the component.\"\n    },\n    {\n      \"id\": 5,\n      \"chapterId\": 3,\n      \"courseId\": 1,\n      \"order\": 1,\n      \"title\": \"useState and useEffect\",\n      \"duration\": 13,\n      \"videoUrl\": \"https://www.youtube.com/watch?v=O6P86uwfdR0\",\n      \"content\": \"useState stores a value between renders; useEffect runs side effects such as fetching data after the component renders.\\nAlways list the values the effect uses in its dependency array.\"\n    },\n    {\n      \"id\": 6,\n      \"chapterId\": 4,\n      \"courseId\": 3,\n      \"order\": 1,\n      \"title\": \"let, const and var\",\n      \"duration\": 10,\n      \"videoUrl\": \"https://www.youtube.com/watch?v=hdI2bqOjy3c\",\n      \"content\": \"Prefer const, use let when a variable must be reassigned, and avoid var (function scope, hoisting surprises).\"\n    },\n    {\n      \"id\": 7,\n      \"chapterId\": 4,\n      \"courseId\": 3,\n      \"order\": 2,\n      \"title\": \"Primitive types\",\n      \"duration\": 11,\n      \"videoUrl\": \"https://www.youtube.com/watch?v=PkZNo7MFNFg\",\n      \"content\": \"string, number, boolean, null, undefined, bigint and symbol — and why typeof null is \\\"object\\\".\"\n    },\n    {\n      \"id\": 8,\n      \"chapterId\": 5,\n      \"courseId\": 3,\n      \"order\": 1,\n      \"title\": \"Arrow functions and array methods\",\n      \"duration\": 16,\n      \"videoUrl\": \"https://www.youtube.com/watch?v=R8rmfD9Y5-c\",\n      \"content\": \"Write short callbacks with arrow functions and transform data with map, filter and reduce without mutating the original array.\"\n    },\n    {\n      \"id\": 9,\n      \"chapterId\": 6,\n      \"courseId\": 4,\n      \"order\": 1,\n      \"title\": \"Your first Express server\",\n      \"duration\": 14,\n      \"videoUrl\": \"https://www.youtube.com/watch?v=fBNz5xF-Kx4\",\n      \"content\": \"Install express, create an app and call app.listen(3000). Add a GET route that returns JSON.\"\n    },\n    {\n      \"id\": 10,\n      \"chapterId\": 6,\n      \"courseId\": 4,\n      \"order\": 2,\n      \"title\": \"Routing & middleware\",\n      \"duration\": 18,\n      \"videoUrl\": \"https://www.youtube.com/watch?v=L72fhGm1tfE\",\n      \"content\": \"Split routes with express.Router and write middleware with (req, res, next) for logging and validation.\"\n    },\n    {\n      \"id\": 11,\n      \"chapterId\": 7,\n      \"courseId\": 4,\n      \"order\": 1,\n      \"title\": \"Building a REST API\",\n      \"duration\": 20,\n      \"videoUrl\": \"https://www.youtube.com/watch?v=pKd0Rpw7O48\",\n      \"content\": \"Map CRUD to HTTP: GET /items, POST /items, PUT /items/:id, DELETE /items/:id — with the right status codes.\"\n    },\n    {\n      \"id\": 12,\n      \"chapterId\": 8,\n      \"courseId\": 6,\n      \"order\": 1,\n      \"title\": \"SELECT, WHERE, ORDER BY\",\n      \"duration\": 15,\n      \"videoUrl\": \"https://www.youtube.com/watch?v=HXV3zeQKqGY\",\n      \"content\": \"Choose columns with SELECT, filter rows with WHERE and sort the result with ORDER BY.\"\n    },\n    {\n      \"id\": 13,\n      \"chapterId\": 8,\n      \"courseId\": 6,\n      \"order\": 2,\n      \"title\": \"JOIN in practice\",\n      \"duration\": 17,\n      \"videoUrl\": \"https://www.youtube.com/watch?v=9yeOJ0ZMUYw\",\n      \"content\": \"Combine rows of related tables with INNER JOIN and LEFT JOIN on their keys.\"\n    }\n  ],\n  \"questions\": [\n    {\n      \"id\": 1,\n      \"chapterId\": 1,\n      \"courseId\": 1,\n      \"content\": \"What does JSX compile to?\",\n      \"options\": [\n        \"Plain HTML strings\",\n        \"React.createElement() calls\",\n        \"Web Components\",\n        \"CSS-in-JS objects\"\n      ],\n      \"answerIndex\": 1,\n      \"explanation\": \"The build tool turns every JSX tag into a React.createElement (or jsx()) call that returns a plain object describing the UI.\"\n    },\n    {\n      \"id\": 2,\n      \"chapterId\": 1,\n      \"courseId\": 1,\n      \"content\": \"Which command creates a new React app with Create React App?\",\n      \"options\": [\n        \"npm create-react-app my-app\",\n        \"npx create-react-app my-app\",\n        \"npm init react my-app\",\n        \"npx react-new my-app\"\n      ],\n      \"answerIndex\": 1,\n      \"explanation\": \"npx downloads and runs create-react-app once, without installing it globally.\"\n    },\n    {\n      \"id\": 3,\n      \"chapterId\": 1,\n      \"courseId\": 1,\n      \"content\": \"Which file renders <App /> into #root in a CRA project?\",\n      \"options\": [\n        \"src/index.js\",\n        \"public/manifest.json\",\n        \"src/App.css\",\n        \"package.json\"\n      ],\n      \"answerIndex\": 0,\n      \"explanation\": \"src/index.js calls ReactDOM.createRoot(document.getElementById(\\\"root\\\")).render(<App />).\"\n    },\n    {\n      \"id\": 4,\n      \"chapterId\": 2,\n      \"courseId\": 1,\n      \"content\": \"Props are…\",\n      \"options\": [\n        \"mutable data owned by the child\",\n        \"read-only data passed from parent to child\",\n        \"global variables\",\n        \"the same thing as state\"\n      ],\n      \"answerIndex\": 1,\n      \"explanation\": \"A component must never change its props; the parent owns that data.\"\n    },\n    {\n      \"id\": 5,\n      \"chapterId\": 2,\n      \"courseId\": 1,\n      \"content\": \"Why must you never mutate state directly (state.items.push(x))?\",\n      \"options\": [\n        \"It is slower\",\n        \"React compares references, so the same array means no re-render\",\n        \"It throws an error\",\n        \"It deletes the state\"\n      ],\n      \"answerIndex\": 1,\n      \"explanation\": \"Create a new array/object (spread, map, filter) so React sees a new reference and re-renders.\"\n    },\n    {\n      \"id\": 6,\n      \"chapterId\": 2,\n      \"courseId\": 1,\n      \"content\": \"Where should state shared by two sibling components live?\",\n      \"options\": [\n        \"In each sibling separately\",\n        \"In their closest common parent (lift state up)\",\n        \"In localStorage\",\n        \"In a CSS file\"\n      ],\n      \"answerIndex\": 1,\n      \"explanation\": \"Lifting state up gives one source of truth; the siblings receive it via props.\"\n    },\n    {\n      \"id\": 7,\n      \"chapterId\": 3,\n      \"courseId\": 1,\n      \"content\": \"When does useEffect(fn, []) run?\",\n      \"options\": [\n        \"Before every render\",\n        \"After the first render only\",\n        \"On every state change\",\n        \"Never\"\n      ],\n      \"answerIndex\": 1,\n      \"explanation\": \"An empty dependency array means \\\"after mount\\\" (twice in development StrictMode).\"\n    },\n    {\n      \"id\": 8,\n      \"chapterId\": 3,\n      \"courseId\": 1,\n      \"content\": \"What is wrong with calling a hook inside an if statement?\",\n      \"options\": [\n        \"Nothing\",\n        \"Hooks must be called in the same order on every render\",\n        \"Hooks only work in class components\",\n        \"It makes the app slower\"\n      ],\n      \"answerIndex\": 1,\n      \"explanation\": \"React matches hook state by call order, so hooks must sit at the top level of the component.\"\n    },\n    {\n      \"id\": 9,\n      \"chapterId\": 4,\n      \"courseId\": 3,\n      \"content\": \"Which keyword declares a variable that cannot be reassigned?\",\n      \"options\": [\n        \"var\",\n        \"let\",\n        \"const\",\n        \"static\"\n      ],\n      \"answerIndex\": 2,\n      \"explanation\": \"const prevents reassignment (the object it points to can still change).\"\n    },\n    {\n      \"id\": 10,\n      \"chapterId\": 4,\n      \"courseId\": 3,\n      \"content\": \"What is typeof null in JavaScript?\",\n      \"options\": [\n        \"\\\"null\\\"\",\n        \"\\\"object\\\"\",\n        \"\\\"undefined\\\"\",\n        \"\\\"number\\\"\"\n      ],\n      \"answerIndex\": 1,\n      \"explanation\": \"A historic bug kept for compatibility: typeof null === \\\"object\\\".\"\n    },\n    {\n      \"id\": 11,\n      \"chapterId\": 4,\n      \"courseId\": 3,\n      \"content\": \"Which value is NOT falsy?\",\n      \"options\": [\n        \"0\",\n        \"\\\"\\\" (empty string)\",\n        \"\\\"0\\\"\",\n        \"NaN\"\n      ],\n      \"answerIndex\": 2,\n      \"explanation\": \"Any non-empty string, including \\\"0\\\", is truthy.\"\n    },\n    {\n      \"id\": 12,\n      \"chapterId\": 6,\n      \"courseId\": 4,\n      \"content\": \"Which method starts an Express server on a port?\",\n      \"options\": [\n        \"app.run(3000)\",\n        \"app.listen(3000)\",\n        \"app.start(3000)\",\n        \"express.serve(3000)\"\n      ],\n      \"answerIndex\": 1,\n      \"explanation\": \"app.listen(port, callback) opens the HTTP server.\"\n    },\n    {\n      \"id\": 13,\n      \"chapterId\": 6,\n      \"courseId\": 4,\n      \"content\": \"What does an Express middleware function receive?\",\n      \"options\": [\n        \"(req, res, next)\",\n        \"(state, action)\",\n        \"(props)\",\n        \"(event)\"\n      ],\n      \"answerIndex\": 0,\n      \"explanation\": \"Middleware gets the request, the response and next() to pass control on.\"\n    }\n  ],\n  \"enrollments\": [\n    {\n      \"id\": 1,\n      \"userId\": 2,\n      \"courseId\": 1,\n      \"enrolledAt\": \"2026-09-01\",\n      \"completedLessons\": [\n        1,\n        2,\n        3\n      ]\n    },\n    {\n      \"id\": 2,\n      \"userId\": 2,\n      \"courseId\": 3,\n      \"enrolledAt\": \"2026-09-10\",\n      \"completedLessons\": []\n    },\n    {\n      \"id\": 3,\n      \"userId\": 3,\n      \"courseId\": 1,\n      \"enrolledAt\": \"2026-09-12\",\n      \"completedLessons\": [\n        1\n      ]\n    },\n    {\n      \"id\": 4,\n      \"userId\": 3,\n      \"courseId\": 4,\n      \"enrolledAt\": \"2026-09-15\",\n      \"completedLessons\": [\n        9,\n        10,\n        11\n      ]\n    },\n    {\n      \"id\": 5,\n      \"userId\": 5,\n      \"courseId\": 1,\n      \"enrolledAt\": \"2026-10-01\",\n      \"completedLessons\": []\n    },\n    {\n      \"id\": 6,\n      \"userId\": 5,\n      \"courseId\": 6,\n      \"enrolledAt\": \"2026-10-03\",\n      \"completedLessons\": [\n        12\n      ]\n    }\n  ],\n  \"results\": [\n    {\n      \"id\": 1,\n      \"userId\": 2,\n      \"courseId\": 1,\n      \"chapterId\": 1,\n      \"score\": 2,\n      \"total\": 3,\n      \"percent\": 67,\n      \"passed\": false,\n      \"answers\": [\n        1,\n        0,\n        0\n      ],\n      \"submittedAt\": \"2026-09-05T09:00:00.000Z\"\n    },\n    {\n      \"id\": 2,\n      \"userId\": 2,\n      \"courseId\": 1,\n      \"chapterId\": 1,\n      \"score\": 3,\n      \"total\": 3,\n      \"percent\": 100,\n      \"passed\": true,\n      \"answers\": [\n        1,\n        1,\n        0\n      ],\n      \"submittedAt\": \"2026-09-06T10:30:00.000Z\"\n    },\n    {\n      \"id\": 3,\n      \"userId\": 3,\n      \"courseId\": 4,\n      \"chapterId\": 6,\n      \"score\": 2,\n      \"total\": 2,\n      \"percent\": 100,\n      \"passed\": true,\n      \"answers\": [\n        1,\n        0\n      ],\n      \"submittedAt\": \"2026-09-20T14:00:00.000Z\"\n    },\n    {\n      \"id\": 4,\n      \"userId\": 2,\n      \"courseId\": 3,\n      \"chapterId\": 4,\n      \"score\": 1,\n      \"total\": 3,\n      \"percent\": 33,\n      \"passed\": false,\n      \"answers\": [\n        2,\n        0,\n        0\n      ],\n      \"submittedAt\": \"2026-09-12T08:15:00.000Z\"\n    }\n  ]\n}\n"
+        },
+        {
+          "name": "README.md",
+          "language": "text",
+          "code": "# CodeLearn — mini LMS (FER202 final assignment)\n\nReactJS (Create React App) · React Router 6 · Redux Toolkit · Axios · React-Bootstrap · json-server 0.17.4\n\n## Run\n\n```bash\nnpm install              # React 18 is pinned: CRA now installs React 19 by default (peer conflicts)\nnpm run dev              # json-server :9999 + React :3000 together (concurrently)\n```\n\nOr in two terminals: `npm run server` and `npm start`. Restart `npm start` after editing `.env`.\n\n## Demo accounts (db.json)\n\n| Role    | Email               | Password |\n|---------|---------------------|----------|\n| admin   | admin@codelearn.vn  | admin123 |\n| student | an@codelearn.vn     | 123456   |\n| locked  | cuong@codelearn.vn  | 123456   |\n\njson-server is not a real auth server: passwords are plain text in db.json — for learning only.\n"
+        },
+        {
+          "name": "public/index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"utf-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n    <meta name=\"description\" content=\"CodeLearn — online programming courses (FER202 assignment)\" />\n    <title>CodeLearn</title>\n  </head>\n  <body>\n    <noscript>You need to enable JavaScript to run this app.</noscript>\n    <div id=\"root\"></div>\n  </body>\n</html>\n"
+        },
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — khai báo MỌI route của CodeLearn ở một chỗ (nhìn là thấy cả sơ đồ trang)\n// (STARTER) Bắt đầu từ F1: tạo Layout (navbar + footer), các trang và route 404.\nexport default function App() {\n  return (\n    <div className=\"container py-5\">\n      <h1>CodeLearn</h1>\n      <p className=\"lead\">Online programming courses — FER202 assignment starter.</p>\n      <p>Start with <b>F1</b>: layout, routing and the 404 page. Run <code>npm run dev</code> to start React + json-server.</p>\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/api/axiosClient.js",
+          "language": "javascript",
+          "code": "// src/api/axiosClient.js — MỘT chỗ duy nhất biết địa chỉ API (ĐÃ CHO SẴN)\n// Đọc từ .env (REACT_APP_API_URL) — không viết cứng \"http://localhost:9999\" ở bất kỳ đâu khác.\n// ⚠ CRA chỉ đọc .env lúc `npm start` khởi động: sửa .env thì phải tắt và chạy lại.\nimport axios from 'axios';\n\nconst axiosClient = axios.create({\n  baseURL: process.env.REACT_APP_API_URL,\n  headers: { 'Content-Type': 'application/json' },\n  timeout: 10000,\n});\n\n// Quy ước của dự án: mỗi hàm trong src/api/*.js tự trả `response.data`\n// (không dựa vào interceptor để \"bóc\" data — đọc code là thấy ngay hàm trả gì).\nexport default axiosClient;\n"
+        },
+        {
+          "name": "src/app/store.js",
+          "language": "javascript",
+          "code": "// src/app/store.js — store Redux duy nhất của app: mỗi \"feature\" một slice\nimport { configureStore } from '@reduxjs/toolkit';\n\nexport const store = configureStore({\n  reducer: {\n    // reducer giữ chỗ — F2 thay bằng auth, các F sau thêm courses / enrollments / quiz\n    app: (state = { name: 'CodeLearn' }) => state,\n  },\n});\n\nexport default store;\n"
+        },
+        {
+          "name": "src/index.css",
+          "language": "css",
+          "code": "/* src/index.css — CodeLearn (đã cho sẵn; sửa thoải mái) */\nbody { background: #f8fafc; }\n.course-thumb {\n  height: 130px; display: flex; align-items: center; justify-content: center;\n  color: #fff; font-size: 2rem; font-weight: 700; letter-spacing: .05em;\n  border-radius: .375rem .375rem 0 0; background: linear-gradient(135deg, #2563eb, #7c3aed);\n}\n.course-card { transition: transform .15s ease; }\n.course-card:hover { transform: translateY(-2px); }\n.lesson-link.done { color: #15803d; }\n.lesson-content { white-space: pre-line; }\n.question.correct { border-color: #16a34a; }\n.question.incorrect { border-color: #dc2626; }\n.option-correct label { color: #15803d; font-weight: 600; }\n.option-wrong label { color: #dc2626; text-decoration: line-through; }\n.admin-sidebar .nav-link.active { background: #0d6efd; color: #fff; border-radius: .375rem; }\n.bar { fill: #0d6efd; }\n.bar-label, .bar-value { font-size: 12px; fill: #334155; }\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào (ĐÃ CHO SẴN): Bootstrap CSS + Redux <Provider> + <BrowserRouter> bọc <App />\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { BrowserRouter } from 'react-router-dom';\nimport { Provider } from 'react-redux';\nimport 'bootstrap/dist/css/bootstrap.min.css';\nimport './index.css';\nimport { store } from './app/store';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <Provider store={store}>\n      <BrowserRouter>\n        <App />\n      </BrowserRouter>\n    </Provider>\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "src/components/AppNavbar.js",
+          "language": "javascript",
+          "code": "// src/components/AppNavbar.js — STARTER (F1)\n// see the brief\n\nexport {};\n"
+        },
+        {
+          "name": "src/components/Layout.js",
+          "language": "javascript",
+          "code": "// src/components/Layout.js — STARTER (F1)\n// see the brief\n\nexport {};\n"
+        },
+        {
+          "name": "src/pages/CoursesPage.js",
+          "language": "javascript",
+          "code": "// src/pages/CoursesPage.js — STARTER (F1): build this page — see the brief.\n// Route + ids/classes: section \"Element ids / classes\" of the brief.\n\nexport default function CoursesPage() {\n  return <h2>CoursesPage — not implemented yet</h2>;\n}\n"
+        },
+        {
+          "name": "src/pages/HomePage.js",
+          "language": "javascript",
+          "code": "// src/pages/HomePage.js — STARTER (F1): build this page — see the brief.\n// Route + ids/classes: section \"Element ids / classes\" of the brief.\n\nexport default function HomePage() {\n  return <h2>HomePage — not implemented yet</h2>;\n}\n"
+        },
+        {
+          "name": "src/pages/NotFoundPage.js",
+          "language": "javascript",
+          "code": "// src/pages/NotFoundPage.js — STARTER (F1): build this page — see the brief.\n// Route + ids/classes: section \"Element ids / classes\" of the brief.\n\nexport default function NotFoundPage() {\n  return <h2>NotFoundPage — not implemented yet</h2>;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "package.json",
+          "language": "json",
+          "code": "{\n  \"name\": \"codelearn\",\n  \"version\": \"0.1.0\",\n  \"private\": true,\n  \"dependencies\": {\n    \"@reduxjs/toolkit\": \"^2.2.7\",\n    \"axios\": \"^1.7.7\",\n    \"bootstrap\": \"^5.3.3\",\n    \"react\": \"^18.3.1\",\n    \"react-bootstrap\": \"^2.10.5\",\n    \"react-dom\": \"^18.3.1\",\n    \"react-redux\": \"^9.1.2\",\n    \"react-router-dom\": \"^6.26.2\",\n    \"react-scripts\": \"5.0.1\"\n  },\n  \"devDependencies\": {\n    \"concurrently\": \"^9.0.1\",\n    \"json-server\": \"0.17.4\"\n  },\n  \"scripts\": {\n    \"start\": \"react-scripts start\",\n    \"build\": \"react-scripts build\",\n    \"server\": \"json-server --watch db.json --port 9999\",\n    \"dev\": \"concurrently -n api,web -c blue,green \\\"npm run server\\\" \\\"npm start\\\"\"\n  },\n  \"eslintConfig\": {\n    \"extends\": [\n      \"react-app\"\n    ]\n  },\n  \"browserslist\": {\n    \"production\": [\n      \">0.2%\",\n      \"not dead\",\n      \"not op_mini all\"\n    ],\n    \"development\": [\n      \"last 1 chrome version\",\n      \"last 1 firefox version\",\n      \"last 1 safari version\"\n    ]\n  }\n}\n"
+        },
+        {
+          "name": ".env",
+          "language": "text",
+          "code": "REACT_APP_API_URL=http://localhost:9999\n"
+        },
+        {
+          "name": "db.json",
+          "language": "json",
+          "code": "{\n  \"users\": [\n    {\n      \"id\": 1,\n      \"fullName\": \"Admin CodeLearn\",\n      \"email\": \"admin@codelearn.vn\",\n      \"password\": \"admin123\",\n      \"role\": \"admin\",\n      \"active\": true,\n      \"createdAt\": \"2026-01-01\"\n    },\n    {\n      \"id\": 2,\n      \"fullName\": \"Nguyen Van An\",\n      \"email\": \"an@codelearn.vn\",\n      \"password\": \"123456\",\n      \"role\": \"student\",\n      \"active\": true,\n      \"createdAt\": \"2026-08-20\"\n    },\n    {\n      \"id\": 3,\n      \"fullName\": \"Tran Thi Binh\",\n      \"email\": \"binh@codelearn.vn\",\n      \"password\": \"123456\",\n      \"role\": \"student\",\n      \"active\": true,\n      \"createdAt\": \"2026-08-25\"\n    },\n    {\n      \"id\": 4,\n      \"fullName\": \"Le Van Cuong\",\n      \"email\": \"cuong@codelearn.vn\",\n      \"password\": \"123456\",\n      \"role\": \"student\",\n      \"active\": false,\n      \"createdAt\": \"2026-09-01\"\n    },\n    {\n      \"id\": 5,\n      \"fullName\": \"Pham Minh Duc\",\n      \"email\": \"duc@codelearn.vn\",\n      \"password\": \"123456\",\n      \"role\": \"student\",\n      \"active\": true,\n      \"createdAt\": \"2026-09-28\"\n    }\n  ],\n  \"categories\": [\n    {\n      \"id\": 1,\n      \"name\": \"Frontend\"\n    },\n    {\n      \"id\": 2,\n      \"name\": \"Backend\"\n    },\n    {\n      \"id\": 3,\n      \"name\": \"Database\"\n    },\n    {\n      \"id\": 4,\n      \"name\": \"Mobile\"\n    }\n  ],\n  \"courses\": [\n    {\n      \"id\": 1,\n      \"title\": \"React for Beginners\",\n      \"categoryId\": 1,\n      \"level\": \"Beginner\",\n      \"price\": 0,\n      \"instructor\": \"Hoang Cuong\",\n      \"thumbnail\": \"\",\n      \"published\": true,\n      \"createdAt\": \"2026-01-10\",\n      \"description\": \"Build your first React apps: JSX, components, props, state and the most used hooks — step by step.\"\n    },\n    {\n      \"id\": 2,\n      \"title\": \"Advanced React Patterns\",\n      \"categoryId\": 1,\n      \"level\": \"Advanced\",\n      \"price\": 499000,\n      \"instructor\": \"Hoang Cuong\",\n      \"thumbnail\": \"\",\n      \"published\": true,\n      \"createdAt\": \"2026-03-05\",\n      \"description\": \"Compound components, render props, custom hooks and performance patterns used in large React codebases.\"\n    },\n    {\n      \"id\": 3,\n      \"title\": \"JavaScript Essentials\",\n      \"categoryId\": 1,\n      \"level\": \"Beginner\",\n      \"price\": 199000,\n      \"instructor\": \"Tran Minh\",\n      \"thumbnail\": \"\",\n      \"published\": true,\n      \"createdAt\": \"2026-02-01\",\n      \"description\": \"The JavaScript you need before React: variables, types, functions, arrays and objects.\"\n    },\n    {\n      \"id\": 4,\n      \"title\": \"Node.js & Express REST APIs\",\n      \"categoryId\": 2,\n      \"level\": \"Intermediate\",\n      \"price\": 399000,\n      \"instructor\": \"Le Quang\",\n      \"thumbnail\": \"\",\n      \"published\": true,\n      \"createdAt\": \"2026-04-12\",\n      \"description\": \"Design and build REST APIs with Express: routing, middleware, validation and JSON responses.\"\n    },\n    {\n      \"id\": 5,\n      \"title\": \"Spring Boot Fundamentals\",\n      \"categoryId\": 2,\n      \"level\": \"Intermediate\",\n      \"price\": 449000,\n      \"instructor\": \"Nguyen Hai\",\n      \"thumbnail\": \"\",\n      \"published\": true,\n      \"createdAt\": \"2026-05-20\",\n      \"description\": \"Create production-ready Java back ends with Spring Boot, Spring Web and Spring Data JPA.\"\n    },\n    {\n      \"id\": 6,\n      \"title\": \"SQL Server for Developers\",\n      \"categoryId\": 3,\n      \"level\": \"Beginner\",\n      \"price\": 0,\n      \"instructor\": \"Pham Thu\",\n      \"thumbnail\": \"\",\n      \"published\": true,\n      \"createdAt\": \"2026-06-01\",\n      \"description\": \"Write correct SELECT queries, filter, sort and join tables in Microsoft SQL Server.\"\n    },\n    {\n      \"id\": 7,\n      \"title\": \"PostgreSQL Performance Tuning\",\n      \"categoryId\": 3,\n      \"level\": \"Advanced\",\n      \"price\": 549000,\n      \"instructor\": \"Pham Thu\",\n      \"thumbnail\": \"\",\n      \"published\": true,\n      \"createdAt\": \"2026-07-15\",\n      \"description\": \"Read query plans, design indexes and tune PostgreSQL for real workloads.\"\n    },\n    {\n      \"id\": 8,\n      \"title\": \"Flutter Mobile Apps\",\n      \"categoryId\": 4,\n      \"level\": \"Intermediate\",\n      \"price\": 349000,\n      \"instructor\": \"Vo Thanh\",\n      \"thumbnail\": \"\",\n      \"published\": true,\n      \"createdAt\": \"2026-08-08\",\n      \"description\": \"Build cross-platform mobile apps with Flutter widgets, navigation and state management.\"\n    },\n    {\n      \"id\": 9,\n      \"title\": \"TypeScript in Practice\",\n      \"categoryId\": 1,\n      \"level\": \"Intermediate\",\n      \"price\": 299000,\n      \"instructor\": \"Tran Minh\",\n      \"thumbnail\": \"\",\n      \"published\": true,\n      \"createdAt\": \"2026-09-01\",\n      \"description\": \"Add types to real projects: interfaces, generics, narrowing and typing React components.\"\n    },\n    {\n      \"id\": 10,\n      \"title\": \"MongoDB Basics\",\n      \"categoryId\": 3,\n      \"level\": \"Beginner\",\n      \"price\": 149000,\n      \"instructor\": \"Le Quang\",\n      \"thumbnail\": \"\",\n      \"published\": false,\n      \"createdAt\": \"2026-10-01\",\n      \"description\": \"Documents, collections and queries in MongoDB — draft course, not published yet.\"\n    }\n  ],\n  \"chapters\": [\n    {\n      \"id\": 1,\n      \"courseId\": 1,\n      \"title\": \"Getting Started with React\",\n      \"order\": 1\n    },\n    {\n      \"id\": 2,\n      \"courseId\": 1,\n      \"title\": \"Components, Props & State\",\n      \"order\": 2\n    },\n    {\n      \"id\": 3,\n      \"courseId\": 1,\n      \"title\": \"Hooks in Practice\",\n      \"order\": 3\n    },\n    {\n      \"id\": 4,\n      \"courseId\": 3,\n      \"title\": \"Variables & Types\",\n      \"order\": 1\n    },\n    {\n      \"id\": 5,\n      \"courseId\": 3,\n      \"title\": \"Functions & Arrays\",\n      \"order\": 2\n    },\n    {\n      \"id\": 6,\n      \"courseId\": 4,\n      \"title\": \"Express Basics\",\n      \"order\": 1\n    },\n    {\n      \"id\": 7,\n      \"courseId\": 4,\n      \"title\": \"REST & JSON\",\n      \"order\": 2\n    },\n    {\n      \"id\": 8,\n      \"courseId\": 6,\n      \"title\": \"SELECT Fundamentals\",\n      \"order\": 1\n    }\n  ],\n  \"lessons\": [\n    {\n      \"id\": 1,\n      \"chapterId\": 1,\n      \"courseId\": 1,\n      \"order\": 1,\n      \"title\": \"What is React?\",\n      \"duration\": 8,\n      \"videoUrl\": \"https://www.youtube.com/watch?v=SqcY0GlETPk\",\n      \"content\": \"React is a JavaScript library for building user interfaces from small, reusable components.\\nIn this lesson you see how a React app is just a tree of components that turn data into UI.\"\n    },\n    {\n      \"id\": 2,\n      \"chapterId\": 1,\n      \"courseId\": 1,\n      \"order\": 2,\n      \"title\": \"Create React App & project structure\",\n      \"duration\": 12,\n      \"videoUrl\": \"https://www.youtube.com/watch?v=bMknfKXIFA8\",\n      \"content\": \"Create the project with npx create-react-app, then walk through public/index.html, src/index.js and src/App.js.\\nRun it with npm start on http://localhost:3000.\"\n    },\n    {\n      \"id\": 3,\n      \"chapterId\": 2,\n      \"courseId\": 1,\n      \"order\": 1,\n      \"title\": \"JSX and components\",\n      \"duration\": 15,\n      \"videoUrl\": \"https://www.youtube.com/watch?v=w7ejDZ8SWv8\",\n      \"content\": \"JSX looks like HTML but compiles to React.createElement calls.\\nA component is a function that returns JSX; its name must start with a capital letter.\"\n    },\n    {\n      \"id\": 4,\n      \"chapterId\": 2,\n      \"courseId\": 1,\n      \"order\": 2,\n      \"title\": \"Props vs State\",\n      \"duration\": 14,\n      \"videoUrl\": \"https://www.youtube.com/watch?v=IYvD9oBCuJI\",\n      \"content\": \"Props are read-only data passed from a parent; state is data a component owns and changes with its setter.\\nChanging state re-renders the component.\"\n    },\n    {\n      \"id\": 5,\n      \"chapterId\": 3,\n      \"courseId\": 1,\n      \"order\": 1,\n      \"title\": \"useState and useEffect\",\n      \"duration\": 13,\n      \"videoUrl\": \"https://www.youtube.com/watch?v=O6P86uwfdR0\",\n      \"content\": \"useState stores a value between renders; useEffect runs side effects such as fetching data after the component renders.\\nAlways list the values the effect uses in its dependency array.\"\n    },\n    {\n      \"id\": 6,\n      \"chapterId\": 4,\n      \"courseId\": 3,\n      \"order\": 1,\n      \"title\": \"let, const and var\",\n      \"duration\": 10,\n      \"videoUrl\": \"https://www.youtube.com/watch?v=hdI2bqOjy3c\",\n      \"content\": \"Prefer const, use let when a variable must be reassigned, and avoid var (function scope, hoisting surprises).\"\n    },\n    {\n      \"id\": 7,\n      \"chapterId\": 4,\n      \"courseId\": 3,\n      \"order\": 2,\n      \"title\": \"Primitive types\",\n      \"duration\": 11,\n      \"videoUrl\": \"https://www.youtube.com/watch?v=PkZNo7MFNFg\",\n      \"content\": \"string, number, boolean, null, undefined, bigint and symbol — and why typeof null is \\\"object\\\".\"\n    },\n    {\n      \"id\": 8,\n      \"chapterId\": 5,\n      \"courseId\": 3,\n      \"order\": 1,\n      \"title\": \"Arrow functions and array methods\",\n      \"duration\": 16,\n      \"videoUrl\": \"https://www.youtube.com/watch?v=R8rmfD9Y5-c\",\n      \"content\": \"Write short callbacks with arrow functions and transform data with map, filter and reduce without mutating the original array.\"\n    },\n    {\n      \"id\": 9,\n      \"chapterId\": 6,\n      \"courseId\": 4,\n      \"order\": 1,\n      \"title\": \"Your first Express server\",\n      \"duration\": 14,\n      \"videoUrl\": \"https://www.youtube.com/watch?v=fBNz5xF-Kx4\",\n      \"content\": \"Install express, create an app and call app.listen(3000). Add a GET route that returns JSON.\"\n    },\n    {\n      \"id\": 10,\n      \"chapterId\": 6,\n      \"courseId\": 4,\n      \"order\": 2,\n      \"title\": \"Routing & middleware\",\n      \"duration\": 18,\n      \"videoUrl\": \"https://www.youtube.com/watch?v=L72fhGm1tfE\",\n      \"content\": \"Split routes with express.Router and write middleware with (req, res, next) for logging and validation.\"\n    },\n    {\n      \"id\": 11,\n      \"chapterId\": 7,\n      \"courseId\": 4,\n      \"order\": 1,\n      \"title\": \"Building a REST API\",\n      \"duration\": 20,\n      \"videoUrl\": \"https://www.youtube.com/watch?v=pKd0Rpw7O48\",\n      \"content\": \"Map CRUD to HTTP: GET /items, POST /items, PUT /items/:id, DELETE /items/:id — with the right status codes.\"\n    },\n    {\n      \"id\": 12,\n      \"chapterId\": 8,\n      \"courseId\": 6,\n      \"order\": 1,\n      \"title\": \"SELECT, WHERE, ORDER BY\",\n      \"duration\": 15,\n      \"videoUrl\": \"https://www.youtube.com/watch?v=HXV3zeQKqGY\",\n      \"content\": \"Choose columns with SELECT, filter rows with WHERE and sort the result with ORDER BY.\"\n    },\n    {\n      \"id\": 13,\n      \"chapterId\": 8,\n      \"courseId\": 6,\n      \"order\": 2,\n      \"title\": \"JOIN in practice\",\n      \"duration\": 17,\n      \"videoUrl\": \"https://www.youtube.com/watch?v=9yeOJ0ZMUYw\",\n      \"content\": \"Combine rows of related tables with INNER JOIN and LEFT JOIN on their keys.\"\n    }\n  ],\n  \"questions\": [\n    {\n      \"id\": 1,\n      \"chapterId\": 1,\n      \"courseId\": 1,\n      \"content\": \"What does JSX compile to?\",\n      \"options\": [\n        \"Plain HTML strings\",\n        \"React.createElement() calls\",\n        \"Web Components\",\n        \"CSS-in-JS objects\"\n      ],\n      \"answerIndex\": 1,\n      \"explanation\": \"The build tool turns every JSX tag into a React.createElement (or jsx()) call that returns a plain object describing the UI.\"\n    },\n    {\n      \"id\": 2,\n      \"chapterId\": 1,\n      \"courseId\": 1,\n      \"content\": \"Which command creates a new React app with Create React App?\",\n      \"options\": [\n        \"npm create-react-app my-app\",\n        \"npx create-react-app my-app\",\n        \"npm init react my-app\",\n        \"npx react-new my-app\"\n      ],\n      \"answerIndex\": 1,\n      \"explanation\": \"npx downloads and runs create-react-app once, without installing it globally.\"\n    },\n    {\n      \"id\": 3,\n      \"chapterId\": 1,\n      \"courseId\": 1,\n      \"content\": \"Which file renders <App /> into #root in a CRA project?\",\n      \"options\": [\n        \"src/index.js\",\n        \"public/manifest.json\",\n        \"src/App.css\",\n        \"package.json\"\n      ],\n      \"answerIndex\": 0,\n      \"explanation\": \"src/index.js calls ReactDOM.createRoot(document.getElementById(\\\"root\\\")).render(<App />).\"\n    },\n    {\n      \"id\": 4,\n      \"chapterId\": 2,\n      \"courseId\": 1,\n      \"content\": \"Props are…\",\n      \"options\": [\n        \"mutable data owned by the child\",\n        \"read-only data passed from parent to child\",\n        \"global variables\",\n        \"the same thing as state\"\n      ],\n      \"answerIndex\": 1,\n      \"explanation\": \"A component must never change its props; the parent owns that data.\"\n    },\n    {\n      \"id\": 5,\n      \"chapterId\": 2,\n      \"courseId\": 1,\n      \"content\": \"Why must you never mutate state directly (state.items.push(x))?\",\n      \"options\": [\n        \"It is slower\",\n        \"React compares references, so the same array means no re-render\",\n        \"It throws an error\",\n        \"It deletes the state\"\n      ],\n      \"answerIndex\": 1,\n      \"explanation\": \"Create a new array/object (spread, map, filter) so React sees a new reference and re-renders.\"\n    },\n    {\n      \"id\": 6,\n      \"chapterId\": 2,\n      \"courseId\": 1,\n      \"content\": \"Where should state shared by two sibling components live?\",\n      \"options\": [\n        \"In each sibling separately\",\n        \"In their closest common parent (lift state up)\",\n        \"In localStorage\",\n        \"In a CSS file\"\n      ],\n      \"answerIndex\": 1,\n      \"explanation\": \"Lifting state up gives one source of truth; the siblings receive it via props.\"\n    },\n    {\n      \"id\": 7,\n      \"chapterId\": 3,\n      \"courseId\": 1,\n      \"content\": \"When does useEffect(fn, []) run?\",\n      \"options\": [\n        \"Before every render\",\n        \"After the first render only\",\n        \"On every state change\",\n        \"Never\"\n      ],\n      \"answerIndex\": 1,\n      \"explanation\": \"An empty dependency array means \\\"after mount\\\" (twice in development StrictMode).\"\n    },\n    {\n      \"id\": 8,\n      \"chapterId\": 3,\n      \"courseId\": 1,\n      \"content\": \"What is wrong with calling a hook inside an if statement?\",\n      \"options\": [\n        \"Nothing\",\n        \"Hooks must be called in the same order on every render\",\n        \"Hooks only work in class components\",\n        \"It makes the app slower\"\n      ],\n      \"answerIndex\": 1,\n      \"explanation\": \"React matches hook state by call order, so hooks must sit at the top level of the component.\"\n    },\n    {\n      \"id\": 9,\n      \"chapterId\": 4,\n      \"courseId\": 3,\n      \"content\": \"Which keyword declares a variable that cannot be reassigned?\",\n      \"options\": [\n        \"var\",\n        \"let\",\n        \"const\",\n        \"static\"\n      ],\n      \"answerIndex\": 2,\n      \"explanation\": \"const prevents reassignment (the object it points to can still change).\"\n    },\n    {\n      \"id\": 10,\n      \"chapterId\": 4,\n      \"courseId\": 3,\n      \"content\": \"What is typeof null in JavaScript?\",\n      \"options\": [\n        \"\\\"null\\\"\",\n        \"\\\"object\\\"\",\n        \"\\\"undefined\\\"\",\n        \"\\\"number\\\"\"\n      ],\n      \"answerIndex\": 1,\n      \"explanation\": \"A historic bug kept for compatibility: typeof null === \\\"object\\\".\"\n    },\n    {\n      \"id\": 11,\n      \"chapterId\": 4,\n      \"courseId\": 3,\n      \"content\": \"Which value is NOT falsy?\",\n      \"options\": [\n        \"0\",\n        \"\\\"\\\" (empty string)\",\n        \"\\\"0\\\"\",\n        \"NaN\"\n      ],\n      \"answerIndex\": 2,\n      \"explanation\": \"Any non-empty string, including \\\"0\\\", is truthy.\"\n    },\n    {\n      \"id\": 12,\n      \"chapterId\": 6,\n      \"courseId\": 4,\n      \"content\": \"Which method starts an Express server on a port?\",\n      \"options\": [\n        \"app.run(3000)\",\n        \"app.listen(3000)\",\n        \"app.start(3000)\",\n        \"express.serve(3000)\"\n      ],\n      \"answerIndex\": 1,\n      \"explanation\": \"app.listen(port, callback) opens the HTTP server.\"\n    },\n    {\n      \"id\": 13,\n      \"chapterId\": 6,\n      \"courseId\": 4,\n      \"content\": \"What does an Express middleware function receive?\",\n      \"options\": [\n        \"(req, res, next)\",\n        \"(state, action)\",\n        \"(props)\",\n        \"(event)\"\n      ],\n      \"answerIndex\": 0,\n      \"explanation\": \"Middleware gets the request, the response and next() to pass control on.\"\n    }\n  ],\n  \"enrollments\": [\n    {\n      \"id\": 1,\n      \"userId\": 2,\n      \"courseId\": 1,\n      \"enrolledAt\": \"2026-09-01\",\n      \"completedLessons\": [\n        1,\n        2,\n        3\n      ]\n    },\n    {\n      \"id\": 2,\n      \"userId\": 2,\n      \"courseId\": 3,\n      \"enrolledAt\": \"2026-09-10\",\n      \"completedLessons\": []\n    },\n    {\n      \"id\": 3,\n      \"userId\": 3,\n      \"courseId\": 1,\n      \"enrolledAt\": \"2026-09-12\",\n      \"completedLessons\": [\n        1\n      ]\n    },\n    {\n      \"id\": 4,\n      \"userId\": 3,\n      \"courseId\": 4,\n      \"enrolledAt\": \"2026-09-15\",\n      \"completedLessons\": [\n        9,\n        10,\n        11\n      ]\n    },\n    {\n      \"id\": 5,\n      \"userId\": 5,\n      \"courseId\": 1,\n      \"enrolledAt\": \"2026-10-01\",\n      \"completedLessons\": []\n    },\n    {\n      \"id\": 6,\n      \"userId\": 5,\n      \"courseId\": 6,\n      \"enrolledAt\": \"2026-10-03\",\n      \"completedLessons\": [\n        12\n      ]\n    }\n  ],\n  \"results\": [\n    {\n      \"id\": 1,\n      \"userId\": 2,\n      \"courseId\": 1,\n      \"chapterId\": 1,\n      \"score\": 2,\n      \"total\": 3,\n      \"percent\": 67,\n      \"passed\": false,\n      \"answers\": [\n        1,\n        0,\n        0\n      ],\n      \"submittedAt\": \"2026-09-05T09:00:00.000Z\"\n    },\n    {\n      \"id\": 2,\n      \"userId\": 2,\n      \"courseId\": 1,\n      \"chapterId\": 1,\n      \"score\": 3,\n      \"total\": 3,\n      \"percent\": 100,\n      \"passed\": true,\n      \"answers\": [\n        1,\n        1,\n        0\n      ],\n      \"submittedAt\": \"2026-09-06T10:30:00.000Z\"\n    },\n    {\n      \"id\": 3,\n      \"userId\": 3,\n      \"courseId\": 4,\n      \"chapterId\": 6,\n      \"score\": 2,\n      \"total\": 2,\n      \"percent\": 100,\n      \"passed\": true,\n      \"answers\": [\n        1,\n        0\n      ],\n      \"submittedAt\": \"2026-09-20T14:00:00.000Z\"\n    },\n    {\n      \"id\": 4,\n      \"userId\": 2,\n      \"courseId\": 3,\n      \"chapterId\": 4,\n      \"score\": 1,\n      \"total\": 3,\n      \"percent\": 33,\n      \"passed\": false,\n      \"answers\": [\n        2,\n        0,\n        0\n      ],\n      \"submittedAt\": \"2026-09-12T08:15:00.000Z\"\n    }\n  ]\n}\n"
+        },
+        {
+          "name": "README.md",
+          "language": "text",
+          "code": "# CodeLearn — mini LMS (FER202 final assignment)\n\nReactJS (Create React App) · React Router 6 · Redux Toolkit · Axios · React-Bootstrap · json-server 0.17.4\n\n## Run\n\n```bash\nnpm install              # React 18 is pinned: CRA now installs React 19 by default (peer conflicts)\nnpm run dev              # json-server :9999 + React :3000 together (concurrently)\n```\n\nOr in two terminals: `npm run server` and `npm start`. Restart `npm start` after editing `.env`.\n\n## Demo accounts (db.json)\n\n| Role    | Email               | Password |\n|---------|---------------------|----------|\n| admin   | admin@codelearn.vn  | admin123 |\n| student | an@codelearn.vn     | 123456   |\n| locked  | cuong@codelearn.vn  | 123456   |\n\njson-server is not a real auth server: passwords are plain text in db.json — for learning only.\n"
+        },
+        {
+          "name": "public/index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"utf-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n    <meta name=\"description\" content=\"CodeLearn — online programming courses (FER202 assignment)\" />\n    <title>CodeLearn</title>\n  </head>\n  <body>\n    <noscript>You need to enable JavaScript to run this app.</noscript>\n    <div id=\"root\"></div>\n  </body>\n</html>\n"
+        },
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — khai báo MỌI route của CodeLearn ở một chỗ (nhìn là thấy cả sơ đồ trang)\nimport { Route, Routes } from 'react-router-dom';\nimport Layout from './components/Layout';\nimport HomePage from './pages/HomePage';\nimport CoursesPage from './pages/CoursesPage';\nimport NotFoundPage from './pages/NotFoundPage';\n\nexport default function App() {\n  return (\n    <Routes>\n      {/* Layout chung: navbar + <Outlet /> + footer cho mọi trang */}\n      <Route element={<Layout />}>\n        {/* ── Khách (guest) xem được ── */}\n        <Route path=\"/\" element={<HomePage />} />\n        <Route path=\"/courses\" element={<CoursesPage />} />\n\n        {/* Mọi đường dẫn không khớp ⇒ 404 (luôn để CUỐI) */}\n        <Route path=\"*\" element={<NotFoundPage />} />\n      </Route>\n    </Routes>\n  );\n}\n"
+        },
+        {
+          "name": "src/api/axiosClient.js",
+          "language": "javascript",
+          "code": "// src/api/axiosClient.js — MỘT chỗ duy nhất biết địa chỉ API (ĐÃ CHO SẴN)\n// Đọc từ .env (REACT_APP_API_URL) — không viết cứng \"http://localhost:9999\" ở bất kỳ đâu khác.\n// ⚠ CRA chỉ đọc .env lúc `npm start` khởi động: sửa .env thì phải tắt và chạy lại.\nimport axios from 'axios';\n\nconst axiosClient = axios.create({\n  baseURL: process.env.REACT_APP_API_URL,\n  headers: { 'Content-Type': 'application/json' },\n  timeout: 10000,\n});\n\n// Quy ước của dự án: mỗi hàm trong src/api/*.js tự trả `response.data`\n// (không dựa vào interceptor để \"bóc\" data — đọc code là thấy ngay hàm trả gì).\nexport default axiosClient;\n"
+        },
+        {
+          "name": "src/app/store.js",
+          "language": "javascript",
+          "code": "// src/app/store.js — store Redux duy nhất của app: mỗi \"feature\" một slice\nimport { configureStore } from '@reduxjs/toolkit';\n\nexport const store = configureStore({\n  reducer: {\n    // reducer giữ chỗ — F2 thay bằng auth, các F sau thêm courses / enrollments / quiz\n    app: (state = { name: 'CodeLearn' }) => state,\n  },\n});\n\nexport default store;\n"
+        },
+        {
+          "name": "src/components/AppNavbar.js",
+          "language": "javascript",
+          "code": "// src/components/AppNavbar.js — thanh điều hướng; NavLink tự gắn class \"active\" cho trang đang mở\nimport { Container, Nav, Navbar } from 'react-bootstrap';\nimport { Link, NavLink } from 'react-router-dom';\n\nexport default function AppNavbar() {\n  return (\n    <Navbar bg=\"dark\" data-bs-theme=\"dark\" expand=\"md\" sticky=\"top\">\n      <Container>\n        <Navbar.Brand as={Link} to=\"/\" id=\"brand\">💻 CodeLearn</Navbar.Brand>\n        <Navbar.Toggle aria-controls=\"main-nav\" />\n        <Navbar.Collapse id=\"main-nav\">\n          <Nav className=\"me-auto\">\n            {/* end: \"/\" chỉ active đúng ở trang chủ, không active ở mọi trang */}\n            <Nav.Link as={NavLink} to=\"/\" end id=\"nav-home\">Home</Nav.Link>\n            <Nav.Link as={NavLink} to=\"/courses\" id=\"nav-courses\">Courses</Nav.Link>\n          </Nav>\n        </Navbar.Collapse>\n      </Container>\n    </Navbar>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/Layout.js",
+          "language": "javascript",
+          "code": "// src/components/Layout.js — khung chung: navbar trên cùng, nội dung trang ở <Outlet />, footer dưới cùng\nimport { Container } from 'react-bootstrap';\nimport { Outlet } from 'react-router-dom';\nimport AppNavbar from './AppNavbar';\n\nexport default function Layout() {\n  return (\n    <div className=\"d-flex flex-column min-vh-100\">\n      <AppNavbar />\n      <Container as=\"main\" id=\"main\" className=\"flex-grow-1 py-4\">\n        <Outlet />\n      </Container>\n      <footer id=\"footer\" className=\"bg-dark text-light text-center py-3 mt-auto small\">\n        © 2026 CodeLearn — FER202 final assignment\n      </footer>\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/index.css",
+          "language": "css",
+          "code": "/* src/index.css — CodeLearn (đã cho sẵn; sửa thoải mái) */\nbody { background: #f8fafc; }\n.course-thumb {\n  height: 130px; display: flex; align-items: center; justify-content: center;\n  color: #fff; font-size: 2rem; font-weight: 700; letter-spacing: .05em;\n  border-radius: .375rem .375rem 0 0; background: linear-gradient(135deg, #2563eb, #7c3aed);\n}\n.course-card { transition: transform .15s ease; }\n.course-card:hover { transform: translateY(-2px); }\n.lesson-link.done { color: #15803d; }\n.lesson-content { white-space: pre-line; }\n.question.correct { border-color: #16a34a; }\n.question.incorrect { border-color: #dc2626; }\n.option-correct label { color: #15803d; font-weight: 600; }\n.option-wrong label { color: #dc2626; text-decoration: line-through; }\n.admin-sidebar .nav-link.active { background: #0d6efd; color: #fff; border-radius: .375rem; }\n.bar { fill: #0d6efd; }\n.bar-label, .bar-value { font-size: 12px; fill: #334155; }\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào (ĐÃ CHO SẴN): Bootstrap CSS + Redux <Provider> + <BrowserRouter> bọc <App />\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { BrowserRouter } from 'react-router-dom';\nimport { Provider } from 'react-redux';\nimport 'bootstrap/dist/css/bootstrap.min.css';\nimport './index.css';\nimport { store } from './app/store';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <Provider store={store}>\n      <BrowserRouter>\n        <App />\n      </BrowserRouter>\n    </Provider>\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "src/pages/CoursesPage.js",
+          "language": "javascript",
+          "code": "// src/pages/CoursesPage.js — (F1) trang giữ chỗ; F3 thay bằng danh sách khoá học thật\nexport default function CoursesPage() {\n  return (\n    <>\n      <h2 id=\"courses-title\">Courses</h2>\n      <p className=\"text-muted\">The course list arrives in F3.</p>\n    </>\n  );\n}\n"
+        },
+        {
+          "name": "src/pages/HomePage.js",
+          "language": "javascript",
+          "code": "// src/pages/HomePage.js — trang chủ: giới thiệu ngắn + nút sang danh sách khoá học\nimport { Col, Row } from 'react-bootstrap';\nimport { Link } from 'react-router-dom';\n\nconst FEATURES = [\n  { icon: '🎬', title: 'Video lessons', text: 'Short, focused lessons with a video and notes.' },\n  { icon: '📝', title: 'Chapter quizzes', text: 'Check what you learned at the end of every chapter.' },\n  { icon: '📈', title: 'Track progress', text: 'See completed lessons and quiz scores in one place.' },\n];\n\nexport default function HomePage() {\n  return (\n    <>\n      <section className=\"p-5 mb-4 bg-white rounded-3 shadow-sm text-center\">\n        <h1 id=\"home-title\" className=\"display-5 fw-bold\">Learn to code with CodeLearn</h1>\n        <p className=\"lead text-muted\">Find a course, enrol, learn lesson by lesson and test yourself with quizzes.</p>\n        <Link to=\"/courses\" id=\"browse-btn\" className=\"btn btn-primary btn-lg\">Browse courses</Link>\n      </section>\n      <Row xs={1} md={3} className=\"g-3\">\n        {FEATURES.map((f) => (\n          <Col key={f.title}>\n            <div className=\"p-4 bg-white rounded-3 shadow-sm h-100\">\n              <div className=\"fs-2\">{f.icon}</div>\n              <h5 className=\"mt-2\">{f.title}</h5>\n              <p className=\"text-muted mb-0\">{f.text}</p>\n            </div>\n          </Col>\n        ))}\n      </Row>\n    </>\n  );\n}\n"
+        },
+        {
+          "name": "src/pages/NotFoundPage.js",
+          "language": "javascript",
+          "code": "// src/pages/NotFoundPage.js — trang 404 cho mọi đường dẫn không khớp route nào (path=\"*\")\nimport { Link } from 'react-router-dom';\n\nexport default function NotFoundPage() {\n  return (\n    <div id=\"not-found\" className=\"text-center py-5\">\n      <h1 className=\"display-1 fw-bold text-primary\">404</h1>\n      <p className=\"lead\">Page not found</p>\n      <p className=\"text-muted\">The page you are looking for does not exist or has been moved.</p>\n      <Link to=\"/\" id=\"back-home\" className=\"btn btn-primary\">Back to home</Link>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Walkthrough.</b> <code>App.js</code> has one layout route (no path) whose element is <code>Layout</code>; every page is its child, so the navbar and footer are written once and pages render into <code>&lt;Outlet /&gt;</code>. <code>NavLink</code> adds <code>active</code> automatically; <code>end</code> keeps Home from matching every path. The catch-all <code>path=\"*\"</code> is the last child of the layout, so the 404 still shows the navbar. Setup stays in config files: json-server is pinned to 0.17.4 because later functions rely on <code>_embed</code>/<code>_expand</code>, and the API address lives only in <code>.env</code> → <code>axiosClient</code>.</p>",
+      "solutionExplanationHtmlVi": "<p><b>Hướng giải.</b> <code>App.js</code> có một route layout (không path) với element <code>Layout</code>; mọi trang là con của nó ⇒ navbar/footer viết một lần, trang vẽ vào <code>&lt;Outlet /&gt;</code>. <code>NavLink</code> tự gắn <code>active</code>; <code>end</code> giữ cho Home không khớp mọi đường dẫn. Route <code>path=\"*\"</code> là con cuối của layout nên 404 vẫn có navbar. Cấu hình nằm ở tệp cấu hình: ghim json-server 0.17.4 vì các chức năng sau dựa vào <code>_embed</code>/<code>_expand</code>; địa chỉ API chỉ ở <code>.env</code> → <code>axiosClient</code>.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "thuVien": [
+          "react-router-dom",
+          "react-bootstrap",
+          "bootstrap",
+          "axios",
+          "@reduxjs/toolkit",
+          "react-redux"
+        ],
+        "url": "/",
+        "jsonServer": {
+          "base": "http://localhost:9999",
+          "db": {
+            "users": [
+              {
+                "id": 1,
+                "fullName": "Admin CodeLearn",
+                "email": "admin@codelearn.vn",
+                "password": "admin123",
+                "role": "admin",
+                "active": true,
+                "createdAt": "2026-01-01"
+              },
+              {
+                "id": 2,
+                "fullName": "Nguyen Van An",
+                "email": "an@codelearn.vn",
+                "password": "123456",
+                "role": "student",
+                "active": true,
+                "createdAt": "2026-08-20"
+              },
+              {
+                "id": 3,
+                "fullName": "Tran Thi Binh",
+                "email": "binh@codelearn.vn",
+                "password": "123456",
+                "role": "student",
+                "active": true,
+                "createdAt": "2026-08-25"
+              },
+              {
+                "id": 4,
+                "fullName": "Le Van Cuong",
+                "email": "cuong@codelearn.vn",
+                "password": "123456",
+                "role": "student",
+                "active": false,
+                "createdAt": "2026-09-01"
+              },
+              {
+                "id": 5,
+                "fullName": "Pham Minh Duc",
+                "email": "duc@codelearn.vn",
+                "password": "123456",
+                "role": "student",
+                "active": true,
+                "createdAt": "2026-09-28"
+              }
+            ],
+            "categories": [
+              {
+                "id": 1,
+                "name": "Frontend"
+              },
+              {
+                "id": 2,
+                "name": "Backend"
+              },
+              {
+                "id": 3,
+                "name": "Database"
+              },
+              {
+                "id": 4,
+                "name": "Mobile"
+              }
+            ],
+            "courses": [
+              {
+                "id": 1,
+                "title": "React for Beginners",
+                "categoryId": 1,
+                "level": "Beginner",
+                "price": 0,
+                "instructor": "Hoang Cuong",
+                "thumbnail": "",
+                "published": true,
+                "createdAt": "2026-01-10",
+                "description": "Build your first React apps: JSX, components, props, state and the most used hooks — step by step."
+              },
+              {
+                "id": 2,
+                "title": "Advanced React Patterns",
+                "categoryId": 1,
+                "level": "Advanced",
+                "price": 499000,
+                "instructor": "Hoang Cuong",
+                "thumbnail": "",
+                "published": true,
+                "createdAt": "2026-03-05",
+                "description": "Compound components, render props, custom hooks and performance patterns used in large React codebases."
+              },
+              {
+                "id": 3,
+                "title": "JavaScript Essentials",
+                "categoryId": 1,
+                "level": "Beginner",
+                "price": 199000,
+                "instructor": "Tran Minh",
+                "thumbnail": "",
+                "published": true,
+                "createdAt": "2026-02-01",
+                "description": "The JavaScript you need before React: variables, types, functions, arrays and objects."
+              },
+              {
+                "id": 4,
+                "title": "Node.js & Express REST APIs",
+                "categoryId": 2,
+                "level": "Intermediate",
+                "price": 399000,
+                "instructor": "Le Quang",
+                "thumbnail": "",
+                "published": true,
+                "createdAt": "2026-04-12",
+                "description": "Design and build REST APIs with Express: routing, middleware, validation and JSON responses."
+              },
+              {
+                "id": 5,
+                "title": "Spring Boot Fundamentals",
+                "categoryId": 2,
+                "level": "Intermediate",
+                "price": 449000,
+                "instructor": "Nguyen Hai",
+                "thumbnail": "",
+                "published": true,
+                "createdAt": "2026-05-20",
+                "description": "Create production-ready Java back ends with Spring Boot, Spring Web and Spring Data JPA."
+              },
+              {
+                "id": 6,
+                "title": "SQL Server for Developers",
+                "categoryId": 3,
+                "level": "Beginner",
+                "price": 0,
+                "instructor": "Pham Thu",
+                "thumbnail": "",
+                "published": true,
+                "createdAt": "2026-06-01",
+                "description": "Write correct SELECT queries, filter, sort and join tables in Microsoft SQL Server."
+              },
+              {
+                "id": 7,
+                "title": "PostgreSQL Performance Tuning",
+                "categoryId": 3,
+                "level": "Advanced",
+                "price": 549000,
+                "instructor": "Pham Thu",
+                "thumbnail": "",
+                "published": true,
+                "createdAt": "2026-07-15",
+                "description": "Read query plans, design indexes and tune PostgreSQL for real workloads."
+              },
+              {
+                "id": 8,
+                "title": "Flutter Mobile Apps",
+                "categoryId": 4,
+                "level": "Intermediate",
+                "price": 349000,
+                "instructor": "Vo Thanh",
+                "thumbnail": "",
+                "published": true,
+                "createdAt": "2026-08-08",
+                "description": "Build cross-platform mobile apps with Flutter widgets, navigation and state management."
+              },
+              {
+                "id": 9,
+                "title": "TypeScript in Practice",
+                "categoryId": 1,
+                "level": "Intermediate",
+                "price": 299000,
+                "instructor": "Tran Minh",
+                "thumbnail": "",
+                "published": true,
+                "createdAt": "2026-09-01",
+                "description": "Add types to real projects: interfaces, generics, narrowing and typing React components."
+              },
+              {
+                "id": 10,
+                "title": "MongoDB Basics",
+                "categoryId": 3,
+                "level": "Beginner",
+                "price": 149000,
+                "instructor": "Le Quang",
+                "thumbnail": "",
+                "published": false,
+                "createdAt": "2026-10-01",
+                "description": "Documents, collections and queries in MongoDB — draft course, not published yet."
+              }
+            ],
+            "chapters": [
+              {
+                "id": 1,
+                "courseId": 1,
+                "title": "Getting Started with React",
+                "order": 1
+              },
+              {
+                "id": 2,
+                "courseId": 1,
+                "title": "Components, Props & State",
+                "order": 2
+              },
+              {
+                "id": 3,
+                "courseId": 1,
+                "title": "Hooks in Practice",
+                "order": 3
+              },
+              {
+                "id": 4,
+                "courseId": 3,
+                "title": "Variables & Types",
+                "order": 1
+              },
+              {
+                "id": 5,
+                "courseId": 3,
+                "title": "Functions & Arrays",
+                "order": 2
+              },
+              {
+                "id": 6,
+                "courseId": 4,
+                "title": "Express Basics",
+                "order": 1
+              },
+              {
+                "id": 7,
+                "courseId": 4,
+                "title": "REST & JSON",
+                "order": 2
+              },
+              {
+                "id": 8,
+                "courseId": 6,
+                "title": "SELECT Fundamentals",
+                "order": 1
+              }
+            ],
+            "lessons": [
+              {
+                "id": 1,
+                "chapterId": 1,
+                "courseId": 1,
+                "order": 1,
+                "title": "What is React?",
+                "duration": 8,
+                "videoUrl": "https://www.youtube.com/watch?v=SqcY0GlETPk",
+                "content": "React is a JavaScript library for building user interfaces from small, reusable components.\nIn this lesson you see how a React app is just a tree of components that turn data into UI."
+              },
+              {
+                "id": 2,
+                "chapterId": 1,
+                "courseId": 1,
+                "order": 2,
+                "title": "Create React App & project structure",
+                "duration": 12,
+                "videoUrl": "https://www.youtube.com/watch?v=bMknfKXIFA8",
+                "content": "Create the project with npx create-react-app, then walk through public/index.html, src/index.js and src/App.js.\nRun it with npm start on http://localhost:3000."
+              },
+              {
+                "id": 3,
+                "chapterId": 2,
+                "courseId": 1,
+                "order": 1,
+                "title": "JSX and components",
+                "duration": 15,
+                "videoUrl": "https://www.youtube.com/watch?v=w7ejDZ8SWv8",
+                "content": "JSX looks like HTML but compiles to React.createElement calls.\nA component is a function that returns JSX; its name must start with a capital letter."
+              },
+              {
+                "id": 4,
+                "chapterId": 2,
+                "courseId": 1,
+                "order": 2,
+                "title": "Props vs State",
+                "duration": 14,
+                "videoUrl": "https://www.youtube.com/watch?v=IYvD9oBCuJI",
+                "content": "Props are read-only data passed from a parent; state is data a component owns and changes with its setter.\nChanging state re-renders the component."
+              },
+              {
+                "id": 5,
+                "chapterId": 3,
+                "courseId": 1,
+                "order": 1,
+                "title": "useState and useEffect",
+                "duration": 13,
+                "videoUrl": "https://www.youtube.com/watch?v=O6P86uwfdR0",
+                "content": "useState stores a value between renders; useEffect runs side effects such as fetching data after the component renders.\nAlways list the values the effect uses in its dependency array."
+              },
+              {
+                "id": 6,
+                "chapterId": 4,
+                "courseId": 3,
+                "order": 1,
+                "title": "let, const and var",
+                "duration": 10,
+                "videoUrl": "https://www.youtube.com/watch?v=hdI2bqOjy3c",
+                "content": "Prefer const, use let when a variable must be reassigned, and avoid var (function scope, hoisting surprises)."
+              },
+              {
+                "id": 7,
+                "chapterId": 4,
+                "courseId": 3,
+                "order": 2,
+                "title": "Primitive types",
+                "duration": 11,
+                "videoUrl": "https://www.youtube.com/watch?v=PkZNo7MFNFg",
+                "content": "string, number, boolean, null, undefined, bigint and symbol — and why typeof null is \"object\"."
+              },
+              {
+                "id": 8,
+                "chapterId": 5,
+                "courseId": 3,
+                "order": 1,
+                "title": "Arrow functions and array methods",
+                "duration": 16,
+                "videoUrl": "https://www.youtube.com/watch?v=R8rmfD9Y5-c",
+                "content": "Write short callbacks with arrow functions and transform data with map, filter and reduce without mutating the original array."
+              },
+              {
+                "id": 9,
+                "chapterId": 6,
+                "courseId": 4,
+                "order": 1,
+                "title": "Your first Express server",
+                "duration": 14,
+                "videoUrl": "https://www.youtube.com/watch?v=fBNz5xF-Kx4",
+                "content": "Install express, create an app and call app.listen(3000). Add a GET route that returns JSON."
+              },
+              {
+                "id": 10,
+                "chapterId": 6,
+                "courseId": 4,
+                "order": 2,
+                "title": "Routing & middleware",
+                "duration": 18,
+                "videoUrl": "https://www.youtube.com/watch?v=L72fhGm1tfE",
+                "content": "Split routes with express.Router and write middleware with (req, res, next) for logging and validation."
+              },
+              {
+                "id": 11,
+                "chapterId": 7,
+                "courseId": 4,
+                "order": 1,
+                "title": "Building a REST API",
+                "duration": 20,
+                "videoUrl": "https://www.youtube.com/watch?v=pKd0Rpw7O48",
+                "content": "Map CRUD to HTTP: GET /items, POST /items, PUT /items/:id, DELETE /items/:id — with the right status codes."
+              },
+              {
+                "id": 12,
+                "chapterId": 8,
+                "courseId": 6,
+                "order": 1,
+                "title": "SELECT, WHERE, ORDER BY",
+                "duration": 15,
+                "videoUrl": "https://www.youtube.com/watch?v=HXV3zeQKqGY",
+                "content": "Choose columns with SELECT, filter rows with WHERE and sort the result with ORDER BY."
+              },
+              {
+                "id": 13,
+                "chapterId": 8,
+                "courseId": 6,
+                "order": 2,
+                "title": "JOIN in practice",
+                "duration": 17,
+                "videoUrl": "https://www.youtube.com/watch?v=9yeOJ0ZMUYw",
+                "content": "Combine rows of related tables with INNER JOIN and LEFT JOIN on their keys."
+              }
+            ],
+            "questions": [
+              {
+                "id": 1,
+                "chapterId": 1,
+                "courseId": 1,
+                "content": "What does JSX compile to?",
+                "options": [
+                  "Plain HTML strings",
+                  "React.createElement() calls",
+                  "Web Components",
+                  "CSS-in-JS objects"
+                ],
+                "answerIndex": 1,
+                "explanation": "The build tool turns every JSX tag into a React.createElement (or jsx()) call that returns a plain object describing the UI."
+              },
+              {
+                "id": 2,
+                "chapterId": 1,
+                "courseId": 1,
+                "content": "Which command creates a new React app with Create React App?",
+                "options": [
+                  "npm create-react-app my-app",
+                  "npx create-react-app my-app",
+                  "npm init react my-app",
+                  "npx react-new my-app"
+                ],
+                "answerIndex": 1,
+                "explanation": "npx downloads and runs create-react-app once, without installing it globally."
+              },
+              {
+                "id": 3,
+                "chapterId": 1,
+                "courseId": 1,
+                "content": "Which file renders <App /> into #root in a CRA project?",
+                "options": [
+                  "src/index.js",
+                  "public/manifest.json",
+                  "src/App.css",
+                  "package.json"
+                ],
+                "answerIndex": 0,
+                "explanation": "src/index.js calls ReactDOM.createRoot(document.getElementById(\"root\")).render(<App />)."
+              },
+              {
+                "id": 4,
+                "chapterId": 2,
+                "courseId": 1,
+                "content": "Props are…",
+                "options": [
+                  "mutable data owned by the child",
+                  "read-only data passed from parent to child",
+                  "global variables",
+                  "the same thing as state"
+                ],
+                "answerIndex": 1,
+                "explanation": "A component must never change its props; the parent owns that data."
+              },
+              {
+                "id": 5,
+                "chapterId": 2,
+                "courseId": 1,
+                "content": "Why must you never mutate state directly (state.items.push(x))?",
+                "options": [
+                  "It is slower",
+                  "React compares references, so the same array means no re-render",
+                  "It throws an error",
+                  "It deletes the state"
+                ],
+                "answerIndex": 1,
+                "explanation": "Create a new array/object (spread, map, filter) so React sees a new reference and re-renders."
+              },
+              {
+                "id": 6,
+                "chapterId": 2,
+                "courseId": 1,
+                "content": "Where should state shared by two sibling components live?",
+                "options": [
+                  "In each sibling separately",
+                  "In their closest common parent (lift state up)",
+                  "In localStorage",
+                  "In a CSS file"
+                ],
+                "answerIndex": 1,
+                "explanation": "Lifting state up gives one source of truth; the siblings receive it via props."
+              },
+              {
+                "id": 7,
+                "chapterId": 3,
+                "courseId": 1,
+                "content": "When does useEffect(fn, []) run?",
+                "options": [
+                  "Before every render",
+                  "After the first render only",
+                  "On every state change",
+                  "Never"
+                ],
+                "answerIndex": 1,
+                "explanation": "An empty dependency array means \"after mount\" (twice in development StrictMode)."
+              },
+              {
+                "id": 8,
+                "chapterId": 3,
+                "courseId": 1,
+                "content": "What is wrong with calling a hook inside an if statement?",
+                "options": [
+                  "Nothing",
+                  "Hooks must be called in the same order on every render",
+                  "Hooks only work in class components",
+                  "It makes the app slower"
+                ],
+                "answerIndex": 1,
+                "explanation": "React matches hook state by call order, so hooks must sit at the top level of the component."
+              },
+              {
+                "id": 9,
+                "chapterId": 4,
+                "courseId": 3,
+                "content": "Which keyword declares a variable that cannot be reassigned?",
+                "options": [
+                  "var",
+                  "let",
+                  "const",
+                  "static"
+                ],
+                "answerIndex": 2,
+                "explanation": "const prevents reassignment (the object it points to can still change)."
+              },
+              {
+                "id": 10,
+                "chapterId": 4,
+                "courseId": 3,
+                "content": "What is typeof null in JavaScript?",
+                "options": [
+                  "\"null\"",
+                  "\"object\"",
+                  "\"undefined\"",
+                  "\"number\""
+                ],
+                "answerIndex": 1,
+                "explanation": "A historic bug kept for compatibility: typeof null === \"object\"."
+              },
+              {
+                "id": 11,
+                "chapterId": 4,
+                "courseId": 3,
+                "content": "Which value is NOT falsy?",
+                "options": [
+                  "0",
+                  "\"\" (empty string)",
+                  "\"0\"",
+                  "NaN"
+                ],
+                "answerIndex": 2,
+                "explanation": "Any non-empty string, including \"0\", is truthy."
+              },
+              {
+                "id": 12,
+                "chapterId": 6,
+                "courseId": 4,
+                "content": "Which method starts an Express server on a port?",
+                "options": [
+                  "app.run(3000)",
+                  "app.listen(3000)",
+                  "app.start(3000)",
+                  "express.serve(3000)"
+                ],
+                "answerIndex": 1,
+                "explanation": "app.listen(port, callback) opens the HTTP server."
+              },
+              {
+                "id": 13,
+                "chapterId": 6,
+                "courseId": 4,
+                "content": "What does an Express middleware function receive?",
+                "options": [
+                  "(req, res, next)",
+                  "(state, action)",
+                  "(props)",
+                  "(event)"
+                ],
+                "answerIndex": 0,
+                "explanation": "Middleware gets the request, the response and next() to pass control on."
+              }
+            ],
+            "enrollments": [
+              {
+                "id": 1,
+                "userId": 2,
+                "courseId": 1,
+                "enrolledAt": "2026-09-01",
+                "completedLessons": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              {
+                "id": 2,
+                "userId": 2,
+                "courseId": 3,
+                "enrolledAt": "2026-09-10",
+                "completedLessons": []
+              },
+              {
+                "id": 3,
+                "userId": 3,
+                "courseId": 1,
+                "enrolledAt": "2026-09-12",
+                "completedLessons": [
+                  1
+                ]
+              },
+              {
+                "id": 4,
+                "userId": 3,
+                "courseId": 4,
+                "enrolledAt": "2026-09-15",
+                "completedLessons": [
+                  9,
+                  10,
+                  11
+                ]
+              },
+              {
+                "id": 5,
+                "userId": 5,
+                "courseId": 1,
+                "enrolledAt": "2026-10-01",
+                "completedLessons": []
+              },
+              {
+                "id": 6,
+                "userId": 5,
+                "courseId": 6,
+                "enrolledAt": "2026-10-03",
+                "completedLessons": [
+                  12
+                ]
+              }
+            ],
+            "results": [
+              {
+                "id": 1,
+                "userId": 2,
+                "courseId": 1,
+                "chapterId": 1,
+                "score": 2,
+                "total": 3,
+                "percent": 67,
+                "passed": false,
+                "answers": [
+                  1,
+                  0,
+                  0
+                ],
+                "submittedAt": "2026-09-05T09:00:00.000Z"
+              },
+              {
+                "id": 2,
+                "userId": 2,
+                "courseId": 1,
+                "chapterId": 1,
+                "score": 3,
+                "total": 3,
+                "percent": 100,
+                "passed": true,
+                "answers": [
+                  1,
+                  1,
+                  0
+                ],
+                "submittedAt": "2026-09-06T10:30:00.000Z"
+              },
+              {
+                "id": 3,
+                "userId": 3,
+                "courseId": 4,
+                "chapterId": 6,
+                "score": 2,
+                "total": 2,
+                "percent": 100,
+                "passed": true,
+                "answers": [
+                  1,
+                  0
+                ],
+                "submittedAt": "2026-09-20T14:00:00.000Z"
+              },
+              {
+                "id": 4,
+                "userId": 2,
+                "courseId": 3,
+                "chapterId": 4,
+                "score": 1,
+                "total": 3,
+                "percent": 33,
+                "passed": false,
+                "answers": [
+                  2,
+                  0,
+                  0
+                ],
+                "submittedAt": "2026-09-12T08:15:00.000Z"
+              }
+            ]
+          }
+        },
+        "kiem": [
+          {
+            "nhom": "f1",
+            "moTa": "json-server pinned to 0.17.4",
+            "kiem": "ma-nguon",
+            "tep": "package.json",
+            "khop": "\"json-server\":\\s*\"[~^]?0\\.17\\.4\""
+          },
+          {
+            "nhom": "f1",
+            "moTa": "\"server\" runs json-server on db.json port 9999; \"dev\" uses concurrently",
+            "kiem": "ma-nguon",
+            "tep": "package.json",
+            "khop": "(?=[\\s\\S]*\"server\":\\s*\"json-server[^\"]*db\\.json[^\"]*--port 9999)(?=[\\s\\S]*\"dev\":\\s*\"concurrently)"
+          },
+          {
+            "nhom": "f1",
+            "moTa": ".env defines REACT_APP_API_URL and axiosClient uses it",
+            "kiem": "ma-nguon",
+            "tep": "src/api/axiosClient.js",
+            "khop": "baseURL:\\s*process\\.env\\.REACT_APP_API_URL"
+          },
+          {
+            "nhom": "f1",
+            "an": true,
+            "moTa": "React 18 in package.json",
+            "kiem": "ma-nguon",
+            "tep": "package.json",
+            "khop": "\"react\":\\s*\"[~^]?18\\."
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Navbar brand \"CodeLearn\" and two links",
+            "url": "/",
+            "kiem": "danh-sach-text",
+            "selector": "#nav-home, #nav-courses",
+            "mongDoi": [
+              "Home",
+              "Courses"
+            ]
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Brand shows CodeLearn",
+            "url": "/",
+            "kiem": "text",
+            "selector": "#brand",
+            "khop": "CodeLearn"
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Page content is rendered inside <main id=\"main\"> (Outlet)",
+            "url": "/",
+            "kiem": "ton-tai",
+            "selector": "#main #home-title"
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Footer on every page",
+            "url": "/courses",
+            "kiem": "text",
+            "selector": "#footer",
+            "khop": "© 2026 CodeLearn"
+          },
+          {
+            "nhom": "f2",
+            "an": true,
+            "moTa": "Layout uses <Outlet />",
+            "kiem": "ma-nguon",
+            "tep": "src/components/Layout.js",
+            "khop": "<Outlet\\s*/>"
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Home page title",
+            "url": "/",
+            "kiem": "text",
+            "selector": "#home-title",
+            "giaTri": "Learn to code with CodeLearn"
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Clicking Courses opens /courses",
+            "url": "/",
+            "kiem": "duong-dan",
+            "giaTri": "/courses",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#nav-courses",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Courses page renders its title",
+            "url": "/courses",
+            "kiem": "text",
+            "selector": "#courses-title",
+            "giaTri": "Courses"
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Active link: #nav-courses is active on /courses",
+            "url": "/courses",
+            "kiem": "thuoc-tinh",
+            "selector": "#nav-courses",
+            "thuocTinh": "class",
+            "khop": "\\bactive\\b"
+          },
+          {
+            "nhom": "f3",
+            "an": true,
+            "moTa": "Home link is NOT active on /courses (end)",
+            "url": "/courses",
+            "kiem": "thuoc-tinh",
+            "selector": "#nav-home",
+            "thuocTinh": "class",
+            "khop": "^(?![\\s\\S]*\\bactive\\b)"
+          },
+          {
+            "nhom": "f3",
+            "an": true,
+            "moTa": "\"Browse courses\" button goes to /courses",
+            "url": "/",
+            "kiem": "duong-dan",
+            "giaTri": "/courses",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#browse-btn",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Unknown URL ⇒ 404 + \"Page not found\"",
+            "url": "/no-such-page",
+            "kiem": "text",
+            "selector": "#not-found",
+            "khop": "404[\\s\\S]*Page not found"
+          },
+          {
+            "nhom": "f4",
+            "moTa": "404 page keeps the navbar (inside the layout)",
+            "url": "/no-such-page",
+            "kiem": "ton-tai",
+            "selector": "#nav-home"
+          },
+          {
+            "nhom": "f4",
+            "moTa": "\"Back to home\" returns to /",
+            "url": "/no-such-page",
+            "kiem": "duong-dan",
+            "giaTri": "/",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#back-home",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "an": true,
+            "moTa": "Deep unknown URL /courses/x/y ⇒ 404",
+            "url": "/courses/x/y",
+            "kiem": "ton-tai",
+            "selector": "#not-found"
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Routes declared with <Routes>, catch-all path=\"*\"",
+            "kiem": "ma-nguon",
+            "tep": "src/App.js",
+            "khop": "(?=[\\s\\S]*<Routes>)(?=[\\s\\S]*path=\"\\*\")"
+          },
+          {
+            "nhom": "f5",
+            "an": true,
+            "moTa": "No <a href=\"/…\"> for internal navigation in the navbar",
+            "kiem": "ma-nguon",
+            "tep": "src/components/AppNavbar.js",
+            "khop": "<a\\s[^>]*href=\"/",
+            "phuDinh": true
+          }
+        ],
+        "loiGiaiSauKhiDat": true,
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. Project setup",
+            "diem": 2
+          },
+          {
+            "ma": "f2",
+            "ten": "2. Layout",
+            "diem": 2.5
+          },
+          {
+            "ma": "f3",
+            "ten": "3. Routes & navigation",
+            "diem": 2.5
+          },
+          {
+            "ma": "f4",
+            "ten": "4. 404 page",
+            "diem": 2
+          },
+          {
+            "ma": "f5",
+            "ten": "5. Code structure",
+            "diem": 1
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "project",
+      "mistakesJson": [
+        {
+          "loi": "Cài <code>json-server</code> không ghi phiên bản ⇒ ra 1.x, sau này <code>_expand</code>/<code>_embed</code> (F4, F5, F8) không chạy. Ghim <code>\"json-server\": \"0.17.4\"</code>."
+        },
+        {
+          "loi": "Dùng <code>&lt;a href=\"/courses\"&gt;</code> trong navbar ⇒ mỗi lần bấm tải lại CẢ trang (mất state Redux). Dùng <code>Link</code>/<code>NavLink</code>."
+        },
+        {
+          "loi": "Quên <code>end</code> ở link Home ⇒ \"Home\" sáng ở mọi trang vì mọi đường dẫn đều bắt đầu bằng \"/\"."
+        },
+        {
+          "loi": "Đặt <code>path=\"*\"</code> ngoài route Layout ⇒ trang 404 không có navbar; đặt trước các route khác trong v5 (Switch) thì nuốt hết — v6 xếp theo độ khớp nhưng vẫn nên để cuối cho dễ đọc."
+        },
+        {
+          "loi": "Gõ <code>REACT_APP_API_URL</code> vào .env khi <code>npm start</code> đang chạy mà không khởi động lại ⇒ biến vẫn undefined."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "layout route",
+          "vi": "route không có path, chỉ bọc khung chung quanh các route con"
+        },
+        {
+          "en": "Outlet",
+          "vi": "chỗ route con được vẽ vào bên trong layout"
+        },
+        {
+          "en": "catch-all route",
+          "vi": "route path=\"*\" bắt mọi đường dẫn còn lại (404)"
+        },
+        {
+          "en": "slice",
+          "vi": "một \"lát\" state Redux kèm reducer + action của một tính năng (createSlice)"
+        },
+        {
+          "en": "thunk (createAsyncThunk)",
+          "vi": "action bất đồng bộ: gọi API rồi tự dispatch pending / fulfilled / rejected"
+        },
+        {
+          "en": "protected route",
+          "vi": "route có bảo vệ: chưa đăng nhập / sai vai trò thì không vào được"
+        },
+        {
+          "en": "enrollment",
+          "vi": "lượt đăng ký học một khoá"
+        }
+      ]
+    }
+  ]
+}

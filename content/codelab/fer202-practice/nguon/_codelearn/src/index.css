@@ -1,0 +1,18 @@
+/* src/index.css — CodeLearn (đã cho sẵn; sửa thoải mái) */
+body { background: #f8fafc; }
+.course-thumb {
+  height: 130px; display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 2rem; font-weight: 700; letter-spacing: .05em;
+  border-radius: .375rem .375rem 0 0; background: linear-gradient(135deg, #2563eb, #7c3aed);
+}
+.course-card { transition: transform .15s ease; }
+.course-card:hover { transform: translateY(-2px); }
+.lesson-link.done { color: #15803d; }
+.lesson-content { white-space: pre-line; }
+.question.correct { border-color: #16a34a; }
+.question.incorrect { border-color: #dc2626; }
+.option-correct label { color: #15803d; font-weight: 600; }
+.option-wrong label { color: #dc2626; text-decoration: line-through; }
+.admin-sidebar .nav-link.active { background: #0d6efd; color: #fff; border-radius: .375rem; }
+.bar { fill: #0d6efd; }
+.bar-label, .bar-value { font-size: 12px; fill: #334155; }

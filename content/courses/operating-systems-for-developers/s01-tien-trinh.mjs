@@ -680,7 +680,7 @@ ${run('c15-pid1', 'docker run -d --name os-p1a', 1)}
 ${run('c15-pid1', 'docker exec os-p1a ps', 1)}
 ${run('c15-pid1', 'docker stop os-p1a', 1)}
 ${run('c15-pid1', "docker inspect -f '{{.State.ExitCode}}' os-p1a", 1)}
-<p><code>docker stop</code> sends SIGTERM and waits <strong>10 seconds</strong> for a clean exit. PID 1 ignored it, so after 10 seconds Docker escalated to SIGKILL — <strong>exit 137</strong>. Every <code>docker stop</code> and every deploy of this container takes 10 seconds and kills the app hard. Now the <em>same</em> server that <em>does</em> catch SIGTERM (the <code>sig.c</code> pattern from 1.4):</p>
+<p><code>docker stop</code> sends SIGTERM and waits <strong>10 seconds</strong> for a clean exit. PID 1 ignored it, so after 10 seconds Docker escalated to SIGKILL — <strong>exit 137</strong>. Every <code>docker stop</code> and every deploy of this container takes 10 seconds and kills the app hard. <em>(Measured note: on this lab's Docker Desktop the default grace period came out at 3.1 s; with <code>docker stop -t 10</code> it took 10.1 s and exit 137. The documented Docker Engine default — and what you get on a Linux server such as our VPS — is 10 s. Check your own with <code>docker inspect -f '{{.Config.StopTimeout}}'</code> and time a stop.)</em> Now the <em>same</em> server that <em>does</em> catch SIGTERM (the <code>sig.c</code> pattern from 1.4):</p>
 ${run('c15-pid1', 'docker stop os-p1b', 1)}
 ${run('c15-pid1', 'docker logs os-p1b')}
 <p>0.1 seconds, exit 0, "bye" in the logs. The only difference is a four-line SIGTERM handler. <strong>Catch SIGTERM in every service you containerise</strong> — in Node, Python and Spring Boot it is a few lines, and it is what makes deploys zero-downtime.</p>
@@ -753,7 +753,7 @@ ${run('c15-pid1', 'docker run -d --name os-p1a', 1)}
 ${run('c15-pid1', 'docker exec os-p1a ps', 1)}
 ${run('c15-pid1', 'docker stop os-p1a', 1)}
 ${run('c15-pid1', "docker inspect -f '{{.State.ExitCode}}' os-p1a", 1)}
-<p><code>docker stop</code> gửi SIGTERM và chờ <strong>10 giây</strong> để thoát sạch. PID 1 lờ nó, nên sau 10 giây Docker leo lên SIGKILL — <strong>exit 137</strong>. Mỗi <code>docker stop</code> và mỗi lần deploy container này mất 10 giây và giết app một cách thô bạo. Giờ tới <em>cùng</em> máy chủ đó nhưng <em>có</em> bắt SIGTERM (khuôn <code>sig.c</code> ở bài 1.4):</p>
+<p><code>docker stop</code> gửi SIGTERM và chờ <strong>10 giây</strong> để thoát sạch. PID 1 lờ nó, nên sau 10 giây Docker leo lên SIGKILL — <strong>exit 137</strong>. Mỗi <code>docker stop</code> và mỗi lần deploy container này mất 10 giây và giết app một cách thô bạo. <em>(Ghi chú đo thật: trên Docker Desktop của lab, thời gian chờ mặc định đo ra 3,1 giây; với <code>docker stop -t 10</code> thì mất 10,1 giây rồi exit 137. Mặc định theo tài liệu Docker Engine — và là thứ bạn gặp trên máy chủ Linux như VPS của dự án — là 10 giây. Tự kiểm bằng <code>docker inspect -f '{{.Config.StopTimeout}}'</code> và bấm giờ một lần stop.)</em> Giờ tới <em>cùng</em> máy chủ đó nhưng <em>có</em> bắt SIGTERM (khuôn <code>sig.c</code> ở bài 1.4):</p>
 ${run('c15-pid1', 'docker stop os-p1b', 1)}
 ${run('c15-pid1', 'docker logs os-p1b')}
 <p>0,1 giây, exit 0, "bye" trong log. Khác biệt duy nhất là một handler SIGTERM bốn dòng. <strong>Hãy bắt SIGTERM trong mọi dịch vụ bạn đóng gói</strong> — trong Node, Python và Spring Boot nó là vài dòng, và nó là thứ làm deploy không rớt request.</p>

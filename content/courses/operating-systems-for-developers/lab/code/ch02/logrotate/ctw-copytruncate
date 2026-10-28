@@ -1,0 +1,7 @@
+/var/log/ctw/app.log {
+    size 10k
+    rotate 3
+    copytruncate
+    compress
+    missingok
+}

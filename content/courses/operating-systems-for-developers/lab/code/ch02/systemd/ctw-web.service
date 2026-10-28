@@ -1,0 +1,11 @@
+# ctw-web.service — api.js (bài 2.2) chạy như dịch vụ trên "VPS" của bài 2.7, nghe cổng 3000.
+[Unit]
+Description=CT Work web API (lab)
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/node /lab/ch02/api.js
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

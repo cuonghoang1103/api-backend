@@ -1,0 +1,27 @@
+$ df -h /System/Volumes/Data
+Filesystem      Size    Used   Avail Capacity iused ifree %iused  Mounted on
+/dev/disk3s5   926Gi   847Gi    39Gi    96%    5.3M  414M    1%   /System/Volumes/Data
+$ du -sh frontend/node_modules frontend/.next node_modules
+1.5G	frontend/node_modules
+1.4G	frontend/.next
+750M	node_modules
+$ du -sh "$TMPDIR"
+6.1G	/var/folders/vz/1ssh970n4wgfbntrn0y6mz4m0000gn/T/
+$ docker system df
+TYPE            TOTAL     ACTIVE    SIZE      RECLAIMABLE
+Images          49        25        33.36GB   11.36GB (34%)
+Containers      43        8         2.04GB    1.819GB (89%)
+Local Volumes   102       32        9.715GB   3.32GB (34%)
+Build Cache     100       0         5.708GB   1.585GB
+$ pgrep -l node | head -3
+13420 node
+17309 node
+22318 node
+$ ps -axo pid,%cpu,rss,etime,comm -m | head -4
+  PID  %CPU    RSS     ELAPSED COMM
+96158   0.0 1459248    15:06:23 next-server (v14.2.35)
+16043 357.0 5295888    08:33:44 /System/Library/Frameworks/Virtualization.framework/Versions/A/XPCServices/com.apple.Virtualization.VirtualMachine.xpc/Contents/MacOS/com.apple.Virtualization.VirtualMachine
+ 1645   1.1 983168 04-07:41:05 claude
+$ lsof -nP -iTCP:3123 -sTCP:LISTEN
+COMMAND   PID  USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+node    96158 admin   13u  IPv6 0x3159475989941a08      0t0  TCP *:3123 (LISTEN)

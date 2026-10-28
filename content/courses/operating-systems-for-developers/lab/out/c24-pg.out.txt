@@ -1,0 +1,60 @@
+$ docker run -d --name os-c24-pg --label oslab=1 --privileged --restart unless-stopped -e POSTGRES_PASSWORD=lab -e PGDATA=/srv/vps/pgdata -v os-c24-img:/img postgres:17 bash -c 'mkdir -p /srv/vps && mount -o loop /img/vps.img /srv/vps && exec docker-entrypoint.sh postgres' > /dev/null; sleep 8
+$ docker exec os-c24-pg df -h /srv/vps
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/loop0       86M   39M   41M  49% /srv/vps
+$ docker exec os-c24-pg psql -U postgres -qc "create table orders(id serial primary key, note text)" -c "insert into orders(note) select 'order ' || g from generate_series(1, 20000) g" -c "select count(*) from orders"
+ count 
+-------
+ 20000
+(1 row)
+
+$ docker exec os-c24-pg bash -c 'mkdir -p /srv/vps/buildcache; dd if=/dev/zero of=/srv/vps/buildcache/layer.tar bs=1M count=200 status=none; df -h /srv/vps'
+dd: error writing '/srv/vps/buildcache/layer.tar': No space left on device
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/loop0       86M   84M     0 100% /srv/vps
+$ docker exec os-c24-pg psql -U postgres -c "insert into orders(note) select 'order ' || g from generate_series(1, 20000) g"
+ERROR:  could not extend file "base/5/16385": No space left on device
+HINT:  Check free disk space.
+$ docker exec os-c24-pg psql -U postgres -c "insert into orders(note) values ('one small order')" -c "select pg_switch_wal()"
+ERROR:  could not extend file "base/5/16385": No space left on device
+HINT:  Check free disk space.
+ pg_switch_wal 
+---------------
+ 0/17DCE00
+(1 row)
+
+$ docker exec os-c24-pg psql -U postgres -c "checkpoint"
+WARNING:  terminating connection because of crash of another server process
+DETAIL:  The postmaster has commanded this server process to roll back the current transaction and exit, because another server process exited abnormally and possibly corrupted shared memory.
+HINT:  In a moment you should be able to reconnect to the database and repeat your command.
+server closed the connection unexpectedly
+	This probably means the server terminated abnormally
+	before or while processing the request.
+connection to server was lost
+$ sleep 4; docker ps -a --filter name=os-c24-pg --format '{{.Names}}  {{.Status}}'
+os-c24-pg  Restarting (1) 1 second ago
+$ docker logs os-c24-pg 2>&1 | grep -E 'PANIC|FATAL|terminated by|due to startup' | head -5 | cut -c 25-
+UTC [63] PANIC:  could not write to file "pg_logical/replorigin_checkpoint.tmp": No space left on device
+UTC [1] LOG:  checkpointer process (PID 63) was terminated by signal 6: Aborted
+UTC [111] FATAL:  could not write to file "pg_wal/xlogtemp.111": No space left on device
+UTC [1] LOG:  shutting down due to startup process failure
+UTC [1] FATAL:  could not write lock file "postmaster.pid": No space left on device
+$ docker exec os-c24-pg psql -U postgres -c "select count(*) from orders"
+Error response from daemon: Container b321e63f2f318640c8e7d48a524089c3a575bf7832c6424440aaf4a633df292e is restarting, wait until the container is running
+$ docker stop os-c24-pg > /dev/null; docker run --rm --label oslab=1 --privileged -v os-c24-img:/img os-lab bash -c 'mount -o loop /img/vps.img /mnt && du -sh /mnt/* && rm -rf /mnt/buildcache && df -h /mnt; umount /mnt'
+44M	/mnt/buildcache
+16K	/mnt/lost+found
+40M	/mnt/pgdata
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/loop0       86M   40M   40M  51% /mnt
+$ docker start os-c24-pg > /dev/null; sleep 6; docker ps -a --filter name=os-c24-pg --format '{{.Names}}  {{.Status}}'
+os-c24-pg  Up 6 seconds
+$ docker logs os-c24-pg 2>&1 | grep -E 'redo done|ready to accept' | tail -2 | cut -c 25-
+UTC [29] LOG:  redo done at 0/17DCDE8 system usage: CPU: user: 0.01 s, system: 0.00 s, elapsed: 0.01 s
+UTC [1] LOG:  database system is ready to accept connections
+$ docker exec os-c24-pg psql -U postgres -c "select count(*) from orders"
+ count 
+-------
+ 20000
+(1 row)
+

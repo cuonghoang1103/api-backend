@@ -1,0 +1,34 @@
+$ docker run -d --name os-c22z --label oslab=1 --pids-limit 60 -v "$PWD/ch02":/lab/ch02 os-lab node /lab/ch02/chup-anh.js > /dev/null; sleep 1.5
+$ docker exec os-c22z ps -eo pid,ppid,stat,comm | head -6
+    PID    PPID STAT COMMAND
+      1       0 Ssl  node
+     14       1 Z    sleep
+     16       1 Z    sleep
+     18       1 Z    sleep
+     20       1 Z    sleep
+$ docker exec os-c22z sh -c "ps -eo stat | grep -c '^Z'"
+26
+$ docker exec os-c22z top -b -n 1 | sed -n 2p
+Tasks:  37 total,   1 running,   5 sleeping,   0 stopped,  31 zombie
+$ docker exec os-c22z sh -c 'Z=$(ps -eo pid,stat | awk "\$2 ~ /^Z/ {print \$1; exit}"); kill -9 $Z; sleep 0.2; ps -o pid,ppid,stat,comm -p $Z'
+    PID    PPID STAT COMMAND
+     14       1 Z    sleep
+$ sleep 8; docker logs os-c22z 2>&1 | tail -4
+sh: 0: Cannot fork
+sh: 0: Cannot fork
+sh: 0: Cannot fork
+sh: 0: Cannot fork
+$ docker exec os-c22z cat /sys/fs/cgroup/pids.current; echo "exit=$?"
+OCI runtime exec failed: exec failed: unable to start container process: error executing setns process: exit status 1; runc init error(s): nsexec-0[59880]: unable to spawn stage-1: Resource temporarily unavailable
+exit=128
+$ docker run -d --name os-c22z-init --label oslab=1 --init --pids-limit 60 -v "$PWD/ch02":/lab/ch02 os-lab node /lab/ch02/chup-anh.js > /dev/null; sleep 6
+$ docker exec os-c22z-init ps -eo pid,ppid,stat,comm | head -4
+    PID    PPID STAT COMMAND
+      1       0 Ss   docker-init
+      7       1 Sl   node
+    237       1 S    sleep
+$ docker exec os-c22z-init sh -c "ps -eo stat | grep -c '^Z'; cat /sys/fs/cgroup/pids.current"
+0
+14
+$ docker logs os-c22z-init 2>&1 | tail -1
+pid=7 started=114 failed=0

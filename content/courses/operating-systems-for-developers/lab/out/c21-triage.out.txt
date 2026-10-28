@@ -1,0 +1,75 @@
+$ uptime
+ 18:00:31 up  8:00,  0 users,  load average: 4.17, 1.84, 1.25
+$ dmesg | tail -2
+[28825.864202] docker0: port 5(veth279a355) entered blocking state
+[28825.864206] docker0: port 5(veth279a355) entered forwarding state
+$ vmstat 1 5
+procs -----------memory---------- ---swap-- -----io---- -system-- -------cpu-------
+ r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st gu
+ 5  1      0 3906324  31744 1418732    0    1   307  8974 3121    4  1  1 98  0  0  0
+ 3  3    924 3816492  31756 1504368   12 2432 614412 1928405 7330 5646 31  9 39 21  0  0
+ 5  1    924 4165224   1616 1212836    0    0    20 184430 6051 3513 31  3 38 28  0  0
+ 7  4      0 4328788   2404 1027012    0    0 21956 1521428 14579 16817 32  9 36 23  0  0
+ 3  2      0 4272836   3080 1066208    0    0  7180 1571238 18000 22999 36  9 41 14  0  0
+$ mpstat 1 1
+Linux 7.0.12-linuxkit (oslab) 	10/28/26 	_aarch64_	(10 CPU)
+
+18:00:35     CPU    %usr   %nice    %sys %iowait    %irq   %soft  %steal  %guest  %gnice   %idle
+18:00:36     all   30.20    0.00    8.50   11.70    0.00    0.90    0.00    0.00    0.00   48.70
+Average:     all   30.20    0.00    8.50   11.70    0.00    0.90    0.00    0.00    0.00   48.70
+$ pidstat 1 1
+Linux 7.0.12-linuxkit (oslab) 	10/28/26 	_aarch64_	(10 CPU)
+
+18:00:36      UID       PID    %usr %system  %guest   %wait    %CPU   CPU  Command
+18:00:37        0        12  300.00    0.00    0.00    0.00  300.00     8  node
+18:00:37        0        14    0.00    1.00    0.00    0.00    1.00     1  bash
+18:00:37        0       796    0.00    1.00    0.00    0.00    1.00     1  dd
+
+Average:      UID       PID    %usr %system  %guest   %wait    %CPU   CPU  Command
+Average:        0        12  300.00    0.00    0.00    0.00  300.00     -  node
+Average:        0        14    0.00    1.00    0.00    0.00    1.00     -  bash
+Average:        0       796    0.00    1.00    0.00    0.00    1.00     -  dd
+$ pidstat -d 1 1 | grep -E 'Command|dd'
+18:00:37      UID       PID   kB_rd/s   kB_wr/s kB_ccwr/s iodelay  Command
+18:00:38        0       809      0.00  44599.01      0.00       0  dd
+Average:      UID       PID   kB_rd/s   kB_wr/s kB_ccwr/s iodelay  Command
+Average:        0       809      0.00  44599.01      0.00       0  dd
+$ iostat -dxyz 1 1 | awk 'NF>10 {print $1, $2, $8, $9, $12, $(NF-1), $NF}' | column -t
+Device  r/s    w/s     wkB/s      w_await  aqu-sz  %util
+vda     56.44  150.50  609805.94  174.70   27.15   83.86
+$ free -m
+               total        used        free      shared  buff/cache   available
+Mem:            7934        3075        4061         156        1152        4858
+Swap:           1023           0        1023
+$ sar -n DEV 1 1 | grep -E 'IFACE|eth0' | head -2
+18:00:41        IFACE   rxpck/s   txpck/s    rxkB/s    txkB/s   rxcmp/s   txcmp/s  rxmcst/s   %ifutil
+18:00:42         eth0      0.00      0.00      0.00      0.00      0.00      0.00      0.00      0.00
+$ sar -n TCP,ETCP 1 1 | head -6
+Linux 7.0.12-linuxkit (oslab) 	10/28/26 	_aarch64_	(10 CPU)
+
+18:00:42     active/s passive/s    iseg/s    oseg/s
+18:00:43         0.00      0.00      0.00      0.00
+
+18:00:42     atmptf/s  estres/s retrseg/s isegerr/s   orsts/s
+$ top -b -n 1 -w 100 | head -12
+top - 18:00:43 up  8:00,  0 users,  load average: 4.52, 1.99, 1.30
+Tasks:   7 total,   3 running,   4 sleeping,   0 stopped,   0 zombie
+%Cpu(s): 31.8 us, 10.0 sy,  0.0 ni, 44.5 id, 11.8 wa,  0.0 hi,  1.8 si,  0.0 st 
+MiB Mem :   7934.1 total,   4084.3 free,   3072.1 used,   1132.7 buff/cache     
+MiB Swap:   1024.0 total,   1024.0 free,      0.0 used.   4862.0 avail Mem 
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+     12 root      20   0 1431164  83668  46144 R 300.0   1.0   3:04.69 node
+    889 root      20   0  152660  11840   5464 R  60.0   0.1   0:00.06 dd
+      1 root      20   0    9268   3460   3216 S   0.0   0.0   0:00.01 bash
+      7 root      20   0    8968   4136   3276 S   0.0   0.1   0:00.01 phien
+     14 root      20   0    9600   5468   3216 S   0.0   0.1   0:00.11 bash
+$ ps -o pid,stat,%cpu,etime,cmd -p $(pgrep -d, -f 'bao-cao|sao-luu') --ppid $(pgrep -f sao-luu)
+    PID STAT %CPU     ELAPSED CMD
+     12 Rl    299       01:01 node bao-cao.js
+     14 S     0.1       01:01 bash sao-luu.sh
+    889 Rl   72.7       00:00 dd if=/dev/zero of=/tmp/backup.bin bs=1M count=200 oflag=direct status=none
+$ grep -E '^(Name|State|Threads)' /proc/$(pgrep -f bao-cao.js)/status
+Name:	node
+State:	R (running)
+Threads:	9

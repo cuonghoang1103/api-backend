@@ -1,0 +1,13 @@
+$ df -h /System/Volumes/Data
+Filesystem      Size    Used   Avail Capacity iused ifree %iused  Mounted on
+/dev/disk3s5   926Gi   847Gi    39Gi    96%    5.3M  413M    1%   /System/Volumes/Data
+$ ls -lh ~/Library/Containers/com.docker.docker/Data/vms/0/data/Docker.raw
+-rw-r--r--@ 1 admin  staff   926G Oct 28 18:12 /Users/admin/Library/Containers/com.docker.docker/Data/vms/0/data/Docker.raw
+$ du -h ~/Library/Containers/com.docker.docker/Data/vms/0/data/Docker.raw
+ 47G	/Users/admin/Library/Containers/com.docker.docker/Data/vms/0/data/Docker.raw
+$ docker system df
+TYPE            TOTAL     ACTIVE    SIZE      RECLAIMABLE
+Images          49        24        33.36GB   11.41GB (34%)
+Containers      41        6         2.031GB   1.819GB (89%)
+Local Volumes   102       32        9.713GB   3.32GB (34%)
+Build Cache     100       0         5.708GB   1.585GB

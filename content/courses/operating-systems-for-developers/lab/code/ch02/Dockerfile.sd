@@ -1,0 +1,13 @@
+# os-lab-sd — ảnh lab PHỤ của Chương 2 (khoá Operating Systems for Developers): os-lab + systemd/journald (để học
+# systemctl/journalctl như trên VPS thật), ssh + rsync (đọc log deploy), ncdu, logrotate.
+#   docker build -t os-lab-sd -f Dockerfile.sd .
+#   docker run -d --name os-sd --label oslab=1 --hostname vps-lab --privileged --cgroupns=private \
+#     --tmpfs /run --tmpfs /run/lock os-lab-sd            # systemd làm PID 1 — CHỈ cho container vứt đi
+#   docker exec -it os-sd bash
+FROM os-lab
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      systemd systemd-sysv dbus openssh-server openssh-client rsync ncdu logrotate cron \
+ && rm -rf /var/lib/apt/lists/* \
+ && systemctl mask systemd-logind.service getty.target console-getty.service systemd-firstboot.service 2>/dev/null; true
+STOPSIGNAL SIGRTMIN+3
+CMD ["/sbin/init"]

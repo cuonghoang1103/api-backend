@@ -1,0 +1,15 @@
+$ docker info --format '{{.LoggingDriver}}'
+json-file
+$ docker run -d --name os-c26-chatty --label oslab=1 os-lab bash -c 'i=0; while :; do echo "debug: polling queue, iteration $((i++)), nothing to do"; done' > /dev/null; sleep 5; docker stop -t 1 os-c26-chatty > /dev/null
+$ docker logs os-c26-chatty 2>&1 | wc -lc
+  822854 44323006
+$ docker inspect -f '{{.HostConfig.LogConfig.Type}} {{.HostConfig.LogConfig.Config}}' os-c26-chatty
+json-file map[]
+$ docker run -d --name os-c26-rot --label oslab=1 --log-opt max-size=1m --log-opt max-file=3 os-lab bash -c 'i=0; while :; do echo "debug: polling queue, iteration $((i++)), nothing to do"; done' > /dev/null; sleep 5; docker stop -t 1 os-c26-rot > /dev/null
+$ docker logs os-c26-rot 2>&1 | wc -lc
+   16559  894186
+$ docker inspect -f '{{.HostConfig.LogConfig.Type}} {{.HostConfig.LogConfig.Config}}' os-c26-rot
+json-file map[max-file:3 max-size:1m]
+$ docker logs --since 2s os-c26-rot 2>&1 | head -2
+debug: polling queue, iteration 807977, nothing to do
+debug: polling queue, iteration 807978, nothing to do

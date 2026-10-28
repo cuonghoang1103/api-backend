@@ -1,0 +1,10 @@
+# bao-cao.service — job báo cáo bị cấu hình sai đường dẫn: chết ngay mỗi lần chạy ⇒ systemd khởi động lại liên tục rồi bỏ cuộc.
+[Unit]
+Description=Nightly report (lab)
+StartLimitIntervalSec=30
+StartLimitBurst=4
+
+[Service]
+ExecStart=/usr/local/bin/node /lab/ch02/bao-cao-dem.js
+Restart=on-failure
+RestartSec=1

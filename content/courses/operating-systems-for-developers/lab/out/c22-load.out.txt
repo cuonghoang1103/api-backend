@@ -1,0 +1,39 @@
+$ nproc
+2
+$ cat /proc/loadavg
+1.17 1.30 0.83 3/685 13
+$ for i in 1 2 3 4 5 6; do node -e 'for(;;){}' & done; sleep 65
+$ uptime
+ 17:51:59 up  7:51,  0 users,  load average: 4.37, 2.22, 1.19
+$ cat /proc/loadavg
+4.37 2.22 1.19 7/726 64
+$ mpstat -P 0,1 1 1 | grep -v Average
+Linux 7.0.12-linuxkit (oslab) 	10/28/26 	_aarch64_	(10 CPU)
+
+17:51:59     CPU    %usr   %nice    %sys %iowait    %irq   %soft  %steal  %guest  %gnice   %idle
+17:52:00       0  100.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+17:52:00       1  100.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+
+$ top -b -n 1 -w 100 | head -14
+top - 17:52:00 up  7:51,  0 users,  load average: 4.37, 2.22, 1.19
+Tasks:  10 total,   7 running,   3 sleeping,   0 stopped,   0 zombie
+%Cpu(s): 20.0 us,  0.0 sy,  0.0 ni, 80.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st 
+MiB Mem :   7934.1 total,   1079.4 free,   3040.0 used,   4169.6 buff/cache     
+MiB Swap:   1024.0 total,   1024.0 free,      0.0 used.   4894.1 avail Mem 
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+     16 root      20   0  550324  51932  40936 R  50.0   0.6   0:25.61 node
+     20 root      20   0  550972  52732  41092 R  50.0   0.6   0:25.61 node
+     18 root      20   0  551408  53164  41092 R  30.0   0.7   0:24.06 node
+     19 root      20   0  550172  51944  41092 R  30.0   0.6   0:16.56 node
+     21 root      20   0  550976  52728  41080 R  30.0   0.6   0:24.06 node
+     17 root      20   0  551840  53284  40776 R  20.0   0.7   0:16.55 node
+      1 root      20   0    8968   3452   3208 S   0.0   0.0   0:00.02 bash
+$ ps -o pid,psr,stat,%cpu,comm -C node
+    PID PSR STAT %CPU COMMAND
+     16   0 Rl   38.6 node
+     17   1 Rl   24.9 node
+     18   1 Rl   36.3 node
+     19   1 Rl   24.9 node
+     20   0 Rl   38.6 node
+     21   1 Rl   36.3 node

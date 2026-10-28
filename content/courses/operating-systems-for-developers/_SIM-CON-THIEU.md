@@ -54,6 +54,7 @@
 - Bộ cấp phát malloc: heap brk + top chunk, ngưỡng mmap động, phân mảnh (lỗ 112 B không chứa khối 200 B), khối cuối ghim đỉnh heap, malloc_trim; arena theo luồng.
 - Bộ gom rác: heap thế hệ trẻ/già, mark-compact, dòng thời gian lần dừng stop-the-world của G1 vs ZGC đồng thời; heap-sau-GC tăng (rò rỉ) vs phẳng.
 ## Từ Ch2 (28/10) — ⭐ ưu tiên số 1: "Bảng điều khiển hệ thống" (top/htop sống)
+  - ✅ **Đã nhúng vào Ch2 (28/10, sau 495d5af22):** 2.1 `sysmon calm` · 2.2 `sysmon cpuhog` + `zombies` · 2.3 `pagecache warm` + `sysmon memleak` + `cgroup oom` · 2.4 `sysmon diskfull` + `iostorm` · 2.6 `cgroup restart` · 2.7 `sysmon mystery` (thử thách cuối chương). Còn thiếu preset `deletedopen`/`inodes` riêng và hai build song song (`oom137build`) — tuỳ chọn.
 Bài 2.1–2.7 dạy đọc top/vmstat/iostat/free/df bằng output tĩnh; người học cần MỘT máy ảo sống để tự bơm tải và nhìn cột đổi.
 (Thấy `frontend/src/components/os-lab/SysmonSim.tsx` đang dựng với preset calm/cpuhog/memleak/diskfull/iostorm/forkbomb/zombies/mystery
 — khớp gần đủ; dưới đây là những gì Ch2 cần để nhúng được, kèm số đo thật để mô phỏng "giống máy thật".)

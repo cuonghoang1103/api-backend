@@ -28,6 +28,7 @@
 import { khung } from './_chung/khung.mjs';
 import s00 from './operating-systems-for-developers/s00-gioi-thieu.mjs';
 import s01 from './operating-systems-for-developers/s01-tien-trinh.mjs';
+import s02 from './operating-systems-for-developers/s02-quan-sat.mjs';
 import s03 from './operating-systems-for-developers/s03-luong-lap-lich.mjs';
 import s05 from './operating-systems-for-developers/s05-dong-bo.mjs';
 import s07 from './operating-systems-for-developers/s07-bo-nho-ao.mjs';
@@ -157,6 +158,7 @@ const sections = khung('os', [
 // Ghi đè hai section KHUNG bằng hai section THẬT đã soạn (giữ nguyên slug bài + title chương để seeder neo đúng).
 sections[0] = s00;
 sections[1] = s01;
+sections[2] = s02;
 sections[3] = s03;
 sections[5] = s05;
 sections[7] = s07;

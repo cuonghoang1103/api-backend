@@ -1,0 +1,13 @@
+# ctw-api.service — "API" của bài 2.6 chạy như một dịch vụ systemd trên VPS (thay vì docker), log ra stdout ⇒ journald.
+[Unit]
+Description=CT Work API (lab)
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/node /lab/ch02/api-log.js
+Restart=always
+RestartSec=2
+MemoryMax=300M
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,13 @@
+$ nproc
+1
+$ cat /sys/fs/cgroup/cpu.max
+100000 100000
+$ free -m | head -2
+               total        used        free      shared  buff/cache   available
+Mem:            7934        3027        1104         156        4156        4906
+$ cat /sys/fs/cgroup/memory.max
+536870912
+$ cat /proc/loadavg
+2.43 0.79 0.46 2/704 23
+$ ps -e --no-headers | wc -l
+4

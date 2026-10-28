@@ -1,0 +1,42 @@
+$ ssh -o BatchMode=yes -o ConnectTimeout=5 vps 'hostname; uptime'
+Warning: Permanently added 'vps' (ED25519) to the list of known hosts.
+vps-lab
+ 18:12:32 up  8:12,  0 users,  load average: 2.41, 2.45, 1.89
+$ ssh vps "df -h / | tail -1; free -m | sed -n 2p"
+overlay         911G   48G  818G   6% /
+Mem:            7934        3205        3382         156        1700        4728
+$ ssh vps 'systemctl is-active ctw-web; systemctl show ctw-web -p MainPID -p NRestarts -p MemoryCurrent'
+active
+MainPID=169
+NRestarts=0
+MemoryCurrent=10719232
+$ ssh -o BatchMode=yes -o ConnectTimeout=3 -p 2222 vps true; echo "exit=$?"
+ssh: connect to host vps port 2222: Connection refused
+exit=255
+$ du -sh /srv/build; find /srv/build -type f | wc -l
+81M	/srv/build
+1503
+$ rsync -az --delete --bwlimit=20000 --info=progress2,stats1 /srv/build/ vps:/srv/app/ | tr '\r' '\n' | awk 'NF && (++n <= 7 || /to-chk=0\// || !/[0-9]%/)'
+         32,768   0%    0.00kB/s    0:00:00  
+     22,413,312  26%   19.55MB/s    0:00:03  
+     26,214,400  31%   20.69MB/s    0:00:01 (xfr#1, to-chk=1503/1505)
+     44,564,480  53%   19.55MB/s    0:00:01  
+     52,428,800  63%   19.98MB/s    0:00:02 (xfr#2, to-chk=1502/1505)
+     66,584,576  80%   19.53MB/s    0:00:00  
+     78,643,200  94%   19.71MB/s    0:00:03 (xfr#3, to-chk=1501/1505)
+     83,143,200 100%   19.58MB/s    0:00:04 (xfr#1503, to-chk=0/1505)
+     83,143,200 100%   19.58MB/s    0:00:04 (xfr#1503, to-chk=0/1505)
+     83,143,200 100%   19.56MB/s    0:00:04 (xfr#1503, to-chk=0/1505)
+sent 83,255,621 bytes  received 28,595 bytes  18,507,603.56 bytes/sec
+total size is 83,143,200  speedup is 1.00
+$ echo "// hotfix" >> /srv/build/server-chunk-2.js; rsync -az --delete --info=progress2,stats1 /srv/build/ vps:/srv/app/ | tr '\r' '\n' | awk 'NF'
+          5,120   0%    0.00kB/s    0:00:00  
+     26,214,410  31%    1.63GB/s    0:00:00 (xfr#1, to-chk=1502/1505)
+     26,214,410  31%  416.59MB/s    0:00:00 (xfr#1, to-chk=1500/1505)
+     26,214,410  31%  416.59MB/s    0:00:00 (xfr#1, to-chk=0/1505)   
+sent 32,774 bytes  received 30,763 bytes  127,074.00 bytes/sec
+total size is 83,143,210  speedup is 1,308.58
+$ ssh vps 'for p in /health /api/v1/admin/users /api/v1/gifs; do echo "$p $(curl -s -o /dev/null -w "%{http_code}" localhost:3000$p)"; done'
+/health 200
+/api/v1/admin/users 401
+/api/v1/gifs 404

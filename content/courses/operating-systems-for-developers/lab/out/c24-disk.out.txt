@@ -1,0 +1,61 @@
+$ df -h /mnt/vps
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/loop0       60M  152K   55M   1% /mnt/vps
+$ df -i /mnt/vps
+Filesystem     Inodes IUsed IFree IUse% Mounted on
+/dev/loop0       2048    12  2036    1% /mnt/vps
+$ tune2fs -l $(findmnt -no SOURCE /mnt/vps) | grep -E '^(Block size|Block count|Reserved block count):'
+Block count:              16384
+Reserved block count:     819
+Block size:               4096
+$ mkdir -p /mnt/vps/log; python3 ghi-log.py /mnt/vps/log/app.log & sleep 2
+pid 28 wrote 30 MB to /mnt/vps/log/app.log, keeping it open
+$ df -h /mnt/vps; du -sh /mnt/vps/log
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/loop0       60M   31M   25M  55% /mnt/vps
+31M	/mnt/vps/log
+$ rm /mnt/vps/log/app.log
+$ df -h /mnt/vps; du -sh /mnt/vps/log
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/loop0       60M   31M   25M  55% /mnt/vps
+4.0K	/mnt/vps/log
+$ lsof -nP +L1 /mnt/vps
+COMMAND PID USER FD   TYPE DEVICE SIZE/OFF NLINK NODE NAME
+python3  28 root 3w   REG    7,0 31457280     0   14 /mnt/vps/log/app.log (deleted)
+$ ls -l /proc/$(pgrep -f ghi-log.py)/fd
+total 0
+lrwx------ 1 root root 64 Oct 28 18:00 0 -> /dev/null
+l-wx------ 1 root root 64 Oct 28 18:00 1 -> pipe:[776501]
+l-wx------ 1 root root 64 Oct 28 18:00 2 -> pipe:[776501]
+l-wx------ 1 root root 64 Oct 28 18:00 3 -> /mnt/vps/log/app.log (deleted)
+$ : > /proc/$(pgrep -f ghi-log.py)/fd/3; df -h /mnt/vps
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/loop0       60M  156K   55M   1% /mnt/vps
+$ mkdir /mnt/vps/sessions && for i in $(seq 1 2100); do { echo x > /mnt/vps/sessions/sess_$i; } 2> /dev/null || { echo "write failed at file $i"; break; }; done
+write failed at file 2035
+$ touch /mnt/vps/deploy.lock
+touch: cannot touch '/mnt/vps/deploy.lock': No space left on device
+$ df -h /mnt/vps
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/loop0       60M  8.2M   47M  15% /mnt/vps
+$ df -i /mnt/vps
+Filesystem     Inodes IUsed IFree IUse% Mounted on
+/dev/loop0       2048  2048     0  100% /mnt/vps
+$ for d in /mnt/vps/*/; do echo "$(find "$d" | wc -l) $d"; done | sort -rn
+2035 /mnt/vps/sessions/
+1 /mnt/vps/lost+found/
+1 /mnt/vps/log/
+$ find /mnt/vps/sessions -name 'sess_*' -mmin -5 -delete; df -i /mnt/vps | tail -1
+/dev/loop0       2048    14  2034    1% /mnt/vps
+$ du -xh --max-depth=1 /mnt/vps | sort -h
+16K	/mnt/vps/lost+found
+68K	/mnt/vps/sessions
+6.1M	/mnt/vps/log
+9.1M	/mnt/vps/uploads
+23M	/mnt/vps/cache
+38M	/mnt/vps
+$ dd if=/dev/zero of=/mnt/vps/log/big bs=1M count=40; echo "exit=$?"; ls -lh /mnt/vps/log/big; df -h /mnt/vps | tail -1
+dd: IO error: No space left on device
+exit=1
+-rw-r--r-- 1 root root 20M Oct 28 18:00 /mnt/vps/log/big
+/dev/loop0       60M   58M     0 100% /mnt/vps

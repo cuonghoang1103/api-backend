@@ -1,0 +1,6 @@
+# chatty.service — dịch vụ "lắm lời": in log ở mức debug mỗi vòng lặp ⇒ nhật ký phình nhanh.
+[Unit]
+Description=Chatty worker (lab)
+
+[Service]
+ExecStart=/bin/bash -c 'i=0; while :; do echo "debug: polling queue, iteration $((i++)), nothing to do"; done'

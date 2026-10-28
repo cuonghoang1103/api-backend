@@ -1,0 +1,114 @@
+$ node api.js & sleep 0.5
+api listening on :3000 pid=9
+$ python3 -m http.server 8080 --bind 127.0.0.1 > /dev/null 2>&1 & sleep 0.5
+$ ss -tulpn
+Netid State  Recv-Q Send-Q Local Address:Port Peer Address:PortProcess                         
+tcp   LISTEN 0      5          127.0.0.1:8080      0.0.0.0:*    users:(("python3",pid=19,fd=3))
+tcp   LISTEN 0      511                *:3000            *:*    users:(("node",pid=9,fd=18))   
+$ node api.js; echo "exit=$?"
+node:events:497
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1941:16)
+    at listenInCluster (node:net:1998:12)
+    at Server.listen (node:net:2103:7)
+    at Object.<anonymous> (/lab/ch02/api.js:17:4)
+    at Module._compile (node:internal/modules/cjs/loader:1781:14)
+    at Object..js (node:internal/modules/cjs/loader:1913:10)
+    at Module.load (node:internal/modules/cjs/loader:1505:32)
+    at Function._load (node:internal/modules/cjs/loader:1309:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1977:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v22.23.4
+exit=1
+$ ss -ltnp 'sport = :3000'
+State  Recv-Q Send-Q Local Address:Port Peer Address:PortProcess                      
+LISTEN 0      511                *:3000            *:*    users:(("node",pid=9,fd=18))
+$ lsof -nP -iTCP:3000 -sTCP:LISTEN
+COMMAND PID USER FD   TYPE DEVICE SIZE/OFF NODE NAME
+node      9 root 18u  IPv6 877419      0t0  TCP *:3000 (LISTEN)
+$ fuser 3000/tcp
+3000/tcp:                9
+$ kill $(lsof -ti:3000); sleep 0.3; ss -ltn 'sport = :3000' | tail -n +2 | wc -l
+0
+$ node fake-next.js & sleep 0.5
+ready on :3000 pid=51
+$ ps -o pid,comm,args -p $(pgrep -f next-server)
+    PID COMMAND         COMMAND
+     51 next-server (v1 next-server (v14.
+$ pkill -f "next start"; echo "pkill exit=$?"
+pkill exit=1
+$ pkill -f "fake-next.js"; echo "pkill exit=$?"
+pkill exit=1
+$ lsof -ti:3000; echo "lsof exit=$?"
+lsof exit=1
+$ ss -ltnp 'sport = :3000'
+State  Recv-Q Send-Q Local Address:Port Peer Address:PortProcess                                  
+LISTEN 0      511                *:3000            *:*    users:(("next-server (v1",pid=51,fd=18))
+$ fuser -k 3000/tcp; sleep 0.3; curl -s localhost:3000; echo "curl exit=$?"
+3000/tcp:               51
+curl exit=7
+/usr/local/bin/phien: line 47:    51 Killed                     node fake-next.js
+$ for i in $(seq 1 300); do curl -s -o /dev/null localhost:3000/health; done; ss -s
+Total: 3
+TCP:   384 (estab 0, closed 382, orphaned 0, timewait 300)
+
+Transport Total     IP        IPv6
+RAW	  0         0         0        
+UDP	  0         0         0        
+TCP	  2         1         1        
+INET	  2         1         1        
+FRAG	  0         0         0        
+
+$ ss -tan state time-wait | head -4
+Recv-Q Send-Q Local Address:Port  Peer Address:Port
+0      0              [::1]:42782        [::1]:3000
+0      0              [::1]:42798        [::1]:3000
+0      0              [::1]:42802        [::1]:3000
+$ ss -tan state time-wait | wc -l
+301
+$ cat /proc/sys/net/ipv4/ip_local_port_range
+32768	60999
+$ ulimit -n
+1048576
+$ bash -c 'ulimit -Sn 64; grep "open files" /proc/self/limits'
+Max open files            64                   1048576              files     
+$ bash -c 'ulimit -Sn 64; node -p "require(\"fs\").readFileSync(\"/proc/self/limits\", \"utf8\").match(/Max open files.*/)[0]"'
+Max open files            1048576              1048576              files     
+$ ulimit -n 64; node ro-ri-fd.js & sleep 0.5
+audit api on :3002 pid=423
+$ for i in $(seq 1 70); do curl -s localhost:3002/order/$i > /tmp/last.txt; done; cat /tmp/last.txt
+EMFILE: EMFILE: too many open files, open '/tmp/audit-4.log'
+$ ls /proc/$(pgrep -f ro-ri-fd.js)/fd | wc -l
+63
+$ grep 'open files' /proc/$(pgrep -f ro-ri-fd.js)/limits
+Max open files            64                   64                   files     
+$ lsof -nP -p $(pgrep -f ro-ri-fd.js) | awk 'NR > 1 {print $5, $9}' | sort | uniq -c | sort -rn | head -4
+     10 FIFO pipe
+      9 REG /tmp/audit-3.log
+      9 REG /tmp/audit-2.log
+      9 REG /tmp/audit-1.log
+$ curl -s -m 2 localhost:3002/health; echo "curl exit=$?"
+ok
+curl exit=0
+$ prlimit --pid $(pgrep -f ro-ri-fd.js) --nofile=1024:1024
+prlimit: failed to set the NOFILE resource limit: Operation not permitted
+$ kill $(pgrep -f ro-ri-fd.js); FIX=1 node ro-ri-fd.js & sleep 0.5
+audit api on :3002 pid=556
+$ for i in $(seq 1 500); do curl -s localhost:3002/order/$i > /tmp/last.txt; done; cat /tmp/last.txt; ls /proc/$(pgrep -f ro-ri-fd.js)/fd | wc -l
+ok
+19
+$ cat /proc/sys/fs/file-nr
+905	0	9223372036854775807

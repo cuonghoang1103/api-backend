@@ -1,0 +1,97 @@
+$ uptime
+ 18:09:33 up  8:09,  0 users,  load average: 2.53, 2.29, 1.71
+$ systemctl status ctw-api --no-pager
+● ctw-api.service - CT Work API (lab)
+     Loaded: loaded (/etc/systemd/system/ctw-api.service; enabled; preset: enabled)
+     Active: active (running) since Wed 2026-10-28 18:09:21 +07; 12s ago
+ Invocation: 39a6697eb7854e1c8e656283bd83a437
+   Main PID: 127 (node)
+      Tasks: 7 (limit: 9563)
+     Memory: 10M (max: 300M, available: 289.9M, peak: 11M)
+        CPU: 28ms
+     CGroup: /system.slice/ctw-api.service
+             └─127 /usr/local/bin/node /lab/ch02/api-log.js
+
+Oct 28 18:09:25 vps-lab node[127]: GET /api/v1/feed 200 16ms
+Oct 28 18:09:26 vps-lab node[127]: GET /api/v1/feed 200 17ms
+Oct 28 18:09:26 vps-lab node[127]: ERROR GET /api/v1/orders 500 db timeout after 3000ms (request 5)
+Oct 28 18:09:27 vps-lab node[127]: GET /api/v1/feed 200 18ms
+Oct 28 18:09:28 vps-lab node[127]: GET /api/v1/feed 200 12ms
+Oct 28 18:09:29 vps-lab node[127]: GET /api/v1/feed 200 13ms
+Oct 28 18:09:30 vps-lab node[127]: GET /api/v1/feed 200 14ms
+Oct 28 18:09:31 vps-lab node[127]: GET /api/v1/feed 200 15ms
+Oct 28 18:09:31 vps-lab node[127]: ERROR GET /api/v1/orders 500 db timeout after 3000ms (request 10)
+Oct 28 18:09:32 vps-lab node[127]: GET /api/v1/feed 200 16ms
+$ systemctl --failed --no-pager
+  UNIT            LOAD   ACTIVE SUB    DESCRIPTION
+● bao-cao.service loaded failed failed Nightly report (lab)
+
+Legend: LOAD   → Reflects whether the unit definition was properly loaded.
+        ACTIVE → The high-level unit activation state, i.e. generalization of SUB.
+        SUB    → The low-level unit activation state, values depend on unit type.
+
+1 loaded units listed.
+$ systemctl status bao-cao --no-pager | head -6
+× bao-cao.service - Nightly report (lab)
+     Loaded: loaded (/etc/systemd/system/bao-cao.service; static)
+     Active: failed (Result: exit-code) since Wed 2026-10-28 18:09:26 +07; 7s ago
+   Duration: 28ms
+ Invocation: fd0d7f9057414f48ab2e436a6ee71dea
+    Process: 160 ExecStart=/usr/local/bin/node /lab/ch02/bao-cao-dem.js (code=exited, status=1/FAILURE)
+$ journalctl -u bao-cao --no-pager | tail -6
+Oct 28 18:09:25 vps-lab systemd[1]: bao-cao.service: Main process exited, code=exited, status=1/FAILURE
+Oct 28 18:09:25 vps-lab systemd[1]: bao-cao.service: Failed with result 'exit-code'.
+Oct 28 18:09:26 vps-lab systemd[1]: bao-cao.service: Scheduled restart job, restart counter is at 4.
+Oct 28 18:09:26 vps-lab systemd[1]: bao-cao.service: Start request repeated too quickly.
+Oct 28 18:09:26 vps-lab systemd[1]: bao-cao.service: Failed with result 'exit-code'.
+Oct 28 18:09:26 vps-lab systemd[1]: Failed to start bao-cao.service - Nightly report (lab).
+$ journalctl -u ctw-api --since "-30s" --no-pager | tail -4
+Oct 28 18:09:30 vps-lab node[127]: GET /api/v1/feed 200 14ms
+Oct 28 18:09:31 vps-lab node[127]: GET /api/v1/feed 200 15ms
+Oct 28 18:09:31 vps-lab node[127]: ERROR GET /api/v1/orders 500 db timeout after 3000ms (request 10)
+Oct 28 18:09:32 vps-lab node[127]: GET /api/v1/feed 200 16ms
+$ journalctl -u ctw-api -p err --no-pager
+Oct 28 18:09:26 vps-lab node[127]: ERROR GET /api/v1/orders 500 db timeout after 3000ms (request 5)
+Oct 28 18:09:31 vps-lab node[127]: ERROR GET /api/v1/orders 500 db timeout after 3000ms (request 10)
+$ journalctl -u ctw-api -p err -o short-iso --no-pager -n 1
+2026-10-28T18:09:31+07:00 vps-lab node[127]: ERROR GET /api/v1/orders 500 db timeout after 3000ms (request 10)
+$ journalctl --disk-usage
+Archived and active journals take up 8M in the file system.
+$ systemctl start chatty; sleep 20; systemctl stop chatty
+$ journalctl --disk-usage
+Archived and active journals take up 24M in the file system.
+$ journalctl -u chatty --no-pager | sed -n '2,3p'
+Oct 28 18:09:33 vps-lab bash[201]: debug: polling queue, iteration 0, nothing to do
+Oct 28 18:09:33 vps-lab bash[201]: debug: polling queue, iteration 1, nothing to do
+$ journalctl -u chatty --no-pager | wc -l
+37505
+$ journalctl --vacuum-size=10M
+Vacuuming done, freed 0B of archived journals from /var/log/journal.
+Vacuuming done, freed 0B of archived journals from /run/log/journal.
+Vacuuming done, freed 0B of archived journals from /var/log/journal/8b4484558fae4d77b65061877845898e.
+$ journalctl --rotate; journalctl --vacuum-size=10M
+Vacuuming done, freed 0B of archived journals from /var/log/journal.
+Deleted archived journal /var/log/journal/8b4484558fae4d77b65061877845898e/system@822e8993e4b04749944abf107531e473-0000000000000001-00065ee498080fd9.journal (21.7M).
+Vacuuming done, freed 21.7M of archived journals from /var/log/journal/8b4484558fae4d77b65061877845898e.
+Vacuuming done, freed 0B of archived journals from /run/log/journal.
+$ journalctl --disk-usage
+Archived and active journals take up 8M in the file system.
+$ mkdir -p /etc/systemd/journald.conf.d && printf '[Journal]\nSystemMaxUse=200M\nMaxRetentionSec=14day\n' > /etc/systemd/journald.conf.d/size.conf && systemctl restart systemd-journald; cat /etc/systemd/journald.conf.d/size.conf
+[Journal]
+SystemMaxUse=200M
+MaxRetentionSec=14day
+$ systemd-run --unit=oom-demo -p MemoryMax=64M -p MemorySwapMax=0 /usr/local/bin/node --max-old-space-size=1024 -e 'const a = []; for (;;) a.push(new Array(1e6).fill(1))'; sleep 4
+Running as unit: oom-demo.service; invocation ID: 9a9bd3bc8ab94ff1988ce8c02482c120
+$ systemctl status oom-demo --no-pager | head -4
+× oom-demo.service - [systemd-run] /usr/local/bin/node --max-old-space-size=1024 -e "const a = []; for (;;) a.push(new Array(1e6).fill(1))"
+     Loaded: loaded (/run/systemd/transient/oom-demo.service; transient)
+  Transient: yes
+     Active: failed (Result: oom-kill) since Wed 2026-10-28 18:09:54 +07; 3s ago
+$ journalctl -u oom-demo --no-pager | grep -iE 'oom|killed|exited' | tail -3
+Oct 28 18:09:54 vps-lab systemd[1]: oom-demo.service: The kernel OOM killer killed some processes in this unit.
+Oct 28 18:09:54 vps-lab systemd[1]: oom-demo.service: Main process exited, code=killed, status=9/KILL
+Oct 28 18:09:54 vps-lab systemd[1]: oom-demo.service: Failed with result 'oom-kill'.
+$ journalctl -k --no-pager | grep -E 'Killed process [0-9]+ \(node\)' | tail -1 | cut -c 1-140
+Oct 28 18:09:54 vps-lab kernel: Memory cgroup out of memory: Killed process 85118 (node) total-vm:795676kB, anon-rss:63532kB, file-rss:36568
+$ dmesg -T | grep -E 'Killed process [0-9]+ \(node\)' | tail -1 | cut -c 1-110
+[Wed Oct 28 18:09:54 2026] Memory cgroup out of memory: Killed process 85118 (node) total-vm:795676kB, anon-rs

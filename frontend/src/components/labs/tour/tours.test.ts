@@ -136,6 +136,8 @@ const FINAL: Record<string, (s: Record<string, Record<string, unknown> | undefin
   'epoll-ready': (s) => s.ep?.preset === 'scan' && s.ep?.n === 10000,
   'epoll-trigger': (s) => s.ep?.share === 'oneshot' && s.ep?.atEnd === true,
   'epoll-c10k': (s) => s.ep?.wall === 'nofile',
+  'eintr-signal': (s) => s.eintr?.mode === 'restart' && s.eintr?.atEnd === true && s.eintr?.sawEintr === false,
+  'nagle-delay': (s) => s.nagle?.nodelay === true && s.nagle?.atEnd === true && s.nagle?.total === 0.028,
   'syscall-errno': (s) => s.sys?.kind === 'clone3' && s.sys?.raw === -38 && s.sys?.atEnd === true,
 };
 

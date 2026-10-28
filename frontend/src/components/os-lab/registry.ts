@@ -146,6 +146,20 @@ export const OS_LABS: Record<string, OsLabDef> = {
     presets: ['ready', 'scan', 'trigger', 'oneshot', 'c10k', 'walls'],
     load: () => import('./EpollSim'),
   },
+  eintr: {
+    en: 'Signals vs blocking calls: EINTR', vi: 'Tín hiệu và lời gọi chặn: EINTR', chapterEn: 'Chapter 11', chapterVi: 'Chương 11',
+    descEn: 'read() blocks for 2 s, SIGALRM arrives at 1 s: ERESTARTSYS, rt_sigreturn, -1 EINTR vs SA_RESTART, poll always EINTR, Python retries (PEP 475), Go\'s SIGURG.',
+    descVi: 'read() chặn 2 s, SIGALRM tới lúc 1 s: ERESTARTSYS, rt_sigreturn, -1 EINTR so với SA_RESTART, poll luôn EINTR, Python tự thử lại (PEP 475), SIGURG của Go.',
+    presets: ['norestart', 'restart', 'poll', 'python', 'go'],
+    load: () => import('./EintrSim'),
+  },
+  nagle: {
+    en: 'Nagle + delayed ACK', vi: 'Nagle + ACK trễ', chapterEn: 'Chapters 10–11', chapterVi: 'Chương 10–11',
+    descEn: 'Two small writes on one TCP connection: Nagle holds the second, the client delays its ACK — 41 ms per request, 8.4 s for 200; TCP_NODELAY or one write: 0.028 s.',
+    descVi: 'Hai lần ghi nhỏ trên một kết nối TCP: Nagle giữ lần thứ hai, khách trì hoãn ACK — 41 ms mỗi request, 8,4 s cho 200; TCP_NODELAY hoặc một write: 0,028 s.',
+    presets: ['nagle', 'nodelay', 'onewrite'],
+    load: () => import('./NagleSim'),
+  },
   latency: {
     en: 'Latency ladder', vi: 'Thang độ trễ', chapterEn: 'Section 0', chapterVi: 'Mục 0',
     descEn: 'Registers → caches → RAM → SSD → disk → network, on a human time scale.',

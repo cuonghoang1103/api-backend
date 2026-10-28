@@ -6,7 +6,7 @@ import type { ComponentType } from 'react';
 import {
   Binary, Boxes, Cable, CalendarClock, Cpu, Database, FileCode2, GitFork, Gauge, HardDrive, Layers, Lock, MemoryStick,
   Network, Route, ScanSearch, ShieldAlert, Shuffle, Timer, Type, Workflow, Zap,
-  ArrowDownUp, KeyRound, ShieldCheck, Container, Layers3, RadioTower, Table2,
+  ArrowDownUp, KeyRound, Container, Layers3, RadioTower, Table2, AlarmClock, Hourglass,
 } from 'lucide-react';
 import type { L } from './tour/types';
 import type { LabNs } from './selector';
@@ -16,7 +16,7 @@ export const SIM_ICON: Record<LabNs, Record<string, ComponentType<{ className?: 
   'os-lab': {
     process: GitFork, scheduler: CalendarClock, race: Shuffle, memory: Layers, vm: MemoryStick, sysmon: Gauge, eventloop: Workflow,
     threadpool: Boxes, sync: Lock, deadlock: ShieldAlert, cgroup: Database, cow: Route, pagecache: HardDrive, latency: Timer,
-    syscall: ArrowDownUp, perm: KeyRound, fdtable: Table2, nslayers: Container, overlay: Layers3, epoll: RadioTower, stackframe: ShieldCheck,
+    syscall: ArrowDownUp, perm: KeyRound, fdtable: Table2, nslayers: Container, overlay: Layers3, epoll: RadioTower, eintr: AlarmClock, nagle: Hourglass,
   },
 };
 export const FALLBACK_ICON = ScanSearch;
@@ -52,6 +52,7 @@ export const SIM_HINT: Record<LabNs, Record<string, L>> = {
     nslayers: ['The same process seen from the host (left) and from inside the container (right). Turn namespaces on one by one and watch the right side change.', 'Cùng một tiến trình nhìn từ máy chủ (trái) và từ trong container (phải). Bật từng namespace một và xem bên phải thay đổi.'],
     overlay: ['Read-only layers at the bottom, one writable layer on top, the merged view the container sees. Press Step to read, write and delete files.', 'Các lớp chỉ-đọc ở dưới, một lớp ghi được ở trên, góc nhìn ghép mà container thấy. Bấm Bước để đọc, ghi, xoá tệp.'],
     epoll: ['Many sockets, one thread. Green = has data. Press Step and see how epoll hands over only the ready ones.', 'Nhiều socket, một luồng. Xanh = có dữ liệu. Bấm Bước và xem epoll chỉ trao đúng những socket đã sẵn sàng.'],
-    stackframe: ['A function\'s stack frame, one instruction at a time. Make the input longer and see which defence stops the damage.', 'Khung stack của một hàm, từng lệnh một. Cho chuỗi vào dài dần và xem lớp phòng vệ nào chặn được.'],
+    eintr: ['A program asleep in read(), and an alarm signal at 1 second. Press Step and watch what the call returns.', 'Một chương trình đang ngủ trong read(), và một tín hiệu báo thức lúc 1 giây. Bấm Bước và xem lời gọi trả về gì.'],
+    nagle: ['Packets between a server and curl, millisecond by millisecond. Press Step and look for the one that waits.', 'Các gói tin giữa máy chủ và curl, từng mili giây. Bấm Bước và tìm gói phải chờ.'],
   },
 };

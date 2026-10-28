@@ -50,6 +50,21 @@ Số đo thật: 2026-10-28 (record=1, rate=1, viewport 1280×800, lang=vi).
 | [eventloop-block](#eventloop-block) | os-lab | eventloop | 5 | 47.2 s | 59.0 s | `/os-lab?record=1&tour=eventloop-block&lang=vi` |
 | [deadlock-detect](#deadlock-detect) | os-lab | deadlock | 5 | 58.8 s | 69.6 s | `/os-lab?record=1&tour=deadlock-detect&lang=vi` |
 | [deadlock-banker](#deadlock-banker) | os-lab | deadlock | 5 | 50.7 s | 62.4 s | `/os-lab?record=1&tour=deadlock-banker&lang=vi` |
+| [syscall-journey](#syscall-journey) | os-lab | syscall | 10 | 104.8 s | 107.4 s | `/os-lab?record=1&tour=syscall-journey&lang=vi` |
+| [syscall-errno](#syscall-errno) | os-lab | syscall | 10 | 96.2 s | 98.2 s | `/os-lab?record=1&tour=syscall-errno&lang=vi` |
+| [perm-check](#perm-check) | os-lab | perm | 10 | 104.6 s | 104.1 s | `/os-lab?record=1&tour=perm-check&lang=vi` |
+| [perm-acl](#perm-acl) | os-lab | perm | 9 | 81.8 s | 93.7 s | `/os-lab?record=1&tour=perm-acl&lang=vi` |
+| [fdtable-offsets](#fdtable-offsets) | os-lab | fdtable | 9 | 81.5 s | 82.6 s | `/os-lab?record=1&tour=fdtable-offsets&lang=vi` |
+| [fdtable-deleted](#fdtable-deleted) | os-lab | fdtable | 8 | 75.3 s | 76.0 s | `/os-lab?record=1&tour=fdtable-deleted&lang=vi` |
+| [nslayers-views](#nslayers-views) | os-lab | nslayers | 9 | 87.9 s | 89.9 s | `/os-lab?record=1&tour=nslayers-views&lang=vi` |
+| [nslayers-pod](#nslayers-pod) | os-lab | nslayers | 6 | 60.1 s | 60.2 s | `/os-lab?record=1&tour=nslayers-pod&lang=vi` |
+| [overlay-copyup](#overlay-copyup) | os-lab | overlay | 9 | 79.3 s | 79.4 s | `/os-lab?record=1&tour=overlay-copyup&lang=vi` |
+| [overlay-cache](#overlay-cache) | os-lab | overlay | 7 | 63.9 s | 64.0 s | `/os-lab?record=1&tour=overlay-cache&lang=vi` |
+| [epoll-ready](#epoll-ready) | os-lab | epoll | 7 | 68.5 s | 72.8 s | `/os-lab?record=1&tour=epoll-ready&lang=vi` |
+| [epoll-trigger](#epoll-trigger) | os-lab | epoll | 8 | 59.2 s | 63.0 s | `/os-lab?record=1&tour=epoll-trigger&lang=vi` |
+| [epoll-c10k](#epoll-c10k) | os-lab | epoll | 8 | 73.1 s | 73.8 s | `/os-lab?record=1&tour=epoll-c10k&lang=vi` |
+| [eintr-signal](#eintr-signal) | os-lab | eintr | 5 | 50.4 s | 54.7 s | `/os-lab?record=1&tour=eintr-signal&lang=vi` |
+| [nagle-delay](#nagle-delay) | os-lab | nagle | 5 | 46.3 s | 50.7 s | `/os-lab?record=1&tour=nagle-delay&lang=vi` |
 | [process-start](#process-start) | os-lab | process | 5 | 54.6 s | 54.7 s | `/os-lab?record=1&tour=process-start&lang=vi` |
 | [scheduler-start](#scheduler-start) | os-lab | scheduler | 5 | 54.6 s | 54.7 s | `/os-lab?record=1&tour=scheduler-start&lang=vi` |
 | [race-start](#race-start) | os-lab | race | 5 | 54.6 s | 54.7 s | `/os-lab?record=1&tour=race-start&lang=vi` |
@@ -63,6 +78,14 @@ Số đo thật: 2026-10-28 (record=1, rate=1, viewport 1280×800, lang=vi).
 | [cgroup-start](#cgroup-start) | os-lab | cgroup | 5 | 57.4 s | 57.4 s | `/os-lab?record=1&tour=cgroup-start&lang=vi` |
 | [cow-start](#cow-start) | os-lab | cow | 5 | 57.4 s | 40.8 s | `/os-lab?record=1&tour=cow-start&lang=vi` |
 | [pagecache-start](#pagecache-start) | os-lab | pagecache | 5 | 57.4 s | 57.4 s | `/os-lab?record=1&tour=pagecache-start&lang=vi` |
+| [syscall-start](#syscall-start) | os-lab | syscall | 5 | 57.4 s | 67.9 s | `/os-lab?record=1&tour=syscall-start&lang=vi` |
+| [perm-start](#perm-start) | os-lab | perm | 5 | 57.4 s | 57.4 s | `/os-lab?record=1&tour=perm-start&lang=vi` |
+| [fdtable-start](#fdtable-start) | os-lab | fdtable | 5 | 57.4 s | 63.6 s | `/os-lab?record=1&tour=fdtable-start&lang=vi` |
+| [nslayers-start](#nslayers-start) | os-lab | nslayers | 5 | 57.4 s | 57.4 s | `/os-lab?record=1&tour=nslayers-start&lang=vi` |
+| [overlay-start](#overlay-start) | os-lab | overlay | 5 | 57.4 s | 57.4 s | `/os-lab?record=1&tour=overlay-start&lang=vi` |
+| [epoll-start](#epoll-start) | os-lab | epoll | 5 | 57.4 s | 57.5 s | `/os-lab?record=1&tour=epoll-start&lang=vi` |
+| [eintr-start](#eintr-start) | os-lab | eintr | 5 | 57.4 s | 61.4 s | `/os-lab?record=1&tour=eintr-start&lang=vi` |
+| [nagle-start](#nagle-start) | os-lab | nagle | 5 | 57.4 s | 59.2 s | `/os-lab?record=1&tour=nagle-start&lang=vi` |
 | [latency-start](#latency-start) | os-lab | latency | 5 | 52.9 s | 53.0 s | `/os-lab?record=1&tour=latency-start&lang=vi` |
 | [bits-start](#bits-start) | cpu-lab | bits | 5 | 57.4 s | 40.8 s | `/cpu-lab?record=1&tour=bits-start&lang=vi` |
 | [data-start](#data-start) | cpu-lab | data | 5 | 57.4 s | 40.8 s | `/cpu-lab?record=1&tour=data-start&lang=vi` |
@@ -544,6 +567,306 @@ Trạng thái an toàn, kiểm an toàn bằng tay, và vì sao một yêu cầu
 
 Tiếng (đo thật): 1.8 s start · 17.2 s tick · 18.1 s tick · 19.0 s tick · 19.9 s tick · 20.8 s tick · 21.7 s tick · 22.6 s tick · 23.5 s tick · 24.4 s tick · 25.3 s tick · 26.2 s tick · 27.1 s tick · 28.0 s tick · 28.0 s step-ok · 43.6 s right · 43.6 s step-ok · 46.0 s wrong · 58.9 s right · 63.3 s done
 
+## syscall-journey
+
+**Hành trình của printf("hi")** / The journey of printf("hi") — os-lab · `syscall` · preset mặc định của: write, strace, batch, vdso
+
+Theo một lời gọi write() từ mã của bạn, băng qua lằn ranh người dùng/nhân, tới driver rồi quay về — và xem mỗi chặng tốn bao nhiêu.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 11.0 s (en 11.0 s) | 0.9 s | `sys-path` | Một toà tháp nhiều tầng | sys.scenario("write"), sys.arch("arm64"), player.seek(0) |  |
+| 2 | 11.9 s | 11.0 s (en 11.0 s) | 11.9 s | `sys-term` | printf không phải lời gọi hệ thống | — |  |
+| 3 | 22.9 s | 8.1 s (en 8.2 s) | 22.9 s | `step` | Đến lượt bạn: vượt lằn ranh | — | Bấm Bước tới khi CPU ở chế độ nhân. → player.step ×≤4 +700ms |
+| 4 | 31.0 s | 11.0 s (en 11.0 s) | 30.7 s | `sys-regs` | Cả "API" chỉ là các con số | — |  |
+| 5 | 42.0 s | 11.0 s (en 11.0 s) | 41.7 s | `where` | Chuyện này xảy ra ở đâu? | — |  |
+| 6 | 53.0 s | 5.7 s (en 6.3 s) | 52.7 s | `play` | Đến lượt bạn: đi hết chuyến | — | Chạy tới khi write() trả về 10. → player.speed(4), player.play +200ms |
+| 7 | 58.6 s | 11.0 s (en 11.0 s) | 61.2 s | `sys-cost` | 195,7 nano giây | — |  |
+| 8 | 69.6 s | 11.0 s (en 11.0 s) | 72.2 s | `sys-ladder` | Cỡ 100 lần một lời gọi hàm | — |  |
+| 9 | 80.6 s | 6.2 s (en 6.2 s) | 83.2 s | `sys-scenario` | Đến lượt bạn: mẹo đọc đồng hồ | — | Chạy kịch bản đồng hồ vDSO tới cuối. → sys.scenario("vdso") +300ms, player.end +400ms |
+| 10 | 86.8 s | 11.0 s (en 11.0 s) | 89.4 s | `sys-path` | Nó không hề vượt lằn ranh | — |  |
+| ✓ | 100.4 s | 7.0 s | 100.4 s | — | Câu hỏi: Trên arm64, lệnh nào đưa CPU từ chế độ người dùng vào nhân? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 15.7 s start · 15.7 s tap · 18.6 s tap · 41.2 s blip-fetch · 42.1 s blip-fetch · 42.9 s whoosh · 42.9 s step-ok · 71.2 s blip-decode · 71.6 s blip-decode · 72.0 s blip-exec · 72.4 s blip-exec · 72.8 s blip-exec · 73.1 s whoosh · 73.4 s pop · 73.8 s hit · 73.8 s step-ok · 101.4 s tap · 101.4 s blip-fetch · 101.9 s hit · 101.9 s step-ok · 117.8 s right · 122.2 s done
+
+## syscall-errno
+
+**Lỗi quay về ra sao: −errno** / How errors come back: −errno — os-lab · `syscall` · preset mặc định của: fail, seccomp
+
+Tệp không tồn tại trả về −2, libc đổi thành errno 2; rồi một bộ lọc seccomp trả lời EPERM, KILL và ENOSYS trước cả khi nhân kịp nhìn.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 8.6 s (en 9.2 s) | 0.9 s | `sys-path` | Tệp cấu hình không tồn tại | sys.scenario("fail"), sys.exists(false), player.seek(0) |  |
+| 2 | 9.5 s | 10.1 s (en 10.5 s) | 9.5 s | `step` | Đến lượt bạn: đi theo đường dẫn | — | Bấm Bước tới khi phép tìm thất bại. → player.step ×≤7 +650ms |
+| 3 | 19.6 s | 10.8 s (en 11.0 s) | 21.5 s | `sys-regs` | −2 trong thanh ghi kết quả | player.step +300ms |  |
+| 4 | 30.4 s | 11.0 s (en 11.0 s) | 32.3 s | `sys-term` | libc: −1 và errno = 2 | player.end +300ms |  |
+| 5 | 41.4 s | 5.6 s (en 5.8 s) | 43.3 s | `sys-scenario` | Đến lượt bạn: thêm bộ lọc seccomp | — | Chạy kịch bản seccomp tới cuối. → sys.scenario("seccomp") +300ms, player.end +400ms |
+| 6 | 47.1 s | 11.0 s (en 11.0 s) | 49.0 s | `sys-path` | Hàm xử lý thật không hề chạy | — |  |
+| 7 | 58.1 s | 3.6 s (en 3.7 s) | 60.0 s | `sys-options` | Đến lượt bạn: KILL | — | Hành động KILL, chạy tới cuối. → sys.filter("kill") +300ms, player.end +400ms |
+| 8 | 61.7 s | 11.0 s (en 11.0 s) | 63.6 s | `sys-term` | "Bad system call", thoát 159 | — |  |
+| 9 | 72.7 s | 5.5 s (en 5.5 s) | 74.6 s | `sys-options` | Đến lượt bạn: ENOSYS với một luồng | — | Luồng Python + ENOSYS, chạy tới cuối. → sys.call("clone3") +300ms, sys.filter("enosys") +300ms, player.end +400ms |
+| 10 | 78.2 s | 11.0 s (en 11.0 s) | 80.2 s | `sys-term` | "thread ok" — đường lùi | — |  |
+| ✓ | 91.2 s | 7.0 s | 91.2 s | — | Câu hỏi: openat của nhân trả về −2. Chương trình C của bạn thấy gì? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 15.8 s start · 15.8 s tap · 18.6 s tap · 27.8 s blip-fetch · 28.6 s whoosh · 29.7 s blip-decode · 31.0 s blip-decode · 31.9 s blip-exec · 33.6 s oops · 33.6 s step-ok · 37.1 s whoosh · 47.5 s oops · 61.3 s tap · 61.3 s blip-fetch · 61.8 s oops · 61.8 s step-ok · 76.8 s tap · 76.8 s blip-fetch · 77.3 s thud · 77.3 s step-ok · 92.3 s tap · 92.3 s blip-fetch · 92.7 s tap · 93.2 s hit · 93.2 s step-ok · 108.7 s right · 113.1 s done
+
+## perm-check
+
+**Linux quyết định "Permission denied" ra sao** / How Linux decides "Permission denied" — os-lab · `perm` · preset mặc định của: owner, dirx, sticky
+
+Xét chủ trước và CHỈ bit của chủ; rồi nhóm, rồi other — và vì sao xoá là chuyện của thư mục, không phải của tệp.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 11.0 s (en 11.0 s) | 0.9 s | `perm-ask` | Một câu hỏi cho nhân | perm.preset("owner"), player.seek(0) |  |
+| 2 | 11.9 s | 9.6 s (en 10.7 s) | 14.9 s | `perm-tree` | Đọc chuỗi quyền | — |  |
+| 3 | 21.5 s | 11.4 s (en 11.1 s) | 24.5 s | `step` | Đến lượt bạn: chạy phép kiểm | — | Bấm Bước tới khi hiện phán quyết. → player.step ×≤9 +600ms |
+| 4 | 32.8 s | 11.0 s (en 11.0 s) | 32.3 s | `perm-checks` | Chỉ bit của chủ được tính | — |  |
+| 5 | 43.8 s | 4.5 s (en 4.2 s) | 43.3 s | `perm-ask` | Đến lượt bạn: hỏi với tư cách bob | — | Hỏi với tư cách bob và chạy tới phán quyết. → perm.who("bob") +300ms, player.end +400ms |
+| 6 | 48.4 s | 10.4 s (en 11.0 s) | 47.8 s | `perm-shell` | bob đọc được: "hello" | — |  |
+| 7 | 58.8 s | 11.0 s (en 11.0 s) | 58.3 s | `perm-shell` | Xoá trong /tmp | perm.preset("sticky"), player.end +300ms |  |
+| 8 | 69.8 s | 10.9 s (en 11.0 s) | 69.3 s | `perm-checks` | Bit sticky | — |  |
+| 9 | 80.7 s | 5.9 s (en 6.3 s) | 80.1 s | `perm-ask` | Đến lượt bạn: thư mục không có "t" | — | Xoá /srv/drop/bob-session với tư cách dev. → perm.path("/srv/drop/bob-session") +300ms, player.end +400ms |
+| 10 | 86.6 s | 11.0 s (en 11.0 s) | 86.1 s | `perm-checks` | Xoá = ghi vào thư mục | — |  |
+| ✓ | 97.1 s | 7.0 s | 97.1 s | — | Câu hỏi: Một tệp ----rwxrwx và bạn là chủ (cũng thuộc nhóm của nó). Bạn đọc được không? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 1.8 s start · 2.0 s tap · 28.9 s blip-exec · 29.6 s miss · 30.3 s tick · 31.0 s wrong · 31.0 s step-ok · 46.6 s tap · 46.6 s blip-exec · 47.1 s hit · 47.1 s step-ok · 59.2 s tap · 59.2 s blip-exec · 59.6 s wrong · 84.3 s tap · 84.3 s blip-exec · 84.8 s hit · 84.8 s step-ok · 100.6 s right · 105.0 s done
+
+## perm-acl
+
+**Ngoài rwx: ACL, setuid và root** / Beyond rwx: ACLs, setuid and root — os-lab · `perm` · preset mặc định của: acl, setuid, caps, setgid
+
+Một mục ACL và cái bẫy mask, một chương trình setuid mượn quyền root, và chính root chỉ là một bộ capability.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 11.0 s (en 11.0 s) | 0.9 s | `perm-tree` | Một thư mục riêng… có một ngoại lệ | perm.preset("acl"), player.seek(0) |  |
+| 2 | 11.9 s | 5.1 s (en 5.0 s) | 14.9 s | `play` | Đến lượt bạn: user của nginx đọc được a.jpg không? | — | Chạy tới phán quyết. → player.speed(4), player.play +200ms |
+| 3 | 17.0 s | 8.6 s (en 10.9 s) | 21.6 s | `perm-checks` | Mục ACL phải AND với mask | — |  |
+| 4 | 25.6 s | 6.3 s (en 7.1 s) | 30.2 s | `perm-bits` | Đến lượt bạn: lệnh chmod 600 vô hại | — | Đặt a.jpg thành 600. → perm.select("/srv/app/uploads/a.jpg"), perm.chmod("/srv/app/uploads/a.jpg:600") +300ms |
+| 5 | 31.9 s | 11.0 s (en 11.0 s) | 43.8 s | `perm-bits` | #effective:--- | player.end +300ms |  |
+| 6 | 42.9 s | 11.0 s (en 11.0 s) | 54.8 s | `perm-shell` | setuid: mượn danh chủ tệp | perm.preset("setuid"), player.end +300ms |  |
+| 7 | 53.9 s | 5.2 s (en 4.7 s) | 65.8 s | `perm-ask` | Đến lượt bạn: không qua ids | — | Đọc .env trực tiếp với tư cách dev. → perm.via(false) +300ms, player.end +400ms |
+| 8 | 59.1 s | 11.0 s (en 11.0 s) | 71.0 s | `perm-checks` | root đọc tệp 000 | perm.preset("caps"), player.end +300ms |  |
+| 9 | 70.1 s | 4.7 s (en 4.9 s) | 82.0 s | `perm-ask` | Đến lượt bạn: bỏ capability | — | Bỏ CAP_DAC_OVERRIDE và chạy. → perm.capsDrop(true) +300ms, player.end +400ms |
+| ✓ | 86.7 s | 7.0 s | 86.7 s | — | Câu hỏi: Một tệp có mục ACL user:www-data:r-- và bạn chạy chmod 600 lên nó. www-data còn đọc được không? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 1.8 s start · 2.0 s tap · 19.1 s blip-exec · 19.4 s blip-exec · 19.7 s blip-exec · 20.0 s tick · 20.2 s blip-exec · 20.5 s hit · 20.5 s step-ok · 42.2 s on · 42.2 s blip-exec · 42.2 s step-ok · 45.0 s wrong · 55.7 s tap · 55.7 s tick · 56.2 s hit · 69.5 s tap · 69.5 s blip-exec · 70.0 s wrong · 70.0 s step-ok · 71.9 s tap · 71.9 s blip-exec · 72.3 s hit · 85.4 s tap · 85.4 s blip-exec · 85.9 s wrong · 85.9 s step-ok · 90.2 s right · 94.6 s done
+
+## fdtable-offsets
+
+**Vì sao hai người ghi làm nát tệp log** / Why two writers clobber a log file — os-lab · `fdtable` · preset mặc định của: twice, dup, append, fork, redirect
+
+fd → mô tả file mở → inode: ai giữ offset sẽ quyết định các lần ghi có đè lên nhau hay không.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 10.4 s (en 11.0 s) | 0.9 s | `fd-procs` | Ba bảng, không phải một | fd.preset("twice"), player.seek(0) |  |
+| 2 | 11.3 s | 6.1 s (en 5.9 s) | 11.3 s | `step` | Đến lượt bạn: mở tệp log hai lần | — | Bấm Bước tới khi xong cả hai lần open. → player.step ×≤2 +700ms |
+| 3 | 17.4 s | 9.8 s (en 11.0 s) | 17.4 s | `fd-ofds` | Hai mô tả, hai offset | — |  |
+| 4 | 27.2 s | 3.7 s (en 4.1 s) | 27.3 s | `play` | Đến lượt bạn: cho họ ghi | — | Chạy tới cuối. → player.speed(4), player.play +200ms |
+| 5 | 30.9 s | 10.9 s (en 11.0 s) | 31.9 s | `fd-term` | "worker B: hi" + "er 1001 paid" | — |  |
+| 6 | 41.7 s | 5.5 s (en 5.8 s) | 42.7 s | `fd-preset` | Đến lượt bạn: dùng chung một mô tả | — | Chạy kịch bản dup tới cuối. → fd.preset("dup") +300ms, player.end +400ms |
+| 7 | 47.2 s | 11.0 s (en 11.0 s) | 48.2 s | `fd-ofds` | Một mô tả, offset 39 | — |  |
+| 8 | 58.2 s | 5.3 s (en 5.6 s) | 59.2 s | `fd-preset` | Đến lượt bạn: O_APPEND | — | Chạy kịch bản append tới cuối. → fd.preset("append") +300ms, player.end +400ms |
+| 9 | 63.5 s | 11.0 s (en 11.0 s) | 64.6 s | `fd-term` | Nhân nhảy về cuối tệp | — |  |
+| ✓ | 75.6 s | 7.0 s | 75.6 s | — | Câu hỏi: Tiến trình cha mở log.txt rồi fork(). Cha và con cùng ghi vào fd 3. Chuyện gì xảy ra? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 9.7 s start · 9.7 s tap · 23.4 s blip-exec · 24.2 s blip-exec · 24.2 s step-ok · 38.6 s blip-exec · 39.0 s miss · 39.3 s hit · 39.3 s step-ok · 54.5 s tap · 55.0 s hit · 55.0 s step-ok · 70.9 s tap · 71.4 s hit · 71.4 s step-ok · 86.9 s right · 91.3 s done
+
+## fdtable-deleted
+
+**Đã xoá mà đĩa vẫn đầy, và "Too many open files"** / Deleted but still full, and "Too many open files" — os-lab · `fdtable` · preset mặc định của: deleted, emfile, links
+
+Tệp sống tới khi tên cuối cùng VÀ mô tả mở cuối cùng đều biến mất; tiến trình không bao giờ đóng sẽ chạm EMFILE.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 8.8 s (en 9.8 s) | 0.9 s | `fd-inodes` | Một tệp log đang bận | fd.preset("deleted"), player.seek(0) |  |
+| 2 | 9.7 s | 5.2 s (en 5.3 s) | 9.7 s | `step` | Đến lượt bạn: xoá nó | — | Bấm Bước tới khi app.log bị xoá. → player.step ×≤3 +700ms |
+| 3 | 15.0 s | 11.0 s (en 11.0 s) | 15.0 s | `fd-df` | du nói 0, df nói 900 MiB | — |  |
+| 4 | 26.0 s | 11.0 s (en 11.0 s) | 26.0 s | `fd-inodes` | links 0, đang mở 1 | — |  |
+| 5 | 37.0 s | 3.1 s (en 3.1 s) | 37.0 s | `play` | Đến lượt bạn: đóng nó | — | Chạy tới khi dung lượng được giải phóng. → player.speed(4), player.play +200ms |
+| 6 | 40.1 s | 10.9 s (en 11.0 s) | 40.7 s | `fd-procs` | Một máy chủ không bao giờ đóng | fd.preset("emfile"), player.seek(1) |  |
+| 7 | 51.0 s | 6.3 s (en 6.7 s) | 51.6 s | `step` | Đến lượt bạn: gửi lưu lượng | — | Bấm Bước tới khi gặp EMFILE. → player.step ×≤3 +700ms |
+| 8 | 57.3 s | 11.0 s (en 11.0 s) | 57.9 s | `fd-term` | EMFILE: Too many open files | — |  |
+| ✓ | 68.9 s | 7.0 s | 68.9 s | — | Câu hỏi: Bạn rm một tệp log 900 MiB mà df vẫn báo đĩa đầy. Vì sao? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 7.1 s start · 7.2 s tap · 18.3 s blip-exec · 19.1 s blip-exec · 19.9 s miss · 19.9 s step-ok · 45.5 s blip-exec · 45.8 s hit · 45.8 s step-ok · 47.0 s tap · 47.1 s blip-exec · 60.8 s blip-exec · 61.6 s miss · 62.4 s oops · 62.4 s step-ok · 77.8 s right · 82.2 s done
+
+## nslayers-views
+
+**Dựng một container từ các namespace** / Build a container out of namespaces — os-lab · `nslayers` · preset mặc định của: docker, unshare, userns
+
+Bắt đầu từ một tiến trình bình thường và bật từng namespace tới khi nó trông như một container — rồi xem thứ gì vẫn dùng chung.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 11.0 s (en 11.0 s) | 0.9 s | `ns-inside` | Chưa có namespace nào | ns.preset("docker"), player.seek(0) |  |
+| 2 | 11.9 s | 11.0 s (en 11.0 s) | 11.9 s | `ns-host` | Máy chủ luôn thấy sự thật | — |  |
+| 3 | 22.9 s | 7.5 s (en 8.3 s) | 22.9 s | `step` | Đến lượt bạn: thêm namespace | — | Bấm Bước tới khi pid namespace được bật. → player.step ×≤3 +700ms |
+| 4 | 30.4 s | 11.0 s (en 11.0 s) | 30.4 s | `ns-inside` | PID 71743 là PID 1 | — |  |
+| 5 | 41.4 s | 4.0 s (en 4.2 s) | 41.4 s | `play` | Đến lượt bạn: dựng nốt container | — | Chạy tới cuối. → player.speed(4), player.play +200ms |
+| 6 | 45.4 s | 11.0 s (en 11.0 s) | 47.3 s | `ns-inodes` | 7 namespace riêng, 1 dùng chung | — |  |
+| 7 | 56.4 s | 2.5 s (en 3.0 s) | 58.3 s | `ns-toggles` | Đến lượt bạn: bật "user" | — | Bật user namespace. → ns.toggle("user") +300ms |
+| 8 | 58.9 s | 11.0 s (en 11.0 s) | 60.9 s | `ns-inside` | root bên trong, dev bên ngoài | — |  |
+| 9 | 69.9 s | 11.0 s (en 11.0 s) | 71.9 s | `where` | Container nằm ở đâu? | — |  |
+| ✓ | 82.9 s | 7.0 s | 82.9 s | — | Câu hỏi: Namespace nào khiến một tiến trình thấy mình là PID 1? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 1.8 s start · 1.8 s tap · 27.4 s on · 28.3 s on · 29.1 s on · 29.1 s step-ok · 45.1 s on · 45.5 s on · 45.9 s on · 46.3 s on · 46.7 s on · 46.7 s step-ok · 60.8 s on · 60.8 s step-ok · 86.4 s right · 90.8 s done
+
+## nslayers-pod
+
+**Pod = các container dùng chung namespace** / A pod = containers sharing namespaces — os-lab · `nslayers` · preset mặc định của: pod
+
+Vì sao sidecar gọi được localhost:8000, vì sao hai container không cùng nghe 8000 được, và container pause để làm gì.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 11.0 s (en 11.0 s) | 0.9 s | `ns-pod` | Ba container, một pod | ns.preset("pod") |  |
+| 2 | 11.9 s | 11.0 s (en 11.0 s) | 11.9 s | `ns-podres` | localhost nghĩa là cả pod | — |  |
+| 3 | 22.9 s | 4.0 s (en 4.4 s) | 22.9 s | `ns-pod` | Đến lượt bạn: cắt mạng | — | Thôi dùng chung net. → ns.pod("net") +300ms |
+| 4 | 26.9 s | 11.0 s (en 11.0 s) | 26.9 s | `ns-podres` | Connection refused | — |  |
+| 5 | 37.9 s | 4.3 s (en 4.0 s) | 37.9 s | `ns-pod` | Đến lượt bạn: dùng chung net và pid | — | Dùng chung net và pid. → ns.pod("net") +300ms, ns.pod("pid") +300ms |
+| 6 | 42.1 s | 11.0 s (en 11.0 s) | 42.2 s | `ns-podres` | pause là PID 1 | — |  |
+| ✓ | 53.2 s | 7.0 s | 53.2 s | — | Câu hỏi: Hai container trong một pod cùng nghe cổng 8000. Chuyện gì xảy ra? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 9.3 s start · 9.4 s tap · 33.7 s off · 33.7 s step-ok · 48.7 s on · 49.1 s on · 49.1 s step-ok · 64.2 s right · 68.6 s done
+
+## overlay-copyup
+
+**Container ghi vào image chỉ-đọc ra sao** / How a container writes to a read-only image — os-lab · `overlay` · preset mặc định của: layers, copyup, whiteout, opaque, image
+
+Các lớp chồng thành một góc nhìn; lần ghi đầu vào tệp lớp dưới chép nguyên tệp lên; xoá để lại một whiteout.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 10.7 s (en 10.7 s) | 0.9 s | `ov-stack` | Mỗi lớp chỉ là một thư mục | ov.preset("copyup"), player.seek(0) |  |
+| 2 | 11.6 s | 4.3 s (en 3.9 s) | 11.7 s | `step` | Đến lượt bạn: mount chúng | — | Mount overlay. → player.step ×≤1 +600ms |
+| 3 | 15.9 s | 11.0 s (en 11.0 s) | 15.9 s | `ov-merged` | Một góc nhìn ghép | — |  |
+| 4 | 26.9 s | 7.1 s (en 7.1 s) | 26.9 s | `step` | Đến lượt bạn: đụng vào tệp lớn | — | Bấm Bước tới khi big.db được copy-up. → player.step ×≤3 +700ms |
+| 5 | 34.0 s | 11.0 s (en 11.0 s) | 34.1 s | `ov-copyup` | 0,93 s cho một byte | — |  |
+| 6 | 45.0 s | 4.2 s (en 4.0 s) | 45.1 s | `step` | Đến lượt bạn: ghi lần nữa | — | Bấm Bước thêm một lần. → player.step ×≤1 +600ms |
+| 7 | 49.2 s | 8.3 s (en 8.7 s) | 49.2 s | `ov-copyup` | 1 ms: chỉ trả một lần | — |  |
+| 8 | 57.5 s | 3.8 s (en 4.0 s) | 57.6 s | `ov-preset` | Đến lượt bạn: xoá một tệp | — | Chạy kịch bản whiteout tới cuối. → ov.preset("whiteout") +300ms, player.end +400ms |
+| 9 | 61.3 s | 11.0 s (en 11.0 s) | 61.4 s | `ov-term` | Một whiteout, không phải xoá thật | — |  |
+| ✓ | 72.4 s | 7.0 s | 72.4 s | — | Câu hỏi: Một Dockerfile chép .env ở một bước rồi xoá ở bước sau. Bí mật còn trong image không? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 8.2 s start · 8.2 s tap · 21.6 s blip-exec · 21.6 s step-ok · 37.7 s blip-exec · 38.5 s blip-exec · 39.3 s whoosh · 39.3 s step-ok · 55.0 s blip-exec · 55.0 s step-ok · 66.9 s tap · 66.9 s tick · 67.4 s blip-exec · 67.4 s step-ok · 82.3 s right · 86.7 s done
+
+## overlay-cache
+
+**Vì sao docker build của bạn chậm** / Why your Docker build is slow — os-lab · `overlay` · preset mặc định của: cache
+
+Mỗi bước Dockerfile là một lớp được cache; một thay đổi làm dựng lại bước đó và mọi bước sau — thứ tự rất quan trọng.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 9.9 s (en 10.9 s) | 0.9 s | `ov-stack` | Năm bước, năm lớp | ov.preset("cache"), player.seek(0) |  |
+| 2 | 10.8 s | 5.4 s (en 5.5 s) | 10.8 s | `step` | Đến lượt bạn: sửa server.js | — | Bấm Bước tới lần sửa server.js. → player.step ×≤2 +700ms |
+| 3 | 16.2 s | 10.1 s (en 11.0 s) | 16.2 s | `ov-copyup` | Một bước, 0,1 s | — |  |
+| 4 | 26.2 s | 3.9 s (en 3.9 s) | 26.2 s | `step` | Đến lượt bạn: sửa package.json | — | Bấm Bước tới lần sửa package.json. → player.step ×≤1 +600ms |
+| 5 | 30.1 s | 11.0 s (en 11.0 s) | 30.2 s | `ov-stack` | Mọi thứ sau nó đều dựng lại | — |  |
+| 6 | 41.1 s | 4.8 s (en 5.6 s) | 41.2 s | `ov-ops` | Đến lượt bạn: lỗi kinh điển | — | Thứ tự sai + sửa server.js. → ov.order("bad") +300ms, ov.change("server") +300ms |
+| 7 | 45.9 s | 11.0 s (en 11.0 s) | 46.0 s | `ov-copyup` | Sửa một dòng là cài lại tất cả | — |  |
+| ✓ | 57.0 s | 7.0 s | 57.0 s | — | Câu hỏi: Thứ tự Dockerfile nào giữ build nhanh khi bạn sửa code? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 14.4 s start · 14.4 s tap · 27.2 s tick · 28.0 s tick · 28.0 s step-ok · 42.2 s tick · 42.2 s step-ok · 57.3 s tap · 57.8 s tap · 57.8 s step-ok · 73.1 s right · 77.5 s done
+
+## epoll-ready
+
+**Một luồng canh hàng nghìn socket ra sao** / How one thread watches thousands of sockets — os-lab · `epoll` · preset mặc định của: ready, scan
+
+Đăng ký một lần (danh sách quan tâm), để nhân gom những gì sẵn sàng (danh sách sẵn sàng), chỉ thức vì chúng — và vì sao như thế hơn poll().
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 10.6 s (en 11.0 s) | 0.9 s | `ep-lists` | Hai danh sách trong nhân | ep.preset("ready"), player.seek(0) |  |
+| 2 | 11.5 s | 7.8 s (en 7.9 s) | 16.0 s | `step` | Đến lượt bạn: nhận vài khách | — | Bấm Bước tới khi danh sách quan tâm có 9 fd. → player.step ×≤6 +650ms |
+| 3 | 19.3 s | 10.6 s (en 10.5 s) | 23.8 s | `ep-cost` | Rảnh thì không tốn gì | player.step +300ms |  |
+| 4 | 29.9 s | 5.3 s (en 5.2 s) | 34.5 s | `step` | Đến lượt bạn: dữ liệu tới | — | Bấm Bước tới khi epoll_wait trả về 2 sự kiện. → player.step ×≤3 +650ms |
+| 5 | 35.2 s | 11.0 s (en 11.0 s) | 39.4 s | `ep-cost` | 2 thay vì 9 | — |  |
+| 6 | 46.2 s | 4.3 s (en 4.3 s) | 50.4 s | `ep-preset` | Đến lượt bạn: tăng quy mô | — | Chạy kịch bản giá tới cuối. → ep.preset("scan") +300ms, player.end +400ms |
+| 7 | 50.5 s | 11.0 s (en 11.0 s) | 54.8 s | `ep-cost` | 676 µs so với 0,72 µs | — |  |
+| ✓ | 65.8 s | 7.0 s | 65.8 s | — | Câu hỏi: epoll_wait trả lại cái gì? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 2.6 s start · 2.6 s tap · 20.2 s blip-decode · 21.0 s tick · 21.8 s whoosh · 22.5 s pop · 23.3 s blip-exec · 24.1 s tick · 24.1 s step-ok · 25.9 s tick · 38.5 s whoosh · 39.4 s pop · 39.4 s step-ok · 54.4 s tap · 54.4 s tick · 54.9 s tick · 54.9 s step-ok · 70.1 s right · 74.5 s done
+
+## epoll-trigger
+
+**Theo mức vs theo cạnh: lỗi làm treo kết nối** / Level vs edge: the bug that hangs connections — os-lab · `epoll` · preset mặc định của: trigger, oneshot
+
+LT cứ nhắc mãi, ET chỉ báo một lần — nên với ET phải đọc tới EAGAIN. Thêm: bốn luồng trên một epoll.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 7.8 s (en 8.3 s) | 0.9 s | `ep-bytes` | 10 byte, mỗi lần đọc 4 | ep.preset("trigger"), ep.trig("lt"), player.seek(0) |  |
+| 2 | 8.7 s | 2.5 s (en 2.5 s) | 11.4 s | `play` | Đến lượt bạn: theo mức | — | Chạy tới cuối ở chế độ LT. → player.speed(4), player.play +200ms |
+| 3 | 11.2 s | 7.1 s (en 8.6 s) | 15.0 s | `ep-bytes` | 4 + 4 + 2 | — |  |
+| 4 | 18.3 s | 4.2 s (en 4.2 s) | 22.1 s | `ep-opts` | Đến lượt bạn: theo cạnh | — | Chế độ ET, chạy tới cuối. → ep.trig("et") +300ms, player.end +400ms |
+| 5 | 22.5 s | 11.0 s (en 11.0 s) | 26.3 s | `ep-bytes` | 6 byte kẹt mãi mãi | — |  |
+| 6 | 33.5 s | 3.9 s (en 4.1 s) | 37.3 s | `ep-opts` | Đến lượt bạn: luật của ET | — | ET + vét, chạy tới cuối. → ep.trig("drain") +300ms, player.end +400ms |
+| 7 | 37.4 s | 10.8 s (en 11.0 s) | 41.2 s | `ep-lanes` | Bốn luồng, một epoll | ep.preset("oneshot"), ep.share("lt"), player.end +300ms |  |
+| 8 | 48.2 s | 3.9 s (en 4.0 s) | 52.1 s | `ep-opts` | Đến lượt bạn: EPOLLONESHOT | — | EPOLLONESHOT, chạy tới cuối. → ep.share("oneshot") +300ms, player.end +400ms |
+| ✓ | 56.0 s | 7.0 s | 56.0 s | — | Câu hỏi: Với epoll theo cạnh, khi được đánh thức bạn nên đọc bao nhiêu? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 2.9 s start · 2.9 s tap · 3.0 s tap · 15.4 s blip-exec · 15.8 s blip-exec · 16.1 s hit · 16.1 s step-ok · 16.5 s hit · 26.3 s tap · 26.3 s blip-exec · 26.8 s oops · 26.8 s step-ok · 41.4 s tap · 41.4 s blip-exec · 41.9 s hit · 41.9 s step-ok · 43.2 s tap · 43.2 s tick · 43.4 s tap · 43.8 s miss · 56.1 s tap · 56.1 s tick · 56.6 s hit · 56.6 s step-ok · 60.6 s right · 65.0 s done
+
+## epoll-c10k
+
+**10 000 kết nối: luồng vs một event loop** / 10 000 connections: threads vs one event loop — os-lab · `epoll` · preset mặc định của: c10k, walls
+
+Đo thật trong lab: mỗi-kết-nối-một-luồng tốn bao nhiêu bộ nhớ, đổi ngữ cảnh và độ trễ đuôi, và giới hạn nào làm nó gãy trước.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 11.0 s (en 11.0 s) | 0.9 s | `ep-c10k` | 1 000 kết nối: hoà | ep.preset("c10k"), ep.load("busy"), player.seek(0) |  |
+| 2 | 11.9 s | 3.5 s (en 3.7 s) | 11.9 s | `play` | Đến lượt bạn: tăng tải | — | Chạy tới 10 000 kết nối. → player.speed(4), player.play +200ms |
+| 3 | 15.4 s | 11.0 s (en 11.0 s) | 16.1 s | `ep-c10k` | p99: 322 ms so với 0,38 ms | — |  |
+| 4 | 26.4 s | 4.1 s (en 4.2 s) | 27.1 s | `ep-opts` | Đến lượt bạn: một ứng dụng chat | — | Chọn tải nhẹ. → ep.load("light") +300ms |
+| 5 | 30.5 s | 11.0 s (en 11.0 s) | 31.1 s | `ep-c10k` | Độ trễ ổn, bộ nhớ thì không | — |  |
+| 6 | 41.5 s | 8.0 s (en 7.5 s) | 42.1 s | `ep-walls` | Bức tường 1: pids.max | ep.preset("walls"), player.seek(0) |  |
+| 7 | 49.4 s | 5.6 s (en 5.3 s) | 50.1 s | `step` | Đến lượt bạn: các bức tường tiếp theo | — | Bấm Bước tới bức tường ulimit -n. → player.step ×≤2 +700ms |
+| 8 | 55.1 s | 11.0 s (en 11.0 s) | 55.8 s | `ep-walls` | Kết nối nào cũng là một fd | — |  |
+| ✓ | 66.8 s | 7.0 s | 66.8 s | — | Câu hỏi: Vì sao máy chủ mỗi-kết-nối-một-luồng tốn bộ nhớ hơn nhiều so với RSS hiển thị? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 7.8 s start · 7.8 s tap · 9.3 s tap · 21.3 s tick · 21.7 s tick · 21.7 s step-ok · 36.4 s tap · 36.4 s step-ok · 49.1 s tap · 49.1 s tick · 60.1 s tick · 60.9 s tick · 60.9 s step-ok · 76.3 s right · 80.7 s done
+
+## eintr-signal
+
+**Khi tín hiệu cắt ngang read()** / When a signal interrupts read() — os-lab · `eintr` · preset mặc định của: norestart, restart, poll, python, go
+
+Lời gọi đang chặn trả -1 EINTR khi một handler chạy — trừ khi SA_RESTART bảo nhân chạy lại nó.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 10.4 s (en 10.8 s) | 0.9 s | `ei-timeline` | Ngủ trong read() | eintr.mode("norestart"), player.seek(0) |  |
+| 2 | 11.3 s | 6.2 s (en 6.2 s) | 13.9 s | `step` | Đến lượt bạn: cho báo thức reo | — | Bấm Bước tới khi read() trả về. → player.step ×≤3 +650ms |
+| 3 | 17.4 s | 11.0 s (en 11.0 s) | 21.7 s | `ei-term` | -1 EINTR lúc 1,0 s | — |  |
+| 4 | 28.4 s | 4.0 s (en 4.2 s) | 32.7 s | `ei-mode` | Đến lượt bạn: SA_RESTART | — | SA_RESTART, chạy tới cuối. → eintr.mode("restart") +300ms, player.end +400ms |
+| 5 | 32.4 s | 11.0 s (en 11.0 s) | 36.7 s | `ei-term` | Nhân tự chạy lại | — |  |
+| ✓ | 47.7 s | 7.0 s | 47.7 s | — | Câu hỏi: read() trả -1 với errno EINTR. Mã C thường nên làm gì? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 32.8 s start · 35.5 s tap · 48.8 s whoosh · 50.7 s oops · 51.7 s oops · 51.7 s step-ok · 66.7 s tap · 66.7 s tick · 67.2 s hit · 67.2 s step-ok · 82.2 s right · 86.6 s done
+
+## nagle-delay
+
+**Vì sao request nào cũng mất 41 ms** / Why every request takes 41 ms — os-lab · `nagle` · preset mặc định của: nagle, nodelay, onewrite
+
+Nagle ở máy chủ và ACK trễ ở khách chờ lẫn nhau; TCP_NODELAY hoặc gộp một lần write là hết.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 9.7 s (en 9.9 s) | 0.9 s | `ng-seq` | Một máy chủ HTTP tí hon | nagle.writes(2), nagle.nodelay(false), nagle.delayedAck(true), player.seek(0) |  |
+| 2 | 10.6 s | 3.4 s (en 3.8 s) | 13.2 s | `play` | Đến lượt bạn: gửi một request | — | Chạy tới cuối. → player.speed(4), player.play +200ms |
+| 3 | 14.0 s | 11.0 s (en 11.0 s) | 18.3 s | `ng-seq` | Hai bên lịch sự chờ nhau = kẹt 40 ms | — |  |
+| 4 | 25.0 s | 10.7 s (en 10.9 s) | 29.3 s | `ng-cost` | 8,4 s cho 200 trang tí hon | — |  |
+| 5 | 35.7 s | 3.6 s (en 3.9 s) | 40.0 s | `ng-opts` | Đến lượt bạn: TCP_NODELAY | — | Bật TCP_NODELAY, chạy tới cuối. → nagle.nodelay(true) +300ms, player.end +400ms |
+| ✓ | 43.7 s | 7.0 s | 43.7 s | — | Câu hỏi: Thay đổi nào xoá được khoảng kẹt 40 ms? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 31.6 s start · 34.2 s tap · 34.3 s tap · 34.4 s tap · 46.3 s blip-exec · 46.7 s miss · 47.1 s miss · 47.5 s oops · 47.8 s oops · 47.8 s step-ok · 72.6 s tap · 72.6 s blip-exec · 73.2 s hit · 73.2 s step-ok · 77.0 s right · 81.4 s done
+
 ## process-start
 
 **Cách dùng phòng lab này** / How to use this lab — os-lab · `process` · tour làm quen (mọi preset chưa có tour riêng)
@@ -763,6 +1086,142 @@ Một phút làm quen: mô phỏng này cho thấy gì và điều khiển nó r
 | ✓ | 50.4 s | 7.0 s | 50.4 s | — | Câu hỏi: Ô có viền màu bên trái cho bạn biết gì? | đáp án đúng: A | — |
 
 Tiếng (đo thật): 1.8 s start · 26.9 s tick · 27.6 s step-ok · 27.6 s tick · 53.9 s right · 58.3 s done
+
+## syscall-start
+
+**Cách dùng phòng lab này** / How to use this lab — os-lab · `syscall` · tour làm quen (mọi preset chưa có tour riêng)
+
+Một phút làm quen: mô phỏng này cho thấy gì và điều khiển nó ra sao.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 11.0 s (en 11.0 s) | 0.9 s | `head` | Hành trình một lời gọi hệ thống | — |  |
+| 2 | 11.9 s | 11.0 s (en 11.0 s) | 22.5 s | `controls` | Thanh điều khiển | — |  |
+| 3 | 22.9 s | 5.6 s (en 5.4 s) | 33.5 s | `step` | Đến lượt bạn: hai bước | — | Bấm Bước hai lần. → player.step ×≤2 +600ms |
+| 4 | 28.5 s | 10.9 s (en 11.0 s) | 39.1 s | `explain` | Đọc ô giải thích | — |  |
+| 5 | 39.4 s | 11.0 s (en 11.0 s) | 49.9 s | — | Giờ tự khám phá | — |  |
+| ✓ | 60.9 s | 7.0 s | 60.9 s | — | Câu hỏi: Ô có viền màu bên trái cho bạn biết gì? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 1.8 s start · 37.4 s blip-fetch · 38.2 s step-ok · 38.2 s blip-fetch · 64.5 s right · 68.9 s done
+
+## perm-start
+
+**Cách dùng phòng lab này** / How to use this lab — os-lab · `perm` · tour làm quen (mọi preset chưa có tour riêng)
+
+Một phút làm quen: mô phỏng này cho thấy gì và điều khiển nó ra sao.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 11.0 s (en 11.0 s) | 0.9 s | `head` | Phòng quyền: người X làm được Y không? | — |  |
+| 2 | 11.9 s | 11.0 s (en 11.0 s) | 11.9 s | `controls` | Thanh điều khiển | — |  |
+| 3 | 22.9 s | 5.6 s (en 5.4 s) | 22.9 s | `step` | Đến lượt bạn: hai bước | — | Bấm Bước hai lần. → player.step ×≤2 +600ms |
+| 4 | 28.5 s | 10.9 s (en 11.0 s) | 28.5 s | `explain` | Đọc ô giải thích | — |  |
+| 5 | 39.4 s | 11.0 s (en 11.0 s) | 39.4 s | — | Giờ tự khám phá | — |  |
+| ✓ | 50.4 s | 7.0 s | 50.4 s | — | Câu hỏi: Ô có viền màu bên trái cho bạn biết gì? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 1.8 s start · 26.9 s blip-exec · 27.6 s step-ok · 27.6 s miss · 53.9 s right · 58.3 s done
+
+## fdtable-start
+
+**Cách dùng phòng lab này** / How to use this lab — os-lab · `fdtable` · tour làm quen (mọi preset chưa có tour riêng)
+
+Một phút làm quen: mô phỏng này cho thấy gì và điều khiển nó ra sao.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 11.0 s (en 11.0 s) | 0.9 s | `head` | fd, tệp đang mở và inode | — |  |
+| 2 | 11.9 s | 11.0 s (en 11.0 s) | 18.1 s | `controls` | Thanh điều khiển | — |  |
+| 3 | 22.9 s | 5.6 s (en 5.4 s) | 29.1 s | `step` | Đến lượt bạn: hai bước | — | Bấm Bước hai lần. → player.step ×≤2 +600ms |
+| 4 | 28.5 s | 10.9 s (en 11.0 s) | 34.7 s | `explain` | Đọc ô giải thích | — |  |
+| 5 | 39.4 s | 11.0 s (en 11.0 s) | 45.6 s | — | Giờ tự khám phá | — |  |
+| ✓ | 56.6 s | 7.0 s | 56.6 s | — | Câu hỏi: Ô có viền màu bên trái cho bạn biết gì? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 1.9 s start · 33.1 s blip-exec · 33.8 s step-ok · 33.8 s blip-exec · 60.2 s right · 64.6 s done
+
+## nslayers-start
+
+**Cách dùng phòng lab này** / How to use this lab — os-lab · `nslayers` · tour làm quen (mọi preset chưa có tour riêng)
+
+Một phút làm quen: mô phỏng này cho thấy gì và điều khiển nó ra sao.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 11.0 s (en 11.0 s) | 0.9 s | `head` | Namespace: một tiến trình, hai góc nhìn | — |  |
+| 2 | 11.9 s | 11.0 s (en 11.0 s) | 11.9 s | `controls` | Thanh điều khiển | — |  |
+| 3 | 22.9 s | 5.6 s (en 5.4 s) | 22.9 s | `step` | Đến lượt bạn: hai bước | — | Bấm Bước hai lần. → player.step ×≤2 +600ms |
+| 4 | 28.5 s | 10.9 s (en 11.0 s) | 28.5 s | `explain` | Đọc ô giải thích | — |  |
+| 5 | 39.4 s | 11.0 s (en 11.0 s) | 39.4 s | — | Giờ tự khám phá | — |  |
+| ✓ | 50.4 s | 7.0 s | 50.4 s | — | Câu hỏi: Ô có viền màu bên trái cho bạn biết gì? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 1.8 s start · 26.9 s on · 27.6 s step-ok · 27.6 s on · 53.9 s right · 58.3 s done
+
+## overlay-start
+
+**Cách dùng phòng lab này** / How to use this lab — os-lab · `overlay` · tour làm quen (mọi preset chưa có tour riêng)
+
+Một phút làm quen: mô phỏng này cho thấy gì và điều khiển nó ra sao.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 11.0 s (en 11.0 s) | 0.9 s | `head` | OverlayFS: các lớp image | — |  |
+| 2 | 11.9 s | 11.0 s (en 11.0 s) | 11.9 s | `controls` | Thanh điều khiển | — |  |
+| 3 | 22.9 s | 5.6 s (en 5.4 s) | 22.9 s | `step` | Đến lượt bạn: hai bước | — | Bấm Bước hai lần. → player.step ×≤2 +600ms |
+| 4 | 28.5 s | 10.9 s (en 11.0 s) | 28.5 s | `explain` | Đọc ô giải thích | — |  |
+| 5 | 39.4 s | 11.0 s (en 11.0 s) | 39.4 s | — | Giờ tự khám phá | — |  |
+| ✓ | 50.4 s | 7.0 s | 50.4 s | — | Câu hỏi: Ô có viền màu bên trái cho bạn biết gì? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 14.3 s start · 39.4 s blip-exec · 40.1 s step-ok · 40.1 s blip-exec · 66.4 s right · 70.8 s done
+
+## epoll-start
+
+**Cách dùng phòng lab này** / How to use this lab — os-lab · `epoll` · tour làm quen (mọi preset chưa có tour riêng)
+
+Một phút làm quen: mô phỏng này cho thấy gì và điều khiển nó ra sao.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 11.0 s (en 11.0 s) | 0.9 s | `head` | epoll: một luồng, hàng nghìn kết nối | — |  |
+| 2 | 11.9 s | 11.0 s (en 11.0 s) | 12.0 s | `controls` | Thanh điều khiển | — |  |
+| 3 | 22.9 s | 5.6 s (en 5.4 s) | 23.0 s | `step` | Đến lượt bạn: hai bước | — | Bấm Bước hai lần. → player.step ×≤2 +600ms |
+| 4 | 28.5 s | 10.9 s (en 11.0 s) | 28.6 s | `explain` | Đọc ô giải thích | — |  |
+| 5 | 39.4 s | 11.0 s (en 11.0 s) | 39.5 s | — | Giờ tự khám phá | — |  |
+| ✓ | 50.5 s | 7.0 s | 50.5 s | — | Câu hỏi: Ô có viền màu bên trái cho bạn biết gì? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 14.7 s start · 39.8 s blip-decode · 40.5 s step-ok · 40.5 s tick · 66.9 s right · 71.3 s done
+
+## eintr-start
+
+**Cách dùng phòng lab này** / How to use this lab — os-lab · `eintr` · tour làm quen (mọi preset chưa có tour riêng)
+
+Một phút làm quen: mô phỏng này cho thấy gì và điều khiển nó ra sao.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 11.0 s (en 11.0 s) | 0.9 s | `head` | Tín hiệu và lời gọi chặn: EINTR | — |  |
+| 2 | 11.9 s | 11.0 s (en 11.0 s) | 14.7 s | `controls` | Thanh điều khiển | — |  |
+| 3 | 22.9 s | 5.6 s (en 5.4 s) | 25.7 s | `step` | Đến lượt bạn: hai bước | — | Bấm Bước hai lần. → player.step ×≤2 +600ms |
+| 4 | 28.5 s | 10.9 s (en 11.0 s) | 32.5 s | `explain` | Đọc ô giải thích | — |  |
+| 5 | 39.4 s | 11.0 s (en 11.0 s) | 43.4 s | — | Giờ tự khám phá | — |  |
+| ✓ | 54.4 s | 7.0 s | 54.4 s | — | Câu hỏi: Ô có viền màu bên trái cho bạn biết gì? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 32.7 s start · 60.5 s whoosh · 62.4 s step-ok · 62.4 s oops · 88.8 s right · 93.2 s done
+
+## nagle-start
+
+**Cách dùng phòng lab này** / How to use this lab — os-lab · `nagle` · tour làm quen (mọi preset chưa có tour riêng)
+
+Một phút làm quen: mô phỏng này cho thấy gì và điều khiển nó ra sao.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 11.0 s (en 11.0 s) | 0.9 s | `head` | Nagle + ACK trễ | — |  |
+| 2 | 11.9 s | 11.0 s (en 11.0 s) | 13.7 s | `controls` | Thanh điều khiển | — |  |
+| 3 | 22.9 s | 5.6 s (en 5.4 s) | 24.8 s | `step` | Đến lượt bạn: hai bước | — | Bấm Bước hai lần. → player.step ×≤2 +600ms |
+| 4 | 28.5 s | 10.9 s (en 11.0 s) | 30.3 s | `explain` | Đọc ô giải thích | — |  |
+| 5 | 39.4 s | 11.0 s (en 11.0 s) | 41.2 s | — | Giờ tự khám phá | — |  |
+| ✓ | 52.2 s | 7.0 s | 52.2 s | — | Câu hỏi: Ô có viền màu bên trái cho bạn biết gì? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 31.5 s start · 58.4 s blip-exec · 59.1 s step-ok · 59.1 s miss · 85.4 s right · 89.8 s done
 
 ## latency-start
 

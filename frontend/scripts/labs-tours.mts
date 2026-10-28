@@ -5,6 +5,7 @@
  *                                                                    # Chromium thật, ghi mốc thời gian từng bước vào
  *                                                                    # src/components/labs/tours.timing.json; tour nào
  *                                                                    # kẹt / thiếu hành động ⇒ thoát mã 1
+ *   npx tsx scripts/labs-tours.mts --measure <url> --only a,b        # chỉ đo các tour đó, GỘP vào tours.timing.json có sẵn
  *   npx tsx scripts/labs-tours.mts --md                              # viết src/components/labs/TOURS.md (dòng thời gian
  *                                                                    # danh nghĩa + số đo thật nếu có tours.timing.json)
  *   npx tsx scripts/labs-tours.mts --md --check                      # TOURS.md có khớp mã không (không ghi)
@@ -43,12 +44,12 @@ function nominal(t: Tour, lang: 'vi' | 'en') {
   });
 }
 
-async function measure(base: string) {
+async function measure(base: string, only?: Set<string>) {
   const { chromium } = await import('playwright');
   const browser = await chromium.launch();
   const out: Measured[] = [];
   const bad: string[] = [];
-  const queue = [...TOURS];
+  const queue = TOURS.filter((t) => !only || only.has(t.id));
   const worker = async () => {
     for (let t = queue.shift(); t; t = queue.shift()) {
       const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 } });
@@ -77,6 +78,11 @@ async function measure(base: string) {
   };
   await Promise.all([worker(), worker(), worker(), worker()]);
   await browser.close();
+  // --only: giữ số đo cũ của các tour khác, thay/thêm các tour vừa đo
+  if (only && fs.existsSync(TIMING)) {
+    const old: { tours?: Measured[] } = JSON.parse(fs.readFileSync(TIMING, 'utf8'));
+    for (const m of old.tours ?? []) if (!only.has(m.id) && TOURS.some((t) => t.id === m.id)) out.push(m);
+  }
   out.sort((a, b) => TOURS.findIndex((t) => t.id === a.id) - TOURS.findIndex((t) => t.id === b.id));
   fs.writeFileSync(TIMING, JSON.stringify({ measuredAt: new Date().toISOString().slice(0, 10), base: 'record=1, rate=1, viewport 1280×800, lang=vi', tours: out }, null, 1) + '\n');
   if (bad.length) { console.error(bad.join('\n')); process.exit(1); }
@@ -144,7 +150,8 @@ function md(): string {
 }
 
 const args = process.argv.slice(2);
-if (args[0] === '--measure') await measure(args[1] ?? 'http://localhost:3000');
+const onlyArg = args.indexOf('--only');
+if (args[0] === '--measure') await measure(args[1] ?? 'http://localhost:3000', onlyArg >= 0 ? new Set(args[onlyArg + 1].split(',')) : undefined);
 if (args.includes('--md')) {
   const text = md();
   if (args.includes('--check')) {

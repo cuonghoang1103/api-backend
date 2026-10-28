@@ -2821,6 +2821,1743 @@
    ]
   },
   {
+   "id": "syscall-journey",
+   "lang": "vi",
+   "totalMs": 107394,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 11908
+    },
+    {
+     "idx": 2,
+     "t": 22911
+    },
+    {
+     "idx": 3,
+     "t": 30678
+    },
+    {
+     "idx": 4,
+     "t": 41682
+    },
+    {
+     "idx": 5,
+     "t": 52684
+    },
+    {
+     "idx": 6,
+     "t": 61202
+    },
+    {
+     "idx": 7,
+     "t": 72207
+    },
+    {
+     "idx": 8,
+     "t": 83210
+    },
+    {
+     "idx": 9,
+     "t": 89385
+    }
+   ],
+   "quizAt": 100390,
+   "doneAt": 107394,
+   "sfx": [
+    {
+     "t": 14827,
+     "name": "start"
+    },
+    {
+     "t": 14838,
+     "name": "tap"
+    },
+    {
+     "t": 17747,
+     "name": "tap"
+    },
+    {
+     "t": 40333,
+     "name": "blip-fetch"
+    },
+    {
+     "t": 41156,
+     "name": "blip-fetch"
+    },
+    {
+     "t": 41979,
+     "name": "whoosh"
+    },
+    {
+     "t": 41979,
+     "name": "step-ok"
+    },
+    {
+     "t": 70318,
+     "name": "blip-decode"
+    },
+    {
+     "t": 70684,
+     "name": "blip-decode"
+    },
+    {
+     "t": 71087,
+     "name": "blip-exec"
+    },
+    {
+     "t": 71481,
+     "name": "blip-exec"
+    },
+    {
+     "t": 71868,
+     "name": "blip-exec"
+    },
+    {
+     "t": 72209,
+     "name": "whoosh"
+    },
+    {
+     "t": 72537,
+     "name": "pop"
+    },
+    {
+     "t": 72907,
+     "name": "hit"
+    },
+    {
+     "t": 72907,
+     "name": "step-ok"
+    },
+    {
+     "t": 100486,
+     "name": "tap"
+    },
+    {
+     "t": 100488,
+     "name": "blip-fetch"
+    },
+    {
+     "t": 101012,
+     "name": "hit"
+    },
+    {
+     "t": 101012,
+     "name": "step-ok"
+    },
+    {
+     "t": 116919,
+     "name": "right"
+    },
+    {
+     "t": 121320,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "syscall-errno",
+   "lang": "vi",
+   "totalMs": 98185,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 9488
+    },
+    {
+     "idx": 2,
+     "t": 21505
+    },
+    {
+     "idx": 3,
+     "t": 32318
+    },
+    {
+     "idx": 4,
+     "t": 43322
+    },
+    {
+     "idx": 5,
+     "t": 48975
+    },
+    {
+     "idx": 6,
+     "t": 59979
+    },
+    {
+     "idx": 7,
+     "t": 63622
+    },
+    {
+     "idx": 8,
+     "t": 74627
+    },
+    {
+     "idx": 9,
+     "t": 80178
+    }
+   ],
+   "quizAt": 91181,
+   "doneAt": 98185,
+   "sfx": [
+    {
+     "t": 14922,
+     "name": "start"
+    },
+    {
+     "t": 14934,
+     "name": "tap"
+    },
+    {
+     "t": 17697,
+     "name": "tap"
+    },
+    {
+     "t": 26930,
+     "name": "blip-fetch"
+    },
+    {
+     "t": 27703,
+     "name": "whoosh"
+    },
+    {
+     "t": 28830,
+     "name": "blip-decode"
+    },
+    {
+     "t": 30072,
+     "name": "blip-decode"
+    },
+    {
+     "t": 30998,
+     "name": "blip-exec"
+    },
+    {
+     "t": 32724,
+     "name": "oops"
+    },
+    {
+     "t": 32724,
+     "name": "step-ok"
+    },
+    {
+     "t": 36244,
+     "name": "whoosh"
+    },
+    {
+     "t": 46645,
+     "name": "oops"
+    },
+    {
+     "t": 60392,
+     "name": "tap"
+    },
+    {
+     "t": 60396,
+     "name": "blip-fetch"
+    },
+    {
+     "t": 60918,
+     "name": "oops"
+    },
+    {
+     "t": 60918,
+     "name": "step-ok"
+    },
+    {
+     "t": 75876,
+     "name": "tap"
+    },
+    {
+     "t": 75877,
+     "name": "blip-fetch"
+    },
+    {
+     "t": 76399,
+     "name": "thud"
+    },
+    {
+     "t": 76399,
+     "name": "step-ok"
+    },
+    {
+     "t": 91391,
+     "name": "tap"
+    },
+    {
+     "t": 91393,
+     "name": "blip-fetch"
+    },
+    {
+     "t": 91813,
+     "name": "tap"
+    },
+    {
+     "t": 92338,
+     "name": "hit"
+    },
+    {
+     "t": 92338,
+     "name": "step-ok"
+    },
+    {
+     "t": 107804,
+     "name": "right"
+    },
+    {
+     "t": 112207,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "perm-check",
+   "lang": "vi",
+   "totalMs": 104088,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 14925
+    },
+    {
+     "idx": 2,
+     "t": 24499
+    },
+    {
+     "idx": 3,
+     "t": 32281
+    },
+    {
+     "idx": 4,
+     "t": 43284
+    },
+    {
+     "idx": 5,
+     "t": 47816
+    },
+    {
+     "idx": 6,
+     "t": 58258
+    },
+    {
+     "idx": 7,
+     "t": 69260
+    },
+    {
+     "idx": 8,
+     "t": 80134
+    },
+    {
+     "idx": 9,
+     "t": 86082
+    }
+   ],
+   "quizAt": 97085,
+   "doneAt": 104088,
+   "sfx": [
+    {
+     "t": 902,
+     "name": "start"
+    },
+    {
+     "t": 1064,
+     "name": "tap"
+    },
+    {
+     "t": 27958,
+     "name": "blip-exec"
+    },
+    {
+     "t": 28680,
+     "name": "miss"
+    },
+    {
+     "t": 29403,
+     "name": "tick"
+    },
+    {
+     "t": 30126,
+     "name": "wrong"
+    },
+    {
+     "t": 30126,
+     "name": "step-ok"
+    },
+    {
+     "t": 45679,
+     "name": "tap"
+    },
+    {
+     "t": 45681,
+     "name": "blip-exec"
+    },
+    {
+     "t": 46203,
+     "name": "hit"
+    },
+    {
+     "t": 46203,
+     "name": "step-ok"
+    },
+    {
+     "t": 58260,
+     "name": "tap"
+    },
+    {
+     "t": 58262,
+     "name": "blip-exec"
+    },
+    {
+     "t": 58688,
+     "name": "wrong"
+    },
+    {
+     "t": 83356,
+     "name": "tap"
+    },
+    {
+     "t": 83358,
+     "name": "blip-exec"
+    },
+    {
+     "t": 83881,
+     "name": "hit"
+    },
+    {
+     "t": 83881,
+     "name": "step-ok"
+    },
+    {
+     "t": 99688,
+     "name": "right"
+    },
+    {
+     "t": 104089,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "perm-acl",
+   "lang": "vi",
+   "totalMs": 93695,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 14925
+    },
+    {
+     "idx": 2,
+     "t": 21552
+    },
+    {
+     "idx": 3,
+     "t": 30194
+    },
+    {
+     "idx": 4,
+     "t": 43827
+    },
+    {
+     "idx": 5,
+     "t": 54830
+    },
+    {
+     "idx": 6,
+     "t": 65834
+    },
+    {
+     "idx": 7,
+     "t": 71005
+    },
+    {
+     "idx": 8,
+     "t": 82007
+    }
+   ],
+   "quizAt": 86691,
+   "doneAt": 93695,
+   "sfx": [
+    {
+     "t": 902,
+     "name": "start"
+    },
+    {
+     "t": 1065,
+     "name": "tap"
+    },
+    {
+     "t": 18235,
+     "name": "blip-exec"
+    },
+    {
+     "t": 18512,
+     "name": "blip-exec"
+    },
+    {
+     "t": 18791,
+     "name": "blip-exec"
+    },
+    {
+     "t": 19068,
+     "name": "tick"
+    },
+    {
+     "t": 19347,
+     "name": "blip-exec"
+    },
+    {
+     "t": 19625,
+     "name": "hit"
+    },
+    {
+     "t": 19625,
+     "name": "step-ok"
+    },
+    {
+     "t": 41297,
+     "name": "on"
+    },
+    {
+     "t": 41299,
+     "name": "blip-exec"
+    },
+    {
+     "t": 41299,
+     "name": "step-ok"
+    },
+    {
+     "t": 44133,
+     "name": "wrong"
+    },
+    {
+     "t": 54833,
+     "name": "tap"
+    },
+    {
+     "t": 54835,
+     "name": "tick"
+    },
+    {
+     "t": 55257,
+     "name": "hit"
+    },
+    {
+     "t": 68600,
+     "name": "tap"
+    },
+    {
+     "t": 68602,
+     "name": "blip-exec"
+    },
+    {
+     "t": 69126,
+     "name": "wrong"
+    },
+    {
+     "t": 69126,
+     "name": "step-ok"
+    },
+    {
+     "t": 71008,
+     "name": "tap"
+    },
+    {
+     "t": 71010,
+     "name": "blip-exec"
+    },
+    {
+     "t": 71431,
+     "name": "hit"
+    },
+    {
+     "t": 84491,
+     "name": "tap"
+    },
+    {
+     "t": 84493,
+     "name": "blip-exec"
+    },
+    {
+     "t": 85015,
+     "name": "wrong"
+    },
+    {
+     "t": 85015,
+     "name": "step-ok"
+    },
+    {
+     "t": 89294,
+     "name": "right"
+    },
+    {
+     "t": 93697,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "fdtable-offsets",
+   "lang": "vi",
+   "totalMs": 82556,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 11296
+    },
+    {
+     "idx": 2,
+     "t": 17426
+    },
+    {
+     "idx": 3,
+     "t": 27250
+    },
+    {
+     "idx": 4,
+     "t": 31854
+    },
+    {
+     "idx": 5,
+     "t": 42728
+    },
+    {
+     "idx": 6,
+     "t": 48194
+    },
+    {
+     "idx": 7,
+     "t": 59197
+    },
+    {
+     "idx": 8,
+     "t": 64551
+    }
+   ],
+   "quizAt": 75553,
+   "doneAt": 82556,
+   "sfx": [
+    {
+     "t": 8793,
+     "name": "start"
+    },
+    {
+     "t": 8817,
+     "name": "tap"
+    },
+    {
+     "t": 22508,
+     "name": "blip-exec"
+    },
+    {
+     "t": 23330,
+     "name": "blip-exec"
+    },
+    {
+     "t": 23330,
+     "name": "step-ok"
+    },
+    {
+     "t": 37700,
+     "name": "blip-exec"
+    },
+    {
+     "t": 38053,
+     "name": "miss"
+    },
+    {
+     "t": 38407,
+     "name": "hit"
+    },
+    {
+     "t": 38407,
+     "name": "step-ok"
+    },
+    {
+     "t": 53560,
+     "name": "tap"
+    },
+    {
+     "t": 54084,
+     "name": "hit"
+    },
+    {
+     "t": 54084,
+     "name": "step-ok"
+    },
+    {
+     "t": 69963,
+     "name": "tap"
+    },
+    {
+     "t": 70488,
+     "name": "hit"
+    },
+    {
+     "t": 70488,
+     "name": "step-ok"
+    },
+    {
+     "t": 86048,
+     "name": "right"
+    },
+    {
+     "t": 90449,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "fdtable-deleted",
+   "lang": "vi",
+   "totalMs": 75950,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 9733
+    },
+    {
+     "idx": 2,
+     "t": 14980
+    },
+    {
+     "idx": 3,
+     "t": 25982
+    },
+    {
+     "idx": 4,
+     "t": 36984
+    },
+    {
+     "idx": 5,
+     "t": 40709
+    },
+    {
+     "idx": 6,
+     "t": 51585
+    },
+    {
+     "idx": 7,
+     "t": 57942
+    }
+   ],
+   "quizAt": 68946,
+   "doneAt": 75950,
+   "sfx": [
+    {
+     "t": 6241,
+     "name": "start"
+    },
+    {
+     "t": 6251,
+     "name": "tap"
+    },
+    {
+     "t": 17398,
+     "name": "blip-exec"
+    },
+    {
+     "t": 18221,
+     "name": "blip-exec"
+    },
+    {
+     "t": 19047,
+     "name": "miss"
+    },
+    {
+     "t": 19047,
+     "name": "step-ok"
+    },
+    {
+     "t": 44575,
+     "name": "blip-exec"
+    },
+    {
+     "t": 44928,
+     "name": "hit"
+    },
+    {
+     "t": 44928,
+     "name": "step-ok"
+    },
+    {
+     "t": 46052,
+     "name": "tap"
+    },
+    {
+     "t": 46193,
+     "name": "blip-exec"
+    },
+    {
+     "t": 59904,
+     "name": "blip-exec"
+    },
+    {
+     "t": 60730,
+     "name": "miss"
+    },
+    {
+     "t": 61548,
+     "name": "oops"
+    },
+    {
+     "t": 61548,
+     "name": "step-ok"
+    },
+    {
+     "t": 76890,
+     "name": "right"
+    },
+    {
+     "t": 81291,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "nslayers-views",
+   "lang": "vi",
+   "totalMs": 89865,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 11907
+    },
+    {
+     "idx": 2,
+     "t": 22912
+    },
+    {
+     "idx": 3,
+     "t": 30384
+    },
+    {
+     "idx": 4,
+     "t": 41390
+    },
+    {
+     "idx": 5,
+     "t": 47322
+    },
+    {
+     "idx": 6,
+     "t": 58326
+    },
+    {
+     "idx": 7,
+     "t": 60858
+    },
+    {
+     "idx": 8,
+     "t": 71859
+    }
+   ],
+   "quizAt": 82861,
+   "doneAt": 89865,
+   "sfx": [
+    {
+     "t": 901,
+     "name": "start"
+    },
+    {
+     "t": 909,
+     "name": "tap"
+    },
+    {
+     "t": 26537,
+     "name": "on"
+    },
+    {
+     "t": 27359,
+     "name": "on"
+    },
+    {
+     "t": 28181,
+     "name": "on"
+    },
+    {
+     "t": 28181,
+     "name": "step-ok"
+    },
+    {
+     "t": 44215,
+     "name": "on"
+    },
+    {
+     "t": 44617,
+     "name": "on"
+    },
+    {
+     "t": 45021,
+     "name": "on"
+    },
+    {
+     "t": 45424,
+     "name": "on"
+    },
+    {
+     "t": 45828,
+     "name": "on"
+    },
+    {
+     "t": 45828,
+     "name": "step-ok"
+    },
+    {
+     "t": 59860,
+     "name": "on"
+    },
+    {
+     "t": 59862,
+     "name": "step-ok"
+    },
+    {
+     "t": 85465,
+     "name": "right"
+    },
+    {
+     "t": 89867,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "nslayers-pod",
+   "lang": "vi",
+   "totalMs": 60187,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 11909
+    },
+    {
+     "idx": 2,
+     "t": 22913
+    },
+    {
+     "idx": 3,
+     "t": 26891
+    },
+    {
+     "idx": 4,
+     "t": 37895
+    },
+    {
+     "idx": 5,
+     "t": 42184
+    }
+   ],
+   "quizAt": 53186,
+   "doneAt": 60187,
+   "sfx": [
+    {
+     "t": 8450,
+     "name": "start"
+    },
+    {
+     "t": 8462,
+     "name": "tap"
+    },
+    {
+     "t": 32837,
+     "name": "off"
+    },
+    {
+     "t": 32839,
+     "name": "step-ok"
+    },
+    {
+     "t": 47755,
+     "name": "on"
+    },
+    {
+     "t": 48178,
+     "name": "on"
+    },
+    {
+     "t": 48180,
+     "name": "step-ok"
+    },
+    {
+     "t": 63337,
+     "name": "right"
+    },
+    {
+     "t": 67737,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "overlay-copyup",
+   "lang": "vi",
+   "totalMs": 79412,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 11654
+    },
+    {
+     "idx": 2,
+     "t": 15934
+    },
+    {
+     "idx": 3,
+     "t": 26938
+    },
+    {
+     "idx": 4,
+     "t": 34072
+    },
+    {
+     "idx": 5,
+     "t": 45073
+    },
+    {
+     "idx": 6,
+     "t": 49240
+    },
+    {
+     "idx": 7,
+     "t": 57574
+    },
+    {
+     "idx": 8,
+     "t": 61405
+    }
+   ],
+   "quizAt": 72407,
+   "doneAt": 79412,
+   "sfx": [
+    {
+     "t": 7312,
+     "name": "start"
+    },
+    {
+     "t": 7321,
+     "name": "tap"
+    },
+    {
+     "t": 20744,
+     "name": "blip-exec"
+    },
+    {
+     "t": 20744,
+     "name": "step-ok"
+    },
+    {
+     "t": 36776,
+     "name": "blip-exec"
+    },
+    {
+     "t": 37597,
+     "name": "blip-exec"
+    },
+    {
+     "t": 38420,
+     "name": "whoosh"
+    },
+    {
+     "t": 38420,
+     "name": "step-ok"
+    },
+    {
+     "t": 54096,
+     "name": "blip-exec"
+    },
+    {
+     "t": 54096,
+     "name": "step-ok"
+    },
+    {
+     "t": 65969,
+     "name": "tap"
+    },
+    {
+     "t": 65971,
+     "name": "tick"
+    },
+    {
+     "t": 66495,
+     "name": "blip-exec"
+    },
+    {
+     "t": 66495,
+     "name": "step-ok"
+    },
+    {
+     "t": 81421,
+     "name": "right"
+    },
+    {
+     "t": 85824,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "overlay-cache",
+   "lang": "vi",
+   "totalMs": 64005,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 10788
+    },
+    {
+     "idx": 2,
+     "t": 16178
+    },
+    {
+     "idx": 3,
+     "t": 26248
+    },
+    {
+     "idx": 4,
+     "t": 30153
+    },
+    {
+     "idx": 5,
+     "t": 41156
+    },
+    {
+     "idx": 6,
+     "t": 45999
+    }
+   ],
+   "quizAt": 57002,
+   "doneAt": 64005,
+   "sfx": [
+    {
+     "t": 13539,
+     "name": "start"
+    },
+    {
+     "t": 13549,
+     "name": "tap"
+    },
+    {
+     "t": 26314,
+     "name": "tick"
+    },
+    {
+     "t": 27138,
+     "name": "tick"
+    },
+    {
+     "t": 27138,
+     "name": "step-ok"
+    },
+    {
+     "t": 41346,
+     "name": "tick"
+    },
+    {
+     "t": 41346,
+     "name": "step-ok"
+    },
+    {
+     "t": 56429,
+     "name": "tap"
+    },
+    {
+     "t": 56852,
+     "name": "tap"
+    },
+    {
+     "t": 56853,
+     "name": "step-ok"
+    },
+    {
+     "t": 72242,
+     "name": "right"
+    },
+    {
+     "t": 76644,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "epoll-ready",
+   "lang": "vi",
+   "totalMs": 72777,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 16017
+    },
+    {
+     "idx": 2,
+     "t": 23847
+    },
+    {
+     "idx": 3,
+     "t": 34476
+    },
+    {
+     "idx": 4,
+     "t": 39419
+    },
+    {
+     "idx": 5,
+     "t": 50422
+    },
+    {
+     "idx": 6,
+     "t": 54770
+    }
+   ],
+   "quizAt": 65773,
+   "doneAt": 72777,
+   "sfx": [
+    {
+     "t": 1676,
+     "name": "start"
+    },
+    {
+     "t": 1686,
+     "name": "tap"
+    },
+    {
+     "t": 19304,
+     "name": "blip-decode"
+    },
+    {
+     "t": 20078,
+     "name": "tick"
+    },
+    {
+     "t": 20853,
+     "name": "whoosh"
+    },
+    {
+     "t": 21628,
+     "name": "pop"
+    },
+    {
+     "t": 22402,
+     "name": "blip-exec"
+    },
+    {
+     "t": 23177,
+     "name": "tick"
+    },
+    {
+     "t": 23177,
+     "name": "step-ok"
+    },
+    {
+     "t": 24966,
+     "name": "tick"
+    },
+    {
+     "t": 37630,
+     "name": "whoosh"
+    },
+    {
+     "t": 38536,
+     "name": "pop"
+    },
+    {
+     "t": 38536,
+     "name": "step-ok"
+    },
+    {
+     "t": 53483,
+     "name": "tap"
+    },
+    {
+     "t": 53492,
+     "name": "tick"
+    },
+    {
+     "t": 54007,
+     "name": "tick"
+    },
+    {
+     "t": 54007,
+     "name": "step-ok"
+    },
+    {
+     "t": 69152,
+     "name": "right"
+    },
+    {
+     "t": 73553,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "epoll-trigger",
+   "lang": "vi",
+   "totalMs": 63000,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 11445
+    },
+    {
+     "idx": 2,
+     "t": 15010
+    },
+    {
+     "idx": 3,
+     "t": 22103
+    },
+    {
+     "idx": 4,
+     "t": 26341
+    },
+    {
+     "idx": 5,
+     "t": 37344
+    },
+    {
+     "idx": 6,
+     "t": 41247
+    },
+    {
+     "idx": 7,
+     "t": 52059
+    }
+   ],
+   "quizAt": 55997,
+   "doneAt": 63000,
+   "sfx": [
+    {
+     "t": 1998,
+     "name": "start"
+    },
+    {
+     "t": 2008,
+     "name": "tap"
+    },
+    {
+     "t": 2129,
+     "name": "tap"
+    },
+    {
+     "t": 14474,
+     "name": "blip-exec"
+    },
+    {
+     "t": 14853,
+     "name": "blip-exec"
+    },
+    {
+     "t": 15230,
+     "name": "hit"
+    },
+    {
+     "t": 15230,
+     "name": "step-ok"
+    },
+    {
+     "t": 15607,
+     "name": "hit"
+    },
+    {
+     "t": 25423,
+     "name": "tap"
+    },
+    {
+     "t": 25425,
+     "name": "blip-exec"
+    },
+    {
+     "t": 25947,
+     "name": "oops"
+    },
+    {
+     "t": 25947,
+     "name": "step-ok"
+    },
+    {
+     "t": 40470,
+     "name": "tap"
+    },
+    {
+     "t": 40471,
+     "name": "blip-exec"
+    },
+    {
+     "t": 40993,
+     "name": "hit"
+    },
+    {
+     "t": 40993,
+     "name": "step-ok"
+    },
+    {
+     "t": 42346,
+     "name": "tap"
+    },
+    {
+     "t": 42347,
+     "name": "tick"
+    },
+    {
+     "t": 42467,
+     "name": "tap"
+    },
+    {
+     "t": 42890,
+     "name": "miss"
+    },
+    {
+     "t": 55206,
+     "name": "tap"
+    },
+    {
+     "t": 55207,
+     "name": "tick"
+    },
+    {
+     "t": 55729,
+     "name": "hit"
+    },
+    {
+     "t": 55729,
+     "name": "step-ok"
+    },
+    {
+     "t": 59697,
+     "name": "right"
+    },
+    {
+     "t": 64098,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "epoll-c10k",
+   "lang": "vi",
+   "totalMs": 73764,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 11908
+    },
+    {
+     "idx": 2,
+     "t": 16059
+    },
+    {
+     "idx": 3,
+     "t": 27064
+    },
+    {
+     "idx": 4,
+     "t": 31147
+    },
+    {
+     "idx": 5,
+     "t": 42150
+    },
+    {
+     "idx": 6,
+     "t": 50110
+    },
+    {
+     "idx": 7,
+     "t": 55755
+    }
+   ],
+   "quizAt": 66758,
+   "doneAt": 73764,
+   "sfx": [
+    {
+     "t": 6937,
+     "name": "start"
+    },
+    {
+     "t": 6948,
+     "name": "tap"
+    },
+    {
+     "t": 8372,
+     "name": "tap"
+    },
+    {
+     "t": 20439,
+     "name": "tick"
+    },
+    {
+     "t": 20817,
+     "name": "tick"
+    },
+    {
+     "t": 20817,
+     "name": "step-ok"
+    },
+    {
+     "t": 35538,
+     "name": "tap"
+    },
+    {
+     "t": 35540,
+     "name": "step-ok"
+    },
+    {
+     "t": 48188,
+     "name": "tap"
+    },
+    {
+     "t": 48190,
+     "name": "tick"
+    },
+    {
+     "t": 59183,
+     "name": "tick"
+    },
+    {
+     "t": 60006,
+     "name": "tick"
+    },
+    {
+     "t": 60006,
+     "name": "step-ok"
+    },
+    {
+     "t": 75398,
+     "name": "right"
+    },
+    {
+     "t": 79801,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "eintr-signal",
+   "lang": "vi",
+   "totalMs": 54687,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 13926
+    },
+    {
+     "idx": 2,
+     "t": 21667
+    },
+    {
+     "idx": 3,
+     "t": 32669
+    },
+    {
+     "idx": 4,
+     "t": 36681
+    }
+   ],
+   "quizAt": 47684,
+   "doneAt": 54687,
+   "sfx": [
+    {
+     "t": 31937,
+     "name": "start"
+    },
+    {
+     "t": 34593,
+     "name": "tap"
+    },
+    {
+     "t": 47861,
+     "name": "whoosh"
+    },
+    {
+     "t": 49763,
+     "name": "oops"
+    },
+    {
+     "t": 50760,
+     "name": "oops"
+    },
+    {
+     "t": 50760,
+     "name": "step-ok"
+    },
+    {
+     "t": 65796,
+     "name": "tap"
+    },
+    {
+     "t": 65798,
+     "name": "tick"
+    },
+    {
+     "t": 66321,
+     "name": "hit"
+    },
+    {
+     "t": 66321,
+     "name": "step-ok"
+    },
+    {
+     "t": 81324,
+     "name": "right"
+    },
+    {
+     "t": 85724,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "nagle-delay",
+   "lang": "vi",
+   "totalMs": 50670,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 13167
+    },
+    {
+     "idx": 2,
+     "t": 18337
+    },
+    {
+     "idx": 3,
+     "t": 29340
+    },
+    {
+     "idx": 4,
+     "t": 40029
+    }
+   ],
+   "quizAt": 43667,
+   "doneAt": 50670,
+   "sfx": [
+    {
+     "t": 30728,
+     "name": "start"
+    },
+    {
+     "t": 33304,
+     "name": "tap"
+    },
+    {
+     "t": 33426,
+     "name": "tap"
+    },
+    {
+     "t": 33547,
+     "name": "tap"
+    },
+    {
+     "t": 45424,
+     "name": "blip-exec"
+    },
+    {
+     "t": 45802,
+     "name": "miss"
+    },
+    {
+     "t": 46179,
+     "name": "miss"
+    },
+    {
+     "t": 46556,
+     "name": "oops"
+    },
+    {
+     "t": 46934,
+     "name": "oops"
+    },
+    {
+     "t": 46934,
+     "name": "step-ok"
+    },
+    {
+     "t": 71732,
+     "name": "tap"
+    },
+    {
+     "t": 71733,
+     "name": "blip-exec"
+    },
+    {
+     "t": 72254,
+     "name": "hit"
+    },
+    {
+     "t": 72254,
+     "name": "step-ok"
+    },
+    {
+     "t": 76097,
+     "name": "right"
+    },
+    {
+     "t": 80498,
+     "name": "done"
+    }
+   ]
+  },
+  {
    "id": "process-start",
    "lang": "vi",
    "totalMs": 54674,
@@ -3491,6 +5228,446 @@
     },
     {
      "t": 57401,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "syscall-start",
+   "lang": "vi",
+   "totalMs": 67945,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 22455
+    },
+    {
+     "idx": 2,
+     "t": 33467
+    },
+    {
+     "idx": 3,
+     "t": 39061
+    },
+    {
+     "idx": 4,
+     "t": 49937
+    }
+   ],
+   "quizAt": 60941,
+   "doneAt": 67945,
+   "sfx": [
+    {
+     "t": 942,
+     "name": "start"
+    },
+    {
+     "t": 36534,
+     "name": "blip-fetch"
+    },
+    {
+     "t": 37255,
+     "name": "step-ok"
+    },
+    {
+     "t": 37255,
+     "name": "blip-fetch"
+    },
+    {
+     "t": 63585,
+     "name": "right"
+    },
+    {
+     "t": 67987,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "perm-start",
+   "lang": "vi",
+   "totalMs": 57395,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 11907
+    },
+    {
+     "idx": 2,
+     "t": 22916
+    },
+    {
+     "idx": 3,
+     "t": 28513
+    },
+    {
+     "idx": 4,
+     "t": 39387
+    }
+   ],
+   "quizAt": 50390,
+   "doneAt": 57395,
+   "sfx": [
+    {
+     "t": 949,
+     "name": "start"
+    },
+    {
+     "t": 25992,
+     "name": "blip-exec"
+    },
+    {
+     "t": 26714,
+     "name": "step-ok"
+    },
+    {
+     "t": 26714,
+     "name": "miss"
+    },
+    {
+     "t": 53042,
+     "name": "right"
+    },
+    {
+     "t": 57443,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "fdtable-start",
+   "lang": "vi",
+   "totalMs": 63615,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 18117
+    },
+    {
+     "idx": 2,
+     "t": 29137
+    },
+    {
+     "idx": 3,
+     "t": 34732
+    },
+    {
+     "idx": 4,
+     "t": 45606
+    }
+   ],
+   "quizAt": 56609,
+   "doneAt": 63615,
+   "sfx": [
+    {
+     "t": 964,
+     "name": "start"
+    },
+    {
+     "t": 32227,
+     "name": "blip-exec"
+    },
+    {
+     "t": 32949,
+     "name": "step-ok"
+    },
+    {
+     "t": 32949,
+     "name": "blip-exec"
+    },
+    {
+     "t": 59276,
+     "name": "right"
+    },
+    {
+     "t": 63679,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "nslayers-start",
+   "lang": "vi",
+   "totalMs": 57407,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 11906
+    },
+    {
+     "idx": 2,
+     "t": 22926
+    },
+    {
+     "idx": 3,
+     "t": 28524
+    },
+    {
+     "idx": 4,
+     "t": 39399
+    }
+   ],
+   "quizAt": 50402,
+   "doneAt": 57407,
+   "sfx": [
+    {
+     "t": 902,
+     "name": "start"
+    },
+    {
+     "t": 25957,
+     "name": "on"
+    },
+    {
+     "t": 26679,
+     "name": "step-ok"
+    },
+    {
+     "t": 26679,
+     "name": "on"
+    },
+    {
+     "t": 53007,
+     "name": "right"
+    },
+    {
+     "t": 57408,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "overlay-start",
+   "lang": "vi",
+   "totalMs": 57411,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 901
+    },
+    {
+     "idx": 1,
+     "t": 11914
+    },
+    {
+     "idx": 2,
+     "t": 22935
+    },
+    {
+     "idx": 3,
+     "t": 28531
+    },
+    {
+     "idx": 4,
+     "t": 39406
+    }
+   ],
+   "quizAt": 50408,
+   "doneAt": 57411,
+   "sfx": [
+    {
+     "t": 13424,
+     "name": "start"
+    },
+    {
+     "t": 38485,
+     "name": "blip-exec"
+    },
+    {
+     "t": 39208,
+     "name": "step-ok"
+    },
+    {
+     "t": 39208,
+     "name": "blip-exec"
+    },
+    {
+     "t": 65533,
+     "name": "right"
+    },
+    {
+     "t": 69934,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "epoll-start",
+   "lang": "vi",
+   "totalMs": 57467,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 901
+    },
+    {
+     "idx": 1,
+     "t": 11972
+    },
+    {
+     "idx": 2,
+     "t": 22993
+    },
+    {
+     "idx": 3,
+     "t": 28586
+    },
+    {
+     "idx": 4,
+     "t": 39462
+    }
+   ],
+   "quizAt": 50464,
+   "doneAt": 57467,
+   "sfx": [
+    {
+     "t": 13788,
+     "name": "start"
+    },
+    {
+     "t": 38903,
+     "name": "blip-decode"
+    },
+    {
+     "t": 39626,
+     "name": "step-ok"
+    },
+    {
+     "t": 39626,
+     "name": "tick"
+    },
+    {
+     "t": 65954,
+     "name": "right"
+    },
+    {
+     "t": 70354,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "eintr-start",
+   "lang": "vi",
+   "totalMs": 61397,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 14728
+    },
+    {
+     "idx": 2,
+     "t": 25747
+    },
+    {
+     "idx": 3,
+     "t": 32519
+    },
+    {
+     "idx": 4,
+     "t": 43393
+    }
+   ],
+   "quizAt": 54394,
+   "doneAt": 61397,
+   "sfx": [
+    {
+     "t": 31755,
+     "name": "start"
+    },
+    {
+     "t": 59626,
+     "name": "whoosh"
+    },
+    {
+     "t": 61463,
+     "name": "step-ok"
+    },
+    {
+     "t": 61463,
+     "name": "oops"
+    },
+    {
+     "t": 87850,
+     "name": "right"
+    },
+    {
+     "t": 92252,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "nagle-start",
+   "lang": "vi",
+   "totalMs": 59225,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 13718
+    },
+    {
+     "idx": 2,
+     "t": 24752
+    },
+    {
+     "idx": 3,
+     "t": 30344
+    },
+    {
+     "idx": 4,
+     "t": 41220
+    }
+   ],
+   "quizAt": 52221,
+   "doneAt": 59225,
+   "sfx": [
+    {
+     "t": 30625,
+     "name": "start"
+    },
+    {
+     "t": 57500,
+     "name": "blip-exec"
+    },
+    {
+     "t": 58222,
+     "name": "step-ok"
+    },
+    {
+     "t": 58222,
+     "name": "miss"
+    },
+    {
+     "t": 84549,
+     "name": "right"
+    },
+    {
+     "t": 88950,
      "name": "done"
     }
    ]

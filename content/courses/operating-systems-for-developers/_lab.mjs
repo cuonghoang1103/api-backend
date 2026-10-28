@@ -38,6 +38,8 @@ export const SIMS = {
   nslayers: ['docker', 'unshare', 'userns', 'pod'],
   overlay: ['layers', 'copyup', 'whiteout', 'opaque', 'image', 'cache'],
   epoll: ['ready', 'scan', 'trigger', 'oneshot', 'c10k', 'walls'],
+  eintr: ['norestart', 'restart', 'poll', 'python', 'go'],
+  nagle: ['nagle', 'nodelay', 'onewrite'],
   latency: ['default'],
 };
 
@@ -62,6 +64,8 @@ export const TOURS = {
   nslayers: ['nslayers-views', 'nslayers-pod', 'nslayers-start'],
   overlay: ['overlay-copyup', 'overlay-cache', 'overlay-start'],
   epoll: ['epoll-ready', 'epoll-trigger', 'epoll-c10k', 'epoll-start'],
+  eintr: ['eintr-signal', 'eintr-start'],
+  nagle: ['nagle-delay', 'nagle-start'],
   latency: ['latency-start'],
 };
 

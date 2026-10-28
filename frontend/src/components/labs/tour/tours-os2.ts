@@ -763,4 +763,83 @@ export const OS2_TOURS: Tour[] = [
       answer: 0, why: ['10 000 threads × 16 KiB = 156 MiB of kernel memory that ps/top RSS does not count — it still counts against the cgroup.', '10 000 luồng × 16 KiB = 156 MiB bộ nhớ nhân mà RSS của ps/top không tính — nhưng cgroup vẫn tính.'],
     },
   },
+  // ───────────────────────── eintr / nagle ─────────────────────────
+  {
+    id: 'eintr-signal', ns: 'os-lab', sim: 'eintr', presets: ['norestart', 'restart', 'poll', 'python', 'go'],
+    title: ['When a signal interrupts read()', 'Khi tín hiệu cắt ngang read()'],
+    summary: ['A blocking call returns -1 EINTR when a handler runs — unless SA_RESTART asks the kernel to restart it.', 'Lời gọi đang chặn trả -1 EINTR khi một handler chạy — trừ khi SA_RESTART bảo nhân chạy lại nó.'],
+    steps: [
+      {
+        target: 'ei-timeline', do: [{ a: 'eintr.mode', v: 'norestart' }, { a: 'player.seek', v: 0 }],
+        title: ['Asleep in read()', 'Ngủ trong read()'],
+        body: ['The program reads from an empty pipe; data will come at 2.0 s. Until then it sleeps inside the kernel (state S). An alarm is set for 1.0 s.', 'Chương trình đọc một ống trống; dữ liệu tới lúc 2,0 s. Tới lúc đó nó ngủ bên trong nhân (trạng thái S). Báo thức được hẹn lúc 1,0 s.'],
+      },
+      {
+        target: 'step',
+        title: ['Your turn: let the alarm ring', 'Đến lượt bạn: cho báo thức reo'],
+        body: ['Press Step until the program sees the result of read().', 'Bấm Bước tới khi chương trình thấy kết quả của read().'],
+        task: { text: ['Step until read() returns.', 'Bấm Bước tới khi read() trả về.'], until: (s) => s.eintr?.mode === 'norestart' && s.eintr?.sawEintr === true, solve: [step(3, 650)] },
+      },
+      {
+        target: 'ei-term',
+        title: ['-1 EINTR at 1.0 s', '-1 EINTR lúc 1,0 s'],
+        body: ['Nothing is wrong, yet read() returned -1 with errno EINTR ("Interrupted system call"). strace shows the inside story: ERESTARTSYS, the handler, rt_sigreturn = -1 EINTR.', 'Chẳng có gì sai, vậy mà read() trả -1 với errno EINTR ("Interrupted system call"). strace cho thấy chuyện bên trong: ERESTARTSYS, handler, rt_sigreturn = -1 EINTR.'],
+      },
+      {
+        target: 'ei-mode',
+        title: ['Your turn: SA_RESTART', 'Đến lượt bạn: SA_RESTART'],
+        body: ['Choose "C + SA_RESTART" and run it to the end.', 'Chọn "C + SA_RESTART" và chạy tới cuối.'],
+        task: { text: ['SA_RESTART, run to the end.', 'SA_RESTART, chạy tới cuối.'], until: (s) => s.eintr?.mode === 'restart' && s.eintr?.atEnd === true, solve: [{ a: 'eintr.mode', v: 'restart', delay: 300 }, { a: 'player.end', delay: 400 }] },
+      },
+      {
+        target: 'ei-term',
+        title: ['The kernel restarts it', 'Nhân tự chạy lại'],
+        body: ['rt_sigreturn = 3: the kernel restarted read() by itself and the program only ever sees read() = 5 at 2.0 s. But poll(), epoll_wait() and nanosleep() are never restarted — always loop on EINTR there.', 'rt_sigreturn = 3: nhân tự chạy lại read() và chương trình chỉ thấy read() = 5 lúc 2,0 s. Nhưng poll(), epoll_wait() và nanosleep() không bao giờ được chạy lại — ở đó luôn phải lặp khi gặp EINTR.'],
+      },
+    ],
+    quiz: {
+      q: ['read() returns -1 with errno EINTR. What should C code usually do?', 'read() trả -1 với errno EINTR. Mã C thường nên làm gì?'],
+      options: [['Call read() again', 'Gọi read() lại'], ['Treat it as a fatal I/O error', 'Coi là lỗi I/O chết người'], ['Close the file', 'Đóng tệp']],
+      answer: 0, why: ['EINTR only means a signal handler ran in the middle; nothing failed. Retry (or use SA_RESTART).', 'EINTR chỉ có nghĩa một handler tín hiệu chạy chen vào; chẳng có gì hỏng. Hãy thử lại (hoặc dùng SA_RESTART).'],
+    },
+  },
+  {
+    id: 'nagle-delay', ns: 'os-lab', sim: 'nagle', presets: ['nagle', 'nodelay', 'onewrite'],
+    title: ['Why every request takes 41 ms', 'Vì sao request nào cũng mất 41 ms'],
+    summary: ['Nagle on the server and delayed ACK on the client wait for each other; TCP_NODELAY or a single write fixes it.', 'Nagle ở máy chủ và ACK trễ ở khách chờ lẫn nhau; TCP_NODELAY hoặc gộp một lần write là hết.'],
+    steps: [
+      {
+        target: 'ng-seq', do: [{ a: 'nagle.writes', v: 2 }, { a: 'nagle.nodelay', v: false }, { a: 'nagle.delayedAck', v: true }, { a: 'player.seek', v: 0 }],
+        title: ['A tiny HTTP server', 'Một máy chủ HTTP tí hon'],
+        body: ['The server answers with two write() calls: headers, then the 6-byte body "hello\\n". This is what Python\'s http.server does.', 'Máy chủ trả lời bằng hai lần write(): headers, rồi body 6 byte "hello\\n". http.server của Python làm đúng như vậy.'],
+      },
+      {
+        target: 'play',
+        title: ['Your turn: send one request', 'Đến lượt bạn: gửi một request'],
+        body: ['Press Play and watch the milliseconds column.', 'Bấm Chạy và nhìn cột mili giây.'],
+        task: { text: ['Play to the end.', 'Chạy tới cuối.'], until: (s) => s.nagle?.nodelay === false && s.nagle?.atEnd === true, solve: [{ a: 'player.speed', v: 4 }, { a: 'player.play', delay: 200 }] },
+      },
+      {
+        target: 'ng-seq',
+        title: ['Two polite waits = deadlock for 40 ms', 'Hai bên lịch sự chờ nhau = kẹt 40 ms'],
+        body: ['The server holds the body until the headers are ACKed (Nagle). The client holds the ACK hoping to send it with its next data (delayed ACK). Only the 40 ms timer breaks the tie.', 'Máy chủ giữ body tới khi headers được ACK (Nagle). Khách giữ ACK, mong gửi kèm dữ liệu kế tiếp (ACK trễ). Chỉ có bộ hẹn giờ 40 ms phá được thế bế tắc.'],
+      },
+      {
+        target: 'ng-cost',
+        title: ['8.4 s for 200 tiny pages', '8,4 s cho 200 trang tí hon'],
+        body: ['41 ms × 200 = 8.367 s measured in the lab — for 6 bytes each. The CPU is idle the whole time; strace shows nothing slow, just a gap.', '41 ms × 200 = 8,367 s đo trong lab — cho mỗi trang 6 byte. CPU rảnh suốt; strace không thấy gì chậm, chỉ thấy một khoảng trống.'],
+      },
+      {
+        target: 'ng-opts',
+        title: ['Your turn: TCP_NODELAY', 'Đến lượt bạn: TCP_NODELAY'],
+        body: ['Turn TCP_NODELAY on and run it again.', 'Bật TCP_NODELAY và chạy lại.'],
+        task: { text: ['TCP_NODELAY on, run to the end.', 'Bật TCP_NODELAY, chạy tới cuối.'], until: (s) => s.nagle?.nodelay === true && s.nagle?.atEnd === true, solve: [{ a: 'nagle.nodelay', v: true, delay: 300 }, { a: 'player.end', delay: 400 }] },
+      },
+    ],
+    quiz: {
+      q: ['Which change removes the 40 ms stall?', 'Thay đổi nào xoá được khoảng kẹt 40 ms?'],
+      options: [['Send headers and body in one write, or set TCP_NODELAY', 'Gửi headers và body trong một write, hoặc bật TCP_NODELAY'], ['A faster CPU', 'CPU nhanh hơn'], ['A bigger receive buffer', 'Bộ đệm nhận lớn hơn']],
+      answer: 0, why: ['The delay is two timers waiting for each other, not work: avoid the small second segment or turn Nagle off.', 'Độ trễ là hai bộ hẹn giờ chờ nhau, không phải việc tính toán: tránh gói nhỏ thứ hai hoặc tắt Nagle.'],
+    },
+  },
 ];

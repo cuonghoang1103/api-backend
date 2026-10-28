@@ -1,0 +1,490 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-a2-1-testing",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-a2-1-testing"
+  },
+  "exercises": [
+    {
+      "title": "Build a tiny expect() like Jest/Vitest",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "assertion",
+        "toBe vs toEqual",
+        "deep equality",
+        "test runner"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "testing",
+        "javascript"
+      ],
+      "problemHtml": "<p>Test runners are less magic than they look. Implement <code>expect(actual)</code> returning matchers <code>toBe(expected)</code> (uses <code>Object.is</code>), <code>toEqual(expected)</code> (deep equality for plain objects/arrays) and <code>toContain(item)</code> (arrays and strings). A failing matcher throws <code>Error(\"Expected 3 to be 4\")</code> with <code>JSON.stringify</code> of both values. Then write <code>runTests(tests)</code> that runs <code>[{ name, fn }]</code> and returns <code>{ passed, failed: [names] }</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Messages: <code>Expected X to be Y</code>, <code>Expected X to equal Y</code>, <code>Expected X to contain Y</code> (JSON of values).</li>\n  <li><code>runTests</code> catches each test's error so one failure does not stop the others.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bộ chạy test không thần bí như vẻ ngoài. Cài <code>expect(actual)</code> trả matcher <code>toBe(expected)</code> (dùng <code>Object.is</code>), <code>toEqual(expected)</code> (so sâu object/mảng thường) và <code>toContain(item)</code> (mảng và chuỗi). Matcher sai thì ném <code>Error(\"Expected 3 to be 4\")</code> với <code>JSON.stringify</code> hai giá trị. Rồi viết <code>runTests(tests)</code> chạy <code>[{ name, fn }]</code> và trả <code>{ passed, failed: [tên] }</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Thông điệp: <code>Expected X to be Y</code>, <code>Expected X to equal Y</code>, <code>Expected X to contain Y</code> (JSON của giá trị).</li>\n  <li><code>runTests</code> bắt lỗi từng test để một test hỏng không chặn các test khác.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "expect({ a: [1, 2] }).toEqual({ a: [1, 2] })",
+          "output": "passes (no throw)",
+          "explanation": "toBe would fail: two different objects.|||toBe sẽ trượt: hai object khác nhau."
+        }
+      ],
+      "hintsJson": [
+        "function deepEqual(a, b) { if (Object.is(a, b)) return true; if (typeof a !== \"object\" || typeof b !== \"object\" || !a || !b) return false; if (Array.isArray(a) !== Array.isArray(b)) return false; const ka = Object.keys(a), kb = Object.keys(b); return ka.length === kb.length && ka.every((k) => deepEqual(a[k], b[k])); }",
+        "runTests: for (const t of tests) { try { t.fn(); passed++; } catch { failed.push(t.name); } }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// main.js — STARTER\nfunction expect(actual) {\n  return {\n    toBe: (expected) => actual === expected,\n    toEqual: (expected) => JSON.stringify(actual) === JSON.stringify(expected),\n  };\n}\n\nfunction runTests(tests) {\n  tests.forEach((t) => t.fn());\n  return { passed: tests.length, failed: [] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// main.js — expect mini: matcher ném lỗi khi sai; runTests bắt lỗi từng test\nconst show = (v) => JSON.stringify(v);\n\nfunction deepEqual(a, b) {\n  if (Object.is(a, b)) return true;\n  if (typeof a !== 'object' || typeof b !== 'object' || a === null || b === null) return false;\n  if (Array.isArray(a) !== Array.isArray(b)) return false;\n  const ka = Object.keys(a);\n  const kb = Object.keys(b);\n  return ka.length === kb.length && ka.every((k) => Object.prototype.hasOwnProperty.call(b, k) && deepEqual(a[k], b[k]));\n}\n\nfunction expect(actual) {\n  const fail = (verb, expected) => {\n    throw new Error(`Expected ${show(actual)} ${verb} ${show(expected)}`);\n  };\n  return {\n    toBe(expected) {\n      if (!Object.is(actual, expected)) fail('to be', expected);\n    },\n    toEqual(expected) {\n      if (!deepEqual(actual, expected)) fail('to equal', expected);\n    },\n    toContain(item) {\n      const ok = Array.isArray(actual) ? actual.some((x) => Object.is(x, item)) : String(actual).includes(item);\n      if (!ok) fail('to contain', item);\n    },\n  };\n}\n\nfunction runTests(tests) {\n  let passed = 0;\n  const failed = [];\n  for (const t of tests) {\n    try {\n      t.fn();\n      passed += 1;\n    } catch {\n      failed.push(t.name);\n    }\n  }\n  return { passed, failed };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Mỗi test là một hàm; test trượt = hàm ném lỗi. toBe so danh tính, toEqual so cấu trúc — đúng như Jest/Vitest mà Testing Library dùng.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "toBe passes silently",
+            "goi": "expect(3).toBe(3)",
+            "mongDoi": {
+              "$js": "undefined"
+            }
+          },
+          {
+            "moTa": "toBe failure message",
+            "goi": "expect(3).toBe(4)",
+            "mongDoi": {
+              "loi": "Error",
+              "thongDiep": "^Expected 3 to be 4$"
+            }
+          },
+          {
+            "moTa": "toEqual compares deeply",
+            "goi": "(() => { expect({ a: [1, { b: 2 }] }).toEqual({ a: [1, { b: 2 }] }); return \"ok\"; })()",
+            "mongDoi": "ok"
+          },
+          {
+            "moTa": "toEqual failure",
+            "goi": "expect([1, 2]).toEqual([1, 3])",
+            "mongDoi": {
+              "loi": "Error",
+              "thongDiep": "^Expected \\[1,2\\] to equal \\[1,3\\]$"
+            }
+          },
+          {
+            "moTa": "runTests summary",
+            "goi": "runTests([{ name: \"a\", fn: () => expect(1).toBe(1) }, { name: \"b\", fn: () => expect(\"hi\").toContain(\"x\") }, { name: \"c\", fn: () => expect([1]).toContain(1) }])",
+            "mongDoi": {
+              "passed": 2,
+              "failed": [
+                "b"
+              ]
+            }
+          },
+          {
+            "an": true,
+            "moTa": "toBe uses Object.is (NaN)",
+            "goi": "(() => { expect(NaN).toBe(NaN); return \"ok\"; })()",
+            "mongDoi": "ok"
+          },
+          {
+            "an": true,
+            "moTa": "toBe distinguishes objects",
+            "goi": "expect({}).toBe({})",
+            "mongDoi": {
+              "loi": "Error",
+              "thongDiep": "^Expected \\{\\} to be \\{\\}$"
+            }
+          },
+          {
+            "an": true,
+            "moTa": "Key order does not matter for toEqual",
+            "goi": "(() => { expect({ a: 1, b: 2 }).toEqual({ b: 2, a: 1 }); return \"ok\"; })()",
+            "mongDoi": "ok"
+          },
+          {
+            "an": true,
+            "moTa": "Array vs object are different",
+            "goi": "expect([]).toEqual({})",
+            "mongDoi": {
+              "loi": "Error"
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng <code>===</code> cho toBe ⇒ NaN không bằng NaN; Object.is xử lý đúng."
+        },
+        {
+          "loi": "So JSON.stringify cho toEqual ⇒ sai khi thứ tự khoá khác nhau."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "assertion",
+          "vi": "khẳng định: điều kiện phải đúng, sai thì test trượt"
+        },
+        {
+          "en": "matcher",
+          "vi": "hàm so sánh như toBe/toEqual"
+        }
+      ]
+    },
+    {
+      "title": "Choose the Testing Library query",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "getByRole",
+        "getByLabelText",
+        "queryBy",
+        "findBy"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "testing",
+        "table"
+      ],
+      "problemHtml": "<p>React Testing Library recommends querying the page the way users find things. For each need write the best query: <code>getByRole</code>, <code>getByLabelText</code>, <code>getByText</code>, <code>queryByText</code> or <code>findByText</code>.</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>React Testing Library khuyên truy vấn trang theo cách người dùng tìm thứ họ cần. Với mỗi nhu cầu ghi truy vấn tốt nhất: <code>getByRole</code>, <code>getByLabelText</code>, <code>getByText</code>, <code>queryByText</code> hoặc <code>findByText</code>.</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Thứ tự ưu tiên: role → label → text → test id.",
+        "Kiểm \"không có\" ⇒ queryBy…; đợi xuất hiện ⇒ findBy…"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Choose the Testing Library query\n\nAnswer in the panel on the left (no code needed).\n\n1. Best query\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Choose the Testing Library query — answer key\n\n1. Best query\n   - btn.query: getByRole\n   - input.query: getByLabelText\n   - absent.query: queryByText\n   - async.query: findByText\n   - para.query: getByText\n   getBy* throws when missing, queryBy* returns null (for \"not present\"), findBy* waits (returns a Promise).|||getBy* ném lỗi khi thiếu, queryBy* trả null (để kiểm \"không có\"), findBy* chờ (trả Promise).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Truy vấn theo role/label vừa kiểm chức năng vừa kiểm khả năng tiếp cận.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "r",
+            "de": "Best query",
+            "cot": [
+              {
+                "ma": "need",
+                "ten": "Need"
+              },
+              {
+                "ma": "query",
+                "ten": "Query"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "btn",
+                "o": {
+                  "need": "Click the \"Save\" button"
+                }
+              },
+              {
+                "ma": "input",
+                "o": {
+                  "need": "Type into the input labelled \"Email\""
+                }
+              },
+              {
+                "ma": "absent",
+                "o": {
+                  "need": "Assert that \"Error\" is NOT on the page"
+                }
+              },
+              {
+                "ma": "async",
+                "o": {
+                  "need": "Wait for \"Loaded 3 users\" that appears after a fetch"
+                }
+              },
+              {
+                "ma": "para",
+                "o": {
+                  "need": "Read a paragraph that says \"Welcome back\""
+                }
+              }
+            ],
+            "dapAn": {
+              "btn.query": "getByRole",
+              "input.query": "getByLabelText",
+              "absent.query": "queryByText",
+              "async.query": "findByText",
+              "para.query": "getByText"
+            },
+            "giaiThich": "<p>getBy* throws when missing, queryBy* returns null (for \"not present\"), findBy* waits (returns a Promise).</p><p><i>🇻🇳 getBy* ném lỗi khi thiếu, queryBy* trả null (để kiểm \"không có\"), findBy* chờ (trả Promise).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng getByText để kiểm phần tử KHÔNG có ⇒ test ném lỗi trước cả khi expect."
+        },
+        {
+          "loi": "Lạm dụng data-testid trong khi role/label có sẵn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "accessible role",
+          "vi": "vai trò trợ năng (button, textbox, heading…)"
+        }
+      ]
+    },
+    {
+      "title": "Testing React: concepts",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "unit vs integration",
+        "user-event",
+        "mocking APIs"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "testing",
+        "quiz"
+      ],
+      "problemHtml": "<p>Five questions on testing React apps with Vitest/Jest and React Testing Library: what to test, how to simulate users and how to deal with network requests.</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu về kiểm thử app React với Vitest/Jest và React Testing Library: test cái gì, mô phỏng người dùng thế nào và xử lý request mạng ra sao.</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Test hành vi người dùng thấy, không test chi tiết cài đặt.",
+        "Giả lập mạng (MSW) thay vì gọi server thật."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Testing React: concepts\n\nAnswer in the panel on the left (no code needed).\n\n1. What should a component test check?\n2. Simulate typing and clicking like a real user:\n3. A component fetches users on mount. In tests you should…\n4. Unit test vs integration test in a React app:\n5. Which are good test-friendly habits? (choose all)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Testing React: concepts — answer key\n\n1. What should a component test check?\n   Answer: b) What the user sees and can do (text, buttons, results after interaction)\n   Refactoring internals should not break good tests. / Tái cấu trúc bên trong không nên làm hỏng test tốt.\n\n2. Simulate typing and clicking like a real user:\n   Answer: a) @testing-library/user-event\n   await user.type(input, \"Lan\"); await user.click(button); / await user.type(input, \"Lan\"); await user.click(button);\n\n3. A component fetches users on mount. In tests you should…\n   Answer: b) mock the network (e.g. MSW) and assert the rendered result with findBy…\n   Deterministic data, no flaky network. / Dữ liệu cố định, không lệ thuộc mạng.\n\n4. Unit test vs integration test in a React app:\n   Answer: b) Unit tests a function or small component alone; integration tests several pieces working together (e.g. form + API + list)\n   The testing trophy favours integration tests for UIs. / \"Testing trophy\" ưu tiên test tích hợp cho giao diện.\n\n5. Which are good test-friendly habits? (choose all)\n   Answer: a) Pure functions for business logic (reducers, validators) + b) Accessible labels on inputs + d) Small components with clear props\n   Random output makes assertions unstable. / Kết quả ngẫu nhiên làm khẳng định không ổn định.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>\"The more your tests resemble the way your software is used, the more confidence they can give you.\"</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "t1",
+            "de": "What should a component test check?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The internal state variable names"
+              },
+              {
+                "ma": "b",
+                "noiDung": "What the user sees and can do (text, buttons, results after interaction)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The number of hooks used"
+              },
+              {
+                "ma": "d",
+                "noiDung": "CSS file size"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Refactoring internals should not break good tests.</p><p><i>🇻🇳 Tái cấu trúc bên trong không nên làm hỏng test tốt.</i></p>"
+          },
+          {
+            "ma": "t2",
+            "de": "Simulate typing and clicking like a real user:",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "@testing-library/user-event"
+              },
+              {
+                "ma": "b",
+                "noiDung": "setState directly"
+              },
+              {
+                "ma": "c",
+                "noiDung": "document.write"
+              },
+              {
+                "ma": "d",
+                "noiDung": "alert"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>await user.type(input, \"Lan\"); await user.click(button);</p><p><i>🇻🇳 await user.type(input, \"Lan\"); await user.click(button);</i></p>"
+          },
+          {
+            "ma": "t3",
+            "de": "A component fetches users on mount. In tests you should…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "call the real production API"
+              },
+              {
+                "ma": "b",
+                "noiDung": "mock the network (e.g. MSW) and assert the rendered result with findBy…"
+              },
+              {
+                "ma": "c",
+                "noiDung": "skip testing it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "use setTimeout(5000)"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Deterministic data, no flaky network.</p><p><i>🇻🇳 Dữ liệu cố định, không lệ thuộc mạng.</i></p>"
+          },
+          {
+            "ma": "t4",
+            "de": "Unit test vs integration test in a React app:",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Same thing"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Unit tests a function or small component alone; integration tests several pieces working together (e.g. form + API + list)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Integration tests only run in production"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Unit tests need a browser"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The testing trophy favours integration tests for UIs.</p><p><i>🇻🇳 \"Testing trophy\" ưu tiên test tích hợp cho giao diện.</i></p>"
+          },
+          {
+            "ma": "t5",
+            "de": "Which are good test-friendly habits? (choose all)",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Pure functions for business logic (reducers, validators)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Accessible labels on inputs"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Random ids in rendered text"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Small components with clear props"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "b",
+                "d"
+              ]
+            ],
+            "giaiThich": "<p>Random output makes assertions unstable.</p><p><i>🇻🇳 Kết quả ngẫu nhiên làm khẳng định không ổn định.</i></p>",
+            "nhieu": true
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Kiểm state nội bộ của component."
+        },
+        {
+          "loi": "Test phụ thuộc server thật ⇒ chập chờn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "implementation detail",
+          "vi": "chi tiết bên trong, người dùng không thấy"
+        }
+      ]
+    }
+  ]
+}

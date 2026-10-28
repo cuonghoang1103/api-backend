@@ -1,0 +1,644 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-a1-1-performance",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-a1-1-performance"
+  },
+  "exercises": [
+    {
+      "title": "React.memo only works with stable props (useCallback)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "React.memo",
+        "useCallback",
+        "referential equality",
+        "render count"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "performance",
+        "memo"
+      ],
+      "problemHtml": "<p>A parent has a clock-like counter that changes often and a big <code>ProductList</code> child that does not depend on it. Each component shows how many times it has rendered. Make <code>ProductList</code> skip re-renders caused by the counter: wrap it in <code>React.memo</code> AND pass a stable <code>onSelect</code> created with <code>useCallback</code> — a new function each render would defeat <code>memo</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Parent: <code>#tick</code> button (+1), <code>#ticks</code>; selected product in <code>#selected</code> (<code>Selected: Mouse</code>).</li>\n  <li><code>ProductList</code>: buttons <code>.product</code> (Keyboard, Mouse, Monitor) calling <code>onSelect(name)</code>; <code>#list-renders</code> shows <code>List rendered 1 times</code> (count with <code>useRef</code>).</li>\n</ul>",
+      "problemHtmlVi": "<p>Component cha có một bộ đếm đổi liên tục và một con <code>ProductList</code> lớn không phụ thuộc vào nó. Mỗi component hiện số lần đã render. Làm cho <code>ProductList</code> bỏ qua các lần render do bộ đếm gây ra: bọc bằng <code>React.memo</code> VÀ truyền <code>onSelect</code> ổn định tạo bằng <code>useCallback</code> — hàm mới mỗi lần render sẽ làm <code>memo</code> vô dụng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Cha: nút <code>#tick</code> (+1), <code>#ticks</code>; sản phẩm được chọn ở <code>#selected</code> (<code>Selected: Mouse</code>).</li>\n  <li><code>ProductList</code>: nút <code>.product</code> (Keyboard, Mouse, Monitor) gọi <code>onSelect(name)</code>; <code>#list-renders</code> hiện <code>List rendered 1 times</code> (đếm bằng <code>useRef</code>).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "click tick 3 times",
+          "output": "List rendered 1 times",
+          "explanation": "Props are shallow-equal, so memo skips the render.|||Props bằng nhau (so nông) nên memo bỏ qua render."
+        }
+      ],
+      "hintsJson": [
+        "const ProductList = memo(function ProductList({ onSelect }) { const renders = useRef(0); renders.current += 1; … });",
+        "const handleSelect = useCallback((name) => setSelected(name), []);"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useRef, useState } from 'react';\n\nfunction ProductList({ onSelect }) {\n  const renders = useRef(0);\n  renders.current += 1;\n  return (\n    <div>\n      {['Keyboard', 'Mouse', 'Monitor'].map((p) => <button key={p} className=\"product\" onClick={() => onSelect(p)}>{p}</button>)}\n      <p id=\"list-renders\">List rendered {renders.current} times</p>\n    </div>\n  );\n}\n\nexport default function App() {\n  const [ticks, setTicks] = useState(0);\n  const [selected, setSelected] = useState(null);\n  return (\n    <div>\n      <button id=\"tick\" onClick={() => setTicks(ticks + 1)}>Tick</button>\n      <p id=\"ticks\">{ticks}</p>\n      <p id=\"selected\">Selected: {selected ?? 'none'}</p>\n      <ProductList onSelect={(name) => setSelected(name)} />\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — memo cho con + useCallback cho hàm truyền xuống\nimport { memo, useCallback, useRef, useState } from 'react';\n\nconst PRODUCTS = ['Keyboard', 'Mouse', 'Monitor'];\n\nconst ProductList = memo(function ProductList({ onSelect }) {\n  const renders = useRef(0);\n  renders.current += 1;\n  return (\n    <div>\n      {PRODUCTS.map((p) => (\n        <button key={p} type=\"button\" className=\"product\" onClick={() => onSelect(p)}>{p}</button>\n      ))}\n      <p id=\"list-renders\">List rendered {renders.current} times</p>\n    </div>\n  );\n});\n\nexport default function App() {\n  const [ticks, setTicks] = useState(0);\n  const [selected, setSelected] = useState(null);\n  const handleSelect = useCallback((name) => setSelected(name), []); // cùng một hàm mọi lần render\n\n  return (\n    <div>\n      <button id=\"tick\" type=\"button\" onClick={() => setTicks((t) => t + 1)}>Tick</button>\n      <p id=\"ticks\">{ticks}</p>\n      <p id=\"selected\">Selected: {selected ?? 'none'}</p>\n      <ProductList onSelect={handleSelect} />\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>memo</code> so từng prop bằng <code>Object.is</code>. Số và chuỗi giống nhau thì bằng; hàm/object tạo mới mỗi render thì luôn khác. <code>useCallback</code> giữ CÙNG một hàm giữa các lần render (khi phụ thuộc không đổi).</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "List does not re-render on ticks",
+            "kiem": "text",
+            "selector": "#list-renders",
+            "giaTri": "List rendered 1 times",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#tick",
+                "lan": 3
+              }
+            ]
+          },
+          {
+            "moTa": "Ticks still update",
+            "kiem": "text",
+            "selector": "#ticks",
+            "giaTri": "3",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#tick",
+                "lan": 3
+              }
+            ]
+          },
+          {
+            "moTa": "Selecting still works",
+            "kiem": "text",
+            "selector": "#selected",
+            "giaTri": "Selected: Mouse",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".product:nth-child(2)",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Selecting does not re-render the list either",
+            "kiem": "text",
+            "selector": "#list-renders",
+            "giaTri": "List rendered 1 times",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".product:nth-child(2)",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#tick",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Uses memo and useCallback",
+            "kiem": "ma-nguon",
+            "khop": "^(?=[\\s\\S]*memo\\()(?=[\\s\\S]*useCallback\\()"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chỉ bọc memo mà truyền <code>onSelect={(n) =&gt; setSelected(n)}</code> ⇒ hàm mới mỗi lần ⇒ vẫn render lại."
+        },
+        {
+          "loi": "Bọc memo mọi component \"cho chắc\" ⇒ thêm chi phí so sánh mà không lợi gì."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "memoization",
+          "vi": "ghi nhớ kết quả để khỏi tính/vẽ lại"
+        },
+        {
+          "en": "shallow comparison",
+          "vi": "so nông từng prop bằng Object.is"
+        }
+      ]
+    },
+    {
+      "title": "useMemo for an expensive filter",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "useMemo",
+        "dependency array",
+        "derived data"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "performance",
+        "useMemo"
+      ],
+      "problemHtml": "<p>Filtering 5,000 products is slow, and the page also has an unrelated \"note\" input. Typing in the note re-renders the page and — without <code>useMemo</code> — re-runs the filter on every keystroke. Wrap the filter in <code>useMemo</code> with <code>[query, minPrice]</code>. The given <code>filterProducts</code> counts its calls in <code>stats.calls</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>#query</code>, <code>#min-price</code> (number), <code>#note</code>; <code>#result-count</code> <code>12 products</code>; <code>#calls</code> <code>Filter ran 1 times</code> (read <code>stats.calls</code> during render).</li>\n  <li>Typing in <code>#note</code> must not run the filter again.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lọc 5.000 sản phẩm thì chậm, và trang còn ô \"ghi chú\" không liên quan. Gõ ghi chú làm trang render lại và — nếu không có <code>useMemo</code> — chạy lại bộ lọc mỗi phím. Bọc bộ lọc trong <code>useMemo</code> với <code>[query, minPrice]</code>. Hàm <code>filterProducts</code> có sẵn đếm số lần gọi trong <code>stats.calls</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>#query</code>, <code>#min-price</code> (số), <code>#note</code>; <code>#result-count</code> <code>12 products</code>; <code>#calls</code> <code>Filter ran 1 times</code> (đọc <code>stats.calls</code> lúc render).</li>\n  <li>Gõ vào <code>#note</code> không được chạy lại bộ lọc.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "type 5 characters in note",
+          "output": "Filter ran 1 times",
+          "explanation": "useMemo returns the cached array while query/minPrice are unchanged.|||useMemo trả mảng đã nhớ khi query/minPrice không đổi."
+        }
+      ],
+      "hintsJson": [
+        "const results = useMemo(() => filterProducts(PRODUCTS, query, minPrice), [query, minPrice]);",
+        "Đặt useMemo TRƯỚC dòng đọc stats.calls để số hiển thị đúng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\nimport { PRODUCTS, filterProducts, stats } from './products';\n\nexport default function App() {\n  const [query, setQuery] = useState('laptop 1');\n  const [minPrice, setMinPrice] = useState(1500000);\n  const [note, setNote] = useState('');\n  const results = filterProducts(PRODUCTS, query, minPrice);\n  return (\n    <div>\n      <input id=\"query\" value={query} onChange={(e) => setQuery(e.target.value)} />\n      <input id=\"min-price\" type=\"number\" value={minPrice} onChange={(e) => setMinPrice(Number(e.target.value))} />\n      <input id=\"note\" value={note} onChange={(e) => setNote(e.target.value)} />\n      <p id=\"result-count\">{results.length} products</p>\n      <p id=\"calls\">Filter ran {stats.calls} times</p>\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/products.js",
+          "language": "javascript",
+          "code": "// src/products.js (cho sẵn) — 5.000 sản phẩm giả + bộ lọc có đếm số lần gọi\nexport const PRODUCTS = Array.from({ length: 5000 }, (_, i) => ({\n  id: i + 1,\n  name: (i % 2 ? 'Pro ' : 'Basic ') + ['Keyboard', 'Mouse', 'Monitor', 'Laptop', 'Headset'][i % 5] + ' ' + (i + 1),\n  price: ((i * 37) % 2000) * 1000,\n}));\n\nexport const stats = { calls: 0 };\n\nexport function filterProducts(list, query, minPrice) {\n  stats.calls += 1;\n  const q = query.trim().toLowerCase();\n  return list.filter((p) => p.price >= minPrice && p.name.toLowerCase().includes(q));\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — useMemo: chỉ lọc lại khi query hoặc minPrice đổi\nimport { useMemo, useState } from 'react';\nimport { PRODUCTS, filterProducts, stats } from './products';\n\nexport default function App() {\n  const [query, setQuery] = useState('laptop 1');\n  const [minPrice, setMinPrice] = useState(1500000);\n  const [note, setNote] = useState('');\n\n  const results = useMemo(() => filterProducts(PRODUCTS, query, minPrice), [query, minPrice]);\n\n  return (\n    <div>\n      <input id=\"query\" value={query} onChange={(e) => setQuery(e.target.value)} />\n      <input id=\"min-price\" type=\"number\" value={minPrice} onChange={(e) => setMinPrice(Number(e.target.value))} />\n      <input id=\"note\" value={note} onChange={(e) => setNote(e.target.value)} placeholder=\"Note\" />\n      <p id=\"result-count\">{results.length} products</p>\n      <p id=\"calls\">Filter ran {stats.calls} times</p>\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/products.js",
+          "language": "javascript",
+          "code": "// src/products.js (cho sẵn) — 5.000 sản phẩm giả + bộ lọc có đếm số lần gọi\nexport const PRODUCTS = Array.from({ length: 5000 }, (_, i) => ({\n  id: i + 1,\n  name: (i % 2 ? 'Pro ' : 'Basic ') + ['Keyboard', 'Mouse', 'Monitor', 'Laptop', 'Headset'][i % 5] + ' ' + (i + 1),\n  price: ((i * 37) % 2000) * 1000,\n}));\n\nexport const stats = { calls: 0 };\n\nexport function filterProducts(list, query, minPrice) {\n  stats.calls += 1;\n  const q = query.trim().toLowerCase();\n  return list.filter((p) => p.price >= minPrice && p.name.toLowerCase().includes(q));\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>useMemo chỉ đáng dùng khi phép tính thật sự tốn (lọc/sắp mảng lớn) hoặc khi cần giữ tham chiếu ổn định cho memo/useEffect. Với phép tính rẻ, cứ tính thẳng.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Typing a note does not re-filter",
+            "kiem": "text",
+            "selector": "#calls",
+            "giaTri": "Filter ran 1 times",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#note",
+                "giaTri": "a"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#note",
+                "giaTri": "ab"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#note",
+                "giaTri": "abc"
+              }
+            ]
+          },
+          {
+            "moTa": "Changing the query re-filters",
+            "kiem": "text",
+            "selector": "#calls",
+            "giaTri": "Filter ran 2 times",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#query",
+                "giaTri": "mouse"
+              }
+            ]
+          },
+          {
+            "moTa": "Changing min price re-filters",
+            "kiem": "text",
+            "selector": "#calls",
+            "giaTri": "Filter ran 2 times",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#min-price",
+                "giaTri": "0"
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Result count is correct",
+            "kiem": "text",
+            "selector": "#result-count",
+            "khop": "^\\d+ products$"
+          },
+          {
+            "an": true,
+            "moTa": "useMemo with both dependencies",
+            "kiem": "ma-nguon",
+            "khop": "useMemo\\([\\s\\S]*\\[\\s*(query\\s*,\\s*minPrice|minPrice\\s*,\\s*query)\\s*\\]"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Lưu kết quả lọc vào state + useEffect ⇒ thêm một lần render và dễ lệch."
+        },
+        {
+          "loi": "Thiếu minPrice trong mảng phụ thuộc ⇒ đổi giá không lọc lại."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "cache",
+          "vi": "bộ nhớ đệm kết quả"
+        }
+      ]
+    },
+    {
+      "title": "The index-as-key bug",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "keys and identity",
+        "component state in lists",
+        "stable ids"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "performance",
+        "keys"
+      ],
+      "problemHtml": "<p>Each row of a task list has its own uncontrolled note input. With <code>key={index}</code>, deleting the first row makes the second task show the FIRST task's note — React reused the component by position. Fix it with a stable id key so state stays with the right task.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Rows <code>li.task</code> with <code>.title</code>, <code>input.note</code> and <code>.btn-delete</code>; tasks: Design, Code, Test.</li>\n  <li>After typing a note on \"Code\" and deleting \"Design\", the note stays with \"Code\".</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi dòng của danh sách việc có ô ghi chú riêng (không điều khiển). Với <code>key={index}</code>, xoá dòng đầu làm việc thứ hai hiện ghi chú của việc THỨ NHẤT — React dùng lại component theo vị trí. Sửa bằng key là id ổn định để state đi đúng với việc của nó.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Dòng <code>li.task</code> có <code>.title</code>, <code>input.note</code> và <code>.btn-delete</code>; việc: Design, Code, Test.</li>\n  <li>Gõ ghi chú ở \"Code\" rồi xoá \"Design\", ghi chú vẫn ở với \"Code\".</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "note \"review PR\" on Code, delete Design",
+          "output": "Code · review PR",
+          "explanation": "With index keys the first row (now Code) would keep Design's empty note.|||Với key là index, dòng đầu (giờ là Code) sẽ giữ ghi chú rỗng của Design."
+        }
+      ],
+      "hintsJson": [
+        "key={task.id}",
+        "State của component con (kể cả giá trị ô không điều khiển trong DOM) gắn với key, không gắn với dữ liệu."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\n\nexport default function App() {\n  const [tasks, setTasks] = useState([{ id: 1, title: 'Design' }, { id: 2, title: 'Code' }, { id: 3, title: 'Test' }]);\n  return (\n    <ul>\n      {tasks.map((t, index) => (\n        <li key={index} className=\"task\">\n          <span className=\"title\">{t.title}</span>\n          <input className=\"note\" placeholder=\"note\" />\n          <button className=\"btn-delete\" onClick={() => setTasks(tasks.filter((x) => x.id !== t.id))}>Delete</button>\n        </li>\n      ))}\n    </ul>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — key ổn định (id) giữ state đúng với từng việc\nimport { useState } from 'react';\n\nexport default function App() {\n  const [tasks, setTasks] = useState([{ id: 1, title: 'Design' }, { id: 2, title: 'Code' }, { id: 3, title: 'Test' }]);\n  return (\n    <ul>\n      {tasks.map((t) => (\n        <li key={t.id} className=\"task\">\n          <span className=\"title\">{t.title}</span>\n          <input className=\"note\" placeholder=\"note\" />\n          <button type=\"button\" className=\"btn-delete\" onClick={() => setTasks((list) => list.filter((x) => x.id !== t.id))}>Delete</button>\n        </li>\n      ))}\n    </ul>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Key cho React biết \"đây có phải CÙNG một phần tử như lần trước không\". Key theo vị trí đúng chỉ khi danh sách không bao giờ thêm/xoá/sắp lại.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Note stays with its task after deleting above",
+            "kiem": "thuoc-tinh-js",
+            "selector": "li.task:nth-child(1) .note",
+            "thuocTinh": "value",
+            "giaTri": "review PR",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "li.task:nth-child(2) .note",
+                "giaTri": "review PR"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "li.task:nth-child(1) .btn-delete",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Remaining titles",
+            "kiem": "danh-sach-text",
+            "selector": "li.task .title",
+            "mongDoi": [
+              "Code",
+              "Test"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "li.task:nth-child(1) .btn-delete",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Uses a stable key",
+            "kiem": "ma-nguon",
+            "khop": "key=\\{\\s*t\\.id\\s*\\}"
+          },
+          {
+            "an": true,
+            "moTa": "Last task note untouched",
+            "kiem": "thuoc-tinh-js",
+            "selector": "li.task:nth-child(2) .note",
+            "thuocTinh": "value",
+            "giaTri": "write tests",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "li.task:nth-child(3) .note",
+                "giaTri": "write tests"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "li.task:nth-child(1) .btn-delete",
+                "lan": 1
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng <code>Math.random()</code> làm key ⇒ mỗi render tạo component mới, mất focus và state."
+        },
+        {
+          "loi": "Nghĩ key chỉ để tắt cảnh báo."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "reconciliation",
+          "vi": "quá trình React ghép cây cũ với cây mới"
+        }
+      ]
+    },
+    {
+      "title": "Measure first: performance decisions",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "React Profiler",
+        "premature optimisation",
+        "memo costs"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "performance",
+        "quiz"
+      ],
+      "problemHtml": "<p>Five decisions about React performance. The guiding rule: measure with the React DevTools Profiler or the browser Performance panel before optimising, and fix the biggest cost first.</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm quyết định về hiệu năng React. Nguyên tắc: đo bằng Profiler của React DevTools hoặc tab Performance của trình duyệt trước khi tối ưu, và sửa chỗ tốn nhất trước.</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "memo/useMemo/useCallback cũng có chi phí.",
+        "Danh sách rất dài ⇒ ảo hoá (chỉ vẽ phần nhìn thấy)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Measure first: performance decisions\n\nAnswer in the panel on the left (no code needed).\n\n1. The app \"feels slow\". First step?\n2. A table renders 10,000 rows and scrolling lags. Best fix?\n3. When is useCallback useful? (choose all)\n4. Which change reduces the initial bundle the most?\n5. State that changes on every keystroke is high in the tree and re-renders a big page. Good fix?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Measure first: performance decisions — answer key\n\n1. The app \"feels slow\". First step?\n   Answer: b) Record with the React Profiler to see which components render often or slowly\n   Optimise what the measurement shows. / Tối ưu đúng chỗ phép đo chỉ ra.\n\n2. A table renders 10,000 rows and scrolling lags. Best fix?\n   Answer: b) Virtualize the list (render only visible rows, e.g. react-window) or paginate\n   The DOM size itself is the cost. / Chính số nút DOM là chi phí.\n\n3. When is useCallback useful? (choose all)\n   Answer: a) Passing a callback to a memo child + b) Using a function in a useEffect dependency array + d) Returning a function from a custom hook used in effects\n   For a plain button it adds work without benefit. / Với nút bình thường nó chỉ thêm việc.\n\n4. Which change reduces the initial bundle the most?\n   Answer: b) Route-based code splitting with React.lazy\n   memo/useMemo affect rendering, not download size. / memo/useMemo ảnh hưởng render, không phải dung lượng tải.\n\n5. State that changes on every keystroke is high in the tree and re-renders a big page. Good fix?\n   Answer: a) Move the state down into the component that uses it (colocation)\n   Keeping state close to where it is used limits re-renders. / Giữ state gần nơi dùng sẽ giới hạn phạm vi render lại.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Đo → tìm nút thắt → sửa đúng chỗ → đo lại.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "p1",
+            "de": "The app \"feels slow\". First step?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Wrap every component in memo"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Record with the React Profiler to see which components render often or slowly"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Rewrite in another framework"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Add useMemo everywhere"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Optimise what the measurement shows.</p><p><i>🇻🇳 Tối ưu đúng chỗ phép đo chỉ ra.</i></p>"
+          },
+          {
+            "ma": "p2",
+            "de": "A table renders 10,000 rows and scrolling lags. Best fix?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "useCallback on the scroll handler"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Virtualize the list (render only visible rows, e.g. react-window) or paginate"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Use inline styles"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Disable StrictMode"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The DOM size itself is the cost.</p><p><i>🇻🇳 Chính số nút DOM là chi phí.</i></p>"
+          },
+          {
+            "ma": "p3",
+            "de": "When is useCallback useful? (choose all)",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Passing a callback to a memo child"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Using a function in a useEffect dependency array"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Every event handler on a button"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Returning a function from a custom hook used in effects"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "b",
+                "d"
+              ]
+            ],
+            "giaiThich": "<p>For a plain button it adds work without benefit.</p><p><i>🇻🇳 Với nút bình thường nó chỉ thêm việc.</i></p>",
+            "nhieu": true
+          },
+          {
+            "ma": "p4",
+            "de": "Which change reduces the initial bundle the most?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "useMemo"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Route-based code splitting with React.lazy"
+              },
+              {
+                "ma": "c",
+                "noiDung": "React.memo"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Renaming components"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>memo/useMemo affect rendering, not download size.</p><p><i>🇻🇳 memo/useMemo ảnh hưởng render, không phải dung lượng tải.</i></p>"
+          },
+          {
+            "ma": "p5",
+            "de": "State that changes on every keystroke is high in the tree and re-renders a big page. Good fix?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Move the state down into the component that uses it (colocation)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Use a global variable"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Use setTimeout"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nothing can be done"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Keeping state close to where it is used limits re-renders.</p><p><i>🇻🇳 Giữ state gần nơi dùng sẽ giới hạn phạm vi render lại.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Bọc useCallback mọi hàm \"cho chắc\"."
+        },
+        {
+          "loi": "Tối ưu trước khi biết chỗ chậm."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "profiler",
+          "vi": "công cụ đo thời gian render"
+        },
+        {
+          "en": "virtualization",
+          "vi": "chỉ vẽ các dòng đang hiện trên màn hình"
+        }
+      ]
+    }
+  ]
+}

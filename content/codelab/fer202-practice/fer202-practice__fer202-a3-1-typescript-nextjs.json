@@ -1,0 +1,439 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-a3-1-typescript-nextjs",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-a3-1-typescript-nextjs"
+  },
+  "exercises": [
+    {
+      "title": "TypeScript for React: read the types",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "props types",
+        "union types",
+        "optional props",
+        "generics",
+        "type errors"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "quiz"
+      ],
+      "problemHtml": "<p>Eight questions on typing React components with TypeScript: props interfaces, optional props, unions, event types, <code>useState</code> generics and what the compiler will or will not catch.</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tám câu về khai báo kiểu cho component React bằng TypeScript: interface props, prop tuỳ chọn, union, kiểu sự kiện, generic của <code>useState</code> và điều trình biên dịch bắt được hay không.</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "TypeScript chỉ kiểm lúc biên dịch; lúc chạy là JavaScript thường.",
+        "prop?: T nghĩa là T | undefined."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# TypeScript for React: read the types\n\nAnswer in the panel on the left (no code needed).\n\n1. type Props = { title: string; count?: number }. Which JSX compiles?\n2. status: \"idle\" | \"loading\" | \"done\" — what is this?\n3. Type of e in <input onChange={(e) => …} />?\n4. const [user, setUser] = useState<User | null>(null) — why the generic?\n5. Data fetched from an API at runtime…\n6. Benefits of TypeScript in a React team? (choose all)\n7. Next.js adds to React… (choose all)\n8. Why does SSR help SEO compared with a pure client SPA?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# TypeScript for React: read the types — answer key\n\n1. type Props = { title: string; count?: number }. Which JSX compiles?\n   Answer: b) <Card title=\"Hi\" />\n   title is required and must be a string; count is optional but must be a number. / title bắt buộc và là chuỗi; count tuỳ chọn nhưng phải là số.\n\n2. status: \"idle\" | \"loading\" | \"done\" — what is this?\n   Answer: b) A union of string literal types\n   Assigning \"error\" is a compile error. / Gán \"error\" sẽ báo lỗi biên dịch.\n\n3. Type of e in <input onChange={(e) => …} />?\n   Answer: a) React.ChangeEvent<HTMLInputElement>\n   Usually inferred automatically when written inline. / Thường tự suy ra khi viết trực tiếp.\n\n4. const [user, setUser] = useState<User | null>(null) — why the generic?\n   Answer: b) From null alone TS would infer type null and refuse setUser(realUser)\n   Give the full type when the initial value is narrower. / Khai báo đầy đủ khi giá trị đầu hẹp hơn.\n\n5. Data fetched from an API at runtime…\n   Answer: b) is NOT checked by TypeScript at runtime — validate it (e.g. zod) if it may be wrong\n   Types are erased after compilation. / Kiểu bị xoá sau khi biên dịch.\n\n6. Benefits of TypeScript in a React team? (choose all)\n   Answer: a) Autocomplete and safer refactors + b) Catches wrong props at compile time + d) Self-documenting component APIs\n   Bundle size is unchanged. / Dung lượng bundle không đổi.\n\n7. Next.js adds to React… (choose all)\n   Answer: a) File-based routing + b) Server-side rendering / static generation + d) API routes / server actions\n   It is a React framework. / Đó là framework của React.\n\n8. Why does SSR help SEO compared with a pure client SPA?\n   Answer: b) The server sends HTML that already contains the content, so crawlers and users see it before JS runs\n   Hydration then makes it interactive. / Hydration sau đó làm trang tương tác được.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Xem giải thích từng câu sau khi nộp.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "t1",
+            "de": "<code>type Props = { title: string; count?: number }</code>. Which JSX compiles?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>&lt;Card /&gt;</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>&lt;Card title=\"Hi\" /&gt;</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>&lt;Card title={1} /&gt;</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>&lt;Card count=\"2\" title=\"x\" /&gt;</code>"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>title is required and must be a string; count is optional but must be a number.</p><p><i>🇻🇳 title bắt buộc và là chuỗi; count tuỳ chọn nhưng phải là số.</i></p>"
+          },
+          {
+            "ma": "t2",
+            "de": "<code>status: \"idle\" | \"loading\" | \"done\"</code> — what is this?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "An enum class"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A union of string literal types"
+              },
+              {
+                "ma": "c",
+                "noiDung": "An array"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A regular expression"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Assigning \"error\" is a compile error.</p><p><i>🇻🇳 Gán \"error\" sẽ báo lỗi biên dịch.</i></p>"
+          },
+          {
+            "ma": "t3",
+            "de": "Type of <code>e</code> in <code>&lt;input onChange={(e) =&gt; …} /&gt;</code>?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>React.ChangeEvent&lt;HTMLInputElement&gt;</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>MouseEvent</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>string</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>any</code> always"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Usually inferred automatically when written inline.</p><p><i>🇻🇳 Thường tự suy ra khi viết trực tiếp.</i></p>"
+          },
+          {
+            "ma": "t4",
+            "de": "<code>const [user, setUser] = useState&lt;User | null&gt;(null)</code> — why the generic?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Required syntax"
+              },
+              {
+                "ma": "b",
+                "noiDung": "From null alone TS would infer type null and refuse setUser(realUser)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It makes it faster"
+              },
+              {
+                "ma": "d",
+                "noiDung": "To allow strings"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Give the full type when the initial value is narrower.</p><p><i>🇻🇳 Khai báo đầy đủ khi giá trị đầu hẹp hơn.</i></p>"
+          },
+          {
+            "ma": "t5",
+            "de": "Data fetched from an API at runtime…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "is automatically validated by TypeScript"
+              },
+              {
+                "ma": "b",
+                "noiDung": "is NOT checked by TypeScript at runtime — validate it (e.g. zod) if it may be wrong"
+              },
+              {
+                "ma": "c",
+                "noiDung": "cannot be typed"
+              },
+              {
+                "ma": "d",
+                "noiDung": "must be any"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Types are erased after compilation.</p><p><i>🇻🇳 Kiểu bị xoá sau khi biên dịch.</i></p>"
+          },
+          {
+            "ma": "t6",
+            "de": "Benefits of TypeScript in a React team? (choose all)",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Autocomplete and safer refactors"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Catches wrong props at compile time"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Makes the bundle smaller"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Self-documenting component APIs"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "b",
+                "d"
+              ]
+            ],
+            "giaiThich": "<p>Bundle size is unchanged.</p><p><i>🇻🇳 Dung lượng bundle không đổi.</i></p>",
+            "nhieu": true
+          },
+          {
+            "ma": "t7",
+            "de": "Next.js adds to React… (choose all)",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "File-based routing"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Server-side rendering / static generation"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A replacement for JavaScript"
+              },
+              {
+                "ma": "d",
+                "noiDung": "API routes / server actions"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "b",
+                "d"
+              ]
+            ],
+            "giaiThich": "<p>It is a React framework.</p><p><i>🇻🇳 Đó là framework của React.</i></p>",
+            "nhieu": true
+          },
+          {
+            "ma": "t8",
+            "de": "Why does SSR help SEO compared with a pure client SPA?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It hides content"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The server sends HTML that already contains the content, so crawlers and users see it before JS runs"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It removes JavaScript"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It is faster to type"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Hydration then makes it interactive.</p><p><i>🇻🇳 Hydration sau đó làm trang tương tác được.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng any khắp nơi ⇒ mất hết lợi ích."
+        },
+        {
+          "loi": "Nghĩ TS kiểm được dữ liệu API trả về lúc chạy."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "type annotation",
+          "vi": "chú thích kiểu"
+        },
+        {
+          "en": "union type",
+          "vi": "kiểu hợp: A | B"
+        }
+      ]
+    },
+    {
+      "title": "Next.js app router: file → URL",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "app directory",
+        "page.tsx",
+        "dynamic segment",
+        "route groups"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nextjs",
+        "table"
+      ],
+      "problemHtml": "<p>In the Next.js <code>app/</code> router every folder is a URL segment and <code>page.tsx</code> makes it public. Write the URL each file serves (use <code>:slug</code> style for dynamic parts, e.g. <code>/blog/:slug</code>).</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trong router <code>app/</code> của Next.js mỗi thư mục là một đoạn URL và <code>page.tsx</code> làm nó truy cập được. Ghi URL mà mỗi tệp phục vụ (phần động viết kiểu <code>:slug</code>, vd <code>/blog/:slug</code>).</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Thư mục trong ngoặc tròn không xuất hiện trên URL.",
+        "Ngoặc vuông = tham số, giống :param của React Router."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Next.js app router: file → URL\n\nAnswer in the panel on the left (no code needed).\n\n1. URL served\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Next.js app router: file → URL — answer key\n\n1. URL served\n   - root.url: /\n   - about.url: /about\n   - slug.url: /blog/:slug\n   - group.url: /cart\n   - nested.url: /courses/:id/lessons/:lessonId\n   [x] = dynamic segment; (group) folders organise files without adding a URL segment.|||[x] = đoạn động; thư mục (nhóm) để sắp xếp tệp, không thêm đoạn URL.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Định tuyến theo tệp thay cho mảng route của React Router; ý tưởng tham số và lồng nhau giữ nguyên.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "n",
+            "de": "URL served",
+            "cot": [
+              {
+                "ma": "file",
+                "ten": "File"
+              },
+              {
+                "ma": "url",
+                "ten": "URL"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "root",
+                "o": {
+                  "file": "app/page.tsx"
+                }
+              },
+              {
+                "ma": "about",
+                "o": {
+                  "file": "app/about/page.tsx"
+                }
+              },
+              {
+                "ma": "slug",
+                "o": {
+                  "file": "app/blog/[slug]/page.tsx"
+                }
+              },
+              {
+                "ma": "group",
+                "o": {
+                  "file": "app/(shop)/cart/page.tsx"
+                }
+              },
+              {
+                "ma": "nested",
+                "o": {
+                  "file": "app/courses/[id]/lessons/[lessonId]/page.tsx"
+                }
+              }
+            ],
+            "dapAn": {
+              "root.url": "/",
+              "about.url": "/about",
+              "slug.url": [
+                "/blog/:slug",
+                "/blog/[slug]"
+              ],
+              "group.url": "/cart",
+              "nested.url": [
+                "/courses/:id/lessons/:lessonId",
+                "/courses/[id]/lessons/[lessonId]"
+              ]
+            },
+            "giaiThich": "<p>[x] = dynamic segment; (group) folders organise files without adding a URL segment.</p><p><i>🇻🇳 [x] = đoạn động; thư mục (nhóm) để sắp xếp tệp, không thêm đoạn URL.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Ghi /shop/cart cho route group."
+        },
+        {
+          "loi": "Nghĩ layout.tsx tạo URL — chỉ page.tsx mới tạo."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "route group",
+          "vi": "nhóm route: thư mục (tên) không thành đoạn URL"
+        }
+      ]
+    }
+  ]
+}

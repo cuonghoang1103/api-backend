@@ -536,6 +536,24 @@
       "name": "Interview corner — React overview & tooling",
       "level": "MEDIUM",
       "description": "Câu hỏi phỏng vấn về React, npm và Git."
+    },
+    {
+      "slug": "fer202-a1-1-performance",
+      "name": "14.1 Performance (advanced)",
+      "level": "ADVANCED",
+      "description": "React.memo + useCallback (đếm lần render), useMemo cho bộ lọc nặng, lỗi key = index, đo trước tối ưu sau."
+    },
+    {
+      "slug": "fer202-a2-1-testing",
+      "name": "14.2 Testing React apps (advanced)",
+      "level": "ADVANCED",
+      "description": "Tự viết expect mini, chọn truy vấn Testing Library, khái niệm kiểm thử React."
+    },
+    {
+      "slug": "fer202-a3-1-typescript-nextjs",
+      "name": "14.3 TypeScript & Next.js (advanced)",
+      "level": "ADVANCED",
+      "description": "Đọc kiểu TypeScript cho React, ánh xạ tệp app router Next.js sang URL."
     }
   ]
 }

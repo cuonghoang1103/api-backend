@@ -1,0 +1,642 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-5-7-ch14-quality-attributes",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-5-7-ch14-quality-attributes"
+  },
+  "exercises": [
+    {
+      "title": "Quality 1 — external or internal attribute?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "quality attributes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers splits quality attributes into <b>external</b> (seen by users while the software runs: availability, installability, integrity, interoperability, performance, reliability, robustness, safety, security, usability) and <b>internal</b> (seen by developers and maintainers: efficiency, modifiability, portability, reusability, scalability, verifiability).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Wiegers chia thuộc tính chất lượng thành <b>bên ngoài</b> (người dùng thấy khi chạy) và <b>bên trong</b> (dev và người bảo trì thấy).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Người dùng có cảm nhận trực tiếp khi dùng không?",
+        "Sửa/chuyển/tái sử dụng/kiểm thử ⇒ bên trong."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Quality 1 — external or internal attribute?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Quality 1 — external or internal attribute? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: External\n   - r1.k: Internal\n   - r2.k: External\n   - r3.k: Internal\n   - r4.k: External\n   - r5.k: Internal\n   - r6.k: External\n   - r7.k: Internal\n   External: experienced by users at run time. Internal: experienced by the people who build, test and maintain the software.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>External: experienced by users at run time. Internal: experienced by the people who build, test and maintain the software.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Kind",
+                "luaChon": [
+                  "External",
+                  "Internal"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Usability"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Modifiability"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Availability"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Portability"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Safety"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Verifiability"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "Interoperability"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "s": "Reusability"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "External",
+              "r1.k": "Internal",
+              "r2.k": "External",
+              "r3.k": "Internal",
+              "r4.k": "External",
+              "r5.k": "Internal",
+              "r6.k": "External",
+              "r7.k": "Internal"
+            },
+            "giaiThich": "<p><p>External: experienced by users at run time. Internal: experienced by the people who build, test and maintain the software.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng scalability là bên ngoài (Wiegers xếp vào bên trong)."
+        },
+        {
+          "loi": "Nhầm safety với security."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "quality attribute",
+          "vi": "thuộc tính chất lượng — các \"-ility\": performance, usability, security, availability…"
+        },
+        {
+          "en": "nonfunctional requirement (NFR)",
+          "vi": "yêu cầu phi chức năng — thuộc tính chất lượng, giao diện ngoài, ràng buộc"
+        }
+      ]
+    },
+    {
+      "title": "Quality 2 — name the attribute",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 9,
+      "points": 20,
+      "concepts": [
+        "quality attributes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Requirements for a hospital appointment system. Name the main quality attribute of each.</p><p>Each row is graded on its own; the explanation of every answer appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Yêu cầu của hệ thống đặt lịch khám. Gọi tên thuộc tính chất lượng chính của từng yêu cầu.</p><p>Mỗi dòng được chấm riêng; giải thích từng đáp án hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ngăn hại cho người ⇒ safety; ngăn truy cập trái phép ⇒ security.",
+        "Đầu vào hỏng mà vẫn chạy ⇒ robustness."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Quality 2 — name the attribute\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Quality 2 — name the attribute — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Availability\n   - r1.k: Reliability\n   - r2.k: Robustness\n   - r3.k: Security\n   - r4.k: Integrity\n   - r5.k: Safety\n   - r6.k: Usability\n   - r7.k: Interoperability\n   - r8.k: Scalability\n   - r9.k: Modifiability\n   - r10.k: Performance\n   - r11.k: Portability\n   Availability = up time; reliability = failure-free operation; robustness = handling bad input/conditions; security = preventing unauthorised access; integrity = data not corrupted/changed improperly; safety = preventing harm; usability = ease of use/learning; interoperability = exchanging with other systems; scalability = growing capacity; modifiability = ease of change; performance = response/throughput; portability = moving across platforms.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Availability = up time; reliability = failure-free operation; robustness = handling bad input/conditions; security = preventing unauthorised access; integrity = data not corrupted/changed improperly; safety = preventing harm; usability = ease of use/learning; interoperability = exchanging with other systems; scalability = growing capacity; modifiability = ease of change; performance = response/throughput; portability = moving across platforms.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Attribute",
+                "luaChon": [
+                  "Availability",
+                  "Installability",
+                  "Integrity",
+                  "Interoperability",
+                  "Performance",
+                  "Reliability",
+                  "Robustness",
+                  "Safety",
+                  "Security",
+                  "Usability",
+                  "Efficiency",
+                  "Modifiability",
+                  "Portability",
+                  "Reusability",
+                  "Scalability",
+                  "Verifiability"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "The booking service shall be available 99.5% of the time between 06:00 and 22:00."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "The mean time between failures of the kiosk shall be at least 30 days."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "If the lab system sends a malformed result, the system shall log it and keep running."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Only the patient’s doctor shall be able to view the diagnosis."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "The system shall prevent an appointment record from being changed without leaving an audit entry."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "The infusion-dose screen shall ask for confirmation of any dose over the protocol limit."
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "A first-time patient shall be able to book an appointment within 3 minutes without help."
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "s": "The system shall exchange appointments with the national e-health platform using HL7 FHIR."
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "s": "The system shall handle 5× today’s bookings by adding servers, without code changes."
+                }
+              },
+              {
+                "ma": "r9",
+                "o": {
+                  "s": "A developer shall be able to add a new appointment type in at most 4 hours of work."
+                }
+              },
+              {
+                "ma": "r10",
+                "o": {
+                  "s": "Search results shall appear within 1 second for 95% of searches."
+                }
+              },
+              {
+                "ma": "r11",
+                "o": {
+                  "s": "The system shall run on both Android 13+ and iOS 17+."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Availability",
+              "r1.k": "Reliability",
+              "r2.k": "Robustness",
+              "r3.k": "Security",
+              "r4.k": "Integrity",
+              "r5.k": "Safety",
+              "r6.k": "Usability",
+              "r7.k": "Interoperability",
+              "r8.k": "Scalability",
+              "r9.k": "Modifiability",
+              "r10.k": "Performance",
+              "r11.k": "Portability"
+            },
+            "giaiThich": "<p><p>Availability = up time; reliability = failure-free operation; robustness = handling bad input/conditions; security = preventing unauthorised access; integrity = data not corrupted/changed improperly; safety = preventing harm; usability = ease of use/learning; interoperability = exchanging with other systems; scalability = growing capacity; modifiability = ease of change; performance = response/throughput; portability = moving across platforms.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm availability với reliability."
+        },
+        {
+          "loi": "Nhầm integrity với security."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "quality attribute",
+          "vi": "thuộc tính chất lượng — các \"-ility\": performance, usability, security, availability…"
+        },
+        {
+          "en": "nonfunctional requirement (NFR)",
+          "vi": "yêu cầu phi chức năng — thuộc tính chất lượng, giao diện ngoài, ràng buộc"
+        }
+      ]
+    },
+    {
+      "title": "Quality 3 — trade-offs and exploring attributes",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "quality attribute trade-offs"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Quality attributes interact: improving one can hurt another (Wiegers Figure 14-2). Wiegers also gives a process to explore them: start with a broad list, reduce it, prioritise, elicit specific expectations for each, then specify them in a well-structured, verifiable way.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Thuộc tính chất lượng tác động lẫn nhau: cải thiện cái này có thể hại cái kia (Hình 14-2). Wiegers cũng đưa quy trình khám phá: bắt đầu bằng danh sách rộng, rút gọn, xếp ưu tiên, khai thác kỳ vọng cụ thể, rồi đặc tả kiểm chứng được.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Bảo mật ↔ dễ dùng/hiệu năng là cặp đánh đổi kinh điển.",
+        "Câu hỏi \"có/không\" không khai thác được gì."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Quality 3 — trade-offs and exploring attributes\n\nAnswer in the answer panel (no code needed).\n\n1. Adding strong encryption and two-factor login usually hurts…Thêm mã hoá mạnh và đăng nhập hai lớp thường làm giảm…\n2. Making the code highly portable across platforms may reduce…Làm mã chạy được trên nhiều nền tảng có thể làm giảm…\n3. Why prioritise quality attributes?Vì sao phải xếp ưu tiên thuộc tính chất lượng?\n4. The best first step to elicit a quality requirement is to ask…Bước đầu tốt nhất để khai thác yêu cầu chất lượng là hỏi…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Quality 3 — trade-offs and exploring attributes — answer key\n\n1. Adding strong encryption and two-factor login usually hurts…Thêm mã hoá mạnh và đăng nhập hai lớp thường làm giảm…\n   Answer: b) usability and performance\n   Security often trades against usability and performance.VI: Bảo mật thường đánh đổi với tính dễ dùng và hiệu năng.\n\n2. Making the code highly portable across platforms may reduce…Làm mã chạy được trên nhiều nền tảng có thể làm giảm…\n   Answer: a) efficiency/performance\n   Generic code cannot use platform-specific optimisations.VI: Mã chung không tận dụng tối ưu riêng nền tảng.\n\n3. Why prioritise quality attributes?Vì sao phải xếp ưu tiên thuộc tính chất lượng?\n   Answer: a) Because you cannot maximise all of them — trade-offs must be decided\n   Conflicts need an agreed order.VI: Xung đột cần thứ tự đã thống nhất.\n\n4. The best first step to elicit a quality requirement is to ask…Bước đầu tốt nhất để khai thác yêu cầu chất lượng là hỏi…\n   Answer: b) \"What would be unacceptable? How long would make you give up?\" — and turn the answer into a measurable target\n   Ask for the consequences and limits, then quantify.VI: Hỏi hậu quả và giới hạn, rồi lượng hoá.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · a · a · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Adding strong encryption and two-factor login usually hurts…</p><p style=\"opacity:.75;font-size:.92em\"><i>Thêm mã hoá mạnh và đăng nhập hai lớp thường làm giảm…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "security"
+              },
+              {
+                "ma": "b",
+                "noiDung": "usability and performance"
+              },
+              {
+                "ma": "c",
+                "noiDung": "integrity"
+              },
+              {
+                "ma": "d",
+                "noiDung": "nothing"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Security often trades against usability and performance.</p><p><i>VI: Bảo mật thường đánh đổi với tính dễ dùng và hiệu năng.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Making the code highly portable across platforms may reduce…</p><p style=\"opacity:.75;font-size:.92em\"><i>Làm mã chạy được trên nhiều nền tảng có thể làm giảm…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "efficiency/performance"
+              },
+              {
+                "ma": "b",
+                "noiDung": "portability"
+              },
+              {
+                "ma": "c",
+                "noiDung": "availability always"
+              },
+              {
+                "ma": "d",
+                "noiDung": "nothing"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Generic code cannot use platform-specific optimisations.</p><p><i>VI: Mã chung không tận dụng tối ưu riêng nền tảng.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Why prioritise quality attributes?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao phải xếp ưu tiên thuộc tính chất lượng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Because you cannot maximise all of them — trade-offs must be decided"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Because the template requires it"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only to shorten the SRS"
+              },
+              {
+                "ma": "d",
+                "noiDung": "For marketing"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Conflicts need an agreed order.</p><p><i>VI: Xung đột cần thứ tự đã thống nhất.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>The best first step to elicit a quality requirement is to ask…</p><p style=\"opacity:.75;font-size:.92em\"><i>Bước đầu tốt nhất để khai thác yêu cầu chất lượng là hỏi…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "\"Should it be fast?\""
+              },
+              {
+                "ma": "b",
+                "noiDung": "\"What would be unacceptable? How long would make you give up?\" — and turn the answer into a measurable target"
+              },
+              {
+                "ma": "c",
+                "noiDung": "\"Which database?\""
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nothing — guess"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Ask for the consequences and limits, then quantify.</p><p><i>VI: Hỏi hậu quả và giới hạn, rồi lượng hoá.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng mọi thuộc tính đều tối đa được cùng lúc."
+        },
+        {
+          "loi": "Hỏi khách \"có cần nhanh không?\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "quality attribute",
+          "vi": "thuộc tính chất lượng — các \"-ility\": performance, usability, security, availability…"
+        }
+      ]
+    },
+    {
+      "title": "Quality 4 — turn vague wishes into verifiable quality requirements",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "specifying quality requirements"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>The clinic manager said: \"It must be fast, always up and secure.\" Write <code>QR</code>: an array of exactly three requirements, one each for <b>performance</b>, <b>availability</b> and <b>security</b>. Each object has <code>{ attr, text }</code>. Each <code>text</code> must start with \"The system shall\", contain a number with a unit (seconds, %, hours, minutes, attempts…), and must not use vague words (fast, always, secure, user-friendly, quickly, robust).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>attr values: \"performance\", \"availability\", \"security\".</li>\n</ul>",
+      "problemHtmlVi": "<p>Quản lý phòng khám nói: \"Phải nhanh, luôn chạy và an toàn.\" Viết <code>QR</code>: đúng ba yêu cầu cho <b>performance</b>, <b>availability</b> và <b>security</b>. Mỗi đối tượng <code>{ attr, text }</code>; text bắt đầu \"The system shall\", có số kèm đơn vị, không dùng từ mơ hồ.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>attr là \"performance\", \"availability\", \"security\".</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "fast",
+          "output": "The system shall display the patient’s appointment list within 2 seconds for 95% of requests.",
+          "explanation": "Action, number, unit, percentile.|||Hành động, số, đơn vị, phân vị."
+        }
+      ],
+      "hintsJson": [
+        "Hiệu năng: thời gian + phân vị + điều kiện tải.",
+        "Sẵn sàng: % thời gian trong khung giờ cụ thể; bảo mật: cơ chế cụ thể (khoá tài khoản, phân quyền…)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "qr.js",
+          "language": "javascript",
+          "code": "const QR = [\n  { attr: 'performance', text: '' },\n  { attr: 'availability', text: '' },\n  { attr: 'security', text: '' },\n];\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "qr.js",
+          "language": "javascript",
+          "code": "const QR = [\n  { attr: 'performance', text: 'The system shall display the appointment list within 2 seconds for 95% of requests under a load of 200 concurrent users.' },\n  { attr: 'availability', text: 'The system shall be available 99.5% of the time between 06:00 and 22:00 each day, excluding announced maintenance.' },\n  { attr: 'security', text: 'The system shall lock a user account for 15 minutes after 5 consecutive failed login attempts.' },\n];\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A verifiable quality requirement names the action, the measure and the unit, and the conditions (load, time window). See Planguage in 5.7 for a fuller structure.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "qr.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "three requirements: performance, availability, security",
+              "vi": "ba yêu cầu: performance, availability, security"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof QR==\"undefined\"||!Array.isArray(QR))return\"QR must be an array\";if(QR.length!==3)return\"exactly 3 requirements\";var r=QR.map(function(t){return String(t&&t.attr||\"\").toLowerCase()}).sort().join(\",\");return r===\"availability,performance,security\"?\"OK\":\"attr must be performance, availability and security (got \"+r+\")\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "each text is a \"shall\" statement without vague words",
+              "vi": "mỗi text là câu \"shall\" không từ mơ hồ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof QR==\"undefined\"||!Array.isArray(QR))return\"QR must be an array\";for(var t=0;t<QR.length;t++){var e=String(QR[t]&&QR[t].text||\"\");if(!/^the system shall\\b/i.test(e))return QR[t].attr+': start with \"The system shall\"';if(/\\b(fast|always|secure|securely|user-friendly|quickly|robust|easy|efficient)\\b/i.test(e))return QR[t].attr+\": remove the vague word\";if(e.length<50)return QR[t].attr+\": too short to be specific\"}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "each text is measurable (number + unit)",
+              "vi": "mỗi text đo được (số + đơn vị)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof QR==\"undefined\"||!Array.isArray(QR))return\"QR must be an array\";for(var r=0;r<QR.length;r++){var t=String(QR[r]&&QR[r].text||\"\");if(!/\\d+(\\.\\d+)?\\s*(%|ms|milliseconds?|seconds?|s\\b|minutes?|hours?|days?|attempts?|users?|requests?|characters?)/i.test(t))return QR[r].attr+\": add a number with a unit\"}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "the measure fits the attribute",
+              "vi": "thước đo hợp với thuộc tính"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof QR==\"undefined\"||!Array.isArray(QR))return\"QR must be an array\";for(var e=0;e<QR.length;e++){var r=String(QR[e]&&QR[e].attr||\"\").toLowerCase(),t=String(QR[e]&&QR[e].text||\"\");if(r===\"performance\"&&!/(ms|milliseconds?|seconds?|\\bs\\b|per second|per minute)/i.test(t))return\"performance: give a time (seconds/ms) or a rate\";if(r===\"availability\"&&!/%/.test(t))return\"availability: give a percentage of up time\";if(r===\"security\"&&!/(login|log in|password|attempt|role|authori|authenti|encrypt|access|lock)/i.test(t))return\"security: say what is protected and how (login, roles, access, encryption\\u2026)\"}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết \"The system shall be secure.\""
+        },
+        {
+          "loi": "Đặt 100% availability — không khả thi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "quality attribute",
+          "vi": "thuộc tính chất lượng — các \"-ility\": performance, usability, security, availability…"
+        },
+        {
+          "en": "verifiable",
+          "vi": "kiểm chứng được — có cách test/đo để biết đạt hay không"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,444 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-5-2-ch10-srs-labeling",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-5-2-ch10-srs-labeling"
+  },
+  "exercises": [
+    {
+      "title": "Labeling 1 — which labeling scheme?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "labeling requirements"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Every requirement needs a unique, persistent label so it can be traced and discussed. Wiegers compares <b>sequence numbers</b> (UR-9, FR-26), <b>hierarchical numbering</b> (3.2.4.3) and <b>hierarchical textual tags</b> (Print.ConfirmCopies). Name the scheme of each label.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi yêu cầu cần nhãn duy nhất, bền vững để truy vết và trao đổi. Wiegers so sánh <b>số thứ tự</b> (UR-9, FR-26), <b>đánh số phân cấp</b> (3.2.4.3) và <b>thẻ chữ phân cấp</b> (Print.ConfirmCopies). Gọi tên cách đánh nhãn của từng nhãn.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Chỉ có tiền tố + số tăng dần ⇒ sequence number.",
+        "Các từ nối bằng dấu chấm ⇒ textual tag."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Labeling 1 — which labeling scheme?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Labeling 1 — which labeling scheme? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Sequence number\n   - r1.k: Hierarchical numbering\n   - r2.k: Hierarchical textual tag\n   - r3.k: Sequence number\n   - r4.k: Hierarchical numbering\n   - r5.k: Hierarchical textual tag\n   Sequence numbers are simple but say nothing about grouping; hierarchical numbers change when sections move; textual tags survive edits and carry meaning.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Sequence numbers are simple but say nothing about grouping; hierarchical numbers change when sections move; textual tags survive edits and carry meaning.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Scheme",
+                "luaChon": [
+                  "Sequence number",
+                  "Hierarchical numbering",
+                  "Hierarchical textual tag"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "FR-26"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "3.2.4.3"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Loan.Renew.LimitReached"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "UR-9"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "4.1.2"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Search.Results.Sort"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Sequence number",
+              "r1.k": "Hierarchical numbering",
+              "r2.k": "Hierarchical textual tag",
+              "r3.k": "Sequence number",
+              "r4.k": "Hierarchical numbering",
+              "r5.k": "Hierarchical textual tag"
+            },
+            "giaiThich": "<p><p>Sequence numbers are simple but say nothing about grouping; hierarchical numbers change when sections move; textual tags survive edits and carry meaning.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm \"4.1.2\" với số thứ tự."
+        },
+        {
+          "loi": "Cho rằng nhãn có thể đổi khi chèn yêu cầu mới."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "requirement label",
+          "vi": "nhãn yêu cầu — định danh duy nhất, bền vững"
+        }
+      ]
+    },
+    {
+      "title": "Labeling 2 — strengths and weaknesses of each scheme",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "labeling requirements"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Labels must stay stable when the document changes, otherwise traces and test cases point to the wrong requirement. Answer the questions about the three schemes.</p><p>Each question is graded on its own; the explanation appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Nhãn phải ổn định khi tài liệu thay đổi, nếu không các liên kết truy vết và test case sẽ trỏ sai yêu cầu. Trả lời các câu về ba cách đánh nhãn.</p><p>Mỗi câu được chấm riêng; giải thích hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Nhãn tốt: duy nhất, không đổi, không tái sử dụng.",
+        "Số phân cấp phụ thuộc cấu trúc tài liệu."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Labeling 2 — strengths and weaknesses of each scheme\n\nAnswer in the answer panel (no code needed).\n\n1. A new section is inserted before 3.2. What happens to hierarchical numbers like 3.2.4.3?Chèn một mục mới trước 3.2. Số phân cấp như 3.2.4.3 bị gì?\n2. A requirement FR-26 is deleted. What should happen to the number 26?Xoá FR-26. Số 26 xử lý thế nào?\n3. Which scheme carries meaning and survives reorganisation best?Cách nào mang ý nghĩa và chịu được sắp xếp lại tốt nhất?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Labeling 2 — strengths and weaknesses of each scheme — answer key\n\n1. A new section is inserted before 3.2. What happens to hierarchical numbers like 3.2.4.3?Chèn một mục mới trước 3.2. Số phân cấp như 3.2.4.3 bị gì?\n   Answer: b) They may shift, breaking every reference to them\n   The weakness of hierarchical numbering.VI: Điểm yếu của đánh số phân cấp.\n\n2. A requirement FR-26 is deleted. What should happen to the number 26?Xoá FR-26. Số 26 xử lý thế nào?\n   Answer: b) Retire it — never reuse a label\n   Reusing labels confuses history and traces.VI: Dùng lại nhãn làm rối lịch sử và truy vết.\n\n3. Which scheme carries meaning and survives reorganisation best?Cách nào mang ý nghĩa và chịu được sắp xếp lại tốt nhất?\n   Answer: c) Hierarchical textual tags\n   Tags like Print.ConfirmCopies do not change when sections move.VI: Thẻ như Print.ConfirmCopies không đổi khi mục di chuyển.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · c.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>A new section is inserted before 3.2. What happens to hierarchical numbers like 3.2.4.3?</p><p style=\"opacity:.75;font-size:.92em\"><i>Chèn một mục mới trước 3.2. Số phân cấp như 3.2.4.3 bị gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Nothing"
+              },
+              {
+                "ma": "b",
+                "noiDung": "They may shift, breaking every reference to them"
+              },
+              {
+                "ma": "c",
+                "noiDung": "They become textual tags"
+              },
+              {
+                "ma": "d",
+                "noiDung": "They are deleted"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The weakness of hierarchical numbering.</p><p><i>VI: Điểm yếu của đánh số phân cấp.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>A requirement FR-26 is deleted. What should happen to the number 26?</p><p style=\"opacity:.75;font-size:.92em\"><i>Xoá FR-26. Số 26 xử lý thế nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Give it to the next new requirement"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Retire it — never reuse a label"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Renumber all requirements"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nothing matters"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Reusing labels confuses history and traces.</p><p><i>VI: Dùng lại nhãn làm rối lịch sử và truy vết.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Which scheme carries meaning and survives reorganisation best?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cách nào mang ý nghĩa và chịu được sắp xếp lại tốt nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Sequence numbers"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Hierarchical numbering"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Hierarchical textual tags"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Page numbers"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Tags like Print.ConfirmCopies do not change when sections move.</p><p><i>VI: Thẻ như Print.ConfirmCopies không đổi khi mục di chuyển.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đánh số lại toàn bộ khi xoá một yêu cầu."
+        },
+        {
+          "loi": "Tái sử dụng số của yêu cầu đã xoá."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "persistent label",
+          "vi": "nhãn bền vững — không đổi suốt đời yêu cầu"
+        }
+      ]
+    },
+    {
+      "title": "Labeling 3 — TBDs and user interfaces in the SRS",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "TBDs",
+        "UI in the SRS"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers: mark every gap with <b>TBD</b> (to be determined), record who will resolve it and by when, and resolve all TBDs before the requirements are baselined for implementation. UI details in the SRS: describe what the user must be able to do and the essential data, and keep detailed screen designs in separate UI specifications or prototypes.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Wiegers: đánh dấu mọi chỗ thiếu bằng <b>TBD</b>, ghi ai giải quyết và hạn, giải quyết hết TBD trước khi baseline để hiện thực. Chi tiết giao diện trong SRS: mô tả người dùng phải làm được gì và dữ liệu thiết yếu; thiết kế màn hình chi tiết để ở tài liệu UI riêng hoặc prototype.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "TBD phải có người chịu trách nhiệm và hạn.",
+        "SRS nói người dùng làm gì; bố cục chi tiết để ở tài liệu UI."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Labeling 3 — TBDs and user interfaces in the SRS\n\nAnswer in the answer panel (no code needed).\n\n1. The fine per day is not decided yet. What do you write?Tiền phạt mỗi ngày chưa quyết. Viết gì?\n2. When must all TBDs be resolved?Khi nào phải giải quyết hết TBD?\n3. Should the SRS contain the exact pixel layout of every screen?SRS có nên chứa bố cục từng pixel của mọi màn hình?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Labeling 3 — TBDs and user interfaces in the SRS — answer key\n\n1. The fine per day is not decided yet. What do you write?Tiền phạt mỗi ngày chưa quyết. Viết gì?\n   Answer: b) \"The fine per day is TBD\" — with the person responsible and a due date in the issue list\n   Make the gap visible and owned.VI: Làm chỗ thiếu hiện rõ và có người chịu trách nhiệm.\n\n2. When must all TBDs be resolved?Khi nào phải giải quyết hết TBD?\n   Answer: b) Before the affected requirements are baselined and implemented\n   A TBD in a baselined requirement is a defect waiting to happen.VI: TBD trong yêu cầu đã baseline là lỗi chờ xảy ra.\n\n3. Should the SRS contain the exact pixel layout of every screen?SRS có nên chứa bố cục từng pixel của mọi màn hình?\n   Answer: b) No — state what the user must do and the essential data; keep detailed layouts in UI specs or prototypes\n   Layouts change often; requirements should not.VI: Bố cục đổi thường xuyên; yêu cầu thì không nên.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>The fine per day is not decided yet. What do you write?</p><p style=\"opacity:.75;font-size:.92em\"><i>Tiền phạt mỗi ngày chưa quyết. Viết gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Leave the requirement out"
+              },
+              {
+                "ma": "b",
+                "noiDung": "\"The fine per day is TBD\" — with the person responsible and a due date in the issue list"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Guess a value"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Write \"a reasonable fine\""
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Make the gap visible and owned.</p><p><i>VI: Làm chỗ thiếu hiện rõ và có người chịu trách nhiệm.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>When must all TBDs be resolved?</p><p style=\"opacity:.75;font-size:.92em\"><i>Khi nào phải giải quyết hết TBD?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Never"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Before the affected requirements are baselined and implemented"
+              },
+              {
+                "ma": "c",
+                "noiDung": "After the release"
+              },
+              {
+                "ma": "d",
+                "noiDung": "During testing"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A TBD in a baselined requirement is a defect waiting to happen.</p><p><i>VI: TBD trong yêu cầu đã baseline là lỗi chờ xảy ra.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Should the SRS contain the exact pixel layout of every screen?</p><p style=\"opacity:.75;font-size:.92em\"><i>SRS có nên chứa bố cục từng pixel của mọi màn hình?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Yes"
+              },
+              {
+                "ma": "b",
+                "noiDung": "No — state what the user must do and the essential data; keep detailed layouts in UI specs or prototypes"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only colours"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only for mobile apps"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Layouts change often; requirements should not.</p><p><i>VI: Bố cục đổi thường xuyên; yêu cầu thì không nên.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết \"hợp lý\", \"phù hợp\" thay cho TBD."
+        },
+        {
+          "loi": "Nhồi mock-up chi tiết vào SRS."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "TBD (to be determined)",
+          "vi": "chỗ chưa quyết, đánh dấu để theo dõi tới khi đóng"
+        },
+        {
+          "en": "Software Requirements Specification (SRS)",
+          "vi": "tài liệu đặc tả yêu cầu phần mềm"
+        }
+      ]
+    }
+  ]
+}

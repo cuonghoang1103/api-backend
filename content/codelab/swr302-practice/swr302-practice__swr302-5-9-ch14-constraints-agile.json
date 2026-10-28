@@ -1,0 +1,462 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-5-9-ch14-constraints-agile",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-5-9-ch14-constraints-agile"
+  },
+  "exercises": [
+    {
+      "title": "Constraints 1 — constraint, quality attribute or functional?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "constraints"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>A <b>constraint</b> restricts the options available to developers (a language, a platform, a standard, a component that must be used). A <b>quality attribute</b> says how well the system does something. A <b>functional requirement</b> says what the system does.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Ràng buộc</b> giới hạn lựa chọn của dev (ngôn ngữ, nền tảng, chuẩn, thành phần bắt buộc dùng). <b>Thuộc tính chất lượng</b> nói hệ thống làm TỐT tới mức nào. <b>Yêu cầu chức năng</b> nói hệ thống LÀM gì.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Bắt dùng một công nghệ/chuẩn/luật ⇒ ràng buộc.",
+        "Có thước đo \"tốt tới đâu\" ⇒ thuộc tính chất lượng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Constraints 1 — constraint, quality attribute or functional?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Constraints 1 — constraint, quality attribute or functional? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Constraint\n   - r1.k: Constraint\n   - r2.k: Functional requirement\n   - r3.k: Quality attribute\n   - r4.k: Constraint\n   - r5.k: Functional requirement\n   - r6.k: Quality attribute\n   Constraints come from technology, standards, laws, the organisation or existing systems; they limit design choices. Quality attributes are measurable \"how well\"; functional requirements are behaviours.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Constraints come from technology, standards, laws, the organisation or existing systems; they limit design choices. Quality attributes are measurable \"how well\"; functional requirements are behaviours.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Kind",
+                "luaChon": [
+                  "Constraint",
+                  "Quality attribute",
+                  "Functional requirement"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "The system shall be written in Java 21 to match the hospital’s other systems."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "The system shall store data only in servers located in Vietnam (Decree 13)."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The system shall let a patient cancel an appointment up to 2 hours before it starts."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "The system shall restore service within 30 minutes after a server failure."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Reports shall use the Ministry of Health’s Form 01 layout."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "The system shall send a reminder SMS 24 hours before an appointment."
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "95% of new receptionists shall complete a booking without errors after a 1-hour training."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Constraint",
+              "r1.k": "Constraint",
+              "r2.k": "Functional requirement",
+              "r3.k": "Quality attribute",
+              "r4.k": "Constraint",
+              "r5.k": "Functional requirement",
+              "r6.k": "Quality attribute"
+            },
+            "giaiThich": "<p><p>Constraints come from technology, standards, laws, the organisation or existing systems; they limit design choices. Quality attributes are measurable \"how well\"; functional requirements are behaviours.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Xếp \"viết bằng Java\" vào chất lượng."
+        },
+        {
+          "loi": "Xếp mẫu báo cáo bắt buộc vào chức năng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "design / implementation constraint",
+          "vi": "ràng buộc thiết kế/hiện thực — giới hạn lựa chọn của đội phát triển (ngôn ngữ, nền tảng, chuẩn)"
+        },
+        {
+          "en": "quality attribute",
+          "vi": "thuộc tính chất lượng — các \"-ility\": performance, usability, security, availability…"
+        },
+        {
+          "en": "functional requirement (FR)",
+          "vi": "yêu cầu chức năng — hành vi hệ thống thể hiện trong điều kiện cụ thể (\"The system shall…\"); ghi trong SRS"
+        }
+      ]
+    },
+    {
+      "title": "Constraints 2 — translating quality attributes into design and code",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "implementing quality requirements"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers (\"Translating quality attributes into technical specifications\"): quality requirements usually become architecture and design decisions, and sometimes <b>derived functional requirements</b>. Example: a security requirement \"lock after 5 failed attempts\" needs a lock function, an unlock function and an admin screen.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Wiegers: yêu cầu chất lượng thường trở thành quyết định kiến trúc/thiết kế, đôi khi sinh ra <b>yêu cầu chức năng phái sinh</b>. Ví dụ: yêu cầu bảo mật \"khoá sau 5 lần sai\" cần chức năng khoá, mở khoá và màn hình quản trị.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Thuộc tính chất lượng ⇒ kiến trúc + đôi khi yêu cầu chức năng phái sinh.",
+        "Khoá thì phải có mở khoá."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Constraints 2 — translating quality attributes into design and code\n\nAnswer in the answer panel (no code needed).\n\n1. A reliability requirement \"no lost bookings after a crash\" most likely leads to…Yêu cầu tin cậy \"không mất lịch hẹn sau sự cố\" dẫn tới…\n2. An availability goal of 99.9% usually requires…Mục tiêu sẵn sàng 99,9% thường đòi hỏi…\n3. Which is a derived functional requirement of \"accounts lock after 5 failed logins\"?Yêu cầu chức năng phái sinh của \"khoá tài khoản sau 5 lần đăng nhập sai\"?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Constraints 2 — translating quality attributes into design and code — answer key\n\n1. A reliability requirement \"no lost bookings after a crash\" most likely leads to…Yêu cầu tin cậy \"không mất lịch hẹn sau sự cố\" dẫn tới…\n   Answer: a) transaction logging and recovery design\n   Reliability ⇒ architecture choices.VI: Tin cậy ⇒ lựa chọn kiến trúc.\n\n2. An availability goal of 99.9% usually requires…Mục tiêu sẵn sàng 99,9% thường đòi hỏi…\n   Answer: a) redundant servers and failover\n   High availability is a structural decision.VI: Sẵn sàng cao là quyết định cấu trúc.\n\n3. Which is a derived functional requirement of \"accounts lock after 5 failed logins\"?Yêu cầu chức năng phái sinh của \"khoá tài khoản sau 5 lần đăng nhập sai\"?\n   Answer: a) The system shall let an administrator unlock a locked account.\n   Someone must be able to undo the lock.VI: Phải có cách mở khoá.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · a · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>A reliability requirement \"no lost bookings after a crash\" most likely leads to…</p><p style=\"opacity:.75;font-size:.92em\"><i>Yêu cầu tin cậy \"không mất lịch hẹn sau sự cố\" dẫn tới…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "transaction logging and recovery design"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a new colour scheme"
+              },
+              {
+                "ma": "c",
+                "noiDung": "removing backups"
+              },
+              {
+                "ma": "d",
+                "noiDung": "nothing"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Reliability ⇒ architecture choices.</p><p><i>VI: Tin cậy ⇒ lựa chọn kiến trúc.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>An availability goal of 99.9% usually requires…</p><p style=\"opacity:.75;font-size:.92em\"><i>Mục tiêu sẵn sàng 99,9% thường đòi hỏi…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "redundant servers and failover"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a longer SRS"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a single server"
+              },
+              {
+                "ma": "d",
+                "noiDung": "more test cases only"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>High availability is a structural decision.</p><p><i>VI: Sẵn sàng cao là quyết định cấu trúc.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Which is a derived functional requirement of \"accounts lock after 5 failed logins\"?</p><p style=\"opacity:.75;font-size:.92em\"><i>Yêu cầu chức năng phái sinh của \"khoá tài khoản sau 5 lần đăng nhập sai\"?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The system shall let an administrator unlock a locked account."
+              },
+              {
+                "ma": "b",
+                "noiDung": "The login page shall be blue."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Use PostgreSQL."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Train the users."
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Someone must be able to undo the lock.</p><p><i>VI: Phải có cách mở khoá.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng yêu cầu chất lượng chỉ cần test là xong."
+        },
+        {
+          "loi": "Quên chức năng mở khoá."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "quality attribute",
+          "vi": "thuộc tính chất lượng — các \"-ility\": performance, usability, security, availability…"
+        },
+        {
+          "en": "design / implementation constraint",
+          "vi": "ràng buộc thiết kế/hiện thực — giới hạn lựa chọn của đội phát triển (ngôn ngữ, nền tảng, chuẩn)"
+        }
+      ]
+    },
+    {
+      "title": "Constraints 3 — quality requirements in agile projects",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "quality requirements in agile"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>In agile projects, quality requirements are often captured as <b>acceptance criteria</b> on user stories, as <b>constraint stories</b>, or in the <b>Definition of Done</b> when they apply to every story. Some (performance, scalability, security) must be considered early, because they shape the architecture and are expensive to add later.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trong dự án agile, yêu cầu chất lượng thường được ghi thành <b>tiêu chí chấp nhận</b> của user story, <b>constraint story</b>, hoặc trong <b>Definition of Done</b> khi áp cho mọi story. Một số (hiệu năng, mở rộng, bảo mật) phải tính sớm vì chúng định hình kiến trúc và thêm sau rất tốn kém.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Áp cho mọi story ⇒ DoD.",
+        "Riêng một story ⇒ acceptance criteria."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Constraints 3 — quality requirements in agile projects\n\nAnswer in the answer panel (no code needed).\n\n1. \"Every screen must meet WCAG 2.2 AA.\" Where does it belong best?\"Mọi màn hình phải đạt WCAG 2.2 AA.\" Đặt ở đâu tốt nhất?\n2. \"Search returns in 1 s\" for the search story belongs…\"Tìm kiếm trả về trong 1 giây\" của story tìm kiếm thuộc…\n3. Why must scalability be discussed in the first iterations?Vì sao phải bàn khả năng mở rộng từ những vòng đầu?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Constraints 3 — quality requirements in agile projects — answer key\n\n1. \"Every screen must meet WCAG 2.2 AA.\" Where does it belong best?\"Mọi màn hình phải đạt WCAG 2.2 AA.\" Đặt ở đâu tốt nhất?\n   Answer: a) In the Definition of Done\n   It applies to every story.VI: Nó áp cho mọi story.\n\n2. \"Search returns in 1 s\" for the search story belongs…\"Tìm kiếm trả về trong 1 giây\" của story tìm kiếm thuộc…\n   Answer: a) in the acceptance criteria of that story\n   Specific to one story ⇒ its acceptance criteria.VI: Riêng một story ⇒ tiêu chí chấp nhận của story đó.\n\n3. Why must scalability be discussed in the first iterations?Vì sao phải bàn khả năng mở rộng từ những vòng đầu?\n   Answer: a) It shapes the architecture; adding it later costs much more\n   Architecture-shaping attributes need early attention.VI: Thuộc tính định hình kiến trúc cần chú ý sớm.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · a · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>\"Every screen must meet WCAG 2.2 AA.\" Where does it belong best?</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Mọi màn hình phải đạt WCAG 2.2 AA.\" Đặt ở đâu tốt nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "In the Definition of Done"
+              },
+              {
+                "ma": "b",
+                "noiDung": "In one user story only"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Nowhere"
+              },
+              {
+                "ma": "d",
+                "noiDung": "In the retrospective notes"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>It applies to every story.</p><p><i>VI: Nó áp cho mọi story.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>\"Search returns in 1 s\" for the search story belongs…</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Tìm kiếm trả về trong 1 giây\" của story tìm kiếm thuộc…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "in the acceptance criteria of that story"
+              },
+              {
+                "ma": "b",
+                "noiDung": "only in the final release notes"
+              },
+              {
+                "ma": "c",
+                "noiDung": "in the sprint goal"
+              },
+              {
+                "ma": "d",
+                "noiDung": "in the vision statement"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Specific to one story ⇒ its acceptance criteria.</p><p><i>VI: Riêng một story ⇒ tiêu chí chấp nhận của story đó.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Why must scalability be discussed in the first iterations?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao phải bàn khả năng mở rộng từ những vòng đầu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It shapes the architecture; adding it later costs much more"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Because agile forbids it later"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only to please the PO"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It does not matter"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Architecture-shaping attributes need early attention.</p><p><i>VI: Thuộc tính định hình kiến trúc cần chú ý sớm.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Để yêu cầu chất lượng tới cuối dự án."
+        },
+        {
+          "loi": "Nhét WCAG vào một story duy nhất."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "acceptance criteria",
+          "vi": "tiêu chí chấp nhận — điều kiện để khách nhận một yêu cầu/story (Given/When/Then)"
+        },
+        {
+          "en": "user story",
+          "vi": "câu chuyện người dùng — \"As a <role>, I want <goal> so that <benefit>\""
+        }
+      ]
+    }
+  ]
+}

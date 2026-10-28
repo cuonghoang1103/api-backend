@@ -1,0 +1,580 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-5-6-ch11-ambiguity",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-5-6-ch11-ambiguity"
+  },
+  "exercises": [
+    {
+      "title": "Ambiguity 1 — spot the ambiguous term",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "ambiguous terms"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers Table 11-2 lists words that make requirements ambiguous: <i>acceptable, adequate, and/or, as much as practicable, at least / at most, between, depends on, efficient, fast, flexible, improved, including, maximize / minimize, optimal, normally, reasonable, robust, seamless, several, shouldn’t, state-of-the-art, sufficient, support, user-friendly</i>. For each requirement, pick the ambiguous term.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bảng 11-2 của Wiegers liệt kê các từ làm yêu cầu mơ hồ. Với mỗi yêu cầu, chọn từ mơ hồ.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Từ mơ hồ là từ mỗi người đọc hiểu một kiểu.",
+        "\"between\" mơ hồ vì không rõ có tính hai đầu mút không."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Ambiguity 1 — spot the ambiguous term\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Ambiguity 1 — spot the ambiguous term — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: and/or\n   - r1.k: between\n   - r2.k: support\n   - r3.k: several\n   - r4.k: normally\n   - r5.k: robust\n   - r6.k: including\n   - r7.k: minimize\n   Fix: \"and/or\" ⇒ state which; \"between 10 and 40\" ⇒ say if 10 and 40 are included; \"support\" ⇒ the concrete action (upload, preview, convert…); \"several\" ⇒ a number; \"normally\" ⇒ what happens in the abnormal case; \"robust\" ⇒ recovery behaviour; \"including\" ⇒ the complete list; \"minimize\" ⇒ a target number.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Fix: \"and/or\" ⇒ state which; \"between 10 and 40\" ⇒ say if 10 and 40 are included; \"support\" ⇒ the concrete action (upload, preview, convert…); \"several\" ⇒ a number; \"normally\" ⇒ what happens in the abnormal case; \"robust\" ⇒ recovery behaviour; \"including\" ⇒ the complete list; \"minimize\" ⇒ a target number.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Ambiguous term",
+                "luaChon": [
+                  "and/or",
+                  "between",
+                  "support",
+                  "several",
+                  "normally",
+                  "robust",
+                  "including",
+                  "minimize"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "The system shall e-mail and/or text the student when a grade is posted."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "A class shall have between 10 and 40 students."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The system shall support PDF submissions."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "The lecturer shall be able to attach several files to an announcement."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Grades are normally published within 7 days."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "The upload service shall be robust."
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "Reports shall show course data, including the attendance rate."
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "s": "The system shall minimize the number of clicks to submit an assignment."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "and/or",
+              "r1.k": "between",
+              "r2.k": "support",
+              "r3.k": "several",
+              "r4.k": "normally",
+              "r5.k": "robust",
+              "r6.k": "including",
+              "r7.k": "minimize"
+            },
+            "giaiThich": "<p><p>Fix: \"and/or\" ⇒ state which; \"between 10 and 40\" ⇒ say if 10 and 40 are included; \"support\" ⇒ the concrete action (upload, preview, convert…); \"several\" ⇒ a number; \"normally\" ⇒ what happens in the abnormal case; \"robust\" ⇒ recovery behaviour; \"including\" ⇒ the complete list; \"minimize\" ⇒ a target number.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng \"support\" là động từ rõ nghĩa."
+        },
+        {
+          "loi": "Bỏ qua \"including\" — danh sách không đầy đủ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "ambiguous",
+          "vi": "mơ hồ — hiểu được nhiều cách"
+        }
+      ]
+    },
+    {
+      "title": "Ambiguity 2 — boundary values",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "boundary values"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers’ example: \"vacation requests of up to 5 days do not need approval; requests of 5 to 10 days need supervisor approval; more than 10 days need management approval\". Which rule applies to exactly 5 days? Boundaries must not overlap or leave gaps.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ví dụ của Wiegers về nghỉ phép: \"tới 5 ngày không cần duyệt; 5 tới 10 ngày cần trưởng nhóm; trên 10 ngày cần ban giám đốc\". Đúng 5 ngày thì theo luật nào? Biên không được chồng lấn hay bỏ trống.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Thử đúng các giá trị biên: 5, 10.",
+        "Mỗi giá trị phải rơi vào ĐÚNG MỘT luật."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Ambiguity 2 — boundary values\n\nAnswer in the answer panel (no code needed).\n\n1. In the original wording, 5 days falls into…Với cách viết gốc, 5 ngày rơi vào…\n2. Which rewrite is unambiguous?Cách viết lại nào không mơ hồ?\n3. Option b leaves which values uncovered?Phương án b bỏ sót giá trị nào?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Ambiguity 2 — boundary values — answer key\n\n1. In the original wording, 5 days falls into…Với cách viết gốc, 5 ngày rơi vào…\n   Answer: b) both the first and the second rule — overlap\n   \"up to 5\" and \"5 to 10\" both include 5.VI: \"tới 5\" và \"5 tới 10\" đều chứa 5.\n\n2. Which rewrite is unambiguous?Cách viết lại nào không mơ hồ?\n   Answer: a) ≤ 5 days: none; 6–10 days: supervisor; > 10 days: management (whole days)\n   Every whole number falls into exactly one rule.VI: Mỗi số nguyên rơi đúng vào một luật.\n\n3. Option b leaves which values uncovered?Phương án b bỏ sót giá trị nào?\n   Answer: b) Exactly 5 and exactly 10\n   Strict inequalities on both sides create gaps.VI: Bất đẳng thức nghiêm ngặt hai phía tạo khoảng trống.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · a · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>In the original wording, 5 days falls into…</p><p style=\"opacity:.75;font-size:.92em\"><i>Với cách viết gốc, 5 ngày rơi vào…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "only the first rule"
+              },
+              {
+                "ma": "b",
+                "noiDung": "both the first and the second rule — overlap"
+              },
+              {
+                "ma": "c",
+                "noiDung": "no rule — gap"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the third rule"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>\"up to 5\" and \"5 to 10\" both include 5.</p><p><i>VI: \"tới 5\" và \"5 tới 10\" đều chứa 5.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Which rewrite is unambiguous?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cách viết lại nào không mơ hồ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "≤ 5 days: none; 6–10 days: supervisor; > 10 days: management (whole days)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "< 5: none; > 5 and < 10: supervisor; > 10: management"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Short: none; medium: supervisor; long: management"
+              },
+              {
+                "ma": "d",
+                "noiDung": "0–5: none; 5–10: supervisor; 10+: management"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Every whole number falls into exactly one rule.</p><p><i>VI: Mỗi số nguyên rơi đúng vào một luật.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Option b leaves which values uncovered?</p><p style=\"opacity:.75;font-size:.92em\"><i>Phương án b bỏ sót giá trị nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "None"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Exactly 5 and exactly 10"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only 0"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only 11"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Strict inequalities on both sides create gaps.</p><p><i>VI: Bất đẳng thức nghiêm ngặt hai phía tạo khoảng trống.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết \"5–10\" và \"10+\" — 10 rơi vào hai luật."
+        },
+        {
+          "loi": "Dùng \"<\" hai phía làm hở biên."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "boundary value",
+          "vi": "giá trị biên"
+        }
+      ]
+    },
+    {
+      "title": "Ambiguity 3 — negatives, omissions and \"and/or\" logic",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "ambiguity: logic and omissions"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Other sources of ambiguity: negative requirements (\"shall not\"), implied conditions, missing else-branches (what if the condition is false?), and combining <i>and</i>/<i>or</i> without parentheses.</p><p>Each question is graded on its own; the explanation appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các nguồn mơ hồ khác: yêu cầu phủ định, điều kiện ngầm, thiếu nhánh \"nếu không thì\", và trộn <i>and</i>/<i>or</i> không có ngoặc.</p><p>Mỗi câu được chấm riêng; giải thích hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Mỗi \"if\" cần một \"else\".",
+        "Trộn and/or ⇒ thêm ngoặc hoặc bảng quyết định."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Ambiguity 3 — negatives, omissions and \"and/or\" logic\n\nAnswer in the answer panel (no code needed).\n\n1. \"If the payment succeeds, the system shall confirm the order.\" What is missing?\"Nếu thanh toán thành công, hệ thống xác nhận đơn.\" Thiếu gì?\n2. \"Students who are enrolled and have paid or have a scholarship may register.\" How many readings?\"Students who are enrolled and have paid or have a scholarship may register.\" Mấy cách hiểu?\n3. \"The system shall not allow a user to delete a course.\" The better form is…\"The system shall not allow a user to delete a course.\" Dạng tốt hơn là…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Ambiguity 3 — negatives, omissions and \"and/or\" logic — answer key\n\n1. \"If the payment succeeds, the system shall confirm the order.\" What is missing?\"Nếu thanh toán thành công, hệ thống xác nhận đơn.\" Thiếu gì?\n   Answer: b) What the system does when the payment fails\n   Always specify the else-branch.VI: Luôn đặc tả nhánh còn lại.\n\n2. \"Students who are enrolled and have paid or have a scholarship may register.\" How many readings?\"Students who are enrolled and have paid or have a scholarship may register.\" Mấy cách hiểu?\n   Answer: b) Two: enrolled AND (paid OR scholarship), or (enrolled AND paid) OR scholarship\n   Use parentheses, a list or a decision table.VI: Dùng ngoặc, danh sách hoặc bảng quyết định.\n\n3. \"The system shall not allow a user to delete a course.\" The better form is…\"The system shall not allow a user to delete a course.\" Dạng tốt hơn là…\n   Answer: a) \"Only an administrator shall be able to delete a course.\" — positive, names who CAN\n   A positive statement says who may do it.VI: Câu khẳng định nói ai được phép.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>\"If the payment succeeds, the system shall confirm the order.\" What is missing?</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Nếu thanh toán thành công, hệ thống xác nhận đơn.\" Thiếu gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Nothing"
+              },
+              {
+                "ma": "b",
+                "noiDung": "What the system does when the payment fails"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The colour of the button"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The database name"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Always specify the else-branch.</p><p><i>VI: Luôn đặc tả nhánh còn lại.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>\"Students who are enrolled and have paid or have a scholarship may register.\" How many readings?</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Students who are enrolled and have paid or have a scholarship may register.\" Mấy cách hiểu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "One"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Two: enrolled AND (paid OR scholarship), or (enrolled AND paid) OR scholarship"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Three"
+              },
+              {
+                "ma": "d",
+                "noiDung": "None"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Use parentheses, a list or a decision table.</p><p><i>VI: Dùng ngoặc, danh sách hoặc bảng quyết định.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>\"The system shall not allow a user to delete a course.\" The better form is…</p><p style=\"opacity:.75;font-size:.92em\"><i>\"The system shall not allow a user to delete a course.\" Dạng tốt hơn là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "\"Only an administrator shall be able to delete a course.\" — positive, names who CAN"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Delete the requirement"
+              },
+              {
+                "ma": "c",
+                "noiDung": "\"Deleting courses is bad.\""
+              },
+              {
+                "ma": "d",
+                "noiDung": "Keep it — negatives are best"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>A positive statement says who may do it.</p><p><i>VI: Câu khẳng định nói ai được phép.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên nhánh thất bại."
+        },
+        {
+          "loi": "Để nguyên câu trộn and/or."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "ambiguous",
+          "vi": "mơ hồ — hiểu được nhiều cách"
+        },
+        {
+          "en": "decision table",
+          "vi": "bảng quyết định — mọi tổ hợp điều kiện ⇒ hành động (n điều kiện ⇒ 2ⁿ cột)"
+        }
+      ]
+    },
+    {
+      "title": "Ambiguity 4 — make the late-submission rule unambiguous",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "boundary values"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>The draft rule says: \"Assignments submitted slightly late lose some marks; very late ones get zero.\" The lecturer clarified: up to and including 24 hours late ⇒ minus 10%; more than 24 and up to and including 72 hours ⇒ minus 30%; more than 72 hours ⇒ 0 marks; on time ⇒ no penalty. Write <code>function penalty(hoursLate)</code> returning the percentage deducted (0, 10, 30 or 100). <code>hoursLate</code> ≤ 0 means on time. Then write <code>RULE</code>: the requirement in one sentence per band, with no ambiguous words.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>penalty() correct at every boundary (0, 24, 72); RULE has 4 sentences, each with a number, without \"slightly\", \"very\", \"some\", \"about\".</li>\n</ul>",
+      "problemHtmlVi": "<p>Luật nháp: \"Nộp trễ một chút trừ ít điểm; trễ nhiều thì 0 điểm.\" Giảng viên làm rõ: trễ tới và bằng 24 giờ ⇒ trừ 10%; hơn 24 và tới bằng 72 giờ ⇒ trừ 30%; hơn 72 giờ ⇒ 0 điểm; đúng hạn ⇒ không trừ. Viết <code>penalty(hoursLate)</code> trả phần trăm bị trừ (0, 10, 30, 100). Rồi viết <code>RULE</code>: mỗi khoảng một câu, không có từ mơ hồ.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>penalty() đúng tại mọi biên (0, 24, 72); RULE 4 câu, mỗi câu có số, không dùng \"slightly/very/some/about\".</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "penalty(24)",
+          "output": "10",
+          "explanation": "24 h is in the first late band (inclusive).|||24 giờ thuộc khoảng trễ đầu (bao gồm)."
+        },
+        {
+          "input": "penalty(24.5)",
+          "output": "30",
+          "explanation": "More than 24 h.|||Hơn 24 giờ."
+        }
+      ],
+      "hintsJson": [
+        "Thử chính các giá trị 0, 24, 72 và lân cận.",
+        "Dùng \"at most\" và \"more than\" để chốt biên, tránh \"between\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "rule.js",
+          "language": "javascript",
+          "code": "function penalty(hoursLate) {\n  // TODO\n  return 0;\n}\nconst RULE = [];\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "rule.js",
+          "language": "javascript",
+          "code": "function penalty(hoursLate) {\n  if (hoursLate <= 0) return 0;\n  if (hoursLate <= 24) return 10;\n  if (hoursLate <= 72) return 30;\n  return 100;\n}\nconst RULE = [\n  'The system shall apply no penalty to an assignment submitted on or before the deadline.',\n  'The system shall deduct 10% of the mark from an assignment submitted more than 0 and at most 24 hours after the deadline.',\n  'The system shall deduct 30% of the mark from an assignment submitted more than 24 and at most 72 hours after the deadline.',\n  'The system shall give 0 marks to an assignment submitted more than 72 hours after the deadline.',\n];\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Every value of hoursLate falls into exactly one band: ≤0, (0,24], (24,72], >72. The sentence form mirrors the code: \"more than X and at most Y\".</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "rule.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "penalty() is correct on time and at 24 h",
+              "vi": "penalty() đúng khi đúng hạn và tại 24 giờ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof penalty!=\"function\")return\"penalty is not a function\";for(var t=[[-5,0],[0,0],[.1,10],[24,10]],n=0;n<t.length;n++)if(penalty(t[n][0])!==t[n][1])return\"penalty(\"+t[n][0]+\") should be \"+t[n][1]+\", got \"+penalty(t[n][0]);return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "penalty() is correct above 24 h and at 72 h",
+              "vi": "penalty() đúng trên 24 giờ và tại 72 giờ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof penalty!=\"function\")return\"penalty is not a function\";for(var t=[[24.01,30],[48,30],[72,30],[72.01,100],[500,100]],n=0;n<t.length;n++)if(penalty(t[n][0])!==t[n][1])return\"penalty(\"+t[n][0]+\") should be \"+t[n][1]+\", got \"+penalty(t[n][0]);return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "RULE: 4 precise sentences, no vague words",
+              "vi": "RULE: 4 câu chính xác, không từ mơ hồ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof RULE==\"undefined\"||!Array.isArray(RULE))return\"RULE must be an array\";if(RULE.length!==4)return\"one sentence per band \\u21D2 4 sentences\";for(var t=0;t<4;t++){var r=String(RULE[t]);if(!/^the system shall\\b/i.test(r))return\"RULE[\"+t+']: start with \"The system shall\"';if(/\\b(slightly|very|some|about|approximately|around|a bit|reasonable)\\b/i.test(r))return\"RULE[\"+t+\"] still uses a vague word\"}var e=RULE.join(\" \");return/\\b24\\b/.test(e)&&/\\b72\\b/.test(e)&&/10\\s*%/.test(e)&&/30\\s*%/.test(e)?\"OK\":\"state the numbers 24, 72, 10% and 30%\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "RULE closes each boundary (at most / more than)",
+              "vi": "RULE chốt từng biên (at most / more than)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof RULE==\"undefined\"||!Array.isArray(RULE))return\"RULE must be an array\";var e=RULE.join(\" \").toLowerCase();return/\\bbetween\\b/.test(e)?'\"between\" leaves the endpoints unclear \\u2014 use \"more than \\u2026 and at most \\u2026\"':/(at most|up to and including|or less|no more than|≤|<=)/.test(e)&&/(more than|over|greater than|>)/.test(e)?\"OK\":'say whether 24 and 72 are included (e.g. \"at most 24 hours\", \"more than 72 hours\")'})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng `< 24` làm 24 giờ rơi sang khoảng 30%."
+        },
+        {
+          "loi": "Viết \"between 24 and 72 hours\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "boundary value",
+          "vi": "giá trị biên"
+        },
+        {
+          "en": "ambiguous",
+          "vi": "mơ hồ — hiểu được nhiều cách"
+        }
+      ]
+    }
+  ]
+}

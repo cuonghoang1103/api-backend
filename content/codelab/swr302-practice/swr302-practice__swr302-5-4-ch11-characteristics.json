@@ -1,0 +1,484 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-5-4-ch11-characteristics",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-5-4-ch11-characteristics"
+  },
+  "exercises": [
+    {
+      "title": "Characteristics 1 — of each requirement, or of the set?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "characteristics of excellent requirements"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers: each requirement should be <b>complete, correct, feasible, necessary, prioritized, unambiguous and verifiable</b>; the set of requirements should be <b>complete, consistent, modifiable and traceable</b>.</p><p>Each question is graded on its own; the explanation appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Wiegers: mỗi yêu cầu nên <b>đầy đủ, đúng, khả thi, cần thiết, có ưu tiên, không mơ hồ, kiểm chứng được</b>; tập yêu cầu nên <b>đầy đủ, nhất quán, sửa được, truy vết được</b>.</p><p>Mỗi câu được chấm riêng; giải thích hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Nhất quán, sửa được, truy vết được ⇒ của TẬP yêu cầu.",
+        "Cần thiết = truy về nhu cầu/mục tiêu nghiệp vụ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Characteristics 1 — of each requirement, or of the set?\n\nAnswer in the answer panel (no code needed).\n\n1. \"Consistent\" is a characteristic of…\"Nhất quán\" là đặc tính của…\n2. \"Verifiable\" means…\"Kiểm chứng được\" nghĩa là…\n3. \"Necessary\" means the requirement…\"Cần thiết\" nghĩa là yêu cầu…\n4. \"Modifiable\" refers to the set being…\"Sửa được\" nói tập yêu cầu…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Characteristics 1 — of each requirement, or of the set? — answer key\n\n1. \"Consistent\" is a characteristic of…\"Nhất quán\" là đặc tính của…\n   Answer: b) the set of requirements\n   Consistency is about requirements not conflicting with each other.VI: Nhất quán là các yêu cầu không mâu thuẫn nhau.\n\n2. \"Verifiable\" means…\"Kiểm chứng được\" nghĩa là…\n   Answer: b) a test or another method can show whether it is correctly implemented\n   If you cannot test it, you cannot prove it is met.VI: Không test được thì không chứng minh được đã đạt.\n\n3. \"Necessary\" means the requirement…\"Cần thiết\" nghĩa là yêu cầu…\n   Answer: a) traces to a business need or objective\n   Otherwise it is gold plating.VI: Nếu không, đó là mạ vàng.\n\n4. \"Modifiable\" refers to the set being…\"Sửa được\" nói tập yêu cầu…\n   Answer: a) easy to change without side effects: each requirement stated once, well organised, with a history\n   No duplication, clear structure, version history.VI: Không trùng lặp, cấu trúc rõ, có lịch sử phiên bản.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · a · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>\"Consistent\" is a characteristic of…</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Nhất quán\" là đặc tính của…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "each requirement"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the set of requirements"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the code"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the test plan"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Consistency is about requirements not conflicting with each other.</p><p><i>VI: Nhất quán là các yêu cầu không mâu thuẫn nhau.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>\"Verifiable\" means…</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Kiểm chứng được\" nghĩa là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the customer has signed it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a test or another method can show whether it is correctly implemented"
+              },
+              {
+                "ma": "c",
+                "noiDung": "it is short"
+              },
+              {
+                "ma": "d",
+                "noiDung": "it has an ID"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>If you cannot test it, you cannot prove it is met.</p><p><i>VI: Không test được thì không chứng minh được đã đạt.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>\"Necessary\" means the requirement…</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Cần thiết\" nghĩa là yêu cầu…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "traces to a business need or objective"
+              },
+              {
+                "ma": "b",
+                "noiDung": "is technically easy"
+              },
+              {
+                "ma": "c",
+                "noiDung": "was requested by a developer"
+              },
+              {
+                "ma": "d",
+                "noiDung": "is in the template"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Otherwise it is gold plating.</p><p><i>VI: Nếu không, đó là mạ vàng.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>\"Modifiable\" refers to the set being…</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Sửa được\" nói tập yêu cầu…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "easy to change without side effects: each requirement stated once, well organised, with a history"
+              },
+              {
+                "ma": "b",
+                "noiDung": "written in Word"
+              },
+              {
+                "ma": "c",
+                "noiDung": "always changing"
+              },
+              {
+                "ma": "d",
+                "noiDung": "locked"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>No duplication, clear structure, version history.</p><p><i>VI: Không trùng lặp, cấu trúc rõ, có lịch sử phiên bản.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng \"nhất quán\" áp cho từng yêu cầu riêng lẻ."
+        },
+        {
+          "loi": "Nhầm verifiable với \"đã được duyệt\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "verifiable",
+          "vi": "kiểm chứng được — có cách test/đo để biết đạt hay không"
+        },
+        {
+          "en": "ambiguous",
+          "vi": "mơ hồ — hiểu được nhiều cách"
+        }
+      ]
+    },
+    {
+      "title": "Characteristics 3 — choose the better requirement",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "writing excellent requirements"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>For each pair, choose the requirement that is closer to \"excellent\".</p><p>Each question is graded on its own; the explanation appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi cặp, chọn yêu cầu gần với \"xuất sắc\" hơn.</p><p>Mỗi câu được chấm riêng; giải thích hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Có số, đơn vị, điều kiện ⇒ kiểm chứng được.",
+        "Tránh chọn sẵn công nghệ/thiết kế trong yêu cầu."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Characteristics 3 — choose the better requirement\n\nAnswer in the answer panel (no code needed).\n\n1. SearchTìm kiếm\n2. NotificationsThông báo\n3. PaymentsThanh toán\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Characteristics 3 — choose the better requirement — answer key\n\n1. SearchTìm kiếm\n   Answer: b) The system shall display the first 20 matching rooms within 2 seconds after the tenant submits a search, for 95% of searches.\n   Verifiable and unambiguous.VI: Kiểm chứng được và không mơ hồ.\n\n2. NotificationsThông báo\n   Answer: b) The system shall e-mail the landlord within 5 minutes after a tenant submits a viewing request.\n   No \"and/or\", no \"when appropriate\".VI: Không \"and/or\", không \"khi phù hợp\".\n\n3. PaymentsThanh toán\n   Answer: b) The system shall accept rent payments by card through the payment provider selected by the company.\n   A need, not a design decision.VI: Một nhu cầu, không phải quyết định thiết kế.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Search</p><p style=\"opacity:.75;font-size:.92em\"><i>Tìm kiếm</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Search shall be fast."
+              },
+              {
+                "ma": "b",
+                "noiDung": "The system shall display the first 20 matching rooms within 2 seconds after the tenant submits a search, for 95% of searches."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Verifiable and unambiguous.</p><p><i>VI: Kiểm chứng được và không mơ hồ.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Notifications</p><p style=\"opacity:.75;font-size:.92em\"><i>Thông báo</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The system shall notify the landlord and/or the tenant when appropriate."
+              },
+              {
+                "ma": "b",
+                "noiDung": "The system shall e-mail the landlord within 5 minutes after a tenant submits a viewing request."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>No \"and/or\", no \"when appropriate\".</p><p><i>VI: Không \"and/or\", không \"khi phù hợp\".</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Payments</p><p style=\"opacity:.75;font-size:.92em\"><i>Thanh toán</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The system shall use Stripe and store card numbers in table cards."
+              },
+              {
+                "ma": "b",
+                "noiDung": "The system shall accept rent payments by card through the payment provider selected by the company."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A need, not a design decision.</p><p><i>VI: Một nhu cầu, không phải quyết định thiết kế.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chọn câu ngắn hơn vì \"gọn\"."
+        },
+        {
+          "loi": "Coi tên nhà cung cấp cụ thể là yêu cầu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "verifiable",
+          "vi": "kiểm chứng được — có cách test/đo để biết đạt hay không"
+        },
+        {
+          "en": "ambiguous",
+          "vi": "mơ hồ — hiểu được nhiều cách"
+        }
+      ]
+    },
+    {
+      "title": "Characteristics 2 — which characteristic is violated?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 9,
+      "points": 20,
+      "concepts": [
+        "characteristics of excellent requirements"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Each requirement from a student-housing app breaks one characteristic. Name it.</p><p>Each row is graded on its own; the explanation of every answer appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi yêu cầu của app nhà ở sinh viên vi phạm một đặc tính. Gọi tên nó.</p><p>Mỗi dòng được chấm riêng; giải thích từng đáp án hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Mâu thuẫn với một yêu cầu KHÁC ⇒ consistent; mâu thuẫn với NGUỒN (chính sách) ⇒ correct.",
+        "\"Nearby\" hiểu nhiều cách ⇒ unambiguous."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Characteristics 2 — which characteristic is violated?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Characteristics 2 — which characteristic is violated? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Verifiable\n   - r1.k: Unambiguous\n   - r2.k: Feasible\n   - r3.k: Consistent\n   - r4.k: Necessary\n   - r5.k: Complete\n   - r6.k: Correct\n   - r7.k: Traceable\n   - r8.k: Prioritized\n   Vague words ⇒ not verifiable or ambiguous; impossible targets ⇒ infeasible; two statements disagree ⇒ inconsistent; nobody needs it ⇒ unnecessary; cut sentence ⇒ incomplete; contradicts the source ⇒ incorrect; no links ⇒ not traceable; everything High ⇒ not prioritized.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Vague words ⇒ not verifiable or ambiguous; impossible targets ⇒ infeasible; two statements disagree ⇒ inconsistent; nobody needs it ⇒ unnecessary; cut sentence ⇒ incomplete; contradicts the source ⇒ incorrect; no links ⇒ not traceable; everything High ⇒ not prioritized.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Violated",
+                "luaChon": [
+                  "Complete",
+                  "Correct",
+                  "Feasible",
+                  "Necessary",
+                  "Prioritized",
+                  "Unambiguous",
+                  "Verifiable",
+                  "Consistent",
+                  "Traceable"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "The system shall be user-friendly."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "The system shall show nearby rooms. (Nearby = 500 m? 5 km? by road?)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The system shall respond to every request in 1 ms over the mobile network."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "The system shall send a refund within 24 hours. (Elsewhere: \"refunds are sent within 7 days\".)"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "The system shall show a 3D tour of every room. (No objective or user asked for it.)"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "The system shall let a tenant pay rent by … (the sentence stops here)."
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "The deposit is two months’ rent. (The housing policy says one month.)"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "s": "FR-12 has no link to any user requirement, design element or test."
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "s": "All 140 requirements are marked \"High\"."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Verifiable",
+              "r1.k": "Unambiguous",
+              "r2.k": "Feasible",
+              "r3.k": "Consistent",
+              "r4.k": "Necessary",
+              "r5.k": "Complete",
+              "r6.k": "Correct",
+              "r7.k": "Traceable",
+              "r8.k": "Prioritized"
+            },
+            "giaiThich": "<p><p>Vague words ⇒ not verifiable or ambiguous; impossible targets ⇒ infeasible; two statements disagree ⇒ inconsistent; nobody needs it ⇒ unnecessary; cut sentence ⇒ incomplete; contradicts the source ⇒ incorrect; no links ⇒ not traceable; everything High ⇒ not prioritized.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm correct với consistent."
+        },
+        {
+          "loi": "Chọn verifiable cho \"nearby\" — vấn đề gốc là mơ hồ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "verifiable",
+          "vi": "kiểm chứng được — có cách test/đo để biết đạt hay không"
+        },
+        {
+          "en": "ambiguous",
+          "vi": "mơ hồ — hiểu được nhiều cách"
+        },
+        {
+          "en": "gold plating",
+          "vi": "mạ vàng — dev tự thêm chức năng không ai yêu cầu"
+        }
+      ]
+    }
+  ]
+}

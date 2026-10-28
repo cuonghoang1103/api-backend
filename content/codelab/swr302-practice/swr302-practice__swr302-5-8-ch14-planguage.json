@@ -1,0 +1,438 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-5-8-ch14-planguage",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-5-8-ch14-planguage"
+  },
+  "exercises": [
+    {
+      "title": "Planguage 1 — what does each keyword mean?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "Planguage"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Tom Gilb’s Planguage, used by Wiegers to write precise quality requirements. Match each description to its keyword.</p><p>Each row is graded on its own; the explanation of every answer appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Planguage của Tom Gilb, được Wiegers dùng để viết yêu cầu chất lượng chính xác. Ghép mô tả với từ khoá.</p><p>Mỗi dòng được chấm riêng; giải thích từng đáp án hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "SCALE = đơn vị; METER = cách đo.",
+        "GOAL là mức tối thiểu chấp nhận được."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Planguage 1 — what does each keyword mean?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Planguage 1 — what does each keyword mean? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: TAG\n   - r1.k: AMBITION\n   - r2.k: SCALE\n   - r3.k: METER\n   - r4.k: GOAL\n   - r5.k: STRETCH\n   - r6.k: WISH\n   - r7.k: PAST\n   - r8.k: DEFINED\n   SCALE says WHAT is measured; METER says HOW it is measured; GOAL is the must-reach level; STRETCH and WISH are higher, optional levels.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>SCALE says WHAT is measured; METER says HOW it is measured; GOAL is the must-reach level; STRETCH and WISH are higher, optional levels.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Keyword",
+                "luaChon": [
+                  "TAG",
+                  "AMBITION",
+                  "SCALE",
+                  "METER",
+                  "GOAL",
+                  "STRETCH",
+                  "WISH",
+                  "PAST",
+                  "DEFINED"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "A unique, persistent identifier of the requirement"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "A short statement of the intent of the requirement"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The unit of measure"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "How, in practice, the value is measured"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "The minimum level to be achieved for the product to be acceptable"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "A better level we hope to reach"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "The ideal level under perfect conditions"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "s": "The value reached by an earlier or competing product"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "s": "The definition of a term used in the requirement"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "TAG",
+              "r1.k": "AMBITION",
+              "r2.k": "SCALE",
+              "r3.k": "METER",
+              "r4.k": "GOAL",
+              "r5.k": "STRETCH",
+              "r6.k": "WISH",
+              "r7.k": "PAST",
+              "r8.k": "DEFINED"
+            },
+            "giaiThich": "<p><p>SCALE says WHAT is measured; METER says HOW it is measured; GOAL is the must-reach level; STRETCH and WISH are higher, optional levels.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đảo SCALE với METER."
+        },
+        {
+          "loi": "Coi WISH là mức bắt buộc."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Planguage",
+          "vi": "ngôn ngữ của Tom Gilb để viết yêu cầu chất lượng đo được (TAG, SCALE, METER, GOAL…)"
+        }
+      ]
+    },
+    {
+      "title": "Planguage 2 — read a Planguage requirement",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "Planguage"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<pre>TAG: Booking.Speed\nAMBITION: Patients can confirm an appointment quickly on a phone.\nSCALE: Seconds from tapping \"Confirm\" to the confirmation screen.\nMETER: Automated test of 500 bookings on a 4G connection, 90th percentile.\nGOAL: ≤ 3 seconds\nSTRETCH: ≤ 2 seconds\nWISH: ≤ 1 second\nPAST: 6 seconds (old web form)</pre>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đọc yêu cầu Planguage ở trên và trả lời.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Chỉ GOAL bắt buộc phải đạt.",
+        "METER = cách đo cụ thể."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Planguage 2 — read a Planguage requirement\n\nAnswer in the answer panel (no code needed).\n\n1. The release measures 2.6 s. Is the requirement satisfied?Bản phát hành đo được 2,6 giây. Đạt yêu cầu không?\n2. Which line tells the tester how to measure?Dòng nào cho tester biết đo thế nào?\n3. The word \"quickly\" appears in AMBITION. Is that a problem?AMBITION có chữ \"quickly\". Có sao không?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Planguage 2 — read a Planguage requirement — answer key\n\n1. The release measures 2.6 s. Is the requirement satisfied?Bản phát hành đo được 2,6 giây. Đạt yêu cầu không?\n   Answer: a) Yes — the GOAL (≤ 3 s) is met; STRETCH is not\n   Only GOAL is mandatory.VI: Chỉ GOAL là bắt buộc.\n\n2. Which line tells the tester how to measure?Dòng nào cho tester biết đo thế nào?\n   Answer: b) METER\n   METER is the measuring method.VI: METER là phương pháp đo.\n\n3. The word \"quickly\" appears in AMBITION. Is that a problem?AMBITION có chữ \"quickly\". Có sao không?\n   Answer: a) No — AMBITION states intent; SCALE, METER and GOAL make it precise\n   The precision lives in the other keywords.VI: Độ chính xác nằm ở các từ khoá khác.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · b · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>The release measures 2.6 s. Is the requirement satisfied?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bản phát hành đo được 2,6 giây. Đạt yêu cầu không?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Yes — the GOAL (≤ 3 s) is met; STRETCH is not"
+              },
+              {
+                "ma": "b",
+                "noiDung": "No — the WISH is not met"
+              },
+              {
+                "ma": "c",
+                "noiDung": "No — the STRETCH is not met"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Cannot tell"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Only GOAL is mandatory.</p><p><i>VI: Chỉ GOAL là bắt buộc.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Which line tells the tester how to measure?</p><p style=\"opacity:.75;font-size:.92em\"><i>Dòng nào cho tester biết đo thế nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "SCALE"
+              },
+              {
+                "ma": "b",
+                "noiDung": "METER"
+              },
+              {
+                "ma": "c",
+                "noiDung": "AMBITION"
+              },
+              {
+                "ma": "d",
+                "noiDung": "PAST"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>METER is the measuring method.</p><p><i>VI: METER là phương pháp đo.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>The word \"quickly\" appears in AMBITION. Is that a problem?</p><p style=\"opacity:.75;font-size:.92em\"><i>AMBITION có chữ \"quickly\". Có sao không?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "No — AMBITION states intent; SCALE, METER and GOAL make it precise"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Yes — remove the whole requirement"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Yes — AMBITION must contain a number"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only in agile"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The precision lives in the other keywords.</p><p><i>VI: Độ chính xác nằm ở các từ khoá khác.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Coi STRETCH là ngưỡng đạt."
+        },
+        {
+          "loi": "Nghĩ AMBITION phải đo được."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Planguage",
+          "vi": "ngôn ngữ của Tom Gilb để viết yêu cầu chất lượng đo được (TAG, SCALE, METER, GOAL…)"
+        }
+      ]
+    },
+    {
+      "title": "Planguage 3 — write and check a Planguage requirement",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "Planguage"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Two parts. <b>(a)</b> Write <code>PL</code>, a Planguage requirement for the availability of a hospital booking service (\"always up\") as an object with keys <code>TAG, AMBITION, SCALE, METER, GOAL, STRETCH</code> (strings). GOAL and STRETCH must contain a percentage and STRETCH must be stricter than GOAL. <b>(b)</b> Write <code>function meets(pl, measured)</code> that returns <code>\"goal\"</code>, <code>\"stretch\"</code> or <code>\"fail\"</code> for a measured percentage, reading the numbers from <code>pl.GOAL</code> and <code>pl.STRETCH</code> (for availability, higher is better; a value equal to the level meets it). It will be tested on hidden Planguage objects too.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>meets() returns \"stretch\" when the STRETCH level is reached, else \"goal\" when the GOAL is reached, else \"fail\".</li>\n</ul>",
+      "problemHtmlVi": "<p>(a) Viết <code>PL</code> — yêu cầu Planguage về độ sẵn sàng (\"luôn chạy\") với các khoá TAG, AMBITION, SCALE, METER, GOAL, STRETCH; GOAL và STRETCH có phần trăm, STRETCH chặt hơn GOAL. (b) Viết <code>meets(pl, measured)</code> trả \"goal\", \"stretch\" hoặc \"fail\", đọc số từ pl.GOAL và pl.STRETCH (cao hơn là tốt hơn; bằng mức thì đạt mức đó). Có kiểm trên dữ liệu ẩn.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>meets() trả \"stretch\" nếu đạt STRETCH, không thì \"goal\" nếu đạt GOAL, còn lại \"fail\".</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "GOAL \"99.5%\", STRETCH \"99.9%\", measured 99.7",
+          "output": "\"goal\"",
+          "explanation": "Above the goal, below the stretch.|||Trên goal, dưới stretch."
+        }
+      ],
+      "hintsJson": [
+        "Đọc số bằng regex /(\\d+(?:\\.\\d+)?)\\s*%/.",
+        "Kiểm STRETCH trước, rồi GOAL."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "planguage.js",
+          "language": "javascript",
+          "code": "const PL = { TAG: '', AMBITION: '', SCALE: '', METER: '', GOAL: '', STRETCH: '' };\n\nfunction meets(pl, measured) {\n  // TODO: read the percentages from pl.GOAL and pl.STRETCH\n  return 'fail';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "planguage.js",
+          "language": "javascript",
+          "code": "const PL = {\n  TAG: 'Booking.Availability',\n  AMBITION: 'Patients can book an appointment whenever the clinic is open for booking.',\n  SCALE: 'Percentage of minutes between 06:00 and 22:00 in which the booking service answers a health check.',\n  METER: 'External monitor probes the booking endpoint every minute; monthly report.',\n  GOAL: '99.5%',\n  STRETCH: '99.9%',\n};\n\nfunction soCua(s) {\n  var m = String(s).match(/(\\d+(?:\\.\\d+)?)\\s*%/);\n  return m ? parseFloat(m[1]) : NaN;\n}\n\nfunction meets(pl, measured) {\n  var g = soCua(pl.GOAL), s = soCua(pl.STRETCH);\n  if (!isNaN(s) && measured >= s) return 'stretch';\n  if (!isNaN(g) && measured >= g) return 'goal';\n  return 'fail';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Planguage separates the intent (AMBITION) from the measurement (SCALE + METER) and the target levels (GOAL, STRETCH, WISH). Only GOAL is the acceptance threshold.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "planguage.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "PL has all six keywords filled",
+              "vi": "PL có đủ sáu từ khoá"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof PL==\"undefined\"||!PL)return\"PL is missing\";for(var i=[\"TAG\",\"AMBITION\",\"SCALE\",\"METER\",\"GOAL\",\"STRETCH\"],t=0;t<i.length;t++)if(String(PL[i[t]]||\"\").trim().length<3)return i[t]+\" is empty\";return/\\s/.test(String(PL.TAG).trim())?\"TAG should be one identifier without spaces (e.g. Booking.Availability)\":\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "SCALE and METER are specific (unit; how and how often measured)",
+              "vi": "SCALE và METER cụ thể (đơn vị; đo thế nào, bao lâu một lần)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){return typeof PL==\"undefined\"||!PL?\"PL is missing\":/(percent|%|proportion|minutes|hours|time)/i.test(String(PL.SCALE))?/(monitor|probe|log|measure|report|check|test|tool|every|per)/i.test(String(PL.METER))?\"OK\":\"METER: say how it is measured (monitor, logs, report\\u2026)\":\"SCALE: say the unit (percentage of time\\u2026)\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "GOAL and STRETCH are percentages and STRETCH is stricter",
+              "vi": "GOAL và STRETCH là phần trăm, STRETCH chặt hơn"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof PL==\"undefined\"||!PL)return\"PL is missing\";var t=String(PL.GOAL).match(/(\\d+(?:\\.\\d+)?)\\s*%/),a=String(PL.STRETCH).match(/(\\d+(?:\\.\\d+)?)\\s*%/);return!t||!a?\"GOAL and STRETCH must contain a percentage like 99.5%\":parseFloat(t[1])>=100?\"a GOAL of 100% is not feasible\":parseFloat(a[1])>parseFloat(t[1])&&parseFloat(a[1])<=100?\"OK\":\"STRETCH must be higher than GOAL and at most 100%\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "meets() works on your PL",
+              "vi": "meets() đúng với PL của bạn"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof meets!=\"function\"||typeof PL==\"undefined\")return\"meets or PL missing\";var e=parseFloat(String(PL.GOAL).match(/(\\d+(?:\\.\\d+)?)/)[1]),t=parseFloat(String(PL.STRETCH).match(/(\\d+(?:\\.\\d+)?)/)[1]);return meets(PL,e)!==\"goal\"?'measured = GOAL \\u21D2 \"goal\"':meets(PL,t)!==\"stretch\"?'measured = STRETCH \\u21D2 \"stretch\"':meets(PL,e-.1)!==\"fail\"?'below GOAL \\u21D2 \"fail\"':\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "meets() works on hidden Planguage objects",
+              "vi": "meets() đúng trên dữ liệu ẩn"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof meets!=\"function\")return\"meets is not a function\";for(var n={GOAL:\"at least 98 % of requests\",STRETCH:\"99.25% of requests\"},e=[[97.99,\"fail\"],[98,\"goal\"],[99.2,\"goal\"],[99.25,\"stretch\"],[100,\"stretch\"]],t=0;t<e.length;t++){var r=meets(n,e[t][0]);if(r!==e[t][1])return\"GOAL 98%, STRETCH 99.25%, measured \"+e[t][0]+\" \\u21D2 \"+e[t][1]+\", got \"+r}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt GOAL 100%."
+        },
+        {
+          "loi": "So sánh chuỗi \"99.5%\" thay vì số."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Planguage",
+          "vi": "ngôn ngữ của Tom Gilb để viết yêu cầu chất lượng đo được (TAG, SCALE, METER, GOAL…)"
+        }
+      ]
+    }
+  ]
+}

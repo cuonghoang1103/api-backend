@@ -1,0 +1,601 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-5-1-srs-ieee-830",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-5-1-srs-ieee-830"
+  },
+  "exercises": [
+    {
+      "title": "SRS 1 — the top-level sections of the template",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "SRS template"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers’ SRS template (Figure 10-2, derived from IEEE 830): Introduction · Overall description · System features · Data requirements · External interface requirements · Quality attributes · Internationalization and localization requirements · Other requirements, then the appendices Glossary and Analysis models. Put the sections in order.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Template SRS của Wiegers (Hình 10-2, dựa trên IEEE 830). Sắp các mục cho đúng thứ tự.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Bối cảnh (giới thiệu, mô tả tổng quan) luôn đứng đầu.",
+        "Chức năng (system features) đứng ngay sau bối cảnh, trước dữ liệu và giao diện."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# SRS 1 — the top-level sections of the template\n\nAnswer in the answer panel (no code needed).\n\n1. Order the sectionsSắp các mục\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# SRS 1 — the top-level sections of the template — answer key\n\n1. Order the sectionsSắp các mục\n   Answer: a) 1 Introduction  →  b) 2 Overall description  →  c) 3 System features  →  d) 4 Data requirements  →  e) 5 External interface requirements  →  f) 6 Quality attributes  →  g) 7 Internationalization and localization requirements  →  h) 8 Other requirements  →  i) Appendix A: Glossary  →  j) Appendix B: Analysis models\n   Context first (1–2), then functions (3), data (4), interfaces (5), quality (6), i18n (7), other (8), appendices.VI: Bối cảnh trước (1–2), rồi chức năng (3), dữ liệu (4), giao diện (5), chất lượng (6), i18n (7), khác (8), phụ lục.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>1 Introduction → 2 Overall description → 3 System features → 4 Data requirements → 5 External interface requirements → 6 Quality attributes → 7 Internationalization → 8 Other requirements → Appendix A Glossary → Appendix B Analysis models.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Order the sections</p><p style=\"opacity:.75;font-size:.92em\"><i>Sắp các mục</i></p>",
+            "muc": [
+              {
+                "ma": "f",
+                "noiDung": "6 Quality attributes"
+              },
+              {
+                "ma": "c",
+                "noiDung": "3 System features"
+              },
+              {
+                "ma": "j",
+                "noiDung": "Appendix B: Analysis models"
+              },
+              {
+                "ma": "a",
+                "noiDung": "1 Introduction"
+              },
+              {
+                "ma": "h",
+                "noiDung": "8 Other requirements"
+              },
+              {
+                "ma": "d",
+                "noiDung": "4 Data requirements"
+              },
+              {
+                "ma": "b",
+                "noiDung": "2 Overall description"
+              },
+              {
+                "ma": "i",
+                "noiDung": "Appendix A: Glossary"
+              },
+              {
+                "ma": "e",
+                "noiDung": "5 External interface requirements"
+              },
+              {
+                "ma": "g",
+                "noiDung": "7 Internationalization and localization requirements"
+              }
+            ],
+            "dapAn": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e",
+              "f",
+              "g",
+              "h",
+              "i",
+              "j"
+            ],
+            "giaiThich": "<p>Context first (1–2), then functions (3), data (4), interfaces (5), quality (6), i18n (7), other (8), appendices.</p><p><i>VI: Bối cảnh trước (1–2), rồi chức năng (3), dữ liệu (4), giao diện (5), chất lượng (6), i18n (7), khác (8), phụ lục.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt quality attributes trước system features."
+        },
+        {
+          "loi": "Quên phụ lục Glossary."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Software Requirements Specification (SRS)",
+          "vi": "tài liệu đặc tả yêu cầu phần mềm"
+        }
+      ]
+    },
+    {
+      "title": "SRS 3 — purpose and audiences",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "SRS audiences"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>The SRS is read by many audiences: customers and marketing (what they will get), project managers (estimates and plans), developers (what to build), testers (what to verify), maintainers, documentation writers and legal staff. It describes WHAT the system does, not HOW it is designed.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>SRS có nhiều đối tượng đọc: khách hàng và marketing (sẽ nhận được gì), quản lý dự án (ước lượng, kế hoạch), dev (xây gì), tester (kiểm gì), người bảo trì, người viết tài liệu, pháp chế. Nó mô tả hệ thống LÀM GÌ, không phải thiết kế THẾ NÀO.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "SRS nói LÀM GÌ, không nói thiết kế THẾ NÀO.",
+        "Nhiều đối tượng đọc ⇒ viết rõ cho tất cả."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# SRS 3 — purpose and audiences\n\nAnswer in the answer panel (no code needed).\n\n1. Which audience uses the SRS to write test cases?Đối tượng nào dùng SRS để viết test case?\n2. Should the SRS describe the database tables?SRS có nên mô tả các bảng CSDL không?\n3. One SRS or several?Một SRS hay nhiều?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# SRS 3 — purpose and audiences — answer key\n\n1. Which audience uses the SRS to write test cases?Đối tượng nào dùng SRS để viết test case?\n   Answer: a) Testers\n   Every requirement must be verifiable for them.VI: Mỗi yêu cầu phải kiểm chứng được với họ.\n\n2. Should the SRS describe the database tables?SRS có nên mô tả các bảng CSDL không?\n   Answer: b) No — it states what data is needed (data requirements), not how it is stored\n   Design belongs to the design documents.VI: Thiết kế thuộc tài liệu thiết kế.\n\n3. One SRS or several?Một SRS hay nhiều?\n   Answer: b) It depends: a large system may have one SRS per subsystem or release, plus a vision document\n   Wiegers: organise by what the project needs.VI: Wiegers: tổ chức theo nhu cầu dự án.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · b · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which audience uses the SRS to write test cases?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đối tượng nào dùng SRS để viết test case?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Testers"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Marketing"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Legal staff"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The sponsor only"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Every requirement must be verifiable for them.</p><p><i>VI: Mỗi yêu cầu phải kiểm chứng được với họ.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Should the SRS describe the database tables?</p><p style=\"opacity:.75;font-size:.92em\"><i>SRS có nên mô tả các bảng CSDL không?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Yes, always"
+              },
+              {
+                "ma": "b",
+                "noiDung": "No — it states what data is needed (data requirements), not how it is stored"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only the primary keys"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only for agile projects"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Design belongs to the design documents.</p><p><i>VI: Thiết kế thuộc tài liệu thiết kế.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>One SRS or several?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một SRS hay nhiều?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Always exactly one"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It depends: a large system may have one SRS per subsystem or release, plus a vision document"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Never more than one page"
+              },
+              {
+                "ma": "d",
+                "noiDung": "One per developer"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Wiegers: organise by what the project needs.</p><p><i>VI: Wiegers: tổ chức theo nhu cầu dự án.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đưa thiết kế CSDL vào SRS."
+        },
+        {
+          "loi": "Viết SRS chỉ cho dev đọc."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Software Requirements Specification (SRS)",
+          "vi": "tài liệu đặc tả yêu cầu phần mềm"
+        }
+      ]
+    },
+    {
+      "title": "SRS 2 — which section of the SRS?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "SRS template sections"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Statements from the SRS of a university e-library. Choose the section of the Wiegers template.</p><p>Each row is graded on its own; the explanation of every answer appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các phát biểu trong SRS của thư viện điện tử. Chọn mục của template Wiegers.</p><p>Mỗi dòng được chấm riêng; giải thích từng đáp án hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Phần 2 là bối cảnh sản phẩm; phần 3 là chức năng.",
+        "Giao diện với phần mềm khác ⇒ 5.2."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# SRS 2 — which section of the SRS?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# SRS 2 — which section of the SRS? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: 1.1 Purpose\n   - r1.k: 2.1 Product perspective\n   - r2.k: 2.2 User classes and characteristics\n   - r3.k: 2.3 Operating environment\n   - r4.k: 2.4 Design and implementation constraints\n   - r5.k: 2.5 Assumptions and dependencies\n   - r6.k: 3 System features\n   - r7.k: 4 Data requirements\n   - r8.k: 5.2 Software interfaces\n   - r9.k: 6 Quality attributes\n   Section 2 frames the product (where it fits, who uses it, where it runs, what limits it, what we assume); section 3 holds functions; 4 data; 5 interfaces by kind; 6 quality attributes.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Section 2 frames the product (where it fits, who uses it, where it runs, what limits it, what we assume); section 3 holds functions; 4 data; 5 interfaces by kind; 6 quality attributes.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Section",
+                "luaChon": [
+                  "1.1 Purpose",
+                  "1.3 Project scope",
+                  "2.1 Product perspective",
+                  "2.2 User classes and characteristics",
+                  "2.3 Operating environment",
+                  "2.4 Design and implementation constraints",
+                  "2.5 Assumptions and dependencies",
+                  "3 System features",
+                  "4 Data requirements",
+                  "5.1 User interfaces",
+                  "5.2 Software interfaces",
+                  "6 Quality attributes"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "This SRS specifies release 1.0 of the e-library for readers, librarians and IT."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "The e-library replaces the desktop catalogue and adds e-book lending; printed-book acquisition stays outside it."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Readers are students and lecturers; most use phones; some lecturers rarely use computers."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "The system runs in the university data centre on Ubuntu servers; clients use any current browser."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "E-books must be protected with the publisher’s DRM library."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "We assume the publishers’ APIs stay available during the project."
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "The system shall let a reader borrow an e-book for 14 days."
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "s": "A loan consists of reader ID, e-book ID, start date and due date."
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "s": "The e-library shall obtain e-book licences from the publisher through its REST API."
+                }
+              },
+              {
+                "ma": "r9",
+                "o": {
+                  "s": "Search shall return the first page of results within 2 seconds for 95% of queries."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "1.1 Purpose",
+              "r1.k": "2.1 Product perspective",
+              "r2.k": "2.2 User classes and characteristics",
+              "r3.k": "2.3 Operating environment",
+              "r4.k": "2.4 Design and implementation constraints",
+              "r5.k": "2.5 Assumptions and dependencies",
+              "r6.k": "3 System features",
+              "r7.k": "4 Data requirements",
+              "r8.k": "5.2 Software interfaces",
+              "r9.k": "6 Quality attributes"
+            },
+            "giaiThich": "<p><p>Section 2 frames the product (where it fits, who uses it, where it runs, what limits it, what we assume); section 3 holds functions; 4 data; 5 interfaces by kind; 6 quality attributes.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt \"dùng thư viện DRM\" vào quality attributes — đó là ràng buộc (2.4)."
+        },
+        {
+          "loi": "Đặt giả định vào rủi ro."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Software Requirements Specification (SRS)",
+          "vi": "tài liệu đặc tả yêu cầu phần mềm"
+        },
+        {
+          "en": "design / implementation constraint",
+          "vi": "ràng buộc thiết kế/hiện thực — giới hạn lựa chọn của đội phát triển (ngôn ngữ, nền tảng, chuẩn)"
+        }
+      ]
+    },
+    {
+      "title": "SRS 4 — product requirement in the SRS, or elsewhere?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "SRS content"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Not everything the team writes belongs in the SRS. Decide where each item goes: <b>SRS</b>, <b>Vision and scope</b>, <b>Project plan</b> or <b>Design document</b>.</p><p>Each row is graded on its own; the explanation of every answer appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Không phải mọi thứ đội viết đều thuộc SRS. Xác định mỗi mục vào đâu: <b>SRS</b>, <b>Vision and scope</b>, <b>Project plan</b> hay <b>Design document</b>.</p><p>Mỗi dòng được chấm riêng; giải thích từng đáp án hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Mục tiêu nghiệp vụ ⇒ Vision & Scope.",
+        "Ai làm gì khi nào ⇒ kế hoạch dự án; công nghệ nội bộ ⇒ thiết kế."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# SRS 4 — product requirement in the SRS, or elsewhere?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# SRS 4 — product requirement in the SRS, or elsewhere? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Vision and scope\n   - r1.k: SRS\n   - r2.k: Project plan\n   - r3.k: Design document\n   - r4.k: SRS\n   - r5.k: Project plan\n   Business objectives go to the vision and scope document; product requirements (functional and nonfunctional) to the SRS; resources and schedule to the project plan; architecture choices to the design document.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Business objectives go to the vision and scope document; product requirements (functional and nonfunctional) to the SRS; resources and schedule to the project plan; architecture choices to the design document.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Document",
+                "luaChon": [
+                  "SRS",
+                  "Vision and scope",
+                  "Project plan",
+                  "Design document"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Reduce printed-book purchases by 30% in three years."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "The system shall notify a reader when a reserved e-book becomes available."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Two developers will be assigned to the payment module in May."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "The loans service publishes events on a Kafka topic."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "The e-library shall support 2,000 concurrent readers."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Train the librarians in June."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Vision and scope",
+              "r1.k": "SRS",
+              "r2.k": "Project plan",
+              "r3.k": "Design document",
+              "r4.k": "SRS",
+              "r5.k": "Project plan"
+            },
+            "giaiThich": "<p><p>Business objectives go to the vision and scope document; product requirements (functional and nonfunctional) to the SRS; resources and schedule to the project plan; architecture choices to the design document.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đưa lựa chọn Kafka vào SRS."
+        },
+        {
+          "loi": "Đưa lịch đào tạo vào SRS."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Software Requirements Specification (SRS)",
+          "vi": "tài liệu đặc tả yêu cầu phần mềm"
+        },
+        {
+          "en": "vision and scope document",
+          "vi": "tài liệu tầm nhìn & phạm vi — chứa business requirements"
+        }
+      ]
+    }
+  ]
+}

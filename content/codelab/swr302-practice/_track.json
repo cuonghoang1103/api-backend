@@ -208,6 +208,54 @@
       "description": "Lab chương 4A: use case GymPass — sơ đồ, hai bảng, đặc tả Book a Class, business rule, FR."
     },
     {
+      "slug": "swr302-5-1-srs-ieee-830",
+      "name": "5.1 The SRS: template, sections and audiences",
+      "level": "BEGINNER",
+      "description": "Thứ tự các mục của template SRS Wiegers (từ IEEE 830), đặt phát biểu vào đúng mục, đối tượng đọc SRS, cái gì vào SRS và cái gì vào tài liệu khác."
+    },
+    {
+      "slug": "swr302-5-2-ch10-srs-labeling",
+      "name": "5.2 Labeling requirements, TBDs and UI in the SRS",
+      "level": "BEGINNER",
+      "description": "Ba cách đánh nhãn yêu cầu (số thứ tự, số phân cấp, thẻ chữ phân cấp) và điểm mạnh/yếu, không tái sử dụng nhãn, cách ghi TBD, mức chi tiết giao diện trong SRS."
+    },
+    {
+      "slug": "swr302-5-4-ch11-characteristics",
+      "name": "5.3 Characteristics of excellent requirements",
+      "level": "BEGINNER",
+      "description": "Đặc tính của từng yêu cầu (đầy đủ, đúng, khả thi, cần thiết, có ưu tiên, không mơ hồ, kiểm chứng được) và của tập yêu cầu (đầy đủ, nhất quán, sửa được, truy vết được); gọi tên đặc tính bị vi phạm; chọn yêu cầu tốt hơn."
+    },
+    {
+      "slug": "swr302-5-5-ch11-writing",
+      "name": "5.4 Guidelines for writing requirements",
+      "level": "INTERMEDIATE",
+      "description": "Góc nhìn hệ thống/người dùng, thể chủ động, mỗi câu một yêu cầu, tránh chi tiết thiết kế, từ mơ hồ và phủ định kép, mức chi tiết nhất quán; tự viết lại ba yêu cầu tồi có chấm."
+    },
+    {
+      "slug": "swr302-5-6-ch11-ambiguity",
+      "name": "5.5 Avoiding ambiguity",
+      "level": "INTERMEDIATE",
+      "description": "Từ mơ hồ (bảng 11-2), giá trị biên chồng lấn/bỏ trống, thiếu nhánh else, trộn and/or, câu phủ định; tự viết luật nộp trễ không mơ hồ và hàm penalty đúng mọi biên."
+    },
+    {
+      "slug": "swr302-5-7-ch14-quality-attributes",
+      "name": "5.6 Quality attributes",
+      "level": "INTERMEDIATE",
+      "description": "Thuộc tính chất lượng bên ngoài/bên trong (Wiegers Ch.14), gọi tên thuộc tính của 12 yêu cầu bệnh viện, đánh đổi giữa các thuộc tính, quy trình khám phá; tự viết 3 yêu cầu chất lượng đo được."
+    },
+    {
+      "slug": "swr302-5-8-ch14-planguage",
+      "name": "5.7 Specifying quality requirements with Planguage",
+      "level": "INTERMEDIATE",
+      "description": "Từ khoá Planguage (TAG, AMBITION, SCALE, METER, GOAL, STRETCH, WISH, PAST, DEFINED), đọc yêu cầu Planguage để quyết định đạt/không, tự viết yêu cầu sẵn sàng bằng Planguage và hàm kiểm mức đạt."
+    },
+    {
+      "slug": "swr302-5-9-ch14-constraints-agile",
+      "name": "5.8 Constraints and quality requirements in agile",
+      "level": "BEGINNER",
+      "description": "Phân biệt ràng buộc / thuộc tính chất lượng / yêu cầu chức năng, yêu cầu chất lượng biến thành kiến trúc và yêu cầu chức năng phái sinh, đặt yêu cầu chất lượng vào DoD hay tiêu chí chấp nhận trong agile."
+    },
+    {
       "slug": "swr302-5-lab-srs-medqueue",
       "name": "Lab 5 — Specification: the SRS of MedQueue",
       "level": "ADVANCED",

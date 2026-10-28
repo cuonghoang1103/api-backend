@@ -1,0 +1,85 @@
+{
+  "groupSlug": "fptu",
+  "slug": "dbi202-practice",
+  "name": "DBI202 — Luyện tập SQL",
+  "language": "sql",
+  "color": "#336791",
+  "docsUrl": "https://learn.microsoft.com/en-us/sql/t-sql/language-reference",
+  "status": "PUBLISHED",
+  "level": "BEGINNER",
+  "description": "Bộ luyện môn DBI202 (Database Systems) có MÁY CHẤM SQL THẬT ngay trong trình duyệt: PostgreSQL 18 (WASM) ở chế độ giống SQL Server — so chuỗi không phân biệt hoa thường, AVG số nguyên, GROUP BY chặt. Viết SQL chuẩn chạy cả SQL Server lẫn PostgreSQL; cú pháp riêng một hệ bị báo rõ. CSDL mẫu FUHCompany của môn, mỗi bài học một bộ đề dễ → khó (kiểm ẩn đổi dữ liệu), Lab chương dạng bản in và đề luyện PE theo dạng SP26.",
+  "modules": [
+    {
+      "slug": "dbi202-sql-ddl",
+      "name": "5.1 CREATE TABLE: keys and constraints",
+      "level": "BEGINNER",
+      "description": "CREATE TABLE với khoá chính, NOT NULL, UNIQUE, CHECK, DEFAULT, khoá ghép, khoá ngoại và ON DELETE CASCADE — chấm theo hành vi (câu hợp lệ chạy, câu vi phạm bị chặn)."
+    },
+    {
+      "slug": "dbi202-rang-buoc-sql",
+      "name": "5.3 ALTER TABLE: add columns and constraints",
+      "level": "INTERMEDIATE",
+      "description": "ALTER TABLE trên FUHCompany có sẵn dữ liệu: thêm cột, thêm CHECK/UNIQUE/FOREIGN KEY có tên, thay một ràng buộc bằng DROP CONSTRAINT."
+    },
+    {
+      "slug": "dbi202-5-lab-ct-library",
+      "name": "Lab 5 — Build the CT Library database (DDL + constraints)",
+      "level": "ADVANCED",
+      "description": "Lab 5 (bản in): dựng CSDL thư viện CT Library 5 câu × 2 điểm — bảng, ràng buộc cột/bảng, DEFAULT, ALTER, xoá đúng thứ tự khoá ngoại."
+    },
+    {
+      "slug": "dbi202-select-join",
+      "name": "6.1 SELECT basics: columns, filters, sorting",
+      "level": "BEGINNER",
+      "description": "SELECT cơ bản trên FUHCompany: chọn cột, WHERE, LIKE với N…, AND/OR, IS NULL, ORDER BY nhiều khoá, cột tính + CASE."
+    },
+    {
+      "slug": "dbi202-join-day-du",
+      "name": "6.2 Joins: inner, outer, self and anti-joins",
+      "level": "INTERMEDIATE",
+      "description": "INNER JOIN, nối 4 bảng, LEFT JOIN giữ dòng trống, tự nối nhân viên–giám sát, anti-join, điều kiện ở ON hay WHERE."
+    },
+    {
+      "slug": "dbi202-group-by-subquery",
+      "name": "6.3 Aggregation: GROUP BY and HAVING",
+      "level": "INTERMEDIATE",
+      "description": "COUNT/SUM/AVG/MIN/MAX, GROUP BY chặt như SQL Server, HAVING, đếm kể cả số 0, lớn nhất theo nhóm có hoà, AVG số nguyên kiểu SQL Server."
+    },
+    {
+      "slug": "dbi202-truy-van-long",
+      "name": "6.4 Subqueries: IN, EXISTS, correlated, ALL and the NULL trap",
+      "level": "INTERMEDIATE",
+      "description": "Truy vấn con vô hướng, IN, NOT EXISTS, tương quan, bẫy NOT IN + NULL, >= ALL."
+    },
+    {
+      "slug": "dbi202-cap-nhat-du-lieu",
+      "name": "6.5 INSERT, UPDATE, DELETE done safely",
+      "level": "INTERMEDIATE",
+      "description": "INSERT đủ/thiếu cột, UPDATE/DELETE có điều kiện, UPDATE theo truy vấn con, INSERT … SELECT — chấm bằng truy vấn kiểm sau lệnh."
+    },
+    {
+      "slug": "dbi202-slide-dbi7-4",
+      "name": "6.7 Set operations: UNION, INTERSECT, EXCEPT",
+      "level": "INTERMEDIATE",
+      "description": "Phép tập hợp UNION, INTERSECT, EXCEPT, UNION ALL (túi vs tập) trên FUHCompany."
+    },
+    {
+      "slug": "dbi202-6-lab-fuhcompany-reports",
+      "name": "Lab 6 — FUHCompany management reports (8 queries)",
+      "level": "ADVANCED",
+      "description": "Lab 6 (bản in): 8 báo cáo quản trị trên FUHCompany theo quy định PE (Q1.sql … Q8.sql), thang 10, kiểm ẩn đổi dữ liệu."
+    },
+    {
+      "slug": "dbi202-view",
+      "name": "7.2 Views: virtual tables that hide complexity",
+      "level": "INTERMEDIATE",
+      "description": "CREATE VIEW: che cột, gói phép nối, gói phép gộp, WITH CHECK OPTION."
+    },
+    {
+      "slug": "dbi202-9-pe-1-ct-rent",
+      "name": "PE 1 — CT Rent (car rental) · 10 questions",
+      "level": "ADVANCED",
+      "description": "Luyện PE số 1 — CT Rent (cho thuê xe): 10 câu × 1 điểm theo dạng đề SP26 (ERD→bảng, LIKE, JOIN, outer join, COUNT DISTINCT, lớn nhất theo nhóm, max kép, VIEW, UPDATE, INSERT…SELECT)."
+    }
+  ]
+}

@@ -1,0 +1,758 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-sql-ddl",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-sql-ddl"
+  },
+  "exercises": [
+    {
+      "title": "Create the course table",
+      "language": "sql",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "CREATE TABLE",
+        "PRIMARY KEY",
+        "NOT NULL"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "ddl",
+        "primary-key"
+      ],
+      "problemHtml": "<p>Create table <code>tblCourse</code> with three columns: <code>courseID</code> — exactly 6 characters, the primary key; <code>courseName</code> — up to 100 characters, required; <code>credits</code> — an integer, optional.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Columns in this order: courseID CHAR(6), courseName VARCHAR(100), credits INT.</li>\n  <li>courseID is the PRIMARY KEY; courseName is NOT NULL.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tạo bảng <code>tblCourse</code> gồm ba cột: <code>courseID</code> — đúng 6 ký tự, khoá chính; <code>courseName</code> — tối đa 100 ký tự, bắt buộc; <code>credits</code> — số nguyên, không bắt buộc.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Cột đúng thứ tự: courseID CHAR(6), courseName VARCHAR(100), credits INT.</li>\n  <li>courseID là PRIMARY KEY; courseName NOT NULL.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "col        | type             \n-----------+------------------\ncourseid   | character        \ncoursename | character varying\ncredits    | integer          ",
+          "explanation": "Expected result of check \"Columns and types\" (row order matters).|||Kết quả mong đợi của kiểm \"Columns and types\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "CREATE TABLE name ( col TYPE [NOT NULL], …, CONSTRAINT pk_name PRIMARY KEY (col) ).",
+        "NOT NULL makes a column required; NULL (the default) makes it optional."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your CREATE TABLE statement(s) below. Use portable types: INT, VARCHAR(n), CHAR(n), DECIMAL(p,s), DATE.\n-- (On the real SQL Server PE you would use NVARCHAR for Vietnamese text — here VARCHAR keeps the code portable.)\n-- Viết (các) lệnh CREATE TABLE bên dưới. Kiểu chạy mọi hệ: INT, VARCHAR(n), CHAR(n), DECIMAL(p,s), DATE.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE TABLE tblCourse (\n    courseID   CHAR(6)      NOT NULL,\n    courseName VARCHAR(100) NOT NULL,\n    credits    INT          NULL,\n    CONSTRAINT pk_course PRIMARY KEY (courseID)   -- named constraint: easier to drop/alter later\n);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The grader tests <b>behaviour</b>: a valid insert must succeed, a duplicate key and a missing required value must be rejected. PRIMARY KEY = UNIQUE + NOT NULL on the key column(s).</p>",
+      "solutionExplanationHtmlVi": "<p>Máy chấm kiểm <b>hành vi</b>: chèn hợp lệ phải được, trùng khoá và thiếu giá trị bắt buộc phải bị chặn. PRIMARY KEY = UNIQUE + NOT NULL trên (các) cột khoá.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Columns and types",
+            "kiemTra": "SELECT lower(column_name) AS col, lower(data_type) AS type FROM information_schema.columns WHERE lower(table_name) = 'tblcourse' ORDER BY ordinal_position",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "col",
+                "type"
+              ],
+              "hang": [
+                [
+                  "courseid",
+                  "character"
+                ],
+                [
+                  "coursename",
+                  "character varying"
+                ],
+                [
+                  "credits",
+                  "integer"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "chay-duoc",
+            "moTa": "A valid course can be inserted",
+            "thu": "INSERT INTO tblCourse (courseID, courseName, credits) VALUES ('DBI202', 'Database Systems', 3)"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Duplicate courseID is rejected (PRIMARY KEY)",
+            "thu": "INSERT INTO tblCourse (courseID, courseName, credits) VALUES ('DBI202', 'A', 3), ('DBI202', 'B', 3)",
+            "maLoi": "23505"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Missing courseName is rejected (NOT NULL)",
+            "thu": "INSERT INTO tblCourse (courseID, credits) VALUES ('PRF192', 3)",
+            "maLoi": "23502"
+          },
+          {
+            "kiem": "chay-duoc",
+            "moTa": "credits may be left empty",
+            "thu": "INSERT INTO tblCourse (courseID, courseName) VALUES ('SSG104', 'Soft skills')"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting the primary key — duplicates are accepted and the table cannot be referenced by a foreign key.|||Quên khoá chính — trùng mã vẫn vào được và bảng không làm đích cho khoá ngoại được."
+        },
+        {
+          "loi": "VARCHAR without a length — on SQL Server it means VARCHAR(1)! Always write the length.|||VARCHAR không ghi độ dài — trên SQL Server nghĩa là VARCHAR(1)! Luôn ghi độ dài."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "DDL",
+          "vi": "ngôn ngữ định nghĩa dữ liệu",
+          "giaiThich": "CREATE, ALTER, DROP bảng/view/ràng buộc."
+        },
+        {
+          "en": "PRIMARY KEY",
+          "vi": "khoá chính",
+          "giaiThich": "Định danh duy nhất mỗi dòng: UNIQUE + NOT NULL."
+        },
+        {
+          "en": "NOT NULL",
+          "vi": "không được để trống"
+        }
+      ]
+    },
+    {
+      "title": "Student table with UNIQUE email and a GPA range",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 9,
+      "points": 20,
+      "concepts": [
+        "UNIQUE",
+        "CHECK",
+        "DECIMAL(p,s)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "ddl",
+        "unique",
+        "check"
+      ],
+      "problemHtml": "<p>Create <code>tblStudent</code>: <code>studentID</code> CHAR(8) primary key; <code>fullName</code> VARCHAR(60) required; <code>email</code> VARCHAR(100), optional but <b>no two students may share an email</b>; <code>gpa</code> DECIMAL(3,2) between <b>0 and 4</b> inclusive.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Columns in order: studentID, fullName, email, gpa.</li>\n  <li>UNIQUE on email, CHECK on gpa (0 ≤ gpa ≤ 4).</li>\n</ul>",
+      "problemHtmlVi": "<p>Tạo <code>tblStudent</code>: <code>studentID</code> CHAR(8) khoá chính; <code>fullName</code> VARCHAR(60) bắt buộc; <code>email</code> VARCHAR(100), không bắt buộc nhưng <b>hai sinh viên không được trùng email</b>; <code>gpa</code> DECIMAL(3,2) từ <b>0 đến 4</b> (tính cả hai đầu).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Cột theo thứ tự: studentID, fullName, email, gpa.</li>\n  <li>UNIQUE trên email, CHECK trên gpa (0 ≤ gpa ≤ 4).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "col       | type             \n----------+------------------\nstudentid | character        \nfullname  | character varying\nemail     | character varying\ngpa       | numeric          ",
+          "explanation": "Expected result of check \"Columns and types\" (row order matters).|||Kết quả mong đợi của kiểm \"Columns and types\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "UNIQUE (email) forbids duplicates but still allows NULL.",
+        "CHECK (gpa BETWEEN 0 AND 4) — BETWEEN includes both ends."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your CREATE TABLE statement(s) below. Use portable types: INT, VARCHAR(n), CHAR(n), DECIMAL(p,s), DATE.\n-- (On the real SQL Server PE you would use NVARCHAR for Vietnamese text — here VARCHAR keeps the code portable.)\n-- Viết (các) lệnh CREATE TABLE bên dưới. Kiểu chạy mọi hệ: INT, VARCHAR(n), CHAR(n), DECIMAL(p,s), DATE.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE TABLE tblStudent (\n    studentID CHAR(8)      NOT NULL,\n    fullName  VARCHAR(60)  NOT NULL,\n    email     VARCHAR(100) NULL,\n    gpa       DECIMAL(3,2) NULL,\n    CONSTRAINT pk_student       PRIMARY KEY (studentID),\n    CONSTRAINT uq_student_email UNIQUE (email),\n    CONSTRAINT ck_student_gpa   CHECK (gpa BETWEEN 0 AND 4)\n);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>DECIMAL(p,s): p digits in total, s of them after the decimal point. Naming constraints (uq_…, ck_…) gives readable error messages and lets you drop them later.</p>",
+      "solutionExplanationHtmlVi": "<p>DECIMAL(p,s): tổng p chữ số, s chữ số sau dấu phẩy. Đặt tên ràng buộc (uq_…, ck_…) cho thông báo lỗi dễ đọc và xoá/sửa sau được.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Columns and types",
+            "kiemTra": "SELECT lower(column_name) AS col, lower(data_type) AS type FROM information_schema.columns WHERE lower(table_name) = 'tblstudent' ORDER BY ordinal_position",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "col",
+                "type"
+              ],
+              "hang": [
+                [
+                  "studentid",
+                  "character"
+                ],
+                [
+                  "fullname",
+                  "character varying"
+                ],
+                [
+                  "email",
+                  "character varying"
+                ],
+                [
+                  "gpa",
+                  "numeric"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "chay-duoc",
+            "moTa": "Valid students (GPA 0 and 4 are allowed)",
+            "thu": "INSERT INTO tblStudent (studentID, fullName, email, gpa) VALUES ('HE170001', 'An', 'an@fpt.edu.vn', 4.00), ('HE170002', 'Binh', 'binh@fpt.edu.vn', 0)"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Duplicate email is rejected (UNIQUE)",
+            "thu": "INSERT INTO tblStudent (studentID, fullName, email) VALUES ('HE170003', 'C', 'x@fpt.edu.vn'), ('HE170004', 'D', 'x@fpt.edu.vn')",
+            "maLoi": "23505"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "GPA 4.5 is rejected (CHECK)",
+            "thu": "INSERT INTO tblStudent (studentID, fullName, gpa) VALUES ('HE170005', 'E', 4.5)",
+            "maLoi": "23514"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Negative GPA is rejected (CHECK)",
+            "thu": "INSERT INTO tblStudent (studentID, fullName, gpa) VALUES ('HE170006', 'F', -0.5)",
+            "maLoi": "23514"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "CHECK (gpa > 0 AND gpa < 4) — rejects the valid boundary values 0 and 4.|||CHECK (gpa > 0 AND gpa < 4) — chặn nhầm giá trị biên hợp lệ 0 và 4."
+        },
+        {
+          "loi": "Expecting UNIQUE to allow many NULL emails on SQL Server — it allows only ONE NULL there (PostgreSQL allows many). Test data here avoids that difference; remember it for the exam.|||Tưởng UNIQUE cho nhiều email NULL trên SQL Server — ở đó chỉ cho MỘT NULL (PostgreSQL cho nhiều). Dữ liệu kiểm ở đây tránh chỗ khác nhau này; nhớ khi thi."
+        },
+        {
+          "loi": "DECIMAL(2,2) — only values below 1 fit; DECIMAL(3,2) holds 0.00…9.99.|||DECIMAL(2,2) — chỉ chứa số nhỏ hơn 1; DECIMAL(3,2) chứa 0.00…9.99."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "CHECK constraint",
+          "vi": "ràng buộc kiểm tra",
+          "giaiThich": "Điều kiện mọi dòng phải thoả (vd salary > 0)."
+        },
+        {
+          "en": "UNIQUE",
+          "vi": "không trùng"
+        },
+        {
+          "en": "DECIMAL(p,s)",
+          "vi": "số thập phân p chữ số, s chữ số lẻ"
+        }
+      ]
+    },
+    {
+      "title": "Enrollment: composite key and two foreign keys",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "composite primary key",
+        "FOREIGN KEY … REFERENCES",
+        "many-to-many"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "ddl",
+        "foreign-key",
+        "composite-key"
+      ],
+      "problemHtml": "<p>A student takes many courses, a course has many students, and a student may retake a course in another semester. Create <code>tblEnrollment(studentID, courseID, semester, grade)</code>: semester is CHAR(4) like <code>SU26</code>, grade DECIMAL(3,1) optional. The key is (studentID, courseID, semester); studentID and courseID reference the existing tables.</p>\n<p><b>Existing tables</b> (tab <code>StudentBase.sql</code>): <code>tblCourse(<u>courseID</u>, courseName, credits)</code>, <code>tblStudent(<u>studentID</u>, fullName, email, gpa)</code> with two students (HE170001, HE170002) and two courses (DBI202, PRF192).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Columns in order: studentID CHAR(8), courseID CHAR(6), semester CHAR(4), grade DECIMAL(3,1).</li>\n  <li>PRIMARY KEY (studentID, courseID, semester); two FOREIGN KEYs.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một sinh viên học nhiều môn, một môn có nhiều sinh viên, và sinh viên có thể học lại ở kỳ khác. Tạo <code>tblEnrollment(studentID, courseID, semester, grade)</code>: semester CHAR(4) như <code>SU26</code>, grade DECIMAL(3,1) không bắt buộc. Khoá là (studentID, courseID, semester); studentID và courseID tham chiếu hai bảng đã có.</p>\n<p><b>Bảng đã có</b> (tab <code>StudentBase.sql</code>): <code>tblCourse(<u>courseID</u>, courseName, credits)</code>, <code>tblStudent(<u>studentID</u>, fullName, email, gpa)</code> với hai sinh viên (HE170001, HE170002) và hai môn (DBI202, PRF192).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Cột theo thứ tự: studentID CHAR(8), courseID CHAR(6), semester CHAR(4), grade DECIMAL(3,1).</li>\n  <li>PRIMARY KEY (studentID, courseID, semester); hai FOREIGN KEY.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "col       | type     \n----------+----------\nstudentid | character\ncourseid  | character\nsemester  | character\ngrade     | numeric  ",
+          "explanation": "Expected result of check \"Columns and types\" (row order matters).|||Kết quả mong đợi của kiểm \"Columns and types\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "A composite key is declared at table level: PRIMARY KEY (col1, col2, col3).",
+        "FOREIGN KEY (studentID) REFERENCES tblStudent (studentID) — and the same for courseID."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your CREATE TABLE statement(s) below. Use portable types: INT, VARCHAR(n), CHAR(n), DECIMAL(p,s), DATE.\n-- (On the real SQL Server PE you would use NVARCHAR for Vietnamese text — here VARCHAR keeps the code portable.)\n-- Viết (các) lệnh CREATE TABLE bên dưới. Kiểu chạy mọi hệ: INT, VARCHAR(n), CHAR(n), DECIMAL(p,s), DATE.\n"
+        },
+        {
+          "name": "StudentBase.sql",
+          "language": "sql",
+          "code": "-- StudentBase.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- StudentBase.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE tblCourse (\n    courseID   CHAR(6)       NOT NULL PRIMARY KEY,\n    courseName NVARCHAR(100) NOT NULL,\n    credits    INT           NOT NULL\n);\nCREATE TABLE tblStudent (\n    studentID CHAR(8)      NOT NULL PRIMARY KEY,\n    fullName  NVARCHAR(60) NOT NULL,\n    email     VARCHAR(100) NULL UNIQUE,\n    gpa       DECIMAL(3,2) NULL CHECK (gpa >= 0 AND gpa <= 4)\n);\nINSERT INTO tblCourse (courseID, courseName, credits) VALUES ('DBI202', N'Database Systems', 3), ('PRF192', N'Programming Fundamentals', 3);\nINSERT INTO tblStudent (studentID, fullName, email, gpa) VALUES ('HE170001', N'Nguyễn An', 'an@fpt.edu.vn', 3.20), ('HE170002', N'Trần Bình', NULL, 2.75);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE TABLE tblEnrollment (\n    studentID CHAR(8)      NOT NULL,\n    courseID  CHAR(6)      NOT NULL,\n    semester  CHAR(4)      NOT NULL,\n    grade     DECIMAL(3,1) NULL,\n    CONSTRAINT pk_enrollment         PRIMARY KEY (studentID, courseID, semester),\n    CONSTRAINT fk_enrollment_student FOREIGN KEY (studentID) REFERENCES tblStudent (studentID),\n    CONSTRAINT fk_enrollment_course  FOREIGN KEY (courseID)  REFERENCES tblCourse (courseID)\n);\n"
+        },
+        {
+          "name": "StudentBase.sql",
+          "language": "sql",
+          "code": "-- StudentBase.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- StudentBase.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE tblCourse (\n    courseID   CHAR(6)       NOT NULL PRIMARY KEY,\n    courseName NVARCHAR(100) NOT NULL,\n    credits    INT           NOT NULL\n);\nCREATE TABLE tblStudent (\n    studentID CHAR(8)      NOT NULL PRIMARY KEY,\n    fullName  NVARCHAR(60) NOT NULL,\n    email     VARCHAR(100) NULL UNIQUE,\n    gpa       DECIMAL(3,2) NULL CHECK (gpa >= 0 AND gpa <= 4)\n);\nINSERT INTO tblCourse (courseID, courseName, credits) VALUES ('DBI202', N'Database Systems', 3), ('PRF192', N'Programming Fundamentals', 3);\nINSERT INTO tblStudent (studentID, fullName, email, gpa) VALUES ('HE170001', N'Nguyễn An', 'an@fpt.edu.vn', 3.20), ('HE170002', N'Trần Bình', NULL, 2.75);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A many-to-many relationship becomes a table whose key combines the keys of both sides (+ semester to allow retakes), and each part is a foreign key — rule 5 of \"ERD → tables\".</p>",
+      "solutionExplanationHtmlVi": "<p>Liên kết nhiều-nhiều thành một bảng có khoá ghép từ khoá hai bên (+ kỳ học để cho học lại), mỗi phần là một khoá ngoại — quy tắc 5 của \"ERD → bảng\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "CREATE TABLE tblCourse (\n    courseID   CHAR(6)       NOT NULL PRIMARY KEY,\n    courseName NVARCHAR(100) NOT NULL,\n    credits    INT           NOT NULL\n);\nCREATE TABLE tblStudent (\n    studentID CHAR(8)      NOT NULL PRIMARY KEY,\n    fullName  NVARCHAR(60) NOT NULL,\n    email     VARCHAR(100) NULL UNIQUE,\n    gpa       DECIMAL(3,2) NULL CHECK (gpa >= 0 AND gpa <= 4)\n);\nINSERT INTO tblCourse (courseID, courseName, credits) VALUES ('DBI202', N'Database Systems', 3), ('PRF192', N'Programming Fundamentals', 3);\nINSERT INTO tblStudent (studentID, fullName, email, gpa) VALUES ('HE170001', N'Nguyễn An', 'an@fpt.edu.vn', 3.20), ('HE170002', N'Trần Bình', NULL, 2.75);",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Columns and types",
+            "kiemTra": "SELECT lower(column_name) AS col, lower(data_type) AS type FROM information_schema.columns WHERE lower(table_name) = 'tblenrollment' ORDER BY ordinal_position",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "col",
+                "type"
+              ],
+              "hang": [
+                [
+                  "studentid",
+                  "character"
+                ],
+                [
+                  "courseid",
+                  "character"
+                ],
+                [
+                  "semester",
+                  "character"
+                ],
+                [
+                  "grade",
+                  "numeric"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "chay-duoc",
+            "moTa": "Valid enrollments, including a retake in another semester",
+            "thu": "INSERT INTO tblEnrollment (studentID, courseID, semester, grade) VALUES ('HE170001', 'DBI202', 'SP26', 4.5), ('HE170001', 'DBI202', 'SU26', 7.0), ('HE170002', 'PRF192', 'SU26', NULL)"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Same student, course and semester twice is rejected",
+            "thu": "INSERT INTO tblEnrollment (studentID, courseID, semester) VALUES ('HE170002', 'DBI202', 'SU26'), ('HE170002', 'DBI202', 'SU26')",
+            "maLoi": "23505"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Unknown student is rejected (FOREIGN KEY)",
+            "thu": "INSERT INTO tblEnrollment (studentID, courseID, semester) VALUES ('HE999999', 'DBI202', 'SU26')",
+            "maLoi": "23503"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Unknown course is rejected (FOREIGN KEY)",
+            "thu": "INSERT INTO tblEnrollment (studentID, courseID, semester) VALUES ('HE170001', 'XXX999', 'SU26')",
+            "maLoi": "23503"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "PRIMARY KEY (studentID, courseID) — a retake in another semester becomes a duplicate.|||PRIMARY KEY (studentID, courseID) — học lại kỳ khác bị coi là trùng."
+        },
+        {
+          "loi": "Writing PRIMARY KEY on each column separately — that is not allowed (a table has ONE primary key); list them together.|||Ghi PRIMARY KEY riêng cho từng cột — không được (bảng chỉ có MỘT khoá chính); liệt kê chung trong một ngoặc."
+        },
+        {
+          "loi": "Forgetting the foreign keys — enrollments for non-existent students are accepted.|||Quên khoá ngoại — ghi danh cho sinh viên không tồn tại vẫn vào được."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "FOREIGN KEY",
+          "vi": "khoá ngoại",
+          "giaiThich": "Giá trị phải có ở cột khoá của bảng được tham chiếu (toàn vẹn tham chiếu)."
+        },
+        {
+          "en": "composite key",
+          "vi": "khoá ghép (nhiều cột)"
+        },
+        {
+          "en": "PRIMARY KEY",
+          "vi": "khoá chính",
+          "giaiThich": "Định danh duy nhất mỗi dòng: UNIQUE + NOT NULL."
+        }
+      ]
+    },
+    {
+      "title": "Defaults and allowed values for payments",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "DEFAULT",
+        "CHECK … IN (…)",
+        "foreign key"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "ddl",
+        "default",
+        "check"
+      ],
+      "problemHtml": "<p>Create <code>tblPayment(paymentID, studentID, amount, method, paidOn)</code>: paymentID INT primary key; studentID CHAR(8) required, referencing tblStudent; amount DECIMAL(10,2) <b>greater than 0</b>; method VARCHAR(10) that is <b>CASH, CARD or BANK</b> and <b>defaults to CASH</b>; paidOn DATE required.</p>\n<p><b>Existing tables</b> (tab <code>StudentBase.sql</code>): <code>tblStudent(<u>studentID</u>, …)</code> with HE170001 and HE170002.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Columns in order: paymentID, studentID, amount, method, paidOn.</li>\n  <li>DEFAULT 'CASH' and CHECK (method IN ('CASH', 'CARD', 'BANK')).</li>\n</ul>",
+      "problemHtmlVi": "<p>Tạo <code>tblPayment(paymentID, studentID, amount, method, paidOn)</code>: paymentID INT khoá chính; studentID CHAR(8) bắt buộc, tham chiếu tblStudent; amount DECIMAL(10,2) <b>lớn hơn 0</b>; method VARCHAR(10) là <b>CASH, CARD hoặc BANK</b>, <b>mặc định CASH</b>; paidOn DATE bắt buộc.</p>\n<p><b>Bảng đã có</b> (tab <code>StudentBase.sql</code>): <code>tblStudent(<u>studentID</u>, …)</code> với HE170001 và HE170002.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Cột theo thứ tự: paymentID, studentID, amount, method, paidOn.</li>\n  <li>DEFAULT 'CASH' và CHECK (method IN ('CASH', 'CARD', 'BANK')).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "col       | type             \n----------+------------------\npaymentid | integer          \nstudentid | character        \namount    | numeric          \nmethod    | character varying\npaidon    | date             ",
+          "explanation": "Expected result of check \"Columns and types\" (row order matters).|||Kết quả mong đợi của kiểm \"Columns and types\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "DEFAULT 'CASH' goes in the column definition.",
+        "CHECK (method IN ('CASH', 'CARD', 'BANK')) restricts the allowed values."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your CREATE TABLE statement(s) below. Use portable types: INT, VARCHAR(n), CHAR(n), DECIMAL(p,s), DATE.\n-- (On the real SQL Server PE you would use NVARCHAR for Vietnamese text — here VARCHAR keeps the code portable.)\n-- Viết (các) lệnh CREATE TABLE bên dưới. Kiểu chạy mọi hệ: INT, VARCHAR(n), CHAR(n), DECIMAL(p,s), DATE.\n"
+        },
+        {
+          "name": "StudentBase.sql",
+          "language": "sql",
+          "code": "-- StudentBase.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- StudentBase.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE tblCourse (\n    courseID   CHAR(6)       NOT NULL PRIMARY KEY,\n    courseName NVARCHAR(100) NOT NULL,\n    credits    INT           NOT NULL\n);\nCREATE TABLE tblStudent (\n    studentID CHAR(8)      NOT NULL PRIMARY KEY,\n    fullName  NVARCHAR(60) NOT NULL,\n    email     VARCHAR(100) NULL UNIQUE,\n    gpa       DECIMAL(3,2) NULL CHECK (gpa >= 0 AND gpa <= 4)\n);\nINSERT INTO tblCourse (courseID, courseName, credits) VALUES ('DBI202', N'Database Systems', 3), ('PRF192', N'Programming Fundamentals', 3);\nINSERT INTO tblStudent (studentID, fullName, email, gpa) VALUES ('HE170001', N'Nguyễn An', 'an@fpt.edu.vn', 3.20), ('HE170002', N'Trần Bình', NULL, 2.75);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE TABLE tblPayment (\n    paymentID INT           NOT NULL,\n    studentID CHAR(8)       NOT NULL,\n    amount    DECIMAL(10,2) NOT NULL,\n    method    VARCHAR(10)   NOT NULL DEFAULT 'CASH',\n    paidOn    DATE          NOT NULL,\n    CONSTRAINT pk_payment         PRIMARY KEY (paymentID),\n    CONSTRAINT fk_payment_student FOREIGN KEY (studentID) REFERENCES tblStudent (studentID),\n    CONSTRAINT ck_payment_amount  CHECK (amount > 0),\n    CONSTRAINT ck_payment_method  CHECK (method IN ('CASH', 'CARD', 'BANK'))\n);\n"
+        },
+        {
+          "name": "StudentBase.sql",
+          "language": "sql",
+          "code": "-- StudentBase.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- StudentBase.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE tblCourse (\n    courseID   CHAR(6)       NOT NULL PRIMARY KEY,\n    courseName NVARCHAR(100) NOT NULL,\n    credits    INT           NOT NULL\n);\nCREATE TABLE tblStudent (\n    studentID CHAR(8)      NOT NULL PRIMARY KEY,\n    fullName  NVARCHAR(60) NOT NULL,\n    email     VARCHAR(100) NULL UNIQUE,\n    gpa       DECIMAL(3,2) NULL CHECK (gpa >= 0 AND gpa <= 4)\n);\nINSERT INTO tblCourse (courseID, courseName, credits) VALUES ('DBI202', N'Database Systems', 3), ('PRF192', N'Programming Fundamentals', 3);\nINSERT INTO tblStudent (studentID, fullName, email, gpa) VALUES ('HE170001', N'Nguyễn An', 'an@fpt.edu.vn', 3.20), ('HE170002', N'Trần Bình', NULL, 2.75);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A CHECK constraint rejects a row only when the condition is FALSE — UNKNOWN (NULL) passes. Combine CHECK with NOT NULL when the value is required.</p>",
+      "solutionExplanationHtmlVi": "<p>Ràng buộc CHECK chỉ chặn khi điều kiện FALSE — UNKNOWN (NULL) thì lọt. Ghép CHECK với NOT NULL khi giá trị là bắt buộc.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "CREATE TABLE tblCourse (\n    courseID   CHAR(6)       NOT NULL PRIMARY KEY,\n    courseName NVARCHAR(100) NOT NULL,\n    credits    INT           NOT NULL\n);\nCREATE TABLE tblStudent (\n    studentID CHAR(8)      NOT NULL PRIMARY KEY,\n    fullName  NVARCHAR(60) NOT NULL,\n    email     VARCHAR(100) NULL UNIQUE,\n    gpa       DECIMAL(3,2) NULL CHECK (gpa >= 0 AND gpa <= 4)\n);\nINSERT INTO tblCourse (courseID, courseName, credits) VALUES ('DBI202', N'Database Systems', 3), ('PRF192', N'Programming Fundamentals', 3);\nINSERT INTO tblStudent (studentID, fullName, email, gpa) VALUES ('HE170001', N'Nguyễn An', 'an@fpt.edu.vn', 3.20), ('HE170002', N'Trần Bình', NULL, 2.75);",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Columns and types",
+            "kiemTra": "SELECT lower(column_name) AS col, lower(data_type) AS type FROM information_schema.columns WHERE lower(table_name) = 'tblpayment' ORDER BY ordinal_position",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "col",
+                "type"
+              ],
+              "hang": [
+                [
+                  "paymentid",
+                  "integer"
+                ],
+                [
+                  "studentid",
+                  "character"
+                ],
+                [
+                  "amount",
+                  "numeric"
+                ],
+                [
+                  "method",
+                  "character varying"
+                ],
+                [
+                  "paidon",
+                  "date"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Omitting method stores CASH (DEFAULT)",
+            "kiemTra": "INSERT INTO tblPayment (paymentID, studentID, amount, paidOn) VALUES (1, 'HE170001', 2500000, '2026-09-01'); SELECT paymentID, method FROM tblPayment",
+            "mongDoi": {
+              "cot": [
+                "paymentID",
+                "method"
+              ],
+              "hang": [
+                [
+                  1,
+                  "CASH"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Amount 0 is rejected",
+            "thu": "INSERT INTO tblPayment (paymentID, studentID, amount, method, paidOn) VALUES (2, 'HE170001', 0, 'CARD', '2026-09-02')",
+            "maLoi": "23514"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Method CRYPTO is rejected",
+            "thu": "INSERT INTO tblPayment (paymentID, studentID, amount, method, paidOn) VALUES (3, 'HE170002', 100, 'CRYPTO', '2026-09-02')",
+            "maLoi": "23514"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Unknown student is rejected",
+            "thu": "INSERT INTO tblPayment (paymentID, studentID, amount, paidOn) VALUES (4, 'HE999999', 100, '2026-09-02')",
+            "maLoi": "23503"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "No DEFAULT — an INSERT without method stores NULL (and NULL passes a CHECK, because CHECK only rejects FALSE).|||Thiếu DEFAULT — INSERT không ghi method sẽ lưu NULL (và NULL lọt qua CHECK, vì CHECK chỉ chặn FALSE)."
+        },
+        {
+          "loi": "CHECK (amount >= 0) — the requirement says greater than 0.|||CHECK (amount >= 0) — đề yêu cầu lớn hơn 0."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "CHECK constraint",
+          "vi": "ràng buộc kiểm tra",
+          "giaiThich": "Điều kiện mọi dòng phải thoả (vd salary > 0)."
+        },
+        {
+          "en": "DEFAULT",
+          "vi": "giá trị mặc định"
+        },
+        {
+          "en": "FOREIGN KEY",
+          "vi": "khoá ngoại",
+          "giaiThich": "Giá trị phải có ở cột khoá của bảng được tham chiếu (toàn vẹn tham chiếu)."
+        }
+      ]
+    },
+    {
+      "title": "Sections that disappear with their course (ON DELETE CASCADE)",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 12,
+      "points": 30,
+      "concepts": [
+        "weak entity",
+        "composite key containing a foreign key",
+        "ON DELETE CASCADE"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "ddl",
+        "cascade",
+        "weak-entity"
+      ],
+      "problemHtml": "<p>A <b>section</b> (class group) only exists inside its course: it is identified by the course + a section number (1, 2, 3…). Create <code>tblSection(courseID, sectionNo, room)</code> so that <b>deleting a course automatically deletes its sections</b>.</p>\n<p><b>Existing tables</b> (tab <code>StudentBase.sql</code>): <code>tblCourse(<u>courseID</u>, courseName, credits)</code> with DBI202 and PRF192.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Columns in order: courseID CHAR(6), sectionNo INT, room VARCHAR(10).</li>\n  <li>PRIMARY KEY (courseID, sectionNo); FOREIGN KEY courseID → tblCourse with ON DELETE CASCADE.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Lớp học phần</b> chỉ tồn tại trong môn của nó: định danh bằng môn + số lớp (1, 2, 3…). Tạo <code>tblSection(courseID, sectionNo, room)</code> sao cho <b>xoá môn thì các lớp của môn tự bị xoá</b>.</p>\n<p><b>Bảng đã có</b> (tab <code>StudentBase.sql</code>): <code>tblCourse(<u>courseID</u>, courseName, credits)</code> với DBI202 và PRF192.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Cột theo thứ tự: courseID CHAR(6), sectionNo INT, room VARCHAR(10).</li>\n  <li>PRIMARY KEY (courseID, sectionNo); FOREIGN KEY courseID → tblCourse kèm ON DELETE CASCADE.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "col       | type             \n----------+------------------\ncourseid  | character        \nsectionno | integer          \nroom      | character varying",
+          "explanation": "Expected result of check \"Columns and types\" (row order matters).|||Kết quả mong đợi của kiểm \"Columns and types\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "A weak entity's key = owner's key + its own partial key: PRIMARY KEY (courseID, sectionNo).",
+        "Add ON DELETE CASCADE to the foreign key clause."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your CREATE TABLE statement(s) below. Use portable types: INT, VARCHAR(n), CHAR(n), DECIMAL(p,s), DATE.\n-- (On the real SQL Server PE you would use NVARCHAR for Vietnamese text — here VARCHAR keeps the code portable.)\n-- Viết (các) lệnh CREATE TABLE bên dưới. Kiểu chạy mọi hệ: INT, VARCHAR(n), CHAR(n), DECIMAL(p,s), DATE.\n"
+        },
+        {
+          "name": "StudentBase.sql",
+          "language": "sql",
+          "code": "-- StudentBase.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- StudentBase.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE tblCourse (\n    courseID   CHAR(6)       NOT NULL PRIMARY KEY,\n    courseName NVARCHAR(100) NOT NULL,\n    credits    INT           NOT NULL\n);\nCREATE TABLE tblStudent (\n    studentID CHAR(8)      NOT NULL PRIMARY KEY,\n    fullName  NVARCHAR(60) NOT NULL,\n    email     VARCHAR(100) NULL UNIQUE,\n    gpa       DECIMAL(3,2) NULL CHECK (gpa >= 0 AND gpa <= 4)\n);\nINSERT INTO tblCourse (courseID, courseName, credits) VALUES ('DBI202', N'Database Systems', 3), ('PRF192', N'Programming Fundamentals', 3);\nINSERT INTO tblStudent (studentID, fullName, email, gpa) VALUES ('HE170001', N'Nguyễn An', 'an@fpt.edu.vn', 3.20), ('HE170002', N'Trần Bình', NULL, 2.75);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE TABLE tblSection (\n    courseID  CHAR(6)     NOT NULL,\n    sectionNo INT         NOT NULL,\n    room      VARCHAR(10) NULL,\n    CONSTRAINT pk_section        PRIMARY KEY (courseID, sectionNo),   -- weak entity: owner key + partial key\n    CONSTRAINT fk_section_course FOREIGN KEY (courseID) REFERENCES tblCourse (courseID)\n        ON DELETE CASCADE\n);\n"
+        },
+        {
+          "name": "StudentBase.sql",
+          "language": "sql",
+          "code": "-- StudentBase.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- StudentBase.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE tblCourse (\n    courseID   CHAR(6)       NOT NULL PRIMARY KEY,\n    courseName NVARCHAR(100) NOT NULL,\n    credits    INT           NOT NULL\n);\nCREATE TABLE tblStudent (\n    studentID CHAR(8)      NOT NULL PRIMARY KEY,\n    fullName  NVARCHAR(60) NOT NULL,\n    email     VARCHAR(100) NULL UNIQUE,\n    gpa       DECIMAL(3,2) NULL CHECK (gpa >= 0 AND gpa <= 4)\n);\nINSERT INTO tblCourse (courseID, courseName, credits) VALUES ('DBI202', N'Database Systems', 3), ('PRF192', N'Programming Fundamentals', 3);\nINSERT INTO tblStudent (studentID, fullName, email, gpa) VALUES ('HE170001', N'Nguyễn An', 'an@fpt.edu.vn', 3.20), ('HE170002', N'Trần Bình', NULL, 2.75);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>ON DELETE CASCADE propagates a delete from parent to children — right for a weak entity (a section is meaningless without its course), dangerous for independent data (never cascade from department to employees).</p>",
+      "solutionExplanationHtmlVi": "<p>ON DELETE CASCADE lan lệnh xoá từ cha sang con — đúng cho thực thể yếu (lớp không có nghĩa khi môn bị xoá), nguy hiểm cho dữ liệu độc lập (đừng bao giờ cascade từ phòng sang nhân viên).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "CREATE TABLE tblCourse (\n    courseID   CHAR(6)       NOT NULL PRIMARY KEY,\n    courseName NVARCHAR(100) NOT NULL,\n    credits    INT           NOT NULL\n);\nCREATE TABLE tblStudent (\n    studentID CHAR(8)      NOT NULL PRIMARY KEY,\n    fullName  NVARCHAR(60) NOT NULL,\n    email     VARCHAR(100) NULL UNIQUE,\n    gpa       DECIMAL(3,2) NULL CHECK (gpa >= 0 AND gpa <= 4)\n);\nINSERT INTO tblCourse (courseID, courseName, credits) VALUES ('DBI202', N'Database Systems', 3), ('PRF192', N'Programming Fundamentals', 3);\nINSERT INTO tblStudent (studentID, fullName, email, gpa) VALUES ('HE170001', N'Nguyễn An', 'an@fpt.edu.vn', 3.20), ('HE170002', N'Trần Bình', NULL, 2.75);",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Columns and types",
+            "kiemTra": "SELECT lower(column_name) AS col, lower(data_type) AS type FROM information_schema.columns WHERE lower(table_name) = 'tblsection' ORDER BY ordinal_position",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "col",
+                "type"
+              ],
+              "hang": [
+                [
+                  "courseid",
+                  "character"
+                ],
+                [
+                  "sectionno",
+                  "integer"
+                ],
+                [
+                  "room",
+                  "character varying"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Deleting DBI202 removes its sections only",
+            "kiemTra": "INSERT INTO tblSection (courseID, sectionNo, room) VALUES ('DBI202', 1, 'AL-R201'), ('DBI202', 2, 'AL-R202'), ('PRF192', 1, 'BE-110'); DELETE FROM tblCourse WHERE courseID = 'DBI202'; SELECT courseID, sectionNo, room FROM tblSection",
+            "mongDoi": {
+              "cot": [
+                "courseID",
+                "sectionNo",
+                "room"
+              ],
+              "hang": [
+                [
+                  "PRF192",
+                  1,
+                  "BE-110"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Section number is unique only inside a course",
+            "thu": "INSERT INTO tblSection (courseID, sectionNo) VALUES ('PRF192', 1), ('PRF192', 1)",
+            "maLoi": "23505"
+          },
+          {
+            "kiem": "chay-duoc",
+            "moTa": "Same section number in two courses is fine",
+            "thu": "INSERT INTO tblSection (courseID, sectionNo) VALUES ('PRF192', 1), ('DBI202', 1)"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Section of an unknown course is rejected",
+            "thu": "INSERT INTO tblSection (courseID, sectionNo) VALUES ('ZZZ999', 1)",
+            "maLoi": "23503"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "No CASCADE — deleting the course fails with a foreign-key error (SQL Server Msg 547) while sections exist.|||Thiếu CASCADE — xoá môn bị lỗi khoá ngoại (SQL Server Msg 547) khi còn lớp."
+        },
+        {
+          "loi": "PRIMARY KEY (sectionNo) alone — section 1 can exist in only one course.|||Chỉ PRIMARY KEY (sectionNo) — số lớp 1 chỉ có ở một môn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "weak entity",
+          "vi": "thực thể yếu"
+        },
+        {
+          "en": "ON DELETE CASCADE",
+          "vi": "xoá lan theo khoá ngoại"
+        },
+        {
+          "en": "FOREIGN KEY",
+          "vi": "khoá ngoại",
+          "giaiThich": "Giá trị phải có ở cột khoá của bảng được tham chiếu (toàn vẹn tham chiếu)."
+        }
+      ]
+    }
+  ]
+}

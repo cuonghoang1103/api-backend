@@ -30,6 +30,8 @@ export const PRACTICE_TRACK_BY_COURSE: Readonly<Record<string, string>> = Object
   'software-requirements': 'swr302-practice',
   // Kỹ năng nghề (28/10/2026): thuyết trình + báo cáo kỹ thuật, gắn SSG105 Ch3/Ch4 (content/codelab/ky-nang-practice).
   'ssg105-communication-and-in-group-working-skills': 'ky-nang-practice',
+  // DBI202 (29/10/2026): máy chấm SQL trong trình duyệt (PostgreSQL WASM, chế độ SQL Server) — content/codelab/dbi202-practice.
+  'introduction-to-databases': 'dbi202-practice',
 });
 
 /**

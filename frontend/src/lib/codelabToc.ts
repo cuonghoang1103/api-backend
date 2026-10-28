@@ -27,6 +27,7 @@ export const KHOA_CUA_TRACK: Readonly<Record<string, string>> = Object.freeze({
   'swt301-practice': 'software-testing',
   'swr302-practice': 'software-requirements',
   'ky-nang-practice': 'ssg105-communication-and-in-group-working-skills',
+  'dbi202-practice': 'introduction-to-databases',
 });
 
 /**
@@ -96,6 +97,13 @@ export const TEN_CHUONG: Readonly<Record<string, Readonly<Record<number, string>
     10: 'Xếp ưu tiên & yêu cầu cho AI/ML',
     11: 'Luyện PE — đề thực hành có đồng hồ',
     12: 'Chuyên đề: nâng cấp/thay thế, gói có sẵn, công cụ, cải tiến, rủi ro',
+  },
+  // DBI202 (29/10/2026) — số chương theo khoá introduction-to-databases (content/academy/DBI202.mjs).
+  'dbi202-practice': {
+    5: 'SQL DDL: tạo bảng & ràng buộc',
+    6: 'Truy vấn SQL: SELECT, JOIN, GROUP BY, truy vấn con, DML',
+    7: 'View (procedure/trigger T-SQL: máy chấm SQL Server — sắp có)',
+    9: 'Luyện PE — đề thực hành có đồng hồ',
   },
   // Kỹ năng nghề — số chương theo SSG105 (Ch3 Written communication, Ch4 Presentations).
   'ky-nang-practice': {

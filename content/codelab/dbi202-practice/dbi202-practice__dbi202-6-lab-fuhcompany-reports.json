@@ -1,0 +1,1061 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-6-lab-fuhcompany-reports",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-on-ch6"
+  },
+  "exercises": [
+    {
+      "title": "Lab 6 — FUHCompany management reports",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 90,
+      "points": 100,
+      "concepts": [
+        "LIKE",
+        "multi-table join",
+        "outer join + COUNT",
+        "GROUP BY / HAVING",
+        "relational division",
+        "minimum per group"
+      ],
+      "prerequisites": [
+        "6.1–6.4 of this track"
+      ],
+      "tags": [
+        "dbi202",
+        "lab",
+        "sql",
+        "fuhcompany"
+      ],
+      "problemHtml": "<h1>Lab 6 — FUHCompany management reports</h1>\n<p class=\"bi-phu\">DBI202 · Chapter 6 — SQL queries · Suggested time: 90 minutes · Total: 10 marks (8 × 1.25)</p>\n<h2>1. Overview</h2>\n<p>The board of FUHCompany asks for eight management reports. The database is the course's sample company (7 tables: employees, departments, projects, assignments, locations, department offices, dependents). Write each report as <b>one standard SQL query</b> in its own file — the same rules as the Practical Exam.</p>\n<h3>Main features</h3>\n<ul>\n  <li>Filtering text and dates, joining up to four tables.</li>\n  <li>Counting with outer joins, grouping, HAVING.</li>\n  <li>Relational division and minimum-per-group with ties.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>Column names/aliases and their order exactly as listed; row order only matters when the question says \"order by\".</li>\n  <li>Standard SQL that runs on both SQL Server and PostgreSQL: no TOP/LIMIT, ISNULL/IFNULL, YEAR(), ILIKE, ::. Text compares case-insensitively, as on SQL Server.</li>\n  <li>Never hard-code numbers you can read from the data (hidden checks change the data).</li>\n</ul>\n<h2>2. Submission files</h2>\n<pre>RollNo_Name_DBI202_Lab6/\n├── Q1.sql    -- Staff living in TP Hồ Chí Minh (1.25 marks)\n├── Q2.sql    -- Project directory (1.25 marks)\n├── Q3.sql    -- Projects per location, including empty locations (1.25 marks)\n├── Q4.sql    -- Born in the 1980s (1.25 marks)\n├── Q5.sql    -- Busy projects (1.25 marks)\n├── Q6.sql    -- Departments and their managers (1.25 marks)\n├── Q7.sql    -- All projects of their own department (division) (1.25 marks)\n├── Q8.sql    -- Lowest paid of each department (1.25 marks)</pre>\n<h2>3. Data model</h2>\n<p><b>tblEmployee</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>empSSN</code></td><td>DECIMAL(18,0)</td><td>PK</td></tr><tr><td><code>empName</code></td><td>NVARCHAR(50)</td><td></td></tr><tr><td><code>empAddress</code></td><td>NVARCHAR(100)</td><td>NULL allowed</td></tr><tr><td><code>empSalary</code></td><td>DECIMAL(10,0)</td><td>> 0</td></tr><tr><td><code>empSex</code></td><td>CHAR(1)</td><td>'F' / 'M'</td></tr><tr><td><code>empBirthdate</code></td><td>DATE</td><td>NULL allowed</td></tr><tr><td><code>depNum</code></td><td>INT</td><td>FK → tblDepartment</td></tr><tr><td><code>supervisorSSN</code></td><td>DECIMAL(18,0)</td><td>FK → tblEmployee (NULL = director)</td></tr></tbody></table>\n<p><b>tblDepartment</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>depNum</code></td><td>INT</td><td>PK</td></tr><tr><td><code>depName</code></td><td>NVARCHAR(50)</td><td>UNIQUE</td></tr><tr><td><code>mgrSSN</code></td><td>DECIMAL(18,0)</td><td>FK → tblEmployee (manager)</td></tr><tr><td><code>mgrAssDate</code></td><td>DATE</td><td></td></tr></tbody></table>\n<p><b>tblProject</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>proNum</code></td><td>INT</td><td>PK</td></tr><tr><td><code>proName</code></td><td>NVARCHAR(50)</td><td></td></tr><tr><td><code>locNum</code></td><td>INT</td><td>FK → tblLocation</td></tr><tr><td><code>depNum</code></td><td>INT</td><td>FK → tblDepartment (controlling department)</td></tr></tbody></table>\n<p><b>tblWorksOn</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>empSSN, proNum</code></td><td>DECIMAL(18,0), INT</td><td>PK; FKs</td></tr><tr><td><code>workHours</code></td><td>DECIMAL(5,1)</td><td>≥ 0</td></tr></tbody></table>\n<p><b>tblLocation · tblDepLocation · tblDependent</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>tblLocation</code></td><td>locNum PK, locName UNIQUE</td><td></td></tr><tr><td><code>tblDepLocation</code></td><td>(depNum, locNum) PK</td><td>offices of departments</td></tr><tr><td><code>tblDependent</code></td><td>(empSSN, depName) PK</td><td>depSex, depBirthdate, depRelationship</td></tr></tbody></table>\n<h2>4. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. Staff living in TP Hồ Chí Minh <span class=\"bi-diem\">1.25 marks</span></h3>\n<p>Employees whose address ends with \"TP Hồ Chí Minh\".</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Columns: <code>empSSN, empName, empAddress</code>; order by empSSN.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>2. Project directory <span class=\"bi-diem\">1.25 marks</span></h3>\n<p>Every project with the name of its controlling department and of its location.</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Columns: <code>proNum, proName, depName, locName</code>; order by proNum.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>3. Projects per location, including empty locations <span class=\"bi-diem\">1.25 marks</span></h3>\n<p>For every location, the number of projects located there (0 if none).</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Columns: <code>locNum, locName, NumProjects</code>; order by locNum.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>4. Born in the 1980s <span class=\"bi-diem\">1.25 marks</span></h3>\n<p>Employees born from 1 January 1980 to 31 December 1989, with their department name.</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Columns: <code>empSSN, empName, empBirthdate, depName</code>; order by empBirthdate.</li>\n  <li>Use a date range, not YEAR() (SQL Server only, and not index-friendly).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. Busy projects <span class=\"bi-diem\">1.25 marks</span></h3>\n<p>Projects whose total working hours are at least 50, with the number of people and the total hours.</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Columns: <code>proNum, proName, NumStaff, TotalHours</code>; order by TotalHours descending, then proNum.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>6. Departments and their managers <span class=\"bi-diem\">1.25 marks</span></h3>\n<p>Every department with its manager's name and the number of employees in the department.</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Columns: <code>depNum, depName, ManagerName, NumEmployees</code>; order by depNum.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>7. All projects of their own department (division) <span class=\"bi-diem\">1.25 marks</span></h3>\n<p>Employees who work on <b>every</b> project controlled by their own department. Only consider departments that control at least one project.</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Columns: <code>empSSN, empName, depNum</code>; order by empSSN.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>8. Lowest paid of each department <span class=\"bi-diem\">1.25 marks</span></h3>\n<p>For each department, the employee(s) with the lowest salary in that department (all of them on a tie).</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Columns: <code>depNum, empSSN, empName, empSalary</code>; order by depNum, then empSSN.</li>\n</ul>\n</div>\n<h2>5. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>Staff living in TP Hồ Chí Minh</td><td>1.25</td></tr><tr><td>2</td><td>Project directory</td><td>1.25</td></tr><tr><td>3</td><td>Projects per location, including empty locations</td><td>1.25</td></tr><tr><td>4</td><td>Born in the 1980s</td><td>1.25</td></tr><tr><td>5</td><td>Busy projects</td><td>1.25</td></tr><tr><td>6</td><td>Departments and their managers</td><td>1.25</td></tr><tr><td>7</td><td>All projects of their own department (division)</td><td>1.25</td></tr><tr><td>8</td><td>Lowest paid of each department</td><td>1.25</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Wrong column names/aliases or column order — the checker compares columns by position and name.</li>\n  <li>INNER JOIN where the question says \"every … including …\" (Q3, Q6).</li>\n  <li>TOP 1 / FETCH 1 ROW for \"the lowest\" — drops ties (Q8).</li>\n  <li>Hard-coded numbers that only match today's data — hidden checks change the data.</li>\n</ul>\n<h2>6. Submission</h2>\n<p>Write each answer in its own tab (Q1.sql … Q8.sql). <b>Run</b> = sample checks; <b>Submit</b> = all checks (hidden ones change the data). The FUHCompany.sql tab is the database script — run it in SSMS to practise on real SQL Server.</p>",
+      "problemHtmlVi": "<h1>Lab 6 — FUHCompany management reports</h1>\n<p class=\"bi-phu\">DBI202 · Chương 6 — Truy vấn SQL · Thời gian gợi ý: 90 phút · Tổng: 10 điểm (8 × 1,25)</p>\n<h2>1. Tổng quan</h2>\n<p>Ban giám đốc FUHCompany cần tám báo cáo quản trị. CSDL là công ty mẫu của môn (7 bảng: nhân viên, phòng, dự án, phân công, địa điểm, văn phòng của phòng, người phụ thuộc). Viết mỗi báo cáo bằng <b>một câu SQL chuẩn</b> trong tệp riêng — cùng quy định như bài thi thực hành.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>Lọc chữ và ngày, nối tới bốn bảng.</li>\n  <li>Đếm có outer join, gộp nhóm, HAVING.</li>\n  <li>Phép chia quan hệ và nhỏ nhất theo nhóm có hoà.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Tên cột/bí danh và thứ tự cột đúng như đề; thứ tự dòng chỉ quan trọng khi đề ghi \"sắp theo\".</li>\n  <li>SQL chuẩn chạy cả SQL Server lẫn PostgreSQL: không TOP/LIMIT, ISNULL, YEAR(), ILIKE, ::. Chuỗi so không phân biệt hoa thường như SQL Server.</li>\n  <li>Không chép cứng con số đọc được từ dữ liệu (kiểm ẩn đổi dữ liệu).</li>\n</ul>\n<h2>2. Tệp nộp bài</h2>\n<pre>RollNo_Name_DBI202_Lab6/\n├── Q1.sql    -- Staff living in TP Hồ Chí Minh (1.25 marks)\n├── Q2.sql    -- Project directory (1.25 marks)\n├── Q3.sql    -- Projects per location, including empty locations (1.25 marks)\n├── Q4.sql    -- Born in the 1980s (1.25 marks)\n├── Q5.sql    -- Busy projects (1.25 marks)\n├── Q6.sql    -- Departments and their managers (1.25 marks)\n├── Q7.sql    -- All projects of their own department (division) (1.25 marks)\n├── Q8.sql    -- Lowest paid of each department (1.25 marks)</pre>\n<h2>3. Mô hình dữ liệu</h2>\n<p><b>tblEmployee</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>empSSN</code></td><td>DECIMAL(18,0)</td><td>PK</td></tr><tr><td><code>empName</code></td><td>NVARCHAR(50)</td><td></td></tr><tr><td><code>empAddress</code></td><td>NVARCHAR(100)</td><td>NULL allowed</td></tr><tr><td><code>empSalary</code></td><td>DECIMAL(10,0)</td><td>> 0</td></tr><tr><td><code>empSex</code></td><td>CHAR(1)</td><td>'F' / 'M'</td></tr><tr><td><code>empBirthdate</code></td><td>DATE</td><td>NULL allowed</td></tr><tr><td><code>depNum</code></td><td>INT</td><td>FK → tblDepartment</td></tr><tr><td><code>supervisorSSN</code></td><td>DECIMAL(18,0)</td><td>FK → tblEmployee (NULL = director)</td></tr></tbody></table>\n<p><b>tblDepartment</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>depNum</code></td><td>INT</td><td>PK</td></tr><tr><td><code>depName</code></td><td>NVARCHAR(50)</td><td>UNIQUE</td></tr><tr><td><code>mgrSSN</code></td><td>DECIMAL(18,0)</td><td>FK → tblEmployee (manager)</td></tr><tr><td><code>mgrAssDate</code></td><td>DATE</td><td></td></tr></tbody></table>\n<p><b>tblProject</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>proNum</code></td><td>INT</td><td>PK</td></tr><tr><td><code>proName</code></td><td>NVARCHAR(50)</td><td></td></tr><tr><td><code>locNum</code></td><td>INT</td><td>FK → tblLocation</td></tr><tr><td><code>depNum</code></td><td>INT</td><td>FK → tblDepartment (controlling department)</td></tr></tbody></table>\n<p><b>tblWorksOn</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>empSSN, proNum</code></td><td>DECIMAL(18,0), INT</td><td>PK; FKs</td></tr><tr><td><code>workHours</code></td><td>DECIMAL(5,1)</td><td>≥ 0</td></tr></tbody></table>\n<p><b>tblLocation · tblDepLocation · tblDependent</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>tblLocation</code></td><td>locNum PK, locName UNIQUE</td><td></td></tr><tr><td><code>tblDepLocation</code></td><td>(depNum, locNum) PK</td><td>offices of departments</td></tr><tr><td><code>tblDependent</code></td><td>(empSSN, depName) PK</td><td>depSex, depBirthdate, depRelationship</td></tr></tbody></table>\n<h2>4. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. Nhân viên sống ở TP Hồ Chí Minh <span class=\"bi-diem\">1.25 điểm</span></h3>\n<p>Nhân viên có địa chỉ kết thúc bằng \"TP Hồ Chí Minh\".</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Cột: <code>empSSN, empName, empAddress</code>; sắp theo empSSN.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>2. Danh bạ dự án <span class=\"bi-diem\">1.25 điểm</span></h3>\n<p>Mọi dự án kèm tên phòng quản lý và tên địa điểm.</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Cột: <code>proNum, proName, depName, locName</code>; sắp theo proNum.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>3. Số dự án mỗi địa điểm, kể cả địa điểm trống <span class=\"bi-diem\">1.25 điểm</span></h3>\n<p>Với mọi địa điểm, số dự án đặt tại đó (0 nếu không có).</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Cột: <code>locNum, locName, NumProjects</code>; sắp theo locNum.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>4. Sinh trong thập niên 1980 <span class=\"bi-diem\">1.25 điểm</span></h3>\n<p>Nhân viên sinh từ 01/01/1980 đến 31/12/1989, kèm tên phòng.</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Cột: <code>empSSN, empName, empBirthdate, depName</code>; sắp theo empBirthdate.</li>\n  <li>Dùng khoảng ngày, không YEAR() (chỉ SQL Server và không dùng được chỉ mục).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. Dự án bận rộn <span class=\"bi-diem\">1.25 điểm</span></h3>\n<p>Dự án có tổng giờ làm từ 50 trở lên, kèm số người và tổng giờ.</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Cột: <code>proNum, proName, NumStaff, TotalHours</code>; sắp TotalHours giảm dần, rồi proNum.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>6. Các phòng và trưởng phòng <span class=\"bi-diem\">1.25 điểm</span></h3>\n<p>Mọi phòng kèm tên trưởng phòng và số nhân viên của phòng.</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Cột: <code>depNum, depName, ManagerName, NumEmployees</code>; sắp theo depNum.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>7. Làm mọi dự án của phòng mình (phép chia) <span class=\"bi-diem\">1.25 điểm</span></h3>\n<p>Nhân viên làm <b>mọi</b> dự án do phòng của họ quản lý. Chỉ xét phòng có ít nhất một dự án.</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Cột: <code>empSSN, empName, depNum</code>; sắp theo empSSN.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>8. Lương thấp nhất mỗi phòng <span class=\"bi-diem\">1.25 điểm</span></h3>\n<p>Với mỗi phòng, (các) nhân viên lương thấp nhất phòng (hoà thì hiện hết).</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Cột: <code>depNum, empSSN, empName, empSalary</code>; sắp theo depNum, rồi empSSN.</li>\n</ul>\n</div>\n<h2>5. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>Nhân viên sống ở TP Hồ Chí Minh</td><td>1.25</td></tr><tr><td>2</td><td>Danh bạ dự án</td><td>1.25</td></tr><tr><td>3</td><td>Số dự án mỗi địa điểm, kể cả địa điểm trống</td><td>1.25</td></tr><tr><td>4</td><td>Sinh trong thập niên 1980</td><td>1.25</td></tr><tr><td>5</td><td>Dự án bận rộn</td><td>1.25</td></tr><tr><td>6</td><td>Các phòng và trưởng phòng</td><td>1.25</td></tr><tr><td>7</td><td>Làm mọi dự án của phòng mình (phép chia)</td><td>1.25</td></tr><tr><td>8</td><td>Lương thấp nhất mỗi phòng</td><td>1.25</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Sai tên/bí danh hay thứ tự cột — máy chấm so cột theo vị trí và tên.</li>\n  <li>Dùng INNER JOIN khi đề ghi \"mọi … kể cả …\" (Q3, Q6).</li>\n  <li>TOP 1 / FETCH 1 ROW cho \"thấp nhất\" — mất dòng hoà (Q8).</li>\n  <li>Chép cứng con số chỉ khớp dữ liệu hôm nay — kiểm ẩn đổi dữ liệu.</li>\n</ul>\n<h2>6. Nộp bài</h2>\n<p>Viết mỗi câu trong tab riêng (Q1.sql … Q8.sql). <b>Chạy thử</b> = kiểm mẫu; <b>Nộp</b> = mọi kiểm (kiểm ẩn đổi dữ liệu). Tab FUHCompany.sql là script CSDL — chạy trong SSMS để luyện trên SQL Server thật.</p>",
+      "inputSpec": "The database built by FUHCompany.sql (schema below; full script in the FUHCompany.sql tab).|||CSDL dựng bởi FUHCompany.sql (lược đồ bên dưới; script đầy đủ ở tab FUHCompany.sql).",
+      "outputSpec": "One file per question (Q1.sql … Qn.sql) containing only the statement(s) that answer it; each question is graded independently.|||Mỗi câu một tệp (Q1.sql … Qn.sql) chỉ chứa (các) lệnh trả lời câu đó; mỗi câu chấm độc lập.",
+      "constraints": "Column names/aliases and their order exactly as listed; row order only matters when the question says \"order by\".|||Tên cột/bí danh và thứ tự cột đúng như đề; thứ tự dòng chỉ quan trọng khi đề ghi \"sắp theo\".\nStandard SQL that runs on both SQL Server and PostgreSQL: no TOP/LIMIT, ISNULL/IFNULL, YEAR(), ILIKE, ::. Text compares case-insensitively, as on SQL Server.|||SQL chuẩn chạy cả SQL Server lẫn PostgreSQL: không TOP/LIMIT, ISNULL, YEAR(), ILIKE, ::. Chuỗi so không phân biệt hoa thường như SQL Server.\nNever hard-code numbers you can read from the data (hidden checks change the data).|||Không chép cứng con số đọc được từ dữ liệu (kiểm ẩn đổi dữ liệu).",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "empSSN      | empName         | empAddress                  \n------------+-----------------+-----------------------------\n30121050001 | Trần Minh Quang | 45 Nguyễn Huệ, Q.1, TP Hồ C…\n30121050002 | Hoàng Thị Hà    | 12 Lê Lợi, Q.1, TP Hồ Chí M…\n30121050003 | Võ Việt Anh     | 88 Trần Hưng Đạo, Q.5, TP H…\n30121050004 | Lê Thị Lan Anh  | 21 Pasteur, Q.3, TP Hồ Chí …\n30121050030 | Huỳnh Văn Tài   | 9 Võ Văn Tần, Q.3, TP Hồ Ch…",
+          "explanation": "Expected result of check \"Q1 · staff in TP Hồ Chí Minh\" (row order matters).|||Kết quả mong đợi của kiểm \"Q1 · staff in TP Hồ Chí Minh\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "Làm câu dễ trước (Q1, Q2, Q4), rồi Q3/Q5/Q6 (gộp nhóm), cuối cùng Q7/Q8.",
+        "Q7 \"mọi dự án của phòng\": KHÔNG tồn tại dự án nào của phòng mà nhân viên KHÔNG làm — hai lớp NOT EXISTS. Đừng quên phòng không có dự án (đề loại nó ra).",
+        "Q8: so lương với MIN của chính phòng đó (truy vấn con tương quan) — giữ được người hoà."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "Q1.sql",
+          "language": "sql",
+          "code": "-- Q1. Staff living in TP Hồ Chí Minh\n-- Write only the statement(s) that answer this question (no USE, no GO, no test commands).\n-- Chỉ viết (các) lệnh trả lời câu này (không USE, không GO, không lệnh chạy thử).\n"
+        },
+        {
+          "name": "Q2.sql",
+          "language": "sql",
+          "code": "-- Q2. Project directory\n-- Write only the statement(s) that answer this question (no USE, no GO, no test commands).\n-- Chỉ viết (các) lệnh trả lời câu này (không USE, không GO, không lệnh chạy thử).\n"
+        },
+        {
+          "name": "Q3.sql",
+          "language": "sql",
+          "code": "-- Q3. Projects per location, including empty locations\n-- Write only the statement(s) that answer this question (no USE, no GO, no test commands).\n-- Chỉ viết (các) lệnh trả lời câu này (không USE, không GO, không lệnh chạy thử).\n"
+        },
+        {
+          "name": "Q4.sql",
+          "language": "sql",
+          "code": "-- Q4. Born in the 1980s\n-- Write only the statement(s) that answer this question (no USE, no GO, no test commands).\n-- Chỉ viết (các) lệnh trả lời câu này (không USE, không GO, không lệnh chạy thử).\n"
+        },
+        {
+          "name": "Q5.sql",
+          "language": "sql",
+          "code": "-- Q5. Busy projects\n-- Write only the statement(s) that answer this question (no USE, no GO, no test commands).\n-- Chỉ viết (các) lệnh trả lời câu này (không USE, không GO, không lệnh chạy thử).\n"
+        },
+        {
+          "name": "Q6.sql",
+          "language": "sql",
+          "code": "-- Q6. Departments and their managers\n-- Write only the statement(s) that answer this question (no USE, no GO, no test commands).\n-- Chỉ viết (các) lệnh trả lời câu này (không USE, không GO, không lệnh chạy thử).\n"
+        },
+        {
+          "name": "Q7.sql",
+          "language": "sql",
+          "code": "-- Q7. All projects of their own department (division)\n-- Write only the statement(s) that answer this question (no USE, no GO, no test commands).\n-- Chỉ viết (các) lệnh trả lời câu này (không USE, không GO, không lệnh chạy thử).\n"
+        },
+        {
+          "name": "Q8.sql",
+          "language": "sql",
+          "code": "-- Q8. Lowest paid of each department\n-- Write only the statement(s) that answer this question (no USE, no GO, no test commands).\n-- Chỉ viết (các) lệnh trả lời câu này (không USE, không GO, không lệnh chạy thử).\n"
+        },
+        {
+          "name": "FUHCompany.sql",
+          "language": "sql",
+          "code": "-- FUHCompany.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- FUHCompany.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE tblLocation (\n    locNum   INT           NOT NULL,\n    locName  NVARCHAR(50)  NOT NULL,\n    CONSTRAINT pk_location      PRIMARY KEY (locNum),\n    CONSTRAINT uq_location_name UNIQUE (locName)\n);\n\nCREATE TABLE tblDepartment (\n    depNum      INT            NOT NULL,\n    depName     NVARCHAR(50)   NOT NULL,\n    mgrSSN      DECIMAL(18,0)  NULL,\n    mgrAssDate  DATE           NULL,\n    CONSTRAINT pk_department      PRIMARY KEY (depNum),\n    CONSTRAINT uq_department_name UNIQUE (depName)\n);\n\nCREATE TABLE tblEmployee (\n    empSSN         DECIMAL(18,0)  NOT NULL,\n    empName        NVARCHAR(50)   NOT NULL,\n    empAddress     NVARCHAR(100)  NULL,\n    empSalary      DECIMAL(10,0)  NULL,\n    empSex         CHAR(1)        NULL,\n    empBirthdate   DATE           NULL,\n    depNum         INT            NULL,\n    supervisorSSN  DECIMAL(18,0)  NULL,\n    CONSTRAINT pk_employee            PRIMARY KEY (empSSN),\n    CONSTRAINT ck_employee_sex        CHECK (empSex IN ('F', 'M')),\n    CONSTRAINT ck_employee_salary     CHECK (empSalary > 0),\n    CONSTRAINT fk_employee_department FOREIGN KEY (depNum)        REFERENCES tblDepartment (depNum),\n    CONSTRAINT fk_employee_supervisor FOREIGN KEY (supervisorSSN) REFERENCES tblEmployee (empSSN)\n);\n\nCREATE TABLE tblDepLocation (\n    depNum  INT  NOT NULL,\n    locNum  INT  NOT NULL,\n    CONSTRAINT pk_deplocation            PRIMARY KEY (depNum, locNum),\n    CONSTRAINT fk_deplocation_department FOREIGN KEY (depNum) REFERENCES tblDepartment (depNum),\n    CONSTRAINT fk_deplocation_location   FOREIGN KEY (locNum) REFERENCES tblLocation (locNum)\n);\n\nCREATE TABLE tblProject (\n    proNum   INT           NOT NULL,\n    proName  NVARCHAR(50)  NOT NULL,\n    locNum   INT           NULL,\n    depNum   INT           NULL,\n    CONSTRAINT pk_project            PRIMARY KEY (proNum),\n    CONSTRAINT fk_project_location   FOREIGN KEY (locNum) REFERENCES tblLocation (locNum),\n    CONSTRAINT fk_project_department FOREIGN KEY (depNum) REFERENCES tblDepartment (depNum)\n);\n\nCREATE TABLE tblWorksOn (\n    empSSN     DECIMAL(18,0)  NOT NULL,\n    proNum     INT            NOT NULL,\n    workHours  DECIMAL(5,1)   NULL,\n    CONSTRAINT pk_workson          PRIMARY KEY (empSSN, proNum),\n    CONSTRAINT ck_workson_hours    CHECK (workHours >= 0),\n    CONSTRAINT fk_workson_employee FOREIGN KEY (empSSN) REFERENCES tblEmployee (empSSN),\n    CONSTRAINT fk_workson_project  FOREIGN KEY (proNum) REFERENCES tblProject (proNum)\n);\n\nCREATE TABLE tblDependent (\n    depName          NVARCHAR(50)   NOT NULL,\n    empSSN           DECIMAL(18,0)  NOT NULL,\n    depSex           CHAR(1)        NULL,\n    depBirthdate     DATE           NULL,\n    depRelationship  NVARCHAR(30)   NULL,\n    CONSTRAINT pk_dependent          PRIMARY KEY (empSSN, depName),\n    CONSTRAINT ck_dependent_sex      CHECK (depSex IN ('F', 'M')),\n    CONSTRAINT fk_dependent_employee FOREIGN KEY (empSSN) REFERENCES tblEmployee (empSSN)\n);\n\nALTER TABLE tblDepartment\n    ADD CONSTRAINT fk_department_manager FOREIGN KEY (mgrSSN) REFERENCES tblEmployee (empSSN);\n\nINSERT INTO tblLocation (locNum, locName) VALUES\n    (1, N'TP Hà Nội'),\n    (2, N'TP Hồ Chí Minh'),\n    (3, N'TP Đà Nẵng'),\n    (4, N'TP Cần Thơ');\n\nINSERT INTO tblDepartment (depNum, depName, mgrSSN, mgrAssDate) VALUES\n    (1, N'Phòng Phần mềm trong nước', NULL, NULL),\n    (2, N'Phòng Phần mềm nước ngoài', NULL, NULL),\n    (3, N'Phòng Kinh doanh',          NULL, NULL),\n    (4, N'Phòng Hành chính',          NULL, NULL),\n    (5, N'Phòng Nghiên cứu',          NULL, NULL);\n\nINSERT INTO tblEmployee (empSSN, empName, empAddress, empSalary, empSex, empBirthdate, depNum, supervisorSSN) VALUES\n    (30121050001, N'Trần Minh Quang', N'45 Nguyễn Huệ, Q.1, TP Hồ Chí Minh',     150000, 'M', '1968-03-12', 1, NULL),\n    (30121050002, N'Hoàng Thị Hà',    N'12 Lê Lợi, Q.1, TP Hồ Chí Minh',         90000,  'F', '1985-07-20', 1, 30121050001),\n    (30121050010, N'Phạm Quốc Bảo',   N'102 Kim Mã, Ba Đình, TP Hà Nội',         95000,  'M', '1978-09-09', 2, 30121050001),\n    (30121050020, N'Nguyễn Thị Mai',  N'60 Bạch Đằng, Hải Châu, TP Đà Nẵng',     88000,  'F', '1980-06-25', 3, 30121050001),\n    (30121050030, N'Huỳnh Văn Tài',   N'9 Võ Văn Tần, Q.3, TP Hồ Chí Minh',      70000,  'M', '1975-10-10', 4, 30121050001),\n    (30121050037, N'Lý Thanh Tâm',    N'77 Hùng Vương, Hải Châu, TP Đà Nẵng',    65000,  'F', '1983-03-03', 5, 30121050001),\n    (30121050003, N'Võ Việt Anh',     N'88 Trần Hưng Đạo, Q.5, TP Hồ Chí Minh',  60000,  'M', '1990-11-02', 1, 30121050002),\n    (30121050004, N'Lê Thị Lan Anh',  N'21 Pasteur, Q.3, TP Hồ Chí Minh',        45000,  'F', '1995-01-15', 1, 30121050002),\n    (30121050005, N'Mai Duy An',      N'7 Hàng Bài, Hoàn Kiếm, TP Hà Nội',       55000,  'M', '1992-05-30', 2, 30121050010),\n    (30121050011, N'Hồ Ngọc Hân',     N'33 Cầu Giấy, TP Hà Nội',                 72000,  'F', '1988-12-01', 2, 30121050010),\n    (30121050012, N'Đặng Tuấn Anh',   N'5 Láng Hạ, Đống Đa, TP Hà Nội',          105000, 'M', '1970-04-18', 2, 30121050010),\n    (30121050021, N'Bùi Văn Nam',     NULL,                                      40000,  'M', '1998-02-14', 3, 30121050020),\n    (30121050027, N'Trương Thị Thu',  N'14 Nguyễn Văn Linh, TP Đà Nẵng',         52000,  'F', '1993-08-08', 3, 30121050020),\n    (30121050038, N'Phan Hữu Nghĩa',  N'3 Lý Thường Kiệt, TP Hà Nội',            38000,  'M', NULL,         5, 30121050037);\n\nUPDATE tblDepartment SET mgrSSN = 30121050001, mgrAssDate = '2015-01-01' WHERE depNum = 1;\nUPDATE tblDepartment SET mgrSSN = 30121050010, mgrAssDate = '2018-06-15' WHERE depNum = 2;\nUPDATE tblDepartment SET mgrSSN = 30121050020, mgrAssDate = '2019-03-01' WHERE depNum = 3;\nUPDATE tblDepartment SET mgrSSN = 30121050030, mgrAssDate = '2020-09-01' WHERE depNum = 4;\nUPDATE tblDepartment SET mgrSSN = 30121050037, mgrAssDate = '2022-01-10' WHERE depNum = 5;\n\nINSERT INTO tblDepLocation (depNum, locNum) VALUES\n    (1, 1), (1, 2),\n    (2, 1), (2, 2),\n    (3, 2), (3, 3),\n    (4, 1),\n    (5, 3);\n\nINSERT INTO tblProject (proNum, proName, locNum, depNum) VALUES\n    (1, N'ProjectA', 1, 1),\n    (2, N'ProjectB', 2, 1),\n    (3, N'ProjectC', 1, 2),\n    (4, N'ProjectD', 2, 2),\n    (5, N'ProjectE', 3, 3),\n    (6, N'ProjectF', 2, 4);\n\nINSERT INTO tblWorksOn (empSSN, proNum, workHours) VALUES\n    (30121050001, 1, 10.0),\n    (30121050002, 1, 20.0),\n    (30121050003, 1, 30.0),\n    (30121050003, 2, 12.5),\n    (30121050004, 2, 35.0),\n    (30121050005, 2, 20.0),\n    (30121050003, 3, 10.0),\n    (30121050005, 3, 25.0),\n    (30121050011, 3, 30.0),\n    (30121050012, 3, 15.0),\n    (30121050010, 4, 30.0),\n    (30121050012, 4, 20.0),\n    (30121050020, 5, 15.0),\n    (30121050021, 5, 40.0),\n    (30121050027, 5, 30.0),\n    (30121050030, 6, 40.0);\n\nINSERT INTO tblDependent (depName, empSSN, depSex, depBirthdate, depRelationship) VALUES\n    (N'Phạm Thị Hoa',     30121050001, 'F', '1970-01-20', N'Vợ'),\n    (N'Trần Minh Khang',  30121050001, 'M', '2000-05-05', N'Con trai'),\n    (N'Nguyễn Văn Bình',  30121050002, 'M', '1983-09-12', N'Chồng'),\n    (N'Phạm Gia Huy',     30121050010, 'M', '2010-02-02', N'Con trai'),\n    (N'Trương Minh Châu', 30121050027, 'F', '2020-07-07', N'Con gái');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "Q1.sql",
+          "language": "sql",
+          "code": "SELECT empSSN, empName, empAddress\nFROM tblEmployee\nWHERE empAddress LIKE N'%TP Hồ Chí Minh'\nORDER BY empSSN;\n"
+        },
+        {
+          "name": "Q2.sql",
+          "language": "sql",
+          "code": "SELECT p.proNum, p.proName, d.depName, l.locName\nFROM tblProject p\nJOIN tblDepartment d ON d.depNum = p.depNum\nJOIN tblLocation  l ON l.locNum = p.locNum\nORDER BY p.proNum;\n"
+        },
+        {
+          "name": "Q3.sql",
+          "language": "sql",
+          "code": "SELECT l.locNum, l.locName, COUNT(p.proNum) AS NumProjects\nFROM tblLocation l\nLEFT JOIN tblProject p ON p.locNum = l.locNum\nGROUP BY l.locNum, l.locName\nORDER BY l.locNum;\n"
+        },
+        {
+          "name": "Q4.sql",
+          "language": "sql",
+          "code": "SELECT e.empSSN, e.empName, e.empBirthdate, d.depName\nFROM tblEmployee e\nJOIN tblDepartment d ON d.depNum = e.depNum\nWHERE e.empBirthdate >= '1980-01-01' AND e.empBirthdate < '1990-01-01'\nORDER BY e.empBirthdate;\n"
+        },
+        {
+          "name": "Q5.sql",
+          "language": "sql",
+          "code": "SELECT p.proNum, p.proName, COUNT(*) AS NumStaff, SUM(w.workHours) AS TotalHours\nFROM tblProject p\nJOIN tblWorksOn w ON w.proNum = p.proNum\nGROUP BY p.proNum, p.proName\nHAVING SUM(w.workHours) >= 50\nORDER BY TotalHours DESC, p.proNum;\n"
+        },
+        {
+          "name": "Q6.sql",
+          "language": "sql",
+          "code": "SELECT d.depNum, d.depName, m.empName AS ManagerName,\n       (SELECT COUNT(*) FROM tblEmployee e WHERE e.depNum = d.depNum) AS NumEmployees\nFROM tblDepartment d\nLEFT JOIN tblEmployee m ON m.empSSN = d.mgrSSN   -- the manager is ALSO a row of tblEmployee\nORDER BY d.depNum;\n"
+        },
+        {
+          "name": "Q7.sql",
+          "language": "sql",
+          "code": "SELECT e.empSSN, e.empName, e.depNum\nFROM tblEmployee e\nWHERE EXISTS (SELECT 1 FROM tblProject p WHERE p.depNum = e.depNum)        -- the department has projects\n  AND NOT EXISTS (SELECT 1                                                 -- no project of the department…\n                  FROM tblProject p\n                  WHERE p.depNum = e.depNum\n                    AND NOT EXISTS (SELECT 1 FROM tblWorksOn w             -- …that the employee does NOT work on\n                                    WHERE w.empSSN = e.empSSN AND w.proNum = p.proNum))\nORDER BY e.empSSN;\n"
+        },
+        {
+          "name": "Q8.sql",
+          "language": "sql",
+          "code": "SELECT e.depNum, e.empSSN, e.empName, e.empSalary\nFROM tblEmployee e\nWHERE e.empSalary = (SELECT MIN(x.empSalary) FROM tblEmployee x WHERE x.depNum = e.depNum)\nORDER BY e.depNum, e.empSSN;\n"
+        },
+        {
+          "name": "FUHCompany.sql",
+          "language": "sql",
+          "code": "-- FUHCompany.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- FUHCompany.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE tblLocation (\n    locNum   INT           NOT NULL,\n    locName  NVARCHAR(50)  NOT NULL,\n    CONSTRAINT pk_location      PRIMARY KEY (locNum),\n    CONSTRAINT uq_location_name UNIQUE (locName)\n);\n\nCREATE TABLE tblDepartment (\n    depNum      INT            NOT NULL,\n    depName     NVARCHAR(50)   NOT NULL,\n    mgrSSN      DECIMAL(18,0)  NULL,\n    mgrAssDate  DATE           NULL,\n    CONSTRAINT pk_department      PRIMARY KEY (depNum),\n    CONSTRAINT uq_department_name UNIQUE (depName)\n);\n\nCREATE TABLE tblEmployee (\n    empSSN         DECIMAL(18,0)  NOT NULL,\n    empName        NVARCHAR(50)   NOT NULL,\n    empAddress     NVARCHAR(100)  NULL,\n    empSalary      DECIMAL(10,0)  NULL,\n    empSex         CHAR(1)        NULL,\n    empBirthdate   DATE           NULL,\n    depNum         INT            NULL,\n    supervisorSSN  DECIMAL(18,0)  NULL,\n    CONSTRAINT pk_employee            PRIMARY KEY (empSSN),\n    CONSTRAINT ck_employee_sex        CHECK (empSex IN ('F', 'M')),\n    CONSTRAINT ck_employee_salary     CHECK (empSalary > 0),\n    CONSTRAINT fk_employee_department FOREIGN KEY (depNum)        REFERENCES tblDepartment (depNum),\n    CONSTRAINT fk_employee_supervisor FOREIGN KEY (supervisorSSN) REFERENCES tblEmployee (empSSN)\n);\n\nCREATE TABLE tblDepLocation (\n    depNum  INT  NOT NULL,\n    locNum  INT  NOT NULL,\n    CONSTRAINT pk_deplocation            PRIMARY KEY (depNum, locNum),\n    CONSTRAINT fk_deplocation_department FOREIGN KEY (depNum) REFERENCES tblDepartment (depNum),\n    CONSTRAINT fk_deplocation_location   FOREIGN KEY (locNum) REFERENCES tblLocation (locNum)\n);\n\nCREATE TABLE tblProject (\n    proNum   INT           NOT NULL,\n    proName  NVARCHAR(50)  NOT NULL,\n    locNum   INT           NULL,\n    depNum   INT           NULL,\n    CONSTRAINT pk_project            PRIMARY KEY (proNum),\n    CONSTRAINT fk_project_location   FOREIGN KEY (locNum) REFERENCES tblLocation (locNum),\n    CONSTRAINT fk_project_department FOREIGN KEY (depNum) REFERENCES tblDepartment (depNum)\n);\n\nCREATE TABLE tblWorksOn (\n    empSSN     DECIMAL(18,0)  NOT NULL,\n    proNum     INT            NOT NULL,\n    workHours  DECIMAL(5,1)   NULL,\n    CONSTRAINT pk_workson          PRIMARY KEY (empSSN, proNum),\n    CONSTRAINT ck_workson_hours    CHECK (workHours >= 0),\n    CONSTRAINT fk_workson_employee FOREIGN KEY (empSSN) REFERENCES tblEmployee (empSSN),\n    CONSTRAINT fk_workson_project  FOREIGN KEY (proNum) REFERENCES tblProject (proNum)\n);\n\nCREATE TABLE tblDependent (\n    depName          NVARCHAR(50)   NOT NULL,\n    empSSN           DECIMAL(18,0)  NOT NULL,\n    depSex           CHAR(1)        NULL,\n    depBirthdate     DATE           NULL,\n    depRelationship  NVARCHAR(30)   NULL,\n    CONSTRAINT pk_dependent          PRIMARY KEY (empSSN, depName),\n    CONSTRAINT ck_dependent_sex      CHECK (depSex IN ('F', 'M')),\n    CONSTRAINT fk_dependent_employee FOREIGN KEY (empSSN) REFERENCES tblEmployee (empSSN)\n);\n\nALTER TABLE tblDepartment\n    ADD CONSTRAINT fk_department_manager FOREIGN KEY (mgrSSN) REFERENCES tblEmployee (empSSN);\n\nINSERT INTO tblLocation (locNum, locName) VALUES\n    (1, N'TP Hà Nội'),\n    (2, N'TP Hồ Chí Minh'),\n    (3, N'TP Đà Nẵng'),\n    (4, N'TP Cần Thơ');\n\nINSERT INTO tblDepartment (depNum, depName, mgrSSN, mgrAssDate) VALUES\n    (1, N'Phòng Phần mềm trong nước', NULL, NULL),\n    (2, N'Phòng Phần mềm nước ngoài', NULL, NULL),\n    (3, N'Phòng Kinh doanh',          NULL, NULL),\n    (4, N'Phòng Hành chính',          NULL, NULL),\n    (5, N'Phòng Nghiên cứu',          NULL, NULL);\n\nINSERT INTO tblEmployee (empSSN, empName, empAddress, empSalary, empSex, empBirthdate, depNum, supervisorSSN) VALUES\n    (30121050001, N'Trần Minh Quang', N'45 Nguyễn Huệ, Q.1, TP Hồ Chí Minh',     150000, 'M', '1968-03-12', 1, NULL),\n    (30121050002, N'Hoàng Thị Hà',    N'12 Lê Lợi, Q.1, TP Hồ Chí Minh',         90000,  'F', '1985-07-20', 1, 30121050001),\n    (30121050010, N'Phạm Quốc Bảo',   N'102 Kim Mã, Ba Đình, TP Hà Nội',         95000,  'M', '1978-09-09', 2, 30121050001),\n    (30121050020, N'Nguyễn Thị Mai',  N'60 Bạch Đằng, Hải Châu, TP Đà Nẵng',     88000,  'F', '1980-06-25', 3, 30121050001),\n    (30121050030, N'Huỳnh Văn Tài',   N'9 Võ Văn Tần, Q.3, TP Hồ Chí Minh',      70000,  'M', '1975-10-10', 4, 30121050001),\n    (30121050037, N'Lý Thanh Tâm',    N'77 Hùng Vương, Hải Châu, TP Đà Nẵng',    65000,  'F', '1983-03-03', 5, 30121050001),\n    (30121050003, N'Võ Việt Anh',     N'88 Trần Hưng Đạo, Q.5, TP Hồ Chí Minh',  60000,  'M', '1990-11-02', 1, 30121050002),\n    (30121050004, N'Lê Thị Lan Anh',  N'21 Pasteur, Q.3, TP Hồ Chí Minh',        45000,  'F', '1995-01-15', 1, 30121050002),\n    (30121050005, N'Mai Duy An',      N'7 Hàng Bài, Hoàn Kiếm, TP Hà Nội',       55000,  'M', '1992-05-30', 2, 30121050010),\n    (30121050011, N'Hồ Ngọc Hân',     N'33 Cầu Giấy, TP Hà Nội',                 72000,  'F', '1988-12-01', 2, 30121050010),\n    (30121050012, N'Đặng Tuấn Anh',   N'5 Láng Hạ, Đống Đa, TP Hà Nội',          105000, 'M', '1970-04-18', 2, 30121050010),\n    (30121050021, N'Bùi Văn Nam',     NULL,                                      40000,  'M', '1998-02-14', 3, 30121050020),\n    (30121050027, N'Trương Thị Thu',  N'14 Nguyễn Văn Linh, TP Đà Nẵng',         52000,  'F', '1993-08-08', 3, 30121050020),\n    (30121050038, N'Phan Hữu Nghĩa',  N'3 Lý Thường Kiệt, TP Hà Nội',            38000,  'M', NULL,         5, 30121050037);\n\nUPDATE tblDepartment SET mgrSSN = 30121050001, mgrAssDate = '2015-01-01' WHERE depNum = 1;\nUPDATE tblDepartment SET mgrSSN = 30121050010, mgrAssDate = '2018-06-15' WHERE depNum = 2;\nUPDATE tblDepartment SET mgrSSN = 30121050020, mgrAssDate = '2019-03-01' WHERE depNum = 3;\nUPDATE tblDepartment SET mgrSSN = 30121050030, mgrAssDate = '2020-09-01' WHERE depNum = 4;\nUPDATE tblDepartment SET mgrSSN = 30121050037, mgrAssDate = '2022-01-10' WHERE depNum = 5;\n\nINSERT INTO tblDepLocation (depNum, locNum) VALUES\n    (1, 1), (1, 2),\n    (2, 1), (2, 2),\n    (3, 2), (3, 3),\n    (4, 1),\n    (5, 3);\n\nINSERT INTO tblProject (proNum, proName, locNum, depNum) VALUES\n    (1, N'ProjectA', 1, 1),\n    (2, N'ProjectB', 2, 1),\n    (3, N'ProjectC', 1, 2),\n    (4, N'ProjectD', 2, 2),\n    (5, N'ProjectE', 3, 3),\n    (6, N'ProjectF', 2, 4);\n\nINSERT INTO tblWorksOn (empSSN, proNum, workHours) VALUES\n    (30121050001, 1, 10.0),\n    (30121050002, 1, 20.0),\n    (30121050003, 1, 30.0),\n    (30121050003, 2, 12.5),\n    (30121050004, 2, 35.0),\n    (30121050005, 2, 20.0),\n    (30121050003, 3, 10.0),\n    (30121050005, 3, 25.0),\n    (30121050011, 3, 30.0),\n    (30121050012, 3, 15.0),\n    (30121050010, 4, 30.0),\n    (30121050012, 4, 20.0),\n    (30121050020, 5, 15.0),\n    (30121050021, 5, 40.0),\n    (30121050027, 5, 30.0),\n    (30121050030, 6, 40.0);\n\nINSERT INTO tblDependent (depName, empSSN, depSex, depBirthdate, depRelationship) VALUES\n    (N'Phạm Thị Hoa',     30121050001, 'F', '1970-01-20', N'Vợ'),\n    (N'Trần Minh Khang',  30121050001, 'M', '2000-05-05', N'Con trai'),\n    (N'Nguyễn Văn Bình',  30121050002, 'M', '1983-09-12', N'Chồng'),\n    (N'Phạm Gia Huy',     30121050010, 'M', '2010-02-02', N'Con trai'),\n    (N'Trương Minh Châu', 30121050027, 'F', '2020-07-07', N'Con gái');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each file is graded on a fresh copy of FUHCompany (and on a modified copy for the hidden checks). The reference answers use only standard SQL, so they run unchanged on SQL Server 2019+ and PostgreSQL.</p>",
+      "solutionExplanationHtmlVi": "<p>Mỗi tệp được chấm trên một bản FUHCompany mới (và một bản đã đổi dữ liệu cho kiểm ẩn). Lời giải mẫu chỉ dùng SQL chuẩn nên chạy nguyên văn trên SQL Server 2019+ và PostgreSQL.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE tblLocation (\n    locNum   INT           NOT NULL,\n    locName  NVARCHAR(50)  NOT NULL,\n    CONSTRAINT pk_location      PRIMARY KEY (locNum),\n    CONSTRAINT uq_location_name UNIQUE (locName)\n);\n\nCREATE TABLE tblDepartment (\n    depNum      INT            NOT NULL,\n    depName     NVARCHAR(50)   NOT NULL,\n    mgrSSN      DECIMAL(18,0)  NULL,\n    mgrAssDate  DATE           NULL,\n    CONSTRAINT pk_department      PRIMARY KEY (depNum),\n    CONSTRAINT uq_department_name UNIQUE (depName)\n);\n\nCREATE TABLE tblEmployee (\n    empSSN         DECIMAL(18,0)  NOT NULL,\n    empName        NVARCHAR(50)   NOT NULL,\n    empAddress     NVARCHAR(100)  NULL,\n    empSalary      DECIMAL(10,0)  NULL,\n    empSex         CHAR(1)        NULL,\n    empBirthdate   DATE           NULL,\n    depNum         INT            NULL,\n    supervisorSSN  DECIMAL(18,0)  NULL,\n    CONSTRAINT pk_employee            PRIMARY KEY (empSSN),\n    CONSTRAINT ck_employee_sex        CHECK (empSex IN ('F', 'M')),\n    CONSTRAINT ck_employee_salary     CHECK (empSalary > 0),\n    CONSTRAINT fk_employee_department FOREIGN KEY (depNum)        REFERENCES tblDepartment (depNum),\n    CONSTRAINT fk_employee_supervisor FOREIGN KEY (supervisorSSN) REFERENCES tblEmployee (empSSN)\n);\n\nCREATE TABLE tblDepLocation (\n    depNum  INT  NOT NULL,\n    locNum  INT  NOT NULL,\n    CONSTRAINT pk_deplocation            PRIMARY KEY (depNum, locNum),\n    CONSTRAINT fk_deplocation_department FOREIGN KEY (depNum) REFERENCES tblDepartment (depNum),\n    CONSTRAINT fk_deplocation_location   FOREIGN KEY (locNum) REFERENCES tblLocation (locNum)\n);\n\nCREATE TABLE tblProject (\n    proNum   INT           NOT NULL,\n    proName  NVARCHAR(50)  NOT NULL,\n    locNum   INT           NULL,\n    depNum   INT           NULL,\n    CONSTRAINT pk_project            PRIMARY KEY (proNum),\n    CONSTRAINT fk_project_location   FOREIGN KEY (locNum) REFERENCES tblLocation (locNum),\n    CONSTRAINT fk_project_department FOREIGN KEY (depNum) REFERENCES tblDepartment (depNum)\n);\n\nCREATE TABLE tblWorksOn (\n    empSSN     DECIMAL(18,0)  NOT NULL,\n    proNum     INT            NOT NULL,\n    workHours  DECIMAL(5,1)   NULL,\n    CONSTRAINT pk_workson          PRIMARY KEY (empSSN, proNum),\n    CONSTRAINT ck_workson_hours    CHECK (workHours >= 0),\n    CONSTRAINT fk_workson_employee FOREIGN KEY (empSSN) REFERENCES tblEmployee (empSSN),\n    CONSTRAINT fk_workson_project  FOREIGN KEY (proNum) REFERENCES tblProject (proNum)\n);\n\nCREATE TABLE tblDependent (\n    depName          NVARCHAR(50)   NOT NULL,\n    empSSN           DECIMAL(18,0)  NOT NULL,\n    depSex           CHAR(1)        NULL,\n    depBirthdate     DATE           NULL,\n    depRelationship  NVARCHAR(30)   NULL,\n    CONSTRAINT pk_dependent          PRIMARY KEY (empSSN, depName),\n    CONSTRAINT ck_dependent_sex      CHECK (depSex IN ('F', 'M')),\n    CONSTRAINT fk_dependent_employee FOREIGN KEY (empSSN) REFERENCES tblEmployee (empSSN)\n);\n\nALTER TABLE tblDepartment\n    ADD CONSTRAINT fk_department_manager FOREIGN KEY (mgrSSN) REFERENCES tblEmployee (empSSN);\n\nINSERT INTO tblLocation (locNum, locName) VALUES\n    (1, N'TP Hà Nội'),\n    (2, N'TP Hồ Chí Minh'),\n    (3, N'TP Đà Nẵng'),\n    (4, N'TP Cần Thơ');\n\nINSERT INTO tblDepartment (depNum, depName, mgrSSN, mgrAssDate) VALUES\n    (1, N'Phòng Phần mềm trong nước', NULL, NULL),\n    (2, N'Phòng Phần mềm nước ngoài', NULL, NULL),\n    (3, N'Phòng Kinh doanh',          NULL, NULL),\n    (4, N'Phòng Hành chính',          NULL, NULL),\n    (5, N'Phòng Nghiên cứu',          NULL, NULL);\n\nINSERT INTO tblEmployee (empSSN, empName, empAddress, empSalary, empSex, empBirthdate, depNum, supervisorSSN) VALUES\n    (30121050001, N'Trần Minh Quang', N'45 Nguyễn Huệ, Q.1, TP Hồ Chí Minh',     150000, 'M', '1968-03-12', 1, NULL),\n    (30121050002, N'Hoàng Thị Hà',    N'12 Lê Lợi, Q.1, TP Hồ Chí Minh',         90000,  'F', '1985-07-20', 1, 30121050001),\n    (30121050010, N'Phạm Quốc Bảo',   N'102 Kim Mã, Ba Đình, TP Hà Nội',         95000,  'M', '1978-09-09', 2, 30121050001),\n    (30121050020, N'Nguyễn Thị Mai',  N'60 Bạch Đằng, Hải Châu, TP Đà Nẵng',     88000,  'F', '1980-06-25', 3, 30121050001),\n    (30121050030, N'Huỳnh Văn Tài',   N'9 Võ Văn Tần, Q.3, TP Hồ Chí Minh',      70000,  'M', '1975-10-10', 4, 30121050001),\n    (30121050037, N'Lý Thanh Tâm',    N'77 Hùng Vương, Hải Châu, TP Đà Nẵng',    65000,  'F', '1983-03-03', 5, 30121050001),\n    (30121050003, N'Võ Việt Anh',     N'88 Trần Hưng Đạo, Q.5, TP Hồ Chí Minh',  60000,  'M', '1990-11-02', 1, 30121050002),\n    (30121050004, N'Lê Thị Lan Anh',  N'21 Pasteur, Q.3, TP Hồ Chí Minh',        45000,  'F', '1995-01-15', 1, 30121050002),\n    (30121050005, N'Mai Duy An',      N'7 Hàng Bài, Hoàn Kiếm, TP Hà Nội',       55000,  'M', '1992-05-30', 2, 30121050010),\n    (30121050011, N'Hồ Ngọc Hân',     N'33 Cầu Giấy, TP Hà Nội',                 72000,  'F', '1988-12-01', 2, 30121050010),\n    (30121050012, N'Đặng Tuấn Anh',   N'5 Láng Hạ, Đống Đa, TP Hà Nội',          105000, 'M', '1970-04-18', 2, 30121050010),\n    (30121050021, N'Bùi Văn Nam',     NULL,                                      40000,  'M', '1998-02-14', 3, 30121050020),\n    (30121050027, N'Trương Thị Thu',  N'14 Nguyễn Văn Linh, TP Đà Nẵng',         52000,  'F', '1993-08-08', 3, 30121050020),\n    (30121050038, N'Phan Hữu Nghĩa',  N'3 Lý Thường Kiệt, TP Hà Nội',            38000,  'M', NULL,         5, 30121050037);\n\nUPDATE tblDepartment SET mgrSSN = 30121050001, mgrAssDate = '2015-01-01' WHERE depNum = 1;\nUPDATE tblDepartment SET mgrSSN = 30121050010, mgrAssDate = '2018-06-15' WHERE depNum = 2;\nUPDATE tblDepartment SET mgrSSN = 30121050020, mgrAssDate = '2019-03-01' WHERE depNum = 3;\nUPDATE tblDepartment SET mgrSSN = 30121050030, mgrAssDate = '2020-09-01' WHERE depNum = 4;\nUPDATE tblDepartment SET mgrSSN = 30121050037, mgrAssDate = '2022-01-10' WHERE depNum = 5;\n\nINSERT INTO tblDepLocation (depNum, locNum) VALUES\n    (1, 1), (1, 2),\n    (2, 1), (2, 2),\n    (3, 2), (3, 3),\n    (4, 1),\n    (5, 3);\n\nINSERT INTO tblProject (proNum, proName, locNum, depNum) VALUES\n    (1, N'ProjectA', 1, 1),\n    (2, N'ProjectB', 2, 1),\n    (3, N'ProjectC', 1, 2),\n    (4, N'ProjectD', 2, 2),\n    (5, N'ProjectE', 3, 3),\n    (6, N'ProjectF', 2, 4);\n\nINSERT INTO tblWorksOn (empSSN, proNum, workHours) VALUES\n    (30121050001, 1, 10.0),\n    (30121050002, 1, 20.0),\n    (30121050003, 1, 30.0),\n    (30121050003, 2, 12.5),\n    (30121050004, 2, 35.0),\n    (30121050005, 2, 20.0),\n    (30121050003, 3, 10.0),\n    (30121050005, 3, 25.0),\n    (30121050011, 3, 30.0),\n    (30121050012, 3, 15.0),\n    (30121050010, 4, 30.0),\n    (30121050012, 4, 20.0),\n    (30121050020, 5, 15.0),\n    (30121050021, 5, 40.0),\n    (30121050027, 5, 30.0),\n    (30121050030, 6, 40.0);\n\nINSERT INTO tblDependent (depName, empSSN, depSex, depBirthdate, depRelationship) VALUES\n    (N'Phạm Thị Hoa',     30121050001, 'F', '1970-01-20', N'Vợ'),\n    (N'Trần Minh Khang',  30121050001, 'M', '2000-05-05', N'Con trai'),\n    (N'Nguyễn Văn Bình',  30121050002, 'M', '1983-09-12', N'Chồng'),\n    (N'Phạm Gia Huy',     30121050010, 'M', '2010-02-02', N'Con trai'),\n    (N'Trương Minh Châu', 30121050027, 'F', '2020-07-07', N'Con gái');\n",
+        "tepChinh": "Q1.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Q1 · staff in TP Hồ Chí Minh",
+            "thuTu": true,
+            "tep": "Q1.sql",
+            "nhom": "f1",
+            "mongDoi": {
+              "cot": [
+                "empSSN",
+                "empName",
+                "empAddress"
+              ],
+              "hang": [
+                [
+                  30121050001,
+                  "Trần Minh Quang",
+                  "45 Nguyễn Huệ, Q.1, TP Hồ Chí Minh"
+                ],
+                [
+                  30121050002,
+                  "Hoàng Thị Hà",
+                  "12 Lê Lợi, Q.1, TP Hồ Chí Minh"
+                ],
+                [
+                  30121050003,
+                  "Võ Việt Anh",
+                  "88 Trần Hưng Đạo, Q.5, TP Hồ Chí Minh"
+                ],
+                [
+                  30121050004,
+                  "Lê Thị Lan Anh",
+                  "21 Pasteur, Q.3, TP Hồ Chí Minh"
+                ],
+                [
+                  30121050030,
+                  "Huỳnh Văn Tài",
+                  "9 Võ Văn Tần, Q.3, TP Hồ Chí Minh"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Q1 · new staff",
+            "an": true,
+            "themCsdl": "INSERT INTO tblDepartment (depNum, depName, mgrSSN, mgrAssDate) VALUES (6, N'Phòng Đào tạo', 30121050012, '2026-01-01');\nINSERT INTO tblEmployee (empSSN, empName, empAddress, empSalary, empSex, empBirthdate, depNum, supervisorSSN) VALUES\n (30121050095, N'Ngô Bảo Châu', N'5 Điện Biên Phủ, Q.3, TP Hồ Chí Minh', 39000, 'M', '1987-02-02', 6, 30121050012),\n (30121050096, N'Đinh Thị Hoa', N'18 Lý Tự Trọng, TP Hồ Chí Minh', 38000, 'F', '1989-12-31', 5, 30121050037),\n (30121050097, N'Lạc Văn Phúc', NULL, 70000, 'M', '1980-01-01', 4, 30121050030);\nINSERT INTO tblProject (proNum, proName, locNum, depNum) VALUES (7, N'ProjectG', 4, 6), (8, N'ProjectH', 3, 4);\nINSERT INTO tblWorksOn (empSSN, proNum, workHours) VALUES (30121050095, 7, 20.0), (30121050097, 6, 12.0), (30121050097, 8, 9.0), (30121050030, 8, 3.0), (30121050004, 1, 6.0)",
+            "thuTu": true,
+            "tep": "Q1.sql",
+            "nhom": "f1",
+            "mongDoi": {
+              "cot": [
+                "empSSN",
+                "empName",
+                "empAddress"
+              ],
+              "hang": [
+                [
+                  30121050001,
+                  "Trần Minh Quang",
+                  "45 Nguyễn Huệ, Q.1, TP Hồ Chí Minh"
+                ],
+                [
+                  30121050002,
+                  "Hoàng Thị Hà",
+                  "12 Lê Lợi, Q.1, TP Hồ Chí Minh"
+                ],
+                [
+                  30121050003,
+                  "Võ Việt Anh",
+                  "88 Trần Hưng Đạo, Q.5, TP Hồ Chí Minh"
+                ],
+                [
+                  30121050004,
+                  "Lê Thị Lan Anh",
+                  "21 Pasteur, Q.3, TP Hồ Chí Minh"
+                ],
+                [
+                  30121050030,
+                  "Huỳnh Văn Tài",
+                  "9 Võ Văn Tần, Q.3, TP Hồ Chí Minh"
+                ],
+                [
+                  30121050095,
+                  "Ngô Bảo Châu",
+                  "5 Điện Biên Phủ, Q.3, TP Hồ Chí Minh"
+                ],
+                [
+                  30121050096,
+                  "Đinh Thị Hoa",
+                  "18 Lý Tự Trọng, TP Hồ Chí Minh"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Q2 · project directory",
+            "thuTu": true,
+            "tep": "Q2.sql",
+            "nhom": "f2",
+            "mongDoi": {
+              "cot": [
+                "proNum",
+                "proName",
+                "depName",
+                "locName"
+              ],
+              "hang": [
+                [
+                  1,
+                  "ProjectA",
+                  "Phòng Phần mềm trong nước",
+                  "TP Hà Nội"
+                ],
+                [
+                  2,
+                  "ProjectB",
+                  "Phòng Phần mềm trong nước",
+                  "TP Hồ Chí Minh"
+                ],
+                [
+                  3,
+                  "ProjectC",
+                  "Phòng Phần mềm nước ngoài",
+                  "TP Hà Nội"
+                ],
+                [
+                  4,
+                  "ProjectD",
+                  "Phòng Phần mềm nước ngoài",
+                  "TP Hồ Chí Minh"
+                ],
+                [
+                  5,
+                  "ProjectE",
+                  "Phòng Kinh doanh",
+                  "TP Đà Nẵng"
+                ],
+                [
+                  6,
+                  "ProjectF",
+                  "Phòng Hành chính",
+                  "TP Hồ Chí Minh"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Q2 · new projects",
+            "an": true,
+            "themCsdl": "INSERT INTO tblDepartment (depNum, depName, mgrSSN, mgrAssDate) VALUES (6, N'Phòng Đào tạo', 30121050012, '2026-01-01');\nINSERT INTO tblEmployee (empSSN, empName, empAddress, empSalary, empSex, empBirthdate, depNum, supervisorSSN) VALUES\n (30121050095, N'Ngô Bảo Châu', N'5 Điện Biên Phủ, Q.3, TP Hồ Chí Minh', 39000, 'M', '1987-02-02', 6, 30121050012),\n (30121050096, N'Đinh Thị Hoa', N'18 Lý Tự Trọng, TP Hồ Chí Minh', 38000, 'F', '1989-12-31', 5, 30121050037),\n (30121050097, N'Lạc Văn Phúc', NULL, 70000, 'M', '1980-01-01', 4, 30121050030);\nINSERT INTO tblProject (proNum, proName, locNum, depNum) VALUES (7, N'ProjectG', 4, 6), (8, N'ProjectH', 3, 4);\nINSERT INTO tblWorksOn (empSSN, proNum, workHours) VALUES (30121050095, 7, 20.0), (30121050097, 6, 12.0), (30121050097, 8, 9.0), (30121050030, 8, 3.0), (30121050004, 1, 6.0)",
+            "thuTu": true,
+            "tep": "Q2.sql",
+            "nhom": "f2",
+            "mongDoi": {
+              "cot": [
+                "proNum",
+                "proName",
+                "depName",
+                "locName"
+              ],
+              "hang": [
+                [
+                  1,
+                  "ProjectA",
+                  "Phòng Phần mềm trong nước",
+                  "TP Hà Nội"
+                ],
+                [
+                  2,
+                  "ProjectB",
+                  "Phòng Phần mềm trong nước",
+                  "TP Hồ Chí Minh"
+                ],
+                [
+                  3,
+                  "ProjectC",
+                  "Phòng Phần mềm nước ngoài",
+                  "TP Hà Nội"
+                ],
+                [
+                  4,
+                  "ProjectD",
+                  "Phòng Phần mềm nước ngoài",
+                  "TP Hồ Chí Minh"
+                ],
+                [
+                  5,
+                  "ProjectE",
+                  "Phòng Kinh doanh",
+                  "TP Đà Nẵng"
+                ],
+                [
+                  6,
+                  "ProjectF",
+                  "Phòng Hành chính",
+                  "TP Hồ Chí Minh"
+                ],
+                [
+                  7,
+                  "ProjectG",
+                  "Phòng Đào tạo",
+                  "TP Cần Thơ"
+                ],
+                [
+                  8,
+                  "ProjectH",
+                  "Phòng Hành chính",
+                  "TP Đà Nẵng"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Q3 · projects per location",
+            "thuTu": true,
+            "tep": "Q3.sql",
+            "nhom": "f3",
+            "mongDoi": {
+              "cot": [
+                "locNum",
+                "locName",
+                "NumProjects"
+              ],
+              "hang": [
+                [
+                  1,
+                  "TP Hà Nội",
+                  2
+                ],
+                [
+                  2,
+                  "TP Hồ Chí Minh",
+                  3
+                ],
+                [
+                  3,
+                  "TP Đà Nẵng",
+                  1
+                ],
+                [
+                  4,
+                  "TP Cần Thơ",
+                  0
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Q3 · after new projects",
+            "an": true,
+            "themCsdl": "INSERT INTO tblDepartment (depNum, depName, mgrSSN, mgrAssDate) VALUES (6, N'Phòng Đào tạo', 30121050012, '2026-01-01');\nINSERT INTO tblEmployee (empSSN, empName, empAddress, empSalary, empSex, empBirthdate, depNum, supervisorSSN) VALUES\n (30121050095, N'Ngô Bảo Châu', N'5 Điện Biên Phủ, Q.3, TP Hồ Chí Minh', 39000, 'M', '1987-02-02', 6, 30121050012),\n (30121050096, N'Đinh Thị Hoa', N'18 Lý Tự Trọng, TP Hồ Chí Minh', 38000, 'F', '1989-12-31', 5, 30121050037),\n (30121050097, N'Lạc Văn Phúc', NULL, 70000, 'M', '1980-01-01', 4, 30121050030);\nINSERT INTO tblProject (proNum, proName, locNum, depNum) VALUES (7, N'ProjectG', 4, 6), (8, N'ProjectH', 3, 4);\nINSERT INTO tblWorksOn (empSSN, proNum, workHours) VALUES (30121050095, 7, 20.0), (30121050097, 6, 12.0), (30121050097, 8, 9.0), (30121050030, 8, 3.0), (30121050004, 1, 6.0)",
+            "thuTu": true,
+            "tep": "Q3.sql",
+            "nhom": "f3",
+            "mongDoi": {
+              "cot": [
+                "locNum",
+                "locName",
+                "NumProjects"
+              ],
+              "hang": [
+                [
+                  1,
+                  "TP Hà Nội",
+                  2
+                ],
+                [
+                  2,
+                  "TP Hồ Chí Minh",
+                  3
+                ],
+                [
+                  3,
+                  "TP Đà Nẵng",
+                  2
+                ],
+                [
+                  4,
+                  "TP Cần Thơ",
+                  1
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Q4 · born in the 1980s",
+            "thuTu": true,
+            "tep": "Q4.sql",
+            "nhom": "f4",
+            "mongDoi": {
+              "cot": [
+                "empSSN",
+                "empName",
+                "empBirthdate",
+                "depName"
+              ],
+              "hang": [
+                [
+                  30121050020,
+                  "Nguyễn Thị Mai",
+                  "1980-06-25",
+                  "Phòng Kinh doanh"
+                ],
+                [
+                  30121050037,
+                  "Lý Thanh Tâm",
+                  "1983-03-03",
+                  "Phòng Nghiên cứu"
+                ],
+                [
+                  30121050002,
+                  "Hoàng Thị Hà",
+                  "1985-07-20",
+                  "Phòng Phần mềm trong nước"
+                ],
+                [
+                  30121050011,
+                  "Hồ Ngọc Hân",
+                  "1988-12-01",
+                  "Phòng Phần mềm nước ngoài"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Q4 · with new staff",
+            "an": true,
+            "themCsdl": "INSERT INTO tblDepartment (depNum, depName, mgrSSN, mgrAssDate) VALUES (6, N'Phòng Đào tạo', 30121050012, '2026-01-01');\nINSERT INTO tblEmployee (empSSN, empName, empAddress, empSalary, empSex, empBirthdate, depNum, supervisorSSN) VALUES\n (30121050095, N'Ngô Bảo Châu', N'5 Điện Biên Phủ, Q.3, TP Hồ Chí Minh', 39000, 'M', '1987-02-02', 6, 30121050012),\n (30121050096, N'Đinh Thị Hoa', N'18 Lý Tự Trọng, TP Hồ Chí Minh', 38000, 'F', '1989-12-31', 5, 30121050037),\n (30121050097, N'Lạc Văn Phúc', NULL, 70000, 'M', '1980-01-01', 4, 30121050030);\nINSERT INTO tblProject (proNum, proName, locNum, depNum) VALUES (7, N'ProjectG', 4, 6), (8, N'ProjectH', 3, 4);\nINSERT INTO tblWorksOn (empSSN, proNum, workHours) VALUES (30121050095, 7, 20.0), (30121050097, 6, 12.0), (30121050097, 8, 9.0), (30121050030, 8, 3.0), (30121050004, 1, 6.0)",
+            "thuTu": true,
+            "tep": "Q4.sql",
+            "nhom": "f4",
+            "mongDoi": {
+              "cot": [
+                "empSSN",
+                "empName",
+                "empBirthdate",
+                "depName"
+              ],
+              "hang": [
+                [
+                  30121050097,
+                  "Lạc Văn Phúc",
+                  "1980-01-01",
+                  "Phòng Hành chính"
+                ],
+                [
+                  30121050020,
+                  "Nguyễn Thị Mai",
+                  "1980-06-25",
+                  "Phòng Kinh doanh"
+                ],
+                [
+                  30121050037,
+                  "Lý Thanh Tâm",
+                  "1983-03-03",
+                  "Phòng Nghiên cứu"
+                ],
+                [
+                  30121050002,
+                  "Hoàng Thị Hà",
+                  "1985-07-20",
+                  "Phòng Phần mềm trong nước"
+                ],
+                [
+                  30121050095,
+                  "Ngô Bảo Châu",
+                  "1987-02-02",
+                  "Phòng Đào tạo"
+                ],
+                [
+                  30121050011,
+                  "Hồ Ngọc Hân",
+                  "1988-12-01",
+                  "Phòng Phần mềm nước ngoài"
+                ],
+                [
+                  30121050096,
+                  "Đinh Thị Hoa",
+                  "1989-12-31",
+                  "Phòng Nghiên cứu"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Q5 · busy projects",
+            "thuTu": true,
+            "tep": "Q5.sql",
+            "nhom": "f5",
+            "mongDoi": {
+              "cot": [
+                "proNum",
+                "proName",
+                "NumStaff",
+                "TotalHours"
+              ],
+              "hang": [
+                [
+                  5,
+                  "ProjectE",
+                  3,
+                  85
+                ],
+                [
+                  3,
+                  "ProjectC",
+                  4,
+                  80
+                ],
+                [
+                  2,
+                  "ProjectB",
+                  3,
+                  67.5
+                ],
+                [
+                  1,
+                  "ProjectA",
+                  3,
+                  60
+                ],
+                [
+                  4,
+                  "ProjectD",
+                  2,
+                  50
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Q5 · after new assignments",
+            "an": true,
+            "themCsdl": "INSERT INTO tblDepartment (depNum, depName, mgrSSN, mgrAssDate) VALUES (6, N'Phòng Đào tạo', 30121050012, '2026-01-01');\nINSERT INTO tblEmployee (empSSN, empName, empAddress, empSalary, empSex, empBirthdate, depNum, supervisorSSN) VALUES\n (30121050095, N'Ngô Bảo Châu', N'5 Điện Biên Phủ, Q.3, TP Hồ Chí Minh', 39000, 'M', '1987-02-02', 6, 30121050012),\n (30121050096, N'Đinh Thị Hoa', N'18 Lý Tự Trọng, TP Hồ Chí Minh', 38000, 'F', '1989-12-31', 5, 30121050037),\n (30121050097, N'Lạc Văn Phúc', NULL, 70000, 'M', '1980-01-01', 4, 30121050030);\nINSERT INTO tblProject (proNum, proName, locNum, depNum) VALUES (7, N'ProjectG', 4, 6), (8, N'ProjectH', 3, 4);\nINSERT INTO tblWorksOn (empSSN, proNum, workHours) VALUES (30121050095, 7, 20.0), (30121050097, 6, 12.0), (30121050097, 8, 9.0), (30121050030, 8, 3.0), (30121050004, 1, 6.0)",
+            "thuTu": true,
+            "tep": "Q5.sql",
+            "nhom": "f5",
+            "mongDoi": {
+              "cot": [
+                "proNum",
+                "proName",
+                "NumStaff",
+                "TotalHours"
+              ],
+              "hang": [
+                [
+                  5,
+                  "ProjectE",
+                  3,
+                  85
+                ],
+                [
+                  3,
+                  "ProjectC",
+                  4,
+                  80
+                ],
+                [
+                  2,
+                  "ProjectB",
+                  3,
+                  67.5
+                ],
+                [
+                  1,
+                  "ProjectA",
+                  4,
+                  66
+                ],
+                [
+                  6,
+                  "ProjectF",
+                  2,
+                  52
+                ],
+                [
+                  4,
+                  "ProjectD",
+                  2,
+                  50
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Q6 · managers and headcount",
+            "thuTu": true,
+            "tep": "Q6.sql",
+            "nhom": "f6",
+            "mongDoi": {
+              "cot": [
+                "depNum",
+                "depName",
+                "ManagerName",
+                "NumEmployees"
+              ],
+              "hang": [
+                [
+                  1,
+                  "Phòng Phần mềm trong nước",
+                  "Trần Minh Quang",
+                  4
+                ],
+                [
+                  2,
+                  "Phòng Phần mềm nước ngoài",
+                  "Phạm Quốc Bảo",
+                  4
+                ],
+                [
+                  3,
+                  "Phòng Kinh doanh",
+                  "Nguyễn Thị Mai",
+                  3
+                ],
+                [
+                  4,
+                  "Phòng Hành chính",
+                  "Huỳnh Văn Tài",
+                  1
+                ],
+                [
+                  5,
+                  "Phòng Nghiên cứu",
+                  "Lý Thanh Tâm",
+                  2
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Q6 · new department",
+            "an": true,
+            "themCsdl": "INSERT INTO tblDepartment (depNum, depName, mgrSSN, mgrAssDate) VALUES (6, N'Phòng Đào tạo', 30121050012, '2026-01-01');\nINSERT INTO tblEmployee (empSSN, empName, empAddress, empSalary, empSex, empBirthdate, depNum, supervisorSSN) VALUES\n (30121050095, N'Ngô Bảo Châu', N'5 Điện Biên Phủ, Q.3, TP Hồ Chí Minh', 39000, 'M', '1987-02-02', 6, 30121050012),\n (30121050096, N'Đinh Thị Hoa', N'18 Lý Tự Trọng, TP Hồ Chí Minh', 38000, 'F', '1989-12-31', 5, 30121050037),\n (30121050097, N'Lạc Văn Phúc', NULL, 70000, 'M', '1980-01-01', 4, 30121050030);\nINSERT INTO tblProject (proNum, proName, locNum, depNum) VALUES (7, N'ProjectG', 4, 6), (8, N'ProjectH', 3, 4);\nINSERT INTO tblWorksOn (empSSN, proNum, workHours) VALUES (30121050095, 7, 20.0), (30121050097, 6, 12.0), (30121050097, 8, 9.0), (30121050030, 8, 3.0), (30121050004, 1, 6.0)",
+            "thuTu": true,
+            "tep": "Q6.sql",
+            "nhom": "f6",
+            "mongDoi": {
+              "cot": [
+                "depNum",
+                "depName",
+                "ManagerName",
+                "NumEmployees"
+              ],
+              "hang": [
+                [
+                  1,
+                  "Phòng Phần mềm trong nước",
+                  "Trần Minh Quang",
+                  4
+                ],
+                [
+                  2,
+                  "Phòng Phần mềm nước ngoài",
+                  "Phạm Quốc Bảo",
+                  4
+                ],
+                [
+                  3,
+                  "Phòng Kinh doanh",
+                  "Nguyễn Thị Mai",
+                  3
+                ],
+                [
+                  4,
+                  "Phòng Hành chính",
+                  "Huỳnh Văn Tài",
+                  2
+                ],
+                [
+                  5,
+                  "Phòng Nghiên cứu",
+                  "Lý Thanh Tâm",
+                  3
+                ],
+                [
+                  6,
+                  "Phòng Đào tạo",
+                  "Đặng Tuấn Anh",
+                  1
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Q7 · relational division",
+            "thuTu": true,
+            "tep": "Q7.sql",
+            "nhom": "f7",
+            "mongDoi": {
+              "cot": [
+                "empSSN",
+                "empName",
+                "depNum"
+              ],
+              "hang": [
+                [
+                  30121050003,
+                  "Võ Việt Anh",
+                  1
+                ],
+                [
+                  30121050012,
+                  "Đặng Tuấn Anh",
+                  2
+                ],
+                [
+                  30121050020,
+                  "Nguyễn Thị Mai",
+                  3
+                ],
+                [
+                  30121050021,
+                  "Bùi Văn Nam",
+                  3
+                ],
+                [
+                  30121050027,
+                  "Trương Thị Thu",
+                  3
+                ],
+                [
+                  30121050030,
+                  "Huỳnh Văn Tài",
+                  4
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Q7 · new projects change the divisor",
+            "an": true,
+            "themCsdl": "INSERT INTO tblDepartment (depNum, depName, mgrSSN, mgrAssDate) VALUES (6, N'Phòng Đào tạo', 30121050012, '2026-01-01');\nINSERT INTO tblEmployee (empSSN, empName, empAddress, empSalary, empSex, empBirthdate, depNum, supervisorSSN) VALUES\n (30121050095, N'Ngô Bảo Châu', N'5 Điện Biên Phủ, Q.3, TP Hồ Chí Minh', 39000, 'M', '1987-02-02', 6, 30121050012),\n (30121050096, N'Đinh Thị Hoa', N'18 Lý Tự Trọng, TP Hồ Chí Minh', 38000, 'F', '1989-12-31', 5, 30121050037),\n (30121050097, N'Lạc Văn Phúc', NULL, 70000, 'M', '1980-01-01', 4, 30121050030);\nINSERT INTO tblProject (proNum, proName, locNum, depNum) VALUES (7, N'ProjectG', 4, 6), (8, N'ProjectH', 3, 4);\nINSERT INTO tblWorksOn (empSSN, proNum, workHours) VALUES (30121050095, 7, 20.0), (30121050097, 6, 12.0), (30121050097, 8, 9.0), (30121050030, 8, 3.0), (30121050004, 1, 6.0)",
+            "thuTu": true,
+            "tep": "Q7.sql",
+            "nhom": "f7",
+            "mongDoi": {
+              "cot": [
+                "empSSN",
+                "empName",
+                "depNum"
+              ],
+              "hang": [
+                [
+                  30121050003,
+                  "Võ Việt Anh",
+                  1
+                ],
+                [
+                  30121050004,
+                  "Lê Thị Lan Anh",
+                  1
+                ],
+                [
+                  30121050012,
+                  "Đặng Tuấn Anh",
+                  2
+                ],
+                [
+                  30121050020,
+                  "Nguyễn Thị Mai",
+                  3
+                ],
+                [
+                  30121050021,
+                  "Bùi Văn Nam",
+                  3
+                ],
+                [
+                  30121050027,
+                  "Trương Thị Thu",
+                  3
+                ],
+                [
+                  30121050030,
+                  "Huỳnh Văn Tài",
+                  4
+                ],
+                [
+                  30121050095,
+                  "Ngô Bảo Châu",
+                  6
+                ],
+                [
+                  30121050097,
+                  "Lạc Văn Phúc",
+                  4
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Q8 · lowest paid per department",
+            "thuTu": true,
+            "tep": "Q8.sql",
+            "nhom": "f8",
+            "mongDoi": {
+              "cot": [
+                "depNum",
+                "empSSN",
+                "empName",
+                "empSalary"
+              ],
+              "hang": [
+                [
+                  1,
+                  30121050004,
+                  "Lê Thị Lan Anh",
+                  45000
+                ],
+                [
+                  2,
+                  30121050005,
+                  "Mai Duy An",
+                  55000
+                ],
+                [
+                  3,
+                  30121050021,
+                  "Bùi Văn Nam",
+                  40000
+                ],
+                [
+                  4,
+                  30121050030,
+                  "Huỳnh Văn Tài",
+                  70000
+                ],
+                [
+                  5,
+                  30121050038,
+                  "Phan Hữu Nghĩa",
+                  38000
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Q8 · with a tie",
+            "an": true,
+            "themCsdl": "INSERT INTO tblDepartment (depNum, depName, mgrSSN, mgrAssDate) VALUES (6, N'Phòng Đào tạo', 30121050012, '2026-01-01');\nINSERT INTO tblEmployee (empSSN, empName, empAddress, empSalary, empSex, empBirthdate, depNum, supervisorSSN) VALUES\n (30121050095, N'Ngô Bảo Châu', N'5 Điện Biên Phủ, Q.3, TP Hồ Chí Minh', 39000, 'M', '1987-02-02', 6, 30121050012),\n (30121050096, N'Đinh Thị Hoa', N'18 Lý Tự Trọng, TP Hồ Chí Minh', 38000, 'F', '1989-12-31', 5, 30121050037),\n (30121050097, N'Lạc Văn Phúc', NULL, 70000, 'M', '1980-01-01', 4, 30121050030);\nINSERT INTO tblProject (proNum, proName, locNum, depNum) VALUES (7, N'ProjectG', 4, 6), (8, N'ProjectH', 3, 4);\nINSERT INTO tblWorksOn (empSSN, proNum, workHours) VALUES (30121050095, 7, 20.0), (30121050097, 6, 12.0), (30121050097, 8, 9.0), (30121050030, 8, 3.0), (30121050004, 1, 6.0);\nINSERT INTO tblEmployee (empSSN, empName, empSalary, empSex, depNum) VALUES (30121050098, N'Mạc Thị Na', 40000, 'F', 3)",
+            "thuTu": true,
+            "tep": "Q8.sql",
+            "nhom": "f8",
+            "mongDoi": {
+              "cot": [
+                "depNum",
+                "empSSN",
+                "empName",
+                "empSalary"
+              ],
+              "hang": [
+                [
+                  1,
+                  30121050004,
+                  "Lê Thị Lan Anh",
+                  45000
+                ],
+                [
+                  2,
+                  30121050005,
+                  "Mai Duy An",
+                  55000
+                ],
+                [
+                  3,
+                  30121050021,
+                  "Bùi Văn Nam",
+                  40000
+                ],
+                [
+                  3,
+                  30121050098,
+                  "Mạc Thị Na",
+                  40000
+                ],
+                [
+                  4,
+                  30121050030,
+                  "Huỳnh Văn Tài",
+                  70000
+                ],
+                [
+                  4,
+                  30121050097,
+                  "Lạc Văn Phúc",
+                  70000
+                ],
+                [
+                  5,
+                  30121050038,
+                  "Phan Hữu Nghĩa",
+                  38000
+                ],
+                [
+                  5,
+                  30121050096,
+                  "Đinh Thị Hoa",
+                  38000
+                ],
+                [
+                  6,
+                  30121050095,
+                  "Ngô Bảo Châu",
+                  39000
+                ]
+              ]
+            }
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. Staff living in TP Hồ Chí Minh",
+            "diem": 1.25
+          },
+          {
+            "ma": "f2",
+            "ten": "2. Project directory",
+            "diem": 1.25
+          },
+          {
+            "ma": "f3",
+            "ten": "3. Projects per location, including empty locations",
+            "diem": 1.25
+          },
+          {
+            "ma": "f4",
+            "ten": "4. Born in the 1980s",
+            "diem": 1.25
+          },
+          {
+            "ma": "f5",
+            "ten": "5. Busy projects",
+            "diem": 1.25
+          },
+          {
+            "ma": "f6",
+            "ten": "6. Departments and their managers",
+            "diem": 1.25
+          },
+          {
+            "ma": "f7",
+            "ten": "7. All projects of their own department (division)",
+            "diem": 1.25
+          },
+          {
+            "ma": "f8",
+            "ten": "8. Lowest paid of each department",
+            "diem": 1.25
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Q3 with COUNT(*) — empty locations show 1 instead of 0.|||Q3 dùng COUNT(*) — địa điểm trống hiện 1 thay vì 0."
+        },
+        {
+          "loi": "Q6 counting employees via a second JOIN with GROUP BY on the manager — the count mixes up subordinates and department members.|||Q6 đếm nhân viên qua phép nối thứ hai gộp theo trưởng phòng — đếm lẫn cấp dưới với thành viên phòng."
+        },
+        {
+          "loi": "Q7 with one NOT EXISTS only — employees of a department WITHOUT projects (department 5) qualify \"vacuously\".|||Q7 chỉ một tầng NOT EXISTS — nhân viên phòng KHÔNG có dự án (phòng 5) \"thoả\" một cách rỗng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "LEFT (OUTER) JOIN",
+          "vi": "nối ngoài trái",
+          "giaiThich": "Giữ MỌI dòng bảng trái; không có cặp ⇒ cột bảng phải là NULL."
+        },
+        {
+          "en": "HAVING",
+          "vi": "điều kiện trên nhóm",
+          "giaiThich": "Lọc NHÓM sau khi gộp (dùng được hàm gộp); WHERE lọc dòng trước khi gộp."
+        },
+        {
+          "en": "relational division",
+          "vi": "phép chia quan hệ (\"làm MỌI …\")"
+        },
+        {
+          "en": "correlated subquery",
+          "vi": "truy vấn con tương quan",
+          "giaiThich": "Truy vấn con tham chiếu cột của câu ngoài ⇒ chạy lại cho từng dòng ngoài."
+        },
+        {
+          "en": "EXISTS / NOT EXISTS",
+          "vi": "có tồn tại / không tồn tại",
+          "giaiThich": "Đúng khi truy vấn con trả ≥ 1 dòng; an toàn với NULL hơn NOT IN."
+        }
+      ]
+    }
+  ]
+}

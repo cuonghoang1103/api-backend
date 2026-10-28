@@ -1,0 +1,1280 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-9-pe-1-ct-rent",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-on-pe"
+  },
+  "exercises": [
+    {
+      "title": "PE 1 — CT Rent car-rental database (practice paper)",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 85,
+      "points": 100,
+      "concepts": [
+        "ERD → tables",
+        "LIKE",
+        "joins",
+        "outer join",
+        "COUNT DISTINCT",
+        "maximum per group",
+        "double maximum",
+        "VIEW",
+        "UPDATE with subquery",
+        "INSERT … SELECT"
+      ],
+      "prerequisites": [
+        "the whole 6.x part of this track"
+      ],
+      "tags": [
+        "dbi202",
+        "pe",
+        "sql",
+        "exam-practice"
+      ],
+      "problemHtml": "<h1>PE 1 — CT Rent car-rental database (practice paper)</h1>\n<p class=\"bi-phu\">DBI202 · Practical Exam practice · 85 minutes · 10 questions × 1 mark · format of the SP26 papers</p>\n<h2>1. Overview</h2>\n<p>CT Rent is a self-drive car-rental company with branches in Hà Nội, Hồ Chí Minh and Đà Nẵng. Its database (script <code>DBscript.sql</code>) stores branches, car models, cars, customers and rentals. Question 1 is independent: build tables from the ERD below. Questions 2–10 use the CT Rent database.</p>\n<p><b>ERD for Question 1</b></p><pre>\n ┌──────────────────────────────┐            ┌──────────────────────────┐\n │ Doctor                        │            │ Patient                   │\n │  DoctorID   INT  (key)        │            │  PatientID  INT  (key)    │\n │  FullName   VARCHAR(50)       │ ──&lt; Treats &gt;──  FullName   VARCHAR(50) │\n │  Specialty  VARCHAR(50)       │   (M : N)  │  BirthDate  DATE          │\n │ {Phone}     VARCHAR(15)       │            └──────────────────────────┘\n └──────────────────────────────┘\n   {Phone} = multi-valued attribute\n   Treats attributes: VisitDate DATE (part of the key — a doctor may treat the same patient on many days),\n                      Diagnosis VARCHAR(200)</pre>\n<p>⚠ The real SP26 papers ask for a <b>function</b>, a <b>trigger</b> or a <b>procedure</b> in Q8–Q9 (T-SQL). This in-browser grader runs PostgreSQL, so here Q8 is a <b>VIEW</b> and Q9 an <b>UPDATE</b>; practise the T-SQL questions on the real papers in the Exam Room (a SQL Server grader is coming).</p>\n<h3>General requirements</h3>\n<ul>\n  <li>One file per question (Q1.sql … Q10.sql) containing ONLY the statement(s) that answer it — no USE, no GO, no test commands (same rule as the real PE).</li>\n  <li>Column names/aliases and order exactly as asked. Row order matters only when the question says \"order by\".</li>\n  <li>Portable SQL only (SQL Server + PostgreSQL): no TOP/LIMIT, ISNULL, YEAR(), GETDATE(), ILIKE, ::. Use COALESCE, date ranges, OFFSET … FETCH.</li>\n  <li>Q1 types: INT for ids, VARCHAR(50) for names/specialty, VARCHAR(15) for phone, DATE, VARCHAR(200) for diagnosis (the real PE would use NVARCHAR).</li>\n</ul>\n<h2>2. Submission files</h2>\n<pre>RollNo_Name_DBI202_PE1/\n├── Q1.sql    -- Create the tables of the ERD (1 mark)\n├── Q2.sql    -- Customers with an FPT University email (1 mark)\n├── Q3.sql    -- Toyota cars at Hà Nội branches (1 mark)\n├── Q4.sql    -- 2025 members and their 2025 rentals (1 mark)\n├── Q5.sql    -- Cars and customers per branch (1 mark)\n├── Q6.sql    -- Most rented model of each brand (1 mark)\n├── Q7.sql    -- Top customers of each city — by money AND by number of rentals (1 mark)\n├── Q8.sql    -- View of open rentals (1 mark)\n├── Q9.sql    -- Send heavily used cars to maintenance (1 mark)\n├── Q10.sql    -- Fill the loyalty table (1 mark)</pre>\n<h2>3. Data model</h2>\n<p><b>Branches</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>BranchID</code></td><td>INT</td><td>PK</td></tr><tr><td><code>BranchName</code></td><td>NVARCHAR(50)</td><td></td></tr><tr><td><code>City</code></td><td>NVARCHAR(30)</td><td></td></tr></tbody></table>\n<p><b>CarModels</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>ModelID</code></td><td>INT</td><td>PK</td></tr><tr><td><code>Brand</code></td><td>NVARCHAR(30)</td><td>Toyota, Honda, Hyundai…</td></tr><tr><td><code>ModelName</code></td><td>NVARCHAR(50)</td><td></td></tr><tr><td><code>Seats</code></td><td>INT</td><td></td></tr><tr><td><code>DailyRate</code></td><td>DECIMAL(10,2)</td><td>VND per day</td></tr></tbody></table>\n<p><b>Cars</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>CarID</code></td><td>INT</td><td>PK</td></tr><tr><td><code>PlateNo</code></td><td>VARCHAR(15)</td><td>UNIQUE</td></tr><tr><td><code>ModelID</code></td><td>INT</td><td>FK → CarModels</td></tr><tr><td><code>BranchID</code></td><td>INT</td><td>FK → Branches (where the car is now)</td></tr><tr><td><code>MadeYear</code></td><td>INT</td><td></td></tr><tr><td><code>Status</code></td><td>NVARCHAR(15)</td><td>'Available' / 'Rented' / 'Maintenance'</td></tr></tbody></table>\n<p><b>Customers</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>CustomerID</code></td><td>INT</td><td>PK</td></tr><tr><td><code>FullName</code></td><td>NVARCHAR(50)</td><td></td></tr><tr><td><code>Email</code></td><td>NVARCHAR(100)</td><td></td></tr><tr><td><code>City</code></td><td>NVARCHAR(30)</td><td></td></tr><tr><td><code>JoinDate</code></td><td>DATE</td><td></td></tr></tbody></table>\n<p><b>Rentals</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>RentalID</code></td><td>INT</td><td>PK</td></tr><tr><td><code>CarID</code></td><td>INT</td><td>FK → Cars</td></tr><tr><td><code>CustomerID</code></td><td>INT</td><td>FK → Customers</td></tr><tr><td><code>PickupBranchID</code></td><td>INT</td><td>FK → Branches</td></tr><tr><td><code>PickupDate</code></td><td>DATE</td><td></td></tr><tr><td><code>ReturnDate</code></td><td>DATE</td><td>NULL = not returned yet</td></tr><tr><td><code>TotalAmount</code></td><td>DECIMAL(12,2)</td><td>NULL until returned</td></tr></tbody></table>\n<p><b>LoyalCustomers</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>CustomerID</code></td><td>INT</td><td>PK, FK → Customers</td></tr><tr><td><code>FullName</code></td><td>NVARCHAR(50)</td><td></td></tr><tr><td><code>TotalSpent</code></td><td>DECIMAL(14,2)</td><td>empty table — filled in Q10</td></tr></tbody></table>\n<h2>4. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. Create the tables of the ERD <span class=\"bi-diem\">1 mark</span></h3>\n<p>Write the CREATE TABLE statements for every table derived from the ERD above (Doctor, DoctorPhone, Patient, Treats) with primary and foreign keys. Keep the names of the ERD; the multi-valued attribute table is named DoctorPhone; the relationship table is named Treats.</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Doctor(DoctorID, FullName, Specialty) · DoctorPhone(DoctorID, Phone) · Patient(PatientID, FullName, BirthDate) · Treats(DoctorID, PatientID, VisitDate, Diagnosis) — columns in this order.</li>\n  <li>Keys: DoctorPhone (DoctorID, Phone); Treats (DoctorID, PatientID, VisitDate); every reference is a FOREIGN KEY.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>2. Customers with an FPT University email <span class=\"bi-diem\">1 mark</span></h3>\n<p>Customers whose email ends with \"@fpt.edu.vn\" (not case-sensitive).</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Columns: <code>CustomerID, FullName, Email</code>. Any row order.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>3. Toyota cars at Hà Nội branches <span class=\"bi-diem\">1 mark</span></h3>\n<p>All cars of brand Toyota that are located at a branch in the city Hà Nội.</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Columns: <code>CarID, PlateNo, ModelName, BranchName</code>; order by CarID.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>4. 2025 members and their 2025 rentals <span class=\"bi-diem\">1 mark</span></h3>\n<p>All customers who joined in 2025, together with their rentals picked up in 2025. Customers without a 2025 rental must still appear (rental columns NULL).</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Columns: <code>CustomerID, FullName, JoinDate, RentalID, PickupDate</code>; order by CustomerID, then RentalID.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. Cars and customers per branch <span class=\"bi-diem\">1 mark</span></h3>\n<p>For every branch: the number of cars currently located there and the number of different customers who picked up a car there.</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Columns: <code>BranchID, BranchName, NumCars, NumCustomers</code>; order by BranchID.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>6. Most rented model of each brand <span class=\"bi-diem\">1 mark</span></h3>\n<p>For each brand, the model(s) with the highest number of rentals among the models of that brand (all of them on a tie). Models never rented count 0.</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Columns: <code>Brand, ModelName, NumRentals</code>; order by Brand, then ModelName.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>7. Top customers of each city — by money AND by number of rentals <span class=\"bi-diem\">1 mark</span></h3>\n<p>For each city, the customer(s) who have the highest total amount spent among customers of that city <b>and also</b> the highest number of rentals among customers of that city. Total spent ignores open rentals (TotalAmount NULL).</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Columns: <code>City, CustomerID, FullName, TotalSpent, NumRentals</code>; order by CustomerID.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>8. View of open rentals <span class=\"bi-diem\">1 mark</span></h3>\n<p>Create a view named <code>vwOpenRentals</code> listing every rental whose car has not been returned yet, with the plate number and the customer's name.</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>View columns: <code>RentalID, PlateNo, FullName, PickupDate</code>. No ORDER BY inside the view.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>9. Send heavily used cars to maintenance <span class=\"bi-diem\">1 mark</span></h3>\n<p>Set Status to <b>Maintenance</b> for every car that has been rented <b>at least 3 times</b> and whose current status is <b>Available</b>.</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>One UPDATE statement using a subquery (no UPDATE … FROM). Cars that are Rented must keep their status.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>10. Fill the loyalty table <span class=\"bi-diem\">1 mark</span></h3>\n<p>Insert into <code>LoyalCustomers</code> every customer whose total amount over <b>returned</b> rentals is greater than 5,000,000, with that total.</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>One INSERT INTO LoyalCustomers (CustomerID, FullName, TotalSpent) SELECT … statement.</li>\n</ul>\n</div>\n<h2>5. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>Create the tables of the ERD</td><td>1</td></tr><tr><td>2</td><td>Customers with an FPT University email</td><td>1</td></tr><tr><td>3</td><td>Toyota cars at Hà Nội branches</td><td>1</td></tr><tr><td>4</td><td>2025 members and their 2025 rentals</td><td>1</td></tr><tr><td>5</td><td>Cars and customers per branch</td><td>1</td></tr><tr><td>6</td><td>Most rented model of each brand</td><td>1</td></tr><tr><td>7</td><td>Top customers of each city — by money AND by number of rentals</td><td>1</td></tr><tr><td>8</td><td>View of open rentals</td><td>1</td></tr><tr><td>9</td><td>Send heavily used cars to maintenance</td><td>1</td></tr><tr><td>10</td><td>Fill the loyalty table</td><td>1</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>A file that contains test commands, USE or GO — 0 for that question on the real PE.</li>\n  <li>Filtering the optional side of an outer join in WHERE (Q4) — the \"even if\" rows disappear.</li>\n  <li>COUNT without DISTINCT after two LEFT JOINs (Q5) — counts are multiplied.</li>\n  <li>TOP 1 / FETCH 1 ROW for \"the highest\" (Q6, Q7) — ties are lost.</li>\n</ul>\n<h2>6. Submission</h2>\n<p>Q1–Q10 tabs = Q1.sql … Q10.sql. <b>Run</b> = sample checks, <b>Submit</b> = all checks incl. hidden ones (modified data) and the 10-mark score table. Run DBscript.sql in SSMS to rehearse on real SQL Server.</p>",
+      "problemHtmlVi": "<h1>PE 1 — CT Rent car-rental database (practice paper)</h1>\n<p class=\"bi-phu\">DBI202 · Luyện thi thực hành · 85 phút · 10 câu × 1 điểm · theo dạng đề SP26</p>\n<h2>1. Tổng quan</h2>\n<p>CT Rent là công ty cho thuê xe tự lái, có chi nhánh ở Hà Nội, Hồ Chí Minh và Đà Nẵng. CSDL (script <code>DBscript.sql</code>) lưu chi nhánh, mẫu xe, xe, khách hàng và lượt thuê. Câu 1 độc lập: dựng bảng từ ERD bên dưới. Câu 2–10 dùng CSDL CT Rent.</p>\n<p><b>ERD cho Câu 1</b></p><pre>\n ┌──────────────────────────────┐            ┌──────────────────────────┐\n │ Doctor                        │            │ Patient                   │\n │  DoctorID   INT  (key)        │            │  PatientID  INT  (key)    │\n │  FullName   VARCHAR(50)       │ ──&lt; Treats &gt;──  FullName   VARCHAR(50) │\n │  Specialty  VARCHAR(50)       │   (M : N)  │  BirthDate  DATE          │\n │ {Phone}     VARCHAR(15)       │            └──────────────────────────┘\n └──────────────────────────────┘\n   {Phone} = multi-valued attribute\n   Treats attributes: VisitDate DATE (part of the key — a doctor may treat the same patient on many days),\n                      Diagnosis VARCHAR(200)</pre>\n<p>⚠ Đề SP26 thật hỏi <b>function</b>, <b>trigger</b> hoặc <b>procedure</b> ở Q8–Q9 (T-SQL). Máy chấm trình duyệt chạy PostgreSQL nên ở đây Q8 là <b>VIEW</b>, Q9 là <b>UPDATE</b>; luyện câu T-SQL trên đề thật ở Phòng thi (máy chấm SQL Server sắp có).</p>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Mỗi câu một tệp (Q1.sql … Q10.sql) CHỈ chứa (các) lệnh trả lời câu đó — không USE, không GO, không lệnh chạy thử (như PE thật).</li>\n  <li>Tên cột/bí danh và thứ tự cột đúng như đề. Thứ tự dòng chỉ quan trọng khi đề ghi \"sắp theo\".</li>\n  <li>Chỉ SQL chạy cả hai hệ: không TOP/LIMIT, ISNULL, YEAR(), GETDATE(), ILIKE, ::. Dùng COALESCE, khoảng ngày, OFFSET … FETCH.</li>\n  <li>Kiểu ở Q1: INT cho mã, VARCHAR(50) cho tên/chuyên khoa, VARCHAR(15) cho số điện thoại, DATE, VARCHAR(200) cho chẩn đoán (PE thật dùng NVARCHAR).</li>\n</ul>\n<h2>2. Tệp nộp bài</h2>\n<pre>RollNo_Name_DBI202_PE1/\n├── Q1.sql    -- Create the tables of the ERD (1 mark)\n├── Q2.sql    -- Customers with an FPT University email (1 mark)\n├── Q3.sql    -- Toyota cars at Hà Nội branches (1 mark)\n├── Q4.sql    -- 2025 members and their 2025 rentals (1 mark)\n├── Q5.sql    -- Cars and customers per branch (1 mark)\n├── Q6.sql    -- Most rented model of each brand (1 mark)\n├── Q7.sql    -- Top customers of each city — by money AND by number of rentals (1 mark)\n├── Q8.sql    -- View of open rentals (1 mark)\n├── Q9.sql    -- Send heavily used cars to maintenance (1 mark)\n├── Q10.sql    -- Fill the loyalty table (1 mark)</pre>\n<h2>3. Mô hình dữ liệu</h2>\n<p><b>Branches</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>BranchID</code></td><td>INT</td><td>PK</td></tr><tr><td><code>BranchName</code></td><td>NVARCHAR(50)</td><td></td></tr><tr><td><code>City</code></td><td>NVARCHAR(30)</td><td></td></tr></tbody></table>\n<p><b>CarModels</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>ModelID</code></td><td>INT</td><td>PK</td></tr><tr><td><code>Brand</code></td><td>NVARCHAR(30)</td><td>Toyota, Honda, Hyundai…</td></tr><tr><td><code>ModelName</code></td><td>NVARCHAR(50)</td><td></td></tr><tr><td><code>Seats</code></td><td>INT</td><td></td></tr><tr><td><code>DailyRate</code></td><td>DECIMAL(10,2)</td><td>VND per day</td></tr></tbody></table>\n<p><b>Cars</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>CarID</code></td><td>INT</td><td>PK</td></tr><tr><td><code>PlateNo</code></td><td>VARCHAR(15)</td><td>UNIQUE</td></tr><tr><td><code>ModelID</code></td><td>INT</td><td>FK → CarModels</td></tr><tr><td><code>BranchID</code></td><td>INT</td><td>FK → Branches (where the car is now)</td></tr><tr><td><code>MadeYear</code></td><td>INT</td><td></td></tr><tr><td><code>Status</code></td><td>NVARCHAR(15)</td><td>'Available' / 'Rented' / 'Maintenance'</td></tr></tbody></table>\n<p><b>Customers</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>CustomerID</code></td><td>INT</td><td>PK</td></tr><tr><td><code>FullName</code></td><td>NVARCHAR(50)</td><td></td></tr><tr><td><code>Email</code></td><td>NVARCHAR(100)</td><td></td></tr><tr><td><code>City</code></td><td>NVARCHAR(30)</td><td></td></tr><tr><td><code>JoinDate</code></td><td>DATE</td><td></td></tr></tbody></table>\n<p><b>Rentals</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>RentalID</code></td><td>INT</td><td>PK</td></tr><tr><td><code>CarID</code></td><td>INT</td><td>FK → Cars</td></tr><tr><td><code>CustomerID</code></td><td>INT</td><td>FK → Customers</td></tr><tr><td><code>PickupBranchID</code></td><td>INT</td><td>FK → Branches</td></tr><tr><td><code>PickupDate</code></td><td>DATE</td><td></td></tr><tr><td><code>ReturnDate</code></td><td>DATE</td><td>NULL = not returned yet</td></tr><tr><td><code>TotalAmount</code></td><td>DECIMAL(12,2)</td><td>NULL until returned</td></tr></tbody></table>\n<p><b>LoyalCustomers</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>CustomerID</code></td><td>INT</td><td>PK, FK → Customers</td></tr><tr><td><code>FullName</code></td><td>NVARCHAR(50)</td><td></td></tr><tr><td><code>TotalSpent</code></td><td>DECIMAL(14,2)</td><td>empty table — filled in Q10</td></tr></tbody></table>\n<h2>4. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. Tạo các bảng từ ERD <span class=\"bi-diem\">1 điểm</span></h3>\n<p>Viết các lệnh CREATE TABLE cho mọi bảng suy ra từ ERD trên (Doctor, DoctorPhone, Patient, Treats) kèm khoá chính, khoá ngoại. Giữ đúng tên trong ERD; bảng thuộc tính đa trị tên DoctorPhone; bảng liên kết tên Treats.</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Doctor(DoctorID, FullName, Specialty) · DoctorPhone(DoctorID, Phone) · Patient(PatientID, FullName, BirthDate) · Treats(DoctorID, PatientID, VisitDate, Diagnosis) — cột đúng thứ tự này.</li>\n  <li>Khoá: DoctorPhone (DoctorID, Phone); Treats (DoctorID, PatientID, VisitDate); mọi tham chiếu là FOREIGN KEY.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>2. Khách hàng có email FPT University <span class=\"bi-diem\">1 điểm</span></h3>\n<p>Khách hàng có email kết thúc bằng \"@fpt.edu.vn\" (không phân biệt hoa thường).</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Cột: <code>CustomerID, FullName, Email</code>. Thứ tự dòng tuỳ ý.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>3. Xe Toyota ở chi nhánh Hà Nội <span class=\"bi-diem\">1 điểm</span></h3>\n<p>Mọi xe hãng Toyota đang ở chi nhánh thuộc thành phố Hà Nội.</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Cột: <code>CarID, PlateNo, ModelName, BranchName</code>; sắp theo CarID.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>4. Khách gia nhập 2025 và các lượt thuê năm 2025 <span class=\"bi-diem\">1 điểm</span></h3>\n<p>Mọi khách gia nhập năm 2025, kèm các lượt thuê nhận xe trong năm 2025. Khách không có lượt thuê 2025 vẫn phải hiện (cột lượt thuê NULL).</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Cột: <code>CustomerID, FullName, JoinDate, RentalID, PickupDate</code>; sắp theo CustomerID rồi RentalID.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. Số xe và số khách mỗi chi nhánh <span class=\"bi-diem\">1 điểm</span></h3>\n<p>Với mọi chi nhánh: số xe đang đặt tại đó và số khách hàng khác nhau đã nhận xe tại đó.</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Cột: <code>BranchID, BranchName, NumCars, NumCustomers</code>; sắp theo BranchID.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>6. Mẫu xe được thuê nhiều nhất của mỗi hãng <span class=\"bi-diem\">1 điểm</span></h3>\n<p>Với mỗi hãng, (các) mẫu xe có số lượt thuê cao nhất trong các mẫu của hãng đó (hoà thì hiện hết). Mẫu chưa từng được thuê tính 0.</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Cột: <code>Brand, ModelName, NumRentals</code>; sắp theo Brand rồi ModelName.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>7. Khách hàng đứng đầu mỗi thành phố — theo tiền VÀ theo số lượt <span class=\"bi-diem\">1 điểm</span></h3>\n<p>Với mỗi thành phố, (các) khách có tổng tiền chi cao nhất trong số khách của thành phố đó <b>và đồng thời</b> có số lượt thuê nhiều nhất trong số khách của thành phố đó. Tổng tiền bỏ qua lượt chưa trả xe (TotalAmount NULL).</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Cột: <code>City, CustomerID, FullName, TotalSpent, NumRentals</code>; sắp theo CustomerID.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>8. View các lượt thuê chưa trả xe <span class=\"bi-diem\">1 điểm</span></h3>\n<p>Tạo view tên <code>vwOpenRentals</code> liệt kê mọi lượt thuê chưa trả xe, kèm biển số và tên khách.</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Cột của view: <code>RentalID, PlateNo, FullName, PickupDate</code>. Không ORDER BY trong view.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>9. Đưa xe chạy nhiều đi bảo dưỡng <span class=\"bi-diem\">1 điểm</span></h3>\n<p>Đặt Status = <b>Maintenance</b> cho mọi xe đã được thuê <b>ít nhất 3 lần</b> và đang ở trạng thái <b>Available</b>.</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Một lệnh UPDATE dùng truy vấn con (không UPDATE … FROM). Xe đang Rented phải giữ trạng thái.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>10. Điền bảng khách thân thiết <span class=\"bi-diem\">1 điểm</span></h3>\n<p>Chèn vào <code>LoyalCustomers</code> mọi khách có tổng tiền các lượt thuê <b>đã trả xe</b> lớn hơn 5.000.000, kèm tổng đó.</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Một lệnh INSERT INTO LoyalCustomers (CustomerID, FullName, TotalSpent) SELECT ….</li>\n</ul>\n</div>\n<h2>5. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>Tạo các bảng từ ERD</td><td>1</td></tr><tr><td>2</td><td>Khách hàng có email FPT University</td><td>1</td></tr><tr><td>3</td><td>Xe Toyota ở chi nhánh Hà Nội</td><td>1</td></tr><tr><td>4</td><td>Khách gia nhập 2025 và các lượt thuê năm 2025</td><td>1</td></tr><tr><td>5</td><td>Số xe và số khách mỗi chi nhánh</td><td>1</td></tr><tr><td>6</td><td>Mẫu xe được thuê nhiều nhất của mỗi hãng</td><td>1</td></tr><tr><td>7</td><td>Khách hàng đứng đầu mỗi thành phố — theo tiền VÀ theo số lượt</td><td>1</td></tr><tr><td>8</td><td>View các lượt thuê chưa trả xe</td><td>1</td></tr><tr><td>9</td><td>Đưa xe chạy nhiều đi bảo dưỡng</td><td>1</td></tr><tr><td>10</td><td>Điền bảng khách thân thiết</td><td>1</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Tệp có lệnh chạy thử, USE hay GO — câu đó 0 điểm ở PE thật.</li>\n  <li>Lọc phía tuỳ chọn của outer join ở WHERE (Q4) — mất các dòng \"kể cả khi\".</li>\n  <li>COUNT không DISTINCT sau hai LEFT JOIN (Q5) — số đếm bị nhân lên.</li>\n  <li>TOP 1 / FETCH 1 ROW cho \"cao nhất\" (Q6, Q7) — mất dòng hoà.</li>\n</ul>\n<h2>6. Nộp bài</h2>\n<p>Tab Q1–Q10 = Q1.sql … Q10.sql. <b>Chạy thử</b> = kiểm mẫu, <b>Nộp</b> = mọi kiểm kể cả kiểm ẩn (đổi dữ liệu) và bảng điểm thang 10. Chạy DBscript.sql trong SSMS để tập trên SQL Server thật.</p>",
+      "inputSpec": "The database built by DBscript.sql (schema below; full script in the DBscript.sql tab).|||CSDL dựng bởi DBscript.sql (lược đồ bên dưới; script đầy đủ ở tab DBscript.sql).",
+      "outputSpec": "One file per question (Q1.sql … Qn.sql) containing only the statement(s) that answer it; each question is graded independently.|||Mỗi câu một tệp (Q1.sql … Qn.sql) chỉ chứa (các) lệnh trả lời câu đó; mỗi câu chấm độc lập.",
+      "constraints": "One file per question (Q1.sql … Q10.sql) containing ONLY the statement(s) that answer it — no USE, no GO, no test commands (same rule as the real PE).|||Mỗi câu một tệp (Q1.sql … Q10.sql) CHỈ chứa (các) lệnh trả lời câu đó — không USE, không GO, không lệnh chạy thử (như PE thật).\nColumn names/aliases and order exactly as asked. Row order matters only when the question says \"order by\".|||Tên cột/bí danh và thứ tự cột đúng như đề. Thứ tự dòng chỉ quan trọng khi đề ghi \"sắp theo\".\nPortable SQL only (SQL Server + PostgreSQL): no TOP/LIMIT, ISNULL, YEAR(), GETDATE(), ILIKE, ::. Use COALESCE, date ranges, OFFSET … FETCH.|||Chỉ SQL chạy cả hai hệ: không TOP/LIMIT, ISNULL, YEAR(), GETDATE(), ILIKE, ::. Dùng COALESCE, khoảng ngày, OFFSET … FETCH.\nQ1 types: INT for ids, VARCHAR(50) for names/specialty, VARCHAR(15) for phone, DATE, VARCHAR(200) for diagnosis (the real PE would use NVARCHAR).|||Kiểu ở Q1: INT cho mã, VARCHAR(50) cho tên/chuyên khoa, VARCHAR(15) cho số điện thoại, DATE, VARCHAR(200) cho chẩn đoán (PE thật dùng NVARCHAR).",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "tbl         | col       | type             \n------------+-----------+------------------\ndoctor      | doctorid  | integer          \ndoctor      | fullname  | character varying\ndoctor      | specialty | character varying\ndoctorphone | doctorid  | integer          \ndoctorphone | phone     | character varying\npatient     | patientid | integer          \npatient     | fullname  | character varying\npatient     | birthdate | date             \n… (12 rows)",
+          "explanation": "Expected result of check \"Q1 · tables and columns\" (row order matters).|||Kết quả mong đợi của kiểm \"Q1 · tables and columns\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "Phân bổ 85 phút: Q1–Q4 ~ 25 phút, Q5–Q7 ~ 35 phút, Q8–Q10 ~ 15 phút, còn lại soát lỗi.",
+        "Q5: hai LEFT JOIN cùng lúc nhân dòng (xe × lượt thuê) ⇒ COUNT(DISTINCT …). Q6/Q7: tính số liệu trong một CTE rồi so với MAX của cùng nhóm.",
+        "Q8–Q10: chạy thử SELECT bên trong trước, đúng dòng rồi mới bọc CREATE VIEW / UPDATE / INSERT."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "Q1.sql",
+          "language": "sql",
+          "code": "-- Q1. Create the tables of the ERD\n-- Write only the statement(s) that answer this question (no USE, no GO, no test commands).\n-- Chỉ viết (các) lệnh trả lời câu này (không USE, không GO, không lệnh chạy thử).\n"
+        },
+        {
+          "name": "Q2.sql",
+          "language": "sql",
+          "code": "-- Q2. Customers with an FPT University email\n-- Write only the statement(s) that answer this question (no USE, no GO, no test commands).\n-- Chỉ viết (các) lệnh trả lời câu này (không USE, không GO, không lệnh chạy thử).\n"
+        },
+        {
+          "name": "Q3.sql",
+          "language": "sql",
+          "code": "-- Q3. Toyota cars at Hà Nội branches\n-- Write only the statement(s) that answer this question (no USE, no GO, no test commands).\n-- Chỉ viết (các) lệnh trả lời câu này (không USE, không GO, không lệnh chạy thử).\n"
+        },
+        {
+          "name": "Q4.sql",
+          "language": "sql",
+          "code": "-- Q4. 2025 members and their 2025 rentals\n-- Write only the statement(s) that answer this question (no USE, no GO, no test commands).\n-- Chỉ viết (các) lệnh trả lời câu này (không USE, không GO, không lệnh chạy thử).\n"
+        },
+        {
+          "name": "Q5.sql",
+          "language": "sql",
+          "code": "-- Q5. Cars and customers per branch\n-- Write only the statement(s) that answer this question (no USE, no GO, no test commands).\n-- Chỉ viết (các) lệnh trả lời câu này (không USE, không GO, không lệnh chạy thử).\n"
+        },
+        {
+          "name": "Q6.sql",
+          "language": "sql",
+          "code": "-- Q6. Most rented model of each brand\n-- Write only the statement(s) that answer this question (no USE, no GO, no test commands).\n-- Chỉ viết (các) lệnh trả lời câu này (không USE, không GO, không lệnh chạy thử).\n"
+        },
+        {
+          "name": "Q7.sql",
+          "language": "sql",
+          "code": "-- Q7. Top customers of each city — by money AND by number of rentals\n-- Write only the statement(s) that answer this question (no USE, no GO, no test commands).\n-- Chỉ viết (các) lệnh trả lời câu này (không USE, không GO, không lệnh chạy thử).\n"
+        },
+        {
+          "name": "Q8.sql",
+          "language": "sql",
+          "code": "-- Q8. View of open rentals\n-- Write only the statement(s) that answer this question (no USE, no GO, no test commands).\n-- Chỉ viết (các) lệnh trả lời câu này (không USE, không GO, không lệnh chạy thử).\n"
+        },
+        {
+          "name": "Q9.sql",
+          "language": "sql",
+          "code": "-- Q9. Send heavily used cars to maintenance\n-- Write only the statement(s) that answer this question (no USE, no GO, no test commands).\n-- Chỉ viết (các) lệnh trả lời câu này (không USE, không GO, không lệnh chạy thử).\n"
+        },
+        {
+          "name": "Q10.sql",
+          "language": "sql",
+          "code": "-- Q10. Fill the loyalty table\n-- Write only the statement(s) that answer this question (no USE, no GO, no test commands).\n-- Chỉ viết (các) lệnh trả lời câu này (không USE, không GO, không lệnh chạy thử).\n"
+        },
+        {
+          "name": "DBscript.sql",
+          "language": "sql",
+          "code": "-- DBscript.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- DBscript.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Branches (\n    BranchID   INT           NOT NULL PRIMARY KEY,\n    BranchName NVARCHAR(50)  NOT NULL,\n    City       NVARCHAR(30)  NOT NULL\n);\nCREATE TABLE CarModels (\n    ModelID    INT           NOT NULL PRIMARY KEY,\n    Brand      NVARCHAR(30)  NOT NULL,\n    ModelName  NVARCHAR(50)  NOT NULL,\n    Seats      INT           NOT NULL,\n    DailyRate  DECIMAL(10,2) NOT NULL\n);\nCREATE TABLE Cars (\n    CarID      INT           NOT NULL PRIMARY KEY,\n    PlateNo    VARCHAR(15)   NOT NULL UNIQUE,\n    ModelID    INT           NOT NULL REFERENCES CarModels (ModelID),\n    BranchID   INT           NOT NULL REFERENCES Branches (BranchID),\n    MadeYear   INT           NOT NULL,\n    Status     NVARCHAR(15)  NOT NULL\n);\nCREATE TABLE Customers (\n    CustomerID INT           NOT NULL PRIMARY KEY,\n    FullName   NVARCHAR(50)  NOT NULL,\n    Email      NVARCHAR(100) NOT NULL,\n    City       NVARCHAR(30)  NOT NULL,\n    JoinDate   DATE          NOT NULL\n);\nCREATE TABLE Rentals (\n    RentalID       INT           NOT NULL PRIMARY KEY,\n    CarID          INT           NOT NULL REFERENCES Cars (CarID),\n    CustomerID     INT           NOT NULL REFERENCES Customers (CustomerID),\n    PickupBranchID INT           NOT NULL REFERENCES Branches (BranchID),\n    PickupDate     DATE          NOT NULL,\n    ReturnDate     DATE          NULL,\n    TotalAmount    DECIMAL(12,2) NULL\n);\nCREATE TABLE LoyalCustomers (\n    CustomerID INT           NOT NULL PRIMARY KEY REFERENCES Customers (CustomerID),\n    FullName   NVARCHAR(50)  NOT NULL,\n    TotalSpent DECIMAL(14,2) NOT NULL\n);\n\nINSERT INTO Branches (BranchID, BranchName, City) VALUES\n (1, N'CT Rent Hoàn Kiếm', N'Hà Nội'), (2, N'CT Rent Cầu Giấy', N'Hà Nội'),\n (3, N'CT Rent Quận 1', N'Hồ Chí Minh'), (4, N'CT Rent Hải Châu', N'Đà Nẵng');\nINSERT INTO CarModels (ModelID, Brand, ModelName, Seats, DailyRate) VALUES\n (1, N'Toyota', N'Vios', 5, 700000), (2, N'Toyota', N'Innova', 7, 1000000), (3, N'Honda', N'City', 5, 750000),\n (4, N'Hyundai', N'Accent', 5, 650000), (5, N'Kia', N'Carnival', 7, 1400000), (6, N'VinFast', N'VF8', 5, 1200000),\n (7, N'Hyundai', N'Creta', 5, 800000);\nINSERT INTO Cars (CarID, PlateNo, ModelID, BranchID, MadeYear, Status) VALUES\n (1, '29A-123.45', 1, 1, 2021, N'Available'), (2, '29A-678.90', 2, 1, 2022, N'Rented'),\n (3, '30F-111.22', 1, 2, 2020, N'Available'), (4, '30F-333.44', 3, 2, 2023, N'Available'),\n (5, '51H-555.66', 1, 3, 2019, N'Maintenance'), (6, '51H-777.88', 5, 3, 2024, N'Available'),\n (7, '51H-999.00', 6, 3, 2025, N'Rented'), (8, '43A-246.80', 4, 4, 2021, N'Available'),\n (9, '43A-135.79', 2, 4, 2022, N'Available'), (10, '30G-864.20', 6, 2, 2025, N'Available'),\n (11, '29A-202.02', 4, 1, 2018, N'Available'), (12, '51K-121.21', 3, 3, 2022, N'Available'),\n (13, '43B-777.77', 7, 4, 2024, N'Available');\nINSERT INTO Customers (CustomerID, FullName, Email, City, JoinDate) VALUES\n (1, N'Nguyễn Minh Khoa', N'khoa.nm@fpt.edu.vn', N'Hà Nội', '2024-03-10'),\n (2, N'Trần Thu Hà', N'ha.tt@gmail.com', N'Hà Nội', '2025-01-15'),\n (3, N'Lê Quốc Anh', N'ANH.LQ@FPT.EDU.VN', N'Hồ Chí Minh', '2025-02-20'),\n (4, N'Phạm Gia Bảo', N'bao.pg@yahoo.com', N'Hồ Chí Minh', '2024-07-01'),\n (5, N'Võ Thị Lan', N'lan.vt@fpt.edu.vn', N'Đà Nẵng', '2025-05-05'),\n (6, N'Đỗ Hoàng Nam', N'nam.dh@outlook.com', N'Đà Nẵng', '2023-11-11'),\n (7, N'Bùi Khánh Linh', N'linh.bk@fpt.edu.vn.example.com', N'Hà Nội', '2025-08-18'),\n (8, N'Hoàng Anh Tú', N'tu.ha@gmail.com', N'Hồ Chí Minh', '2025-12-31'),\n (9, N'Mai Phương Thảo', N'thao.mp@fpt.edu.vn', N'Hà Nội', '2026-01-01'),\n (10, N'Đặng Văn Hùng', N'hung.dv@gmail.com', N'Đà Nẵng', '2025-06-30');\nINSERT INTO Rentals (RentalID, CarID, CustomerID, PickupBranchID, PickupDate, ReturnDate, TotalAmount) VALUES\n (1, 1, 1, 1, '2024-04-01', '2024-04-04', 2100000), (2, 3, 1, 2, '2024-06-10', '2024-06-12', 1400000),\n (3, 2, 2, 1, '2025-02-01', '2025-02-05', 4000000), (4, 1, 2, 1, '2025-03-15', '2025-03-16', 700000),\n (5, 5, 3, 3, '2025-03-01', '2025-03-08', 4900000), (6, 6, 4, 3, '2024-09-09', '2024-09-12', 4200000),\n (7, 8, 5, 4, '2025-06-01', '2025-06-03', 1300000), (8, 9, 6, 4, '2024-01-20', '2024-01-25', 5000000),\n (9, 1, 3, 1, '2025-07-07', '2025-07-09', 1400000), (10, 4, 2, 2, '2025-09-01', '2025-09-04', 2250000),\n (11, 7, 3, 3, '2026-01-10', NULL, NULL), (12, 2, 9, 1, '2026-02-01', NULL, NULL),\n (13, 1, 4, 1, '2025-10-10', '2025-10-12', 800000), (14, 3, 7, 2, '2025-11-01', '2025-11-03', 1400000),\n (15, 6, 3, 3, '2025-12-20', '2025-12-25', 7000000), (16, 8, 10, 4, '2025-08-08', '2025-08-10', 1300000),\n (17, 9, 5, 4, '2026-03-03', '2026-03-06', 3000000), (18, 12, 8, 3, '2026-01-05', '2026-01-06', 750000),\n (19, 10, 1, 2, '2026-02-14', '2026-02-16', 2400000), (20, 3, 2, 2, '2026-04-01', '2026-04-02', 700000),\n (21, 13, 6, 4, '2025-04-04', '2025-04-06', 1600000), (22, 13, 10, 4, '2026-05-01', '2026-05-02', 800000),\n (23, 8, 5, 4, '2026-06-01', '2026-06-02', 650000), (24, 2, 6, 1, '2024-12-01', '2024-12-03', 2000000),\n (25, 13, 9, 4, '2025-09-09', '2025-09-10', 800000);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "Q1.sql",
+          "language": "sql",
+          "code": "CREATE TABLE Doctor (\n    DoctorID  INT         NOT NULL PRIMARY KEY,\n    FullName  VARCHAR(50) NOT NULL,\n    Specialty VARCHAR(50) NULL\n);\nCREATE TABLE DoctorPhone (                       -- multi-valued attribute ⇒ its own table\n    DoctorID INT         NOT NULL REFERENCES Doctor (DoctorID),\n    Phone    VARCHAR(15) NOT NULL,\n    PRIMARY KEY (DoctorID, Phone)\n);\nCREATE TABLE Patient (\n    PatientID INT         NOT NULL PRIMARY KEY,\n    FullName  VARCHAR(50) NOT NULL,\n    BirthDate DATE        NULL\n);\nCREATE TABLE Treats (                            -- M:N relationship with attributes\n    DoctorID  INT          NOT NULL REFERENCES Doctor (DoctorID),\n    PatientID INT          NOT NULL REFERENCES Patient (PatientID),\n    VisitDate DATE         NOT NULL,\n    Diagnosis VARCHAR(200) NULL,\n    PRIMARY KEY (DoctorID, PatientID, VisitDate)\n);\n"
+        },
+        {
+          "name": "Q2.sql",
+          "language": "sql",
+          "code": "SELECT CustomerID, FullName, Email\nFROM Customers\nWHERE LOWER(Email) LIKE '%@fpt.edu.vn';   -- LOWER makes it case-insensitive on ANY collation\n"
+        },
+        {
+          "name": "Q3.sql",
+          "language": "sql",
+          "code": "SELECT c.CarID, c.PlateNo, m.ModelName, b.BranchName\nFROM Cars c\nJOIN CarModels m ON m.ModelID = c.ModelID\nJOIN Branches  b ON b.BranchID = c.BranchID\nWHERE m.Brand = N'Toyota' AND b.City = N'Hà Nội'\nORDER BY c.CarID;\n"
+        },
+        {
+          "name": "Q4.sql",
+          "language": "sql",
+          "code": "SELECT cu.CustomerID, cu.FullName, cu.JoinDate, r.RentalID, r.PickupDate\nFROM Customers cu\nLEFT JOIN Rentals r\n       ON r.CustomerID = cu.CustomerID\n      AND r.PickupDate >= '2025-01-01' AND r.PickupDate < '2026-01-01'   -- filter of the optional side ⇒ in ON\nWHERE cu.JoinDate >= '2025-01-01' AND cu.JoinDate < '2026-01-01'\nORDER BY cu.CustomerID, r.RentalID;\n"
+        },
+        {
+          "name": "Q5.sql",
+          "language": "sql",
+          "code": "SELECT b.BranchID, b.BranchName,\n       COUNT(DISTINCT c.CarID)      AS NumCars,        -- two LEFT JOINs multiply rows ⇒ DISTINCT\n       COUNT(DISTINCT r.CustomerID) AS NumCustomers\nFROM Branches b\nLEFT JOIN Cars    c ON c.BranchID = b.BranchID\nLEFT JOIN Rentals r ON r.PickupBranchID = b.BranchID\nGROUP BY b.BranchID, b.BranchName\nORDER BY b.BranchID;\n"
+        },
+        {
+          "name": "Q6.sql",
+          "language": "sql",
+          "code": "WITH ModelRentals AS (\n    SELECT m.ModelID, m.Brand, m.ModelName, COUNT(r.RentalID) AS NumRentals\n    FROM CarModels m\n    LEFT JOIN Cars    c ON c.ModelID = m.ModelID\n    LEFT JOIN Rentals r ON r.CarID = c.CarID\n    GROUP BY m.ModelID, m.Brand, m.ModelName\n)\nSELECT a.Brand, a.ModelName, a.NumRentals\nFROM ModelRentals a\nWHERE a.NumRentals = (SELECT MAX(b.NumRentals) FROM ModelRentals b WHERE b.Brand = a.Brand)\nORDER BY a.Brand, a.ModelName;\n"
+        },
+        {
+          "name": "Q7.sql",
+          "language": "sql",
+          "code": "WITH Stats AS (\n    SELECT cu.City, cu.CustomerID, cu.FullName,\n           COALESCE(SUM(r.TotalAmount), 0) AS TotalSpent,\n           COUNT(r.RentalID)               AS NumRentals\n    FROM Customers cu\n    LEFT JOIN Rentals r ON r.CustomerID = cu.CustomerID\n    GROUP BY cu.City, cu.CustomerID, cu.FullName\n)\nSELECT s.City, s.CustomerID, s.FullName, s.TotalSpent, s.NumRentals\nFROM Stats s\nWHERE s.TotalSpent = (SELECT MAX(x.TotalSpent) FROM Stats x WHERE x.City = s.City)\n  AND s.NumRentals = (SELECT MAX(x.NumRentals) FROM Stats x WHERE x.City = s.City)\nORDER BY s.CustomerID;\n"
+        },
+        {
+          "name": "Q8.sql",
+          "language": "sql",
+          "code": "CREATE VIEW vwOpenRentals AS\nSELECT r.RentalID, c.PlateNo, cu.FullName, r.PickupDate\nFROM Rentals r\nJOIN Cars      c  ON c.CarID = r.CarID\nJOIN Customers cu ON cu.CustomerID = r.CustomerID\nWHERE r.ReturnDate IS NULL;\n"
+        },
+        {
+          "name": "Q9.sql",
+          "language": "sql",
+          "code": "UPDATE Cars\nSET Status = N'Maintenance'\nWHERE Status = N'Available'\n  AND CarID IN (SELECT CarID FROM Rentals GROUP BY CarID HAVING COUNT(*) >= 3);\n"
+        },
+        {
+          "name": "Q10.sql",
+          "language": "sql",
+          "code": "INSERT INTO LoyalCustomers (CustomerID, FullName, TotalSpent)\nSELECT cu.CustomerID, cu.FullName, SUM(r.TotalAmount)\nFROM Customers cu\nJOIN Rentals r ON r.CustomerID = cu.CustomerID\nWHERE r.ReturnDate IS NOT NULL\nGROUP BY cu.CustomerID, cu.FullName\nHAVING SUM(r.TotalAmount) > 5000000;\n"
+        },
+        {
+          "name": "DBscript.sql",
+          "language": "sql",
+          "code": "-- DBscript.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- DBscript.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Branches (\n    BranchID   INT           NOT NULL PRIMARY KEY,\n    BranchName NVARCHAR(50)  NOT NULL,\n    City       NVARCHAR(30)  NOT NULL\n);\nCREATE TABLE CarModels (\n    ModelID    INT           NOT NULL PRIMARY KEY,\n    Brand      NVARCHAR(30)  NOT NULL,\n    ModelName  NVARCHAR(50)  NOT NULL,\n    Seats      INT           NOT NULL,\n    DailyRate  DECIMAL(10,2) NOT NULL\n);\nCREATE TABLE Cars (\n    CarID      INT           NOT NULL PRIMARY KEY,\n    PlateNo    VARCHAR(15)   NOT NULL UNIQUE,\n    ModelID    INT           NOT NULL REFERENCES CarModels (ModelID),\n    BranchID   INT           NOT NULL REFERENCES Branches (BranchID),\n    MadeYear   INT           NOT NULL,\n    Status     NVARCHAR(15)  NOT NULL\n);\nCREATE TABLE Customers (\n    CustomerID INT           NOT NULL PRIMARY KEY,\n    FullName   NVARCHAR(50)  NOT NULL,\n    Email      NVARCHAR(100) NOT NULL,\n    City       NVARCHAR(30)  NOT NULL,\n    JoinDate   DATE          NOT NULL\n);\nCREATE TABLE Rentals (\n    RentalID       INT           NOT NULL PRIMARY KEY,\n    CarID          INT           NOT NULL REFERENCES Cars (CarID),\n    CustomerID     INT           NOT NULL REFERENCES Customers (CustomerID),\n    PickupBranchID INT           NOT NULL REFERENCES Branches (BranchID),\n    PickupDate     DATE          NOT NULL,\n    ReturnDate     DATE          NULL,\n    TotalAmount    DECIMAL(12,2) NULL\n);\nCREATE TABLE LoyalCustomers (\n    CustomerID INT           NOT NULL PRIMARY KEY REFERENCES Customers (CustomerID),\n    FullName   NVARCHAR(50)  NOT NULL,\n    TotalSpent DECIMAL(14,2) NOT NULL\n);\n\nINSERT INTO Branches (BranchID, BranchName, City) VALUES\n (1, N'CT Rent Hoàn Kiếm', N'Hà Nội'), (2, N'CT Rent Cầu Giấy', N'Hà Nội'),\n (3, N'CT Rent Quận 1', N'Hồ Chí Minh'), (4, N'CT Rent Hải Châu', N'Đà Nẵng');\nINSERT INTO CarModels (ModelID, Brand, ModelName, Seats, DailyRate) VALUES\n (1, N'Toyota', N'Vios', 5, 700000), (2, N'Toyota', N'Innova', 7, 1000000), (3, N'Honda', N'City', 5, 750000),\n (4, N'Hyundai', N'Accent', 5, 650000), (5, N'Kia', N'Carnival', 7, 1400000), (6, N'VinFast', N'VF8', 5, 1200000),\n (7, N'Hyundai', N'Creta', 5, 800000);\nINSERT INTO Cars (CarID, PlateNo, ModelID, BranchID, MadeYear, Status) VALUES\n (1, '29A-123.45', 1, 1, 2021, N'Available'), (2, '29A-678.90', 2, 1, 2022, N'Rented'),\n (3, '30F-111.22', 1, 2, 2020, N'Available'), (4, '30F-333.44', 3, 2, 2023, N'Available'),\n (5, '51H-555.66', 1, 3, 2019, N'Maintenance'), (6, '51H-777.88', 5, 3, 2024, N'Available'),\n (7, '51H-999.00', 6, 3, 2025, N'Rented'), (8, '43A-246.80', 4, 4, 2021, N'Available'),\n (9, '43A-135.79', 2, 4, 2022, N'Available'), (10, '30G-864.20', 6, 2, 2025, N'Available'),\n (11, '29A-202.02', 4, 1, 2018, N'Available'), (12, '51K-121.21', 3, 3, 2022, N'Available'),\n (13, '43B-777.77', 7, 4, 2024, N'Available');\nINSERT INTO Customers (CustomerID, FullName, Email, City, JoinDate) VALUES\n (1, N'Nguyễn Minh Khoa', N'khoa.nm@fpt.edu.vn', N'Hà Nội', '2024-03-10'),\n (2, N'Trần Thu Hà', N'ha.tt@gmail.com', N'Hà Nội', '2025-01-15'),\n (3, N'Lê Quốc Anh', N'ANH.LQ@FPT.EDU.VN', N'Hồ Chí Minh', '2025-02-20'),\n (4, N'Phạm Gia Bảo', N'bao.pg@yahoo.com', N'Hồ Chí Minh', '2024-07-01'),\n (5, N'Võ Thị Lan', N'lan.vt@fpt.edu.vn', N'Đà Nẵng', '2025-05-05'),\n (6, N'Đỗ Hoàng Nam', N'nam.dh@outlook.com', N'Đà Nẵng', '2023-11-11'),\n (7, N'Bùi Khánh Linh', N'linh.bk@fpt.edu.vn.example.com', N'Hà Nội', '2025-08-18'),\n (8, N'Hoàng Anh Tú', N'tu.ha@gmail.com', N'Hồ Chí Minh', '2025-12-31'),\n (9, N'Mai Phương Thảo', N'thao.mp@fpt.edu.vn', N'Hà Nội', '2026-01-01'),\n (10, N'Đặng Văn Hùng', N'hung.dv@gmail.com', N'Đà Nẵng', '2025-06-30');\nINSERT INTO Rentals (RentalID, CarID, CustomerID, PickupBranchID, PickupDate, ReturnDate, TotalAmount) VALUES\n (1, 1, 1, 1, '2024-04-01', '2024-04-04', 2100000), (2, 3, 1, 2, '2024-06-10', '2024-06-12', 1400000),\n (3, 2, 2, 1, '2025-02-01', '2025-02-05', 4000000), (4, 1, 2, 1, '2025-03-15', '2025-03-16', 700000),\n (5, 5, 3, 3, '2025-03-01', '2025-03-08', 4900000), (6, 6, 4, 3, '2024-09-09', '2024-09-12', 4200000),\n (7, 8, 5, 4, '2025-06-01', '2025-06-03', 1300000), (8, 9, 6, 4, '2024-01-20', '2024-01-25', 5000000),\n (9, 1, 3, 1, '2025-07-07', '2025-07-09', 1400000), (10, 4, 2, 2, '2025-09-01', '2025-09-04', 2250000),\n (11, 7, 3, 3, '2026-01-10', NULL, NULL), (12, 2, 9, 1, '2026-02-01', NULL, NULL),\n (13, 1, 4, 1, '2025-10-10', '2025-10-12', 800000), (14, 3, 7, 2, '2025-11-01', '2025-11-03', 1400000),\n (15, 6, 3, 3, '2025-12-20', '2025-12-25', 7000000), (16, 8, 10, 4, '2025-08-08', '2025-08-10', 1300000),\n (17, 9, 5, 4, '2026-03-03', '2026-03-06', 3000000), (18, 12, 8, 3, '2026-01-05', '2026-01-06', 750000),\n (19, 10, 1, 2, '2026-02-14', '2026-02-16', 2400000), (20, 3, 2, 2, '2026-04-01', '2026-04-02', 700000),\n (21, 13, 6, 4, '2025-04-04', '2025-04-06', 1600000), (22, 13, 10, 4, '2026-05-01', '2026-05-02', 800000),\n (23, 8, 5, 4, '2026-06-01', '2026-06-02', 650000), (24, 2, 6, 1, '2024-12-01', '2024-12-03', 2000000),\n (25, 13, 9, 4, '2025-09-09', '2025-09-10', 800000);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Every reference answer is standard SQL that runs unchanged on SQL Server 2019+ and PostgreSQL. Each file is graded on a fresh copy of the database and again on a modified copy (hidden checks), exactly like an examiner re-running your script on new data.</p>",
+      "solutionExplanationHtmlVi": "<p>Mọi lời giải mẫu là SQL chuẩn chạy nguyên văn trên SQL Server 2019+ và PostgreSQL. Mỗi tệp được chấm trên một bản CSDL mới và lần nữa trên bản đã đổi dữ liệu (kiểm ẩn) — giống giám khảo chạy lại script của bạn trên dữ liệu mới.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "CREATE TABLE Branches (\n    BranchID   INT           NOT NULL PRIMARY KEY,\n    BranchName NVARCHAR(50)  NOT NULL,\n    City       NVARCHAR(30)  NOT NULL\n);\nCREATE TABLE CarModels (\n    ModelID    INT           NOT NULL PRIMARY KEY,\n    Brand      NVARCHAR(30)  NOT NULL,\n    ModelName  NVARCHAR(50)  NOT NULL,\n    Seats      INT           NOT NULL,\n    DailyRate  DECIMAL(10,2) NOT NULL\n);\nCREATE TABLE Cars (\n    CarID      INT           NOT NULL PRIMARY KEY,\n    PlateNo    VARCHAR(15)   NOT NULL UNIQUE,\n    ModelID    INT           NOT NULL REFERENCES CarModels (ModelID),\n    BranchID   INT           NOT NULL REFERENCES Branches (BranchID),\n    MadeYear   INT           NOT NULL,\n    Status     NVARCHAR(15)  NOT NULL\n);\nCREATE TABLE Customers (\n    CustomerID INT           NOT NULL PRIMARY KEY,\n    FullName   NVARCHAR(50)  NOT NULL,\n    Email      NVARCHAR(100) NOT NULL,\n    City       NVARCHAR(30)  NOT NULL,\n    JoinDate   DATE          NOT NULL\n);\nCREATE TABLE Rentals (\n    RentalID       INT           NOT NULL PRIMARY KEY,\n    CarID          INT           NOT NULL REFERENCES Cars (CarID),\n    CustomerID     INT           NOT NULL REFERENCES Customers (CustomerID),\n    PickupBranchID INT           NOT NULL REFERENCES Branches (BranchID),\n    PickupDate     DATE          NOT NULL,\n    ReturnDate     DATE          NULL,\n    TotalAmount    DECIMAL(12,2) NULL\n);\nCREATE TABLE LoyalCustomers (\n    CustomerID INT           NOT NULL PRIMARY KEY REFERENCES Customers (CustomerID),\n    FullName   NVARCHAR(50)  NOT NULL,\n    TotalSpent DECIMAL(14,2) NOT NULL\n);\n\nINSERT INTO Branches (BranchID, BranchName, City) VALUES\n (1, N'CT Rent Hoàn Kiếm', N'Hà Nội'), (2, N'CT Rent Cầu Giấy', N'Hà Nội'),\n (3, N'CT Rent Quận 1', N'Hồ Chí Minh'), (4, N'CT Rent Hải Châu', N'Đà Nẵng');\nINSERT INTO CarModels (ModelID, Brand, ModelName, Seats, DailyRate) VALUES\n (1, N'Toyota', N'Vios', 5, 700000), (2, N'Toyota', N'Innova', 7, 1000000), (3, N'Honda', N'City', 5, 750000),\n (4, N'Hyundai', N'Accent', 5, 650000), (5, N'Kia', N'Carnival', 7, 1400000), (6, N'VinFast', N'VF8', 5, 1200000),\n (7, N'Hyundai', N'Creta', 5, 800000);\nINSERT INTO Cars (CarID, PlateNo, ModelID, BranchID, MadeYear, Status) VALUES\n (1, '29A-123.45', 1, 1, 2021, N'Available'), (2, '29A-678.90', 2, 1, 2022, N'Rented'),\n (3, '30F-111.22', 1, 2, 2020, N'Available'), (4, '30F-333.44', 3, 2, 2023, N'Available'),\n (5, '51H-555.66', 1, 3, 2019, N'Maintenance'), (6, '51H-777.88', 5, 3, 2024, N'Available'),\n (7, '51H-999.00', 6, 3, 2025, N'Rented'), (8, '43A-246.80', 4, 4, 2021, N'Available'),\n (9, '43A-135.79', 2, 4, 2022, N'Available'), (10, '30G-864.20', 6, 2, 2025, N'Available'),\n (11, '29A-202.02', 4, 1, 2018, N'Available'), (12, '51K-121.21', 3, 3, 2022, N'Available'),\n (13, '43B-777.77', 7, 4, 2024, N'Available');\nINSERT INTO Customers (CustomerID, FullName, Email, City, JoinDate) VALUES\n (1, N'Nguyễn Minh Khoa', N'khoa.nm@fpt.edu.vn', N'Hà Nội', '2024-03-10'),\n (2, N'Trần Thu Hà', N'ha.tt@gmail.com', N'Hà Nội', '2025-01-15'),\n (3, N'Lê Quốc Anh', N'ANH.LQ@FPT.EDU.VN', N'Hồ Chí Minh', '2025-02-20'),\n (4, N'Phạm Gia Bảo', N'bao.pg@yahoo.com', N'Hồ Chí Minh', '2024-07-01'),\n (5, N'Võ Thị Lan', N'lan.vt@fpt.edu.vn', N'Đà Nẵng', '2025-05-05'),\n (6, N'Đỗ Hoàng Nam', N'nam.dh@outlook.com', N'Đà Nẵng', '2023-11-11'),\n (7, N'Bùi Khánh Linh', N'linh.bk@fpt.edu.vn.example.com', N'Hà Nội', '2025-08-18'),\n (8, N'Hoàng Anh Tú', N'tu.ha@gmail.com', N'Hồ Chí Minh', '2025-12-31'),\n (9, N'Mai Phương Thảo', N'thao.mp@fpt.edu.vn', N'Hà Nội', '2026-01-01'),\n (10, N'Đặng Văn Hùng', N'hung.dv@gmail.com', N'Đà Nẵng', '2025-06-30');\nINSERT INTO Rentals (RentalID, CarID, CustomerID, PickupBranchID, PickupDate, ReturnDate, TotalAmount) VALUES\n (1, 1, 1, 1, '2024-04-01', '2024-04-04', 2100000), (2, 3, 1, 2, '2024-06-10', '2024-06-12', 1400000),\n (3, 2, 2, 1, '2025-02-01', '2025-02-05', 4000000), (4, 1, 2, 1, '2025-03-15', '2025-03-16', 700000),\n (5, 5, 3, 3, '2025-03-01', '2025-03-08', 4900000), (6, 6, 4, 3, '2024-09-09', '2024-09-12', 4200000),\n (7, 8, 5, 4, '2025-06-01', '2025-06-03', 1300000), (8, 9, 6, 4, '2024-01-20', '2024-01-25', 5000000),\n (9, 1, 3, 1, '2025-07-07', '2025-07-09', 1400000), (10, 4, 2, 2, '2025-09-01', '2025-09-04', 2250000),\n (11, 7, 3, 3, '2026-01-10', NULL, NULL), (12, 2, 9, 1, '2026-02-01', NULL, NULL),\n (13, 1, 4, 1, '2025-10-10', '2025-10-12', 800000), (14, 3, 7, 2, '2025-11-01', '2025-11-03', 1400000),\n (15, 6, 3, 3, '2025-12-20', '2025-12-25', 7000000), (16, 8, 10, 4, '2025-08-08', '2025-08-10', 1300000),\n (17, 9, 5, 4, '2026-03-03', '2026-03-06', 3000000), (18, 12, 8, 3, '2026-01-05', '2026-01-06', 750000),\n (19, 10, 1, 2, '2026-02-14', '2026-02-16', 2400000), (20, 3, 2, 2, '2026-04-01', '2026-04-02', 700000),\n (21, 13, 6, 4, '2025-04-04', '2025-04-06', 1600000), (22, 13, 10, 4, '2026-05-01', '2026-05-02', 800000),\n (23, 8, 5, 4, '2026-06-01', '2026-06-02', 650000), (24, 2, 6, 1, '2024-12-01', '2024-12-03', 2000000),\n (25, 13, 9, 4, '2025-09-09', '2025-09-10', 800000);",
+        "tepChinh": "Q1.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Q1 · tables and columns",
+            "kiemTra": "SELECT lower(table_name) AS tbl, lower(column_name) AS col, lower(data_type) AS type FROM information_schema.columns WHERE lower(table_name) IN ('doctor', 'doctorphone', 'patient', 'treats') ORDER BY lower(table_name), ordinal_position",
+            "thuTu": true,
+            "csdl": "",
+            "tep": "Q1.sql",
+            "nhom": "f1",
+            "mongDoi": {
+              "cot": [
+                "tbl",
+                "col",
+                "type"
+              ],
+              "hang": [
+                [
+                  "doctor",
+                  "doctorid",
+                  "integer"
+                ],
+                [
+                  "doctor",
+                  "fullname",
+                  "character varying"
+                ],
+                [
+                  "doctor",
+                  "specialty",
+                  "character varying"
+                ],
+                [
+                  "doctorphone",
+                  "doctorid",
+                  "integer"
+                ],
+                [
+                  "doctorphone",
+                  "phone",
+                  "character varying"
+                ],
+                [
+                  "patient",
+                  "patientid",
+                  "integer"
+                ],
+                [
+                  "patient",
+                  "fullname",
+                  "character varying"
+                ],
+                [
+                  "patient",
+                  "birthdate",
+                  "date"
+                ],
+                [
+                  "treats",
+                  "doctorid",
+                  "integer"
+                ],
+                [
+                  "treats",
+                  "patientid",
+                  "integer"
+                ],
+                [
+                  "treats",
+                  "visitdate",
+                  "date"
+                ],
+                [
+                  "treats",
+                  "diagnosis",
+                  "character varying"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "chay-duoc",
+            "moTa": "Q1 · valid rows in all four tables",
+            "thu": "INSERT INTO Doctor (DoctorID, FullName, Specialty) VALUES (1, 'Dr. An', 'Cardiology'); INSERT INTO DoctorPhone (DoctorID, Phone) VALUES (1, '0901'), (1, '0902'); INSERT INTO Patient (PatientID, FullName, BirthDate) VALUES (7, 'Binh', '2000-01-01'); INSERT INTO Treats (DoctorID, PatientID, VisitDate, Diagnosis) VALUES (1, 7, '2026-01-02', 'flu'), (1, 7, '2026-02-02', 'check-up')",
+            "csdl": "",
+            "tep": "Q1.sql",
+            "nhom": "f1"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q1 · same doctor, patient and day twice is rejected",
+            "thu": "INSERT INTO Doctor (DoctorID, FullName) VALUES (1, 'A'); INSERT INTO Patient (PatientID, FullName) VALUES (7, 'B'); INSERT INTO Treats (DoctorID, PatientID, VisitDate) VALUES (1, 7, '2026-01-02'), (1, 7, '2026-01-02')",
+            "maLoi": "23505",
+            "csdl": "",
+            "tep": "Q1.sql",
+            "nhom": "f1"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q1 · a phone of an unknown doctor is rejected",
+            "thu": "INSERT INTO DoctorPhone (DoctorID, Phone) VALUES (99, '0999')",
+            "maLoi": "23503",
+            "csdl": "",
+            "an": true,
+            "tep": "Q1.sql",
+            "nhom": "f1"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q1 · a visit of an unknown patient is rejected",
+            "thu": "INSERT INTO Doctor (DoctorID, FullName) VALUES (1, 'A'); INSERT INTO Treats (DoctorID, PatientID, VisitDate) VALUES (1, 99, '2026-01-02')",
+            "maLoi": "23503",
+            "csdl": "",
+            "an": true,
+            "tep": "Q1.sql",
+            "nhom": "f1"
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Q2 · FPT emails",
+            "tep": "Q2.sql",
+            "nhom": "f2",
+            "mongDoi": {
+              "cot": [
+                "CustomerID",
+                "FullName",
+                "Email"
+              ],
+              "hang": [
+                [
+                  1,
+                  "Nguyễn Minh Khoa",
+                  "khoa.nm@fpt.edu.vn"
+                ],
+                [
+                  3,
+                  "Lê Quốc Anh",
+                  "ANH.LQ@FPT.EDU.VN"
+                ],
+                [
+                  5,
+                  "Võ Thị Lan",
+                  "lan.vt@fpt.edu.vn"
+                ],
+                [
+                  9,
+                  "Mai Phương Thảo",
+                  "thao.mp@fpt.edu.vn"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Q2 · more emails (upper case, look-alike domains)",
+            "an": true,
+            "themCsdl": "INSERT INTO Customers (CustomerID, FullName, Email, City, JoinDate) VALUES\n (11, N'Kiều Minh Tâm', N'tam.km@FPT.edu.vn', N'Đà Nẵng', '2025-12-31'),\n (12, N'Lò Thị Mai', N'mai.lt@fpt.edu.vn.vn', N'Hồ Chí Minh', '2024-12-31');\nINSERT INTO Cars (CarID, PlateNo, ModelID, BranchID, MadeYear, Status) VALUES (14, '43C-999.99', 3, 4, 2025, N'Available');\nINSERT INTO Rentals (RentalID, CarID, CustomerID, PickupBranchID, PickupDate, ReturnDate, TotalAmount) VALUES\n (31, 14, 11, 4, '2025-12-31', '2026-01-02', 9000000), (32, 4, 11, 4, '2026-01-10', '2026-01-11', 750000),\n (33, 12, 11, 3, '2026-02-01', '2026-02-03', 1500000), (34, 4, 1, 2, '2026-03-01', NULL, NULL),\n (35, 14, 5, 4, '2026-07-01', '2026-07-02', 750000)",
+            "tep": "Q2.sql",
+            "nhom": "f2",
+            "mongDoi": {
+              "cot": [
+                "CustomerID",
+                "FullName",
+                "Email"
+              ],
+              "hang": [
+                [
+                  1,
+                  "Nguyễn Minh Khoa",
+                  "khoa.nm@fpt.edu.vn"
+                ],
+                [
+                  3,
+                  "Lê Quốc Anh",
+                  "ANH.LQ@FPT.EDU.VN"
+                ],
+                [
+                  5,
+                  "Võ Thị Lan",
+                  "lan.vt@fpt.edu.vn"
+                ],
+                [
+                  9,
+                  "Mai Phương Thảo",
+                  "thao.mp@fpt.edu.vn"
+                ],
+                [
+                  11,
+                  "Kiều Minh Tâm",
+                  "tam.km@FPT.edu.vn"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Q3 · Toyota in Hà Nội",
+            "thuTu": true,
+            "tep": "Q3.sql",
+            "nhom": "f3",
+            "mongDoi": {
+              "cot": [
+                "CarID",
+                "PlateNo",
+                "ModelName",
+                "BranchName"
+              ],
+              "hang": [
+                [
+                  1,
+                  "29A-123.45",
+                  "Vios",
+                  "CT Rent Hoàn Kiếm"
+                ],
+                [
+                  2,
+                  "29A-678.90",
+                  "Innova",
+                  "CT Rent Hoàn Kiếm"
+                ],
+                [
+                  3,
+                  "30F-111.22",
+                  "Vios",
+                  "CT Rent Cầu Giấy"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Q3 · after a new car",
+            "an": true,
+            "themCsdl": "INSERT INTO Customers (CustomerID, FullName, Email, City, JoinDate) VALUES\n (11, N'Kiều Minh Tâm', N'tam.km@FPT.edu.vn', N'Đà Nẵng', '2025-12-31'),\n (12, N'Lò Thị Mai', N'mai.lt@fpt.edu.vn.vn', N'Hồ Chí Minh', '2024-12-31');\nINSERT INTO Cars (CarID, PlateNo, ModelID, BranchID, MadeYear, Status) VALUES (14, '43C-999.99', 3, 4, 2025, N'Available');\nINSERT INTO Rentals (RentalID, CarID, CustomerID, PickupBranchID, PickupDate, ReturnDate, TotalAmount) VALUES\n (31, 14, 11, 4, '2025-12-31', '2026-01-02', 9000000), (32, 4, 11, 4, '2026-01-10', '2026-01-11', 750000),\n (33, 12, 11, 3, '2026-02-01', '2026-02-03', 1500000), (34, 4, 1, 2, '2026-03-01', NULL, NULL),\n (35, 14, 5, 4, '2026-07-01', '2026-07-02', 750000); INSERT INTO Cars (CarID, PlateNo, ModelID, BranchID, MadeYear, Status) VALUES (15, '30K-000.15', 2, 2, 2026, N'Available')",
+            "thuTu": true,
+            "tep": "Q3.sql",
+            "nhom": "f3",
+            "mongDoi": {
+              "cot": [
+                "CarID",
+                "PlateNo",
+                "ModelName",
+                "BranchName"
+              ],
+              "hang": [
+                [
+                  1,
+                  "29A-123.45",
+                  "Vios",
+                  "CT Rent Hoàn Kiếm"
+                ],
+                [
+                  2,
+                  "29A-678.90",
+                  "Innova",
+                  "CT Rent Hoàn Kiếm"
+                ],
+                [
+                  3,
+                  "30F-111.22",
+                  "Vios",
+                  "CT Rent Cầu Giấy"
+                ],
+                [
+                  15,
+                  "30K-000.15",
+                  "Innova",
+                  "CT Rent Cầu Giấy"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Q4 · 2025 members with 2025 rentals",
+            "thuTu": true,
+            "tep": "Q4.sql",
+            "nhom": "f4",
+            "mongDoi": {
+              "cot": [
+                "CustomerID",
+                "FullName",
+                "JoinDate",
+                "RentalID",
+                "PickupDate"
+              ],
+              "hang": [
+                [
+                  2,
+                  "Trần Thu Hà",
+                  "2025-01-15",
+                  3,
+                  "2025-02-01"
+                ],
+                [
+                  2,
+                  "Trần Thu Hà",
+                  "2025-01-15",
+                  4,
+                  "2025-03-15"
+                ],
+                [
+                  2,
+                  "Trần Thu Hà",
+                  "2025-01-15",
+                  10,
+                  "2025-09-01"
+                ],
+                [
+                  3,
+                  "Lê Quốc Anh",
+                  "2025-02-20",
+                  5,
+                  "2025-03-01"
+                ],
+                [
+                  3,
+                  "Lê Quốc Anh",
+                  "2025-02-20",
+                  9,
+                  "2025-07-07"
+                ],
+                [
+                  3,
+                  "Lê Quốc Anh",
+                  "2025-02-20",
+                  15,
+                  "2025-12-20"
+                ],
+                [
+                  5,
+                  "Võ Thị Lan",
+                  "2025-05-05",
+                  7,
+                  "2025-06-01"
+                ],
+                [
+                  7,
+                  "Bùi Khánh Linh",
+                  "2025-08-18",
+                  14,
+                  "2025-11-01"
+                ],
+                [
+                  8,
+                  "Hoàng Anh Tú",
+                  "2025-12-31",
+                  null,
+                  null
+                ],
+                [
+                  10,
+                  "Đặng Văn Hùng",
+                  "2025-06-30",
+                  16,
+                  "2025-08-08"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Q4 · boundary dates",
+            "an": true,
+            "themCsdl": "INSERT INTO Customers (CustomerID, FullName, Email, City, JoinDate) VALUES\n (11, N'Kiều Minh Tâm', N'tam.km@FPT.edu.vn', N'Đà Nẵng', '2025-12-31'),\n (12, N'Lò Thị Mai', N'mai.lt@fpt.edu.vn.vn', N'Hồ Chí Minh', '2024-12-31');\nINSERT INTO Cars (CarID, PlateNo, ModelID, BranchID, MadeYear, Status) VALUES (14, '43C-999.99', 3, 4, 2025, N'Available');\nINSERT INTO Rentals (RentalID, CarID, CustomerID, PickupBranchID, PickupDate, ReturnDate, TotalAmount) VALUES\n (31, 14, 11, 4, '2025-12-31', '2026-01-02', 9000000), (32, 4, 11, 4, '2026-01-10', '2026-01-11', 750000),\n (33, 12, 11, 3, '2026-02-01', '2026-02-03', 1500000), (34, 4, 1, 2, '2026-03-01', NULL, NULL),\n (35, 14, 5, 4, '2026-07-01', '2026-07-02', 750000)",
+            "thuTu": true,
+            "tep": "Q4.sql",
+            "nhom": "f4",
+            "mongDoi": {
+              "cot": [
+                "CustomerID",
+                "FullName",
+                "JoinDate",
+                "RentalID",
+                "PickupDate"
+              ],
+              "hang": [
+                [
+                  2,
+                  "Trần Thu Hà",
+                  "2025-01-15",
+                  3,
+                  "2025-02-01"
+                ],
+                [
+                  2,
+                  "Trần Thu Hà",
+                  "2025-01-15",
+                  4,
+                  "2025-03-15"
+                ],
+                [
+                  2,
+                  "Trần Thu Hà",
+                  "2025-01-15",
+                  10,
+                  "2025-09-01"
+                ],
+                [
+                  3,
+                  "Lê Quốc Anh",
+                  "2025-02-20",
+                  5,
+                  "2025-03-01"
+                ],
+                [
+                  3,
+                  "Lê Quốc Anh",
+                  "2025-02-20",
+                  9,
+                  "2025-07-07"
+                ],
+                [
+                  3,
+                  "Lê Quốc Anh",
+                  "2025-02-20",
+                  15,
+                  "2025-12-20"
+                ],
+                [
+                  5,
+                  "Võ Thị Lan",
+                  "2025-05-05",
+                  7,
+                  "2025-06-01"
+                ],
+                [
+                  7,
+                  "Bùi Khánh Linh",
+                  "2025-08-18",
+                  14,
+                  "2025-11-01"
+                ],
+                [
+                  8,
+                  "Hoàng Anh Tú",
+                  "2025-12-31",
+                  null,
+                  null
+                ],
+                [
+                  10,
+                  "Đặng Văn Hùng",
+                  "2025-06-30",
+                  16,
+                  "2025-08-08"
+                ],
+                [
+                  11,
+                  "Kiều Minh Tâm",
+                  "2025-12-31",
+                  31,
+                  "2025-12-31"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Q5 · per branch",
+            "thuTu": true,
+            "tep": "Q5.sql",
+            "nhom": "f5",
+            "mongDoi": {
+              "cot": [
+                "BranchID",
+                "BranchName",
+                "NumCars",
+                "NumCustomers"
+              ],
+              "hang": [
+                [
+                  1,
+                  "CT Rent Hoàn Kiếm",
+                  3,
+                  6
+                ],
+                [
+                  2,
+                  "CT Rent Cầu Giấy",
+                  3,
+                  3
+                ],
+                [
+                  3,
+                  "CT Rent Quận 1",
+                  4,
+                  3
+                ],
+                [
+                  4,
+                  "CT Rent Hải Châu",
+                  3,
+                  4
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Q5 · after new rentals",
+            "an": true,
+            "themCsdl": "INSERT INTO Customers (CustomerID, FullName, Email, City, JoinDate) VALUES\n (11, N'Kiều Minh Tâm', N'tam.km@FPT.edu.vn', N'Đà Nẵng', '2025-12-31'),\n (12, N'Lò Thị Mai', N'mai.lt@fpt.edu.vn.vn', N'Hồ Chí Minh', '2024-12-31');\nINSERT INTO Cars (CarID, PlateNo, ModelID, BranchID, MadeYear, Status) VALUES (14, '43C-999.99', 3, 4, 2025, N'Available');\nINSERT INTO Rentals (RentalID, CarID, CustomerID, PickupBranchID, PickupDate, ReturnDate, TotalAmount) VALUES\n (31, 14, 11, 4, '2025-12-31', '2026-01-02', 9000000), (32, 4, 11, 4, '2026-01-10', '2026-01-11', 750000),\n (33, 12, 11, 3, '2026-02-01', '2026-02-03', 1500000), (34, 4, 1, 2, '2026-03-01', NULL, NULL),\n (35, 14, 5, 4, '2026-07-01', '2026-07-02', 750000)",
+            "thuTu": true,
+            "tep": "Q5.sql",
+            "nhom": "f5",
+            "mongDoi": {
+              "cot": [
+                "BranchID",
+                "BranchName",
+                "NumCars",
+                "NumCustomers"
+              ],
+              "hang": [
+                [
+                  1,
+                  "CT Rent Hoàn Kiếm",
+                  3,
+                  6
+                ],
+                [
+                  2,
+                  "CT Rent Cầu Giấy",
+                  3,
+                  3
+                ],
+                [
+                  3,
+                  "CT Rent Quận 1",
+                  4,
+                  4
+                ],
+                [
+                  4,
+                  "CT Rent Hải Châu",
+                  4,
+                  5
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Q6 · top model per brand",
+            "thuTu": true,
+            "tep": "Q6.sql",
+            "nhom": "f6",
+            "mongDoi": {
+              "cot": [
+                "Brand",
+                "ModelName",
+                "NumRentals"
+              ],
+              "hang": [
+                [
+                  "Honda",
+                  "City",
+                  2
+                ],
+                [
+                  "Hyundai",
+                  "Accent",
+                  3
+                ],
+                [
+                  "Hyundai",
+                  "Creta",
+                  3
+                ],
+                [
+                  "Kia",
+                  "Carnival",
+                  2
+                ],
+                [
+                  "Toyota",
+                  "Vios",
+                  8
+                ],
+                [
+                  "VinFast",
+                  "VF8",
+                  2
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Q6 · with new rentals",
+            "an": true,
+            "themCsdl": "INSERT INTO Customers (CustomerID, FullName, Email, City, JoinDate) VALUES\n (11, N'Kiều Minh Tâm', N'tam.km@FPT.edu.vn', N'Đà Nẵng', '2025-12-31'),\n (12, N'Lò Thị Mai', N'mai.lt@fpt.edu.vn.vn', N'Hồ Chí Minh', '2024-12-31');\nINSERT INTO Cars (CarID, PlateNo, ModelID, BranchID, MadeYear, Status) VALUES (14, '43C-999.99', 3, 4, 2025, N'Available');\nINSERT INTO Rentals (RentalID, CarID, CustomerID, PickupBranchID, PickupDate, ReturnDate, TotalAmount) VALUES\n (31, 14, 11, 4, '2025-12-31', '2026-01-02', 9000000), (32, 4, 11, 4, '2026-01-10', '2026-01-11', 750000),\n (33, 12, 11, 3, '2026-02-01', '2026-02-03', 1500000), (34, 4, 1, 2, '2026-03-01', NULL, NULL),\n (35, 14, 5, 4, '2026-07-01', '2026-07-02', 750000)",
+            "thuTu": true,
+            "tep": "Q6.sql",
+            "nhom": "f6",
+            "mongDoi": {
+              "cot": [
+                "Brand",
+                "ModelName",
+                "NumRentals"
+              ],
+              "hang": [
+                [
+                  "Honda",
+                  "City",
+                  7
+                ],
+                [
+                  "Hyundai",
+                  "Accent",
+                  3
+                ],
+                [
+                  "Hyundai",
+                  "Creta",
+                  3
+                ],
+                [
+                  "Kia",
+                  "Carnival",
+                  2
+                ],
+                [
+                  "Toyota",
+                  "Vios",
+                  8
+                ],
+                [
+                  "VinFast",
+                  "VF8",
+                  2
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Q7 · double maximum per city",
+            "thuTu": true,
+            "tep": "Q7.sql",
+            "nhom": "f7",
+            "mongDoi": {
+              "cot": [
+                "City",
+                "CustomerID",
+                "FullName",
+                "TotalSpent",
+                "NumRentals"
+              ],
+              "hang": [
+                [
+                  "Hà Nội",
+                  2,
+                  "Trần Thu Hà",
+                  7650000,
+                  4
+                ],
+                [
+                  "Hồ Chí Minh",
+                  3,
+                  "Lê Quốc Anh",
+                  13300000,
+                  4
+                ],
+                [
+                  "Đà Nẵng",
+                  6,
+                  "Đỗ Hoàng Nam",
+                  8600000,
+                  3
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Q7 · with a new big spender",
+            "an": true,
+            "themCsdl": "INSERT INTO Customers (CustomerID, FullName, Email, City, JoinDate) VALUES\n (11, N'Kiều Minh Tâm', N'tam.km@FPT.edu.vn', N'Đà Nẵng', '2025-12-31'),\n (12, N'Lò Thị Mai', N'mai.lt@fpt.edu.vn.vn', N'Hồ Chí Minh', '2024-12-31');\nINSERT INTO Cars (CarID, PlateNo, ModelID, BranchID, MadeYear, Status) VALUES (14, '43C-999.99', 3, 4, 2025, N'Available');\nINSERT INTO Rentals (RentalID, CarID, CustomerID, PickupBranchID, PickupDate, ReturnDate, TotalAmount) VALUES\n (31, 14, 11, 4, '2025-12-31', '2026-01-02', 9000000), (32, 4, 11, 4, '2026-01-10', '2026-01-11', 750000),\n (33, 12, 11, 3, '2026-02-01', '2026-02-03', 1500000), (34, 4, 1, 2, '2026-03-01', NULL, NULL),\n (35, 14, 5, 4, '2026-07-01', '2026-07-02', 750000)",
+            "thuTu": true,
+            "tep": "Q7.sql",
+            "nhom": "f7",
+            "mongDoi": {
+              "cot": [
+                "City",
+                "CustomerID",
+                "FullName",
+                "TotalSpent",
+                "NumRentals"
+              ],
+              "hang": [
+                [
+                  "Hà Nội",
+                  2,
+                  "Trần Thu Hà",
+                  7650000,
+                  4
+                ],
+                [
+                  "Hồ Chí Minh",
+                  3,
+                  "Lê Quốc Anh",
+                  13300000,
+                  4
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Q8 · SELECT * FROM vwOpenRentals",
+            "kiemTra": "SELECT * FROM vwOpenRentals",
+            "tep": "Q8.sql",
+            "nhom": "f8",
+            "mongDoi": {
+              "cot": [
+                "rentalid",
+                "plateno",
+                "fullname",
+                "pickupdate"
+              ],
+              "hang": [
+                [
+                  12,
+                  "29A-678.90",
+                  "Mai Phương Thảo",
+                  "2026-02-01"
+                ],
+                [
+                  11,
+                  "51H-999.00",
+                  "Lê Quốc Anh",
+                  "2026-01-10"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Q8 · the view follows new data",
+            "kiemTra": "SELECT * FROM vwOpenRentals",
+            "an": true,
+            "themCsdl": "INSERT INTO Customers (CustomerID, FullName, Email, City, JoinDate) VALUES\n (11, N'Kiều Minh Tâm', N'tam.km@FPT.edu.vn', N'Đà Nẵng', '2025-12-31'),\n (12, N'Lò Thị Mai', N'mai.lt@fpt.edu.vn.vn', N'Hồ Chí Minh', '2024-12-31');\nINSERT INTO Cars (CarID, PlateNo, ModelID, BranchID, MadeYear, Status) VALUES (14, '43C-999.99', 3, 4, 2025, N'Available');\nINSERT INTO Rentals (RentalID, CarID, CustomerID, PickupBranchID, PickupDate, ReturnDate, TotalAmount) VALUES\n (31, 14, 11, 4, '2025-12-31', '2026-01-02', 9000000), (32, 4, 11, 4, '2026-01-10', '2026-01-11', 750000),\n (33, 12, 11, 3, '2026-02-01', '2026-02-03', 1500000), (34, 4, 1, 2, '2026-03-01', NULL, NULL),\n (35, 14, 5, 4, '2026-07-01', '2026-07-02', 750000)",
+            "tep": "Q8.sql",
+            "nhom": "f8",
+            "mongDoi": {
+              "cot": [
+                "rentalid",
+                "plateno",
+                "fullname",
+                "pickupdate"
+              ],
+              "hang": [
+                [
+                  12,
+                  "29A-678.90",
+                  "Mai Phương Thảo",
+                  "2026-02-01"
+                ],
+                [
+                  34,
+                  "30F-333.44",
+                  "Nguyễn Minh Khoa",
+                  "2026-03-01"
+                ],
+                [
+                  11,
+                  "51H-999.00",
+                  "Lê Quốc Anh",
+                  "2026-01-10"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Q9 · status of every car",
+            "kiemTra": "SELECT CarID, Status FROM Cars ORDER BY CarID",
+            "thuTu": true,
+            "tep": "Q9.sql",
+            "nhom": "f9",
+            "mongDoi": {
+              "cot": [
+                "CarID",
+                "Status"
+              ],
+              "hang": [
+                [
+                  1,
+                  "Maintenance"
+                ],
+                [
+                  2,
+                  "Rented"
+                ],
+                [
+                  3,
+                  "Maintenance"
+                ],
+                [
+                  4,
+                  "Available"
+                ],
+                [
+                  5,
+                  "Maintenance"
+                ],
+                [
+                  6,
+                  "Available"
+                ],
+                [
+                  7,
+                  "Rented"
+                ],
+                [
+                  8,
+                  "Maintenance"
+                ],
+                [
+                  9,
+                  "Available"
+                ],
+                [
+                  10,
+                  "Available"
+                ],
+                [
+                  11,
+                  "Available"
+                ],
+                [
+                  12,
+                  "Available"
+                ],
+                [
+                  13,
+                  "Maintenance"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Q9 · with new rentals",
+            "kiemTra": "SELECT CarID, Status FROM Cars ORDER BY CarID",
+            "thuTu": true,
+            "an": true,
+            "themCsdl": "INSERT INTO Customers (CustomerID, FullName, Email, City, JoinDate) VALUES\n (11, N'Kiều Minh Tâm', N'tam.km@FPT.edu.vn', N'Đà Nẵng', '2025-12-31'),\n (12, N'Lò Thị Mai', N'mai.lt@fpt.edu.vn.vn', N'Hồ Chí Minh', '2024-12-31');\nINSERT INTO Cars (CarID, PlateNo, ModelID, BranchID, MadeYear, Status) VALUES (14, '43C-999.99', 3, 4, 2025, N'Available');\nINSERT INTO Rentals (RentalID, CarID, CustomerID, PickupBranchID, PickupDate, ReturnDate, TotalAmount) VALUES\n (31, 14, 11, 4, '2025-12-31', '2026-01-02', 9000000), (32, 4, 11, 4, '2026-01-10', '2026-01-11', 750000),\n (33, 12, 11, 3, '2026-02-01', '2026-02-03', 1500000), (34, 4, 1, 2, '2026-03-01', NULL, NULL),\n (35, 14, 5, 4, '2026-07-01', '2026-07-02', 750000)",
+            "tep": "Q9.sql",
+            "nhom": "f9",
+            "mongDoi": {
+              "cot": [
+                "CarID",
+                "Status"
+              ],
+              "hang": [
+                [
+                  1,
+                  "Maintenance"
+                ],
+                [
+                  2,
+                  "Rented"
+                ],
+                [
+                  3,
+                  "Maintenance"
+                ],
+                [
+                  4,
+                  "Maintenance"
+                ],
+                [
+                  5,
+                  "Maintenance"
+                ],
+                [
+                  6,
+                  "Available"
+                ],
+                [
+                  7,
+                  "Rented"
+                ],
+                [
+                  8,
+                  "Maintenance"
+                ],
+                [
+                  9,
+                  "Available"
+                ],
+                [
+                  10,
+                  "Available"
+                ],
+                [
+                  11,
+                  "Available"
+                ],
+                [
+                  12,
+                  "Available"
+                ],
+                [
+                  13,
+                  "Maintenance"
+                ],
+                [
+                  14,
+                  "Available"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Q10 · LoyalCustomers content",
+            "kiemTra": "SELECT CustomerID, FullName, TotalSpent FROM LoyalCustomers",
+            "tep": "Q10.sql",
+            "nhom": "f10",
+            "mongDoi": {
+              "cot": [
+                "CustomerID",
+                "FullName",
+                "TotalSpent"
+              ],
+              "hang": [
+                [
+                  6,
+                  "Đỗ Hoàng Nam",
+                  8600000
+                ],
+                [
+                  2,
+                  "Trần Thu Hà",
+                  7650000
+                ],
+                [
+                  3,
+                  "Lê Quốc Anh",
+                  13300000
+                ],
+                [
+                  1,
+                  "Nguyễn Minh Khoa",
+                  5900000
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Q10 · with new rentals",
+            "kiemTra": "SELECT CustomerID, FullName, TotalSpent FROM LoyalCustomers",
+            "an": true,
+            "themCsdl": "INSERT INTO Customers (CustomerID, FullName, Email, City, JoinDate) VALUES\n (11, N'Kiều Minh Tâm', N'tam.km@FPT.edu.vn', N'Đà Nẵng', '2025-12-31'),\n (12, N'Lò Thị Mai', N'mai.lt@fpt.edu.vn.vn', N'Hồ Chí Minh', '2024-12-31');\nINSERT INTO Cars (CarID, PlateNo, ModelID, BranchID, MadeYear, Status) VALUES (14, '43C-999.99', 3, 4, 2025, N'Available');\nINSERT INTO Rentals (RentalID, CarID, CustomerID, PickupBranchID, PickupDate, ReturnDate, TotalAmount) VALUES\n (31, 14, 11, 4, '2025-12-31', '2026-01-02', 9000000), (32, 4, 11, 4, '2026-01-10', '2026-01-11', 750000),\n (33, 12, 11, 3, '2026-02-01', '2026-02-03', 1500000), (34, 4, 1, 2, '2026-03-01', NULL, NULL),\n (35, 14, 5, 4, '2026-07-01', '2026-07-02', 750000)",
+            "tep": "Q10.sql",
+            "nhom": "f10",
+            "mongDoi": {
+              "cot": [
+                "CustomerID",
+                "FullName",
+                "TotalSpent"
+              ],
+              "hang": [
+                [
+                  6,
+                  "Đỗ Hoàng Nam",
+                  8600000
+                ],
+                [
+                  2,
+                  "Trần Thu Hà",
+                  7650000
+                ],
+                [
+                  11,
+                  "Kiều Minh Tâm",
+                  11250000
+                ],
+                [
+                  3,
+                  "Lê Quốc Anh",
+                  13300000
+                ],
+                [
+                  5,
+                  "Võ Thị Lan",
+                  5700000
+                ],
+                [
+                  1,
+                  "Nguyễn Minh Khoa",
+                  5900000
+                ]
+              ]
+            }
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. Create the tables of the ERD",
+            "diem": 1
+          },
+          {
+            "ma": "f2",
+            "ten": "2. Customers with an FPT University email",
+            "diem": 1
+          },
+          {
+            "ma": "f3",
+            "ten": "3. Toyota cars at Hà Nội branches",
+            "diem": 1
+          },
+          {
+            "ma": "f4",
+            "ten": "4. 2025 members and their 2025 rentals",
+            "diem": 1
+          },
+          {
+            "ma": "f5",
+            "ten": "5. Cars and customers per branch",
+            "diem": 1
+          },
+          {
+            "ma": "f6",
+            "ten": "6. Most rented model of each brand",
+            "diem": 1
+          },
+          {
+            "ma": "f7",
+            "ten": "7. Top customers of each city — by money AND by number of rentals",
+            "diem": 1
+          },
+          {
+            "ma": "f8",
+            "ten": "8. View of open rentals",
+            "diem": 1
+          },
+          {
+            "ma": "f9",
+            "ten": "9. Send heavily used cars to maintenance",
+            "diem": 1
+          },
+          {
+            "ma": "f10",
+            "ten": "10. Fill the loyalty table",
+            "diem": 1
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "pe",
+      "mistakesJson": [
+        {
+          "loi": "Q2 with LIKE '%fpt.edu.vn%' — also matches look-alike domains such as \"…@fpt.edu.vn.example.com\".|||Q2 dùng LIKE '%fpt.edu.vn%' — dính cả tên miền giả như \"…@fpt.edu.vn.example.com\"."
+        },
+        {
+          "loi": "Q7 checking only the money maximum — Đà Nẵng's top spender is not the customer with the most rentals.|||Q7 chỉ xét tiền lớn nhất — người chi nhiều nhất Đà Nẵng không phải người thuê nhiều lượt nhất."
+        },
+        {
+          "loi": "Q9 without the Status = 'Available' filter — a car that is out on rent gets sent to maintenance.|||Q9 thiếu điều kiện Status = 'Available' — xe đang cho thuê cũng bị đưa đi bảo dưỡng."
+        },
+        {
+          "loi": "Q10 including open rentals (TotalAmount NULL is ignored by SUM, but the rule says \"returned\" — write it).|||Q10 tính cả lượt chưa trả xe (SUM bỏ qua NULL, nhưng đề ghi \"đã trả xe\" — hãy viết rõ)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "multi-valued attribute",
+          "vi": "thuộc tính đa trị (⇒ bảng riêng)"
+        },
+        {
+          "en": "M:N relationship",
+          "vi": "liên kết nhiều-nhiều (⇒ bảng liên kết)"
+        },
+        {
+          "en": "LEFT (OUTER) JOIN",
+          "vi": "nối ngoài trái",
+          "giaiThich": "Giữ MỌI dòng bảng trái; không có cặp ⇒ cột bảng phải là NULL."
+        },
+        {
+          "en": "COUNT(DISTINCT x)",
+          "vi": "đếm giá trị khác nhau"
+        },
+        {
+          "en": "HAVING",
+          "vi": "điều kiện trên nhóm",
+          "giaiThich": "Lọc NHÓM sau khi gộp (dùng được hàm gộp); WHERE lọc dòng trước khi gộp."
+        },
+        {
+          "en": "VIEW",
+          "vi": "bảng ảo",
+          "giaiThich": "Câu SELECT được đặt tên, dùng như một bảng; không lưu dữ liệu riêng."
+        },
+        {
+          "en": "CTE (WITH … AS)",
+          "vi": "bảng tạm đặt tên trong một câu truy vấn"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,605 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-3-3-ch7-techniques",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-3-3-ch7-techniques"
+  },
+  "exercises": [
+    {
+      "title": "Techniques 1 — facilitated or independent?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "elicitation techniques"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Two families of elicitation techniques: <b>facilitated</b> techniques interact with stakeholders (mainly discovering business and user requirements); <b>independent</b> techniques are done by the analyst alone to discover information and functionality users may not be aware of. Classify.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hai họ kỹ thuật: có điều phối (làm cùng bên liên quan) và độc lập (BA tự làm).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Có mặt bên liên quan ⇒ có điều phối.",
+        "BA tự đọc/tự xem hệ thống ⇒ độc lập."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Techniques 1 — facilitated or independent?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Techniques 1 — facilitated or independent? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Facilitated\n   - r1.k: Independent\n   - r2.k: Facilitated\n   - r3.k: Independent\n   - r4.k: Facilitated\n   - r5.k: Independent\n   Most projects combine both: facilitated techniques bring out what people know; independent ones reveal what they forgot or never knew.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Most projects combine both: facilitated techniques bring out what people know; independent ones reveal what they forgot or never knew.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Family",
+                "luaChon": [
+                  "Facilitated",
+                  "Independent"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Interviews"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Document analysis"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Workshops"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "System interface analysis"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Focus groups"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "User interface analysis"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Facilitated",
+              "r1.k": "Independent",
+              "r2.k": "Facilitated",
+              "r3.k": "Independent",
+              "r4.k": "Facilitated",
+              "r5.k": "Independent"
+            },
+            "giaiThich": "<p><p>Most projects combine both: facilitated techniques bring out what people know; independent ones reveal what they forgot or never knew.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Xếp phân tích giao diện vào có điều phối."
+        },
+        {
+          "loi": "Nghĩ chỉ dùng một họ là đủ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "elicitation",
+          "vi": "khai thác yêu cầu — khám phá nhu cầu từ bên liên quan"
+        }
+      ]
+    },
+    {
+      "title": "Techniques 2 — which technique fits?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "choosing elicitation techniques"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Choose the best technique for each situation.</p><p>Each row is graded on its own; the explanation of every answer appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chọn kỹ thuật tốt nhất cho từng tình huống.</p><p>Mỗi dòng được chấm riêng; giải thích từng đáp án hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Nhiều người, ở xa ⇒ questionnaire.",
+        "Chuỗi phác thảo màn hình theo bước ⇒ storyboard."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Techniques 2 — which technique fits?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Techniques 2 — which technique fits? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Brainstorming\n   - r1.k: System interface analysis\n   - r2.k: User interface analysis\n   - r3.k: Storyboards\n   - r4.k: Questionnaires\n   - r5.k: Observations\n   - r6.k: Prototyping\n   - r7.k: Document analysis\n   Select by project characteristics, not habit: many BAs default to interviews and workshops and forget techniques that would be cheaper or more effective.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Select by project characteristics, not habit: many BAs default to interviews and workshops and forget techniques that would be cheaper or more effective.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Technique",
+                "luaChon": [
+                  "Interviews",
+                  "Workshops",
+                  "Focus groups",
+                  "Observations",
+                  "Questionnaires",
+                  "System interface analysis",
+                  "User interface analysis",
+                  "Document analysis",
+                  "Brainstorming",
+                  "Prototyping",
+                  "Storyboards"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "You need many candidate ideas for a loyalty feature quickly, without early criticism."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "The new app must exchange orders with the courier’s system."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "You replace an old desktop app; its screens show what users do today."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "You want users’ feedback on how a task flows, with a few quick sketches of the screens in sequence."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "3,000 drivers across the country must rate the importance of 10 features."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "You need to understand a task users find hard to describe in words."
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "Users and developers are unsure whether the proposed screen layout works."
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "s": "New regulations and the old specification must be checked for requirements."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Brainstorming",
+              "r1.k": "System interface analysis",
+              "r2.k": "User interface analysis",
+              "r3.k": "Storyboards",
+              "r4.k": "Questionnaires",
+              "r5.k": "Observations",
+              "r6.k": "Prototyping",
+              "r7.k": "Document analysis"
+            },
+            "giaiThich": "<p><p>Select by project characteristics, not habit: many BAs default to interviews and workshops and forget techniques that would be cheaper or more effective.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Phỏng vấn 3.000 tài xế."
+        },
+        {
+          "loi": "Nhầm storyboard với prototype."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "elicitation",
+          "vi": "khai thác yêu cầu — khám phá nhu cầu từ bên liên quan"
+        },
+        {
+          "en": "prototype",
+          "vi": "nguyên mẫu — bản thử để làm rõ yêu cầu (throwaway / evolutionary, mock-up / proof of concept)"
+        }
+      ]
+    },
+    {
+      "title": "Techniques 3 — interviews and workshops done well",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "interviews",
+        "workshops"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Interviews: establish rapport, stay in scope, prepare questions and straw-man models (people critique more easily than create), suggest ideas, listen actively and paraphrase. Workshops: ground rules, all roles filled (facilitator, scribe, timekeeper), an agenda, a parking lot, time-boxed topics, a small team of the right people (5–6).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phỏng vấn và workshop hiệu quả.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Bản nháp giúp người dùng phản biện.",
+        "Lạc đề ⇒ parking lot."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Techniques 3 — interviews and workshops done well\n\nAnswer in the answer panel (no code needed).\n\n1. Why bring a straw-man model to an interview?Vì sao mang mô hình nháp (straw man) tới buổi phỏng vấn?\n2. An important but off-topic issue comes up in a workshop. The facilitator should…Một vấn đề quan trọng nhưng lạc đề nảy ra trong workshop. Người điều phối nên…\n3. The ideal size of a requirements workshop is…Quy mô lý tưởng của một workshop yêu cầu là…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Techniques 3 — interviews and workshops done well — answer key\n\n1. Why bring a straw-man model to an interview?Vì sao mang mô hình nháp (straw man) tới buổi phỏng vấn?\n   Answer: d) People critique an existing draft more easily than they create from nothing\n   Easier to correct than to create.VI: Sửa dễ hơn tạo mới.\n\n2. An important but off-topic issue comes up in a workshop. The facilitator should…Một vấn đề quan trọng nhưng lạc đề nảy ra trong workshop. Người điều phối nên…\n   Answer: a) Put it in the parking lot and come back to it later\n   Parking lot.VI: Bãi đỗ (parking lot).\n\n3. The ideal size of a requirements workshop is…Quy mô lý tưởng của một workshop yêu cầu là…\n   Answer: d) about 5–6 of the right people; run parallel workshops for different user classes\n   Small but right.VI: Nhỏ nhưng đúng người.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: d · a · d.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Why bring a straw-man model to an interview?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao mang mô hình nháp (straw man) tới buổi phỏng vấn?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "To finish the interview faster without listening"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It replaces the interview"
+              },
+              {
+                "ma": "c",
+                "noiDung": "To show off"
+              },
+              {
+                "ma": "d",
+                "noiDung": "People critique an existing draft more easily than they create from nothing"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Easier to correct than to create.</p><p><i>VI: Sửa dễ hơn tạo mới.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>An important but off-topic issue comes up in a workshop. The facilitator should…</p><p style=\"opacity:.75;font-size:.92em\"><i>Một vấn đề quan trọng nhưng lạc đề nảy ra trong workshop. Người điều phối nên…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Put it in the parking lot and come back to it later"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Ignore it forever"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Spend the rest of the session on it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "End the workshop"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Parking lot.</p><p><i>VI: Bãi đỗ (parking lot).</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>The ideal size of a requirements workshop is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Quy mô lý tưởng của một workshop yêu cầu là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "as many people as possible"
+              },
+              {
+                "ma": "b",
+                "noiDung": "only the BA"
+              },
+              {
+                "ma": "c",
+                "noiDung": "30 people"
+              },
+              {
+                "ma": "d",
+                "noiDung": "about 5–6 of the right people; run parallel workshops for different user classes"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Small but right.</p><p><i>VI: Nhỏ nhưng đúng người.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đi phỏng vấn tay không."
+        },
+        {
+          "loi": "Workshop 30 người."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "straw-man model",
+          "vi": "mô hình nháp để người khác phản biện"
+        },
+        {
+          "en": "parking lot",
+          "vi": "danh sách vấn đề tạm gác để xử lý sau"
+        }
+      ]
+    },
+    {
+      "title": "Techniques 4 — observation, questionnaires and analysis traps",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "observation",
+        "questionnaires"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Observation may be passive (watch without interfering; protocol analysis — the performer explains while working; ethnography — long-term) or active (you join the work). Questionnaires suffer from biases; use a representative sample, unbiased and unambiguous questions, and redundant questions to detect inconsistency. User interface analysis: do not assume the new system needs a function just because the old one had it. Document analysis: documents may be out of date.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Quan sát, bảng hỏi và các bẫy khi phân tích giao diện/tài liệu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Vừa làm vừa nói ⇒ protocol analysis.",
+        "Cái cũ có chưa chắc cái mới cần."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Techniques 4 — observation, questionnaires and analysis traps\n\nAnswer in the answer panel (no code needed).\n\n1. A clerk explains aloud what she is doing while processing an invoice. This is…Nhân viên vừa xử lý hoá đơn vừa nói to điều mình đang làm. Đây là…\n2. Why add redundant questions to a questionnaire?Vì sao thêm câu hỏi trùng ý vào bảng hỏi?\n3. The old system has a \"fax order\" screen. Should the new one?Hệ thống cũ có màn hình \"đặt hàng qua fax\". Hệ thống mới có nên có?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Techniques 4 — observation, questionnaires and analysis traps — answer key\n\n1. A clerk explains aloud what she is doing while processing an invoice. This is…Nhân viên vừa xử lý hoá đơn vừa nói to điều mình đang làm. Đây là…\n   Answer: d) protocol analysis (passive observation)\n   The performer explains concurrently.VI: Người làm giải thích song song.\n\n2. Why add redundant questions to a questionnaire?Vì sao thêm câu hỏi trùng ý vào bảng hỏi?\n   Answer: a) To detect inconsistent or careless answers\n   Consistency check.VI: Kiểm tính nhất quán.\n\n3. The old system has a \"fax order\" screen. Should the new one?Hệ thống cũ có màn hình \"đặt hàng qua fax\". Hệ thống mới có nên có?\n   Answer: b) Not automatically — confirm the need still exists\n   Old functionality is a lead, not a requirement.VI: Chức năng cũ là manh mối, chưa phải yêu cầu.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: d · a · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>A clerk explains aloud what she is doing while processing an invoice. This is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Nhân viên vừa xử lý hoá đơn vừa nói to điều mình đang làm. Đây là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a questionnaire"
+              },
+              {
+                "ma": "b",
+                "noiDung": "active observation"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a focus group"
+              },
+              {
+                "ma": "d",
+                "noiDung": "protocol analysis (passive observation)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The performer explains concurrently.</p><p><i>VI: Người làm giải thích song song.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Why add redundant questions to a questionnaire?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao thêm câu hỏi trùng ý vào bảng hỏi?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "To detect inconsistent or careless answers"
+              },
+              {
+                "ma": "b",
+                "noiDung": "To make it longer"
+              },
+              {
+                "ma": "c",
+                "noiDung": "To confuse respondents"
+              },
+              {
+                "ma": "d",
+                "noiDung": "They are never useful"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Consistency check.</p><p><i>VI: Kiểm tính nhất quán.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>The old system has a \"fax order\" screen. Should the new one?</p><p style=\"opacity:.75;font-size:.92em\"><i>Hệ thống cũ có màn hình \"đặt hàng qua fax\". Hệ thống mới có nên có?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Yes, copy every old screen"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Not automatically — confirm the need still exists"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only if it is easy"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Yes, it is in the documents"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Old functionality is a lead, not a requirement.</p><p><i>VI: Chức năng cũ là manh mối, chưa phải yêu cầu.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Sao chép mọi chức năng của hệ thống cũ."
+        },
+        {
+          "loi": "Tin tài liệu cũ là đúng hiện tại."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "protocol analysis",
+          "vi": "phân tích giao thức — người làm vừa làm vừa giải thích"
+        }
+      ]
+    }
+  ]
+}

@@ -88,7 +88,7 @@ const E4 = tracNghiem({
 
 export default moDun({
   slug: 'swr302-3-6-ch7-done-missing',
-  ten: '3.4 Knowing when you are done and finding missing requirements',
+  ten: '3.6 Knowing when you are done and finding missing requirements',
   moTaModule: 'Dấu hiệu khai thác sắp đủ (khác với hết ngân sách), sáu kỹ thuật tìm yêu cầu thiếu (CRUD, phân rã, lớp người dùng, ngoại lệ, đối xứng, sự kiện thời gian), đọc ma trận CRUD, bắt lỗ hổng trong bộ yêu cầu.',
   de: [E1, E4, E2, E3],
 });

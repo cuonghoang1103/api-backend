@@ -128,7 +128,7 @@ const E4 = baiJs({
 
 export default moDun({
   slug: 'swr302-4-8-ch12-flow-models',
-  ten: '4.6 Behaviour models: swimlane and state-transition diagrams',
+  ten: '4.8 Behaviour models: swimlane and state-transition diagrams',
   moTaModule: 'Trạng thái hay hoạt động, cơ bản về swimlane (lane là vai trò, điểm bàn giao), tự vẽ máy trạng thái Leave Request có guard và sự kiện thời gian, tự vẽ swimlane duyệt nghỉ phép có hai rẽ nhánh — chấm bằng máy đọc Mermaid/PlantUML.',
   de: [E1, E2, E3, E4],
 });

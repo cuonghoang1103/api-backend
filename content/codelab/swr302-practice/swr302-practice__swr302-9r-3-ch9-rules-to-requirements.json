@@ -1,0 +1,496 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-9r-3-ch9-rules-to-requirements",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-9r-3-ch9-rules-to-requirements"
+  },
+  "exercises": [
+    {
+      "title": "Rules to requirements 1 — rule or functional requirement?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "rules vs requirements"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>A business rule is an external statement of policy that drives system functionality; a functional requirement is the system behaviour that enforces it. They can look alike. Classify.</p><p>Each row is graded on its own; the explanation of every answer appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Luật là chính sách bên ngoài; yêu cầu chức năng là hành vi hệ thống thực thi luật đó.</p><p>Mỗi dòng được chấm riêng; giải thích từng đáp án hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "\"The system shall …\" ⇒ yêu cầu chức năng.",
+        "Chính sách tồn tại kể cả khi không có phần mềm ⇒ luật."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Rules to requirements 1 — rule or functional requirement?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Rules to requirements 1 — rule or functional requirement? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Business rule\n   - r1.k: Functional requirement\n   - r2.k: Business rule\n   - r3.k: Functional requirement\n   - r4.k: Business rule\n   The rule exists even without software; the requirement says what the software does about it.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The rule exists even without software; the requirement says what the software does about it.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Kind",
+                "luaChon": [
+                  "Business rule",
+                  "Functional requirement"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Only pharmacists may dispense controlled drugs."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "The system shall ask for a pharmacist’s PIN before recording the dispensing of a controlled drug."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "A loan is overdue the day after its due date."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "The system shall e-mail the member on the first overdue day of a loan."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Students may borrow at most 5 books at a time."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Business rule",
+              "r1.k": "Functional requirement",
+              "r2.k": "Business rule",
+              "r3.k": "Functional requirement",
+              "r4.k": "Business rule"
+            },
+            "giaiThich": "<p><p>The rule exists even without software; the requirement says what the software does about it.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Coi mọi câu có \"may only\" là yêu cầu chức năng."
+        },
+        {
+          "loi": "Chép luật vào yêu cầu thay vì tham chiếu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "business rule",
+          "vi": "quy tắc nghiệp vụ — chính sách, luật, chuẩn, công thức tồn tại NGOÀI phần mềm"
+        },
+        {
+          "en": "functional requirement (FR)",
+          "vi": "yêu cầu chức năng — hành vi hệ thống thể hiện trong điều kiện cụ thể (\"The system shall…\"); ghi trong SRS"
+        }
+      ]
+    },
+    {
+      "title": "Rules to requirements 2 — derive functional requirements from rules",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "deriving requirements from rules"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers’ Chemical Tracking System example: rule #1 (action enabler) \"if a container’s expiration date is reached, notify its holder\"; rule #2 (fact) \"a container that can form explosive decomposition products expires one year after manufacture\". Write <code>DERIVED</code>: at least 3 functional requirements <code>{ id, text, rules: [...] }</code> derived from these rules, each linked (by id) to the rule(s) it comes from: <b>R1</b> and/or <b>R2</b>. Cover: computing the expiration date, notifying the holder, and identifying which containers have an expiration date.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Do not copy the rule text — refer to the rule by id.</li>\n</ul>",
+      "problemHtmlVi": "<p>Từ hai luật của Chemical Tracking System, viết ≥ 3 yêu cầu chức năng có liên kết tới luật nguồn (R1, R2): tính ngày hết hạn, báo người giữ, xác định bình nào có hạn dùng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Không chép lại nội dung luật — tham chiếu theo id.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "rule R2",
+          "output": "{ id: 'FR-1', text: 'The system shall set the expiration date of a container that can form explosive decomposition products to one year after its manufacture date.', rules: ['R2'] }",
+          "explanation": "|||"
+        }
+      ],
+      "hintsJson": [
+        "R2 (fact) ⇒ nhận diện bình + tính ngày; R1 (action enabler) ⇒ thông báo.",
+        "Mỗi yêu cầu ghi luật nguồn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "derived.js",
+          "language": "javascript",
+          "code": "const DERIVED = [\n  // { id: 'FR-1', text: 'The system shall …', rules: ['R2'] },\n];\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "derived.js",
+          "language": "javascript",
+          "code": "const DERIVED = [\n  { id: 'FR-1', text: 'The system shall flag a container as able to form explosive decomposition products when its chemical is on the explosive-decomposition list.', rules: ['R2'] },\n  { id: 'FR-2', text: 'The system shall set the expiration date of a flagged container to one year after its manufacture date.', rules: ['R2'] },\n  { id: 'FR-3', text: 'The system shall e-mail the holder of a container on the day its expiration date is reached.', rules: ['R1'] },\n  { id: 'FR-4', text: 'The system shall list the containers that expire within the next 30 days for each holder.', rules: ['R1', 'R2'] },\n];\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>One fact and one action enabler produce several functional requirements; linking them to their rules means a change to a rule immediately shows which requirements must change.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "derived.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "at least 3 \"shall\" requirements, each linked to R1 or R2",
+              "vi": "ít nhất 3 yêu cầu \"shall\", mỗi cái nối tới R1 hoặc R2"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof DERIVED==\"undefined\"||!Array.isArray(DERIVED)||DERIVED.length<3)return\"write at least 3 requirements\";for(var r=0;r<DERIVED.length;r++){var e=DERIVED[r]||{};if(!/^the system shall\\b/i.test(String(e.text)))return(e.id||r)+': \"The system shall \\u2026\"';if(!Array.isArray(e.rules)||!e.rules.length||e.rules.some(function(t){return[\"R1\",\"R2\"].indexOf(t)<0}))return(e.id||r)+\": rules must list R1 and/or R2\"}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "covers expiration date, notification and identification",
+              "vi": "phủ ngày hết hạn, thông báo và nhận diện"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof DERIVED==\"undefined\"||!Array.isArray(DERIVED))return\"DERIVED is missing\";var e=DERIVED.map(function(t){return String(t.text).toLowerCase()}).join(\" | \");return/(one year|1 year|12 months)/.test(e)?!/(notify|notif|e-?mail|alert|message)/.test(e)||!/holder|owner/.test(e)?\"notify the holder when the date is reached\":/(explosive|decomposition|flag|identify|determine|list)/.test(e)?\"OK\":\"identify which containers have an expiration date\":\"compute the expiration date (one year after manufacture)\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "the notification requirement traces to R1, the date computation to R2",
+              "vi": "thông báo truy về R1, tính ngày truy về R2"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof DERIVED==\"undefined\"||!Array.isArray(DERIVED))return\"DERIVED is missing\";var t=DERIVED.filter(function(e){return/(notify|notif|e-?mail|alert|message)/i.test(e.text)}),n=DERIVED.filter(function(e){return/(one year|1 year|12 months)/i.test(e.text)});return!t.length||!t.every(function(e){return e.rules.indexOf(\"R1\")>=0})?\"notification comes from the action enabler R1\":n.length&&n.every(function(e){return e.rules.indexOf(\"R2\")>=0})?\"OK\":\"the one-year date comes from the fact R2\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chép nguyên văn luật làm yêu cầu."
+        },
+        {
+          "loi": "Không ghi luật nguồn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "business rule",
+          "vi": "quy tắc nghiệp vụ — chính sách, luật, chuẩn, công thức tồn tại NGOÀI phần mềm"
+        },
+        {
+          "en": "functional requirement (FR)",
+          "vi": "yêu cầu chức năng — hành vi hệ thống thể hiện trong điều kiện cụ thể (\"The system shall…\"); ghi trong SRS"
+        },
+        {
+          "en": "requirements traceability matrix (RTM)",
+          "vi": "ma trận truy vết yêu cầu — nối nguồn ↔ yêu cầu ↔ thiết kế ↔ mã ↔ test"
+        }
+      ]
+    },
+    {
+      "title": "Rules to requirements 3 — linking rules and requirements",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "rules traceability"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>To avoid redundancy, do not duplicate catalogue rules inside requirements — refer to the rule as the source. Link a requirement to its rules with an \"origin\" attribute in a requirements tool, with trace links in a matrix, or with hyperlinks to rule ids (fragile if the rules move).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Không chép luật vào yêu cầu; liên kết bằng thuộc tính \"origin\", ma trận truy vết hoặc liên kết.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Truy vết luật ⇒ thấy ngay ảnh hưởng.",
+        "Hyperlink gãy khi tài liệu di chuyển."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Rules to requirements 3 — linking rules and requirements\n\nAnswer in the answer panel (no code needed).\n\n1. The VAT rate changes. With good traceability you can…Thuế suất VAT thay đổi. Có truy vết tốt bạn có thể…\n2. Why are hyperlinks to rule ids the most fragile linking method?Vì sao liên kết siêu văn bản tới id luật là cách mong manh nhất?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Rules to requirements 3 — linking rules and requirements — answer key\n\n1. The VAT rate changes. With good traceability you can…Thuế suất VAT thay đổi. Có truy vết tốt bạn có thể…\n   Answer: d) find immediately every requirement (and test) that depends on the VAT rule\n   Rule → requirements → tests.VI: Luật → yêu cầu → test.\n\n2. Why are hyperlinks to rule ids the most fragile linking method?Vì sao liên kết siêu văn bản tới id luật là cách mong manh nhất?\n   Answer: d) They break when the rules move to another document or location\n   Location-dependent.VI: Phụ thuộc vị trí.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: d · d.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>The VAT rate changes. With good traceability you can…</p><p style=\"opacity:.75;font-size:.92em\"><i>Thuế suất VAT thay đổi. Có truy vết tốt bạn có thể…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "nothing — search every document by hand"
+              },
+              {
+                "ma": "b",
+                "noiDung": "rewrite the SRS"
+              },
+              {
+                "ma": "c",
+                "noiDung": "ignore the change"
+              },
+              {
+                "ma": "d",
+                "noiDung": "find immediately every requirement (and test) that depends on the VAT rule"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Rule → requirements → tests.</p><p><i>VI: Luật → yêu cầu → test.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Why are hyperlinks to rule ids the most fragile linking method?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao liên kết siêu văn bản tới id luật là cách mong manh nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "They cannot be clicked"
+              },
+              {
+                "ma": "b",
+                "noiDung": "They are not fragile"
+              },
+              {
+                "ma": "c",
+                "noiDung": "They are too fast"
+              },
+              {
+                "ma": "d",
+                "noiDung": "They break when the rules move to another document or location"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Location-dependent.</p><p><i>VI: Phụ thuộc vị trí.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chép thuế suất vào 20 yêu cầu."
+        },
+        {
+          "loi": "Không có liên kết nào."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "requirements traceability matrix (RTM)",
+          "vi": "ma trận truy vết yêu cầu — nối nguồn ↔ yêu cầu ↔ thiết kế ↔ mã ↔ test"
+        },
+        {
+          "en": "business rule",
+          "vi": "quy tắc nghiệp vụ — chính sách, luật, chuẩn, công thức tồn tại NGOÀI phần mềm"
+        }
+      ]
+    },
+    {
+      "title": "Rules to requirements 4 — enforce in software or not?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 4,
+      "points": 20,
+      "concepts": [
+        "enforcing rules"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>After identifying the rules, the BA decides which pertain to the application, which must be enforced in software, and how. Some rules are enforced by people or procedures instead.</p><p>Each question is graded on its own; the explanation appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>BA quyết định luật nào thuộc ứng dụng, luật nào phải thực thi bằng phần mềm, và thực thi thế nào.</p><p>Mỗi câu được chấm riêng; giải thích hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Một số luật do con người/quy trình thực thi.",
+        "Luật thời gian ⇒ cảnh báo/báo cáo."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Rules to requirements 4 — enforce in software or not?\n\nAnswer in the answer panel (no code needed).\n\n1. Rule: \"Staff must wash their hands before handling samples.\" For a lab-management system this rule is…Luật: \"Nhân viên phải rửa tay trước khi cầm mẫu.\" Với hệ thống quản lý phòng lab, luật này…\n2. Rule: \"A sample must be tested within 48 hours of collection.\" What might the software do?Luật: \"Mẫu phải được xét nghiệm trong 48 giờ sau khi lấy.\" Phần mềm có thể làm gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Rules to requirements 4 — enforce in software or not? — answer key\n\n1. Rule: \"Staff must wash their hands before handling samples.\" For a lab-management system this rule is…Luật: \"Nhân viên phải rửa tay trước khi cầm mẫu.\" Với hệ thống quản lý phòng lab, luật này…\n   Answer: a) enforced by procedure and training, not by the software\n   Not every rule becomes software behaviour.VI: Không phải luật nào cũng thành hành vi phần mềm.\n\n2. Rule: \"A sample must be tested within 48 hours of collection.\" What might the software do?Luật: \"Mẫu phải được xét nghiệm trong 48 giờ sau khi lấy.\" Phần mềm có thể làm gì?\n   Answer: b) Warn the technician when a sample approaches 48 hours and report expired samples\n   Derived functional requirements enforce the rule.VI: Yêu cầu chức năng phái sinh thực thi luật.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Rule: \"Staff must wash their hands before handling samples.\" For a lab-management system this rule is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Luật: \"Nhân viên phải rửa tay trước khi cầm mẫu.\" Với hệ thống quản lý phòng lab, luật này…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "enforced by procedure and training, not by the software"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a data requirement"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a functional requirement"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a quality attribute"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Not every rule becomes software behaviour.</p><p><i>VI: Không phải luật nào cũng thành hành vi phần mềm.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Rule: \"A sample must be tested within 48 hours of collection.\" What might the software do?</p><p style=\"opacity:.75;font-size:.92em\"><i>Luật: \"Mẫu phải được xét nghiệm trong 48 giờ sau khi lấy.\" Phần mềm có thể làm gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Nothing"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Warn the technician when a sample approaches 48 hours and report expired samples"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Change the rule"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Delete the sample"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Derived functional requirements enforce the rule.</p><p><i>VI: Yêu cầu chức năng phái sinh thực thi luật.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Biến mọi luật thành yêu cầu phần mềm."
+        },
+        {
+          "loi": "Bỏ qua luật vì \"không phải việc của phần mềm\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "business rule",
+          "vi": "quy tắc nghiệp vụ — chính sách, luật, chuẩn, công thức tồn tại NGOÀI phần mềm"
+        }
+      ]
+    }
+  ]
+}

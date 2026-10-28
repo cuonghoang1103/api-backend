@@ -124,7 +124,7 @@ const E4 = baiJs({
 
 export default moDun({
   slug: 'swr302-4-11-ch13-dictionary-crud',
-  ten: '4.9 The data dictionary and CRUD analysis',
+  ten: '4.11 The data dictionary and CRUD analysis',
   moTaModule: 'Ký pháp data dictionary Wiegers (primitive, structure, nhóm lặp m:n{ }, tuỳ chọn ( )), tự viết từ điển cho đăng ký sự kiện có kiểm khép kín, điền ma trận CRUD và đọc ra yêu cầu thiếu.',
   de: [E1, E3, E2, E4],
 });

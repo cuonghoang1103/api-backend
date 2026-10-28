@@ -119,7 +119,7 @@ const E4 = tracNghiem({
 
 export default moDun({
   slug: 'swr302-4-10-ch13-data-models',
-  ten: '4.8 Data models: the conceptual ERD and cardinality',
+  ten: '4.10 Data models: the conceptual ERD and cardinality',
   moTaModule: 'Đọc ký hiệu chân quạ Mermaid, thực thể / thuộc tính / quan hệ, bản số từ câu nghiệp vụ (cả quan hệ đệ quy), tự vẽ ERD khái niệm khách sạn có thực thể kết hợp Reservation — chấm bằng máy đọc erDiagram.',
   de: [E1, E2, E4, E3],
 });

@@ -82,7 +82,7 @@ const E4 = tracNghiem({
 
 export default moDun({
   slug: 'swr302-4-7-ch12-why-model',
-  ten: '4.12 Choosing a model: which model answers which question',
+  ten: '4.7 Choosing a model: which model answers which question',
   moTaModule: 'Vì sao cần mô hình phân tích, chọn mô hình theo câu hỏi (context, ecosystem, use case, swimlane, DFD, ERD, state, bảng quyết định, dialog map) cho hệ thống đặt phòng khách sạn.',
   de: [E2, E1, E3, E4],
 });

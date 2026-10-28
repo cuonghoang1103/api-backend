@@ -1,0 +1,524 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-4-3-ch8-usage-centric",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-4-3-ch8-usage-centric"
+  },
+  "exercises": [
+    {
+      "title": "Usage-centric 1 — usage-centric or product-centric?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "usage-centric requirements"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p><b>Usage-centric</b>: understand what users need to accomplish, then derive the functionality. <b>Product-centric</b>: define features you expect will sell — riskier, since you may build features nobody uses. Classify each way of working.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hướng sử dụng vs hướng sản phẩm.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Bắt đầu từ việc người dùng cần làm ⇒ hướng sử dụng.",
+        "Bắt đầu từ tính năng \"bán được\" ⇒ hướng sản phẩm."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Usage-centric 1 — usage-centric or product-centric?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Usage-centric 1 — usage-centric or product-centric? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Usage-centric\n   - r1.k: Product-centric\n   - r2.k: Usage-centric\n   - r3.k: Product-centric\n   Usage-centric work reveals the necessary functionality, avoids unused features and helps prioritisation.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Usage-centric work reveals the necessary functionality, avoids unused features and helps prioritisation.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Approach",
+                "luaChon": [
+                  "Usage-centric",
+                  "Product-centric"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "\"Let’s list the tasks nurses do in a shift and see what the app must support.\""
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "\"Competitors have AI chat — we need AI chat too.\""
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "\"For each user class, which goals do they reach with the system?\""
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "\"Marketing wants 50 features on the box.\""
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Usage-centric",
+              "r1.k": "Product-centric",
+              "r2.k": "Usage-centric",
+              "r3.k": "Product-centric"
+            },
+            "giaiThich": "<p><p>Usage-centric work reveals the necessary functionality, avoids unused features and helps prioritisation.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Sao chép tính năng đối thủ không cần biết ai dùng."
+        },
+        {
+          "loi": "Nghĩ hướng sản phẩm luôn tốt hơn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "use case",
+          "vi": "ca sử dụng — một mục tiêu actor đạt được nhờ hệ thống (tên: động từ + danh từ)"
+        },
+        {
+          "en": "user story",
+          "vi": "câu chuyện người dùng — \"As a <role>, I want <goal> so that <benefit>\""
+        }
+      ]
+    },
+    {
+      "title": "Usage-centric 2 — use case and user story",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "use cases and user stories"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>A use case is a sequence of interactions between the system and an external actor that results in an outcome of value for the actor; name it verb + object (\"Request a Chemical\"). A user story: \"As a [type of user], I want [goal] so that [reason]\" — it also names the user class and the rationale. With use cases, the BA derives functional requirements and tests; a story is a placeholder for a just-in-time conversation, and epics are split to fit an iteration.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Use case và user story.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Tên use case: động từ + đối tượng.",
+        "Story nêu vai và lý do."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Usage-centric 2 — use case and user story\n\nAnswer in the answer panel (no code needed).\n\n1. Which is a well-named use case?Tên use case nào tốt?\n2. What does a user story state that a bare use case name does not?User story nêu điều gì mà tên use case trần không có?\n3. From a use case specification, the BA derives…Từ đặc tả use case, BA suy ra…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Usage-centric 2 — use case and user story — answer key\n\n1. Which is a well-named use case?Tên use case nào tốt?\n   Answer: c) Request a Chemical\n   Strong verb + object, value evident.VI: Động từ mạnh + đối tượng, giá trị rõ.\n\n2. What does a user story state that a bare use case name does not?User story nêu điều gì mà tên use case trần không có?\n   Answer: b) The user class and the reason (benefit)\n   \"As a … so that …\".VI: \"As a … so that …\".\n\n3. From a use case specification, the BA derives…Từ đặc tả use case, BA suy ra…\n   Answer: c) functional requirements for developers and tests for testers\n   Figure 8-1.VI: Hình 8-1.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: c · b · c.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which is a well-named use case?</p><p style=\"opacity:.75;font-size:.92em\"><i>Tên use case nào tốt?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Chemical Module"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Process Stuff"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Request a Chemical"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Database Access"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Strong verb + object, value evident.</p><p><i>VI: Động từ mạnh + đối tượng, giá trị rõ.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>What does a user story state that a bare use case name does not?</p><p style=\"opacity:.75;font-size:.92em\"><i>User story nêu điều gì mà tên use case trần không có?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The database tables"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The user class and the reason (benefit)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The release date"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The test script"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>\"As a … so that …\".</p><p><i>VI: \"As a … so that …\".</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>From a use case specification, the BA derives…</p><p style=\"opacity:.75;font-size:.92em\"><i>Từ đặc tả use case, BA suy ra…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the project budget"
+              },
+              {
+                "ma": "b",
+                "noiDung": "nothing more"
+              },
+              {
+                "ma": "c",
+                "noiDung": "functional requirements for developers and tests for testers"
+              },
+              {
+                "ma": "d",
+                "noiDung": "only the UI design"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Figure 8-1.</p><p><i>VI: Hình 8-1.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt tên use case theo module."
+        },
+        {
+          "loi": "Coi story là đặc tả đầy đủ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "use case",
+          "vi": "ca sử dụng — một mục tiêu actor đạt được nhờ hệ thống (tên: động từ + danh từ)"
+        },
+        {
+          "en": "user story",
+          "vi": "câu chuyện người dùng — \"As a <role>, I want <goal> so that <benefit>\""
+        },
+        {
+          "en": "epic",
+          "vi": "story lớn, phải tách thành nhiều story"
+        }
+      ]
+    },
+    {
+      "title": "Usage-centric 3 — questions that find use cases",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "finding use cases"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers’ questions to discover use cases: What will the actor use the system for? Will they create, store, change, remove or read data? Will they inform the system of external events? Do they need to be informed of occurrences? For a smart-home system, which question surfaced each use case?</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi để tìm use case. Câu hỏi nào làm lộ ra từng use case của hệ thống nhà thông minh?</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Nhận cảnh báo ⇒ \"cần được thông báo\".",
+        "Báo cho hệ thống biết sự kiện ngoài ⇒ \"inform the system\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Usage-centric 3 — questions that find use cases\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Usage-centric 3 — questions that find use cases — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: What will the actor use the system for?\n   - r1.k: Will they create, change, remove or read data?\n   - r2.k: Will they inform the system of external events?\n   - r3.k: Do they need to be informed of occurrences?\n   Asking all four questions for every actor is a cheap completeness check.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Asking all four questions for every actor is a cheap completeness check.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Question",
+                "luaChon": [
+                  "What will the actor use the system for?",
+                  "Will they create, change, remove or read data?",
+                  "Will they inform the system of external events?",
+                  "Do they need to be informed of occurrences?"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Program Vacation Setting (set lights and alarm for a long absence)"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Edit Family Member Profile"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Report Power Outage (the homeowner tells the system the grid is down)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Receive Intrusion Alert"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "What will the actor use the system for?",
+              "r1.k": "Will they create, change, remove or read data?",
+              "r2.k": "Will they inform the system of external events?",
+              "r3.k": "Do they need to be informed of occurrences?"
+            },
+            "giaiThich": "<p><p>Asking all four questions for every actor is a cheap completeness check.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chỉ hỏi \"dùng để làm gì\" mà quên dữ liệu và sự kiện."
+        },
+        {
+          "loi": "Nhầm hai chiều thông báo."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "use case",
+          "vi": "ca sử dụng — một mục tiêu actor đạt được nhờ hệ thống (tên: động từ + danh từ)"
+        },
+        {
+          "en": "actor",
+          "vi": "tác nhân — vai trò (người hoặc hệ thống) bên ngoài tương tác với hệ thống"
+        }
+      ]
+    },
+    {
+      "title": "Usage-centric 4 — turn a use case name into a user story",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "use cases and user stories"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>For each use case of a library system write the equivalent user story in <code>STORIES</code> (keys UC1–UC3): <b>UC1</b> \"Reserve a Book\" (primary actor: member), <b>UC2</b> \"Renew a Loan\" (member), <b>UC3</b> \"Record a Returned Book\" (librarian). Each must follow \"As a &lt;role&gt;, I want &lt;goal&gt; so that &lt;benefit&gt;\", name the primary actor of the use case as the role, and keep the use case’s goal.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>The benefit must be a real reason, not a repetition of the goal.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết user story tương đương cho ba use case thư viện; vai là actor chính, giữ mục tiêu của use case.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Lợi ích phải là lý do thật, không lặp lại mục tiêu.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Reserve a Book (member)",
+          "output": "As a member, I want to reserve a book that is on loan so that I can borrow it as soon as it is returned.",
+          "explanation": "|||"
+        }
+      ],
+      "hintsJson": [
+        "Vai = actor chính của use case.",
+        "Lợi ích trả lời \"để làm gì\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "stories.js",
+          "language": "javascript",
+          "code": "const STORIES = { UC1: '', UC2: '', UC3: '' };\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "stories.js",
+          "language": "javascript",
+          "code": "const STORIES = {\n  UC1: 'As a member, I want to reserve a book that is on loan so that I can borrow it as soon as it is returned.',\n  UC2: 'As a member, I want to renew my loan online so that I can keep reading without visiting the library.',\n  UC3: 'As a librarian, I want to record a returned book so that it becomes available to the next reader.',\n};\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A use case name gives the goal; the story adds the user class and the reason — the very things a use case keeps in its actor and description fields.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "stories.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "UC1 — form, role and goal",
+              "vi": "UC1 — mẫu, vai và mục tiêu"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof STORIES==\"undefined\"||!STORIES)return\"STORIES is missing\";var r=String(STORIES.UC1||\"\").trim(),e=/^as an? ([^,]+?),? i want (to )?(.+?) so that (.+)$/i.exec(r);if(!e)return'use \"As a <role>, I want <goal> so that <benefit>\"';if(!/member/i.test(e[1]))return\"the role is the primary actor: member\";if(!/reserv/i.test(e[3]))return\"keep the goal of the use case (reserv\\u2026)\";var t=e[4].replace(/[.]$/,\"\").trim();return t.split(/\\s+/).length<4?\"the benefit is too short \\u2014 say why it matters\":/reserv/i.test(t)&&t.split(/\\s+/).length<7?\"the benefit repeats the goal \\u2014 give the real reason\":\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "UC2 — form, role and goal",
+              "vi": "UC2 — mẫu, vai và mục tiêu"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof STORIES==\"undefined\"||!STORIES)return\"STORIES is missing\";var r=String(STORIES.UC2||\"\").trim(),e=/^as an? ([^,]+?),? i want (to )?(.+?) so that (.+)$/i.exec(r);if(!e)return'use \"As a <role>, I want <goal> so that <benefit>\"';if(!/member/i.test(e[1]))return\"the role is the primary actor: member\";if(!/renew/i.test(e[3]))return\"keep the goal of the use case (renew\\u2026)\";var t=e[4].replace(/[.]$/,\"\").trim();return t.split(/\\s+/).length<4?\"the benefit is too short \\u2014 say why it matters\":/renew/i.test(t)&&t.split(/\\s+/).length<7?\"the benefit repeats the goal \\u2014 give the real reason\":\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "UC3 — form, role and goal",
+              "vi": "UC3 — mẫu, vai và mục tiêu"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof STORIES==\"undefined\"||!STORIES)return\"STORIES is missing\";var r=String(STORIES.UC3||\"\").trim(),t=/^as an? ([^,]+?),? i want (to )?(.+?) so that (.+)$/i.exec(r);if(!t)return'use \"As a <role>, I want <goal> so that <benefit>\"';if(!/librarian/i.test(t[1]))return\"the role is the primary actor: librarian\";if(!/return/i.test(t[3]))return\"keep the goal of the use case (return\\u2026)\";var e=t[4].replace(/[.]$/,\"\").trim();return e.split(/\\s+/).length<4?\"the benefit is too short \\u2014 say why it matters\":/return/i.test(e)&&e.split(/\\s+/).length<7?\"the benefit repeats the goal \\u2014 give the real reason\":\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "\"so that I can reserve a book\" — lặp lại mục tiêu."
+        },
+        {
+          "loi": "Vai là \"the system\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "user story",
+          "vi": "câu chuyện người dùng — \"As a <role>, I want <goal> so that <benefit>\""
+        },
+        {
+          "en": "use case",
+          "vi": "ca sử dụng — một mục tiêu actor đạt được nhờ hệ thống (tên: động từ + danh từ)"
+        },
+        {
+          "en": "primary / secondary actor",
+          "vi": "tác nhân chính (khởi động use case để đạt mục tiêu) / phụ (hệ thống cần nó giúp)"
+        }
+      ]
+    }
+  ]
+}

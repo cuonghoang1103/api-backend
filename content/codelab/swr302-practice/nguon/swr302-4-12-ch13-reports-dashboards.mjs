@@ -81,7 +81,7 @@ const E4 = tracNghiem({
 
 export default moDun({
   slug: 'swr302-4-12-ch13-reports-dashboards',
-  ten: '4.10 Specifying reports and dashboards',
+  ten: '4.12 Specifying reports and dashboards',
   moTaModule: 'Các trường của đặc tả báo cáo Wiegers (mục đích, người dùng, trigger, định dạng, độ trễ, thân báo cáo, quyền), câu hỏi khai thác báo cáo, khác biệt báo cáo và dashboard.',
   de: [E1, E2, E3, E4],
 });

@@ -89,7 +89,7 @@ const E4 = baiJs({
 
 export default moDun({
   slug: 'swr302-3-5-ch7-classifying-input',
-  ten: '3.3 Classifying customer input',
+  ten: '3.5 Classifying customer input',
   moTaModule: 'Chín nhóm đầu vào khách hàng của Wiegers Ch.7 và từ khoá nhận biết, phân loại ghi chép phỏng vấn thư viện, các câu dễ nhầm, tách một đoạn nói liền thành tám loại thông tin yêu cầu.',
   de: [E1, E2, E3, E4],
 });

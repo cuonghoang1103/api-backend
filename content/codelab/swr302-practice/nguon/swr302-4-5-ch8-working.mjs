@@ -82,9 +82,28 @@ const E3 = baiJs({
   khaiNiem: ['deriving functional requirements'],
 });
 
+const E4 = phanLoai({
+  tieuDe: 'Working with use cases 4 — traps to avoid',
+  doKho: 'MEDIUM', phut: 6,
+  moTa: { en: '<p>Wiegers’ use case traps: <b>too many use cases</b> (one per screen or per CRUD action), <b>highly complex use cases</b> (dozens of branches in one), <b>design in use cases</b> (screens, buttons, tables), <b>data definitions in use cases</b> (they belong in the data dictionary), and <b>use cases users don’t understand</b>. Name the trap.</p>', vi: '<p>Các bẫy khi viết use case. Gọi tên bẫy.</p>' },
+  cot: 'Trap', luaChon: ['Too many use cases', 'Highly complex use cases', 'Design in use cases', 'Data definitions in use cases', 'Use cases users don’t understand'],
+  hang: [
+    ['"Add Patient", "Edit Patient", "Delete Patient", "View Patient" as four separate use cases.', 'Too many use cases'],
+    ['Step 4: "The user clicks the green Save button at the bottom right of the form."', 'Design in use cases'],
+    ['A step lists that a patient record has 14 fields with their lengths and formats.', 'Data definitions in use cases'],
+    ['One "Manage Clinic" use case has 37 alternative flows.', 'Highly complex use cases'],
+    ['Steps written as "invoke POST /api/v2/appt with JWT" for a review by nurses.', 'Use cases users don’t understand'],
+  ],
+  giaiThich: '<p>Keep use cases at the level of user goals, free of design and data detail, readable by the users who must validate them.</p>',
+  goiY: ['Một use case cho mỗi thao tác CRUD ⇒ quá nhiều use case.', 'Nút, màu, vị trí ⇒ thiết kế trong use case.'],
+  loiHayGap: ['Viết use case theo từng màn hình.', 'Đưa định dạng trường dữ liệu vào luồng.'],
+  thuatNgu: tn('useCase', 'dataDictionary'),
+  khaiNiem: ['use case traps'],
+});
+
 export default moDun({
   slug: 'swr302-4-5-ch8-working',
-  ten: '4.4 From use cases to functional requirements',
+  ten: '4.5 From use cases to functional requirements',
   moTaModule: 'Rút yêu cầu chức năng từ bước, luồng thay thế, ngoại lệ và business rule của use case; xác định nguồn của từng FR; tự viết FR cho use case Check In Patient có chấm.',
-  de: [E1, E2, E3],
+  de: [E1, E2, E3, E4],
 });

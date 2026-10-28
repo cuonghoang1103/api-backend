@@ -214,14 +214,26 @@
       "description": "Vòng đời một buổi khai thác (chuẩn bị → thực hiện → theo dõi), câu hỏi mở/đóng/dẫn dắt, sáu cái bẫy khi khai thác và cách khắc phục, nội dung kế hoạch khai thác."
     },
     {
+      "slug": "swr302-3-3-ch7-techniques",
+      "name": "3.3 The elicitation technique toolbox",
+      "level": "BEGINNER",
+      "description": "Kỹ thuật có điều phối vs độc lập, chọn kỹ thuật cho 8 tình huống (brainstorming, storyboard, phân tích giao diện…), phỏng vấn và workshop tốt, quan sát, bảng hỏi và các bẫy."
+    },
+    {
+      "slug": "swr302-3-4-ch7-planning",
+      "name": "3.4 Planning and running elicitation",
+      "level": "BEGINNER",
+      "description": "Ba giai đoạn chuẩn bị / thực hiện / theo dõi, trình tự một buổi khai thác, nội dung kế hoạch khai thác (kỹ thuật theo nhóm, thời gian chuẩn bị, rủi ro), ghi chú và vấn đề mở."
+    },
+    {
       "slug": "swr302-3-5-ch7-classifying-input",
-      "name": "3.3 Classifying customer input",
+      "name": "3.5 Classifying customer input",
       "level": "INTERMEDIATE",
       "description": "Chín nhóm đầu vào khách hàng của Wiegers Ch.7 và từ khoá nhận biết, phân loại ghi chép phỏng vấn thư viện, các câu dễ nhầm, tách một đoạn nói liền thành tám loại thông tin yêu cầu."
     },
     {
       "slug": "swr302-3-6-ch7-done-missing",
-      "name": "3.4 Knowing when you are done and finding missing requirements",
+      "name": "3.6 Knowing when you are done and finding missing requirements",
       "level": "INTERMEDIATE",
       "description": "Dấu hiệu khai thác sắp đủ (khác với hết ngân sách), sáu kỹ thuật tìm yêu cầu thiếu (CRUD, phân rã, lớp người dùng, ngoại lệ, đối xứng, sự kiện thời gian), đọc ma trận CRUD, bắt lỗ hổng trong bộ yêu cầu."
     },
@@ -250,70 +262,88 @@
       "description": "Use case và user story, actor là gì (người, hệ thống, thiết bị ngoài), tự vẽ sơ đồ use case đầu tiên của ClinicCare bằng PlantUML có chấm, nhận ra \"không phải use case\" (màn hình, CRUD, bước kiểm tra)."
     },
     {
-      "slug": "swr302-4-4-ch8-anatomy",
-      "name": "4.2 Use case anatomy: flows, «include», «extend», generalization",
-      "level": "INTERMEDIATE",
-      "description": "Khi nào «include», khi nào «extend» và chiều mũi tên, luồng chính / thay thế / ngoại lệ, tự mô hình hoá include/extend của ClinicCare có chấm, actor chính/phụ và tổng quát hoá actor."
-    },
-    {
-      "slug": "swr302-4-6-ch8-template",
-      "name": "4.3 The use case specification template",
-      "level": "INTERMEDIATE",
-      "description": "Các trường của template use case Wiegers (ví dụ ATM), viết bước luồng chính tốt, ngoại lệ và luồng thay thế, tự viết đặc tả đầy đủ UC-07 Renew Loan có chấm theo luật thư viện."
-    },
-    {
-      "slug": "swr302-4-5-ch8-working",
-      "name": "4.4 From use cases to functional requirements",
-      "level": "INTERMEDIATE",
-      "description": "Rút yêu cầu chức năng từ bước, luồng thay thế, ngoại lệ và business rule của use case; xác định nguồn của từng FR; tự viết FR cho use case Check In Patient có chấm."
-    },
-    {
       "slug": "swr302-4-2-domain-model-dfd",
-      "name": "4.5 Data flow diagrams: notation, levels and balancing",
+      "name": "4.2 Data flow diagrams: notation, levels and balancing",
       "level": "INTERMEDIATE",
       "description": "Bốn ký hiệu DFD, luồng hợp lệ và không hợp lệ, hố đen / phép màu / kho chỉ ghi / kho chỉ đọc / mất cân bằng, tự vẽ DFD mức 0 cân bằng với sơ đồ ngữ cảnh cho sẵn (chấm bằng máy đọc Mermaid)."
     },
     {
+      "slug": "swr302-4-3-ch8-usage-centric",
+      "name": "4.3 Usage-centric requirements: use cases and user stories",
+      "level": "BEGINNER",
+      "description": "Hướng sử dụng vs hướng sản phẩm, use case và user story khác nhau ở đâu, câu hỏi tìm use case, tự chuyển ba use case thư viện thành user story có chấm."
+    },
+    {
+      "slug": "swr302-4-4-ch8-anatomy",
+      "name": "4.4 Use case anatomy: flows, «include», «extend», generalization",
+      "level": "INTERMEDIATE",
+      "description": "Khi nào «include», khi nào «extend» và chiều mũi tên, luồng chính / thay thế / ngoại lệ, tự mô hình hoá include/extend của ClinicCare có chấm, actor chính/phụ và tổng quát hoá actor."
+    },
+    {
+      "slug": "swr302-4-5-ch8-working",
+      "name": "4.5 From use cases to functional requirements",
+      "level": "INTERMEDIATE",
+      "description": "Rút yêu cầu chức năng từ bước, luồng thay thế, ngoại lệ và business rule của use case; xác định nguồn của từng FR; tự viết FR cho use case Check In Patient có chấm."
+    },
+    {
+      "slug": "swr302-4-6-ch8-template",
+      "name": "4.6 The use case specification template",
+      "level": "INTERMEDIATE",
+      "description": "Các trường của template use case Wiegers (ví dụ ATM), viết bước luồng chính tốt, ngoại lệ và luồng thay thế, tự viết đặc tả đầy đủ UC-07 Renew Loan có chấm theo luật thư viện."
+    },
+    {
+      "slug": "swr302-4-7-ch12-why-model",
+      "name": "4.7 Choosing a model: which model answers which question",
+      "level": "BEGINNER",
+      "description": "Vì sao cần mô hình phân tích, chọn mô hình theo câu hỏi (context, ecosystem, use case, swimlane, DFD, ERD, state, bảng quyết định, dialog map) cho hệ thống đặt phòng khách sạn."
+    },
+    {
       "slug": "swr302-4-8-ch12-flow-models",
-      "name": "4.6 Behaviour models: swimlane and state-transition diagrams",
+      "name": "4.8 Behaviour models: swimlane and state-transition diagrams",
       "level": "INTERMEDIATE",
       "description": "Trạng thái hay hoạt động, cơ bản về swimlane (lane là vai trò, điểm bàn giao), tự vẽ máy trạng thái Leave Request có guard và sự kiện thời gian, tự vẽ swimlane duyệt nghỉ phép có hai rẽ nhánh — chấm bằng máy đọc Mermaid/PlantUML."
     },
     {
       "slug": "swr302-4-9-ch12-decision-uml-agile",
-      "name": "4.7 Decision models: decision tables, trees and event-response tables",
+      "name": "4.9 Decision models: decision tables, trees and event-response tables",
       "level": "INTERMEDIATE",
       "description": "Khi nào dùng bảng hay cây quyết định, điền bảng 2 điều kiện, tự viết đủ 2³ cột cho luật miễn phạt có chấm, bảng sự kiện – phản hồi của barrier bãi đỗ."
     },
     {
       "slug": "swr302-4-10-ch13-data-models",
-      "name": "4.8 Data models: the conceptual ERD and cardinality",
+      "name": "4.10 Data models: the conceptual ERD and cardinality",
       "level": "INTERMEDIATE",
       "description": "Đọc ký hiệu chân quạ Mermaid, thực thể / thuộc tính / quan hệ, bản số từ câu nghiệp vụ (cả quan hệ đệ quy), tự vẽ ERD khái niệm khách sạn có thực thể kết hợp Reservation — chấm bằng máy đọc erDiagram."
     },
     {
       "slug": "swr302-4-11-ch13-dictionary-crud",
-      "name": "4.9 The data dictionary and CRUD analysis",
+      "name": "4.11 The data dictionary and CRUD analysis",
       "level": "INTERMEDIATE",
       "description": "Ký pháp data dictionary Wiegers (primitive, structure, nhóm lặp m:n{ }, tuỳ chọn ( )), tự viết từ điển cho đăng ký sự kiện có kiểm khép kín, điền ma trận CRUD và đọc ra yêu cầu thiếu."
     },
     {
       "slug": "swr302-4-12-ch13-reports-dashboards",
-      "name": "4.10 Specifying reports and dashboards",
+      "name": "4.12 Specifying reports and dashboards",
       "level": "BEGINNER",
       "description": "Các trường của đặc tả báo cáo Wiegers (mục đích, người dùng, trigger, định dạng, độ trễ, thân báo cáo, quyền), câu hỏi khai thác báo cáo, khác biệt báo cáo và dashboard."
     },
     {
       "slug": "swr302-9r-1-ch9-taxonomy",
-      "name": "4.11 Business rules: the five types and the catalogue",
+      "name": "4.13 Business rules: the five types and the catalogue",
       "level": "INTERMEDIATE",
       "description": "Năm loại business rule của Wiegers (fact, constraint, action enabler, inference, computation), phân loại luật của shop trực tuyến, rule → yêu cầu chức năng và truy vết, rule tĩnh/động, tự viết danh mục business rule có chấm."
     },
     {
-      "slug": "swr302-4-7-ch12-why-model",
-      "name": "4.12 Choosing a model: which model answers which question",
+      "slug": "swr302-9r-2-ch9-document-discover",
+      "name": "4.14 Documenting and discovering business rules",
       "level": "BEGINNER",
-      "description": "Vì sao cần mô hình phân tích, chọn mô hình theo câu hỏi (context, ecosystem, use case, swimlane, DFD, ERD, state, bảng quyết định, dialog map) cho hệ thống đặt phòng khách sạn."
+      "description": "Thuộc tính của luật (id, loại, tĩnh/động, nguồn), tự viết ba mục danh mục luật có chấm, nguồn phát hiện luật (kiến thức chung, hệ thống cũ, mô hình quy trình, tài liệu, câu hỏi), nơi lưu luật."
+    },
+    {
+      "slug": "swr302-9r-3-ch9-rules-to-requirements",
+      "name": "4.15 Business rules to requirements and traceability",
+      "level": "BEGINNER",
+      "description": "Phân biệt luật nghiệp vụ và yêu cầu chức năng, tự suy yêu cầu từ hai luật của Chemical Tracking System có liên kết nguồn, cách liên kết luật–yêu cầu, luật nào thực thi bằng phần mềm."
     },
     {
       "slug": "swr302-4-lab-behaviour-quickfix",

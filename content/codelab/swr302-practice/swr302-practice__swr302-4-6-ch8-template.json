@@ -467,6 +467,180 @@
           "vi": "quy tắc nghiệp vụ — chính sách, luật, chuẩn, công thức tồn tại NGOÀI phần mềm"
         }
       ]
+    },
+    {
+      "title": "Template 4 — which field of the template?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "use case template"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Use case \"Withdraw Cash\" (ATM). Put each piece of information into the right field of the Wiegers use case template.</p><p>Each row is graded on its own; the explanation of every answer appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Use case \"Rút tiền\" (ATM). Đặt mỗi thông tin vào đúng trường của template use case Wiegers.</p><p>Mỗi dòng được chấm riêng; giải thích từng đáp án hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Vẫn đạt mục tiêu theo đường khác ⇒ alternative flow.",
+        "Không đạt mục tiêu ⇒ exception."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Template 4 — which field of the template?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Template 4 — which field of the template? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Trigger\n   - r1.k: Precondition\n   - r2.k: Postcondition\n   - r3.k: Normal flow step\n   - r4.k: Alternative flow\n   - r5.k: Exception\n   - r6.k: Business rules\n   - r7.k: Frequency of use\n   - r8.k: Assumptions\n   Alternative flows still reach the goal by another path; exceptions prevent the goal; rules are referenced by id from the catalogue.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Alternative flows still reach the goal by another path; exceptions prevent the goal; rules are referenced by id from the catalogue.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Template field",
+                "luaChon": [
+                  "Trigger",
+                  "Precondition",
+                  "Postcondition",
+                  "Normal flow step",
+                  "Alternative flow",
+                  "Exception",
+                  "Business rules",
+                  "Frequency of use",
+                  "Assumptions"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "The customer inserts a card."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "The ATM is online and has cash."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The account balance is reduced by the amount withdrawn."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "The system asks for the amount."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "The customer chooses a quick amount of 500,000 VND instead of typing one."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "The PIN is wrong three times; the card is retained."
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "BR-12 daily withdrawal limit of 20 million VND."
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "s": "About 300 withdrawals per ATM per day."
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "s": "The bank network answers within 5 seconds."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Trigger",
+              "r1.k": "Precondition",
+              "r2.k": "Postcondition",
+              "r3.k": "Normal flow step",
+              "r4.k": "Alternative flow",
+              "r5.k": "Exception",
+              "r6.k": "Business rules",
+              "r7.k": "Frequency of use",
+              "r8.k": "Assumptions"
+            },
+            "giaiThich": "<p><p>Alternative flows still reach the goal by another path; exceptions prevent the goal; rules are referenced by id from the catalogue.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gọi việc đưa thẻ vào là precondition."
+        },
+        {
+          "loi": "Ghi sai PIN 3 lần là luồng thay thế."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "trigger",
+          "vi": "sự kiện kích hoạt use case"
+        },
+        {
+          "en": "precondition / postcondition",
+          "vi": "tiền điều kiện (phải đúng trước khi bắt đầu) / hậu điều kiện (đúng sau khi xong)"
+        },
+        {
+          "en": "alternative flow",
+          "vi": "luồng thay thế — cách khác vẫn đạt mục tiêu"
+        },
+        {
+          "en": "exception",
+          "vi": "ngoại lệ — điều kiện làm use case không đạt mục tiêu, và cách xử lý"
+        }
+      ]
     }
   ]
 }

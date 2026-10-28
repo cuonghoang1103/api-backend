@@ -99,9 +99,32 @@ const E3 = baiJs({
   boYeu: [{ ten: 'thiếu ngoại lệ, luồng toàn System', tep: { 'uc-spec.js': `const UC_SPEC = ${jsLit({ ...GIAI_SPEC, normalFlow: ['1. System shows loans.', '2. System renews.', '3. System saves.', '4. System notifies.', '5. System ends.'], exceptions: [] })};\n` } }],
 });
 
+const E4 = phanLoai({
+  tieuDe: 'Template 4 — which field of the template?',
+  doKho: 'EASY', phut: 6,
+  moTa: { en: '<p>Use case "Withdraw Cash" (ATM). Put each piece of information into the right field of the Wiegers use case template.</p>', vi: '<p>Use case "Rút tiền" (ATM). Đặt mỗi thông tin vào đúng trường của template use case Wiegers.</p>' },
+  cot: 'Template field', luaChon: ['Trigger', 'Precondition', 'Postcondition', 'Normal flow step', 'Alternative flow', 'Exception', 'Business rules', 'Frequency of use', 'Assumptions'],
+  hang: [
+    ['The customer inserts a card.', 'Trigger'],
+    ['The ATM is online and has cash.', 'Precondition'],
+    ['The account balance is reduced by the amount withdrawn.', 'Postcondition'],
+    ['The system asks for the amount.', 'Normal flow step'],
+    ['The customer chooses a quick amount of 500,000 VND instead of typing one.', 'Alternative flow'],
+    ['The PIN is wrong three times; the card is retained.', 'Exception'],
+    ['BR-12 daily withdrawal limit of 20 million VND.', 'Business rules'],
+    ['About 300 withdrawals per ATM per day.', 'Frequency of use'],
+    ['The bank network answers within 5 seconds.', 'Assumptions'],
+  ],
+  giaiThich: '<p>Alternative flows still reach the goal by another path; exceptions prevent the goal; rules are referenced by id from the catalogue.</p>',
+  goiY: ['Vẫn đạt mục tiêu theo đường khác ⇒ alternative flow.', 'Không đạt mục tiêu ⇒ exception.'],
+  loiHayGap: ['Gọi việc đưa thẻ vào là precondition.', 'Ghi sai PIN 3 lần là luồng thay thế.'],
+  thuatNgu: tn('trigger', 'precondition', 'altFlow', 'exception'),
+  khaiNiem: ['use case template'],
+});
+
 export default moDun({
   slug: 'swr302-4-6-ch8-template',
-  ten: '4.3 The use case specification template',
+  ten: '4.6 The use case specification template',
   moTaModule: 'Các trường của template use case Wiegers (ví dụ ATM), viết bước luồng chính tốt, ngoại lệ và luồng thay thế, tự viết đặc tả đầy đủ UC-07 Renew Loan có chấm theo luật thư viện.',
-  de: [E1, E2, E3],
+  de: [E1, E2, E3, E4],
 });

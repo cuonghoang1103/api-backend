@@ -1,0 +1,489 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-9r-2-ch9-document-discover",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-9r-2-ch9-document-discover"
+  },
+  "exercises": [
+    {
+      "title": "Rules catalogue 1 — static or dynamic?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "business rule attributes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Each catalogued rule records whether it is <b>static</b> (unlikely to change) or <b>dynamic</b> (likely to change). Dynamic rules tell developers to make that functionality or data easy to update (e.g. configurable values).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Luật tĩnh (ít đổi) hay động (dễ đổi) — luật động ⇒ làm phần đó dễ cập nhật.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Giá, thuế suất, ngưỡng ⇒ động.",
+        "Định nghĩa, sự thật cấu trúc ⇒ tĩnh."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Rules catalogue 1 — static or dynamic?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Rules catalogue 1 — static or dynamic? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Dynamic\n   - r1.k: Static\n   - r2.k: Dynamic\n   - r3.k: Static\n   - r4.k: Dynamic\n   Rates, prices and thresholds change; definitions and structural facts rarely do.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Rates, prices and thresholds change; definitions and structural facts rarely do.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Kind",
+                "luaChon": [
+                  "Static",
+                  "Dynamic"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Value-added tax is 10% of the service fee."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "A child is a person under 18 years of age."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The weekend surcharge is 20,000 VND."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Every invoice has exactly one customer."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Members with more than 1,000 points get a 5% discount."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Dynamic",
+              "r1.k": "Static",
+              "r2.k": "Dynamic",
+              "r3.k": "Static",
+              "r4.k": "Dynamic"
+            },
+            "giaiThich": "<p><p>Rates, prices and thresholds change; definitions and structural facts rarely do.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Coi thuế suất là tĩnh."
+        },
+        {
+          "loi": "Hard-code các giá trị động."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "business rule",
+          "vi": "quy tắc nghiệp vụ — chính sách, luật, chuẩn, công thức tồn tại NGOÀI phần mềm"
+        }
+      ]
+    },
+    {
+      "title": "Rules catalogue 3 — where did the rule come from?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "discovering business rules"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Business rules hide in: \"common knowledge\" of long-time staff; legacy systems (rules embedded in code); business-process models (constraints, triggers, computations at each step); document analysis (regulations, policies, contracts); data analysis; and the questions the BA asks during elicitation. Name the source of each discovery.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Luật nghiệp vụ ẩn ở đâu. Gọi tên nguồn của từng phát hiện.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Đọc mã cũ ⇒ legacy system.",
+        "Câu hỏi \"ai được phép…\" ⇒ elicitation questions."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Rules catalogue 3 — where did the rule come from?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Rules catalogue 3 — where did the rule come from? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Legacy system\n   - r1.k: Common knowledge\n   - r2.k: Document analysis\n   - r3.k: Business-process modeling\n   - r4.k: Elicitation questions\n   Rule-hunting questions — \"Who is permitted to do this?\", \"Are there conditions where this is not allowed?\", \"How is this value calculated?\" — surface rules nobody states unprompted.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Rule-hunting questions — \"Who is permitted to do this?\", \"Are there conditions where this is not allowed?\", \"How is this value calculated?\" — surface rules nobody states unprompted.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Source",
+                "luaChon": [
+                  "Common knowledge",
+                  "Legacy system",
+                  "Business-process modeling",
+                  "Document analysis",
+                  "Elicitation questions"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Reading the old COBOL code, the BA finds that orders over 50 million need two approvals."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "A cashier with 15 years of service says: \"We never refund gift cards.\""
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The new tax circular requires invoices to show the buyer’s tax code."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "While drawing the returns process, the BA sees a decision \"item older than 30 days?\"."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "The BA asks \"Who is allowed to cancel an order?\" and learns only supervisors may."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Legacy system",
+              "r1.k": "Common knowledge",
+              "r2.k": "Document analysis",
+              "r3.k": "Business-process modeling",
+              "r4.k": "Elicitation questions"
+            },
+            "giaiThich": "<p><p>Rule-hunting questions — \"Who is permitted to do this?\", \"Are there conditions where this is not allowed?\", \"How is this value calculated?\" — surface rules nobody states unprompted.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm common knowledge với elicitation questions."
+        },
+        {
+          "loi": "Bỏ qua mã hệ thống cũ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "business rule",
+          "vi": "quy tắc nghiệp vụ — chính sách, luật, chuẩn, công thức tồn tại NGOÀI phần mềm"
+        }
+      ]
+    },
+    {
+      "title": "Rules catalogue 2 — write catalogue entries",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "documenting business rules"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Write <code>CATALOG</code>: three entries for these rules of a gym — (1) \"A member under 16 may only book classes accompanied by an adult\", (2) \"A personal-training session costs 300,000 VND, or 250,000 VND for gold members\", (3) \"When a member has not paid for 30 days, the system suspends the membership\". Each entry: <code>{ id, statement, type, staticOrDynamic, source }</code> — id like BR-01, unique; type one of fact, constraint, action enabler, inference, computation; source names where the rule comes from (policy, law, manager, contract…).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Types: (1) constraint, (2) computation, (3) action enabler.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết ba mục danh mục luật cho phòng gym, mỗi mục có id, phát biểu, loại, tĩnh/động, nguồn.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Loại: (1) constraint, (2) computation, (3) action enabler.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "rule (2)",
+          "output": "{ id: 'BR-02', statement: '…', type: 'computation', staticOrDynamic: 'dynamic', source: 'Gym price list approved by the manager' }",
+          "explanation": "|||"
+        }
+      ],
+      "hintsJson": [
+        "Giá ⇒ computation, động.",
+        "\"Khi … thì hệ thống …\" ⇒ action enabler."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "catalog.js",
+          "language": "javascript",
+          "code": "const CATALOG = [\n  // { id: 'BR-01', statement: '', type: '', staticOrDynamic: '', source: '' },\n];\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "catalog.js",
+          "language": "javascript",
+          "code": "const CATALOG = [\n  { id: 'BR-01', statement: 'A member under 16 may book a class only if an adult member is booked on the same class.', type: 'constraint', staticOrDynamic: 'static', source: 'Gym safety policy' },\n  { id: 'BR-02', statement: 'A personal-training session costs 300,000 VND, or 250,000 VND for gold members.', type: 'computation', staticOrDynamic: 'dynamic', source: 'Price list approved by the gym manager' },\n  { id: 'BR-03', statement: 'If a member has not paid for 30 days, the membership is suspended.', type: 'action enabler', staticOrDynamic: 'dynamic', source: 'Membership contract' },\n];\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each rule gets an id that requirements can point to, a type that tells how it is enforced, a volatility flag that guides design, and a source that tells whom to ask when it changes.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "catalog.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "three well-formed entries with unique ids",
+              "vi": "ba mục đúng dạng, id không trùng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof CATALOG==\"undefined\"||!Array.isArray(CATALOG)||CATALOG.length!==3)return\"CATALOG must have 3 entries\";for(var i={},r=0;r<3;r++){var t=CATALOG[r]||{};if(!/^BR-\\d{2,3}$/.test(String(t.id)))return\"entry \"+(r+1)+\": id like BR-01\";if(i[t.id])return\"duplicate id \"+t.id;if(i[t.id]=1,String(t.statement||\"\").split(/\\s+/).length<6)return t.id+\": write the full statement\";if(String(t.source||\"\").trim().length<4)return t.id+\": record the source of the rule\";if([\"static\",\"dynamic\"].indexOf(String(t.staticOrDynamic).toLowerCase())<0)return t.id+\": staticOrDynamic must be static or dynamic\"}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "the types are right",
+              "vi": "loại đúng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof CATALOG==\"undefined\"||!Array.isArray(CATALOG))return\"CATALOG is missing\";for(var n=[\"constraint\",\"computation\",\"action enabler\"],r=0;r<3;r++){var t=String((CATALOG[r]||{}).type||\"\").toLowerCase().replace(/[-_]/g,\" \").trim();if(t!==n[r])return\"rule \"+(r+1)+\" is a \"+n[r]+' (got \"'+t+'\")'}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "prices and payment periods are dynamic",
+              "vi": "giá và kỳ hạn thanh toán là động"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){return typeof CATALOG==\"undefined\"||!Array.isArray(CATALOG)?\"CATALOG is missing\":String((CATALOG[1]||{}).staticOrDynamic).toLowerCase()===\"dynamic\"?\"OK\":\"prices change \\u2014 the computation rule is dynamic\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thiếu nguồn của luật."
+        },
+        {
+          "loi": "Coi bảng giá là luật tĩnh."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "business rule",
+          "vi": "quy tắc nghiệp vụ — chính sách, luật, chuẩn, công thức tồn tại NGOÀI phần mềm"
+        }
+      ]
+    },
+    {
+      "title": "Rules catalogue 4 — where to store rules",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 4,
+      "points": 10,
+      "concepts": [
+        "business rules repository"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Manage rules as enterprise assets: a simple catalogue at first; a requirements tool storing rules as a requirement type for all projects; large or rule-heavy organisations may build a rules database, possibly with a rules engine. Rules touching safety, security, finance or compliance carry the greatest risk if unmanaged.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Quản lý luật như tài sản doanh nghiệp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Danh mục đơn giản là đủ để bắt đầu.",
+        "An toàn, bảo mật, tài chính, tuân thủ ⇒ rủi ro cao."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Rules catalogue 4 — where to store rules\n\nAnswer in the answer panel (no code needed).\n\n1. A small team starts its first project. Where should it record business rules?Đội nhỏ bắt đầu dự án đầu tiên. Ghi luật ở đâu?\n2. Which rules carry the greatest risk if unmanaged?Luật nào rủi ro nhất nếu không quản lý?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Rules catalogue 4 — where to store rules — answer key\n\n1. A small team starts its first project. Where should it record business rules?Đội nhỏ bắt đầu dự án đầu tiên. Ghi luật ở đâu?\n   Answer: a) A simple rules catalogue (table) referenced by the requirements\n   Start simple; reference, do not duplicate.VI: Bắt đầu đơn giản; tham chiếu, không chép lại.\n\n2. Which rules carry the greatest risk if unmanaged?Luật nào rủi ro nhất nếu không quản lý?\n   Answer: d) Rules about safety, security, finance and compliance\n   High consequence domains.VI: Lĩnh vực hậu quả cao.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · d.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>A small team starts its first project. Where should it record business rules?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đội nhỏ bắt đầu dự án đầu tiên. Ghi luật ở đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A simple rules catalogue (table) referenced by the requirements"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Nowhere"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only in the code"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Inside each requirement, copied again and again"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Start simple; reference, do not duplicate.</p><p><i>VI: Bắt đầu đơn giản; tham chiếu, không chép lại.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Which rules carry the greatest risk if unmanaged?</p><p style=\"opacity:.75;font-size:.92em\"><i>Luật nào rủi ro nhất nếu không quản lý?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Rules about fonts"
+              },
+              {
+                "ma": "b",
+                "noiDung": "None"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Rules about colours"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Rules about safety, security, finance and compliance"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>High consequence domains.</p><p><i>VI: Lĩnh vực hậu quả cao.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chép luật vào nhiều yêu cầu."
+        },
+        {
+          "loi": "Chỉ để luật trong mã nguồn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "business rule",
+          "vi": "quy tắc nghiệp vụ — chính sách, luật, chuẩn, công thức tồn tại NGOÀI phần mềm"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,521 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-3-4-ch7-planning",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-3-4-ch7-planning"
+  },
+  "exercises": [
+    {
+      "title": "Elicitation planning 1 — prepare, perform or follow up?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "elicitation activities"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers splits each elicitation activity into <b>preparing</b> (scope and agenda, resources, learn about the stakeholders, questions, straw-man models), <b>performing</b> (educate stakeholders about the approach, take good notes, use the physical space) and <b>following up</b> (organise and share the notes, document open issues).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chuẩn bị · thực hiện · theo dõi sau buổi khai thác.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Trước buổi ⇒ chuẩn bị; trong buổi ⇒ thực hiện; sau buổi ⇒ theo dõi.",
+        "Parking lot xử lý sau buổi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Elicitation planning 1 — prepare, perform or follow up?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Elicitation planning 1 — prepare, perform or follow up? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Preparing\n   - r1.k: Preparing\n   - r2.k: Performing\n   - r3.k: Performing\n   - r4.k: Following up\n   - r5.k: Following up\n   Only those who supplied the requirements can judge whether they were captured correctly — so share notes quickly.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Only those who supplied the requirements can judge whether they were captured correctly — so share notes quickly.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Stage",
+                "luaChon": [
+                  "Preparing",
+                  "Performing",
+                  "Following up"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Book a room and check participants’ time zones."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Draft a process flow for participants to correct."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "A scribe records decisions, actions with owners and open issues."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Put diagrams on the walls and let people move sticky notes."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Send the consolidated notes to participants for review within two days."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Move each parking-lot item into the issue tracker with an owner and due date."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Preparing",
+              "r1.k": "Preparing",
+              "r2.k": "Performing",
+              "r3.k": "Performing",
+              "r4.k": "Following up",
+              "r5.k": "Following up"
+            },
+            "giaiThich": "<p><p>Only those who supplied the requirements can judge whether they were captured correctly — so share notes quickly.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Để ghi chú vài tuần mới gửi."
+        },
+        {
+          "loi": "Không ai ghi chép trong buổi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "elicitation",
+          "vi": "khai thác yêu cầu — khám phá nhu cầu từ bên liên quan"
+        }
+      ]
+    },
+    {
+      "title": "Elicitation planning 2 — one session from start to finish",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 4,
+      "points": 10,
+      "concepts": [
+        "elicitation activities"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Order the steps of one elicitation session.</p><p>Drag the items into the right order; the explanation appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sắp các bước của một buổi khai thác.</p><p>Kéo các mục về đúng thứ tự; giải thích hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Câu hỏi và mô hình nháp được chuẩn bị trước buổi.",
+        "Ghi nhận vấn đề mở là bước theo dõi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Elicitation planning 2 — one session from start to finish\n\nAnswer in the answer panel (no code needed).\n\n1. Order the stepsSắp các bước\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Elicitation planning 2 — one session from start to finish — answer key\n\n1. Order the stepsSắp các bước\n   Answer: a) Plan the scope and agenda  →  b) Prepare questions and a straw-man model  →  c) Explain the approach to the participants  →  d) Elicit and take notes  →  e) Consolidate and share the notes for review  →  f) Log open issues with owners\n   Prepare → perform → follow up.VI: Chuẩn bị → thực hiện → theo dõi.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Scope and agenda → questions and straw man → explain the approach → elicit with notes → share notes → log open issues.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Order the steps</p><p style=\"opacity:.75;font-size:.92em\"><i>Sắp các bước</i></p>",
+            "muc": [
+              {
+                "ma": "d",
+                "noiDung": "Elicit and take notes"
+              },
+              {
+                "ma": "f",
+                "noiDung": "Log open issues with owners"
+              },
+              {
+                "ma": "a",
+                "noiDung": "Plan the scope and agenda"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Explain the approach to the participants"
+              },
+              {
+                "ma": "e",
+                "noiDung": "Consolidate and share the notes for review"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Prepare questions and a straw-man model"
+              }
+            ],
+            "dapAn": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e",
+              "f"
+            ],
+            "giaiThich": "<p>Prepare → perform → follow up.</p><p><i>VI: Chuẩn bị → thực hiện → theo dõi.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Soạn câu hỏi ngay trong buổi."
+        },
+        {
+          "loi": "Bỏ bước gửi lại ghi chú."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "elicitation",
+          "vi": "khai thác yêu cầu — khám phá nhu cầu từ bên liên quan"
+        }
+      ]
+    },
+    {
+      "title": "Elicitation planning 3 — the elicitation plan",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "elicitation plan"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>A project-level elicitation plan covers: objectives (overall and per activity); strategy and techniques (which technique for which stakeholder group, depending on access); schedule and resource estimates (participants, BA preparation and follow-up time); documents and systems needed for independent elicitation; expected products; and elicitation risks.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Kế hoạch khai thác cấp dự án gồm gì.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Kế hoạch: mục tiêu, kỹ thuật, lịch & nguồn lực, tài liệu, sản phẩm, rủi ro.",
+        "Thời gian chuẩn bị và theo dõi rất đáng kể."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Elicitation planning 3 — the elicitation plan\n\nAnswer in the answer panel (no code needed).\n\n1. Which item belongs in an elicitation plan?Mục nào thuộc kế hoạch khai thác?\n2. A BA estimates only the time of the sessions themselves. What is missing?BA chỉ ước lượng thời gian các buổi. Thiếu gì?\n3. Key users are available only two hours a month. This is…Người dùng chính chỉ rảnh hai giờ mỗi tháng. Đây là…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Elicitation planning 3 — the elicitation plan — answer key\n\n1. Which item belongs in an elicitation plan?Mục nào thuộc kế hoạch khai thác?\n   Answer: a) Which technique is used with which stakeholder group, and why\n   Strategy and techniques.VI: Chiến lược và kỹ thuật.\n\n2. A BA estimates only the time of the sessions themselves. What is missing?BA chỉ ước lượng thời gian các buổi. Thiếu gì?\n   Answer: c) Preparation and follow-up time, often as long as the sessions\n   Prepare + follow up.VI: Chuẩn bị + theo dõi.\n\n3. Key users are available only two hours a month. This is…Người dùng chính chỉ rảnh hai giờ mỗi tháng. Đây là…\n   Answer: b) an elicitation risk to record in the plan, with a mitigation\n   Elicitation risks.VI: Rủi ro khai thác.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · c · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which item belongs in an elicitation plan?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mục nào thuộc kế hoạch khai thác?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Which technique is used with which stakeholder group, and why"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The test cases"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The database schema"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The deployment script"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Strategy and techniques.</p><p><i>VI: Chiến lược và kỹ thuật.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>A BA estimates only the time of the sessions themselves. What is missing?</p><p style=\"opacity:.75;font-size:.92em\"><i>BA chỉ ước lượng thời gian các buổi. Thiếu gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Coding time"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Holiday time"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Preparation and follow-up time, often as long as the sessions"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nothing"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Prepare + follow up.</p><p><i>VI: Chuẩn bị + theo dõi.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Key users are available only two hours a month. This is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Người dùng chính chỉ rảnh hai giờ mỗi tháng. Đây là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a test failure"
+              },
+              {
+                "ma": "b",
+                "noiDung": "an elicitation risk to record in the plan, with a mitigation"
+              },
+              {
+                "ma": "c",
+                "noiDung": "irrelevant"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a design decision"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Elicitation risks.</p><p><i>VI: Rủi ro khai thác.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chỉ tính giờ họp."
+        },
+        {
+          "loi": "Không ghi rủi ro về sự sẵn sàng của người dùng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "elicitation",
+          "vi": "khai thác yêu cầu — khám phá nhu cầu từ bên liên quan"
+        }
+      ]
+    },
+    {
+      "title": "Elicitation planning 4 — notes and open issues",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 4,
+      "points": 10,
+      "concepts": [
+        "following up"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Organise and share the notes soon after the session: consolidate sources, update while fresh, keep the raw notes, and ask participants to review. Record each open issue in the issue tracker with notes, an owner and a due date.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Gửi ghi chú sớm, giữ ghi chú thô, ghi vấn đề mở kèm người phụ trách và hạn.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Người cung cấp yêu cầu là người kiểm.",
+        "Giữ ghi chú thô."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Elicitation planning 4 — notes and open issues\n\nAnswer in the answer panel (no code needed).\n\n1. Who can best judge whether requirements were captured correctly?Ai đánh giá tốt nhất việc ghi lại yêu cầu có đúng không?\n2. Should the raw notes be thrown away after consolidation?Có nên vứt ghi chú thô sau khi tổng hợp?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Elicitation planning 4 — notes and open issues — answer key\n\n1. Who can best judge whether requirements were captured correctly?Ai đánh giá tốt nhất việc ghi lại yêu cầu có đúng không?\n   Answer: c) The people who supplied them\n   Hence share notes for review.VI: Vì vậy gửi ghi chú để họ xem lại.\n\n2. Should the raw notes be thrown away after consolidation?Có nên vứt ghi chú thô sau khi tổng hợp?\n   Answer: c) No — keep them as a source to check later\n   Keep the evidence.VI: Giữ bằng chứng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: c · c.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Who can best judge whether requirements were captured correctly?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ai đánh giá tốt nhất việc ghi lại yêu cầu có đúng không?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The BA alone"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The developers"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The people who supplied them"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The sponsor only"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Hence share notes for review.</p><p><i>VI: Vì vậy gửi ghi chú để họ xem lại.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Should the raw notes be thrown away after consolidation?</p><p style=\"opacity:.75;font-size:.92em\"><i>Có nên vứt ghi chú thô sau khi tổng hợp?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Only on agile projects"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Yes, always"
+              },
+              {
+                "ma": "c",
+                "noiDung": "No — keep them as a source to check later"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only if they are handwritten"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Keep the evidence.</p><p><i>VI: Giữ bằng chứng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Không gửi lại ghi chú."
+        },
+        {
+          "loi": "Huỷ ghi chú thô."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "elicitation",
+          "vi": "khai thác yêu cầu — khám phá nhu cầu từ bên liên quan"
+        }
+      ]
+    }
+  ]
+}

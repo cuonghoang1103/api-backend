@@ -109,7 +109,7 @@ const E4 = baiJs({
 
 export default moDun({
   slug: 'swr302-9r-1-ch9-taxonomy',
-  ten: '4.11 Business rules: the five types and the catalogue',
+  ten: '4.13 Business rules: the five types and the catalogue',
   moTaModule: 'Năm loại business rule của Wiegers (fact, constraint, action enabler, inference, computation), phân loại luật của shop trực tuyến, rule → yêu cầu chức năng và truy vết, rule tĩnh/động, tự viết danh mục business rule có chấm.',
   de: [E1, E2, E3, E4],
 });

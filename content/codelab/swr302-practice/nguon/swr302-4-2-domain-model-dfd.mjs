@@ -130,7 +130,7 @@ const E4 = phanLoai({
 
 export default moDun({
   slug: 'swr302-4-2-domain-model-dfd',
-  ten: '4.5 Data flow diagrams: notation, levels and balancing',
+  ten: '4.2 Data flow diagrams: notation, levels and balancing',
   moTaModule: 'Bốn ký hiệu DFD, luồng hợp lệ và không hợp lệ, hố đen / phép màu / kho chỉ ghi / kho chỉ đọc / mất cân bằng, tự vẽ DFD mức 0 cân bằng với sơ đồ ngữ cảnh cho sẵn (chấm bằng máy đọc Mermaid).',
   de: [E1, E2, E4, E3],
 });

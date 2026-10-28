@@ -87,7 +87,7 @@ const E4 = phanLoai({
 
 export default moDun({
   slug: 'swr302-4-9-ch12-decision-uml-agile',
-  ten: '4.7 Decision models: decision tables, trees and event-response tables',
+  ten: '4.9 Decision models: decision tables, trees and event-response tables',
   moTaModule: 'Khi nào dùng bảng hay cây quyết định, điền bảng 2 điều kiện, tự viết đủ 2³ cột cho luật miễn phạt có chấm, bảng sự kiện – phản hồi của barrier bãi đỗ.',
   de: [E1, E2, E4, E3],
 });

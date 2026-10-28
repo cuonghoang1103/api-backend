@@ -114,7 +114,7 @@ const E4 = tracNghiem({
 
 export default moDun({
   slug: 'swr302-4-4-ch8-anatomy',
-  ten: '4.2 Use case anatomy: flows, «include», «extend», generalization',
+  ten: '4.4 Use case anatomy: flows, «include», «extend», generalization',
   moTaModule: 'Khi nào «include», khi nào «extend» và chiều mũi tên, luồng chính / thay thế / ngoại lệ, tự mô hình hoá include/extend của ClinicCare có chấm, actor chính/phụ và tổng quát hoá actor.',
   de: [E1, E2, E4, E3],
 });

@@ -1,0 +1,483 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-7-project-cliniccare-m6-change",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-7-1-change-control"
+  },
+  "exercises": [
+    {
+      "title": "ClinicCare project — Milestone 6: Validation, change control and traceability",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 70,
+      "points": 100,
+      "concepts": [
+        "RTM",
+        "testing the requirements",
+        "change control",
+        "impact analysis",
+        "suspect links"
+      ],
+      "prerequisites": [
+        "Milestone 5",
+        "SWR302 lessons 6.4, 7.1–7.4"
+      ],
+      "tags": [
+        "swr302",
+        "project"
+      ],
+      "problemHtml": "<h1>ClinicCare project — Milestone 6: Validation, change control and traceability</h1>\n<p class=\"bi-phu\">Running project · milestone 6 of 7 · keep the requirements under control · 10 marks</p>\n<h2>1. Overview</h2>\n<p><b>Minh An Family Clinic</b> has 3 doctors, 2 receptionists, 1 pharmacist and a clinic manager. Today patients phone the reception desk to book: about <b>120 calls a day</b>, many unanswered at peak time, and <b>15% of appointments are no-shows</b>. The owner wants <b>ClinicCare</b>, a web and mobile system, live within 6 months.</p>\n<ul>\n<li><b>Patients</b> register, book an appointment with a chosen doctor in a free 15-minute slot, cancel it, pay the visit fee online, and read their prescriptions.</li>\n<li><b>Doctors</b> publish their working slots, see the day’s appointment list, record visit notes and write e-prescriptions.</li>\n<li><b>Receptionists</b> check patients in, book on behalf of patients who still phone, and mark no-shows.</li>\n<li>The <b>pharmacist</b> receives e-prescriptions and marks them dispensed.</li>\n<li>The <b>clinic manager</b> sets services and fees and reads monthly reports.</li>\n<li>External systems: the <b>VNPay payment gateway</b> (charges, confirms and refunds), the <b>SMS gateway</b> (delivers the reminder sent 24 hours before each appointment), and the <b>National e-Prescription System</b>, to which every prescription must be sent by law and which returns a prescription code.</li>\n</ul>\n<p><b>Business rules.</b> BR-01 an appointment can be cancelled free of charge up to 2 hours before it starts · BR-02 a patient with 3 no-shows in the last 90 days must prepay when booking · BR-03 a patient may hold at most 2 future appointments · BR-04 visit fee = service fee + 10% VAT · BR-05 a slot lasts 15 minutes.</p>\n<p><b>Not in release 1:</b> video consultation, insurance e-claims, a loyalty programme, integration with the lab machines.</p><p>The SRS is baselined and the team is building. The traceability data is in <code>data/rtm.js</code>:</p><table><thead><tr><th>Link</th><th>Recorded at version of \"from\"</th></tr></thead><tbody><tr><td>UC-02 → FR-1</td><td>2</td></tr><tr><td>UC-02 → FR-2</td><td>3</td></tr><tr><td>BR-03 → FR-2</td><td>1</td></tr><tr><td>BR-02 → FR-3</td><td>1</td></tr><tr><td>BR-04 → FR-4</td><td>1</td></tr><tr><td>BR-01 → FR-5</td><td>1</td></tr><tr><td>UC-17 → FR-6</td><td>1</td></tr><tr><td>UC-13 → FR-7</td><td>1</td></tr><tr><td>UC-11 → FR-8</td><td>1</td></tr><tr><td>FR-1 → DES-BOOK</td><td>1</td></tr><tr><td>FR-2 → DES-BOOK</td><td>1</td></tr><tr><td>FR-5 → DES-BOOK</td><td>1</td></tr><tr><td>FR-3 → DES-PAY</td><td>1</td></tr><tr><td>DES-BOOK → CODE-BOOK</td><td>1</td></tr><tr><td>DES-PAY → CODE-PAY</td><td>1</td></tr><tr><td>FR-1 → TC-01</td><td>1</td></tr><tr><td>FR-2 → TC-02</td><td>1</td></tr><tr><td>FR-3 → TC-03</td><td>1</td></tr><tr><td>FR-5 → TC-05</td><td>1</td></tr><tr><td>FR-6 → TC-06</td><td>1</td></tr><tr><td>FR-7 → TC-07</td><td>1</td></tr><tr><td>FR-9 → TC-09</td><td>1</td></tr></tbody></table>\n<ol>\n<li><b>A.</b> From the RTM: functional requirements without a test; functional requirements with no use case or business rule behind them; test cases that verify no requirement.</li>\n<li><b>B.</b> Write at least five conceptual tests <code>{ hoursBefore, expected: 'free' | 'refused' }</code> for FR-5 (BR-01).</li>\n<li><b>C.</b> Three weeks before release, the owner submits <b>CR-07</b>: \"<i>Patients can book for a family member (a child) from their own account.</i>\" It changes UC-02 and BR-03. List every item to review (the two changed items and everything downstream of them), estimate the effort with <code>HOURS_PER_ITEM</code>, and give the CCB decision with its rationale (remaining capacity: <b>18 hours</b>). Then list the states an <i>approved</i> change request goes through until it is closed.</li>\n<li><b>D.</b> BR-03 has been updated to version 2 and UC-02 to version 3. Which trace links are now suspect?</li>\n</ol>\n<h3>Main features</h3>\n<ul>\n  <li>A. Read the RTM.</li>\n  <li>B. Boundary tests.</li>\n  <li>C. Change request CR-07.</li>\n  <li>D. Suspect links.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>Use the ids exactly as in data/rtm.js.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>data/rtm.js             ← ITEMS, LINKS, HOURS_PER_ITEM, REMAINING_CAPACITY_HOURS (given)\nanswers/\n├── a-rtm.js            ← UNTESTED_FR, ORPHAN_FR, TESTS_WITHOUT_REQUIREMENT\n├── b-tests.js          ← CANCEL_TESTS\n├── c-change.js         ← CR07_AFFECTED, CR07_EFFORT_HOURS, CR07_DECISION, CR_LIFECYCLE\n└── d-suspect.js        ← SUSPECT_LINKS</pre>\n<h2>3. Data model</h2>\n<p><b>Answer records</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>id lists</code></td><td>string[]</td><td>any order</td></tr><tr><td><code>CANCEL_TESTS[i]</code></td><td>{ hoursBefore: number, expected: 'free' | 'refused' }</td><td></td></tr><tr><td><code>CR07_DECISION</code></td><td>{ decision: 'Approve' | 'Defer' | 'Reject', rationale }</td><td></td></tr></tbody></table>\n<h2>4. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. A. RTM gaps <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Untested, orphan, unattached tests.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">RTM</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. B. Boundary tests <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Both sides of 2 hours; started appointment.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">testing requirements</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. C1. Impact <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Changed items and downstream.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">impact analysis</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. C2. Effort <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Sum of hours by type.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">estimation</span></p>\n</div>\n<div class=\"bi-cn\"><h3>5. C3. CCB decision <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Decision with rationale.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">CCB</span></p>\n</div>\n<div class=\"bi-cn\"><h3>6. C4. CR life cycle <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Wiegers states in order.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">change control</span></p>\n</div>\n<div class=\"bi-cn\"><h3>7. D. Suspect links <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Newer upstream versions.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">suspect links</span></p>\n</div>\n<h2>5. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>UNTESTED_FR · ORPHAN_FR · TESTS_WITHOUT_REQUIREMENT</code></td><td>answers/a-rtm.js</td></tr><tr><td><code>CANCEL_TESTS</code></td><td>answers/b-tests.js</td></tr><tr><td><code>CR07_*</code></td><td>answers/c-change.js</td></tr><tr><td><code>SUSPECT_LINKS</code></td><td>answers/d-suspect.js</td></tr></tbody></table>\n<h2>6. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>A. RTM gaps</td><td>2</td></tr><tr><td>2</td><td>B. Boundary tests</td><td>2</td></tr><tr><td>3</td><td>C1. Impact</td><td>2</td></tr><tr><td>4</td><td>C2. Effort</td><td>1</td></tr><tr><td>5</td><td>C3. CCB decision</td><td>1</td></tr><tr><td>6</td><td>C4. CR life cycle</td><td>1</td></tr><tr><td>7</td><td>D. Suspect links</td><td>1</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Approving CR-07 because \"the owner asked\" although it does not fit — that is how releases slip.</li>\n  <li>Listing only the direct children of UC-02 — code and tests further down are affected too.</li>\n  <li>Marking UC-02 → FR-2 suspect: it was recorded at version 3 already.</li>\n</ul>\n<h2>7. Submission</h2>\n<p>Write your answers in the files of <code>answers/</code> on the right. Diagrams are written as text in the syntax of a real tool (Mermaid or PlantUML — paste them into <a href=\"https://mermaid.live\" target=\"_blank\" rel=\"noopener\">mermaid.live</a> or <a href=\"https://www.plantuml.com/plantuml\" target=\"_blank\" rel=\"noopener\">plantuml.com</a> to SEE the picture); tables are JavaScript arrays, one object per row of the school template. Press <b>Run</b> for the visible checks and <b>Submit</b> for full grading, hidden checks included. Your mark per question appears in the rubric table.</p>",
+      "problemHtmlVi": "<h1>ClinicCare project — Milestone 6: Validation, change control and traceability</h1>\n<p class=\"bi-phu\">Dự án xuyên suốt · mốc 6/7 · giữ yêu cầu trong tầm kiểm soát · 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p><b>Phòng khám gia đình Minh An</b> có 3 bác sĩ, 2 lễ tân, 1 dược sĩ và một quản lý. Hiện bệnh nhân gọi điện tới lễ tân để đặt lịch: khoảng <b>120 cuộc/ngày</b>, giờ cao điểm nhiều cuộc không ai nghe, và <b>15% lịch hẹn bị bỏ (no-show)</b>. Chủ phòng khám muốn <b>ClinicCare</b> — hệ thống web và di động — chạy trong 6 tháng.</p>\n<ul><li><b>Bệnh nhân</b> đăng ký, đặt lịch với bác sĩ chọn trong slot 15 phút còn trống, huỷ lịch, trả phí khám trực tuyến, xem đơn thuốc.</li><li><b>Bác sĩ</b> công bố slot làm việc, xem danh sách hẹn trong ngày, ghi chú khám và kê đơn điện tử.</li><li><b>Lễ tân</b> làm thủ tục check-in, đặt lịch thay người gọi điện, đánh dấu no-show.</li><li><b>Dược sĩ</b> nhận đơn điện tử và đánh dấu đã phát thuốc.</li><li><b>Quản lý</b> đặt dịch vụ và phí, xem báo cáo tháng.</li><li>Hệ thống ngoài: <b>cổng thanh toán VNPay</b> (thu, xác nhận, hoàn tiền), <b>SMS gateway</b> (gửi nhắc lịch trước 24 giờ), <b>Hệ thống Đơn thuốc Quốc gia</b> (luật bắt buộc gửi mọi đơn, trả về mã đơn).</li></ul>\n<p><b>Luật nghiệp vụ.</b> BR-01 huỷ miễn phí tới trước 2 giờ · BR-02 bệnh nhân có 3 lần no-show trong 90 ngày phải trả trước khi đặt · BR-03 tối đa 2 lịch hẹn tương lai mỗi bệnh nhân · BR-04 phí khám = phí dịch vụ + 10% VAT · BR-05 mỗi slot 15 phút.</p>\n<p><b>Ngoài bản 1:</b> khám qua video, bảo hiểm điện tử, chương trình khách hàng thân thiết, kết nối máy xét nghiệm.</p><p>SRS đã baseline, đội đang làm. Dữ liệu truy vết ở <code>data/rtm.js</code>.</p><ol><li>A. Từ RTM: FR chưa có test; FR không có use case/luật phía sau; test không kiểm yêu cầu nào.</li><li>B. ≥ 5 test khái niệm cho FR-5 (BR-01).</li><li>C. Ba tuần trước phát hành, CR-07 \"đặt lịch cho người nhà\": liệt kê mọi mục phải rà (UC-02, BR-03 và mọi thứ phía sau), ước lượng công theo HOURS_PER_ITEM, quyết định của CCB và lý do (còn 18 giờ); rồi liệt kê các trạng thái của một CR <i>được duyệt</i> tới khi đóng.</li><li>D. BR-03 lên v2, UC-02 lên v3: liên kết nào thành nghi vấn?</li></ol>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>A. Đọc RTM.</li>\n  <li>B. Test biên.</li>\n  <li>C. Yêu cầu thay đổi CR-07.</li>\n  <li>D. Liên kết nghi vấn.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Dùng đúng id trong data/rtm.js.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>data/rtm.js             ← ITEMS, LINKS, HOURS_PER_ITEM, REMAINING_CAPACITY_HOURS (given)\nanswers/\n├── a-rtm.js            ← UNTESTED_FR, ORPHAN_FR, TESTS_WITHOUT_REQUIREMENT\n├── b-tests.js          ← CANCEL_TESTS\n├── c-change.js         ← CR07_AFFECTED, CR07_EFFORT_HOURS, CR07_DECISION, CR_LIFECYCLE\n└── d-suspect.js        ← SUSPECT_LINKS</pre>\n<h2>3. Mô hình dữ liệu</h2>\n<p><b>Answer records</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>id lists</code></td><td>string[]</td><td>thứ tự tuỳ ý</td></tr><tr><td><code>CANCEL_TESTS[i]</code></td><td>{ hoursBefore: number, expected: 'free' | 'refused' }</td><td></td></tr><tr><td><code>CR07_DECISION</code></td><td>{ decision: 'Approve' | 'Defer' | 'Reject', rationale }</td><td></td></tr></tbody></table>\n<h2>4. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. A. Lỗ hổng RTM <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Chưa test, mồ côi, test thừa.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">RTM</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. B. Test biên <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Hai phía 2 giờ; lịch đã bắt đầu.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">testing requirements</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. C1. Ảnh hưởng <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Mục đổi và phía sau.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">impact analysis</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. C2. Công <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Tổng giờ theo loại.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">estimation</span></p>\n</div>\n<div class=\"bi-cn\"><h3>5. C3. Quyết định CCB <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Quyết định kèm lý do.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">CCB</span></p>\n</div>\n<div class=\"bi-cn\"><h3>6. C4. Vòng đời CR <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Trạng thái Wiegers đúng thứ tự.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">change control</span></p>\n</div>\n<div class=\"bi-cn\"><h3>7. D. Liên kết nghi vấn <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Phiên bản phía trên mới hơn.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">suspect links</span></p>\n</div>\n<h2>5. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>UNTESTED_FR · ORPHAN_FR · TESTS_WITHOUT_REQUIREMENT</code></td><td>answers/a-rtm.js</td></tr><tr><td><code>CANCEL_TESTS</code></td><td>answers/b-tests.js</td></tr><tr><td><code>CR07_*</code></td><td>answers/c-change.js</td></tr><tr><td><code>SUSPECT_LINKS</code></td><td>answers/d-suspect.js</td></tr></tbody></table>\n<h2>6. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>A. Lỗ hổng RTM</td><td>2</td></tr><tr><td>2</td><td>B. Test biên</td><td>2</td></tr><tr><td>3</td><td>C1. Ảnh hưởng</td><td>2</td></tr><tr><td>4</td><td>C2. Công</td><td>1</td></tr><tr><td>5</td><td>C3. Quyết định CCB</td><td>1</td></tr><tr><td>6</td><td>C4. Vòng đời CR</td><td>1</td></tr><tr><td>7</td><td>D. Liên kết nghi vấn</td><td>1</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Duyệt CR-07 vì \"chủ phòng khám muốn\" dù không vừa — bản phát hành trễ từ đó.</li>\n  <li>Chỉ liệt kê con trực tiếp của UC-02 — code và test phía sau cũng bị ảnh hưởng.</li>\n  <li>Đánh dấu UC-02 → FR-2 nghi vấn: liên kết đó ghi ở phiên bản 3 rồi.</li>\n</ul>\n<h2>7. Nộp bài</h2>\n<p>Viết câu trả lời vào các tệp trong <code>answers/</code> bên phải. Sơ đồ viết bằng chữ theo cú pháp của công cụ thật (Mermaid hoặc PlantUML — dán vào <a href=\"https://mermaid.live\" target=\"_blank\" rel=\"noopener\">mermaid.live</a> hoặc <a href=\"https://www.plantuml.com/plantuml\" target=\"_blank\" rel=\"noopener\">plantuml.com</a> để XEM hình); bảng là mảng JavaScript, mỗi object là một dòng của template trường. Bấm <b>Chạy thử</b> để chạy kiểm hiện, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn). Điểm từng câu hiện trong bảng thang điểm.</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "Use the ids exactly as in data/rtm.js.|||Dùng đúng id trong data/rtm.js.",
+      "examplesJson": [
+        {
+          "input": "answers/*.js — one object per row of the template",
+          "output": "Rubric table: marks per question (e.g. B. 2.5/3)",
+          "explanation": "Every rubric line is checked separately; hidden checks run on Submit.|||Mỗi dòng rubric được kiểm riêng; kiểm ẩn chạy khi Nộp."
+        }
+      ],
+      "hintsJson": [
+        "A: FR không có liên kết sang TC ⇒ chưa test; FR không có liên kết từ UC/BR ⇒ mồ côi; TC không có liên kết vào ⇒ test thừa.",
+        "C: duyệt BFS từ UC-02 và BR-03; công = Σ HOURS_PER_ITEM[loại] của mọi mục (kể cả UC-02, BR-03).",
+        "D: so version hiện tại của mục \"from\" với fromVersion của từng liên kết."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "data/rtm.js",
+          "language": "javascript",
+          "code": "// Given — the ClinicCare traceability data (read only). A link means \"to was derived from from@fromVersion\".\nconst ITEMS = [\n  { id: 'BR-01', type: 'BR', version: 1, title: 'Free cancellation up to 2 hours before' },\n  { id: 'BR-02', type: 'BR', version: 1, title: 'Prepay after 3 no-shows in 90 days' },\n  {\n    id: 'BR-03',\n    type: 'BR',\n    version: 2,\n    title: 'At most 2 future appointments — now \"per patient, family members counted separately\"',\n  },\n  { id: 'BR-04', type: 'BR', version: 1, title: 'Visit fee = service fee + 10% VAT' },\n  { id: 'UC-02', type: 'UC', version: 3, title: 'Book Appointment' },\n  { id: 'UC-11', type: 'UC', version: 1, title: 'Send Prescription to National System' },\n  { id: 'UC-13', type: 'UC', version: 1, title: 'Mark No-show' },\n  { id: 'UC-17', type: 'UC', version: 1, title: 'Send Appointment Reminder' },\n  { id: 'FR-1', type: 'FR', version: 1, title: 'Display free slots of a doctor' },\n  { id: 'FR-2', type: 'FR', version: 1, title: 'Refuse a third future appointment' },\n  { id: 'FR-3', type: 'FR', version: 1, title: 'Require prepayment' },\n  { id: 'FR-4', type: 'FR', version: 1, title: 'Fee with VAT' },\n  { id: 'FR-5', type: 'FR', version: 1, title: 'Free cancellation up to 2 hours' },\n  { id: 'FR-6', type: 'FR', version: 1, title: 'SMS reminder 24 hours before' },\n  { id: 'FR-7', type: 'FR', version: 1, title: 'No-show after 15 minutes' },\n  { id: 'FR-8', type: 'FR', version: 1, title: 'Store the national prescription code' },\n  { id: 'FR-9', type: 'FR', version: 1, title: 'Show a birthday greeting on the home screen' },\n  { id: 'DES-BOOK', type: 'DES', version: 1, title: 'BookingService' },\n  { id: 'DES-PAY', type: 'DES', version: 1, title: 'PaymentService' },\n  { id: 'CODE-BOOK', type: 'CODE', version: 1, title: 'booking.service.ts' },\n  { id: 'CODE-PAY', type: 'CODE', version: 1, title: 'payment.service.ts' },\n  { id: 'TC-01', type: 'TC', version: 1, title: 'Free slots listed' },\n  { id: 'TC-02', type: 'TC', version: 1, title: 'Third appointment refused' },\n  { id: 'TC-03', type: 'TC', version: 1, title: 'Prepayment asked' },\n  { id: 'TC-05', type: 'TC', version: 1, title: 'Cancel 3 h before' },\n  { id: 'TC-06', type: 'TC', version: 1, title: 'Reminder sent' },\n  { id: 'TC-07', type: 'TC', version: 1, title: 'No-show marked' },\n  { id: 'TC-09', type: 'TC', version: 1, title: 'Birthday greeting shown' },\n  { id: 'TC-10', type: 'TC', version: 1, title: 'Dark mode colours' },\n];\nconst LINKS = [\n  { from: 'UC-02', to: 'FR-1', fromVersion: 2 },\n  { from: 'UC-02', to: 'FR-2', fromVersion: 3 },\n  { from: 'BR-03', to: 'FR-2', fromVersion: 1 },\n  { from: 'BR-02', to: 'FR-3', fromVersion: 1 },\n  { from: 'BR-04', to: 'FR-4', fromVersion: 1 },\n  { from: 'BR-01', to: 'FR-5', fromVersion: 1 },\n  { from: 'UC-17', to: 'FR-6', fromVersion: 1 },\n  { from: 'UC-13', to: 'FR-7', fromVersion: 1 },\n  { from: 'UC-11', to: 'FR-8', fromVersion: 1 },\n  { from: 'FR-1', to: 'DES-BOOK', fromVersion: 1 },\n  { from: 'FR-2', to: 'DES-BOOK', fromVersion: 1 },\n  { from: 'FR-5', to: 'DES-BOOK', fromVersion: 1 },\n  { from: 'FR-3', to: 'DES-PAY', fromVersion: 1 },\n  { from: 'DES-BOOK', to: 'CODE-BOOK', fromVersion: 1 },\n  { from: 'DES-PAY', to: 'CODE-PAY', fromVersion: 1 },\n  { from: 'FR-1', to: 'TC-01', fromVersion: 1 },\n  { from: 'FR-2', to: 'TC-02', fromVersion: 1 },\n  { from: 'FR-3', to: 'TC-03', fromVersion: 1 },\n  { from: 'FR-5', to: 'TC-05', fromVersion: 1 },\n  { from: 'FR-6', to: 'TC-06', fromVersion: 1 },\n  { from: 'FR-7', to: 'TC-07', fromVersion: 1 },\n  { from: 'FR-9', to: 'TC-09', fromVersion: 1 },\n];\nconst HOURS_PER_ITEM = {\"BR\":1,\"UC\":2,\"FR\":2,\"DES\":3,\"CODE\":6,\"TC\":2};\nconst REMAINING_CAPACITY_HOURS = 18;\n"
+        },
+        {
+          "name": "answers/a-rtm.js",
+          "language": "javascript",
+          "code": "// A. Read the RTM (ids, sorted or not).\nconst UNTESTED_FR = [];\nconst ORPHAN_FR = [];\nconst TESTS_WITHOUT_REQUIREMENT = [];\n"
+        },
+        {
+          "name": "answers/b-tests.js",
+          "language": "javascript",
+          "code": "// B. Conceptual tests for FR-5 (BR-01): { hoursBefore, expected: 'free' | 'refused' }\nconst CANCEL_TESTS = [];\n"
+        },
+        {
+          "name": "answers/c-change.js",
+          "language": "javascript",
+          "code": "// C. CR-07 \"Book for a family member\".\nconst CR07_AFFECTED = [];\nconst CR07_EFFORT_HOURS = 0;\nconst CR07_DECISION = { decision: '', rationale: '' };\nconst CR_LIFECYCLE = [];\n"
+        },
+        {
+          "name": "answers/d-suspect.js",
+          "language": "javascript",
+          "code": "// D. Links whose upstream item now has a newer version than when the link was recorded.\nconst SUSPECT_LINKS = [];   // e.g. 'BR-03->FR-2'\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "data/rtm.js",
+          "language": "javascript",
+          "code": "// Given — the ClinicCare traceability data (read only). A link means \"to was derived from from@fromVersion\".\nconst ITEMS = [\n  { id: 'BR-01', type: 'BR', version: 1, title: 'Free cancellation up to 2 hours before' },\n  { id: 'BR-02', type: 'BR', version: 1, title: 'Prepay after 3 no-shows in 90 days' },\n  {\n    id: 'BR-03',\n    type: 'BR',\n    version: 2,\n    title: 'At most 2 future appointments — now \"per patient, family members counted separately\"',\n  },\n  { id: 'BR-04', type: 'BR', version: 1, title: 'Visit fee = service fee + 10% VAT' },\n  { id: 'UC-02', type: 'UC', version: 3, title: 'Book Appointment' },\n  { id: 'UC-11', type: 'UC', version: 1, title: 'Send Prescription to National System' },\n  { id: 'UC-13', type: 'UC', version: 1, title: 'Mark No-show' },\n  { id: 'UC-17', type: 'UC', version: 1, title: 'Send Appointment Reminder' },\n  { id: 'FR-1', type: 'FR', version: 1, title: 'Display free slots of a doctor' },\n  { id: 'FR-2', type: 'FR', version: 1, title: 'Refuse a third future appointment' },\n  { id: 'FR-3', type: 'FR', version: 1, title: 'Require prepayment' },\n  { id: 'FR-4', type: 'FR', version: 1, title: 'Fee with VAT' },\n  { id: 'FR-5', type: 'FR', version: 1, title: 'Free cancellation up to 2 hours' },\n  { id: 'FR-6', type: 'FR', version: 1, title: 'SMS reminder 24 hours before' },\n  { id: 'FR-7', type: 'FR', version: 1, title: 'No-show after 15 minutes' },\n  { id: 'FR-8', type: 'FR', version: 1, title: 'Store the national prescription code' },\n  { id: 'FR-9', type: 'FR', version: 1, title: 'Show a birthday greeting on the home screen' },\n  { id: 'DES-BOOK', type: 'DES', version: 1, title: 'BookingService' },\n  { id: 'DES-PAY', type: 'DES', version: 1, title: 'PaymentService' },\n  { id: 'CODE-BOOK', type: 'CODE', version: 1, title: 'booking.service.ts' },\n  { id: 'CODE-PAY', type: 'CODE', version: 1, title: 'payment.service.ts' },\n  { id: 'TC-01', type: 'TC', version: 1, title: 'Free slots listed' },\n  { id: 'TC-02', type: 'TC', version: 1, title: 'Third appointment refused' },\n  { id: 'TC-03', type: 'TC', version: 1, title: 'Prepayment asked' },\n  { id: 'TC-05', type: 'TC', version: 1, title: 'Cancel 3 h before' },\n  { id: 'TC-06', type: 'TC', version: 1, title: 'Reminder sent' },\n  { id: 'TC-07', type: 'TC', version: 1, title: 'No-show marked' },\n  { id: 'TC-09', type: 'TC', version: 1, title: 'Birthday greeting shown' },\n  { id: 'TC-10', type: 'TC', version: 1, title: 'Dark mode colours' },\n];\nconst LINKS = [\n  { from: 'UC-02', to: 'FR-1', fromVersion: 2 },\n  { from: 'UC-02', to: 'FR-2', fromVersion: 3 },\n  { from: 'BR-03', to: 'FR-2', fromVersion: 1 },\n  { from: 'BR-02', to: 'FR-3', fromVersion: 1 },\n  { from: 'BR-04', to: 'FR-4', fromVersion: 1 },\n  { from: 'BR-01', to: 'FR-5', fromVersion: 1 },\n  { from: 'UC-17', to: 'FR-6', fromVersion: 1 },\n  { from: 'UC-13', to: 'FR-7', fromVersion: 1 },\n  { from: 'UC-11', to: 'FR-8', fromVersion: 1 },\n  { from: 'FR-1', to: 'DES-BOOK', fromVersion: 1 },\n  { from: 'FR-2', to: 'DES-BOOK', fromVersion: 1 },\n  { from: 'FR-5', to: 'DES-BOOK', fromVersion: 1 },\n  { from: 'FR-3', to: 'DES-PAY', fromVersion: 1 },\n  { from: 'DES-BOOK', to: 'CODE-BOOK', fromVersion: 1 },\n  { from: 'DES-PAY', to: 'CODE-PAY', fromVersion: 1 },\n  { from: 'FR-1', to: 'TC-01', fromVersion: 1 },\n  { from: 'FR-2', to: 'TC-02', fromVersion: 1 },\n  { from: 'FR-3', to: 'TC-03', fromVersion: 1 },\n  { from: 'FR-5', to: 'TC-05', fromVersion: 1 },\n  { from: 'FR-6', to: 'TC-06', fromVersion: 1 },\n  { from: 'FR-7', to: 'TC-07', fromVersion: 1 },\n  { from: 'FR-9', to: 'TC-09', fromVersion: 1 },\n];\nconst HOURS_PER_ITEM = {\"BR\":1,\"UC\":2,\"FR\":2,\"DES\":3,\"CODE\":6,\"TC\":2};\nconst REMAINING_CAPACITY_HOURS = 18;\n"
+        },
+        {
+          "name": "answers/a-rtm.js",
+          "language": "javascript",
+          "code": "// A. Follow the links: FR → TC (tested?), UC/BR → FR (source?), FR → TC reversed (what does a test verify?).\nconst UNTESTED_FR = [\"FR-4\",\"FR-8\"];\nconst ORPHAN_FR = [\"FR-9\"];   // a birthday greeting nobody asked for: gold plating\nconst TESTS_WITHOUT_REQUIREMENT = [\"TC-10\"];   // dark mode is not a requirement of release 1\n"
+        },
+        {
+          "name": "answers/b-tests.js",
+          "language": "javascript",
+          "code": "// B. Both sides of the boundary, the boundary itself, and an appointment already started.\nconst CANCEL_TESTS = [\n  { hoursBefore: 24, expected: 'free' },\n  { hoursBefore: 2.1, expected: 'free' },\n  { hoursBefore: 2, expected: 'free' },\n  { hoursBefore: 1.9, expected: 'refused' },\n  { hoursBefore: 0.5, expected: 'refused' },\n  { hoursBefore: -0.25, expected: 'refused' },\n];\n"
+        },
+        {
+          "name": "answers/c-change.js",
+          "language": "javascript",
+          "code": "// C. Impact = the changed items + everything downstream; effort = sum of HOURS_PER_ITEM by type.\nconst CR07_AFFECTED = [\"BR-03\",\"CODE-BOOK\",\"DES-BOOK\",\"FR-1\",\"FR-2\",\"TC-01\",\"TC-02\",\"UC-02\"];\nconst CR07_EFFORT_HOURS = 20;\nconst CR07_DECISION = {\n  decision: 'Defer',\n  rationale: 'The impact is 20 hours but only 18 hours of capacity remain before release 1, and family booking does not serve a release 1 objective; reconsider it for release 2.',\n};\nconst CR_LIFECYCLE = ['Submitted', 'Evaluated', 'Approved', 'Change Made', 'Verified', 'Closed'];\n"
+        },
+        {
+          "name": "answers/d-suspect.js",
+          "language": "javascript",
+          "code": "// D. BR-03 is at v2 (link recorded at v1); UC-02 is at v3 (FR-1 link recorded at v2, FR-2 link already at v3).\nconst SUSPECT_LINKS = [\"BR-03->FR-2\",\"UC-02->FR-1\"];\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The RTM shows FR-4 (VAT) and FR-8 (national code) untested — two legal requirements; FR-9 (birthday greeting) has no source — gold plating; TC-10 tests something nobody required. CR-07 touches 8 items for 20 hours against 18 hours of capacity, so the CCB defers it to release 2 and records the decision. After BR-03 and UC-02 changed, BR-03->FR-2 and UC-02->FR-1 must be re-checked.</p>",
+      "solutionExplanationHtmlVi": "<p>RTM cho thấy FR-4 (VAT) và FR-8 (mã quốc gia) chưa có test — hai yêu cầu pháp lý; FR-9 (chúc mừng sinh nhật) không có nguồn — mạ vàng; TC-10 kiểm thứ không ai yêu cầu. CR-07 chạm 8 mục, 20 giờ so với 18 giờ còn lại ⇒ CCB hoãn sang bản 2 và ghi lại quyết định. Sau khi BR-03 và UC-02 đổi, phải rà lại BR-03->FR-2 và UC-02->FR-1.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "data/rtm.js",
+          "answers/a-rtm.js",
+          "answers/b-tests.js",
+          "answers/c-change.js",
+          "answers/d-suspect.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A — functional requirements without a test case",
+              "vi": "A — yêu cầu chức năng chưa có test case"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((UNTESTED_FR || []).map(String)); } catch (e) { return '(UNTESTED_FR || []).map(String) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(UNTESTED_FR || []).map(String) is empty';\n  var chap = [[\"FR-4\",\"FR-8\"]];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"tap\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"tap\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"tap\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — functional requirements with no use case or business rule behind them",
+              "vi": "A — yêu cầu chức năng không có use case/luật phía sau"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((ORPHAN_FR || []).map(String)); } catch (e) { return '(ORPHAN_FR || []).map(String) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(ORPHAN_FR || []).map(String) is empty';\n  var chap = [[\"FR-9\"]];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"tap\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"tap\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"tap\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — test cases that verify no requirement",
+              "vi": "A — test case không kiểm yêu cầu nào"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((TESTS_WITHOUT_REQUIREMENT || []).map(String)); } catch (e) { return '(TESTS_WITHOUT_REQUIREMENT || []).map(String) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(TESTS_WITHOUT_REQUIREMENT || []).map(String) is empty';\n  var chap = [[\"TC-10\"]];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"tap\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"tap\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"tap\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "B — at least 5 conceptual tests for FR-5, each expected result correct",
+              "vi": "B — ít nhất 5 test khái niệm cho FR-5, mọi kết quả mong đợi đúng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof CANCEL_TESTS==\"undefined\"||!Array.isArray(CANCEL_TESTS))return\"CANCEL_TESTS is missing\";if(CANCEL_TESTS.length<5)return\"write at least 5 tests\";for(var e=0;e<CANCEL_TESTS.length;e++){var r=CANCEL_TESTS[e]||{};if(typeof r.hoursBefore!=\"number\")return\"test \"+(e+1)+\": hoursBefore must be a number\";var f=r.hoursBefore>=2?\"free\":\"refused\";if(r.expected!==f)return\"hoursBefore \"+r.hoursBefore+' \\u21D2 \"'+f+'\" (BR-01: free up to 2 hours before)'}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — the tests sit on both sides of the 2-hour boundary and include an appointment already started",
+              "vi": "B — test nằm hai phía biên 2 giờ và có trường hợp lịch đã bắt đầu"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof CANCEL_TESTS==\"undefined\"||!Array.isArray(CANCEL_TESTS))return\"CANCEL_TESTS is missing\";var e=CANCEL_TESTS.map(function(r){return r.hoursBefore});return e.indexOf(2)<0?\"test exactly 2 hours before (the boundary itself)\":e.some(function(r){return r<2&&r>=1.5})?e.some(function(r){return r>2&&r<=2.5})?e.some(function(r){return r<=0})?\"OK\":\"test an appointment that has already started (0 or negative hours)\":\"test just over the boundary (e.g. 2.1 hours)\":\"test just under the boundary (e.g. 1.9 or 1.99 hours)\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "C — CR-07: every item to review (UC-02, BR-03 and everything downstream)",
+              "vi": "C — CR-07: mọi mục phải rà (UC-02, BR-03 và mọi thứ phía sau)"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((CR07_AFFECTED || []).map(String)); } catch (e) { return '(CR07_AFFECTED || []).map(String) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(CR07_AFFECTED || []).map(String) is empty';\n  var chap = [[\"BR-03\",\"CODE-BOOK\",\"DES-BOOK\",\"FR-1\",\"FR-2\",\"TC-01\",\"TC-02\",\"UC-02\"]];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"tap\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"tap\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"tap\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — CR-07 effort estimate in hours",
+              "vi": "C — ước lượng công CR-07 (giờ)"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (CR07_EFFORT_HOURS); } catch (e) { return 'CR07_EFFORT_HOURS is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'CR07_EFFORT_HOURS is empty';\n  var chap = [20];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"so\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"so\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 0; }); }\n  else if (\"so\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "C — CR-07 decision: defer, with reasons (capacity and release objective)",
+              "vi": "C — quyết định CR-07: hoãn, có lý do (năng lực và mục tiêu bản phát hành)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof CR07_DECISION==\"undefined\"||!CR07_DECISION)return\"CR07_DECISION is missing\";if(!/^defer/i.test(String(CR07_DECISION.decision||\"\").trim()))return\"with 18 hours left the CR does not fit \\u2014 the CCB should defer it, not approve or reject a useful change\";var e=String(CR07_DECISION.rationale||\"\").toLowerCase();return/(hour|capacity|effort|time|20|18)/.test(e)?/(release 2|next release|later release|release two)/.test(e)?\"OK\":\"rationale: say when it will be reconsidered (release 2)\":\"rationale: compare the effort with the remaining capacity\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f5"
+          },
+          {
+            "moTa": {
+              "en": "C — the life of an approved change request, in order",
+              "vi": "C — vòng đời một yêu cầu thay đổi được duyệt, đúng thứ tự"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof CR_LIFECYCLE==\"undefined\"||!Array.isArray(CR_LIFECYCLE))return\"CR_LIFECYCLE is missing\";var e=[\"submitted\",\"evaluated\",\"approved\",\"change made\",\"verified\",\"closed\"],r=CR_LIFECYCLE.map(function(i){return String(i).toLowerCase().replace(/[^a-z ]/g,\" \").replace(/\\s+/g,\" \").trim()});return JSON.stringify(r)===JSON.stringify(e)?\"OK\":\"Wiegers: Submitted \\u2192 Evaluated \\u2192 Approved \\u2192 Change Made \\u2192 Verified \\u2192 Closed\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f6"
+          },
+          {
+            "moTa": {
+              "en": "D — suspect links after BR-03 v2 and UC-02 v3",
+              "vi": "D — liên kết nghi vấn sau BR-03 v2 và UC-02 v3"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((SUSPECT_LINKS || []).map(String)); } catch (e) { return '(SUSPECT_LINKS || []).map(String) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(SUSPECT_LINKS || []).map(String) is empty';\n  var chap = [[\"BR-03->FR-2\",\"UC-02->FR-1\"]];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"tap\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"tap\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"tap\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f7"
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. A. RTM gaps",
+            "diem": 2
+          },
+          {
+            "ma": "f2",
+            "ten": "2. B. Boundary tests",
+            "diem": 2
+          },
+          {
+            "ma": "f3",
+            "ten": "3. C1. Impact",
+            "diem": 2
+          },
+          {
+            "ma": "f4",
+            "ten": "4. C2. Effort",
+            "diem": 1
+          },
+          {
+            "ma": "f5",
+            "ten": "5. C3. CCB decision",
+            "diem": 1
+          },
+          {
+            "ma": "f6",
+            "ten": "6. C4. CR life cycle",
+            "diem": 1
+          },
+          {
+            "ma": "f7",
+            "ten": "7. D. Suspect links",
+            "diem": 1
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "project",
+      "mistakesJson": [
+        {
+          "loi": "Quên FR-8 chưa có test."
+        },
+        {
+          "loi": "Không tính chính UC-02 và BR-03 vào công."
+        },
+        {
+          "loi": "Coi \"Deferred\" là một trạng thái của vòng đời chuẩn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "requirements traceability matrix (RTM)",
+          "vi": "ma trận truy vết yêu cầu — nối nguồn ↔ yêu cầu ↔ thiết kế ↔ mã ↔ test"
+        },
+        {
+          "en": "change control board (CCB)",
+          "vi": "hội đồng kiểm soát thay đổi — người quyết định chấp nhận/từ chối thay đổi"
+        },
+        {
+          "en": "impact analysis",
+          "vi": "phân tích ảnh hưởng — thay đổi này chạm tới yêu cầu, thiết kế, mã, test nào, tốn bao nhiêu"
+        },
+        {
+          "en": "baseline",
+          "vi": "đường cơ sở — bộ yêu cầu đã thống nhất, từ đó mọi thay đổi phải qua kiểm soát"
+        },
+        {
+          "en": "gold plating",
+          "vi": "mạ vàng — dev tự thêm chức năng không ai yêu cầu"
+        },
+        {
+          "en": "acceptance criteria",
+          "vi": "tiêu chí chấp nhận — điều kiện để khách nhận một yêu cầu/story (Given/When/Then)"
+        }
+      ]
+    },
+    {
+      "title": "Interview corner — change and traceability",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "change control",
+        "traceability"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p><b>Interview corner.</b> Questions that interviewers for business analyst, junior software engineer and QA positions really ask about this part of the project. Choose the answer a strong candidate would give; read the explanation — it is what you would say out loud.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Góc phỏng vấn.</b> Câu hỏi nhà tuyển dụng BA, kỹ sư phần mềm junior và QA thật sự hỏi về phần này của dự án. Chọn câu trả lời của một ứng viên giỏi; đọc phần giải thích — đó là điều bạn sẽ nói thành lời.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Câu trả lời tốt gắn với tình huống cụ thể của dự án, không đọc định nghĩa suông.",
+        "Nhà tuyển dụng muốn nghe lý do (vì sao), không chỉ cái gì."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Interview corner — change and traceability\n\nAnswer in the answer panel (no code needed).\n\n1. \"The client asks for a ‘small’ change two weeks before release. What do you do?\"\"Khách xin một thay đổi ‘nhỏ’ hai tuần trước phát hành. Bạn làm gì?\"\n2. \"What is a requirements traceability matrix good for?\"\"Ma trận truy vết yêu cầu dùng để làm gì?\"\n3. \"What is a baseline?\"\"Baseline là gì?\"\n4. \"A requirement changed. How do you know which tests to re-run?\"\"Một yêu cầu đã đổi. Làm sao biết phải chạy lại test nào?\"\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Interview corner — change and traceability — answer key\n\n1. \"The client asks for a ‘small’ change two weeks before release. What do you do?\"\"Khách xin một thay đổi ‘nhỏ’ hai tuần trước phát hành. Bạn làm gì?\"\n   Answer: c) \"I log it as a change request, run an impact analysis with the RTM — requirements, design, code, tests, documents — estimate the effort and let the change control board decide against the remaining capacity. Small-looking changes often are not small.\"\n   Process, impact, decision by the right people.VI: Quy trình, ảnh hưởng, đúng người quyết.\n\n2. \"What is a requirements traceability matrix good for?\"\"Ma trận truy vết yêu cầu dùng để làm gì?\"\n   Answer: d) \"To prove every requirement is designed, built and tested, to find gold plating and missing tests, and to find everything a change affects.\"\n   Coverage, gold plating, impact.VI: Độ phủ, mạ vàng, ảnh hưởng.\n\n3. \"What is a baseline?\"\"Baseline là gì?\"\n   Answer: a) \"A reviewed, agreed set of requirements that development is based on; after it, changes go through change control.\"\n   Agreed + controlled.VI: Đã thống nhất + có kiểm soát.\n\n4. \"A requirement changed. How do you know which tests to re-run?\"\"Một yêu cầu đã đổi. Làm sao biết phải chạy lại test nào?\"\n   Answer: d) \"I follow its trace links forward: every link from the changed item becomes suspect, and the tests (and design, code) at the other end must be reviewed and re-run.\"\n   Suspect links drive regression scope.VI: Liên kết nghi vấn xác định phạm vi kiểm lại.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: c · d · a · d.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>\"The client asks for a ‘small’ change two weeks before release. What do you do?\"</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Khách xin một thay đổi ‘nhỏ’ hai tuần trước phát hành. Bạn làm gì?\"</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "\"I refuse all changes after the baseline.\""
+              },
+              {
+                "ma": "b",
+                "noiDung": "\"I ask the developers to fit it in overtime.\""
+              },
+              {
+                "ma": "c",
+                "noiDung": "\"I log it as a change request, run an impact analysis with the RTM — requirements, design, code, tests, documents — estimate the effort and let the change control board decide against the remaining capacity. Small-looking changes often are not small.\""
+              },
+              {
+                "ma": "d",
+                "noiDung": "\"I just do it, it is small.\""
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Process, impact, decision by the right people.</p><p><i>VI: Quy trình, ảnh hưởng, đúng người quyết.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>\"What is a requirements traceability matrix good for?\"</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Ma trận truy vết yêu cầu dùng để làm gì?\"</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "\"To list the team members.\""
+              },
+              {
+                "ma": "b",
+                "noiDung": "\"It is only for audits.\""
+              },
+              {
+                "ma": "c",
+                "noiDung": "\"To schedule the sprints.\""
+              },
+              {
+                "ma": "d",
+                "noiDung": "\"To prove every requirement is designed, built and tested, to find gold plating and missing tests, and to find everything a change affects.\""
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Coverage, gold plating, impact.</p><p><i>VI: Độ phủ, mạ vàng, ảnh hưởng.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>\"What is a baseline?\"</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Baseline là gì?\"</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "\"A reviewed, agreed set of requirements that development is based on; after it, changes go through change control.\""
+              },
+              {
+                "ma": "b",
+                "noiDung": "\"The database schema.\""
+              },
+              {
+                "ma": "c",
+                "noiDung": "\"The minimum number of requirements.\""
+              },
+              {
+                "ma": "d",
+                "noiDung": "\"The first draft of the SRS.\""
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Agreed + controlled.</p><p><i>VI: Đã thống nhất + có kiểm soát.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>\"A requirement changed. How do you know which tests to re-run?\"</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Một yêu cầu đã đổi. Làm sao biết phải chạy lại test nào?\"</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "\"I re-run every test, always.\""
+              },
+              {
+                "ma": "b",
+                "noiDung": "\"I ask the tester to guess.\""
+              },
+              {
+                "ma": "c",
+                "noiDung": "\"None — the tests were already passing.\""
+              },
+              {
+                "ma": "d",
+                "noiDung": "\"I follow its trace links forward: every link from the changed item becomes suspect, and the tests (and design, code) at the other end must be reviewed and re-run.\""
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Suspect links drive regression scope.</p><p><i>VI: Liên kết nghi vấn xác định phạm vi kiểm lại.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Trả lời bằng định nghĩa thuộc lòng, không ví dụ."
+        },
+        {
+          "loi": "Chọn đáp án nghe \"kỹ thuật\" nhất thay vì đáp án đúng nghiệp vụ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "change control board (CCB)",
+          "vi": "hội đồng kiểm soát thay đổi — người quyết định chấp nhận/từ chối thay đổi"
+        },
+        {
+          "en": "requirements traceability matrix (RTM)",
+          "vi": "ma trận truy vết yêu cầu — nối nguồn ↔ yêu cầu ↔ thiết kế ↔ mã ↔ test"
+        },
+        {
+          "en": "impact analysis",
+          "vi": "phân tích ảnh hưởng — thay đổi này chạm tới yêu cầu, thiết kế, mã, test nào, tốn bao nhiêu"
+        },
+        {
+          "en": "scope creep (creeping requirements)",
+          "vi": "phạm vi phình dần ngoài kiểm soát"
+        }
+      ]
+    }
+  ]
+}

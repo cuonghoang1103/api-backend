@@ -394,6 +394,12 @@
       "description": "Deep Lab chương 7: tự viết động cơ truy vết — dựng RTM cho FR/NFR, độ phủ test và yêu cầu mồ côi, liên kết nghi vấn (suspect) khi mục phía trên đổi phiên bản, phân tích ảnh hưởng nhóm theo loại (có chu trình), xoá nghi vấn sau khi rà — chấm mẫu ClinicCare + dữ liệu ẩn."
     },
     {
+      "slug": "swr302-7-project-cliniccare-m6-change",
+      "name": "ClinicCare project — Milestone 6: Validation, change and traceability",
+      "level": "INTERMEDIATE",
+      "description": "Dự án ClinicCare, mốc 6 (chương 6–7): đọc RTM tìm yêu cầu chưa test / mồ côi / test thừa, viết test biên cho luật huỷ 2 giờ, phân tích ảnh hưởng và công của CR-07, quyết định CCB, vòng đời CR, liên kết nghi vấn sau khi luật và use case đổi phiên bản; kèm Góc phỏng vấn."
+    },
+    {
       "slug": "swr302-8-1-oo-design-prototyping",
       "name": "8.1 From requirements to an OO design",
       "level": "INTERMEDIATE",
@@ -500,6 +506,12 @@
       "name": "Deep Lab 10 — Prioritisation engine",
       "level": "ADVANCED",
       "description": "Deep Lab chương 10: tự viết bảng value/cost/risk của Wiegers thành hàm (loại điểm sai, làm tròn, hoà theo id), lập phạm vi bản phát hành (Must trước, rồi theo priority, báo vượt năng lực) và phân tích độ nhạy trọng số — chấm mẫu ClinicCare + dữ liệu ẩn."
+    },
+    {
+      "slug": "swr302-10-project-cliniccare-m7-release",
+      "name": "ClinicCare project — Milestone 7: Prioritising release 2",
+      "level": "INTERMEDIATE",
+      "description": "Dự án ClinicCare, mốc 7 (chương 9–10): bảng value/cost/risk Wiegers cho 6 ứng viên bản 2, xếp hạng, MoSCoW từ lời bên liên quan, phạm vi bản 2 theo 30 điểm story, ba user story + tiêu chí Given/When/Then cho CR-07 đặt lịch người nhà; kèm Góc phỏng vấn."
     },
     {
       "slug": "swr302-11-pe-1-freshbox-meal-kit",

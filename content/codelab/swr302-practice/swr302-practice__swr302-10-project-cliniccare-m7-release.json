@@ -1,0 +1,514 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-10-project-cliniccare-m7-release",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-10-1-prioritization"
+  },
+  "exercises": [
+    {
+      "title": "ClinicCare project — Milestone 7: Prioritising and planning release 2",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 60,
+      "points": 100,
+      "concepts": [
+        "value/cost/risk prioritization",
+        "MoSCoW",
+        "release planning",
+        "user stories"
+      ],
+      "prerequisites": [
+        "Milestone 6",
+        "SWR302 lessons 9.1, 10.1–10.4"
+      ],
+      "tags": [
+        "swr302",
+        "project"
+      ],
+      "problemHtml": "<h1>ClinicCare project — Milestone 7: Prioritising and planning release 2</h1>\n<p class=\"bi-phu\">Running project · milestone 7 of 7 · what goes into release 2 · 10 marks</p>\n<h2>1. Overview</h2>\n<p><b>Minh An Family Clinic</b> has 3 doctors, 2 receptionists, 1 pharmacist and a clinic manager. Today patients phone the reception desk to book: about <b>120 calls a day</b>, many unanswered at peak time, and <b>15% of appointments are no-shows</b>. The owner wants <b>ClinicCare</b>, a web and mobile system, live within 6 months.</p>\n<ul>\n<li><b>Patients</b> register, book an appointment with a chosen doctor in a free 15-minute slot, cancel it, pay the visit fee online, and read their prescriptions.</li>\n<li><b>Doctors</b> publish their working slots, see the day’s appointment list, record visit notes and write e-prescriptions.</li>\n<li><b>Receptionists</b> check patients in, book on behalf of patients who still phone, and mark no-shows.</li>\n<li>The <b>pharmacist</b> receives e-prescriptions and marks them dispensed.</li>\n<li>The <b>clinic manager</b> sets services and fees and reads monthly reports.</li>\n<li>External systems: the <b>VNPay payment gateway</b> (charges, confirms and refunds), the <b>SMS gateway</b> (delivers the reminder sent 24 hours before each appointment), and the <b>National e-Prescription System</b>, to which every prescription must be sent by law and which returns a prescription code.</li>\n</ul>\n<p><b>Business rules.</b> BR-01 an appointment can be cancelled free of charge up to 2 hours before it starts · BR-02 a patient with 3 no-shows in the last 90 days must prepay when booking · BR-03 a patient may hold at most 2 future appointments · BR-04 visit fee = service fee + 10% VAT · BR-05 a slot lasts 15 minutes.</p>\n<p><b>Not in release 1:</b> video consultation, insurance e-claims, a loyalty programme, integration with the lab machines.</p><p>Release 1 is live: reception calls dropped from 120 to 64 a day and no-shows from 15% to 6%. The team (now agile, two-week sprints) can deliver <b>30 story points</b> in release 2. Candidates, rated 1–9 by the stakeholders (benefit, penalty) and the team (cost, risk):</p><table><thead><tr><th>ID</th><th>Candidate</th><th>Benefit</th><th>Penalty</th><th>Cost</th><th>Risk</th><th>Story points</th></tr></thead><tbody><tr><td>F1</td><td>Family booking (CR-07)</td><td>8</td><td>6</td><td>4</td><td>3</td><td>13</td></tr><tr><td>F2</td><td>Video consultation</td><td>7</td><td>3</td><td>9</td><td>8</td><td>34</td></tr><tr><td>F3</td><td>Insurance e-claims</td><td>6</td><td>7</td><td>8</td><td>7</td><td>21</td></tr><tr><td>F4</td><td>Loyalty points</td><td>3</td><td>1</td><td>3</td><td>2</td><td>8</td></tr><tr><td>F5</td><td>Lab results import</td><td>7</td><td>5</td><td>6</td><td>6</td><td>21</td></tr><tr><td>F6</td><td>English user interface</td><td>5</td><td>4</td><td>2</td><td>1</td><td>5</td></tr></tbody></table>\n<p><b>A.</b> Fill Wiegers’ value/cost/risk table (weights benefit 2, penalty 1, cost 1, risk 0.5) and rank the candidates.</p>\n<p><b>B.</b> Classify each candidate with MoSCoW from what was said:</p><ul><li><b>F1</b> — Owner: \"Parents keep phoning to book for their children — release 2 must have family booking.\"</li><li><b>F2</b> — Head doctor: \"No doctor is trained for video visits yet; it is not for release 2.\"</li><li><b>F3</b> — Manager: \"E-claims would help, but patients can still claim on paper this year.\"</li><li><b>F4</b> — Marketing: \"Loyalty points would be a nice touch if there is time left.\"</li><li><b>F5</b> — Nurses: \"Importing lab results saves us an hour a day; we really want it, but we can live without it for a few months.\"</li><li><b>F6</b> — Owner: \"Our new partner contract requires an English interface from release 2.\"</li></ul>\n<p><b>C.</b> Plan release 2: all Musts, then the other candidates in priority order while the story points fit; Won’t never goes in.</p>\n<p><b>D.</b> CR-07 (family booking), deferred in Milestone 6, is now in. Write three user stories with Given/When/Then acceptance criteria. Remember BR-03 is now <i>at most 2 future appointments per person</i>, family members counted separately.</p>\n<h3>Main features</h3>\n<ul>\n  <li>A. Value/cost/risk and ranking.</li>\n  <li>B. MoSCoW.</li>\n  <li>C. Release 2 scope.</li>\n  <li>D. User stories for CR-07.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>Percentages to 2 decimals, priority to 3 (small rounding differences accepted).</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>answers/\n├── a-priorities.js   ← const PRIORITIES = { F1: { valuePct, costPct, riskPct, priority }, … }; const RANKING = [...]\n├── b-moscow.js       ← const MOSCOW = { F1: '…', … }\n├── c-release.js      ← const RELEASE_2 = [...]\n└── d-stories.js      ← const FAMILY_STORIES = [ { story, criteria: [...] }, … ]</pre>\n<h2>3. Data model</h2>\n<p><b>Answer records</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>PRIORITIES.Fx</code></td><td>{ valuePct, costPct, riskPct, priority }</td><td>numbers</td></tr><tr><td><code>FAMILY_STORIES[i]</code></td><td>{ story, criteria[] }</td><td>Given/When/Then</td></tr></tbody></table>\n<h2>4. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. A1. Value/cost/risk table <span class=\"bi-diem\">3 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Every candidate.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">Wiegers Table 16-1</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. A2. Ranking <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>By priority.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">priority</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. B. MoSCoW <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>From the quotes.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">MoSCoW</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. C. Release 2 scope <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Musts, then priority, within capacity.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">release planning</span></p>\n</div>\n<div class=\"bi-cn\"><h3>5. D. User stories <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Form, roles, Given/When/Then, BR-03.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">user stories</span> <span class=\"bi-hook\">acceptance criteria</span></p>\n</div>\n<h2>5. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>PRIORITIES · RANKING</code></td><td>answers/a-priorities.js</td></tr><tr><td><code>MOSCOW</code></td><td>answers/b-moscow.js</td></tr><tr><td><code>RELEASE_2</code></td><td>answers/c-release.js</td></tr><tr><td><code>FAMILY_STORIES</code></td><td>answers/d-stories.js</td></tr></tbody></table>\n<h2>6. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>A1. Value/cost/risk table</td><td>3</td></tr><tr><td>2</td><td>A2. Ranking</td><td>1</td></tr><tr><td>3</td><td>B. MoSCoW</td><td>2</td></tr><tr><td>4</td><td>C. Release 2 scope</td><td>2</td></tr><tr><td>5</td><td>D. User stories</td><td>2</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Planning by value only: video consultation has high value but the highest cost and risk.</li>\n  <li>Treating the English interface as optional — it is a contract obligation.</li>\n  <li>Acceptance criteria that only cover the happy path.</li>\n</ul>\n<h2>7. Submission</h2>\n<p>Write your answers in the files of <code>answers/</code> on the right. Diagrams are written as text in the syntax of a real tool (Mermaid or PlantUML — paste them into <a href=\"https://mermaid.live\" target=\"_blank\" rel=\"noopener\">mermaid.live</a> or <a href=\"https://www.plantuml.com/plantuml\" target=\"_blank\" rel=\"noopener\">plantuml.com</a> to SEE the picture); tables are JavaScript arrays, one object per row of the school template. Press <b>Run</b> for the visible checks and <b>Submit</b> for full grading, hidden checks included. Your mark per question appears in the rubric table.</p>",
+      "problemHtmlVi": "<h1>ClinicCare project — Milestone 7: Prioritising and planning release 2</h1>\n<p class=\"bi-phu\">Dự án xuyên suốt · mốc 7/7 · cái gì vào bản 2 · 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p><b>Phòng khám gia đình Minh An</b> có 3 bác sĩ, 2 lễ tân, 1 dược sĩ và một quản lý. Hiện bệnh nhân gọi điện tới lễ tân để đặt lịch: khoảng <b>120 cuộc/ngày</b>, giờ cao điểm nhiều cuộc không ai nghe, và <b>15% lịch hẹn bị bỏ (no-show)</b>. Chủ phòng khám muốn <b>ClinicCare</b> — hệ thống web và di động — chạy trong 6 tháng.</p>\n<ul><li><b>Bệnh nhân</b> đăng ký, đặt lịch với bác sĩ chọn trong slot 15 phút còn trống, huỷ lịch, trả phí khám trực tuyến, xem đơn thuốc.</li><li><b>Bác sĩ</b> công bố slot làm việc, xem danh sách hẹn trong ngày, ghi chú khám và kê đơn điện tử.</li><li><b>Lễ tân</b> làm thủ tục check-in, đặt lịch thay người gọi điện, đánh dấu no-show.</li><li><b>Dược sĩ</b> nhận đơn điện tử và đánh dấu đã phát thuốc.</li><li><b>Quản lý</b> đặt dịch vụ và phí, xem báo cáo tháng.</li><li>Hệ thống ngoài: <b>cổng thanh toán VNPay</b> (thu, xác nhận, hoàn tiền), <b>SMS gateway</b> (gửi nhắc lịch trước 24 giờ), <b>Hệ thống Đơn thuốc Quốc gia</b> (luật bắt buộc gửi mọi đơn, trả về mã đơn).</li></ul>\n<p><b>Luật nghiệp vụ.</b> BR-01 huỷ miễn phí tới trước 2 giờ · BR-02 bệnh nhân có 3 lần no-show trong 90 ngày phải trả trước khi đặt · BR-03 tối đa 2 lịch hẹn tương lai mỗi bệnh nhân · BR-04 phí khám = phí dịch vụ + 10% VAT · BR-05 mỗi slot 15 phút.</p>\n<p><b>Ngoài bản 1:</b> khám qua video, bảo hiểm điện tử, chương trình khách hàng thân thiết, kết nối máy xét nghiệm.</p><p>Bản 1 đã chạy: cuộc gọi giảm từ 120 xuống 64/ngày, no-show từ 15% xuống 6%. Đội (giờ làm agile, sprint 2 tuần) làm được <b>30 điểm</b> ở bản 2. A. Bảng value/cost/risk và xếp hạng. B. MoSCoW theo lời bên liên quan. C. Phạm vi bản 2: Must trước, rồi theo priority khi còn điểm; Won't không bao giờ vào. D. CR-07 (đặt lịch người nhà) nay được làm: viết ba user story có tiêu chí Given/When/Then; BR-03 nay là tối đa 2 lịch hẹn tương lai MỖI NGƯỜI, người nhà tính riêng.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>A. Value/cost/risk và xếp hạng.</li>\n  <li>B. MoSCoW.</li>\n  <li>C. Phạm vi bản 2.</li>\n  <li>D. User story cho CR-07.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Phần trăm 2 chữ số, priority 3 chữ số (chấp nhận sai số làm tròn nhỏ).</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>answers/\n├── a-priorities.js   ← const PRIORITIES = { F1: { valuePct, costPct, riskPct, priority }, … }; const RANKING = [...]\n├── b-moscow.js       ← const MOSCOW = { F1: '…', … }\n├── c-release.js      ← const RELEASE_2 = [...]\n└── d-stories.js      ← const FAMILY_STORIES = [ { story, criteria: [...] }, … ]</pre>\n<h2>3. Mô hình dữ liệu</h2>\n<p><b>Answer records</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>PRIORITIES.Fx</code></td><td>{ valuePct, costPct, riskPct, priority }</td><td>số</td></tr><tr><td><code>FAMILY_STORIES[i]</code></td><td>{ story, criteria[] }</td><td>Given/When/Then</td></tr></tbody></table>\n<h2>4. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. A1. Bảng value/cost/risk <span class=\"bi-diem\">3 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Mọi ứng viên.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">Wiegers Table 16-1</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. A2. Xếp hạng <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Theo priority.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">priority</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. B. MoSCoW <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Theo lời bên liên quan.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">MoSCoW</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. C. Phạm vi bản 2 <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Must, rồi priority, trong năng lực.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">release planning</span></p>\n</div>\n<div class=\"bi-cn\"><h3>5. D. User story <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Mẫu, vai, Given/When/Then, BR-03.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">user stories</span> <span class=\"bi-hook\">acceptance criteria</span></p>\n</div>\n<h2>5. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>PRIORITIES · RANKING</code></td><td>answers/a-priorities.js</td></tr><tr><td><code>MOSCOW</code></td><td>answers/b-moscow.js</td></tr><tr><td><code>RELEASE_2</code></td><td>answers/c-release.js</td></tr><tr><td><code>FAMILY_STORIES</code></td><td>answers/d-stories.js</td></tr></tbody></table>\n<h2>6. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>A1. Bảng value/cost/risk</td><td>3</td></tr><tr><td>2</td><td>A2. Xếp hạng</td><td>1</td></tr><tr><td>3</td><td>B. MoSCoW</td><td>2</td></tr><tr><td>4</td><td>C. Phạm vi bản 2</td><td>2</td></tr><tr><td>5</td><td>D. User story</td><td>2</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Lập kế hoạch chỉ theo value: khám video value cao nhưng chi phí và rủi ro cao nhất.</li>\n  <li>Coi giao diện tiếng Anh là tuỳ chọn — đó là nghĩa vụ hợp đồng.</li>\n  <li>Tiêu chí chấp nhận chỉ có đường thuận.</li>\n</ul>\n<h2>7. Nộp bài</h2>\n<p>Viết câu trả lời vào các tệp trong <code>answers/</code> bên phải. Sơ đồ viết bằng chữ theo cú pháp của công cụ thật (Mermaid hoặc PlantUML — dán vào <a href=\"https://mermaid.live\" target=\"_blank\" rel=\"noopener\">mermaid.live</a> hoặc <a href=\"https://www.plantuml.com/plantuml\" target=\"_blank\" rel=\"noopener\">plantuml.com</a> để XEM hình); bảng là mảng JavaScript, mỗi object là một dòng của template trường. Bấm <b>Chạy thử</b> để chạy kiểm hiện, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn). Điểm từng câu hiện trong bảng thang điểm.</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "Percentages to 2 decimals, priority to 3 (small rounding differences accepted).|||Phần trăm 2 chữ số, priority 3 chữ số (chấp nhận sai số làm tròn nhỏ).",
+      "examplesJson": [
+        {
+          "input": "answers/*.js — one object per row of the template",
+          "output": "Rubric table: marks per question (e.g. B. 2.5/3)",
+          "explanation": "Every rubric line is checked separately; hidden checks run on Submit.|||Mỗi dòng rubric được kiểm riêng; kiểm ẩn chạy khi Nộp."
+        }
+      ],
+      "hintsJson": [
+        "A: value = 2·benefit + penalty ⇒ tổng value = 98; tổng cost = 32; tổng risk = 27.",
+        "C: Must vào trước bất kể priority; rồi đi theo RANKING, bỏ qua mục không vừa và xét tiếp.",
+        "D: story thứ hai nên có tiêu chí \"trẻ đã có 2 lịch hẹn tương lai ⇒ từ chối lịch thứ ba dù cha mẹ còn chỗ\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers/a-priorities.js",
+          "language": "javascript",
+          "code": "// A. Wiegers weights: benefit 2 · penalty 1 · cost 1 · risk 0.5.\nconst PRIORITIES = {\n  F1: { valuePct: 0, costPct: 0, riskPct: 0, priority: 0 },\n  F2: { valuePct: 0, costPct: 0, riskPct: 0, priority: 0 },\n  F3: { valuePct: 0, costPct: 0, riskPct: 0, priority: 0 },\n  F4: { valuePct: 0, costPct: 0, riskPct: 0, priority: 0 },\n  F5: { valuePct: 0, costPct: 0, riskPct: 0, priority: 0 },\n  F6: { valuePct: 0, costPct: 0, riskPct: 0, priority: 0 },\n};\nconst RANKING = [];\n"
+        },
+        {
+          "name": "answers/b-moscow.js",
+          "language": "javascript",
+          "code": "// B. Must | Should | Could | Won't\nconst MOSCOW = {\n  F1: '',\n  F2: '',\n  F3: '',\n  F4: '',\n  F5: '',\n  F6: '',\n};\n"
+        },
+        {
+          "name": "answers/c-release.js",
+          "language": "javascript",
+          "code": "// C. Feature ids in release 2 (capacity 30 story points).\nconst RELEASE_2 = [];\n"
+        },
+        {
+          "name": "answers/d-stories.js",
+          "language": "javascript",
+          "code": "// D. Three user stories for family booking, each with Given/When/Then acceptance criteria.\nconst FAMILY_STORIES = [\n  { story: 'As a …, I want … so that …', criteria: ['Given … when … then …'] },\n];\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers/a-priorities.js",
+          "language": "javascript",
+          "code": "// A. value = 2·benefit + penalty (total 98); cost total 32; risk total 27.\nconst PRIORITIES = {\n  F1: { valuePct: 22.45, costPct: 12.5, riskPct: 11.11, priority: 1.243 },\n  F2: { valuePct: 17.35, costPct: 28.13, riskPct: 29.63, priority: 0.404 },\n  F3: { valuePct: 19.39, costPct: 25, riskPct: 25.93, priority: 0.511 },\n  F4: { valuePct: 7.14, costPct: 9.38, riskPct: 7.41, priority: 0.546 },\n  F5: { valuePct: 19.39, costPct: 18.75, riskPct: 22.22, priority: 0.649 },\n  F6: { valuePct: 14.29, costPct: 6.25, riskPct: 3.7, priority: 1.763 },\n};\nconst RANKING = [\"F6\",\"F1\",\"F5\",\"F4\",\"F3\",\"F2\"];\n"
+        },
+        {
+          "name": "answers/b-moscow.js",
+          "language": "javascript",
+          "code": "// B. From what each stakeholder really said.\nconst MOSCOW = {\n  F1: 'Must',\n  F2: 'Won\\'t',\n  F3: 'Should',\n  F4: 'Could',\n  F5: 'Should',\n  F6: 'Must',\n};\n"
+        },
+        {
+          "name": "answers/c-release.js",
+          "language": "javascript",
+          "code": "// C. Musts first (F1, F6), then by priority while the points fit; Won't never goes in.\nconst RELEASE_2 = [\"F6\",\"F1\",\"F4\"];\n"
+        },
+        {
+          "name": "answers/d-stories.js",
+          "language": "javascript",
+          "code": "// D. Add a member · book for a member (BR-03 per person) · what reception sees.\nconst FAMILY_STORIES = [\n  {\n    \"story\": \"As a patient, I want to add my child as a family member to my account so that I can book visits for them.\",\n    \"criteria\": [\n      \"Given I am signed in, when I add a family member with name and date of birth, then the member appears in my family list.\",\n      \"Given a family member is already in my list, when I add the same name and date of birth again, then the system refuses the duplicate.\"\n    ]\n  },\n  {\n    \"story\": \"As a patient, I want to choose a family member when I book so that the appointment is for the right person.\",\n    \"criteria\": [\n      \"Given I have a family member, when I book a slot for that member, then the appointment shows the member as the patient.\",\n      \"Given my child already holds 2 future appointments, when I book a third for the child, then the system refuses it although I hold fewer than 2 future appointments myself.\"\n    ]\n  },\n  {\n    \"story\": \"As a receptionist, I want to see who an appointment is for and who booked it so that I check in the right person.\",\n    \"criteria\": [\n      \"Given an appointment booked by a parent for a child, when I open the daily schedule, then I see the child as patient and the parent as booker.\"\n    ]\n  }\n];\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Ranking: F6 (1.763) › F1 (1.243) › F5 (0.649) › F4 (0.546) › F3 (0.511) › F2 (0.404). Release 2 starts with the Musts F1 and F6 (18 points); walking the ranking, F4 (8 points) fits, while F5 (21) and F3 (21) no longer fit — release 2 = F6, F1, F4, 26 of 30 points. Video consultation is Won’t: no trained doctors yet, whatever its value. The family-booking stories turn the deferred change request into testable backlog items, with BR-03 applied per person.</p><p>That closes the loop of the course: objectives (M1) → elicitation (M2) → use cases (M3) → models (M4) → SRS (M5) → change and traceability (M6) → priorities and the next release (M7).</p>",
+      "solutionExplanationHtmlVi": "<p>Xếp hạng: F6 (1.763) › F1 (1.243) › F5 (0.649) › F4 (0.546) › F3 (0.511) › F2 (0.404). Bản 2 bắt đầu bằng Must F1, F6 (18 điểm); đi theo xếp hạng, F4 còn vừa, các ứng viên còn lại không vừa — bản 2 = F6, F1, F4 (26/30 điểm). Khám video là Won't: chưa có bác sĩ được đào tạo, dù value cao. Ba story biến CR đã hoãn thành mục backlog kiểm được, BR-03 áp theo từng người.</p><p>Khép vòng khoá học: mục tiêu (M1) → khai thác (M2) → use case (M3) → mô hình (M4) → SRS (M5) → thay đổi & truy vết (M6) → ưu tiên và bản kế tiếp (M7).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "answers/a-priorities.js",
+          "answers/b-moscow.js",
+          "answers/c-release.js",
+          "answers/d-stories.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A — value %, cost %, risk % and priority of F1",
+              "vi": "A — value %, cost %, risk % và priority của F1"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof PRIORITIES==\"undefined\"||!PRIORITIES||!PRIORITIES.F1)return\"PRIORITIES.F1 is missing\";var t=PRIORITIES.F1,r=function(i,n,e){return Math.abs(Number(i)-n)<=e};return r(t.valuePct,22.448979591836736,.06)?r(t.costPct,12.5,.06)?r(t.riskPct,11.11111111111111,.06)?r(t.priority,1.2433281004709575,.012)?\"OK\":\"priority = value% \\xF7 (cost% \\xD7 1 + risk% \\xD7 0.5)\":\"riskPct = risk \\xF7 total risk \\xD7 100\":\"costPct = cost \\xF7 total cost \\xD7 100\":\"valuePct: value = 2 \\xD7 benefit + 1 \\xD7 penalty, \\xF7 total value \\xD7 100\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — value %, cost %, risk % and priority of F2",
+              "vi": "A — value %, cost %, risk % và priority của F2"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof PRIORITIES==\"undefined\"||!PRIORITIES||!PRIORITIES.F2)return\"PRIORITIES.F2 is missing\";var t=PRIORITIES.F2,r=function(i,n,e){return Math.abs(Number(i)-n)<=e};return r(t.valuePct,17.346938775510203,.06)?r(t.costPct,28.125,.06)?r(t.riskPct,29.629629629629626,.06)?r(t.priority,.4039826173056824,.012)?\"OK\":\"priority = value% \\xF7 (cost% \\xD7 1 + risk% \\xD7 0.5)\":\"riskPct = risk \\xF7 total risk \\xD7 100\":\"costPct = cost \\xF7 total cost \\xD7 100\":\"valuePct: value = 2 \\xD7 benefit + 1 \\xD7 penalty, \\xF7 total value \\xD7 100\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — value %, cost %, risk % and priority of F3",
+              "vi": "A — value %, cost %, risk % và priority của F3"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof PRIORITIES==\"undefined\"||!PRIORITIES||!PRIORITIES.F3)return\"PRIORITIES.F3 is missing\";var t=PRIORITIES.F3,r=function(i,n,e){return Math.abs(Number(i)-n)<=e};return r(t.valuePct,19.387755102040817,.06)?r(t.costPct,25,.06)?r(t.riskPct,25.925925925925924,.06)?r(t.priority,.5107018417122947,.012)?\"OK\":\"priority = value% \\xF7 (cost% \\xD7 1 + risk% \\xD7 0.5)\":\"riskPct = risk \\xF7 total risk \\xD7 100\":\"costPct = cost \\xF7 total cost \\xD7 100\":\"valuePct: value = 2 \\xD7 benefit + 1 \\xD7 penalty, \\xF7 total value \\xD7 100\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — value %, cost %, risk % and priority of F4",
+              "vi": "A — value %, cost %, risk % và priority của F4"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof PRIORITIES==\"undefined\"||!PRIORITIES||!PRIORITIES.F4)return\"PRIORITIES.F4 is missing\";var t=PRIORITIES.F4,r=function(i,n,e){return Math.abs(Number(i)-n)<=e};return r(t.valuePct,7.142857142857142,.06)?r(t.costPct,9.375,.06)?r(t.riskPct,7.4074074074074066,.06)?r(t.priority,.5461441213653603,.012)?\"OK\":\"priority = value% \\xF7 (cost% \\xD7 1 + risk% \\xD7 0.5)\":\"riskPct = risk \\xF7 total risk \\xD7 100\":\"costPct = cost \\xF7 total cost \\xD7 100\":\"valuePct: value = 2 \\xD7 benefit + 1 \\xD7 penalty, \\xF7 total value \\xD7 100\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — value %, cost %, risk % and priority of F5",
+              "vi": "A — value %, cost %, risk % và priority của F5"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof PRIORITIES==\"undefined\"||!PRIORITIES||!PRIORITIES.F5)return\"PRIORITIES.F5 is missing\";var t=PRIORITIES.F5,r=function(i,n,e){return Math.abs(Number(i)-n)<=e};return r(t.valuePct,19.387755102040817,.06)?r(t.costPct,18.75,.06)?r(t.riskPct,22.22222222222222,.06)?r(t.priority,.649264356905553,.012)?\"OK\":\"priority = value% \\xF7 (cost% \\xD7 1 + risk% \\xD7 0.5)\":\"riskPct = risk \\xF7 total risk \\xD7 100\":\"costPct = cost \\xF7 total cost \\xD7 100\":\"valuePct: value = 2 \\xD7 benefit + 1 \\xD7 penalty, \\xF7 total value \\xD7 100\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "A — value %, cost %, risk % and priority of F6",
+              "vi": "A — value %, cost %, risk % và priority của F6"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof PRIORITIES==\"undefined\"||!PRIORITIES||!PRIORITIES.F6)return\"PRIORITIES.F6 is missing\";var t=PRIORITIES.F6,r=function(i,n,e){return Math.abs(Number(i)-n)<=e};return r(t.valuePct,14.285714285714285,.06)?r(t.costPct,6.25,.06)?r(t.riskPct,3.7037037037037033,.06)?r(t.priority,1.763265306122449,.012)?\"OK\":\"priority = value% \\xF7 (cost% \\xD7 1 + risk% \\xD7 0.5)\":\"riskPct = risk \\xF7 total risk \\xD7 100\":\"costPct = cost \\xF7 total cost \\xD7 100\":\"valuePct: value = 2 \\xD7 benefit + 1 \\xD7 penalty, \\xF7 total value \\xD7 100\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "A — the ranking by priority, highest first",
+              "vi": "A — xếp hạng theo priority, cao nhất trước"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((RANKING || []).map(String)); } catch (e) { return '(RANKING || []).map(String) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(RANKING || []).map(String) is empty';\n  var chap = [[\"F6\",\"F1\",\"F5\",\"F4\",\"F3\",\"F2\"]];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"json\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"json\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"json\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet — sort by priority, not by value';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — MoSCoW of F1",
+              "vi": "B — MoSCoW của F1"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (MOSCOW[\"F1\"]); } catch (e) { return 'MOSCOW[\"F1\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'MOSCOW[\"F1\"] is empty';\n  var chap = [\"Must\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "B — MoSCoW of F2",
+              "vi": "B — MoSCoW của F2"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (MOSCOW[\"F2\"]); } catch (e) { return 'MOSCOW[\"F2\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'MOSCOW[\"F2\"] is empty';\n  var chap = [\"Won't\",\"Won’t\",\"Wont\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "B — MoSCoW of F3",
+              "vi": "B — MoSCoW của F3"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (MOSCOW[\"F3\"]); } catch (e) { return 'MOSCOW[\"F3\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'MOSCOW[\"F3\"] is empty';\n  var chap = [\"Should\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "B — MoSCoW of F4",
+              "vi": "B — MoSCoW của F4"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (MOSCOW[\"F4\"]); } catch (e) { return 'MOSCOW[\"F4\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'MOSCOW[\"F4\"] is empty';\n  var chap = [\"Could\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "B — MoSCoW of F5",
+              "vi": "B — MoSCoW của F5"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (MOSCOW[\"F5\"]); } catch (e) { return 'MOSCOW[\"F5\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'MOSCOW[\"F5\"] is empty';\n  var chap = [\"Should\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet — painful to omit, but there is a workaround';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "B — MoSCoW of F6",
+              "vi": "B — MoSCoW của F6"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (MOSCOW[\"F6\"]); } catch (e) { return 'MOSCOW[\"F6\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'MOSCOW[\"F6\"] is empty';\n  var chap = [\"Must\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet — a contract obligation for release 2';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — release 2 scope with 30 story points (Musts first, then by priority)",
+              "vi": "C — phạm vi bản 2 với 30 điểm (Must trước, rồi theo priority)"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((RELEASE_2 || []).map(String)); } catch (e) { return '(RELEASE_2 || []).map(String) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(RELEASE_2 || []).map(String) is empty';\n  var chap = [[\"F6\",\"F1\",\"F4\"]];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"tap\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"tap\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"tap\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "D — three user stories for family booking, in the standard form, from different angles",
+              "vi": "D — ba user story cho đặt lịch người nhà, đúng mẫu, từ các góc khác nhau"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof FAMILY_STORIES==\"undefined\"||!Array.isArray(FAMILY_STORIES))return\"FAMILY_STORIES is missing\";if(FAMILY_STORIES.length!==3)return\"write exactly 3 stories\";for(var t={},e=0;e<3;e++){var o=String((FAMILY_STORIES[e]||{}).story||\"\").trim(),r=/^as an? ([^,]{2,40}),? i want (to )?.{5,}\\bso that\\b.{5,}/i.exec(o);if(!r)return\"story \"+(e+1)+': \"As a <role>, I want <goal> so that <benefit>\"';t[r[1].toLowerCase()]=1}return FAMILY_STORIES.some(function(n){return/add|register|link/i.test(n.story)&&/family|child|member|dependant|dependent/i.test(n.story)})?Object.keys(t).length>=2?\"OK\":\"include another role (e.g. the receptionist who sees who the appointment is for)\":\"one story should cover adding a family member to the account\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f5"
+          },
+          {
+            "moTa": {
+              "en": "D — each story has Given/When/Then acceptance criteria, including the per-person limit of BR-03",
+              "vi": "D — mỗi story có tiêu chí Given/When/Then, có giới hạn theo từng người của BR-03"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof FAMILY_STORIES==\"undefined\"||!Array.isArray(FAMILY_STORIES))return\"FAMILY_STORIES is missing\";for(var r=0;r<FAMILY_STORIES.length;r++){var e=(FAMILY_STORIES[r]||{}).criteria;if(!Array.isArray(e)||!e.length)return\"story \"+(r+1)+\": add acceptance criteria\";for(var t=0;t<e.length;t++)if(!/^given\\b.+\\bwhen\\b.+\\bthen\\b/i.test(String(e[t]).trim()))return\"story \"+(r+1)+\", criterion \"+(t+1)+': \"Given \\u2026 when \\u2026 then \\u2026\"'}var n=FAMILY_STORIES.map(function(i){return(i.criteria||[]).join(\" \")}).join(\" \").toLowerCase();return/(2|two) future/.test(n)?/(refus|reject|not allowed|cannot|error|blocked)/.test(n)?\"OK\":\"add a negative criterion (what is refused)\":\"state BR-03 in a criterion: at most 2 future appointments per person (each family member counted separately)\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f5"
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. A1. Value/cost/risk table",
+            "diem": 3
+          },
+          {
+            "ma": "f2",
+            "ten": "2. A2. Ranking",
+            "diem": 1
+          },
+          {
+            "ma": "f3",
+            "ten": "3. B. MoSCoW",
+            "diem": 2
+          },
+          {
+            "ma": "f4",
+            "ten": "4. C. Release 2 scope",
+            "diem": 2
+          },
+          {
+            "ma": "f5",
+            "ten": "5. D. User stories",
+            "diem": 2
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "project",
+      "mistakesJson": [
+        {
+          "loi": "Quên trọng số 0.5 của risk."
+        },
+        {
+          "loi": "Story vai \"the system\"."
+        },
+        {
+          "loi": "Viết tiêu chí \"it works\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "value / cost / risk prioritization",
+          "vi": "xếp ưu tiên kiểu Wiegers: priority = value% ÷ (cost% × trọng số + risk% × trọng số)"
+        },
+        {
+          "en": "MoSCoW",
+          "vi": "Must / Should / Could / Won’t (this time) — thang ưu tiên"
+        },
+        {
+          "en": "user story",
+          "vi": "câu chuyện người dùng — \"As a <role>, I want <goal> so that <benefit>\""
+        },
+        {
+          "en": "acceptance criteria",
+          "vi": "tiêu chí chấp nhận — điều kiện để khách nhận một yêu cầu/story (Given/When/Then)"
+        },
+        {
+          "en": "product backlog",
+          "vi": "danh sách việc của sản phẩm, xếp theo ưu tiên"
+        }
+      ]
+    },
+    {
+      "title": "Interview corner — prioritisation and release planning",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "prioritization",
+        "release planning"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p><b>Interview corner.</b> Questions that interviewers for business analyst, junior software engineer and QA positions really ask about this part of the project. Choose the answer a strong candidate would give; read the explanation — it is what you would say out loud.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Góc phỏng vấn.</b> Câu hỏi nhà tuyển dụng BA, kỹ sư phần mềm junior và QA thật sự hỏi về phần này của dự án. Chọn câu trả lời của một ứng viên giỏi; đọc phần giải thích — đó là điều bạn sẽ nói thành lời.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Câu trả lời tốt gắn với tình huống cụ thể của dự án, không đọc định nghĩa suông.",
+        "Nhà tuyển dụng muốn nghe lý do (vì sao), không chỉ cái gì."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Interview corner — prioritisation and release planning\n\nAnswer in the answer panel (no code needed).\n\n1. \"Every stakeholder says their feature is a Must. How do you prioritise?\"\"Ai cũng nói tính năng của mình là Must. Bạn ưu tiên thế nào?\"\n2. \"What is the weakness of MoSCoW?\"\"Điểm yếu của MoSCoW là gì?\"\n3. \"How do you measure whether release 1 was a success?\"\"Đo bản 1 thành công thế nào?\"\n4. \"What do you put in acceptance criteria?\"\"Bạn ghi gì trong tiêu chí chấp nhận?\"\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Interview corner — prioritisation and release planning — answer key\n\n1. \"Every stakeholder says their feature is a Must. How do you prioritise?\"\"Ai cũng nói tính năng của mình là Must. Bạn ưu tiên thế nào?\"\n   Answer: b) \"I tie each candidate to the business objectives, ask what happens if it waits a release, use a value/cost/risk analysis so the trade-off is visible, and let the decision maker agreed at the start decide.\"\n   Objectives, consequences, transparent analysis, agreed decision maker.VI: Mục tiêu, hệ quả, phân tích minh bạch, người quyết đã thống nhất.\n\n2. \"What is the weakness of MoSCoW?\"\"Điểm yếu của MoSCoW là gì?\"\n   Answer: d) \"It gives no rationale for the rating and ‘Won’t’ is ambiguous about timing; I combine it with importance × urgency or value/cost/risk.\"\n   Wiegers Ch.16.VI: Wiegers Ch.16.\n\n3. \"How do you measure whether release 1 was a success?\"\"Đo bản 1 thành công thế nào?\"\n   Answer: a) \"Against the business objectives set in the vision: reception calls fell from 120 to 64 a day and no-shows from 15% to 6%, so both targets were met.\"\n   Business objectives are the yardstick.VI: Mục tiêu nghiệp vụ là thước đo.\n\n4. \"What do you put in acceptance criteria?\"\"Bạn ghi gì trong tiêu chí chấp nhận?\"\n   Answer: c) \"The conditions the story must satisfy, as concrete examples in Given/When/Then — the normal case, the rule limits, and what must be refused — so the team and the tester agree on ‘done’ for that story.\"\n   Concrete, testable, including negative cases.VI: Cụ thể, kiểm được, có trường hợp âm.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · d · a · c.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>\"Every stakeholder says their feature is a Must. How do you prioritise?\"</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Ai cũng nói tính năng của mình là Must. Bạn ưu tiên thế nào?\"</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "\"I do whatever the most senior person says.\""
+              },
+              {
+                "ma": "b",
+                "noiDung": "\"I tie each candidate to the business objectives, ask what happens if it waits a release, use a value/cost/risk analysis so the trade-off is visible, and let the decision maker agreed at the start decide.\""
+              },
+              {
+                "ma": "c",
+                "noiDung": "\"I put everything in and work overtime.\""
+              },
+              {
+                "ma": "d",
+                "noiDung": "\"I pick the cheapest features.\""
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Objectives, consequences, transparent analysis, agreed decision maker.</p><p><i>VI: Mục tiêu, hệ quả, phân tích minh bạch, người quyết đã thống nhất.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>\"What is the weakness of MoSCoW?\"</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Điểm yếu của MoSCoW là gì?\"</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "\"It has too many levels.\""
+              },
+              {
+                "ma": "b",
+                "noiDung": "\"It only works for waterfall.\""
+              },
+              {
+                "ma": "c",
+                "noiDung": "\"It needs special software.\""
+              },
+              {
+                "ma": "d",
+                "noiDung": "\"It gives no rationale for the rating and ‘Won’t’ is ambiguous about timing; I combine it with importance × urgency or value/cost/risk.\""
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Wiegers Ch.16.</p><p><i>VI: Wiegers Ch.16.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>\"How do you measure whether release 1 was a success?\"</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Đo bản 1 thành công thế nào?\"</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "\"Against the business objectives set in the vision: reception calls fell from 120 to 64 a day and no-shows from 15% to 6%, so both targets were met.\""
+              },
+              {
+                "ma": "b",
+                "noiDung": "\"By lines of code.\""
+              },
+              {
+                "ma": "c",
+                "noiDung": "\"By the number of features delivered.\""
+              },
+              {
+                "ma": "d",
+                "noiDung": "\"If there were no bugs.\""
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Business objectives are the yardstick.</p><p><i>VI: Mục tiêu nghiệp vụ là thước đo.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>\"What do you put in acceptance criteria?\"</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Bạn ghi gì trong tiêu chí chấp nhận?\"</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "\"The developer’s name.\""
+              },
+              {
+                "ma": "b",
+                "noiDung": "\"‘It works’.\""
+              },
+              {
+                "ma": "c",
+                "noiDung": "\"The conditions the story must satisfy, as concrete examples in Given/When/Then — the normal case, the rule limits, and what must be refused — so the team and the tester agree on ‘done’ for that story.\""
+              },
+              {
+                "ma": "d",
+                "noiDung": "\"The technical design.\""
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Concrete, testable, including negative cases.</p><p><i>VI: Cụ thể, kiểm được, có trường hợp âm.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Trả lời bằng định nghĩa thuộc lòng, không ví dụ."
+        },
+        {
+          "loi": "Chọn đáp án nghe \"kỹ thuật\" nhất thay vì đáp án đúng nghiệp vụ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "MoSCoW",
+          "vi": "Must / Should / Could / Won’t (this time) — thang ưu tiên"
+        },
+        {
+          "en": "value / cost / risk prioritization",
+          "vi": "xếp ưu tiên kiểu Wiegers: priority = value% ÷ (cost% × trọng số + risk% × trọng số)"
+        },
+        {
+          "en": "product backlog",
+          "vi": "danh sách việc của sản phẩm, xếp theo ưu tiên"
+        }
+      ]
+    }
+  ]
+}

@@ -139,6 +139,19 @@ const FINAL: Record<string, (s: Record<string, Record<string, unknown> | undefin
   'eintr-signal': (s) => s.eintr?.mode === 'restart' && s.eintr?.atEnd === true && s.eintr?.sawEintr === false,
   'nagle-delay': (s) => s.nagle?.nodelay === true && s.nagle?.atEnd === true && s.nagle?.total === 0.028,
   'syscall-errno': (s) => s.sys?.kind === 'clone3' && s.sys?.raw === -38 && s.sys?.atEnd === true,
+  'gantt-exam-grade': (s) => s.gx?.mode === 'solution' && s.gx?.atEnd === true && s.gx?.drill === 's2' && s.gx?.policy === 'sjf',
+  'gantt-exam-rr': (s) => s.gx?.full === true && s.gx?.policy === 'rr' && s.gx?.quantum === 3,
+  'disk-arm-cscan': (s) => s.disk?.algo === 'cscan' && s.disk?.countReturn === false && s.disk?.total === 186,
+  'disk-arm-exam': (s) => s.disk?.correct === true && s.disk?.guessOk === true,
+  'addr-split-walk': (s) => s.addr?.idx === '171/3294/291',
+  'addr-split-size': (s) => s.addr?.view === 'seg' && s.addr?.trap === true,
+  'amdahl-ceiling': (s) => s.amd?.view === 'gustafson' && s.amd?.n === 10 && s.amd?.gus === 9.1,
+  'amdahl-karp': (s) => s.amd?.view === 'balance' && s.amd?.atEnd === true,
+  'cacheline-bounce': (s) => s.cl?.gap === 64 && s.cl?.line === 128 && (s.cl?.bounces as number) > 0,
+  'flamegraph-read': (s) => s.fg?.script === 'offcpu' && s.fg?.sel === 'futex_do_wait',
+  'flamegraph-traps': (s) => s.fg?.quizOk === true,
+  'osmap-compare': (s) => s.om?.view === 'compare' && s.om?.card === 'case',
+  'coordinated-omission-loops': (s) => s.co?.conns === 50 && s.co?.atEnd === true && (s.co?.openP99S as number) > 150,
 };
 
 describe('tours — run on the real simulations', () => {

@@ -65,6 +65,19 @@ Số đo thật: 2026-10-28 (record=1, rate=1, viewport 1280×800, lang=vi).
 | [epoll-c10k](#epoll-c10k) | os-lab | epoll | 8 | 73.1 s | 73.8 s | `/os-lab?record=1&tour=epoll-c10k&lang=vi` |
 | [eintr-signal](#eintr-signal) | os-lab | eintr | 5 | 50.4 s | 54.7 s | `/os-lab?record=1&tour=eintr-signal&lang=vi` |
 | [nagle-delay](#nagle-delay) | os-lab | nagle | 5 | 46.3 s | 50.7 s | `/os-lab?record=1&tour=nagle-delay&lang=vi` |
+| [gantt-exam-grade](#gantt-exam-grade) | os-lab | gantt-exam | 9 | 86.7 s | 86.8 s | `/os-lab?record=1&tour=gantt-exam-grade&lang=vi` |
+| [gantt-exam-rr](#gantt-exam-rr) | os-lab | gantt-exam | 6 | 59.1 s | 59.2 s | `/os-lab?record=1&tour=gantt-exam-rr&lang=vi` |
+| [disk-arm-cscan](#disk-arm-cscan) | os-lab | disk-arm | 7 | 58.6 s | 63.0 s | `/os-lab?record=1&tour=disk-arm-cscan&lang=vi` |
+| [disk-arm-exam](#disk-arm-exam) | os-lab | disk-arm | 3 | 27.4 s | 34.0 s | `/os-lab?record=1&tour=disk-arm-exam&lang=vi` |
+| [addr-split-walk](#addr-split-walk) | os-lab | addr-split | 7 | 68.0 s | 68.2 s | `/os-lab?record=1&tour=addr-split-walk&lang=vi` |
+| [addr-split-size](#addr-split-size) | os-lab | addr-split | 8 | 63.0 s | 64.5 s | `/os-lab?record=1&tour=addr-split-size&lang=vi` |
+| [amdahl-ceiling](#amdahl-ceiling) | os-lab | amdahl | 8 | 70.0 s | 70.0 s | `/os-lab?record=1&tour=amdahl-ceiling&lang=vi` |
+| [amdahl-karp](#amdahl-karp) | os-lab | amdahl | 6 | 57.1 s | 57.1 s | `/os-lab?record=1&tour=amdahl-karp&lang=vi` |
+| [cacheline-bounce](#cacheline-bounce) | os-lab | cacheline | 8 | 78.1 s | 78.2 s | `/os-lab?record=1&tour=cacheline-bounce&lang=vi` |
+| [flamegraph-read](#flamegraph-read) | os-lab | flamegraph | 8 | 71.4 s | 71.5 s | `/os-lab?record=1&tour=flamegraph-read&lang=vi` |
+| [flamegraph-traps](#flamegraph-traps) | os-lab | flamegraph | 6 | 52.0 s | 52.0 s | `/os-lab?record=1&tour=flamegraph-traps&lang=vi` |
+| [coordinated-omission-loops](#coordinated-omission-loops) | os-lab | coordinated-omission | 9 | 83.2 s | 83.2 s | `/os-lab?record=1&tour=coordinated-omission-loops&lang=vi` |
+| [osmap-compare](#osmap-compare) | os-lab | osmap | 8 | 69.1 s | 69.2 s | `/os-lab?record=1&tour=osmap-compare&lang=vi` |
 | [process-start](#process-start) | os-lab | process | 5 | 54.6 s | 54.7 s | `/os-lab?record=1&tour=process-start&lang=vi` |
 | [scheduler-start](#scheduler-start) | os-lab | scheduler | 5 | 54.6 s | 54.7 s | `/os-lab?record=1&tour=scheduler-start&lang=vi` |
 | [race-start](#race-start) | os-lab | race | 5 | 54.6 s | 54.7 s | `/os-lab?record=1&tour=race-start&lang=vi` |
@@ -86,6 +99,14 @@ Số đo thật: 2026-10-28 (record=1, rate=1, viewport 1280×800, lang=vi).
 | [epoll-start](#epoll-start) | os-lab | epoll | 5 | 57.4 s | 57.5 s | `/os-lab?record=1&tour=epoll-start&lang=vi` |
 | [eintr-start](#eintr-start) | os-lab | eintr | 5 | 57.4 s | 61.4 s | `/os-lab?record=1&tour=eintr-start&lang=vi` |
 | [nagle-start](#nagle-start) | os-lab | nagle | 5 | 57.4 s | 59.2 s | `/os-lab?record=1&tour=nagle-start&lang=vi` |
+| [gantt-exam-start](#gantt-exam-start) | os-lab | gantt-exam | 5 | 57.4 s | 57.4 s | `/os-lab?record=1&tour=gantt-exam-start&lang=vi` |
+| [disk-arm-start](#disk-arm-start) | os-lab | disk-arm | 5 | 57.4 s | 57.4 s | `/os-lab?record=1&tour=disk-arm-start&lang=vi` |
+| [addr-split-start](#addr-split-start) | os-lab | addr-split | 5 | 57.4 s | 57.4 s | `/os-lab?record=1&tour=addr-split-start&lang=vi` |
+| [amdahl-start](#amdahl-start) | os-lab | amdahl | 5 | 57.4 s | 57.4 s | `/os-lab?record=1&tour=amdahl-start&lang=vi` |
+| [cacheline-start](#cacheline-start) | os-lab | cacheline | 5 | 57.4 s | 57.4 s | `/os-lab?record=1&tour=cacheline-start&lang=vi` |
+| [flamegraph-start](#flamegraph-start) | os-lab | flamegraph | 5 | 57.4 s | 57.4 s | `/os-lab?record=1&tour=flamegraph-start&lang=vi` |
+| [coordinated-omission-start](#coordinated-omission-start) | os-lab | coordinated-omission | 5 | 57.4 s | 57.4 s | `/os-lab?record=1&tour=coordinated-omission-start&lang=vi` |
+| [osmap-start](#osmap-start) | os-lab | osmap | 5 | 57.4 s | 57.6 s | `/os-lab?record=1&tour=osmap-start&lang=vi` |
 | [latency-start](#latency-start) | os-lab | latency | 5 | 52.9 s | 53.0 s | `/os-lab?record=1&tour=latency-start&lang=vi` |
 | [bits-start](#bits-start) | cpu-lab | bits | 5 | 57.4 s | 40.8 s | `/cpu-lab?record=1&tour=bits-start&lang=vi` |
 | [data-start](#data-start) | cpu-lab | data | 5 | 57.4 s | 40.8 s | `/cpu-lab?record=1&tour=data-start&lang=vi` |
@@ -867,6 +888,255 @@ Nagle ở máy chủ và ACK trễ ở khách chờ lẫn nhau; TCP_NODELAY ho�
 
 Tiếng (đo thật): 31.6 s start · 34.2 s tap · 34.3 s tap · 34.4 s tap · 46.3 s blip-exec · 46.7 s miss · 47.1 s miss · 47.5 s oops · 47.8 s oops · 47.8 s step-ok · 72.6 s tap · 72.6 s blip-exec · 73.2 s hit · 73.2 s step-ok · 77.0 s right · 81.4 s done
 
+## gantt-exam-grade
+
+**Tự giải một câu lập lịch và được chấm** / Solve a scheduling question and get it graded — os-lab · `gantt-exam` · preset mặc định của: sjf, srtf, prio, s1, random
+
+Tự tô biểu đồ Gantt cho SJF, điền bảng, được chấm từng ô, rồi xem lại lời giải từng bước.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 9.5 s (en 10.1 s) | 0.9 s | `gx-jobs` | Đề bài | gx.drill("s2"), gx.policy("sjf"), gx.mode("exam") |  |
+| 2 | 10.4 s | 11.0 s (en 11.0 s) | 10.4 s | `gx-rules` | Ghi luật hoà ra trước | — |  |
+| 3 | 21.4 s | 7.6 s (en 7.4 s) | 21.4 s | `step` | Đến lượt bạn: đi theo đồng hồ | — | Bấm Bước tới t = 2. → player.step ×≤2 +650ms |
+| 4 | 29.0 s | 6.4 s (en 6.7 s) | 29.0 s | `gx-grid` | Đến lượt bạn: tô việc đầu tiên | — | Tô ô 0–6 bằng P1. → gx.paint("P1:0:7") |
+| 5 | 35.4 s | 8.0 s (en 8.3 s) | 35.4 s | `gx-grid` | Đến lượt bạn: phần còn lại | — | Tô đủ 19 ô. → gx.paint("P3:7:8") +300ms, gx.paint("P5:8:11") +300ms, gx.paint("P2:11:15") +300ms, gx.paint("P4:15:19") +300ms |
+| 6 | 43.4 s | 6.9 s (en 7.6 s) | 43.4 s | `gx-check` | Đến lượt bạn: điền bảng rồi chấm | — | Điền bảng và bấm Chấm bài. → gx.fill +300ms, gx.check +500ms |
+| 7 | 50.3 s | 11.0 s (en 11.0 s) | 50.4 s | `gx-score` | Chấm từng ô | — |  |
+| 8 | 61.3 s | 7.4 s (en 7.5 s) | 61.4 s | `gx-mode` | Đến lượt bạn: xem lời giải | — | Mở lời giải và chạy tới cuối. → gx.mode("solution") +300ms, player.end +400ms |
+| 9 | 68.7 s | 11.0 s (en 11.0 s) | 68.8 s | `gx-table` | 47/5 và 28/5 | — |  |
+| ✓ | 79.8 s | 7.0 s | 79.8 s | — | Câu hỏi: Hai việc cùng thời gian CPU đến cùng lúc. SJF chọn việc nào? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 13.5 s start · 13.5 s tap · 15.3 s tap · 15.4 s tap · 38.2 s tick · 38.9 s tick · 38.9 s step-ok · 45.2 s tap · 45.2 s step-ok · 52.0 s tap · 52.4 s tap · 52.8 s tap · 53.2 s tap · 53.2 s step-ok · 60.4 s done · 60.4 s step-ok · 78.0 s tap · 78.0 s blip-exec · 78.5 s done · 78.5 s step-ok · 95.0 s right · 99.4 s done
+
+## gantt-exam-rr
+
+**Round robin: cái bẫy thứ tự hàng đợi** / Round robin: the queue-order trap — os-lab · `gantt-exam` · preset mặc định của: rr
+
+Xem một biểu đồ RR sai kinh điển bị chấm, tìm đúng thời điểm quy ước quyết định, rồi sửa lại.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 8.8 s (en 10.9 s) | 0.9 s | `gx-rules` | Một luật quyết định tất cả | gx.drill("s2"), gx.policy("rr"), gx.quantum(3), gx.mode("exam") |  |
+| 2 | 9.7 s | 9.8 s (en 10.9 s) | 9.7 s | `gx-grid` | Bài làm của một bạn | gx.wrong("rr-order") +300ms, gx.check +500ms |  |
+| 3 | 19.4 s | 11.0 s (en 11.0 s) | 19.4 s | `explain` | Lỗi này có tên | — |  |
+| 4 | 30.4 s | 3.8 s (en 4.1 s) | 30.4 s | `gx-mode` | Đến lượt bạn: tới t = 6 | — | Lời giải, t = 6. → gx.mode("solution") +300ms, player.seek(6) +400ms |
+| 5 | 34.2 s | 11.0 s (en 11.0 s) | 34.2 s | `gx-queue` | P5 chen trước P2 | — |  |
+| 6 | 45.2 s | 6.9 s (en 7.9 s) | 45.2 s | `gx-check` | Đến lượt bạn: điểm tối đa | gx.mode("exam") | Được điểm tối đa. → gx.mode("exam") +300ms, gx.fill +300ms, gx.check +500ms |
+| ✓ | 52.2 s | 7.0 s | 52.2 s | — | Câu hỏi: RR, quantum 2. Lúc t = 4, A hết quantum và B vừa đến. Ai đứng trước trong hàng? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 13.4 s start · 13.4 s tap · 14.4 s tap · 15.6 s tap · 23.1 s step-ok · 44.9 s tap · 45.4 s step-ok · 45.4 s pop · 57.7 s tap · 57.7 s tick · 61.2 s tap · 62.3 s done · 62.3 s step-ok · 67.2 s right · 71.6 s done
+
+## disk-arm-cscan
+
+**C-SCAN: 385 hay 186?** / C-SCAN: 385 or 186? — os-lab · `disk-arm` · preset mặc định của: cscan, scan, look, clook, fcfs, sstf
+
+Theo tay đĩa qua bài của Chương 16 và xem vì sao hai đáp án đúng chênh nhau đúng 199.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 11.0 s (en 11.0 s) | 0.9 s | `disk-platter` | Một mặt đĩa nhìn từ trên | disk.exam(false), disk.algo("cscan"), disk.up(true), disk.ret(true) |  |
+| 2 | 11.9 s | 7.7 s (en 8.1 s) | 11.9 s | `step` | Đến lượt bạn: quét lên | — | Bấm Bước tới trụ 181. → player.step ×≤4 +650ms |
+| 3 | 19.6 s | 5.5 s (en 5.1 s) | 19.6 s | `disk-path` | Đến lượt bạn: tới mép | — | Bấm Bước tới mép, 199. → player.step ×≤1 +650ms |
+| 4 | 25.1 s | 6.0 s (en 6.9 s) | 25.1 s | `disk-path` | Đến lượt bạn: cú nhảy | — | Bấm Bước qua cú nhảy về 0. → player.step ×≤1 +650ms |
+| 5 | 31.1 s | 2.9 s (en 3.0 s) | 31.1 s | `disk-sum` | Đến lượt bạn: đi hết | — | Chạy tới cuối. → player.end +300ms |
+| 6 | 33.9 s | 6.7 s (en 6.7 s) | 38.3 s | `disk-opts` | Đến lượt bạn: quy ước kia | — | Không tính cú nhảy về. → disk.ret(false) |
+| 7 | 40.6 s | 11.0 s (en 11.0 s) | 45.0 s | `disk-compare` | 186 — và ghi rõ dùng luật nào | — |  |
+| ✓ | 56.0 s | 7.0 s | 56.0 s | — | Câu hỏi: Sao lại chọn C-SCAN thay vì SCAN, khi nó đi xa hơn? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 1.8 s start · 2.0 s tap · 2.1 s tap · 2.3 s on · 16.1 s blip-exec · 16.9 s blip-exec · 17.7 s blip-exec · 18.5 s blip-exec · 18.5 s step-ok · 23.9 s thud · 23.9 s step-ok · 29.7 s whoosh · 29.7 s step-ok · 38.1 s done · 38.1 s step-ok · 43.0 s off · 43.1 s step-ok · 59.5 s right · 63.9 s done
+
+## disk-arm-exam
+
+**Chế độ thi: tự tính, rồi gọi tên** / Exam mode: compute it, then name it — os-lab · `disk-arm` · preset mặc định của: exam
+
+Tự tính tổng SCAN khi đường đi bị ẩn, rồi nhận ra thuật toán từ thứ tự nó đi.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 6.2 s (en 7.3 s) | 0.9 s | `disk-path` | Đường đi bị ẩn | disk.exam(true), disk.algo("scan"), disk.up(true) |  |
+| 2 | 7.1 s | 6.6 s (en 6.9 s) | 7.1 s | `disk-exam` | Đến lượt bạn: trả lời | — | Trả lời đúng bài SCAN. → disk.answer +300ms, disk.check +400ms |
+| 3 | 13.7 s | 6.7 s (en 6.7 s) | 20.3 s | `disk-guess` | Đến lượt bạn: thuật toán nào? | — | Gọi tên thuật toán. → disk.guess("clook") |
+| ✓ | 27.0 s | 7.0 s | 27.0 s | — | Câu hỏi: Đầu đọc ở 80, đi XUỐNG. LOOK cho 237. Thuật toán nào khác cũng cho 237 ở đề này? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 1.8 s start · 2.0 s tap · 2.1 s tap · 12.1 s right · 12.1 s step-ok · 25.1 s right · 25.1 s step-ok · 30.5 s right · 34.9 s done
+
+## addr-split-walk
+
+**Tách địa chỉ đúng kiểu đề thi** / Split an address like the exam wants — os-lab · `addr-split` · preset mặc định của: split, x64
+
+Hex sang nhị phân, offset trước, rồi mỗi cấp bảng một chỉ số, rồi đi bảng — và vì sao 8/12/12 là trường hợp dễ.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 11.0 s (en 11.0 s) | 0.9 s | `addr-bits` | 32 bit, ba nhiệm vụ | addr.view("split"), addr.va("0x12345678"), addr.bits("10,10,12") |  |
+| 2 | 11.9 s | 6.2 s (en 6.5 s) | 12.1 s | `step` | Đến lượt bạn: offset trước | — | Bấm Bước tới offset. → player.step ×≤1 +650ms |
+| 3 | 18.1 s | 8.8 s (en 10.9 s) | 18.3 s | `addr-bits` | 1656 = 0x678 | — |  |
+| 4 | 26.9 s | 5.7 s (en 6.3 s) | 27.1 s | `play` | Đến lượt bạn: các chỉ số và đi bảng | — | Chạy tới cuối. → player.end +300ms |
+| 5 | 32.6 s | 11.0 s (en 11.0 s) | 32.7 s | `addr-walk` | Thêm hai lần đọc bộ nhớ | — |  |
+| 6 | 43.6 s | 7.1 s (en 7.1 s) | 43.7 s | `addr-input` | Đến lượt bạn: địa chỉ của bài thi cuối khoá | — | 0xABCDE123, 8/12/12. → addr.va("0xABCDE123") +300ms, addr.bits("8,12,12") +300ms |
+| 7 | 50.7 s | 10.3 s (en 11.0 s) | 50.9 s | `addr-bits` | 0xAB · 0xCDE · 0x123 | — |  |
+| ✓ | 61.2 s | 7.0 s | 61.2 s | — | Câu hỏi: Địa chỉ 32 bit, trang 4 KiB. Offset có mấy bit? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 7.1 s start · 7.3 s tap · 7.6 s tap · 22.1 s blip-decode · 22.1 s step-ok · 36.6 s hit · 36.6 s step-ok · 53.9 s blip-decode · 54.3 s tap · 54.3 s step-ok · 70.0 s right · 74.4 s done
+
+## addr-split-size
+
+**Cỡ bảng trang, TLB và phân đoạn** / Table size, TLB and segmentation — os-lab · `addr-split` · preset mặc định của: table, tlb, seg
+
+Vì sao bảng một mức không mở rộng được, một lần trượt TLB với 4 mức tốn bao nhiêu, và khi nào phân đoạn gây trap.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 7.8 s (en 8.1 s) | 0.9 s | `addr-table` | Mỗi trang một mục | addr.view("table"), addr.vabits(32), addr.page(12), addr.pte(4) |  |
+| 2 | 8.7 s | 3.3 s (en 3.8 s) | 8.7 s | `play` | Đến lượt bạn: cách nhiều mức | — | Chạy tới cuối. → player.end +300ms |
+| 3 | 12.0 s | 11.0 s (en 11.0 s) | 12.0 s | `addr-table` | 4 MiB vs 12 KiB | — |  |
+| 4 | 23.0 s | 5.7 s (en 5.8 s) | 23.0 s | `addr-input` | Đến lượt bạn: bốn mức | — | Trang TLB, 4 mức. → addr.view("tlb") +300ms, addr.hit(95), addr.levels(4) +300ms |
+| 5 | 28.7 s | 9.1 s (en 9.1 s) | 28.9 s | `addr-table` | 106 ns thay vì 80 | — |  |
+| 6 | 37.8 s | 2.8 s (en 2.8 s) | 38.0 s | `addr-input` | Đến lượt bạn: TLB kém hơn | — | Tỉ lệ trúng 80 %. → addr.hit(80) |
+| 7 | 40.6 s | 5.4 s (en 6.0 s) | 40.8 s | `addr-input` | Đến lượt bạn: tràn đoạn | — | Đoạn 1, offset 130. → addr.view("seg") +300ms, addr.seg("1:130") +300ms |
+| 8 | 46.0 s | 10.1 s (en 11.0 s) | 47.4 s | `addr-table` | TRAP | player.end +300ms |  |
+| ✓ | 57.5 s | 7.0 s | 57.5 s | — | Câu hỏi: Vì sao bảng trang nhiều mức tiết kiệm bộ nhớ? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 7.4 s start · 7.5 s tap · 17.2 s hit · 17.2 s step-ok · 32.6 s tap · 32.6 s blip-decode · 33.3 s step-ok · 46.1 s step-ok · 50.3 s tap · 51.2 s tap · 51.2 s step-ok · 55.0 s oops · 66.6 s right · 71.0 s done
+
+## amdahl-ceiling
+
+**Phần tuần tự đặt ra cái trần** / The serial part sets the ceiling — os-lab · `amdahl` · preset mặc định của: amdahl, gustafson, hetero
+
+So định luật Amdahl với speedup đo thật trong lab, thấy cái trần 1/s, rồi hai cách đi vòng qua nó.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 11.0 s (en 11.0 s) | 0.9 s | `amd-chart` | 10 % không chia được | amd.view("amdahl"), amd.s(0.1) |  |
+| 2 | 11.9 s | 5.4 s (en 5.6 s) | 11.9 s | `step` | Đến lượt bạn: lên 10 lõi | — | Bấm Bước tới n = 10. → player.step ×≤4 +650ms |
+| 3 | 17.3 s | 11.0 s (en 11.0 s) | 17.4 s | `amd-kpi` | Dự đoán 5,26×, đo được 4,97× | — |  |
+| 4 | 28.3 s | 4.2 s (en 4.0 s) | 28.4 s | `amd-sliders` | Đến lượt bạn: 25 % tuần tự | — | s = 25 %. → amd.s(0.25) |
+| 5 | 32.5 s | 4.2 s (en 4.4 s) | 32.5 s | `play` | Đến lượt bạn: tới 64 lõi | — | Chạy tới 64 lõi. → player.end +300ms |
+| 6 | 36.6 s | 9.4 s (en 9.6 s) | 36.7 s | `amd-chart` | 3,8× trên 64 lõi | — |  |
+| 7 | 46.0 s | 6.0 s (en 5.5 s) | 46.1 s | `amd-view` | Đến lượt bạn: Gustafson | — | Mở Gustafson. → amd.view("gustafson") |
+| 8 | 52.0 s | 11.0 s (en 11.0 s) | 52.0 s | `amd-chart` | Làm được gấp 9,1 lần | amd.s(0.1), player.seek(4) +300ms |  |
+| ✓ | 63.0 s | 7.0 s | 63.0 s | — | Câu hỏi: 5 % việc là tuần tự. Speedup tốt nhất có thể với vô hạn lõi là bao nhiêu? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 8.0 s start · 8.0 s tap · 21.0 s blip-exec · 21.8 s blip-exec · 22.6 s blip-exec · 23.3 s blip-exec · 23.3 s step-ok · 37.8 s step-ok · 42.1 s thud · 42.1 s step-ok · 56.6 s tap · 56.6 s step-ok · 56.6 s blip-exec · 59.6 s blip-exec · 72.7 s right · 77.1 s done
+
+## amdahl-karp
+
+**Đo phần tuần tự của bạn (Karp–Flatt)** / Measure your serial fraction (Karp–Flatt) — os-lab · `amdahl` · preset mặc định của: karp, balance
+
+Biến một bảng sweep thành phần tuần tự e, dự đoán 64 lõi, và xem vì sao chia khối cố định thua hàng đợi chung.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 11.0 s (en 11.0 s) | 0.9 s | `amd-karp` | Một bảng sweep thật | amd.view("karp"), amd.load("a10") |  |
+| 2 | 11.9 s | 9.9 s (en 11.0 s) | 11.9 s | `amd-kpi` | e ≈ 11 %, dự đoán 64 lõi | — |  |
+| 3 | 21.8 s | 5.3 s (en 4.7 s) | 21.8 s | `amd-karp` | Đến lượt bạn: một chương trình chia việc khéo | — | Nạp bảng hàng đợi chung. → amd.load("queue") |
+| 4 | 27.1 s | 5.5 s (en 5.5 s) | 27.2 s | `amd-karp` | Đến lượt bạn: khối cố định | — | Nạp bảng khối cố định. → amd.load("block") |
+| 5 | 32.6 s | 6.4 s (en 6.9 s) | 32.7 s | `amd-view` | Đến lượt bạn: vì sao khối thua | — | Chia việc, chạy tới cuối. → amd.view("balance") +300ms, player.end +400ms |
+| 6 | 39.1 s | 11.0 s (en 11.0 s) | 39.1 s | `amd-chart` | Chờ luồng chậm nhất | — |  |
+| ✓ | 50.1 s | 7.0 s | 50.1 s | — | Câu hỏi: e của Karp–Flatt TĂNG khi bạn thêm lõi. Điều đó gợi ý gì? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 9.0 s start · 9.0 s tap · 9.8 s pop · 32.9 s pop · 32.9 s step-ok · 38.3 s pop · 38.4 s step-ok · 44.2 s tap · 44.7 s tick · 44.7 s step-ok · 60.7 s right · 65.1 s done
+
+## cacheline-bounce
+
+**Xem một dòng cache nhảy qua lại** / Watch a cache line bounce — os-lab · `cacheline` · preset mặc định của: false, m1, padded, java
+
+Tám luồng, tám bộ đếm riêng, một dòng cache: MESI biến mỗi lần ghi thành một lần chuyển — 777 ms vs 192 ms.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 9.8 s (en 9.7 s) | 0.9 s | `cl-mem` | Tám bộ đếm, cách nhau 8 byte | cl.cores(8), cl.local(false), cl.gap(8), cl.line(64) |  |
+| 2 | 10.7 s | 6.9 s (en 6.8 s) | 10.7 s | `step` | Đến lượt bạn: bốn lần ghi | — | Bấm Bước tới khi dòng đã nhảy 3 lần. → player.step ×≤4 +600ms |
+| 3 | 17.6 s | 11.0 s (en 11.0 s) | 17.6 s | `cl-cores` | Đọc để giành quyền sở hữu | — |  |
+| 4 | 28.6 s | 9.8 s (en 9.9 s) | 28.6 s | `cl-clock` | 777 ms | — |  |
+| 5 | 38.4 s | 5.0 s (en 4.6 s) | 38.4 s | `cl-opts` | Đến lượt bạn: chèn đệm giữa các bộ đếm | — | Cách 128 B, chạy tới cuối. → cl.gap(128) +300ms, player.end +400ms |
+| 6 | 43.4 s | 8.8 s (en 8.3 s) | 43.4 s | `cl-kpi` | Không lần nhảy nào, 192 ms | — |  |
+| 7 | 52.1 s | 8.0 s (en 8.0 s) | 52.2 s | `cl-opts` | Đến lượt bạn: cái bẫy getconf | — | Cách 64 B, dòng 128 B, chạy tới cuối. → cl.gap(64) +300ms, cl.line(128) +300ms, player.end +400ms |
+| 8 | 60.1 s | 11.0 s (en 11.0 s) | 60.2 s | `cl-mem` | Từng cặp vẫn chung dòng | — |  |
+| ✓ | 71.2 s | 7.0 s | 71.2 s | — | Câu hỏi: Hai luồng ghi hai biến KHÁC nhau mà chương trình càng thêm luồng càng chậm. Nguyên nhân nhiều khả năng nhất? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 8.9 s start · 10.0 s off · 10.2 s tap · 10.6 s tap · 21.7 s pop · 22.4 s whoosh · 23.1 s whoosh · 23.8 s whoosh · 23.8 s step-ok · 49.1 s tap · 49.6 s hit · 49.6 s step-ok · 64.3 s tap · 64.8 s tap · 65.3 s whoosh · 65.3 s step-ok · 81.8 s right · 86.2 s done
+
+## flamegraph-read
+
+**Đọc một flame graph thật** / Read a real flame graph — os-lab · `flamegraph` · preset mặc định của: hot, offcpu, java, python
+
+Tìm hàm nóng theo thời gian SELF, thấy vì sao TOTAL dễ gây hiểu lầm, tìm tên, rồi học flame graph off-CPU cho thấy gì.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 10.7 s (en 11.0 s) | 0.9 s | `fg-graph` | 915 mẫu của hot.c | fg.script("hot") |  |
+| 2 | 11.6 s | 4.2 s (en 4.2 s) | 11.7 s | `step` | Đến lượt bạn: tìm điểm nóng | — | Bấm Bước tới khi crc_bitwise được chọn. → player.step ×≤2 +800ms |
+| 3 | 15.8 s | 11.0 s (en 11.0 s) | 15.9 s | `fg-info` | SELF 86,9 % | — |  |
+| 4 | 26.8 s | 5.2 s (en 4.3 s) | 26.9 s | `fg-rank` | Đến lượt bạn: một TOTAL dễ gây hiểu lầm | — | Chọn render_json. → fg.select("render_json") |
+| 5 | 32.0 s | 11.0 s (en 9.8 s) | 32.0 s | `fg-info` | 10 % total, 0 % self | — |  |
+| 6 | 43.0 s | 4.2 s (en 4.9 s) | 43.0 s | `fg-tools` | Đến lượt bạn: tìm | — | Tìm "printf". → fg.search("printf") |
+| 7 | 47.2 s | 6.2 s (en 6.2 s) | 47.3 s | `fg-script` | Đến lượt bạn: off-CPU | — | on/off-CPU, chạy tới cuối. → fg.script("offcpu") +300ms, player.end +500ms |
+| 8 | 53.4 s | 11.0 s (en 11.0 s) | 53.5 s | `fg-graph` | 87,8 % ngồi chờ khoá | — |  |
+| ✓ | 64.5 s | 7.0 s | 64.5 s | — | Câu hỏi: Trong flame graph, trục x có nghĩa gì? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 1.8 s start · 1.8 s tap · 15.7 s oops · 15.7 s step-ok · 30.7 s pop · 30.7 s step-ok · 46.3 s step-ok · 51.5 s tap · 52.1 s oops · 52.1 s step-ok · 68.0 s right · 72.4 s done
+
+## flamegraph-traps
+
+**Hai cái bẫy: hàm đổi tên và inline** / Two traps: renamed functions and inlining — os-lab · `flamegraph` · preset mặc định của: diff, inline
+
+Một đồ thị khác biệt "cho thấy" chậm đi, và một JIT giấu mất hàm bạn cần sửa.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 7.7 s (en 9.1 s) | 0.9 s | `fg-graph` | Trước → sau | fg.script("diff") |  |
+| 2 | 8.6 s | 3.8 s (en 3.9 s) | 8.6 s | `step` | Đến lượt bạn: hộp đỏ | — | Bấm Bước tới crc_table. → player.step ×≤1 +800ms |
+| 3 | 12.4 s | 11.0 s (en 11.0 s) | 12.4 s | `fg-info` | Đỏ không có nghĩa là chậm hơn | — |  |
+| 4 | 23.4 s | 3.9 s (en 4.3 s) | 23.4 s | `fg-script` | Đến lượt bạn: bẫy inline | — | Bẫy inline, chạy tới cuối. → fg.script("inline") +300ms, player.end +500ms |
+| 5 | 27.3 s | 6.7 s (en 6.7 s) | 27.3 s | `fg-quiz` | Đến lượt bạn: hàm nào? | — | Trả lời đúng câu đố. → fg.answer("unique") |
+| 6 | 34.0 s | 11.0 s (en 11.0 s) | 34.0 s | `fg-quiz` | Dòng 24: 91,3 % | — |  |
+| ✓ | 45.0 s | 7.0 s | 45.0 s | — | Câu hỏi: Một hàm nóng vắng mặt trong flame graph. Lý do có khả năng là gì? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 1.8 s start · 1.8 s tap · 12.0 s step-ok · 26.3 s tap · 26.9 s blip-exec · 26.9 s step-ok · 32.0 s right · 32.0 s step-ok · 48.5 s right · 52.9 s done
+
+## coordinated-omission-loops
+
+**Vì sao p99 = 0,2 ms có thể là nói dối** / Why p99 = 0.2 ms can be a lie — os-lab · `coordinated-omission` · preset mặc định của: stall, conns, wrk, nostall
+
+Xem công cụ vòng kín ngừng gửi lúc máy chủ đứng hình, công cụ vòng mở giữ đúng lịch, và sửa số liệu như wrk.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 11.0 s (en 11.0 s) | 0.9 s | `co-lanes` | Một máy chủ, hai công cụ đo | co.conns(1), co.stall(200), co.rate(100), co.fix(false) |  |
+| 2 | 11.9 s | 5.9 s (en 6.0 s) | 11.9 s | `step` | Đến lượt bạn: qua lần đứng hình đầu | — | Bấm Bước tới 1,25 s. → player.step ×≤5 +500ms |
+| 3 | 17.8 s | 11.0 s (en 11.0 s) | 17.8 s | `co-lanes` | Vòng kín im bặt | — |  |
+| 4 | 28.8 s | 2.6 s (en 2.8 s) | 28.8 s | `play` | Đến lượt bạn: trọn 8 giây | — | Chạy tới 8 s. → player.end +300ms |
+| 5 | 31.4 s | 11.0 s (en 11.0 s) | 31.4 s | `co-table` | 0,1 ms vs 190 ms | — |  |
+| 6 | 42.4 s | 5.2 s (en 5.5 s) | 42.4 s | `co-opts` | Đến lượt bạn: cách sửa của wrk | — | Bật cách sửa. → co.fix(true) |
+| 7 | 47.5 s | 10.7 s (en 11.0 s) | 47.6 s | `co-table` | ≈ 187 ms, như wrk | — |  |
+| 8 | 58.2 s | 6.9 s (en 7.5 s) | 58.3 s | `co-opts` | Đến lượt bạn: đủ kết nối | — | 50 kết nối, chạy tới cuối. → co.conns(50) +300ms, player.end +500ms |
+| 9 | 65.2 s | 11.0 s (en 11.0 s) | 65.2 s | `co-table` | Giờ hai đồng hồ khớp nhau | — |  |
+| ✓ | 76.2 s | 7.0 s | 76.2 s | — | Câu hỏi: hey -c 1 báo p99 = 0,1 ms trên một máy chủ đứng hình 200 ms mỗi giây. Vì sao? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 7.2 s start · 7.2 s tap · 7.7 s off · 20.4 s tick · 21.0 s tick · 21.6 s tick · 22.2 s thud · 22.9 s thud · 22.9 s step-ok · 36.7 s thud · 36.7 s step-ok · 51.7 s on · 51.7 s step-ok · 68.4 s tap · 68.4 s step-ok · 68.4 s tick · 69.0 s thud · 85.2 s right · 89.6 s done
+
+## osmap-compare
+
+**Một ý, ba hệ điều hành** / One idea, three systems — os-lab · `osmap` · preset mặc định của: linux, mac, win, compare
+
+Lật giữa Linux, macOS và Windows trên cùng các khái niệm và tìm những khác biệt làm gãy mã thật.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 11.0 s (en 11.0 s) | 0.9 s | `om-switch` | Công tắc | om.os("linux"), om.card("kernel") |  |
+| 2 | 11.9 s | 3.9 s (en 4.2 s) | 11.9 s | `step` | Đến lượt bạn: số hiệu syscall | — | Sang thẻ số hiệu syscall. → player.step ×≤1 +650ms |
+| 3 | 15.8 s | 4.8 s (en 4.8 s) | 15.9 s | `om-switch` | Đến lượt bạn: lật sang macOS | — | Chuyển sang macOS. → om.os("mac") |
+| 4 | 20.7 s | 10.5 s (en 10.6 s) | 20.7 s | `om-cards` | 4 thay vì 64 | — |  |
+| 5 | 31.2 s | 5.7 s (en 6.0 s) | 31.2 s | `om-switch` | Đến lượt bạn: so cạnh nhau | — | So cạnh nhau, thẻ tín hiệu. → om.os("compare") +300ms, om.card("signal") +300ms |
+| 6 | 36.8 s | 11.0 s (en 11.0 s) | 36.8 s | `om-cards` | exit 138 mang hai nghĩa | — |  |
+| 7 | 47.8 s | 3.3 s (en 3.5 s) | 47.8 s | `om-cards` | Đến lượt bạn: bẫy hoa/thường | — | Mở thẻ hoa/thường. → om.card("case") |
+| 8 | 51.1 s | 11.0 s (en 10.4 s) | 51.1 s | `om-cards` | Chạy được trên máy Mac của tôi | — |  |
+| ✓ | 62.1 s | 7.0 s | 62.1 s | — | Câu hỏi: Container trên máy Mac in "Linux … aarch64" khi gõ uname. Vì sao? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 9.1 s start · 9.1 s whoosh · 22.6 s blip-exec · 22.6 s step-ok · 26.8 s whoosh · 26.8 s step-ok · 42.5 s pop · 42.9 s blip-exec · 42.9 s step-ok · 57.9 s blip-exec · 57.9 s step-ok · 72.9 s right · 77.3 s done
+
 ## process-start
 
 **Cách dùng phòng lab này** / How to use this lab — os-lab · `process` · tour làm quen (mọi preset chưa có tour riêng)
@@ -1222,6 +1492,142 @@ Một phút làm quen: mô phỏng này cho thấy gì và điều khiển nó r
 | ✓ | 52.2 s | 7.0 s | 52.2 s | — | Câu hỏi: Ô có viền màu bên trái cho bạn biết gì? | đáp án đúng: A | — |
 
 Tiếng (đo thật): 31.5 s start · 58.4 s blip-exec · 59.1 s step-ok · 59.1 s miss · 85.4 s right · 89.8 s done
+
+## gantt-exam-start
+
+**Cách dùng phòng lab này** / How to use this lab — os-lab · `gantt-exam` · tour làm quen (mọi preset chưa có tour riêng)
+
+Một phút làm quen: mô phỏng này cho thấy gì và điều khiển nó ra sao.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 11.0 s (en 11.0 s) | 0.9 s | `head` | Luyện đề Gantt: lập lịch, có chấm | — |  |
+| 2 | 11.9 s | 11.0 s (en 11.0 s) | 11.9 s | `controls` | Thanh điều khiển | — |  |
+| 3 | 22.9 s | 5.6 s (en 5.4 s) | 22.9 s | `step` | Đến lượt bạn: hai bước | — | Bấm Bước hai lần. → player.step ×≤2 +600ms |
+| 4 | 28.5 s | 10.9 s (en 11.0 s) | 28.5 s | `explain` | Đọc ô giải thích | — |  |
+| 5 | 39.4 s | 11.0 s (en 11.0 s) | 39.4 s | — | Giờ tự khám phá | — |  |
+| ✓ | 50.4 s | 7.0 s | 50.4 s | — | Câu hỏi: Ô có viền màu bên trái cho bạn biết gì? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 8.5 s start · 33.6 s tick · 34.3 s step-ok · 34.3 s tick · 60.6 s right · 65.0 s done
+
+## disk-arm-start
+
+**Cách dùng phòng lab này** / How to use this lab — os-lab · `disk-arm` · tour làm quen (mọi preset chưa có tour riêng)
+
+Một phút làm quen: mô phỏng này cho thấy gì và điều khiển nó ra sao.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 11.0 s (en 11.0 s) | 0.9 s | `head` | Lập lịch tay đĩa | — |  |
+| 2 | 11.9 s | 11.0 s (en 11.0 s) | 11.9 s | `controls` | Thanh điều khiển | — |  |
+| 3 | 22.9 s | 5.6 s (en 5.4 s) | 22.9 s | `step` | Đến lượt bạn: hai bước | — | Bấm Bước hai lần. → player.step ×≤2 +600ms |
+| 4 | 28.5 s | 10.9 s (en 11.0 s) | 28.5 s | `explain` | Đọc ô giải thích | — |  |
+| 5 | 39.4 s | 11.0 s (en 11.0 s) | 39.4 s | — | Giờ tự khám phá | — |  |
+| ✓ | 50.4 s | 7.0 s | 50.4 s | — | Câu hỏi: Ô có viền màu bên trái cho bạn biết gì? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 1.8 s start · 26.8 s blip-exec · 27.6 s step-ok · 27.6 s blip-exec · 53.9 s right · 58.3 s done
+
+## addr-split-start
+
+**Cách dùng phòng lab này** / How to use this lab — os-lab · `addr-split` · tour làm quen (mọi preset chưa có tour riêng)
+
+Một phút làm quen: mô phỏng này cho thấy gì và điều khiển nó ra sao.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 11.0 s (en 11.0 s) | 0.9 s | `head` | Tách bit địa chỉ & cỡ bảng trang | — |  |
+| 2 | 11.9 s | 11.0 s (en 11.0 s) | 11.9 s | `controls` | Thanh điều khiển | — |  |
+| 3 | 22.9 s | 5.6 s (en 5.4 s) | 22.9 s | `step` | Đến lượt bạn: hai bước | — | Bấm Bước hai lần. → player.step ×≤2 +600ms |
+| 4 | 28.5 s | 10.9 s (en 11.0 s) | 28.5 s | `explain` | Đọc ô giải thích | — |  |
+| 5 | 39.4 s | 11.0 s (en 11.0 s) | 39.4 s | — | Giờ tự khám phá | — |  |
+| ✓ | 50.4 s | 7.0 s | 50.4 s | — | Câu hỏi: Ô có viền màu bên trái cho bạn biết gì? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 7.7 s start · 32.7 s blip-decode · 33.5 s step-ok · 33.5 s blip-decode · 59.8 s right · 64.2 s done
+
+## amdahl-start
+
+**Cách dùng phòng lab này** / How to use this lab — os-lab · `amdahl` · tour làm quen (mọi preset chưa có tour riêng)
+
+Một phút làm quen: mô phỏng này cho thấy gì và điều khiển nó ra sao.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 11.0 s (en 11.0 s) | 0.9 s | `head` | Amdahl, Gustafson & Karp–Flatt | — |  |
+| 2 | 11.9 s | 11.0 s (en 11.0 s) | 11.9 s | `controls` | Thanh điều khiển | — |  |
+| 3 | 22.9 s | 5.6 s (en 5.4 s) | 22.9 s | `step` | Đến lượt bạn: hai bước | — | Bấm Bước hai lần. → player.step ×≤2 +600ms |
+| 4 | 28.5 s | 10.9 s (en 11.0 s) | 28.5 s | `explain` | Đọc ô giải thích | — |  |
+| 5 | 39.4 s | 11.0 s (en 11.0 s) | 39.4 s | — | Giờ tự khám phá | — |  |
+| ✓ | 50.4 s | 7.0 s | 50.4 s | — | Câu hỏi: Ô có viền màu bên trái cho bạn biết gì? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 10.1 s start · 35.2 s blip-exec · 35.9 s step-ok · 35.9 s blip-exec · 62.2 s right · 66.6 s done
+
+## cacheline-start
+
+**Cách dùng phòng lab này** / How to use this lab — os-lab · `cacheline` · tour làm quen (mọi preset chưa có tour riêng)
+
+Một phút làm quen: mô phỏng này cho thấy gì và điều khiển nó ra sao.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 11.0 s (en 11.0 s) | 0.9 s | `head` | False sharing & MESI | — |  |
+| 2 | 11.9 s | 11.0 s (en 11.0 s) | 11.9 s | `controls` | Thanh điều khiển | — |  |
+| 3 | 22.9 s | 5.6 s (en 5.4 s) | 22.9 s | `step` | Đến lượt bạn: hai bước | — | Bấm Bước hai lần. → player.step ×≤2 +600ms |
+| 4 | 28.5 s | 10.9 s (en 11.0 s) | 28.5 s | `explain` | Đọc ô giải thích | — |  |
+| 5 | 39.4 s | 11.0 s (en 11.0 s) | 39.4 s | — | Giờ tự khám phá | — |  |
+| ✓ | 50.4 s | 7.0 s | 50.4 s | — | Câu hỏi: Ô có viền màu bên trái cho bạn biết gì? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 9.1 s start · 34.1 s pop · 34.9 s step-ok · 34.9 s whoosh · 61.2 s right · 65.6 s done
+
+## flamegraph-start
+
+**Cách dùng phòng lab này** / How to use this lab — os-lab · `flamegraph` · tour làm quen (mọi preset chưa có tour riêng)
+
+Một phút làm quen: mô phỏng này cho thấy gì và điều khiển nó ra sao.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 11.0 s (en 11.0 s) | 0.9 s | `head` | Đọc flame graph | — |  |
+| 2 | 11.9 s | 11.0 s (en 11.0 s) | 11.9 s | `controls` | Thanh điều khiển | — |  |
+| 3 | 22.9 s | 5.6 s (en 5.4 s) | 22.9 s | `step` | Đến lượt bạn: hai bước | — | Bấm Bước hai lần. → player.step ×≤2 +600ms |
+| 4 | 28.5 s | 10.9 s (en 11.0 s) | 28.5 s | `explain` | Đọc ô giải thích | — |  |
+| 5 | 39.4 s | 11.0 s (en 11.0 s) | 39.4 s | — | Giờ tự khám phá | — |  |
+| ✓ | 50.4 s | 7.0 s | 50.4 s | — | Câu hỏi: Ô có viền màu bên trái cho bạn biết gì? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 1.8 s start · 27.6 s step-ok · 27.6 s oops · 53.9 s right · 58.3 s done
+
+## coordinated-omission-start
+
+**Cách dùng phòng lab này** / How to use this lab — os-lab · `coordinated-omission` · tour làm quen (mọi preset chưa có tour riêng)
+
+Một phút làm quen: mô phỏng này cho thấy gì và điều khiển nó ra sao.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 11.0 s (en 11.0 s) | 0.9 s | `head` | Coordinated omission | — |  |
+| 2 | 11.9 s | 11.0 s (en 11.0 s) | 11.9 s | `controls` | Thanh điều khiển | — |  |
+| 3 | 22.9 s | 5.6 s (en 5.4 s) | 22.9 s | `step` | Đến lượt bạn: hai bước | — | Bấm Bước hai lần. → player.step ×≤2 +600ms |
+| 4 | 28.5 s | 10.9 s (en 11.0 s) | 28.5 s | `explain` | Đọc ô giải thích | — |  |
+| 5 | 39.4 s | 11.0 s (en 11.0 s) | 39.4 s | — | Giờ tự khám phá | — |  |
+| ✓ | 50.4 s | 7.0 s | 50.4 s | — | Câu hỏi: Ô có viền màu bên trái cho bạn biết gì? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 7.0 s start · 32.1 s tick · 32.8 s step-ok · 32.8 s tick · 59.1 s right · 63.5 s done
+
+## osmap-start
+
+**Cách dùng phòng lab này** / How to use this lab — os-lab · `osmap` · tour làm quen (mọi preset chưa có tour riêng)
+
+Một phút làm quen: mô phỏng này cho thấy gì và điều khiển nó ra sao.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 11.0 s (en 11.0 s) | 0.9 s | `head` | Cùng khái niệm, ba hệ điều hành | — |  |
+| 2 | 11.9 s | 11.0 s (en 11.0 s) | 12.1 s | `controls` | Thanh điều khiển | — |  |
+| 3 | 22.9 s | 5.6 s (en 5.4 s) | 23.1 s | `step` | Đến lượt bạn: hai bước | — | Bấm Bước hai lần. → player.step ×≤2 +600ms |
+| 4 | 28.5 s | 10.9 s (en 11.0 s) | 28.7 s | `explain` | Đọc ô giải thích | — |  |
+| 5 | 39.4 s | 11.0 s (en 11.0 s) | 39.6 s | — | Giờ tự khám phá | — |  |
+| ✓ | 50.6 s | 7.0 s | 50.6 s | — | Câu hỏi: Ô có viền màu bên trái cho bạn biết gì? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 9.6 s start · 34.9 s blip-exec · 35.6 s step-ok · 35.6 s blip-exec · 61.9 s right · 66.3 s done
 
 ## latency-start
 

@@ -40,6 +40,14 @@ export const SIMS = {
   epoll: ['ready', 'scan', 'trigger', 'oneshot', 'c10k', 'walls'],
   eintr: ['norestart', 'restart', 'poll', 'python', 'go'],
   nagle: ['nagle', 'nodelay', 'onewrite'],
+  'gantt-exam': ['s1', 'sjf', 'srtf', 'rr', 'prio', 'random'],
+  'disk-arm': ['cscan', 'fcfs', 'sstf', 'scan', 'look', 'clook', 'exam'],
+  'addr-split': ['split', 'x64', 'table', 'tlb', 'seg'],
+  amdahl: ['amdahl', 'gustafson', 'karp', 'hetero', 'balance'],
+  cacheline: ['false', 'padded', 'm1', 'java'],
+  flamegraph: ['hot', 'diff', 'offcpu', 'inline', 'java', 'python'],
+  'coordinated-omission': ['stall', 'conns', 'wrk', 'nostall'],
+  osmap: ['linux', 'mac', 'win', 'compare'],
   latency: ['default'],
 };
 
@@ -66,6 +74,14 @@ export const TOURS = {
   epoll: ['epoll-ready', 'epoll-trigger', 'epoll-c10k', 'epoll-start'],
   eintr: ['eintr-signal', 'eintr-start'],
   nagle: ['nagle-delay', 'nagle-start'],
+  'gantt-exam': ['gantt-exam-grade', 'gantt-exam-rr', 'gantt-exam-start'],
+  'disk-arm': ['disk-arm-cscan', 'disk-arm-exam', 'disk-arm-start'],
+  'addr-split': ['addr-split-walk', 'addr-split-size', 'addr-split-start'],
+  amdahl: ['amdahl-ceiling', 'amdahl-karp', 'amdahl-start'],
+  cacheline: ['cacheline-bounce', 'cacheline-start'],
+  flamegraph: ['flamegraph-read', 'flamegraph-traps', 'flamegraph-start'],
+  'coordinated-omission': ['coordinated-omission-loops', 'coordinated-omission-start'],
+  osmap: ['osmap-compare', 'osmap-start'],
   latency: ['latency-start'],
 };
 

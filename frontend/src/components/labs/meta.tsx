@@ -7,6 +7,7 @@ import {
   Binary, Boxes, Cable, CalendarClock, Cpu, Database, FileCode2, GitFork, Gauge, HardDrive, Layers, Lock, MemoryStick,
   Network, Route, ScanSearch, ShieldAlert, Shuffle, Timer, Type, Workflow, Zap,
   ArrowDownUp, KeyRound, Container, Layers3, RadioTower, Table2, AlarmClock, Hourglass,
+  ChartGantt, Disc3, Split, TrendingUp, Grid3x3, Flame, Waypoints, MonitorSmartphone,
 } from 'lucide-react';
 import type { L } from './tour/types';
 import type { LabNs } from './selector';
@@ -17,6 +18,7 @@ export const SIM_ICON: Record<LabNs, Record<string, ComponentType<{ className?: 
     process: GitFork, scheduler: CalendarClock, race: Shuffle, memory: Layers, vm: MemoryStick, sysmon: Gauge, eventloop: Workflow,
     threadpool: Boxes, sync: Lock, deadlock: ShieldAlert, cgroup: Database, cow: Route, pagecache: HardDrive, latency: Timer,
     syscall: ArrowDownUp, perm: KeyRound, fdtable: Table2, nslayers: Container, overlay: Layers3, epoll: RadioTower, eintr: AlarmClock, nagle: Hourglass,
+    'gantt-exam': ChartGantt, 'disk-arm': Disc3, 'addr-split': Split, amdahl: TrendingUp, cacheline: Grid3x3, flamegraph: Flame, 'coordinated-omission': Waypoints, osmap: MonitorSmartphone,
   },
 };
 export const FALLBACK_ICON = ScanSearch;
@@ -54,5 +56,13 @@ export const SIM_HINT: Record<LabNs, Record<string, L>> = {
     epoll: ['Many sockets, one thread. Green = has data. Press Step and see how epoll hands over only the ready ones.', 'Nhiều socket, một luồng. Xanh = có dữ liệu. Bấm Bước và xem epoll chỉ trao đúng những socket đã sẵn sàng.'],
     eintr: ['A program asleep in read(), and an alarm signal at 1 second. Press Step and watch what the call returns.', 'Một chương trình đang ngủ trong read(), và một tín hiệu báo thức lúc 1 giây. Bấm Bước và xem lời gọi trả về gì.'],
     nagle: ['Packets between a server and curl, millisecond by millisecond. Press Step and look for the one that waits.', 'Các gói tin giữa máy chủ và curl, từng mili giây. Bấm Bước và tìm gói phải chờ.'],
+    'gantt-exam': ['An exam question you solve yourself. Pick a job, paint the cells of the Gantt chart, fill the table, then press "Check my answer".', 'Một câu đề thi bạn tự giải. Chọn một việc, tô các ô của biểu đồ Gantt, điền bảng, rồi bấm "Chấm bài".'],
+    'disk-arm': ['A disk seen from above and the path of its read head. Press Step: the arm swings to the next cylinder and the counter adds the distance.', 'Một mặt đĩa nhìn từ trên và đường đi của đầu đọc. Bấm Bước: tay đĩa xoay tới trụ kế tiếp và bộ đếm cộng thêm quãng đường.'],
+    'addr-split': ['One virtual address, its bits coloured by job: which bits pick the table entry, which bits are the offset. Press Step for the exam method.', 'Một địa chỉ ảo, các bit tô màu theo nhiệm vụ: bit nào chọn mục trong bảng, bit nào là offset. Bấm Bước để xem cách giải đề.'],
+    amdahl: ['How much faster with more cores? Move the "serial part" slider and watch the curve flatten; the circles are real measurements.', 'Thêm lõi thì nhanh hơn bao nhiêu? Kéo thanh "phần tuần tự" và xem đường cong dẹt xuống; các vòng tròn là số đo thật.'],
+    cacheline: ['Each core adds to its own counter. Press Step and watch the red M jump from core to core when the counters share a cache line.', 'Mỗi lõi cộng vào bộ đếm của riêng nó. Bấm Bước và xem chữ M đỏ nhảy từ lõi này sang lõi khác khi các bộ đếm chung một dòng cache.'],
+    flamegraph: ['A real profile: each box is a function, wider = more CPU time. Tap a box to see its SELF and TOTAL, tap again to zoom in.', 'Một hồ sơ thật: mỗi hộp là một hàm, càng rộng càng tốn CPU. Chạm một hộp để xem SELF và TOTAL, chạm tiếp để phóng to.'],
+    'coordinated-omission': ['The same frozen server measured two ways. Press Play and compare the p99 the two load testers report.', 'Cùng một máy chủ bị đứng hình, đo theo hai cách. Bấm Chạy và so p99 mà hai công cụ tải báo ra.'],
+    osmap: ['Flip the switch at the top between Linux, macOS and Windows: every card changes to that system\'s name, command and output.', 'Bật công tắc phía trên giữa Linux, macOS và Windows: mỗi thẻ đổi sang tên, lệnh và output của hệ đó.'],
   },
 };

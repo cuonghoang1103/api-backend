@@ -142,6 +142,12 @@
       "description": "Deep Lab chương 3: tự viết bộ theo dõi khai thác — ma trận CRUD tìm yêu cầu còn thiếu (Wiegers Ch.7), độ phủ lớp người dùng theo buổi và kỹ thuật, câu hỏi còn mở/TBD theo chủ đề — chấm mẫu ClinicCare + dữ liệu ẩn."
     },
     {
+      "slug": "swr302-3-project-cliniccare-m2-elicitation",
+      "name": "ClinicCare project — Milestone 2: Elicitation",
+      "level": "INTERMEDIATE",
+      "description": "Dự án ClinicCare, mốc 2 (chương 3): phân loại 12 câu nói của bên liên quan vào 9 nhóm đầu vào của Wiegers, lập kế hoạch khai thác cho 5 lớp người dùng (kỹ thuật, mục tiêu, câu hỏi mở), viết câu hỏi làm rõ cho phát biểu mơ hồ; kèm Góc phỏng vấn."
+    },
+    {
       "slug": "swr302-4-1-use-case-user-story",
       "name": "4.1 Use cases, user stories and actors",
       "level": "BEGINNER",
@@ -236,6 +242,12 @@
       "name": "Deep Lab 4 — Model consistency checker",
       "level": "ADVANCED",
       "description": "Deep Lab chương 4: tự viết công cụ kiểm mô hình — cân bằng DFD (context ↔ mức 0, so như đa tập), luật DFD (hố đen, phép màu, luồng sai luật, kho chỉ ghi/chỉ đọc, thiếu nhãn) và độ đầy đủ bảng quyết định (tổ hợp thiếu, mâu thuẫn, trùng) — chấm trên mẫu MediLab và dữ liệu ẩn."
+    },
+    {
+      "slug": "swr302-4-project-cliniccare-m3-use-cases",
+      "name": "ClinicCare project — Milestone 3: Use cases",
+      "level": "INTERMEDIATE",
+      "description": "Dự án ClinicCare, mốc 3 (chương 4): sơ đồ use case 8 actor / 17 use case với «extend» trả trước và «include» gửi đơn thuốc quốc gia, đặc tả đầy đủ use case \"Book Appointment\" theo template Wiegers — chấm bằng máy đọc PlantUML; kèm Góc phỏng vấn."
     },
     {
       "slug": "swr302-5-1-srs-ieee-830",

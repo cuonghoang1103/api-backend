@@ -1,0 +1,537 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-3-project-cliniccare-m2-elicitation",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-3-5-ch7-classifying-input"
+  },
+  "exercises": [
+    {
+      "title": "ClinicCare project — Milestone 2: Elicitation",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 60,
+      "points": 100,
+      "concepts": [
+        "classifying customer input",
+        "elicitation planning",
+        "elicitation techniques"
+      ],
+      "prerequisites": [
+        "Milestone 1",
+        "SWR302 lessons 3.1–3.3"
+      ],
+      "tags": [
+        "swr302",
+        "project"
+      ],
+      "problemHtml": "<h1>ClinicCare project — Milestone 2: Elicitation</h1>\n<p class=\"bi-phu\">Running project · milestone 2 of 7 · classify, plan, ask · 10 marks</p>\n<h2>1. Overview</h2>\n<p><b>Minh An Family Clinic</b> has 3 doctors, 2 receptionists, 1 pharmacist and a clinic manager. Today patients phone the reception desk to book: about <b>120 calls a day</b>, many unanswered at peak time, and <b>15% of appointments are no-shows</b>. The owner wants <b>ClinicCare</b>, a web and mobile system, live within 6 months.</p>\n<ul>\n<li><b>Patients</b> register, book an appointment with a chosen doctor in a free 15-minute slot, cancel it, pay the visit fee online, and read their prescriptions.</li>\n<li><b>Doctors</b> publish their working slots, see the day’s appointment list, record visit notes and write e-prescriptions.</li>\n<li><b>Receptionists</b> check patients in, book on behalf of patients who still phone, and mark no-shows.</li>\n<li>The <b>pharmacist</b> receives e-prescriptions and marks them dispensed.</li>\n<li>The <b>clinic manager</b> sets services and fees and reads monthly reports.</li>\n<li>External systems: the <b>VNPay payment gateway</b> (charges, confirms and refunds), the <b>SMS gateway</b> (delivers the reminder sent 24 hours before each appointment), and the <b>National e-Prescription System</b>, to which every prescription must be sent by law and which returns a prescription code.</li>\n</ul>\n<p><b>Business rules.</b> BR-01 an appointment can be cancelled free of charge up to 2 hours before it starts · BR-02 a patient with 3 no-shows in the last 90 days must prepay when booking · BR-03 a patient may hold at most 2 future appointments · BR-04 visit fee = service fee + 10% VAT · BR-05 a slot lasts 15 minutes.</p>\n<p><b>Not in release 1:</b> video consultation, insurance e-claims, a loyalty programme, integration with the lab machines.</p><p><b>A.</b> The first round of conversations produced these statements. Classify each one into Wiegers’ nine categories of customer input (Business requirement, User requirement, Business rule, Functional requirement, Quality attribute, External interface requirement, Constraint, Data definition, Solution idea):</p><table><thead><tr><th>#</th><th>Who</th><th>What they said</th></tr></thead><tbody><tr><td>T1</td><td>Owner</td><td>I want the phone calls to the desk cut by half before Tết.</td></tr><tr><td>T2</td><td>Receptionist</td><td>I need to see at a glance which patients have arrived and who is late.</td></tr><tr><td>T3</td><td>Owner</td><td>A patient who missed three appointments in 90 days has to pay before booking.</td></tr><tr><td>T4</td><td>Receptionist</td><td>When I mark a no-show, the system should free that slot for a walk-in patient.</td></tr><tr><td>T5</td><td>Receptionist</td><td>The check-in screen must open in under two seconds — there is always a queue.</td></tr><tr><td>T6</td><td>Pharmacist</td><td>Every prescription has to go to the national e-prescription system in their XML format.</td></tr><tr><td>T7</td><td>IT contractor</td><td>It has to run on the Windows 10 PCs we already have at the desk.</td></tr><tr><td>T8</td><td>Receptionist</td><td>A booking code is the letter M followed by six digits.</td></tr><tr><td>T9</td><td>Doctor</td><td>Maybe put a big drop-down with all our photos at the top of the page?</td></tr><tr><td>T10</td><td>Doctor</td><td>A doctor never sees more than 32 patients in one day.</td></tr><tr><td>T11</td><td>Patient</td><td>I want to book for my children too, not only for myself.</td></tr><tr><td>T12</td><td>Manager</td><td>Each month I need the number of visits per doctor and the revenue per service.</td></tr></tbody></table>\n<p><b>B.</b> Plan the next round: one session per user class (Patient, Doctor, Receptionist, Pharmacist, Clinic Manager) with <code>{ userClass, technique, objective, questions }</code>. Use at least three different techniques from Wiegers Ch.7, observe the receptionists at work, and write at least three open questions per session that ask about needs, not solutions.</p>\n<p><b>C.</b> Write one open follow-up question for each vague statement:</p><table><thead><tr><th>#</th><th>Vague statement</th></tr></thead><tbody><tr><td>V1</td><td>Patients want to book quickly.</td></tr><tr><td>V2</td><td>Reminders should be sent in good time.</td></tr><tr><td>V3</td><td>Some services need a deposit.</td></tr><tr><td>V4</td><td>Late patients may lose their slot.</td></tr></tbody></table>\n<h3>Main features</h3>\n<ul>\n  <li>A. Classify customer input.</li>\n  <li>B. Elicitation plan.</li>\n  <li>C. Follow-up questions.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>Category names exactly as listed.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>answers/\n├── a-input-types.js   ← const INPUT_TYPES = { T1: '…', … }\n├── b-plan.js          ← const ELICITATION_PLAN = [ { userClass, technique, objective, questions }, … ]\n└── c-follow-ups.js    ← const FOLLOW_UPS = { V1: '…?', … }</pre>\n<h2>3. Data model</h2>\n<p><b>Answer records</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>INPUT_TYPES.Tn</code></td><td>string</td><td>one of the nine categories</td></tr><tr><td><code>session</code></td><td>{ userClass, technique, objective, questions[] }</td><td>technique from Wiegers Ch.7</td></tr><tr><td><code>FOLLOW_UPS.Vn</code></td><td>string ending with \"?\"</td><td>open question</td></tr></tbody></table>\n<h2>4. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. A. Classification <span class=\"bi-diem\">4 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Twelve statements.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">classifying customer input</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. B1. Coverage and techniques <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>All user classes; ≥ 3 techniques; observation.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">elicitation techniques</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. B2. Objectives and questions <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Open, need-oriented questions.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">planning elicitation</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. C. Follow-up questions <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Ask for the missing number or condition.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">ambiguity</span></p>\n</div>\n<h2>5. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>INPUT_TYPES</code></td><td>answers/a-input-types.js</td></tr><tr><td><code>ELICITATION_PLAN</code></td><td>answers/b-plan.js</td></tr><tr><td><code>FOLLOW_UPS</code></td><td>answers/c-follow-ups.js</td></tr></tbody></table>\n<h2>6. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>A. Classification</td><td>4</td></tr><tr><td>2</td><td>B1. Coverage and techniques</td><td>2</td></tr><tr><td>3</td><td>B2. Objectives and questions</td><td>2</td></tr><tr><td>4</td><td>C. Follow-up questions</td><td>2</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Recording the doctor’s drop-down idea as a requirement — find the need behind it first.</li>\n  <li>Questions such as \"Would you like an app to book?\" — leading and yes/no.</li>\n</ul>\n<h2>7. Submission</h2>\n<p>Write your answers in the files of <code>answers/</code> on the right. Diagrams are written as text in the syntax of a real tool (Mermaid or PlantUML — paste them into <a href=\"https://mermaid.live\" target=\"_blank\" rel=\"noopener\">mermaid.live</a> or <a href=\"https://www.plantuml.com/plantuml\" target=\"_blank\" rel=\"noopener\">plantuml.com</a> to SEE the picture); tables are JavaScript arrays, one object per row of the school template. Press <b>Run</b> for the visible checks and <b>Submit</b> for full grading, hidden checks included. Your mark per question appears in the rubric table.</p>",
+      "problemHtmlVi": "<h1>ClinicCare project — Milestone 2: Elicitation</h1>\n<p class=\"bi-phu\">Dự án xuyên suốt · mốc 2/7 · phân loại, lập kế hoạch, hỏi · 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p><b>Phòng khám gia đình Minh An</b> có 3 bác sĩ, 2 lễ tân, 1 dược sĩ và một quản lý. Hiện bệnh nhân gọi điện tới lễ tân để đặt lịch: khoảng <b>120 cuộc/ngày</b>, giờ cao điểm nhiều cuộc không ai nghe, và <b>15% lịch hẹn bị bỏ (no-show)</b>. Chủ phòng khám muốn <b>ClinicCare</b> — hệ thống web và di động — chạy trong 6 tháng.</p>\n<ul><li><b>Bệnh nhân</b> đăng ký, đặt lịch với bác sĩ chọn trong slot 15 phút còn trống, huỷ lịch, trả phí khám trực tuyến, xem đơn thuốc.</li><li><b>Bác sĩ</b> công bố slot làm việc, xem danh sách hẹn trong ngày, ghi chú khám và kê đơn điện tử.</li><li><b>Lễ tân</b> làm thủ tục check-in, đặt lịch thay người gọi điện, đánh dấu no-show.</li><li><b>Dược sĩ</b> nhận đơn điện tử và đánh dấu đã phát thuốc.</li><li><b>Quản lý</b> đặt dịch vụ và phí, xem báo cáo tháng.</li><li>Hệ thống ngoài: <b>cổng thanh toán VNPay</b> (thu, xác nhận, hoàn tiền), <b>SMS gateway</b> (gửi nhắc lịch trước 24 giờ), <b>Hệ thống Đơn thuốc Quốc gia</b> (luật bắt buộc gửi mọi đơn, trả về mã đơn).</li></ul>\n<p><b>Luật nghiệp vụ.</b> BR-01 huỷ miễn phí tới trước 2 giờ · BR-02 bệnh nhân có 3 lần no-show trong 90 ngày phải trả trước khi đặt · BR-03 tối đa 2 lịch hẹn tương lai mỗi bệnh nhân · BR-04 phí khám = phí dịch vụ + 10% VAT · BR-05 mỗi slot 15 phút.</p>\n<p><b>Ngoài bản 1:</b> khám qua video, bảo hiểm điện tử, chương trình khách hàng thân thiết, kết nối máy xét nghiệm.</p><p><b>A.</b> Phân loại 12 câu nói (bảng ở bản tiếng Anh) vào 9 nhóm đầu vào của Wiegers. <b>B.</b> Lập kế hoạch vòng khai thác tiếp: mỗi lớp người dùng một buổi <code>{ userClass, technique, objective, questions }</code>; ít nhất ba kỹ thuật khác nhau, có quan sát lễ tân, mỗi buổi ≥ 3 câu hỏi mở về nhu cầu (không gợi giải pháp). <b>C.</b> Viết một câu hỏi làm rõ (mở) cho mỗi phát biểu mơ hồ.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>A. Phân loại đầu vào khách hàng.</li>\n  <li>B. Kế hoạch khai thác.</li>\n  <li>C. Câu hỏi làm rõ.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Tên nhóm đúng như danh sách.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>answers/\n├── a-input-types.js   ← const INPUT_TYPES = { T1: '…', … }\n├── b-plan.js          ← const ELICITATION_PLAN = [ { userClass, technique, objective, questions }, … ]\n└── c-follow-ups.js    ← const FOLLOW_UPS = { V1: '…?', … }</pre>\n<h2>3. Mô hình dữ liệu</h2>\n<p><b>Answer records</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>INPUT_TYPES.Tn</code></td><td>string</td><td>một trong chín nhóm</td></tr><tr><td><code>session</code></td><td>{ userClass, technique, objective, questions[] }</td><td>kỹ thuật theo Wiegers Ch.7</td></tr><tr><td><code>FOLLOW_UPS.Vn</code></td><td>string ending with \"?\"</td><td>câu hỏi mở</td></tr></tbody></table>\n<h2>4. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. A. Phân loại <span class=\"bi-diem\">4 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Mười hai câu.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">classifying customer input</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. B1. Độ phủ và kỹ thuật <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Đủ lớp người dùng; ≥ 3 kỹ thuật; quan sát.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">elicitation techniques</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. B2. Mục tiêu và câu hỏi <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Câu hỏi mở, hướng nhu cầu.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">planning elicitation</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. C. Câu hỏi làm rõ <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Hỏi con số / điều kiện còn thiếu.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">ambiguity</span></p>\n</div>\n<h2>5. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>INPUT_TYPES</code></td><td>answers/a-input-types.js</td></tr><tr><td><code>ELICITATION_PLAN</code></td><td>answers/b-plan.js</td></tr><tr><td><code>FOLLOW_UPS</code></td><td>answers/c-follow-ups.js</td></tr></tbody></table>\n<h2>6. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>A. Phân loại</td><td>4</td></tr><tr><td>2</td><td>B1. Độ phủ và kỹ thuật</td><td>2</td></tr><tr><td>3</td><td>B2. Mục tiêu và câu hỏi</td><td>2</td></tr><tr><td>4</td><td>C. Câu hỏi làm rõ</td><td>2</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Ghi ý tưởng drop-down của bác sĩ thành yêu cầu — phải tìm nhu cầu phía sau trước.</li>\n  <li>Câu hỏi kiểu \"Bạn có muốn app để đặt lịch không?\" — dẫn dắt và có/không.</li>\n</ul>\n<h2>7. Nộp bài</h2>\n<p>Viết câu trả lời vào các tệp trong <code>answers/</code> bên phải. Sơ đồ viết bằng chữ theo cú pháp của công cụ thật (Mermaid hoặc PlantUML — dán vào <a href=\"https://mermaid.live\" target=\"_blank\" rel=\"noopener\">mermaid.live</a> hoặc <a href=\"https://www.plantuml.com/plantuml\" target=\"_blank\" rel=\"noopener\">plantuml.com</a> để XEM hình); bảng là mảng JavaScript, mỗi object là một dòng của template trường. Bấm <b>Chạy thử</b> để chạy kiểm hiện, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn). Điểm từng câu hiện trong bảng thang điểm.</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "Category names exactly as listed.|||Tên nhóm đúng như danh sách.",
+      "examplesJson": [
+        {
+          "input": "answers/*.js — one object per row of the template",
+          "output": "Rubric table: marks per question (e.g. B. 2.5/3)",
+          "explanation": "Every rubric line is checked separately; hidden checks run on Submit.|||Mỗi dòng rubric được kiểm riêng; kiểm ẩn chạy khi Nộp."
+        }
+      ],
+      "hintsJson": [
+        "A: \"phải chạy trên Windows 10 sẵn có\" giới hạn lựa chọn ⇒ Constraint; \"gửi sang hệ thống quốc gia theo XML\" ⇒ External interface.",
+        "B: quan sát (observation) hợp với việc mà người làm khó tự mô tả (giờ cao điểm ở quầy).",
+        "C: hỏi \"bao nhiêu / bao lâu / khi nào / cái nào\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers/a-input-types.js",
+          "language": "javascript",
+          "code": "// A. One of: Business requirement | User requirement | Business rule | Functional requirement | Quality attribute | External interface requirement | Constraint | Data definition | Solution idea\nconst INPUT_TYPES = {\n  T1: '',\n  T2: '',\n  T3: '',\n  T4: '',\n  T5: '',\n  T6: '',\n  T7: '',\n  T8: '',\n  T9: '',\n  T10: '',\n  T11: '',\n  T12: '',\n};\n"
+        },
+        {
+          "name": "answers/b-plan.js",
+          "language": "javascript",
+          "code": "// B. Elicitation plan — one object per session.\nconst ELICITATION_PLAN = [\n  { userClass: '', technique: '', objective: '', questions: [] },\n];\n"
+        },
+        {
+          "name": "answers/c-follow-ups.js",
+          "language": "javascript",
+          "code": "// C. One open follow-up question per vague statement.\nconst FOLLOW_UPS = {\n  V1: '',\n  V2: '',\n  V3: '',\n  V4: '',\n};\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers/a-input-types.js",
+          "language": "javascript",
+          "code": "// A. Wiegers Ch.7 — classify what the customer said, then record it in the right place.\nconst INPUT_TYPES = {\n  T1: 'Business requirement',\n  T2: 'User requirement',\n  T3: 'Business rule',\n  T4: 'Functional requirement',\n  T5: 'Quality attribute',\n  T6: 'External interface requirement',\n  T7: 'Constraint',\n  T8: 'Data definition',\n  T9: 'Solution idea',\n  T10: 'Business rule',\n  T11: 'User requirement',\n  T12: 'User requirement',\n};\n"
+        },
+        {
+          "name": "answers/b-plan.js",
+          "language": "javascript",
+          "code": "// B. Five user classes, four techniques; open questions about needs, not solutions.\nconst ELICITATION_PLAN = [\n  {\n    \"userClass\": \"Receptionist\",\n    \"technique\": \"Observation\",\n    \"objective\": \"See how the morning phone rush, check-in and walk-ins are really handled today.\",\n    \"questions\": [\n      \"What do you do when two lines ring while a patient is at the desk?\",\n      \"How do you decide who gets a free slot when a patient does not come?\",\n      \"Which information do you look for most often during check-in?\"\n    ]\n  },\n  {\n    \"userClass\": \"Patient\",\n    \"technique\": \"Questionnaire\",\n    \"objective\": \"Learn how patients book today and what makes them miss appointments.\",\n    \"questions\": [\n      \"How do you usually book a visit today?\",\n      \"What made you miss an appointment in the past?\",\n      \"When would you like to be reminded before a visit?\"\n    ]\n  },\n  {\n    \"userClass\": \"Doctor\",\n    \"technique\": \"Interview\",\n    \"objective\": \"Understand how doctors plan their slots and write prescriptions.\",\n    \"questions\": [\n      \"How do you plan your working hours for a week?\",\n      \"What information do you need before a patient enters the room?\",\n      \"Which steps of writing a prescription take you the most time?\"\n    ]\n  },\n  {\n    \"userClass\": \"Pharmacist\",\n    \"technique\": \"Interview\",\n    \"objective\": \"Understand how prescriptions reach the pharmacy and are dispensed.\",\n    \"questions\": [\n      \"How do prescriptions reach you today?\",\n      \"What happens when a medicine is out of stock?\",\n      \"Which details of a prescription must you check before dispensing?\"\n    ]\n  },\n  {\n    \"userClass\": \"Clinic Manager\",\n    \"technique\": \"Document analysis\",\n    \"objective\": \"Study the current fee list and monthly reports to find the data the system must keep.\",\n    \"questions\": [\n      \"Which figures do you look at first in the monthly report?\",\n      \"How often do service fees change, and who approves the change?\",\n      \"What decisions do you make from the no-show numbers?\"\n    ]\n  }\n];\n"
+        },
+        {
+          "name": "answers/c-follow-ups.js",
+          "language": "javascript",
+          "code": "// C. Each question asks for the missing number or condition.\nconst FOLLOW_UPS = {\n  V1: 'How many steps or how many seconds would feel quick enough to book a visit on your phone?',\n  V2: 'How many hours before the appointment should the reminder arrive, and by which channel?',\n  V3: 'Which services need a deposit, and how much is it for each?',\n  V4: 'How many minutes late can a patient be before the slot is given away, and what happens to the fee?',\n};\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Classifying input tells you where it goes: business requirements into the vision document, user requirements into use cases or stories, business rules into the rules catalogue, functional and quality requirements into the SRS, solution ideas back into a conversation about the real need. Observation catches what interviews miss: receptionists juggling phones and a queue rarely describe their work accurately from memory.</p>",
+      "solutionExplanationHtmlVi": "<p>Phân loại cho biết thông tin đi về đâu: yêu cầu nghiệp vụ vào tài liệu tầm nhìn, yêu cầu người dùng vào use case/story, luật nghiệp vụ vào danh mục luật, yêu cầu chức năng và chất lượng vào SRS, ý tưởng giải pháp quay lại thành câu hỏi về nhu cầu thật. Quan sát bắt được điều phỏng vấn bỏ sót: lễ tân vừa nghe điện vừa xếp hàng hiếm khi tả lại chính xác công việc của mình.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "answers/a-input-types.js",
+          "answers/b-plan.js",
+          "answers/c-follow-ups.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A — category of T1",
+              "vi": "A — nhóm của T1"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (INPUT_TYPES[\"T1\"]); } catch (e) { return 'INPUT_TYPES[\"T1\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'INPUT_TYPES[\"T1\"] is empty';\n  var chap = [\"Business requirement\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — category of T2",
+              "vi": "A — nhóm của T2"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (INPUT_TYPES[\"T2\"]); } catch (e) { return 'INPUT_TYPES[\"T2\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'INPUT_TYPES[\"T2\"] is empty';\n  var chap = [\"User requirement\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet — a task the user needs to do — not yet a system behaviour';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — category of T3",
+              "vi": "A — nhóm của T3"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (INPUT_TYPES[\"T3\"]); } catch (e) { return 'INPUT_TYPES[\"T3\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'INPUT_TYPES[\"T3\"] is empty';\n  var chap = [\"Business rule\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — category of T4",
+              "vi": "A — nhóm của T4"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (INPUT_TYPES[\"T4\"]); } catch (e) { return 'INPUT_TYPES[\"T4\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'INPUT_TYPES[\"T4\"] is empty';\n  var chap = [\"Functional requirement\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — category of T5",
+              "vi": "A — nhóm của T5"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (INPUT_TYPES[\"T5\"]); } catch (e) { return 'INPUT_TYPES[\"T5\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'INPUT_TYPES[\"T5\"] is empty';\n  var chap = [\"Quality attribute\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — category of T6",
+              "vi": "A — nhóm của T6"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (INPUT_TYPES[\"T6\"]); } catch (e) { return 'INPUT_TYPES[\"T6\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'INPUT_TYPES[\"T6\"] is empty';\n  var chap = [\"External interface requirement\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet — it describes the connection to another system';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — category of T7",
+              "vi": "A — nhóm của T7"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (INPUT_TYPES[\"T7\"]); } catch (e) { return 'INPUT_TYPES[\"T7\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'INPUT_TYPES[\"T7\"] is empty';\n  var chap = [\"Constraint\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet — it limits the developers’ choices';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — category of T8",
+              "vi": "A — nhóm của T8"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (INPUT_TYPES[\"T8\"]); } catch (e) { return 'INPUT_TYPES[\"T8\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'INPUT_TYPES[\"T8\"] is empty';\n  var chap = [\"Data definition\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — category of T9",
+              "vi": "A — nhóm của T9"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (INPUT_TYPES[\"T9\"]); } catch (e) { return 'INPUT_TYPES[\"T9\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'INPUT_TYPES[\"T9\"] is empty';\n  var chap = [\"Solution idea\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet — the doctor proposes a design, the need behind it is still unknown';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — category of T10",
+              "vi": "A — nhóm của T10"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (INPUT_TYPES[\"T10\"]); } catch (e) { return 'INPUT_TYPES[\"T10\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'INPUT_TYPES[\"T10\"] is empty';\n  var chap = [\"Business rule\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "A — category of T11",
+              "vi": "A — nhóm của T11"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (INPUT_TYPES[\"T11\"]); } catch (e) { return 'INPUT_TYPES[\"T11\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'INPUT_TYPES[\"T11\"] is empty';\n  var chap = [\"User requirement\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "A — category of T12",
+              "vi": "A — nhóm của T12"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (INPUT_TYPES[\"T12\"]); } catch (e) { return 'INPUT_TYPES[\"T12\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'INPUT_TYPES[\"T12\"] is empty';\n  var chap = [\"User requirement\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "B — the plan covers all five user classes",
+              "vi": "B — kế hoạch phủ đủ năm lớp người dùng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof ELICITATION_PLAN==\"undefined\"||!Array.isArray(ELICITATION_PLAN))return\"ELICITATION_PLAN must be an array of sessions\";for(var e=[\"patient\",\"doctor\",\"reception\",\"pharmac\",\"manager\"],n=ELICITATION_PLAN.map(function(a){return String(a.userClass||\"\").toLowerCase()}).join(\" | \"),r=0;r<e.length;r++)if(n.indexOf(e[r])<0)return'no session for the user class \"'+e[r]+'\\u2026\"';return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — at least three different techniques, including observation of the reception desk",
+              "vi": "B — ít nhất ba kỹ thuật khác nhau, có quan sát quầy lễ tân"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof ELICITATION_PLAN==\"undefined\"||!Array.isArray(ELICITATION_PLAN))return\"ELICITATION_PLAN is missing\";for(var i=[\"interview\",\"workshop\",\"focus group\",\"observation\",\"questionnaire\",\"survey\",\"document analysis\",\"system interface analysis\",\"user interface analysis\",\"prototype\"],n={},e=0;e<ELICITATION_PLAN.length;e++){var s=String(ELICITATION_PLAN[e].technique||\"\").toLowerCase().trim(),r=i.filter(function(t){return s.indexOf(t)>=0})[0];if(!r)return\"session \"+(e+1)+': \"'+ELICITATION_PLAN[e].technique+'\" is not one of Wiegers\\u2019 elicitation techniques';n[r===\"survey\"?\"questionnaire\":r]=!0}if(Object.keys(n).length<3)return\"use at least three different techniques\";var o=ELICITATION_PLAN.some(function(t){return/observ/i.test(t.technique)&&/reception/i.test(t.userClass)});return o?\"OK\":\"observe the receptionists at work \\u2014 they cannot describe the phone rush accurately in an interview\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — each session has an objective and at least three questions",
+              "vi": "B — mỗi buổi có mục tiêu và ít nhất ba câu hỏi"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof ELICITATION_PLAN==\"undefined\"||!Array.isArray(ELICITATION_PLAN))return\"ELICITATION_PLAN is missing\";for(var r=0;r<ELICITATION_PLAN.length;r++){var e=ELICITATION_PLAN[r];if(String(e.objective||\"\").trim().split(/\\s+/).length<4)return\"session \"+(r+1)+\": write its objective\";if(!Array.isArray(e.questions)||e.questions.length<3)return\"session \"+(r+1)+\": at least 3 questions\"}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "B — questions are open-ended and do not push a solution",
+              "vi": "B — câu hỏi mở, không gợi sẵn giải pháp"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof ELICITATION_PLAN==\"undefined\"||!Array.isArray(ELICITATION_PLAN))return\"ELICITATION_PLAN is missing\";for(var e=0;e<ELICITATION_PLAN.length;e++)for(var n=ELICITATION_PLAN[e].questions||[],s=0;s<n.length;s++){var t=String(n[s]).trim();if(!/\\?$/.test(t))return\"session \"+(e+1)+\", question \"+(s+1)+': end with \"?\"';if(/^(do|does|did|is|are|was|were|can|could|will|would|should|have|has)\\b/i.test(t))return\"session \"+(e+1)+': \"'+t.slice(0,50)+'\\u2026\" is a yes/no question \\u2014 ask \"what / how / when / tell me about\\u2026\"';if(/\\b(app|button|drop-?down|screen|database|website)\\b/i.test(t)&&/\\b(want|like|prefer|need)\\b/i.test(t))return\"session \"+(e+1)+': \"'+t.slice(0,50)+'\\u2026\" proposes a solution \\u2014 ask about the need'}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — follow-up question for V1: \"Patients want to book quickly.\"",
+              "vi": "C — câu hỏi làm rõ cho V1: \"Patients want to book quickly.\""
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof FOLLOW_UPS==\"undefined\"||!FOLLOW_UPS)return\"FOLLOW_UPS is missing\";var n=String(FOLLOW_UPS.V1||\"\").trim();return!/\\?$/.test(n)||n.split(/\\s+/).length<5?'write a full question ending with \"?\"':/^(do|does|is|are|can|will|would|should)\\b/i.test(n)?\"make it open (what / how many / how long / when / which), not yes/no\":new RegExp(\"how long|how many|minutes|seconds|steps|taps|clicks\",\"i\").test(n)?\"OK\":\"ask for the missing number or condition (e.g. how many, how long, when, which)\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "C — follow-up question for V2: \"Reminders should be sent in good time.\"",
+              "vi": "C — câu hỏi làm rõ cho V2: \"Reminders should be sent in good time.\""
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof FOLLOW_UPS==\"undefined\"||!FOLLOW_UPS)return\"FOLLOW_UPS is missing\";var n=String(FOLLOW_UPS.V2||\"\").trim();return!/\\?$/.test(n)||n.split(/\\s+/).length<5?'write a full question ending with \"?\"':/^(do|does|is|are|can|will|would|should)\\b/i.test(n)?\"make it open (what / how many / how long / when / which), not yes/no\":new RegExp(\"when|how many hours|how long before|hours\",\"i\").test(n)?\"OK\":\"ask for the missing number or condition (e.g. how many, how long, when, which)\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "C — follow-up question for V3: \"Some services need a deposit.\"",
+              "vi": "C — câu hỏi làm rõ cho V3: \"Some services need a deposit.\""
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof FOLLOW_UPS==\"undefined\"||!FOLLOW_UPS)return\"FOLLOW_UPS is missing\";var n=String(FOLLOW_UPS.V3||\"\").trim();return!/\\?$/.test(n)||n.split(/\\s+/).length<5?'write a full question ending with \"?\"':/^(do|does|is|are|can|will|would|should)\\b/i.test(n)?\"make it open (what / how many / how long / when / which), not yes/no\":new RegExp(\"which|what services|how much|amount\",\"i\").test(n)?\"OK\":\"ask for the missing number or condition (e.g. how many, how long, when, which)\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "C — follow-up question for V4: \"Late patients may lose their slot.\"",
+              "vi": "C — câu hỏi làm rõ cho V4: \"Late patients may lose their slot.\""
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof FOLLOW_UPS==\"undefined\"||!FOLLOW_UPS)return\"FOLLOW_UPS is missing\";var n=String(FOLLOW_UPS.V4||\"\").trim();return!/\\?$/.test(n)||n.split(/\\s+/).length<5?'write a full question ending with \"?\"':/^(do|does|is|are|can|will|would|should)\\b/i.test(n)?\"make it open (what / how many / how long / when / which), not yes/no\":new RegExp(\"how late|how many minutes|minutes|what happens\",\"i\").test(n)?\"OK\":\"ask for the missing number or condition (e.g. how many, how long, when, which)\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4",
+            "an": true
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. A. Classification",
+            "diem": 4
+          },
+          {
+            "ma": "f2",
+            "ten": "2. B1. Coverage and techniques",
+            "diem": 2
+          },
+          {
+            "ma": "f3",
+            "ten": "3. B2. Objectives and questions",
+            "diem": 2
+          },
+          {
+            "ma": "f4",
+            "ten": "4. C. Follow-up questions",
+            "diem": 2
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "project",
+      "mistakesJson": [
+        {
+          "loi": "Xếp T2 vào Functional requirement — đó là nhu cầu của người dùng, chưa phải hành vi hệ thống."
+        },
+        {
+          "loi": "Chỉ dùng phỏng vấn cho mọi lớp người dùng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "elicitation",
+          "vi": "khai thác yêu cầu — khám phá nhu cầu từ bên liên quan"
+        },
+        {
+          "en": "user class",
+          "vi": "lớp người dùng — nhóm người dùng có cách dùng/nhu cầu giống nhau"
+        },
+        {
+          "en": "business rule",
+          "vi": "quy tắc nghiệp vụ — chính sách, luật, chuẩn, công thức tồn tại NGOÀI phần mềm"
+        },
+        {
+          "en": "design / implementation constraint",
+          "vi": "ràng buộc thiết kế/hiện thực — giới hạn lựa chọn của đội phát triển (ngôn ngữ, nền tảng, chuẩn)"
+        },
+        {
+          "en": "external interface requirement",
+          "vi": "yêu cầu giao diện ngoài — giữa hệ thống với người dùng, phần cứng, hệ thống khác"
+        },
+        {
+          "en": "quality attribute",
+          "vi": "thuộc tính chất lượng — các \"-ility\": performance, usability, security, availability…"
+        }
+      ]
+    },
+    {
+      "title": "Interview corner — elicitation",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "elicitation techniques",
+        "classifying customer input"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p><b>Interview corner.</b> Questions that interviewers for business analyst, junior software engineer and QA positions really ask about this part of the project. Choose the answer a strong candidate would give; read the explanation — it is what you would say out loud.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Góc phỏng vấn.</b> Câu hỏi nhà tuyển dụng BA, kỹ sư phần mềm junior và QA thật sự hỏi về phần này của dự án. Chọn câu trả lời của một ứng viên giỏi; đọc phần giải thích — đó là điều bạn sẽ nói thành lời.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Câu trả lời tốt gắn với tình huống cụ thể của dự án, không đọc định nghĩa suông.",
+        "Nhà tuyển dụng muốn nghe lý do (vì sao), không chỉ cái gì."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Interview corner — elicitation\n\nAnswer in the answer panel (no code needed).\n\n1. \"A user tells you exactly which screen layout she wants. What do you do?\"\"Người dùng nói chính xác cô ấy muốn bố cục màn hình nào. Bạn làm gì?\"\n2. \"When would you choose observation over an interview?\"\"Khi nào bạn chọn quan sát thay vì phỏng vấn?\"\n3. \"How do you know you are done eliciting?\"\"Làm sao biết đã khai thác xong?\"\n4. \"Give an example of a bad elicitation question.\"\"Cho ví dụ một câu hỏi khai thác tồi.\"\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Interview corner — elicitation — answer key\n\n1. \"A user tells you exactly which screen layout she wants. What do you do?\"\"Người dùng nói chính xác cô ấy muốn bố cục màn hình nào. Bạn làm gì?\"\n   Answer: c) \"I note it as a solution idea and ask why — what she is trying to achieve — then record the underlying need; the layout may still be a good design input.\"\n   Find the need behind the solution.VI: Tìm nhu cầu phía sau giải pháp.\n\n2. \"When would you choose observation over an interview?\"\"Khi nào bạn chọn quan sát thay vì phỏng vấn?\"\n   Answer: c) \"When the work is routine or fast and people cannot describe it well — like ClinicCare’s receptionists handling phones and a queue at the same time.\"\n   Observation reveals tacit, routine work.VI: Quan sát lộ ra việc thường ngày, khó diễn đạt.\n\n3. \"How do you know you are done eliciting?\"\"Làm sao biết đã khai thác xong?\"\n   Answer: a) \"You never know for sure, but there are signs: users cannot think of new use cases, new input repeats earlier topics, every user class was heard, and open questions are closed.\"\n   Wiegers Ch.7 \"knowing when you’re done\".VI: Wiegers Ch.7.\n\n4. \"Give an example of a bad elicitation question.\"\"Cho ví dụ một câu hỏi khai thác tồi.\"\n   Answer: c) \"‘You want online booking, right?’ — it is leading and yes/no. Better: ‘Tell me how a patient books a visit today.’\"\n   Leading, closed questions bias the answer.VI: Câu hỏi dẫn dắt, đóng làm lệch câu trả lời.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: c · c · a · c.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>\"A user tells you exactly which screen layout she wants. What do you do?\"</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Người dùng nói chính xác cô ấy muốn bố cục màn hình nào. Bạn làm gì?\"</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "\"I ignore it.\""
+              },
+              {
+                "ma": "b",
+                "noiDung": "\"I ask the developers to build it straight away.\""
+              },
+              {
+                "ma": "c",
+                "noiDung": "\"I note it as a solution idea and ask why — what she is trying to achieve — then record the underlying need; the layout may still be a good design input.\""
+              },
+              {
+                "ma": "d",
+                "noiDung": "\"I write it into the SRS as a requirement.\""
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Find the need behind the solution.</p><p><i>VI: Tìm nhu cầu phía sau giải pháp.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>\"When would you choose observation over an interview?\"</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Khi nào bạn chọn quan sát thay vì phỏng vấn?\"</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "\"Never, interviews are always better.\""
+              },
+              {
+                "ma": "b",
+                "noiDung": "\"Only for managers.\""
+              },
+              {
+                "ma": "c",
+                "noiDung": "\"When the work is routine or fast and people cannot describe it well — like ClinicCare’s receptionists handling phones and a queue at the same time.\""
+              },
+              {
+                "ma": "d",
+                "noiDung": "\"Only when the user refuses to talk.\""
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Observation reveals tacit, routine work.</p><p><i>VI: Quan sát lộ ra việc thường ngày, khó diễn đạt.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>\"How do you know you are done eliciting?\"</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Làm sao biết đã khai thác xong?\"</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "\"You never know for sure, but there are signs: users cannot think of new use cases, new input repeats earlier topics, every user class was heard, and open questions are closed.\""
+              },
+              {
+                "ma": "b",
+                "noiDung": "\"When the SRS reaches 50 pages.\""
+              },
+              {
+                "ma": "c",
+                "noiDung": "\"When the deadline arrives.\""
+              },
+              {
+                "ma": "d",
+                "noiDung": "\"After the first interview.\""
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Wiegers Ch.7 \"knowing when you’re done\".</p><p><i>VI: Wiegers Ch.7.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>\"Give an example of a bad elicitation question.\"</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Cho ví dụ một câu hỏi khai thác tồi.\"</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "\"‘What happens when a patient is late?’\""
+              },
+              {
+                "ma": "b",
+                "noiDung": "\"‘Which report do you read first?’\""
+              },
+              {
+                "ma": "c",
+                "noiDung": "\"‘You want online booking, right?’ — it is leading and yes/no. Better: ‘Tell me how a patient books a visit today.’\""
+              },
+              {
+                "ma": "d",
+                "noiDung": "\"‘How many calls do you get in the morning?’\""
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Leading, closed questions bias the answer.</p><p><i>VI: Câu hỏi dẫn dắt, đóng làm lệch câu trả lời.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Trả lời bằng định nghĩa thuộc lòng, không ví dụ."
+        },
+        {
+          "loi": "Chọn đáp án nghe \"kỹ thuật\" nhất thay vì đáp án đúng nghiệp vụ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "elicitation",
+          "vi": "khai thác yêu cầu — khám phá nhu cầu từ bên liên quan"
+        },
+        {
+          "en": "user class",
+          "vi": "lớp người dùng — nhóm người dùng có cách dùng/nhu cầu giống nhau"
+        }
+      ]
+    }
+  ]
+}

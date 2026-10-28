@@ -1,0 +1,629 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-1-5-ch1-process",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-1-5-ch1-process"
+  },
+  "exercises": [
+    {
+      "title": "RE process 1 — development vs management",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "requirements development",
+        "requirements management"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Requirements engineering has two halves. <b>Requirements development</b> discovers and writes the requirements: elicitation, analysis, specification, validation. <b>Requirements management</b> controls them once they are baselined: versions, changes, status, traceability.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Kỹ nghệ yêu cầu có hai nửa. <b>Phát triển yêu cầu</b> khám phá và viết yêu cầu: khai thác, phân tích, đặc tả, thẩm định. <b>Quản lý yêu cầu</b> kiểm soát chúng sau khi baseline: phiên bản, thay đổi, trạng thái, truy vết.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Phát triển TẠO ra yêu cầu; quản lý KIỂM SOÁT chúng theo thời gian.",
+        "Bốn hoạt động phát triển lặp đi lặp lại, không phải thác nước."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# RE process 1 — development vs management\n\nAnswer in the answer panel (no code needed).\n\n1. Which activity belongs to requirements MANAGEMENT?Hoạt động nào thuộc QUẢN LÝ yêu cầu?\n2. The four activities of requirements DEVELOPMENT are…Bốn hoạt động của PHÁT TRIỂN yêu cầu là…\n3. Are the development activities done once, in strict order?Các hoạt động phát triển có làm một lần, đúng thứ tự cứng không?\n4. \"Confirm that you have the correct set of requirements before development accepts them\" describes…\"Xác nhận bộ yêu cầu là đúng trước khi đội phát triển nhận\" mô tả…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# RE process 1 — development vs management — answer key\n\n1. Which activity belongs to requirements MANAGEMENT?Hoạt động nào thuộc QUẢN LÝ yêu cầu?\n   Answer: c) Evaluating a change request against the baseline\n   Change control starts after a baseline exists.VI: Kiểm soát thay đổi bắt đầu khi đã có baseline.\n\n2. The four activities of requirements DEVELOPMENT are…Bốn hoạt động của PHÁT TRIỂN yêu cầu là…\n   Answer: a) elicitation, analysis, specification, validation\n   These four are the backbone of the course.VI: Bốn hoạt động này là xương sống của môn.\n\n3. Are the development activities done once, in strict order?Các hoạt động phát triển có làm một lần, đúng thứ tự cứng không?\n   Answer: b) No — they are iterative and incremental; you go back and forth as understanding grows\n   Wiegers stresses iteration: analysis raises new questions for elicitation, validation finds gaps, and so on.VI: Wiegers nhấn mạnh tính lặp: phân tích sinh câu hỏi mới cho khai thác, thẩm định tìm ra chỗ thiếu…\n\n4. \"Confirm that you have the correct set of requirements before development accepts them\" describes…\"Xác nhận bộ yêu cầu là đúng trước khi đội phát triển nhận\" mô tả…\n   Answer: b) validation\n   Validation: reviews, prototypes, acceptance criteria.VI: Thẩm định: review, prototype, tiêu chí chấp nhận.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: c · a · b · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which activity belongs to requirements MANAGEMENT?</p><p style=\"opacity:.75;font-size:.92em\"><i>Hoạt động nào thuộc QUẢN LÝ yêu cầu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Interviewing users"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Drawing a context diagram"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Evaluating a change request against the baseline"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Writing the SRS"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Change control starts after a baseline exists.</p><p><i>VI: Kiểm soát thay đổi bắt đầu khi đã có baseline.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>The four activities of requirements DEVELOPMENT are…</p><p style=\"opacity:.75;font-size:.92em\"><i>Bốn hoạt động của PHÁT TRIỂN yêu cầu là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "elicitation, analysis, specification, validation"
+              },
+              {
+                "ma": "b",
+                "noiDung": "planning, coding, testing, deployment"
+              },
+              {
+                "ma": "c",
+                "noiDung": "baseline, change control, tracing, status"
+              },
+              {
+                "ma": "d",
+                "noiDung": "interview, workshop, prototype, survey"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>These four are the backbone of the course.</p><p><i>VI: Bốn hoạt động này là xương sống của môn.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Are the development activities done once, in strict order?</p><p style=\"opacity:.75;font-size:.92em\"><i>Các hoạt động phát triển có làm một lần, đúng thứ tự cứng không?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Yes — elicit everything, then analyse, then write, then validate"
+              },
+              {
+                "ma": "b",
+                "noiDung": "No — they are iterative and incremental; you go back and forth as understanding grows"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only on agile projects"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only validation is repeated"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Wiegers stresses iteration: analysis raises new questions for elicitation, validation finds gaps, and so on.</p><p><i>VI: Wiegers nhấn mạnh tính lặp: phân tích sinh câu hỏi mới cho khai thác, thẩm định tìm ra chỗ thiếu…</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>\"Confirm that you have the correct set of requirements before development accepts them\" describes…</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Xác nhận bộ yêu cầu là đúng trước khi đội phát triển nhận\" mô tả…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "specification"
+              },
+              {
+                "ma": "b",
+                "noiDung": "validation"
+              },
+              {
+                "ma": "c",
+                "noiDung": "elicitation"
+              },
+              {
+                "ma": "d",
+                "noiDung": "management"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Validation: reviews, prototypes, acceptance criteria.</p><p><i>VI: Thẩm định: review, prototype, tiêu chí chấp nhận.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Coi vẽ mô hình là \"quản lý yêu cầu\" — đó là phân tích."
+        },
+        {
+          "loi": "Cho rằng phải khai thác xong 100% rồi mới phân tích."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "elicitation",
+          "vi": "khai thác yêu cầu — khám phá nhu cầu từ bên liên quan"
+        },
+        {
+          "en": "analysis",
+          "vi": "phân tích yêu cầu — làm rõ, mô hình hoá, phát hiện thiếu/xung đột"
+        },
+        {
+          "en": "specification",
+          "vi": "đặc tả — ghi yêu cầu ra tài liệu có cấu trúc (SRS)"
+        },
+        {
+          "en": "validation",
+          "vi": "thẩm định — xác nhận đúng THỨ cần làm (đúng nhu cầu)"
+        },
+        {
+          "en": "baseline",
+          "vi": "đường cơ sở — bộ yêu cầu đã thống nhất, từ đó mọi thay đổi phải qua kiểm soát"
+        }
+      ]
+    },
+    {
+      "title": "RE process 3 — one pass through the activities",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 4,
+      "points": 10,
+      "concepts": [
+        "RE process"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Even though the activities iterate, one pass for a single feature goes in a natural order. Order the steps for the feature \"quiz reminders\".</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dù các hoạt động lặp lại, một lượt cho một tính năng vẫn có thứ tự tự nhiên. Sắp các bước cho tính năng \"nhắc làm quiz\".</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Bắt đầu từ việc HỎI người dùng.",
+        "Quản lý bắt đầu khi đã có baseline."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# RE process 3 — one pass through the activities\n\nAnswer in the answer panel (no code needed).\n\n1. Order the stepsSắp thứ tự\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# RE process 3 — one pass through the activities — answer key\n\n1. Order the stepsSắp thứ tự\n   Answer: a) Ask students and lecturers how they keep track of quizzes (elicitation)  →  b) Model when a reminder is needed and resolve conflicts (analysis)  →  c) Write the reminder requirements in the SRS (specification)  →  d) Review them with lecturers and write acceptance criteria (validation)  →  e) Baseline them and handle later change requests (management)\n   Elicit → analyse → specify → validate → manage.VI: Khai thác → phân tích → đặc tả → thẩm định → quản lý.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Elicitation → analysis → specification → validation → management.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Order the steps</p><p style=\"opacity:.75;font-size:.92em\"><i>Sắp thứ tự</i></p>",
+            "muc": [
+              {
+                "ma": "d",
+                "noiDung": "Review them with lecturers and write acceptance criteria (validation)"
+              },
+              {
+                "ma": "a",
+                "noiDung": "Ask students and lecturers how they keep track of quizzes (elicitation)"
+              },
+              {
+                "ma": "e",
+                "noiDung": "Baseline them and handle later change requests (management)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Write the reminder requirements in the SRS (specification)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Model when a reminder is needed and resolve conflicts (analysis)"
+              }
+            ],
+            "dapAn": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e"
+            ],
+            "giaiThich": "<p>Elicit → analyse → specify → validate → manage.</p><p><i>VI: Khai thác → phân tích → đặc tả → thẩm định → quản lý.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết SRS trước khi hỏi người dùng."
+        },
+        {
+          "loi": "Đặt validation sau baseline."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "baseline",
+          "vi": "đường cơ sở — bộ yêu cầu đã thống nhất, từ đó mọi thay đổi phải qua kiểm soát"
+        }
+      ]
+    },
+    {
+      "title": "RE process 4 — development or management?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "requirements development vs management"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Decide for each task of the e-learning team whether it is requirements <b>development</b> (creating the requirements) or requirements <b>management</b> (controlling them after the baseline).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi việc của đội e-learning, xác định là <b>phát triển</b> yêu cầu (tạo ra yêu cầu) hay <b>quản lý</b> yêu cầu (kiểm soát sau baseline).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Tạo ra / làm rõ yêu cầu ⇒ development.",
+        "Phiên bản, thay đổi, trạng thái, truy vết ⇒ management."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# RE process 4 — development or management?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# RE process 4 — development or management? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Development\n   - r1.k: Management\n   - r2.k: Development\n   - r3.k: Management\n   - r4.k: Development\n   - r5.k: Management\n   - r6.k: Management\n   - r7.k: Development\n   Eliciting, modelling, writing and validating create requirements (development); versioning, change decisions, status tracking and traceability control them (management).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Eliciting, modelling, writing and validating create requirements (development); versioning, change decisions, status tracking and traceability control them (management).</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Half",
+                "luaChon": [
+                  "Development",
+                  "Management"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Run a focus group with first-year students."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Define the version numbering scheme of the SRS."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Draw a data flow diagram of the grading process."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Decide with the CCB whether to accept a requested change."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Write acceptance criteria for the quiz feature."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Report how many requirements are implemented and verified."
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "Trace each requirement to its design elements and tests."
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "s": "Write the external interface requirements in the SRS."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Development",
+              "r1.k": "Management",
+              "r2.k": "Development",
+              "r3.k": "Management",
+              "r4.k": "Development",
+              "r5.k": "Management",
+              "r6.k": "Management",
+              "r7.k": "Development"
+            },
+            "giaiThich": "<p><p>Eliciting, modelling, writing and validating create requirements (development); versioning, change decisions, status tracking and traceability control them (management).</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Coi viết tiêu chí chấp nhận là management."
+        },
+        {
+          "loi": "Coi truy vết là việc của tester, không phải quản lý yêu cầu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "baseline",
+          "vi": "đường cơ sở — bộ yêu cầu đã thống nhất, từ đó mọi thay đổi phải qua kiểm soát"
+        },
+        {
+          "en": "change control board (CCB)",
+          "vi": "hội đồng kiểm soát thay đổi — người quyết định chấp nhận/từ chối thay đổi"
+        },
+        {
+          "en": "requirements traceability matrix (RTM)",
+          "vi": "ma trận truy vết yêu cầu — nối nguồn ↔ yêu cầu ↔ thiết kế ↔ mã ↔ test"
+        }
+      ]
+    },
+    {
+      "title": "RE process 2 — which activity is this?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "RE activities"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Tasks from the plan of a team building an e-learning portal. Name the requirements activity of each (Wiegers slides 18–20 list the typical tasks of each activity).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các việc trong kế hoạch của một đội xây cổng e-learning. Gọi tên hoạt động yêu cầu của từng việc (slide 18–20 liệt kê việc điển hình của mỗi hoạt động).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Tìm hiểu ai/ở đâu/cần gì ⇒ elicitation. Làm rõ, phân rã, thương lượng, tìm chỗ thiếu ⇒ analysis.",
+        "Test chấp nhận được xây trong VALIDATION để xác nhận yêu cầu đúng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# RE process 2 — which activity is this?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# RE process 2 — which activity is this? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Elicitation\n   - r1.k: Elicitation\n   - r2.k: Analysis\n   - r3.k: Analysis\n   - r4.k: Specification\n   - r5.k: Validation\n   - r6.k: Validation\n   - r7.k: Management\n   - r8.k: Analysis\n   Elicitation finds the sources and needs; analysis refines, decomposes, models, negotiates and finds gaps; specification writes; validation confirms (reviews, acceptance tests); management tracks status and change.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Elicitation finds the sources and needs; analysis refines, decomposes, models, negotiates and finds gaps; specification writes; validation confirms (reviews, acceptance tests); management tracks status and change.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Activity",
+                "luaChon": [
+                  "Elicitation",
+                  "Analysis",
+                  "Specification",
+                  "Validation",
+                  "Management"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Identify the user classes and the other stakeholders. — <i>Xác định lớp người dùng và các bên liên quan khác.</i>"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Learn about the environment in which the product will be used. — <i>Tìm hiểu môi trường sản phẩm sẽ được dùng.</i>"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Decompose high-level requirements into an appropriate level of detail. — <i>Phân rã yêu cầu cấp cao xuống mức chi tiết phù hợp.</i>"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Negotiate implementation priorities between stakeholders. — <i>Thương lượng ưu tiên hiện thực giữa các bên.</i>"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Translate the collected needs into written requirements and diagrams for each audience. — <i>Chuyển nhu cầu thu được thành yêu cầu viết và sơ đồ cho từng đối tượng đọc.</i>"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Review the documented requirements to fix problems before the developers accept them. — <i>Review yêu cầu đã viết để sửa lỗi trước khi dev nhận.</i>"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "Develop acceptance tests from the requirements. — <i>Xây test chấp nhận từ yêu cầu.</i>"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "s": "Record the status of each requirement and its history of changes. — <i>Ghi trạng thái từng yêu cầu và lịch sử thay đổi.</i>"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "s": "Identify gaps and unnecessary requirements by comparing them with the scope. — <i>Tìm chỗ thiếu và yêu cầu thừa bằng cách so với phạm vi.</i>"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Elicitation",
+              "r1.k": "Elicitation",
+              "r2.k": "Analysis",
+              "r3.k": "Analysis",
+              "r4.k": "Specification",
+              "r5.k": "Validation",
+              "r6.k": "Validation",
+              "r7.k": "Management",
+              "r8.k": "Analysis"
+            },
+            "giaiThich": "<p><p>Elicitation finds the sources and needs; analysis refines, decomposes, models, negotiates and finds gaps; specification writes; validation confirms (reviews, acceptance tests); management tracks status and change.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Xếp \"thương lượng ưu tiên\" vào management — trong Wiegers nó thuộc analysis."
+        },
+        {
+          "loi": "Xếp \"phát triển test chấp nhận\" vào testing — ở đây nó là validation."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "elicitation",
+          "vi": "khai thác yêu cầu — khám phá nhu cầu từ bên liên quan"
+        },
+        {
+          "en": "analysis",
+          "vi": "phân tích yêu cầu — làm rõ, mô hình hoá, phát hiện thiếu/xung đột"
+        },
+        {
+          "en": "specification",
+          "vi": "đặc tả — ghi yêu cầu ra tài liệu có cấu trúc (SRS)"
+        },
+        {
+          "en": "validation",
+          "vi": "thẩm định — xác nhận đúng THỨ cần làm (đúng nhu cầu)"
+        }
+      ]
+    }
+  ]
+}

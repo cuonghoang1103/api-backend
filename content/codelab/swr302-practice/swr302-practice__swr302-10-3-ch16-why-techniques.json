@@ -1,0 +1,565 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-10-3-ch16-why-techniques",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-10-3-ch16-why-techniques"
+  },
+  "exercises": [
+    {
+      "title": "Prioritisation 1 — why and when",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "why prioritise"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Prioritisation (requirements triage) reveals competing goals, resolves conflicts, plans staged deliveries, controls scope creep and supports trade-off decisions. Establish priorities <b>early</b>, when you have the most flexibility, and <b>revisit them periodically</b>. Davis’ pragmatics: customers’ needs, relative importance, timing, predecessors, requirements that must be implemented as a group, and cost.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ưu tiên giúp lộ mục tiêu cạnh tranh, giải xung đột, lập kế hoạch giao từng phần, kiểm soát phình phạm vi. Đặt sớm và xem lại định kỳ. Davis: nhu cầu, tầm quan trọng tương đối, thời điểm, yêu cầu tiên quyết, nhóm phải làm cùng, chi phí.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Sớm và xem lại định kỳ.",
+        "Ưu tiên ≠ chỉ tầm quan trọng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Prioritisation 1 — why and when\n\nAnswer in the answer panel (no code needed).\n\n1. When should priorities be set?Khi nào đặt ưu tiên?\n2. FR-8 \"Export to PDF\" cannot work before FR-3 \"Generate report\". Which pragmatic issue is this?FR-8 \"Xuất PDF\" không thể chạy trước FR-3 \"Tạo báo cáo\". Đây là vấn đề nào?\n3. Is priority the same as importance?Ưu tiên có giống tầm quan trọng không?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Prioritisation 1 — why and when — answer key\n\n1. When should priorities be set?Khi nào đặt ưu tiên?\n   Answer: a) Early, and revisited periodically as the project and business change\n   Early = most flexibility.VI: Sớm = linh hoạt nhất.\n\n2. FR-8 \"Export to PDF\" cannot work before FR-3 \"Generate report\". Which pragmatic issue is this?FR-8 \"Xuất PDF\" không thể chạy trước FR-3 \"Tạo báo cáo\". Đây là vấn đề nào?\n   Answer: a) Predecessors (dependencies)\n   A predecessor must come first.VI: Yêu cầu tiên quyết phải đi trước.\n\n3. Is priority the same as importance?Ưu tiên có giống tầm quan trọng không?\n   Answer: a) No — importance is weighed against timing, dependencies and cost\n   Priority is a trade-off.VI: Ưu tiên là một sự đánh đổi.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · a · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>When should priorities be set?</p><p style=\"opacity:.75;font-size:.92em\"><i>Khi nào đặt ưu tiên?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Early, and revisited periodically as the project and business change"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Once, at the end of analysis"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only when late"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Never"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Early = most flexibility.</p><p><i>VI: Sớm = linh hoạt nhất.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>FR-8 \"Export to PDF\" cannot work before FR-3 \"Generate report\". Which pragmatic issue is this?</p><p style=\"opacity:.75;font-size:.92em\"><i>FR-8 \"Xuất PDF\" không thể chạy trước FR-3 \"Tạo báo cáo\". Đây là vấn đề nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Predecessors (dependencies)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Cost"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Customer needs"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Timing only"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>A predecessor must come first.</p><p><i>VI: Yêu cầu tiên quyết phải đi trước.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Is priority the same as importance?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ưu tiên có giống tầm quan trọng không?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "No — importance is weighed against timing, dependencies and cost"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Yes"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only in agile"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only for NFRs"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Priority is a trade-off.</p><p><i>VI: Ưu tiên là một sự đánh đổi.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt ưu tiên một lần rồi khoá."
+        },
+        {
+          "loi": "Bỏ qua phụ thuộc giữa các yêu cầu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "MoSCoW",
+          "vi": "Must / Should / Could / Won’t (this time) — thang ưu tiên"
+        },
+        {
+          "en": "scope creep (creeping requirements)",
+          "vi": "phạm vi phình dần ngoài kiểm soát"
+        }
+      ]
+    },
+    {
+      "title": "Prioritisation 2 — games and the questions that expose them",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "games people play with priorities"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Avoid <b>decibel prioritisation</b> (the loudest voice wins) and <b>threat prioritisation</b> (whoever holds the most political power wins). Wiegers’ questions to get stakeholders to admit lower priorities: Is there another way to satisfy the need? What are the consequences of omitting or deferring it? What is the effect on the business objectives if it waits several months? Is it worth delaying the release of everything else? Classify each situation or question.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tránh <b>ưu tiên theo âm lượng</b> và <b>ưu tiên theo đe doạ/quyền lực</b>. Các câu hỏi để bên liên quan thừa nhận mức ưu tiên thấp hơn.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ai to tiếng nhất ⇒ decibel.",
+        "Dựa vào quyền lực/đe doạ ⇒ threat."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Prioritisation 2 — games and the questions that expose them\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Prioritisation 2 — games and the questions that expose them — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Decibel prioritisation\n   - r1.k: Threat prioritisation\n   - r2.k: Good probing question\n   - r3.k: Good probing question\n   - r4.k: Threat prioritisation\n   - r5.k: Good probing question\n   Both games replace analysis with pressure; the probing questions bring back the real trade-offs.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Both games replace analysis with pressure; the probing questions bring back the real trade-offs.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Kind",
+                "luaChon": [
+                  "Decibel prioritisation",
+                  "Threat prioritisation",
+                  "Good probing question"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "The marketing lead shouts the longest in the meeting, so her feature goes first."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "\"If my report is not High, I’ll ask the CEO to stop funding the project.\""
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "\"Is there another way to meet this need for the first release?\""
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "\"What happens to the business objectives if this waits three months?\""
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "The director’s request is always marked Must because he signs the budget."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "\"Is this feature worth delaying all the other features at this priority?\""
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Decibel prioritisation",
+              "r1.k": "Threat prioritisation",
+              "r2.k": "Good probing question",
+              "r3.k": "Good probing question",
+              "r4.k": "Threat prioritisation",
+              "r5.k": "Good probing question"
+            },
+            "giaiThich": "<p><p>Both games replace analysis with pressure; the probing questions bring back the real trade-offs.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Coi ưu tiên của giám đốc là đương nhiên đúng."
+        },
+        {
+          "loi": "Nhầm hai loại \"trò chơi\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "MoSCoW",
+          "vi": "Must / Should / Could / Won’t (this time) — thang ưu tiên"
+        }
+      ]
+    },
+    {
+      "title": "Prioritisation 4 — in or out for release 1",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "in or out"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>The simplest technique: stakeholders go down the list and decide <b>in</b> or <b>out</b> for the first release, constantly referring to the business objectives, paring the list to the bare minimum. Business objective of ClinicCare release 1: \"<i>Let patients book and cancel appointments online to cut phone calls to reception by 40% within 6 months.</i>\"</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Kỹ thuật đơn giản nhất: quyết <b>vào</b> hay <b>ra</b> cho bản đầu, luôn bám mục tiêu nghiệp vụ, rút tới mức tối thiểu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Mỗi mục: có trực tiếp phục vụ mục tiêu bản 1 không?",
+        "Bác sĩ phải công bố lịch thì bệnh nhân mới đặt được."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Prioritisation 4 — in or out for release 1\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Prioritisation 4 — in or out for release 1 — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: In\n   - r1.k: In\n   - r2.k: In\n   - r3.k: Out\n   - r4.k: Out\n   - r5.k: In\n   - r6.k: Out\n   Only what directly serves \"book and cancel online, fewer calls\" stays in; everything else is revisited for the next release.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Only what directly serves \"book and cancel online, fewer calls\" stays in; everything else is revisited for the next release.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Release 1",
+                "luaChon": [
+                  "In",
+                  "Out"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Patients book an appointment online."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Patients cancel an appointment online."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "SMS confirmation of a booking."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Video consultation."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Loyalty points for regular patients."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Doctors publish their available slots."
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "AI symptom checker."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "In",
+              "r1.k": "In",
+              "r2.k": "In",
+              "r3.k": "Out",
+              "r4.k": "Out",
+              "r5.k": "In",
+              "r6.k": "Out"
+            },
+            "giaiThich": "<p><p>Only what directly serves \"book and cancel online, fewer calls\" stays in; everything else is revisited for the next release.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Giữ tính năng \"hay\" nhưng không phục vụ mục tiêu."
+        },
+        {
+          "loi": "Bỏ chức năng tiên quyết (lịch bác sĩ)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "business requirement",
+          "vi": "yêu cầu nghiệp vụ — VÌ SAO tổ chức làm hệ thống (mục tiêu, lợi ích); ghi trong Vision & Scope"
+        },
+        {
+          "en": "scope",
+          "vi": "phạm vi — phần nào của tầm nhìn dự án/phiên bản này sẽ làm"
+        }
+      ]
+    },
+    {
+      "title": "Prioritisation 3 — pairwise comparison and rank ordering",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "pairwise comparison"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>In <b>pairwise comparison</b>, stakeholders judge, for each pair of features, which is more important; ranking by number of \"wins\" gives an order. It works for a small set (features, quality attributes) but becomes unwieldy beyond a couple of dozen items (n(n−1)/2 comparisons). Write:</p><ul><li><code>function pairs(n)</code> — how many comparisons are needed for n items.</li><li><code>function rankPairwise(items, judgements)</code> — <code>judgements</code> is an array of <code>[winner, loser]</code>. Return the item ids sorted by number of wins (most first); ties keep the order of <code>items</code>. Ignore judgements that mention unknown items or compare an item with itself; if the same pair is judged more than once, only the <b>last</b> judgement counts.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>pairs(20) = 190 — why the method does not scale to hundreds of requirements.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>So sánh từng cặp</b>: với mỗi cặp, chọn cái quan trọng hơn; xếp theo số lần thắng. Viết <code>pairs(n)</code> (số phép so sánh) và <code>rankPairwise(items, judgements)</code>: sắp theo số thắng giảm dần, hoà giữ thứ tự items; bỏ phán xét có mục lạ hoặc tự so với mình; cùng một cặp phán xét nhiều lần ⇒ chỉ lần <b>cuối</b> tính.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>pairs(20) = 190 — vì sao không dùng được cho hàng trăm yêu cầu.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "rankPairwise(['A','B','C'], [['A','B'],['C','A'],['C','B']])",
+          "output": "['C','A','B']",
+          "explanation": "C 2 wins, A 1, B 0.|||C thắng 2, A 1, B 0."
+        }
+      ],
+      "hintsJson": [
+        "n(n−1)/2.",
+        "Dùng khoá cặp đã sắp (\"A|B\") để phán xét sau ghi đè phán xét trước."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "pairwise.js",
+          "language": "javascript",
+          "code": "function pairs(n) {\n  return 0;\n}\n\nfunction rankPairwise(items, judgements) {\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "pairwise.js",
+          "language": "javascript",
+          "code": "function pairs(n) {\n  return n > 1 ? n * (n - 1) / 2 : 0;\n}\n\nfunction rankPairwise(items, judgements) {\n  var known = {};\n  items.forEach(function (x) { known['#' + x] = true; });\n  var last = {};\n  judgements.forEach(function (j) {\n    var w = j[0], l = j[1];\n    if (!known['#' + w] || !known['#' + l] || w === l) return;\n    var key = [w, l].sort().join('\\u0000');\n    last[key] = w;\n  });\n  var wins = {};\n  items.forEach(function (x) { wins['#' + x] = 0; });\n  Object.keys(last).forEach(function (k) { wins['#' + last[k]]++; });\n  return items\n    .map(function (x, i) { return { x: x, i: i, w: wins['#' + x] }; })\n    .sort(function (a, b) { return b.w - a.w || a.i - b.i; })\n    .map(function (o) { return o.x; });\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Pairwise comparison gives a full ranking for a handful of items, but 190 comparisons for 20 items and 4,950 for 100 show why Wiegers calls full rank ordering overkill: requirements are delivered in batches per release, so grouping them is enough.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "pairwise.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "pairs(n)",
+              "vi": "pairs(n)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof pairs!=\"function\")return\"pairs is not a function\";for(var n=[[0,0],[1,0],[2,1],[5,10],[20,190],[100,4950]],r=0;r<n.length;r++)if(pairs(n[r][0])!==n[r][1])return\"pairs(\"+n[r][0]+\") should be \"+n[r][1];return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "ranking by wins",
+              "vi": "xếp theo số thắng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof rankPairwise!=\"function\")return\"rankPairwise is not a function\";var i=rankPairwise([\"A\",\"B\",\"C\"],[[\"A\",\"B\"],[\"C\",\"A\"],[\"C\",\"B\"]]);return JSON.stringify(i)==='[\"C\",\"A\",\"B\"]'?\"OK\":'expected [\"C\",\"A\",\"B\"], got '+JSON.stringify(i)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "ties keep the items order",
+              "vi": "hoà giữ thứ tự items"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof rankPairwise!=\"function\")return\"rankPairwise is not a function\";var i=rankPairwise([\"P\",\"Q\",\"R\",\"S\"],[[\"Q\",\"P\"],[\"S\",\"R\"]]);return JSON.stringify(i)==='[\"Q\",\"S\",\"P\",\"R\"]'?\"OK\":'expected [\"Q\",\"S\",\"P\",\"R\"], got '+JSON.stringify(i)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "hidden: repeated pairs — the last judgement wins",
+              "vi": "ẩn: cặp lặp — phán xét cuối thắng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof rankPairwise!=\"function\")return\"rankPairwise is not a function\";var i=rankPairwise([\"A\",\"B\",\"C\"],[[\"A\",\"B\"],[\"A\",\"B\"],[\"B\",\"A\"],[\"C\",\"A\"]]);return JSON.stringify(i)==='[\"B\",\"C\",\"A\"]'?\"OK\":'A\\u2013B judged 3 times, last says B \\u21D2 expected [\"B\",\"C\",\"A\"], got '+JSON.stringify(i)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "hidden: unknown items and self-comparisons are ignored",
+              "vi": "ẩn: mục lạ và tự so sánh bị bỏ qua"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof rankPairwise!=\"function\")return\"rankPairwise is not a function\";var r=rankPairwise([\"x\",\"y\",\"constructor\"],[[\"z\",\"x\"],[\"x\",\"x\"],[\"y\",\"x\"],[\"constructor\",\"y\"],[\"toString\",\"y\"]]);return JSON.stringify(r)==='[\"y\",\"constructor\",\"x\"]'?\"OK\":'expected [\"y\",\"constructor\",\"x\"], got '+JSON.stringify(r)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cộng mọi phán xét lặp lại."
+        },
+        {
+          "loi": "Dùng obj[x] với id \"constructor\" ⇒ sai."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "pairwise comparison",
+          "vi": "so sánh từng cặp"
+        },
+        {
+          "en": "rank ordering",
+          "vi": "xếp hạng duy nhất từng mục"
+        }
+      ]
+    }
+  ]
+}

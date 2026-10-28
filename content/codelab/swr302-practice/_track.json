@@ -382,6 +382,30 @@
       "description": "Lab chương 9: viết 5 user story đúng khuôn, đúng vai trò, phủ đề; vi phạm INVEST của 6 story tồi; tiêu chí chấp nhận Given/When/Then kiểm luật sức chứa và hạn 24 giờ; Definition of Ready vs Done; đúng/sai về yêu cầu trong agile."
     },
     {
+      "slug": "swr302-10-1-prioritization",
+      "name": "10.1 Setting priorities: MoSCoW and value ÷ (cost + risk)",
+      "level": "BEGINNER",
+      "description": "MoSCoW cho app giao đồ ăn, tự viết hàm xếp hạng value ÷ (cost + risk) (lọc điểm sai, hoà, không sửa đầu vào) chấm dữ liệu ẩn, vì sao ưu tiên và cách chống \"mọi thứ đều Must\"."
+    },
+    {
+      "slug": "swr302-10-2-ai-ml-requirements",
+      "name": "10.2 Requirements for AI/ML systems",
+      "level": "INTERMEDIATE",
+      "description": "Các loại yêu cầu mới của AI/ML (dữ liệu, hiệu năng mô hình, công bằng, giải thích, giám sát drift, fallback), chọn precision/recall theo chi phí lỗi, tự viết hàm kiểm mô hình theo yêu cầu (theo nhóm), biến mong muốn AI thành 6 yêu cầu đo được."
+    },
+    {
+      "slug": "swr302-10-3-ch16-why-techniques",
+      "name": "10.3 Why prioritise, games and first techniques",
+      "level": "INTERMEDIATE",
+      "description": "Vì sao và khi nào ưu tiên, sáu vấn đề thực tiễn của Davis, trò chơi decibel/threat và câu hỏi vạch trần, in-or-out theo mục tiêu nghiệp vụ, tự viết so sánh từng cặp (số phép so sánh, xếp hạng theo số thắng) chấm dữ liệu ẩn."
+    },
+    {
+      "slug": "swr302-10-4-ch16-scales-matrix",
+      "name": "10.4 Three-level scale, MoSCoW, $100 and value/cost/risk",
+      "level": "INTERMEDIATE",
+      "description": "Thang quan trọng × gấp (Hình 16-1, ô \"đừng làm\"), ưu tiên nhiều lượt (Hình 16-2), phê phán MoSCoW, tự viết bộ đếm phiếu $100 có kiểm phiếu và cảnh báo dồn phiếu chấm dữ liệu ẩn."
+    },
+    {
       "slug": "swr302-10-lab-prioritization-campusride",
       "name": "Lab 10 — Prioritization: CampusRide Release 1",
       "level": "ADVANCED",

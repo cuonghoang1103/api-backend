@@ -1,0 +1,596 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-10-2-ai-ml-requirements",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-10-2-ai-ml-requirements"
+  },
+  "exercises": [
+    {
+      "title": "AI/ML 1 — which kind of requirement?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "AI/ML requirement kinds"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>AI/ML systems need new kinds of requirements: <b>data</b> (quantity, quality, coverage, labelling, freshness), <b>model performance</b> (metrics with thresholds), <b>fairness</b> (no large differences across groups), <b>explainability</b> (justify a decision), <b>monitoring and drift</b> (retraining triggers) and <b>human-in-the-loop / fallback</b> (what happens at low confidence). Classify the requirements of an AI that triages X-ray images.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hệ AI/ML cần thêm các loại yêu cầu mới. Phân loại yêu cầu của AI phân loại ảnh X-quang.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ngưỡng chỉ số trên tập test ⇒ model performance.",
+        "So sánh giữa các nhóm ⇒ fairness."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# AI/ML 1 — which kind of requirement?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# AI/ML 1 — which kind of requirement? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Functional\n   - r1.k: Data\n   - r2.k: Model performance\n   - r3.k: Fairness\n   - r4.k: Explainability\n   - r5.k: Monitoring and drift\n   - r6.k: Human-in-the-loop / fallback\n   In ML, much of the real specification lives in the data and the chosen metric; these extra requirement kinds make \"correct\" and \"done\" testable.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>In ML, much of the real specification lives in the data and the chosen metric; these extra requirement kinds make \"correct\" and \"done\" testable.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Kind",
+                "luaChon": [
+                  "Functional",
+                  "Data",
+                  "Model performance",
+                  "Fairness",
+                  "Explainability",
+                  "Monitoring and drift",
+                  "Human-in-the-loop / fallback"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "The system shall mark each uploaded chest X-ray as \"normal\" or \"needs review\"."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "The training set shall contain at least 40,000 labelled X-rays from at least 6 hospitals."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Recall for \"needs review\" shall be at least 0.97 on the held-out test set."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Recall shall not differ by more than 2 percentage points between patients over and under 60."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "For each \"needs review\" result, the system shall highlight the image region that most influenced the decision."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Recall shall be measured monthly on newly labelled images; a drop of more than 3 points shall trigger a retraining review."
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "When the model confidence is below 0.70, the image shall be sent to a radiologist instead of being auto-classified."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Functional",
+              "r1.k": "Data",
+              "r2.k": "Model performance",
+              "r3.k": "Fairness",
+              "r4.k": "Explainability",
+              "r5.k": "Monitoring and drift",
+              "r6.k": "Human-in-the-loop / fallback"
+            },
+            "giaiThich": "<p><p>In ML, much of the real specification lives in the data and the chosen metric; these extra requirement kinds make \"correct\" and \"done\" testable.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm monitoring với model performance."
+        },
+        {
+          "loi": "Coi fallback là chức năng thông thường."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "precision",
+          "vi": "độ chính xác dương — trong các ca báo dương, bao nhiêu ca đúng"
+        },
+        {
+          "en": "recall",
+          "vi": "độ phủ — trong các ca dương thật, bao nhiêu ca được bắt"
+        },
+        {
+          "en": "drift",
+          "vi": "trôi dữ liệu — dữ liệu thực thay đổi làm mô hình kém dần"
+        }
+      ]
+    },
+    {
+      "title": "AI/ML 2 — choose the metric that matches the cost of errors",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "model performance metrics"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p><b>Precision</b> = TP ÷ (TP + FP): of the cases flagged positive, how many really are. <b>Recall</b> = TP ÷ (TP + FN): of the real positives, how many were caught. Choose the metric that matches the cost of each error type. Accuracy can hide class imbalance.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Precision</b> = TP ÷ (TP + FP). <b>Recall</b> = TP ÷ (TP + FN). Chọn chỉ số khớp chi phí lỗi. Accuracy có thể che mất mất cân bằng lớp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Bỏ sót tệ ⇒ recall; báo nhầm tệ ⇒ precision.",
+        "Dữ liệu lệch lớp ⇒ accuracy đánh lừa."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# AI/ML 2 — choose the metric that matches the cost of errors\n\nAnswer in the answer panel (no code needed).\n\n1. Cancer screening: missing a cancer (false negative) is far worse than a false alarm. Prioritise…Tầm soát ung thư: bỏ sót (FN) tệ hơn nhiều báo nhầm. Ưu tiên…\n2. A spam filter: putting a real customer e-mail into spam (false positive) is very costly. Prioritise…Lọc thư rác: cho thư khách thật vào spam (FP) rất tốn kém. Ưu tiên…\n3. Only 1% of transactions are fraud. A model that says \"not fraud\" for everything has 99% accuracy. This shows…Chỉ 1% giao dịch là gian lận. Mô hình luôn nói \"không gian lận\" đạt 99% accuracy. Điều này cho thấy…\n4. \"The AI will figure it out.\" As a requirement this is…\"AI sẽ tự lo.\" Là một yêu cầu, câu này…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# AI/ML 2 — choose the metric that matches the cost of errors — answer key\n\n1. Cancer screening: missing a cancer (false negative) is far worse than a false alarm. Prioritise…Tầm soát ung thư: bỏ sót (FN) tệ hơn nhiều báo nhầm. Ưu tiên…\n   Answer: a) recall\n   High recall = few missed cases.VI: Recall cao = ít bỏ sót.\n\n2. A spam filter: putting a real customer e-mail into spam (false positive) is very costly. Prioritise…Lọc thư rác: cho thư khách thật vào spam (FP) rất tốn kém. Ưu tiên…\n   Answer: b) precision\n   High precision = few false alarms.VI: Precision cao = ít báo nhầm.\n\n3. Only 1% of transactions are fraud. A model that says \"not fraud\" for everything has 99% accuracy. This shows…Chỉ 1% giao dịch là gian lận. Mô hình luôn nói \"không gian lận\" đạt 99% accuracy. Điều này cho thấy…\n   Answer: a) accuracy hides class imbalance — specify recall/precision for the fraud class\n   Its recall for fraud is 0.VI: Recall cho gian lận bằng 0.\n\n4. \"The AI will figure it out.\" As a requirement this is…\"AI sẽ tự lo.\" Là một yêu cầu, câu này…\n   Answer: a) not a requirement — no metric, no test set, no fallback\n   Without thresholds there is no way to say \"done\".VI: Không có ngưỡng thì không thể nói \"xong\".\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · b · a · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Cancer screening: missing a cancer (false negative) is far worse than a false alarm. Prioritise…</p><p style=\"opacity:.75;font-size:.92em\"><i>Tầm soát ung thư: bỏ sót (FN) tệ hơn nhiều báo nhầm. Ưu tiên…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "recall"
+              },
+              {
+                "ma": "b",
+                "noiDung": "precision"
+              },
+              {
+                "ma": "c",
+                "noiDung": "speed only"
+              },
+              {
+                "ma": "d",
+                "noiDung": "accuracy only"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>High recall = few missed cases.</p><p><i>VI: Recall cao = ít bỏ sót.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>A spam filter: putting a real customer e-mail into spam (false positive) is very costly. Prioritise…</p><p style=\"opacity:.75;font-size:.92em\"><i>Lọc thư rác: cho thư khách thật vào spam (FP) rất tốn kém. Ưu tiên…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "recall"
+              },
+              {
+                "ma": "b",
+                "noiDung": "precision"
+              },
+              {
+                "ma": "c",
+                "noiDung": "model size"
+              },
+              {
+                "ma": "d",
+                "noiDung": "nothing"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>High precision = few false alarms.</p><p><i>VI: Precision cao = ít báo nhầm.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Only 1% of transactions are fraud. A model that says \"not fraud\" for everything has 99% accuracy. This shows…</p><p style=\"opacity:.75;font-size:.92em\"><i>Chỉ 1% giao dịch là gian lận. Mô hình luôn nói \"không gian lận\" đạt 99% accuracy. Điều này cho thấy…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "accuracy hides class imbalance — specify recall/precision for the fraud class"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the model is excellent"
+              },
+              {
+                "ma": "c",
+                "noiDung": "fraud does not matter"
+              },
+              {
+                "ma": "d",
+                "noiDung": "we need more servers"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Its recall for fraud is 0.</p><p><i>VI: Recall cho gian lận bằng 0.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>\"The AI will figure it out.\" As a requirement this is…</p><p style=\"opacity:.75;font-size:.92em\"><i>\"AI sẽ tự lo.\" Là một yêu cầu, câu này…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "not a requirement — no metric, no test set, no fallback"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a good functional requirement"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a fairness requirement"
+              },
+              {
+                "ma": "d",
+                "noiDung": "enough for an AI project"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Without thresholds there is no way to say \"done\".</p><p><i>VI: Không có ngưỡng thì không thể nói \"xong\".</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chỉ đặt yêu cầu accuracy."
+        },
+        {
+          "loi": "Đảo nghĩa precision và recall."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "precision",
+          "vi": "TP ÷ (TP + FP)"
+        },
+        {
+          "en": "recall",
+          "vi": "TP ÷ (TP + FN)"
+        },
+        {
+          "en": "class imbalance",
+          "vi": "mất cân bằng lớp"
+        }
+      ]
+    },
+    {
+      "title": "AI/ML 3 — check a model against its requirements",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "testing ML requirements"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Model requirements for an X-ray triage model: <b>MP-1</b> precision ≥ <code>req.minPrecision</code>; <b>MP-2</b> recall ≥ <code>req.minRecall</code>; <b>FR-1</b> (fairness) the recall of every group differs from the overall recall by at most <code>req.maxGap</code>. Write <code>function evaluate(results, req)</code> where <code>results</code> is an array of <code>{ group, actual, predicted }</code> (booleans: true = \"needs review\"). Return <code>{ precision, recall, groupRecall: { [group]: number }, passed: [ids], failed: [ids] }</code> — numbers rounded to 3 decimals, ids among \"MP-1\", \"MP-2\", \"FR-1\" in that order. A metric whose denominator is 0 counts as 0. Groups with no actual positives are ignored for FR-1 (but still listed with recall 0).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Compare after rounding to 3 decimals.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>evaluate(results, req)</code> tính precision, recall tổng, recall theo nhóm, và cho biết yêu cầu MP-1 (precision), MP-2 (recall), FR-1 (chênh recall nhóm so với tổng ≤ maxGap) đạt hay trượt. Làm tròn 3 chữ số; mẫu số 0 ⇒ 0; nhóm không có ca dương thật bị bỏ qua khi xét FR-1.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>So sánh sau khi làm tròn 3 chữ số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "TP=8, FP=2, FN=2",
+          "output": "precision 0.8, recall 0.8",
+          "explanation": "|||"
+        }
+      ],
+      "hintsJson": [
+        "Đếm TP, FP, FN; mẫu số 0 ⇒ 0.",
+        "Nhóm hoá theo group, tính recall từng nhóm, so với recall tổng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "evaluate.js",
+          "language": "javascript",
+          "code": "function evaluate(results, req) {\n  // TODO\n  return { precision: 0, recall: 0, groupRecall: {}, passed: [], failed: [] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "evaluate.js",
+          "language": "javascript",
+          "code": "function r3(x) { return Math.round(x * 1000) / 1000; }\nfunction rec(rows) {\n  var tp = 0, fn = 0;\n  rows.forEach(function (r) { if (r.actual && r.predicted) tp++; else if (r.actual) fn++; });\n  return { v: tp + fn ? tp / (tp + fn) : 0, pos: tp + fn };\n}\n\nfunction evaluate(results, req) {\n  var tp = 0, fp = 0;\n  results.forEach(function (r) { if (r.predicted && r.actual) tp++; else if (r.predicted) fp++; });\n  var precision = r3(tp + fp ? tp / (tp + fp) : 0);\n  var all = rec(results), recall = r3(all.v);\n  var groups = {}, groupRecall = {};\n  results.forEach(function (r) { (groups[r.group] = groups[r.group] || []).push(r); });\n  var fairOk = true;\n  Object.keys(groups).forEach(function (g) {\n    var x = rec(groups[g]);\n    groupRecall[g] = r3(x.v);\n    if (x.pos > 0 && r3(Math.abs(groupRecall[g] - recall)) > req.maxGap) fairOk = false;\n  });\n  var passed = [], failed = [];\n  [['MP-1', precision >= req.minPrecision], ['MP-2', recall >= req.minRecall], ['FR-1', fairOk]].forEach(function (c) { (c[1] ? passed : failed).push(c[0]); });\n  return { precision: precision, recall: recall, groupRecall: groupRecall, passed: passed, failed: failed };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Requirements stated as thresholds on named metrics, on a defined test set, per group, make an ML model testable: the evaluation becomes a pass/fail report, just like a test run.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "evaluate.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "precision and recall",
+              "vi": "precision và recall"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var a=[{group:\"A\",actual:!0,predicted:!0},{group:\"A\",actual:!0,predicted:!0},{group:\"A\",actual:!0,predicted:!0},{group:\"A\",actual:!0,predicted:!0},{group:\"A\",actual:!0,predicted:!0},{group:\"A\",actual:!0,predicted:!0},{group:\"A\",actual:!0,predicted:!0},{group:\"A\",actual:!0,predicted:!0},{group:\"A\",actual:!1,predicted:!0},{group:\"A\",actual:!1,predicted:!0},{group:\"A\",actual:!0,predicted:!1},{group:\"A\",actual:!0,predicted:!1},{group:\"A\",actual:!1,predicted:!1},{group:\"A\",actual:!1,predicted:!1},{group:\"A\",actual:!1,predicted:!1},{group:\"A\",actual:!1,predicted:!1},{group:\"A\",actual:!1,predicted:!1},{group:\"A\",actual:!1,predicted:!1},{group:\"A\",actual:!1,predicted:!1},{group:\"A\",actual:!1,predicted:!1}],r={minPrecision:.8,minRecall:.9,maxGap:.05};if(typeof evaluate!=\"function\")return\"evaluate is not a function\";var e=evaluate(a,r);return e?e.precision===.8&&e.recall===.8?\"OK\":\"expected precision 0.8, recall 0.8, got \"+e.precision+\", \"+e.recall:\"evaluate must return an object\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "pass/fail of MP-1 and MP-2 (≥ is a pass)",
+              "vi": "đạt/trượt MP-1, MP-2 (≥ là đạt)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var a=[{group:\"A\",actual:!0,predicted:!0},{group:\"A\",actual:!0,predicted:!0},{group:\"A\",actual:!0,predicted:!0},{group:\"A\",actual:!0,predicted:!0},{group:\"A\",actual:!0,predicted:!0},{group:\"A\",actual:!0,predicted:!0},{group:\"A\",actual:!0,predicted:!0},{group:\"A\",actual:!0,predicted:!0},{group:\"A\",actual:!1,predicted:!0},{group:\"A\",actual:!1,predicted:!0},{group:\"A\",actual:!0,predicted:!1},{group:\"A\",actual:!0,predicted:!1},{group:\"A\",actual:!1,predicted:!1},{group:\"A\",actual:!1,predicted:!1},{group:\"A\",actual:!1,predicted:!1},{group:\"A\",actual:!1,predicted:!1},{group:\"A\",actual:!1,predicted:!1},{group:\"A\",actual:!1,predicted:!1},{group:\"A\",actual:!1,predicted:!1},{group:\"A\",actual:!1,predicted:!1}],t={minPrecision:.8,minRecall:.9,maxGap:.05};if(typeof evaluate!=\"function\")return\"evaluate is not a function\";var e=evaluate(a,t);return e?JSON.stringify(e.passed)==='[\"MP-1\",\"FR-1\"]'&&JSON.stringify(e.failed)==='[\"MP-2\"]'?\"OK\":\"expected passed [MP-1, FR-1], failed [MP-2]; got \"+JSON.stringify(e.passed)+\" / \"+JSON.stringify(e.failed):\"evaluate must return an object\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "recall per group and the fairness check",
+              "vi": "recall theo nhóm và kiểm công bằng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var r=[{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!0},{group:\"young\",actual:!0,predicted:!1},{group:\"young\",actual:!0,predicted:!1},{group:\"young\",actual:!0,predicted:!1},{group:\"young\",actual:!0,predicted:!1},{group:\"young\",actual:!0,predicted:!1},{group:\"old\",actual:!0,predicted:!0},{group:\"old\",actual:!0,predicted:!0},{group:\"old\",actual:!0,predicted:!0},{group:\"old\",actual:!0,predicted:!0},{group:\"old\",actual:!0,predicted:!0},{group:\"old\",actual:!0,predicted:!0},{group:\"old\",actual:!0,predicted:!0},{group:\"old\",actual:!0,predicted:!0},{group:\"old\",actual:!0,predicted:!0},{group:\"old\",actual:!0,predicted:!0},{group:\"old\",actual:!0,predicted:!0},{group:\"old\",actual:!0,predicted:!0},{group:\"old\",actual:!0,predicted:!0},{group:\"old\",actual:!0,predicted:!0},{group:\"old\",actual:!0,predicted:!0},{group:\"old\",actual:!0,predicted:!0},{group:\"old\",actual:!0,predicted:!0},{group:\"old\",actual:!0,predicted:!0},{group:\"old\",actual:!0,predicted:!0},{group:\"old\",actual:!0,predicted:!0},{group:\"old\",actual:!0,predicted:!0},{group:\"old\",actual:!0,predicted:!0},{group:\"old\",actual:!0,predicted:!0},{group:\"old\",actual:!0,predicted:!0},{group:\"old\",actual:!0,predicted:!0},{group:\"old\",actual:!0,predicted:!0},{group:\"old\",actual:!0,predicted:!0},{group:\"old\",actual:!0,predicted:!0},{group:\"old\",actual:!0,predicted:!0},{group:\"old\",actual:!0,predicted:!0},{group:\"old\",actual:!0,predicted:!1},{group:\"old\",actual:!0,predicted:!1},{group:\"old\",actual:!0,predicted:!1},{group:\"old\",actual:!0,predicted:!1},{group:\"old\",actual:!0,predicted:!1},{group:\"old\",actual:!0,predicted:!1},{group:\"old\",actual:!0,predicted:!1},{group:\"old\",actual:!0,predicted:!1},{group:\"old\",actual:!0,predicted:!1},{group:\"old\",actual:!0,predicted:!1},{group:\"old\",actual:!0,predicted:!1},{group:\"old\",actual:!0,predicted:!1},{group:\"old\",actual:!0,predicted:!1},{group:\"old\",actual:!0,predicted:!1},{group:\"old\",actual:!0,predicted:!1},{group:\"old\",actual:!0,predicted:!1},{group:\"old\",actual:!0,predicted:!1},{group:\"old\",actual:!0,predicted:!1},{group:\"old\",actual:!0,predicted:!1},{group:\"old\",actual:!0,predicted:!1},{group:\"old\",actual:!1,predicted:!0},{group:\"old\",actual:!1,predicted:!0},{group:\"old\",actual:!1,predicted:!0},{group:\"old\",actual:!1,predicted:!0},{group:\"old\",actual:!1,predicted:!0},{group:\"old\",actual:!1,predicted:!0},{group:\"old\",actual:!1,predicted:!0},{group:\"old\",actual:!1,predicted:!0},{group:\"old\",actual:!1,predicted:!0},{group:\"old\",actual:!1,predicted:!0},{group:\"young\",actual:!1,predicted:!1},{group:\"young\",actual:!1,predicted:!1},{group:\"young\",actual:!1,predicted:!1},{group:\"young\",actual:!1,predicted:!1},{group:\"young\",actual:!1,predicted:!1},{group:\"young\",actual:!1,predicted:!1},{group:\"young\",actual:!1,predicted:!1},{group:\"young\",actual:!1,predicted:!1},{group:\"young\",actual:!1,predicted:!1},{group:\"young\",actual:!1,predicted:!1},{group:\"young\",actual:!1,predicted:!1},{group:\"young\",actual:!1,predicted:!1},{group:\"young\",actual:!1,predicted:!1},{group:\"young\",actual:!1,predicted:!1},{group:\"young\",actual:!1,predicted:!1},{group:\"young\",actual:!1,predicted:!1},{group:\"young\",actual:!1,predicted:!1},{group:\"young\",actual:!1,predicted:!1},{group:\"young\",actual:!1,predicted:!1},{group:\"young\",actual:!1,predicted:!1},{group:\"young\",actual:!1,predicted:!1},{group:\"young\",actual:!1,predicted:!1},{group:\"young\",actual:!1,predicted:!1},{group:\"young\",actual:!1,predicted:!1},{group:\"young\",actual:!1,predicted:!1},{group:\"young\",actual:!1,predicted:!1},{group:\"young\",actual:!1,predicted:!1},{group:\"young\",actual:!1,predicted:!1},{group:\"young\",actual:!1,predicted:!1},{group:\"young\",actual:!1,predicted:!1},{group:\"young\",actual:!1,predicted:!1},{group:\"young\",actual:!1,predicted:!1},{group:\"young\",actual:!1,predicted:!1},{group:\"young\",actual:!1,predicted:!1},{group:\"young\",actual:!1,predicted:!1},{group:\"young\",actual:!1,predicted:!1},{group:\"young\",actual:!1,predicted:!1},{group:\"young\",actual:!1,predicted:!1},{group:\"young\",actual:!1,predicted:!1},{group:\"young\",actual:!1,predicted:!1}],t={minPrecision:.85,minRecall:.7,maxGap:.1};if(typeof evaluate!=\"function\")return\"evaluate is not a function\";var e=evaluate(r,t);if(!e)return\"evaluate must return an object\";var u=e.groupRecall||{};return u.young!==.9||u.old!==.6?\"groupRecall should be young 0.9, old 0.6; got \"+JSON.stringify(u):e.recall!==.75?\"overall recall should be 0.75, got \"+e.recall:JSON.stringify(e.failed)==='[\"FR-1\"]'?\"OK\":\"only FR-1 should fail (gap 0.15 > 0.1); got failed \"+JSON.stringify(e.failed)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "hidden: groups without positives are ignored for fairness",
+              "vi": "ẩn: nhóm không có ca dương bị bỏ qua khi xét công bằng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var a=[{group:\"g1\",actual:!0,predicted:!0},{group:\"g1\",actual:!0,predicted:!0},{group:\"g1\",actual:!0,predicted:!0},{group:\"g2\",actual:!1,predicted:!1},{group:\"g2\",actual:!1,predicted:!1},{group:\"g2\",actual:!1,predicted:!1},{group:\"g2\",actual:!1,predicted:!1},{group:\"g2\",actual:!1,predicted:!0}],r={minPrecision:.7,minRecall:.9,maxGap:.05};if(typeof evaluate!=\"function\")return\"evaluate is not a function\";var e=evaluate(a,r);return e?(e.groupRecall||{}).g2!==0?\"g2 has no positives \\u21D2 recall 0\":JSON.stringify(e.passed)==='[\"MP-1\",\"MP-2\",\"FR-1\"]'?\"OK\":\"expected all three passed (precision 0.75, recall 1, g2 ignored); got \"+JSON.stringify(e.passed):\"evaluate must return an object\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "hidden: empty results, no crash",
+              "vi": "ẩn: không có kết quả, không lỗi"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var n=[],a={minPrecision:.5,minRecall:.5,maxGap:.1};if(typeof evaluate!=\"function\")return\"evaluate is not a function\";var e=evaluate(n,a);return e?e.precision===0&&e.recall===0&&JSON.stringify(e.failed)==='[\"MP-1\",\"MP-2\"]'?\"OK\":\"empty input \\u21D2 precision 0, recall 0, MP-1 and MP-2 fail, FR-1 passes\":\"evaluate must return an object\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Tính FR-1 cho cả nhóm không có ca dương."
+        },
+        {
+          "loi": "So sánh trước khi làm tròn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "precision",
+          "vi": "TP ÷ (TP + FP)"
+        },
+        {
+          "en": "recall",
+          "vi": "TP ÷ (TP + FN)"
+        },
+        {
+          "en": "fairness gap",
+          "vi": "chênh lệch chỉ số giữa các nhóm"
+        }
+      ]
+    },
+    {
+      "title": "AI/ML 4 — turn an AI wish into requirements",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "writing AI/ML requirements"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Stakeholder: \"<i>Build an AI that reads handwritten prescriptions and fills in the medicines automatically.</i>\" Write <code>AIREQ</code> with six keys — <code>functional, data, performance, fallback, monitoring, fairness</code> — each one requirement sentence starting with \"The system shall\" or \"The training data shall\" / \"The model shall\". Each non-functional one must contain a number; <code>fallback</code> must mention a confidence threshold and a human (pharmacist/doctor); <code>performance</code> must name a metric (precision, recall, accuracy, F1) and a test set.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>No vague words like \"accurate enough\", \"good\", \"smart\".</li>\n</ul>",
+      "problemHtmlVi": "<p>Biến mong muốn \"AI đọc đơn thuốc viết tay rồi tự điền thuốc\" thành 6 yêu cầu: functional, data, performance, fallback, monitoring, fairness; mỗi câu bắt đầu \"The system shall\" / \"The training data shall\" / \"The model shall\"; yêu cầu phi chức năng có số; fallback nêu ngưỡng độ tin cậy và người (dược sĩ/bác sĩ); performance nêu chỉ số và tập test.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Không dùng từ mơ hồ như \"accurate enough\", \"good\", \"smart\".</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "fallback",
+          "output": "The system shall send a prescription line to a pharmacist for manual entry when the extraction confidence is below 0.85.",
+          "explanation": "|||"
+        }
+      ],
+      "hintsJson": [
+        "Mỗi loại một câu, có số và đơn vị/chỉ số.",
+        "Fallback: \"when the confidence is below 0.85, … pharmacist\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "aireq.js",
+          "language": "javascript",
+          "code": "const AIREQ = { functional: '', data: '', performance: '', fallback: '', monitoring: '', fairness: '' };\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "aireq.js",
+          "language": "javascript",
+          "code": "const AIREQ = {\n  functional: 'The system shall extract the medicine name, strength, dosage and quantity from each line of an uploaded handwritten prescription image.',\n  data: 'The training data shall contain at least 30,000 labelled prescription lines written by at least 300 different doctors from at least 10 hospitals.',\n  performance: 'The model shall achieve a field-level accuracy of at least 97% for medicine name and 95% for dosage on the held-out test set of 3,000 prescription lines.',\n  fallback: 'The system shall send a prescription line to a pharmacist for manual entry when the extraction confidence for any field is below 0.85.',\n  monitoring: 'The system shall measure accuracy every week on newly verified prescriptions, and a drop of more than 2 percentage points shall trigger a retraining review.',\n  fairness: 'The model shall not differ in accuracy by more than 3 percentage points between prescriptions from different hospitals.',\n};\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A vague AI wish becomes testable once each requirement kind has a metric, a threshold and, where needed, a human fallback — the same discipline as chapter 5, applied to a probabilistic system.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "aireq.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "six requirements, each a \"shall\" sentence",
+              "vi": "sáu yêu cầu, mỗi câu dạng \"shall\""
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof AIREQ==\"undefined\"||!AIREQ)return\"AIREQ is missing\";function n(r){return String(AIREQ[r]||\"\")}for(var e=[\"functional\",\"data\",\"performance\",\"fallback\",\"monitoring\",\"fairness\"],t=0;t<6;t++){var a=n(e[t]);if(a.length<40)return e[t]+\" is missing or too short\";if(!/^the (system|training data|model|data set|dataset) shall\\b/i.test(a))return e[t]+': start with \"The system shall\", \"The training data shall\" or \"The model shall\"';if(/\\b(accurate enough|good|smart|intelligent|reasonable|fast|well)\\b/i.test(a))return e[t]+\": remove the vague word\"}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "non-functional requirements contain numbers",
+              "vi": "yêu cầu phi chức năng có số"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof AIREQ==\"undefined\"||!AIREQ)return\"AIREQ is missing\";function e(t){return String(AIREQ[t]||\"\")}for(var r=[\"data\",\"performance\",\"fallback\",\"monitoring\",\"fairness\"],n=0;n<r.length;n++)if(!/\\d/.test(e(r[n])))return r[n]+\" needs a number\";return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "performance: a named metric on a test set",
+              "vi": "performance: chỉ số có tên trên tập test"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof AIREQ==\"undefined\"||!AIREQ)return\"AIREQ is missing\";function t(r){return String(AIREQ[r]||\"\")}var e=t(\"performance\");return/precision|recall|accuracy|f1|error rate/i.test(e)?/test set|held-out|test data|validation set/i.test(e)?\"OK\":\"say on which test set it is measured\":\"name the metric (precision, recall, accuracy, F1)\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "fallback: confidence threshold and a human",
+              "vi": "fallback: ngưỡng độ tin cậy và con người"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof AIREQ==\"undefined\"||!AIREQ)return\"AIREQ is missing\";function t(n){return String(AIREQ[n]||\"\")}var e=t(\"fallback\");return!/confidence/i.test(e)||!/0?\\.\\d+|\\d+\\s*%/.test(e)?\"state the confidence threshold (e.g. below 0.85)\":/pharmacist|doctor|human|staff|nurse|reviewer/i.test(e)?\"OK\":\"say which person takes over\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "monitoring has a period and a trigger; fairness compares groups",
+              "vi": "monitoring có chu kỳ và ngưỡng kích hoạt; fairness so sánh nhóm"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof AIREQ==\"undefined\"||!AIREQ)return\"AIREQ is missing\";function e(i){return String(AIREQ[i]||\"\")}var n=e(\"monitoring\");if(!/(daily|weekly|monthly|every|each)/i.test(n))return\"monitoring: how often is it measured?\";if(!/(trigger|retrain|alert|review)/i.test(n))return\"monitoring: what happens when it drops?\";var r=e(\"fairness\");return/(between|across|group|hospital|age|gender|region)/i.test(r)?\"OK\":\"fairness: compare groups (e.g. between hospitals)\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết \"The model shall be accurate\"."
+        },
+        {
+          "loi": "Quên tập test cho yêu cầu hiệu năng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "human-in-the-loop",
+          "vi": "con người trong vòng lặp — chuyển cho người khi máy không chắc"
+        },
+        {
+          "en": "drift",
+          "vi": "trôi dữ liệu"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,425 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-10-4-ch16-scales-matrix",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-10-4-ch16-scales-matrix"
+  },
+  "exercises": [
+    {
+      "title": "Scales 1 — importance × urgency",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "three-level scale"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers Figure 16-1: <b>High</b> = important and urgent; <b>Medium</b> = important but not urgent; <b>Low</b> = neither important nor urgent; and the fourth quadrant — urgent to some stakeholder but <b>not important</b> to the business objectives — <b>don’t do it</b>. Classify the requirements for the next ClinicCare release.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hình 16-1: High = quan trọng + gấp; Medium = quan trọng, không gấp; Low = không quan trọng, không gấp; ô thứ tư — gấp với ai đó nhưng không quan trọng với mục tiêu — đừng làm.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Hỏi hai câu: có quan trọng với mục tiêu? có cần ngay bản tới?",
+        "Gấp mà không quan trọng ⇒ đừng làm."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Scales 1 — importance × urgency\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Scales 1 — importance × urgency — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: High\n   - r1.k: Medium\n   - r2.k: Low\n   - r3.k: Don't do\n   - r4.k: High\n   Two dimensions: importance to the business objectives and urgency for the next release. Urgent-but-unimportant requests are the trap.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Two dimensions: importance to the business objectives and urgency for the next release. Urgent-but-unimportant requests are the trap.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Priority",
+                "luaChon": [
+                  "High",
+                  "Medium",
+                  "Low",
+                  "Don't do"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Online booking — the core objective, needed in the next release."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Multi-language UI — important for the 2027 expansion, not needed now."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Seasonal greeting banners — neither important nor needed soon."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "A manager wants a custom export for tomorrow’s meeting; it serves no business objective."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Fix: double bookings for the same slot — breaks the core objective, must ship now."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "High",
+              "r1.k": "Medium",
+              "r2.k": "Low",
+              "r3.k": "Don't do",
+              "r4.k": "High"
+            },
+            "giaiThich": "<p><p>Two dimensions: importance to the business objectives and urgency for the next release. Urgent-but-unimportant requests are the trap.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đánh High cho mọi việc gấp."
+        },
+        {
+          "loi": "Quên ô thứ tư."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "three-level scale",
+          "vi": "thang ba mức (cao/vừa/thấp)"
+        }
+      ]
+    },
+    {
+      "title": "Scales 2 — multipass, MoSCoW and $100",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "multipass prioritisation",
+        "MoSCoW",
+        "$100"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Multipass (Figure 16-2): if too many requirements are High, partition the Highs again into high / higher / highest; the \"highest\" become the new top, the rest fold into Medium. MoSCoW turns three levels into four but gives no rationale for rating and is ambiguous about timing (\"Won’t\" — this release or ever?) — the book prefers the importance × urgency scale. $100: each participant spends 100 imaginary dollars; it makes people think about limited resources but is easy to game and ignores implementation cost.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Nhiều lượt, MoSCoW và $100 theo Wiegers.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Quá nhiều High ⇒ chia lại các High.",
+        "$100 dễ bị lách, không tính chi phí."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Scales 2 — multipass, MoSCoW and $100\n\nAnswer in the answer panel (no code needed).\n\n1. 70 of 90 requirements are High. Wiegers suggests…70/90 yêu cầu là High. Wiegers gợi ý…\n2. The book’s main criticism of MoSCoW is that…Phê phán chính của sách về MoSCoW là…\n3. In a $100 exercise one stakeholder puts all $100 on his pet feature. This shows…Trong bài $100, một người dồn cả $100 cho tính năng yêu thích. Điều này cho thấy…\n4. Where should each requirement’s priority be stored?Lưu ưu tiên của mỗi yêu cầu ở đâu?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Scales 2 — multipass, MoSCoW and $100 — answer key\n\n1. 70 of 90 requirements are High. Wiegers suggests…70/90 yêu cầu là High. Wiegers gợi ý…\n   Answer: a) Partition the Highs again (high/higher/highest); only \"highest\" stays top\n   Figure 16-2.VI: Hình 16-2.\n\n2. The book’s main criticism of MoSCoW is that…Phê phán chính của sách về MoSCoW là…\n   Answer: a) it gives no rationale for rating and \"Won’t\" is ambiguous about timing\n   Prefer importance × urgency.VI: Ưu tiên thang quan trọng × gấp.\n\n3. In a $100 exercise one stakeholder puts all $100 on his pet feature. This shows…Trong bài $100, một người dồn cả $100 cho tính năng yêu thích. Điều này cho thấy…\n   Answer: a) the technique can be gamed\n   Davis: easy to game, ignores cost.VI: Davis: dễ bị lách, bỏ qua chi phí.\n\n4. Where should each requirement’s priority be stored?Lưu ưu tiên của mỗi yêu cầu ở đâu?\n   Answer: a) As an attribute of the requirement (SRS, database), with a convention about inheritance from parent requirements\n   Priority is a requirement attribute.VI: Ưu tiên là một thuộc tính của yêu cầu.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · a · a · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>70 of 90 requirements are High. Wiegers suggests…</p><p style=\"opacity:.75;font-size:.92em\"><i>70/90 yêu cầu là High. Wiegers gợi ý…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Partition the Highs again (high/higher/highest); only \"highest\" stays top"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Accept it"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Make all of them Medium"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Delete 70 requirements"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Figure 16-2.</p><p><i>VI: Hình 16-2.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>The book’s main criticism of MoSCoW is that…</p><p style=\"opacity:.75;font-size:.92em\"><i>Phê phán chính của sách về MoSCoW là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "it gives no rationale for rating and \"Won’t\" is ambiguous about timing"
+              },
+              {
+                "ma": "b",
+                "noiDung": "it has too few levels"
+              },
+              {
+                "ma": "c",
+                "noiDung": "it is too mathematical"
+              },
+              {
+                "ma": "d",
+                "noiDung": "it is only for waterfall"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Prefer importance × urgency.</p><p><i>VI: Ưu tiên thang quan trọng × gấp.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>In a $100 exercise one stakeholder puts all $100 on his pet feature. This shows…</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong bài $100, một người dồn cả $100 cho tính năng yêu thích. Điều này cho thấy…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the technique can be gamed"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the feature is the only one needed"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the technique is perfect"
+              },
+              {
+                "ma": "d",
+                "noiDung": "costs were included"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Davis: easy to game, ignores cost.</p><p><i>VI: Davis: dễ bị lách, bỏ qua chi phí.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Where should each requirement’s priority be stored?</p><p style=\"opacity:.75;font-size:.92em\"><i>Lưu ưu tiên của mỗi yêu cầu ở đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "As an attribute of the requirement (SRS, database), with a convention about inheritance from parent requirements"
+              },
+              {
+                "ma": "b",
+                "noiDung": "In the developer’s memory"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only in the meeting minutes"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nowhere"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Priority is a requirement attribute.</p><p><i>VI: Ưu tiên là một thuộc tính của yêu cầu.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng sách khuyên dùng MoSCoW."
+        },
+        {
+          "loi": "Tin kết quả $100 tuyệt đối."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "MoSCoW",
+          "vi": "Must / Should / Could / Won’t (this time) — thang ưu tiên"
+        }
+      ]
+    },
+    {
+      "title": "Scales 3 — run a $100 vote and spot gaming",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "$100 technique"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Each participant spends exactly $100 across the features. Write <code>function hundredDollar(ballots)</code> where <code>ballots</code> is an array of <code>{ voter, alloc: { featureId: dollars } }</code>. Return <code>{ totals, ranking, invalid, gamed }</code>:</p><ul><li><code>invalid</code>: voters whose allocation does not sum to exactly 100, or contains a negative or non-integer amount — their ballots are <b>not</b> counted.</li><li><code>totals</code>: dollars per feature from valid ballots.</li><li><code>ranking</code>: feature ids by total (highest first); ties alphabetical.</li><li><code>gamed</code>: valid voters who put more than $60 on a single feature (a warning, they are still counted).</li></ul><p><code>invalid</code> and <code>gamed</code> keep the ballot order.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Davis: the $100 method is easy to game — flag it, do not silently trust it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi người chi đúng $100. Viết <code>hundredDollar(ballots)</code> trả <code>{ totals, ranking, invalid, gamed }</code>: phiếu không đủ đúng 100, có số âm hoặc không nguyên ⇒ invalid và không tính; totals theo tính năng; ranking giảm dần, hoà theo bảng chữ cái; gamed = người dồn hơn $60 vào một tính năng (vẫn được tính).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Davis: $100 dễ bị lách — cần cảnh báo, đừng tin mù quáng.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "[{voter:'An', alloc:{A:50,B:50}}, {voter:'Binh', alloc:{A:100}}]",
+          "output": "totals {A:150,B:50}, ranking [A,B], invalid [], gamed ['Binh']",
+          "explanation": "|||"
+        }
+      ],
+      "hintsJson": [
+        "Kiểm phiếu trước (tổng đúng 100, số nguyên không âm), rồi mới cộng.",
+        "Hoà: so sánh chuỗi id."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "vote.js",
+          "language": "javascript",
+          "code": "function hundredDollar(ballots) {\n  // TODO\n  return { totals: {}, ranking: [], invalid: [], gamed: [] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "vote.js",
+          "language": "javascript",
+          "code": "function hundredDollar(ballots) {\n  var totals = {}, invalid = [], gamed = [];\n  ballots.forEach(function (b) {\n    var vals = Object.keys(b.alloc || {}).map(function (k) { return b.alloc[k]; });\n    var bad = vals.some(function (v) { return typeof v !== 'number' || v < 0 || Math.floor(v) !== v; });\n    var sum = vals.reduce(function (s, v) { return s + (typeof v === 'number' ? v : 0); }, 0);\n    if (bad || sum !== 100) { invalid.push(b.voter); return; }\n    Object.keys(b.alloc).forEach(function (k) { totals[k] = (totals[k] || 0) + b.alloc[k]; });\n    if (vals.some(function (v) { return v > 60; })) gamed.push(b.voter);\n  });\n  var ranking = Object.keys(totals).sort(function (a, b) { return totals[b] - totals[a] || (a < b ? -1 : a > b ? 1 : 0); });\n  return { totals: totals, ranking: ranking, invalid: invalid, gamed: gamed };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The $100 method gets people thinking about scarce resources, but its results need guarding: validate ballots and flag concentration. It still ignores implementation cost — combine it with cost and risk before deciding.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "vote.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "totals and ranking",
+              "vi": "tổng và xếp hạng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var r=[{voter:\"An\",alloc:{A:50,B:50}},{voter:\"Binh\",alloc:{A:100}}];if(typeof hundredDollar!=\"function\")return\"hundredDollar is not a function\";var n=hundredDollar(r);return n?JSON.stringify(n.totals)==='{\"A\":150,\"B\":50}'&&JSON.stringify(n.ranking)==='[\"A\",\"B\"]'?\"OK\":\"expected totals {A:150,B:50}, ranking [A,B]; got \"+JSON.stringify(n.totals)+\" \"+JSON.stringify(n.ranking):\"return { totals, ranking, invalid, gamed }\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "flags gaming (> $60 on one feature)",
+              "vi": "cảnh báo dồn phiếu (> $60 một tính năng)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var i=[{voter:\"An\",alloc:{A:50,B:50}},{voter:\"Binh\",alloc:{A:100}}];if(typeof hundredDollar!=\"function\")return\"hundredDollar is not a function\";var n=hundredDollar(i);return n?JSON.stringify(n.gamed)==='[\"Binh\"]'&&JSON.stringify(n.invalid)===\"[]\"?\"OK\":\"expected gamed [Binh], invalid []; got \"+JSON.stringify(n.gamed)+\" / \"+JSON.stringify(n.invalid):\"return { totals, ranking, invalid, gamed }\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "hidden: invalid ballots are not counted",
+              "vi": "ẩn: phiếu không hợp lệ không được tính"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var n=[{voter:\"Chi\",alloc:{Booking:40,Reminder:30,Payment:30}},{voter:\"Dung\",alloc:{Booking:30,Payment:40,Reports:30}},{voter:\"Em\",alloc:{Booking:50,Reports:60}},{voter:\"Giang\",alloc:{Reports:61,Reminder:39}},{voter:\"Hai\",alloc:{Booking:120,Payment:-20}},{voter:\"Khoa\",alloc:{Booking:33.5,Payment:66.5}}];if(typeof hundredDollar!=\"function\")return\"hundredDollar is not a function\";var o=hundredDollar(n);return o?JSON.stringify(o.invalid)!=='[\"Em\",\"Hai\",\"Khoa\"]'?\"invalid should be [Em, Hai, Khoa] (sum 110, negative, non-integer); got \"+JSON.stringify(o.invalid):o.totals.Booking===70&&o.totals.Payment===70&&o.totals.Reports===91&&o.totals.Reminder===69?\"OK\":\"totals wrong: \"+JSON.stringify(o.totals):\"return { totals, ranking, invalid, gamed }\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "hidden: ties alphabetical, gamed only among valid",
+              "vi": "ẩn: hoà theo chữ cái, gamed chỉ trong phiếu hợp lệ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var o=[{voter:\"Chi\",alloc:{Booking:40,Reminder:30,Payment:30}},{voter:\"Dung\",alloc:{Booking:30,Payment:40,Reports:30}},{voter:\"Em\",alloc:{Booking:50,Reports:60}},{voter:\"Giang\",alloc:{Reports:61,Reminder:39}},{voter:\"Hai\",alloc:{Booking:120,Payment:-20}},{voter:\"Khoa\",alloc:{Booking:33.5,Payment:66.5}}];if(typeof hundredDollar!=\"function\")return\"hundredDollar is not a function\";var n=hundredDollar(o);return n?JSON.stringify(n.ranking)!=='[\"Reports\",\"Booking\",\"Payment\",\"Reminder\"]'?\"ranking should be [Reports, Booking, Payment, Reminder]; got \"+JSON.stringify(n.ranking):JSON.stringify(n.gamed)==='[\"Giang\"]'?\"OK\":\"gamed should be [Giang]; got \"+JSON.stringify(n.gamed):\"return { totals, ranking, invalid, gamed }\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cộng cả phiếu sai vào tổng."
+        },
+        {
+          "loi": "Coi người dồn phiếu là không hợp lệ (chỉ cảnh báo)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "$100 (cumulative voting)",
+          "vi": "bỏ phiếu tích luỹ $100"
+        }
+      ]
+    }
+  ]
+}

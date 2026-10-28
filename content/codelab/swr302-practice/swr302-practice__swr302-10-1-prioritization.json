@@ -1,0 +1,419 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-10-1-prioritization",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-10-1-prioritization"
+  },
+  "exercises": [
+    {
+      "title": "Priorities 1 — MoSCoW",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "MoSCoW"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>MoSCoW: <b>Must</b> — the release fails without it; <b>Should</b> — important, painful to omit, but there is a workaround; <b>Could</b> — nice to have, first to be cut; <b>Won’t</b> (this time) — explicitly out of scope for now, recorded. Classify the requirements for release 1 of a food-delivery app.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>MoSCoW cho bản 1 của app giao đồ ăn.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Không có thì bản phát hành vô dụng ⇒ Must.",
+        "Có cách làm tạm ⇒ Should."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Priorities 1 — MoSCoW\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Priorities 1 — MoSCoW — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Must\n   - r1.k: Must\n   - r2.k: Should\n   - r3.k: Could\n   - r4.k: Won't\n   - r5.k: Should\n   Musts are what makes the release usable at all; Shoulds hurt to omit but have workarounds; Coulds are first to go; Won’t is recorded out of scope.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Musts are what makes the release usable at all; Shoulds hurt to omit but have workarounds; Coulds are first to go; Won’t is recorded out of scope.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "MoSCoW",
+                "luaChon": [
+                  "Must",
+                  "Should",
+                  "Could",
+                  "Won't"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Customers can place an order and pay."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Restaurants receive new orders."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Customers can re-order a previous order with one tap (they can still order manually)."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Animated confetti when the order is delivered."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Drone delivery."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Customers can rate the driver (feedback can still come by e-mail)."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Must",
+              "r1.k": "Must",
+              "r2.k": "Should",
+              "r3.k": "Could",
+              "r4.k": "Won't",
+              "r5.k": "Should"
+            },
+            "giaiThich": "<p><p>Musts are what makes the release usable at all; Shoulds hurt to omit but have workarounds; Coulds are first to go; Won’t is recorded out of scope.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đánh Must cho mọi thứ."
+        },
+        {
+          "loi": "Xoá hẳn mục Won’t thay vì ghi lại."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "MoSCoW",
+          "vi": "Must / Should / Could / Won’t (this time) — thang ưu tiên"
+        }
+      ]
+    },
+    {
+      "title": "Priorities 3 — why prioritise, and the games",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "why prioritise"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Prioritisation delivers the most value earliest, manages scope against fixed deadlines and attacks high-risk items early. A common game: every stakeholder marks their request \"Must\". Counter it: cap the Musts (e.g. ≤ 60% of the effort), require each Must to trace to a business objective, and make trade-offs visible (\"if this is a Must, which Must drops?\").</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ưu tiên giúp giao giá trị sớm, quản lý phạm vi theo hạn cố định, xử lý rủi ro sớm. Trò thường gặp: ai cũng đánh \"Must\". Cách chống: giới hạn Must, Must phải truy về mục tiêu nghiệp vụ, đánh đổi minh bạch.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Must phải truy về mục tiêu nghiệp vụ.",
+        "Khách cho giá trị; đội cho chi phí và rủi ro."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Priorities 3 — why prioritise, and the games\n\nAnswer in the answer panel (no code needed).\n\n1. 85% of the requirements are Must. What do you do?85% yêu cầu là Must. Làm gì?\n2. Why attack high-risk items early?Vì sao xử lý mục rủi ro cao sớm?\n3. Who should decide priorities?Ai quyết định ưu tiên?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Priorities 3 — why prioritise, and the games — answer key\n\n1. 85% of the requirements are Must. What do you do?85% yêu cầu là Must. Làm gì?\n   Answer: a) Cap the Musts and ask which Must drops for each new Must; trace Musts to objectives\n   Make trade-offs explicit.VI: Làm đánh đổi minh bạch.\n\n2. Why attack high-risk items early?Vì sao xử lý mục rủi ro cao sớm?\n   Answer: a) So there is still time to react if they fail\n   Late failures leave no room.VI: Thất bại muộn không còn đường lùi.\n\n3. Who should decide priorities?Ai quyết định ưu tiên?\n   Answer: a) Customer representatives together with the team, which estimates cost and risk\n   Value from customers, cost and risk from the team.VI: Giá trị từ khách, chi phí và rủi ro từ đội.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · a · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>85% of the requirements are Must. What do you do?</p><p style=\"opacity:.75;font-size:.92em\"><i>85% yêu cầu là Must. Làm gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Cap the Musts and ask which Must drops for each new Must; trace Musts to objectives"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Accept and work overtime"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Remove all Coulds and be done"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Let the developers decide alone"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Make trade-offs explicit.</p><p><i>VI: Làm đánh đổi minh bạch.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Why attack high-risk items early?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao xử lý mục rủi ro cao sớm?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "So there is still time to react if they fail"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Because they are easy"
+              },
+              {
+                "ma": "c",
+                "noiDung": "To impress the customer"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It does not matter"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Late failures leave no room.</p><p><i>VI: Thất bại muộn không còn đường lùi.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Who should decide priorities?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ai quyết định ưu tiên?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Customer representatives together with the team, which estimates cost and risk"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Only developers"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Whoever shouts loudest"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The most senior manager alone"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Value from customers, cost and risk from the team.</p><p><i>VI: Giá trị từ khách, chi phí và rủi ro từ đội.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Để người nói to nhất quyết."
+        },
+        {
+          "loi": "Chấp nhận mọi thứ là Must."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "MoSCoW",
+          "vi": "Must / Should / Could / Won’t (this time) — thang ưu tiên"
+        },
+        {
+          "en": "value / cost / risk prioritization",
+          "vi": "xếp ưu tiên kiểu Wiegers: priority = value% ÷ (cost% × trọng số + risk% × trọng số)"
+        }
+      ]
+    },
+    {
+      "title": "Priorities 2 — rank by value ÷ (cost + risk)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "value, cost and risk"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Lesson 10.1 scores each feature 1–9 on <b>value</b> (higher is better), <b>cost</b> and <b>risk</b> (higher is worse), and computes <code>priority = value / (cost + risk)</code>. Write <code>function rank(features)</code> returning a new array of <code>{ id, priority }</code> sorted by priority (highest first), priority rounded to 2 decimals. Ties keep the input order. Features with any score outside 1–9 are left out. Do not modify the input.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>rank(FEATURES) ⇒ F1 1.8, F2 1, F4 1, F3 0.24.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chấm mỗi tính năng 1–9 theo value, cost, risk; <code>priority = value / (cost + risk)</code>. Viết <code>rank(features)</code> trả mảng mới <code>{ id, priority }</code> giảm dần, làm tròn 2 chữ số; hoà giữ thứ tự đầu vào; bỏ tính năng có điểm ngoài 1–9; không sửa đầu vào.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>rank(FEATURES) ⇒ F1 1.8, F2 1, F4 1, F3 0.24.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Guest checkout V9 C3 R2",
+          "output": "9 / 5 = 1.8",
+          "explanation": "Do it first.|||Làm trước."
+        }
+      ],
+      "hintsJson": [
+        "Lọc trước, rồi tính, rồi sắp; giữ chỉ số gốc để phá hoà.",
+        "Math.round(x * 100) / 100."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "features.js",
+          "language": "javascript",
+          "code": "const FEATURES = [\n {\n  \"id\": \"F1\",\n  \"name\": \"Guest checkout\",\n  \"value\": 9,\n  \"cost\": 3,\n  \"risk\": 2\n },\n {\n  \"id\": \"F2\",\n  \"name\": \"Coupon codes\",\n  \"value\": 6,\n  \"cost\": 4,\n  \"risk\": 2\n },\n {\n  \"id\": \"F3\",\n  \"name\": \"Crypto payment\",\n  \"value\": 4,\n  \"cost\": 8,\n  \"risk\": 9\n },\n {\n  \"id\": \"F4\",\n  \"name\": \"Dark mode\",\n  \"value\": 3,\n  \"cost\": 2,\n  \"risk\": 1\n }\n];\n"
+        },
+        {
+          "name": "rank.js",
+          "language": "javascript",
+          "code": "function rank(features) {\n  // TODO\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "features.js",
+          "language": "javascript",
+          "code": "const FEATURES = [\n {\n  \"id\": \"F1\",\n  \"name\": \"Guest checkout\",\n  \"value\": 9,\n  \"cost\": 3,\n  \"risk\": 2\n },\n {\n  \"id\": \"F2\",\n  \"name\": \"Coupon codes\",\n  \"value\": 6,\n  \"cost\": 4,\n  \"risk\": 2\n },\n {\n  \"id\": \"F3\",\n  \"name\": \"Crypto payment\",\n  \"value\": 4,\n  \"cost\": 8,\n  \"risk\": 9\n },\n {\n  \"id\": \"F4\",\n  \"name\": \"Dark mode\",\n  \"value\": 3,\n  \"cost\": 2,\n  \"risk\": 1\n }\n];\n"
+        },
+        {
+          "name": "rank.js",
+          "language": "javascript",
+          "code": "function rank(features) {\n  function ok(n) { return typeof n === 'number' && n >= 1 && n <= 9; }\n  return features\n    .filter(function (f) { return ok(f.value) && ok(f.cost) && ok(f.risk); })\n    .map(function (f, i) { return { id: f.id, priority: Math.round(f.value / (f.cost + f.risk) * 100) / 100, i: i }; })\n    .sort(function (a, b) { return b.priority - a.priority || a.i - b.i; })\n    .map(function (x) { return { id: x.id, priority: x.priority }; });\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The formula surfaces quick wins (high value, low cost and risk). It turns a political argument into a defensible ranking — but the numbers are relative estimates; the conversation they provoke matters as much as the result.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "features.js",
+          "rank.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "sample features",
+              "vi": "tính năng mẫu"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var i=[{id:\"F1\",name:\"Guest checkout\",value:9,cost:3,risk:2},{id:\"F2\",name:\"Coupon codes\",value:6,cost:4,risk:2},{id:\"F3\",name:\"Crypto payment\",value:4,cost:8,risk:9},{id:\"F4\",name:\"Dark mode\",value:3,cost:2,risk:1}],r=[{id:\"F1\",priority:1.8},{id:\"F2\",priority:1},{id:\"F4\",priority:1},{id:\"F3\",priority:.24}];if(typeof rank!=\"function\")return\"rank is not a function\";var n=JSON.stringify(i),t=rank(i);return JSON.stringify(i)!==n?\"do not modify the input array\":JSON.stringify(t)===JSON.stringify(r)?\"OK\":\"expected \"+JSON.stringify(r)+\", got \"+JSON.stringify(t)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "rounding to 2 decimals",
+              "vi": "làm tròn 2 chữ số"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var i=[{id:\"A\",value:2,cost:2,risk:1},{id:\"B\",value:5,cost:3,risk:3}],r=[{id:\"B\",priority:.83},{id:\"A\",priority:.67}];if(typeof rank!=\"function\")return\"rank is not a function\";var t=JSON.stringify(i),n=rank(i);return JSON.stringify(i)!==t?\"do not modify the input array\":JSON.stringify(n)===JSON.stringify(r)?\"OK\":\"expected \"+JSON.stringify(r)+\", got \"+JSON.stringify(n)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "hidden: invalid scores are left out",
+              "vi": "ẩn: điểm ngoài 1–9 bị loại"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var i=[{id:\"X\",value:10,cost:1,risk:1},{id:\"Y\",value:4,cost:0,risk:2},{id:\"Z\",value:4,cost:2,risk:2}],r=[{id:\"Z\",priority:1}];if(typeof rank!=\"function\")return\"rank is not a function\";var t=JSON.stringify(i),n=rank(i);return JSON.stringify(i)!==t?\"do not modify the input array\":JSON.stringify(n)===JSON.stringify(r)?\"OK\":\"expected \"+JSON.stringify(r)+\", got \"+JSON.stringify(n)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "hidden: ties keep input order",
+              "vi": "ẩn: hoà giữ thứ tự đầu vào"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var i=[{id:\"P\",value:2,cost:1,risk:1},{id:\"Q\",value:9,cost:9,risk:9},{id:\"R\",value:4,cost:1,risk:3}],r=[{id:\"P\",priority:1},{id:\"R\",priority:1},{id:\"Q\",priority:.5}];if(typeof rank!=\"function\")return\"rank is not a function\";var n=JSON.stringify(i),t=rank(i);return JSON.stringify(i)!==n?\"do not modify the input array\":JSON.stringify(t)===JSON.stringify(r)?\"OK\":\"expected \"+JSON.stringify(r)+\", got \"+JSON.stringify(t)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng features.sort trực tiếp (sửa đầu vào)."
+        },
+        {
+          "loi": "Không loại điểm 0 hay 10."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "value / cost / risk prioritization",
+          "vi": "xếp ưu tiên kiểu Wiegers: priority = value% ÷ (cost% × trọng số + risk% × trọng số)"
+        }
+      ]
+    }
+  ]
+}

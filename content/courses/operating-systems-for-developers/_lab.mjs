@@ -33,6 +33,8 @@ export const SIMS = {
   cow: ['fork', 'exec', 'bgsave', 'hugepage'],
   pagecache: ['seq', 'random', 'warm', 'mmap', 'lru'],
   syscall: ['write', 'fail', 'vdso', 'batch', 'strace', 'seccomp'],
+  perm: ['owner', 'dirx', 'sticky', 'setgid', 'setuid', 'caps', 'acl'],
+  fdtable: ['twice', 'dup', 'append', 'fork', 'deleted', 'emfile', 'links', 'redirect'],
   latency: ['default'],
 };
 
@@ -52,6 +54,8 @@ export const TOURS = {
   cow: ['cow-start'],
   pagecache: ['pagecache-start'],
   syscall: ['syscall-journey', 'syscall-errno', 'syscall-start'],
+  perm: ['perm-check', 'perm-acl', 'perm-start'],
+  fdtable: ['fdtable-offsets', 'fdtable-deleted', 'fdtable-start'],
   latency: ['latency-start'],
 };
 

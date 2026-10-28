@@ -125,6 +125,10 @@ const FINAL: Record<string, (s: Record<string, Record<string, unknown> | undefin
   'eventloop-block': (s) => s.el?.offload === true,
   'process-shell': (s) => s.process?.zombies === 0 && (s.process?.i as number) === 7,
   'syscall-journey': (s) => s.sys?.scenario === 'vdso' && s.sys?.atEnd === true && s.sys?.mode === 'user',
+  'perm-check': (s) => s.perm?.path === '/srv/drop/bob-session' && s.perm?.ok === true,
+  'perm-acl': (s) => s.perm?.capsDrop === true && s.perm?.ok === false,
+  'fdtable-offsets': (s) => s.fd?.preset === 'append' && s.fd?.pos4 === 39 && s.fd?.file === 'worker A: order 1001 paid\nworker B: hi\n',
+  'fdtable-deleted': (s) => s.fd?.preset === 'emfile' && (s.fd?.fds as number) >= 1024 && String(s.fd?.term).includes('EMFILE'),
   'syscall-errno': (s) => s.sys?.kind === 'clone3' && s.sys?.raw === -38 && s.sys?.atEnd === true,
 };
 

@@ -111,6 +111,20 @@ export const OS_LABS: Record<string, OsLabDef> = {
     presets: ['write', 'fail', 'vdso', 'batch', 'strace', 'seccomp'],
     load: () => import('./SyscallSim'),
   },
+  perm: {
+    en: 'Permission room: can user X do Y?', vi: 'Phòng quyền: người X làm được Y không?', chapterEn: 'Chapter 9', chapterVi: 'Chương 9',
+    descEn: 'rwx and owner/group/other checked one rule at a time; directory x and w, delete vs sticky (EPERM), setuid/setgid, umask, capabilities and the ACL mask trap.',
+    descVi: 'rwx và chủ/nhóm/other được kiểm từng luật một; x và w của thư mục, xoá và sticky (EPERM), setuid/setgid, umask, capability và cái bẫy mask của ACL.',
+    presets: ['owner', 'dirx', 'sticky', 'setgid', 'setuid', 'caps', 'acl'],
+    load: () => import('./PermSim'),
+  },
+  fdtable: {
+    en: 'File descriptors, open files and inodes', vi: 'fd, tệp đang mở và inode', chapterEn: 'Chapter 9', chapterVi: 'Chương 9',
+    descEn: 'fd table → open file description (offset, flags) → inode ← names. Two open()s overwrite each other, dup/fork share an offset, O_APPEND, deleted-but-open files, EMFILE, 2>&1 order.',
+    descVi: 'Bảng fd → mô tả file mở (offset, cờ) → inode ← tên. Hai lần open() ghi đè nhau, dup/fork chung offset, O_APPEND, tệp đã xoá mà còn mở, EMFILE, thứ tự 2>&1.',
+    presets: ['twice', 'dup', 'append', 'fork', 'deleted', 'emfile', 'links', 'redirect'],
+    load: () => import('./FdTableSim'),
+  },
   latency: {
     en: 'Latency ladder', vi: 'Thang độ trễ', chapterEn: 'Section 0', chapterVi: 'Mục 0',
     descEn: 'Registers → caches → RAM → SSD → disk → network, on a human time scale.',

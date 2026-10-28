@@ -1,0 +1,468 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-7-2-traceability",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-7-2-traceability"
+  },
+  "exercises": [
+    {
+      "title": "Traceability 1 — the four directions",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "trace directions"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers Figure 29-1: <b>forward to requirements</b> (customer needs → requirements), <b>backward from requirements</b> (requirements → customer needs/origin), <b>forward from requirements</b> (requirements → design, code, tests), <b>backward to requirements</b> (design, code, tests → requirements). Name the direction of each trace.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hình 29-1 của Wiegers: bốn hướng truy vết. Gọi tên hướng của từng liên kết.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Nhu cầu → yêu cầu: forward TO requirements.",
+        "Sản phẩm (code/test) → yêu cầu: backward TO requirements."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Traceability 1 — the four directions\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Traceability 1 — the four directions — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Forward to requirements\n   - r1.k: Backward from requirements\n   - r2.k: Forward from requirements\n   - r3.k: Backward to requirements\n   - r4.k: Forward to requirements\n   - r5.k: Backward to requirements\n   \"To/from requirements\" names where the requirement sits: before it are needs (forward to / backward from); after it are work products (forward from / backward to).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>\"To/from requirements\" names where the requirement sits: before it are needs (forward to / backward from); after it are work products (forward from / backward to).</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Direction",
+                "luaChon": [
+                  "Forward to requirements",
+                  "Backward from requirements",
+                  "Forward from requirements",
+                  "Backward to requirements"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Business objective BO-2 → user requirement UR-5"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "FR-12 → which interview did it come from?"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "FR-12 → test case TC-40"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Class BookingService → FR-12, FR-13"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Stakeholder request SR-3 → FR-20"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Test case TC-41 → which requirement does it verify?"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Forward to requirements",
+              "r1.k": "Backward from requirements",
+              "r2.k": "Forward from requirements",
+              "r3.k": "Backward to requirements",
+              "r4.k": "Forward to requirements",
+              "r5.k": "Backward to requirements"
+            },
+            "giaiThich": "<p><p>\"To/from requirements\" names where the requirement sits: before it are needs (forward to / backward from); after it are work products (forward from / backward to).</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm \"forward from\" với \"forward to\"."
+        },
+        {
+          "loi": "Coi mọi liên kết tới test là backward."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "requirements traceability matrix (RTM)",
+          "vi": "ma trận truy vết yêu cầu — nối nguồn ↔ yêu cầu ↔ thiết kế ↔ mã ↔ test"
+        }
+      ]
+    },
+    {
+      "title": "Traceability 2 — why trace?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "benefits of traceability"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers lists benefits of traceability: finding missing requirements, finding unnecessary requirements (gold plating), certification and compliance, change impact analysis, maintenance, project tracking, reengineering, reuse and testing.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lợi ích của truy vết theo Wiegers: tìm yêu cầu thiếu, yêu cầu thừa (mạ vàng), chứng nhận và tuân thủ, phân tích ảnh hưởng thay đổi, bảo trì, theo dõi dự án, tái cấu trúc, tái sử dụng, kiểm thử.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Code không có yêu cầu ⇒ mạ vàng hoặc thiếu yêu cầu.",
+        "Ghi liên kết ngay khi tạo sản phẩm."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Traceability 2 — why trace?\n\nAnswer in the answer panel (no code needed).\n\n1. A code module traces to no requirement. This suggests…Một module code không truy về yêu cầu nào. Điều này gợi ý…\n2. A requirement has no test case. Risk?Một yêu cầu không có test case. Rủi ro?\n3. A medical-device regulator asks you to prove every safety requirement was tested. You use…Cơ quan quản lý thiết bị y tế yêu cầu chứng minh mọi yêu cầu an toàn đã được test. Bạn dùng…\n4. Who should record trace links, and when?Ai ghi liên kết truy vết, và khi nào?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Traceability 2 — why trace? — answer key\n\n1. A code module traces to no requirement. This suggests…Một module code không truy về yêu cầu nào. Điều này gợi ý…\n   Answer: a) gold plating or a missing requirement\n   Either it is unneeded, or the requirement was never written.VI: Hoặc không cần, hoặc yêu cầu chưa được viết.\n\n2. A requirement has no test case. Risk?Một yêu cầu không có test case. Rủi ro?\n   Answer: a) It may be shipped unverified\n   Traceability exposes untested requirements.VI: Truy vết lộ yêu cầu chưa được kiểm.\n\n3. A medical-device regulator asks you to prove every safety requirement was tested. You use…Cơ quan quản lý thiết bị y tế yêu cầu chứng minh mọi yêu cầu an toàn đã được test. Bạn dùng…\n   Answer: a) the requirements traceability matrix\n   Certification is a classic use of the RTM.VI: Chứng nhận là công dụng kinh điển của RTM.\n\n4. Who should record trace links, and when?Ai ghi liên kết truy vết, và khi nào?\n   Answer: a) Everyone who creates a work product, at the time they create it\n   Capturing links later is costly and inaccurate.VI: Ghi sau thì tốn kém và thiếu chính xác.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · a · a · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>A code module traces to no requirement. This suggests…</p><p style=\"opacity:.75;font-size:.92em\"><i>Một module code không truy về yêu cầu nào. Điều này gợi ý…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "gold plating or a missing requirement"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the module is perfect"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a testing tool bug"
+              },
+              {
+                "ma": "d",
+                "noiDung": "nothing"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Either it is unneeded, or the requirement was never written.</p><p><i>VI: Hoặc không cần, hoặc yêu cầu chưa được viết.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>A requirement has no test case. Risk?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một yêu cầu không có test case. Rủi ro?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It may be shipped unverified"
+              },
+              {
+                "ma": "b",
+                "noiDung": "None"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It will be deleted"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The build fails"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Traceability exposes untested requirements.</p><p><i>VI: Truy vết lộ yêu cầu chưa được kiểm.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>A medical-device regulator asks you to prove every safety requirement was tested. You use…</p><p style=\"opacity:.75;font-size:.92em\"><i>Cơ quan quản lý thiết bị y tế yêu cầu chứng minh mọi yêu cầu an toàn đã được test. Bạn dùng…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the requirements traceability matrix"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the vision statement"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the backlog burndown"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the context diagram"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Certification is a classic use of the RTM.</p><p><i>VI: Chứng nhận là công dụng kinh điển của RTM.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Who should record trace links, and when?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ai ghi liên kết truy vết, và khi nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Everyone who creates a work product, at the time they create it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "One BA at the end of the project"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Testers after release"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nobody — tools guess them"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Capturing links later is costly and inaccurate.</p><p><i>VI: Ghi sau thì tốn kém và thiếu chính xác.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Để truy vết tới cuối dự án."
+        },
+        {
+          "loi": "Cho rằng truy vết chỉ để làm đẹp tài liệu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "requirements traceability matrix (RTM)",
+          "vi": "ma trận truy vết yêu cầu — nối nguồn ↔ yêu cầu ↔ thiết kế ↔ mã ↔ test"
+        },
+        {
+          "en": "gold plating",
+          "vi": "mạ vàng — dev tự thêm chức năng không ai yêu cầu"
+        }
+      ]
+    },
+    {
+      "title": "Traceability 3 — an RTM checker",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "requirements traceability matrix"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>A project stores its trace links as an array of items <code>{ id, type, from }</code>: <code>type</code> is \"UR\" (user requirement), \"FR\" (functional requirement) or \"TC\" (test case); <code>from</code> lists the ids this item traces back to (FR → UR, TC → FR). Write <code>function check(items)</code> that returns <code>{ orphanFR, untestedFR, uncoveredUR, brokenLinks }</code>:</p><ul><li><code>orphanFR</code>: ids of FRs with no valid UR in <code>from</code> (possible gold plating).</li><li><code>untestedFR</code>: ids of FRs that no TC traces to.</li><li><code>uncoveredUR</code>: ids of URs that no FR traces to (missing requirements).</li><li><code>brokenLinks</code>: strings <code>\"TC-3->FR-9\"</code> for every link to an id that does not exist.</li></ul><p>Each list sorted alphabetically. Tested on hidden RTMs.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>A link counts only if the target exists and has the right type (FR → UR, TC → FR).</li>\n</ul>",
+      "problemHtmlVi": "<p>Liên kết truy vết lưu thành mảng <code>{ id, type, from }</code>. Viết <code>check(items)</code> trả <code>{ orphanFR, untestedFR, uncoveredUR, brokenLinks }</code> như mô tả; mỗi danh sách sắp xếp theo bảng chữ cái. Có kiểm trên RTM ẩn.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Liên kết chỉ tính khi đích tồn tại và đúng loại (FR → UR, TC → FR).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "the sample RTM in rtm-sample.js",
+          "output": "{ orphanFR: [\"FR-4\"], untestedFR: [\"FR-2\",\"FR-4\"], uncoveredUR: [], brokenLinks: [\"TC-3->FR-9\"] }",
+          "explanation": "|||"
+        }
+      ],
+      "hintsJson": [
+        "Dựng bảng byId trước; liên kết gãy là đích không có trong bảng.",
+        "Kiểm loại đích: FR chỉ tính khi trỏ tới UR; TC chỉ tính khi trỏ tới FR."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "rtm-sample.js",
+          "language": "javascript",
+          "code": "const SAMPLE = [\n {\n  \"id\": \"UR-1\",\n  \"type\": \"UR\",\n  \"from\": []\n },\n {\n  \"id\": \"UR-2\",\n  \"type\": \"UR\",\n  \"from\": []\n },\n {\n  \"id\": \"FR-1\",\n  \"type\": \"FR\",\n  \"from\": [\n   \"UR-1\"\n  ]\n },\n {\n  \"id\": \"FR-2\",\n  \"type\": \"FR\",\n  \"from\": [\n   \"UR-1\"\n  ]\n },\n {\n  \"id\": \"FR-3\",\n  \"type\": \"FR\",\n  \"from\": [\n   \"UR-2\"\n  ]\n },\n {\n  \"id\": \"FR-4\",\n  \"type\": \"FR\",\n  \"from\": []\n },\n {\n  \"id\": \"TC-1\",\n  \"type\": \"TC\",\n  \"from\": [\n   \"FR-1\"\n  ]\n },\n {\n  \"id\": \"TC-2\",\n  \"type\": \"TC\",\n  \"from\": [\n   \"FR-1\",\n   \"FR-3\"\n  ]\n },\n {\n  \"id\": \"TC-3\",\n  \"type\": \"TC\",\n  \"from\": [\n   \"FR-9\"\n  ]\n }\n];\n"
+        },
+        {
+          "name": "check.js",
+          "language": "javascript",
+          "code": "function check(items) {\n  return { orphanFR: [], untestedFR: [], uncoveredUR: [], brokenLinks: [] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "rtm-sample.js",
+          "language": "javascript",
+          "code": "const SAMPLE = [\n {\n  \"id\": \"UR-1\",\n  \"type\": \"UR\",\n  \"from\": []\n },\n {\n  \"id\": \"UR-2\",\n  \"type\": \"UR\",\n  \"from\": []\n },\n {\n  \"id\": \"FR-1\",\n  \"type\": \"FR\",\n  \"from\": [\n   \"UR-1\"\n  ]\n },\n {\n  \"id\": \"FR-2\",\n  \"type\": \"FR\",\n  \"from\": [\n   \"UR-1\"\n  ]\n },\n {\n  \"id\": \"FR-3\",\n  \"type\": \"FR\",\n  \"from\": [\n   \"UR-2\"\n  ]\n },\n {\n  \"id\": \"FR-4\",\n  \"type\": \"FR\",\n  \"from\": []\n },\n {\n  \"id\": \"TC-1\",\n  \"type\": \"TC\",\n  \"from\": [\n   \"FR-1\"\n  ]\n },\n {\n  \"id\": \"TC-2\",\n  \"type\": \"TC\",\n  \"from\": [\n   \"FR-1\",\n   \"FR-3\"\n  ]\n },\n {\n  \"id\": \"TC-3\",\n  \"type\": \"TC\",\n  \"from\": [\n   \"FR-9\"\n  ]\n }\n];\n"
+        },
+        {
+          "name": "check.js",
+          "language": "javascript",
+          "code": "function check(items) {\n  var byId = {};\n  items.forEach(function (x) { byId[x.id] = x; });\n  var orphanFR = [], untestedFR = [], uncoveredUR = [], brokenLinks = [];\n  var urCovered = {}, frTested = {};\n  items.forEach(function (x) {\n    (x.from || []).forEach(function (t) {\n      var target = Object.prototype.hasOwnProperty.call(byId, t) ? byId[t] : null;\n      if (!target) { brokenLinks.push(x.id + '->' + t); return; }\n      if (x.type === 'FR' && target.type === 'UR') urCovered[t] = true;\n      if (x.type === 'TC' && target.type === 'FR') frTested[t] = true;\n    });\n  });\n  items.forEach(function (x) {\n    if (x.type === 'FR') {\n      var ok = (x.from || []).some(function (t) { return byId[t] && byId[t].type === 'UR'; });\n      if (!ok) orphanFR.push(x.id);\n      if (!frTested[x.id]) untestedFR.push(x.id);\n    }\n    if (x.type === 'UR' && !urCovered[x.id]) uncoveredUR.push(x.id);\n  });\n  return { orphanFR: orphanFR.sort(), untestedFR: untestedFR.sort(), uncoveredUR: uncoveredUR.sort(), brokenLinks: brokenLinks.sort() };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The checker answers three classic RTM questions: what has no origin (orphans), what is not verified (untested), and what need has no requirement (uncovered) — plus data hygiene (broken links).</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "rtm-sample.js",
+          "check.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "sample: orphan FRs",
+              "vi": "mẫu: FR mồ côi"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var o=[{id:\"UR-1\",type:\"UR\",from:[]},{id:\"UR-2\",type:\"UR\",from:[]},{id:\"FR-1\",type:\"FR\",from:[\"UR-1\"]},{id:\"FR-2\",type:\"FR\",from:[\"UR-1\"]},{id:\"FR-3\",type:\"FR\",from:[\"UR-2\"]},{id:\"FR-4\",type:\"FR\",from:[]},{id:\"TC-1\",type:\"TC\",from:[\"FR-1\"]},{id:\"TC-2\",type:\"TC\",from:[\"FR-1\",\"FR-3\"]},{id:\"TC-3\",type:\"TC\",from:[\"FR-9\"]}],f={orphanFR:[\"FR-4\"],untestedFR:[\"FR-2\",\"FR-4\"],uncoveredUR:[],brokenLinks:[\"TC-3->FR-9\"]},e=[\"orphanFR\"];if(typeof check!=\"function\")return\"check is not a function\";var t=check(o);if(!t)return\"check must return an object\";for(var r=0;r<e.length;r++){var R=JSON.stringify(t[e[r]]),n=JSON.stringify(f[e[r]]);if(R!==n)return e[r]+\" should be \"+n+\", got \"+R}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "sample: untested FRs and uncovered URs",
+              "vi": "mẫu: FR chưa test, UR chưa phủ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var o=[{id:\"UR-1\",type:\"UR\",from:[]},{id:\"UR-2\",type:\"UR\",from:[]},{id:\"FR-1\",type:\"FR\",from:[\"UR-1\"]},{id:\"FR-2\",type:\"FR\",from:[\"UR-1\"]},{id:\"FR-3\",type:\"FR\",from:[\"UR-2\"]},{id:\"FR-4\",type:\"FR\",from:[]},{id:\"TC-1\",type:\"TC\",from:[\"FR-1\"]},{id:\"TC-2\",type:\"TC\",from:[\"FR-1\",\"FR-3\"]},{id:\"TC-3\",type:\"TC\",from:[\"FR-9\"]}],f={orphanFR:[\"FR-4\"],untestedFR:[\"FR-2\",\"FR-4\"],uncoveredUR:[],brokenLinks:[\"TC-3->FR-9\"]},r=[\"untestedFR\",\"uncoveredUR\"];if(typeof check!=\"function\")return\"check is not a function\";var t=check(o);if(!t)return\"check must return an object\";for(var e=0;e<r.length;e++){var R=JSON.stringify(t[r[e]]),n=JSON.stringify(f[r[e]]);if(R!==n)return r[e]+\" should be \"+n+\", got \"+R}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "sample: broken links",
+              "vi": "mẫu: liên kết gãy"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var R=[{id:\"UR-1\",type:\"UR\",from:[]},{id:\"UR-2\",type:\"UR\",from:[]},{id:\"FR-1\",type:\"FR\",from:[\"UR-1\"]},{id:\"FR-2\",type:\"FR\",from:[\"UR-1\"]},{id:\"FR-3\",type:\"FR\",from:[\"UR-2\"]},{id:\"FR-4\",type:\"FR\",from:[]},{id:\"TC-1\",type:\"TC\",from:[\"FR-1\"]},{id:\"TC-2\",type:\"TC\",from:[\"FR-1\",\"FR-3\"]},{id:\"TC-3\",type:\"TC\",from:[\"FR-9\"]}],f={orphanFR:[\"FR-4\"],untestedFR:[\"FR-2\",\"FR-4\"],uncoveredUR:[],brokenLinks:[\"TC-3->FR-9\"]},e=[\"brokenLinks\"];if(typeof check!=\"function\")return\"check is not a function\";var n=check(R);if(!n)return\"check must return an object\";for(var r=0;r<e.length;r++){var t=JSON.stringify(n[e[r]]),o=JSON.stringify(f[e[r]]);if(t!==o)return e[r]+\" should be \"+o+\", got \"+t}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "hidden RTM: wrong-type links do not count",
+              "vi": "RTM ẩn: liên kết sai loại không tính"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var o=[{id:\"UR-1\",type:\"UR\",from:[]},{id:\"UR-2\",type:\"UR\",from:[]},{id:\"UR-3\",type:\"UR\",from:[]},{id:\"FR-10\",type:\"FR\",from:[\"UR-1\"]},{id:\"FR-2\",type:\"FR\",from:[\"UR-1\",\"UR-3\"]},{id:\"FR-3\",type:\"FR\",from:[\"FR-2\"]},{id:\"FR-5\",type:\"FR\",from:[\"UR-7\"]},{id:\"TC-1\",type:\"TC\",from:[\"FR-10\"]},{id:\"TC-2\",type:\"TC\",from:[\"UR-2\"]},{id:\"TC-9\",type:\"TC\",from:[\"FR-3\",\"FR-77\"]}],F={orphanFR:[\"FR-3\",\"FR-5\"],untestedFR:[\"FR-2\",\"FR-5\"],uncoveredUR:[\"UR-2\"],brokenLinks:[\"FR-5->UR-7\",\"TC-9->FR-77\"]},r=[\"orphanFR\",\"untestedFR\",\"uncoveredUR\"];if(typeof check!=\"function\")return\"check is not a function\";var e=check(o);if(!e)return\"check must return an object\";for(var R=0;R<r.length;R++){var t=JSON.stringify(e[r[R]]),n=JSON.stringify(F[r[R]]);if(t!==n)return r[R]+\" should be \"+n+\", got \"+t}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "hidden RTM: broken links, sorted",
+              "vi": "RTM ẩn: liên kết gãy, đã sắp xếp"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var o=[{id:\"UR-1\",type:\"UR\",from:[]},{id:\"UR-2\",type:\"UR\",from:[]},{id:\"UR-3\",type:\"UR\",from:[]},{id:\"FR-10\",type:\"FR\",from:[\"UR-1\"]},{id:\"FR-2\",type:\"FR\",from:[\"UR-1\",\"UR-3\"]},{id:\"FR-3\",type:\"FR\",from:[\"FR-2\"]},{id:\"FR-5\",type:\"FR\",from:[\"UR-7\"]},{id:\"TC-1\",type:\"TC\",from:[\"FR-10\"]},{id:\"TC-2\",type:\"TC\",from:[\"UR-2\"]},{id:\"TC-9\",type:\"TC\",from:[\"FR-3\",\"FR-77\"]}],f={orphanFR:[\"FR-3\",\"FR-5\"],untestedFR:[\"FR-2\",\"FR-5\"],uncoveredUR:[\"UR-2\"],brokenLinks:[\"FR-5->UR-7\",\"TC-9->FR-77\"]},r=[\"brokenLinks\"];if(typeof check!=\"function\")return\"check is not a function\";var e=check(o);if(!e)return\"check must return an object\";for(var R=0;R<r.length;R++){var t=JSON.stringify(e[r[R]]),n=JSON.stringify(f[r[R]]);if(t!==n)return r[R]+\" should be \"+n+\", got \"+t}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "hidden RTM: missing \"from\", tricky ids",
+              "vi": "RTM ẩn: thiếu \"from\", id đánh lừa"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var c=[{id:\"UR-1\",type:\"UR\",from:[]},{id:\"FR-1\",type:\"FR\"},{id:\"TC-1\",type:\"TC\",from:[\"constructor\"]}],u={orphanFR:[\"FR-1\"],untestedFR:[\"FR-1\"],uncoveredUR:[\"UR-1\"],brokenLinks:[\"TC-1->constructor\"]},r=[\"orphanFR\",\"untestedFR\",\"uncoveredUR\",\"brokenLinks\"];if(typeof check!=\"function\")return\"check is not a function\";var t=check(c);if(!t)return\"check must return an object\";for(var n=0;n<r.length;n++){var e=JSON.stringify(t[r[n]]),o=JSON.stringify(u[r[n]]);if(e!==o)return r[n]+\" should be \"+o+\", got \"+e}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Tính FR → FR là có nguồn UR."
+        },
+        {
+          "loi": "Dùng byId[t] với t = \"constructor\" ⇒ tưởng đích tồn tại."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "requirements traceability matrix (RTM)",
+          "vi": "ma trận truy vết yêu cầu — nối nguồn ↔ yêu cầu ↔ thiết kế ↔ mã ↔ test"
+        },
+        {
+          "en": "gold plating",
+          "vi": "mạ vàng — dev tự thêm chức năng không ai yêu cầu"
+        }
+      ]
+    }
+  ]
+}

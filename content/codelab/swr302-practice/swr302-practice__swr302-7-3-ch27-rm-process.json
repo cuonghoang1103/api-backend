@@ -1,0 +1,455 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-7-3-ch27-rm-process",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-7-3-ch27-rm-process"
+  },
+  "exercises": [
+    {
+      "title": "RM 1 — which requirements management activity?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "requirements management activities"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers Figure 27-1 groups requirements management into four activities: <b>version control</b>, <b>change control</b>, <b>requirements status tracking</b> and <b>requirements tracing</b>. Classify each task.</p><p>Each row is graded on its own; the explanation of every answer appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hình 27-1: quản lý yêu cầu gồm bốn hoạt động. Phân loại từng việc.</p><p>Mỗi dòng được chấm riêng; giải thích từng đáp án hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Baseline gắn với version control.",
+        "Phân tích ảnh hưởng là một bước của change control."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# RM 1 — which requirements management activity?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# RM 1 — which requirements management activity? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Version control\n   - r1.k: Change control\n   - r2.k: Requirements status tracking\n   - r3.k: Requirements tracing\n   - r4.k: Change control\n   - r5.k: Version control\n   - r6.k: Requirements status tracking\n   Version control identifies versions and baselines; change control proposes, analyses and decides changes; status tracking records each requirement’s status; tracing links requirements to origins and work products.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Version control identifies versions and baselines; change control proposes, analyses and decides changes; status tracking records each requirement’s status; tracing links requirements to origins and work products.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Activity",
+                "luaChon": [
+                  "Version control",
+                  "Change control",
+                  "Requirements status tracking",
+                  "Requirements tracing"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Give each SRS release a unique version identifier and keep a revision history."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Propose a change and have the CCB approve or reject it."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Report that 40 of 60 requirements are Verified."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Link FR-12 to its use case, design element and test cases."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Analyse the impact of a proposed change before deciding."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Define the requirements baseline for release 1.0."
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "Record that FR-30 moved from Approved to Implemented."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Version control",
+              "r1.k": "Change control",
+              "r2.k": "Requirements status tracking",
+              "r3.k": "Requirements tracing",
+              "r4.k": "Change control",
+              "r5.k": "Version control",
+              "r6.k": "Requirements status tracking"
+            },
+            "giaiThich": "<p><p>Version control identifies versions and baselines; change control proposes, analyses and decides changes; status tracking records each requirement’s status; tracing links requirements to origins and work products.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Xếp baseline vào change control."
+        },
+        {
+          "loi": "Nhầm status tracking với tracing."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "baseline",
+          "vi": "đường cơ sở — bộ yêu cầu đã thống nhất, từ đó mọi thay đổi phải qua kiểm soát"
+        },
+        {
+          "en": "change control board (CCB)",
+          "vi": "hội đồng kiểm soát thay đổi — người quyết định chấp nhận/từ chối thay đổi"
+        },
+        {
+          "en": "requirements traceability matrix (RTM)",
+          "vi": "ma trận truy vết yêu cầu — nối nguồn ↔ yêu cầu ↔ thiết kế ↔ mã ↔ test"
+        }
+      ]
+    },
+    {
+      "title": "RM 2 — baselines and requirement attributes",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "baseline",
+        "requirement attributes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>A <b>requirements baseline</b> is a set of requirements that has been reviewed and agreed upon and serves as the basis for further development; changes to it go through change control. Wiegers suggests storing <b>attributes</b> for each requirement, such as date created, version, author, priority, status, origin, rationale, release number, stakeholders to contact, validation method.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Baseline yêu cầu</b> là tập yêu cầu đã review và thống nhất, làm nền cho phát triển tiếp; thay đổi phải qua kiểm soát thay đổi. Wiegers gợi ý lưu <b>thuộc tính</b> cho mỗi yêu cầu: ngày tạo, phiên bản, tác giả, ưu tiên, trạng thái, nguồn gốc, lý do, bản phát hành, người liên hệ, cách thẩm định.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Sau baseline: mọi thay đổi qua CR.",
+        "Rationale = lý do; origin = nguồn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# RM 2 — baselines and requirement attributes\n\nAnswer in the answer panel (no code needed).\n\n1. After the baseline, the customer wants to edit a requirement directly in the SRS. Correct?Sau baseline, khách muốn sửa thẳng một yêu cầu trong SRS. Đúng không?\n2. Which attribute helps answer \"why do we need this requirement?\"Thuộc tính nào trả lời \"vì sao cần yêu cầu này?\"\n3. Which attribute helps decide whom to ask about a requirement?Thuộc tính nào giúp biết hỏi ai về một yêu cầu?\n4. Version identifiers should…Định danh phiên bản nên…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# RM 2 — baselines and requirement attributes — answer key\n\n1. After the baseline, the customer wants to edit a requirement directly in the SRS. Correct?Sau baseline, khách muốn sửa thẳng một yêu cầu trong SRS. Đúng không?\n   Answer: a) No — submit a change request; the baseline changes only through change control\n   That is the point of a baseline.VI: Đó là ý nghĩa của baseline.\n\n2. Which attribute helps answer \"why do we need this requirement?\"Thuộc tính nào trả lời \"vì sao cần yêu cầu này?\"\n   Answer: a) Rationale\n   Rationale records the reason.VI: Rationale ghi lý do.\n\n3. Which attribute helps decide whom to ask about a requirement?Thuộc tính nào giúp biết hỏi ai về một yêu cầu?\n   Answer: a) Origin / stakeholders to contact\n   Origin points to the source.VI: Nguồn gốc trỏ tới người nêu.\n\n4. Version identifiers should…Định danh phiên bản nên…\n   Answer: a) be unique for every revision so people know they read the current one\n   Everyone must know which version they read.VI: Ai cũng phải biết đang đọc bản nào.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · a · a · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>After the baseline, the customer wants to edit a requirement directly in the SRS. Correct?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau baseline, khách muốn sửa thẳng một yêu cầu trong SRS. Đúng không?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "No — submit a change request; the baseline changes only through change control"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Yes, customers own the SRS"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Yes, if it is a small change"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only on Fridays"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>That is the point of a baseline.</p><p><i>VI: Đó là ý nghĩa của baseline.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Which attribute helps answer \"why do we need this requirement?\"</p><p style=\"opacity:.75;font-size:.92em\"><i>Thuộc tính nào trả lời \"vì sao cần yêu cầu này?\"</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Rationale"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Version"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Date created"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Release number"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Rationale records the reason.</p><p><i>VI: Rationale ghi lý do.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Which attribute helps decide whom to ask about a requirement?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thuộc tính nào giúp biết hỏi ai về một yêu cầu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Origin / stakeholders to contact"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Priority"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Status"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Validation method"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Origin points to the source.</p><p><i>VI: Nguồn gốc trỏ tới người nêu.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Version identifiers should…</p><p style=\"opacity:.75;font-size:.92em\"><i>Định danh phiên bản nên…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "be unique for every revision so people know they read the current one"
+              },
+              {
+                "ma": "b",
+                "noiDung": "stay the same forever"
+              },
+              {
+                "ma": "c",
+                "noiDung": "be optional"
+              },
+              {
+                "ma": "d",
+                "noiDung": "only change for major releases"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Everyone must know which version they read.</p><p><i>VI: Ai cũng phải biết đang đọc bản nào.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Sửa thẳng SRS sau baseline."
+        },
+        {
+          "loi": "Nhầm rationale với origin."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "baseline",
+          "vi": "đường cơ sở — bộ yêu cầu đã thống nhất, từ đó mọi thay đổi phải qua kiểm soát"
+        }
+      ]
+    },
+    {
+      "title": "RM 3 — a requirements status report",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "requirements status tracking"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers’ requirement statuses: <b>Proposed</b>, <b>Approved</b>, <b>Implemented</b>, <b>Verified</b>, <b>Deleted</b>, <b>Rejected</b>. Write <code>function statusReport(reqs)</code> where <code>reqs</code> is an array of <code>{ id, status }</code>. Return <code>{ counts, percentDone, invalid }</code>:</p><ul><li><code>counts</code>: an object with all six statuses as keys (0 when absent).</li><li><code>percentDone</code>: Verified ÷ (all valid requirements except Deleted and Rejected) × 100, rounded to the nearest whole number; 0 when the denominator is 0.</li><li><code>invalid</code>: sorted ids whose status is not one of the six (they are not counted elsewhere).</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Status names are case-sensitive.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trạng thái yêu cầu của Wiegers: Proposed, Approved, Implemented, Verified, Deleted, Rejected. Viết <code>statusReport(reqs)</code> trả <code>{ counts, percentDone, invalid }</code>: counts có đủ sáu khoá; percentDone = Verified ÷ (yêu cầu hợp lệ trừ Deleted và Rejected) × 100, làm tròn; 0 nếu mẫu bằng 0; invalid = id có trạng thái lạ (sắp xếp).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Tên trạng thái phân biệt hoa thường.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "[{id:\"A\",status:\"Verified\"},{id:\"B\",status:\"Approved\"},{id:\"C\",status:\"Deleted\"}]",
+          "output": "{ counts: {Proposed:0, Approved:1, Implemented:0, Verified:1, Deleted:1, Rejected:0}, percentDone: 50, invalid: [] }",
+          "explanation": "1 of 2 active.|||1 trên 2 yêu cầu còn hiệu lực."
+        }
+      ],
+      "hintsJson": [
+        "Khởi tạo counts với sáu khoá = 0 trước.",
+        "Mẫu số = Proposed + Approved + Implemented + Verified."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "status.js",
+          "language": "javascript",
+          "code": "function statusReport(reqs) {\n  // TODO\n  return { counts: {}, percentDone: 0, invalid: [] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "status.js",
+          "language": "javascript",
+          "code": "var STATUSES = ['Proposed', 'Approved', 'Implemented', 'Verified', 'Deleted', 'Rejected'];\n\nfunction statusReport(reqs) {\n  var counts = {};\n  STATUSES.forEach(function (s) { counts[s] = 0; });\n  var invalid = [];\n  reqs.forEach(function (r) {\n    if (STATUSES.indexOf(r.status) >= 0) counts[r.status]++;\n    else invalid.push(r.id);\n  });\n  var active = counts.Proposed + counts.Approved + counts.Implemented + counts.Verified;\n  var percentDone = active ? Math.round(counts.Verified * 100 / active) : 0;\n  return { counts: counts, percentDone: percentDone, invalid: invalid.sort() };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Status tracking gives an honest view of progress: \"percent verified\" is more meaningful than \"percent coded\". Deleted and Rejected requirements are kept for history but excluded from progress.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "status.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "counts include all six statuses",
+              "vi": "counts có đủ sáu trạng thái"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var n=[{id:\"A\",status:\"Verified\"},{id:\"B\",status:\"Approved\"},{id:\"C\",status:\"Deleted\"}];if(typeof statusReport!=\"function\")return\"statusReport is not a function\";var e=statusReport(n);if(!e||!e.counts)return\"return { counts, percentDone, invalid }\";for(var r=[\"Proposed\",\"Approved\",\"Implemented\",\"Verified\",\"Deleted\",\"Rejected\"],t=0;t<6;t++)if(e.counts[r[t]]!==[0,1,0,1,1,0][t])return\"counts.\"+r[t]+\" should be \"+[0,1,0,1,1,0][t];return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "percentDone excludes Deleted and Rejected",
+              "vi": "percentDone bỏ Deleted và Rejected"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var e=[{id:\"A\",status:\"Verified\"},{id:\"B\",status:\"Approved\"},{id:\"C\",status:\"Deleted\"}];if(typeof statusReport!=\"function\")return\"statusReport is not a function\";var t=statusReport(e);return!t||!t.counts?\"return { counts, percentDone, invalid }\":t.percentDone===50?\"OK\":\"percentDone should be 50, got \"+t.percentDone})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "empty list ⇒ 0%, no crash",
+              "vi": "danh sách rỗng ⇒ 0%, không lỗi"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var t=[];if(typeof statusReport!=\"function\")return\"statusReport is not a function\";var n=statusReport(t);return!n||!n.counts?\"return { counts, percentDone, invalid }\":n.percentDone===0&&n.invalid.length===0?\"OK\":\"empty input \\u21D2 percentDone 0, invalid []\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "hidden: invalid statuses (case-sensitive), sorted",
+              "vi": "ẩn: trạng thái lạ (phân biệt hoa thường), sắp xếp"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var i=[{id:\"R7\",status:\"Verified\"},{id:\"R1\",status:\"Implemented\"},{id:\"R2\",status:\"Verified\"},{id:\"R3\",status:\"Rejected\"},{id:\"R9\",status:\"done\"},{id:\"R4\",status:\"Proposed\"},{id:\"R5\",status:\"verified\"},{id:\"R6\",status:\"Verified\"}];if(typeof statusReport!=\"function\")return\"statusReport is not a function\";var t=statusReport(i);return!t||!t.counts?\"return { counts, percentDone, invalid }\":JSON.stringify(t.invalid)===JSON.stringify([\"R5\",\"R9\"])?\"OK\":'invalid should be [\"R5\",\"R9\"], got '+JSON.stringify(t.invalid)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "hidden: percentDone rounding",
+              "vi": "ẩn: làm tròn percentDone"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var e=[{id:\"R7\",status:\"Verified\"},{id:\"R1\",status:\"Implemented\"},{id:\"R2\",status:\"Verified\"},{id:\"R3\",status:\"Rejected\"},{id:\"R9\",status:\"done\"},{id:\"R4\",status:\"Proposed\"},{id:\"R5\",status:\"verified\"},{id:\"R6\",status:\"Verified\"}];if(typeof statusReport!=\"function\")return\"statusReport is not a function\";var t=statusReport(e);return!t||!t.counts?\"return { counts, percentDone, invalid }\":t.percentDone===60&&t.counts.Verified===3?\"OK\":\"expected Verified 3 of 5 active \\u21D2 60%, got \"+t.percentDone+\"% (Verified \"+t.counts.Verified+\")\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Tính cả Deleted/Rejected vào mẫu số."
+        },
+        {
+          "loi": "Đếm \"verified\" (chữ thường) như Verified."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "requirement status",
+          "vi": "trạng thái yêu cầu"
+        }
+      ]
+    }
+  ]
+}

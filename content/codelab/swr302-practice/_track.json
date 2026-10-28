@@ -292,6 +292,30 @@
       "description": "Lab chương 6: thanh tra trích đoạn SRS 16 dòng của TutorMatch — liệt kê lỗi (dòng, loại, mức, cách sửa) chấm theo ghép cặp, có lỗi nghiêm trọng bắt buộc và trừ khẳng định sai; năm giai đoạn và vai trò inspection; tiêu chí chấp nhận Given/When/Then; verification hay validation."
     },
     {
+      "slug": "swr302-7-1-change-control",
+      "name": "7.1 Change control and the CCB",
+      "level": "INTERMEDIATE",
+      "description": "Vòng đời yêu cầu thay đổi (Submitted → … → Closed, Rejected, Canceled), chính sách kiểm soát thay đổi và CCB, tự cài máy trạng thái CR chấm trên mọi cặp, ra quyết định CCB cho 6 CR."
+    },
+    {
+      "slug": "swr302-7-2-traceability",
+      "name": "7.2 Requirements traceability",
+      "level": "INTERMEDIATE",
+      "description": "Bốn hướng truy vết (Hình 29-1), lợi ích của truy vết, tự viết bộ kiểm RTM: FR mồ côi, FR chưa test, UR chưa phủ, liên kết gãy — chấm trên RTM ẩn."
+    },
+    {
+      "slug": "swr302-7-3-ch27-rm-process",
+      "name": "7.3 Requirements management practices",
+      "level": "INTERMEDIATE",
+      "description": "Bốn hoạt động quản lý yêu cầu (version control, change control, status tracking, tracing), baseline và thuộc tính yêu cầu, tự viết báo cáo trạng thái yêu cầu (Proposed…Rejected) chấm trên dữ liệu ẩn."
+    },
+    {
+      "slug": "swr302-7-6-ch28-impact-analysis",
+      "name": "7.4 Change impact analysis",
+      "level": "INTERMEDIATE",
+      "description": "Checklist câu hỏi phân tích ảnh hưởng, xác định sản phẩm bị ảnh hưởng bởi CR-14 (PetCare), tự viết hàm tìm mọi mục bị ảnh hưởng trên đồ thị truy vết (có chu trình) và ước lượng công."
+    },
+    {
       "slug": "swr302-7-lab-change-control-libranet",
       "name": "Lab 7 — Requirements Management: a Change Request in LibraNet",
       "level": "ADVANCED",

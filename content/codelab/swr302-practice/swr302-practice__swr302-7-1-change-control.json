@@ -1,0 +1,567 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-7-1-change-control",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-7-1-change-control"
+  },
+  "exercises": [
+    {
+      "title": "Change control 1 — the normal life of a change request",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 4,
+      "points": 10,
+      "concepts": [
+        "change request states"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers Figure 28-2: the states of a change request. On the normal (approved) path a request goes through six states. Put them in order.</p><p>Drag the items into the right order; the explanation appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hình 28-2 của Wiegers: trạng thái của yêu cầu thay đổi. Trên đường bình thường (được duyệt) có sáu trạng thái. Sắp đúng thứ tự.</p><p>Kéo các mục về đúng thứ tự; giải thích hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Phải đánh giá (Evaluated) trước khi CCB quyết.",
+        "Kiểm (Verified) sau khi sửa (Change Made)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Change control 1 — the normal life of a change request\n\nAnswer in the answer panel (no code needed).\n\n1. Order the statesSắp trạng thái\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Change control 1 — the normal life of a change request — answer key\n\n1. Order the statesSắp trạng thái\n   Answer: a) Submitted  →  b) Evaluated  →  c) Approved  →  d) Change Made  →  e) Verified  →  f) Closed\n   Rejected and Canceled are the other end states.VI: Rejected và Canceled là các trạng thái kết thúc khác.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Submitted → Evaluated → Approved → Change Made → Verified → Closed. A request may also end Rejected (by the CCB) or Canceled (withdrawn at any time).</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Order the states</p><p style=\"opacity:.75;font-size:.92em\"><i>Sắp trạng thái</i></p>",
+            "muc": [
+              {
+                "ma": "e",
+                "noiDung": "Verified"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Approved"
+              },
+              {
+                "ma": "a",
+                "noiDung": "Submitted"
+              },
+              {
+                "ma": "f",
+                "noiDung": "Closed"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Evaluated"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Change Made"
+              }
+            ],
+            "dapAn": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e",
+              "f"
+            ],
+            "giaiThich": "<p>Rejected and Canceled are the other end states.</p><p><i>VI: Rejected và Canceled là các trạng thái kết thúc khác.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt Approved trước Evaluated."
+        },
+        {
+          "loi": "Đóng ngay sau Change Made mà không Verified."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "change control board (CCB)",
+          "vi": "hội đồng kiểm soát thay đổi — người quyết định chấp nhận/từ chối thay đổi"
+        },
+        {
+          "en": "impact analysis",
+          "vi": "phân tích ảnh hưởng — thay đổi này chạm tới yêu cầu, thiết kế, mã, test nào, tốn bao nhiêu"
+        }
+      ]
+    },
+    {
+      "title": "Change control 2 — policy and the CCB",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "change control policy"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers’ change control policy includes: all changes must follow the process; no design or implementation work is done on unapproved changes, except feasibility studies; simply requesting a change does not guarantee it will be made; the contents of the change database are visible to all stakeholders; impact analysis is done for every change; every incorporated change is traceable to an approved change request. The <b>change control board (CCB)</b> decides which proposed changes are approved.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chính sách kiểm soát thay đổi của Wiegers, và <b>CCB</b> là nhóm quyết định thay đổi nào được duyệt.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Mọi thay đổi đi qua quy trình, kể cả nhỏ.",
+        "CCB quyết dựa trên impact analysis."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Change control 2 — policy and the CCB\n\nAnswer in the answer panel (no code needed).\n\n1. A developer adds a \"small\" field the customer asked for by phone, without a CR. This breaks…Dev thêm một trường \"nhỏ\" khách xin qua điện thoại, không có CR. Vi phạm…\n2. Who should sit on a CCB?Ai nên ngồi trong CCB?\n3. Before the CCB decides, the request must have…Trước khi CCB quyết, yêu cầu phải có…\n4. A change request was rejected. The requester should…Yêu cầu thay đổi bị từ chối. Người yêu cầu nên…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Change control 2 — policy and the CCB — answer key\n\n1. A developer adds a \"small\" field the customer asked for by phone, without a CR. This breaks…Dev thêm một trường \"nhỏ\" khách xin qua điện thoại, không có CR. Vi phạm…\n   Answer: a) \"all changes must follow the process\" and traceability to an approved CR\n   Small unmanaged changes add up to scope creep.VI: Thay đổi nhỏ không quản lý cộng dồn thành phình phạm vi.\n\n2. Who should sit on a CCB?Ai nên ngồi trong CCB?\n   Answer: a) Representatives of the groups affected: project management, product owner/BA, development, testing, customers or marketing…\n   Decision makers representing the affected groups.VI: Người có quyền quyết, đại diện các nhóm bị ảnh hưởng.\n\n3. Before the CCB decides, the request must have…Trước khi CCB quyết, yêu cầu phải có…\n   Answer: a) an impact analysis\n   Decide with cost, schedule and risk in view.VI: Quyết định khi đã thấy chi phí, lịch và rủi ro.\n\n4. A change request was rejected. The requester should…Yêu cầu thay đổi bị từ chối. Người yêu cầu nên…\n   Answer: a) be told the decision and its rationale, recorded in the change database\n   Decisions and reasons are communicated and recorded.VI: Quyết định và lý do được thông báo và ghi lại.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · a · a · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>A developer adds a \"small\" field the customer asked for by phone, without a CR. This breaks…</p><p style=\"opacity:.75;font-size:.92em\"><i>Dev thêm một trường \"nhỏ\" khách xin qua điện thoại, không có CR. Vi phạm…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "\"all changes must follow the process\" and traceability to an approved CR"
+              },
+              {
+                "ma": "b",
+                "noiDung": "nothing — it was small"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the coding standard only"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the DoD"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Small unmanaged changes add up to scope creep.</p><p><i>VI: Thay đổi nhỏ không quản lý cộng dồn thành phình phạm vi.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Who should sit on a CCB?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ai nên ngồi trong CCB?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Representatives of the groups affected: project management, product owner/BA, development, testing, customers or marketing…"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Only developers"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only the person requesting the change"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Everyone in the company"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Decision makers representing the affected groups.</p><p><i>VI: Người có quyền quyết, đại diện các nhóm bị ảnh hưởng.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Before the CCB decides, the request must have…</p><p style=\"opacity:.75;font-size:.92em\"><i>Trước khi CCB quyết, yêu cầu phải có…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "an impact analysis"
+              },
+              {
+                "ma": "b",
+                "noiDung": "working code"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a test report"
+              },
+              {
+                "ma": "d",
+                "noiDung": "nothing"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Decide with cost, schedule and risk in view.</p><p><i>VI: Quyết định khi đã thấy chi phí, lịch và rủi ro.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>A change request was rejected. The requester should…</p><p style=\"opacity:.75;font-size:.92em\"><i>Yêu cầu thay đổi bị từ chối. Người yêu cầu nên…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "be told the decision and its rationale, recorded in the change database"
+              },
+              {
+                "ma": "b",
+                "noiDung": "not be told"
+              },
+              {
+                "ma": "c",
+                "noiDung": "implement it anyway"
+              },
+              {
+                "ma": "d",
+                "noiDung": "resubmit the same request every day"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Decisions and reasons are communicated and recorded.</p><p><i>VI: Quyết định và lý do được thông báo và ghi lại.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho phép dev tự nhận thay đổi \"nhỏ\"."
+        },
+        {
+          "loi": "Không thông báo lý do từ chối."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "change control board (CCB)",
+          "vi": "hội đồng kiểm soát thay đổi — người quyết định chấp nhận/từ chối thay đổi"
+        },
+        {
+          "en": "scope creep (creeping requirements)",
+          "vi": "phạm vi phình dần ngoài kiểm soát"
+        },
+        {
+          "en": "impact analysis",
+          "vi": "phân tích ảnh hưởng — thay đổi này chạm tới yêu cầu, thiết kế, mã, test nào, tốn bao nhiêu"
+        }
+      ]
+    },
+    {
+      "title": "Change control 4 — what should the CCB decide?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "CCB decisions"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Change requests for <b>PetCare</b> release 2 (two weeks before the release). For each, choose the most reasonable CCB decision: <b>Approve for this release</b>, <b>Defer to a later release</b> or <b>Reject</b>.</p><p>Each row is graded on its own; the explanation of every answer appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Yêu cầu thay đổi cho PetCare bản 2 (còn hai tuần tới ngày phát hành). Chọn quyết định CCB hợp lý nhất.</p><p>Mỗi dòng được chấm riêng; giải thích từng đáp án hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Luật bắt buộc + công nhỏ ⇒ duyệt.",
+        "Lớn, chưa sẵn sàng ⇒ hoãn; vô giá trị hoặc phạm luật ⇒ từ chối."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Change control 4 — what should the CCB decide?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Change control 4 — what should the CCB decide? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Approve for this release\n   - r1.k: Defer to a later release\n   - r2.k: Reject\n   - r3.k: Approve for this release\n   - r4.k: Defer to a later release\n   - r5.k: Reject\n   Mandatory, small or defect-fixing changes fit; large or not-yet-ready features are deferred; changes without business value or that break rules are rejected.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Mandatory, small or defect-fixing changes fit; large or not-yet-ready features are deferred; changes without business value or that break rules are rejected.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Decision",
+                "luaChon": [
+                  "Approve for this release",
+                  "Defer to a later release",
+                  "Reject"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Law change: invoices must show the new 8% VAT from next month; 4 hours of work."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Add a loyalty-points programme; 3 weeks of work; not in the vision."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Make the \"Book\" button purple because the developer likes purple."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Defect: a booking can be made for a date in the past; 2 hours to fix."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Integrate with a pet-insurance partner that has not signed a contract yet."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Remove the audit log to make saving faster; violates the clinic’s data-retention rule."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Approve for this release",
+              "r1.k": "Defer to a later release",
+              "r2.k": "Reject",
+              "r3.k": "Approve for this release",
+              "r4.k": "Defer to a later release",
+              "r5.k": "Reject"
+            },
+            "giaiThich": "<p><p>Mandatory, small or defect-fixing changes fit; large or not-yet-ready features are deferred; changes without business value or that break rules are rejected.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Duyệt mọi thứ khách xin."
+        },
+        {
+          "loi": "Từ chối tính năng tốt thay vì hoãn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "change control board (CCB)",
+          "vi": "hội đồng kiểm soát thay đổi — người quyết định chấp nhận/từ chối thay đổi"
+        },
+        {
+          "en": "scope creep (creeping requirements)",
+          "vi": "phạm vi phình dần ngoài kiểm soát"
+        }
+      ]
+    },
+    {
+      "title": "Change control 3 — implement the CR state machine",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "change request states"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Write <code>function canMove(from, to)</code> for a change-tracking tool, following Wiegers’ CR life cycle: Submitted → Evaluated; Evaluated → Approved or Rejected; Approved → Change Made; Change Made → Verified; Verified → Closed; and a request can become <b>Canceled</b> from any state that is not final. <b>Closed</b>, <b>Rejected</b> and <b>Canceled</b> are final. No other transitions are allowed (no skipping, no going back). Return <code>true</code>/<code>false</code>. Unknown state names return <code>false</code>. Tested on all pairs.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>State names exactly: \"Submitted\", \"Evaluated\", \"Approved\", \"Rejected\", \"Change Made\", \"Verified\", \"Closed\", \"Canceled\".</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>canMove(from, to)</code> theo vòng đời CR của Wiegers: Submitted → Evaluated; Evaluated → Approved hoặc Rejected; Approved → Change Made; Change Made → Verified; Verified → Closed; và từ mọi trạng thái chưa kết thúc có thể sang <b>Canceled</b>. Closed, Rejected, Canceled là kết thúc. Chỉ các chuyển trên là hợp lệ. Tên trạng thái lạ ⇒ false. Kiểm trên mọi cặp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Tên trạng thái đúng chính tả như trên.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "canMove(\"Approved\", \"Canceled\")",
+          "output": "true",
+          "explanation": "Not final ⇒ can be canceled.|||Chưa kết thúc ⇒ huỷ được."
+        },
+        {
+          "input": "canMove(\"Closed\", \"Canceled\")",
+          "output": "false",
+          "explanation": "Closed is final.|||Closed là kết thúc."
+        }
+      ],
+      "hintsJson": [
+        "Dùng một bảng NEXT[from] = [các trạng thái kế].",
+        "Canceled: cho phép nếu from chưa phải trạng thái kết thúc."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "cr.js",
+          "language": "javascript",
+          "code": "function canMove(from, to) {\n  // TODO\n  return false;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "cr.js",
+          "language": "javascript",
+          "code": "var NEXT = {\n  'Submitted': ['Evaluated'],\n  'Evaluated': ['Approved', 'Rejected'],\n  'Approved': ['Change Made'],\n  'Change Made': ['Verified'],\n  'Verified': ['Closed'],\n  'Rejected': [], 'Closed': [], 'Canceled': [],\n};\nvar FINAL = ['Rejected', 'Closed', 'Canceled'];\n\nfunction canMove(from, to) {\n  if (!NEXT.hasOwnProperty(from) || !NEXT.hasOwnProperty(to)) return false;\n  if (to === 'Canceled') return FINAL.indexOf(from) < 0;\n  return NEXT[from].indexOf(to) >= 0;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A table of allowed next states plus one rule for Canceled is all the tool needs. Enforcing it stops changes being implemented before they are approved, and stops closed requests being reopened silently.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "cr.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "the normal path moves forward",
+              "vi": "đường bình thường đi tiếp được"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var t=[[\"Submitted\",\"Evaluated\",!0],[\"Evaluated\",\"Approved\",!0],[\"Evaluated\",\"Rejected\",!0],[\"Approved\",\"Change Made\",!0],[\"Change Made\",\"Verified\",!0],[\"Verified\",\"Closed\",!0]];if(typeof canMove!=\"function\")return\"canMove is not a function\";for(var e=0;e<t.length;e++){var a=canMove(t[e][0],t[e][1]);if(a!==t[e][2])return'canMove(\"'+t[e][0]+'\", \"'+t[e][1]+'\") should be '+t[e][2]+\", got \"+a}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "no skipping or going backwards on the normal path",
+              "vi": "không nhảy cóc, không lùi trên đường bình thường"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var a=[[\"Submitted\",\"Submitted\",!1],[\"Submitted\",\"Evaluated\",!0],[\"Submitted\",\"Approved\",!1],[\"Submitted\",\"Change Made\",!1],[\"Submitted\",\"Verified\",!1],[\"Submitted\",\"Closed\",!1],[\"Evaluated\",\"Submitted\",!1],[\"Evaluated\",\"Evaluated\",!1],[\"Evaluated\",\"Approved\",!0],[\"Evaluated\",\"Change Made\",!1],[\"Evaluated\",\"Verified\",!1],[\"Evaluated\",\"Closed\",!1],[\"Approved\",\"Submitted\",!1],[\"Approved\",\"Evaluated\",!1],[\"Approved\",\"Approved\",!1],[\"Approved\",\"Change Made\",!0],[\"Approved\",\"Verified\",!1],[\"Approved\",\"Closed\",!1],[\"Change Made\",\"Submitted\",!1],[\"Change Made\",\"Evaluated\",!1],[\"Change Made\",\"Approved\",!1],[\"Change Made\",\"Change Made\",!1],[\"Change Made\",\"Verified\",!0],[\"Change Made\",\"Closed\",!1],[\"Verified\",\"Submitted\",!1],[\"Verified\",\"Evaluated\",!1],[\"Verified\",\"Approved\",!1],[\"Verified\",\"Change Made\",!1],[\"Verified\",\"Verified\",!1],[\"Verified\",\"Closed\",!0],[\"Closed\",\"Submitted\",!1],[\"Closed\",\"Evaluated\",!1],[\"Closed\",\"Approved\",!1],[\"Closed\",\"Change Made\",!1],[\"Closed\",\"Verified\",!1],[\"Closed\",\"Closed\",!1]];if(typeof canMove!=\"function\")return\"canMove is not a function\";for(var e=0;e<a.length;e++){var d=canMove(a[e][0],a[e][1]);if(d!==a[e][2])return'canMove(\"'+a[e][0]+'\", \"'+a[e][1]+'\") should be '+a[e][2]+\", got \"+d}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Canceled from any non-final state",
+              "vi": "Canceled từ mọi trạng thái chưa kết thúc"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var n=[[\"Submitted\",\"Canceled\",!0],[\"Evaluated\",\"Canceled\",!0],[\"Approved\",\"Canceled\",!0],[\"Rejected\",\"Canceled\",!1],[\"Change Made\",\"Canceled\",!0],[\"Verified\",\"Canceled\",!0],[\"Closed\",\"Canceled\",!1],[\"Canceled\",\"Canceled\",!1]];if(typeof canMove!=\"function\")return\"canMove is not a function\";for(var e=0;e<n.length;e++){var a=canMove(n[e][0],n[e][1]);if(a!==n[e][2])return'canMove(\"'+n[e][0]+'\", \"'+n[e][1]+'\") should be '+n[e][2]+\", got \"+a}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "final states never move",
+              "vi": "trạng thái kết thúc không đi đâu"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var a=[[\"Rejected\",\"Submitted\",!1],[\"Rejected\",\"Evaluated\",!1],[\"Rejected\",\"Approved\",!1],[\"Rejected\",\"Rejected\",!1],[\"Rejected\",\"Change Made\",!1],[\"Rejected\",\"Verified\",!1],[\"Rejected\",\"Closed\",!1],[\"Rejected\",\"Canceled\",!1],[\"Closed\",\"Submitted\",!1],[\"Closed\",\"Evaluated\",!1],[\"Closed\",\"Approved\",!1],[\"Closed\",\"Rejected\",!1],[\"Closed\",\"Change Made\",!1],[\"Closed\",\"Verified\",!1],[\"Closed\",\"Closed\",!1],[\"Closed\",\"Canceled\",!1],[\"Canceled\",\"Submitted\",!1],[\"Canceled\",\"Evaluated\",!1],[\"Canceled\",\"Approved\",!1],[\"Canceled\",\"Rejected\",!1],[\"Canceled\",\"Change Made\",!1],[\"Canceled\",\"Verified\",!1],[\"Canceled\",\"Closed\",!1],[\"Canceled\",\"Canceled\",!1]];if(typeof canMove!=\"function\")return\"canMove is not a function\";for(var e=0;e<a.length;e++){var l=canMove(a[e][0],a[e][1]);if(l!==a[e][2])return'canMove(\"'+a[e][0]+'\", \"'+a[e][1]+'\") should be '+a[e][2]+\", got \"+l}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "unknown states return false",
+              "vi": "trạng thái lạ trả false"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){return typeof canMove!=\"function\"?\"canMove is not a function\":canMove(\"Draft\",\"Submitted\")!==!1||canMove(\"Submitted\",\"Done\")!==!1||canMove(\"submitted\",\"evaluated\")!==!1||canMove(\"toString\",\"Canceled\")!==!1?\"unknown state names must return false\":\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho Closed → Canceled."
+        },
+        {
+          "loi": "Dùng obj[from] mà không kiểm hasOwnProperty ⇒ \"toString\" lọt qua."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "change control board (CCB)",
+          "vi": "hội đồng kiểm soát thay đổi — người quyết định chấp nhận/từ chối thay đổi"
+        }
+      ]
+    }
+  ]
+}

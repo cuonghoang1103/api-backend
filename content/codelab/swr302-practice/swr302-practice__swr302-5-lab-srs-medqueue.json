@@ -1,0 +1,623 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-5-lab-srs-medqueue",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-5-1-srs-ieee-830"
+  },
+  "exercises": [
+    {
+      "title": "Lab 5 — Specification: the SRS of MedQueue",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 70,
+      "points": 100,
+      "concepts": [
+        "SRS template",
+        "characteristics of excellent requirements",
+        "ambiguity",
+        "quality attributes",
+        "Planguage"
+      ],
+      "prerequisites": [
+        "SWR302 lessons 5.1–5.9"
+      ],
+      "tags": [
+        "swr302",
+        "lab"
+      ],
+      "problemHtml": "<h1>Lab 5 — Specification: the SRS of MedQueue</h1>\n<p class=\"bi-phu\">Chapter 5 lab · SRS template, writing and fixing requirements, quality attributes, Planguage · 10 marks</p>\n<h2>1. Overview</h2>\n<p>City General Hospital is building <b>MedQueue</b> for its outpatient clinic: patients take a queue ticket at a kiosk or in the app, see their estimated waiting time and receive an SMS when three patients remain before them; nurses triage patients into priority classes; doctors call the next patient from their room; hall screens show the called numbers; appointments come from the hospital information system (HIS). You are reviewing the first draft of the SRS.</p>\n<p><b>A. Statements to place in the SRS</b>:</p><ul><li><b>R1</b> — The kiosk prints the queue ticket on a 58-mm thermal printer connected by USB.</li><li><b>R2</b> — MedQueue retrieves the patient’s appointment from the hospital information system (HIS) through its HL7 FHIR REST API.</li><li><b>R3</b> — Every screen shall be available in Vietnamese and English, and dates shall be shown as dd/mm/yyyy.</li><li><b>R4</b> — MedQueue shall run on the hospital’s on-premise Ubuntu 22.04 servers.</li><li><b>R5</b> — Nurses use shared desktop PCs at the triage desks; doctors use tablets in the consulting rooms.</li><li><b>R6</b> — Patients, nurses, doctors and the clinic manager use MedQueue; many patients are elderly and have poor eyesight.</li><li><b>R7</b> — MedQueue replaces the paper number dispenser and is one part of the hospital’s digital front-door programme.</li><li><b>R8</b> — When a doctor presses Call next, the system shall assign the first waiting patient of that room and show the number on the hall screen.</li><li><b>R9</b> — A queue entry consists of the ticket number, patient ID, department, priority class and issue time.</li><li><b>R10</b> — 95% of queue-status refreshes shall complete within 1 second with 500 concurrent users.</li><li><b>R11</b> — The HIS team will expose the appointment API before go-live.</li><li><b>R12</b> — Triage: the nurse’s assessment of urgency that decides a patient’s priority class.</li><li><b>R13</b> — SMS messages to patients are sent to the hospital SMS gateway over HTTPS.</li></ul>\n<p>Template sections: <code>1.1</code> Purpose · <code>1.2</code> Document conventions · <code>1.3</code> Project scope · <code>1.4</code> References · <code>2.1</code> Product perspective · <code>2.2</code> User classes and characteristics · <code>2.3</code> Operating environment · <code>2.4</code> Design and implementation constraints · <code>2.5</code> Assumptions and dependencies · <code>3</code> System features · <code>4</code> Data requirements · <code>5.1</code> User interfaces · <code>5.2</code> Software interfaces · <code>5.3</code> Hardware interfaces · <code>5.4</code> Communications interfaces · <code>6</code> Quality attributes · <code>7</code> Internationalization and localization requirements · <code>8</code> Other requirements · <code>A</code> Appendix A: Glossary · <code>B</code> Appendix B: Analysis models.</p>\n<p><b>B. Bad requirements from the draft</b>:</p><ul><li><b>B1</b> — The system shall show the estimated waiting time quickly.</li><li><b>B2</b> — The system shall send the call SMS to the patient and/or the guardian.</li><li><b>B3</b> — The system shall let the doctor call the next patient, print the daily report and export statistics to Excel.</li><li><b>B4</b> — Queue numbers shall be stored in a MySQL table named q_numbers with an auto-increment key.</li><li><b>B5</b> — If the patient is not in the hall when called, the system shall handle it.</li><li><b>B6</b> — The kiosk should be user-friendly for elderly patients.</li><li><b>B7</b> — The system shall call Emergency-class patients before all other patients. (Compare with R8.)</li><li><b>B8</b> — The system shall support up to TBD patients per day.</li></ul>\n<p><b>C. Nonfunctional requirements to classify</b>:</p><ul><li><b>Q1</b> — MedQueue shall be available 99.5% of the time between 06:00 and 20:00 on working days.</li><li><b>Q2</b> — Only the nurses and doctors of a department shall see the names of that department’s waiting patients.</li><li><b>Q3</b> — A first-time patient shall obtain a ticket at the kiosk within 60 seconds without help in 90% of attempts.</li><li><b>Q4</b> — If the HIS is unreachable, the kiosk shall keep issuing tickets and shall synchronise them within 5 minutes after the HIS is back.</li><li><b>Q5</b> — MedQueue shall exchange appointments with the HIS using HL7 FHIR R4 resources.</li><li><b>Q6</b> — MedQueue shall serve 3,000 patients per day in 2027 by adding servers, without changing the software.</li><li><b>Q7</b> — An administrator shall be able to configure a new department in under 30 minutes without any code change.</li><li><b>Q8</b> — Ticket numbers of one department shall never repeat or skip within one day.</li></ul>\n<p><b>D.</b> Write three measurable nonfunctional requirements for MedQueue, each for a different quality attribute.</p>\n<p><b>E.</b> Write the requirement \"the called number appears on the hall screen quickly\" in <b>Planguage</b>.</p>\n<h3>Main features</h3>\n<ul>\n  <li>A. SRS section of 13 statements.</li>\n  <li>B. Problem and rewrite of 8 bad requirements.</li>\n  <li>C. Quality attribute of 8 NFRs.</li>\n  <li>D. Three measurable NFRs.</li>\n  <li>E. One requirement in Planguage.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>A good requirement: \"shall\", system perspective, one requirement per statement, verifiable (numbers and units), no design decision, no ambiguous words.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>answers/\n├── a-sections.js    ← const SECTIONS = { R1: '5.3', … }\n├── b-fixes.js       ← const FIXES = { B1: { problem, rewrite }, … }      (B3.rewrite = array)\n├── c-attributes.js  ← const ATTRIBUTES = { Q1: '…', … }\n├── d-nfrs.js        ← const NFRS = [ { attribute, requirement } ×3 ]\n└── e-planguage.js   ← const PLANGUAGE = { tag, ambition, scale, meter, goal, stretch, wish, defined }</pre>\n<h2>3. Data model</h2>\n<p><b>Allowed values</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>SECTIONS.*</code></td><td>string</td><td>1.1 = Purpose · 1.2 = Document conventions · 1.3 = Project scope · 1.4 = References · 2.1 = Product perspective · 2.2 = User classes and characteristics · 2.3 = Operating environment · 2.4 = Design and implementation constraints · 2.5 = Assumptions and dependencies · 3 = System features · 4 = Data requirements · 5.1 = User interfaces · 5.2 = Software interfaces · 5.3 = Hardware interfaces · 5.4 = Communications interfaces · 6 = Quality attributes · 7 = Internationalization and localization requirements · 8 = Other requirements · A = Appendix A: Glossary · B = Appendix B: Analysis models</td></tr><tr><td><code>FIXES.*.problem</code></td><td>string</td><td>AMBIGUOUS · UNVERIFIABLE · COMPOUND · DESIGN · INCOMPLETE · INCONSISTENT</td></tr><tr><td><code>ATTRIBUTES.* · NFRS[i].attribute</code></td><td>string</td><td>Availability · Installability · Integrity · Interoperability · Performance · Reliability · Robustness · Safety · Security · Usability · Efficiency · Modifiability · Portability · Reusability · Scalability · Verifiability</td></tr><tr><td><code>PLANGUAGE</code></td><td>object</td><td>TAG = hierarchical name · AMBITION = the intent in words · SCALE = unit of measure · METER = how it is measured · GOAL = target · STRETCH = better · WISH = ideal · DEFINED = a term used above</td></tr></tbody></table>\n<h2>4. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. A. SRS template sections <span class=\"bi-diem\">2.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>The right section for each statement.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">SRS template (Wiegers Fig. 10-2)</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. B1. Diagnosing bad requirements <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>The main problem of each statement.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">characteristics of excellent requirements</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. B2. Rewriting them <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Verifiable, single, no design, defined response, consistent.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">writing guidelines</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. C. Quality attributes <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>The attribute each NFR is about.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">quality attributes</span></p>\n</div>\n<div class=\"bi-cn\"><h3>5. D. Measurable NFRs <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Three attributes, numbers and conditions, about MedQueue.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">nonfunctional requirement</span></p>\n</div>\n<div class=\"bi-cn\"><h3>6. E. Planguage <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Every keyword; a unit; how it is measured; goal < stretch < wish.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">Planguage</span></p>\n</div>\n<h2>5. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>SECTIONS</code></td><td>answers/a-sections.js</td></tr><tr><td><code>FIXES</code></td><td>answers/b-fixes.js</td></tr><tr><td><code>ATTRIBUTES</code></td><td>answers/c-attributes.js</td></tr><tr><td><code>NFRS</code></td><td>answers/d-nfrs.js</td></tr><tr><td><code>PLANGUAGE</code></td><td>answers/e-planguage.js</td></tr></tbody></table>\n<h2>6. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>A. SRS template sections</td><td>2.5</td></tr><tr><td>2</td><td>B1. Diagnosing bad requirements</td><td>1.5</td></tr><tr><td>3</td><td>B2. Rewriting them</td><td>1.5</td></tr><tr><td>4</td><td>C. Quality attributes</td><td>1.5</td></tr><tr><td>5</td><td>D. Measurable NFRs</td><td>1.5</td></tr><tr><td>6</td><td>E. Planguage</td><td>1.5</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Putting R4 (Ubuntu servers) in quality attributes — it is a design and implementation constraint (2.4).</li>\n  <li>Rewriting B1 as \"very quickly\" or B6 as \"easy to use\": still unverifiable.</li>\n  <li>Keeping B3 as one sentence with \"and\": three requirements need three statements.</li>\n  <li>Fixing B4 by naming PostgreSQL instead of MySQL — the problem is stating a design at all.</li>\n</ul>\n<h2>7. Submission</h2>\n<p>Write your answers in the files of <code>answers/</code> on the right. Diagrams are written as text in the syntax of a real tool (Mermaid or PlantUML — paste them into <a href=\"https://mermaid.live\" target=\"_blank\" rel=\"noopener\">mermaid.live</a> or <a href=\"https://www.plantuml.com/plantuml\" target=\"_blank\" rel=\"noopener\">plantuml.com</a> to SEE the picture); tables are JavaScript arrays, one object per row of the school template. Press <b>Run</b> for the visible checks and <b>Submit</b> for full grading, hidden checks included. Your mark per question appears in the rubric table.</p>",
+      "problemHtmlVi": "<h1>Lab 5 — Specification: the SRS of MedQueue</h1>\n<p class=\"bi-phu\">Lab chương 5 · template SRS, viết và sửa yêu cầu, thuộc tính chất lượng, Planguage · 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p>Bệnh viện Đa khoa Thành phố xây <b>MedQueue</b> cho khoa khám ngoại trú: bệnh nhân lấy số ở kiosk hoặc trong app, xem thời gian chờ ước tính và nhận SMS khi còn ba người trước mình; điều dưỡng phân loại ưu tiên; bác sĩ gọi người tiếp theo từ phòng khám; màn hình sảnh hiện số được gọi; lịch hẹn lấy từ hệ thống thông tin bệnh viện (HIS). Bạn review bản nháp SRS đầu tiên.</p>\n<p><b>A.</b> Đặt 13 phát biểu R1–R13 vào mục của template SRS (danh sách mục ở bản tiếng Anh). <b>B.</b> Tám yêu cầu tồi B1–B8: gọi tên vấn đề chính và viết lại. <b>C.</b> Tám NFR Q1–Q8: thuộc tính chất lượng nào? <b>D.</b> Viết ba NFR đo được cho MedQueue, mỗi cái một thuộc tính khác nhau. <b>E.</b> Viết yêu cầu \"số được gọi hiện nhanh trên màn hình sảnh\" bằng <b>Planguage</b>.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>A. Mục SRS của 13 phát biểu.</li>\n  <li>B. Vấn đề và bản viết lại của 8 yêu cầu tồi.</li>\n  <li>C. Thuộc tính chất lượng của 8 NFR.</li>\n  <li>D. Ba NFR đo được.</li>\n  <li>E. Một yêu cầu bằng Planguage.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Yêu cầu tốt: \"shall\", góc nhìn hệ thống, mỗi câu một yêu cầu, kiểm chứng được (số và đơn vị), không quyết định thiết kế, không từ mơ hồ.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>answers/\n├── a-sections.js    ← const SECTIONS = { R1: '5.3', … }\n├── b-fixes.js       ← const FIXES = { B1: { problem, rewrite }, … }      (B3.rewrite = array)\n├── c-attributes.js  ← const ATTRIBUTES = { Q1: '…', … }\n├── d-nfrs.js        ← const NFRS = [ { attribute, requirement } ×3 ]\n└── e-planguage.js   ← const PLANGUAGE = { tag, ambition, scale, meter, goal, stretch, wish, defined }</pre>\n<h2>3. Mô hình dữ liệu</h2>\n<p><b>Allowed values</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>SECTIONS.*</code></td><td>string</td><td>số mục của template (vd \"2.4\", \"5.3\", \"A\")</td></tr><tr><td><code>FIXES.*.problem</code></td><td>string</td><td>AMBIGUOUS · UNVERIFIABLE · COMPOUND · DESIGN · INCOMPLETE · INCONSISTENT</td></tr><tr><td><code>ATTRIBUTES.* · NFRS[i].attribute</code></td><td>string</td><td>Availability · Installability · Integrity · Interoperability · Performance · Reliability · Robustness · Safety · Security · Usability · Efficiency · Modifiability · Portability · Reusability · Scalability · Verifiability</td></tr><tr><td><code>PLANGUAGE</code></td><td>object</td><td>TAG = tên phân cấp · AMBITION = ý định · SCALE = đơn vị đo · METER = cách đo · GOAL = mục tiêu · STRETCH = tốt hơn · WISH = lý tưởng · DEFINED = định nghĩa thuật ngữ</td></tr></tbody></table>\n<h2>4. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. A. Mục template SRS <span class=\"bi-diem\">2.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Đúng mục cho từng phát biểu.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">SRS template (Wiegers Fig. 10-2)</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. B1. Chẩn đoán yêu cầu tồi <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Vấn đề chính của từng phát biểu.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">characteristics of excellent requirements</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. B2. Viết lại <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Kiểm chứng được, đơn, không thiết kế, phản hồi xác định, nhất quán.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">writing guidelines</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. C. Thuộc tính chất lượng <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Thuộc tính mà mỗi NFR nói tới.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">quality attributes</span></p>\n</div>\n<div class=\"bi-cn\"><h3>5. D. NFR đo được <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Ba thuộc tính, có số và điều kiện, về MedQueue.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">nonfunctional requirement</span></p>\n</div>\n<div class=\"bi-cn\"><h3>6. E. Planguage <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Đủ từ khoá; có đơn vị; cách đo; goal < stretch < wish.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">Planguage</span></p>\n</div>\n<h2>5. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>SECTIONS</code></td><td>answers/a-sections.js</td></tr><tr><td><code>FIXES</code></td><td>answers/b-fixes.js</td></tr><tr><td><code>ATTRIBUTES</code></td><td>answers/c-attributes.js</td></tr><tr><td><code>NFRS</code></td><td>answers/d-nfrs.js</td></tr><tr><td><code>PLANGUAGE</code></td><td>answers/e-planguage.js</td></tr></tbody></table>\n<h2>6. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>A. Mục template SRS</td><td>2.5</td></tr><tr><td>2</td><td>B1. Chẩn đoán yêu cầu tồi</td><td>1.5</td></tr><tr><td>3</td><td>B2. Viết lại</td><td>1.5</td></tr><tr><td>4</td><td>C. Thuộc tính chất lượng</td><td>1.5</td></tr><tr><td>5</td><td>D. NFR đo được</td><td>1.5</td></tr><tr><td>6</td><td>E. Planguage</td><td>1.5</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Đặt R4 (máy chủ Ubuntu) vào thuộc tính chất lượng — đó là ràng buộc thiết kế và hiện thực (2.4).</li>\n  <li>Viết lại B1 thành \"rất nhanh\" hay B6 thành \"dễ dùng\": vẫn không kiểm chứng được.</li>\n  <li>Giữ B3 một câu nối bằng \"and\": ba yêu cầu cần ba câu.</li>\n  <li>Sửa B4 bằng cách đổi MySQL thành PostgreSQL — vấn đề là việc nêu thiết kế.</li>\n</ul>\n<h2>7. Nộp bài</h2>\n<p>Viết câu trả lời vào các tệp trong <code>answers/</code> bên phải. Sơ đồ viết bằng chữ theo cú pháp của công cụ thật (Mermaid hoặc PlantUML — dán vào <a href=\"https://mermaid.live\" target=\"_blank\" rel=\"noopener\">mermaid.live</a> hoặc <a href=\"https://www.plantuml.com/plantuml\" target=\"_blank\" rel=\"noopener\">plantuml.com</a> để XEM hình); bảng là mảng JavaScript, mỗi object là một dòng của template trường. Bấm <b>Chạy thử</b> để chạy kiểm hiện, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn). Điểm từng câu hiện trong bảng thang điểm.</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "A good requirement: \"shall\", system perspective, one requirement per statement, verifiable (numbers and units), no design decision, no ambiguous words.|||Yêu cầu tốt: \"shall\", góc nhìn hệ thống, mỗi câu một yêu cầu, kiểm chứng được (số và đơn vị), không quyết định thiết kế, không từ mơ hồ.",
+      "examplesJson": [
+        {
+          "input": "answers/*.js — one object per row of the template",
+          "output": "Rubric table: marks per question (e.g. B. 2.5/3)",
+          "explanation": "Every rubric line is checked separately; hidden checks run on Submit.|||Mỗi dòng rubric được kiểm riêng; kiểm ẩn chạy khi Nộp."
+        }
+      ],
+      "hintsJson": [
+        "A: phần 2 là bối cảnh (sản phẩm nằm ở đâu, ai dùng, chạy ở đâu, giới hạn gì, giả định gì); phần 5 tách theo LOẠI giao diện; định nghĩa thuật ngữ ⇒ Appendix A.",
+        "B: tìm từ mơ hồ (quickly, user-friendly, and/or), nhiều ý nối bằng \"and\", chi tiết thiết kế (MySQL, table), \"handle it\" (phản hồi chưa xác định), TBD, và câu mâu thuẫn với R8.",
+        "E: GOAL là mức phải đạt; STRETCH tốt hơn; WISH lý tưởng. Với thời gian: số càng NHỎ càng tốt."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers/a-sections.js",
+          "language": "javascript",
+          "code": "// A. Section number of the Wiegers SRS template: 1.1 | 1.2 | 1.3 | 1.4 | 2.1 | 2.2 | 2.3 | 2.4 | 2.5 | 3 | 4 | 5.1 | 5.2 | 5.3 | 5.4 | 6 | 7 | 8 | A | B\nconst SECTIONS = {\n  R1: '',\n  R2: '',\n  R3: '',\n  R4: '',\n  R5: '',\n  R6: '',\n  R7: '',\n  R8: '',\n  R9: '',\n  R10: '',\n  R11: '',\n  R12: '',\n  R13: '',\n};\n"
+        },
+        {
+          "name": "answers/b-fixes.js",
+          "language": "javascript",
+          "code": "// B. problem: AMBIGUOUS | UNVERIFIABLE | COMPOUND | DESIGN | INCOMPLETE | INCONSISTENT · rewrite: a good requirement (B3: an array of statements).\nconst FIXES = {\n  B1: { problem: '', rewrite: '' },\n  B2: { problem: '', rewrite: '' },\n  B3: { problem: '', rewrite: '' },\n  B4: { problem: '', rewrite: '' },\n  B5: { problem: '', rewrite: '' },\n  B6: { problem: '', rewrite: '' },\n  B7: { problem: '', rewrite: '' },\n  B8: { problem: '', rewrite: '' },\n};\n"
+        },
+        {
+          "name": "answers/c-attributes.js",
+          "language": "javascript",
+          "code": "// C. Availability | Installability | Integrity | Interoperability | Performance | Reliability | Robustness | Safety | Security | Usability | Efficiency | Modifiability | Portability | Reusability | Scalability | Verifiability\nconst ATTRIBUTES = {\n  Q1: '',\n  Q2: '',\n  Q3: '',\n  Q4: '',\n  Q5: '',\n  Q6: '',\n  Q7: '',\n  Q8: '',\n};\n"
+        },
+        {
+          "name": "answers/d-nfrs.js",
+          "language": "javascript",
+          "code": "// D. Three measurable NFRs of MedQueue for three different quality attributes.\nconst NFRS = [\n  { attribute: '', requirement: '' },\n];\n"
+        },
+        {
+          "name": "answers/e-planguage.js",
+          "language": "javascript",
+          "code": "// E. One performance requirement in Planguage.\nconst PLANGUAGE = { tag: '', ambition: '', scale: '', meter: '', goal: '', stretch: '', wish: '', defined: '' };\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers/a-sections.js",
+          "language": "javascript",
+          "code": "// A. Interfaces split by kind (5.2 software, 5.3 hardware, 5.4 communications); limits = 2.4; things we count on = 2.5.\nconst SECTIONS = {\n  R1: '5.3',\n  R2: '5.2',\n  R3: '7',\n  R4: '2.4',\n  R5: '2.3',\n  R6: '2.2',\n  R7: '2.1',\n  R8: '3',\n  R9: '4',\n  R10: '6',\n  R11: '2.5',\n  R12: 'A',\n  R13: '5.4',\n};\n"
+        },
+        {
+          "name": "answers/b-fixes.js",
+          "language": "javascript",
+          "code": "// B. Verifiable, one requirement per statement, no design decision, a defined response, consistent with R8.\nconst FIXES = {\n  B1: {\n    problem: 'UNVERIFIABLE',\n    rewrite: 'The system shall display the estimated waiting time of a ticket within 2 seconds after the ticket is issued.',\n  },\n  B2: {\n    problem: 'AMBIGUOUS',\n    rewrite: 'The system shall send the call SMS to the mobile number registered for the patient; when the patient is under 16, it shall send it to the registered guardian instead.',\n  },\n  B3: {\n    problem: 'COMPOUND',\n    rewrite: [\n      'The system shall let a doctor call the next waiting patient of the doctor’s room.',\n      'The system shall let the clinic manager print the daily queue report.',\n      'The system shall let the clinic manager export the monthly queue statistics as an .xlsx file.',\n    ],\n  },\n  B4: {\n    problem: 'DESIGN',\n    rewrite: 'The system shall keep every issued queue number for 90 days and shall never issue the same number twice in one day.',\n  },\n  B5: {\n    problem: 'INCOMPLETE',\n    rewrite: 'If the patient does not reach the room within 3 minutes after the third call, the system shall mark the ticket as No-show and call the next waiting patient.',\n  },\n  B6: {\n    problem: 'UNVERIFIABLE',\n    rewrite: 'At least 90% of patients aged 65 or older shall obtain a ticket at the kiosk within 60 seconds without help, measured in the acceptance usability test.',\n  },\n  B7: {\n    problem: 'INCONSISTENT',\n    rewrite: 'When a doctor presses Call next, the system shall assign the waiting patient with the highest priority class (Emergency, then Priority, then Normal) and, within the same class, the earliest issue time.',\n  },\n  B8: {\n    problem: 'INCOMPLETE',\n    rewrite: 'The system shall be able to issue at least 3,000 tickets per day.',\n  },\n};\n"
+        },
+        {
+          "name": "answers/c-attributes.js",
+          "language": "javascript",
+          "code": "// C. External quality attributes of Wiegers Ch.14 (+ internal: modifiability, scalability…).\nconst ATTRIBUTES = {\n  Q1: 'Availability',\n  Q2: 'Security',\n  Q3: 'Usability',\n  Q4: 'Robustness',\n  Q5: 'Interoperability',\n  Q6: 'Scalability',\n  Q7: 'Modifiability',\n  Q8: 'Integrity',\n};\n"
+        },
+        {
+          "name": "answers/d-nfrs.js",
+          "language": "javascript",
+          "code": "// D. Each: attribute + shall + number + unit + condition, about MedQueue.\nconst NFRS = [\n  { attribute: 'Performance', requirement: 'The hall screen shall show a newly called number within 2 seconds after the doctor presses Call next, in 95% of calls with 500 concurrent users.' },\n  { attribute: 'Availability', requirement: 'The kiosks shall be able to issue tickets 99.9% of the time between 06:00 and 18:00 on working days, measured monthly.' },\n  { attribute: 'Security', requirement: 'The system shall lock a staff account for 15 minutes after 5 consecutive failed sign-in attempts.' },\n];\n"
+        },
+        {
+          "name": "answers/e-planguage.js",
+          "language": "javascript",
+          "code": "// E. Gilb's Planguage: a stopwatch can judge it.\nconst PLANGUAGE = {\n  tag: 'Performance.CallDisplay',\n  ambition: 'Patients see their number on the hall screen almost as soon as the doctor calls them.',\n  scale: 'Seconds from the doctor pressing Call next until the number appears on the hall screen.',\n  meter: 'Timestamps logged by the server and the screen client during 1,000 calls of the load test with 500 concurrent users; 95th percentile.',\n  goal: '2 seconds',\n  stretch: '1 second',\n  wish: '0.5 seconds',\n  defined: 'Hall screen: the 55-inch display in each waiting hall.',\n};\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>A.</b> R1 5.3 · R2 5.2 · R3 7 · R4 2.4 · R5 2.3 · R6 2.2 · R7 2.1 · R8 3 · R9 4 · R10 6 · R11 2.5 · R12 A · R13 5.4. <b>B.</b> B1 UNVERIFIABLE · B2 AMBIGUOUS · B3 COMPOUND · B4 DESIGN · B5 INCOMPLETE · B6 UNVERIFIABLE · B7 INCONSISTENT · B8 INCOMPLETE — rewrites in the solution file. <b>C.</b> Q1 Availability · Q2 Security · Q3 Usability · Q4 Robustness · Q5 Interoperability · Q6 Scalability · Q7 Modifiability · Q8 Integrity/Reliability. <b>D/E.</b> A requirement a stopwatch can judge: attribute, shall, number, unit, the condition of measurement; in Planguage the METER makes the SCALE measurable.</p>",
+      "solutionExplanationHtmlVi": "<p><b>A.</b> R1 5.3 · R2 5.2 · R3 7 · R4 2.4 · R5 2.3 · R6 2.2 · R7 2.1 · R8 3 · R9 4 · R10 6 · R11 2.5 · R12 A · R13 5.4. <b>B.</b> B1 UNVERIFIABLE · B2 AMBIGUOUS · B3 COMPOUND · B4 DESIGN · B5 INCOMPLETE · B6 UNVERIFIABLE · B7 INCONSISTENT · B8 INCOMPLETE — bản viết lại trong tệp lời giải. <b>C.</b> như trên. <b>D/E.</b> Yêu cầu mà đồng hồ bấm giờ phán được: thuộc tính, shall, con số, đơn vị, điều kiện đo; trong Planguage, METER làm SCALE đo được.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "answers/a-sections.js",
+          "answers/b-fixes.js",
+          "answers/c-attributes.js",
+          "answers/d-nfrs.js",
+          "answers/e-planguage.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A — SRS section of R1",
+              "vi": "A — mục SRS của R1"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (SECTIONS[\"R1\"]); } catch (e) { return 'SECTIONS[\"R1\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'SECTIONS[\"R1\"] is empty';\n  var chap = [\"5.3\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — SRS section of R2",
+              "vi": "A — mục SRS của R2"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (SECTIONS[\"R2\"]); } catch (e) { return 'SECTIONS[\"R2\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'SECTIONS[\"R2\"] is empty';\n  var chap = [\"5.2\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — SRS section of R3",
+              "vi": "A — mục SRS của R3"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (SECTIONS[\"R3\"]); } catch (e) { return 'SECTIONS[\"R3\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'SECTIONS[\"R3\"] is empty';\n  var chap = [\"7\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — SRS section of R4",
+              "vi": "A — mục SRS của R4"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (SECTIONS[\"R4\"]); } catch (e) { return 'SECTIONS[\"R4\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'SECTIONS[\"R4\"] is empty';\n  var chap = [\"2.4\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet — it limits the design choices of the team';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — SRS section of R5",
+              "vi": "A — mục SRS của R5"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (SECTIONS[\"R5\"]); } catch (e) { return 'SECTIONS[\"R5\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'SECTIONS[\"R5\"] is empty';\n  var chap = [\"2.3\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — SRS section of R6",
+              "vi": "A — mục SRS của R6"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (SECTIONS[\"R6\"]); } catch (e) { return 'SECTIONS[\"R6\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'SECTIONS[\"R6\"] is empty';\n  var chap = [\"2.2\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — SRS section of R7",
+              "vi": "A — mục SRS của R7"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (SECTIONS[\"R7\"]); } catch (e) { return 'SECTIONS[\"R7\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'SECTIONS[\"R7\"] is empty';\n  var chap = [\"2.1\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet — how the product fits in its bigger world';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — SRS section of R8",
+              "vi": "A — mục SRS của R8"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (SECTIONS[\"R8\"]); } catch (e) { return 'SECTIONS[\"R8\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'SECTIONS[\"R8\"] is empty';\n  var chap = [\"3\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — SRS section of R9",
+              "vi": "A — mục SRS của R9"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (SECTIONS[\"R9\"]); } catch (e) { return 'SECTIONS[\"R9\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'SECTIONS[\"R9\"] is empty';\n  var chap = [\"4\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — SRS section of R10",
+              "vi": "A — mục SRS của R10"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (SECTIONS[\"R10\"]); } catch (e) { return 'SECTIONS[\"R10\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'SECTIONS[\"R10\"] is empty';\n  var chap = [\"6\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — SRS section of R11",
+              "vi": "A — mục SRS của R11"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (SECTIONS[\"R11\"]); } catch (e) { return 'SECTIONS[\"R11\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'SECTIONS[\"R11\"] is empty';\n  var chap = [\"2.5\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet — something the project counts on that may turn out false';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — SRS section of R12",
+              "vi": "A — mục SRS của R12"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (SECTIONS[\"R12\"]); } catch (e) { return 'SECTIONS[\"R12\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'SECTIONS[\"R12\"] is empty';\n  var chap = [\"A\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "A — SRS section of R13",
+              "vi": "A — mục SRS của R13"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (SECTIONS[\"R13\"]); } catch (e) { return 'SECTIONS[\"R13\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'SECTIONS[\"R13\"] is empty';\n  var chap = [\"5.4\",\"5.2\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "B — main problem of B1",
+              "vi": "B — vấn đề chính của B1"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((FIXES['B1'] || {}).problem); } catch (e) { return '(FIXES[\\'B1\\'] || {}).problem is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(FIXES[\\'B1\\'] || {}).problem is empty';\n  var chap = [\"UNVERIFIABLE\",\"AMBIGUOUS\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — main problem of B2",
+              "vi": "B — vấn đề chính của B2"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((FIXES['B2'] || {}).problem); } catch (e) { return '(FIXES[\\'B2\\'] || {}).problem is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(FIXES[\\'B2\\'] || {}).problem is empty';\n  var chap = [\"AMBIGUOUS\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — main problem of B3",
+              "vi": "B — vấn đề chính của B3"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((FIXES['B3'] || {}).problem); } catch (e) { return '(FIXES[\\'B3\\'] || {}).problem is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(FIXES[\\'B3\\'] || {}).problem is empty';\n  var chap = [\"COMPOUND\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — main problem of B4",
+              "vi": "B — vấn đề chính của B4"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((FIXES['B4'] || {}).problem); } catch (e) { return '(FIXES[\\'B4\\'] || {}).problem is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(FIXES[\\'B4\\'] || {}).problem is empty';\n  var chap = [\"DESIGN\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — main problem of B5",
+              "vi": "B — vấn đề chính của B5"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((FIXES['B5'] || {}).problem); } catch (e) { return '(FIXES[\\'B5\\'] || {}).problem is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(FIXES[\\'B5\\'] || {}).problem is empty';\n  var chap = [\"INCOMPLETE\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — main problem of B6",
+              "vi": "B — vấn đề chính của B6"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((FIXES['B6'] || {}).problem); } catch (e) { return '(FIXES[\\'B6\\'] || {}).problem is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(FIXES[\\'B6\\'] || {}).problem is empty';\n  var chap = [\"UNVERIFIABLE\",\"AMBIGUOUS\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — main problem of B7",
+              "vi": "B — vấn đề chính của B7"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((FIXES['B7'] || {}).problem); } catch (e) { return '(FIXES[\\'B7\\'] || {}).problem is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(FIXES[\\'B7\\'] || {}).problem is empty';\n  var chap = [\"INCONSISTENT\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "B — main problem of B8",
+              "vi": "B — vấn đề chính của B8"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((FIXES['B8'] || {}).problem); } catch (e) { return '(FIXES[\\'B8\\'] || {}).problem is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(FIXES[\\'B8\\'] || {}).problem is empty';\n  var chap = [\"INCOMPLETE\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "B — the rewrite of B1 is a good requirement",
+              "vi": "B — bản viết lại của B1 là yêu cầu tốt"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof FIXES==\"undefined\"||!FIXES||!FIXES.B1)return\"FIXES.B1 is missing\";var r=FIXES.B1.rewrite,e=Array.isArray(r)?r:[r];if(e.length!==1)return\"one requirement per statement\";for(var n=0;n<e.length;n++){var t=String(e[n]||\"\").trim();if(!/\\bshall\\b/i.test(t))return'use \"shall\" \\u2014 VI: d\\xF9ng \"shall\"';if(/\\b(quickly|fast|user[- ]friendly|easy|easily|simple|efficient|flexible|robust|adequate|appropriate|several|some|many|as much as possible|and\\/or|etc|tbd|support)\\b/i.test(t))return\"still ambiguous (quickly, easy, user-friendly, and/or, TBD, support\\u2026) \\u2014 VI: v\\u1EABn c\\xF2n t\\u1EEB m\\u01A1 h\\u1ED3\";if(t.split(/\\s+/).length<7)return\"too short to be verifiable\";if((t.match(/\\bshall\\b/gi)||[]).length>2)return\"more than one requirement in one statement\"}var s=e.join(\" \");return!/\\d/.test(s)||!/second|ms|minute/i.test(s)?\"state the response time with a number and a unit\":\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "B — the rewrite of B2 is a good requirement",
+              "vi": "B — bản viết lại của B2 là yêu cầu tốt"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof FIXES==\"undefined\"||!FIXES||!FIXES.B2)return\"FIXES.B2 is missing\";var t=FIXES.B2.rewrite,e=Array.isArray(t)?t:[t];if(e.length!==1)return\"one requirement per statement\";for(var n=0;n<e.length;n++){var r=String(e[n]||\"\").trim();if(!/\\bshall\\b/i.test(r))return'use \"shall\" \\u2014 VI: d\\xF9ng \"shall\"';if(/\\b(quickly|fast|user[- ]friendly|easy|easily|simple|efficient|flexible|robust|adequate|appropriate|several|some|many|as much as possible|and\\/or|etc|tbd|support)\\b/i.test(r))return\"still ambiguous (quickly, easy, user-friendly, and/or, TBD, support\\u2026) \\u2014 VI: v\\u1EABn c\\xF2n t\\u1EEB m\\u01A1 h\\u1ED3\";if(r.split(/\\s+/).length<7)return\"too short to be verifiable\";if((r.match(/\\bshall\\b/gi)||[]).length>2)return\"more than one requirement in one statement\"}var i=e.join(\" \");return!/guardian/i.test(i)||!/patient/i.test(i)?\"say exactly WHO gets the SMS (patient or guardian) and when\":\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "B — the rewrite of B3 is a good requirement",
+              "vi": "B — bản viết lại của B3 là yêu cầu tốt"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof FIXES==\"undefined\"||!FIXES||!FIXES.B3)return\"FIXES.B3 is missing\";var t=FIXES.B3.rewrite,e=Array.isArray(t)?t:[t];if(e.length<3)return\"B3 holds three requirements \\u2014 split it into three statements (an array)\";for(var n=0;n<e.length;n++){var r=String(e[n]||\"\").trim();if(!/\\bshall\\b/i.test(r))return'use \"shall\" \\u2014 VI: d\\xF9ng \"shall\"';if(/\\b(quickly|fast|user[- ]friendly|easy|easily|simple|efficient|flexible|robust|adequate|appropriate|several|some|many|as much as possible|and\\/or|etc|tbd|support)\\b/i.test(r))return\"still ambiguous (quickly, easy, user-friendly, and/or, TBD, support\\u2026) \\u2014 VI: v\\u1EABn c\\xF2n t\\u1EEB m\\u01A1 h\\u1ED3\";if(r.split(/\\s+/).length<7)return\"too short to be verifiable\";if((r.match(/\\bshall\\b/gi)||[]).length>2)return\"more than one requirement in one statement\"}var i=e.join(\" \");return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "B — the rewrite of B4 is a good requirement",
+              "vi": "B — bản viết lại của B4 là yêu cầu tốt"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof FIXES==\"undefined\"||!FIXES||!FIXES.B4)return\"FIXES.B4 is missing\";var r=FIXES.B4.rewrite,e=Array.isArray(r)?r:[r];if(e.length!==1)return\"one requirement per statement\";for(var n=0;n<e.length;n++){var t=String(e[n]||\"\").trim();if(!/\\bshall\\b/i.test(t))return'use \"shall\" \\u2014 VI: d\\xF9ng \"shall\"';if(/\\b(quickly|fast|user[- ]friendly|easy|easily|simple|efficient|flexible|robust|adequate|appropriate|several|some|many|as much as possible|and\\/or|etc|tbd|support)\\b/i.test(t))return\"still ambiguous (quickly, easy, user-friendly, and/or, TBD, support\\u2026) \\u2014 VI: v\\u1EABn c\\xF2n t\\u1EEB m\\u01A1 h\\u1ED3\";if(t.split(/\\s+/).length<7)return\"too short to be verifiable\";if((t.match(/\\bshall\\b/gi)||[]).length>2)return\"more than one requirement in one statement\"}var s=e.join(\" \");return/mysql|table|auto[- ]?increment|sql/i.test(s)?\"still a design decision \\u2014 state the NEED (keep numbers, never duplicate), not the database\":\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "B — the rewrite of B5 is a good requirement",
+              "vi": "B — bản viết lại của B5 là yêu cầu tốt"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof FIXES==\"undefined\"||!FIXES||!FIXES.B5)return\"FIXES.B5 is missing\";var t=FIXES.B5.rewrite,e=Array.isArray(t)?t:[t];if(e.length!==1)return\"one requirement per statement\";for(var n=0;n<e.length;n++){var r=String(e[n]||\"\").trim();if(!/\\bshall\\b/i.test(r))return'use \"shall\" \\u2014 VI: d\\xF9ng \"shall\"';if(/\\b(quickly|fast|user[- ]friendly|easy|easily|simple|efficient|flexible|robust|adequate|appropriate|several|some|many|as much as possible|and\\/or|etc|tbd|support)\\b/i.test(r))return\"still ambiguous (quickly, easy, user-friendly, and/or, TBD, support\\u2026) \\u2014 VI: v\\u1EABn c\\xF2n t\\u1EEB m\\u01A1 h\\u1ED3\";if(r.split(/\\s+/).length<7)return\"too short to be verifiable\";if((r.match(/\\bshall\\b/gi)||[]).length>2)return\"more than one requirement in one statement\"}var s=e.join(\" \");return!/no[- ]?show|next|end of the queue|re-?call|skip/i.test(s)||!/\\d/.test(s)?\"say what the system DOES and after how long / how many calls\":\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "B — the rewrite of B6 is a good requirement",
+              "vi": "B — bản viết lại của B6 là yêu cầu tốt"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof FIXES==\"undefined\"||!FIXES||!FIXES.B6)return\"FIXES.B6 is missing\";var t=FIXES.B6.rewrite,e=Array.isArray(t)?t:[t];if(e.length!==1)return\"one requirement per statement\";for(var s=0;s<e.length;s++){var r=String(e[s]||\"\").trim();if(!/\\bshall\\b/i.test(r))return'use \"shall\" \\u2014 VI: d\\xF9ng \"shall\"';if(/\\b(quickly|fast|user[- ]friendly|easy|easily|simple|efficient|flexible|robust|adequate|appropriate|several|some|many|as much as possible|and\\/or|etc|tbd|support)\\b/i.test(r))return\"still ambiguous (quickly, easy, user-friendly, and/or, TBD, support\\u2026) \\u2014 VI: v\\u1EABn c\\xF2n t\\u1EEB m\\u01A1 h\\u1ED3\";if(r.split(/\\s+/).length<7)return\"too short to be verifiable\";if((r.match(/\\bshall\\b/gi)||[]).length>2)return\"more than one requirement in one statement\"}var a=e.join(\" \");return/\\d/.test(a)?\"OK\":\"make it measurable: who, which task, how fast, what success rate\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "B — the rewrite of B7 is a good requirement",
+              "vi": "B — bản viết lại của B7 là yêu cầu tốt"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof FIXES==\"undefined\"||!FIXES||!FIXES.B7)return\"FIXES.B7 is missing\";var t=FIXES.B7.rewrite,e=Array.isArray(t)?t:[t];if(e.length!==1)return\"one requirement per statement\";for(var n=0;n<e.length;n++){var r=String(e[n]||\"\").trim();if(!/\\bshall\\b/i.test(r))return'use \"shall\" \\u2014 VI: d\\xF9ng \"shall\"';if(/\\b(quickly|fast|user[- ]friendly|easy|easily|simple|efficient|flexible|robust|adequate|appropriate|several|some|many|as much as possible|and\\/or|etc|tbd|support)\\b/i.test(r))return\"still ambiguous (quickly, easy, user-friendly, and/or, TBD, support\\u2026) \\u2014 VI: v\\u1EABn c\\xF2n t\\u1EEB m\\u01A1 h\\u1ED3\";if(r.split(/\\s+/).length<7)return\"too short to be verifiable\";if((r.match(/\\bshall\\b/gi)||[]).length>2)return\"more than one requirement in one statement\"}var i=e.join(\" \");return!/priority|emergency/i.test(i)||!/call next|next/i.test(i)?\"merge R8 and B7 into one consistent rule for Call next\":\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "B — the rewrite of B8 is a good requirement",
+              "vi": "B — bản viết lại của B8 là yêu cầu tốt"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof FIXES==\"undefined\"||!FIXES||!FIXES.B8)return\"FIXES.B8 is missing\";var t=FIXES.B8.rewrite,e=Array.isArray(t)?t:[t];if(e.length!==1)return\"one requirement per statement\";for(var n=0;n<e.length;n++){var r=String(e[n]||\"\").trim();if(!/\\bshall\\b/i.test(r))return'use \"shall\" \\u2014 VI: d\\xF9ng \"shall\"';if(/\\b(quickly|fast|user[- ]friendly|easy|easily|simple|efficient|flexible|robust|adequate|appropriate|several|some|many|as much as possible|and\\/or|etc|tbd|support)\\b/i.test(r))return\"still ambiguous (quickly, easy, user-friendly, and/or, TBD, support\\u2026) \\u2014 VI: v\\u1EABn c\\xF2n t\\u1EEB m\\u01A1 h\\u1ED3\";if(r.split(/\\s+/).length<7)return\"too short to be verifiable\";if((r.match(/\\bshall\\b/gi)||[]).length>2)return\"more than one requirement in one statement\"}var i=e.join(\" \");return!/\\d/.test(i)||/tbd/i.test(i)?\"replace TBD with a number\":\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "C — quality attribute of Q1",
+              "vi": "C — thuộc tính chất lượng của Q1"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (ATTRIBUTES[\"Q1\"]); } catch (e) { return 'ATTRIBUTES[\"Q1\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'ATTRIBUTES[\"Q1\"] is empty';\n  var chap = [\"Availability\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "C — quality attribute of Q2",
+              "vi": "C — thuộc tính chất lượng của Q2"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (ATTRIBUTES[\"Q2\"]); } catch (e) { return 'ATTRIBUTES[\"Q2\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'ATTRIBUTES[\"Q2\"] is empty';\n  var chap = [\"Security\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "C — quality attribute of Q3",
+              "vi": "C — thuộc tính chất lượng của Q3"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (ATTRIBUTES[\"Q3\"]); } catch (e) { return 'ATTRIBUTES[\"Q3\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'ATTRIBUTES[\"Q3\"] is empty';\n  var chap = [\"Usability\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "C — quality attribute of Q4",
+              "vi": "C — thuộc tính chất lượng của Q4"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (ATTRIBUTES[\"Q4\"]); } catch (e) { return 'ATTRIBUTES[\"Q4\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'ATTRIBUTES[\"Q4\"] is empty';\n  var chap = [\"Robustness\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "C — quality attribute of Q5",
+              "vi": "C — thuộc tính chất lượng của Q5"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (ATTRIBUTES[\"Q5\"]); } catch (e) { return 'ATTRIBUTES[\"Q5\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'ATTRIBUTES[\"Q5\"] is empty';\n  var chap = [\"Interoperability\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "C — quality attribute of Q6",
+              "vi": "C — thuộc tính chất lượng của Q6"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (ATTRIBUTES[\"Q6\"]); } catch (e) { return 'ATTRIBUTES[\"Q6\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'ATTRIBUTES[\"Q6\"] is empty';\n  var chap = [\"Scalability\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "C — quality attribute of Q7",
+              "vi": "C — thuộc tính chất lượng của Q7"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (ATTRIBUTES[\"Q7\"]); } catch (e) { return 'ATTRIBUTES[\"Q7\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'ATTRIBUTES[\"Q7\"] is empty';\n  var chap = [\"Modifiability\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "C — quality attribute of Q8",
+              "vi": "C — thuộc tính chất lượng của Q8"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (ATTRIBUTES[\"Q8\"]); } catch (e) { return 'ATTRIBUTES[\"Q8\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'ATTRIBUTES[\"Q8\"] is empty';\n  var chap = [\"Integrity\",\"Reliability\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "D — three measurable NFRs for three different quality attributes",
+              "vi": "D — ba NFR đo được cho ba thuộc tính chất lượng khác nhau"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof NFRS==\"undefined\"||!Array.isArray(NFRS))return\"NFRS is missing\";if(NFRS.length<3)return\"write 3 NFRs\";for(var s=[\"Availability\",\"Installability\",\"Integrity\",\"Interoperability\",\"Performance\",\"Reliability\",\"Robustness\",\"Safety\",\"Security\",\"Usability\",\"Efficiency\",\"Modifiability\",\"Portability\",\"Reusability\",\"Scalability\",\"Verifiability\"].map(function(n){return n.toLowerCase()}),r={},e=0;e<NFRS.length;e++){var a=NFRS[e]||{},i=String(a.attribute||\"\").toLowerCase().trim(),t=String(a.requirement||\"\");if(s.indexOf(i)<0)return\"NFRS[\"+e+\"].attribute must be a quality attribute of Wiegers Ch.14\";if(r[i])return\"use three DIFFERENT attributes\";if(r[i]=1,!/\\bshall\\b/i.test(t))return\"NFRS[\"+e+']: use \"shall\"';if(!/\\d/.test(t))return\"NFRS[\"+e+\"] is not measurable \\u2014 add a number (time, %, count, minutes\\u2026)\";if(/\\b(quickly|fast|user[- ]friendly|easy|easily|simple|efficient|flexible|robust|adequate|appropriate|several|some|many|as much as possible|and\\/or|etc|tbd|support)\\b/i.test(t))return\"NFRS[\"+e+\"] contains an ambiguous word\";if(!/medqueue|kiosk|ticket|queue|patient|hall|screen|nurse|doctor|his|sms|staff/i.test(t))return\"NFRS[\"+e+\"] must be about MedQueue, not a generic sentence\"}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f5"
+          },
+          {
+            "moTa": {
+              "en": "D — each NFR states the condition under which it is measured",
+              "vi": "D — mỗi NFR nêu điều kiện đo"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof NFRS==\"undefined\"||!Array.isArray(NFRS)||!NFRS.length)return\"NFRS is missing\";for(var n=0;n<NFRS.length;n++)if(!/\\b(with|when|during|between|after|under|for|in|per|within|while)\\b/i.test(String((NFRS[n]||{}).requirement)))return\"NFRS[\"+n+\"]: under which condition (load, time window, event)?\";return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f5",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "E — Planguage: TAG, AMBITION, SCALE, METER, GOAL, STRETCH, WISH, DEFINED all present",
+              "vi": "E — Planguage: đủ TAG, AMBITION, SCALE, METER, GOAL, STRETCH, WISH, DEFINED"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof PLANGUAGE==\"undefined\"||!PLANGUAGE)return\"PLANGUAGE is missing\";for(var r=[\"tag\",\"ambition\",\"scale\",\"meter\",\"goal\",\"stretch\",\"wish\",\"defined\"],e=0;e<r.length;e++)if(!String(PLANGUAGE[r[e]]||\"\").trim())return\"keyword \"+r[e].toUpperCase()+\" is empty\";return/^[A-Za-z]+\\.[A-Za-z]+/.test(String(PLANGUAGE.tag))?\"OK\":\"TAG is a hierarchical name, e.g. Performance.CallDisplay\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f6"
+          },
+          {
+            "moTa": {
+              "en": "E — SCALE has a unit, METER says how it is measured, GOAL < STRETCH < WISH in difficulty",
+              "vi": "E — SCALE có đơn vị, METER nói cách đo, GOAL < STRETCH < WISH về độ khó"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof PLANGUAGE==\"undefined\"||!PLANGUAGE)return\"PLANGUAGE is missing\";if(!/second|ms|minute|percent|%|count|number/i.test(String(PLANGUAGE.scale)))return\"SCALE needs a unit (seconds, %, \\u2026)\";if(!/test|log|measur|monitor|stopwatch|timestamp|percentile|sample/i.test(String(PLANGUAGE.meter)))return\"METER must say HOW the value is measured\";var t=function(A){var n=/([\\d.]+)/.exec(String(A));return n?Number(n[1]):NaN},r=t(PLANGUAGE.goal),e=t(PLANGUAGE.stretch),i=t(PLANGUAGE.wish);if(isNaN(r)||isNaN(e)||isNaN(i))return\"GOAL, STRETCH and WISH need numbers\";var s=/percent|%|availability|rate/i.test(String(PLANGUAGE.scale)),a=s?r<e&&e<i:r>e&&e>i;return a?\"OK\":\"GOAL is the target to reach, STRETCH is better, WISH is better still \\u2014 check the order\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f6"
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. A. SRS template sections",
+            "diem": 2.5
+          },
+          {
+            "ma": "f2",
+            "ten": "2. B1. Diagnosing bad requirements",
+            "diem": 1.5
+          },
+          {
+            "ma": "f3",
+            "ten": "3. B2. Rewriting them",
+            "diem": 1.5
+          },
+          {
+            "ma": "f4",
+            "ten": "4. C. Quality attributes",
+            "diem": 1.5
+          },
+          {
+            "ma": "f5",
+            "ten": "5. D. Measurable NFRs",
+            "diem": 1.5
+          },
+          {
+            "ma": "f6",
+            "ten": "6. E. Planguage",
+            "diem": 1.5
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Xếp R9 (thành phần một queue entry) vào System features — đó là định nghĩa dữ liệu ⇒ mục 4."
+        },
+        {
+          "loi": "Xếp R5 vào User classes vì có \"nurses\", \"doctors\" — câu này nói về MÁY họ dùng ⇒ Operating environment."
+        },
+        {
+          "loi": "NFR không có điều kiện đo (\"in under 2 seconds\" — với bao nhiêu người dùng?)."
+        },
+        {
+          "loi": "Planguage có GOAL = 1s, STRETCH = 2s (đảo chiều)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Software Requirements Specification (SRS)",
+          "vi": "tài liệu đặc tả yêu cầu phần mềm"
+        },
+        {
+          "en": "verifiable",
+          "vi": "kiểm chứng được — có cách test/đo để biết đạt hay không"
+        },
+        {
+          "en": "ambiguous",
+          "vi": "mơ hồ — hiểu được nhiều cách"
+        },
+        {
+          "en": "TBD (to be determined)",
+          "vi": "chỗ chưa quyết, đánh dấu để theo dõi tới khi đóng"
+        },
+        {
+          "en": "quality attribute",
+          "vi": "thuộc tính chất lượng — các \"-ility\": performance, usability, security, availability…"
+        },
+        {
+          "en": "design / implementation constraint",
+          "vi": "ràng buộc thiết kế/hiện thực — giới hạn lựa chọn của đội phát triển (ngôn ngữ, nền tảng, chuẩn)"
+        },
+        {
+          "en": "external interface requirement",
+          "vi": "yêu cầu giao diện ngoài — giữa hệ thống với người dùng, phần cứng, hệ thống khác"
+        },
+        {
+          "en": "Planguage",
+          "vi": "ngôn ngữ của Tom Gilb để viết yêu cầu chất lượng đo được (TAG, SCALE, METER, GOAL…)"
+        },
+        {
+          "en": "nonfunctional requirement (NFR)",
+          "vi": "yêu cầu phi chức năng — thuộc tính chất lượng, giao diện ngoài, ràng buộc"
+        }
+      ]
+    }
+  ]
+}

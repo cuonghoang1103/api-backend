@@ -10,6 +10,12 @@
   "description": "Bộ luyện môn SWR302 (Software Requirements) theo giáo trình Wiegers & Beatty và slide trường — đề tiếng Anh kèm bản Việt và bảng thuật ngữ; mỗi bài học một bộ đề từ dễ đến khó có máy chấm thật (phân loại yêu cầu, MoSCoW/Wiegers, RTM, RACI, CRUD, bảng quyết định; sơ đồ viết bằng Mermaid/PlantUML được chấm theo thuộc tính: context diagram, DFD, use case, ERD, state, swimlane; đặc tả use case theo template), mỗi chương một Lab + Deep Lab dạng bản in, PE luyện đúng định dạng SP26/SU26 và dự án xuyên suốt ClinicCare.",
   "modules": [
     {
+      "slug": "swr302-3-lab-elicitation-canteengo",
+      "name": "Lab 3 — Elicitation: CanteenGo Pre-Order Canteen",
+      "level": "ADVANCED",
+      "description": "Lab chương 3: chọn kỹ thuật khai thác cho 9 tình huống, xếp việc vào pha chuẩn bị/thực hiện/theo dõi, phân loại 12 câu đầu vào khách hàng vào 9 loại của Wiegers, câu hỏi mở/đóng/dẫn dắt, dấu hiệu khai thác đã gần đủ."
+    },
+    {
       "slug": "swr302-4-lab-behaviour-quickfix",
       "name": "Lab 4C — Behaviour Models: QuickFix IT Helpdesk",
       "level": "ADVANCED",
@@ -26,6 +32,24 @@
       "name": "Lab 4A — Use Cases: GymPass Campus Fitness Centre",
       "level": "ADVANCED",
       "description": "Lab chương 4A: use case GymPass — sơ đồ, hai bảng, đặc tả Book a Class, business rule, FR."
+    },
+    {
+      "slug": "swr302-5-lab-srs-medqueue",
+      "name": "Lab 5 — Specification: the SRS of MedQueue",
+      "level": "ADVANCED",
+      "description": "Lab chương 5: đặt 13 phát biểu vào đúng mục template SRS Wiegers, chẩn đoán và viết lại 8 yêu cầu tồi (mơ hồ, không kiểm chứng, ghép, thiết kế, thiếu, mâu thuẫn), 8 thuộc tính chất lượng, viết 3 NFR đo được, một yêu cầu bằng Planguage."
+    },
+    {
+      "slug": "swr302-6-lab-inspection-tutormatch",
+      "name": "Lab 6 — Validation: Inspecting the SRS of TutorMatch",
+      "level": "ADVANCED",
+      "description": "Lab chương 6: thanh tra trích đoạn SRS 16 dòng của TutorMatch — liệt kê lỗi (dòng, loại, mức, cách sửa) chấm theo ghép cặp, có lỗi nghiêm trọng bắt buộc và trừ khẳng định sai; năm giai đoạn và vai trò inspection; tiêu chí chấp nhận Given/When/Then; verification hay validation."
+    },
+    {
+      "slug": "swr302-10-lab-prioritization-campusride",
+      "name": "Lab 10 — Prioritization: CampusRide Release 1",
+      "level": "ADVANCED",
+      "description": "Lab chương 10: bảng value/cost/risk của Wiegers (value%, cost%, risk%, priority, xếp hạng) cho 6 tính năng, MoSCoW từ lời bên liên quan, phạm vi bản 1 theo năng lực, thang ba mức quan trọng × khẩn cấp, phép thử $100."
     },
     {
       "slug": "swr302-11-pe-1-freshbox-meal-kit",

@@ -1,0 +1,414 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-6-lab-inspection-tutormatch",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-6-1-tham-dinh"
+  },
+  "exercises": [
+    {
+      "title": "Lab 6 — Validation: Inspecting the SRS of TutorMatch",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 60,
+      "points": 100,
+      "concepts": [
+        "requirements inspection",
+        "defect checklist",
+        "acceptance criteria",
+        "verification vs validation"
+      ],
+      "prerequisites": [
+        "SWR302 lessons 6.1–6.4 (validation)"
+      ],
+      "tags": [
+        "swr302",
+        "lab"
+      ],
+      "problemHtml": "<h1>Lab 6 — Validation: Inspecting the SRS of TutorMatch</h1>\n<p class=\"bi-phu\">Chapter 6 lab · requirements inspection, defect checklist, acceptance criteria, verification vs validation · 10 marks</p>\n<h2>1. Overview</h2>\n<p><b>TutorMatch</b> lets FPT University students who did well in a subject tutor younger students for a fee paid by the university. Business rules: <b>BR-1</b> a tutor must have passed the subject with at least 8.0; <b>BR-2</b> new tutors without a rating yet are listed in search with the label \"New\"; <b>BR-3</b> a tutee may book at most 3 sessions per calendar week. The business objective is \"raise the pass rate of first-year students by 10% in two semesters\".</p>\n<p>You are an inspector. This is the excerpt under inspection (line numbers on the left):</p><pre> 1  TM-01  The system shall let a student register as a tutor for a subject passed with a grade of at least 8.0.\n 2  TM-02  The system shall let a tutee search tutors by subject, campus and available time.\n 3  TM-03  Search results shall be displayed quickly.\n 4  TM-04  The system shall let a tutee book a 60-minute session with a tutor.\n 5  TM-05  A tutee shall be able to book at most 3 sessions per calendar week.\n 6  TM-06  The system shall let a tutee book up to 5 sessions per week.\n 7  TM-07  The system shall store sessions in a MongoDB collection named \"sessions\".\n 8  TM-08  When a tutor cancels a session less than 12 hours before it starts, the system shall take appropriate action.\n 9  TM-09  The system shall pay the tutor 50,000 VND per completed session through the campus e-wallet.\n10  TM-10  Each tutoring session lasts 90 minutes.\n11  TM-11  The system shall let the tutee rate the tutor, the platform and the meeting room after a session.\n12  TM-12  The system shall show a 3D animated mascot on the home page.\n13  TM-13  The system shall remind both participants TBD hours before the session.\n14  TM-14  Only tutors whose average rating is above 4.5 shall appear in search results.\n15  TM-15  The system shall let a tutee book a session with a tutor.\n16  TM-16  The system shall be available 24/7 with zero downtime.</pre>\n<p><b>B. Inspection roles</b>:</p><ul><li><b>P1</b> — Reads the SRS aloud during the meeting, paraphrasing each requirement in their own words.</li><li><b>P2</b> — Plans the inspection with the author, chooses the inspectors and leads the meeting.</li><li><b>P3</b> — Writes down every defect raised in the meeting and its classification.</li><li><b>P4</b> — Wrote the SRS; listens, answers questions without debating, and fixes the defects afterwards.</li><li><b>P5</b> — Examines the document for defects before the meeting and raises them during it.</li></ul>\n<p><b>C.</b> Write the acceptance criteria of TM-05 as Given/When/Then scenarios.</p>\n<p><b>D. Activities to classify</b>:</p><ul><li><b>V1</b> — Checking that every requirement has a unique ID and the SRS follows the template.</li><li><b>V2</b> — Asking tutees whether booking through TutorMatch would really replace their Facebook groups.</li><li><b>V3</b> — Looking for requirements that contradict each other.</li><li><b>V4</b> — Showing a clickable prototype of the booking flow to five tutors and watching them use it.</li><li><b>V5</b> — Tracing every requirement back to a business objective in the vision document.</li><li><b>V6</b> — Checking that every requirement is written so a test can pass or fail it.</li></ul>\n<h3>Main features</h3>\n<ul>\n  <li>A. Inspect the excerpt: at least 8 real defects with line, type, severity and fix.</li>\n  <li>B. The inspection process and its roles.</li>\n  <li>C. Acceptance criteria for a business rule.</li>\n  <li>D. Verification or validation?</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>An issue counts when its line AND its type match a real defect. Reporting a correct requirement as a defect costs marks.</li>\n  <li>For a conflict between two lines, report the line that should change.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>answers/\n├── a-issues.js       ← const ISSUES = [ { line, type, severity, description, fix } ]\n├── b-inspection.js   ← const INSPECTION = { stages: [...] }; const INSPECTION_ROLES = { P1: '…' }\n├── c-acceptance.js   ← const ACCEPTANCE = [ { given, when, then } ]\n└── d-v-or-v.js       ← const V_OR_V = { V1: '…' }</pre>\n<h2>3. Data model</h2>\n<p><b>Allowed values</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>ISSUES[i].type</code></td><td>string</td><td>AMBIGUOUS · UNVERIFIABLE · INCOMPLETE · INCONSISTENT · INCORRECT · INFEASIBLE · UNNECESSARY · DESIGN · COMPOUND · DUPLICATE</td></tr><tr><td><code>ISSUES[i].severity · description · fix</code></td><td>string</td><td>High / Medium / Low · what is wrong and why · the concrete change</td></tr><tr><td><code>INSPECTION.stages</code></td><td>string[]</td><td>PLANNING → PREPARATION → INSPECTION_MEETING → REWORK → FOLLOW_UP</td></tr><tr><td><code>INSPECTION_ROLES.*</code></td><td>string</td><td>Author · Moderator · Reader · Recorder · Inspector</td></tr><tr><td><code>ACCEPTANCE[i]</code></td><td>{ given, when, then }</td><td>one scenario per object</td></tr><tr><td><code>V_OR_V.*</code></td><td>string</td><td>VERIFICATION · VALIDATION</td></tr></tbody></table>\n<h2>4. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. A1. Defects found <span class=\"bi-diem\">3 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>At least 8 distinct real defects, right line and right type.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">defect checklist</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. A2. The two critical defects <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>The conflict between two requirements and the requirement that breaks a business rule.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">inconsistent</span> <span class=\"bi-hook\">incorrect</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. A3. Fixes and no false claims <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>A concrete fix for each defect; no correct requirement reported.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">rework</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. B. Inspection process and roles <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Five stages in order; five roles.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">inspection</span></p>\n</div>\n<div class=\"bi-cn\"><h3>5. C. Acceptance criteria <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Given/When/Then on both sides of the limit.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">acceptance criteria</span></p>\n</div>\n<div class=\"bi-cn\"><h3>6. D. Verification vs validation <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Right document vs right requirements.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">verification</span> <span class=\"bi-hook\">validation</span></p>\n</div>\n<h2>5. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>ISSUES</code></td><td>answers/a-issues.js</td></tr><tr><td><code>INSPECTION · INSPECTION_ROLES</code></td><td>answers/b-inspection.js</td></tr><tr><td><code>ACCEPTANCE</code></td><td>answers/c-acceptance.js</td></tr><tr><td><code>V_OR_V</code></td><td>answers/d-v-or-v.js</td></tr></tbody></table>\n<h2>6. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>A1. Defects found</td><td>3</td></tr><tr><td>2</td><td>A2. The two critical defects</td><td>1</td></tr><tr><td>3</td><td>A3. Fixes and no false claims</td><td>1</td></tr><tr><td>4</td><td>B. Inspection process and roles</td><td>2</td></tr><tr><td>5</td><td>C. Acceptance criteria</td><td>1.5</td></tr><tr><td>6</td><td>D. Verification vs validation</td><td>1.5</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Calling TM-05 a defect because it conflicts with TM-06: TM-05 matches BR-3, the line to change is TM-06.</li>\n  <li>Missing TM-14: it reads well but breaks BR-2 — check every requirement against the business rules.</li>\n  <li>Fixes like \"make it better\" or \"rewrite it\".</li>\n</ul>\n<h2>7. Submission</h2>\n<p>Write your answers in the files of <code>answers/</code> on the right. Diagrams are written as text in the syntax of a real tool (Mermaid or PlantUML — paste them into <a href=\"https://mermaid.live\" target=\"_blank\" rel=\"noopener\">mermaid.live</a> or <a href=\"https://www.plantuml.com/plantuml\" target=\"_blank\" rel=\"noopener\">plantuml.com</a> to SEE the picture); tables are JavaScript arrays, one object per row of the school template. Press <b>Run</b> for the visible checks and <b>Submit</b> for full grading, hidden checks included. Your mark per question appears in the rubric table.</p>",
+      "problemHtmlVi": "<h1>Lab 6 — Validation: Inspecting the SRS of TutorMatch</h1>\n<p class=\"bi-phu\">Lab chương 6 · thanh tra yêu cầu, checklist lỗi, tiêu chí chấp nhận, verification vs validation · 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p><b>TutorMatch</b> cho sinh viên FPT University học tốt một môn làm gia sư cho sinh viên khoá dưới, trường trả phí. Business rule: <b>BR-1</b> gia sư phải qua môn với điểm từ 8.0; <b>BR-2</b> gia sư mới chưa có điểm đánh giá vẫn hiện trong tìm kiếm với nhãn \"New\"; <b>BR-3</b> người học đặt tối đa 3 buổi mỗi tuần lịch. Mục tiêu nghiệp vụ: \"tăng tỉ lệ qua môn của sinh viên năm nhất 10% trong hai học kỳ\".</p>\n<p>Bạn là inspector. Trích đoạn cần thanh tra ở bản tiếng Anh (số dòng bên trái). <b>A.</b> Liệt kê lỗi. <b>B.</b> Năm giai đoạn và vai trò P1–P5. <b>C.</b> Tiêu chí chấp nhận của TM-05 dạng Given/When/Then. <b>D.</b> Sáu hoạt động V1–V6: verification hay validation?</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>A. Thanh tra trích đoạn: ít nhất 8 lỗi thật kèm dòng, loại, mức độ và cách sửa.</li>\n  <li>B. Quy trình inspection và các vai trò.</li>\n  <li>C. Tiêu chí chấp nhận cho một business rule.</li>\n  <li>D. Verification hay validation?</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Một lỗi được tính khi đúng dòng VÀ đúng loại. Báo lỗi cho yêu cầu đúng bị trừ điểm.</li>\n  <li>Với mâu thuẫn giữa hai dòng, báo dòng cần sửa.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>answers/\n├── a-issues.js       ← const ISSUES = [ { line, type, severity, description, fix } ]\n├── b-inspection.js   ← const INSPECTION = { stages: [...] }; const INSPECTION_ROLES = { P1: '…' }\n├── c-acceptance.js   ← const ACCEPTANCE = [ { given, when, then } ]\n└── d-v-or-v.js       ← const V_OR_V = { V1: '…' }</pre>\n<h2>3. Mô hình dữ liệu</h2>\n<p><b>Allowed values</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>ISSUES[i].type</code></td><td>string</td><td>AMBIGUOUS · UNVERIFIABLE · INCOMPLETE · INCONSISTENT · INCORRECT · INFEASIBLE · UNNECESSARY · DESIGN · COMPOUND · DUPLICATE</td></tr><tr><td><code>ISSUES[i].severity · description · fix</code></td><td>string</td><td>High / Medium / Low · sai gì, vì sao · sửa cụ thể</td></tr><tr><td><code>INSPECTION.stages</code></td><td>string[]</td><td>đúng thứ tự</td></tr><tr><td><code>INSPECTION_ROLES.*</code></td><td>string</td><td>Author · Moderator · Reader · Recorder · Inspector</td></tr><tr><td><code>ACCEPTANCE[i]</code></td><td>{ given, when, then }</td><td>mỗi object một kịch bản</td></tr><tr><td><code>V_OR_V.*</code></td><td>string</td><td>VERIFICATION · VALIDATION</td></tr></tbody></table>\n<h2>4. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. A1. Lỗi tìm được <span class=\"bi-diem\">3 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Ít nhất 8 lỗi thật khác nhau, đúng dòng và đúng loại.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">defect checklist</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. A2. Hai lỗi nghiêm trọng <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Mâu thuẫn giữa hai yêu cầu và yêu cầu vi phạm business rule.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">inconsistent</span> <span class=\"bi-hook\">incorrect</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. A3. Cách sửa và không báo sai <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Mỗi lỗi một cách sửa cụ thể; không báo lỗi cho yêu cầu đúng.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">rework</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. B. Quy trình và vai trò inspection <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Năm giai đoạn đúng thứ tự; năm vai trò.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">inspection</span></p>\n</div>\n<div class=\"bi-cn\"><h3>5. C. Tiêu chí chấp nhận <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Given/When/Then ở hai phía giới hạn.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">acceptance criteria</span></p>\n</div>\n<div class=\"bi-cn\"><h3>6. D. Verification vs validation <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Viết đúng vs đúng nhu cầu.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">verification</span> <span class=\"bi-hook\">validation</span></p>\n</div>\n<h2>5. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>ISSUES</code></td><td>answers/a-issues.js</td></tr><tr><td><code>INSPECTION · INSPECTION_ROLES</code></td><td>answers/b-inspection.js</td></tr><tr><td><code>ACCEPTANCE</code></td><td>answers/c-acceptance.js</td></tr><tr><td><code>V_OR_V</code></td><td>answers/d-v-or-v.js</td></tr></tbody></table>\n<h2>6. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>A1. Lỗi tìm được</td><td>3</td></tr><tr><td>2</td><td>A2. Hai lỗi nghiêm trọng</td><td>1</td></tr><tr><td>3</td><td>A3. Cách sửa và không báo sai</td><td>1</td></tr><tr><td>4</td><td>B. Quy trình và vai trò inspection</td><td>2</td></tr><tr><td>5</td><td>C. Tiêu chí chấp nhận</td><td>1.5</td></tr><tr><td>6</td><td>D. Verification vs validation</td><td>1.5</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Coi TM-05 là lỗi vì mâu thuẫn với TM-06: TM-05 khớp BR-3, dòng cần sửa là TM-06.</li>\n  <li>Bỏ sót TM-14: đọc thì trơn nhưng phạm BR-2 — đối chiếu mọi yêu cầu với business rule.</li>\n  <li>Cách sửa kiểu \"làm tốt hơn\", \"viết lại\".</li>\n</ul>\n<h2>7. Nộp bài</h2>\n<p>Viết câu trả lời vào các tệp trong <code>answers/</code> bên phải. Sơ đồ viết bằng chữ theo cú pháp của công cụ thật (Mermaid hoặc PlantUML — dán vào <a href=\"https://mermaid.live\" target=\"_blank\" rel=\"noopener\">mermaid.live</a> hoặc <a href=\"https://www.plantuml.com/plantuml\" target=\"_blank\" rel=\"noopener\">plantuml.com</a> để XEM hình); bảng là mảng JavaScript, mỗi object là một dòng của template trường. Bấm <b>Chạy thử</b> để chạy kiểm hiện, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn). Điểm từng câu hiện trong bảng thang điểm.</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "An issue counts when its line AND its type match a real defect. Reporting a correct requirement as a defect costs marks.|||Một lỗi được tính khi đúng dòng VÀ đúng loại. Báo lỗi cho yêu cầu đúng bị trừ điểm.\nFor a conflict between two lines, report the line that should change.|||Với mâu thuẫn giữa hai dòng, báo dòng cần sửa.",
+      "examplesJson": [
+        {
+          "input": "answers/*.js — one object per row of the template",
+          "output": "Rubric table: marks per question (e.g. B. 2.5/3)",
+          "explanation": "Every rubric line is checked separately; hidden checks run on Submit.|||Mỗi dòng rubric được kiểm riêng; kiểm ẩn chạy khi Nộp."
+        }
+      ],
+      "hintsJson": [
+        "A: đi theo checklist Wiegers — rõ ràng (mơ hồ?), kiểm chứng được, đầy đủ (TBD? phản hồi chưa định?), nhất quán (hai dòng nói khác nhau?), đúng (trái business rule?), khả thi, cần thiết (truy về mục tiêu?), không thiết kế, một yêu cầu một câu, không trùng.",
+        "A: có hai cặp mâu thuẫn số liệu (số buổi/tuần, độ dài buổi) và một yêu cầu trùng.",
+        "C: test cả hai phía giới hạn: đang có 2 buổi ⇒ đặt được; đang có 3 buổi ⇒ bị từ chối kèm thông báo."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers/a-issues.js",
+          "language": "javascript",
+          "code": "// A. One object per defect. type: AMBIGUOUS | UNVERIFIABLE | INCOMPLETE | INCONSISTENT | INCORRECT | INFEASIBLE | UNNECESSARY | DESIGN | COMPOUND | DUPLICATE\nconst ISSUES = [\n  { line: 3, type: '', severity: 'Medium', description: '', fix: '' },\n];\n"
+        },
+        {
+          "name": "answers/b-inspection.js",
+          "language": "javascript",
+          "code": "// B. stages: PLANNING | PREPARATION | INSPECTION_MEETING | REWORK | FOLLOW_UP · roles: Author | Moderator | Reader | Recorder | Inspector\nconst INSPECTION = { stages: [] };\nconst INSPECTION_ROLES = {\n  P1: '',\n  P2: '',\n  P3: '',\n  P4: '',\n  P5: '',\n};\n"
+        },
+        {
+          "name": "answers/c-acceptance.js",
+          "language": "javascript",
+          "code": "// C. Acceptance criteria of TM-05 — one object per scenario.\nconst ACCEPTANCE = [\n  { given: '', when: '', then: '' },\n];\n"
+        },
+        {
+          "name": "answers/d-v-or-v.js",
+          "language": "javascript",
+          "code": "// D. VERIFICATION (are the requirements written right?) | VALIDATION (are they the right requirements?)\nconst V_OR_V = {\n  V1: '',\n  V2: '',\n  V3: '',\n  V4: '',\n  V5: '',\n  V6: '',\n};\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers/a-issues.js",
+          "language": "javascript",
+          "code": "// A. Eleven defects; TM-01, TM-02, TM-04, TM-05 and TM-09 are fine. line = the line number in the excerpt.\nconst ISSUES = [\n  { line: 3, type: 'UNVERIFIABLE', severity: 'Medium', description: '\"quickly\" has no measure, so no test can pass or fail it.', fix: 'The system shall display search results within 2 seconds for 95% of searches with 300 concurrent users.' },\n  { line: 6, type: 'INCONSISTENT', severity: 'High', description: 'TM-06 allows 5 sessions per week while TM-05 allows at most 3.', fix: 'Ask the product owner which limit is right, keep one rule (3 per week, BR-3) and delete TM-06.' },\n  { line: 7, type: 'DESIGN', severity: 'Low', description: 'Names the database product and collection — a design decision, not a need.', fix: 'Remove it from the SRS; state only what must be kept (sessions kept for 12 months).' },\n  { line: 8, type: 'INCOMPLETE', severity: 'High', description: '\"take appropriate action\" leaves the system response undefined.', fix: 'State the response: notify the tutee within 1 minute, release the slot and record a late cancellation for the tutor.' },\n  { line: 10, type: 'INCONSISTENT', severity: 'Medium', description: 'A session lasts 90 minutes here but 60 minutes in TM-04.', fix: 'Agree on one duration with the stakeholders and update TM-04 or TM-10.' },\n  { line: 11, type: 'COMPOUND', severity: 'Low', description: 'Three different ratings packed in one requirement.', fix: 'Split into three requirements, one per thing rated.' },\n  { line: 12, type: 'UNNECESSARY', severity: 'Low', description: 'Gold plating: no business objective or user need asks for a mascot.', fix: 'Remove it, or trace it to a stated business objective before keeping it.' },\n  { line: 13, type: 'INCOMPLETE', severity: 'Medium', description: 'TBD left in the reminder time.', fix: 'Resolve the TBD with the sponsor: remind both participants 2 hours before the session.' },\n  { line: 14, type: 'INCORRECT', severity: 'High', description: 'Contradicts BR-2: new tutors without a rating must appear with the label New.', fix: 'Show tutors with an average rating above 4.5 first and new tutors with the label New, as BR-2 requires.' },\n  { line: 15, type: 'DUPLICATE', severity: 'Low', description: 'Repeats TM-04 with less detail.', fix: 'Delete TM-15 and keep TM-04.' },\n  { line: 16, type: 'INFEASIBLE', severity: 'Medium', description: 'Zero downtime is impossible to build and to verify.', fix: 'The system shall be available 99.5% of the time between 07:00 and 22:00, measured monthly.' },\n];\n"
+        },
+        {
+          "name": "answers/b-inspection.js",
+          "language": "javascript",
+          "code": "// B. Wiegers Fig. 17-2 and the inspection roles.\nconst INSPECTION = { stages: ['PLANNING', 'PREPARATION', 'INSPECTION_MEETING', 'REWORK', 'FOLLOW_UP'] };\nconst INSPECTION_ROLES = {\n  P1: 'Reader',\n  P2: 'Moderator',\n  P3: 'Recorder',\n  P4: 'Author',\n  P5: 'Inspector',\n};\n"
+        },
+        {
+          "name": "answers/c-acceptance.js",
+          "language": "javascript",
+          "code": "// C. Test both sides of the limit: the 3rd booking passes, the 4th is refused with a message.\nconst ACCEPTANCE = [\n  { given: 'a tutee has 2 confirmed sessions in the current calendar week', when: 'the tutee books another session in the same week', then: 'the booking is confirmed and the tutee now has 3 sessions that week' },\n  { given: 'a tutee already has 3 confirmed sessions in the current calendar week', when: 'the tutee tries to book a 4th session in the same week', then: 'the booking is refused and the tutee is shown the message \"Weekly limit of 3 sessions reached\"' },\n  { given: 'a tutee has 3 confirmed sessions this week', when: 'the tutee books a session for next week', then: 'the booking is confirmed because the limit applies per calendar week' },\n];\n"
+        },
+        {
+          "name": "answers/d-v-or-v.js",
+          "language": "javascript",
+          "code": "// D. Verification checks the document against its rules; validation checks it against the real needs.\nconst V_OR_V = {\n  V1: 'VERIFICATION',\n  V2: 'VALIDATION',\n  V3: 'VERIFICATION',\n  V4: 'VALIDATION',\n  V5: 'VALIDATION',\n  V6: 'VERIFICATION',\n};\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>A.</b> Defects on lines 3, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16 — see the solution file; lines 1, 2, 4, 5 and 9 are fine. The two that matter most are the 5-vs-3 conflict and TM-14 breaking BR-2. <b>B.</b> Planning → preparation → inspection meeting → rework → follow-up; Reader, Moderator, Recorder, Author, Inspector. <b>C.</b> Two scenarios around the limit, the refusal with its message. <b>D.</b> V1, V3, V6 verification (the document is written right); V2, V4, V5 validation (it describes the right thing).</p>",
+      "solutionExplanationHtmlVi": "<p><b>A.</b> Lỗi ở các dòng 3, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16 — xem tệp lời giải; dòng 1, 2, 4, 5, 9 đúng. Hai lỗi quan trọng nhất là mâu thuẫn 5 với 3 buổi và TM-14 phạm BR-2. <b>B.</b> Planning → preparation → inspection meeting → rework → follow-up; Reader, Moderator, Recorder, Author, Inspector. <b>C.</b> Hai kịch bản quanh giới hạn, ca từ chối có thông báo. <b>D.</b> V1, V3, V6 verification (tài liệu viết đúng); V2, V4, V5 validation (mô tả đúng thứ cần).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "answers/a-issues.js",
+          "answers/b-inspection.js",
+          "answers/c-acceptance.js",
+          "answers/d-v-or-v.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "At least 2 distinct real issues with the right line and type",
+              "vi": "Ít nhất 2 lỗi thật khác nhau, đúng dòng và đúng loại"
+            },
+            "chuanBi": "\nfunction __dongCua(x) { if (Array.isArray(x.lines)) return x.lines.map(Number); if (x.line != null) return String(x.line).split(/[^0-9]+/).filter(Boolean).map(Number); return []; }\nfunction __hop(i, k) { var d = __dongCua(i); var t = String(i.type || '').toUpperCase().trim(); return d.some(function (n) { return k.dong.indexOf(n) >= 0; }) && (!k.loai || k.loai.indexOf(t) >= 0); }\n// ghép cặp tối đa lỗi ↔ khoá: MỘT mục người học chỉ được tính cho MỘT lỗi thật\nfunction __ghep(I, K) {\n  var gan = {};\n  function thu(i, tham) {\n    for (var k = 0; k < K.length; k++) {\n      if (tham[k] || !__hop(I[i], K[k])) continue;\n      tham[k] = 1;\n      if (gan[k] === undefined || thu(gan[k], tham)) { gan[k] = i; return true; }\n    }\n    return false;\n  }\n  for (var i = 0; i < I.length; i++) thu(i, {});\n  return Object.keys(gan).map(function (k) { return K[k]; });\n}\n\nconst __K = [{\"ma\":\"k3\",\"dong\":[3],\"loai\":[\"UNVERIFIABLE\",\"AMBIGUOUS\"],\"ten\":\"TM-03 \\\"quickly\\\" cannot be tested\"},{\"ma\":\"k6\",\"dong\":[6],\"loai\":[\"INCONSISTENT\"],\"ten\":\"TM-06 contradicts TM-05 (5 vs 3 sessions per week)\",\"tenVi\":\"TM-06 mâu thuẫn TM-05 (5 so với 3 buổi/tuần)\",\"nang\":true},{\"ma\":\"k7\",\"dong\":[7],\"loai\":[\"DESIGN\"],\"ten\":\"TM-07 states a design decision (MongoDB)\"},{\"ma\":\"k8\",\"dong\":[8],\"loai\":[\"INCOMPLETE\",\"AMBIGUOUS\"],\"ten\":\"TM-08 \\\"appropriate action\\\" — the response is undefined\"},{\"ma\":\"k10\",\"dong\":[10,4],\"loai\":[\"INCONSISTENT\"],\"ten\":\"TM-10 90 minutes vs TM-04 60 minutes\"},{\"ma\":\"k11\",\"dong\":[11],\"loai\":[\"COMPOUND\"],\"ten\":\"TM-11 three ratings in one requirement\"},{\"ma\":\"k12\",\"dong\":[12],\"loai\":[\"UNNECESSARY\"],\"ten\":\"TM-12 gold plating — traces to no business objective\"},{\"ma\":\"k13\",\"dong\":[13],\"loai\":[\"INCOMPLETE\"],\"ten\":\"TM-13 TBD left open\"},{\"ma\":\"k14\",\"dong\":[14],\"loai\":[\"INCORRECT\",\"INCONSISTENT\"],\"ten\":\"TM-14 contradicts BR-2 (new tutors without a rating must be listed)\",\"tenVi\":\"TM-14 trái BR-2 (gia sư mới chưa có điểm vẫn phải hiện)\",\"nang\":true},{\"ma\":\"k15\",\"dong\":[15],\"loai\":[\"DUPLICATE\"],\"ten\":\"TM-15 duplicates TM-04\"},{\"ma\":\"k16\",\"dong\":[16],\"loai\":[\"INFEASIBLE\",\"UNVERIFIABLE\"],\"ten\":\"TM-16 zero downtime is infeasible and cannot be verified\"}];\nconst __SAI = [{\"dong\":[1],\"ten\":\"TM-01 is a correct requirement (it traces to BR-1)\"},{\"dong\":[5],\"ten\":\"TM-05 matches BR-3 — the line to change is TM-06\"},{\"dong\":[2],\"ten\":\"TM-02 is a correct requirement\"},{\"dong\":[9],\"ten\":\"TM-09 is a correct requirement\"}];\nconst __LOAI = [\"AMBIGUOUS\",\"UNVERIFIABLE\",\"INCOMPLETE\",\"INCONSISTENT\",\"INCORRECT\",\"INFEASIBLE\",\"UNNECESSARY\",\"DESIGN\",\"COMPOUND\",\"DUPLICATE\"];\nconst __I = (typeof ISSUES !== 'undefined' && Array.isArray(ISSUES)) ? ISSUES : null;\nconst __KQ = (function () {\n  if (!__I) return 'ISSUES is missing — declare: const ISSUES = [ { line: 4, type: \"LOGIC\", severity: \"High\", description: \"…\", fix: \"…\" }, … ]';\n  var bad = __I.filter(function (x) { return !x || !__dongCua(x).length || !String(x.description || '').trim(); });\n  if (bad.length) return 'every issue needs a line number and a description';\n  if (__LOAI) { var lt = __I.filter(function (x) { return __LOAI.indexOf(String(x.type || '').toUpperCase().trim()) < 0; }); if (lt.length) return 'unknown type ' + JSON.stringify(lt[0].type) + ' — use one of ' + __LOAI.join(', '); }\n  var timRa = __ghep(__I, __K);\n  function viec(k) {\n\n    return timRa.length >= 2 ? 'OK' : 'found ' + timRa.length + ' valid issue(s) — need 2. (An issue counts when its line AND type match a real defect.)';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "At least 4 distinct real issues with the right line and type",
+              "vi": "Ít nhất 4 lỗi thật khác nhau, đúng dòng và đúng loại"
+            },
+            "chuanBi": "\nfunction __dongCua(x) { if (Array.isArray(x.lines)) return x.lines.map(Number); if (x.line != null) return String(x.line).split(/[^0-9]+/).filter(Boolean).map(Number); return []; }\nfunction __hop(i, k) { var d = __dongCua(i); var t = String(i.type || '').toUpperCase().trim(); return d.some(function (n) { return k.dong.indexOf(n) >= 0; }) && (!k.loai || k.loai.indexOf(t) >= 0); }\n// ghép cặp tối đa lỗi ↔ khoá: MỘT mục người học chỉ được tính cho MỘT lỗi thật\nfunction __ghep(I, K) {\n  var gan = {};\n  function thu(i, tham) {\n    for (var k = 0; k < K.length; k++) {\n      if (tham[k] || !__hop(I[i], K[k])) continue;\n      tham[k] = 1;\n      if (gan[k] === undefined || thu(gan[k], tham)) { gan[k] = i; return true; }\n    }\n    return false;\n  }\n  for (var i = 0; i < I.length; i++) thu(i, {});\n  return Object.keys(gan).map(function (k) { return K[k]; });\n}\n\nconst __K = [{\"ma\":\"k3\",\"dong\":[3],\"loai\":[\"UNVERIFIABLE\",\"AMBIGUOUS\"],\"ten\":\"TM-03 \\\"quickly\\\" cannot be tested\"},{\"ma\":\"k6\",\"dong\":[6],\"loai\":[\"INCONSISTENT\"],\"ten\":\"TM-06 contradicts TM-05 (5 vs 3 sessions per week)\",\"tenVi\":\"TM-06 mâu thuẫn TM-05 (5 so với 3 buổi/tuần)\",\"nang\":true},{\"ma\":\"k7\",\"dong\":[7],\"loai\":[\"DESIGN\"],\"ten\":\"TM-07 states a design decision (MongoDB)\"},{\"ma\":\"k8\",\"dong\":[8],\"loai\":[\"INCOMPLETE\",\"AMBIGUOUS\"],\"ten\":\"TM-08 \\\"appropriate action\\\" — the response is undefined\"},{\"ma\":\"k10\",\"dong\":[10,4],\"loai\":[\"INCONSISTENT\"],\"ten\":\"TM-10 90 minutes vs TM-04 60 minutes\"},{\"ma\":\"k11\",\"dong\":[11],\"loai\":[\"COMPOUND\"],\"ten\":\"TM-11 three ratings in one requirement\"},{\"ma\":\"k12\",\"dong\":[12],\"loai\":[\"UNNECESSARY\"],\"ten\":\"TM-12 gold plating — traces to no business objective\"},{\"ma\":\"k13\",\"dong\":[13],\"loai\":[\"INCOMPLETE\"],\"ten\":\"TM-13 TBD left open\"},{\"ma\":\"k14\",\"dong\":[14],\"loai\":[\"INCORRECT\",\"INCONSISTENT\"],\"ten\":\"TM-14 contradicts BR-2 (new tutors without a rating must be listed)\",\"tenVi\":\"TM-14 trái BR-2 (gia sư mới chưa có điểm vẫn phải hiện)\",\"nang\":true},{\"ma\":\"k15\",\"dong\":[15],\"loai\":[\"DUPLICATE\"],\"ten\":\"TM-15 duplicates TM-04\"},{\"ma\":\"k16\",\"dong\":[16],\"loai\":[\"INFEASIBLE\",\"UNVERIFIABLE\"],\"ten\":\"TM-16 zero downtime is infeasible and cannot be verified\"}];\nconst __SAI = [{\"dong\":[1],\"ten\":\"TM-01 is a correct requirement (it traces to BR-1)\"},{\"dong\":[5],\"ten\":\"TM-05 matches BR-3 — the line to change is TM-06\"},{\"dong\":[2],\"ten\":\"TM-02 is a correct requirement\"},{\"dong\":[9],\"ten\":\"TM-09 is a correct requirement\"}];\nconst __LOAI = [\"AMBIGUOUS\",\"UNVERIFIABLE\",\"INCOMPLETE\",\"INCONSISTENT\",\"INCORRECT\",\"INFEASIBLE\",\"UNNECESSARY\",\"DESIGN\",\"COMPOUND\",\"DUPLICATE\"];\nconst __I = (typeof ISSUES !== 'undefined' && Array.isArray(ISSUES)) ? ISSUES : null;\nconst __KQ = (function () {\n  if (!__I) return 'ISSUES is missing — declare: const ISSUES = [ { line: 4, type: \"LOGIC\", severity: \"High\", description: \"…\", fix: \"…\" }, … ]';\n  var bad = __I.filter(function (x) { return !x || !__dongCua(x).length || !String(x.description || '').trim(); });\n  if (bad.length) return 'every issue needs a line number and a description';\n  if (__LOAI) { var lt = __I.filter(function (x) { return __LOAI.indexOf(String(x.type || '').toUpperCase().trim()) < 0; }); if (lt.length) return 'unknown type ' + JSON.stringify(lt[0].type) + ' — use one of ' + __LOAI.join(', '); }\n  var timRa = __ghep(__I, __K);\n  function viec(k) {\n\n    return timRa.length >= 4 ? 'OK' : 'found ' + timRa.length + ' valid issue(s) — need 4. (An issue counts when its line AND type match a real defect.)';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "At least 6 distinct real issues with the right line and type",
+              "vi": "Ít nhất 6 lỗi thật khác nhau, đúng dòng và đúng loại"
+            },
+            "chuanBi": "\nfunction __dongCua(x) { if (Array.isArray(x.lines)) return x.lines.map(Number); if (x.line != null) return String(x.line).split(/[^0-9]+/).filter(Boolean).map(Number); return []; }\nfunction __hop(i, k) { var d = __dongCua(i); var t = String(i.type || '').toUpperCase().trim(); return d.some(function (n) { return k.dong.indexOf(n) >= 0; }) && (!k.loai || k.loai.indexOf(t) >= 0); }\n// ghép cặp tối đa lỗi ↔ khoá: MỘT mục người học chỉ được tính cho MỘT lỗi thật\nfunction __ghep(I, K) {\n  var gan = {};\n  function thu(i, tham) {\n    for (var k = 0; k < K.length; k++) {\n      if (tham[k] || !__hop(I[i], K[k])) continue;\n      tham[k] = 1;\n      if (gan[k] === undefined || thu(gan[k], tham)) { gan[k] = i; return true; }\n    }\n    return false;\n  }\n  for (var i = 0; i < I.length; i++) thu(i, {});\n  return Object.keys(gan).map(function (k) { return K[k]; });\n}\n\nconst __K = [{\"ma\":\"k3\",\"dong\":[3],\"loai\":[\"UNVERIFIABLE\",\"AMBIGUOUS\"],\"ten\":\"TM-03 \\\"quickly\\\" cannot be tested\"},{\"ma\":\"k6\",\"dong\":[6],\"loai\":[\"INCONSISTENT\"],\"ten\":\"TM-06 contradicts TM-05 (5 vs 3 sessions per week)\",\"tenVi\":\"TM-06 mâu thuẫn TM-05 (5 so với 3 buổi/tuần)\",\"nang\":true},{\"ma\":\"k7\",\"dong\":[7],\"loai\":[\"DESIGN\"],\"ten\":\"TM-07 states a design decision (MongoDB)\"},{\"ma\":\"k8\",\"dong\":[8],\"loai\":[\"INCOMPLETE\",\"AMBIGUOUS\"],\"ten\":\"TM-08 \\\"appropriate action\\\" — the response is undefined\"},{\"ma\":\"k10\",\"dong\":[10,4],\"loai\":[\"INCONSISTENT\"],\"ten\":\"TM-10 90 minutes vs TM-04 60 minutes\"},{\"ma\":\"k11\",\"dong\":[11],\"loai\":[\"COMPOUND\"],\"ten\":\"TM-11 three ratings in one requirement\"},{\"ma\":\"k12\",\"dong\":[12],\"loai\":[\"UNNECESSARY\"],\"ten\":\"TM-12 gold plating — traces to no business objective\"},{\"ma\":\"k13\",\"dong\":[13],\"loai\":[\"INCOMPLETE\"],\"ten\":\"TM-13 TBD left open\"},{\"ma\":\"k14\",\"dong\":[14],\"loai\":[\"INCORRECT\",\"INCONSISTENT\"],\"ten\":\"TM-14 contradicts BR-2 (new tutors without a rating must be listed)\",\"tenVi\":\"TM-14 trái BR-2 (gia sư mới chưa có điểm vẫn phải hiện)\",\"nang\":true},{\"ma\":\"k15\",\"dong\":[15],\"loai\":[\"DUPLICATE\"],\"ten\":\"TM-15 duplicates TM-04\"},{\"ma\":\"k16\",\"dong\":[16],\"loai\":[\"INFEASIBLE\",\"UNVERIFIABLE\"],\"ten\":\"TM-16 zero downtime is infeasible and cannot be verified\"}];\nconst __SAI = [{\"dong\":[1],\"ten\":\"TM-01 is a correct requirement (it traces to BR-1)\"},{\"dong\":[5],\"ten\":\"TM-05 matches BR-3 — the line to change is TM-06\"},{\"dong\":[2],\"ten\":\"TM-02 is a correct requirement\"},{\"dong\":[9],\"ten\":\"TM-09 is a correct requirement\"}];\nconst __LOAI = [\"AMBIGUOUS\",\"UNVERIFIABLE\",\"INCOMPLETE\",\"INCONSISTENT\",\"INCORRECT\",\"INFEASIBLE\",\"UNNECESSARY\",\"DESIGN\",\"COMPOUND\",\"DUPLICATE\"];\nconst __I = (typeof ISSUES !== 'undefined' && Array.isArray(ISSUES)) ? ISSUES : null;\nconst __KQ = (function () {\n  if (!__I) return 'ISSUES is missing — declare: const ISSUES = [ { line: 4, type: \"LOGIC\", severity: \"High\", description: \"…\", fix: \"…\" }, … ]';\n  var bad = __I.filter(function (x) { return !x || !__dongCua(x).length || !String(x.description || '').trim(); });\n  if (bad.length) return 'every issue needs a line number and a description';\n  if (__LOAI) { var lt = __I.filter(function (x) { return __LOAI.indexOf(String(x.type || '').toUpperCase().trim()) < 0; }); if (lt.length) return 'unknown type ' + JSON.stringify(lt[0].type) + ' — use one of ' + __LOAI.join(', '); }\n  var timRa = __ghep(__I, __K);\n  function viec(k) {\n\n    return timRa.length >= 6 ? 'OK' : 'found ' + timRa.length + ' valid issue(s) — need 6. (An issue counts when its line AND type match a real defect.)';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "At least 8 distinct real issues with the right line and type",
+              "vi": "Ít nhất 8 lỗi thật khác nhau, đúng dòng và đúng loại"
+            },
+            "chuanBi": "\nfunction __dongCua(x) { if (Array.isArray(x.lines)) return x.lines.map(Number); if (x.line != null) return String(x.line).split(/[^0-9]+/).filter(Boolean).map(Number); return []; }\nfunction __hop(i, k) { var d = __dongCua(i); var t = String(i.type || '').toUpperCase().trim(); return d.some(function (n) { return k.dong.indexOf(n) >= 0; }) && (!k.loai || k.loai.indexOf(t) >= 0); }\n// ghép cặp tối đa lỗi ↔ khoá: MỘT mục người học chỉ được tính cho MỘT lỗi thật\nfunction __ghep(I, K) {\n  var gan = {};\n  function thu(i, tham) {\n    for (var k = 0; k < K.length; k++) {\n      if (tham[k] || !__hop(I[i], K[k])) continue;\n      tham[k] = 1;\n      if (gan[k] === undefined || thu(gan[k], tham)) { gan[k] = i; return true; }\n    }\n    return false;\n  }\n  for (var i = 0; i < I.length; i++) thu(i, {});\n  return Object.keys(gan).map(function (k) { return K[k]; });\n}\n\nconst __K = [{\"ma\":\"k3\",\"dong\":[3],\"loai\":[\"UNVERIFIABLE\",\"AMBIGUOUS\"],\"ten\":\"TM-03 \\\"quickly\\\" cannot be tested\"},{\"ma\":\"k6\",\"dong\":[6],\"loai\":[\"INCONSISTENT\"],\"ten\":\"TM-06 contradicts TM-05 (5 vs 3 sessions per week)\",\"tenVi\":\"TM-06 mâu thuẫn TM-05 (5 so với 3 buổi/tuần)\",\"nang\":true},{\"ma\":\"k7\",\"dong\":[7],\"loai\":[\"DESIGN\"],\"ten\":\"TM-07 states a design decision (MongoDB)\"},{\"ma\":\"k8\",\"dong\":[8],\"loai\":[\"INCOMPLETE\",\"AMBIGUOUS\"],\"ten\":\"TM-08 \\\"appropriate action\\\" — the response is undefined\"},{\"ma\":\"k10\",\"dong\":[10,4],\"loai\":[\"INCONSISTENT\"],\"ten\":\"TM-10 90 minutes vs TM-04 60 minutes\"},{\"ma\":\"k11\",\"dong\":[11],\"loai\":[\"COMPOUND\"],\"ten\":\"TM-11 three ratings in one requirement\"},{\"ma\":\"k12\",\"dong\":[12],\"loai\":[\"UNNECESSARY\"],\"ten\":\"TM-12 gold plating — traces to no business objective\"},{\"ma\":\"k13\",\"dong\":[13],\"loai\":[\"INCOMPLETE\"],\"ten\":\"TM-13 TBD left open\"},{\"ma\":\"k14\",\"dong\":[14],\"loai\":[\"INCORRECT\",\"INCONSISTENT\"],\"ten\":\"TM-14 contradicts BR-2 (new tutors without a rating must be listed)\",\"tenVi\":\"TM-14 trái BR-2 (gia sư mới chưa có điểm vẫn phải hiện)\",\"nang\":true},{\"ma\":\"k15\",\"dong\":[15],\"loai\":[\"DUPLICATE\"],\"ten\":\"TM-15 duplicates TM-04\"},{\"ma\":\"k16\",\"dong\":[16],\"loai\":[\"INFEASIBLE\",\"UNVERIFIABLE\"],\"ten\":\"TM-16 zero downtime is infeasible and cannot be verified\"}];\nconst __SAI = [{\"dong\":[1],\"ten\":\"TM-01 is a correct requirement (it traces to BR-1)\"},{\"dong\":[5],\"ten\":\"TM-05 matches BR-3 — the line to change is TM-06\"},{\"dong\":[2],\"ten\":\"TM-02 is a correct requirement\"},{\"dong\":[9],\"ten\":\"TM-09 is a correct requirement\"}];\nconst __LOAI = [\"AMBIGUOUS\",\"UNVERIFIABLE\",\"INCOMPLETE\",\"INCONSISTENT\",\"INCORRECT\",\"INFEASIBLE\",\"UNNECESSARY\",\"DESIGN\",\"COMPOUND\",\"DUPLICATE\"];\nconst __I = (typeof ISSUES !== 'undefined' && Array.isArray(ISSUES)) ? ISSUES : null;\nconst __KQ = (function () {\n  if (!__I) return 'ISSUES is missing — declare: const ISSUES = [ { line: 4, type: \"LOGIC\", severity: \"High\", description: \"…\", fix: \"…\" }, … ]';\n  var bad = __I.filter(function (x) { return !x || !__dongCua(x).length || !String(x.description || '').trim(); });\n  if (bad.length) return 'every issue needs a line number and a description';\n  if (__LOAI) { var lt = __I.filter(function (x) { return __LOAI.indexOf(String(x.type || '').toUpperCase().trim()) < 0; }); if (lt.length) return 'unknown type ' + JSON.stringify(lt[0].type) + ' — use one of ' + __LOAI.join(', '); }\n  var timRa = __ghep(__I, __K);\n  function viec(k) {\n\n    return timRa.length >= 8 ? 'OK' : 'found ' + timRa.length + ' valid issue(s) — need 8. (An issue counts when its line AND type match a real defect.)';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "Finds the critical defect: TM-06 contradicts TM-05 (5 vs 3 sessions per week)",
+              "vi": "Tìm ra lỗi nghiêm trọng: TM-06 mâu thuẫn TM-05 (5 so với 3 buổi/tuần)"
+            },
+            "chuanBi": "\nfunction __dongCua(x) { if (Array.isArray(x.lines)) return x.lines.map(Number); if (x.line != null) return String(x.line).split(/[^0-9]+/).filter(Boolean).map(Number); return []; }\nfunction __hop(i, k) { var d = __dongCua(i); var t = String(i.type || '').toUpperCase().trim(); return d.some(function (n) { return k.dong.indexOf(n) >= 0; }) && (!k.loai || k.loai.indexOf(t) >= 0); }\n// ghép cặp tối đa lỗi ↔ khoá: MỘT mục người học chỉ được tính cho MỘT lỗi thật\nfunction __ghep(I, K) {\n  var gan = {};\n  function thu(i, tham) {\n    for (var k = 0; k < K.length; k++) {\n      if (tham[k] || !__hop(I[i], K[k])) continue;\n      tham[k] = 1;\n      if (gan[k] === undefined || thu(gan[k], tham)) { gan[k] = i; return true; }\n    }\n    return false;\n  }\n  for (var i = 0; i < I.length; i++) thu(i, {});\n  return Object.keys(gan).map(function (k) { return K[k]; });\n}\n\nconst __K = [{\"ma\":\"k3\",\"dong\":[3],\"loai\":[\"UNVERIFIABLE\",\"AMBIGUOUS\"],\"ten\":\"TM-03 \\\"quickly\\\" cannot be tested\"},{\"ma\":\"k6\",\"dong\":[6],\"loai\":[\"INCONSISTENT\"],\"ten\":\"TM-06 contradicts TM-05 (5 vs 3 sessions per week)\",\"tenVi\":\"TM-06 mâu thuẫn TM-05 (5 so với 3 buổi/tuần)\",\"nang\":true},{\"ma\":\"k7\",\"dong\":[7],\"loai\":[\"DESIGN\"],\"ten\":\"TM-07 states a design decision (MongoDB)\"},{\"ma\":\"k8\",\"dong\":[8],\"loai\":[\"INCOMPLETE\",\"AMBIGUOUS\"],\"ten\":\"TM-08 \\\"appropriate action\\\" — the response is undefined\"},{\"ma\":\"k10\",\"dong\":[10,4],\"loai\":[\"INCONSISTENT\"],\"ten\":\"TM-10 90 minutes vs TM-04 60 minutes\"},{\"ma\":\"k11\",\"dong\":[11],\"loai\":[\"COMPOUND\"],\"ten\":\"TM-11 three ratings in one requirement\"},{\"ma\":\"k12\",\"dong\":[12],\"loai\":[\"UNNECESSARY\"],\"ten\":\"TM-12 gold plating — traces to no business objective\"},{\"ma\":\"k13\",\"dong\":[13],\"loai\":[\"INCOMPLETE\"],\"ten\":\"TM-13 TBD left open\"},{\"ma\":\"k14\",\"dong\":[14],\"loai\":[\"INCORRECT\",\"INCONSISTENT\"],\"ten\":\"TM-14 contradicts BR-2 (new tutors without a rating must be listed)\",\"tenVi\":\"TM-14 trái BR-2 (gia sư mới chưa có điểm vẫn phải hiện)\",\"nang\":true},{\"ma\":\"k15\",\"dong\":[15],\"loai\":[\"DUPLICATE\"],\"ten\":\"TM-15 duplicates TM-04\"},{\"ma\":\"k16\",\"dong\":[16],\"loai\":[\"INFEASIBLE\",\"UNVERIFIABLE\"],\"ten\":\"TM-16 zero downtime is infeasible and cannot be verified\"}];\nconst __SAI = [{\"dong\":[1],\"ten\":\"TM-01 is a correct requirement (it traces to BR-1)\"},{\"dong\":[5],\"ten\":\"TM-05 matches BR-3 — the line to change is TM-06\"},{\"dong\":[2],\"ten\":\"TM-02 is a correct requirement\"},{\"dong\":[9],\"ten\":\"TM-09 is a correct requirement\"}];\nconst __LOAI = [\"AMBIGUOUS\",\"UNVERIFIABLE\",\"INCOMPLETE\",\"INCONSISTENT\",\"INCORRECT\",\"INFEASIBLE\",\"UNNECESSARY\",\"DESIGN\",\"COMPOUND\",\"DUPLICATE\"];\nconst __I = (typeof ISSUES !== 'undefined' && Array.isArray(ISSUES)) ? ISSUES : null;\nconst __KQ = (function () {\n  if (!__I) return 'ISSUES is missing — declare: const ISSUES = [ { line: 4, type: \"LOGIC\", severity: \"High\", description: \"…\", fix: \"…\" }, … ]';\n  var bad = __I.filter(function (x) { return !x || !__dongCua(x).length || !String(x.description || '').trim(); });\n  if (bad.length) return 'every issue needs a line number and a description';\n  if (__LOAI) { var lt = __I.filter(function (x) { return __LOAI.indexOf(String(x.type || '').toUpperCase().trim()) < 0; }); if (lt.length) return 'unknown type ' + JSON.stringify(lt[0].type) + ' — use one of ' + __LOAI.join(', '); }\n  var timRa = __ghep(__I, __K);\n  function viec(k) {\n\n    return __I.some(function (i) { return __hop(i, __K.filter(function (x) { return x.ma === \"k6\"; })[0]); }) ? 'OK' : 'missed a critical defect (check the line(s) 6)';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "Finds the critical defect: TM-14 contradicts BR-2 (new tutors without a rating must be listed)",
+              "vi": "Tìm ra lỗi nghiêm trọng: TM-14 trái BR-2 (gia sư mới chưa có điểm vẫn phải hiện)"
+            },
+            "chuanBi": "\nfunction __dongCua(x) { if (Array.isArray(x.lines)) return x.lines.map(Number); if (x.line != null) return String(x.line).split(/[^0-9]+/).filter(Boolean).map(Number); return []; }\nfunction __hop(i, k) { var d = __dongCua(i); var t = String(i.type || '').toUpperCase().trim(); return d.some(function (n) { return k.dong.indexOf(n) >= 0; }) && (!k.loai || k.loai.indexOf(t) >= 0); }\n// ghép cặp tối đa lỗi ↔ khoá: MỘT mục người học chỉ được tính cho MỘT lỗi thật\nfunction __ghep(I, K) {\n  var gan = {};\n  function thu(i, tham) {\n    for (var k = 0; k < K.length; k++) {\n      if (tham[k] || !__hop(I[i], K[k])) continue;\n      tham[k] = 1;\n      if (gan[k] === undefined || thu(gan[k], tham)) { gan[k] = i; return true; }\n    }\n    return false;\n  }\n  for (var i = 0; i < I.length; i++) thu(i, {});\n  return Object.keys(gan).map(function (k) { return K[k]; });\n}\n\nconst __K = [{\"ma\":\"k3\",\"dong\":[3],\"loai\":[\"UNVERIFIABLE\",\"AMBIGUOUS\"],\"ten\":\"TM-03 \\\"quickly\\\" cannot be tested\"},{\"ma\":\"k6\",\"dong\":[6],\"loai\":[\"INCONSISTENT\"],\"ten\":\"TM-06 contradicts TM-05 (5 vs 3 sessions per week)\",\"tenVi\":\"TM-06 mâu thuẫn TM-05 (5 so với 3 buổi/tuần)\",\"nang\":true},{\"ma\":\"k7\",\"dong\":[7],\"loai\":[\"DESIGN\"],\"ten\":\"TM-07 states a design decision (MongoDB)\"},{\"ma\":\"k8\",\"dong\":[8],\"loai\":[\"INCOMPLETE\",\"AMBIGUOUS\"],\"ten\":\"TM-08 \\\"appropriate action\\\" — the response is undefined\"},{\"ma\":\"k10\",\"dong\":[10,4],\"loai\":[\"INCONSISTENT\"],\"ten\":\"TM-10 90 minutes vs TM-04 60 minutes\"},{\"ma\":\"k11\",\"dong\":[11],\"loai\":[\"COMPOUND\"],\"ten\":\"TM-11 three ratings in one requirement\"},{\"ma\":\"k12\",\"dong\":[12],\"loai\":[\"UNNECESSARY\"],\"ten\":\"TM-12 gold plating — traces to no business objective\"},{\"ma\":\"k13\",\"dong\":[13],\"loai\":[\"INCOMPLETE\"],\"ten\":\"TM-13 TBD left open\"},{\"ma\":\"k14\",\"dong\":[14],\"loai\":[\"INCORRECT\",\"INCONSISTENT\"],\"ten\":\"TM-14 contradicts BR-2 (new tutors without a rating must be listed)\",\"tenVi\":\"TM-14 trái BR-2 (gia sư mới chưa có điểm vẫn phải hiện)\",\"nang\":true},{\"ma\":\"k15\",\"dong\":[15],\"loai\":[\"DUPLICATE\"],\"ten\":\"TM-15 duplicates TM-04\"},{\"ma\":\"k16\",\"dong\":[16],\"loai\":[\"INFEASIBLE\",\"UNVERIFIABLE\"],\"ten\":\"TM-16 zero downtime is infeasible and cannot be verified\"}];\nconst __SAI = [{\"dong\":[1],\"ten\":\"TM-01 is a correct requirement (it traces to BR-1)\"},{\"dong\":[5],\"ten\":\"TM-05 matches BR-3 — the line to change is TM-06\"},{\"dong\":[2],\"ten\":\"TM-02 is a correct requirement\"},{\"dong\":[9],\"ten\":\"TM-09 is a correct requirement\"}];\nconst __LOAI = [\"AMBIGUOUS\",\"UNVERIFIABLE\",\"INCOMPLETE\",\"INCONSISTENT\",\"INCORRECT\",\"INFEASIBLE\",\"UNNECESSARY\",\"DESIGN\",\"COMPOUND\",\"DUPLICATE\"];\nconst __I = (typeof ISSUES !== 'undefined' && Array.isArray(ISSUES)) ? ISSUES : null;\nconst __KQ = (function () {\n  if (!__I) return 'ISSUES is missing — declare: const ISSUES = [ { line: 4, type: \"LOGIC\", severity: \"High\", description: \"…\", fix: \"…\" }, … ]';\n  var bad = __I.filter(function (x) { return !x || !__dongCua(x).length || !String(x.description || '').trim(); });\n  if (bad.length) return 'every issue needs a line number and a description';\n  if (__LOAI) { var lt = __I.filter(function (x) { return __LOAI.indexOf(String(x.type || '').toUpperCase().trim()) < 0; }); if (lt.length) return 'unknown type ' + JSON.stringify(lt[0].type) + ' — use one of ' + __LOAI.join(', '); }\n  var timRa = __ghep(__I, __K);\n  function viec(k) {\n\n    return __I.some(function (i) { return __hop(i, __K.filter(function (x) { return x.ma === \"k14\"; })[0]); }) ? 'OK' : 'missed a critical defect (check the line(s) 14)';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "No false claims (a correct requirement reported as a defect)",
+              "vi": "Không báo sai (báo lỗi cho một yêu cầu đúng)"
+            },
+            "chuanBi": "\nfunction __dongCua(x) { if (Array.isArray(x.lines)) return x.lines.map(Number); if (x.line != null) return String(x.line).split(/[^0-9]+/).filter(Boolean).map(Number); return []; }\nfunction __hop(i, k) { var d = __dongCua(i); var t = String(i.type || '').toUpperCase().trim(); return d.some(function (n) { return k.dong.indexOf(n) >= 0; }) && (!k.loai || k.loai.indexOf(t) >= 0); }\n// ghép cặp tối đa lỗi ↔ khoá: MỘT mục người học chỉ được tính cho MỘT lỗi thật\nfunction __ghep(I, K) {\n  var gan = {};\n  function thu(i, tham) {\n    for (var k = 0; k < K.length; k++) {\n      if (tham[k] || !__hop(I[i], K[k])) continue;\n      tham[k] = 1;\n      if (gan[k] === undefined || thu(gan[k], tham)) { gan[k] = i; return true; }\n    }\n    return false;\n  }\n  for (var i = 0; i < I.length; i++) thu(i, {});\n  return Object.keys(gan).map(function (k) { return K[k]; });\n}\n\nconst __K = [{\"ma\":\"k3\",\"dong\":[3],\"loai\":[\"UNVERIFIABLE\",\"AMBIGUOUS\"],\"ten\":\"TM-03 \\\"quickly\\\" cannot be tested\"},{\"ma\":\"k6\",\"dong\":[6],\"loai\":[\"INCONSISTENT\"],\"ten\":\"TM-06 contradicts TM-05 (5 vs 3 sessions per week)\",\"tenVi\":\"TM-06 mâu thuẫn TM-05 (5 so với 3 buổi/tuần)\",\"nang\":true},{\"ma\":\"k7\",\"dong\":[7],\"loai\":[\"DESIGN\"],\"ten\":\"TM-07 states a design decision (MongoDB)\"},{\"ma\":\"k8\",\"dong\":[8],\"loai\":[\"INCOMPLETE\",\"AMBIGUOUS\"],\"ten\":\"TM-08 \\\"appropriate action\\\" — the response is undefined\"},{\"ma\":\"k10\",\"dong\":[10,4],\"loai\":[\"INCONSISTENT\"],\"ten\":\"TM-10 90 minutes vs TM-04 60 minutes\"},{\"ma\":\"k11\",\"dong\":[11],\"loai\":[\"COMPOUND\"],\"ten\":\"TM-11 three ratings in one requirement\"},{\"ma\":\"k12\",\"dong\":[12],\"loai\":[\"UNNECESSARY\"],\"ten\":\"TM-12 gold plating — traces to no business objective\"},{\"ma\":\"k13\",\"dong\":[13],\"loai\":[\"INCOMPLETE\"],\"ten\":\"TM-13 TBD left open\"},{\"ma\":\"k14\",\"dong\":[14],\"loai\":[\"INCORRECT\",\"INCONSISTENT\"],\"ten\":\"TM-14 contradicts BR-2 (new tutors without a rating must be listed)\",\"tenVi\":\"TM-14 trái BR-2 (gia sư mới chưa có điểm vẫn phải hiện)\",\"nang\":true},{\"ma\":\"k15\",\"dong\":[15],\"loai\":[\"DUPLICATE\"],\"ten\":\"TM-15 duplicates TM-04\"},{\"ma\":\"k16\",\"dong\":[16],\"loai\":[\"INFEASIBLE\",\"UNVERIFIABLE\"],\"ten\":\"TM-16 zero downtime is infeasible and cannot be verified\"}];\nconst __SAI = [{\"dong\":[1],\"ten\":\"TM-01 is a correct requirement (it traces to BR-1)\"},{\"dong\":[5],\"ten\":\"TM-05 matches BR-3 — the line to change is TM-06\"},{\"dong\":[2],\"ten\":\"TM-02 is a correct requirement\"},{\"dong\":[9],\"ten\":\"TM-09 is a correct requirement\"}];\nconst __LOAI = [\"AMBIGUOUS\",\"UNVERIFIABLE\",\"INCOMPLETE\",\"INCONSISTENT\",\"INCORRECT\",\"INFEASIBLE\",\"UNNECESSARY\",\"DESIGN\",\"COMPOUND\",\"DUPLICATE\"];\nconst __I = (typeof ISSUES !== 'undefined' && Array.isArray(ISSUES)) ? ISSUES : null;\nconst __KQ = (function () {\n  if (!__I) return 'ISSUES is missing — declare: const ISSUES = [ { line: 4, type: \"LOGIC\", severity: \"High\", description: \"…\", fix: \"…\" }, … ]';\n  var bad = __I.filter(function (x) { return !x || !__dongCua(x).length || !String(x.description || '').trim(); });\n  if (bad.length) return 'every issue needs a line number and a description';\n  if (__LOAI) { var lt = __I.filter(function (x) { return __LOAI.indexOf(String(x.type || '').toUpperCase().trim()) < 0; }); if (lt.length) return 'unknown type ' + JSON.stringify(lt[0].type) + ' — use one of ' + __LOAI.join(', '); }\n  var timRa = __ghep(__I, __K);\n  function viec(k) {\n\n    var s = __SAI.filter(function (k) { return __I.some(function (i) { return __hop(i, k); }); });\n    return s.length ? 'false claim: ' + s.map(function (k) { return k.ten; }).join('; ') : 'OK';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "Every issue has a concrete fix suggestion",
+              "vi": "Mỗi lỗi có gợi ý sửa cụ thể"
+            },
+            "chuanBi": "\nfunction __dongCua(x) { if (Array.isArray(x.lines)) return x.lines.map(Number); if (x.line != null) return String(x.line).split(/[^0-9]+/).filter(Boolean).map(Number); return []; }\nfunction __hop(i, k) { var d = __dongCua(i); var t = String(i.type || '').toUpperCase().trim(); return d.some(function (n) { return k.dong.indexOf(n) >= 0; }) && (!k.loai || k.loai.indexOf(t) >= 0); }\n// ghép cặp tối đa lỗi ↔ khoá: MỘT mục người học chỉ được tính cho MỘT lỗi thật\nfunction __ghep(I, K) {\n  var gan = {};\n  function thu(i, tham) {\n    for (var k = 0; k < K.length; k++) {\n      if (tham[k] || !__hop(I[i], K[k])) continue;\n      tham[k] = 1;\n      if (gan[k] === undefined || thu(gan[k], tham)) { gan[k] = i; return true; }\n    }\n    return false;\n  }\n  for (var i = 0; i < I.length; i++) thu(i, {});\n  return Object.keys(gan).map(function (k) { return K[k]; });\n}\n\nconst __K = [{\"ma\":\"k3\",\"dong\":[3],\"loai\":[\"UNVERIFIABLE\",\"AMBIGUOUS\"],\"ten\":\"TM-03 \\\"quickly\\\" cannot be tested\"},{\"ma\":\"k6\",\"dong\":[6],\"loai\":[\"INCONSISTENT\"],\"ten\":\"TM-06 contradicts TM-05 (5 vs 3 sessions per week)\",\"tenVi\":\"TM-06 mâu thuẫn TM-05 (5 so với 3 buổi/tuần)\",\"nang\":true},{\"ma\":\"k7\",\"dong\":[7],\"loai\":[\"DESIGN\"],\"ten\":\"TM-07 states a design decision (MongoDB)\"},{\"ma\":\"k8\",\"dong\":[8],\"loai\":[\"INCOMPLETE\",\"AMBIGUOUS\"],\"ten\":\"TM-08 \\\"appropriate action\\\" — the response is undefined\"},{\"ma\":\"k10\",\"dong\":[10,4],\"loai\":[\"INCONSISTENT\"],\"ten\":\"TM-10 90 minutes vs TM-04 60 minutes\"},{\"ma\":\"k11\",\"dong\":[11],\"loai\":[\"COMPOUND\"],\"ten\":\"TM-11 three ratings in one requirement\"},{\"ma\":\"k12\",\"dong\":[12],\"loai\":[\"UNNECESSARY\"],\"ten\":\"TM-12 gold plating — traces to no business objective\"},{\"ma\":\"k13\",\"dong\":[13],\"loai\":[\"INCOMPLETE\"],\"ten\":\"TM-13 TBD left open\"},{\"ma\":\"k14\",\"dong\":[14],\"loai\":[\"INCORRECT\",\"INCONSISTENT\"],\"ten\":\"TM-14 contradicts BR-2 (new tutors without a rating must be listed)\",\"tenVi\":\"TM-14 trái BR-2 (gia sư mới chưa có điểm vẫn phải hiện)\",\"nang\":true},{\"ma\":\"k15\",\"dong\":[15],\"loai\":[\"DUPLICATE\"],\"ten\":\"TM-15 duplicates TM-04\"},{\"ma\":\"k16\",\"dong\":[16],\"loai\":[\"INFEASIBLE\",\"UNVERIFIABLE\"],\"ten\":\"TM-16 zero downtime is infeasible and cannot be verified\"}];\nconst __SAI = [{\"dong\":[1],\"ten\":\"TM-01 is a correct requirement (it traces to BR-1)\"},{\"dong\":[5],\"ten\":\"TM-05 matches BR-3 — the line to change is TM-06\"},{\"dong\":[2],\"ten\":\"TM-02 is a correct requirement\"},{\"dong\":[9],\"ten\":\"TM-09 is a correct requirement\"}];\nconst __LOAI = [\"AMBIGUOUS\",\"UNVERIFIABLE\",\"INCOMPLETE\",\"INCONSISTENT\",\"INCORRECT\",\"INFEASIBLE\",\"UNNECESSARY\",\"DESIGN\",\"COMPOUND\",\"DUPLICATE\"];\nconst __I = (typeof ISSUES !== 'undefined' && Array.isArray(ISSUES)) ? ISSUES : null;\nconst __KQ = (function () {\n  if (!__I) return 'ISSUES is missing — declare: const ISSUES = [ { line: 4, type: \"LOGIC\", severity: \"High\", description: \"…\", fix: \"…\" }, … ]';\n  var bad = __I.filter(function (x) { return !x || !__dongCua(x).length || !String(x.description || '').trim(); });\n  if (bad.length) return 'every issue needs a line number and a description';\n  if (__LOAI) { var lt = __I.filter(function (x) { return __LOAI.indexOf(String(x.type || '').toUpperCase().trim()) < 0; }); if (lt.length) return 'unknown type ' + JSON.stringify(lt[0].type) + ' — use one of ' + __LOAI.join(', '); }\n  var timRa = __ghep(__I, __K);\n  function viec(k) {\n\n    var t = __I.filter(function (x) { return String(x.fix || '').trim().length < 6; });\n    return t.length ? (t.length + ' issue(s) without a real fix (e.g. line ' + __dongCua(t[0]).join('/') + ')') : 'OK';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "B — the five stages of an inspection, in order",
+              "vi": "B — năm giai đoạn của inspection, đúng thứ tự"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((INSPECTION.stages || []).map(String)); } catch (e) { return '(INSPECTION.stages || []).map(String) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(INSPECTION.stages || []).map(String) is empty';\n  var chap = [[\"PLANNING\",\"PREPARATION\",\"INSPECTION_MEETING\",\"REWORK\",\"FOLLOW_UP\"]];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"json\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"json\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"json\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet — planning → preparation → inspection meeting → rework → follow-up';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "B — role of P1",
+              "vi": "B — vai trò của P1"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (INSPECTION_ROLES[\"P1\"]); } catch (e) { return 'INSPECTION_ROLES[\"P1\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'INSPECTION_ROLES[\"P1\"] is empty';\n  var chap = [\"Reader\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "B — role of P2",
+              "vi": "B — vai trò của P2"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (INSPECTION_ROLES[\"P2\"]); } catch (e) { return 'INSPECTION_ROLES[\"P2\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'INSPECTION_ROLES[\"P2\"] is empty';\n  var chap = [\"Moderator\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "B — role of P3",
+              "vi": "B — vai trò của P3"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (INSPECTION_ROLES[\"P3\"]); } catch (e) { return 'INSPECTION_ROLES[\"P3\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'INSPECTION_ROLES[\"P3\"] is empty';\n  var chap = [\"Recorder\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "B — role of P4",
+              "vi": "B — vai trò của P4"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (INSPECTION_ROLES[\"P4\"]); } catch (e) { return 'INSPECTION_ROLES[\"P4\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'INSPECTION_ROLES[\"P4\"] is empty';\n  var chap = [\"Author\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "B — role of P5",
+              "vi": "B — vai trò của P5"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (INSPECTION_ROLES[\"P5\"]); } catch (e) { return 'INSPECTION_ROLES[\"P5\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'INSPECTION_ROLES[\"P5\"] is empty';\n  var chap = [\"Inspector\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "C — acceptance criteria of TM-05 in Given/When/Then: a success and a refusal at the limit",
+              "vi": "C — tiêu chí chấp nhận của TM-05 dạng Given/When/Then: một ca thành công và một ca bị từ chối ở giới hạn"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof ACCEPTANCE==\"undefined\"||!Array.isArray(ACCEPTANCE))return\"ACCEPTANCE is missing\";if(ACCEPTANCE.length<2)return\"write at least two scenarios\";for(var n=0;n<ACCEPTANCE.length;n++){var t=ACCEPTANCE[n]||{};if(!String(t.given||\"\").trim()||!String(t.when||\"\").trim()||!String(t.then||\"\").trim())return\"scenario \"+(n+1)+\" needs given, when and then\"}var r=ACCEPTANCE.map(function(e){return[e.given,e.when,e.then].join(\" \")}),o=r.some(function(e){return/\\b3\\b|three/i.test(e)&&/refus|reject|not allow|denied|cannot|error|block/i.test(e)}),i=r.some(function(e){return/\\b2\\b|two/i.test(e)&&/confirm|booked|created|success|accept/i.test(e)});return o?i?\"OK\":\"one scenario must show the 3rd booking accepted when 2 sessions are booked\":\"one scenario must show the 4th booking refused when 3 sessions are already booked in the week\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f5"
+          },
+          {
+            "moTa": {
+              "en": "C — the refusal scenario says what the tutee sees",
+              "vi": "C — ca bị từ chối nói rõ người học thấy gì"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof ACCEPTANCE==\"undefined\"||!Array.isArray(ACCEPTANCE))return\"ACCEPTANCE is missing\";var e=ACCEPTANCE.filter(function(t){return/refus|reject|not allow|denied|cannot|error|block/i.test(String(t&&t.then))})[0];return e?/message|show|display|tell|inform|see/i.test(String(e.then))?\"OK\":'the \"then\" must say what the tutee is shown (a message)':'no \"then\" with a refusal'})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f5",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "D — V1: verification or validation",
+              "vi": "D — V1: verification hay validation"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (V_OR_V[\"V1\"]); } catch (e) { return 'V_OR_V[\"V1\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'V_OR_V[\"V1\"] is empty';\n  var chap = [\"VERIFICATION\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f6"
+          },
+          {
+            "moTa": {
+              "en": "D — V2: verification or validation",
+              "vi": "D — V2: verification hay validation"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (V_OR_V[\"V2\"]); } catch (e) { return 'V_OR_V[\"V2\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'V_OR_V[\"V2\"] is empty';\n  var chap = [\"VALIDATION\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f6"
+          },
+          {
+            "moTa": {
+              "en": "D — V3: verification or validation",
+              "vi": "D — V3: verification hay validation"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (V_OR_V[\"V3\"]); } catch (e) { return 'V_OR_V[\"V3\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'V_OR_V[\"V3\"] is empty';\n  var chap = [\"VERIFICATION\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f6"
+          },
+          {
+            "moTa": {
+              "en": "D — V4: verification or validation",
+              "vi": "D — V4: verification hay validation"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (V_OR_V[\"V4\"]); } catch (e) { return 'V_OR_V[\"V4\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'V_OR_V[\"V4\"] is empty';\n  var chap = [\"VALIDATION\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f6"
+          },
+          {
+            "moTa": {
+              "en": "D — V5: verification or validation",
+              "vi": "D — V5: verification hay validation"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (V_OR_V[\"V5\"]); } catch (e) { return 'V_OR_V[\"V5\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'V_OR_V[\"V5\"] is empty';\n  var chap = [\"VALIDATION\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f6"
+          },
+          {
+            "moTa": {
+              "en": "D — V6: verification or validation",
+              "vi": "D — V6: verification hay validation"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (V_OR_V[\"V6\"]); } catch (e) { return 'V_OR_V[\"V6\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'V_OR_V[\"V6\"] is empty';\n  var chap = [\"VERIFICATION\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f6"
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. A1. Defects found",
+            "diem": 3
+          },
+          {
+            "ma": "f2",
+            "ten": "2. A2. The two critical defects",
+            "diem": 1
+          },
+          {
+            "ma": "f3",
+            "ten": "3. A3. Fixes and no false claims",
+            "diem": 1
+          },
+          {
+            "ma": "f4",
+            "ten": "4. B. Inspection process and roles",
+            "diem": 2
+          },
+          {
+            "ma": "f5",
+            "ten": "5. C. Acceptance criteria",
+            "diem": 1.5
+          },
+          {
+            "ma": "f6",
+            "ten": "6. D. Verification vs validation",
+            "diem": 1.5
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Ghi type \"WRONG\" hay \"ERROR\" chung chung — dùng đúng loại trong danh sách."
+        },
+        {
+          "loi": "Đảo giai đoạn: rework trước inspection meeting."
+        },
+        {
+          "loi": "Nhầm Reader với Recorder: Reader diễn giải từng yêu cầu, Recorder ghi lỗi."
+        },
+        {
+          "loi": "Xếp V5 (truy về mục tiêu nghiệp vụ) là verification — nó hỏi \"có đúng thứ cần không\" ⇒ validation."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "inspection",
+          "vi": "thanh tra — loại review hình thức nhất, có vai trò và quy trình"
+        },
+        {
+          "en": "acceptance criteria",
+          "vi": "tiêu chí chấp nhận — điều kiện để khách nhận một yêu cầu/story (Given/When/Then)"
+        },
+        {
+          "en": "verification",
+          "vi": "kiểm chứng — xác nhận làm ĐÚNG CÁCH (khớp đặc tả, chất lượng tài liệu)"
+        },
+        {
+          "en": "validation",
+          "vi": "thẩm định — xác nhận đúng THỨ cần làm (đúng nhu cầu)"
+        },
+        {
+          "en": "gold plating",
+          "vi": "mạ vàng — dev tự thêm chức năng không ai yêu cầu"
+        },
+        {
+          "en": "verifiable",
+          "vi": "kiểm chứng được — có cách test/đo để biết đạt hay không"
+        },
+        {
+          "en": "ambiguous",
+          "vi": "mơ hồ — hiểu được nhiều cách"
+        },
+        {
+          "en": "TBD (to be determined)",
+          "vi": "chỗ chưa quyết, đánh dấu để theo dõi tới khi đóng"
+        },
+        {
+          "en": "moderator / reader / recorder / author",
+          "vi": "người điều phối / người đọc diễn giải / thư ký ghi lỗi / tác giả"
+        }
+      ]
+    }
+  ]
+}

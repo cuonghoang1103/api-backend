@@ -1,0 +1,585 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-3-lab-elicitation-canteengo",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-3-1-ky-thuat-elicitation"
+  },
+  "exercises": [
+    {
+      "title": "Lab 3 — Elicitation: CanteenGo Pre-Order Canteen",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 45,
+      "points": 100,
+      "concepts": [
+        "elicitation techniques",
+        "classifying customer input",
+        "open vs closed questions",
+        "knowing when you are done"
+      ],
+      "prerequisites": [
+        "SWR302 lessons 3.1–3.6 (elicitation)"
+      ],
+      "tags": [
+        "swr302",
+        "lab"
+      ],
+      "problemHtml": "<h1>Lab 3 — Elicitation: CanteenGo Pre-Order Canteen</h1>\n<p class=\"bi-phu\">Chapter 3 lab · elicitation techniques, the session lifecycle, classifying customer input, question types, knowing when you are done · 10 marks</p>\n<h2>1. Overview</h2>\n<p>The university canteen wants <b>CanteenGo</b>: students pre-order lunch, pay with the campus e-wallet and pick it up at a chosen time. You are the business analyst and must plan and run the elicitation.</p>\n<p><b>A. Situations</b> — choose the most suitable technique for each:</p><ul><li><b>S1</b> — Learn how the 12 cooks really work during the lunch rush — when asked, they only say \"we just do it\".</li><li><b>S2</b> — Collect the preferences of 6,000 students about payment methods and pick-up times.</li><li><b>S3</b> — CanteenGo must exchange menus and stock levels with the supplier ordering system, whose API is documented.</li><li><b>S4</b> — Students cannot describe what a good pre-order screen looks like; they need something to react to.</li><li><b>S5</b> — Get the canteen manager, the finance officer, IT and two student representatives to agree on the scope of release 1 in one day.</li><li><b>S6</b> — The university food-safety regulation (40 pages) defines how allergens must be labelled.</li><li><b>S7</b> — Eight international students discuss together what they expect from halal and vegetarian menus.</li><li><b>S8</b> — Understand in depth the goals of the canteen manager and what goes wrong with today’s cash system.</li><li><b>S9</b> — The current cashier app has refund screens that nobody ever documented.</li></ul>\n<p><b>B. Activities of one elicitation session</b>:</p><ul><li><b>T1</b> — Define the scope and the agenda of the session</li><li><b>T2</b> — Learn about the participants and prepare the questions and a straw-man model</li><li><b>T3</b> — Keep the discussion inside the scope of the session and park off-topic ideas</li><li><b>T4</b> — Take notes of what is said, decided and left open</li><li><b>T5</b> — Organise and share the notes with the participants within a day</li><li><b>T6</b> — Record open issues (TBDs) with an owner and a due date</li><li><b>T7</b> — Classify the customer input into requirement types</li><li><b>T8</b> — Send the invitation with the goal of the session and the materials to read</li></ul>\n<p><b>C. Notes from the first interviews</b> — classify each sentence:</p><ul><li><b>C1</b> — Manager: \"We want to cut the lunch-time queue by half before the end of the semester.\"</li><li><b>C2</b> — Student: \"I need to order my lunch before class and pick it up at 12:10.\"</li><li><b>C3</b> — Manager: \"Any dish containing peanuts must carry an allergen warning — that is the university food-safety rule.\"</li><li><b>C4</b> — Cook: \"When an order is paid, the kitchen screen shows it in the queue of its pick-up time.\"</li><li><b>C5</b> — IT: \"The menu page has to load in under 2 seconds even when 1,000 students open it at 11:55.\"</li><li><b>C6</b> — Finance: \"It must take payments from the campus e-wallet through the wallet’s existing API.\"</li><li><b>C7</b> — IT: \"Everything has to run on the university’s Azure tenancy.\"</li><li><b>C8</b> — Cook: \"Each order line has a dish, a quantity from 1 to 5 and an optional note of at most 100 characters.\"</li><li><b>C9</b> — Student: \"Put a big red Pay now button at the top of every screen.\"</li><li><b>C10</b> — Manager: \"A student who does not pick up an order three times loses pre-ordering for a week.\"</li><li><b>C11</b> — Student: \"I want to see which dishes are sold out before I choose.\"</li><li><b>C12</b> — Finance: \"We expect canteen revenue to grow 15% once students stop buying from the shops outside the gate.\"</li></ul>\n<p><b>D. Questions the junior BA wrote</b>:</p><ul><li><b>Q1</b> — What happens in the kitchen during the lunch rush?</li><li><b>Q2</b> — Do students pay by cash or by card?</li><li><b>Q3</b> — You would like a mobile app, wouldn’t you?</li><li><b>Q4</b> — Can you walk me through how you handle a refund today?</li><li><b>Q5</b> — Isn’t the cash register the real reason for the queue?</li><li><b>Q6</b> — How many orders do you serve between 12:00 and 12:15?</li></ul>\n<p><b>E. Possible signals that elicitation is nearly done</b>:</p><ul><li><b>a</b> — The users cannot think of any more use cases.</li><li><b>b</b> — The project has used all of its elicitation budget.</li><li><b>c</b> — New scenarios turn out to be variations of use cases already captured.</li><li><b>d</b> — The sponsor says the deadline is close.</li><li><b>e</b> — New ideas raised are out of scope or have low priority and could come in a later release.</li><li><b>f</b> — The SRS template has a requirement in every section.</li></ul>\n<h3>Main features</h3>\n<ul>\n  <li>A. Technique for each of 9 situations.</li>\n  <li>B. Phase of 8 session activities.</li>\n  <li>C. Type of 12 pieces of customer input.</li>\n  <li>D. Kind of 6 questions.</li>\n  <li>E. Signals of completeness; the need behind a solution idea.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>Use exactly the allowed values listed in the data model (spelling matters, case does not).</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>answers/\n├── a-techniques.js    ← const TECHNIQUES = { S1: '…', … }\n├── b-phases.js        ← const PHASES = { T1: '…', … }\n├── c-input-types.js   ← const INPUT_TYPES = { C1: '…', … }\n├── d-questions.js     ← const QUESTIONS = { Q1: '…', … }\n└── e-done.js          ← const DONE_SIGNALS = ['…']; const REAL_NEED_C9 = '…'</pre>\n<h2>3. Data model</h2>\n<p><b>Allowed values</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>TECHNIQUES.*</code></td><td>string</td><td>Interview · Workshop · Focus group · Observation · Questionnaire · System interface analysis · User interface analysis · Document analysis · Prototyping</td></tr><tr><td><code>PHASES.*</code></td><td>string</td><td>PREPARE · PERFORM · FOLLOW_UP</td></tr><tr><td><code>INPUT_TYPES.*</code></td><td>string</td><td>Business requirement · User requirement · Business rule · Functional requirement · Quality attribute · External interface · Constraint · Data requirement · Solution idea</td></tr><tr><td><code>QUESTIONS.*</code></td><td>string</td><td>OPEN · CLOSED · LEADING</td></tr><tr><td><code>DONE_SIGNALS · REAL_NEED_C9</code></td><td>string[] · string</td><td>letters a–f · PAY_QUICKLY | RED_COLOUR | MORE_BUTTONS | BIGGER_SCREEN</td></tr></tbody></table>\n<h2>4. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. A. Elicitation techniques <span class=\"bi-diem\">2.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>The technique that fits who holds the knowledge and how many people there are.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">interview</span> <span class=\"bi-hook\">workshop</span> <span class=\"bi-hook\">observation</span> <span class=\"bi-hook\">questionnaire</span> <span class=\"bi-hook\">interface analysis</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. B. Session lifecycle <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Prepare → perform → follow up.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">elicitation plan</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. C. Classifying customer input <span class=\"bi-diem\">3 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>The nine buckets of Wiegers Ch.7.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">business requirement</span> <span class=\"bi-hook\">business rule</span> <span class=\"bi-hook\">solution idea</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. D. Question types <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Open, closed, leading.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">interview questions</span></p>\n</div>\n<div class=\"bi-cn\"><h3>5. E. Knowing when you are done <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Evidence of completeness, not project pressure; the need behind a solution idea.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">finding missing requirements</span></p>\n</div>\n<h2>5. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>TECHNIQUES</code></td><td>answers/a-techniques.js</td></tr><tr><td><code>PHASES</code></td><td>answers/b-phases.js</td></tr><tr><td><code>INPUT_TYPES</code></td><td>answers/c-input-types.js</td></tr><tr><td><code>QUESTIONS</code></td><td>answers/d-questions.js</td></tr><tr><td><code>DONE_SIGNALS · REAL_NEED_C9</code></td><td>answers/e-done.js</td></tr></tbody></table>\n<h2>6. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>A. Elicitation techniques</td><td>2.5</td></tr><tr><td>2</td><td>B. Session lifecycle</td><td>1.5</td></tr><tr><td>3</td><td>C. Classifying customer input</td><td>3</td></tr><tr><td>4</td><td>D. Question types</td><td>1.5</td></tr><tr><td>5</td><td>E. Knowing when you are done</td><td>1.5</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Interviewing the cooks about their own routine (S1): people describe what they think they do — observe instead.</li>\n  <li>C4 as a user requirement because a cook says it: it describes system behaviour in a condition ⇒ functional requirement.</li>\n  <li>C9 as a functional requirement — it is a solution idea; ask \"why\" to find the need.</li>\n</ul>\n<h2>7. Submission</h2>\n<p>Write your answers in the files of <code>answers/</code> on the right. Diagrams are written as text in the syntax of a real tool (Mermaid or PlantUML — paste them into <a href=\"https://mermaid.live\" target=\"_blank\" rel=\"noopener\">mermaid.live</a> or <a href=\"https://www.plantuml.com/plantuml\" target=\"_blank\" rel=\"noopener\">plantuml.com</a> to SEE the picture); tables are JavaScript arrays, one object per row of the school template. Press <b>Run</b> for the visible checks and <b>Submit</b> for full grading, hidden checks included. Your mark per question appears in the rubric table.</p>",
+      "problemHtmlVi": "<h1>Lab 3 — Elicitation: CanteenGo Pre-Order Canteen</h1>\n<p class=\"bi-phu\">Lab chương 3 · kỹ thuật khai thác, vòng đời buổi khai thác, phân loại đầu vào khách hàng, loại câu hỏi, biết khi nào đủ · 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p>Căng-tin trường muốn có <b>CanteenGo</b>: sinh viên đặt trước bữa trưa, trả bằng ví điện tử của trường và nhận đồ ăn đúng giờ đã chọn. Bạn là BA, phải lập kế hoạch và tiến hành khai thác yêu cầu.</p>\n<p><b>A.</b> Chín tình huống S1–S9 (bản tiếng Anh ở trên): quan sát đầu bếp giờ cao điểm · ý kiến 6.000 sinh viên · trao đổi dữ liệu với hệ thống đặt hàng của nhà cung cấp có API · sinh viên không tả được màn hình đặt trước · đưa quản lý, tài chính, IT, đại diện sinh viên đi tới thống nhất phạm vi trong một ngày · quy định an toàn thực phẩm 40 trang · 8 sinh viên quốc tế cùng bàn về thực đơn halal/chay · hiểu sâu mục tiêu của quản lý căng-tin · màn hình hoàn tiền của app thu ngân chưa ai viết tài liệu.</p>\n<p><b>B.</b> Tám việc T1–T8 của một buổi khai thác — xếp vào pha CHUẨN BỊ / THỰC HIỆN / THEO DÕI.</p>\n<p><b>C.</b> Mười hai câu C1–C12 từ các buổi phỏng vấn đầu — phân loại vào 9 loại đầu vào khách hàng (Wiegers Ch.7).</p>\n<p><b>D.</b> Sáu câu hỏi Q1–Q6 BA mới viết — mở, đóng hay dẫn dắt?</p>\n<p><b>E.</b> Sáu dấu hiệu a–f — dấu hiệu nào thật sự cho thấy khai thác sắp xong?</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>A. Kỹ thuật cho 9 tình huống.</li>\n  <li>B. Pha của 8 việc trong buổi khai thác.</li>\n  <li>C. Loại của 12 câu đầu vào khách hàng.</li>\n  <li>D. Loại của 6 câu hỏi.</li>\n  <li>E. Dấu hiệu đã đủ; nhu cầu thật sau một ý tưởng giải pháp.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Dùng đúng giá trị cho phép trong mô hình dữ liệu (đúng chính tả, không phân biệt hoa thường).</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>answers/\n├── a-techniques.js    ← const TECHNIQUES = { S1: '…', … }\n├── b-phases.js        ← const PHASES = { T1: '…', … }\n├── c-input-types.js   ← const INPUT_TYPES = { C1: '…', … }\n├── d-questions.js     ← const QUESTIONS = { Q1: '…', … }\n└── e-done.js          ← const DONE_SIGNALS = ['…']; const REAL_NEED_C9 = '…'</pre>\n<h2>3. Mô hình dữ liệu</h2>\n<p><b>Allowed values</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>TECHNIQUES.*</code></td><td>string</td><td>Interview · Workshop · Focus group · Observation · Questionnaire · System interface analysis · User interface analysis · Document analysis · Prototyping</td></tr><tr><td><code>PHASES.*</code></td><td>string</td><td>PREPARE (chuẩn bị) · PERFORM (thực hiện) · FOLLOW_UP (theo dõi)</td></tr><tr><td><code>INPUT_TYPES.*</code></td><td>string</td><td>Business requirement · User requirement · Business rule · Functional requirement · Quality attribute · External interface · Constraint · Data requirement · Solution idea</td></tr><tr><td><code>QUESTIONS.*</code></td><td>string</td><td>OPEN (mở) · CLOSED (đóng) · LEADING (dẫn dắt)</td></tr><tr><td><code>DONE_SIGNALS · REAL_NEED_C9</code></td><td>string[] · string</td><td>chữ a–f · một mã</td></tr></tbody></table>\n<h2>4. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. A. Kỹ thuật khai thác <span class=\"bi-diem\">2.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Kỹ thuật hợp với ai nắm tri thức và có bao nhiêu người.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">interview</span> <span class=\"bi-hook\">workshop</span> <span class=\"bi-hook\">observation</span> <span class=\"bi-hook\">questionnaire</span> <span class=\"bi-hook\">interface analysis</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. B. Vòng đời buổi khai thác <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Chuẩn bị → thực hiện → theo dõi.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">elicitation plan</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. C. Phân loại đầu vào khách hàng <span class=\"bi-diem\">3 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Chín nhóm của Wiegers Ch.7.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">business requirement</span> <span class=\"bi-hook\">business rule</span> <span class=\"bi-hook\">solution idea</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. D. Loại câu hỏi <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Mở, đóng, dẫn dắt.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">interview questions</span></p>\n</div>\n<div class=\"bi-cn\"><h3>5. E. Biết khi nào đủ <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Bằng chứng đã đủ, không phải áp lực dự án; nhu cầu sau một ý tưởng giải pháp.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">finding missing requirements</span></p>\n</div>\n<h2>5. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>TECHNIQUES</code></td><td>answers/a-techniques.js</td></tr><tr><td><code>PHASES</code></td><td>answers/b-phases.js</td></tr><tr><td><code>INPUT_TYPES</code></td><td>answers/c-input-types.js</td></tr><tr><td><code>QUESTIONS</code></td><td>answers/d-questions.js</td></tr><tr><td><code>DONE_SIGNALS · REAL_NEED_C9</code></td><td>answers/e-done.js</td></tr></tbody></table>\n<h2>6. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>A. Kỹ thuật khai thác</td><td>2.5</td></tr><tr><td>2</td><td>B. Vòng đời buổi khai thác</td><td>1.5</td></tr><tr><td>3</td><td>C. Phân loại đầu vào khách hàng</td><td>3</td></tr><tr><td>4</td><td>D. Loại câu hỏi</td><td>1.5</td></tr><tr><td>5</td><td>E. Biết khi nào đủ</td><td>1.5</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Phỏng vấn đầu bếp về thói quen của chính họ (S1): người ta tả cái họ NGHĨ mình làm — hãy quan sát.</li>\n  <li>Xếp C4 là user requirement vì đầu bếp nói: nó tả hành vi hệ thống trong một điều kiện ⇒ functional requirement.</li>\n  <li>Xếp C9 là functional requirement — đó là ý tưởng giải pháp; hỏi \"vì sao\" để tìm nhu cầu.</li>\n</ul>\n<h2>7. Nộp bài</h2>\n<p>Viết câu trả lời vào các tệp trong <code>answers/</code> bên phải. Sơ đồ viết bằng chữ theo cú pháp của công cụ thật (Mermaid hoặc PlantUML — dán vào <a href=\"https://mermaid.live\" target=\"_blank\" rel=\"noopener\">mermaid.live</a> hoặc <a href=\"https://www.plantuml.com/plantuml\" target=\"_blank\" rel=\"noopener\">plantuml.com</a> để XEM hình); bảng là mảng JavaScript, mỗi object là một dòng của template trường. Bấm <b>Chạy thử</b> để chạy kiểm hiện, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn). Điểm từng câu hiện trong bảng thang điểm.</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "Use exactly the allowed values listed in the data model (spelling matters, case does not).|||Dùng đúng giá trị cho phép trong mô hình dữ liệu (đúng chính tả, không phân biệt hoa thường).",
+      "examplesJson": [
+        {
+          "input": "answers/*.js — one object per row of the template",
+          "output": "Rubric table: marks per question (e.g. B. 2.5/3)",
+          "explanation": "Every rubric line is checked separately; hidden checks run on Submit.|||Mỗi dòng rubric được kiểm riêng; kiểm ẩn chạy khi Nộp."
+        }
+      ],
+      "hintsJson": [
+        "A: tự hỏi \"tri thức nằm ở đâu?\" — trong đầu người (interview/workshop/focus group), trong việc họ làm (observation), trong hệ thống/tài liệu có sẵn (interface/document analysis), hay chưa ai biết cho tới khi thấy (prototyping).",
+        "C: VÌ SAO tổ chức muốn (business) · NGƯỜI DÙNG cần làm gì (user) · HỆ THỐNG làm gì (functional) · chính sách ngoài phần mềm (business rule) · đo được (quality) · nối hệ thống khác (interface) · giới hạn thiết kế (constraint) · dữ liệu (data) · cách làm cụ thể (solution idea)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers/a-techniques.js",
+          "language": "javascript",
+          "code": "// A. Allowed values: Interview | Workshop | Focus group | Observation | Questionnaire | System interface analysis | User interface analysis | Document analysis | Prototyping\nconst TECHNIQUES = {\n  S1: '',\n  S2: '',\n  S3: '',\n  S4: '',\n  S5: '',\n  S6: '',\n  S7: '',\n  S8: '',\n  S9: '',\n};\n"
+        },
+        {
+          "name": "answers/b-phases.js",
+          "language": "javascript",
+          "code": "// B. Allowed values: PREPARE | PERFORM | FOLLOW_UP\nconst PHASES = {\n  T1: '',\n  T2: '',\n  T3: '',\n  T4: '',\n  T5: '',\n  T6: '',\n  T7: '',\n  T8: '',\n};\n"
+        },
+        {
+          "name": "answers/c-input-types.js",
+          "language": "javascript",
+          "code": "// C. Allowed values: Business requirement | User requirement | Business rule | Functional requirement | Quality attribute | External interface | Constraint | Data requirement | Solution idea\nconst INPUT_TYPES = {\n  C1: '',\n  C2: '',\n  C3: '',\n  C4: '',\n  C5: '',\n  C6: '',\n  C7: '',\n  C8: '',\n  C9: '',\n  C10: '',\n  C11: '',\n  C12: '',\n};\n"
+        },
+        {
+          "name": "answers/d-questions.js",
+          "language": "javascript",
+          "code": "// D. Allowed values: OPEN | CLOSED | LEADING\nconst QUESTIONS = {\n  Q1: '',\n  Q2: '',\n  Q3: '',\n  Q4: '',\n  Q5: '',\n  Q6: '',\n};\n"
+        },
+        {
+          "name": "answers/e-done.js",
+          "language": "javascript",
+          "code": "// E. Letters of the signals that elicitation is nearly done; the real need behind C9.\nconst DONE_SIGNALS = [];\n// PAY_QUICKLY | RED_COLOUR | MORE_BUTTONS | BIGGER_SCREEN\nconst REAL_NEED_C9 = '';\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers/a-techniques.js",
+          "language": "javascript",
+          "code": "// A. Watch what people cannot explain; ask many people the same thing with a questionnaire; read systems and documents.\nconst TECHNIQUES = {\n  S1: 'Observation',\n  S2: 'Questionnaire',\n  S3: 'System interface analysis',\n  S4: 'Prototyping',\n  S5: 'Workshop',\n  S6: 'Document analysis',\n  S7: 'Focus group',\n  S8: 'Interview',\n  S9: 'User interface analysis',\n};\n"
+        },
+        {
+          "name": "answers/b-phases.js",
+          "language": "javascript",
+          "code": "// B. Prepare (scope, agenda, participants, questions, invitation) → perform (facilitate, stay in scope, take notes) → follow up (notes, open issues, classify input).\nconst PHASES = {\n  T1: 'PREPARE',\n  T2: 'PREPARE',\n  T3: 'PERFORM',\n  T4: 'PERFORM',\n  T5: 'FOLLOW_UP',\n  T6: 'FOLLOW_UP',\n  T7: 'FOLLOW_UP',\n  T8: 'PREPARE',\n};\n"
+        },
+        {
+          "name": "answers/c-input-types.js",
+          "language": "javascript",
+          "code": "// C. Wiegers Ch.7 \"classifying customer input\" — the nine buckets.\nconst INPUT_TYPES = {\n  C1: 'Business requirement',  // business objective (why)\n  C2: 'User requirement',  // a user task\n  C3: 'Business rule',  // a policy outside the software\n  C4: 'Functional requirement',  // system behaviour\n  C5: 'Quality attribute',  // performance — measurable\n  C6: 'External interface',  // connection to another system\n  C7: 'Constraint',  // limits design choices\n  C8: 'Data requirement',  // data definition\n  C9: 'Solution idea',  // design idea — ask why\n  C10: 'Business rule',  // policy\n  C11: 'User requirement',  // a user goal\n  C12: 'Business requirement',  // business objective\n};\n"
+        },
+        {
+          "name": "answers/d-questions.js",
+          "language": "javascript",
+          "code": "// D. Open = invites a description; closed = a fact or a choice; leading = suggests the answer the BA wants to hear.\nconst QUESTIONS = {\n  Q1: 'OPEN',\n  Q2: 'CLOSED',\n  Q3: 'LEADING',\n  Q4: 'OPEN',\n  Q5: 'LEADING',\n  Q6: 'CLOSED',\n};\n"
+        },
+        {
+          "name": "answers/e-done.js",
+          "language": "javascript",
+          "code": "// E. Wiegers: no new use cases, new scenarios are variations, new ideas are out of scope or low priority. Budget and deadline are not evidence.\nconst DONE_SIGNALS = ['a', 'c', 'e'];\n// The button is a solution idea; the need is to pay quickly from any screen.\nconst REAL_NEED_C9 = 'PAY_QUICKLY';\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>A.</b> Observation · Questionnaire · System interface analysis · Prototyping · Workshop · Document analysis · Focus group · Interview · User interface analysis. <b>B.</b> T1, T2, T8 prepare · T3, T4 perform · T5, T6, T7 follow up. <b>C.</b> Business · User · Business rule · Functional · Quality attribute · External interface · Constraint · Data · Solution idea · Business rule · User · Business. <b>D.</b> Open · Closed · Leading · Open · Leading · Closed. <b>E.</b> a, c, e — budget, deadline and a filled template say nothing about completeness; the red button hides the need to pay quickly from anywhere.</p>",
+      "solutionExplanationHtmlVi": "<p><b>A.</b> Quan sát · Bảng hỏi · Phân tích giao diện hệ thống · Prototype · Workshop · Phân tích tài liệu · Focus group · Phỏng vấn · Phân tích giao diện người dùng. <b>B.</b> T1, T2, T8 chuẩn bị · T3, T4 thực hiện · T5, T6, T7 theo dõi. <b>C.</b> như bảng trên. <b>D.</b> Mở · Đóng · Dẫn dắt · Mở · Dẫn dắt · Đóng. <b>E.</b> a, c, e — ngân sách, hạn chót hay template đầy chữ không nói gì về độ đủ; nút đỏ che giấu nhu cầu trả tiền nhanh ở mọi nơi.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "answers/a-techniques.js",
+          "answers/b-phases.js",
+          "answers/c-input-types.js",
+          "answers/d-questions.js",
+          "answers/e-done.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A — technique for S1",
+              "vi": "A — kỹ thuật cho S1"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (TECHNIQUES[\"S1\"]); } catch (e) { return 'TECHNIQUES[\"S1\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'TECHNIQUES[\"S1\"] is empty';\n  var chap = [\"Observation\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet — people cannot always explain what they do — watch them';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — technique for S2",
+              "vi": "A — kỹ thuật cho S2"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (TECHNIQUES[\"S2\"]); } catch (e) { return 'TECHNIQUES[\"S2\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'TECHNIQUES[\"S2\"] is empty';\n  var chap = [\"Questionnaire\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — technique for S3",
+              "vi": "A — kỹ thuật cho S3"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (TECHNIQUES[\"S3\"]); } catch (e) { return 'TECHNIQUES[\"S3\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'TECHNIQUES[\"S3\"] is empty';\n  var chap = [\"System interface analysis\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet — look at the other system, not at people';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — technique for S4",
+              "vi": "A — kỹ thuật cho S4"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (TECHNIQUES[\"S4\"]); } catch (e) { return 'TECHNIQUES[\"S4\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'TECHNIQUES[\"S4\"] is empty';\n  var chap = [\"Prototyping\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — technique for S5",
+              "vi": "A — kỹ thuật cho S5"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (TECHNIQUES[\"S5\"]); } catch (e) { return 'TECHNIQUES[\"S5\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'TECHNIQUES[\"S5\"] is empty';\n  var chap = [\"Workshop\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — technique for S6",
+              "vi": "A — kỹ thuật cho S6"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (TECHNIQUES[\"S6\"]); } catch (e) { return 'TECHNIQUES[\"S6\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'TECHNIQUES[\"S6\"] is empty';\n  var chap = [\"Document analysis\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — technique for S7",
+              "vi": "A — kỹ thuật cho S7"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (TECHNIQUES[\"S7\"]); } catch (e) { return 'TECHNIQUES[\"S7\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'TECHNIQUES[\"S7\"] is empty';\n  var chap = [\"Focus group\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — technique for S8",
+              "vi": "A — kỹ thuật cho S8"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (TECHNIQUES[\"S8\"]); } catch (e) { return 'TECHNIQUES[\"S8\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'TECHNIQUES[\"S8\"] is empty';\n  var chap = [\"Interview\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — technique for S9",
+              "vi": "A — kỹ thuật cho S9"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (TECHNIQUES[\"S9\"]); } catch (e) { return 'TECHNIQUES[\"S9\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'TECHNIQUES[\"S9\"] is empty';\n  var chap = [\"User interface analysis\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet — the evidence is in an existing screen';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "B — phase of T1",
+              "vi": "B — pha của T1"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (PHASES[\"T1\"]); } catch (e) { return 'PHASES[\"T1\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'PHASES[\"T1\"] is empty';\n  var chap = [\"PREPARE\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — phase of T2",
+              "vi": "B — pha của T2"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (PHASES[\"T2\"]); } catch (e) { return 'PHASES[\"T2\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'PHASES[\"T2\"] is empty';\n  var chap = [\"PREPARE\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — phase of T3",
+              "vi": "B — pha của T3"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (PHASES[\"T3\"]); } catch (e) { return 'PHASES[\"T3\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'PHASES[\"T3\"] is empty';\n  var chap = [\"PERFORM\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — phase of T4",
+              "vi": "B — pha của T4"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (PHASES[\"T4\"]); } catch (e) { return 'PHASES[\"T4\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'PHASES[\"T4\"] is empty';\n  var chap = [\"PERFORM\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — phase of T5",
+              "vi": "B — pha của T5"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (PHASES[\"T5\"]); } catch (e) { return 'PHASES[\"T5\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'PHASES[\"T5\"] is empty';\n  var chap = [\"FOLLOW_UP\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — phase of T6",
+              "vi": "B — pha của T6"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (PHASES[\"T6\"]); } catch (e) { return 'PHASES[\"T6\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'PHASES[\"T6\"] is empty';\n  var chap = [\"FOLLOW_UP\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — phase of T7",
+              "vi": "B — pha của T7"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (PHASES[\"T7\"]); } catch (e) { return 'PHASES[\"T7\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'PHASES[\"T7\"] is empty';\n  var chap = [\"FOLLOW_UP\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — phase of T8",
+              "vi": "B — pha của T8"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (PHASES[\"T8\"]); } catch (e) { return 'PHASES[\"T8\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'PHASES[\"T8\"] is empty';\n  var chap = [\"PREPARE\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "C — type of C1",
+              "vi": "C — loại của C1"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (INPUT_TYPES[\"C1\"]); } catch (e) { return 'INPUT_TYPES[\"C1\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'INPUT_TYPES[\"C1\"] is empty';\n  var chap = [\"Business requirement\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet — WHY the organisation wants the system';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — type of C2",
+              "vi": "C — loại của C2"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (INPUT_TYPES[\"C2\"]); } catch (e) { return 'INPUT_TYPES[\"C2\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'INPUT_TYPES[\"C2\"] is empty';\n  var chap = [\"User requirement\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — type of C3",
+              "vi": "C — loại của C3"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (INPUT_TYPES[\"C3\"]); } catch (e) { return 'INPUT_TYPES[\"C3\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'INPUT_TYPES[\"C3\"] is empty';\n  var chap = [\"Business rule\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — type of C4",
+              "vi": "C — loại của C4"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (INPUT_TYPES[\"C4\"]); } catch (e) { return 'INPUT_TYPES[\"C4\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'INPUT_TYPES[\"C4\"] is empty';\n  var chap = [\"Functional requirement\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet — what the SYSTEM does in a condition';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — type of C5",
+              "vi": "C — loại của C5"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (INPUT_TYPES[\"C5\"]); } catch (e) { return 'INPUT_TYPES[\"C5\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'INPUT_TYPES[\"C5\"] is empty';\n  var chap = [\"Quality attribute\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — type of C6",
+              "vi": "C — loại của C6"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (INPUT_TYPES[\"C6\"]); } catch (e) { return 'INPUT_TYPES[\"C6\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'INPUT_TYPES[\"C6\"] is empty';\n  var chap = [\"External interface\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — type of C7",
+              "vi": "C — loại của C7"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (INPUT_TYPES[\"C7\"]); } catch (e) { return 'INPUT_TYPES[\"C7\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'INPUT_TYPES[\"C7\"] is empty';\n  var chap = [\"Constraint\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet — it limits the design choices';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — type of C8",
+              "vi": "C — loại của C8"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (INPUT_TYPES[\"C8\"]); } catch (e) { return 'INPUT_TYPES[\"C8\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'INPUT_TYPES[\"C8\"] is empty';\n  var chap = [\"Data requirement\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — type of C9",
+              "vi": "C — loại của C9"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (INPUT_TYPES[\"C9\"]); } catch (e) { return 'INPUT_TYPES[\"C9\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'INPUT_TYPES[\"C9\"] is empty';\n  var chap = [\"Solution idea\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet — a design idea hiding a real need';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — type of C10",
+              "vi": "C — loại của C10"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (INPUT_TYPES[\"C10\"]); } catch (e) { return 'INPUT_TYPES[\"C10\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'INPUT_TYPES[\"C10\"] is empty';\n  var chap = [\"Business rule\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet — a policy that exists outside the software';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — type of C11",
+              "vi": "C — loại của C11"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (INPUT_TYPES[\"C11\"]); } catch (e) { return 'INPUT_TYPES[\"C11\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'INPUT_TYPES[\"C11\"] is empty';\n  var chap = [\"User requirement\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "C — type of C12",
+              "vi": "C — loại của C12"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (INPUT_TYPES[\"C12\"]); } catch (e) { return 'INPUT_TYPES[\"C12\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'INPUT_TYPES[\"C12\"] is empty';\n  var chap = [\"Business requirement\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "D — kind of question Q1",
+              "vi": "D — loại câu hỏi Q1"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (QUESTIONS[\"Q1\"]); } catch (e) { return 'QUESTIONS[\"Q1\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'QUESTIONS[\"Q1\"] is empty';\n  var chap = [\"OPEN\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "D — kind of question Q2",
+              "vi": "D — loại câu hỏi Q2"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (QUESTIONS[\"Q2\"]); } catch (e) { return 'QUESTIONS[\"Q2\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'QUESTIONS[\"Q2\"] is empty';\n  var chap = [\"CLOSED\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "D — kind of question Q3",
+              "vi": "D — loại câu hỏi Q3"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (QUESTIONS[\"Q3\"]); } catch (e) { return 'QUESTIONS[\"Q3\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'QUESTIONS[\"Q3\"] is empty';\n  var chap = [\"LEADING\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "D — kind of question Q4",
+              "vi": "D — loại câu hỏi Q4"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (QUESTIONS[\"Q4\"]); } catch (e) { return 'QUESTIONS[\"Q4\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'QUESTIONS[\"Q4\"] is empty';\n  var chap = [\"OPEN\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "D — kind of question Q5",
+              "vi": "D — loại câu hỏi Q5"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (QUESTIONS[\"Q5\"]); } catch (e) { return 'QUESTIONS[\"Q5\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'QUESTIONS[\"Q5\"] is empty';\n  var chap = [\"LEADING\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "D — kind of question Q6",
+              "vi": "D — loại câu hỏi Q6"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (QUESTIONS[\"Q6\"]); } catch (e) { return 'QUESTIONS[\"Q6\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'QUESTIONS[\"Q6\"] is empty';\n  var chap = [\"CLOSED\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "E — the signals that elicitation is nearly done",
+              "vi": "E — các dấu hiệu khai thác sắp xong"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((DONE_SIGNALS || []).map(String)); } catch (e) { return '(DONE_SIGNALS || []).map(String) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(DONE_SIGNALS || []).map(String) is empty';\n  var chap = [[\"a\",\"c\",\"e\"]];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"tap\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"tap\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"tap\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet — budget and deadline are project pressures, not evidence of completeness';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f5"
+          },
+          {
+            "moTa": {
+              "en": "E — the real need behind C9 (the \"big red Pay now button\")",
+              "vi": "E — nhu cầu thật sau C9 (\"nút Pay now đỏ to\")"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (REAL_NEED_C9); } catch (e) { return 'REAL_NEED_C9 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'REAL_NEED_C9 is empty';\n  var chap = [\"PAY_QUICKLY\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet — ask \"why?\" — what does the student want to achieve with that button?';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f5",
+            "an": true
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. A. Elicitation techniques",
+            "diem": 2.5
+          },
+          {
+            "ma": "f2",
+            "ten": "2. B. Session lifecycle",
+            "diem": 1.5
+          },
+          {
+            "ma": "f3",
+            "ten": "3. C. Classifying customer input",
+            "diem": 3
+          },
+          {
+            "ma": "f4",
+            "ten": "4. D. Question types",
+            "diem": 1.5
+          },
+          {
+            "ma": "f5",
+            "ten": "5. E. Knowing when you are done",
+            "diem": 1.5
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Chọn Questionnaire cho S5 vì có nhiều người — S5 cần cả nhóm TỰ THỐNG NHẤT, đó là workshop."
+        },
+        {
+          "loi": "Xếp C5 là functional — có con số đo được ⇒ quality attribute (performance)."
+        },
+        {
+          "loi": "Xếp C7 là quality attribute — \"phải chạy trên Azure\" giới hạn lựa chọn thiết kế ⇒ constraint."
+        },
+        {
+          "loi": "Chọn \"đã hết ngân sách\" làm dấu hiệu đủ yêu cầu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "elicitation",
+          "vi": "khai thác yêu cầu — khám phá nhu cầu từ bên liên quan"
+        },
+        {
+          "en": "business requirement",
+          "vi": "yêu cầu nghiệp vụ — VÌ SAO tổ chức làm hệ thống (mục tiêu, lợi ích); ghi trong Vision & Scope"
+        },
+        {
+          "en": "user requirement",
+          "vi": "yêu cầu người dùng — việc người dùng phải làm được (use case, user story)"
+        },
+        {
+          "en": "functional requirement (FR)",
+          "vi": "yêu cầu chức năng — hành vi hệ thống thể hiện trong điều kiện cụ thể (\"The system shall…\"); ghi trong SRS"
+        },
+        {
+          "en": "quality attribute",
+          "vi": "thuộc tính chất lượng — các \"-ility\": performance, usability, security, availability…"
+        },
+        {
+          "en": "external interface requirement",
+          "vi": "yêu cầu giao diện ngoài — giữa hệ thống với người dùng, phần cứng, hệ thống khác"
+        },
+        {
+          "en": "design / implementation constraint",
+          "vi": "ràng buộc thiết kế/hiện thực — giới hạn lựa chọn của đội phát triển (ngôn ngữ, nền tảng, chuẩn)"
+        },
+        {
+          "en": "business rule",
+          "vi": "quy tắc nghiệp vụ — chính sách, luật, chuẩn, công thức tồn tại NGOÀI phần mềm"
+        },
+        {
+          "en": "TBD (to be determined)",
+          "vi": "chỗ chưa quyết, đánh dấu để theo dõi tới khi đóng"
+        },
+        {
+          "en": "solution idea",
+          "vi": "ý tưởng giải pháp — người dùng nói CÁCH làm; BA phải hỏi \"vì sao\" để tìm nhu cầu thật"
+        },
+        {
+          "en": "leading question",
+          "vi": "câu hỏi dẫn dắt — gợi sẵn câu trả lời BA muốn nghe"
+        },
+        {
+          "en": "straw-man model",
+          "vi": "mô hình nháp đưa ra để người khác góp ý, sửa"
+        }
+      ]
+    }
+  ]
+}

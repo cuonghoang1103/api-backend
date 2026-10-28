@@ -1,0 +1,388 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-10-lab-prioritization-campusride",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-10-1-prioritization"
+  },
+  "exercises": [
+    {
+      "title": "Lab 10 — Prioritization: CampusRide Release 1",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 50,
+      "points": 100,
+      "concepts": [
+        "value/cost/risk prioritization",
+        "MoSCoW",
+        "three-level scale",
+        "$100 test",
+        "release planning"
+      ],
+      "prerequisites": [
+        "SWR302 lessons 10.1, 10.3–10.4 (prioritization)"
+      ],
+      "tags": [
+        "swr302",
+        "lab"
+      ],
+      "problemHtml": "<h1>Lab 10 — Prioritization: CampusRide Release 1</h1>\n<p class=\"bi-phu\">Chapter 10 lab · value/cost/risk spreadsheet, MoSCoW, release scope, three-level scale, $100 test · 10 marks</p>\n<h2>1. Overview</h2>\n<p><b>CampusRide</b> is the app of the university shuttle buses. The team can build <b>14 cost points</b> in release 1. Each feature was rated 1–9 by the stakeholders (benefit of having it, penalty of not having it) and by the developers (relative cost and technical risk):</p><table><thead><tr><th>ID</th><th>Feature</th><th>Benefit</th><th>Penalty</th><th>Cost</th><th>Risk</th></tr></thead><tbody><tr><td>F1</td><td>Real-time shuttle map</td><td>9</td><td>7</td><td>6</td><td>5</td></tr><tr><td>F2</td><td>Seat reservation</td><td>7</td><td>5</td><td>8</td><td>7</td></tr><tr><td>F3</td><td>Arrival push alerts</td><td>6</td><td>4</td><td>3</td><td>2</td></tr><tr><td>F4</td><td>Route planner across lines</td><td>5</td><td>2</td><td>7</td><td>6</td></tr><tr><td>F5</td><td>Driver incident report</td><td>4</td><td>6</td><td>2</td><td>1</td></tr><tr><td>F6</td><td>Favourite stops</td><td>3</td><td>1</td><td>1</td><td>1</td></tr></tbody></table>\n<p><b>A.</b> Fill the value/cost/risk spreadsheet of Wiegers Table 16-1 with the weights <b>benefit 2 · penalty 1 · cost 1 · risk 0.5</b>: value = 2·benefit + 1·penalty; value% = value ÷ total value × 100; cost% and risk% likewise; <b>priority = value% ÷ (cost% × 1 + risk% × 0.5)</b>. Rank the features.</p>\n<p><b>B. What the stakeholders said</b>:</p><ul><li><b>F1</b> — Sponsor: \"Without the live map the app has no reason to exist.\"</li><li><b>F2</b> — Students: \"Reservation would be great, but the shuttles work without it this term; we need it by next term.\"</li><li><b>F3</b> — Students: \"Alerts would be nice; we can check the map ourselves.\"</li><li><b>F4</b> — Sponsor: \"The route planner is out of release 1 — we will revisit it next year.\"</li><li><b>F5</b> — Transport office: \"The law requires drivers to report incidents within 24 hours, and we must show it in the app from day one.\"</li><li><b>F6</b> — Students: \"Favourites are a nice touch if there is time left.\"</li></ul><p>Classify each feature with MoSCoW, then plan release 1: all Musts first (whatever their priority), then the remaining features in priority order while the cost still fits 14 points; Won’t is never included.</p>\n<p><b>C. Three-level scale</b> (importance × urgency):</p><ul><li><b>T1</b> — Important to the business objectives and needed in release 1.</li><li><b>T2</b> — Important to the business objectives but can wait for release 2.</li><li><b>T3</b> — Neither important to the objectives nor needed soon.</li><li><b>T4</b> — Needed in release 1 for the go-live campaign and essential for the core objective.</li></ul>\n<p><b>D. $100 test</b> for the optional features — each stakeholder spread 100 dollars:</p><table><thead><tr><th>Stakeholder</th><th>F2</th><th>F3</th><th>F4</th><th>F6</th></tr></thead><tbody><tr><td>Student union</td><td>40</td><td>30</td><td>0</td><td>30</td></tr><tr><td>Transport office</td><td>20</td><td>20</td><td>60</td><td>0</td></tr><tr><td>Dorm board</td><td>50</td><td>10</td><td>0</td><td>40</td></tr><tr><td>IT</td><td>0</td><td>50</td><td>30</td><td>20</td></tr></tbody></table>\n<h3>Main features</h3>\n<ul>\n  <li>A. The value/cost/risk spreadsheet and the ranking.</li>\n  <li>B. MoSCoW and the scope of release 1.</li>\n  <li>C. The three-level scale.</li>\n  <li>D. The $100 test.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>Percentages to 2 decimals, priority to 3 decimals (small rounding differences are accepted).</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>answers/\n├── a-priorities.js    ← const PRIORITIES = { F1: { valuePct, costPct, riskPct, priority }, … }; const RANKING = [...]\n├── b-moscow.js        ← const MOSCOW = { F1: '…' }; const RELEASE_1 = [...]; const RELEASE_1_SLACK = 0\n├── c-three-level.js   ← const THREE_LEVEL = { T1: '…' }\n└── d-dollars.js       ← const DOLLARS = { F2, F3, F4, F6 }; const DOLLARS_WINNER = '…'</pre>\n<h2>3. Data model</h2>\n<p><b>Answer records</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>PRIORITIES.Fx</code></td><td>{ valuePct, costPct, riskPct, priority }</td><td>numbers (not strings)</td></tr><tr><td><code>RANKING · RELEASE_1</code></td><td>string[]</td><td>feature ids, e.g. [\"F5\", \"F6\", …]</td></tr><tr><td><code>MOSCOW.*</code></td><td>string</td><td>Must · Should · Could · Won't</td></tr><tr><td><code>THREE_LEVEL.*</code></td><td>string</td><td>High · Medium · Low</td></tr></tbody></table>\n<h2>4. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. A1. Value/cost/risk spreadsheet <span class=\"bi-diem\">3 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>value%, cost%, risk% and priority of every feature.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">Wiegers Table 16-1</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. A2. Ranking <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Highest priority first.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">priority</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. B1. MoSCoW <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Read what each stakeholder really said.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">MoSCoW</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. B2. Release 1 scope <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Musts, then priority order within capacity.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">release planning</span></p>\n</div>\n<div class=\"bi-cn\"><h3>5. C. Three-level scale <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Importance × urgency.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">three-level scale</span></p>\n</div>\n<div class=\"bi-cn\"><h3>6. D. $100 test <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Totals and the winner.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">cumulative voting</span></p>\n</div>\n<h2>5. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>PRIORITIES · RANKING</code></td><td>answers/a-priorities.js</td></tr><tr><td><code>MOSCOW · RELEASE_1 · RELEASE_1_SLACK</code></td><td>answers/b-moscow.js</td></tr><tr><td><code>THREE_LEVEL</code></td><td>answers/c-three-level.js</td></tr><tr><td><code>DOLLARS · DOLLARS_WINNER</code></td><td>answers/d-dollars.js</td></tr></tbody></table>\n<h2>6. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>A1. Value/cost/risk spreadsheet</td><td>3</td></tr><tr><td>2</td><td>A2. Ranking</td><td>1</td></tr><tr><td>3</td><td>B1. MoSCoW</td><td>2</td></tr><tr><td>4</td><td>B2. Release 1 scope</td><td>1.5</td></tr><tr><td>5</td><td>C. Three-level scale</td><td>1</td></tr><tr><td>6</td><td>D. $100 test</td><td>1.5</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Ranking by value instead of priority: F1 has the highest value but not the highest value per cost and risk.</li>\n  <li>Forgetting the weight 2 of benefit, or adding risk without its weight 0.5.</li>\n  <li>F5 as Could because its benefit is low: a legal obligation from day one is a Must.</li>\n  <li>Putting the Won’t feature into the release because capacity is left.</li>\n</ul>\n<h2>7. Submission</h2>\n<p>Write your answers in the files of <code>answers/</code> on the right. Diagrams are written as text in the syntax of a real tool (Mermaid or PlantUML — paste them into <a href=\"https://mermaid.live\" target=\"_blank\" rel=\"noopener\">mermaid.live</a> or <a href=\"https://www.plantuml.com/plantuml\" target=\"_blank\" rel=\"noopener\">plantuml.com</a> to SEE the picture); tables are JavaScript arrays, one object per row of the school template. Press <b>Run</b> for the visible checks and <b>Submit</b> for full grading, hidden checks included. Your mark per question appears in the rubric table.</p>",
+      "problemHtmlVi": "<h1>Lab 10 — Prioritization: CampusRide Release 1</h1>\n<p class=\"bi-phu\">Lab chương 10 · bảng value/cost/risk, MoSCoW, phạm vi bản phát hành, thang ba mức, phép thử $100 · 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p><b>CampusRide</b> là app xe buýt nội bộ của trường. Đội làm được <b>14 điểm chi phí</b> ở bản 1. Mỗi tính năng được chấm 1–9 (lợi ích khi có, thiệt hại khi thiếu — do bên liên quan; chi phí và rủi ro kỹ thuật tương đối — do đội phát triển), xem bảng ở bản tiếng Anh.</p>\n<p><b>A.</b> Điền bảng value/cost/risk (Wiegers Bảng 16-1) với trọng số benefit 2 · penalty 1 · cost 1 · risk 0.5; priority = value% ÷ (cost% × 1 + risk% × 0.5); xếp hạng. <b>B.</b> Phân loại MoSCoW theo lời bên liên quan rồi lập phạm vi bản 1: Must trước (bất kể priority), rồi thêm theo thứ tự priority khi còn vừa 14 điểm; Won’t không bao giờ vào. <b>C.</b> Thang ba mức. <b>D.</b> Phép thử $100.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>A. Bảng value/cost/risk và xếp hạng.</li>\n  <li>B. MoSCoW và phạm vi bản 1.</li>\n  <li>C. Thang ba mức.</li>\n  <li>D. Phép thử $100.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Phần trăm 2 chữ số thập phân, priority 3 chữ số (chấp nhận sai số làm tròn nhỏ).</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>answers/\n├── a-priorities.js    ← const PRIORITIES = { F1: { valuePct, costPct, riskPct, priority }, … }; const RANKING = [...]\n├── b-moscow.js        ← const MOSCOW = { F1: '…' }; const RELEASE_1 = [...]; const RELEASE_1_SLACK = 0\n├── c-three-level.js   ← const THREE_LEVEL = { T1: '…' }\n└── d-dollars.js       ← const DOLLARS = { F2, F3, F4, F6 }; const DOLLARS_WINNER = '…'</pre>\n<h2>3. Mô hình dữ liệu</h2>\n<p><b>Answer records</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>PRIORITIES.Fx</code></td><td>{ valuePct, costPct, riskPct, priority }</td><td>số (không phải chuỗi)</td></tr><tr><td><code>RANKING · RELEASE_1</code></td><td>string[]</td><td>mã tính năng</td></tr><tr><td><code>MOSCOW.*</code></td><td>string</td><td>Must · Should · Could · Won't</td></tr><tr><td><code>THREE_LEVEL.*</code></td><td>string</td><td>High · Medium · Low</td></tr></tbody></table>\n<h2>4. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. A1. Bảng value/cost/risk <span class=\"bi-diem\">3 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>value%, cost%, risk% và priority của từng tính năng.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">Wiegers Table 16-1</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. A2. Xếp hạng <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Priority cao nhất trước.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">priority</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. B1. MoSCoW <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Đọc kỹ điều mỗi bên thật sự nói.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">MoSCoW</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. B2. Phạm vi bản 1 <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Must, rồi theo priority trong năng lực.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">release planning</span></p>\n</div>\n<div class=\"bi-cn\"><h3>5. C. Thang ba mức <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Quan trọng × khẩn cấp.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">three-level scale</span></p>\n</div>\n<div class=\"bi-cn\"><h3>6. D. Phép thử $100 <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Tổng và tính năng thắng.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">cumulative voting</span></p>\n</div>\n<h2>5. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>PRIORITIES · RANKING</code></td><td>answers/a-priorities.js</td></tr><tr><td><code>MOSCOW · RELEASE_1 · RELEASE_1_SLACK</code></td><td>answers/b-moscow.js</td></tr><tr><td><code>THREE_LEVEL</code></td><td>answers/c-three-level.js</td></tr><tr><td><code>DOLLARS · DOLLARS_WINNER</code></td><td>answers/d-dollars.js</td></tr></tbody></table>\n<h2>6. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>A1. Bảng value/cost/risk</td><td>3</td></tr><tr><td>2</td><td>A2. Xếp hạng</td><td>1</td></tr><tr><td>3</td><td>B1. MoSCoW</td><td>2</td></tr><tr><td>4</td><td>B2. Phạm vi bản 1</td><td>1.5</td></tr><tr><td>5</td><td>C. Thang ba mức</td><td>1</td></tr><tr><td>6</td><td>D. Phép thử $100</td><td>1.5</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Xếp theo value thay vì priority: F1 value cao nhất nhưng không phải cao nhất trên chi phí và rủi ro.</li>\n  <li>Quên trọng số 2 của benefit, hoặc cộng risk mà không nhân 0.5.</li>\n  <li>Xếp F5 là Could vì benefit thấp: nghĩa vụ pháp lý từ ngày đầu là Must.</li>\n  <li>Đưa tính năng Won’t vào bản phát hành vì còn năng lực.</li>\n</ul>\n<h2>7. Nộp bài</h2>\n<p>Viết câu trả lời vào các tệp trong <code>answers/</code> bên phải. Sơ đồ viết bằng chữ theo cú pháp của công cụ thật (Mermaid hoặc PlantUML — dán vào <a href=\"https://mermaid.live\" target=\"_blank\" rel=\"noopener\">mermaid.live</a> hoặc <a href=\"https://www.plantuml.com/plantuml\" target=\"_blank\" rel=\"noopener\">plantuml.com</a> để XEM hình); bảng là mảng JavaScript, mỗi object là một dòng của template trường. Bấm <b>Chạy thử</b> để chạy kiểm hiện, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn). Điểm từng câu hiện trong bảng thang điểm.</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "Percentages to 2 decimals, priority to 3 decimals (small rounding differences are accepted).|||Phần trăm 2 chữ số thập phân, priority 3 chữ số (chấp nhận sai số làm tròn nhỏ).",
+      "examplesJson": [
+        {
+          "input": "answers/*.js — one object per row of the template",
+          "output": "Rubric table: marks per question (e.g. B. 2.5/3)",
+          "explanation": "Every rubric line is checked separately; hidden checks run on Submit.|||Mỗi dòng rubric được kiểm riêng; kiểm ẩn chạy khi Nộp."
+        }
+      ],
+      "hintsJson": [
+        "A: value = 2·B + P ⇒ tổng value = 93; tổng cost = 27; tổng risk = 22. Vd F1: value% = 25/93×100.",
+        "B: Must là thứ \"không có thì không phát hành\" (nhà tài trợ, luật). Must vào trước bất kể priority; sau đó đi theo RANKING ở phần A.",
+        "D: cộng theo cột từng tính năng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers/a-priorities.js",
+          "language": "javascript",
+          "code": "// A. Weights: benefit 2 · penalty 1 · cost 1 · risk 0.5. Percentages to 2 decimals, priority to 3.\nconst PRIORITIES = {\n  F1: { valuePct: 0, costPct: 0, riskPct: 0, priority: 0 },\n  F2: { valuePct: 0, costPct: 0, riskPct: 0, priority: 0 },\n  F3: { valuePct: 0, costPct: 0, riskPct: 0, priority: 0 },\n  F4: { valuePct: 0, costPct: 0, riskPct: 0, priority: 0 },\n  F5: { valuePct: 0, costPct: 0, riskPct: 0, priority: 0 },\n  F6: { valuePct: 0, costPct: 0, riskPct: 0, priority: 0 },\n};\nconst RANKING = [];   // feature ids, highest priority first\n"
+        },
+        {
+          "name": "answers/b-moscow.js",
+          "language": "javascript",
+          "code": "// B. Must | Should | Could | Won't\nconst MOSCOW = {\n  F1: '',\n  F2: '',\n  F3: '',\n  F4: '',\n  F5: '',\n  F6: '',\n};\nconst RELEASE_1 = [];        // feature ids in release 1\nconst RELEASE_1_SLACK = 0;   // cost points left unused\n"
+        },
+        {
+          "name": "answers/c-three-level.js",
+          "language": "javascript",
+          "code": "// C. High | Medium | Low\nconst THREE_LEVEL = {\n  T1: '',\n  T2: '',\n  T3: '',\n  T4: '',\n};\n"
+        },
+        {
+          "name": "answers/d-dollars.js",
+          "language": "javascript",
+          "code": "// D. Total of the four stakeholders per feature, and the winner.\nconst DOLLARS = { F2: 0, F3: 0, F4: 0, F6: 0 };\nconst DOLLARS_WINNER = '';\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers/a-priorities.js",
+          "language": "javascript",
+          "code": "// A. value = 2·benefit + 1·penalty (total 93); cost total 27; risk total 22; priority = value% ÷ (cost% + 0.5·risk%).\nconst PRIORITIES = {\n  F1: { valuePct: 26.88, costPct: 22.22, riskPct: 22.73, priority: 0.8 },\n  F2: { valuePct: 20.43, costPct: 29.63, riskPct: 31.82, priority: 0.449 },\n  F3: { valuePct: 17.2, costPct: 11.11, riskPct: 9.09, priority: 1.099 },\n  F4: { valuePct: 12.9, costPct: 25.93, riskPct: 27.27, priority: 0.326 },\n  F5: { valuePct: 15.05, costPct: 7.41, riskPct: 4.55, priority: 1.555 },\n  F6: { valuePct: 7.53, costPct: 3.7, riskPct: 4.55, priority: 1.259 },\n};\nconst RANKING = ['F5','F6','F3','F1','F2','F4'];\n"
+        },
+        {
+          "name": "answers/b-moscow.js",
+          "language": "javascript",
+          "code": "// B. Musts are fixed (F1 sponsor, F5 law); then add by the priority ranking while cost fits; Won't never goes in.\nconst MOSCOW = {\n  F1: 'Must',\n  F2: 'Should',\n  F3: 'Could',\n  F4: 'Won\\'t',\n  F5: 'Must',\n  F6: 'Could',\n};\nconst RELEASE_1 = ['F1','F5','F6','F3'];\nconst RELEASE_1_SLACK = 2;\n"
+        },
+        {
+          "name": "answers/c-three-level.js",
+          "language": "javascript",
+          "code": "// C. High = important and urgent; Medium = important, not urgent; Low = neither.\nconst THREE_LEVEL = {\n  T1: 'High',\n  T2: 'Medium',\n  T3: 'Low',\n  T4: 'High',\n};\n"
+        },
+        {
+          "name": "answers/d-dollars.js",
+          "language": "javascript",
+          "code": "// D. Cumulative voting: add each column.\nconst DOLLARS = {F2:110,F3:110,F4:90,F6:90};\nconst DOLLARS_WINNER = 'F2';\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The completed spreadsheet:</p><table><thead><tr><th>ID</th><th>Value</th><th>Value %</th><th>Cost %</th><th>Risk %</th><th>Priority</th><th>Rank</th></tr></thead><tbody><tr><td>F5</td><td>14</td><td>15.05</td><td>7.41</td><td>4.55</td><td>1.555</td><td>1</td></tr><tr><td>F6</td><td>7</td><td>7.53</td><td>3.70</td><td>4.55</td><td>1.259</td><td>2</td></tr><tr><td>F3</td><td>16</td><td>17.20</td><td>11.11</td><td>9.09</td><td>1.099</td><td>3</td></tr><tr><td>F1</td><td>25</td><td>26.88</td><td>22.22</td><td>22.73</td><td>0.800</td><td>4</td></tr><tr><td>F2</td><td>19</td><td>20.43</td><td>29.63</td><td>31.82</td><td>0.449</td><td>5</td></tr><tr><td>F4</td><td>12</td><td>12.90</td><td>25.93</td><td>27.27</td><td>0.326</td><td>6</td></tr></tbody></table><p>F5 tops the ranking: modest value but tiny cost and risk. F1 has the highest value but also high cost and risk. Release 1 = Musts F1 + F5 (8 points), then by priority F6 (1) and F3 (3) — 12 points; F2 (8) no longer fits and F4 is Won’t. The $100 test gives F2 110 · F3 110 · F4 90 · F6 90 ⇒ F2.</p>",
+      "solutionExplanationHtmlVi": "<p>Bảng đã điền:</p><table><thead><tr><th>ID</th><th>Value</th><th>Value %</th><th>Cost %</th><th>Risk %</th><th>Priority</th><th>Rank</th></tr></thead><tbody><tr><td>F5</td><td>14</td><td>15.05</td><td>7.41</td><td>4.55</td><td>1.555</td><td>1</td></tr><tr><td>F6</td><td>7</td><td>7.53</td><td>3.70</td><td>4.55</td><td>1.259</td><td>2</td></tr><tr><td>F3</td><td>16</td><td>17.20</td><td>11.11</td><td>9.09</td><td>1.099</td><td>3</td></tr><tr><td>F1</td><td>25</td><td>26.88</td><td>22.22</td><td>22.73</td><td>0.800</td><td>4</td></tr><tr><td>F2</td><td>19</td><td>20.43</td><td>29.63</td><td>31.82</td><td>0.449</td><td>5</td></tr><tr><td>F4</td><td>12</td><td>12.90</td><td>25.93</td><td>27.27</td><td>0.326</td><td>6</td></tr></tbody></table><p>F5 đứng đầu: value vừa phải nhưng chi phí và rủi ro rất thấp. F1 value cao nhất nhưng chi phí và rủi ro cũng cao. Bản 1 = Must F1 + F5 (8 điểm), rồi theo priority F6 (1) và F3 (3) — 12 điểm; F2 (8) không còn vừa và F4 là Won’t. Phép thử $100: F2 110 · F3 110 · F4 90 · F6 90 ⇒ F2.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "answers/a-priorities.js",
+          "answers/b-moscow.js",
+          "answers/c-three-level.js",
+          "answers/d-dollars.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A — value %, cost %, risk % and priority of F1",
+              "vi": "A — value %, cost %, risk % và priority của F1"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof PRIORITIES==\"undefined\"||!PRIORITIES||!PRIORITIES.F1)return\"PRIORITIES.F1 is missing\";var t=PRIORITIES.F1,r=function(i,n,e){return Math.abs(Number(i)-n)<=e};return r(t.valuePct,26.881720430107524,.06)?r(t.costPct,22.22222222222222,.06)?r(t.riskPct,22.727272727272727,.06)?r(t.priority,.8003880669415473,.012)?\"OK\":\"priority = value% \\xF7 (cost% \\xD7 1 + risk% \\xD7 0.5)\":\"riskPct = risk \\xF7 total risk \\xD7 100\":\"costPct = cost \\xF7 total cost \\xD7 100\":\"valuePct: value = 2 \\xD7 benefit + 1 \\xD7 penalty, then \\xF7 total value \\xD7 100\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — value %, cost %, risk % and priority of F2",
+              "vi": "A — value %, cost %, risk % và priority của F2"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof PRIORITIES==\"undefined\"||!PRIORITIES||!PRIORITIES.F2)return\"PRIORITIES.F2 is missing\";var t=PRIORITIES.F2,r=function(i,n,e){return Math.abs(Number(i)-n)<=e};return r(t.valuePct,20.43010752688172,.06)?r(t.costPct,29.629629629629626,.06)?r(t.riskPct,31.818181818181817,.06)?r(t.priority,.4486315663943713,.012)?\"OK\":\"priority = value% \\xF7 (cost% \\xD7 1 + risk% \\xD7 0.5)\":\"riskPct = risk \\xF7 total risk \\xD7 100\":\"costPct = cost \\xF7 total cost \\xD7 100\":\"valuePct: value = 2 \\xD7 benefit + 1 \\xD7 penalty, then \\xF7 total value \\xD7 100\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — value %, cost %, risk % and priority of F3",
+              "vi": "A — value %, cost %, risk % và priority của F3"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof PRIORITIES==\"undefined\"||!PRIORITIES||!PRIORITIES.F3)return\"PRIORITIES.F3 is missing\";var t=PRIORITIES.F3,r=function(i,n,e){return Math.abs(Number(i)-n)<=e};return r(t.valuePct,17.20430107526882,.06)?r(t.costPct,11.11111111111111,.06)?r(t.riskPct,9.090909090909092,.06)?r(t.priority,1.0988553590010406,.012)?\"OK\":\"priority = value% \\xF7 (cost% \\xD7 1 + risk% \\xD7 0.5)\":\"riskPct = risk \\xF7 total risk \\xD7 100\":\"costPct = cost \\xF7 total cost \\xD7 100\":\"valuePct: value = 2 \\xD7 benefit + 1 \\xD7 penalty, then \\xF7 total value \\xD7 100\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — value %, cost %, risk % and priority of F4",
+              "vi": "A — value %, cost %, risk % và priority của F4"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof PRIORITIES==\"undefined\"||!PRIORITIES||!PRIORITIES.F4)return\"PRIORITIES.F4 is missing\";var t=PRIORITIES.F4,r=function(i,n,e){return Math.abs(Number(i)-n)<=e};return r(t.valuePct,12.903225806451612,.06)?r(t.costPct,25.925925925925924,.06)?r(t.riskPct,27.27272727272727,.06)?r(t.priority,.326149622512011,.012)?\"OK\":\"priority = value% \\xF7 (cost% \\xD7 1 + risk% \\xD7 0.5)\":\"riskPct = risk \\xF7 total risk \\xD7 100\":\"costPct = cost \\xF7 total cost \\xD7 100\":\"valuePct: value = 2 \\xD7 benefit + 1 \\xD7 penalty, then \\xF7 total value \\xD7 100\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — value %, cost %, risk % and priority of F5",
+              "vi": "A — value %, cost %, risk % và priority của F5"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof PRIORITIES==\"undefined\"||!PRIORITIES||!PRIORITIES.F5)return\"PRIORITIES.F5 is missing\";var t=PRIORITIES.F5,r=function(i,n,e){return Math.abs(Number(i)-n)<=e};return r(t.valuePct,15.053763440860216,.06)?r(t.costPct,7.4074074074074066,.06)?r(t.riskPct,4.545454545454546,.06)?r(t.priority,1.5551192145862553,.012)?\"OK\":\"priority = value% \\xF7 (cost% \\xD7 1 + risk% \\xD7 0.5)\":\"riskPct = risk \\xF7 total risk \\xD7 100\":\"costPct = cost \\xF7 total cost \\xD7 100\":\"valuePct: value = 2 \\xD7 benefit + 1 \\xD7 penalty, then \\xF7 total value \\xD7 100\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "A — value %, cost %, risk % and priority of F6",
+              "vi": "A — value %, cost %, risk % và priority của F6"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof PRIORITIES==\"undefined\"||!PRIORITIES||!PRIORITIES.F6)return\"PRIORITIES.F6 is missing\";var t=PRIORITIES.F6,r=function(i,n,e){return Math.abs(Number(i)-n)<=e};return r(t.valuePct,7.526881720430108,.06)?r(t.costPct,3.7037037037037033,.06)?r(t.riskPct,4.545454545454546,.06)?r(t.priority,1.2594275329395732,.012)?\"OK\":\"priority = value% \\xF7 (cost% \\xD7 1 + risk% \\xD7 0.5)\":\"riskPct = risk \\xF7 total risk \\xD7 100\":\"costPct = cost \\xF7 total cost \\xD7 100\":\"valuePct: value = 2 \\xD7 benefit + 1 \\xD7 penalty, then \\xF7 total value \\xD7 100\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "A — the ranking by priority, highest first",
+              "vi": "A — xếp hạng theo priority, cao nhất trước"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((RANKING || []).map(String)); } catch (e) { return '(RANKING || []).map(String) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(RANKING || []).map(String) is empty';\n  var chap = [[\"F5\",\"F6\",\"F3\",\"F1\",\"F2\",\"F4\"]];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"json\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"json\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"json\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet — sort by priority, not by value';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — MoSCoW of F1",
+              "vi": "B — MoSCoW của F1"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (MOSCOW[\"F1\"]); } catch (e) { return 'MOSCOW[\"F1\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'MOSCOW[\"F1\"] is empty';\n  var chap = [\"Must\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "B — MoSCoW of F2",
+              "vi": "B — MoSCoW của F2"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (MOSCOW[\"F2\"]); } catch (e) { return 'MOSCOW[\"F2\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'MOSCOW[\"F2\"] is empty';\n  var chap = [\"Should\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet — important, but this release can go without it';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "B — MoSCoW of F3",
+              "vi": "B — MoSCoW của F3"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (MOSCOW[\"F3\"]); } catch (e) { return 'MOSCOW[\"F3\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'MOSCOW[\"F3\"] is empty';\n  var chap = [\"Could\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "B — MoSCoW of F4",
+              "vi": "B — MoSCoW của F4"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (MOSCOW[\"F4\"]); } catch (e) { return 'MOSCOW[\"F4\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'MOSCOW[\"F4\"] is empty';\n  var chap = [\"Won’t\",\"Won't\",\"Wont\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "B — MoSCoW of F5",
+              "vi": "B — MoSCoW của F5"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (MOSCOW[\"F5\"]); } catch (e) { return 'MOSCOW[\"F5\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'MOSCOW[\"F5\"] is empty';\n  var chap = [\"Must\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet — a legal obligation from day one';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "B — MoSCoW of F6",
+              "vi": "B — MoSCoW của F6"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (MOSCOW[\"F6\"]); } catch (e) { return 'MOSCOW[\"F6\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'MOSCOW[\"F6\"] is empty';\n  var chap = [\"Could\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "B — release 1 scope with a capacity of 14 cost points (Musts first, then by priority)",
+              "vi": "B — phạm vi bản 1 với năng lực 14 điểm chi phí (Must trước, rồi theo priority)"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((RELEASE_1 || []).map(String)); } catch (e) { return '(RELEASE_1 || []).map(String) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(RELEASE_1 || []).map(String) is empty';\n  var chap = [[\"F1\",\"F5\",\"F6\",\"F3\"]];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"tap\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"tap\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"tap\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet — Musts are in whatever their priority; then add by priority while cost fits; Won’t never goes in';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "B — cost points left unused in release 1",
+              "vi": "B — điểm chi phí còn dư ở bản 1"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (RELEASE_1_SLACK); } catch (e) { return 'RELEASE_1_SLACK is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'RELEASE_1_SLACK is empty';\n  var chap = [2];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"so\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"so\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 0; }); }\n  else if (\"so\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "C — three-level priority of T1",
+              "vi": "C — mức ưu tiên ba bậc của T1"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (THREE_LEVEL[\"T1\"]); } catch (e) { return 'THREE_LEVEL[\"T1\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'THREE_LEVEL[\"T1\"] is empty';\n  var chap = [\"High\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f5"
+          },
+          {
+            "moTa": {
+              "en": "C — three-level priority of T2",
+              "vi": "C — mức ưu tiên ba bậc của T2"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (THREE_LEVEL[\"T2\"]); } catch (e) { return 'THREE_LEVEL[\"T2\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'THREE_LEVEL[\"T2\"] is empty';\n  var chap = [\"Medium\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f5"
+          },
+          {
+            "moTa": {
+              "en": "C — three-level priority of T3",
+              "vi": "C — mức ưu tiên ba bậc của T3"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (THREE_LEVEL[\"T3\"]); } catch (e) { return 'THREE_LEVEL[\"T3\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'THREE_LEVEL[\"T3\"] is empty';\n  var chap = [\"Low\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f5"
+          },
+          {
+            "moTa": {
+              "en": "C — three-level priority of T4",
+              "vi": "C — mức ưu tiên ba bậc của T4"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (THREE_LEVEL[\"T4\"]); } catch (e) { return 'THREE_LEVEL[\"T4\"] is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'THREE_LEVEL[\"T4\"] is empty';\n  var chap = [\"High\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f5"
+          },
+          {
+            "moTa": {
+              "en": "D — total dollars per feature",
+              "vi": "D — tổng tiền mỗi tính năng"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((function () { var d = DOLLARS || {}; return { F2: Number(d.F2), F3: Number(d.F3), F4: Number(d.F4), F6: Number(d.F6) }; })()); } catch (e) { return '(function () { var d = DOLLARS || {}; return { F2: Number(d.F2), F3: Number(d.F3), F4: Number(d.F4), F6: Number(d.F6) }; })() is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(function () { var d = DOLLARS || {}; return { F2: Number(d.F2), F3: Number(d.F3), F4: Number(d.F4), F6: Number(d.F6) }; })() is empty';\n  var chap = [{\"F2\":110,\"F3\":110,\"F4\":90,\"F6\":90}];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"json\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"json\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"json\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet — add up the four columns; keys F2, F3, F4, F6';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f6"
+          },
+          {
+            "moTa": {
+              "en": "D — the feature the $100 test ranks first",
+              "vi": "D — tính năng phép thử $100 xếp đầu"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (DOLLARS_WINNER); } catch (e) { return 'DOLLARS_WINNER is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'DOLLARS_WINNER is empty';\n  var chap = [\"F2\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f6"
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. A1. Value/cost/risk spreadsheet",
+            "diem": 3
+          },
+          {
+            "ma": "f2",
+            "ten": "2. A2. Ranking",
+            "diem": 1
+          },
+          {
+            "ma": "f3",
+            "ten": "3. B1. MoSCoW",
+            "diem": 2
+          },
+          {
+            "ma": "f4",
+            "ten": "4. B2. Release 1 scope",
+            "diem": 1.5
+          },
+          {
+            "ma": "f5",
+            "ten": "5. C. Three-level scale",
+            "diem": 1
+          },
+          {
+            "ma": "f6",
+            "ten": "6. D. $100 test",
+            "diem": 1.5
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Chia priority = value% ÷ (cost% + risk%) — quên trọng số risk 0.5."
+        },
+        {
+          "loi": "Tính value% bằng benefit thay vì 2·benefit + penalty."
+        },
+        {
+          "loi": "Lập phạm vi theo thứ tự value, bỏ qua Must."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "MoSCoW",
+          "vi": "Must / Should / Could / Won’t (this time) — thang ưu tiên"
+        },
+        {
+          "en": "value / cost / risk prioritization",
+          "vi": "xếp ưu tiên kiểu Wiegers: priority = value% ÷ (cost% × trọng số + risk% × trọng số)"
+        },
+        {
+          "en": "relative benefit / penalty",
+          "vi": "lợi ích khi có / thiệt hại khi thiếu (thang 1–9)"
+        },
+        {
+          "en": "$100 test (cumulative voting)",
+          "vi": "phép thử $100 — chia 100 đô ảo cho các yêu cầu"
+        },
+        {
+          "en": "capacity",
+          "vi": "năng lực — lượng việc đội làm được trong một bản phát hành"
+        }
+      ]
+    }
+  ]
+}

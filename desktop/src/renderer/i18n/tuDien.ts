@@ -375,6 +375,10 @@ export const TU_DIEN: Record<string, string> = {
   'Cho phép': 'Allow',
   'Cho phép lần này': 'Allow once',
   'Cho phép cả file này': 'Allow this whole file',
+  // 28/10/2026 — thẻ xin quyền thư mục ngoài dự án (xin_quyen_thu_muc)
+  'Truy cập thư mục ngoài dự án': 'Access a folder outside the project',
+  'Cho phép đọc': 'Allow read',
+  'Cho phép đọc + sửa': 'Allow read + edit',
   'Luôn cho phép': 'Always allow',
   'Luôn cho phép lệnh này': 'Always allow this command',
   'Từ chối': 'Deny',

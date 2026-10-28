@@ -38,8 +38,8 @@ function useReducedMotion() {
 }
 
 const REG_NOTE: Record<'PC' | 'IR' | 'AC' | 'MAR' | 'MBR', [string, string]> = {
-  PC: ['program counter', 'bộ đếm chương trình'], IR: ['instruction register', 'thanh ghi lệnh'], AC: ['accumulator', 'thanh tích luỹ'],
-  MAR: ['memory address reg.', 'thanh ghi địa chỉ'], MBR: ['memory buffer reg.', 'thanh ghi đệm'],
+  PC: ['next instr.', 'lệnh kế'], IR: ['instruction', 'lệnh'], AC: ['accumulator', 'tích luỹ'],
+  MAR: ['address', 'địa chỉ'], MBR: ['data buffer', 'đệm dữ liệu'],
 };
 
 function Board({ lang, S, mem }: { lang: Lang; S: Snap; mem: Uint16Array }) {
@@ -143,7 +143,6 @@ function Board({ lang, S, mem }: { lang: Lang; S: Snap; mem: Uint16Array }) {
       </g>
       {busOn && (() => {
         const d = routeOf(busOn.from, busOn.to);
-        const [ex, ey] = POS[busOn.to];
         const pill = (
           <>
             <rect x={-27} y={-10} width={54} height={20} rx={10} className={busOn.kind === 'addr' ? c.pkAddr : c.pkData} filter="url(#cl-glow)" />
@@ -153,7 +152,8 @@ function Board({ lang, S, mem }: { lang: Lang; S: Snap; mem: Uint16Array }) {
         return (
           <g key={`${busOn.from}-${busOn.to}-${S.memVer}-${S.done}-${S.rtn}`}>
             <path d={d} fill="none" className={busOn.kind === 'addr' ? c.routeAddr : c.routeData} strokeWidth={3} strokeDasharray="6 4" />
-            {reduced ? <g transform={`translate(${ex} ${ey})`}>{pill}</g> : <g>{pill}<animateMotion dur="0.75s" fill="freeze" path={d} calcMode="spline" keySplines="0.4 0 0.2 1" keyTimes="0;1" /></g>}
+            {/* gói chạy tới nơi rồi mờ đi để lộ giá trị vừa giao; giảm chuyển động ⇒ chỉ còn đường đi nét đứt */}
+            {!reduced && <g>{pill}<animateMotion dur="0.75s" fill="freeze" path={d} calcMode="spline" keySplines="0.4 0 0.2 1" keyTimes="0;1" /><animate attributeName="opacity" values="1;1;0" keyTimes="0;0.6;1" dur="1.25s" fill="freeze" /></g>}
           </g>
         );
       })()}

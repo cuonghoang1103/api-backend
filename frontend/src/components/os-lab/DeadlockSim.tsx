@@ -1,6 +1,6 @@
 'use client';
 /** Phòng lab deadlock: Banker từng bước, phát hiện deadlock (đồ thị nhiều bản), triết gia ăn tối, đảo ngược ưu tiên. */
-import { useMemo, useState, type ReactElement } from 'react';
+import { useEffect, useMemo, useState, type ReactElement } from 'react';
 import { Dices } from 'lucide-react';
 import { availOf, detectExamples, hasCycle, initDine, priorityInversion, request, safety, stepDine, textbookBank, type Bank, type Detect, type Dine, type PMode, type SafeStep, type Vec } from './engine/deadlock';
 import { useWidth } from './charts';
@@ -183,6 +183,8 @@ function DetectTab({ lang, start }: { lang: Lang; start: string }) {
   useLabBridge('detect', { key, i: p.i, atEnd: p.atEnd, cycle: cyc, stuck: endSt ? endSt.stuck.length : 0 }, {
     example: (x) => { setKey(String(x)); p.reset(); },
   });
+  // phép quét chạy tới cuối: có người kẹt ⇒ "bịch", ai cũng xong ⇒ chuông
+  useEffect(() => { if (st?.k === 'end') labSfx(st.stuck.length ? 'thud' : 'done'); }, [st]);
   return (
     <>
       <Explain>{t('Detection does not need maximums — only what each process holds now (Allocation) and what it is waiting for now (Request). Same scan as Banker: whoever can be satisfied finishes and returns everything. Whoever is left at the end is DEADLOCKED.', 'Phát hiện không cần mức tối đa — chỉ cần mỗi tiến trình đang giữ gì (Allocation) và đang chờ gì (Request). Quét giống Banker: ai được đáp ứng thì chạy xong và trả hết. Ai còn lại cuối cùng là bị DEADLOCK.')}</Explain>
@@ -232,6 +234,7 @@ function PhiloTab({ lang }: { lang: Lang }) {
   const ST: Record<string, [string, string, string]> = { think: ['#64748b', 'thinking', 'đang nghĩ'], hungry: ['#d97706', 'hungry', 'đói'], eat: ['#16a34a', 'eating', 'đang ăn'], backoff: ['#7c3aed', 'backing off', 'lùi lại'] };
   const m = MODES.find((x) => x[0] === mode)!;
   useLabBridge('philo', { mode, together, deadlock: !!D.deadlock, t: D.t }, { mode: (x) => { setMode(x as PMode); p.reset(); }, together: (x) => { setTogether(!!x); p.reset(); } });
+  useEffect(() => { if (D.deadlock) labSfx('thud'); }, [D.deadlock]);
   return (
     <>
       <div className={s.bar} data-tour="philo-mode">

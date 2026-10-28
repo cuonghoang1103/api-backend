@@ -20,7 +20,11 @@ export interface TourRun {
   solve: () => void; pick: (k: number) => void; finish: () => void;
 }
 
-interface LabTourWindow { __labTour?: { id: string; idx: number; total: number; phase: TourPhase; stuck: string[]; missing: string[] } }
+interface LabTourWindow {
+  __labTour?: { id: string; idx: number; total: number; phase: TourPhase; stuck: string[]; missing: string[] };
+  /** chế độ quay: mốc thời gian (ms từ lúc tour bắt đầu) mỗi lần đổi bước — bước dựng video dùng để cắt/chèn lời */
+  __labTourLog?: Array<{ t: number; idx: number; phase: TourPhase }>;
+}
 
 export function useTourRunner(bus: LabBus, lang: 'en' | 'vi', record: boolean, rate: number): TourRun {
   const [tour, setTour] = useState<Tour | null>(null);
@@ -33,6 +37,7 @@ export function useTourRunner(bus: LabBus, lang: 'en' | 'vi', record: boolean, r
   const tokenRef = useRef(0);
   tokenRef.current = token;
   const stuck = useRef<string[]>([]);
+  const t0 = useRef(0);
   const missing = useRef<string[]>([]);
 
   const visible = useCallback((t: Tour, k: number, dir: 1 | -1): number => {
@@ -49,8 +54,9 @@ export function useTourRunner(bus: LabBus, lang: 'en' | 'vi', record: boolean, r
     if (typeof window === 'undefined') return;
     const w = window as unknown as LabTourWindow;
     w.__labTour = { id: t?.id ?? '', idx: k, total: t?.steps.length ?? 0, phase: p, stuck: stuck.current.slice(), missing: missing.current.slice() };
+    if (record) (w.__labTourLog ??= []).push({ t: Math.round(performance.now() - t0.current), idx: k, phase: p });
     document.documentElement.dataset.labTour = p;
-  }, []);
+  }, [record]);
 
   const go = useCallback((t: Tour, k: number) => {
     setTaskDone(false); setPicked(null);
@@ -61,6 +67,8 @@ export function useTourRunner(bus: LabBus, lang: 'en' | 'vi', record: boolean, r
 
   const start = useCallback((t: Tour) => {
     stuck.current = []; missing.current = [];
+    t0.current = performance.now();
+    if (record && typeof window !== 'undefined') (window as unknown as LabTourWindow).__labTourLog = [];
     setTour(t); labSfx('start');
     go(t, visible(t, 0, 1));
   }, [go, visible]);

@@ -220,8 +220,8 @@ export const OS_TOURS: Tour[] = [
       {
         target: 'step',
         title: ['Your turn: find a page fault', 'Đến lượt bạn: tìm một lỗi trang'],
-        body: ['Press Step until an access touches a page that is not in RAM yet. The explanation box turns orange or red.', 'Bấm Bước tới khi một lần truy cập đụng trang chưa có trong RAM. Ô giải thích chuyển màu cam hoặc đỏ.'],
-        task: { text: ['Step until a page fault happens.', 'Bấm Bước tới khi xảy ra lỗi trang.'], until: (s) => s.vm?.fault === 'minor' || s.vm?.fault === 'major', solve: [step(10, 700)] },
+        body: ['The very first access already faulted: the code page was not in RAM. Press Step until another access touches a page that is not in RAM yet — the explanation box turns orange or red.', 'Ngay lần truy cập đầu đã có lỗi trang: trang mã chưa nằm trong RAM. Bấm Bước tới khi một lần truy cập khác đụng trang chưa có trong RAM — ô giải thích chuyển màu cam hoặc đỏ.'],
+        task: { text: ['Step until the next page fault.', 'Bấm Bước tới lỗi trang tiếp theo.'], until: (s) => ((s.vm?.minor as number) + (s.vm?.major as number)) >= 2 && (s.vm?.fault === 'minor' || s.vm?.fault === 'major'), solve: [step(10, 700)] },
       },
       {
         target: 'vm-frames',

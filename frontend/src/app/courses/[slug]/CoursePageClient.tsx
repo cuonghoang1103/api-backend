@@ -19,6 +19,7 @@ import { sanitizeHtml } from '@/lib/utils';
 import { SafeImage } from '@/components/ui/SafeImage';
 import { getPrerequisites, hasAcknowledgedPrereq, acknowledgePrereq } from '@/lib/coursePrerequisites';
 import { PrerequisiteModal, PrerequisiteBanner } from '@/components/courses/PrerequisiteGate';
+import CourseLabCard from '@/components/labs/CourseLabCard';
 import { tachGachDauDong, nenMotCot } from '@/lib/courseBlurb';
 import { CourseDescription } from '@/components/courses/CourseDescription';
 import { tachCauDai } from '@/lib/courseDescription';
@@ -636,6 +637,7 @@ export default function CourseDetailPage() {
               )}
 
               <PrerequisiteBanner prerequisites={getPrerequisites(course.slug)} />
+              <CourseLabCard slug={course.slug} locale={locale} />
 
               {/* Instructor — ảnh & tên lấy từ TÀI KHOẢN thật (course.instructorId
                   → users), nên admin đổi avatar là trang này đổi theo. Bấm vào

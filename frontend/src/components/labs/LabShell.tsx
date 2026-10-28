@@ -10,6 +10,7 @@
  */
 import { useEffect, useMemo, useRef, type ReactNode } from 'react';
 import { LabBus, LabBusProvider } from './bus';
+import { LABS } from './registry';
 import { LabChromeContext } from './chrome';
 import { FALLBACK_ICON, SIM_HINT, SIM_ICON } from './meta';
 import { startSfxLog } from './sfx';
@@ -26,7 +27,7 @@ export function LabShell({ ns, name, preset, lang, tourId, autoStart, record = f
   const tours = useMemo(() => toursOf(ns, name), [ns, name]);
   const picked = tourId ? TOUR_BY_ID.get(tourId) : undefined;
   const chosen = picked && picked.ns === ns && picked.sim === name ? picked : undefined;
-  const fallback = useMemo(() => defaultTour(ns, name, preset), [ns, name, preset]);
+  const fallback = useMemo(() => defaultTour(ns, name, preset ?? LABS[ns].labs[name]?.presets[0]), [ns, name, preset]);
   const run = useTourRunner(bus, lang, record, rate);
   const Icon = SIM_ICON[ns][name] ?? FALLBACK_ICON;
 

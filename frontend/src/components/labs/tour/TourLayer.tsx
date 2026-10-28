@@ -233,8 +233,8 @@ export function TourOverlay({ lang, run, rootRef, record }: { lang: 'en' | 'vi';
           <div className={t.cardNav}>
             {run.phase === 'step' && (
               <>
-                <button type="button" className={t.navBtn} onClick={run.back} disabled={run.idx === 0}><ArrowLeft aria-hidden />{tx(lang, 'Back', 'Trước')}</button>
-                <button type="button" className={t.navBtn} onClick={run.replay}><RotateCcw aria-hidden />{tx(lang, 'Replay', 'Xem lại')}</button>
+                <button type="button" className={t.navBtn} onClick={run.back} disabled={run.idx === 0} aria-label={tx(lang, 'Back', 'Trước')}><ArrowLeft aria-hidden /><span className={t.navLbl}>{tx(lang, 'Back', 'Trước')}</span></button>
+                <button type="button" className={t.navBtn} onClick={run.replay} aria-label={tx(lang, 'Replay this step', 'Xem lại bước này')}><RotateCcw aria-hidden /><span className={t.navLbl}>{tx(lang, 'Replay', 'Xem lại')}</span></button>
                 <span className={t.grow} />
                 <button type="button" className={t.textBtn} onClick={run.close}>{tx(lang, 'Skip', 'Bỏ qua')}</button>
                 <button type="button" className={cx(t.nextBtn, st?.task && !run.taskDone && t.nextSoft)} onClick={run.next} disabled={run.busy}>
@@ -244,7 +244,7 @@ export function TourOverlay({ lang, run, rootRef, record }: { lang: 'en' | 'vi';
             )}
             {run.phase === 'quiz' && (
               <>
-                <button type="button" className={t.navBtn} onClick={run.back}><ArrowLeft aria-hidden />{tx(lang, 'Back', 'Trước')}</button>
+                <button type="button" className={t.navBtn} onClick={run.back}><ArrowLeft aria-hidden /><span className={t.navLbl}>{tx(lang, 'Back', 'Trước')}</span></button>
                 <span className={t.grow} />
                 <button type="button" className={t.nextBtn} onClick={run.finish} disabled={run.picked === null}>{tx(lang, 'Finish', 'Hoàn thành')}<Check aria-hidden /></button>
               </>

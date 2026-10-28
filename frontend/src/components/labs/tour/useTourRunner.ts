@@ -71,7 +71,7 @@ export function useTourRunner(bus: LabBus, lang: 'en' | 'vi', record: boolean, r
     if (record && typeof window !== 'undefined') (window as unknown as LabTourWindow).__labTourLog = [];
     setTour(t); labSfx('start');
     go(t, visible(t, 0, 1));
-  }, [go, visible]);
+  }, [go, visible, record]);
   const next = useCallback(() => { if (tour) go(tour, visible(tour, idx + 1, 1)); }, [tour, idx, go, visible]);
   const back = useCallback(() => { if (!tour) return; const k = visible(tour, Math.min(idx, tour.steps.length) - 1, -1); if (k >= 0) go(tour, k); }, [tour, idx, go, visible]);
   const replay = useCallback(() => { if (tour) go(tour, idx); }, [tour, idx, go]);

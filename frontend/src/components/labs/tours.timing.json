@@ -1,0 +1,3824 @@
+{
+ "measuredAt": "2026-10-28",
+ "base": "record=1, rate=1, viewport 1280×800, lang=vi",
+ "tours": [
+  {
+   "id": "bits-basics",
+   "lang": "vi",
+   "totalMs": 117231,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 11903
+    },
+    {
+     "idx": 2,
+     "t": 22906
+    },
+    {
+     "idx": 3,
+     "t": 28293
+    },
+    {
+     "idx": 4,
+     "t": 39297
+    },
+    {
+     "idx": 5,
+     "t": 47413
+    },
+    {
+     "idx": 6,
+     "t": 58417
+    },
+    {
+     "idx": 7,
+     "t": 69420
+    },
+    {
+     "idx": 8,
+     "t": 77219
+    },
+    {
+     "idx": 9,
+     "t": 88222
+    },
+    {
+     "idx": 10,
+     "t": 99224
+    }
+   ],
+   "quizAt": 110226,
+   "doneAt": 117231,
+   "sfx": [
+    {
+     "t": 902,
+     "name": "start"
+    },
+    {
+     "t": 26107,
+     "name": "step-ok"
+    },
+    {
+     "t": 44543,
+     "name": "step-ok"
+    },
+    {
+     "t": 59483,
+     "name": "tap"
+    },
+    {
+     "t": 60305,
+     "name": "tap"
+    },
+    {
+     "t": 61126,
+     "name": "tap"
+    },
+    {
+     "t": 61950,
+     "name": "tap"
+    },
+    {
+     "t": 62772,
+     "name": "tap"
+    },
+    {
+     "t": 74629,
+     "name": "step-ok"
+    },
+    {
+     "t": 112831,
+     "name": "right"
+    },
+    {
+     "t": 117232,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "bits-convert",
+   "lang": "vi",
+   "totalMs": 63229,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 901
+    },
+    {
+     "idx": 1,
+     "t": 11406
+    },
+    {
+     "idx": 2,
+     "t": 18993
+    },
+    {
+     "idx": 3,
+     "t": 29117
+    },
+    {
+     "idx": 4,
+     "t": 38011
+    },
+    {
+     "idx": 5,
+     "t": 46281
+    }
+   ],
+   "quizAt": 56225,
+   "doneAt": 63229,
+   "sfx": [
+    {
+     "t": 902,
+     "name": "start"
+    },
+    {
+     "t": 11410,
+     "name": "tick"
+    },
+    {
+     "t": 22705,
+     "name": "tick"
+    },
+    {
+     "t": 23378,
+     "name": "tick"
+    },
+    {
+     "t": 24049,
+     "name": "tick"
+    },
+    {
+     "t": 24723,
+     "name": "tick"
+    },
+    {
+     "t": 25395,
+     "name": "tick"
+    },
+    {
+     "t": 26067,
+     "name": "tick"
+    },
+    {
+     "t": 26743,
+     "name": "step-ok"
+    },
+    {
+     "t": 26743,
+     "name": "tick"
+    },
+    {
+     "t": 29123,
+     "name": "tick"
+    },
+    {
+     "t": 38016,
+     "name": "tick"
+    },
+    {
+     "t": 58829,
+     "name": "right"
+    },
+    {
+     "t": 63230,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "bits-signed",
+   "lang": "vi",
+   "totalMs": 65543,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 11907
+    },
+    {
+     "idx": 2,
+     "t": 22913
+    },
+    {
+     "idx": 3,
+     "t": 33915
+    },
+    {
+     "idx": 4,
+     "t": 37221
+    },
+    {
+     "idx": 5,
+     "t": 48224
+    }
+   ],
+   "quizAt": 58540,
+   "doneAt": 65543,
+   "sfx": [
+    {
+     "t": 901,
+     "name": "start"
+    },
+    {
+     "t": 35901,
+     "name": "step-ok"
+    },
+    {
+     "t": 61143,
+     "name": "right"
+    },
+    {
+     "t": 65544,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "bits-ops",
+   "lang": "vi",
+   "totalMs": 63419,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 901
+    },
+    {
+     "idx": 1,
+     "t": 11906
+    },
+    {
+     "idx": 2,
+     "t": 22038
+    },
+    {
+     "idx": 3,
+     "t": 31302
+    },
+    {
+     "idx": 4,
+     "t": 36093
+    },
+    {
+     "idx": 5,
+     "t": 46348
+    }
+   ],
+   "quizAt": 56416,
+   "doneAt": 63419,
+   "sfx": [
+    {
+     "t": 902,
+     "name": "start"
+    },
+    {
+     "t": 34155,
+     "name": "step-ok"
+    },
+    {
+     "t": 59020,
+     "name": "right"
+    },
+    {
+     "t": 63421,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "data-text",
+   "lang": "vi",
+   "totalMs": 52720,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 11342
+    },
+    {
+     "idx": 2,
+     "t": 22344
+    },
+    {
+     "idx": 3,
+     "t": 26133
+    },
+    {
+     "idx": 4,
+     "t": 34714
+    }
+   ],
+   "quizAt": 45716,
+   "doneAt": 52720,
+   "sfx": [
+    {
+     "t": 900,
+     "name": "start"
+    },
+    {
+     "t": 24612,
+     "name": "step-ok"
+    },
+    {
+     "t": 48319,
+     "name": "right"
+    },
+    {
+     "t": 52720,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "data-float",
+   "lang": "vi",
+   "totalMs": 54839,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 11904
+    },
+    {
+     "idx": 2,
+     "t": 21851
+    },
+    {
+     "idx": 3,
+     "t": 32295
+    },
+    {
+     "idx": 4,
+     "t": 43296
+    }
+   ],
+   "quizAt": 47835,
+   "doneAt": 54839,
+   "sfx": [
+    {
+     "t": 901,
+     "name": "start"
+    },
+    {
+     "t": 46005,
+     "name": "step-ok"
+    },
+    {
+     "t": 50439,
+     "name": "right"
+    },
+    {
+     "t": 54840,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "logic-gates",
+   "lang": "vi",
+   "totalMs": 56464,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 11529
+    },
+    {
+     "idx": 2,
+     "t": 17640
+    },
+    {
+     "idx": 3,
+     "t": 27523
+    },
+    {
+     "idx": 4,
+     "t": 38460
+    }
+   ],
+   "quizAt": 49462,
+   "doneAt": 56464,
+   "sfx": [
+    {
+     "t": 902,
+     "name": "start"
+    },
+    {
+     "t": 15454,
+     "name": "step-ok"
+    },
+    {
+     "t": 52065,
+     "name": "right"
+    },
+    {
+     "t": 56466,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "logic-adder",
+   "lang": "vi",
+   "totalMs": 32471,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 10039
+    },
+    {
+     "idx": 2,
+     "t": 14459
+    }
+   ],
+   "quizAt": 25464,
+   "doneAt": 32471,
+   "sfx": [
+    {
+     "t": 902,
+     "name": "start"
+    },
+    {
+     "t": 12675,
+     "name": "step-ok"
+    },
+    {
+     "t": 28069,
+     "name": "right"
+    },
+    {
+     "t": 32472,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "logic-ripple",
+   "lang": "vi",
+   "totalMs": 42844,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 7622
+    },
+    {
+     "idx": 2,
+     "t": 17071
+    },
+    {
+     "idx": 3,
+     "t": 24835
+    }
+   ],
+   "quizAt": 35838,
+   "doneAt": 42844,
+   "sfx": [
+    {
+     "t": 902,
+     "name": "start"
+    },
+    {
+     "t": 20082,
+     "name": "tick"
+    },
+    {
+     "t": 20534,
+     "name": "tick"
+    },
+    {
+     "t": 20986,
+     "name": "tick"
+    },
+    {
+     "t": 21439,
+     "name": "tick"
+    },
+    {
+     "t": 21890,
+     "name": "tick"
+    },
+    {
+     "t": 22344,
+     "name": "tick"
+    },
+    {
+     "t": 22796,
+     "name": "tick"
+    },
+    {
+     "t": 23248,
+     "name": "tick"
+    },
+    {
+     "t": 23248,
+     "name": "step-ok"
+    },
+    {
+     "t": 38443,
+     "name": "right"
+    },
+    {
+     "t": 42846,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "cpu-first",
+   "lang": "vi",
+   "totalMs": 88789,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 11905
+    },
+    {
+     "idx": 2,
+     "t": 22908
+    },
+    {
+     "idx": 3,
+     "t": 33912
+    },
+    {
+     "idx": 4,
+     "t": 44915
+    },
+    {
+     "idx": 5,
+     "t": 55919
+    },
+    {
+     "idx": 6,
+     "t": 67465
+    },
+    {
+     "idx": 7,
+     "t": 70781
+    }
+   ],
+   "quizAt": 81783,
+   "doneAt": 88789,
+   "sfx": [
+    {
+     "t": 901,
+     "name": "start"
+    },
+    {
+     "t": 60480,
+     "name": "blip-fetch"
+    },
+    {
+     "t": 61301,
+     "name": "blip-fetch"
+    },
+    {
+     "t": 62123,
+     "name": "blip-fetch"
+    },
+    {
+     "t": 62947,
+     "name": "blip-decode"
+    },
+    {
+     "t": 63771,
+     "name": "blip-exec"
+    },
+    {
+     "t": 64597,
+     "name": "step-ok"
+    },
+    {
+     "t": 64597,
+     "name": "blip-exec"
+    },
+    {
+     "t": 69463,
+     "name": "step-ok"
+    },
+    {
+     "t": 69463,
+     "name": "done"
+    },
+    {
+     "t": 84388,
+     "name": "right"
+    },
+    {
+     "t": 88790,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "fetch-decode",
+   "lang": "vi",
+   "totalMs": 133982,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 11219
+    },
+    {
+     "idx": 2,
+     "t": 19738
+    },
+    {
+     "idx": 3,
+     "t": 30753
+    },
+    {
+     "idx": 4,
+     "t": 41757
+    },
+    {
+     "idx": 5,
+     "t": 51517
+    },
+    {
+     "idx": 6,
+     "t": 60406
+    },
+    {
+     "idx": 7,
+     "t": 69546
+    },
+    {
+     "idx": 8,
+     "t": 79428
+    },
+    {
+     "idx": 9,
+     "t": 89328
+    },
+    {
+     "idx": 10,
+     "t": 99459
+    },
+    {
+     "idx": 11,
+     "t": 116971
+    }
+   ],
+   "quizAt": 126979,
+   "doneAt": 133982,
+   "sfx": [
+    {
+     "t": 901,
+     "name": "start"
+    },
+    {
+     "t": 19764,
+     "name": "blip-fetch"
+    },
+    {
+     "t": 30760,
+     "name": "blip-fetch"
+    },
+    {
+     "t": 41764,
+     "name": "blip-fetch"
+    },
+    {
+     "t": 51523,
+     "name": "blip-decode"
+    },
+    {
+     "t": 60412,
+     "name": "blip-exec"
+    },
+    {
+     "t": 69552,
+     "name": "blip-exec"
+    },
+    {
+     "t": 83158,
+     "name": "blip-fetch"
+    },
+    {
+     "t": 83929,
+     "name": "blip-fetch"
+    },
+    {
+     "t": 84703,
+     "name": "blip-fetch"
+    },
+    {
+     "t": 85474,
+     "name": "blip-decode"
+    },
+    {
+     "t": 86245,
+     "name": "blip-exec"
+    },
+    {
+     "t": 87018,
+     "name": "step-ok"
+    },
+    {
+     "t": 87018,
+     "name": "blip-exec"
+    },
+    {
+     "t": 103525,
+     "name": "blip-exec"
+    },
+    {
+     "t": 103781,
+     "name": "blip-exec"
+    },
+    {
+     "t": 104036,
+     "name": "blip-exec"
+    },
+    {
+     "t": 104292,
+     "name": "blip-exec"
+    },
+    {
+     "t": 104548,
+     "name": "blip-exec"
+    },
+    {
+     "t": 104802,
+     "name": "blip-exec"
+    },
+    {
+     "t": 105058,
+     "name": "blip-exec"
+    },
+    {
+     "t": 105313,
+     "name": "blip-exec"
+    },
+    {
+     "t": 105568,
+     "name": "blip-exec"
+    },
+    {
+     "t": 105824,
+     "name": "blip-exec"
+    },
+    {
+     "t": 106077,
+     "name": "blip-exec"
+    },
+    {
+     "t": 106332,
+     "name": "blip-exec"
+    },
+    {
+     "t": 106588,
+     "name": "blip-exec"
+    },
+    {
+     "t": 106842,
+     "name": "blip-exec"
+    },
+    {
+     "t": 107098,
+     "name": "blip-exec"
+    },
+    {
+     "t": 107352,
+     "name": "blip-exec"
+    },
+    {
+     "t": 107607,
+     "name": "blip-exec"
+    },
+    {
+     "t": 107863,
+     "name": "blip-exec"
+    },
+    {
+     "t": 108118,
+     "name": "blip-exec"
+    },
+    {
+     "t": 108374,
+     "name": "blip-exec"
+    },
+    {
+     "t": 108630,
+     "name": "blip-exec"
+    },
+    {
+     "t": 108885,
+     "name": "blip-exec"
+    },
+    {
+     "t": 109139,
+     "name": "blip-exec"
+    },
+    {
+     "t": 109393,
+     "name": "blip-exec"
+    },
+    {
+     "t": 109648,
+     "name": "blip-exec"
+    },
+    {
+     "t": 109904,
+     "name": "blip-exec"
+    },
+    {
+     "t": 110158,
+     "name": "blip-exec"
+    },
+    {
+     "t": 110413,
+     "name": "blip-exec"
+    },
+    {
+     "t": 110667,
+     "name": "blip-exec"
+    },
+    {
+     "t": 110921,
+     "name": "blip-exec"
+    },
+    {
+     "t": 111175,
+     "name": "blip-exec"
+    },
+    {
+     "t": 111430,
+     "name": "blip-exec"
+    },
+    {
+     "t": 111686,
+     "name": "blip-exec"
+    },
+    {
+     "t": 111940,
+     "name": "blip-exec"
+    },
+    {
+     "t": 112195,
+     "name": "blip-exec"
+    },
+    {
+     "t": 112449,
+     "name": "blip-exec"
+    },
+    {
+     "t": 112705,
+     "name": "blip-exec"
+    },
+    {
+     "t": 112960,
+     "name": "blip-exec"
+    },
+    {
+     "t": 113215,
+     "name": "blip-exec"
+    },
+    {
+     "t": 113469,
+     "name": "blip-exec"
+    },
+    {
+     "t": 113724,
+     "name": "blip-exec"
+    },
+    {
+     "t": 113978,
+     "name": "blip-exec"
+    },
+    {
+     "t": 114231,
+     "name": "blip-exec"
+    },
+    {
+     "t": 114486,
+     "name": "step-ok"
+    },
+    {
+     "t": 114486,
+     "name": "done"
+    },
+    {
+     "t": 129581,
+     "name": "right"
+    },
+    {
+     "t": 133983,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "cpu-bus",
+   "lang": "vi",
+   "totalMs": 66423,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 11906
+    },
+    {
+     "idx": 2,
+     "t": 18379
+    },
+    {
+     "idx": 3,
+     "t": 25471
+    },
+    {
+     "idx": 4,
+     "t": 34309
+    },
+    {
+     "idx": 5,
+     "t": 45314
+    },
+    {
+     "idx": 6,
+     "t": 55506
+    }
+   ],
+   "quizAt": 59419,
+   "doneAt": 66423,
+   "sfx": [
+    {
+     "t": 902,
+     "name": "start"
+    },
+    {
+     "t": 11919,
+     "name": "blip-fetch"
+    },
+    {
+     "t": 18387,
+     "name": "blip-fetch"
+    },
+    {
+     "t": 29483,
+     "name": "blip-fetch"
+    },
+    {
+     "t": 30258,
+     "name": "blip-decode"
+    },
+    {
+     "t": 31028,
+     "name": "blip-exec"
+    },
+    {
+     "t": 31798,
+     "name": "step-ok"
+    },
+    {
+     "t": 31798,
+     "name": "blip-exec"
+    },
+    {
+     "t": 57856,
+     "name": "step-ok"
+    },
+    {
+     "t": 57856,
+     "name": "done"
+    },
+    {
+     "t": 62023,
+     "name": "right"
+    },
+    {
+     "t": 66425,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "pipeline-stages",
+   "lang": "vi",
+   "totalMs": 78811,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 11905
+    },
+    {
+     "idx": 2,
+     "t": 17605
+    },
+    {
+     "idx": 3,
+     "t": 25690
+    },
+    {
+     "idx": 4,
+     "t": 35510
+    },
+    {
+     "idx": 5,
+     "t": 44834
+    },
+    {
+     "idx": 6,
+     "t": 53354
+    },
+    {
+     "idx": 7,
+     "t": 64357
+    }
+   ],
+   "quizAt": 71807,
+   "doneAt": 78811,
+   "sfx": [
+    {
+     "t": 901,
+     "name": "start"
+    },
+    {
+     "t": 17609,
+     "name": "tick"
+    },
+    {
+     "t": 25694,
+     "name": "tick"
+    },
+    {
+     "t": 35515,
+     "name": "tick"
+    },
+    {
+     "t": 44839,
+     "name": "tick"
+    },
+    {
+     "t": 53358,
+     "name": "tick"
+    },
+    {
+     "t": 68513,
+     "name": "step-ok"
+    },
+    {
+     "t": 74411,
+     "name": "right"
+    },
+    {
+     "t": 78812,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "cache-basics",
+   "lang": "vi",
+   "totalMs": 73121,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 11906
+    },
+    {
+     "idx": 2,
+     "t": 22159
+    },
+    {
+     "idx": 3,
+     "t": 30078
+    },
+    {
+     "idx": 4,
+     "t": 41083
+    },
+    {
+     "idx": 5,
+     "t": 55112
+    }
+   ],
+   "quizAt": 66118,
+   "doneAt": 73121,
+   "sfx": [
+    {
+     "t": 903,
+     "name": "start"
+    },
+    {
+     "t": 11913,
+     "name": "miss"
+    },
+    {
+     "t": 26048,
+     "name": "hit"
+    },
+    {
+     "t": 26870,
+     "name": "hit"
+    },
+    {
+     "t": 27692,
+     "name": "step-ok"
+    },
+    {
+     "t": 27692,
+     "name": "hit"
+    },
+    {
+     "t": 44376,
+     "name": "miss"
+    },
+    {
+     "t": 44706,
+     "name": "hit"
+    },
+    {
+     "t": 45034,
+     "name": "hit"
+    },
+    {
+     "t": 45362,
+     "name": "hit"
+    },
+    {
+     "t": 45689,
+     "name": "miss"
+    },
+    {
+     "t": 46017,
+     "name": "hit"
+    },
+    {
+     "t": 46346,
+     "name": "hit"
+    },
+    {
+     "t": 46674,
+     "name": "hit"
+    },
+    {
+     "t": 47002,
+     "name": "miss"
+    },
+    {
+     "t": 47331,
+     "name": "hit"
+    },
+    {
+     "t": 47657,
+     "name": "hit"
+    },
+    {
+     "t": 47985,
+     "name": "hit"
+    },
+    {
+     "t": 48313,
+     "name": "miss"
+    },
+    {
+     "t": 48641,
+     "name": "hit"
+    },
+    {
+     "t": 48969,
+     "name": "hit"
+    },
+    {
+     "t": 49297,
+     "name": "hit"
+    },
+    {
+     "t": 49625,
+     "name": "miss"
+    },
+    {
+     "t": 49952,
+     "name": "hit"
+    },
+    {
+     "t": 50280,
+     "name": "hit"
+    },
+    {
+     "t": 50608,
+     "name": "hit"
+    },
+    {
+     "t": 50935,
+     "name": "miss"
+    },
+    {
+     "t": 51263,
+     "name": "hit"
+    },
+    {
+     "t": 51591,
+     "name": "hit"
+    },
+    {
+     "t": 51920,
+     "name": "hit"
+    },
+    {
+     "t": 52248,
+     "name": "miss"
+    },
+    {
+     "t": 52577,
+     "name": "hit"
+    },
+    {
+     "t": 52904,
+     "name": "hit"
+    },
+    {
+     "t": 53231,
+     "name": "step-ok"
+    },
+    {
+     "t": 53231,
+     "name": "hit"
+    },
+    {
+     "t": 68723,
+     "name": "right"
+    },
+    {
+     "t": 73124,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "cache-mapping",
+   "lang": "vi",
+   "totalMs": 45879,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 11905
+    },
+    {
+     "idx": 2,
+     "t": 22409
+    },
+    {
+     "idx": 3,
+     "t": 28248
+    }
+   ],
+   "quizAt": 38875,
+   "doneAt": 45879,
+   "sfx": [
+    {
+     "t": 901,
+     "name": "start"
+    },
+    {
+     "t": 11911,
+     "name": "miss"
+    },
+    {
+     "t": 25875,
+     "name": "step-ok"
+    },
+    {
+     "t": 28455,
+     "name": "hit"
+    },
+    {
+     "t": 41480,
+     "name": "right"
+    },
+    {
+     "t": 45880,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "process-shell",
+   "lang": "vi",
+   "totalMs": 81011,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 11905
+    },
+    {
+     "idx": 2,
+     "t": 22907
+    },
+    {
+     "idx": 3,
+     "t": 33661
+    },
+    {
+     "idx": 4,
+     "t": 44665
+    },
+    {
+     "idx": 5,
+     "t": 55416
+    },
+    {
+     "idx": 6,
+     "t": 63256
+    }
+   ],
+   "quizAt": 74007,
+   "doneAt": 81011,
+   "sfx": [
+    {
+     "t": 902,
+     "name": "start"
+    },
+    {
+     "t": 22916,
+     "name": "tick"
+    },
+    {
+     "t": 33669,
+     "name": "tick"
+    },
+    {
+     "t": 59735,
+     "name": "tick"
+    },
+    {
+     "t": 60558,
+     "name": "tick"
+    },
+    {
+     "t": 60558,
+     "name": "step-ok"
+    },
+    {
+     "t": 63663,
+     "name": "tick"
+    },
+    {
+     "t": 76611,
+     "name": "right"
+    },
+    {
+     "t": 81012,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "sched-policies",
+   "lang": "vi",
+   "totalMs": 72576,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 11900
+    },
+    {
+     "idx": 2,
+     "t": 22282
+    },
+    {
+     "idx": 3,
+     "t": 31680
+    },
+    {
+     "idx": 4,
+     "t": 41751
+    },
+    {
+     "idx": 5,
+     "t": 49713
+    },
+    {
+     "idx": 6,
+     "t": 54570
+    }
+   ],
+   "quizAt": 65573,
+   "doneAt": 72576,
+   "sfx": [
+    {
+     "t": 902,
+     "name": "start"
+    },
+    {
+     "t": 25017,
+     "name": "tick"
+    },
+    {
+     "t": 25221,
+     "name": "tick"
+    },
+    {
+     "t": 25423,
+     "name": "tick"
+    },
+    {
+     "t": 25626,
+     "name": "tick"
+    },
+    {
+     "t": 25832,
+     "name": "tick"
+    },
+    {
+     "t": 26035,
+     "name": "tick"
+    },
+    {
+     "t": 26238,
+     "name": "tick"
+    },
+    {
+     "t": 26441,
+     "name": "tick"
+    },
+    {
+     "t": 26647,
+     "name": "tick"
+    },
+    {
+     "t": 26850,
+     "name": "tick"
+    },
+    {
+     "t": 27053,
+     "name": "tick"
+    },
+    {
+     "t": 27256,
+     "name": "tick"
+    },
+    {
+     "t": 27460,
+     "name": "tick"
+    },
+    {
+     "t": 27665,
+     "name": "tick"
+    },
+    {
+     "t": 27868,
+     "name": "tick"
+    },
+    {
+     "t": 28072,
+     "name": "tick"
+    },
+    {
+     "t": 28277,
+     "name": "tick"
+    },
+    {
+     "t": 28481,
+     "name": "tick"
+    },
+    {
+     "t": 28684,
+     "name": "tick"
+    },
+    {
+     "t": 28887,
+     "name": "tick"
+    },
+    {
+     "t": 29090,
+     "name": "tick"
+    },
+    {
+     "t": 29293,
+     "name": "tick"
+    },
+    {
+     "t": 29498,
+     "name": "tick"
+    },
+    {
+     "t": 29702,
+     "name": "tick"
+    },
+    {
+     "t": 29906,
+     "name": "tick"
+    },
+    {
+     "t": 30109,
+     "name": "step-ok"
+    },
+    {
+     "t": 30109,
+     "name": "tick"
+    },
+    {
+     "t": 52867,
+     "name": "step-ok"
+    },
+    {
+     "t": 68178,
+     "name": "right"
+    },
+    {
+     "t": 72578,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "race-lost-update",
+   "lang": "vi",
+   "totalMs": 84260,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 11904
+    },
+    {
+     "idx": 2,
+     "t": 18502
+    },
+    {
+     "idx": 3,
+     "t": 29743
+    },
+    {
+     "idx": 4,
+     "t": 40750
+    },
+    {
+     "idx": 5,
+     "t": 51625
+    },
+    {
+     "idx": 6,
+     "t": 56309
+    },
+    {
+     "idx": 7,
+     "t": 66254
+    }
+   ],
+   "quizAt": 77257,
+   "doneAt": 84260,
+   "sfx": [
+    {
+     "t": 901,
+     "name": "start"
+    },
+    {
+     "t": 23010,
+     "name": "tick"
+    },
+    {
+     "t": 23783,
+     "name": "tick"
+    },
+    {
+     "t": 24556,
+     "name": "tick"
+    },
+    {
+     "t": 25328,
+     "name": "tick"
+    },
+    {
+     "t": 26101,
+     "name": "tick"
+    },
+    {
+     "t": 26872,
+     "name": "step-ok"
+    },
+    {
+     "t": 26872,
+     "name": "oops"
+    },
+    {
+     "t": 40955,
+     "name": "oops"
+    },
+    {
+     "t": 54416,
+     "name": "step-ok"
+    },
+    {
+     "t": 56613,
+     "name": "done"
+    },
+    {
+     "t": 79859,
+     "name": "right"
+    },
+    {
+     "t": 84260,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "race-deadlock",
+   "lang": "vi",
+   "totalMs": 55177,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 901
+    },
+    {
+     "idx": 1,
+     "t": 11405
+    },
+    {
+     "idx": 2,
+     "t": 21034
+    },
+    {
+     "idx": 3,
+     "t": 32038
+    },
+    {
+     "idx": 4,
+     "t": 37168
+    }
+   ],
+   "quizAt": 48172,
+   "doneAt": 55177,
+   "sfx": [
+    {
+     "t": 902,
+     "name": "start"
+    },
+    {
+     "t": 14354,
+     "name": "tick"
+    },
+    {
+     "t": 15457,
+     "name": "tick"
+    },
+    {
+     "t": 16559,
+     "name": "tick"
+    },
+    {
+     "t": 17661,
+     "name": "tick"
+    },
+    {
+     "t": 18764,
+     "name": "tick"
+    },
+    {
+     "t": 19867,
+     "name": "step-ok"
+    },
+    {
+     "t": 19867,
+     "name": "thud"
+    },
+    {
+     "t": 35089,
+     "name": "step-ok"
+    },
+    {
+     "t": 37474,
+     "name": "tick"
+    },
+    {
+     "t": 50776,
+     "name": "right"
+    },
+    {
+     "t": 55179,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "vm-translate",
+   "lang": "vi",
+   "totalMs": 66296,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 11906
+    },
+    {
+     "idx": 2,
+     "t": 22598
+    },
+    {
+     "idx": 3,
+     "t": 32545
+    },
+    {
+     "idx": 4,
+     "t": 39975
+    },
+    {
+     "idx": 5,
+     "t": 50979
+    }
+   ],
+   "quizAt": 59293,
+   "doneAt": 66296,
+   "sfx": [
+    {
+     "t": 902,
+     "name": "start"
+    },
+    {
+     "t": 11915,
+     "name": "miss"
+    },
+    {
+     "t": 37105,
+     "name": "step-ok"
+    },
+    {
+     "t": 37105,
+     "name": "miss"
+    },
+    {
+     "t": 54396,
+     "name": "miss"
+    },
+    {
+     "t": 54825,
+     "name": "hit"
+    },
+    {
+     "t": 55254,
+     "name": "miss"
+    },
+    {
+     "t": 55682,
+     "name": "hit"
+    },
+    {
+     "t": 56111,
+     "name": "hit"
+    },
+    {
+     "t": 56539,
+     "name": "hit"
+    },
+    {
+     "t": 56969,
+     "name": "miss"
+    },
+    {
+     "t": 57397,
+     "name": "step-ok"
+    },
+    {
+     "t": 57397,
+     "name": "thud"
+    },
+    {
+     "t": 61897,
+     "name": "right"
+    },
+    {
+     "t": 66297,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "vm-thrash",
+   "lang": "vi",
+   "totalMs": 44342,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 10598
+    },
+    {
+     "idx": 2,
+     "t": 21601
+    },
+    {
+     "idx": 3,
+     "t": 26331
+    }
+   ],
+   "quizAt": 37335,
+   "doneAt": 44342,
+   "sfx": [
+    {
+     "t": 902,
+     "name": "start"
+    },
+    {
+     "t": 24173,
+     "name": "step-ok"
+    },
+    {
+     "t": 39942,
+     "name": "right"
+    },
+    {
+     "t": 44344,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "sysmon-read",
+   "lang": "vi",
+   "totalMs": 65492,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 11904
+    },
+    {
+     "idx": 2,
+     "t": 22533
+    },
+    {
+     "idx": 3,
+     "t": 29994
+    },
+    {
+     "idx": 4,
+     "t": 39320
+    },
+    {
+     "idx": 5,
+     "t": 44876
+    },
+    {
+     "idx": 6,
+     "t": 54821
+    }
+   ],
+   "quizAt": 58487,
+   "doneAt": 65492,
+   "sfx": [
+    {
+     "t": 902,
+     "name": "start"
+    },
+    {
+     "t": 25794,
+     "name": "tick"
+    },
+    {
+     "t": 26049,
+     "name": "tick"
+    },
+    {
+     "t": 26302,
+     "name": "tick"
+    },
+    {
+     "t": 26556,
+     "name": "tick"
+    },
+    {
+     "t": 26810,
+     "name": "tick"
+    },
+    {
+     "t": 27067,
+     "name": "tick"
+    },
+    {
+     "t": 27321,
+     "name": "tick"
+    },
+    {
+     "t": 27574,
+     "name": "tick"
+    },
+    {
+     "t": 27827,
+     "name": "tick"
+    },
+    {
+     "t": 28082,
+     "name": "tick"
+    },
+    {
+     "t": 28082,
+     "name": "step-ok"
+    },
+    {
+     "t": 28336,
+     "name": "tick"
+    },
+    {
+     "t": 28591,
+     "name": "tick"
+    },
+    {
+     "t": 28846,
+     "name": "tick"
+    },
+    {
+     "t": 29101,
+     "name": "tick"
+    },
+    {
+     "t": 29353,
+     "name": "tick"
+    },
+    {
+     "t": 29606,
+     "name": "tick"
+    },
+    {
+     "t": 29860,
+     "name": "tick"
+    },
+    {
+     "t": 30423,
+     "name": "tick"
+    },
+    {
+     "t": 31099,
+     "name": "tick"
+    },
+    {
+     "t": 31352,
+     "name": "tick"
+    },
+    {
+     "t": 31606,
+     "name": "tick"
+    },
+    {
+     "t": 31858,
+     "name": "tick"
+    },
+    {
+     "t": 32111,
+     "name": "tick"
+    },
+    {
+     "t": 32365,
+     "name": "tick"
+    },
+    {
+     "t": 32618,
+     "name": "tick"
+    },
+    {
+     "t": 32872,
+     "name": "tick"
+    },
+    {
+     "t": 33125,
+     "name": "tick"
+    },
+    {
+     "t": 33380,
+     "name": "tick"
+    },
+    {
+     "t": 33633,
+     "name": "tick"
+    },
+    {
+     "t": 33888,
+     "name": "tick"
+    },
+    {
+     "t": 34140,
+     "name": "tick"
+    },
+    {
+     "t": 34394,
+     "name": "tick"
+    },
+    {
+     "t": 34647,
+     "name": "tick"
+    },
+    {
+     "t": 34900,
+     "name": "tick"
+    },
+    {
+     "t": 35153,
+     "name": "tick"
+    },
+    {
+     "t": 35407,
+     "name": "tick"
+    },
+    {
+     "t": 35660,
+     "name": "tick"
+    },
+    {
+     "t": 35913,
+     "name": "tick"
+    },
+    {
+     "t": 36167,
+     "name": "tick"
+    },
+    {
+     "t": 36421,
+     "name": "tick"
+    },
+    {
+     "t": 36674,
+     "name": "tick"
+    },
+    {
+     "t": 36928,
+     "name": "tick"
+    },
+    {
+     "t": 37183,
+     "name": "tick"
+    },
+    {
+     "t": 37437,
+     "name": "tick"
+    },
+    {
+     "t": 37692,
+     "name": "tick"
+    },
+    {
+     "t": 37945,
+     "name": "tick"
+    },
+    {
+     "t": 38198,
+     "name": "tick"
+    },
+    {
+     "t": 38451,
+     "name": "tick"
+    },
+    {
+     "t": 38705,
+     "name": "tick"
+    },
+    {
+     "t": 38959,
+     "name": "tick"
+    },
+    {
+     "t": 39213,
+     "name": "tick"
+    },
+    {
+     "t": 39467,
+     "name": "tick"
+    },
+    {
+     "t": 39720,
+     "name": "tick"
+    },
+    {
+     "t": 39974,
+     "name": "tick"
+    },
+    {
+     "t": 40227,
+     "name": "tick"
+    },
+    {
+     "t": 40482,
+     "name": "tick"
+    },
+    {
+     "t": 40736,
+     "name": "tick"
+    },
+    {
+     "t": 40988,
+     "name": "tick"
+    },
+    {
+     "t": 41242,
+     "name": "tick"
+    },
+    {
+     "t": 41497,
+     "name": "tick"
+    },
+    {
+     "t": 41751,
+     "name": "tick"
+    },
+    {
+     "t": 42003,
+     "name": "tick"
+    },
+    {
+     "t": 42256,
+     "name": "tick"
+    },
+    {
+     "t": 42510,
+     "name": "tick"
+    },
+    {
+     "t": 42763,
+     "name": "tick"
+    },
+    {
+     "t": 42763,
+     "name": "step-ok"
+    },
+    {
+     "t": 43016,
+     "name": "tick"
+    },
+    {
+     "t": 43268,
+     "name": "tick"
+    },
+    {
+     "t": 43521,
+     "name": "tick"
+    },
+    {
+     "t": 43775,
+     "name": "tick"
+    },
+    {
+     "t": 44028,
+     "name": "tick"
+    },
+    {
+     "t": 44281,
+     "name": "tick"
+    },
+    {
+     "t": 44533,
+     "name": "tick"
+    },
+    {
+     "t": 44786,
+     "name": "tick"
+    },
+    {
+     "t": 57061,
+     "name": "step-ok"
+    },
+    {
+     "t": 61091,
+     "name": "right"
+    },
+    {
+     "t": 65493,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "eventloop-order",
+   "lang": "vi",
+   "totalMs": 79016,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 11904
+    },
+    {
+     "idx": 2,
+     "t": 21477
+    },
+    {
+     "idx": 3,
+     "t": 31335
+    },
+    {
+     "idx": 4,
+     "t": 41467
+    },
+    {
+     "idx": 5,
+     "t": 61944
+    }
+   ],
+   "quizAt": 72012,
+   "doneAt": 79016,
+   "sfx": [
+    {
+     "t": 901,
+     "name": "start"
+    },
+    {
+     "t": 25430,
+     "name": "tick"
+    },
+    {
+     "t": 26103,
+     "name": "tick"
+    },
+    {
+     "t": 26775,
+     "name": "tick"
+    },
+    {
+     "t": 27449,
+     "name": "tick"
+    },
+    {
+     "t": 28121,
+     "name": "tick"
+    },
+    {
+     "t": 28793,
+     "name": "tick"
+    },
+    {
+     "t": 28793,
+     "name": "step-ok"
+    },
+    {
+     "t": 45386,
+     "name": "tick"
+    },
+    {
+     "t": 45863,
+     "name": "tick"
+    },
+    {
+     "t": 46342,
+     "name": "tick"
+    },
+    {
+     "t": 46819,
+     "name": "tick"
+    },
+    {
+     "t": 47298,
+     "name": "tick"
+    },
+    {
+     "t": 47776,
+     "name": "tick"
+    },
+    {
+     "t": 48256,
+     "name": "tick"
+    },
+    {
+     "t": 48734,
+     "name": "tick"
+    },
+    {
+     "t": 49212,
+     "name": "tick"
+    },
+    {
+     "t": 49690,
+     "name": "tick"
+    },
+    {
+     "t": 50167,
+     "name": "tick"
+    },
+    {
+     "t": 50644,
+     "name": "tick"
+    },
+    {
+     "t": 51121,
+     "name": "tick"
+    },
+    {
+     "t": 51598,
+     "name": "tick"
+    },
+    {
+     "t": 52076,
+     "name": "tick"
+    },
+    {
+     "t": 52554,
+     "name": "tick"
+    },
+    {
+     "t": 53031,
+     "name": "tick"
+    },
+    {
+     "t": 53509,
+     "name": "tick"
+    },
+    {
+     "t": 53987,
+     "name": "tick"
+    },
+    {
+     "t": 54466,
+     "name": "tick"
+    },
+    {
+     "t": 54943,
+     "name": "tick"
+    },
+    {
+     "t": 55420,
+     "name": "tick"
+    },
+    {
+     "t": 55899,
+     "name": "tick"
+    },
+    {
+     "t": 56376,
+     "name": "tick"
+    },
+    {
+     "t": 56853,
+     "name": "tick"
+    },
+    {
+     "t": 57330,
+     "name": "tick"
+    },
+    {
+     "t": 57808,
+     "name": "tick"
+    },
+    {
+     "t": 58286,
+     "name": "tick"
+    },
+    {
+     "t": 58765,
+     "name": "tick"
+    },
+    {
+     "t": 59242,
+     "name": "tick"
+    },
+    {
+     "t": 59721,
+     "name": "tick"
+    },
+    {
+     "t": 59721,
+     "name": "step-ok"
+    },
+    {
+     "t": 74615,
+     "name": "right"
+    },
+    {
+     "t": 79017,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "eventloop-block",
+   "lang": "vi",
+   "totalMs": 59039,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 10352
+    },
+    {
+     "idx": 2,
+     "t": 24736
+    },
+    {
+     "idx": 3,
+     "t": 35362
+    },
+    {
+     "idx": 4,
+     "t": 41717
+    }
+   ],
+   "quizAt": 52034,
+   "doneAt": 59039,
+   "sfx": [
+    {
+     "t": 902,
+     "name": "start"
+    },
+    {
+     "t": 12386,
+     "name": "tick"
+    },
+    {
+     "t": 12863,
+     "name": "tick"
+    },
+    {
+     "t": 13341,
+     "name": "tick"
+    },
+    {
+     "t": 13820,
+     "name": "tick"
+    },
+    {
+     "t": 14297,
+     "name": "tick"
+    },
+    {
+     "t": 14776,
+     "name": "tick"
+    },
+    {
+     "t": 15255,
+     "name": "tick"
+    },
+    {
+     "t": 15733,
+     "name": "tick"
+    },
+    {
+     "t": 16212,
+     "name": "tick"
+    },
+    {
+     "t": 16689,
+     "name": "tick"
+    },
+    {
+     "t": 17166,
+     "name": "tick"
+    },
+    {
+     "t": 17644,
+     "name": "tick"
+    },
+    {
+     "t": 18122,
+     "name": "tick"
+    },
+    {
+     "t": 18599,
+     "name": "tick"
+    },
+    {
+     "t": 19077,
+     "name": "tick"
+    },
+    {
+     "t": 19556,
+     "name": "tick"
+    },
+    {
+     "t": 20035,
+     "name": "tick"
+    },
+    {
+     "t": 20513,
+     "name": "tick"
+    },
+    {
+     "t": 20992,
+     "name": "tick"
+    },
+    {
+     "t": 21470,
+     "name": "tick"
+    },
+    {
+     "t": 21949,
+     "name": "tick"
+    },
+    {
+     "t": 22427,
+     "name": "tick"
+    },
+    {
+     "t": 22905,
+     "name": "tick"
+    },
+    {
+     "t": 23383,
+     "name": "tick"
+    },
+    {
+     "t": 23860,
+     "name": "tick"
+    },
+    {
+     "t": 23860,
+     "name": "step-ok"
+    },
+    {
+     "t": 39129,
+     "name": "step-ok"
+    },
+    {
+     "t": 54638,
+     "name": "right"
+    },
+    {
+     "t": 59040,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "deadlock-detect",
+   "lang": "vi",
+   "totalMs": 69564,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 11906
+    },
+    {
+     "idx": 2,
+     "t": 29551
+    },
+    {
+     "idx": 3,
+     "t": 40553
+    },
+    {
+     "idx": 4,
+     "t": 51557
+    }
+   ],
+   "quizAt": 62559,
+   "doneAt": 69564,
+   "sfx": [
+    {
+     "t": 901,
+     "name": "start"
+    },
+    {
+     "t": 16868,
+     "name": "tick"
+    },
+    {
+     "t": 17771,
+     "name": "tick"
+    },
+    {
+     "t": 18675,
+     "name": "tick"
+    },
+    {
+     "t": 19578,
+     "name": "tick"
+    },
+    {
+     "t": 20481,
+     "name": "tick"
+    },
+    {
+     "t": 21384,
+     "name": "tick"
+    },
+    {
+     "t": 22286,
+     "name": "tick"
+    },
+    {
+     "t": 23189,
+     "name": "tick"
+    },
+    {
+     "t": 24092,
+     "name": "tick"
+    },
+    {
+     "t": 24994,
+     "name": "tick"
+    },
+    {
+     "t": 25898,
+     "name": "tick"
+    },
+    {
+     "t": 26801,
+     "name": "tick"
+    },
+    {
+     "t": 26801,
+     "name": "step-ok"
+    },
+    {
+     "t": 26801,
+     "name": "done"
+    },
+    {
+     "t": 40979,
+     "name": "thud"
+    },
+    {
+     "t": 51982,
+     "name": "thud"
+    },
+    {
+     "t": 65163,
+     "name": "right"
+    },
+    {
+     "t": 69565,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "deadlock-banker",
+   "lang": "vi",
+   "totalMs": 62378,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 11342
+    },
+    {
+     "idx": 2,
+     "t": 29894
+    },
+    {
+     "idx": 3,
+     "t": 39593
+    },
+    {
+     "idx": 4,
+     "t": 44749
+    }
+   ],
+   "quizAt": 55375,
+   "doneAt": 62378,
+   "sfx": [
+    {
+     "t": 901,
+     "name": "start"
+    },
+    {
+     "t": 16304,
+     "name": "tick"
+    },
+    {
+     "t": 17206,
+     "name": "tick"
+    },
+    {
+     "t": 18108,
+     "name": "tick"
+    },
+    {
+     "t": 19011,
+     "name": "tick"
+    },
+    {
+     "t": 19914,
+     "name": "tick"
+    },
+    {
+     "t": 20818,
+     "name": "tick"
+    },
+    {
+     "t": 21720,
+     "name": "tick"
+    },
+    {
+     "t": 22624,
+     "name": "tick"
+    },
+    {
+     "t": 23526,
+     "name": "tick"
+    },
+    {
+     "t": 24430,
+     "name": "tick"
+    },
+    {
+     "t": 25332,
+     "name": "tick"
+    },
+    {
+     "t": 26236,
+     "name": "tick"
+    },
+    {
+     "t": 27143,
+     "name": "tick"
+    },
+    {
+     "t": 27143,
+     "name": "step-ok"
+    },
+    {
+     "t": 42700,
+     "name": "right"
+    },
+    {
+     "t": 42701,
+     "name": "step-ok"
+    },
+    {
+     "t": 45055,
+     "name": "wrong"
+    },
+    {
+     "t": 57978,
+     "name": "right"
+    },
+    {
+     "t": 62379,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "process-start",
+   "lang": "vi",
+   "totalMs": 54674,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 9173
+    },
+    {
+     "idx": 2,
+     "t": 20197
+    },
+    {
+     "idx": 3,
+     "t": 25793
+    },
+    {
+     "idx": 4,
+     "t": 36668
+    }
+   ],
+   "quizAt": 47671,
+   "doneAt": 54674,
+   "sfx": [
+    {
+     "t": 902,
+     "name": "start"
+    },
+    {
+     "t": 23224,
+     "name": "tick"
+    },
+    {
+     "t": 23947,
+     "name": "step-ok"
+    },
+    {
+     "t": 23947,
+     "name": "tick"
+    },
+    {
+     "t": 50274,
+     "name": "right"
+    },
+    {
+     "t": 54675,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "scheduler-start",
+   "lang": "vi",
+   "totalMs": 54677,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 9174
+    },
+    {
+     "idx": 2,
+     "t": 20198
+    },
+    {
+     "idx": 3,
+     "t": 25794
+    },
+    {
+     "idx": 4,
+     "t": 36671
+    }
+   ],
+   "quizAt": 47674,
+   "doneAt": 54677,
+   "sfx": [
+    {
+     "t": 902,
+     "name": "start"
+    },
+    {
+     "t": 23228,
+     "name": "tick"
+    },
+    {
+     "t": 23950,
+     "name": "step-ok"
+    },
+    {
+     "t": 23950,
+     "name": "tick"
+    },
+    {
+     "t": 50278,
+     "name": "right"
+    },
+    {
+     "t": 54679,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "race-start",
+   "lang": "vi",
+   "totalMs": 54670,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 9172
+    },
+    {
+     "idx": 2,
+     "t": 20193
+    },
+    {
+     "idx": 3,
+     "t": 25789
+    },
+    {
+     "idx": 4,
+     "t": 36664
+    }
+   ],
+   "quizAt": 47667,
+   "doneAt": 54670,
+   "sfx": [
+    {
+     "t": 902,
+     "name": "start"
+    },
+    {
+     "t": 23224,
+     "name": "tick"
+    },
+    {
+     "t": 23944,
+     "name": "step-ok"
+    },
+    {
+     "t": 23944,
+     "name": "tick"
+    },
+    {
+     "t": 50270,
+     "name": "right"
+    },
+    {
+     "t": 54671,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "memory-start",
+   "lang": "vi",
+   "totalMs": 54862,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 9359
+    },
+    {
+     "idx": 2,
+     "t": 20380
+    },
+    {
+     "idx": 3,
+     "t": 25977
+    },
+    {
+     "idx": 4,
+     "t": 36853
+    }
+   ],
+   "quizAt": 47857,
+   "doneAt": 54862,
+   "sfx": [
+    {
+     "t": 901,
+     "name": "start"
+    },
+    {
+     "t": 23409,
+     "name": "tick"
+    },
+    {
+     "t": 24131,
+     "name": "step-ok"
+    },
+    {
+     "t": 24131,
+     "name": "tick"
+    },
+    {
+     "t": 50461,
+     "name": "right"
+    },
+    {
+     "t": 54863,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "vm-start",
+   "lang": "vi",
+   "totalMs": 54612,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 9113
+    },
+    {
+     "idx": 2,
+     "t": 20134
+    },
+    {
+     "idx": 3,
+     "t": 25728
+    },
+    {
+     "idx": 4,
+     "t": 36606
+    }
+   ],
+   "quizAt": 47608,
+   "doneAt": 54612,
+   "sfx": [
+    {
+     "t": 902,
+     "name": "start"
+    },
+    {
+     "t": 23159,
+     "name": "miss"
+    },
+    {
+     "t": 23883,
+     "name": "step-ok"
+    },
+    {
+     "t": 23883,
+     "name": "miss"
+    },
+    {
+     "t": 50212,
+     "name": "right"
+    },
+    {
+     "t": 54614,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "sysmon-start",
+   "lang": "vi",
+   "totalMs": 46526,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 11905
+    },
+    {
+     "idx": 2,
+     "t": 22925
+    },
+    {
+     "idx": 3,
+     "t": 28521
+    }
+   ],
+   "quizAt": 39522,
+   "doneAt": 46526,
+   "sfx": [
+    {
+     "t": 902,
+     "name": "start"
+    },
+    {
+     "t": 25953,
+     "name": "tick"
+    },
+    {
+     "t": 26675,
+     "name": "step-ok"
+    },
+    {
+     "t": 26675,
+     "name": "tick"
+    },
+    {
+     "t": 42127,
+     "name": "right"
+    },
+    {
+     "t": 46528,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "eventloop-start",
+   "lang": "vi",
+   "totalMs": 51793,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 11905
+    },
+    {
+     "idx": 3,
+     "t": 22909
+    },
+    {
+     "idx": 4,
+     "t": 33784
+    }
+   ],
+   "quizAt": 44788,
+   "doneAt": 51793,
+   "sfx": [
+    {
+     "t": 902,
+     "name": "start"
+    },
+    {
+     "t": 47394,
+     "name": "right"
+    },
+    {
+     "t": 51795,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "threadpool-start",
+   "lang": "vi",
+   "totalMs": 57393,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 901
+    },
+    {
+     "idx": 1,
+     "t": 11905
+    },
+    {
+     "idx": 2,
+     "t": 22915
+    },
+    {
+     "idx": 3,
+     "t": 28510
+    },
+    {
+     "idx": 4,
+     "t": 39386
+    }
+   ],
+   "quizAt": 50389,
+   "doneAt": 57393,
+   "sfx": [
+    {
+     "t": 902,
+     "name": "start"
+    },
+    {
+     "t": 25944,
+     "name": "tick"
+    },
+    {
+     "t": 26666,
+     "name": "step-ok"
+    },
+    {
+     "t": 26666,
+     "name": "tick"
+    },
+    {
+     "t": 52993,
+     "name": "right"
+    },
+    {
+     "t": 57394,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "sync-start",
+   "lang": "vi",
+   "totalMs": 57397,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 11904
+    },
+    {
+     "idx": 2,
+     "t": 22924
+    },
+    {
+     "idx": 3,
+     "t": 28517
+    },
+    {
+     "idx": 4,
+     "t": 39392
+    }
+   ],
+   "quizAt": 50394,
+   "doneAt": 57397,
+   "sfx": [
+    {
+     "t": 901,
+     "name": "start"
+    },
+    {
+     "t": 25949,
+     "name": "tick"
+    },
+    {
+     "t": 26671,
+     "name": "step-ok"
+    },
+    {
+     "t": 26671,
+     "name": "tick"
+    },
+    {
+     "t": 52997,
+     "name": "right"
+    },
+    {
+     "t": 57398,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "deadlock-start",
+   "lang": "vi",
+   "totalMs": 57220,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 11716
+    },
+    {
+     "idx": 2,
+     "t": 22744
+    },
+    {
+     "idx": 3,
+     "t": 28337
+    },
+    {
+     "idx": 4,
+     "t": 39213
+    }
+   ],
+   "quizAt": 50216,
+   "doneAt": 57220,
+   "sfx": [
+    {
+     "t": 900,
+     "name": "start"
+    },
+    {
+     "t": 25769,
+     "name": "tick"
+    },
+    {
+     "t": 26490,
+     "name": "step-ok"
+    },
+    {
+     "t": 26490,
+     "name": "tick"
+    },
+    {
+     "t": 52819,
+     "name": "right"
+    },
+    {
+     "t": 57220,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "cgroup-start",
+   "lang": "vi",
+   "totalMs": 57401,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 11905
+    },
+    {
+     "idx": 2,
+     "t": 22928
+    },
+    {
+     "idx": 3,
+     "t": 28519
+    },
+    {
+     "idx": 4,
+     "t": 39394
+    }
+   ],
+   "quizAt": 50397,
+   "doneAt": 57401,
+   "sfx": [
+    {
+     "t": 901,
+     "name": "start"
+    },
+    {
+     "t": 25953,
+     "name": "tick"
+    },
+    {
+     "t": 26674,
+     "name": "step-ok"
+    },
+    {
+     "t": 26674,
+     "name": "tick"
+    },
+    {
+     "t": 53000,
+     "name": "right"
+    },
+    {
+     "t": 57401,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "cow-start",
+   "lang": "vi",
+   "totalMs": 40788,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 3,
+     "t": 11906
+    },
+    {
+     "idx": 4,
+     "t": 22783
+    }
+   ],
+   "quizAt": 33784,
+   "doneAt": 40788,
+   "sfx": [
+    {
+     "t": 901,
+     "name": "start"
+    },
+    {
+     "t": 36387,
+     "name": "right"
+    },
+    {
+     "t": 40789,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "pagecache-start",
+   "lang": "vi",
+   "totalMs": 57400,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 11905
+    },
+    {
+     "idx": 2,
+     "t": 22927
+    },
+    {
+     "idx": 3,
+     "t": 28517
+    },
+    {
+     "idx": 4,
+     "t": 39394
+    }
+   ],
+   "quizAt": 50397,
+   "doneAt": 57400,
+   "sfx": [
+    {
+     "t": 901,
+     "name": "start"
+    },
+    {
+     "t": 25953,
+     "name": "tick"
+    },
+    {
+     "t": 26674,
+     "name": "step-ok"
+    },
+    {
+     "t": 26674,
+     "name": "tick"
+    },
+    {
+     "t": 53000,
+     "name": "right"
+    },
+    {
+     "t": 57401,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "latency-start",
+   "lang": "vi",
+   "totalMs": 52992,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 7499
+    },
+    {
+     "idx": 2,
+     "t": 18520
+    },
+    {
+     "idx": 3,
+     "t": 24112
+    },
+    {
+     "idx": 4,
+     "t": 34986
+    }
+   ],
+   "quizAt": 45988,
+   "doneAt": 52992,
+   "sfx": [
+    {
+     "t": 902,
+     "name": "start"
+    },
+    {
+     "t": 21544,
+     "name": "tick"
+    },
+    {
+     "t": 22266,
+     "name": "step-ok"
+    },
+    {
+     "t": 22266,
+     "name": "tick"
+    },
+    {
+     "t": 48591,
+     "name": "right"
+    },
+    {
+     "t": 52993,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "bits-start",
+   "lang": "vi",
+   "totalMs": 40787,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 3,
+     "t": 11905
+    },
+    {
+     "idx": 4,
+     "t": 22782
+    }
+   ],
+   "quizAt": 33784,
+   "doneAt": 40787,
+   "sfx": [
+    {
+     "t": 901,
+     "name": "start"
+    },
+    {
+     "t": 36386,
+     "name": "right"
+    },
+    {
+     "t": 40787,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "data-start",
+   "lang": "vi",
+   "totalMs": 40787,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 3,
+     "t": 11905
+    },
+    {
+     "idx": 4,
+     "t": 22781
+    }
+   ],
+   "quizAt": 33783,
+   "doneAt": 40787,
+   "sfx": [
+    {
+     "t": 900,
+     "name": "start"
+    },
+    {
+     "t": 36385,
+     "name": "right"
+    },
+    {
+     "t": 40787,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "logic-start",
+   "lang": "vi",
+   "totalMs": 40785,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 3,
+     "t": 11906
+    },
+    {
+     "idx": 4,
+     "t": 22780
+    }
+   ],
+   "quizAt": 33780,
+   "doneAt": 40785,
+   "sfx": [
+    {
+     "t": 901,
+     "name": "start"
+    },
+    {
+     "t": 36384,
+     "name": "right"
+    },
+    {
+     "t": 40785,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "cpu-start",
+   "lang": "vi",
+   "totalMs": 57391,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 11906
+    },
+    {
+     "idx": 2,
+     "t": 22919
+    },
+    {
+     "idx": 3,
+     "t": 28513
+    },
+    {
+     "idx": 4,
+     "t": 39388
+    }
+   ],
+   "quizAt": 50389,
+   "doneAt": 57391,
+   "sfx": [
+    {
+     "t": 901,
+     "name": "start"
+    },
+    {
+     "t": 25947,
+     "name": "blip-fetch"
+    },
+    {
+     "t": 26668,
+     "name": "step-ok"
+    },
+    {
+     "t": 26668,
+     "name": "blip-fetch"
+    },
+    {
+     "t": 52991,
+     "name": "right"
+    },
+    {
+     "t": 57392,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "pipeline-start",
+   "lang": "vi",
+   "totalMs": 57402,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 11907
+    },
+    {
+     "idx": 2,
+     "t": 22928
+    },
+    {
+     "idx": 3,
+     "t": 28521
+    },
+    {
+     "idx": 4,
+     "t": 39396
+    }
+   ],
+   "quizAt": 50398,
+   "doneAt": 57402,
+   "sfx": [
+    {
+     "t": 902,
+     "name": "start"
+    },
+    {
+     "t": 25955,
+     "name": "tick"
+    },
+    {
+     "t": 26675,
+     "name": "step-ok"
+    },
+    {
+     "t": 26675,
+     "name": "tick"
+    },
+    {
+     "t": 53002,
+     "name": "right"
+    },
+    {
+     "t": 57403,
+     "name": "done"
+    }
+   ]
+  },
+  {
+   "id": "cache-start",
+   "lang": "vi",
+   "totalMs": 57399,
+   "steps": [
+    {
+     "idx": 0,
+     "t": 900
+    },
+    {
+     "idx": 1,
+     "t": 11905
+    },
+    {
+     "idx": 2,
+     "t": 22928
+    },
+    {
+     "idx": 3,
+     "t": 28520
+    },
+    {
+     "idx": 4,
+     "t": 39395
+    }
+   ],
+   "quizAt": 50395,
+   "doneAt": 57399,
+   "sfx": [
+    {
+     "t": 902,
+     "name": "start"
+    },
+    {
+     "t": 25954,
+     "name": "miss"
+    },
+    {
+     "t": 26675,
+     "name": "step-ok"
+    },
+    {
+     "t": 26675,
+     "name": "miss"
+    },
+    {
+     "t": 52999,
+     "name": "right"
+    },
+    {
+     "t": 57401,
+     "name": "done"
+    }
+   ]
+  }
+ ]
+}

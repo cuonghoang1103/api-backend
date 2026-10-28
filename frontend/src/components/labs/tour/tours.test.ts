@@ -138,7 +138,7 @@ describe('tours — run on the real simulations', () => {
         const host = document.createElement('div');
         document.body.appendChild(host);
         const root = createRoot(host);
-        root.render(React.createElement(busMod.LabBusProvider, { bus, children: React.createElement(Comp, { lang: 'vi', preset: tour.presets[0] ?? def.presets[0] }) }));
+        root.render(React.createElement(busMod.LabBusProvider, { bus }, React.createElement(Comp, { lang: 'vi', preset: tour.presets[0] ?? def.presets[0] })));
         const ctx = { bus, rate: 1, alive: () => true, sleep: (ms: number) => new Promise<void>((r) => realSetTimeout(r, Math.min(ms, 12))) };
         await run.waitUntil(ctx, () => Object.keys(bus.state).length > 0, 5000);
         for (const [k, st] of tour.steps.entries()) {

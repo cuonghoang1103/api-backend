@@ -57,7 +57,7 @@ function shallowEq(a: Record<string, unknown>, b: Record<string, unknown>) {
 
 export const LabBusContext = createContext<LabBus | null>(null);
 export const useLabBus = () => useContext(LabBusContext);
-export function LabBusProvider({ bus, children }: { bus: LabBus; children: ReactNode }) {
+export function LabBusProvider({ bus, children }: { bus: LabBus; children?: ReactNode }) {
   return <LabBusContext.Provider value={bus}>{children}</LabBusContext.Provider>;
 }
 

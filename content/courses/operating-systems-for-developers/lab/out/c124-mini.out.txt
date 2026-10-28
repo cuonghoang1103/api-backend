@@ -1,0 +1,85 @@
+$ ls -lh /opt/c12/alpine-3.24.tar; tar -tf /opt/c12/alpine-3.24.tar | grep -cv /$
+-rw-r--r-- 1 root root 8.6M Oct 28 22:34 /opt/c12/alpine-3.24.tar
+421
+$ cat /etc/os-release | head -1; hostname; ps -e | wc -l
+PRETTY_NAME="Ubuntu 26.04.1 LTS"
+oslab
+5
+$ ./mini-container.sh box1 /bin/sh -c 'echo "hostname: $(hostname)"; head -2 /etc/os-release; echo "my PID: $$"; ps; id'
+hostname: box1
+NAME="Alpine Linux"
+ID=alpine
+my PID: 1
+PID   USER     TIME  COMMAND
+    1 root      0:00 /bin/sh -c echo "hostname: $(hostname)"; head -2 /etc/os-release; echo "my PID: $$"; ps; id
+   17 root      0:00 ps
+uid=0(root) gid=0(root) groups=0(root)
+$ ./mini-container.sh box1 /bin/sh -c 'ls /; df -h / | tail -1; ls /dev; ip -o link | grep -v NONE'
+bin
+dev
+etc
+home
+lib
+media
+mnt
+opt
+proc
+root
+run
+sbin
+srv
+sys
+tmp
+usr
+var
+overlay                 256.0M      8.5M    247.5M   3% /
+null
+urandom
+zero
+1: lo: <LOOPBACK> mtu 65536 qdisc noop state DOWN qlen 1000\    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+$ ./mini-container.sh box1 /bin/sh -c 'cat /proc/self/cgroup; cat /sys/fs/cgroup/memory.max /sys/fs/cgroup/cpu.max /sys/fs/cgroup/pids.max'
+0::/
+67108864
+50000 100000
+32
+$ ./mini-container.sh box1 /bin/sh -c 'dd if=/dev/zero of=/dev/null bs=200M count=1'; echo "exit $?"
+Killed
+exit 137
+$ dmesg | grep -E 'Memory cgroup out of memory' | tail -1 | sed 's/^\[[ 0-9.]*\] //' | cut -c1-90
+Memory cgroup out of memory: Killed process 52297 (dd) total-vm:206488kB, anon-rss:64448kB
+$ ./mini-container.sh box1 /bin/sh -c 'for i in $(seq 40); do sleep 1 & done; sleep 1.5; echo "survived"' 2>&1 | sort | uniq -c
+      1 /bin/sh: can't fork: Resource temporarily unavailable
+$ ./mini-container.sh box1 /bin/sh -c 'time -f "%e s wall, %U s user" sh -c "i=0; while [ \$i -lt 300000 ]; do i=\$((i+1)); done"'
+0.88 s wall, 0.45 s user
+$ CPU="max 100000" ./mini-container.sh box1 /bin/sh -c 'time -f "%e s wall, %U s user" sh -c "i=0; while [ \$i -lt 300000 ]; do i=\$((i+1)); done"'
+0.46 s wall, 0.45 s user
+$ ./mini-container.sh box2 /bin/sh -c 'echo "hello from box2" > /root/note; rm /etc/motd; sleep 300' &
+$ sleep 1; P=$(pgrep -f 'sleep 300' | tail -1); echo "box2's sleep, seen from outside: PID $P"
+box2's sleep, seen from outside: PID 271
+$ grep -E '^NSpid' /proc/$P/status; cat /proc/$P/cgroup; cat /proc/$P/root/etc/alpine-release
+NSpid:	271	1
+0::/mini-box2
+3.24.2
+$ ls -la /var/lib/mini/box2/upper/root /var/lib/mini/box2/upper/etc; ls /var/lib/mini/image/etc/motd
+/var/lib/mini/box2/upper/etc:
+total 0
+drwxr-xr-x+ 2 root root   60 Oct 28 22:46 .
+drwxr-xr-x+ 4 root root   80 Oct 28 22:46 ..
+c---------  2 root root 0, 0 Oct 28 22:46 motd
+
+/var/lib/mini/box2/upper/root:
+total 4
+drwx------+ 2 root root 60 Oct 28 22:46 .
+drwxr-xr-x+ 4 root root 80 Oct 28 22:46 ..
+-rw-r--r--  1 root root 16 Oct 28 22:46 note
+/var/lib/mini/image/etc/motd
+$ nsenter -t $P --all /bin/sh -c 'hostname; cat /root/note; ps'
+box2
+hello from box2
+PID   USER     TIME  COMMAND
+    1 root      0:00 sleep 300
+   16 root      0:00 ps
+$ kill -KILL $P; wait; ls /sys/fs/cgroup | grep -c mini; findmnt -t overlay -n | wc -l
+Killed
+0
+1

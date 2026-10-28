@@ -1,0 +1,63 @@
+$ mkdir /ovl && mount -t tmpfs -o size=700m ovl /ovl && cd /ovl && mkdir -p base/etc app/etc upper work merged
+$ echo "port=80" > base/etc/app.conf; echo "old" > base/etc/legacy.conf; echo "Debian 13" > base/os-release
+$ echo "port=8080" > app/etc/app.conf; echo "console.log('hi')" > app/server.js
+$ dd if=/dev/zero of=base/big.db bs=1M count=200 status=none; ls -s --block-size=M base/big.db
+200 base/big.db
+$ mount -t overlay overlay -o lowerdir=app:base,upperdir=upper,workdir=work merged
+$ findmnt -no FSTYPE,OPTIONS /ovl/merged
+overlay rw,relatime,lowerdir=app:base,upperdir=upper,workdir=work,uuid=on,nouserxattr
+$ ls merged merged/etc; cat merged/etc/app.conf
+merged:
+big.db
+etc
+os-release
+server.js
+
+merged/etc:
+app.conf
+legacy.conf
+port=8080
+$ echo "GET /" > merged/access.log; ls upper
+access.log
+$ echo "workers=4" >> merged/etc/app.conf; cat merged/etc/app.conf; echo "--- lower layers untouched:"; cat app/etc/app.conf base/etc/app.conf
+port=8080
+workers=4
+--- lower layers untouched:
+port=8080
+port=80
+$ ls -l upper/etc
+total 4
+-rw-r--r--+ 1 root root 20 Oct 28 22:42 app.conf
+$ rm merged/etc/legacy.conf; ls merged/etc; ls -l upper/etc/legacy.conf; ls base/etc
+app.conf
+c--------- 2 root root 0, 0 Oct 28 22:42 upper/etc/legacy.conf
+app.conf
+legacy.conf
+$ rm -rf merged/etc && mkdir merged/etc && ls merged/etc; getfattr -d -m 'trusted.overlay' upper/etc 2>/dev/null
+# file: upper/etc
+trusted.overlay.opaque="y"
+
+$ du -sm upper; time sh -c 'echo x >> merged/big.db'; du -sm upper
+1	upper
+
+real	0m0.932s
+user	0m0.000s
+sys	0m0.931s
+201	upper
+$ time sh -c 'echo y >> merged/big.db'
+
+real	0m0.001s
+user	0m0.000s
+sys	0m0.000s
+$ cat /proc/self/mountinfo | grep -E ' / / ' | grep -oE 'lowerdir=[^,]*' | tr ':' '\n' | wc -l
+14
+$ cat /proc/self/mountinfo | grep -E ' / / ' | grep -oE '(upperdir|workdir)=[^,]*' | sed 's|/var/lib/desktop-containerd/daemon/io.containerd.snapshotter.v1.overlayfs|…|'
+upperdir=…/snapshots/63506/fs
+workdir=…/snapshots/63506/work
+$ umount /ovl/merged; ls upper upper/etc
+upper:
+access.log
+big.db
+etc
+
+upper/etc:

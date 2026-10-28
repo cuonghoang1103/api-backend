@@ -1,0 +1,30 @@
+$ docker run -d --name os-c121-web --label oslab=1 --hostname web os-lab sleep 600 > /dev/null
+$ docker exec os-c121-web ps -ef
+UID          PID    PPID  C STIME TTY          TIME CMD
+root           1       0  0 22:39 ?        00:00:00 sleep 600
+root           7       0  0 22:39 ?        00:00:00 ps -ef
+$ P=$(docker inspect -f '{{.State.Pid}}' os-c121-web); echo "the same sleep, seen by the Docker VM: PID $P"
+the same sleep, seen by the Docker VM: PID 71743
+$ docker run --rm --label oslab=1 --name os-c121-vm --pid=host --privileged os-lab bash -c "grep -E '^(Name|NSpid)' /proc/$P/status; ps -o pid,ppid,args -p $P,\$(ps -o ppid= -p $P)"
+Name:	sleep
+NSpid:	71743	1
+  PID  PPID COMMAND
+71719     1 /usr/bin/containerd-shim-runc-v2 -namespace moby -id a9c3949e450cc1dd8f5f1869ee60c0cda8752eb732d824e0d21506a6e19551d0 -address /run/containerd/containerd.sock
+71743 71719 sleep 600
+$ docker run --rm --label oslab=1 --name os-c121-vm --pid=host --privileged os-lab bash -c "for n in pid net mnt uts ipc user cgroup; do printf '%-7s container %-18s VM %s\n' \$n \$(readlink /proc/$P/ns/\$n) \$(readlink /proc/1/ns/\$n); done"
+pid     container pid:[4026533378]   VM pid:[4026531836]
+net     container net:[4026533380]   VM net:[4026531833]
+mnt     container mnt:[4026533375]   VM mnt:[4026531832]
+uts     container uts:[4026533376]   VM uts:[4026531838]
+ipc     container ipc:[4026533377]   VM ipc:[4026531839]
+user    container user:[4026531837]  VM user:[4026531837]
+cgroup  container cgroup:[4026533379] VM cgroup:[4026531835]
+$ docker run --rm --label oslab=1 --name os-c121-vm --pid=host --privileged os-lab nsenter -t $P --uts --net --pid --mount sh -c 'hostname; ip -br addr | grep -v NONE; ps -ef'
+web
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+eth0@if1110      UP             172.17.0.5/16 
+UID          PID    PPID  C STIME TTY          TIME CMD
+root           1       0  0 22:39 ?        00:00:00 sleep 600
+root          13       0  0 22:39 ?        00:00:00 sh -c hostname; ip -br addr | grep -v NONE; ps -ef
+root          17      13  0 22:39 ?        00:00:00 ps -ef
+$ docker rm -f os-c121-web > /dev/null

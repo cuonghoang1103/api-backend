@@ -1,0 +1,74 @@
+$ install -m 755 /opt/c12/runc.arm64 /usr/local/bin/runc; runc --version | head -1
+runc version 1.5.2
+$ mkdir -p /srv/box/rootfs && tar -xf /opt/c12/alpine-3.24.tar -C /srv/box/rootfs && cd /srv/box && runc spec && ls
+config.json
+rootfs
+$ python3 /lab/ch12/ocisum.py config.json
+ociVersion    1.3.0
+process.args  ['sh']  user 0  cwd /
+root          rootfs  readonly=True
+hostname      runc
+namespaces    pid network ipc uts mount cgroup
+mounts        /proc /dev /dev/pts /dev/shm /dev/mqueue /sys /sys/fs/cgroup
+capabilities  3 in bounding set
+resources     memory=None cpu=None/None pids=None
+cgroupsPath   None
+seccomp       none
+masked/ro     10 masked paths, 5 read-only paths
+apparmor      -  noNewPrivileges=True
+$ python3 /lab/ch12/ocifix.py config.json 'hostname; echo "PID $$"; ps; grep -E "^(CapEff|Seccomp|NoNewPrivs)" /proc/self/status; cat /sys/fs/cgroup/memory.max /sys/fs/cgroup/pids.max'
+$ runc run oci-box
+oci-box
+PID 1
+PID   USER     TIME  COMMAND
+    1 root      0:00 sh -c hostname; echo "PID $$"; ps; grep -E "^(CapEff|Seccomp|NoNewPrivs)" /proc/self/status; cat /sys/fs/cgroup/memory.max /sys/fs/cgroup/pids.max
+    8 root      0:00 ps
+CapEff:	0000000020000420
+NoNewPrivs:	1
+Seccomp:	0
+Seccomp_filters:	0
+67108864
+32
+$ python3 /lab/ch12/ocifix.py config.json 'sleep 300'; runc run -d oci-box > /dev/null 2>&1; runc list
+ID          PID         STATUS      BUNDLE      CREATED                          OWNER
+oci-box     82          running     /srv/box    2026-10-28T15:59:13.382846888Z   root
+$ runc state oci-box | grep -E '"(pid|status|bundle)"'
+  "pid": 82,
+  "status": "running",
+  "bundle": "/srv/box",
+$ runc ps oci-box; runc exec oci-box sh -c 'hostname; cat /etc/alpine-release'
+UID          PID    PPID  C STIME TTY          TIME CMD
+root          82       1  0 22:59 ?        00:00:00 sleep 300
+oci-box
+3.24.2
+$ P=$(runc state oci-box | python3 -c 'import json,sys; print(json.load(sys.stdin)["pid"])'); cat /proc/$P/cgroup; cat /sys/fs/cgroup$(cut -d: -f3 /proc/$P/cgroup)/memory.max
+0::/oci-box
+67108864
+$ runc kill oci-box KILL; sleep 0.5; runc list; runc delete oci-box; runc list | wc -l
+ID          PID         STATUS      BUNDLE      CREATED                          OWNER
+oci-box     0           stopped     /srv/box    2026-10-28T15:59:13.382846888Z   root
+1
+$ python3 /lab/ch12/ocifix.py config.json 'true'
+$ strace -f -qq -e trace=clone,clone3,unshare,setns,pivot_root,sethostname,execve -o /tmp/runc.trace runc run oci-trace > /dev/null 2>&1; echo "runc exit $?"
+runc exit 0
+$ grep -E 'unshare\(|pivot_root|sethostname|execve\("/bin/sh' /tmp/runc.trace | sed -E 's/^[0-9]+ +//' | cut -c1-118
+unshare(CLONE_NEWNS|CLONE_NEWCGROUP|CLONE_NEWUTS|CLONE_NEWIPC|CLONE_NEWPID|CLONE_NEWNET) = 0
+unshare(CLONE_FS)                 = 0
+pivot_root(".", ".")              = 0
+sethostname("oci-box", 7)         = 0
+execve("/bin/sh", ["sh", "-c", "true"], 0x74d02e4087a0 /* 3 vars */) = 0
+$ grep -cE 'clone3?\(' /tmp/runc.trace; grep -c 'setns(' /tmp/runc.trace
+20
+1
+$ mkdir -p /srv/rl && chown dev /srv/rl
+$ runuser -u dev -- sh -c 'cd /srv/rl && mkdir rootfs && tar -xf /opt/c12/alpine-3.24.tar -C rootfs 2>/dev/null; runc spec --rootless && python3 /lab/ch12/ocisum.py config.json | grep -E "namespaces|capab|resources"'
+namespaces    pid ipc uts mount cgroup user
+capabilities  3 in bounding set
+resources     memory=None cpu=None/None pids=None
+$ runuser -u dev -- sh -c 'cd /srv/rl && python3 -c "import json; c=json.load(open(\"config.json\")); c[\"process\"][\"terminal\"]=False; c[\"root\"][\"readonly\"]=False; c[\"process\"][\"args\"]=[\"sh\",\"-c\",\"id; cat /proc/self/uid_map; touch /etc/x && echo wrote /etc/x\"]; json.dump(c,open(\"config.json\",\"w\"))" && runc --root /tmp/runc-dev run rl-box'
+uid=0(root) gid=0(root) groups=0(root)
+         0       1001          1
+wrote /etc/x
+$ ls -ln /srv/rl/rootfs/etc/x; id -u dev
+-rw-r--r-- 1 1001 1001 0 Oct 28 22:59 /srv/rl/rootfs/etc/x
+1001

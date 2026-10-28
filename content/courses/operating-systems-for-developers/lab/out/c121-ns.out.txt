@@ -1,0 +1,117 @@
+$ ls -l /proc/self/ns | awk 'NR>1 {print $9, $10, $11}'
+cgroup -> cgroup:[4026533379]
+ipc -> ipc:[4026533377]
+mnt -> mnt:[4026533375]
+net -> net:[4026533380]
+pid -> pid:[4026533378]
+pid_for_children -> pid:[4026533378]
+time -> time:[4026533508]
+time_for_children -> time:[4026533508]
+user -> user:[4026531837]
+uts -> uts:[4026533376]
+$ lsns -o NS,TYPE,NPROCS,PID,COMMAND
+        NS TYPE   NPROCS PID COMMAND
+4026531837 user        3   1 bash -c phien c121-ns.sh 2>&1
+4026533375 mnt         3   1 bash -c phien c121-ns.sh 2>&1
+4026533376 uts         3   1 bash -c phien c121-ns.sh 2>&1
+4026533377 ipc         3   1 bash -c phien c121-ns.sh 2>&1
+4026533378 pid         3   1 bash -c phien c121-ns.sh 2>&1
+4026533379 cgroup      3   1 bash -c phien c121-ns.sh 2>&1
+4026533380 net         3   1 bash -c phien c121-ns.sh 2>&1
+4026533508 time        3   1 bash -c phien c121-ns.sh 2>&1
+$ hostname
+oslab
+$ unshare --uts sh -c 'hostname mini; echo "inside: $(hostname)  uts=$(readlink /proc/self/ns/uts)"'
+inside: mini  uts=uts:[4026533511]
+$ echo "outside: $(hostname)  uts=$(readlink /proc/self/ns/uts)"
+outside: oslab  uts=uts:[4026533376]
+$ unshare --pid sh -c 'echo "sh is still PID $$"; /bin/true; echo "first child ran"; /bin/true; echo "second child ran"'
+sh is still PID 30
+first child ran
+sh: 1: Cannot fork
+$ unshare --pid --fork sh -c 'echo "I am PID $$"; ps -e | wc -l'
+I am PID 1
+fatal library error, lookup self
+0
+$ unshare --pid --fork --mount-proc sh -c 'echo "I am PID $$"; ps -ef'
+I am PID 1
+UID          PID    PPID  C STIME TTY          TIME CMD
+root           1       0  0 22:39 ?        00:00:00 sh -c echo "I am PID $$"; ps -ef
+root           2       1  0 22:39 ?        00:00:00 ps -ef
+$ unshare --pid --fork --mount-proc sleep 300 &
+$ sleep 0.5; S=$(pgrep -n -x sleep); echo "outside the sleep is PID $S"; grep -E '^(Name|NSpid|NSpgid)' /proc/$S/status
+outside the sleep is PID 49
+Name:	sleep
+NSpid:	49	1
+NSpgid:	1	0
+$ readlink /proc/$S/ns/pid /proc/self/ns/pid
+pid:[4026533512]
+pid:[4026533378]
+$ kill $S; sleep 0.5; grep -E '^State' /proc/$S/status
+State:	S (sleeping)
+$ kill -KILL $S; wait; echo "gone: $(ls /proc/$S 2>&1 | head -1)"
+/usr/local/bin/phien: line 24:    46 Killed                     unshare --pid --fork --mount-proc sleep 300
+gone: ls: cannot access '/proc/49': No such file or directory
+$ unshare --mount sh -c 'mount -t tmpfs scratch /mnt && echo secret > /mnt/key && ls /mnt && findmnt -o TARGET,SOURCE,FSTYPE /mnt'
+key
+TARGET SOURCE  FSTYPE
+/mnt   scratch tmpfs
+$ ls /mnt; findmnt /mnt || echo "outside: /mnt is not a mount point"
+outside: /mnt is not a mount point
+$ ip -br link | grep -v NONE
+lo               UNKNOWN        00:00:00:00:00:00 <LOOPBACK,UP,LOWER_UP> 
+eth0@if1108      UP             22:0e:c8:d7:b0:4c <BROADCAST,MULTICAST,UP,LOWER_UP> 
+$ unshare --net sh -c 'ip -br link | grep -v NONE; ip link set lo up; ping -c1 -W1 127.0.0.1 | tail -2; curl -sS -m 2 http://example.com -o /dev/null || echo "curl exit $?"'
+lo               DOWN           00:00:00:00:00:00 <LOOPBACK> 
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.035/0.035/0.035/0.000 ms
+curl: (6) Could not resolve host: example.com
+curl exit 6
+$ ipcmk -Q > /dev/null; ipcs -q | tail -n +3
+key        msqid      owner      perms      used-bytes   messages    
+0x34a8bc7d 0          root       644        0            0           
+
+$ unshare --ipc sh -c 'ipcs -q | tail -n +3; echo "(no queues in the new IPC namespace)"'
+key        msqid      owner      perms      used-bytes   messages    
+
+(no queues in the new IPC namespace)
+$ runuser -u dev -- unshare --user --map-root-user sh -c 'id; cat /proc/self/uid_map; touch /etc/hacked'
+uid=0(root) gid=0(root) groups=0(root)
+         0       1001          1
+touch: cannot touch '/etc/hacked': Permission denied
+$ runuser -u dev -- unshare --user --map-root-user sh -c 'grep -E "^Cap(Eff|Bnd)" /proc/self/status; cat /proc/self/setgroups'
+CapEff:	000001ffffffffff
+CapBnd:	000001ffffffffff
+deny
+$ unshare --user --map-users=0:100000:65536 --map-groups=0:100000:65536 sh -c 'cat /proc/self/uid_map; id'
+         0     100000      65536
+uid=65534(nobody) gid=65534(nogroup) groups=65534(nogroup)
+$ mkdir /sys/fs/cgroup/demo
+$ sh -c 'echo $$ > /sys/fs/cgroup/demo/cgroup.procs; echo "old view: $(cat /proc/self/cgroup)"; unshare --cgroup sh -c "echo new view: \$(cat /proc/self/cgroup)"'
+old view: 0::/demo
+new view: 0::/
+$ rmdir /sys/fs/cgroup/demo
+$ unshare --uts --pid --mount --net --ipc --fork --mount-proc sh -c 'hostname box; sleep 300' &
+$ sleep 0.5; C=$(pgrep -n -x sleep); echo "the box's sleep is PID $C on this side"
+the box's sleep is PID 138 on this side
+$ nsenter -t $C --uts --pid --mount --net sh -c 'hostname; echo "pid $$"; ps -ef; ip -br link | grep -v NONE'
+box
+pid 4
+UID          PID    PPID  C STIME TTY          TIME CMD
+root           1       0  0 22:39 ?        00:00:00 sh -c hostname box; sleep 300
+root           3       1  0 22:39 ?        00:00:00 sleep 300
+root           4       0  0 22:39 ?        00:00:00 sh -c hostname; echo "pid $$"; ps -ef; ip -br link | grep -v NONE
+root           6       4  0 22:39 ?        00:00:00 ps -ef
+lo               DOWN           00:00:00:00:00:00 <LOOPBACK> 
+$ nsenter -t $C --all ls -l /proc/1/ns/net /proc/self/ns/net
+lrwxrwxrwx 1 root root 0 Oct 28 22:39 /proc/1/ns/net -> net:[4026533560]
+lrwxrwxrwx 1 root root 0 Oct 28 22:39 /proc/self/ns/net -> net:[4026533560]
+$ kill -KILL $C; wait
+Killed
+$ ip netns add demo; ls -l /run/netns; ip netns exec demo ip -br link | grep -v NONE; ip netns pids demo | wc -l
+total 0
+-r--r--r-- 1 root root 0 Oct 28 22:39 demo
+lo               DOWN           00:00:00:00:00:00 <LOOPBACK> 
+0
+$ ip netns del demo; ls /run/netns | wc -l
+0

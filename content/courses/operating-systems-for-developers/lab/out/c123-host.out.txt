@@ -1,0 +1,66 @@
+$ docker image inspect os-lab -f '{{len .RootFS.Layers}} layers'
+13 layers
+$ docker history --format '{{printf "%8s" .Size}}  {{.CreatedBy}}' os-lab | cut -c1-104 | head -14
+      0B  CMD ["bash"]
+   4.1kB  WORKDIR /lab
+   102kB  RUN /bin/sh -c chmod +x /usr/local/bin/phien…
+  20.5kB  COPY phien.sh /usr/local/bin/phien # buildkit
+  16.4kB  RUN /bin/sh -c ln -s ../lib/node_modules/npm…
+  18.9MB  COPY /usr/local/lib/node_modules /usr/local/…
+   122MB  COPY /usr/local/bin/node /usr/local/bin/node…
+   719MB  RUN /bin/sh -c apt-get update && apt-get ins…
+      0B  ENV DEBIAN_FRONTEND=noninteractive LANG=C.UT…
+      0B  CMD ["jshell"]
+      0B  ENTRYPOINT ["/__cacert_entrypoint.sh"]
+  12.3kB  COPY --chmod=755 entrypoint.sh /__cacert_ent…
+  12.3kB  RUN /bin/sh -c set -eux;     echo "Verifying…
+   309MB  RUN /bin/sh -c set -eux;     ARCH="$(dpkg --…
+$ docker image inspect alpine:latest -f '{{len .RootFS.Layers}} layer  {{index .RootFS.Layers 0}}'
+1 layer  sha256:1b349a3334531b575b01d409540dd8aca14ef29abddacd50f36643d7c949db4b
+$ docker run --name os-c123-diff --label oslab=1 os-lab sh -c 'echo hi > /tmp/note; rm /etc/legal; echo "nameserver 1.1.1.1" >> /etc/hosts.allow'
+$ docker diff os-c123-diff
+C /tmp
+A /tmp/note
+C /etc
+A /etc/hosts.allow
+D /etc/legal
+$ docker build -q --label oslab=1 -t os-c123-cache cache-demo > /dev/null; echo "first build done"
+first build done
+$ docker build --label oslab=1 -t os-c123-cache --progress=plain cache-demo 2>&1 | grep -E '^#[0-9]+ \[[1-9]/|CACHED|DONE [0-9.]+s$' | grep -E '\[[1-9]/|CACHED' | sed -E 's/^#[0-9]+ //'
+[1/5] FROM docker.io/library/alpine:latest@sha256:294b683cb724975bec92580e1e685676bd4b50bda910ddb8c51d4cabeaec77e6
+[2/5] WORKDIR /app
+CACHED
+[3/5] COPY package.json .
+CACHED
+[4/5] RUN echo "installing dependencies (pretend npm ci)..." && sleep 3 && echo "deps for $(cat package.json)" > deps.txt
+CACHED
+[5/5] COPY server.js .
+CACHED
+$ echo "console.log('v2')" > cache-demo/server.js
+$ docker build --label oslab=1 -t os-c123-cache --progress=plain cache-demo 2>&1 | grep -E '^#[0-9]+ (\[[1-9]/|CACHED|DONE)' | sed -E 's/^#[0-9]+ //' | grep -vE '^DONE 0\.0s$'
+[1/5] FROM docker.io/library/alpine:latest@sha256:294b683cb724975bec92580e1e685676bd4b50bda910ddb8c51d4cabeaec77e6
+[2/5] WORKDIR /app
+CACHED
+[3/5] COPY package.json .
+CACHED
+[4/5] RUN echo "installing dependencies (pretend npm ci)..." && sleep 3 && echo "deps for $(cat package.json)" > deps.txt
+CACHED
+[5/5] COPY server.js .
+DONE 0.1s
+$ echo '{"name":"demo","version":"1.0.1"}' > cache-demo/package.json
+$ docker build --label oslab=1 -t os-c123-cache --progress=plain cache-demo 2>&1 | grep -E '^#[0-9]+ (\[[1-9]/|CACHED|DONE)' | sed -E 's/^#[0-9]+ //' | grep -vE '^DONE 0\.0s$'
+[1/5] FROM docker.io/library/alpine:latest@sha256:294b683cb724975bec92580e1e685676bd4b50bda910ddb8c51d4cabeaec77e6
+[2/5] WORKDIR /app
+CACHED
+[3/5] COPY package.json .
+[4/5] RUN echo "installing dependencies (pretend npm ci)..." && sleep 3 && echo "deps for $(cat package.json)" > deps.txt
+DONE 3.1s
+[5/5] COPY server.js .
+DONE 0.1s
+$ docker run --rm --label oslab=1 os-c123-cache
+deps for {"name":"demo","version":"1.0.1"}
+console.log('v2')
+$ docker system df | grep -E 'TYPE|Build Cache|Images'
+TYPE            TOTAL     ACTIVE    SIZE      RECLAIMABLE
+Images          50        24        33.32GB   11.36GB (34%)
+Build Cache     115       0         5.722GB   1.633GB

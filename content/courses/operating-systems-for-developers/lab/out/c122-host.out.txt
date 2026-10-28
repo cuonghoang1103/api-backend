@@ -1,0 +1,16 @@
+$ docker run -d --name os-c122-app --label oslab=1 --memory 256m --cpus 1.5 --pids-limit 100 os-lab sleep 600 > /dev/null
+$ docker exec os-c122-app sh -c 'cd /sys/fs/cgroup; for f in memory.max cpu.max pids.max; do echo "$f = $(cat $f)"; done'
+memory.max = 268435456
+cpu.max = 150000 100000
+pids.max = 100
+$ docker update --cpus 0.5 --pids-limit 50 os-c122-app > /dev/null; docker exec os-c122-app sh -c 'cat /sys/fs/cgroup/cpu.max /sys/fs/cgroup/pids.max'
+50000 100000
+50
+$ ID=$(docker inspect -f '{{.Id}}' os-c122-app); docker pause os-c122-app > /dev/null
+$ docker exec os-c122-app true
+Error response from daemon: Container os-c122-app is paused, unpause the container before exec
+$ docker run --rm --label oslab=1 --name os-c122-vm --privileged --cgroupns=host os-lab sh -c "cd /sys/fs/cgroup/docker/$ID && echo \"cgroup.freeze = \$(cat cgroup.freeze)\" && grep frozen cgroup.events && cat memory.max"
+cgroup.freeze = 1
+frozen 1
+268435456
+$ docker unpause os-c122-app > /dev/null; docker rm -f os-c122-app > /dev/null

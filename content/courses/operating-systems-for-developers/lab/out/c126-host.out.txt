@@ -1,0 +1,47 @@
+$ uname -sr; docker info -f '{{.OperatingSystem}} · kernel {{.KernelVersion}} · {{.NCPU}} CPUs · {{.Driver}} · cgroup v{{.CgroupVersion}}'
+Darwin 27.0.0
+Docker Desktop · kernel 7.0.12-linuxkit · 10 CPUs · overlayfs · cgroup v2
+$ docker run --rm --label oslab=1 alpine:latest uname -r; docker run --rm --label oslab=1 os-lab uname -r
+7.0.12-linuxkit
+7.0.12-linuxkit
+$ docker info -f 'default runtime: {{.DefaultRuntime}} · security: {{.SecurityOptions}}'
+default runtime: runc · security: [name=seccomp,profile=builtin name=cgroupns]
+$ docker run -d --name os-c126-app --label oslab=1 --memory 128m --cpus 0.5 --pids-limit 64 --cap-drop ALL --read-only os-lab sleep 600 > /dev/null
+$ docker inspect -f 'Pid={{.State.Pid}} Memory={{.HostConfig.Memory}} NanoCpus={{.HostConfig.NanoCpus}} PidsLimit={{.HostConfig.PidsLimit}} ReadonlyRootfs={{.HostConfig.ReadonlyRootfs}} CapDrop={{.HostConfig.CapDrop}}' os-c126-app
+Pid=72724 Memory=134217728 NanoCpus=500000000 PidsLimit=64 ReadonlyRootfs=true CapDrop=[ALL]
+$ ID=$(docker inspect -f '{{.Id}}' os-c126-app); P=$(docker inspect -f '{{.State.Pid}}' os-c126-app)
+$ docker run --rm --label oslab=1 --name os-c126-vm --pid=host --privileged os-lab sh -c "S=\$(ps -o ppid= -p $P); C=\$(pgrep -x containerd | head -1); D=\$(pgrep -x dockerd | head -1); ps -o pid,ppid,args -p \$D,\$C,\$S,$P | cut -c1-118"
+  PID  PPID COMMAND
+  267   147 /usr/bin/containerd --config /etc/containerd/containerd.toml
+  286   147 /usr/local/bin/dockerd --config-file /run/config/docker/daemon.json
+72701     1 /usr/bin/containerd-shim-runc-v2 -namespace moby -id 20e58af54cffcef40d296bfbea4492d372ee438c2e7d9dfd84a26
+72724 72701 sleep 600
+$ docker run --rm --label oslab=1 --name os-c126-vm --pid=host --privileged os-lab sh -c "S=\$(ps -o ppid= -p $P | tr -d ' '); readlink /proc/\$S/cwd | sed 's|$ID|<id>|'; ls /proc/\$S/cwd"
+/run/desktop-containerd/daemon/io.containerd.runtime.v2.task/moby/<id>
+bootstrap.json
+config.json
+init.pid
+log
+log.json
+options.json
+rootfs
+runtime
+s
+shim-binary-path
+work
+$ docker run --rm --label oslab=1 --name os-c126-vm --pid=host --privileged -v "$PWD":/lab/ch12:ro os-lab sh -c "S=\$(ps -o ppid= -p $P | tr -d ' '); python3 /lab/ch12/ocisum.py /proc/\$S/cwd/config.json | sed 's|$ID|<id>|'"
+ociVersion    1.3.0
+process.args  ['/__cacert_entrypoint.sh', 'sleep', '600']  user 0  cwd /lab
+root          /var/lib/docker/rootfs/overlayfs/<id>  readonly=True
+hostname      20e58af54cff
+namespaces    mount network time uts pid ipc cgroup
+mounts        /proc /dev /dev/pts /sys /sys/fs/cgroup /dev/mqueue /dev/shm /etc/hostname /etc/hosts /etc/resolv.conf
+capabilities  0 in bounding set
+resources     memory=134217728 cpu=50000/100000 pids=64
+cgroupsPath   /docker/<id>
+seccomp       default SCMP_ACT_ERRNO, 13 rules naming 380 syscalls
+masked/ro     12 masked paths, 5 read-only paths
+apparmor      -  noNewPrivileges=False
+$ docker rm -f os-c126-app > /dev/null
+$ docker run --rm --label oslab=1 alpine:latest sh -c "grep ' / / ' /proc/self/mountinfo | grep -oE 'lowerdir=[^,]*' | tr ':' '\n' | wc -l"
+2

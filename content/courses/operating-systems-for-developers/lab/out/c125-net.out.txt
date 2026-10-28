@@ -1,0 +1,76 @@
+$ ip -br addr | grep -v NONE; ip route
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+eth0@if1229      UP             172.17.0.4/16 
+default via 172.17.0.1 dev eth0 
+172.17.0.0/16 dev eth0 proto kernel scope link src 172.17.0.4 
+$ ip -d link show eth0 | grep -oE 'veth|link-netnsid [0-9]+'
+link-netnsid 0
+veth
+$ ip netns add c1; ip netns add c2; ip netns list
+c2
+c1
+$ ip link add br0 type bridge; ip addr add 10.12.0.1/24 dev br0; ip link set br0 up
+$ for n in 1 2; do
+>   ip link add veth-c$n type veth peer name eth0 netns c$n
+>   ip link set veth-c$n master br0 up
+>   ip netns exec c$n ip addr add 10.12.0.$((n+1))/24 dev eth0
+>   ip netns exec c$n ip link set eth0 up; ip netns exec c$n ip link set lo up
+>   ip netns exec c$n ip route add default via 10.12.0.1
+> done
+$ ip -br link show master br0
+veth-c1@if11     UP             de:b4:70:91:d7:c7 <BROADCAST,MULTICAST,UP,LOWER_UP> 
+veth-c2@if11     UP             66:e2:be:61:ea:a8 <BROADCAST,MULTICAST,UP,LOWER_UP> 
+$ ip netns exec c1 ip -br addr | grep -v NONE; ip netns exec c1 ip route
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+eth0@if13        UP             10.12.0.2/24 fe80::30a2:58ff:fe84:dfb3/64 
+default via 10.12.0.1 dev eth0 
+10.12.0.0/24 dev eth0 proto kernel scope link src 10.12.0.2 
+$ ip netns exec c1 ping -c3 -i0.2 10.12.0.3 | tail -2
+3 packets transmitted, 3 received, 0% packet loss, time 412ms
+rtt min/avg/max/mdev = 0.048/0.091/0.178/0.061 ms
+$ ip netns exec c2 python3 -m http.server 8000 --bind 10.12.0.3 > /dev/null 2>&1 & SRV=$!
+$ ip netns exec c1 curl -s -o /dev/null -w "HTTP %{http_code} from c2 in %{time_total}s\n" http://10.12.0.3:8000/
+HTTP 200 from c2 in 0.001604s
+$ bridge fdb show br br0 | grep -v permanent
+32:a2:58:84:df:b3 dev veth-c1 master br0 
+72:0a:c8:ef:17:e6 dev veth-c2 master br0 
+$ ip netns exec c1 curl -sS -m 4 -o /dev/null http://example.com; echo "curl exit $?"
+curl: (28) Resolving timed out after 4006 milliseconds
+curl exit 28
+$ cat /proc/sys/net/ipv4/ip_forward
+1
+$ iptables -t nat -A POSTROUTING -s 10.12.0.0/24 ! -o br0 -j MASQUERADE
+$ ip netns exec c1 curl -sS -m 6 -o /dev/null -w "HTTP %{http_code} from %{remote_ip}\n" http://example.com
+HTTP 200 from 172.66.147.243
+$ iptables -t nat -L POSTROUTING -n -v | cut -c1-100
+Chain POSTROUTING (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    2   117 MASQUERADE  all  --  *      !br0    10.12.0.0/24         0.0.0.0/0           
+$ ME=$(hostname -i); echo "this lab box is $ME"
+this lab box is 172.17.0.4
+$ iptables -t nat -A PREROUTING -p tcp --dport 8080 -j DNAT --to-destination 10.12.0.3:8000
+$ iptables -t nat -A OUTPUT -p tcp -d $ME --dport 8080 -j DNAT --to-destination 10.12.0.3:8000
+$ curl -s -o /dev/null -w "HTTP %{http_code} via $ME:8080\n" http://$ME:8080/
+HTTP 200 via 172.17.0.4:8080
+$ ping -c 500 -i 0.002 -q 127.0.0.1 | tail -1
+rtt min/avg/max/mdev = 0.001/0.154/54.552/2.437 ms
+$ ip netns exec c1 ping -c 500 -i 0.002 -q 10.12.0.3 | tail -1
+rtt min/avg/max/mdev = 0.002/0.015/0.265/0.022 ms
+$ ./mini-container.sh box3 sleep 300 &
+$ sleep 1; P=$(pgrep -f 'sleep 300' | tail -1); echo "box3 = PID $P"
+box3 = PID 345
+$ ip link add veth-b3 type veth peer name eth0 netns $P; ip link set veth-b3 master br0 up
+$ grep nameserver /etc/resolv.conf | nsenter -t $P -m sh -c 'cat > /etc/resolv.conf'
+$ nsenter -t $P -n -m sh -c 'ip addr add 10.12.0.4/24 dev eth0; ip link set eth0 up; ip link set lo up; ip route add default via 10.12.0.1; ip -o -4 addr show eth0'
+11: eth0    inet 10.12.0.4/24 scope global eth0\       valid_lft forever preferred_lft forever
+$ nsenter -t $P --all sh -c 'wget -q -O /dev/null http://10.12.0.3:8000/ && echo "box3 -> c2: ok"; wget -q -O - http://example.com | grep -o "<title>.*</title>"'
+box3 -> c2: ok
+<title>Example Domain</title>
+$ kill -KILL $P $SRV; wait; sleep 1; ip -br link show master br0
+Killed
+/usr/local/bin/phien: line 24:   204 Killed                     ip netns exec c2 python3 -m http.server 8000 --bind 10.12.0.3 > /dev/null 2>&1
+veth-c1@if11     UP             de:b4:70:91:d7:c7 <BROADCAST,MULTICAST,UP,LOWER_UP> 
+veth-c2@if11     UP             66:e2:be:61:ea:a8 <BROADCAST,MULTICAST,UP,LOWER_UP> 
+$ ip netns del c1; ip netns del c2; ip link del br0; sleep 1; ip -br link | grep -v NONE
+lo               UNKNOWN        00:00:00:00:00:00 <LOOPBACK,UP,LOWER_UP> 
+eth0@if1229      UP             0e:6f:61:a8:31:df <BROADCAST,MULTICAST,UP,LOWER_UP> 

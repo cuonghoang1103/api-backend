@@ -1,0 +1,79 @@
+$ cat /proc/self/cgroup; findmnt -no FSTYPE,OPTIONS /sys/fs/cgroup
+0::/
+cgroup2 rw,nosuid,nodev,noexec,relatime
+$ cat /sys/fs/cgroup/cgroup.controllers; cat /sys/fs/cgroup/cgroup.procs | wc -l
+cpuset cpu io memory hugetlb pids rdma
+4
+$ mkdir /sys/fs/cgroup/box; echo "+memory" > /sys/fs/cgroup/cgroup.subtree_control
+/usr/local/bin/phien: line 24: echo: write error: Device or resource busy
+$ mkdir /sys/fs/cgroup/init; for p in $(cat /sys/fs/cgroup/cgroup.procs); do echo $p > /sys/fs/cgroup/init/cgroup.procs 2>/dev/null; done; cat /sys/fs/cgroup/cgroup.procs | wc -l
+0
+$ echo "+memory +cpu +pids +io" > /sys/fs/cgroup/cgroup.subtree_control; cat /sys/fs/cgroup/cgroup.subtree_control
+cpu io memory pids
+$ cd /sys/fs/cgroup/box; ls | grep -cE '.'; ls | grep -E '^(memory|cpu|pids|io)\.(max|current|events|stat|peak)$' | tr '\n' ' '; echo
+49
+cpu.max cpu.stat io.max io.stat memory.current memory.events memory.max memory.peak memory.stat pids.current pids.events pids.max pids.peak 
+$ cat memory.max cpu.max pids.max io.max; echo "(io.max empty = no limit)"
+max
+max 100000
+max
+(io.max empty = no limit)
+$ echo 64M > memory.max; echo 0 > memory.swap.max; cat memory.max
+67108864
+$ sh -c 'echo $$ > /sys/fs/cgroup/box/cgroup.procs; exec python3 -c "b = bytearray(b\"x\") * (200 << 20); print(\"got 200 MiB\")"'; echo "exit $?"
+/usr/local/bin/phien: line 24:    44 Killed                     sh -c 'echo $$ > /sys/fs/cgroup/box/cgroup.procs; exec python3 -c "b = bytearray(b\"x\") * (200 << 20); print(\"got 200 MiB\")"'
+exit 137
+$ grep -E '^(oom|oom_kill|max) ' memory.events; echo "peak $(( $(cat memory.peak) >> 20 )) MiB"
+max 53
+oom 1
+oom_kill 1
+peak 64 MiB
+$ dmesg | grep -E 'Memory cgroup out of memory' | tail -1 | sed 's/^\[[ 0-9.]*\] //'
+Memory cgroup out of memory: Killed process 73869 (python3) total-vm:224824kB, anon-rss:65288kB, file-rss:5796kB, shmem-rss:0kB, UID:0 pgtables:184kB oom_score_adj:0
+$ echo max > memory.max
+$ echo "50000 100000" > cpu.max; cat cpu.max
+50000 100000
+$ cat cpu.stat | grep -E '^(usage_usec|nr_periods|nr_throttled|throttled_usec) '
+usage_usec 13740
+nr_periods 0
+nr_throttled 0
+throttled_usec 0
+$ sh -c 'echo $$ > /sys/fs/cgroup/box/cgroup.procs; exec stress-ng --cpu 2 --timeout 4s --quiet' & sleep 2.5; ps -eo pid,pcpu,comm | grep -E 'PID|stress'; wait
+    PID %CPU COMMAND
+     66  0.0 stress-ng
+     68 24.8 stress-ng-cpu
+     69 26.0 stress-ng-cpu
+$ cat cpu.stat | grep -E '^(usage_usec|nr_periods|nr_throttled|throttled_usec) '
+usage_usec 2132769
+nr_periods 42
+nr_throttled 42
+throttled_usec 6165085
+$ echo max > cpu.max; echo 20 > pids.max; cat pids.max
+20
+$ sh -c 'echo $$ > /sys/fs/cgroup/box/cgroup.procs; exec python3 /lab/ch12/forks.py'
+forked 19 children, fork #20 failed: [Errno 11] Resource temporarily unavailable
+pids.current = 20
+$ cat pids.events
+max 1
+$ echo 64 > pids.max
+$ bash -c 'echo $$ > /sys/fs/cgroup/box/cgroup.procs; b(){ b | b & }; b' 2> /dev/null; sleep 3
+$ echo "pids.current=$(cat pids.current)  $(cat pids.events)"; uptime
+pids.current=64  max 150
+ 22:41:50 up 12:41,  0 users,  load average: 0.24, 0.34, 0.33
+$ echo 1 > cgroup.kill; sleep 0.5; echo "after cgroup.kill: pids.current=$(cat pids.current)"; grep populated cgroup.events
+after cgroup.kill: pids.current=0
+populated 0
+$ echo "254:0 wbps=10485760" > io.max; cat io.max
+254:0 rbps=max wbps=10485760 riops=max wiops=max
+$ sh -c 'echo $$ > /sys/fs/cgroup/box/cgroup.procs; exec dd if=/dev/zero of=/var/tmp/io.bin bs=1M count=40 oflag=direct' 2>&1 | tail -1
+41943040 bytes (42 MB, 40 MiB) copied, 3.99409 s, 11 MB/s
+$ echo "254:0 wbps=max" > io.max; dd if=/dev/zero of=/var/tmp/io.bin bs=1M count=40 oflag=direct 2>&1 | tail -1; rm -f /var/tmp/io.bin
+41943040 bytes (42 MB, 40 MiB) copied, 0.0118375 s, 3.8 GB/s
+$ sleep 300 & S=$!; echo $S > cgroup.procs; echo 1 > cgroup.freeze; sleep 0.3
+$ grep frozen cgroup.events; ps -o pid,stat,wchan:12,comm -p $S
+frozen 1
+    PID STAT WCHAN        COMMAND
+    394 S    get_signal   sleep
+$ echo 0 > cgroup.freeze; kill $S; wait 2>/dev/null
+$ cd /; rmdir /sys/fs/cgroup/box && echo "box removed"
+box removed

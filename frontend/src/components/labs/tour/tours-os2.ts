@@ -384,4 +384,109 @@ export const OS2_TOURS: Tour[] = [
       answer: 0, why: ['rm removes a name. The inode is freed only when its link count is 0 AND no open file description refers to it.', 'rm gỡ một tên. Inode chỉ được giải phóng khi số liên kết bằng 0 VÀ không còn mô tả file mở nào trỏ tới nó.'],
     },
   },
+  // ───────────────────────── nslayers ─────────────────────────
+  {
+    id: 'nslayers-views', ns: 'os-lab', sim: 'nslayers', presets: ['docker', 'unshare', 'userns'],
+    title: ['Build a container out of namespaces', 'Dựng một container từ các namespace'],
+    summary: ['Start from a plain process and switch namespaces on one at a time until it looks like a container — then see what is still shared.', 'Bắt đầu từ một tiến trình bình thường và bật từng namespace tới khi nó trông như một container — rồi xem thứ gì vẫn dùng chung.'],
+    steps: [
+      {
+        target: 'ns-inside', do: [{ a: 'ns.preset', v: 'docker' }, { a: 'player.seek', v: 0 }],
+        title: ['No namespaces yet', 'Chưa có namespace nào'],
+        body: ['The right side is what "sleep 600" sees from inside. Right now it sees exactly what the host sees: every process, the real network cards, the VM\'s disk. It is just a process.', 'Bên phải là thứ "sleep 600" thấy từ bên trong. Lúc này nó thấy y như máy chủ: mọi tiến trình, card mạng thật, đĩa của máy ảo. Nó chỉ là một tiến trình.'],
+      },
+      {
+        target: 'ns-host',
+        title: ['The host always sees the truth', 'Máy chủ luôn thấy sự thật'],
+        body: ['On the left: the same process seen from the Docker VM — PID 71743, child of containerd-shim-runc-v2 (71719). This side never changes, whatever we switch on.', 'Bên trái: cùng tiến trình đó nhìn từ máy ảo Docker — PID 71743, con của containerd-shim-runc-v2 (71719). Bên này không bao giờ đổi, dù ta bật gì.'],
+      },
+      {
+        target: 'step',
+        title: ['Your turn: add namespaces', 'Đến lượt bạn: thêm namespace'],
+        body: ['Press Step until the pid namespace is on. Watch the yellow highlights on the right — they mark what just changed.', 'Bấm Bước tới khi pid namespace được bật. Nhìn chỗ tô vàng bên phải — đó là thứ vừa đổi.'],
+        task: { text: ['Step until the pid namespace is on.', 'Bấm Bước tới khi pid namespace được bật.'], until: (s) => s.ns?.preset === 'docker' && s.ns?.pid === true, solve: [step(3, 700)] },
+      },
+      {
+        target: 'ns-inside',
+        title: ['PID 71743 is PID 1', 'PID 71743 là PID 1'],
+        body: ['Inside, the process is PID 1 and ps shows two processes. Outside it is still 71743: /proc/71743/status says NSpid: 71743 1 — one process, two numbers.', 'Bên trong, tiến trình là PID 1 và ps chỉ thấy hai tiến trình. Bên ngoài nó vẫn là 71743: /proc/71743/status ghi NSpid: 71743 1 — một tiến trình, hai con số.'],
+      },
+      {
+        target: 'play',
+        title: ['Your turn: finish the container', 'Đến lượt bạn: dựng nốt container'],
+        body: ['Press Play to switch on net, ipc, cgroup and time.', 'Bấm Chạy để bật nốt net, ipc, cgroup và time.'],
+        task: { text: ['Play to the end.', 'Chạy tới cuối.'], until: (s) => s.ns?.preset === 'docker' && s.ns?.atEnd === true, solve: [{ a: 'player.speed', v: 4 }, { a: 'player.play', delay: 200 }] },
+      },
+      {
+        target: 'ns-inodes',
+        title: ['7 own namespaces, 1 shared', '7 namespace riêng, 1 dùng chung'],
+        body: ['Exactly what the lab measured: 7 namespace inodes differ from the VM\'s PID 1 — but user is the SAME (4026531837). A default Docker container does not isolate users: root inside is root outside.', 'Đúng như lab đo: 7 inode namespace khác PID 1 của máy ảo — nhưng user GIỐNG nhau (4026531837). Container Docker mặc định không cách ly người dùng: root bên trong là root bên ngoài.'],
+      },
+      {
+        target: 'ns-toggles',
+        title: ['Your turn: switch on "user"', 'Đến lượt bạn: bật "user"'],
+        body: ['Click the user button.', 'Bấm nút user.'],
+        task: { text: ['Turn on the user namespace.', 'Bật user namespace.'], until: (s) => s.ns?.user === true, solve: [{ a: 'ns.toggle', v: 'user', delay: 300 }] },
+      },
+      {
+        target: 'ns-inside',
+        title: ['root inside, dev outside', 'root bên trong, dev bên ngoài'],
+        body: ['uid_map becomes "0 1001 1": uid 0 in here is uid 1001 out there. Inside you hold every capability, yet touch /etc/hacked fails — /etc belongs to the real root. That is a rootless container.', 'uid_map thành "0 1001 1": uid 0 trong này là uid 1001 ngoài kia. Bên trong bạn giữ mọi capability, vậy mà touch /etc/hacked thất bại — /etc thuộc root thật. Đó là container rootless.'],
+      },
+      {
+        target: 'where',
+        title: ['Where is the container?', 'Container nằm ở đâu?'],
+        body: ['Nowhere special: a namespace is a few pointers in the kernel\'s process structure in RAM. The process runs on the same cores under the same kernel — that is why containers start in milliseconds and a VM takes seconds.', 'Chẳng ở đâu đặc biệt: namespace chỉ là vài con trỏ trong cấu trúc tiến trình của nhân, nằm trong RAM. Tiến trình chạy trên cùng các lõi, dưới cùng một nhân — vì thế container khởi động trong vài mili giây còn máy ảo mất vài giây.'],
+      },
+    ],
+    quiz: {
+      q: ['Which namespace makes a process see itself as PID 1?', 'Namespace nào khiến một tiến trình thấy mình là PID 1?'],
+      options: [['pid', 'pid'], ['uts', 'uts'], ['user', 'user']],
+      answer: 0, why: ['The PID namespace starts a new numbering; the same process keeps its real PID on the host (NSpid shows both).', 'PID namespace bắt đầu một dãy số mới; cùng tiến trình đó vẫn giữ PID thật trên máy chủ (NSpid hiện cả hai).'],
+    },
+  },
+  {
+    id: 'nslayers-pod', ns: 'os-lab', sim: 'nslayers', presets: ['pod'],
+    title: ['A pod = containers sharing namespaces', 'Pod = các container dùng chung namespace'],
+    summary: ['Why a sidecar can call localhost:8000, why two containers cannot both listen on 8000, and what the pause container is for.', 'Vì sao sidecar gọi được localhost:8000, vì sao hai container không cùng nghe 8000 được, và container pause để làm gì.'],
+    steps: [
+      {
+        target: 'ns-pod', do: [{ a: 'ns.preset', v: 'pod' }],
+        title: ['Three containers, one pod', 'Ba container, một pod'],
+        body: ['"pause" does nothing but hold namespaces. app and sidecar JOIN them. By default Kubernetes shares net, ipc and uts; pid only if you ask (shareProcessNamespace).', '"pause" không làm gì ngoài giữ namespace. app và sidecar GIA NHẬP vào đó. Mặc định Kubernetes cho dùng chung net, ipc và uts; pid chỉ khi bạn xin (shareProcessNamespace).'],
+      },
+      {
+        target: 'ns-podres',
+        title: ['localhost means the pod', 'localhost nghĩa là cả pod'],
+        body: ['They share ONE network namespace, so 127.0.0.1:8000 from the sidecar is the app\'s socket — the lab printed the HTML page. And only one of them can bind port 8000.', 'Chúng dùng chung MỘT network namespace, nên 127.0.0.1:8000 từ sidecar chính là socket của app — lab in ra trang HTML. Và chỉ một trong hai được nghe cổng 8000.'],
+      },
+      {
+        target: 'ns-pod',
+        title: ['Your turn: cut the network', 'Đến lượt bạn: cắt mạng'],
+        body: ['Click "net" to give each container its own network namespace.', 'Bấm "net" để mỗi container có network namespace riêng.'],
+        task: { text: ['Stop sharing net.', 'Thôi dùng chung net.'], until: (s) => s.ns?.podNet === false, solve: [{ a: 'ns.pod', v: 'net', delay: 300 }] },
+      },
+      {
+        target: 'ns-podres',
+        title: ['Connection refused', 'Connection refused'],
+        body: ['Now 127.0.0.1 in the sidecar is its OWN loopback — nobody listens there. And when the app restarts it would get a new IP. Keeping the IP stable is exactly the pause container\'s job.', 'Giờ 127.0.0.1 trong sidecar là loopback CỦA RIÊNG nó — chẳng ai nghe ở đó. Và khi app khởi động lại nó sẽ nhận IP mới. Giữ IP ổn định chính là việc của container pause.'],
+      },
+      {
+        target: 'ns-pod',
+        title: ['Your turn: share net and pid', 'Đến lượt bạn: dùng chung net và pid'],
+        body: ['Turn net back on, and also share pid.', 'Bật lại net, và cho dùng chung cả pid.'],
+        task: { text: ['Share net and pid.', 'Dùng chung net và pid.'], until: (s) => s.ns?.podNet === true && s.ns?.podPid === true, solve: [{ a: 'ns.pod', v: 'net', delay: 300 }, { a: 'ns.pod', v: 'pid', delay: 300 }] },
+      },
+      {
+        target: 'ns-podres',
+        title: ['pause is PID 1', 'pause là PID 1'],
+        body: ['With a shared PID namespace, ps in the app shows pause as PID 1 and python as 7 — the lab\'s docker exec … ps printed exactly that. PID 1 also reaps zombies for the whole pod.', 'Khi dùng chung PID namespace, ps trong app thấy pause là PID 1 và python là 7 — lệnh docker exec … ps của lab in đúng như vậy. PID 1 cũng dọn zombie cho cả pod.'],
+      },
+    ],
+    quiz: {
+      q: ['Two containers in one pod both try to listen on port 8000. What happens?', 'Hai container trong một pod cùng nghe cổng 8000. Chuyện gì xảy ra?'],
+      options: [['The second one gets EADDRINUSE', 'Cái thứ hai nhận EADDRINUSE'], ['Both work, each has its own port 8000', 'Cả hai chạy, mỗi cái một cổng 8000 riêng'], ['Kubernetes renumbers one of them', 'Kubernetes tự đổi số cổng một cái']],
+      answer: 0, why: ['They share one network namespace — one set of ports — so only one socket can bind :8000.', 'Chúng dùng chung một network namespace — một bộ cổng — nên chỉ một socket được nghe :8000.'],
+    },
+  },
 ];

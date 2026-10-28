@@ -129,6 +129,8 @@ const FINAL: Record<string, (s: Record<string, Record<string, unknown> | undefin
   'perm-acl': (s) => s.perm?.capsDrop === true && s.perm?.ok === false,
   'fdtable-offsets': (s) => s.fd?.preset === 'append' && s.fd?.pos4 === 39 && s.fd?.file === 'worker A: order 1001 paid\nworker B: hi\n',
   'fdtable-deleted': (s) => s.fd?.preset === 'emfile' && (s.fd?.fds as number) >= 1024 && String(s.fd?.term).includes('EMFILE'),
+  'nslayers-views': (s) => s.ns?.user === true && s.ns?.insidePid === 1,
+  'nslayers-pod': (s) => s.ns?.podNet === true && s.ns?.podPid === true && s.ns?.curlOk === true,
   'syscall-errno': (s) => s.sys?.kind === 'clone3' && s.sys?.raw === -38 && s.sys?.atEnd === true,
 };
 

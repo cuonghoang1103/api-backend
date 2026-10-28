@@ -125,6 +125,13 @@ export const OS_LABS: Record<string, OsLabDef> = {
     presets: ['twice', 'dup', 'append', 'fork', 'deleted', 'emfile', 'links', 'redirect'],
     load: () => import('./FdTableSim'),
   },
+  nslayers: {
+    en: 'Namespaces: one process, two views', vi: 'Namespace: một tiến trình, hai góc nhìn', chapterEn: 'Chapter 12', chapterVi: 'Chương 12',
+    descEn: 'The same process seen from the host and from inside a container; switch pid, mnt, net, uts, ipc, user, cgroup, time on one by one. unshare traps, uid_map, and a Kubernetes pod with pause.',
+    descVi: 'Cùng một tiến trình nhìn từ máy chủ và từ trong container; bật từng namespace pid, mnt, net, uts, ipc, user, cgroup, time. Bẫy của unshare, uid_map, và pod Kubernetes với pause.',
+    presets: ['docker', 'unshare', 'userns', 'pod'],
+    load: () => import('./NsSim'),
+  },
   latency: {
     en: 'Latency ladder', vi: 'Thang độ trễ', chapterEn: 'Section 0', chapterVi: 'Mục 0',
     descEn: 'Registers → caches → RAM → SSD → disk → network, on a human time scale.',

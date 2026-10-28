@@ -1,0 +1,281 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-3-project-ctbooking-m3",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-3-2-fragments-conditional"
+  },
+  "exercises": [
+    {
+      "title": "CT Booking · Milestone 3 — Today's rooms in JSX",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 75,
+      "points": 100,
+      "concepts": [
+        "JSX expressions",
+        "lists & keys",
+        "conditional rendering",
+        "ES modules",
+        "derived values"
+      ],
+      "prerequisites": [
+        "CT Booking · Milestone 2"
+      ],
+      "tags": [
+        "fer202",
+        "project",
+        "ct-booking",
+        "jsx"
+      ],
+      "problemHtml": "<h1>CT BOOKING · MILESTONE 3: Today's rooms in JSX</h1>\n<p class=\"bi-phu\">FER202 running project · Chapter 3 · Builds on milestone 2 · Suggested time: 75 minutes · Total: 10 marks</p>\n<h2>1. Overview</h2>\n<p>Turn the data and the milestone-2 rules into a read-only page. No state yet: everything on screen is computed during render from <code>ROOMS</code>, <code>BOOKINGS</code> and the domain functions (now an ES module in <code>src/domain/booking.js</code>).</p>\n<h3>Main features</h3>\n<ul>\n  <li>Page & room cards · Room details · Counts & schedule · Conditional parts · JSX hygiene</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>Start from your solution of the previous milestone (the starter already contains it). Keep the ids/classes printed below — the grader uses them.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>src/\n├── data/seed.js          # ROOMS, BOOKINGS (given)\n├── domain/booking.js     # milestone 2 (exported)\n├── App.js                # ← this milestone\n├── index.css (given)\n└── index.js</pre>\n<h2>3. UI wireframe</h2>\n<pre class=\"bi-wire\">CT Booking\n3 rooms · 3 bookings today\n+---------------------------+ +---------------------------+ +-------------------------+\n| Room A1                   | | Room A2                   | | Room B1                 |\n| 4 seats · Floor 1         | | 6 seats · Floor 1         | | 8 seats · Floor 2       |\n| (TV)                      | | (Whiteboard) (TV)         | | (Whiteboard)            |\n| 2 bookings today          | | 1 booking today           | | 0 bookings today        |\n| 08:00–09:30 (90 min) · An | | 09:00–10:30 (90 min) · …  | | No bookings yet         |\n| First free slot: 09:30    | | First free slot: 08:00    | | First free slot: 08:00  |\n+---------------------------+ +---------------------------+ +-------------------------+</pre>\n<h2>4. Data model</h2>\n<p><b>Room · Booking</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>Room</code></td><td>{ id, name, capacity, floor, features: string[] }</td><td></td></tr><tr><td><code>Booking</code></td><td>{ id, roomId, student, name, start: 'HH:MM', end: 'HH:MM', purpose }</td><td>opening hours 08:00–17:00 · max 2 h · no overlap in the same room</td></tr></tbody></table>\n<h2>5. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. Page &amp; room cards <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>#title</code> <code>CT Booking</code>, <code>#summary</code> <code>3 rooms · 3 bookings today</code>, <code>article.room-card#room-&lt;id&gt;</code> with <code>.room-name</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>2. Room details <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>.room-meta</code> <code>6 seats · Floor 1</code>; one <code>.feature</code> badge per feature.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>3. Counts &amp; schedule <span class=\"bi-diem\">2.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>.room-count</code> <code>1 booking today</code> / <code>2 bookings today</code> (from <code>countByRoom</code>); <code>ul.schedule li.booking-row</code> sorted, text <code>formatRange(b) · name · purpose</code>.</li>\n</ul>\n<p><b>Example:</b></p>\n<pre>08:00–09:30 (90 min) · An · SWT301 review</pre>\n</div>\n<div class=\"bi-cn\"><h3>4. Conditional parts <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>No bookings ⇒ <code>.no-bookings</code> <code>No bookings yet</code> (no empty list). <code>.first-free</code> <code>First free slot: 09:30</code> or <code>Fully booked</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. JSX hygiene <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>map</code> with stable keys, <code>className</code>, rules imported from the domain module.</li>\n</ul>\n</div>\n<h2>6. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>#title · #summary · .room-card#room-&lt;id&gt; · .room-name · .room-meta · .feature</code></td><td>cards</td></tr><tr><td><code>.room-count · .schedule .booking-row · .no-bookings · .first-free</code></td><td>schedule</td></tr></tbody></table>\n<h2>7. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>Page &amp; room cards</td><td>2</td></tr><tr><td>2</td><td>Room details</td><td>1.5</td></tr><tr><td>3</td><td>Counts &amp; schedule</td><td>2.5</td></tr><tr><td>4</td><td>Conditional parts</td><td>2</td></tr><tr><td>5</td><td>JSX hygiene</td><td>2</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Re-implementing the overlap/free-slot logic inside App.</li>\n  <li><code>{list.length &amp;&amp; …}</code> printing a stray 0.</li>\n</ul>\n<h2>8. Submission</h2>\n<p>Work directly in the editor (files on the right) or download the starter, run it locally with Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> when the paper uses an API) and paste the files back. Press <b>Run</b> for the sample checks and <b>Submit</b> for full grading (hidden checks included).</p>",
+      "problemHtmlVi": "<h1>CT BOOKING · MỐC 3: Phòng hôm nay bằng JSX</h1>\n<p class=\"bi-phu\">Dự án xuyên suốt FER202 · Chương 3 · Tiếp nối mốc 2 · Thời gian gợi ý: 75 phút · Tổng: 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p>Biến dữ liệu và luật của mốc 2 thành trang chỉ đọc. Chưa có state: mọi thứ trên màn hình được tính lúc render từ <code>ROOMS</code>, <code>BOOKINGS</code> và các hàm nghiệp vụ (giờ là ES module ở <code>src/domain/booking.js</code>).</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>Trang & thẻ phòng · Chi tiết phòng · Số lượt & lịch · Phần có điều kiện · JSX sạch</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Bắt đầu từ lời giải mốc trước (starter đã chứa sẵn). Giữ đúng id/class in bên dưới — máy chấm dùng chúng.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>src/\n├── data/seed.js          # ROOMS, BOOKINGS (given)\n├── domain/booking.js     # milestone 2 (exported)\n├── App.js                # ← this milestone\n├── index.css (given)\n└── index.js</pre>\n<h2>3. Wireframe giao diện</h2>\n<pre class=\"bi-wire\">CT Booking\n3 rooms · 3 bookings today\n+---------------------------+ +---------------------------+ +-------------------------+\n| Room A1                   | | Room A2                   | | Room B1                 |\n| 4 seats · Floor 1         | | 6 seats · Floor 1         | | 8 seats · Floor 2       |\n| (TV)                      | | (Whiteboard) (TV)         | | (Whiteboard)            |\n| 2 bookings today          | | 1 booking today           | | 0 bookings today        |\n| 08:00–09:30 (90 min) · An | | 09:00–10:30 (90 min) · …  | | No bookings yet         |\n| First free slot: 09:30    | | First free slot: 08:00    | | First free slot: 08:00  |\n+---------------------------+ +---------------------------+ +-------------------------+</pre>\n<h2>4. Mô hình dữ liệu</h2>\n<p><b>Room · Booking</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>Room</code></td><td>{ id, name, capacity, floor, features: string[] }</td><td></td></tr><tr><td><code>Booking</code></td><td>{ id, roomId, student, name, start: 'HH:MM', end: 'HH:MM', purpose }</td><td>giờ mở cửa 08:00–17:00 · tối đa 2 giờ · không trùng giờ cùng phòng</td></tr></tbody></table>\n<h2>5. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. Trang &amp; thẻ phòng <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>#title</code> <code>CT Booking</code>, <code>#summary</code> <code>3 rooms · 3 bookings today</code>, <code>article.room-card#room-&lt;id&gt;</code> có <code>.room-name</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>2. Chi tiết phòng <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>.room-meta</code> <code>6 seats · Floor 1</code>; mỗi tiện ích một badge <code>.feature</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>3. Số lượt &amp; lịch <span class=\"bi-diem\">2.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>.room-count</code> <code>1 booking today</code> / <code>2 bookings today</code> (từ <code>countByRoom</code>); <code>ul.schedule li.booking-row</code> đã sắp, chữ <code>formatRange(b) · tên · mục đích</code>.</li>\n</ul>\n<p><b>Ví dụ:</b></p>\n<pre>08:00–09:30 (90 min) · An · SWT301 review</pre>\n</div>\n<div class=\"bi-cn\"><h3>4. Phần có điều kiện <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Không có lượt ⇒ <code>.no-bookings</code> <code>No bookings yet</code> (không vẽ danh sách rỗng). <code>.first-free</code> <code>First free slot: 09:30</code> hoặc <code>Fully booked</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. JSX sạch <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>map</code> với key ổn định, <code>className</code>, luật import từ module nghiệp vụ.</li>\n</ul>\n</div>\n<h2>6. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>#title · #summary · .room-card#room-&lt;id&gt; · .room-name · .room-meta · .feature</code></td><td>thẻ</td></tr><tr><td><code>.room-count · .schedule .booking-row · .no-bookings · .first-free</code></td><td>lịch</td></tr></tbody></table>\n<h2>7. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>Trang &amp; thẻ phòng</td><td>2</td></tr><tr><td>2</td><td>Chi tiết phòng</td><td>1.5</td></tr><tr><td>3</td><td>Số lượt &amp; lịch</td><td>2.5</td></tr><tr><td>4</td><td>Phần có điều kiện</td><td>2</td></tr><tr><td>5</td><td>JSX sạch</td><td>2</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Viết lại luật chồng giờ/ô trống trong App.</li>\n  <li><code>{list.length &amp;&amp; …}</code> in ra số 0 lạc lõng.</li>\n</ul>\n<h2>8. Nộp bài</h2>\n<p>Làm thẳng trong editor (các tệp bên phải) hoặc tải starter, chạy trên máy bằng Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> khi đề dùng API) rồi dán lại tệp. Bấm <b>Chạy thử</b> để chạy kiểm mẫu, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn).</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "Start from your solution of the previous milestone (the starter already contains it). Keep the ids/classes printed below — the grader uses them.|||Bắt đầu từ lời giải mốc trước (starter đã chứa sẵn). Giữ đúng id/class in bên dưới — máy chấm dùng chúng.",
+      "examplesJson": [
+        {
+          "input": "Counts & schedule|||Số lượt & lịch",
+          "output": "08:00–09:30 (90 min) · An · SWT301 review",
+          "explanation": "See the brief / Xem đề."
+        }
+      ],
+      "hintsJson": [
+        "const counts = countByRoom(BOOKINGS); trong map: const n = counts[room.id] ?? 0;",
+        "Lịch của phòng: sortBookings(BOOKINGS).filter(b => b.roomId === room.id)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER mốc 3: lõi nghiệp vụ mốc 2 đã có ở src/domain/booking.js (dạng ES module)\nimport { ROOMS } from './data/seed';\n\nexport default function App() {\n  return (\n    <main>\n      <h1 id=\"title\">CT Booking</h1>\n      <p>{ROOMS.length} rooms</p>\n    </main>\n  );\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport './index.css';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "src/index.css",
+          "language": "css",
+          "code": "/* src/index.css — CT Booking (đã cho) */\nbody { font-family: system-ui, sans-serif; margin: 0; background: #f1f5f9; color: #0f172a; }\nmain { padding: 20px; max-width: 1100px; margin: auto; }\n.rooms { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }\n.room-card { background: #fff; border-radius: 12px; padding: 14px 16px; box-shadow: 0 1px 3px rgba(0,0,0,.08); }\n.room-card.selected { outline: 3px solid #2563eb; }\n.feature { display: inline-block; background: #e0f2fe; color: #075985; border-radius: 999px; padding: 1px 8px; font-size: 12px; margin-right: 4px; }\n.booking-row { font-size: 14px; padding: 3px 0; border-bottom: 1px dashed #e2e8f0; }\n.slot { margin: 2px; padding: 3px 8px; border: 1px solid #cbd5e1; background: #fff; border-radius: 6px; cursor: pointer; }\n.slot.active { background: #2563eb; color: #fff; border-color: #2563eb; }\n.error { color: #dc2626; font-size: 13px; margin: 2px 0; }\n.success { color: #15803d; }\n"
+        },
+        {
+          "name": "src/data/seed.js",
+          "language": "javascript",
+          "code": "// src/data/seed.js — dữ liệu mẫu (đã cho)\nexport const ROOMS = [\n  {\n    id: 1,\n    name: 'Room A1',\n    capacity: 4,\n    floor: 1,\n    features: [\n      'TV'\n    ]\n  },\n  {\n    id: 2,\n    name: 'Room A2',\n    capacity: 6,\n    floor: 1,\n    features: [\n      'Whiteboard',\n      'TV'\n    ]\n  },\n  {\n    id: 3,\n    name: 'Room B1',\n    capacity: 8,\n    floor: 2,\n    features: [\n      'Whiteboard'\n    ]\n  }\n];\n\nexport const BOOKINGS = [\n  {\n    id: 1,\n    roomId: 1,\n    student: 'HE180001',\n    name: 'An',\n    start: '08:00',\n    end: '09:30',\n    purpose: 'SWT301 review'\n  },\n  {\n    id: 2,\n    roomId: 1,\n    student: 'HE180002',\n    name: 'Binh',\n    start: '10:00',\n    end: '11:00',\n    purpose: 'FER202 project'\n  },\n  {\n    id: 3,\n    roomId: 2,\n    student: 'HE180003',\n    name: 'Cuong',\n    start: '09:00',\n    end: '10:30',\n    purpose: 'Group meeting'\n  }\n];\n"
+        },
+        {
+          "name": "src/domain/booking.js",
+          "language": "javascript",
+          "code": "// src/domain/booking.js — lõi nghiệp vụ từ mốc 2 (ES module)\nconst OPEN = '08:00';\nconst CLOSE = '17:00';\nconst MAX_MINUTES = 120;\n\n// '08:30' ⇒ 510 phút kể từ 00:00\nexport function toMinutes(time) {\n  const [h, m] = time.split(':').map(Number);\n  return h * 60 + m;\n}\n\n// 510 ⇒ '08:30'\nexport function toTime(minutes) {\n  return `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`;\n}\n\n// hai khoảng [start, end) chồng nhau khi mỗi cái bắt đầu trước khi cái kia kết thúc\nexport function overlaps(a, b) {\n  return toMinutes(a.start) < toMinutes(b.end) && toMinutes(b.start) < toMinutes(a.end);\n}\n\n// danh sách lỗi (rỗng = hợp lệ); chỉ so trùng với booking CÙNG phòng, khác id\nexport function validateBooking(booking, existing = []) {\n  const errors = [];\n  const s = toMinutes(booking.start);\n  const e = toMinutes(booking.end);\n  if (s >= e) errors.push('Start must be before end');\n  if (s < toMinutes(OPEN) || e > toMinutes(CLOSE)) errors.push('Outside opening hours (08:00–17:00)');\n  if (e - s > MAX_MINUTES) errors.push('Maximum 2 hours per booking');\n  const clash = existing.some((x) => x.roomId === booking.roomId && x.id !== booking.id && overlaps(x, booking));\n  if (clash) errors.push('Overlaps with an existing booking');\n  return errors;\n}\n\n// giờ bắt đầu của các ô trống step phút trong giờ mở cửa\nexport function freeSlots(roomId, bookings, step = 30) {\n  const taken = bookings.filter((b) => b.roomId === roomId);\n  const slots = [];\n  for (let t = toMinutes(OPEN); t + step <= toMinutes(CLOSE); t += step) {\n    const slot = { start: toTime(t), end: toTime(t + step) };\n    if (!taken.some((b) => overlaps(b, slot))) slots.push(slot.start);\n  }\n  return slots;\n}\n\n// { roomId: số booking } bằng reduce, không sửa dữ liệu vào\nexport function countByRoom(bookings) {\n  return bookings.reduce((acc, b) => ({ ...acc, [b.roomId]: (acc[b.roomId] ?? 0) + 1 }), {});\n}\n\n// bản sao đã sắp: theo phòng rồi theo giờ bắt đầu\nexport function sortBookings(list) {\n  return [...list].sort((a, b) => a.roomId - b.roomId || toMinutes(a.start) - toMinutes(b.start));\n}\n\n// '08:00–09:30 (90 min)'\nexport function formatRange({ start, end }) {\n  return `${start}–${end} (${toMinutes(end) - toMinutes(start)} min)`;\n}\n\n// cộng phút vào một giờ: addMinutes('09:30', 60) ⇒ '10:30'\nexport function addMinutes(time, minutes) {\n  return toTime(toMinutes(time) + minutes);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — mốc 3: hiển thị phòng + lịch hôm nay bằng JSX (chưa có state)\nimport { BOOKINGS, ROOMS } from './data/seed';\nimport { countByRoom, formatRange, freeSlots, sortBookings } from './domain/booking';\n\nconst counts = countByRoom(BOOKINGS);\n\nexport default function App() {\n  const sorted = sortBookings(BOOKINGS);\n  return (\n    <main>\n      <h1 id=\"title\">CT Booking</h1>\n      <p id=\"summary\">{ROOMS.length} rooms · {BOOKINGS.length} bookings today</p>\n      <div className=\"rooms\">\n        {ROOMS.map((room) => {\n          const list = sorted.filter((b) => b.roomId === room.id);\n          const free = freeSlots(room.id, BOOKINGS);\n          const n = counts[room.id] ?? 0;\n          return (\n            <article key={room.id} className=\"room-card\" id={`room-${room.id}`}>\n              <h2 className=\"room-name\">{room.name}</h2>\n              <p className=\"room-meta\">{room.capacity} seats · Floor {room.floor}</p>\n              <div className=\"features\">\n                {room.features.map((f) => <span key={f} className=\"feature\">{f}</span>)}\n              </div>\n              <p className=\"room-count\">{n} {n === 1 ? 'booking' : 'bookings'} today</p>\n              {list.length === 0 ? (\n                <p className=\"no-bookings\">No bookings yet</p>\n              ) : (\n                <ul className=\"schedule\">\n                  {list.map((b) => (\n                    <li key={b.id} className=\"booking-row\">{formatRange(b)} · {b.name} · {b.purpose}</li>\n                  ))}\n                </ul>\n              )}\n              <p className=\"first-free\">{free.length > 0 ? `First free slot: ${free[0]}` : 'Fully booked'}</p>\n            </article>\n          );\n        })}\n      </div>\n    </main>\n  );\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport './index.css';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "src/index.css",
+          "language": "css",
+          "code": "/* src/index.css — CT Booking (đã cho) */\nbody { font-family: system-ui, sans-serif; margin: 0; background: #f1f5f9; color: #0f172a; }\nmain { padding: 20px; max-width: 1100px; margin: auto; }\n.rooms { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }\n.room-card { background: #fff; border-radius: 12px; padding: 14px 16px; box-shadow: 0 1px 3px rgba(0,0,0,.08); }\n.room-card.selected { outline: 3px solid #2563eb; }\n.feature { display: inline-block; background: #e0f2fe; color: #075985; border-radius: 999px; padding: 1px 8px; font-size: 12px; margin-right: 4px; }\n.booking-row { font-size: 14px; padding: 3px 0; border-bottom: 1px dashed #e2e8f0; }\n.slot { margin: 2px; padding: 3px 8px; border: 1px solid #cbd5e1; background: #fff; border-radius: 6px; cursor: pointer; }\n.slot.active { background: #2563eb; color: #fff; border-color: #2563eb; }\n.error { color: #dc2626; font-size: 13px; margin: 2px 0; }\n.success { color: #15803d; }\n"
+        },
+        {
+          "name": "src/data/seed.js",
+          "language": "javascript",
+          "code": "// src/data/seed.js — dữ liệu mẫu (đã cho)\nexport const ROOMS = [\n  {\n    id: 1,\n    name: 'Room A1',\n    capacity: 4,\n    floor: 1,\n    features: [\n      'TV'\n    ]\n  },\n  {\n    id: 2,\n    name: 'Room A2',\n    capacity: 6,\n    floor: 1,\n    features: [\n      'Whiteboard',\n      'TV'\n    ]\n  },\n  {\n    id: 3,\n    name: 'Room B1',\n    capacity: 8,\n    floor: 2,\n    features: [\n      'Whiteboard'\n    ]\n  }\n];\n\nexport const BOOKINGS = [\n  {\n    id: 1,\n    roomId: 1,\n    student: 'HE180001',\n    name: 'An',\n    start: '08:00',\n    end: '09:30',\n    purpose: 'SWT301 review'\n  },\n  {\n    id: 2,\n    roomId: 1,\n    student: 'HE180002',\n    name: 'Binh',\n    start: '10:00',\n    end: '11:00',\n    purpose: 'FER202 project'\n  },\n  {\n    id: 3,\n    roomId: 2,\n    student: 'HE180003',\n    name: 'Cuong',\n    start: '09:00',\n    end: '10:30',\n    purpose: 'Group meeting'\n  }\n];\n"
+        },
+        {
+          "name": "src/domain/booking.js",
+          "language": "javascript",
+          "code": "// src/domain/booking.js — lõi nghiệp vụ từ mốc 2 (ES module)\nconst OPEN = '08:00';\nconst CLOSE = '17:00';\nconst MAX_MINUTES = 120;\n\n// '08:30' ⇒ 510 phút kể từ 00:00\nexport function toMinutes(time) {\n  const [h, m] = time.split(':').map(Number);\n  return h * 60 + m;\n}\n\n// 510 ⇒ '08:30'\nexport function toTime(minutes) {\n  return `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`;\n}\n\n// hai khoảng [start, end) chồng nhau khi mỗi cái bắt đầu trước khi cái kia kết thúc\nexport function overlaps(a, b) {\n  return toMinutes(a.start) < toMinutes(b.end) && toMinutes(b.start) < toMinutes(a.end);\n}\n\n// danh sách lỗi (rỗng = hợp lệ); chỉ so trùng với booking CÙNG phòng, khác id\nexport function validateBooking(booking, existing = []) {\n  const errors = [];\n  const s = toMinutes(booking.start);\n  const e = toMinutes(booking.end);\n  if (s >= e) errors.push('Start must be before end');\n  if (s < toMinutes(OPEN) || e > toMinutes(CLOSE)) errors.push('Outside opening hours (08:00–17:00)');\n  if (e - s > MAX_MINUTES) errors.push('Maximum 2 hours per booking');\n  const clash = existing.some((x) => x.roomId === booking.roomId && x.id !== booking.id && overlaps(x, booking));\n  if (clash) errors.push('Overlaps with an existing booking');\n  return errors;\n}\n\n// giờ bắt đầu của các ô trống step phút trong giờ mở cửa\nexport function freeSlots(roomId, bookings, step = 30) {\n  const taken = bookings.filter((b) => b.roomId === roomId);\n  const slots = [];\n  for (let t = toMinutes(OPEN); t + step <= toMinutes(CLOSE); t += step) {\n    const slot = { start: toTime(t), end: toTime(t + step) };\n    if (!taken.some((b) => overlaps(b, slot))) slots.push(slot.start);\n  }\n  return slots;\n}\n\n// { roomId: số booking } bằng reduce, không sửa dữ liệu vào\nexport function countByRoom(bookings) {\n  return bookings.reduce((acc, b) => ({ ...acc, [b.roomId]: (acc[b.roomId] ?? 0) + 1 }), {});\n}\n\n// bản sao đã sắp: theo phòng rồi theo giờ bắt đầu\nexport function sortBookings(list) {\n  return [...list].sort((a, b) => a.roomId - b.roomId || toMinutes(a.start) - toMinutes(b.start));\n}\n\n// '08:00–09:30 (90 min)'\nexport function formatRange({ start, end }) {\n  return `${start}–${end} (${toMinutes(end) - toMinutes(start)} min)`;\n}\n\n// cộng phút vào một giờ: addMinutes('09:30', 60) ⇒ '10:30'\nexport function addMinutes(time, minutes) {\n  return toTime(toMinutes(time) + minutes);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Giao diện là hàm của dữ liệu: App không tự tính luật mà gọi lõi nghiệp vụ mốc 2. Nhánh rỗng và số ít/số nhiều là điều kiện JSX bình thường; key ổn định là id của phòng và booking.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "kiem": [
+          {
+            "nhom": "f1",
+            "moTa": "Title and summary",
+            "kiem": "danh-sach-text",
+            "selector": "#title, #summary",
+            "mongDoi": [
+              "CT Booking",
+              "3 rooms · 3 bookings today"
+            ]
+          },
+          {
+            "nhom": "f1",
+            "moTa": "One card per room",
+            "kiem": "danh-sach-text",
+            "selector": ".room-card .room-name",
+            "mongDoi": [
+              "Room A1",
+              "Room A2",
+              "Room B1"
+            ]
+          },
+          {
+            "nhom": "f1",
+            "an": true,
+            "moTa": "Card ids",
+            "kiem": "so-luong",
+            "selector": "#room-1, #room-2, #room-3",
+            "giaTri": 3
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Meta line",
+            "kiem": "text",
+            "selector": "#room-2 .room-meta",
+            "giaTri": "6 seats · Floor 1"
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Feature badges",
+            "kiem": "danh-sach-text",
+            "selector": "#room-2 .feature",
+            "mongDoi": [
+              "Whiteboard",
+              "TV"
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Booking counts with singular/plural",
+            "kiem": "danh-sach-text",
+            "selector": ".room-count",
+            "mongDoi": [
+              "2 bookings today",
+              "1 booking today",
+              "0 bookings today"
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Schedule rows use formatRange",
+            "kiem": "danh-sach-text",
+            "selector": "#room-1 .booking-row",
+            "mongDoi": [
+              "08:00–09:30 (90 min) · An · SWT301 review",
+              "10:00–11:00 (60 min) · Binh · FER202 project"
+            ]
+          },
+          {
+            "nhom": "f3",
+            "an": true,
+            "moTa": "Uses the domain functions (no copy of the rules in App)",
+            "kiem": "ma-nguon",
+            "tep": "src/App.js",
+            "khop": "from\\s+['\"]\\./domain/booking['\"]"
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Empty room message (and no empty list)",
+            "kiem": "danh-sach-text",
+            "selector": "#room-3 .no-bookings, #room-3 .schedule",
+            "mongDoi": [
+              "No bookings yet"
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "First free slot per room",
+            "kiem": "danh-sach-text",
+            "selector": ".first-free",
+            "mongDoi": [
+              "First free slot: 09:30",
+              "First free slot: 08:00",
+              "First free slot: 08:00"
+            ]
+          },
+          {
+            "nhom": "f4",
+            "an": true,
+            "moTa": "Fully booked branch exists",
+            "kiem": "ma-nguon",
+            "tep": "src/App.js",
+            "khop": "Fully booked"
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Lists rendered with map + key",
+            "kiem": "ma-nguon",
+            "tep": "src/App.js",
+            "khop": "ROOMS\\.map\\([\\s\\S]*key=\\{\\s*room\\.id\\s*\\}"
+          },
+          {
+            "nhom": "f5",
+            "an": true,
+            "moTa": "className, not class",
+            "kiem": "ma-nguon",
+            "tep": "src/App.js",
+            "khop": "\\sclass=",
+            "phuDinh": true
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. Page & room cards",
+            "diem": 2
+          },
+          {
+            "ma": "f2",
+            "ten": "2. Room details",
+            "diem": 1.5
+          },
+          {
+            "ma": "f3",
+            "ten": "3. Counts & schedule",
+            "diem": 2.5
+          },
+          {
+            "ma": "f4",
+            "ten": "4. Conditional parts",
+            "diem": 2
+          },
+          {
+            "ma": "f5",
+            "ten": "5. JSX hygiene",
+            "diem": 2
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "project",
+      "mistakesJson": [
+        {
+          "loi": "Quên ?? 0 ⇒ Room B1 hiện \"undefined bookings today\"."
+        },
+        {
+          "loi": "Dùng index làm key cho thẻ phòng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "read-only view",
+          "vi": "giao diện chỉ hiển thị, chưa tương tác"
+        },
+        {
+          "en": "rubric",
+          "vi": "thang điểm theo tiêu chí"
+        }
+      ],
+      "demoHtml": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>CT Booking · Milestone 3 — Today's rooms in JSX — Live demo</title>\n<script src=\"https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js\" crossorigin=\"anonymous\"></script>\n\n</head><body><div id=\"root\"></div><script>(function(){\nvar M={\"src/App.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _nullishCoalesce(lhs, rhsFn) { if (lhs != null) { return lhs; } else { return rhsFn(); } }// src/App.js — mốc 3: hiển thị phòng + lịch hôm nay bằng JSX (chưa có state)\\nvar _seed = require('./data/seed');\\nvar _booking = require('./domain/booking');\\n\\nconst counts = _booking.countByRoom.call(void 0, _seed.BOOKINGS);\\n\\n function App() {\\n  const sorted = _booking.sortBookings.call(void 0, _seed.BOOKINGS);\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'main', { children: [\\n      _jsxruntime.jsx.call(void 0, 'h1', { id: \\\"title\\\", children: \\\"CT Booking\\\" })\\n      , _jsxruntime.jsxs.call(void 0, 'p', { id: \\\"summary\\\", children: [_seed.ROOMS.length, \\\" rooms · \\\"   , _seed.BOOKINGS.length, \\\" bookings today\\\"  ]})\\n      , _jsxruntime.jsx.call(void 0, 'div', { className: \\\"rooms\\\", children: \\n        _seed.ROOMS.map((room) => {\\n          const list = sorted.filter((b) => b.roomId === room.id);\\n          const free = _booking.freeSlots.call(void 0, room.id, _seed.BOOKINGS);\\n          const n = _nullishCoalesce(counts[room.id], () => ( 0));\\n          return (\\n            _jsxruntime.jsxs.call(void 0, 'article', { className: \\\"room-card\\\", id: `room-${room.id}`, children: [\\n              _jsxruntime.jsx.call(void 0, 'h2', { className: \\\"room-name\\\", children: room.name})\\n              , _jsxruntime.jsxs.call(void 0, 'p', { className: \\\"room-meta\\\", children: [room.capacity, \\\" seats · Floor \\\"    , room.floor]})\\n              , _jsxruntime.jsx.call(void 0, 'div', { className: \\\"features\\\", children: \\n                room.features.map((f) => _jsxruntime.jsx.call(void 0, 'span', { className: \\\"feature\\\", children: f}, f))\\n              })\\n              , _jsxruntime.jsxs.call(void 0, 'p', { className: \\\"room-count\\\", children: [n, \\\" \\\" , n === 1 ? 'booking' : 'bookings', \\\" today\\\" ]})\\n              , list.length === 0 ? (\\n                _jsxruntime.jsx.call(void 0, 'p', { className: \\\"no-bookings\\\", children: \\\"No bookings yet\\\"  })\\n              ) : (\\n                _jsxruntime.jsx.call(void 0, 'ul', { className: \\\"schedule\\\", children: \\n                  list.map((b) => (\\n                    _jsxruntime.jsxs.call(void 0, 'li', { className: \\\"booking-row\\\", children: [_booking.formatRange.call(void 0, b), \\\" · \\\"  , b.name, \\\" · \\\"  , b.purpose]}, b.id)\\n                  ))\\n                })\\n              )\\n              , _jsxruntime.jsx.call(void 0, 'p', { className: \\\"first-free\\\", children: free.length > 0 ? `First free slot: ${free[0]}` : 'Fully booked'})\\n            ]}, room.id)\\n          );\\n        })\\n      })\\n    ]})\\n  );\\n} exports.default = App;\\n\",\"src/index.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\"); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\\nvar _react = require('react'); var _react2 = _interopRequireDefault(_react);\\nvar _client = require('react-dom/client'); var _client2 = _interopRequireDefault(_client);\\nrequire('./index.css');\\nvar _App = require('./App'); var _App2 = _interopRequireDefault(_App);\\n\\nconst root = _client2.default.createRoot(document.getElementById('root'));\\nroot.render(\\n  _jsxruntime.jsx.call(void 0, _react2.default.StrictMode, { children: \\n    _jsxruntime.jsx.call(void 0, _App2.default, {} )\\n  })\\n);\\n\",\"src/data/seed.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/data/seed.js — dữ liệu mẫu (đã cho)\\n const ROOMS = [\\n  {\\n    id: 1,\\n    name: 'Room A1',\\n    capacity: 4,\\n    floor: 1,\\n    features: [\\n      'TV'\\n    ]\\n  },\\n  {\\n    id: 2,\\n    name: 'Room A2',\\n    capacity: 6,\\n    floor: 1,\\n    features: [\\n      'Whiteboard',\\n      'TV'\\n    ]\\n  },\\n  {\\n    id: 3,\\n    name: 'Room B1',\\n    capacity: 8,\\n    floor: 2,\\n    features: [\\n      'Whiteboard'\\n    ]\\n  }\\n]; exports.ROOMS = ROOMS;\\n\\n const BOOKINGS = [\\n  {\\n    id: 1,\\n    roomId: 1,\\n    student: 'HE180001',\\n    name: 'An',\\n    start: '08:00',\\n    end: '09:30',\\n    purpose: 'SWT301 review'\\n  },\\n  {\\n    id: 2,\\n    roomId: 1,\\n    student: 'HE180002',\\n    name: 'Binh',\\n    start: '10:00',\\n    end: '11:00',\\n    purpose: 'FER202 project'\\n  },\\n  {\\n    id: 3,\\n    roomId: 2,\\n    student: 'HE180003',\\n    name: 'Cuong',\\n    start: '09:00',\\n    end: '10:30',\\n    purpose: 'Group meeting'\\n  }\\n]; exports.BOOKINGS = BOOKINGS;\\n\",\"src/domain/booking.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _nullishCoalesce(lhs, rhsFn) { if (lhs != null) { return lhs; } else { return rhsFn(); } }// src/domain/booking.js — lõi nghiệp vụ từ mốc 2 (ES module)\\nconst OPEN = '08:00';\\nconst CLOSE = '17:00';\\nconst MAX_MINUTES = 120;\\n\\n// '08:30' ⇒ 510 phút kể từ 00:00\\n function toMinutes(time) {\\n  const [h, m] = time.split(':').map(Number);\\n  return h * 60 + m;\\n} exports.toMinutes = toMinutes;\\n\\n// 510 ⇒ '08:30'\\n function toTime(minutes) {\\n  return `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`;\\n} exports.toTime = toTime;\\n\\n// hai khoảng [start, end) chồng nhau khi mỗi cái bắt đầu trước khi cái kia kết thúc\\n function overlaps(a, b) {\\n  return toMinutes(a.start) \\u003c toMinutes(b.end) && toMinutes(b.start) \\u003c toMinutes(a.end);\\n} exports.overlaps = overlaps;\\n\\n// danh sách lỗi (rỗng = hợp lệ); chỉ so trùng với booking CÙNG phòng, khác id\\n function validateBooking(booking, existing = []) {\\n  const errors = [];\\n  const s = toMinutes(booking.start);\\n  const e = toMinutes(booking.end);\\n  if (s >= e) errors.push('Start must be before end');\\n  if (s \\u003c toMinutes(OPEN) || e > toMinutes(CLOSE)) errors.push('Outside opening hours (08:00–17:00)');\\n  if (e - s > MAX_MINUTES) errors.push('Maximum 2 hours per booking');\\n  const clash = existing.some((x) => x.roomId === booking.roomId && x.id !== booking.id && overlaps(x, booking));\\n  if (clash) errors.push('Overlaps with an existing booking');\\n  return errors;\\n} exports.validateBooking = validateBooking;\\n\\n// giờ bắt đầu của các ô trống step phút trong giờ mở cửa\\n function freeSlots(roomId, bookings, step = 30) {\\n  const taken = bookings.filter((b) => b.roomId === roomId);\\n  const slots = [];\\n  for (let t = toMinutes(OPEN); t + step \\u003c= toMinutes(CLOSE); t += step) {\\n    const slot = { start: toTime(t), end: toTime(t + step) };\\n    if (!taken.some((b) => overlaps(b, slot))) slots.push(slot.start);\\n  }\\n  return slots;\\n} exports.freeSlots = freeSlots;\\n\\n// { roomId: số booking } bằng reduce, không sửa dữ liệu vào\\n function countByRoom(bookings) {\\n  return bookings.reduce((acc, b) => ({ ...acc, [b.roomId]: (_nullishCoalesce(acc[b.roomId], () => ( 0))) + 1 }), {});\\n} exports.countByRoom = countByRoom;\\n\\n// bản sao đã sắp: theo phòng rồi theo giờ bắt đầu\\n function sortBookings(list) {\\n  return [...list].sort((a, b) => a.roomId - b.roomId || toMinutes(a.start) - toMinutes(b.start));\\n} exports.sortBookings = sortBookings;\\n\\n// '08:00–09:30 (90 min)'\\n function formatRange({ start, end }) {\\n  return `${start}–${end} (${toMinutes(end) - toMinutes(start)} min)`;\\n} exports.formatRange = formatRange;\\n\\n// cộng phút vào một giờ: addMinutes('09:30', 60) ⇒ '10:30'\\n function addMinutes(time, minutes) {\\n  return toTime(toMinutes(time) + minutes);\\n} exports.addMinutes = addMinutes;\\n\"};var CSS={\"src/index.css\":\"/* src/index.css — CT Booking (đã cho) */\\nbody { font-family: system-ui, sans-serif; margin: 0; background: #f1f5f9; color: #0f172a; }\\nmain { padding: 20px; max-width: 1100px; margin: auto; }\\n.rooms { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }\\n.room-card { background: #fff; border-radius: 12px; padding: 14px 16px; box-shadow: 0 1px 3px rgba(0,0,0,.08); }\\n.room-card.selected { outline: 3px solid #2563eb; }\\n.feature { display: inline-block; background: #e0f2fe; color: #075985; border-radius: 999px; padding: 1px 8px; font-size: 12px; margin-right: 4px; }\\n.booking-row { font-size: 14px; padding: 3px 0; border-bottom: 1px dashed #e2e8f0; }\\n.slot { margin: 2px; padding: 3px 8px; border: 1px solid #cbd5e1; background: #fff; border-radius: 6px; cursor: pointer; }\\n.slot.active { background: #2563eb; color: #fff; border-color: #2563eb; }\\n.error { color: #dc2626; font-size: 13px; margin: 2px 0; }\\n.success { color: #15803d; }\\n\"};var DB=null;var BASE=\"http://localhost:9999\";var URL0=null;var THANH=false;\nfunction kho(){var m={};var k={getItem:function(x){x=String(x);return Object.prototype.hasOwnProperty.call(m,x)?m[x]:null},setItem:function(x,v){m[String(x)]=String(v)},removeItem:function(x){delete m[String(x)]},clear:function(){m={}},key:function(i){return Object.keys(m)[i]||null}};Object.defineProperty(k,'length',{get:function(){return Object.keys(m).length}});return k}\ntry{Object.defineProperty(window,'localStorage',{value:kho(),configurable:true})}catch(e){}\ntry{Object.defineProperty(window,'sessionStorage',{value:kho(),configurable:true})}catch(e){}\nwindow.confirm=function(){return true};window.alert=function(m){console.log('[alert]',m);var t=document.getElementById('cl-demo-alert');if(!t){t=document.createElement('div');t.id='cl-demo-alert';t.style.cssText='position:fixed;right:12px;bottom:12px;z-index:99999;max-width:320px;padding:10px 14px;border-radius:10px;background:#0f172a;color:#fff;font:13px system-ui;box-shadow:0 6px 24px rgba(0,0,0,.25)';document.body.appendChild(t)}t.textContent='alert: '+m;clearTimeout(t.__h);t.__h=setTimeout(function(){t.remove()},2600)};\nvar ENV={NODE_ENV:'production',MODE:'production',PROD:true,DEV:false,BASE_URL:'/'};\nString(M['.env']||'').split(/\\r?\\n/).forEach(function(d){var m=/^\\s*(?:export\\s+)?([A-Za-z_][A-Za-z0-9_]*)\\s*=\\s*(.*)\\s*$/.exec(d);if(m)ENV[m[1]]=m[2].replace(/^(['\"])(.*)\\1$/,'$2')});\nwindow.__CL_ENV__=ENV;if(!window.process)window.process={env:ENV};\n// json-server giả (bản sao domAgent.ts)\nvar jsDb=DB?JSON.parse(JSON.stringify(DB)):null;\nfunction tl(st,b){return new Response(b===undefined?'{}':JSON.stringify(b),{status:st,headers:{'content-type':'application/json'}})}\nfunction lay(o,k){return String(k).split('.').reduce(function(a,p){return a==null?undefined:a[p]},o)}\nfunction mot(t){return /ies$/.test(t)?t.slice(0,-3)+'y':t.replace(/s$/,'')}\nfunction xuLy(method,url,body){var u=new URL(url);var ph=u.pathname.replace(/^\\/+|\\/+$/g,'').split('/').filter(Boolean).map(decodeURIComponent);var ten=ph[0],id=ph[1];\nif(!ten||!(ten in jsDb))return tl(404,{});var bang=jsDb[ten];var dl=null;if(body!=null&&body!==''){try{dl=JSON.parse(body)}catch(e){return tl(400,{})}}\nif(!Array.isArray(bang)){if(method==='GET')return tl(200,bang);if(method==='PUT'||method==='POST'){jsDb[ten]=dl||{};return tl(200,jsDb[ten])}if(method==='PATCH'){jsDb[ten]=Object.assign({},bang,dl||{});return tl(200,jsDb[ten])}return tl(404,{})}\nvar vt=function(x){return bang.findIndex(function(r){return String(r.id)===String(x)})};\nvar mr=function(r){var o=Object.assign({},r);u.searchParams.getAll('_expand').forEach(function(e){var b=jsDb[e+'s']||jsDb[e];if(Array.isArray(b))o[e]=b.find(function(x){return String(x.id)===String(r[e+'Id'])})});u.searchParams.getAll('_embed').forEach(function(e){var b=jsDb[e];if(Array.isArray(b)){var k=mot(ten)+'Id';o[e]=b.filter(function(x){return String(x[k])===String(r.id)})}});return o};\nif(method==='GET'){if(id!=null){var i=vt(id);return i<0?tl(404,{}):tl(200,mr(bang[i]))}var ds=bang.slice();var loc={};u.searchParams.forEach(function(v,k){if(k.charAt(0)!=='_'&&k!=='q')(loc[k]=loc[k]||[]).push(v)});\nObject.keys(loc).forEach(function(k){var vs=loc[k],m=/^(.*)_(like|gte|lte|ne)$/.exec(k);ds=ds.filter(function(r){if(m){var gv=lay(r,m[1]);return vs.every(function(v){if(m[2]==='like')return new RegExp(v,'i').test(String(gv));if(m[2]==='ne')return String(gv)!==v;var a=Number(gv),b=Number(v);var so=!isNaN(a)&&!isNaN(b);return m[2]==='gte'?(so?a>=b:String(gv)>=v):(so?a<=b:String(gv)<=v)})}var g=lay(r,k);return vs.some(function(v){return String(g)===v})})});\nvar qq=u.searchParams.get('q');if(qq)ds=ds.filter(function(r){return JSON.stringify(r).toLowerCase().indexOf(qq.toLowerCase())>=0});\nvar sx=u.searchParams.get('_sort');if(sx){var tr=sx.split(','),th=(u.searchParams.get('_order')||'asc').split(',');ds.sort(function(a,b){for(var t=0;t<tr.length;t++){var f=tr[t].replace(/^-/,''),gi=tr[t].charAt(0)==='-'||(th[t]||th[0])==='desc';var x=lay(a,f),y=lay(b,f);var c=(typeof x==='number'&&typeof y==='number')?x-y:String(x).localeCompare(String(y));if(c)return gi?-c:c}return 0})}\nvar gh=u.searchParams.get('_limit'),pg=u.searchParams.get('_page');var tong=ds.length;if(pg){var n=Number(gh)||10;ds=ds.slice((Number(pg)-1)*n,Number(pg)*n)}else if(gh)ds=ds.slice(0,Number(gh));var rr=tl(200,ds.map(mr));try{rr.headers.set('X-Total-Count',String(tong))}catch(e){}return rr}\nif(method==='POST'){if(id!=null)return tl(404,{});var mo=Object.assign({},dl||{});if(mo.id==null){var so2=bang.length&&bang.every(function(r){return typeof r.id==='number'});mo.id=so2||!bang.length?bang.reduce(function(mx,r){return Math.max(mx,Number(r.id)||0)},0)+1:Math.random().toString(16).slice(2,6)}bang.push(mo);return tl(201,mo)}\nif(id==null)return tl(404,{});var j=vt(id);if(j<0)return tl(404,{});\nif(method==='PUT'){bang[j]=Object.assign({},dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='PATCH'){bang[j]=Object.assign({},bang[j],dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='DELETE'){bang.splice(j,1);return tl(200,{})}return tl(404,{})}\nif(jsDb){window.fetch=function(url,init){init=init||{};var s=String(url&&url.url?url.url:url);var me=String(init.method||'GET').toUpperCase();return new Promise(function(res){setTimeout(function(){if(s.indexOf(BASE+'/')!==0)return res(new Response('Not Found',{status:404}));try{res(xuLy(me,s,init.body))}catch(e){res(tl(500,{error:String(e)}))}},120)})}}\nfunction axiosGia(){function goi(method,url,data,cfg){cfg=cfg||{};var u=(cfg.baseURL||'')+url;if(cfg.params){var sp=new URLSearchParams(cfg.params).toString();if(sp)u+=(u.indexOf('?')>=0?'&':'?')+sp}var init={method:method.toUpperCase(),headers:Object.assign({'Content-Type':'application/json'},cfg.headers||{})};if(data!==undefined)init.body=typeof data==='string'?data:JSON.stringify(data);\nreturn window.fetch(u,init).then(function(res){return res.text().then(function(t){var d;try{d=JSON.parse(t)}catch(e){d=t}var hd={};try{res.headers.forEach(function(v,k){hd[k.toLowerCase()]=v})}catch(e){}var out={data:d,status:res.status,statusText:res.statusText,headers:hd,config:cfg};if(res.status>=200&&res.status<300)return out;var err=new Error('Request failed with status code '+res.status);err.response=out;err.name='AxiosError';throw err})})}\nfunction tao(base){var a=function(cfg){return goi(cfg.method||'get',cfg.url,cfg.data,Object.assign({},base,cfg))};['get','delete','head'].forEach(function(m){a[m]=function(url,cfg){return goi(m,url,undefined,Object.assign({},base,cfg))}});['post','put','patch'].forEach(function(m){a[m]=function(url,data,cfg){return goi(m,url,data,Object.assign({},base,cfg))}});a.create=function(c){return tao(Object.assign({},base,c))};a.defaults=base;a.interceptors={request:{use:function(){}},response:{use:function(){}}};a.isAxiosError=function(e){return!!(e&&e.name==='AxiosError')};return a}\nvar ax=tao({});ax.default=ax;return ax}\nvar R=window.React;var tach=function(p,k){var q=Object.assign({},p);var c=q.children;delete q.children;if(k!==undefined)q.key=k;return[q,c]};\nvar j=function(t,p,k){var x=tach(p,k);return x[1]===undefined?R.createElement(t,x[0]):R.createElement(t,x[0],x[1])};\nvar js=function(t,p,k){var x=tach(p,k);return R.createElement.apply(null,[t,x[0]].concat(x[1]||[]))};\n// React Router: MemoryRouter + thanh địa chỉ (gõ URL được — thử ?status=ACTIVE, /items/2…)\nvar viTri=null,routerBoc=null,dieuHuong=null;\nfunction datThanh(v){var o=document.getElementById('cl-demo-url');if(o&&document.activeElement!==o)o.value='http://localhost:3000'+v}\nfunction routerGia(){var RRD=window.ReactRouterDOM;if(!RRD)return null;if(routerBoc)return routerBoc;\nfunction Ghi(){var l=RRD.useLocation();var nav=RRD.useNavigate();dieuHuong=nav;viTri=l.pathname+l.search+l.hash;R.useEffect(function(){datThanh(viTri)});return null}\nfunction RG(p){var d=R.useState(function(){return[viTri||URL0||'/']})[0];return R.createElement(RRD.MemoryRouter,{initialEntries:d,basename:p.basename},R.createElement(Ghi),p.children)}\nfunction tr(routes,opts){var r=RRD.createMemoryRouter(routes,Object.assign({},opts||{},{initialEntries:[viTri||URL0||'/']}));var g=function(s){viTri=s.location.pathname+s.location.search+s.location.hash;datThanh(viTri)};g(r.state);r.subscribe(g);dieuHuong=function(to){r.navigate(to)};return r}\nrouterBoc=Object.assign({},RRD,{BrowserRouter:RG,HashRouter:RG,createBrowserRouter:tr,createHashRouter:tr});return routerBoc}\nvar thunk=function(api){return function(next){return function(a){return typeof a==='function'?a(api.dispatch,api.getState):next(a)}}};\nvar LIB={'react':R,'react-dom':window.ReactDOM,'react-dom/client':window.ReactDOM,'react/jsx-runtime':{jsx:j,jsxs:js,Fragment:R.Fragment},'react/jsx-dev-runtime':{jsxDEV:j,Fragment:R.Fragment},'prop-types':window.PropTypes,'react-bootstrap':window.ReactBootstrap,'@reduxjs/toolkit':window.RTK,'redux':window.RTK,'react-redux':window.ReactRedux,'redux-thunk':{'default':thunk,thunk:thunk}};\nvar C={};\nfunction dd(tu,s){var p=tu.split('/').slice(0,-1);s.split('/').forEach(function(x){if(x==='.'||x==='')return;if(x==='..')p.pop();else p.push(x)});return p.join('/')}\nfunction tim(p){var d=['','.js','.jsx','.ts','.tsx','.json','/index.js','/index.jsx'];for(var i=0;i<d.length;i++){if(M[p+d[i]]!=null||CSS[p+d[i]]!=null)return p+d[i]}return null}\nfunction req(tu,s){if(s==='axios')return axiosGia();if(s==='react-router-dom'||s==='react-router')return routerGia();if(LIB[s])return LIB[s];if(/\\.css$/.test(s)&&!/^\\./.test(s))return{};var p=tim(dd(tu,s));if(!p)throw new Error('Cannot find module '+s);return nap(p)}\nfunction nap(p){if(C[p])return C[p].exports;if(CSS[p]!=null){var st=document.createElement('style');st.textContent=CSS[p];document.head.appendChild(st);C[p]={exports:{}};return{}}var m={exports:{}};C[p]=m;if(/\\.json$/.test(p)){m.exports=JSON.parse(M[p]);return m.exports}new Function('require','module','exports',M[p])(function(s){return req(p,s)},m,m.exports);return m.exports}\nif(THANH){var bar=document.createElement('form');bar.style.cssText='position:sticky;top:0;z-index:99998;display:flex;gap:6px;align-items:center;padding:6px 10px;background:#e2e8f0;border-bottom:1px solid #cbd5e1;font:12px system-ui';bar.innerHTML='<span style=\"color:#475569\">URL</span><input id=\"cl-demo-url\" style=\"flex:1;padding:4px 8px;border:1px solid #cbd5e1;border-radius:6px;font:12px ui-monospace,monospace\" aria-label=\"Address bar\"><button style=\"padding:3px 10px;border-radius:6px;border:1px solid #94a3b8;background:#fff;cursor:pointer\">Go</button>';\nbar.addEventListener('submit',function(e){e.preventDefault();var v=document.getElementById('cl-demo-url').value.replace(/^https?:\\/\\/[^/]+/,'')||'/';if(dieuHuong)dieuHuong(v)});document.body.insertBefore(bar,document.body.firstChild);datThanh(URL0||'/')}\nnap(\"src/index.js\");\n})();</script></body></html>"
+    }
+  ]
+}

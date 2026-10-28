@@ -620,6 +620,30 @@
       "name": "Deep Lab 12 — Issue Tracker (entity adapter · listener middleware)",
       "level": "ADVANCED",
       "description": "Deep lab chương 12: createEntityAdapter, createSelector nối + nhóm cột, thunk lạc quan hoàn tác từ meta.arg, createListenerMiddleware cho nhật ký và lưu bộ lọc. Thang 10."
+    },
+    {
+      "slug": "fer202-2-project-ctbooking-m2",
+      "name": "CT Booking · Milestone 2 — Booking rules (ES6)",
+      "level": "INTERMEDIATE",
+      "description": "Dự án xuyên suốt CT Booking, mốc 2: lõi nghiệp vụ thuần (giờ, chồng giờ, kiểm hợp lệ, ô trống, reduce). Thang 10."
+    },
+    {
+      "slug": "fer202-3-project-ctbooking-m3",
+      "name": "CT Booking · Milestone 3 — Today's rooms (JSX)",
+      "level": "INTERMEDIATE",
+      "description": "Dự án CT Booking mốc 3: trang phòng + lịch hôm nay bằng JSX từ lõi nghiệp vụ mốc 2. Thang 10."
+    },
+    {
+      "slug": "fer202-4-project-ctbooking-m4",
+      "name": "CT Booking · Milestone 4 — Responsive layout (React-Bootstrap)",
+      "level": "INTERMEDIATE",
+      "description": "Dự án CT Booking mốc 4: chuyển sang React-Bootstrap, lưới đáp ứng 1/2/3 cột. Thang 10."
+    },
+    {
+      "slug": "fer202-5-project-ctbooking-m5",
+      "name": "CT Booking · Milestone 5 — Components, props & selection",
+      "level": "INTERMEDIATE",
+      "description": "Dự án CT Booking mốc 5: tách component có PropTypes, state chọn phòng + ô, SlotPicker điều khiển. Thang 10."
     }
   ]
 }

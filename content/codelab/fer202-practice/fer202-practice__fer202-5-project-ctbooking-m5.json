@@ -1,0 +1,371 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-5-project-ctbooking-m5",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-5-1-components-props"
+  },
+  "exercises": [
+    {
+      "title": "CT Booking · Milestone 5 — Components, props and selection state",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 90,
+      "points": 100,
+      "concepts": [
+        "component extraction",
+        "props & callbacks",
+        "lifting state up",
+        "controlled components",
+        "PropTypes"
+      ],
+      "prerequisites": [
+        "CT Booking · Milestone 4"
+      ],
+      "tags": [
+        "fer202",
+        "project",
+        "ct-booking",
+        "components"
+      ],
+      "problemHtml": "<h1>CT BOOKING · MILESTONE 5: Components, props and selection state</h1>\n<p class=\"bi-phu\">FER202 running project · Chapter 5 · Builds on milestone 4 · Suggested time: 90 minutes · Total: 10 marks</p>\n<h2>1. Overview</h2>\n<p>Split the page into reusable components with documented props (<code>RoomCard</code>, <code>Schedule</code>, <code>SlotPicker</code>), then add the first interaction: selecting a room and a 30-minute start slot. The state lives in <code>App</code>; children only receive values and callbacks.</p>\n<h3>Main features</h3>\n<ul>\n  <li>Component split · Room selection · Controlled slot picker · PropTypes</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>Start from your solution of the previous milestone (the starter already contains it). Keep the ids/classes printed below — the grader uses them.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>src/\n├── components/\n│   ├── RoomCard.js     # props: room, bookings, freeCount, firstFree, selected, onSelect\n│   ├── Schedule.js     # props: bookings\n│   └── SlotPicker.js   # props: slots, value, onChange (controlled)\n├── App.js              # state: selectedRoomId, selectedSlot\n└── data/ · domain/     (given)</pre>\n<h2>3. Data model</h2>\n<p><b>Room · Booking</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>Room</code></td><td>{ id, name, capacity, floor, features: string[] }</td><td></td></tr><tr><td><code>Booking</code></td><td>{ id, roomId, student, name, start: 'HH:MM', end: 'HH:MM', purpose }</td><td>opening hours 08:00–17:00 · max 2 h · no overlap in the same room</td></tr></tbody></table>\n<h2>4. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. Component split <span class=\"bi-diem\">2.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>RoomCard</code> renders one card (and uses <code>Schedule</code>); App maps rooms to <code>&lt;RoomCard … onSelect={…} /&gt;</code>. Output identical to milestone 4.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>2. Room selection <span class=\"bi-diem\">2.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>.btn-select</code> in each card; selected card gets class <code>selected</code>; <code>#selected-panel</code> with <code>#selected-room</code> <code>Selected: Room A2</code>; <code>#clear-selection</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>3. Controlled slot picker <span class=\"bi-diem\">3 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>SlotPicker</code> shows <code>.slot</code> buttons for the room's free slots; the chosen one is <code>.active</code>; <code>#selected-slot</code> <code>Selected slot: 11:00–11:30</code> or <code>Choose a start time</code>. Changing room clears the slot.</li>\n</ul>\n<p><b>Example:</b></p>\n<pre>Room A1 → click 11:00 ⇒ \"Selected slot: 11:00–11:30\"</pre>\n</div>\n<div class=\"bi-cn\"><h3>4. PropTypes <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>All three components declare PropTypes (<code>shape</code> for room, <code>arrayOf</code> for lists); SlotPicker keeps no state.</li>\n</ul>\n</div>\n<h2>5. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>.btn-select · .room-card.selected · #selected-panel · #selected-room · .slot(.active) · #selected-slot · #clear-selection</code></td><td>new in milestone 5</td></tr></tbody></table>\n<h2>6. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>Component split</td><td>2.5</td></tr><tr><td>2</td><td>Room selection</td><td>2.5</td></tr><tr><td>3</td><td>Controlled slot picker</td><td>3</td></tr><tr><td>4</td><td>PropTypes</td><td>2</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Each RoomCard keeping its own \"selected\" state — two cards can be selected.</li>\n  <li>Slot left from the previous room after switching.</li>\n</ul>\n<h2>7. Submission</h2>\n<p>Work directly in the editor (files on the right) or download the starter, run it locally with Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> when the paper uses an API) and paste the files back. Press <b>Run</b> for the sample checks and <b>Submit</b> for full grading (hidden checks included).</p>",
+      "problemHtmlVi": "<h1>CT BOOKING · MỐC 5: Component, props và state chọn</h1>\n<p class=\"bi-phu\">Dự án xuyên suốt FER202 · Chương 5 · Tiếp nối mốc 4 · Thời gian gợi ý: 90 phút · Tổng: 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p>Tách trang thành component dùng lại có props được mô tả (<code>RoomCard</code>, <code>Schedule</code>, <code>SlotPicker</code>), rồi thêm tương tác đầu tiên: chọn phòng và một ô bắt đầu 30 phút. State nằm ở <code>App</code>; component con chỉ nhận giá trị và callback.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>Tách component · Chọn phòng · Chọn ô (điều khiển) · PropTypes</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Bắt đầu từ lời giải mốc trước (starter đã chứa sẵn). Giữ đúng id/class in bên dưới — máy chấm dùng chúng.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>src/\n├── components/\n│   ├── RoomCard.js     # props: room, bookings, freeCount, firstFree, selected, onSelect\n│   ├── Schedule.js     # props: bookings\n│   └── SlotPicker.js   # props: slots, value, onChange (controlled)\n├── App.js              # state: selectedRoomId, selectedSlot\n└── data/ · domain/     (given)</pre>\n<h2>3. Mô hình dữ liệu</h2>\n<p><b>Room · Booking</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>Room</code></td><td>{ id, name, capacity, floor, features: string[] }</td><td></td></tr><tr><td><code>Booking</code></td><td>{ id, roomId, student, name, start: 'HH:MM', end: 'HH:MM', purpose }</td><td>giờ mở cửa 08:00–17:00 · tối đa 2 giờ · không trùng giờ cùng phòng</td></tr></tbody></table>\n<h2>4. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. Tách component <span class=\"bi-diem\">2.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>RoomCard</code> vẽ một thẻ (dùng <code>Schedule</code>); App map phòng thành <code>&lt;RoomCard … onSelect={…} /&gt;</code>. Kết quả giống mốc 4.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>2. Chọn phòng <span class=\"bi-diem\">2.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>.btn-select</code> ở mỗi thẻ; thẻ được chọn có class <code>selected</code>; <code>#selected-panel</code> với <code>#selected-room</code> <code>Selected: Room A2</code>; <code>#clear-selection</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>3. Chọn ô (điều khiển) <span class=\"bi-diem\">3 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>SlotPicker</code> hiện nút <code>.slot</code> cho các ô trống của phòng; ô đang chọn có <code>.active</code>; <code>#selected-slot</code> <code>Selected slot: 11:00–11:30</code> hoặc <code>Choose a start time</code>. Đổi phòng thì xoá ô đã chọn.</li>\n</ul>\n<p><b>Ví dụ:</b></p>\n<pre>Room A1 → click 11:00 ⇒ \"Selected slot: 11:00–11:30\"</pre>\n</div>\n<div class=\"bi-cn\"><h3>4. PropTypes <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Cả ba component khai PropTypes (<code>shape</code> cho room, <code>arrayOf</code> cho danh sách); SlotPicker không giữ state.</li>\n</ul>\n</div>\n<h2>5. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>.btn-select · .room-card.selected · #selected-panel · #selected-room · .slot(.active) · #selected-slot · #clear-selection</code></td><td>mới ở mốc 5</td></tr></tbody></table>\n<h2>6. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>Tách component</td><td>2.5</td></tr><tr><td>2</td><td>Chọn phòng</td><td>2.5</td></tr><tr><td>3</td><td>Chọn ô (điều khiển)</td><td>3</td></tr><tr><td>4</td><td>PropTypes</td><td>2</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Mỗi RoomCard tự giữ state \"selected\" — hai thẻ cùng được chọn.</li>\n  <li>Ô của phòng trước còn sót khi đổi phòng.</li>\n</ul>\n<h2>7. Nộp bài</h2>\n<p>Làm thẳng trong editor (các tệp bên phải) hoặc tải starter, chạy trên máy bằng Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> khi đề dùng API) rồi dán lại tệp. Bấm <b>Chạy thử</b> để chạy kiểm mẫu, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn).</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "Start from your solution of the previous milestone (the starter already contains it). Keep the ids/classes printed below — the grader uses them.|||Bắt đầu từ lời giải mốc trước (starter đã chứa sẵn). Giữ đúng id/class in bên dưới — máy chấm dùng chúng.",
+      "examplesJson": [
+        {
+          "input": "Controlled slot picker|||Chọn ô (điều khiển)",
+          "output": "Room A1 → click 11:00 ⇒ \"Selected slot: 11:00–11:30\"",
+          "explanation": "See the brief / Xem đề."
+        }
+      ],
+      "hintsJson": [
+        "const [selectedRoomId, setSelectedRoomId] = useState(null); RoomCard nhận selected={room.id === selectedRoomId}.",
+        "selectRoom(id) đặt cả setSelectedSlot(null)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER mốc 5 = lời giải mốc 4; tách RoomCard / Schedule / SlotPicker và thêm state chọn phòng + ô\nimport { Badge, Card, Col, Container, ListGroup, Navbar, Row } from 'react-bootstrap';\nimport { BOOKINGS, ROOMS } from './data/seed';\nimport { countByRoom, formatRange, freeSlots, sortBookings } from './domain/booking';\n\nconst counts = countByRoom(BOOKINGS);\n\nexport default function App() {\n  const sorted = sortBookings(BOOKINGS);\n  return (\n    <>\n      <Navbar bg=\"primary\" variant=\"dark\" expand=\"md\" id=\"app-nav\">\n        <Container>\n          <Navbar.Brand id=\"title\">CT Booking</Navbar.Brand>\n          <Navbar.Text id=\"summary\" className=\"text-white\">{ROOMS.length} rooms · {BOOKINGS.length} bookings today</Navbar.Text>\n        </Container>\n      </Navbar>\n      <Container className=\"py-4\">\n        <Row className=\"g-3\">\n          {ROOMS.map((room) => {\n            const list = sorted.filter((b) => b.roomId === room.id);\n            const free = freeSlots(room.id, BOOKINGS);\n            const n = counts[room.id] ?? 0;\n            return (\n              <Col key={room.id} xs={12} md={6} lg={4}>\n                <Card className=\"room-card h-100 shadow-sm\" id={`room-${room.id}`}>\n                  <Card.Body>\n                    <Card.Title className=\"room-name\">{room.name}</Card.Title>\n                    <Card.Subtitle className=\"room-meta mb-2 text-muted\">{room.capacity} seats · Floor {room.floor}</Card.Subtitle>\n                    <div className=\"mb-2\">\n                      {room.features.map((f) => <Badge key={f} bg=\"info\" className=\"feature me-1\">{f}</Badge>)}\n                    </div>\n                    <Card.Text className=\"room-count\">{n} {n === 1 ? 'booking' : 'bookings'} today</Card.Text>\n                  </Card.Body>\n                  {list.length === 0 ? (\n                    <Card.Body className=\"pt-0\"><p className=\"no-bookings text-muted mb-0\">No bookings yet</p></Card.Body>\n                  ) : (\n                    <ListGroup variant=\"flush\" className=\"schedule\">\n                      {list.map((b) => (\n                        <ListGroup.Item key={b.id} className=\"booking-row\">{formatRange(b)} · {b.name} · {b.purpose}</ListGroup.Item>\n                      ))}\n                    </ListGroup>\n                  )}\n                  <Card.Footer>\n                    <Badge bg={free.length > 0 ? 'success' : 'danger'} className=\"first-free\">\n                      {free.length > 0 ? `First free slot: ${free[0]}` : 'Fully booked'}\n                    </Badge>\n                  </Card.Footer>\n                </Card>\n              </Col>\n            );\n          })}\n        </Row>\n      </Container>\n    </>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/RoomCard.js",
+          "language": "javascript",
+          "code": "// src/components/RoomCard.js — STARTER\nexport default function RoomCard() {\n  return null;\n}\n"
+        },
+        {
+          "name": "src/components/Schedule.js",
+          "language": "javascript",
+          "code": "// src/components/Schedule.js — STARTER\nexport default function Schedule() {\n  return null;\n}\n"
+        },
+        {
+          "name": "src/components/SlotPicker.js",
+          "language": "javascript",
+          "code": "// src/components/SlotPicker.js — STARTER\nexport default function SlotPicker() {\n  return null;\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport 'bootstrap/dist/css/bootstrap.min.css';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "src/data/seed.js",
+          "language": "javascript",
+          "code": "// src/data/seed.js — dữ liệu mẫu (đã cho)\nexport const ROOMS = [\n  {\n    id: 1,\n    name: 'Room A1',\n    capacity: 4,\n    floor: 1,\n    features: [\n      'TV'\n    ]\n  },\n  {\n    id: 2,\n    name: 'Room A2',\n    capacity: 6,\n    floor: 1,\n    features: [\n      'Whiteboard',\n      'TV'\n    ]\n  },\n  {\n    id: 3,\n    name: 'Room B1',\n    capacity: 8,\n    floor: 2,\n    features: [\n      'Whiteboard'\n    ]\n  }\n];\n\nexport const BOOKINGS = [\n  {\n    id: 1,\n    roomId: 1,\n    student: 'HE180001',\n    name: 'An',\n    start: '08:00',\n    end: '09:30',\n    purpose: 'SWT301 review'\n  },\n  {\n    id: 2,\n    roomId: 1,\n    student: 'HE180002',\n    name: 'Binh',\n    start: '10:00',\n    end: '11:00',\n    purpose: 'FER202 project'\n  },\n  {\n    id: 3,\n    roomId: 2,\n    student: 'HE180003',\n    name: 'Cuong',\n    start: '09:00',\n    end: '10:30',\n    purpose: 'Group meeting'\n  }\n];\n"
+        },
+        {
+          "name": "src/domain/booking.js",
+          "language": "javascript",
+          "code": "// src/domain/booking.js — lõi nghiệp vụ từ mốc 2 (ES module)\nconst OPEN = '08:00';\nconst CLOSE = '17:00';\nconst MAX_MINUTES = 120;\n\n// '08:30' ⇒ 510 phút kể từ 00:00\nexport function toMinutes(time) {\n  const [h, m] = time.split(':').map(Number);\n  return h * 60 + m;\n}\n\n// 510 ⇒ '08:30'\nexport function toTime(minutes) {\n  return `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`;\n}\n\n// hai khoảng [start, end) chồng nhau khi mỗi cái bắt đầu trước khi cái kia kết thúc\nexport function overlaps(a, b) {\n  return toMinutes(a.start) < toMinutes(b.end) && toMinutes(b.start) < toMinutes(a.end);\n}\n\n// danh sách lỗi (rỗng = hợp lệ); chỉ so trùng với booking CÙNG phòng, khác id\nexport function validateBooking(booking, existing = []) {\n  const errors = [];\n  const s = toMinutes(booking.start);\n  const e = toMinutes(booking.end);\n  if (s >= e) errors.push('Start must be before end');\n  if (s < toMinutes(OPEN) || e > toMinutes(CLOSE)) errors.push('Outside opening hours (08:00–17:00)');\n  if (e - s > MAX_MINUTES) errors.push('Maximum 2 hours per booking');\n  const clash = existing.some((x) => x.roomId === booking.roomId && x.id !== booking.id && overlaps(x, booking));\n  if (clash) errors.push('Overlaps with an existing booking');\n  return errors;\n}\n\n// giờ bắt đầu của các ô trống step phút trong giờ mở cửa\nexport function freeSlots(roomId, bookings, step = 30) {\n  const taken = bookings.filter((b) => b.roomId === roomId);\n  const slots = [];\n  for (let t = toMinutes(OPEN); t + step <= toMinutes(CLOSE); t += step) {\n    const slot = { start: toTime(t), end: toTime(t + step) };\n    if (!taken.some((b) => overlaps(b, slot))) slots.push(slot.start);\n  }\n  return slots;\n}\n\n// { roomId: số booking } bằng reduce, không sửa dữ liệu vào\nexport function countByRoom(bookings) {\n  return bookings.reduce((acc, b) => ({ ...acc, [b.roomId]: (acc[b.roomId] ?? 0) + 1 }), {});\n}\n\n// bản sao đã sắp: theo phòng rồi theo giờ bắt đầu\nexport function sortBookings(list) {\n  return [...list].sort((a, b) => a.roomId - b.roomId || toMinutes(a.start) - toMinutes(b.start));\n}\n\n// '08:00–09:30 (90 min)'\nexport function formatRange({ start, end }) {\n  return `${start}–${end} (${toMinutes(end) - toMinutes(start)} min)`;\n}\n\n// cộng phút vào một giờ: addMinutes('09:30', 60) ⇒ '10:30'\nexport function addMinutes(time, minutes) {\n  return toTime(toMinutes(time) + minutes);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — mốc 5: chia component, state \"phòng đang chọn\" + \"ô đang chọn\"\nimport { useState } from 'react';\nimport { Button, Card, Col, Container, Navbar, Row } from 'react-bootstrap';\nimport RoomCard from './components/RoomCard';\nimport SlotPicker from './components/SlotPicker';\nimport { BOOKINGS, ROOMS } from './data/seed';\nimport { addMinutes, freeSlots, sortBookings } from './domain/booking';\n\nexport default function App() {\n  const [selectedRoomId, setSelectedRoomId] = useState(null);\n  const [selectedSlot, setSelectedSlot] = useState(null);\n  const sorted = sortBookings(BOOKINGS);\n  const selectedRoom = ROOMS.find((r) => r.id === selectedRoomId) ?? null;\n\n  const selectRoom = (id) => {\n    setSelectedRoomId(id);\n    setSelectedSlot(null); // đổi phòng ⇒ ô cũ không còn ý nghĩa\n  };\n\n  return (\n    <>\n      <Navbar bg=\"primary\" variant=\"dark\" expand=\"md\" id=\"app-nav\">\n        <Container>\n          <Navbar.Brand id=\"title\">CT Booking</Navbar.Brand>\n          <Navbar.Text id=\"summary\" className=\"text-white\">{ROOMS.length} rooms · {BOOKINGS.length} bookings today</Navbar.Text>\n        </Container>\n      </Navbar>\n      <Container className=\"py-4\">\n        <Row className=\"g-3\">\n          {ROOMS.map((room) => {\n            const free = freeSlots(room.id, BOOKINGS);\n            return (\n              <Col key={room.id} xs={12} md={6} lg={4}>\n                <RoomCard\n                  room={room}\n                  bookings={sorted.filter((b) => b.roomId === room.id)}\n                  freeCount={free.length}\n                  firstFree={free[0]}\n                  selected={room.id === selectedRoomId}\n                  onSelect={selectRoom}\n                />\n              </Col>\n            );\n          })}\n        </Row>\n        {selectedRoom && (\n          <Card className=\"mt-4\" id=\"selected-panel\">\n            <Card.Body>\n              <Card.Title id=\"selected-room\">Selected: {selectedRoom.name}</Card.Title>\n              <SlotPicker slots={freeSlots(selectedRoom.id, BOOKINGS)} value={selectedSlot} onChange={setSelectedSlot} />\n              <p id=\"selected-slot\" className=\"mt-2 mb-2\">\n                {selectedSlot ? `Selected slot: ${selectedSlot}–${addMinutes(selectedSlot, 30)}` : 'Choose a start time'}\n              </p>\n              <Button id=\"clear-selection\" variant=\"link\" onClick={() => selectRoom(null)}>Clear selection</Button>\n            </Card.Body>\n          </Card>\n        )}\n      </Container>\n    </>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/Schedule.js",
+          "language": "javascript",
+          "code": "// src/components/Schedule.js — danh sách lượt đặt của một phòng\nimport PropTypes from 'prop-types';\nimport { ListGroup } from 'react-bootstrap';\nimport { formatRange } from '../domain/booking';\n\nexport default function Schedule({ bookings }) {\n  if (bookings.length === 0) return <p className=\"no-bookings text-muted mb-0 px-3\">No bookings yet</p>;\n  return (\n    <ListGroup variant=\"flush\" className=\"schedule\">\n      {bookings.map((b) => (\n        <ListGroup.Item key={b.id} className=\"booking-row\">{formatRange(b)} · {b.name} · {b.purpose}</ListGroup.Item>\n      ))}\n    </ListGroup>\n  );\n}\n\nSchedule.propTypes = {\n  bookings: PropTypes.arrayOf(\n    PropTypes.shape({ id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired, start: PropTypes.string.isRequired, end: PropTypes.string.isRequired }),\n  ).isRequired,\n};\n"
+        },
+        {
+          "name": "src/components/RoomCard.js",
+          "language": "javascript",
+          "code": "// src/components/RoomCard.js — thẻ phòng: chỉ hiển thị + báo cha khi được chọn\nimport PropTypes from 'prop-types';\nimport { Badge, Button, Card } from 'react-bootstrap';\nimport Schedule from './Schedule';\n\nexport default function RoomCard({ room, bookings, freeCount, firstFree, selected, onSelect }) {\n  const n = bookings.length;\n  return (\n    <Card className={`room-card h-100 shadow-sm${selected ? ' selected border-primary' : ''}`} id={`room-${room.id}`}>\n      <Card.Body>\n        <Card.Title className=\"room-name\">{room.name}</Card.Title>\n        <Card.Subtitle className=\"room-meta mb-2 text-muted\">{room.capacity} seats · Floor {room.floor}</Card.Subtitle>\n        <div className=\"mb-2\">\n          {room.features.map((f) => <Badge key={f} bg=\"info\" className=\"feature me-1\">{f}</Badge>)}\n        </div>\n        <Card.Text className=\"room-count\">{n} {n === 1 ? 'booking' : 'bookings'} today</Card.Text>\n      </Card.Body>\n      <Schedule bookings={bookings} />\n      <Card.Footer className=\"d-flex justify-content-between align-items-center\">\n        <Badge bg={freeCount > 0 ? 'success' : 'danger'} className=\"first-free\">\n          {freeCount > 0 ? `First free slot: ${firstFree}` : 'Fully booked'}\n        </Badge>\n        <Button size=\"sm\" className=\"btn-select\" variant={selected ? 'primary' : 'outline-primary'} disabled={freeCount === 0} onClick={() => onSelect(room.id)}>\n          {selected ? 'Selected' : 'Select'}\n        </Button>\n      </Card.Footer>\n    </Card>\n  );\n}\n\nRoomCard.propTypes = {\n  room: PropTypes.shape({\n    id: PropTypes.number.isRequired,\n    name: PropTypes.string.isRequired,\n    capacity: PropTypes.number.isRequired,\n    floor: PropTypes.number.isRequired,\n    features: PropTypes.arrayOf(PropTypes.string).isRequired,\n  }).isRequired,\n  bookings: PropTypes.array.isRequired,\n  freeCount: PropTypes.number.isRequired,\n  firstFree: PropTypes.string,\n  selected: PropTypes.bool,\n  onSelect: PropTypes.func.isRequired,\n};\n"
+        },
+        {
+          "name": "src/components/SlotPicker.js",
+          "language": "javascript",
+          "code": "// src/components/SlotPicker.js — component ĐIỀU KHIỂN: cha giữ value, con báo onChange\nimport PropTypes from 'prop-types';\nimport { Button } from 'react-bootstrap';\n\nexport default function SlotPicker({ slots, value, onChange }) {\n  if (slots.length === 0) return <p className=\"text-muted\">No free slots</p>;\n  return (\n    <div className=\"slot-picker\">\n      {slots.map((s) => (\n        <Button key={s} size=\"sm\" className=\"slot me-1 mb-1\" variant={s === value ? 'primary' : 'outline-primary'} active={s === value} onClick={() => onChange(s)}>\n          {s}\n        </Button>\n      ))}\n    </div>\n  );\n}\n\nSlotPicker.propTypes = {\n  slots: PropTypes.arrayOf(PropTypes.string).isRequired,\n  value: PropTypes.string,\n  onChange: PropTypes.func.isRequired,\n};\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport 'bootstrap/dist/css/bootstrap.min.css';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "src/data/seed.js",
+          "language": "javascript",
+          "code": "// src/data/seed.js — dữ liệu mẫu (đã cho)\nexport const ROOMS = [\n  {\n    id: 1,\n    name: 'Room A1',\n    capacity: 4,\n    floor: 1,\n    features: [\n      'TV'\n    ]\n  },\n  {\n    id: 2,\n    name: 'Room A2',\n    capacity: 6,\n    floor: 1,\n    features: [\n      'Whiteboard',\n      'TV'\n    ]\n  },\n  {\n    id: 3,\n    name: 'Room B1',\n    capacity: 8,\n    floor: 2,\n    features: [\n      'Whiteboard'\n    ]\n  }\n];\n\nexport const BOOKINGS = [\n  {\n    id: 1,\n    roomId: 1,\n    student: 'HE180001',\n    name: 'An',\n    start: '08:00',\n    end: '09:30',\n    purpose: 'SWT301 review'\n  },\n  {\n    id: 2,\n    roomId: 1,\n    student: 'HE180002',\n    name: 'Binh',\n    start: '10:00',\n    end: '11:00',\n    purpose: 'FER202 project'\n  },\n  {\n    id: 3,\n    roomId: 2,\n    student: 'HE180003',\n    name: 'Cuong',\n    start: '09:00',\n    end: '10:30',\n    purpose: 'Group meeting'\n  }\n];\n"
+        },
+        {
+          "name": "src/domain/booking.js",
+          "language": "javascript",
+          "code": "// src/domain/booking.js — lõi nghiệp vụ từ mốc 2 (ES module)\nconst OPEN = '08:00';\nconst CLOSE = '17:00';\nconst MAX_MINUTES = 120;\n\n// '08:30' ⇒ 510 phút kể từ 00:00\nexport function toMinutes(time) {\n  const [h, m] = time.split(':').map(Number);\n  return h * 60 + m;\n}\n\n// 510 ⇒ '08:30'\nexport function toTime(minutes) {\n  return `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`;\n}\n\n// hai khoảng [start, end) chồng nhau khi mỗi cái bắt đầu trước khi cái kia kết thúc\nexport function overlaps(a, b) {\n  return toMinutes(a.start) < toMinutes(b.end) && toMinutes(b.start) < toMinutes(a.end);\n}\n\n// danh sách lỗi (rỗng = hợp lệ); chỉ so trùng với booking CÙNG phòng, khác id\nexport function validateBooking(booking, existing = []) {\n  const errors = [];\n  const s = toMinutes(booking.start);\n  const e = toMinutes(booking.end);\n  if (s >= e) errors.push('Start must be before end');\n  if (s < toMinutes(OPEN) || e > toMinutes(CLOSE)) errors.push('Outside opening hours (08:00–17:00)');\n  if (e - s > MAX_MINUTES) errors.push('Maximum 2 hours per booking');\n  const clash = existing.some((x) => x.roomId === booking.roomId && x.id !== booking.id && overlaps(x, booking));\n  if (clash) errors.push('Overlaps with an existing booking');\n  return errors;\n}\n\n// giờ bắt đầu của các ô trống step phút trong giờ mở cửa\nexport function freeSlots(roomId, bookings, step = 30) {\n  const taken = bookings.filter((b) => b.roomId === roomId);\n  const slots = [];\n  for (let t = toMinutes(OPEN); t + step <= toMinutes(CLOSE); t += step) {\n    const slot = { start: toTime(t), end: toTime(t + step) };\n    if (!taken.some((b) => overlaps(b, slot))) slots.push(slot.start);\n  }\n  return slots;\n}\n\n// { roomId: số booking } bằng reduce, không sửa dữ liệu vào\nexport function countByRoom(bookings) {\n  return bookings.reduce((acc, b) => ({ ...acc, [b.roomId]: (acc[b.roomId] ?? 0) + 1 }), {});\n}\n\n// bản sao đã sắp: theo phòng rồi theo giờ bắt đầu\nexport function sortBookings(list) {\n  return [...list].sort((a, b) => a.roomId - b.roomId || toMinutes(a.start) - toMinutes(b.start));\n}\n\n// '08:00–09:30 (90 min)'\nexport function formatRange({ start, end }) {\n  return `${start}–${end} (${toMinutes(end) - toMinutes(start)} min)`;\n}\n\n// cộng phút vào một giờ: addMinutes('09:30', 60) ⇒ '10:30'\nexport function addMinutes(time, minutes) {\n  return toTime(toMinutes(time) + minutes);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>State chọn nằm ở cha chung (App) vì cả thẻ phòng lẫn bảng chọn ô cần nó. Component con nhận dữ liệu qua props và báo sự kiện qua callback — một nguồn sự thật, không bao giờ lệch.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "thuVien": [
+          "react-bootstrap",
+          "bootstrap",
+          "prop-types"
+        ],
+        "kiem": [
+          {
+            "nhom": "f1",
+            "moTa": "Cards still render (now via RoomCard)",
+            "kiem": "danh-sach-text",
+            "selector": ".room-card .room-name",
+            "mongDoi": [
+              "Room A1",
+              "Room A2",
+              "Room B1"
+            ]
+          },
+          {
+            "nhom": "f1",
+            "moTa": "App renders <RoomCard> with props",
+            "kiem": "ma-nguon",
+            "tep": "src/App.js",
+            "khop": "<RoomCard[\\s\\S]*room=\\{[\\s\\S]*onSelect=\\{"
+          },
+          {
+            "nhom": "f1",
+            "an": true,
+            "moTa": "Schedule extracted",
+            "kiem": "danh-sach-text",
+            "selector": "#room-1 .schedule .booking-row",
+            "mongDoi": [
+              "08:00–09:30 (90 min) · An · SWT301 review",
+              "10:00–11:00 (60 min) · Binh · FER202 project"
+            ]
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Selecting a room highlights its card",
+            "kiem": "ton-tai",
+            "selector": "#room-2.selected",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#room-2 .btn-select",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Selected panel shows the room",
+            "kiem": "text",
+            "selector": "#selected-room",
+            "giaTri": "Selected: Room A2",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#room-2 .btn-select",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Only one card selected at a time",
+            "kiem": "so-luong",
+            "selector": ".room-card.selected",
+            "giaTri": 1,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#room-2 .btn-select",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#room-3 .btn-select",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "an": true,
+            "moTa": "No panel before selecting",
+            "kiem": "khong-ton-tai",
+            "selector": "#selected-panel"
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Slot picker lists the room's free slots",
+            "kiem": "danh-sach-text",
+            "selector": "#selected-panel .slot:nth-child(-n+3)",
+            "mongDoi": [
+              "09:30",
+              "11:00",
+              "11:30"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#room-1 .btn-select",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Choosing a slot (controlled)",
+            "kiem": "danh-sach-text",
+            "selector": ".slot.active, #selected-slot",
+            "mongDoi": [
+              "11:00",
+              "Selected slot: 11:00–11:30"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#room-1 .btn-select",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#selected-panel .slot:nth-child(2)",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Changing room resets the slot",
+            "kiem": "text",
+            "selector": "#selected-slot",
+            "giaTri": "Choose a start time",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#room-1 .btn-select",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#selected-panel .slot:nth-child(2)",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#room-2 .btn-select",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "an": true,
+            "moTa": "Clear selection hides the panel",
+            "kiem": "khong-ton-tai",
+            "selector": "#selected-panel, .room-card.selected",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#room-1 .btn-select",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#clear-selection",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "RoomCard declares PropTypes with a room shape",
+            "kiem": "ma-nguon",
+            "tep": "src/components/RoomCard.js",
+            "khop": "RoomCard\\.propTypes\\s*=[\\s\\S]*PropTypes\\.shape\\("
+          },
+          {
+            "nhom": "f4",
+            "an": true,
+            "moTa": "SlotPicker is controlled (no own state)",
+            "kiem": "ma-nguon",
+            "tep": "src/components/SlotPicker.js",
+            "khop": "useState",
+            "phuDinh": true
+          },
+          {
+            "nhom": "f4",
+            "an": true,
+            "moTa": "SlotPicker PropTypes",
+            "kiem": "ma-nguon",
+            "tep": "src/components/SlotPicker.js",
+            "khop": "SlotPicker\\.propTypes"
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. Component split",
+            "diem": 2.5
+          },
+          {
+            "ma": "f2",
+            "ten": "2. Room selection",
+            "diem": 2.5
+          },
+          {
+            "ma": "f3",
+            "ten": "3. Controlled slot picker",
+            "diem": 3
+          },
+          {
+            "ma": "f4",
+            "ten": "4. PropTypes",
+            "diem": 2
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "project",
+      "mistakesJson": [
+        {
+          "loi": "Truyền onSelect={selectRoom(room.id)} (gọi ngay khi render) thay vì để RoomCard gọi onSelect(room.id)."
+        },
+        {
+          "loi": "SlotPicker tự useState(value) ⇒ lệch với cha."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "lifting state up",
+          "vi": "đưa state lên component cha chung"
+        },
+        {
+          "en": "rubric",
+          "vi": "thang điểm theo tiêu chí"
+        }
+      ],
+      "demoHtml": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>CT Booking · Milestone 5 — Components, props and selection state — Live demo</title>\n<script src=\"https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-bootstrap@2.10.5/dist/react-bootstrap.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/prop-types@15.8.1/prop-types.min.js\" crossorigin=\"anonymous\"></script>\n<script>fetch(\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css\").then(function(r){return r.text()}).then(function(t){var s=document.createElement('style');s.textContent=t;document.head.insertBefore(s,document.head.firstChild)}).catch(function(){})</script>\n</head><body><div id=\"root\"></div><script>(function(){\nvar M={\"src/App.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; } function _nullishCoalesce(lhs, rhsFn) { if (lhs != null) { return lhs; } else { return rhsFn(); } }// src/App.js — mốc 5: chia component, state \\\"phòng đang chọn\\\" + \\\"ô đang chọn\\\"\\nvar _react = require('react');\\nvar _reactbootstrap = require('react-bootstrap');\\nvar _RoomCard = require('./components/RoomCard'); var _RoomCard2 = _interopRequireDefault(_RoomCard);\\nvar _SlotPicker = require('./components/SlotPicker'); var _SlotPicker2 = _interopRequireDefault(_SlotPicker);\\nvar _seed = require('./data/seed');\\nvar _booking = require('./domain/booking');\\n\\n function App() {\\n  const [selectedRoomId, setSelectedRoomId] = _react.useState.call(void 0, null);\\n  const [selectedSlot, setSelectedSlot] = _react.useState.call(void 0, null);\\n  const sorted = _booking.sortBookings.call(void 0, _seed.BOOKINGS);\\n  const selectedRoom = _nullishCoalesce(_seed.ROOMS.find((r) => r.id === selectedRoomId), () => ( null));\\n\\n  const selectRoom = (id) => {\\n    setSelectedRoomId(id);\\n    setSelectedSlot(null); // đổi phòng ⇒ ô cũ không còn ý nghĩa\\n  };\\n\\n  return (\\n    _jsxruntime.jsxs.call(void 0, _jsxruntime.Fragment, { children: [\\n      _jsxruntime.jsx.call(void 0, _reactbootstrap.Navbar, { bg: \\\"primary\\\", variant: \\\"dark\\\", expand: \\\"md\\\", id: \\\"app-nav\\\", children: \\n        _jsxruntime.jsxs.call(void 0, _reactbootstrap.Container, { children: [\\n          _jsxruntime.jsx.call(void 0, _reactbootstrap.Navbar.Brand, { id: \\\"title\\\", children: \\\"CT Booking\\\" })\\n          , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Navbar.Text, { id: \\\"summary\\\", className: \\\"text-white\\\", children: [_seed.ROOMS.length, \\\" rooms · \\\"   , _seed.BOOKINGS.length, \\\" bookings today\\\"  ]})\\n        ]})\\n      })\\n      , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Container, { className: \\\"py-4\\\", children: [\\n        _jsxruntime.jsx.call(void 0, _reactbootstrap.Row, { className: \\\"g-3\\\", children: \\n          _seed.ROOMS.map((room) => {\\n            const free = _booking.freeSlots.call(void 0, room.id, _seed.BOOKINGS);\\n            return (\\n              _jsxruntime.jsx.call(void 0, _reactbootstrap.Col, { xs: 12, md: 6, lg: 4, children: \\n                _jsxruntime.jsx.call(void 0, _RoomCard2.default, {\\n                  room: room,\\n                  bookings: sorted.filter((b) => b.roomId === room.id),\\n                  freeCount: free.length,\\n                  firstFree: free[0],\\n                  selected: room.id === selectedRoomId,\\n                  onSelect: selectRoom,}\\n                )\\n              }, room.id)\\n            );\\n          })\\n        })\\n        , selectedRoom && (\\n          _jsxruntime.jsx.call(void 0, _reactbootstrap.Card, { className: \\\"mt-4\\\", id: \\\"selected-panel\\\", children: \\n            _jsxruntime.jsxs.call(void 0, _reactbootstrap.Card.Body, { children: [\\n              _jsxruntime.jsxs.call(void 0, _reactbootstrap.Card.Title, { id: \\\"selected-room\\\", children: [\\\"Selected: \\\" , selectedRoom.name]})\\n              , _jsxruntime.jsx.call(void 0, _SlotPicker2.default, { slots: _booking.freeSlots.call(void 0, selectedRoom.id, _seed.BOOKINGS), value: selectedSlot, onChange: setSelectedSlot,} )\\n              , _jsxruntime.jsx.call(void 0, 'p', { id: \\\"selected-slot\\\", className: \\\"mt-2 mb-2\\\" , children: \\n                selectedSlot ? `Selected slot: ${selectedSlot}–${_booking.addMinutes.call(void 0, selectedSlot, 30)}` : 'Choose a start time'\\n              })\\n              , _jsxruntime.jsx.call(void 0, _reactbootstrap.Button, { id: \\\"clear-selection\\\", variant: \\\"link\\\", onClick: () => selectRoom(null), children: \\\"Clear selection\\\" })\\n            ]})\\n          })\\n        )\\n      ]})\\n    ]})\\n  );\\n} exports.default = App;\\n\",\"src/components/Schedule.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/components/Schedule.js — danh sách lượt đặt của một phòng\\nvar _proptypes = require('prop-types'); var _proptypes2 = _interopRequireDefault(_proptypes);\\nvar _reactbootstrap = require('react-bootstrap');\\nvar _booking = require('../domain/booking');\\n\\n function Schedule({ bookings }) {\\n  if (bookings.length === 0) return _jsxruntime.jsx.call(void 0, 'p', { className: \\\"no-bookings text-muted mb-0 px-3\\\"   , children: \\\"No bookings yet\\\"  });\\n  return (\\n    _jsxruntime.jsx.call(void 0, _reactbootstrap.ListGroup, { variant: \\\"flush\\\", className: \\\"schedule\\\", children: \\n      bookings.map((b) => (\\n        _jsxruntime.jsxs.call(void 0, _reactbootstrap.ListGroup.Item, { className: \\\"booking-row\\\", children: [_booking.formatRange.call(void 0, b), \\\" · \\\"  , b.name, \\\" · \\\"  , b.purpose]}, b.id)\\n      ))\\n    })\\n  );\\n} exports.default = Schedule;\\n\\nSchedule.propTypes = {\\n  bookings: _proptypes2.default.arrayOf(\\n    _proptypes2.default.shape({ id: _proptypes2.default.oneOfType([_proptypes2.default.number, _proptypes2.default.string]).isRequired, start: _proptypes2.default.string.isRequired, end: _proptypes2.default.string.isRequired }),\\n  ).isRequired,\\n};\\n\",\"src/components/RoomCard.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/components/RoomCard.js — thẻ phòng: chỉ hiển thị + báo cha khi được chọn\\nvar _proptypes = require('prop-types'); var _proptypes2 = _interopRequireDefault(_proptypes);\\nvar _reactbootstrap = require('react-bootstrap');\\nvar _Schedule = require('./Schedule'); var _Schedule2 = _interopRequireDefault(_Schedule);\\n\\n function RoomCard({ room, bookings, freeCount, firstFree, selected, onSelect }) {\\n  const n = bookings.length;\\n  return (\\n    _jsxruntime.jsxs.call(void 0, _reactbootstrap.Card, { className: `room-card h-100 shadow-sm${selected ? ' selected border-primary' : ''}`, id: `room-${room.id}`, children: [\\n      _jsxruntime.jsxs.call(void 0, _reactbootstrap.Card.Body, { children: [\\n        _jsxruntime.jsx.call(void 0, _reactbootstrap.Card.Title, { className: \\\"room-name\\\", children: room.name})\\n        , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Card.Subtitle, { className: \\\"room-meta mb-2 text-muted\\\"  , children: [room.capacity, \\\" seats · Floor \\\"    , room.floor]})\\n        , _jsxruntime.jsx.call(void 0, 'div', { className: \\\"mb-2\\\", children: \\n          room.features.map((f) => _jsxruntime.jsx.call(void 0, _reactbootstrap.Badge, { bg: \\\"info\\\", className: \\\"feature me-1\\\" , children: f}, f))\\n        })\\n        , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Card.Text, { className: \\\"room-count\\\", children: [n, \\\" \\\" , n === 1 ? 'booking' : 'bookings', \\\" today\\\" ]})\\n      ]})\\n      , _jsxruntime.jsx.call(void 0, _Schedule2.default, { bookings: bookings,} )\\n      , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Card.Footer, { className: \\\"d-flex justify-content-between align-items-center\\\"  , children: [\\n        _jsxruntime.jsx.call(void 0, _reactbootstrap.Badge, { bg: freeCount > 0 ? 'success' : 'danger', className: \\\"first-free\\\", children: \\n          freeCount > 0 ? `First free slot: ${firstFree}` : 'Fully booked'\\n        })\\n        , _jsxruntime.jsx.call(void 0, _reactbootstrap.Button, { size: \\\"sm\\\", className: \\\"btn-select\\\", variant: selected ? 'primary' : 'outline-primary', disabled: freeCount === 0, onClick: () => onSelect(room.id), children: \\n          selected ? 'Selected' : 'Select'\\n        })\\n      ]})\\n    ]})\\n  );\\n} exports.default = RoomCard;\\n\\nRoomCard.propTypes = {\\n  room: _proptypes2.default.shape({\\n    id: _proptypes2.default.number.isRequired,\\n    name: _proptypes2.default.string.isRequired,\\n    capacity: _proptypes2.default.number.isRequired,\\n    floor: _proptypes2.default.number.isRequired,\\n    features: _proptypes2.default.arrayOf(_proptypes2.default.string).isRequired,\\n  }).isRequired,\\n  bookings: _proptypes2.default.array.isRequired,\\n  freeCount: _proptypes2.default.number.isRequired,\\n  firstFree: _proptypes2.default.string,\\n  selected: _proptypes2.default.bool,\\n  onSelect: _proptypes2.default.func.isRequired,\\n};\\n\",\"src/components/SlotPicker.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/components/SlotPicker.js — component ĐIỀU KHIỂN: cha giữ value, con báo onChange\\nvar _proptypes = require('prop-types'); var _proptypes2 = _interopRequireDefault(_proptypes);\\nvar _reactbootstrap = require('react-bootstrap');\\n\\n function SlotPicker({ slots, value, onChange }) {\\n  if (slots.length === 0) return _jsxruntime.jsx.call(void 0, 'p', { className: \\\"text-muted\\\", children: \\\"No free slots\\\"  });\\n  return (\\n    _jsxruntime.jsx.call(void 0, 'div', { className: \\\"slot-picker\\\", children: \\n      slots.map((s) => (\\n        _jsxruntime.jsx.call(void 0, _reactbootstrap.Button, { size: \\\"sm\\\", className: \\\"slot me-1 mb-1\\\"  , variant: s === value ? 'primary' : 'outline-primary', active: s === value, onClick: () => onChange(s), children: \\n          s\\n        }, s)\\n      ))\\n    })\\n  );\\n} exports.default = SlotPicker;\\n\\nSlotPicker.propTypes = {\\n  slots: _proptypes2.default.arrayOf(_proptypes2.default.string).isRequired,\\n  value: _proptypes2.default.string,\\n  onChange: _proptypes2.default.func.isRequired,\\n};\\n\",\"src/index.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\"); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\\nvar _react = require('react'); var _react2 = _interopRequireDefault(_react);\\nvar _client = require('react-dom/client'); var _client2 = _interopRequireDefault(_client);\\nrequire('bootstrap/dist/css/bootstrap.min.css');\\nvar _App = require('./App'); var _App2 = _interopRequireDefault(_App);\\n\\nconst root = _client2.default.createRoot(document.getElementById('root'));\\nroot.render(\\n  _jsxruntime.jsx.call(void 0, _react2.default.StrictMode, { children: \\n    _jsxruntime.jsx.call(void 0, _App2.default, {} )\\n  })\\n);\\n\",\"src/data/seed.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/data/seed.js — dữ liệu mẫu (đã cho)\\n const ROOMS = [\\n  {\\n    id: 1,\\n    name: 'Room A1',\\n    capacity: 4,\\n    floor: 1,\\n    features: [\\n      'TV'\\n    ]\\n  },\\n  {\\n    id: 2,\\n    name: 'Room A2',\\n    capacity: 6,\\n    floor: 1,\\n    features: [\\n      'Whiteboard',\\n      'TV'\\n    ]\\n  },\\n  {\\n    id: 3,\\n    name: 'Room B1',\\n    capacity: 8,\\n    floor: 2,\\n    features: [\\n      'Whiteboard'\\n    ]\\n  }\\n]; exports.ROOMS = ROOMS;\\n\\n const BOOKINGS = [\\n  {\\n    id: 1,\\n    roomId: 1,\\n    student: 'HE180001',\\n    name: 'An',\\n    start: '08:00',\\n    end: '09:30',\\n    purpose: 'SWT301 review'\\n  },\\n  {\\n    id: 2,\\n    roomId: 1,\\n    student: 'HE180002',\\n    name: 'Binh',\\n    start: '10:00',\\n    end: '11:00',\\n    purpose: 'FER202 project'\\n  },\\n  {\\n    id: 3,\\n    roomId: 2,\\n    student: 'HE180003',\\n    name: 'Cuong',\\n    start: '09:00',\\n    end: '10:30',\\n    purpose: 'Group meeting'\\n  }\\n]; exports.BOOKINGS = BOOKINGS;\\n\",\"src/domain/booking.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _nullishCoalesce(lhs, rhsFn) { if (lhs != null) { return lhs; } else { return rhsFn(); } }// src/domain/booking.js — lõi nghiệp vụ từ mốc 2 (ES module)\\nconst OPEN = '08:00';\\nconst CLOSE = '17:00';\\nconst MAX_MINUTES = 120;\\n\\n// '08:30' ⇒ 510 phút kể từ 00:00\\n function toMinutes(time) {\\n  const [h, m] = time.split(':').map(Number);\\n  return h * 60 + m;\\n} exports.toMinutes = toMinutes;\\n\\n// 510 ⇒ '08:30'\\n function toTime(minutes) {\\n  return `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`;\\n} exports.toTime = toTime;\\n\\n// hai khoảng [start, end) chồng nhau khi mỗi cái bắt đầu trước khi cái kia kết thúc\\n function overlaps(a, b) {\\n  return toMinutes(a.start) \\u003c toMinutes(b.end) && toMinutes(b.start) \\u003c toMinutes(a.end);\\n} exports.overlaps = overlaps;\\n\\n// danh sách lỗi (rỗng = hợp lệ); chỉ so trùng với booking CÙNG phòng, khác id\\n function validateBooking(booking, existing = []) {\\n  const errors = [];\\n  const s = toMinutes(booking.start);\\n  const e = toMinutes(booking.end);\\n  if (s >= e) errors.push('Start must be before end');\\n  if (s \\u003c toMinutes(OPEN) || e > toMinutes(CLOSE)) errors.push('Outside opening hours (08:00–17:00)');\\n  if (e - s > MAX_MINUTES) errors.push('Maximum 2 hours per booking');\\n  const clash = existing.some((x) => x.roomId === booking.roomId && x.id !== booking.id && overlaps(x, booking));\\n  if (clash) errors.push('Overlaps with an existing booking');\\n  return errors;\\n} exports.validateBooking = validateBooking;\\n\\n// giờ bắt đầu của các ô trống step phút trong giờ mở cửa\\n function freeSlots(roomId, bookings, step = 30) {\\n  const taken = bookings.filter((b) => b.roomId === roomId);\\n  const slots = [];\\n  for (let t = toMinutes(OPEN); t + step \\u003c= toMinutes(CLOSE); t += step) {\\n    const slot = { start: toTime(t), end: toTime(t + step) };\\n    if (!taken.some((b) => overlaps(b, slot))) slots.push(slot.start);\\n  }\\n  return slots;\\n} exports.freeSlots = freeSlots;\\n\\n// { roomId: số booking } bằng reduce, không sửa dữ liệu vào\\n function countByRoom(bookings) {\\n  return bookings.reduce((acc, b) => ({ ...acc, [b.roomId]: (_nullishCoalesce(acc[b.roomId], () => ( 0))) + 1 }), {});\\n} exports.countByRoom = countByRoom;\\n\\n// bản sao đã sắp: theo phòng rồi theo giờ bắt đầu\\n function sortBookings(list) {\\n  return [...list].sort((a, b) => a.roomId - b.roomId || toMinutes(a.start) - toMinutes(b.start));\\n} exports.sortBookings = sortBookings;\\n\\n// '08:00–09:30 (90 min)'\\n function formatRange({ start, end }) {\\n  return `${start}–${end} (${toMinutes(end) - toMinutes(start)} min)`;\\n} exports.formatRange = formatRange;\\n\\n// cộng phút vào một giờ: addMinutes('09:30', 60) ⇒ '10:30'\\n function addMinutes(time, minutes) {\\n  return toTime(toMinutes(time) + minutes);\\n} exports.addMinutes = addMinutes;\\n\"};var CSS={};var DB=null;var BASE=\"http://localhost:9999\";var URL0=null;var THANH=false;\nfunction kho(){var m={};var k={getItem:function(x){x=String(x);return Object.prototype.hasOwnProperty.call(m,x)?m[x]:null},setItem:function(x,v){m[String(x)]=String(v)},removeItem:function(x){delete m[String(x)]},clear:function(){m={}},key:function(i){return Object.keys(m)[i]||null}};Object.defineProperty(k,'length',{get:function(){return Object.keys(m).length}});return k}\ntry{Object.defineProperty(window,'localStorage',{value:kho(),configurable:true})}catch(e){}\ntry{Object.defineProperty(window,'sessionStorage',{value:kho(),configurable:true})}catch(e){}\nwindow.confirm=function(){return true};window.alert=function(m){console.log('[alert]',m);var t=document.getElementById('cl-demo-alert');if(!t){t=document.createElement('div');t.id='cl-demo-alert';t.style.cssText='position:fixed;right:12px;bottom:12px;z-index:99999;max-width:320px;padding:10px 14px;border-radius:10px;background:#0f172a;color:#fff;font:13px system-ui;box-shadow:0 6px 24px rgba(0,0,0,.25)';document.body.appendChild(t)}t.textContent='alert: '+m;clearTimeout(t.__h);t.__h=setTimeout(function(){t.remove()},2600)};\nvar ENV={NODE_ENV:'production',MODE:'production',PROD:true,DEV:false,BASE_URL:'/'};\nString(M['.env']||'').split(/\\r?\\n/).forEach(function(d){var m=/^\\s*(?:export\\s+)?([A-Za-z_][A-Za-z0-9_]*)\\s*=\\s*(.*)\\s*$/.exec(d);if(m)ENV[m[1]]=m[2].replace(/^(['\"])(.*)\\1$/,'$2')});\nwindow.__CL_ENV__=ENV;if(!window.process)window.process={env:ENV};\n// json-server giả (bản sao domAgent.ts)\nvar jsDb=DB?JSON.parse(JSON.stringify(DB)):null;\nfunction tl(st,b){return new Response(b===undefined?'{}':JSON.stringify(b),{status:st,headers:{'content-type':'application/json'}})}\nfunction lay(o,k){return String(k).split('.').reduce(function(a,p){return a==null?undefined:a[p]},o)}\nfunction mot(t){return /ies$/.test(t)?t.slice(0,-3)+'y':t.replace(/s$/,'')}\nfunction xuLy(method,url,body){var u=new URL(url);var ph=u.pathname.replace(/^\\/+|\\/+$/g,'').split('/').filter(Boolean).map(decodeURIComponent);var ten=ph[0],id=ph[1];\nif(!ten||!(ten in jsDb))return tl(404,{});var bang=jsDb[ten];var dl=null;if(body!=null&&body!==''){try{dl=JSON.parse(body)}catch(e){return tl(400,{})}}\nif(!Array.isArray(bang)){if(method==='GET')return tl(200,bang);if(method==='PUT'||method==='POST'){jsDb[ten]=dl||{};return tl(200,jsDb[ten])}if(method==='PATCH'){jsDb[ten]=Object.assign({},bang,dl||{});return tl(200,jsDb[ten])}return tl(404,{})}\nvar vt=function(x){return bang.findIndex(function(r){return String(r.id)===String(x)})};\nvar mr=function(r){var o=Object.assign({},r);u.searchParams.getAll('_expand').forEach(function(e){var b=jsDb[e+'s']||jsDb[e];if(Array.isArray(b))o[e]=b.find(function(x){return String(x.id)===String(r[e+'Id'])})});u.searchParams.getAll('_embed').forEach(function(e){var b=jsDb[e];if(Array.isArray(b)){var k=mot(ten)+'Id';o[e]=b.filter(function(x){return String(x[k])===String(r.id)})}});return o};\nif(method==='GET'){if(id!=null){var i=vt(id);return i<0?tl(404,{}):tl(200,mr(bang[i]))}var ds=bang.slice();var loc={};u.searchParams.forEach(function(v,k){if(k.charAt(0)!=='_'&&k!=='q')(loc[k]=loc[k]||[]).push(v)});\nObject.keys(loc).forEach(function(k){var vs=loc[k],m=/^(.*)_(like|gte|lte|ne)$/.exec(k);ds=ds.filter(function(r){if(m){var gv=lay(r,m[1]);return vs.every(function(v){if(m[2]==='like')return new RegExp(v,'i').test(String(gv));if(m[2]==='ne')return String(gv)!==v;var a=Number(gv),b=Number(v);var so=!isNaN(a)&&!isNaN(b);return m[2]==='gte'?(so?a>=b:String(gv)>=v):(so?a<=b:String(gv)<=v)})}var g=lay(r,k);return vs.some(function(v){return String(g)===v})})});\nvar qq=u.searchParams.get('q');if(qq)ds=ds.filter(function(r){return JSON.stringify(r).toLowerCase().indexOf(qq.toLowerCase())>=0});\nvar sx=u.searchParams.get('_sort');if(sx){var tr=sx.split(','),th=(u.searchParams.get('_order')||'asc').split(',');ds.sort(function(a,b){for(var t=0;t<tr.length;t++){var f=tr[t].replace(/^-/,''),gi=tr[t].charAt(0)==='-'||(th[t]||th[0])==='desc';var x=lay(a,f),y=lay(b,f);var c=(typeof x==='number'&&typeof y==='number')?x-y:String(x).localeCompare(String(y));if(c)return gi?-c:c}return 0})}\nvar gh=u.searchParams.get('_limit'),pg=u.searchParams.get('_page');var tong=ds.length;if(pg){var n=Number(gh)||10;ds=ds.slice((Number(pg)-1)*n,Number(pg)*n)}else if(gh)ds=ds.slice(0,Number(gh));var rr=tl(200,ds.map(mr));try{rr.headers.set('X-Total-Count',String(tong))}catch(e){}return rr}\nif(method==='POST'){if(id!=null)return tl(404,{});var mo=Object.assign({},dl||{});if(mo.id==null){var so2=bang.length&&bang.every(function(r){return typeof r.id==='number'});mo.id=so2||!bang.length?bang.reduce(function(mx,r){return Math.max(mx,Number(r.id)||0)},0)+1:Math.random().toString(16).slice(2,6)}bang.push(mo);return tl(201,mo)}\nif(id==null)return tl(404,{});var j=vt(id);if(j<0)return tl(404,{});\nif(method==='PUT'){bang[j]=Object.assign({},dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='PATCH'){bang[j]=Object.assign({},bang[j],dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='DELETE'){bang.splice(j,1);return tl(200,{})}return tl(404,{})}\nif(jsDb){window.fetch=function(url,init){init=init||{};var s=String(url&&url.url?url.url:url);var me=String(init.method||'GET').toUpperCase();return new Promise(function(res){setTimeout(function(){if(s.indexOf(BASE+'/')!==0)return res(new Response('Not Found',{status:404}));try{res(xuLy(me,s,init.body))}catch(e){res(tl(500,{error:String(e)}))}},120)})}}\nfunction axiosGia(){function goi(method,url,data,cfg){cfg=cfg||{};var u=(cfg.baseURL||'')+url;if(cfg.params){var sp=new URLSearchParams(cfg.params).toString();if(sp)u+=(u.indexOf('?')>=0?'&':'?')+sp}var init={method:method.toUpperCase(),headers:Object.assign({'Content-Type':'application/json'},cfg.headers||{})};if(data!==undefined)init.body=typeof data==='string'?data:JSON.stringify(data);\nreturn window.fetch(u,init).then(function(res){return res.text().then(function(t){var d;try{d=JSON.parse(t)}catch(e){d=t}var hd={};try{res.headers.forEach(function(v,k){hd[k.toLowerCase()]=v})}catch(e){}var out={data:d,status:res.status,statusText:res.statusText,headers:hd,config:cfg};if(res.status>=200&&res.status<300)return out;var err=new Error('Request failed with status code '+res.status);err.response=out;err.name='AxiosError';throw err})})}\nfunction tao(base){var a=function(cfg){return goi(cfg.method||'get',cfg.url,cfg.data,Object.assign({},base,cfg))};['get','delete','head'].forEach(function(m){a[m]=function(url,cfg){return goi(m,url,undefined,Object.assign({},base,cfg))}});['post','put','patch'].forEach(function(m){a[m]=function(url,data,cfg){return goi(m,url,data,Object.assign({},base,cfg))}});a.create=function(c){return tao(Object.assign({},base,c))};a.defaults=base;a.interceptors={request:{use:function(){}},response:{use:function(){}}};a.isAxiosError=function(e){return!!(e&&e.name==='AxiosError')};return a}\nvar ax=tao({});ax.default=ax;return ax}\nvar R=window.React;var tach=function(p,k){var q=Object.assign({},p);var c=q.children;delete q.children;if(k!==undefined)q.key=k;return[q,c]};\nvar j=function(t,p,k){var x=tach(p,k);return x[1]===undefined?R.createElement(t,x[0]):R.createElement(t,x[0],x[1])};\nvar js=function(t,p,k){var x=tach(p,k);return R.createElement.apply(null,[t,x[0]].concat(x[1]||[]))};\n// React Router: MemoryRouter + thanh địa chỉ (gõ URL được — thử ?status=ACTIVE, /items/2…)\nvar viTri=null,routerBoc=null,dieuHuong=null;\nfunction datThanh(v){var o=document.getElementById('cl-demo-url');if(o&&document.activeElement!==o)o.value='http://localhost:3000'+v}\nfunction routerGia(){var RRD=window.ReactRouterDOM;if(!RRD)return null;if(routerBoc)return routerBoc;\nfunction Ghi(){var l=RRD.useLocation();var nav=RRD.useNavigate();dieuHuong=nav;viTri=l.pathname+l.search+l.hash;R.useEffect(function(){datThanh(viTri)});return null}\nfunction RG(p){var d=R.useState(function(){return[viTri||URL0||'/']})[0];return R.createElement(RRD.MemoryRouter,{initialEntries:d,basename:p.basename},R.createElement(Ghi),p.children)}\nfunction tr(routes,opts){var r=RRD.createMemoryRouter(routes,Object.assign({},opts||{},{initialEntries:[viTri||URL0||'/']}));var g=function(s){viTri=s.location.pathname+s.location.search+s.location.hash;datThanh(viTri)};g(r.state);r.subscribe(g);dieuHuong=function(to){r.navigate(to)};return r}\nrouterBoc=Object.assign({},RRD,{BrowserRouter:RG,HashRouter:RG,createBrowserRouter:tr,createHashRouter:tr});return routerBoc}\nvar thunk=function(api){return function(next){return function(a){return typeof a==='function'?a(api.dispatch,api.getState):next(a)}}};\nvar LIB={'react':R,'react-dom':window.ReactDOM,'react-dom/client':window.ReactDOM,'react/jsx-runtime':{jsx:j,jsxs:js,Fragment:R.Fragment},'react/jsx-dev-runtime':{jsxDEV:j,Fragment:R.Fragment},'prop-types':window.PropTypes,'react-bootstrap':window.ReactBootstrap,'@reduxjs/toolkit':window.RTK,'redux':window.RTK,'react-redux':window.ReactRedux,'redux-thunk':{'default':thunk,thunk:thunk}};\nvar C={};\nfunction dd(tu,s){var p=tu.split('/').slice(0,-1);s.split('/').forEach(function(x){if(x==='.'||x==='')return;if(x==='..')p.pop();else p.push(x)});return p.join('/')}\nfunction tim(p){var d=['','.js','.jsx','.ts','.tsx','.json','/index.js','/index.jsx'];for(var i=0;i<d.length;i++){if(M[p+d[i]]!=null||CSS[p+d[i]]!=null)return p+d[i]}return null}\nfunction req(tu,s){if(s==='axios')return axiosGia();if(s==='react-router-dom'||s==='react-router')return routerGia();if(LIB[s])return LIB[s];if(/\\.css$/.test(s)&&!/^\\./.test(s))return{};var p=tim(dd(tu,s));if(!p)throw new Error('Cannot find module '+s);return nap(p)}\nfunction nap(p){if(C[p])return C[p].exports;if(CSS[p]!=null){var st=document.createElement('style');st.textContent=CSS[p];document.head.appendChild(st);C[p]={exports:{}};return{}}var m={exports:{}};C[p]=m;if(/\\.json$/.test(p)){m.exports=JSON.parse(M[p]);return m.exports}new Function('require','module','exports',M[p])(function(s){return req(p,s)},m,m.exports);return m.exports}\nif(THANH){var bar=document.createElement('form');bar.style.cssText='position:sticky;top:0;z-index:99998;display:flex;gap:6px;align-items:center;padding:6px 10px;background:#e2e8f0;border-bottom:1px solid #cbd5e1;font:12px system-ui';bar.innerHTML='<span style=\"color:#475569\">URL</span><input id=\"cl-demo-url\" style=\"flex:1;padding:4px 8px;border:1px solid #cbd5e1;border-radius:6px;font:12px ui-monospace,monospace\" aria-label=\"Address bar\"><button style=\"padding:3px 10px;border-radius:6px;border:1px solid #94a3b8;background:#fff;cursor:pointer\">Go</button>';\nbar.addEventListener('submit',function(e){e.preventDefault();var v=document.getElementById('cl-demo-url').value.replace(/^https?:\\/\\/[^/]+/,'')||'/';if(dieuHuong)dieuHuong(v)});document.body.insertBefore(bar,document.body.firstChild);datThanh(URL0||'/')}\nnap(\"src/index.js\");\n})();</script></body></html>"
+    }
+  ]
+}

@@ -1,0 +1,333 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-2-project-ctbooking-m2",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-2-2-destructuring-spread-modules"
+  },
+  "exercises": [
+    {
+      "title": "CT Booking · Milestone 2 — Booking rules in pure JavaScript",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 90,
+      "points": 100,
+      "concepts": [
+        "pure functions",
+        "destructuring",
+        "template literals",
+        "reduce",
+        "sorting a copy",
+        "half-open intervals"
+      ],
+      "prerequisites": [
+        "Lab 2 — Student Data Toolkit"
+      ],
+      "tags": [
+        "fer202",
+        "project",
+        "ct-booking",
+        "es6"
+      ],
+      "problemHtml": "<h1>CT BOOKING · MILESTONE 2: Booking rules in pure JavaScript</h1>\n<p class=\"bi-phu\">FER202 running project · Chapter 2 · Builds on milestone — · Suggested time: 90 minutes · Total: 10 marks</p>\n<h2>1. Overview</h2>\n<p><b>CT Booking</b> lets FPT students book group-study rooms in the library for today. Every later milestone (JSX, Bootstrap, components, forms, Context, hooks, Router, lazy loading, HTTP, Redux) builds on the rules you write now, so they must be <b>pure functions</b> that never change their inputs. Rooms open 08:00–17:00, a booking lasts at most 2 hours, and two bookings of the same room may not overlap (touching is fine: 09:30–10:00 after 08:00–09:30).</p>\n<h3>Main features</h3>\n<ul>\n  <li>Time helpers · Overlap rule · Validation · Free slots · reduce & sorting a copy · Formatting</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>Start from your solution of the previous milestone (the starter already contains it). Keep the ids/classes printed below — the grader uses them.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>data.js      # ROOMS, BOOKINGS (given)\nbooking.js   # toMinutes · toTime · addMinutes · overlaps · validateBooking · freeSlots · countByRoom · sortBookings · formatRange</pre>\n<h2>3. Data model</h2>\n<p><b>Room · Booking</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>Room</code></td><td>{ id, name, capacity, floor, features: string[] }</td><td></td></tr><tr><td><code>Booking</code></td><td>{ id, roomId, student, name, start: 'HH:MM', end: 'HH:MM', purpose }</td><td>opening hours 08:00–17:00 · max 2 h · no overlap in the same room</td></tr></tbody></table>\n<h2>4. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. Time helpers <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>toMinutes(\"08:30\") = 510</code>, <code>toTime(510) = \"08:30\"</code> (leading zeros), <code>addMinutes(\"09:30\", 60) = \"10:30\"</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>2. Overlap rule <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>overlaps(a, b)</code> for half-open ranges [start, end): touching ranges do NOT overlap.</li>\n</ul>\n<p><b>Example:</b></p>\n<pre>overlaps(08:00–09:30, 09:30–10:00)  ⇒  false</pre>\n</div>\n<div class=\"bi-cn\"><h3>3. Validation <span class=\"bi-diem\">2.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>validateBooking(b, existing)</code> ⇒ array of messages in this order: <code>Start must be before end</code>, <code>Outside opening hours (08:00–17:00)</code>, <code>Maximum 2 hours per booking</code>, <code>Overlaps with an existing booking</code> (same room, different id).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>4. Free slots <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>freeSlots(roomId, bookings, step = 30)</code> ⇒ start times of every free <code>step</code>-minute slot between 08:00 and 17:00.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. reduce &amp; sorting a copy <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>countByRoom</code> ⇒ <code>{ roomId: count }</code> with <code>reduce</code>; <code>sortBookings</code> ⇒ new array by room then start.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>6. Formatting <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>formatRange({ start, end })</code> ⇒ <code>08:00–09:30 (90 min)</code> (destructured parameter, template literal).</li>\n</ul>\n</div>\n<h2>5. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>toMinutes · toTime · addMinutes · overlaps · validateBooking · freeSlots · countByRoom · sortBookings · formatRange</code></td><td>function names the grader calls</td></tr></tbody></table>\n<h2>6. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>Time helpers</td><td>1</td></tr><tr><td>2</td><td>Overlap rule</td><td>1.5</td></tr><tr><td>3</td><td>Validation</td><td>2.5</td></tr><tr><td>4</td><td>Free slots</td><td>2</td></tr><tr><td>5</td><td>reduce &amp; sorting a copy</td><td>2</td></tr><tr><td>6</td><td>Formatting</td><td>1</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Comparing times as strings without padding (<code>\"9:00\" &gt; \"10:00\"</code> is true!).</li>\n  <li><code>&lt;=</code> in the overlap test — back-to-back bookings become impossible.</li>\n  <li><code>list.sort()</code> on the argument.</li>\n</ul>\n<h2>7. Submission</h2>\n<p>Write <code>booking.js</code>; the grader loads <code>data.js</code> then <code>booking.js</code> and calls the functions.</p>",
+      "problemHtmlVi": "<h1>CT BOOKING · MỐC 2: Luật đặt phòng bằng JavaScript thuần</h1>\n<p class=\"bi-phu\">Dự án xuyên suốt FER202 · Chương 2 · Tiếp nối mốc — · Thời gian gợi ý: 90 phút · Tổng: 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p><b>CT Booking</b> cho sinh viên FPT đặt phòng học nhóm ở thư viện trong ngày. Mọi mốc sau (JSX, Bootstrap, component, form, Context, hook, Router, tải lười, HTTP, Redux) đều dùng lại các luật bạn viết bây giờ, nên chúng phải là <b>hàm thuần</b> không sửa dữ liệu vào. Phòng mở 08:00–17:00, mỗi lượt tối đa 2 giờ, hai lượt cùng phòng không được chồng giờ (chạm nhau thì được: 09:30–10:00 sau 08:00–09:30).</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>Hàm thời gian · Luật chồng giờ · Kiểm hợp lệ · Ô trống · reduce & sắp bản sao · Định dạng</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Bắt đầu từ lời giải mốc trước (starter đã chứa sẵn). Giữ đúng id/class in bên dưới — máy chấm dùng chúng.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>data.js      # ROOMS, BOOKINGS (given)\nbooking.js   # toMinutes · toTime · addMinutes · overlaps · validateBooking · freeSlots · countByRoom · sortBookings · formatRange</pre>\n<h2>3. Mô hình dữ liệu</h2>\n<p><b>Room · Booking</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>Room</code></td><td>{ id, name, capacity, floor, features: string[] }</td><td></td></tr><tr><td><code>Booking</code></td><td>{ id, roomId, student, name, start: 'HH:MM', end: 'HH:MM', purpose }</td><td>giờ mở cửa 08:00–17:00 · tối đa 2 giờ · không trùng giờ cùng phòng</td></tr></tbody></table>\n<h2>4. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. Hàm thời gian <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>toMinutes(\"08:30\") = 510</code>, <code>toTime(510) = \"08:30\"</code> (có số 0 đầu), <code>addMinutes(\"09:30\", 60) = \"10:30\"</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>2. Luật chồng giờ <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>overlaps(a, b)</code> cho khoảng nửa mở [start, end): chạm nhau thì KHÔNG chồng.</li>\n</ul>\n<p><b>Ví dụ:</b></p>\n<pre>overlaps(08:00–09:30, 09:30–10:00)  ⇒  false</pre>\n</div>\n<div class=\"bi-cn\"><h3>3. Kiểm hợp lệ <span class=\"bi-diem\">2.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>validateBooking(b, existing)</code> ⇒ mảng thông điệp theo thứ tự: <code>Start must be before end</code>, <code>Outside opening hours (08:00–17:00)</code>, <code>Maximum 2 hours per booking</code>, <code>Overlaps with an existing booking</code> (cùng phòng, khác id).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>4. Ô trống <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>freeSlots(roomId, bookings, step = 30)</code> ⇒ giờ bắt đầu của mọi ô trống dài <code>step</code> phút trong 08:00–17:00.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. reduce &amp; sắp bản sao <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>countByRoom</code> ⇒ <code>{ roomId: số lượng }</code> bằng <code>reduce</code>; <code>sortBookings</code> ⇒ mảng mới theo phòng rồi giờ bắt đầu.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>6. Định dạng <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>formatRange({ start, end })</code> ⇒ <code>08:00–09:30 (90 min)</code> (tham số destructuring, template literal).</li>\n</ul>\n</div>\n<h2>5. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>toMinutes · toTime · addMinutes · overlaps · validateBooking · freeSlots · countByRoom · sortBookings · formatRange</code></td><td>tên hàm máy chấm gọi</td></tr></tbody></table>\n<h2>6. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>Hàm thời gian</td><td>1</td></tr><tr><td>2</td><td>Luật chồng giờ</td><td>1.5</td></tr><tr><td>3</td><td>Kiểm hợp lệ</td><td>2.5</td></tr><tr><td>4</td><td>Ô trống</td><td>2</td></tr><tr><td>5</td><td>reduce &amp; sắp bản sao</td><td>2</td></tr><tr><td>6</td><td>Định dạng</td><td>1</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>So giờ dạng chuỗi không có số 0 đầu (<code>\"9:00\" &gt; \"10:00\"</code> là true!).</li>\n  <li>Dùng <code>&lt;=</code> trong phép so chồng giờ — hai lượt liền nhau không đặt được.</li>\n  <li><code>list.sort()</code> trên tham số.</li>\n</ul>\n<h2>7. Nộp bài</h2>\n<p>Viết <code>booking.js</code>; máy chấm nạp <code>data.js</code> rồi <code>booking.js</code> và gọi các hàm.</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "Start from your solution of the previous milestone (the starter already contains it). Keep the ids/classes printed below — the grader uses them.|||Bắt đầu từ lời giải mốc trước (starter đã chứa sẵn). Giữ đúng id/class in bên dưới — máy chấm dùng chúng.",
+      "examplesJson": [
+        {
+          "input": "Overlap rule|||Luật chồng giờ",
+          "output": "overlaps(08:00–09:30, 09:30–10:00)  ⇒  false",
+          "explanation": "See the brief / Xem đề."
+        }
+      ],
+      "hintsJson": [
+        "Đổi mọi giờ sang phút rồi so sánh số — đừng so chuỗi.",
+        "freeSlots: for (let t = toMinutes(OPEN); t + step <= toMinutes(CLOSE); t += step) { … nếu không overlaps với booking nào của phòng ⇒ push }.",
+        "validateBooking: mỗi luật một if, push đúng thông điệp, giữ thứ tự."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "booking.js",
+          "language": "javascript",
+          "code": "// booking.js — STARTER: lõi nghiệp vụ CT Booking (giữ đúng tên hàm)\nconst OPEN = '08:00';\nconst CLOSE = '17:00';\nconst MAX_MINUTES = 120;\n\nfunction toMinutes(time) {}\nfunction toTime(minutes) {}\nfunction overlaps(a, b) {}\nfunction validateBooking(booking, existing = []) {}\nfunction freeSlots(roomId, bookings, step = 30) {}\nfunction countByRoom(bookings) {}\nfunction sortBookings(list) {}\nfunction formatRange(booking) {}\nfunction addMinutes(time, minutes) {}\n"
+        },
+        {
+          "name": "data.js",
+          "language": "javascript",
+          "code": "// data.js — dữ liệu mẫu (đã cho)\nconst ROOMS = [\n  {\n    id: 1,\n    name: 'Room A1',\n    capacity: 4,\n    floor: 1,\n    features: [\n      'TV'\n    ]\n  },\n  {\n    id: 2,\n    name: 'Room A2',\n    capacity: 6,\n    floor: 1,\n    features: [\n      'Whiteboard',\n      'TV'\n    ]\n  },\n  {\n    id: 3,\n    name: 'Room B1',\n    capacity: 8,\n    floor: 2,\n    features: [\n      'Whiteboard'\n    ]\n  }\n];\n\nconst BOOKINGS = [\n  {\n    id: 1,\n    roomId: 1,\n    student: 'HE180001',\n    name: 'An',\n    start: '08:00',\n    end: '09:30',\n    purpose: 'SWT301 review'\n  },\n  {\n    id: 2,\n    roomId: 1,\n    student: 'HE180002',\n    name: 'Binh',\n    start: '10:00',\n    end: '11:00',\n    purpose: 'FER202 project'\n  },\n  {\n    id: 3,\n    roomId: 2,\n    student: 'HE180003',\n    name: 'Cuong',\n    start: '09:00',\n    end: '10:30',\n    purpose: 'Group meeting'\n  }\n];\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "booking.js",
+          "language": "javascript",
+          "code": "// booking.js — lõi nghiệp vụ CT Booking: hàm THUẦN, dùng lại ở mọi mốc sau\nconst OPEN = '08:00';\nconst CLOSE = '17:00';\nconst MAX_MINUTES = 120;\n\n// '08:30' ⇒ 510 phút kể từ 00:00\nfunction toMinutes(time) {\n  const [h, m] = time.split(':').map(Number);\n  return h * 60 + m;\n}\n\n// 510 ⇒ '08:30'\nfunction toTime(minutes) {\n  return `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`;\n}\n\n// hai khoảng [start, end) chồng nhau khi mỗi cái bắt đầu trước khi cái kia kết thúc\nfunction overlaps(a, b) {\n  return toMinutes(a.start) < toMinutes(b.end) && toMinutes(b.start) < toMinutes(a.end);\n}\n\n// danh sách lỗi (rỗng = hợp lệ); chỉ so trùng với booking CÙNG phòng, khác id\nfunction validateBooking(booking, existing = []) {\n  const errors = [];\n  const s = toMinutes(booking.start);\n  const e = toMinutes(booking.end);\n  if (s >= e) errors.push('Start must be before end');\n  if (s < toMinutes(OPEN) || e > toMinutes(CLOSE)) errors.push('Outside opening hours (08:00–17:00)');\n  if (e - s > MAX_MINUTES) errors.push('Maximum 2 hours per booking');\n  const clash = existing.some((x) => x.roomId === booking.roomId && x.id !== booking.id && overlaps(x, booking));\n  if (clash) errors.push('Overlaps with an existing booking');\n  return errors;\n}\n\n// giờ bắt đầu của các ô trống step phút trong giờ mở cửa\nfunction freeSlots(roomId, bookings, step = 30) {\n  const taken = bookings.filter((b) => b.roomId === roomId);\n  const slots = [];\n  for (let t = toMinutes(OPEN); t + step <= toMinutes(CLOSE); t += step) {\n    const slot = { start: toTime(t), end: toTime(t + step) };\n    if (!taken.some((b) => overlaps(b, slot))) slots.push(slot.start);\n  }\n  return slots;\n}\n\n// { roomId: số booking } bằng reduce, không sửa dữ liệu vào\nfunction countByRoom(bookings) {\n  return bookings.reduce((acc, b) => ({ ...acc, [b.roomId]: (acc[b.roomId] ?? 0) + 1 }), {});\n}\n\n// bản sao đã sắp: theo phòng rồi theo giờ bắt đầu\nfunction sortBookings(list) {\n  return [...list].sort((a, b) => a.roomId - b.roomId || toMinutes(a.start) - toMinutes(b.start));\n}\n\n// '08:00–09:30 (90 min)'\nfunction formatRange({ start, end }) {\n  return `${start}–${end} (${toMinutes(end) - toMinutes(start)} min)`;\n}\n\n// cộng phút vào một giờ: addMinutes('09:30', 60) ⇒ '10:30'\nfunction addMinutes(time, minutes) {\n  return toTime(toMinutes(time) + minutes);\n}\n"
+        },
+        {
+          "name": "data.js",
+          "language": "javascript",
+          "code": "// data.js — dữ liệu mẫu (đã cho)\nconst ROOMS = [\n  {\n    id: 1,\n    name: 'Room A1',\n    capacity: 4,\n    floor: 1,\n    features: [\n      'TV'\n    ]\n  },\n  {\n    id: 2,\n    name: 'Room A2',\n    capacity: 6,\n    floor: 1,\n    features: [\n      'Whiteboard',\n      'TV'\n    ]\n  },\n  {\n    id: 3,\n    name: 'Room B1',\n    capacity: 8,\n    floor: 2,\n    features: [\n      'Whiteboard'\n    ]\n  }\n];\n\nconst BOOKINGS = [\n  {\n    id: 1,\n    roomId: 1,\n    student: 'HE180001',\n    name: 'An',\n    start: '08:00',\n    end: '09:30',\n    purpose: 'SWT301 review'\n  },\n  {\n    id: 2,\n    roomId: 1,\n    student: 'HE180002',\n    name: 'Binh',\n    start: '10:00',\n    end: '11:00',\n    purpose: 'FER202 project'\n  },\n  {\n    id: 3,\n    roomId: 2,\n    student: 'HE180003',\n    name: 'Cuong',\n    start: '09:00',\n    end: '10:30',\n    purpose: 'Group meeting'\n  }\n];\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Lõi nghiệp vụ tách khỏi giao diện là nền của cả dự án: các mốc sau chỉ việc gọi những hàm này. Đổi giờ ra phút biến mọi so sánh thành so số; khoảng nửa mở <code>[start, end)</code> cho phép hai lượt nối tiếp nhau. Mọi hàm trả giá trị mới nên dùng an toàn với state của React ở các mốc sau.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "booking.js",
+        "tepNap": [
+          "data.js",
+          "booking.js"
+        ],
+        "kiem": [
+          {
+            "nhom": "f1",
+            "moTa": "toMinutes / toTime",
+            "goi": "[toMinutes(\"08:30\"), toTime(510), toTime(1020)]",
+            "mongDoi": [
+              510,
+              "08:30",
+              "17:00"
+            ]
+          },
+          {
+            "nhom": "f1",
+            "moTa": "addMinutes",
+            "goi": "[addMinutes(\"09:30\", 60), addMinutes(\"16:30\", 30)]",
+            "mongDoi": [
+              "10:30",
+              "17:00"
+            ]
+          },
+          {
+            "nhom": "f1",
+            "an": true,
+            "moTa": "Leading zeros",
+            "goi": "toTime(65)",
+            "mongDoi": "01:05"
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Overlapping ranges",
+            "goi": "overlaps({ start: \"08:00\", end: \"09:30\" }, { start: \"09:00\", end: \"10:00\" })",
+            "mongDoi": true
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Touching ranges do not overlap",
+            "goi": "overlaps({ start: \"08:00\", end: \"09:30\" }, { start: \"09:30\", end: \"10:00\" })",
+            "mongDoi": false
+          },
+          {
+            "nhom": "f2",
+            "an": true,
+            "moTa": "One inside the other",
+            "goi": "overlaps({ start: \"10:00\", end: \"12:00\" }, { start: \"10:30\", end: \"11:00\" })",
+            "mongDoi": true
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Valid booking ⇒ no errors",
+            "goi": "validateBooking({ roomId: 1, start: \"11:00\", end: \"12:30\" }, BOOKINGS)",
+            "mongDoi": []
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Overlap in the same room",
+            "goi": "validateBooking({ roomId: 1, start: \"09:00\", end: \"10:00\" }, BOOKINGS)",
+            "mongDoi": [
+              "Overlaps with an existing booking"
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Several rules at once",
+            "goi": "validateBooking({ roomId: 3, start: \"16:00\", end: \"18:30\" }, BOOKINGS)",
+            "mongDoi": [
+              "Outside opening hours (08:00–17:00)",
+              "Maximum 2 hours per booking"
+            ]
+          },
+          {
+            "nhom": "f3",
+            "an": true,
+            "moTa": "Start after end",
+            "goi": "validateBooking({ roomId: 3, start: \"10:00\", end: \"09:00\" }, [])",
+            "mongDoi": [
+              "Start must be before end"
+            ]
+          },
+          {
+            "nhom": "f3",
+            "an": true,
+            "moTa": "Other rooms and the booking itself are ignored",
+            "goi": "[validateBooking({ roomId: 3, start: \"09:00\", end: \"10:00\" }, BOOKINGS), validateBooking({ id: 1, roomId: 1, start: \"08:00\", end: \"09:00\" }, BOOKINGS)]",
+            "mongDoi": [
+              [],
+              []
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Free 30-minute slots of Room A1",
+            "goi": "freeSlots(1, BOOKINGS).slice(0, 4)",
+            "mongDoi": [
+              "09:30",
+              "11:00",
+              "11:30",
+              "12:00"
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Counts",
+            "goi": "[freeSlots(1, BOOKINGS).length, freeSlots(2, BOOKINGS).length, freeSlots(3, BOOKINGS).length]",
+            "mongDoi": [
+              13,
+              15,
+              18
+            ]
+          },
+          {
+            "nhom": "f4",
+            "an": true,
+            "moTa": "Custom step of 60 minutes",
+            "goi": "freeSlots(2, BOOKINGS, 60)",
+            "mongDoi": [
+              "08:00",
+              "11:00",
+              "12:00",
+              "13:00",
+              "14:00",
+              "15:00",
+              "16:00"
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "countByRoom with reduce",
+            "goi": "countByRoom(BOOKINGS)",
+            "mongDoi": {
+              "1": 2,
+              "2": 1
+            }
+          },
+          {
+            "nhom": "f5",
+            "moTa": "sortBookings sorts a copy by room then start",
+            "goi": "sortBookings([BOOKINGS[2], BOOKINGS[1], BOOKINGS[0]]).map((b) => b.id)",
+            "mongDoi": [
+              1,
+              2,
+              3
+            ]
+          },
+          {
+            "nhom": "f5",
+            "an": true,
+            "moTa": "Input array untouched",
+            "chuanBi": "const input = [BOOKINGS[2], BOOKINGS[0]]; sortBookings(input);",
+            "goi": "input.map((b) => b.id)",
+            "mongDoi": [
+              3,
+              1
+            ]
+          },
+          {
+            "nhom": "f6",
+            "moTa": "formatRange with duration",
+            "goi": "BOOKINGS.map(formatRange)",
+            "mongDoi": [
+              "08:00–09:30 (90 min)",
+              "10:00–11:00 (60 min)",
+              "09:00–10:30 (90 min)"
+            ]
+          },
+          {
+            "nhom": "f6",
+            "an": true,
+            "moTa": "Destructured parameter + template literal",
+            "kiem": "ma-nguon",
+            "tep": "booking.js",
+            "khop": "function\\s+formatRange\\s*\\(\\s*\\{\\s*start\\s*,\\s*end\\s*\\}"
+          },
+          {
+            "nhom": "f6",
+            "an": true,
+            "moTa": "No var",
+            "kiem": "ma-nguon",
+            "tep": "booking.js",
+            "khop": "\\bvar\\s",
+            "phuDinh": true
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. Time helpers",
+            "diem": 1
+          },
+          {
+            "ma": "f2",
+            "ten": "2. Overlap rule",
+            "diem": 1.5
+          },
+          {
+            "ma": "f3",
+            "ten": "3. Validation",
+            "diem": 2.5
+          },
+          {
+            "ma": "f4",
+            "ten": "4. Free slots",
+            "diem": 2
+          },
+          {
+            "ma": "f5",
+            "ten": "5. reduce & sorting a copy",
+            "diem": 2
+          },
+          {
+            "ma": "f6",
+            "ten": "6. Formatting",
+            "diem": 1
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "project",
+      "mistakesJson": [
+        {
+          "loi": "Quên padStart ⇒ \"8:0\" thay vì \"08:00\"."
+        },
+        {
+          "loi": "So trùng giờ với cả booking của phòng khác."
+        },
+        {
+          "loi": "countByRoom sửa trực tiếp object tích luỹ rồi trả lại tham chiếu dùng chung ở lần gọi sau."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "half-open interval",
+          "vi": "khoảng nửa mở [đầu, cuối): gồm điểm đầu, không gồm điểm cuối"
+        },
+        {
+          "en": "business rule",
+          "vi": "luật nghiệp vụ"
+        },
+        {
+          "en": "immutable update",
+          "vi": "cập nhật bằng cách tạo object/mảng MỚI"
+        },
+        {
+          "en": "rubric",
+          "vi": "thang điểm theo tiêu chí"
+        }
+      ]
+    }
+  ]
+}

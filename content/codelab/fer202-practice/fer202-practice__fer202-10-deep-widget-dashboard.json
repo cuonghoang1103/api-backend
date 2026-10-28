@@ -1,0 +1,702 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-10-deep-widget-dashboard",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-10-1-lazy-suspense"
+  },
+  "exercises": [
+    {
+      "title": "Deep Lab 10 — Widget Dashboard (lazy registry · per-widget boundaries · useTransition · preload)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 120,
+      "points": 100,
+      "concepts": [
+        "configuration-driven lazy loading",
+        "Suspense granularity",
+        "error boundaries per region",
+        "retrying failed chunks",
+        "useTransition with Suspense",
+        "preloading",
+        "persisted layout"
+      ],
+      "prerequisites": [
+        "Lab 10 — Lazy dashboard",
+        "10.1 Lazy loading & Suspense"
+      ],
+      "tags": [
+        "fer202",
+        "deep-lab",
+        "lazy",
+        "suspense",
+        "transitions"
+      ],
+      "problemHtml": "<h1>DEEP LAB 10: Widget Dashboard — code splitting in depth</h1>\n<p class=\"bi-phu\">FER202 · Chapter 10 (deep) · Suggested time: 120 minutes · Total: 10 marks</p>\n<h2>1. Overview</h2>\n<p>A customisable dashboard where users add widgets from a catalogue. Widget code must download only when a widget is added, each widget gets its <b>own</b> loading skeleton and error boundary (one broken widget must not break the page), the layout is remembered, and switching between lazily loaded tabs uses <code>useTransition</code> so the current page stays visible instead of flashing a fallback. Tabs preload on hover/focus.</p>\n<h3>Main features</h3>\n<ul>\n  <li>Widget registry · persisted layout · per-widget Suspense & error boundary with retry · lazy data · transitions between tabs · preload.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>Widgets and pages are never imported statically from <code>App.js</code> or <code>Dashboard.js</code>; lazy components are created once (module level or a cache), never during render.</li>\n  <li>Given: <code>lazy/helpers.js</code> (<code>withDelay</code>, <code>lazyWithPreload</code>), the widgets and pages. json-server serves <code>GET /weather</code>.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>src/\n├── lazy/helpers.js            # withDelay · lazyWithPreload (given)\n├── widgets/\n│   ├── registry.js            # REGISTRY + getWidget(id, attempt)\n│   ├── Weather.js · Todo.js · Stocks.js   (given)\n├── components/\n│   ├── WidgetBoundary.js      # class error boundary + Retry\n│   └── Dashboard.js           # layout, add/remove, per-widget Suspense\n├── pages/Overview.js · Analytics.js · Settings.js   (given)\n├── App.js                     # tabs + useTransition + preload\n└── index.css (given)</pre>\n<h2>3. UI wireframe</h2>\n<pre class=\"bi-wire\">+-----------------------------------------------------------------+\n| CT Widgets                                                       |\n| [Overview] [Analytics] [Settings]   Loading tab…                 |\n| Overview                                                         |\n| [+ Weather] [+ Todo (disabled)] [+ Stocks]                       |\n| +-----------+  +-----------------+  +--------------------+       |\n| | Todo    × |  | Weather       × |  | Stocks           × |       |\n| | • Review… |  | ░░ Loading…  ░░ |  | Could not load     |       |\n| | • Write…  |  |                 |  | Stocks   [Retry]   |       |\n| +-----------+  +-----------------+  +--------------------+       |\n+-----------------------------------------------------------------+</pre>\n<h2>4. Data model</h2>\n<p><b>Registry &amp; state</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>REGISTRY[i]</code></td><td>{ id, title, load: () =&gt; Promise&lt;module&gt; }</td><td>stocks fails on the first load</td></tr><tr><td><code>layout</code></td><td>string[] (widget ids)</td><td>localStorage \"layout\", default [\"todo\"]</td></tr><tr><td><code>attempts</code></td><td>{ [id]: number }</td><td>new lazy + new boundary key on retry</td></tr><tr><td><code>tab</code></td><td>'overview' | 'analytics' | 'settings'</td><td>changed inside startTransition</td></tr></tbody></table>\n<h2>5. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. Widget registry <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>REGISTRY</code> of <code>{ id, title, load }</code>; <code>getWidget(id, attempt)</code> returns a cached <code>lazy(load)</code>. Toolbar <code>#add-weather|todo|stocks</code>; cards <code>.widget[data-id]</code> with <code>h3</code> and <code>.remove</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>2. Persisted layout <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Layout = array of ids in localStorage <code>layout</code> (default <code>[\"todo\"]</code>, corrupted ⇒ default); add (button disabled when present) and remove.</li>\n</ul>\n<p><b>Example:</b></p>\n<pre>add Weather ⇒ layout [\"todo\",\"weather\"] ⇒ reload keeps both</pre>\n</div>\n<div class=\"bi-cn\"><h3>3. Per-widget Suspense <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Each card wraps its widget in its own <code>Suspense</code> with <code>.skeleton</code> <code>Loading Weather…</code>; other cards stay visible.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>4. Per-widget error boundary <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Class <code>WidgetBoundary</code> shows <code>.widget-error</code> <code>Could not load Stocks</code> + <code>.retry</code>; retry increments the attempt ⇒ new lazy component + new boundary key ⇒ the widget loads.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. Load only when needed <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Weather's code and its <code>GET /weather</code> run only after the widget is added.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>6. Tabs with useTransition <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Three lazy pages; the first load shows <code>#page-fallback</code>. Switching runs <code>setTab</code> inside <code>startTransition</code>: the current page stays, <code>#tab-pending</code> <code>Loading tab…</code> shows, no fallback flash.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>7. Preload tabs <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>#tab-overview|analytics|settings</code> call <code>Component.preload</code> on mouse enter and focus; a preloaded tab opens without the pending hint.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>8. Splitting discipline <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>No static imports of widgets/pages in <code>App.js</code>/<code>Dashboard.js</code>.</li>\n</ul>\n</div>\n<h2>6. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>#tab-overview · #tab-analytics · #tab-settings · #tab-pending · #page-fallback</code></td><td>tabs</td></tr><tr><td><code>#overview-page · #analytics-page · #settings-page</code></td><td>pages (given)</td></tr><tr><td><code>#add-weather · #add-todo · #add-stocks · #widgets</code></td><td>toolbar</td></tr><tr><td><code>.widget[data-id] h3 · .remove · .skeleton · .widget-error · .retry</code></td><td>widget card</td></tr></tbody></table>\n<h2>7. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>Widget registry</td><td>1.5</td></tr><tr><td>2</td><td>Persisted layout</td><td>1.5</td></tr><tr><td>3</td><td>Per-widget Suspense</td><td>1</td></tr><tr><td>4</td><td>Per-widget error boundary</td><td>1.5</td></tr><tr><td>5</td><td>Load only when needed</td><td>1</td></tr><tr><td>6</td><td>Tabs with useTransition</td><td>1.5</td></tr><tr><td>7</td><td>Preload tabs</td><td>1</td></tr><tr><td>8</td><td>Splitting discipline</td><td>1</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>One Suspense around the whole grid — adding a widget blanks every widget.</li>\n  <li>Calling <code>lazy()</code> inside <code>map</code> during render — widgets reload on every render.</li>\n  <li>Retry that reuses the failed lazy component (it remembers the rejection).</li>\n  <li>Tab switch without a transition — the page flashes \"Loading page…\".</li>\n</ul>\n<h2>8. Submission</h2>\n<p>Work directly in the editor (files on the right) or download the starter, run it locally with Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> when the paper uses an API) and paste the files back. Press <b>Run</b> for the sample checks and <b>Submit</b> for full grading (hidden checks included).</p>",
+      "problemHtmlVi": "<h1>DEEP LAB 10: Bảng widget — chia mã chuyên sâu</h1>\n<p class=\"bi-phu\">FER202 · Chương 10 (chuyên sâu) · Thời gian gợi ý: 120 phút · Tổng: 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p>Bảng điều khiển tuỳ biến, người dùng thêm widget từ danh mục. Mã của widget chỉ được tải khi widget được thêm, mỗi widget có khung chờ và error boundary <b>riêng</b> (một widget hỏng không làm hỏng trang), bố cục được ghi nhớ, và chuyển giữa các tab tải lười dùng <code>useTransition</code> để trang hiện tại vẫn hiện thay vì nháy fallback. Tab được tải trước khi rê chuột/focus.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>Sổ đăng ký widget · bố cục lưu lại · Suspense & error boundary từng widget có thử lại · dữ liệu tải lười · chuyển tab bằng transition · tải trước.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Widget và trang không bao giờ được import tĩnh trong <code>App.js</code> hay <code>Dashboard.js</code>; component lazy được tạo một lần (cấp module hoặc cache), không tạo trong lúc render.</li>\n  <li>Có sẵn: <code>lazy/helpers.js</code> (<code>withDelay</code>, <code>lazyWithPreload</code>), các widget và trang. json-server phục vụ <code>GET /weather</code>.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>src/\n├── lazy/helpers.js            # withDelay · lazyWithPreload (given)\n├── widgets/\n│   ├── registry.js            # REGISTRY + getWidget(id, attempt)\n│   ├── Weather.js · Todo.js · Stocks.js   (given)\n├── components/\n│   ├── WidgetBoundary.js      # class error boundary + Retry\n│   └── Dashboard.js           # layout, add/remove, per-widget Suspense\n├── pages/Overview.js · Analytics.js · Settings.js   (given)\n├── App.js                     # tabs + useTransition + preload\n└── index.css (given)</pre>\n<h2>3. Wireframe giao diện</h2>\n<pre class=\"bi-wire\">+-----------------------------------------------------------------+\n| CT Widgets                                                       |\n| [Overview] [Analytics] [Settings]   Loading tab…                 |\n| Overview                                                         |\n| [+ Weather] [+ Todo (disabled)] [+ Stocks]                       |\n| +-----------+  +-----------------+  +--------------------+       |\n| | Todo    × |  | Weather       × |  | Stocks           × |       |\n| | • Review… |  | ░░ Loading…  ░░ |  | Could not load     |       |\n| | • Write…  |  |                 |  | Stocks   [Retry]   |       |\n| +-----------+  +-----------------+  +--------------------+       |\n+-----------------------------------------------------------------+</pre>\n<h2>4. Mô hình dữ liệu</h2>\n<p><b>Registry &amp; state</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>REGISTRY[i]</code></td><td>{ id, title, load: () =&gt; Promise&lt;module&gt; }</td><td>stocks hỏng lần tải đầu</td></tr><tr><td><code>layout</code></td><td>string[] (widget ids)</td><td>localStorage \"layout\", mặc định [\"todo\"]</td></tr><tr><td><code>attempts</code></td><td>{ [id]: number }</td><td>lazy mới + key boundary mới khi thử lại</td></tr><tr><td><code>tab</code></td><td>'overview' | 'analytics' | 'settings'</td><td>đổi trong startTransition</td></tr></tbody></table>\n<h2>5. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. Sổ đăng ký widget <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>REGISTRY</code> gồm <code>{ id, title, load }</code>; <code>getWidget(id, attempt)</code> trả <code>lazy(load)</code> đã được nhớ. Thanh công cụ <code>#add-weather|todo|stocks</code>; thẻ <code>.widget[data-id]</code> có <code>h3</code> và <code>.remove</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>2. Bố cục được lưu <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Bố cục = mảng id trong localStorage <code>layout</code> (mặc định <code>[\"todo\"]</code>, hỏng ⇒ mặc định); thêm (nút vô hiệu khi đã có) và xoá.</li>\n</ul>\n<p><b>Ví dụ:</b></p>\n<pre>thêm Weather ⇒ layout [\"todo\",\"weather\"] ⇒ tải lại vẫn còn cả hai</pre>\n</div>\n<div class=\"bi-cn\"><h3>3. Suspense từng widget <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Mỗi thẻ bọc widget trong <code>Suspense</code> riêng với <code>.skeleton</code> <code>Loading Weather…</code>; thẻ khác vẫn hiện.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>4. Error boundary từng widget <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Class <code>WidgetBoundary</code> hiện <code>.widget-error</code> <code>Could not load Stocks</code> + <code>.retry</code>; thử lại tăng attempt ⇒ component lazy mới + key boundary mới ⇒ widget tải được.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. Chỉ tải khi cần <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Mã của Weather và <code>GET /weather</code> chỉ chạy sau khi widget được thêm.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>6. Tab với useTransition <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Ba trang tải lười; lần đầu hiện <code>#page-fallback</code>. Đổi tab chạy <code>setTab</code> trong <code>startTransition</code>: trang hiện tại vẫn giữ, hiện <code>#tab-pending</code> <code>Loading tab…</code>, không nháy fallback.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>7. Tải trước tab <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>#tab-overview|analytics|settings</code> gọi <code>Component.preload</code> khi rê chuột và focus; tab đã tải trước mở ngay không có dòng chờ.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>8. Kỷ luật chia mã <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Không import tĩnh widget/trang trong <code>App.js</code>/<code>Dashboard.js</code>.</li>\n</ul>\n</div>\n<h2>6. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>#tab-overview · #tab-analytics · #tab-settings · #tab-pending · #page-fallback</code></td><td>tab</td></tr><tr><td><code>#overview-page · #analytics-page · #settings-page</code></td><td>trang (có sẵn)</td></tr><tr><td><code>#add-weather · #add-todo · #add-stocks · #widgets</code></td><td>thanh công cụ</td></tr><tr><td><code>.widget[data-id] h3 · .remove · .skeleton · .widget-error · .retry</code></td><td>thẻ widget</td></tr></tbody></table>\n<h2>7. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>Sổ đăng ký widget</td><td>1.5</td></tr><tr><td>2</td><td>Bố cục được lưu</td><td>1.5</td></tr><tr><td>3</td><td>Suspense từng widget</td><td>1</td></tr><tr><td>4</td><td>Error boundary từng widget</td><td>1.5</td></tr><tr><td>5</td><td>Chỉ tải khi cần</td><td>1</td></tr><tr><td>6</td><td>Tab với useTransition</td><td>1.5</td></tr><tr><td>7</td><td>Tải trước tab</td><td>1</td></tr><tr><td>8</td><td>Kỷ luật chia mã</td><td>1</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Một Suspense bọc cả lưới — thêm một widget làm trắng mọi widget.</li>\n  <li>Gọi <code>lazy()</code> trong <code>map</code> lúc render — widget tải lại mỗi lần render.</li>\n  <li>Thử lại mà dùng lại component lazy đã hỏng (nó nhớ lỗi cũ).</li>\n  <li>Đổi tab không dùng transition — trang nháy \"Loading page…\".</li>\n</ul>\n<h2>8. Nộp bài</h2>\n<p>Làm thẳng trong editor (các tệp bên phải) hoặc tải starter, chạy trên máy bằng Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> khi đề dùng API) rồi dán lại tệp. Bấm <b>Chạy thử</b> để chạy kiểm mẫu, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn).</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "Widgets and pages are never imported statically from <code>App.js</code> or <code>Dashboard.js</code>; lazy components are created once (module level or a cache), never during render.|||Widget và trang không bao giờ được import tĩnh trong <code>App.js</code> hay <code>Dashboard.js</code>; component lazy được tạo một lần (cấp module hoặc cache), không tạo trong lúc render.\nGiven: <code>lazy/helpers.js</code> (<code>withDelay</code>, <code>lazyWithPreload</code>), the widgets and pages. json-server serves <code>GET /weather</code>.|||Có sẵn: <code>lazy/helpers.js</code> (<code>withDelay</code>, <code>lazyWithPreload</code>), các widget và trang. json-server phục vụ <code>GET /weather</code>.",
+      "examplesJson": [
+        {
+          "input": "Persisted layout|||Bố cục được lưu",
+          "output": "add Weather ⇒ layout [\"todo\",\"weather\"] ⇒ reload keeps both|||thêm Weather ⇒ layout [\"todo\",\"weather\"] ⇒ tải lại vẫn còn cả hai",
+          "explanation": "See the brief / Xem đề."
+        }
+      ],
+      "hintsJson": [
+        "getWidget(id, attempt): khoá cache = \"id:attempt\"; chưa có ⇒ cache.set(key, lazy(entry.load)).",
+        "Mỗi thẻ: <WidgetBoundary key={attempt} onRetry={…}><Suspense fallback={<div className=\"skeleton\">…</div>}><Widget/></Suspense></WidgetBoundary>.",
+        "const [isPending, startTransition] = useTransition(); onClick={() => startTransition(() => setTab(key))}.",
+        "Bố cục: useState(readLayout) đọc localStorage có try/catch; useEffect ghi lại khi layout đổi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER: import tĩnh mọi thứ, không Suspense, không lưu bố cục\nimport { useState } from 'react';\nimport Weather from './widgets/Weather';\nimport Todo from './widgets/Todo';\n\nexport default function App() {\n  const [tab, setTab] = useState('overview');\n  return (\n    <main>\n      <h1>CT Widgets</h1>\n      <button id=\"tab-overview\" onClick={() => setTab('overview')}>Overview</button>\n      <button id=\"tab-analytics\" onClick={() => setTab('analytics')}>Analytics</button>\n      {tab === 'overview' && <div id=\"overview-page\"><Weather /><Todo /></div>}\n    </main>\n  );\n}\n"
+        },
+        {
+          "name": "src/widgets/registry.js",
+          "language": "javascript",
+          "code": "// src/widgets/registry.js — STARTER\n// REGISTRY [{ id, title, load }] (stocks: lần đầu hỏng) + getWidget(id, attempt) nhớ component lazy\nexport {};\n"
+        },
+        {
+          "name": "src/components/WidgetBoundary.js",
+          "language": "javascript",
+          "code": "// src/components/WidgetBoundary.js — STARTER\n// class Error Boundary: .widget-error \"Could not load Stocks\" + .retry\nexport {};\n"
+        },
+        {
+          "name": "src/components/Dashboard.js",
+          "language": "javascript",
+          "code": "// src/components/Dashboard.js — STARTER\nexport default function Dashboard() {\n  return null;\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport './index.css';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "src/index.css",
+          "language": "css",
+          "code": "/* src/index.css (đã cho) */\nbody { font-family: system-ui, sans-serif; margin: 0; padding: 20px; background: #f1f5f9; color: #0f172a; }\n.tabs { display: flex; gap: 6px; margin-bottom: 12px; align-items: center; } .tabs button.active { background: #2563eb; color: #fff; }\n#tab-pending { font-size: 13px; color: #b45309; }\n.toolbar { display: flex; gap: 8px; margin: 12px 0; }\n.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }\n.widget { background: #fff; border-radius: 10px; padding: 12px; box-shadow: 0 1px 2px rgba(0,0,0,.08); position: relative; }\n.widget h3 { margin: 0 0 8px; font-size: 15px; } .widget .remove { position: absolute; top: 8px; right: 8px; }\n.skeleton { height: 48px; border-radius: 6px; background: linear-gradient(90deg, #e2e8f0, #f8fafc, #e2e8f0); color: #64748b; padding: 4px; }\n.widget-error { color: #b91c1c; }\n"
+        },
+        {
+          "name": "src/lazy/helpers.js",
+          "language": "javascript",
+          "code": "// src/lazy/helpers.js — giả lập mạng chậm + lazy có preload (dùng chung một promise)\nimport { lazy } from 'react';\n\nexport const withDelay = (factory, ms) => () =>\n  Promise.all([factory(), new Promise((r) => setTimeout(r, ms))]).then(([m]) => m);\n\nexport function lazyWithPreload(factory) {\n  let promise = null;\n  const load = () => {\n    if (!promise) promise = factory();\n    return promise;\n  };\n  const Component = lazy(load);\n  Component.preload = load;\n  return Component;\n}\n"
+        },
+        {
+          "name": "src/widgets/Weather.js",
+          "language": "javascript",
+          "code": "// src/widgets/Weather.js — widget tự tải dữ liệu khi được gắn\nimport { useEffect, useState } from 'react';\n\nexport default function Weather() {\n  const [data, setData] = useState(null);\n  useEffect(() => {\n    fetch('http://localhost:9999/weather').then((r) => r.json()).then(setData);\n  }, []);\n  return <p className=\"weather\">{data ? `${data.city} ${data.temp}°C` : '…'}</p>;\n}\n"
+        },
+        {
+          "name": "src/widgets/Todo.js",
+          "language": "javascript",
+          "code": "// src/widgets/Todo.js\nexport default function Todo() {\n  return (\n    <ul className=\"todo\">\n      <li>Review PR #42</li>\n      <li>Write tests</li>\n    </ul>\n  );\n}\n"
+        },
+        {
+          "name": "src/widgets/Stocks.js",
+          "language": "javascript",
+          "code": "// src/widgets/Stocks.js\nexport default function Stocks() {\n  return <p className=\"stocks\">VNM 70,000 ▲</p>;\n}\n"
+        },
+        {
+          "name": "src/pages/Overview.js",
+          "language": "javascript",
+          "code": "// src/pages/Overview.js\nimport Dashboard from '../components/Dashboard';\n\nexport default function Overview() {\n  return (\n    <div id=\"overview-page\">\n      <h2>Overview</h2>\n      <Dashboard />\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/pages/Analytics.js",
+          "language": "javascript",
+          "code": "// src/pages/Analytics.js\nexport default function Analytics() {\n  return <div id=\"analytics-page\"><h2>Analytics</h2><p>Visitors this week: 12,480</p></div>;\n}\n"
+        },
+        {
+          "name": "src/pages/Settings.js",
+          "language": "javascript",
+          "code": "// src/pages/Settings.js\nexport default function Settings() {\n  return <div id=\"settings-page\"><h2>Settings</h2><p>Theme: light</p></div>;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — tab tải lười; đổi tab trong startTransition để GIỮ trang cũ thay vì hiện fallback\nimport { Suspense, useState, useTransition } from 'react';\nimport { lazyWithPreload, withDelay } from './lazy/helpers';\n\nconst PAGES = {\n  overview: { label: 'Overview', Component: lazyWithPreload(withDelay(() => import('./pages/Overview'), 600)) },\n  analytics: { label: 'Analytics', Component: lazyWithPreload(withDelay(() => import('./pages/Analytics'), 600)) },\n  settings: { label: 'Settings', Component: lazyWithPreload(withDelay(() => import('./pages/Settings'), 600)) },\n};\n\nexport default function App() {\n  const [tab, setTab] = useState('overview');\n  const [isPending, startTransition] = useTransition();\n  const Page = PAGES[tab].Component;\n\n  return (\n    <main>\n      <h1>CT Widgets</h1>\n      <nav className=\"tabs\">\n        {Object.entries(PAGES).map(([key, p]) => (\n          <button\n            key={key}\n            id={`tab-${key}`}\n            type=\"button\"\n            className={key === tab ? 'active' : ''}\n            onMouseEnter={p.Component.preload}\n            onFocus={p.Component.preload}\n            onClick={() => startTransition(() => setTab(key))}\n          >\n            {p.label}\n          </button>\n        ))}\n        {isPending && <span id=\"tab-pending\">Loading tab…</span>}\n      </nav>\n      <Suspense fallback={<p id=\"page-fallback\">Loading page…</p>}>\n        <Page />\n      </Suspense>\n    </main>\n  );\n}\n"
+        },
+        {
+          "name": "src/widgets/registry.js",
+          "language": "javascript",
+          "code": "// src/widgets/registry.js — SỔ ĐĂNG KÝ: mỗi widget khai báo cách tải; component lazy tạo khi cần và được nhớ\nimport { lazy } from 'react';\nimport { withDelay } from '../lazy/helpers';\n\nlet stocksAttempts = 0; // giả lập mạng chập chờn: lần tải đầu của Stocks hỏng\n\nexport const REGISTRY = [\n  { id: 'weather', title: 'Weather', load: withDelay(() => import('./Weather'), 500) },\n  { id: 'todo', title: 'Todo', load: withDelay(() => import('./Todo'), 500) },\n  {\n    id: 'stocks',\n    title: 'Stocks',\n    load: () => {\n      stocksAttempts += 1;\n      if (stocksAttempts === 1) {\n        return new Promise((_, reject) => setTimeout(() => reject(new Error('ChunkLoadError: stocks')), 300));\n      }\n      return withDelay(() => import('./Stocks'), 300)();\n    },\n  },\n];\n\nconst cache = new Map(); // \"id:attempt\" ⇒ component lazy (tạo MỘT lần cho mỗi lần thử)\n\nexport function getWidget(id, attempt = 0) {\n  const key = `${id}:${attempt}`;\n  if (!cache.has(key)) {\n    const entry = REGISTRY.find((w) => w.id === id);\n    cache.set(key, lazy(entry.load));\n  }\n  return cache.get(key);\n}\n"
+        },
+        {
+          "name": "src/components/WidgetBoundary.js",
+          "language": "javascript",
+          "code": "// src/components/WidgetBoundary.js — Error Boundary (class) cho TỪNG widget\nimport { Component } from 'react';\n\nexport default class WidgetBoundary extends Component {\n  state = { error: null };\n\n  static getDerivedStateFromError(error) {\n    return { error };\n  }\n\n  render() {\n    if (this.state.error) {\n      return (\n        <div className=\"widget-error\">\n          <p>Could not load {this.props.title}</p>\n          <button type=\"button\" className=\"retry\" onClick={this.props.onRetry}>Retry</button>\n        </div>\n      );\n    }\n    return this.props.children;\n  }\n}\n"
+        },
+        {
+          "name": "src/components/Dashboard.js",
+          "language": "javascript",
+          "code": "// src/components/Dashboard.js — bố cục widget lưu localStorage; mỗi widget có Suspense + boundary riêng\nimport { Suspense, useEffect, useState } from 'react';\nimport { REGISTRY, getWidget } from '../widgets/registry';\nimport WidgetBoundary from './WidgetBoundary';\n\nfunction readLayout() {\n  try {\n    const ids = JSON.parse(localStorage.getItem('layout'));\n    return Array.isArray(ids) ? ids.filter((id) => REGISTRY.some((w) => w.id === id)) : ['todo'];\n  } catch {\n    return ['todo'];\n  }\n}\n\nexport default function Dashboard() {\n  const [layout, setLayout] = useState(readLayout);\n  const [attempts, setAttempts] = useState({}); // id ⇒ số lần thử lại\n\n  useEffect(() => {\n    localStorage.setItem('layout', JSON.stringify(layout));\n  }, [layout]);\n\n  const add = (id) => setLayout((l) => (l.includes(id) ? l : [...l, id]));\n  const remove = (id) => setLayout((l) => l.filter((x) => x !== id));\n  const retry = (id) => setAttempts((a) => ({ ...a, [id]: (a[id] ?? 0) + 1 }));\n\n  return (\n    <section>\n      <div className=\"toolbar\">\n        {REGISTRY.map((w) => (\n          <button key={w.id} id={`add-${w.id}`} type=\"button\" disabled={layout.includes(w.id)} onClick={() => add(w.id)}>+ {w.title}</button>\n        ))}\n      </div>\n      <div className=\"grid\" id=\"widgets\">\n        {layout.map((id) => {\n          const meta = REGISTRY.find((w) => w.id === id);\n          const attempt = attempts[id] ?? 0;\n          const Widget = getWidget(id, attempt);\n          return (\n            <div key={id} className=\"widget\" data-id={id}>\n              <h3>{meta.title}</h3>\n              <button type=\"button\" className=\"remove\" aria-label={`Remove ${meta.title}`} onClick={() => remove(id)}>×</button>\n              <WidgetBoundary key={attempt} title={meta.title} onRetry={() => retry(id)}>\n                <Suspense fallback={<div className=\"skeleton\">Loading {meta.title}…</div>}>\n                  <Widget />\n                </Suspense>\n              </WidgetBoundary>\n            </div>\n          );\n        })}\n      </div>\n    </section>\n  );\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport './index.css';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "src/index.css",
+          "language": "css",
+          "code": "/* src/index.css (đã cho) */\nbody { font-family: system-ui, sans-serif; margin: 0; padding: 20px; background: #f1f5f9; color: #0f172a; }\n.tabs { display: flex; gap: 6px; margin-bottom: 12px; align-items: center; } .tabs button.active { background: #2563eb; color: #fff; }\n#tab-pending { font-size: 13px; color: #b45309; }\n.toolbar { display: flex; gap: 8px; margin: 12px 0; }\n.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }\n.widget { background: #fff; border-radius: 10px; padding: 12px; box-shadow: 0 1px 2px rgba(0,0,0,.08); position: relative; }\n.widget h3 { margin: 0 0 8px; font-size: 15px; } .widget .remove { position: absolute; top: 8px; right: 8px; }\n.skeleton { height: 48px; border-radius: 6px; background: linear-gradient(90deg, #e2e8f0, #f8fafc, #e2e8f0); color: #64748b; padding: 4px; }\n.widget-error { color: #b91c1c; }\n"
+        },
+        {
+          "name": "src/lazy/helpers.js",
+          "language": "javascript",
+          "code": "// src/lazy/helpers.js — giả lập mạng chậm + lazy có preload (dùng chung một promise)\nimport { lazy } from 'react';\n\nexport const withDelay = (factory, ms) => () =>\n  Promise.all([factory(), new Promise((r) => setTimeout(r, ms))]).then(([m]) => m);\n\nexport function lazyWithPreload(factory) {\n  let promise = null;\n  const load = () => {\n    if (!promise) promise = factory();\n    return promise;\n  };\n  const Component = lazy(load);\n  Component.preload = load;\n  return Component;\n}\n"
+        },
+        {
+          "name": "src/widgets/Weather.js",
+          "language": "javascript",
+          "code": "// src/widgets/Weather.js — widget tự tải dữ liệu khi được gắn\nimport { useEffect, useState } from 'react';\n\nexport default function Weather() {\n  const [data, setData] = useState(null);\n  useEffect(() => {\n    fetch('http://localhost:9999/weather').then((r) => r.json()).then(setData);\n  }, []);\n  return <p className=\"weather\">{data ? `${data.city} ${data.temp}°C` : '…'}</p>;\n}\n"
+        },
+        {
+          "name": "src/widgets/Todo.js",
+          "language": "javascript",
+          "code": "// src/widgets/Todo.js\nexport default function Todo() {\n  return (\n    <ul className=\"todo\">\n      <li>Review PR #42</li>\n      <li>Write tests</li>\n    </ul>\n  );\n}\n"
+        },
+        {
+          "name": "src/widgets/Stocks.js",
+          "language": "javascript",
+          "code": "// src/widgets/Stocks.js\nexport default function Stocks() {\n  return <p className=\"stocks\">VNM 70,000 ▲</p>;\n}\n"
+        },
+        {
+          "name": "src/pages/Overview.js",
+          "language": "javascript",
+          "code": "// src/pages/Overview.js\nimport Dashboard from '../components/Dashboard';\n\nexport default function Overview() {\n  return (\n    <div id=\"overview-page\">\n      <h2>Overview</h2>\n      <Dashboard />\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/pages/Analytics.js",
+          "language": "javascript",
+          "code": "// src/pages/Analytics.js\nexport default function Analytics() {\n  return <div id=\"analytics-page\"><h2>Analytics</h2><p>Visitors this week: 12,480</p></div>;\n}\n"
+        },
+        {
+          "name": "src/pages/Settings.js",
+          "language": "javascript",
+          "code": "// src/pages/Settings.js\nexport default function Settings() {\n  return <div id=\"settings-page\"><h2>Settings</h2><p>Theme: light</p></div>;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Chia mã tốt là chia theo <b>điều người dùng làm</b>: widget chưa được thêm thì mã của nó chưa bao giờ tải. Đặt Suspense và error boundary ở mức TỪNG widget giới hạn \"vùng ảnh hưởng\" của việc chờ và của lỗi. <code>lazy</code> nhớ kết quả promise kể cả khi hỏng, nên thử lại cần component lazy mới (khoá cache theo lần thử) và boundary mới (đổi <code>key</code>). Với tab, <code>startTransition</code> đánh dấu việc đổi tab là không gấp: React giữ giao diện cũ cho tới khi trang mới sẵn sàng thay vì hiện fallback — trải nghiệm mượt hơn hẳn.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://react.dev/reference/react/useTransition#preventing-unwanted-loading-indicators",
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "jsonServer": {
+          "base": "http://localhost:9999",
+          "db": {
+            "weather": {
+              "city": "Hue",
+              "temp": 31
+            }
+          }
+        },
+        "kiem": [
+          {
+            "nhom": "f1",
+            "moTa": "Default layout shows the Todo widget",
+            "kiem": "danh-sach-text",
+            "selector": ".widget h3",
+            "mongDoi": [
+              "Todo"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 1400
+              }
+            ]
+          },
+          {
+            "nhom": "f1",
+            "moTa": "Adding a widget lazy-loads it",
+            "kiem": "danh-sach-text",
+            "selector": ".widget[data-id=\"weather\"] .weather",
+            "mongDoi": [
+              "Hue 31°C"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 900
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#add-weather",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 900
+              }
+            ]
+          },
+          {
+            "nhom": "f1",
+            "an": true,
+            "moTa": "Widgets come from a registry with load functions",
+            "kiem": "ma-nguon",
+            "tep": "src/widgets/registry.js",
+            "khop": "REGISTRY\\s*=\\s*\\[[\\s\\S]*load\\s*:[\\s\\S]*import\\("
+          },
+          {
+            "nhom": "f1",
+            "an": true,
+            "moTa": "Lazy components are cached (not created during render)",
+            "kiem": "ma-nguon",
+            "tep": "src/widgets/registry.js",
+            "khop": "new Map\\([\\s\\S]*lazy\\("
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Layout saved in localStorage \"layout\"",
+            "kiem": "kho-cuc-bo",
+            "khoa": "layout",
+            "khop": "^\\[\"todo\",\"weather\"\\]$",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 900
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#add-weather",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Layout restored after reload",
+            "kiem": "danh-sach-text",
+            "selector": ".widget h3",
+            "mongDoi": [
+              "Todo",
+              "Weather"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 900
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#add-weather",
+                "lan": 1
+              },
+              {
+                "hanhDong": "tai-lai"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 1400
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Remove a widget",
+            "kiem": "danh-sach-text",
+            "selector": ".widget h3",
+            "mongDoi": [
+              "Weather"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 900
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#add-weather",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".widget[data-id=\"todo\"] .remove",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "an": true,
+            "moTa": "Add button disabled when the widget is on the board",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#add-todo",
+            "thuocTinh": "disabled",
+            "giaTri": true,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 900
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "an": true,
+            "moTa": "Corrupted layout falls back to the default",
+            "khoCucBo": {
+              "layout": "{bad"
+            },
+            "kiem": "danh-sach-text",
+            "selector": ".widget h3",
+            "mongDoi": [
+              "Todo"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 1400
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "A loading widget shows its own skeleton",
+            "kiem": "text",
+            "selector": ".widget[data-id=\"weather\"] .skeleton",
+            "giaTri": "Loading Weather…",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 900
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#add-weather",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Other widgets stay visible meanwhile",
+            "kiem": "so-luong",
+            "selector": ".widget[data-id=\"todo\"] .todo li",
+            "giaTri": 2,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 900
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#add-weather",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Failed widget shows an error in its own card",
+            "kiem": "danh-sach-text",
+            "selector": ".widget[data-id=\"stocks\"] .widget-error p, .widget[data-id=\"todo\"] .todo li",
+            "mongDoi": [
+              "Review PR #42",
+              "Write tests",
+              "Could not load Stocks"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 900
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#add-stocks",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 600
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Retry loads it",
+            "kiem": "text",
+            "selector": ".widget[data-id=\"stocks\"] .stocks",
+            "giaTri": "VNM 70,000 ▲",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 900
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#add-stocks",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 600
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".widget[data-id=\"stocks\"] .retry",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 700
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "an": true,
+            "moTa": "Boundary is a class with getDerivedStateFromError",
+            "kiem": "ma-nguon",
+            "tep": "src/components/WidgetBoundary.js",
+            "khop": "class\\s+\\w+\\s+extends\\s+(React\\.)?Component[\\s\\S]*getDerivedStateFromError"
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Weather data not requested before the widget is added",
+            "kiem": "goi-fetch",
+            "khop": "/weather",
+            "min": 0,
+            "max": 0,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 1400
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "an": true,
+            "moTa": "Requested once after adding",
+            "kiem": "goi-fetch",
+            "khop": "/weather",
+            "min": 1,
+            "max": 1,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 900
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#add-weather",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 900
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "moTa": "First load shows the page fallback",
+            "kiem": "ton-tai",
+            "selector": "#page-fallback"
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Switching tabs keeps the old page and shows a pending hint",
+            "kiem": "danh-sach-text",
+            "selector": "#tab-pending, #overview-page h2, #page-fallback",
+            "mongDoi": [
+              "Loading tab…",
+              "Overview"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 1400
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#tab-analytics",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "moTa": "New page appears after loading",
+            "kiem": "ton-tai",
+            "selector": "#analytics-page",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 1400
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#tab-analytics",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 900
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "an": true,
+            "moTa": "Uses useTransition",
+            "kiem": "ma-nguon",
+            "tep": "src/App.js",
+            "khop": "useTransition\\(\\)[\\s\\S]*startTransition\\("
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Preloaded tab opens without pending",
+            "kiem": "danh-sach-text",
+            "selector": "#tab-pending, #settings-page h2",
+            "mongDoi": [
+              "Settings"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 1400
+              },
+              {
+                "hanhDong": "focus",
+                "selector": "#tab-settings"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 900
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#tab-settings",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "an": true,
+            "moTa": "preload wired to hover and focus",
+            "kiem": "ma-nguon",
+            "tep": "src/App.js",
+            "khop": "^(?=[\\s\\S]*onMouseEnter=\\{[^}]*preload)(?=[\\s\\S]*onFocus=\\{[^}]*preload)"
+          },
+          {
+            "nhom": "f8",
+            "moTa": "No static import of widgets or pages in App/Dashboard",
+            "kiem": "ma-nguon",
+            "khop": "import\\s+\\w+\\s+from\\s+['\"]\\.(\\.)?/(widgets/(Weather|Todo|Stocks)|pages/\\w+)['\"]",
+            "phuDinh": true,
+            "tep": "src/App.js"
+          },
+          {
+            "nhom": "f8",
+            "an": true,
+            "moTa": "Dashboard does not import widgets statically",
+            "kiem": "ma-nguon",
+            "tep": "src/components/Dashboard.js",
+            "khop": "from\\s+['\"]\\.\\./widgets/(Weather|Todo|Stocks)",
+            "phuDinh": true
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. Widget registry",
+            "diem": 1.5
+          },
+          {
+            "ma": "f2",
+            "ten": "2. Persisted layout",
+            "diem": 1.5
+          },
+          {
+            "ma": "f3",
+            "ten": "3. Per-widget Suspense",
+            "diem": 1
+          },
+          {
+            "ma": "f4",
+            "ten": "4. Per-widget error boundary",
+            "diem": 1.5
+          },
+          {
+            "ma": "f5",
+            "ten": "5. Load only when needed",
+            "diem": 1
+          },
+          {
+            "ma": "f6",
+            "ten": "6. Tabs with useTransition",
+            "diem": 1.5
+          },
+          {
+            "ma": "f7",
+            "ten": "7. Preload tabs",
+            "diem": 1
+          },
+          {
+            "ma": "f8",
+            "ten": "8. Splitting discipline",
+            "diem": 1
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "deep-lab",
+      "mistakesJson": [
+        {
+          "loi": "Đặt Suspense NGOÀI WidgetBoundary và boundary ngoài cùng ⇒ lỗi một widget xoá cả lưới."
+        },
+        {
+          "loi": "Retry chỉ reset state boundary mà không đổi component lazy ⇒ lỗi lặp lại ngay."
+        },
+        {
+          "loi": "Dùng <code>setTab</code> thường ⇒ Suspense gần nhất hiện fallback, mất trang cũ."
+        },
+        {
+          "loi": "Lưu cả object widget (có hàm) vào localStorage ⇒ JSON.stringify bỏ mất hàm."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "registry",
+          "vi": "sổ đăng ký: danh sách mô tả các thành phần có thể nạp"
+        },
+        {
+          "en": "Suspense granularity",
+          "vi": "độ mịn của Suspense: bọc to hay nhỏ"
+        },
+        {
+          "en": "transition",
+          "vi": "cập nhật \"không gấp\" — React giữ giao diện cũ trong lúc chờ"
+        },
+        {
+          "en": "skeleton",
+          "vi": "khung xương giả hình nội dung khi đang tải"
+        },
+        {
+          "en": "rubric",
+          "vi": "thang điểm theo tiêu chí"
+        },
+        {
+          "en": "persist",
+          "vi": "lưu bền — còn sau khi tải lại trang"
+        }
+      ],
+      "demoHtml": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>Deep Lab 10 — Widget Dashboard (lazy registry · per-widget boundaries · useTransition · preload) — Live demo</title>\n<script src=\"https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js\" crossorigin=\"anonymous\"></script>\n\n</head><body><div id=\"root\"></div><script>(function(){\nvar M={\"src/App.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { newObj[key] = obj[key]; } } } newObj.default = obj; return newObj; } }// src/App.js — tab tải lười; đổi tab trong startTransition để GIỮ trang cũ thay vì hiện fallback\\nvar _react = require('react');\\nvar _helpers = require('./lazy/helpers');\\n\\nconst PAGES = {\\n  overview: { label: 'Overview', Component: _helpers.lazyWithPreload.call(void 0, _helpers.withDelay.call(void 0, () => Promise.resolve().then(() => _interopRequireWildcard(require('./pages/Overview'))), 600)) },\\n  analytics: { label: 'Analytics', Component: _helpers.lazyWithPreload.call(void 0, _helpers.withDelay.call(void 0, () => Promise.resolve().then(() => _interopRequireWildcard(require('./pages/Analytics'))), 600)) },\\n  settings: { label: 'Settings', Component: _helpers.lazyWithPreload.call(void 0, _helpers.withDelay.call(void 0, () => Promise.resolve().then(() => _interopRequireWildcard(require('./pages/Settings'))), 600)) },\\n};\\n\\n function App() {\\n  const [tab, setTab] = _react.useState.call(void 0, 'overview');\\n  const [isPending, startTransition] = _react.useTransition.call(void 0, );\\n  const Page = PAGES[tab].Component;\\n\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'main', { children: [\\n      _jsxruntime.jsx.call(void 0, 'h1', { children: \\\"CT Widgets\\\" })\\n      , _jsxruntime.jsxs.call(void 0, 'nav', { className: \\\"tabs\\\", children: [\\n        Object.entries(PAGES).map(([key, p]) => (\\n          _jsxruntime.jsx.call(void 0, 'button', {\\n\\n            id: `tab-${key}`,\\n            type: \\\"button\\\",\\n            className: key === tab ? 'active' : '',\\n            onMouseEnter: p.Component.preload,\\n            onFocus: p.Component.preload,\\n            onClick: () => startTransition(() => setTab(key)),\\n children: \\n            p.label\\n          }, key)\\n        ))\\n        , isPending && _jsxruntime.jsx.call(void 0, 'span', { id: \\\"tab-pending\\\", children: \\\"Loading tab…\\\" })\\n      ]})\\n      , _jsxruntime.jsx.call(void 0, _react.Suspense, { fallback: _jsxruntime.jsx.call(void 0, 'p', { id: \\\"page-fallback\\\", children: \\\"Loading page…\\\" }), children: \\n        _jsxruntime.jsx.call(void 0, Page, {} )\\n      })\\n    ]})\\n  );\\n} exports.default = App;\\n\",\"src/widgets/registry.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { newObj[key] = obj[key]; } } } newObj.default = obj; return newObj; } }// src/widgets/registry.js — SỔ ĐĂNG KÝ: mỗi widget khai báo cách tải; component lazy tạo khi cần và được nhớ\\nvar _react = require('react');\\nvar _helpers = require('../lazy/helpers');\\n\\nlet stocksAttempts = 0; // giả lập mạng chập chờn: lần tải đầu của Stocks hỏng\\n\\n const REGISTRY = [\\n  { id: 'weather', title: 'Weather', load: _helpers.withDelay.call(void 0, () => Promise.resolve().then(() => _interopRequireWildcard(require('./Weather'))), 500) },\\n  { id: 'todo', title: 'Todo', load: _helpers.withDelay.call(void 0, () => Promise.resolve().then(() => _interopRequireWildcard(require('./Todo'))), 500) },\\n  {\\n    id: 'stocks',\\n    title: 'Stocks',\\n    load: () => {\\n      stocksAttempts += 1;\\n      if (stocksAttempts === 1) {\\n        return new Promise((_, reject) => setTimeout(() => reject(new Error('ChunkLoadError: stocks')), 300));\\n      }\\n      return _helpers.withDelay.call(void 0, () => Promise.resolve().then(() => _interopRequireWildcard(require('./Stocks'))), 300)();\\n    },\\n  },\\n]; exports.REGISTRY = REGISTRY;\\n\\nconst cache = new Map(); // \\\"id:attempt\\\" ⇒ component lazy (tạo MỘT lần cho mỗi lần thử)\\n\\n function getWidget(id, attempt = 0) {\\n  const key = `${id}:${attempt}`;\\n  if (!cache.has(key)) {\\n    const entry = exports.REGISTRY.find((w) => w.id === id);\\n    cache.set(key, _react.lazy.call(void 0, entry.load));\\n  }\\n  return cache.get(key);\\n} exports.getWidget = getWidget;\\n\",\"src/components/WidgetBoundary.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/components/WidgetBoundary.js — Error Boundary (class) cho TỪNG widget\\nvar _react = require('react');\\n\\n class WidgetBoundary extends _react.Component {constructor(...args) { super(...args); WidgetBoundary.prototype.__init.call(this); }\\n  __init() {this.state = { error: null }}\\n\\n  static getDerivedStateFromError(error) {\\n    return { error };\\n  }\\n\\n  render() {\\n    if (this.state.error) {\\n      return (\\n        _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"widget-error\\\", children: [\\n          _jsxruntime.jsxs.call(void 0, 'p', { children: [\\\"Could not load \\\"   , this.props.title]})\\n          , _jsxruntime.jsx.call(void 0, 'button', { type: \\\"button\\\", className: \\\"retry\\\", onClick: this.props.onRetry, children: \\\"Retry\\\"})\\n        ]})\\n      );\\n    }\\n    return this.props.children;\\n  }\\n} exports.default = WidgetBoundary;\\n\",\"src/components/Dashboard.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; } function _nullishCoalesce(lhs, rhsFn) { if (lhs != null) { return lhs; } else { return rhsFn(); } }// src/components/Dashboard.js — bố cục widget lưu localStorage; mỗi widget có Suspense + boundary riêng\\nvar _react = require('react');\\nvar _registry = require('../widgets/registry');\\nvar _WidgetBoundary = require('./WidgetBoundary'); var _WidgetBoundary2 = _interopRequireDefault(_WidgetBoundary);\\n\\nfunction readLayout() {\\n  try {\\n    const ids = JSON.parse(localStorage.getItem('layout'));\\n    return Array.isArray(ids) ? ids.filter((id) => _registry.REGISTRY.some((w) => w.id === id)) : ['todo'];\\n  } catch (e) {\\n    return ['todo'];\\n  }\\n}\\n\\n function Dashboard() {\\n  const [layout, setLayout] = _react.useState.call(void 0, readLayout);\\n  const [attempts, setAttempts] = _react.useState.call(void 0, {}); // id ⇒ số lần thử lại\\n\\n  _react.useEffect.call(void 0, () => {\\n    localStorage.setItem('layout', JSON.stringify(layout));\\n  }, [layout]);\\n\\n  const add = (id) => setLayout((l) => (l.includes(id) ? l : [...l, id]));\\n  const remove = (id) => setLayout((l) => l.filter((x) => x !== id));\\n  const retry = (id) => setAttempts((a) => ({ ...a, [id]: (_nullishCoalesce(a[id], () => ( 0))) + 1 }));\\n\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'section', { children: [\\n      _jsxruntime.jsx.call(void 0, 'div', { className: \\\"toolbar\\\", children: \\n        _registry.REGISTRY.map((w) => (\\n          _jsxruntime.jsxs.call(void 0, 'button', { id: `add-${w.id}`, type: \\\"button\\\", disabled: layout.includes(w.id), onClick: () => add(w.id), children: [\\\"+ \\\" , w.title]}, w.id)\\n        ))\\n      })\\n      , _jsxruntime.jsx.call(void 0, 'div', { className: \\\"grid\\\", id: \\\"widgets\\\", children: \\n        layout.map((id) => {\\n          const meta = _registry.REGISTRY.find((w) => w.id === id);\\n          const attempt = _nullishCoalesce(attempts[id], () => ( 0));\\n          const Widget = _registry.getWidget.call(void 0, id, attempt);\\n          return (\\n            _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"widget\\\", 'data-id': id, children: [\\n              _jsxruntime.jsx.call(void 0, 'h3', { children: meta.title})\\n              , _jsxruntime.jsx.call(void 0, 'button', { type: \\\"button\\\", className: \\\"remove\\\", 'aria-label': `Remove ${meta.title}`, onClick: () => remove(id), children: \\\"×\\\"})\\n              , _jsxruntime.jsx.call(void 0, _WidgetBoundary2.default, { title: meta.title, onRetry: () => retry(id), children: \\n                _jsxruntime.jsx.call(void 0, _react.Suspense, { fallback: _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"skeleton\\\", children: [\\\"Loading \\\" , meta.title, \\\"…\\\"]}), children: \\n                  _jsxruntime.jsx.call(void 0, Widget, {} )\\n                })\\n              }, attempt)\\n            ]}, id)\\n          );\\n        })\\n      })\\n    ]})\\n  );\\n} exports.default = Dashboard;\\n\",\"src/index.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\"); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\\nvar _react = require('react'); var _react2 = _interopRequireDefault(_react);\\nvar _client = require('react-dom/client'); var _client2 = _interopRequireDefault(_client);\\nrequire('./index.css');\\nvar _App = require('./App'); var _App2 = _interopRequireDefault(_App);\\n\\nconst root = _client2.default.createRoot(document.getElementById('root'));\\nroot.render(\\n  _jsxruntime.jsx.call(void 0, _react2.default.StrictMode, { children: \\n    _jsxruntime.jsx.call(void 0, _App2.default, {} )\\n  })\\n);\\n\",\"src/lazy/helpers.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/lazy/helpers.js — giả lập mạng chậm + lazy có preload (dùng chung một promise)\\nvar _react = require('react');\\n\\n const withDelay = (factory, ms) => () =>\\n  Promise.all([factory(), new Promise((r) => setTimeout(r, ms))]).then(([m]) => m); exports.withDelay = withDelay;\\n\\n function lazyWithPreload(factory) {\\n  let promise = null;\\n  const load = () => {\\n    if (!promise) promise = factory();\\n    return promise;\\n  };\\n  const Component = _react.lazy.call(void 0, load);\\n  Component.preload = load;\\n  return Component;\\n} exports.lazyWithPreload = lazyWithPreload;\\n\",\"src/widgets/Weather.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/widgets/Weather.js — widget tự tải dữ liệu khi được gắn\\nvar _react = require('react');\\n\\n function Weather() {\\n  const [data, setData] = _react.useState.call(void 0, null);\\n  _react.useEffect.call(void 0, () => {\\n    fetch('http://localhost:9999/weather').then((r) => r.json()).then(setData);\\n  }, []);\\n  return _jsxruntime.jsx.call(void 0, 'p', { className: \\\"weather\\\", children: data ? `${data.city} ${data.temp}°C` : '…'});\\n} exports.default = Weather;\\n\",\"src/widgets/Todo.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/widgets/Todo.js\\n function Todo() {\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'ul', { className: \\\"todo\\\", children: [\\n      _jsxruntime.jsx.call(void 0, 'li', { children: \\\"Review PR #42\\\"  })\\n      , _jsxruntime.jsx.call(void 0, 'li', { children: \\\"Write tests\\\" })\\n    ]})\\n  );\\n} exports.default = Todo;\\n\",\"src/widgets/Stocks.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/widgets/Stocks.js\\n function Stocks() {\\n  return _jsxruntime.jsx.call(void 0, 'p', { className: \\\"stocks\\\", children: \\\"VNM 70,000 ▲\\\"  });\\n} exports.default = Stocks;\\n\",\"src/pages/Overview.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/pages/Overview.js\\nvar _Dashboard = require('../components/Dashboard'); var _Dashboard2 = _interopRequireDefault(_Dashboard);\\n\\n function Overview() {\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'div', { id: \\\"overview-page\\\", children: [\\n      _jsxruntime.jsx.call(void 0, 'h2', { children: \\\"Overview\\\"})\\n      , _jsxruntime.jsx.call(void 0, _Dashboard2.default, {} )\\n    ]})\\n  );\\n} exports.default = Overview;\\n\",\"src/pages/Analytics.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/pages/Analytics.js\\n function Analytics() {\\n  return _jsxruntime.jsxs.call(void 0, 'div', { id: \\\"analytics-page\\\", children: [_jsxruntime.jsx.call(void 0, 'h2', { children: \\\"Analytics\\\"}), _jsxruntime.jsx.call(void 0, 'p', { children: \\\"Visitors this week: 12,480\\\"   })]});\\n} exports.default = Analytics;\\n\",\"src/pages/Settings.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/pages/Settings.js\\n function Settings() {\\n  return _jsxruntime.jsxs.call(void 0, 'div', { id: \\\"settings-page\\\", children: [_jsxruntime.jsx.call(void 0, 'h2', { children: \\\"Settings\\\"}), _jsxruntime.jsx.call(void 0, 'p', { children: \\\"Theme: light\\\" })]});\\n} exports.default = Settings;\\n\"};var CSS={\"src/index.css\":\"/* src/index.css (đã cho) */\\nbody { font-family: system-ui, sans-serif; margin: 0; padding: 20px; background: #f1f5f9; color: #0f172a; }\\n.tabs { display: flex; gap: 6px; margin-bottom: 12px; align-items: center; } .tabs button.active { background: #2563eb; color: #fff; }\\n#tab-pending { font-size: 13px; color: #b45309; }\\n.toolbar { display: flex; gap: 8px; margin: 12px 0; }\\n.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }\\n.widget { background: #fff; border-radius: 10px; padding: 12px; box-shadow: 0 1px 2px rgba(0,0,0,.08); position: relative; }\\n.widget h3 { margin: 0 0 8px; font-size: 15px; } .widget .remove { position: absolute; top: 8px; right: 8px; }\\n.skeleton { height: 48px; border-radius: 6px; background: linear-gradient(90deg, #e2e8f0, #f8fafc, #e2e8f0); color: #64748b; padding: 4px; }\\n.widget-error { color: #b91c1c; }\\n\"};var DB={\"weather\":{\"city\":\"Hue\",\"temp\":31}};var BASE=\"http://localhost:9999\";var URL0=null;var THANH=false;\nfunction kho(){var m={};var k={getItem:function(x){x=String(x);return Object.prototype.hasOwnProperty.call(m,x)?m[x]:null},setItem:function(x,v){m[String(x)]=String(v)},removeItem:function(x){delete m[String(x)]},clear:function(){m={}},key:function(i){return Object.keys(m)[i]||null}};Object.defineProperty(k,'length',{get:function(){return Object.keys(m).length}});return k}\ntry{Object.defineProperty(window,'localStorage',{value:kho(),configurable:true})}catch(e){}\ntry{Object.defineProperty(window,'sessionStorage',{value:kho(),configurable:true})}catch(e){}\nwindow.confirm=function(){return true};window.alert=function(m){console.log('[alert]',m);var t=document.getElementById('cl-demo-alert');if(!t){t=document.createElement('div');t.id='cl-demo-alert';t.style.cssText='position:fixed;right:12px;bottom:12px;z-index:99999;max-width:320px;padding:10px 14px;border-radius:10px;background:#0f172a;color:#fff;font:13px system-ui;box-shadow:0 6px 24px rgba(0,0,0,.25)';document.body.appendChild(t)}t.textContent='alert: '+m;clearTimeout(t.__h);t.__h=setTimeout(function(){t.remove()},2600)};\nvar ENV={NODE_ENV:'production',MODE:'production',PROD:true,DEV:false,BASE_URL:'/'};\nString(M['.env']||'').split(/\\r?\\n/).forEach(function(d){var m=/^\\s*(?:export\\s+)?([A-Za-z_][A-Za-z0-9_]*)\\s*=\\s*(.*)\\s*$/.exec(d);if(m)ENV[m[1]]=m[2].replace(/^(['\"])(.*)\\1$/,'$2')});\nwindow.__CL_ENV__=ENV;if(!window.process)window.process={env:ENV};\n// json-server giả (bản sao domAgent.ts)\nvar jsDb=DB?JSON.parse(JSON.stringify(DB)):null;\nfunction tl(st,b){return new Response(b===undefined?'{}':JSON.stringify(b),{status:st,headers:{'content-type':'application/json'}})}\nfunction lay(o,k){return String(k).split('.').reduce(function(a,p){return a==null?undefined:a[p]},o)}\nfunction mot(t){return /ies$/.test(t)?t.slice(0,-3)+'y':t.replace(/s$/,'')}\nfunction xuLy(method,url,body){var u=new URL(url);var ph=u.pathname.replace(/^\\/+|\\/+$/g,'').split('/').filter(Boolean).map(decodeURIComponent);var ten=ph[0],id=ph[1];\nif(!ten||!(ten in jsDb))return tl(404,{});var bang=jsDb[ten];var dl=null;if(body!=null&&body!==''){try{dl=JSON.parse(body)}catch(e){return tl(400,{})}}\nif(!Array.isArray(bang)){if(method==='GET')return tl(200,bang);if(method==='PUT'||method==='POST'){jsDb[ten]=dl||{};return tl(200,jsDb[ten])}if(method==='PATCH'){jsDb[ten]=Object.assign({},bang,dl||{});return tl(200,jsDb[ten])}return tl(404,{})}\nvar vt=function(x){return bang.findIndex(function(r){return String(r.id)===String(x)})};\nvar mr=function(r){var o=Object.assign({},r);u.searchParams.getAll('_expand').forEach(function(e){var b=jsDb[e+'s']||jsDb[e];if(Array.isArray(b))o[e]=b.find(function(x){return String(x.id)===String(r[e+'Id'])})});u.searchParams.getAll('_embed').forEach(function(e){var b=jsDb[e];if(Array.isArray(b)){var k=mot(ten)+'Id';o[e]=b.filter(function(x){return String(x[k])===String(r.id)})}});return o};\nif(method==='GET'){if(id!=null){var i=vt(id);return i<0?tl(404,{}):tl(200,mr(bang[i]))}var ds=bang.slice();var loc={};u.searchParams.forEach(function(v,k){if(k.charAt(0)!=='_'&&k!=='q')(loc[k]=loc[k]||[]).push(v)});\nObject.keys(loc).forEach(function(k){var vs=loc[k],m=/^(.*)_(like|gte|lte|ne)$/.exec(k);ds=ds.filter(function(r){if(m){var gv=lay(r,m[1]);return vs.every(function(v){if(m[2]==='like')return new RegExp(v,'i').test(String(gv));if(m[2]==='ne')return String(gv)!==v;var a=Number(gv),b=Number(v);var so=!isNaN(a)&&!isNaN(b);return m[2]==='gte'?(so?a>=b:String(gv)>=v):(so?a<=b:String(gv)<=v)})}var g=lay(r,k);return vs.some(function(v){return String(g)===v})})});\nvar qq=u.searchParams.get('q');if(qq)ds=ds.filter(function(r){return JSON.stringify(r).toLowerCase().indexOf(qq.toLowerCase())>=0});\nvar sx=u.searchParams.get('_sort');if(sx){var tr=sx.split(','),th=(u.searchParams.get('_order')||'asc').split(',');ds.sort(function(a,b){for(var t=0;t<tr.length;t++){var f=tr[t].replace(/^-/,''),gi=tr[t].charAt(0)==='-'||(th[t]||th[0])==='desc';var x=lay(a,f),y=lay(b,f);var c=(typeof x==='number'&&typeof y==='number')?x-y:String(x).localeCompare(String(y));if(c)return gi?-c:c}return 0})}\nvar gh=u.searchParams.get('_limit'),pg=u.searchParams.get('_page');var tong=ds.length;if(pg){var n=Number(gh)||10;ds=ds.slice((Number(pg)-1)*n,Number(pg)*n)}else if(gh)ds=ds.slice(0,Number(gh));var rr=tl(200,ds.map(mr));try{rr.headers.set('X-Total-Count',String(tong))}catch(e){}return rr}\nif(method==='POST'){if(id!=null)return tl(404,{});var mo=Object.assign({},dl||{});if(mo.id==null){var so2=bang.length&&bang.every(function(r){return typeof r.id==='number'});mo.id=so2||!bang.length?bang.reduce(function(mx,r){return Math.max(mx,Number(r.id)||0)},0)+1:Math.random().toString(16).slice(2,6)}bang.push(mo);return tl(201,mo)}\nif(id==null)return tl(404,{});var j=vt(id);if(j<0)return tl(404,{});\nif(method==='PUT'){bang[j]=Object.assign({},dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='PATCH'){bang[j]=Object.assign({},bang[j],dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='DELETE'){bang.splice(j,1);return tl(200,{})}return tl(404,{})}\nif(jsDb){window.fetch=function(url,init){init=init||{};var s=String(url&&url.url?url.url:url);var me=String(init.method||'GET').toUpperCase();return new Promise(function(res){setTimeout(function(){if(s.indexOf(BASE+'/')!==0)return res(new Response('Not Found',{status:404}));try{res(xuLy(me,s,init.body))}catch(e){res(tl(500,{error:String(e)}))}},120)})}}\nfunction axiosGia(){function goi(method,url,data,cfg){cfg=cfg||{};var u=(cfg.baseURL||'')+url;if(cfg.params){var sp=new URLSearchParams(cfg.params).toString();if(sp)u+=(u.indexOf('?')>=0?'&':'?')+sp}var init={method:method.toUpperCase(),headers:Object.assign({'Content-Type':'application/json'},cfg.headers||{})};if(data!==undefined)init.body=typeof data==='string'?data:JSON.stringify(data);\nreturn window.fetch(u,init).then(function(res){return res.text().then(function(t){var d;try{d=JSON.parse(t)}catch(e){d=t}var hd={};try{res.headers.forEach(function(v,k){hd[k.toLowerCase()]=v})}catch(e){}var out={data:d,status:res.status,statusText:res.statusText,headers:hd,config:cfg};if(res.status>=200&&res.status<300)return out;var err=new Error('Request failed with status code '+res.status);err.response=out;err.name='AxiosError';throw err})})}\nfunction tao(base){var a=function(cfg){return goi(cfg.method||'get',cfg.url,cfg.data,Object.assign({},base,cfg))};['get','delete','head'].forEach(function(m){a[m]=function(url,cfg){return goi(m,url,undefined,Object.assign({},base,cfg))}});['post','put','patch'].forEach(function(m){a[m]=function(url,data,cfg){return goi(m,url,data,Object.assign({},base,cfg))}});a.create=function(c){return tao(Object.assign({},base,c))};a.defaults=base;a.interceptors={request:{use:function(){}},response:{use:function(){}}};a.isAxiosError=function(e){return!!(e&&e.name==='AxiosError')};return a}\nvar ax=tao({});ax.default=ax;return ax}\nvar R=window.React;var tach=function(p,k){var q=Object.assign({},p);var c=q.children;delete q.children;if(k!==undefined)q.key=k;return[q,c]};\nvar j=function(t,p,k){var x=tach(p,k);return x[1]===undefined?R.createElement(t,x[0]):R.createElement(t,x[0],x[1])};\nvar js=function(t,p,k){var x=tach(p,k);return R.createElement.apply(null,[t,x[0]].concat(x[1]||[]))};\n// React Router: MemoryRouter + thanh địa chỉ (gõ URL được — thử ?status=ACTIVE, /items/2…)\nvar viTri=null,routerBoc=null,dieuHuong=null;\nfunction datThanh(v){var o=document.getElementById('cl-demo-url');if(o&&document.activeElement!==o)o.value='http://localhost:3000'+v}\nfunction routerGia(){var RRD=window.ReactRouterDOM;if(!RRD)return null;if(routerBoc)return routerBoc;\nfunction Ghi(){var l=RRD.useLocation();var nav=RRD.useNavigate();dieuHuong=nav;viTri=l.pathname+l.search+l.hash;R.useEffect(function(){datThanh(viTri)});return null}\nfunction RG(p){var d=R.useState(function(){return[viTri||URL0||'/']})[0];return R.createElement(RRD.MemoryRouter,{initialEntries:d,basename:p.basename},R.createElement(Ghi),p.children)}\nfunction tr(routes,opts){var r=RRD.createMemoryRouter(routes,Object.assign({},opts||{},{initialEntries:[viTri||URL0||'/']}));var g=function(s){viTri=s.location.pathname+s.location.search+s.location.hash;datThanh(viTri)};g(r.state);r.subscribe(g);dieuHuong=function(to){r.navigate(to)};return r}\nrouterBoc=Object.assign({},RRD,{BrowserRouter:RG,HashRouter:RG,createBrowserRouter:tr,createHashRouter:tr});return routerBoc}\nvar thunk=function(api){return function(next){return function(a){return typeof a==='function'?a(api.dispatch,api.getState):next(a)}}};\nvar LIB={'react':R,'react-dom':window.ReactDOM,'react-dom/client':window.ReactDOM,'react/jsx-runtime':{jsx:j,jsxs:js,Fragment:R.Fragment},'react/jsx-dev-runtime':{jsxDEV:j,Fragment:R.Fragment},'prop-types':window.PropTypes,'react-bootstrap':window.ReactBootstrap,'@reduxjs/toolkit':window.RTK,'redux':window.RTK,'react-redux':window.ReactRedux,'redux-thunk':{'default':thunk,thunk:thunk}};\nvar C={};\nfunction dd(tu,s){var p=tu.split('/').slice(0,-1);s.split('/').forEach(function(x){if(x==='.'||x==='')return;if(x==='..')p.pop();else p.push(x)});return p.join('/')}\nfunction tim(p){var d=['','.js','.jsx','.ts','.tsx','.json','/index.js','/index.jsx'];for(var i=0;i<d.length;i++){if(M[p+d[i]]!=null||CSS[p+d[i]]!=null)return p+d[i]}return null}\nfunction req(tu,s){if(s==='axios')return axiosGia();if(s==='react-router-dom'||s==='react-router')return routerGia();if(LIB[s])return LIB[s];if(/\\.css$/.test(s)&&!/^\\./.test(s))return{};var p=tim(dd(tu,s));if(!p)throw new Error('Cannot find module '+s);return nap(p)}\nfunction nap(p){if(C[p])return C[p].exports;if(CSS[p]!=null){var st=document.createElement('style');st.textContent=CSS[p];document.head.appendChild(st);C[p]={exports:{}};return{}}var m={exports:{}};C[p]=m;if(/\\.json$/.test(p)){m.exports=JSON.parse(M[p]);return m.exports}new Function('require','module','exports',M[p])(function(s){return req(p,s)},m,m.exports);return m.exports}\nif(THANH){var bar=document.createElement('form');bar.style.cssText='position:sticky;top:0;z-index:99998;display:flex;gap:6px;align-items:center;padding:6px 10px;background:#e2e8f0;border-bottom:1px solid #cbd5e1;font:12px system-ui';bar.innerHTML='<span style=\"color:#475569\">URL</span><input id=\"cl-demo-url\" style=\"flex:1;padding:4px 8px;border:1px solid #cbd5e1;border-radius:6px;font:12px ui-monospace,monospace\" aria-label=\"Address bar\"><button style=\"padding:3px 10px;border-radius:6px;border:1px solid #94a3b8;background:#fff;cursor:pointer\">Go</button>';\nbar.addEventListener('submit',function(e){e.preventDefault();var v=document.getElementById('cl-demo-url').value.replace(/^https?:\\/\\/[^/]+/,'')||'/';if(dieuHuong)dieuHuong(v)});document.body.insertBefore(bar,document.body.firstChild);datThanh(URL0||'/')}\nnap(\"src/index.js\");\n})();</script></body></html>"
+    }
+  ]
+}

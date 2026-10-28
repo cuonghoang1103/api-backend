@@ -602,6 +602,12 @@
       "name": "Deep Lab 9 — Course Catalog (React Router loaders · actions · fetchers)",
       "level": "ADVANCED",
       "description": "Deep lab chương 9: data router — loader, action + redirect, errorElement 404, useActionData, useFetcher, useNavigation trên json-server. Thang 10."
+    },
+    {
+      "slug": "fer202-10-deep-widget-dashboard",
+      "name": "Deep Lab 10 — Widget Dashboard (lazy registry · transitions)",
+      "level": "ADVANCED",
+      "description": "Deep lab chương 10: sổ đăng ký widget tải lười, Suspense + error boundary từng widget có thử lại, bố cục lưu, useTransition, tải trước. Thang 10."
     }
   ]
 }

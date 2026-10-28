@@ -1,0 +1,602 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-tdd-bdd",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-tdd-bdd"
+  },
+  "exercises": [
+    {
+      "title": "Test-first 1 — TDD, ATDD or BDD?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "TDD",
+        "ATDD",
+        "BDD"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>TDD works at unit level for developers; ATDD at story level with the power of three; BDD writes the behaviour in business language (Given/When/Then). Classify each statement.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>TDD ở cấp unit cho developer; ATDD ở cấp story với power of three; BDD viết hành vi bằng ngôn ngữ nghiệp vụ (Given/When/Then). Phân loại từng phát biểu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "JUnit + refactor ⇒ TDD.",
+        "Gherkin, Cucumber ⇒ BDD."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Test-first 1 — TDD, ATDD or BDD?\n\nAnswer in the answer panel (no code needed).\n\n1. Statement → methodPhát biểu → phương pháp\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Test-first 1 — TDD, ATDD or BDD? — answer key\n\n1. Statement → methodPhát biểu → phương pháp\n   - r0.m: TDD\n   - r1.m: ATDD\n   - r2.m: BDD\n   - r3.m: TDD\n   - r4.m: ATDD\n   - r5.m: BDD\n   TDD: red–green–refactor at unit level; ATDD: examples from acceptance criteria agreed by the three amigos; BDD: Given/When/Then in business language, run by tools like Cucumber.VI: TDD: đỏ–xanh–refactor ở cấp unit; ATDD: ví dụ từ acceptance criteria do ba người thống nhất; BDD: Given/When/Then bằng ngôn ngữ nghiệp vụ, chạy bằng Cucumber.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>TDD · ATDD · BDD · TDD · ATDD · BDD.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Statement → method</p><p style=\"opacity:.75;font-size:.92em\"><i>Phát biểu → phương pháp</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "m",
+                "ten": "Method",
+                "luaChon": [
+                  "TDD",
+                  "ATDD",
+                  "BDD"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Write a failing JUnit test, write just enough code to pass it, then refactor"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "In a specification workshop the developer, the tester and the product owner turn the acceptance criteria into examples before coding"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Scenarios such as “Given a full lab, When a student books, Then the booking is PENDING” are run by Cucumber"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Tests guide the design of each class and form a regression safety net"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "The acceptance tests are executable requirements that the whole team agreed on"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Non-programmers can read and review the automated tests because they are written in Gherkin"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.m": "TDD",
+              "r1.m": "ATDD",
+              "r2.m": "BDD",
+              "r3.m": "TDD",
+              "r4.m": "ATDD",
+              "r5.m": "BDD"
+            },
+            "giaiThich": "<p>TDD: red–green–refactor at unit level; ATDD: examples from acceptance criteria agreed by the three amigos; BDD: Given/When/Then in business language, run by tools like Cucumber.</p><p><i>VI: TDD: đỏ–xanh–refactor ở cấp unit; ATDD: ví dụ từ acceptance criteria do ba người thống nhất; BDD: Given/When/Then bằng ngôn ngữ nghiệp vụ, chạy bằng Cucumber.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm ATDD với BDD — BDD là ATDD viết theo hành vi, bằng Given/When/Then."
+        },
+        {
+          "loi": "Cho rằng TDD do tester làm."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "red–green–refactor",
+          "vi": "đỏ (test trượt) – xanh (test đạt) – refactor"
+        },
+        {
+          "en": "Gherkin",
+          "vi": "ngôn ngữ Given/When/Then"
+        },
+        {
+          "en": "specification workshop",
+          "vi": "buổi làm rõ đặc tả"
+        }
+      ]
+    },
+    {
+      "title": "Test-first 2 — Put LabBook tests in the testing quadrants",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "testing quadrants"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Rule of thumb from the lesson: first ask who can judge the result (business person → Q2/Q3; only a technical person or a tool → Q1/Q4), then whether the test guides the build (support → Q1/Q2) or evaluates the finished product (critique → Q3/Q4).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mẹo của bài: hỏi trước ai đánh giá được kết quả (người nghiệp vụ → Q2/Q3; chỉ người kỹ thuật hay công cụ → Q1/Q4), rồi test đó dẫn dắt việc xây (hỗ trợ → Q1/Q2) hay đánh giá sản phẩm đã xong (phê bình → Q3/Q4).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Prototype trước khi code ⇒ hỗ trợ đội ⇒ Q2.",
+        "Hiệu năng, bảo mật ⇒ Q4."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Test-first 2 — Put LabBook tests in the testing quadrants\n\nAnswer in the answer panel (no code needed).\n\n1. Test → quadrantTest → góc\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Test-first 2 — Put LabBook tests in the testing quadrants — answer key\n\n1. Test → quadrantTest → góc\n   - r0.q: Q1 — technology-facing, supporting the team\n   - r1.q: Q2 — business-facing, supporting the team\n   - r2.q: Q3 — business-facing, critiquing the product\n   - r3.q: Q4 — technology-facing, critiquing the product\n   - r4.q: Q1 — technology-facing, supporting the team\n   - r5.q: Q2 — business-facing, supporting the team\n   - r6.q: Q3 — business-facing, critiquing the product\n   - r7.q: Q4 — technology-facing, critiquing the product\n   Q1 unit/component (TDD); Q2 functional tests, examples, story tests, prototypes (ATDD/BDD); Q3 exploratory, usability, UAT, alpha/beta; Q4 performance, load, security and other “-ilities”.VI: Q1 unit/component (TDD); Q2 test chức năng, ví dụ, story test, prototype (ATDD/BDD); Q3 khám phá, khả dụng, UAT, alpha/beta; Q4 hiệu năng, tải, bảo mật và các “-ility”.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Q1 · Q2 · Q3 · Q4 · Q1 · Q2 · Q3 · Q4.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Test → quadrant</p><p style=\"opacity:.75;font-size:.92em\"><i>Test → góc</i></p>",
+            "cot": [
+              {
+                "ma": "t",
+                "ten": "Test"
+              },
+              {
+                "ma": "q",
+                "ten": "Quadrant",
+                "luaChon": [
+                  "Q1 — technology-facing, supporting the team",
+                  "Q2 — business-facing, supporting the team",
+                  "Q3 — business-facing, critiquing the product",
+                  "Q4 — technology-facing, critiquing the product"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "t": "TDD unit tests of calcRefund run in CI"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "t": "Gherkin scenarios of the story “waitlist promotion” written in the specification workshop"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "t": "Exploratory session on the new lab-map screen with the lab manager"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "t": "Load test with 500 students booking at 07:00"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "t": "Component tests of WaitList with mocks"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "t": "A clickable prototype of the booking flow reviewed with students before coding"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "t": "Usability test with five first-year students during the sprint review"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "t": "Security scan for SQL injection on the API"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.q": "Q1 — technology-facing, supporting the team",
+              "r1.q": "Q2 — business-facing, supporting the team",
+              "r2.q": "Q3 — business-facing, critiquing the product",
+              "r3.q": "Q4 — technology-facing, critiquing the product",
+              "r4.q": "Q1 — technology-facing, supporting the team",
+              "r5.q": "Q2 — business-facing, supporting the team",
+              "r6.q": "Q3 — business-facing, critiquing the product",
+              "r7.q": "Q4 — technology-facing, critiquing the product"
+            },
+            "giaiThich": "<p>Q1 unit/component (TDD); Q2 functional tests, examples, story tests, prototypes (ATDD/BDD); Q3 exploratory, usability, UAT, alpha/beta; Q4 performance, load, security and other “-ilities”.</p><p><i>VI: Q1 unit/component (TDD); Q2 test chức năng, ví dụ, story test, prototype (ATDD/BDD); Q3 khám phá, khả dụng, UAT, alpha/beta; Q4 hiệu năng, tải, bảo mật và các “-ility”.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng các góc là một trình tự (Q1 làm trước)."
+        },
+        {
+          "loi": "Đặt usability vào Q4 — người dùng đánh giá được ⇒ Q3."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "testing quadrants",
+          "vi": "bốn góc kiểm thử Agile"
+        }
+      ]
+    },
+    {
+      "title": "Test-first 3 — One TDD cycle in the right order",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 4,
+      "points": 10,
+      "concepts": [
+        "TDD"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>A developer implements “the 50% refund band starts at exactly 2 hours” test-first. Order the steps of one TDD cycle.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một developer cài “mức hoàn 50% bắt đầu từ đúng 2 giờ” theo lối test trước. Sắp các bước của một vòng TDD.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Phải thấy test trượt trước khi viết mã.",
+        "Refactor khi mọi test đã xanh."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Test-first 3 — One TDD cycle in the right order\n\nAnswer in the answer panel (no code needed).\n\n1. One TDD cycleMột vòng TDD\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Test-first 3 — One TDD cycle in the right order — answer key\n\n1. One TDD cycleMột vòng TDD\n   Answer: a) Write a test refund(100000, 2) === 50000  →  b) Run it and watch it fail (red)  →  c) Write the simplest code that makes the test pass  →  d) Run all tests and see them pass (green)  →  e) Refactor the code and the test, keeping all tests green\n   Red → green → refactor; then the next test.VI: Đỏ → xanh → refactor; rồi tới test kế tiếp.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a → b → c → d → e.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>One TDD cycle</p><p style=\"opacity:.75;font-size:.92em\"><i>Một vòng TDD</i></p>",
+            "muc": [
+              {
+                "ma": "c",
+                "noiDung": "Write the simplest code that makes the test pass"
+              },
+              {
+                "ma": "a",
+                "noiDung": "Write a test refund(100000, 2) === 50000"
+              },
+              {
+                "ma": "e",
+                "noiDung": "Refactor the code and the test, keeping all tests green"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Run it and watch it fail (red)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Run all tests and see them pass (green)"
+              }
+            ],
+            "dapAn": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e"
+            ],
+            "giaiThich": "<p>Red → green → refactor; then the next test.</p><p><i>VI: Đỏ → xanh → refactor; rồi tới test kế tiếp.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết mã trước rồi mới viết test."
+        },
+        {
+          "loi": "Refactor khi test còn đỏ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "refactor",
+          "vi": "tái cấu trúc mã không đổi hành vi"
+        }
+      ]
+    },
+    {
+      "title": "Test-first 4 — From acceptance criteria to executable tests (US-17)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 18,
+      "points": 20,
+      "concepts": [
+        "unit testing",
+        "mutation testing",
+        "assertion"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>The running example of lesson 9.6, <b>US-17</b>: “As a shopper I want free shipping on big orders so that I order more.” Acceptance criteria agreed by the three amigos:</p><pre>AC1  Given an order total of 500,000 VND or more, the shipping fee is 0 (express included).\nAC2  Given a total below 500,000, a standard order costs 30,000 and an express order 45,000.\nAC3  Given a total below 500,000 and a GOLD member, the fee is 15,000 whatever the speed.\nAC4  A negative or non-integer total is rejected (RangeError).</pre><p>Write the acceptance tests in <code>tests.js</code> as Given/When/Then-named tests (e.g. <code>test.each</code> with the boundary pair 499,999 / 500,000). The implementation:</p><pre>function shippingFee(order) {\n  if (!order || !Number.isInteger(order.total) || order.total &lt; 0) throw new RangeError('INVALID_TOTAL');\n  if (order.total &gt;= 500000) return 0;\n  if (order.member === 'GOLD') return 15000;\n  return order.express ? 45000 : 30000;\n}</pre>\n<h4>Requirements</h4>\n<ul>\n  <li>One test (or row) per acceptance criterion at least, plus the boundary pair.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ví dụ xuyên suốt của bài 9.6, <b>US-17</b>: miễn phí vận chuyển cho đơn lớn, với bốn acceptance criteria như trên (≥ 500.000 → 0; dưới đó thường 30.000, nhanh 45.000; thành viên GOLD 15.000; tổng âm hay không nguyên bị từ chối). Viết acceptance test trong <code>tests.js</code>, đặt tên theo Given/When/Then (vd <code>test.each</code> với cặp biên 499.999 / 500.000).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Mỗi acceptance criterion ít nhất một test (hoặc một dòng), cộng cặp biên.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "test('Given a total of 500,000 When shipping is calculated Then it is free', …)",
+          "output": "kills the mutant that starts free shipping above 500,000",
+          "explanation": "ATDD gives the developer the boundary to unit-test.|||ATDD chỉ cho developer biên cần test."
+        }
+      ],
+      "hintsJson": [
+        "Cặp biên: 499.999 (tính phí) và 500.000 (miễn phí).",
+        "GOLD + express dưới ngưỡng ⇒ 15.000; GOLD trên ngưỡng ⇒ 0.",
+        "Lỗi: −1 và 1000.5."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "tests.js",
+          "language": "javascript",
+          "code": "// US-17 acceptance tests (ATDD). Name each test Given … When … Then ….\ntest('Given a total of 1,000,000 When shipping is calculated Then it is free', () => {\n  expect(shippingFee({ total: 1000000 })).toBe(0);\n});\n"
+        },
+        {
+          "name": "lib/testkit.js",
+          "language": "javascript",
+          "code": "/* lib/testkit.js — a tiny Jest-compatible test kit (describe · test/it · test.each · beforeEach/afterEach ·\n * expect(...).toBe/toEqual/toBeCloseTo/toThrow/toContain/toMatch/… · .not · .resolves/.rejects · jest.fn()).\n * Loaded BEFORE tests.js. DO NOT EDIT — the grader relies on it.\n * Bộ test nhỏ tương thích Jest, nạp trước tests.js. KHÔNG SỬA tệp này — máy chấm dùng nó.\n */\n(function (G) {\n  if (G.__KIT_DA_NAP__) return; G.__KIT_DA_NAP__ = true;\n  var REG = G.__REG__ = [];\n  var GOC = { ten: null, be: [], ae: [] };\n  var CHONG = [GOC];\n  function show(v) {\n    if (typeof v === 'string') return JSON.stringify(v);\n    if (typeof v === 'function') return '[Function]';\n    if (v instanceof Error) return v.name + ': ' + v.message;\n    if (typeof v === 'number' && !isFinite(v)) return String(v);\n    if (v === undefined) return 'undefined';\n    try { var s = JSON.stringify(v); return s && s.length > 140 ? s.slice(0, 137) + '...' : s; } catch (e) { return String(v); }\n  }\n  function deepEq(a, b) {\n    if (Object.is(a, b)) return true;\n    if (typeof a !== 'object' || typeof b !== 'object' || a === null || b === null) return false;\n    if (a instanceof Date && b instanceof Date) return a.getTime() === b.getTime();\n    if (Array.isArray(a) !== Array.isArray(b)) return false;\n    if (a instanceof Map && b instanceof Map) { if (a.size !== b.size) return false; var ok = true; a.forEach(function (v, k) { if (!b.has(k) || !deepEq(v, b.get(k))) ok = false; }); return ok; }\n    if (a instanceof Set && b instanceof Set) { if (a.size !== b.size) return false; var ok2 = true; a.forEach(function (v) { if (!b.has(v)) ok2 = false; }); return ok2; }\n    var ka = Object.keys(a).filter(function (k) { return a[k] !== undefined; });\n    var kb = Object.keys(b).filter(function (k) { return b[k] !== undefined; });\n    if (ka.length !== kb.length) return false;\n    for (var i = 0; i < ka.length; i++) if (!Object.prototype.hasOwnProperty.call(b, ka[i]) || !deepEq(a[ka[i]], b[ka[i]])) return false;\n    return true;\n  }\n  function Loi(m) { var e = new Error(m); e.name = 'AssertionError'; return e; }\n  function khopLoi(err, x) {\n    if (x === undefined) return true;\n    var msg = err && err.message !== undefined ? String(err.message) : String(err);\n    if (typeof x === 'string') return msg.indexOf(x) >= 0;\n    if (x instanceof RegExp) return x.test(msg);\n    if (typeof x === 'function') return err instanceof x || (err && err.name === x.name);\n    if (x && typeof x === 'object' && 'message' in x) return msg === String(x.message);\n    return false;\n  }\n  function make(actual, neg) {\n    var m = {};\n    function chk(pass, msg) { if (!!pass === neg) throw Loi('expected ' + (neg ? 'NOT ' : '') + msg); }\n    function laMock(f) { if (!f || !f.__laMock) throw Loi('this matcher needs a jest.fn() mock, got ' + show(f)); }\n    m.toBe = function (e) { chk(Object.is(actual, e), show(actual) + ' to be ' + show(e)); };\n    m.toEqual = m.toStrictEqual = function (e) { chk(deepEq(actual, e), show(actual) + ' to equal ' + show(e)); };\n    m.toBeCloseTo = function (e, d) { d = d == null ? 2 : d; chk(typeof actual === 'number' && Math.abs(actual - e) < Math.pow(10, -d) / 2, show(actual) + ' to be close to ' + show(e)); };\n    m.toBeTruthy = function () { chk(!!actual, show(actual) + ' to be truthy'); };\n    m.toBeFalsy = function () { chk(!actual, show(actual) + ' to be falsy'); };\n    m.toBeNull = function () { chk(actual === null, show(actual) + ' to be null'); };\n    m.toBeUndefined = function () { chk(actual === undefined, show(actual) + ' to be undefined'); };\n    m.toBeDefined = function () { chk(actual !== undefined, show(actual) + ' to be defined'); };\n    m.toBeNaN = function () { chk(Number.isNaN(actual), show(actual) + ' to be NaN'); };\n    m.toBeGreaterThan = function (n) { chk(actual > n, show(actual) + ' > ' + show(n)); };\n    m.toBeGreaterThanOrEqual = function (n) { chk(actual >= n, show(actual) + ' >= ' + show(n)); };\n    m.toBeLessThan = function (n) { chk(actual < n, show(actual) + ' < ' + show(n)); };\n    m.toBeLessThanOrEqual = function (n) { chk(actual <= n, show(actual) + ' <= ' + show(n)); };\n    m.toContain = function (x) { chk(actual != null && (typeof actual === 'string' ? actual.indexOf(x) >= 0 : Array.prototype.some.call(actual, function (y) { return Object.is(y, x); })), show(actual) + ' to contain ' + show(x)); };\n    m.toContainEqual = function (x) { chk(actual != null && Array.prototype.some.call(actual, function (y) { return deepEq(y, x); }), show(actual) + ' to contain an item equal to ' + show(x)); };\n    m.toHaveLength = function (n) { chk(actual != null && actual.length === n, show(actual) + ' to have length ' + n); };\n    m.toMatch = function (r) { chk(typeof actual === 'string' && (r instanceof RegExp ? r.test(actual) : actual.indexOf(r) >= 0), show(actual) + ' to match ' + String(r)); };\n    m.toHaveProperty = function (p, v) {\n      var ds = Array.isArray(p) ? p : String(p).split('.'); var o = actual, co = true;\n      for (var i = 0; i < ds.length; i++) { if (o == null || !(ds[i] in Object(o))) { co = false; break; } o = o[ds[i]]; }\n      chk(co && (arguments.length < 2 || deepEq(o, v)), show(actual) + ' to have property ' + String(p) + (arguments.length < 2 ? '' : ' = ' + show(v)));\n    };\n    m.toThrow = m.toThrowError = function (x) {\n      if (typeof actual !== 'function') throw Loi('toThrow() needs a function: write expect(() => fn(...)).toThrow()');\n      var threw = false, err;\n      try { actual(); } catch (e) { threw = true; err = e; }\n      chk(threw && khopLoi(err, x), 'the function to throw' + (x === undefined ? '' : ' ' + (typeof x === 'function' ? x.name : show(x instanceof RegExp ? String(x) : x))) + (threw ? ' (it threw ' + show(err) + ')' : ' (it returned normally)'));\n    };\n    m.toHaveBeenCalled = function () { laMock(actual); chk(actual.mock.calls.length > 0, 'the mock to have been called'); };\n    m.toHaveBeenCalledTimes = function (n) { laMock(actual); chk(actual.mock.calls.length === n, 'the mock to be called ' + n + ' time(s), it was called ' + actual.mock.calls.length); };\n    m.toHaveBeenCalledWith = function () { laMock(actual); var a = Array.prototype.slice.call(arguments); chk(actual.mock.calls.some(function (c) { return deepEq(c, a); }), 'the mock to have been called with ' + show(a) + ' — calls: ' + show(actual.mock.calls)); };\n    m.toHaveBeenLastCalledWith = function () { laMock(actual); var a = Array.prototype.slice.call(arguments); var c = actual.mock.calls[actual.mock.calls.length - 1]; chk(!!c && deepEq(c, a), 'the last call to be ' + show(a)); };\n    return m;\n  }\n  function boc(p, neg, laTuChoi) {\n    var mau = make(undefined, false), o = {};\n    Object.keys(mau).forEach(function (k) {\n      o[k] = function () {\n        var args = arguments;\n        return Promise.resolve(p).then(function (v) {\n          if (laTuChoi) throw Loi('expected the promise to reject, it resolved with ' + show(v));\n          return make(v, neg)[k].apply(null, args);\n        }, function (e) {\n          if (!laTuChoi) throw Loi('expected the promise to resolve, it rejected with ' + show(e));\n          return make(k === 'toThrow' || k === 'toThrowError' ? function () { throw e; } : e, neg)[k].apply(null, args);\n        });\n      };\n    });\n    return o;\n  }\n  G.expect = function (actual) {\n    G.__soExpect = (G.__soExpect || 0) + 1;\n    var o = make(actual, false); o.not = make(actual, true);\n    o.resolves = boc(actual, false, false); o.resolves.not = boc(actual, true, false);\n    o.rejects = boc(actual, false, true); o.rejects.not = boc(actual, true, true);\n    return o;\n  };\n  function fn(impl) {\n    var f = function () {\n      var args = Array.prototype.slice.call(arguments); f.mock.calls.push(args);\n      try {\n        var g = f.__mot.length ? f.__mot.shift() : f.__impl;\n        var r = g ? g.apply(this, args) : f.__tra;\n        f.mock.results.push({ type: 'return', value: r }); return r;\n      } catch (e) { f.mock.results.push({ type: 'throw', value: e }); throw e; }\n    };\n    f.__laMock = true; f.mock = { calls: [], results: [] }; f.__impl = impl || null; f.__mot = []; f.__tra = undefined;\n    f.mockReturnValue = function (v) { f.__impl = null; f.__tra = v; return f; };\n    f.mockReturnValueOnce = function (v) { f.__mot.push(function () { return v; }); return f; };\n    f.mockImplementation = function (g) { f.__impl = g; return f; };\n    f.mockImplementationOnce = function (g) { f.__mot.push(g); return f; };\n    f.mockResolvedValue = function (v) { f.__impl = function () { return Promise.resolve(v); }; return f; };\n    f.mockRejectedValue = function (v) { f.__impl = function () { return Promise.reject(v); }; return f; };\n    f.mockClear = f.mockReset = function () { f.mock.calls = []; f.mock.results = []; return f; };\n    return f;\n  }\n  G.jest = { fn: fn, spyOn: function (obj, ten) { var goc = obj[ten]; var s = fn(function () { return goc.apply(this, arguments); }); obj[ten] = s; s.mockRestore = function () { obj[ten] = goc; }; return s; } };\n  G.describe = function (ten, f) { var k = { ten: String(ten), be: [], ae: [] }; CHONG.push(k); try { f(); } finally { CHONG.pop(); } };\n  G.beforeEach = function (f) { CHONG[CHONG.length - 1].be.push(f); };\n  G.afterEach = function (f) { CHONG[CHONG.length - 1].ae.push(f); };\n  G.test = G.it = function (ten, f) {\n    if (typeof f !== 'function') throw new Error('test(\"' + ten + '\") needs a function body');\n    var duong = CHONG.slice(1).map(function (k) { return k.ten; }).concat([String(ten)]).join(' > ');\n    REG.push({ ten: duong, fn: f, khung: CHONG.slice() });\n  };\n  function dinhDang(ten, args, i) {\n    var j = 0;\n    var s = String(ten).replace(/%[sdipjfo#%]/g, function (m) {\n      if (m === '%%') return '%'; if (m === '%#') return String(i);\n      var v = args[j++]; return m === '%p' || m === '%j' || m === '%o' ? show(v) : String(v);\n    });\n    if (args.length === 1 && args[0] && typeof args[0] === 'object' && !Array.isArray(args[0])) s = s.replace(/\\$([A-Za-z_][A-Za-z0-9_]*)/g, function (m, k) { return k in args[0] ? String(args[0][k]) : m; });\n    return s;\n  }\n  G.test.each = G.it.each = function (rows) {\n    return function (ten, f) {\n      rows.forEach(function (r, i) {\n        var args = Array.isArray(r) ? r : [r];\n        G.test(dinhDang(ten, args, i), function () { return f.apply(null, args); });\n      });\n    };\n  };\n  G.test.skip = G.it.skip = function () {};\n  G.describe.skip = function () {};\n  /** Máy chấm: chạy mọi test đã đăng ký sau khi gán các tên toàn cục trong gan. */\n  G.__chayBo = async function (gan) {\n    for (var k in gan) G[k] = gan[k];\n    var kq = { tong: REG.length, dat: [], truot: [] };\n    for (var i = 0; i < REG.length; i++) {\n      var t = REG[i]; G.__soExpect = 0;\n      try {\n        var be = [], ae = [];\n        t.khung.forEach(function (fr) { be = be.concat(fr.be); ae = fr.ae.concat(ae); });\n        for (var a = 0; a < be.length; a++) await be[a]();\n        await t.fn();\n        for (var b = 0; b < ae.length; b++) await ae[b]();\n        if (!G.__soExpect) kq.truot.push({ ten: t.ten, loi: 'no expect() in this test', rong: true });\n        else kq.dat.push(t.ten);\n      } catch (e) {\n        kq.truot.push({ ten: t.ten, loi: e && e.message !== undefined ? (e.name === 'AssertionError' ? '' : e.name + ': ') + e.message : String(e) });\n      }\n    }\n    return kq;\n  };\n})(globalThis);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "tests.js",
+          "language": "javascript",
+          "code": "// US-17 acceptance tests (ATDD) — one or more examples per acceptance criterion.\n// Gherkin: Scenario Outline: shipping fee | Examples: | total | express | member | fee |\ntest.each([\n  [500000, false, null, 0],        // AC1 boundary: exactly 500,000 is free\n  [500000, true, null, 0],         // AC1: express included\n  [1000000, false, 'GOLD', 0],     // AC1 wins over AC3\n  [499999, false, null, 30000],    // AC2 boundary: just below\n  [499999, true, null, 45000],     // AC2 express\n  [100000, false, 'GOLD', 15000],  // AC3\n  [100000, true, 'GOLD', 15000],   // AC3 whatever the speed\n])('Given total %p, express %p, member %p When shipping is calculated Then the fee is %p', (total, express, member, fee) => {\n  expect(shippingFee({ total, express, member })).toBe(fee);\n});\n\ntest.each([[-1], [1000.5]])('Given total %p When shipping is calculated Then it is rejected', (total) => {\n  expect(() => shippingFee({ total })).toThrow(RangeError);\n});\n"
+        },
+        {
+          "name": "lib/testkit.js",
+          "language": "javascript",
+          "code": "/* lib/testkit.js — a tiny Jest-compatible test kit (describe · test/it · test.each · beforeEach/afterEach ·\n * expect(...).toBe/toEqual/toBeCloseTo/toThrow/toContain/toMatch/… · .not · .resolves/.rejects · jest.fn()).\n * Loaded BEFORE tests.js. DO NOT EDIT — the grader relies on it.\n * Bộ test nhỏ tương thích Jest, nạp trước tests.js. KHÔNG SỬA tệp này — máy chấm dùng nó.\n */\n(function (G) {\n  if (G.__KIT_DA_NAP__) return; G.__KIT_DA_NAP__ = true;\n  var REG = G.__REG__ = [];\n  var GOC = { ten: null, be: [], ae: [] };\n  var CHONG = [GOC];\n  function show(v) {\n    if (typeof v === 'string') return JSON.stringify(v);\n    if (typeof v === 'function') return '[Function]';\n    if (v instanceof Error) return v.name + ': ' + v.message;\n    if (typeof v === 'number' && !isFinite(v)) return String(v);\n    if (v === undefined) return 'undefined';\n    try { var s = JSON.stringify(v); return s && s.length > 140 ? s.slice(0, 137) + '...' : s; } catch (e) { return String(v); }\n  }\n  function deepEq(a, b) {\n    if (Object.is(a, b)) return true;\n    if (typeof a !== 'object' || typeof b !== 'object' || a === null || b === null) return false;\n    if (a instanceof Date && b instanceof Date) return a.getTime() === b.getTime();\n    if (Array.isArray(a) !== Array.isArray(b)) return false;\n    if (a instanceof Map && b instanceof Map) { if (a.size !== b.size) return false; var ok = true; a.forEach(function (v, k) { if (!b.has(k) || !deepEq(v, b.get(k))) ok = false; }); return ok; }\n    if (a instanceof Set && b instanceof Set) { if (a.size !== b.size) return false; var ok2 = true; a.forEach(function (v) { if (!b.has(v)) ok2 = false; }); return ok2; }\n    var ka = Object.keys(a).filter(function (k) { return a[k] !== undefined; });\n    var kb = Object.keys(b).filter(function (k) { return b[k] !== undefined; });\n    if (ka.length !== kb.length) return false;\n    for (var i = 0; i < ka.length; i++) if (!Object.prototype.hasOwnProperty.call(b, ka[i]) || !deepEq(a[ka[i]], b[ka[i]])) return false;\n    return true;\n  }\n  function Loi(m) { var e = new Error(m); e.name = 'AssertionError'; return e; }\n  function khopLoi(err, x) {\n    if (x === undefined) return true;\n    var msg = err && err.message !== undefined ? String(err.message) : String(err);\n    if (typeof x === 'string') return msg.indexOf(x) >= 0;\n    if (x instanceof RegExp) return x.test(msg);\n    if (typeof x === 'function') return err instanceof x || (err && err.name === x.name);\n    if (x && typeof x === 'object' && 'message' in x) return msg === String(x.message);\n    return false;\n  }\n  function make(actual, neg) {\n    var m = {};\n    function chk(pass, msg) { if (!!pass === neg) throw Loi('expected ' + (neg ? 'NOT ' : '') + msg); }\n    function laMock(f) { if (!f || !f.__laMock) throw Loi('this matcher needs a jest.fn() mock, got ' + show(f)); }\n    m.toBe = function (e) { chk(Object.is(actual, e), show(actual) + ' to be ' + show(e)); };\n    m.toEqual = m.toStrictEqual = function (e) { chk(deepEq(actual, e), show(actual) + ' to equal ' + show(e)); };\n    m.toBeCloseTo = function (e, d) { d = d == null ? 2 : d; chk(typeof actual === 'number' && Math.abs(actual - e) < Math.pow(10, -d) / 2, show(actual) + ' to be close to ' + show(e)); };\n    m.toBeTruthy = function () { chk(!!actual, show(actual) + ' to be truthy'); };\n    m.toBeFalsy = function () { chk(!actual, show(actual) + ' to be falsy'); };\n    m.toBeNull = function () { chk(actual === null, show(actual) + ' to be null'); };\n    m.toBeUndefined = function () { chk(actual === undefined, show(actual) + ' to be undefined'); };\n    m.toBeDefined = function () { chk(actual !== undefined, show(actual) + ' to be defined'); };\n    m.toBeNaN = function () { chk(Number.isNaN(actual), show(actual) + ' to be NaN'); };\n    m.toBeGreaterThan = function (n) { chk(actual > n, show(actual) + ' > ' + show(n)); };\n    m.toBeGreaterThanOrEqual = function (n) { chk(actual >= n, show(actual) + ' >= ' + show(n)); };\n    m.toBeLessThan = function (n) { chk(actual < n, show(actual) + ' < ' + show(n)); };\n    m.toBeLessThanOrEqual = function (n) { chk(actual <= n, show(actual) + ' <= ' + show(n)); };\n    m.toContain = function (x) { chk(actual != null && (typeof actual === 'string' ? actual.indexOf(x) >= 0 : Array.prototype.some.call(actual, function (y) { return Object.is(y, x); })), show(actual) + ' to contain ' + show(x)); };\n    m.toContainEqual = function (x) { chk(actual != null && Array.prototype.some.call(actual, function (y) { return deepEq(y, x); }), show(actual) + ' to contain an item equal to ' + show(x)); };\n    m.toHaveLength = function (n) { chk(actual != null && actual.length === n, show(actual) + ' to have length ' + n); };\n    m.toMatch = function (r) { chk(typeof actual === 'string' && (r instanceof RegExp ? r.test(actual) : actual.indexOf(r) >= 0), show(actual) + ' to match ' + String(r)); };\n    m.toHaveProperty = function (p, v) {\n      var ds = Array.isArray(p) ? p : String(p).split('.'); var o = actual, co = true;\n      for (var i = 0; i < ds.length; i++) { if (o == null || !(ds[i] in Object(o))) { co = false; break; } o = o[ds[i]]; }\n      chk(co && (arguments.length < 2 || deepEq(o, v)), show(actual) + ' to have property ' + String(p) + (arguments.length < 2 ? '' : ' = ' + show(v)));\n    };\n    m.toThrow = m.toThrowError = function (x) {\n      if (typeof actual !== 'function') throw Loi('toThrow() needs a function: write expect(() => fn(...)).toThrow()');\n      var threw = false, err;\n      try { actual(); } catch (e) { threw = true; err = e; }\n      chk(threw && khopLoi(err, x), 'the function to throw' + (x === undefined ? '' : ' ' + (typeof x === 'function' ? x.name : show(x instanceof RegExp ? String(x) : x))) + (threw ? ' (it threw ' + show(err) + ')' : ' (it returned normally)'));\n    };\n    m.toHaveBeenCalled = function () { laMock(actual); chk(actual.mock.calls.length > 0, 'the mock to have been called'); };\n    m.toHaveBeenCalledTimes = function (n) { laMock(actual); chk(actual.mock.calls.length === n, 'the mock to be called ' + n + ' time(s), it was called ' + actual.mock.calls.length); };\n    m.toHaveBeenCalledWith = function () { laMock(actual); var a = Array.prototype.slice.call(arguments); chk(actual.mock.calls.some(function (c) { return deepEq(c, a); }), 'the mock to have been called with ' + show(a) + ' — calls: ' + show(actual.mock.calls)); };\n    m.toHaveBeenLastCalledWith = function () { laMock(actual); var a = Array.prototype.slice.call(arguments); var c = actual.mock.calls[actual.mock.calls.length - 1]; chk(!!c && deepEq(c, a), 'the last call to be ' + show(a)); };\n    return m;\n  }\n  function boc(p, neg, laTuChoi) {\n    var mau = make(undefined, false), o = {};\n    Object.keys(mau).forEach(function (k) {\n      o[k] = function () {\n        var args = arguments;\n        return Promise.resolve(p).then(function (v) {\n          if (laTuChoi) throw Loi('expected the promise to reject, it resolved with ' + show(v));\n          return make(v, neg)[k].apply(null, args);\n        }, function (e) {\n          if (!laTuChoi) throw Loi('expected the promise to resolve, it rejected with ' + show(e));\n          return make(k === 'toThrow' || k === 'toThrowError' ? function () { throw e; } : e, neg)[k].apply(null, args);\n        });\n      };\n    });\n    return o;\n  }\n  G.expect = function (actual) {\n    G.__soExpect = (G.__soExpect || 0) + 1;\n    var o = make(actual, false); o.not = make(actual, true);\n    o.resolves = boc(actual, false, false); o.resolves.not = boc(actual, true, false);\n    o.rejects = boc(actual, false, true); o.rejects.not = boc(actual, true, true);\n    return o;\n  };\n  function fn(impl) {\n    var f = function () {\n      var args = Array.prototype.slice.call(arguments); f.mock.calls.push(args);\n      try {\n        var g = f.__mot.length ? f.__mot.shift() : f.__impl;\n        var r = g ? g.apply(this, args) : f.__tra;\n        f.mock.results.push({ type: 'return', value: r }); return r;\n      } catch (e) { f.mock.results.push({ type: 'throw', value: e }); throw e; }\n    };\n    f.__laMock = true; f.mock = { calls: [], results: [] }; f.__impl = impl || null; f.__mot = []; f.__tra = undefined;\n    f.mockReturnValue = function (v) { f.__impl = null; f.__tra = v; return f; };\n    f.mockReturnValueOnce = function (v) { f.__mot.push(function () { return v; }); return f; };\n    f.mockImplementation = function (g) { f.__impl = g; return f; };\n    f.mockImplementationOnce = function (g) { f.__mot.push(g); return f; };\n    f.mockResolvedValue = function (v) { f.__impl = function () { return Promise.resolve(v); }; return f; };\n    f.mockRejectedValue = function (v) { f.__impl = function () { return Promise.reject(v); }; return f; };\n    f.mockClear = f.mockReset = function () { f.mock.calls = []; f.mock.results = []; return f; };\n    return f;\n  }\n  G.jest = { fn: fn, spyOn: function (obj, ten) { var goc = obj[ten]; var s = fn(function () { return goc.apply(this, arguments); }); obj[ten] = s; s.mockRestore = function () { obj[ten] = goc; }; return s; } };\n  G.describe = function (ten, f) { var k = { ten: String(ten), be: [], ae: [] }; CHONG.push(k); try { f(); } finally { CHONG.pop(); } };\n  G.beforeEach = function (f) { CHONG[CHONG.length - 1].be.push(f); };\n  G.afterEach = function (f) { CHONG[CHONG.length - 1].ae.push(f); };\n  G.test = G.it = function (ten, f) {\n    if (typeof f !== 'function') throw new Error('test(\"' + ten + '\") needs a function body');\n    var duong = CHONG.slice(1).map(function (k) { return k.ten; }).concat([String(ten)]).join(' > ');\n    REG.push({ ten: duong, fn: f, khung: CHONG.slice() });\n  };\n  function dinhDang(ten, args, i) {\n    var j = 0;\n    var s = String(ten).replace(/%[sdipjfo#%]/g, function (m) {\n      if (m === '%%') return '%'; if (m === '%#') return String(i);\n      var v = args[j++]; return m === '%p' || m === '%j' || m === '%o' ? show(v) : String(v);\n    });\n    if (args.length === 1 && args[0] && typeof args[0] === 'object' && !Array.isArray(args[0])) s = s.replace(/\\$([A-Za-z_][A-Za-z0-9_]*)/g, function (m, k) { return k in args[0] ? String(args[0][k]) : m; });\n    return s;\n  }\n  G.test.each = G.it.each = function (rows) {\n    return function (ten, f) {\n      rows.forEach(function (r, i) {\n        var args = Array.isArray(r) ? r : [r];\n        G.test(dinhDang(ten, args, i), function () { return f.apply(null, args); });\n      });\n    };\n  };\n  G.test.skip = G.it.skip = function () {};\n  G.describe.skip = function () {};\n  /** Máy chấm: chạy mọi test đã đăng ký sau khi gán các tên toàn cục trong gan. */\n  G.__chayBo = async function (gan) {\n    for (var k in gan) G[k] = gan[k];\n    var kq = { tong: REG.length, dat: [], truot: [] };\n    for (var i = 0; i < REG.length; i++) {\n      var t = REG[i]; G.__soExpect = 0;\n      try {\n        var be = [], ae = [];\n        t.khung.forEach(function (fr) { be = be.concat(fr.be); ae = fr.ae.concat(ae); });\n        for (var a = 0; a < be.length; a++) await be[a]();\n        await t.fn();\n        for (var b = 0; b < ae.length; b++) await ae[b]();\n        if (!G.__soExpect) kq.truot.push({ ten: t.ten, loi: 'no expect() in this test', rong: true });\n        else kq.dat.push(t.ten);\n      } catch (e) {\n        kq.truot.push({ ten: t.ten, loi: e && e.message !== undefined ? (e.name === 'AssertionError' ? '' : e.name + ': ') + e.message : String(e) });\n      }\n    }\n    return kq;\n  };\n})(globalThis);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each acceptance criterion becomes at least one executable example; the boundary pair 499,999 / 500,000 is exactly what ATDD hands over to TDD. In Gherkin: <code>Scenario Outline … Examples: | total | express | member | fee |</code>.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "lib/testkit.js",
+          "tests.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Every test passes against the CORRECT implementation (your expected values are right)",
+              "vi": "Mọi test ĐẠT trên bản cài đặt ĐÚNG (giá trị mong đợi của bạn đúng)"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction shippingFee(order) {\n  if (!order || !Number.isInteger(order.total) || order.total < 0) throw new RangeError('INVALID_TOTAL');\n  if (order.total >= 500000) return 0;\n  if (order.member === 'GOLD') return 15000;\n  return order.express ? 45000 : 30000;\n}\nreturn { \"shippingFee\": shippingFee };\n})();\nconst r = await __chayBo(__DUNG);\nif (typeof shippingFee !== 'undefined' && shippingFee !== globalThis[\"shippingFee\"]) return 'tests.js must not declare shippingFee itself (let/const/class/copy of the code) — call the global shippingFee that the grader provides';\nif (!r.tong) return 'No tests found — write test(...) blocks in tests.js';\nif (r.truot.length) return r.truot.length + ' of ' + r.tong + ' test(s) FAIL on the correct code: ' + r.truot.slice(0, 3).map(function (x) { return '\"' + x.ten + '\" — ' + x.loi; }).join(' | ');\nreturn 'OK';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "The suite has at least 8 tests, each with at least one expect()",
+              "vi": "Bộ test có ít nhất 8 test, mỗi test có ít nhất một expect()"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction shippingFee(order) {\n  if (!order || !Number.isInteger(order.total) || order.total < 0) throw new RangeError('INVALID_TOTAL');\n  if (order.total >= 500000) return 0;\n  if (order.member === 'GOLD') return 15000;\n  return order.express ? 45000 : 30000;\n}\nreturn { \"shippingFee\": shippingFee };\n})();\nconst r = await __chayBo(__DUNG);\nconst rong = r.truot.filter(function (x) { return x.rong; });\nif (rong.length) return 'test without any expect(): \"' + rong[0].ten + '\"';\nif (r.tong < 8) return 'only ' + r.tong + ' test(s) — write at least 8';\nreturn 'OK';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M1: free shipping starts above 500,000 (not at)",
+              "vi": "Giết mutant M1: miễn phí từ trên 500.000 (không gồm 500.000)"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction shippingFee(order) {\n  if (!order || !Number.isInteger(order.total) || order.total < 0) throw new RangeError('INVALID_TOTAL');\n  if (order.total >= 500000) return 0;\n  if (order.member === 'GOLD') return 15000;\n  return order.express ? 45000 : 30000;\n}\nreturn { \"shippingFee\": shippingFee };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction shippingFee(order) {\n  if (!order || !Number.isInteger(order.total) || order.total < 0) throw new RangeError('INVALID_TOTAL');\n  if (order.total > 500000) return 0;\n  if (order.member === 'GOLD') return 15000;\n  return order.express ? 45000 : 30000;\n}\nreturn { \"shippingFee\": shippingFee };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M2: GOLD members pay 15,000 even on big orders",
+              "vi": "Giết mutant M2: GOLD trả 15.000 cả với đơn lớn"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction shippingFee(order) {\n  if (!order || !Number.isInteger(order.total) || order.total < 0) throw new RangeError('INVALID_TOTAL');\n  if (order.total >= 500000) return 0;\n  if (order.member === 'GOLD') return 15000;\n  return order.express ? 45000 : 30000;\n}\nreturn { \"shippingFee\": shippingFee };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction shippingFee(order) {\n  if (!order || !Number.isInteger(order.total) || order.total < 0) throw new RangeError('INVALID_TOTAL');\n  if (order.member === 'GOLD') return 15000;\n  if (order.total >= 500000) return 0;\n  return order.express ? 45000 : 30000;\n}\nreturn { \"shippingFee\": shippingFee };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M3: express costs the same as standard",
+              "vi": "Giết mutant M3: giao nhanh giá như thường"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction shippingFee(order) {\n  if (!order || !Number.isInteger(order.total) || order.total < 0) throw new RangeError('INVALID_TOTAL');\n  if (order.total >= 500000) return 0;\n  if (order.member === 'GOLD') return 15000;\n  return order.express ? 45000 : 30000;\n}\nreturn { \"shippingFee\": shippingFee };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction shippingFee(order) {\n  if (!order || !Number.isInteger(order.total) || order.total < 0) throw new RangeError('INVALID_TOTAL');\n  if (order.total >= 500000) return 0;\n  if (order.member === 'GOLD') return 15000;\n  return 30000;\n}\nreturn { \"shippingFee\": shippingFee };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M4: GOLD express pays 45,000",
+              "vi": "Giết mutant M4: GOLD giao nhanh trả 45.000"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction shippingFee(order) {\n  if (!order || !Number.isInteger(order.total) || order.total < 0) throw new RangeError('INVALID_TOTAL');\n  if (order.total >= 500000) return 0;\n  if (order.member === 'GOLD') return 15000;\n  return order.express ? 45000 : 30000;\n}\nreturn { \"shippingFee\": shippingFee };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction shippingFee(order) {\n  if (!order || !Number.isInteger(order.total) || order.total < 0) throw new RangeError('INVALID_TOTAL');\n  if (order.total >= 500000) return 0;\n  if (order.member === 'GOLD' && !order.express) return 15000;\n  return order.express ? 45000 : 30000;\n}\nreturn { \"shippingFee\": shippingFee };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M5: a negative total is accepted",
+              "vi": "Giết mutant M5: nhận tổng âm"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction shippingFee(order) {\n  if (!order || !Number.isInteger(order.total) || order.total < 0) throw new RangeError('INVALID_TOTAL');\n  if (order.total >= 500000) return 0;\n  if (order.member === 'GOLD') return 15000;\n  return order.express ? 45000 : 30000;\n}\nreturn { \"shippingFee\": shippingFee };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction shippingFee(order) {\n  if (!order || !Number.isInteger(order.total)) throw new RangeError('INVALID_TOTAL');\n  if (order.total >= 500000) return 0;\n  if (order.member === 'GOLD') return 15000;\n  return order.express ? 45000 : 30000;\n}\nreturn { \"shippingFee\": shippingFee };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED"
+          },
+          {
+            "moTa": {
+              "en": "Hidden mutant M6 is killed",
+              "vi": "Mutant ẩn M6 bị giết"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction shippingFee(order) {\n  if (!order || !Number.isInteger(order.total) || order.total < 0) throw new RangeError('INVALID_TOTAL');\n  if (order.total >= 500000) return 0;\n  if (order.member === 'GOLD') return 15000;\n  return order.express ? 45000 : 30000;\n}\nreturn { \"shippingFee\": shippingFee };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction shippingFee(order) {\n  if (!order || typeof order.total !== 'number' || order.total < 0) throw new RangeError('INVALID_TOTAL');\n  if (order.total >= 500000) return 0;\n  if (order.member === 'GOLD') return 15000;\n  return order.express ? 45000 : 30000;\n}\nreturn { \"shippingFee\": shippingFee };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden mutant M7 is killed",
+              "vi": "Mutant ẩn M7 bị giết"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction shippingFee(order) {\n  if (!order || !Number.isInteger(order.total) || order.total < 0) throw new RangeError('INVALID_TOTAL');\n  if (order.total >= 500000) return 0;\n  if (order.member === 'GOLD') return 15000;\n  return order.express ? 45000 : 30000;\n}\nreturn { \"shippingFee\": shippingFee };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction shippingFee(order) {\n  if (!order || !Number.isInteger(order.total) || order.total < 0) throw new RangeError('INVALID_TOTAL');\n  if (order.total >= 500000 && !order.express) return 0;\n  if (order.member === 'GOLD') return 15000;\n  return order.express ? 45000 : 30000;\n}\nreturn { \"shippingFee\": shippingFee };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chỉ test 1.000.000 và 100.000 — mutant lệch biên sống sót."
+        },
+        {
+          "loi": "Quên trường hợp GOLD đặt hàng nhanh."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "mutant",
+          "vi": "bản đột biến — bản mã cố ý cài một lỗi nhỏ để thử độ mạnh của bộ test"
+        },
+        {
+          "en": "kill a mutant",
+          "vi": "\"giết\" mutant — có test đạt trên mã đúng nhưng trượt trên mutant"
+        },
+        {
+          "en": "assertion",
+          "vi": "phép khẳng định (expect/assertEquals) — so thực tế với mong đợi"
+        },
+        {
+          "en": "Arrange–Act–Assert (AAA)",
+          "vi": "mẫu viết test 3 bước: chuẩn bị – gọi – khẳng định"
+        },
+        {
+          "en": "parameterized test",
+          "vi": "test tham số hoá — một thân test, nhiều bộ dữ liệu (@ParameterizedTest / test.each)"
+        },
+        {
+          "en": "expected result",
+          "vi": "kết quả mong đợi — lấy từ ĐẶC TẢ, không lấy từ mã"
+        },
+        {
+          "en": "Scenario Outline",
+          "vi": "kịch bản mẫu chạy với bảng Examples"
+        }
+      ]
+    }
+  ]
+}

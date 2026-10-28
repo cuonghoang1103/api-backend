@@ -1,0 +1,494 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-agile-risk-estimation",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-agile-risk-estimation"
+  },
+  "exercises": [
+    {
+      "title": "Agile estimation 1 — Run a planning poker round",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "Agile estimation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Planning poker (FA-3.2.2): everyone shows a card at the same time; if the estimates are far apart the highest and lowest voters explain, then the team votes again. The deck is the modified Fibonacci <code>[1, 2, 3, 5, 8, 13, 20, 40, 100]</code>.</p>\n<p>Write <code>pokerRound(votes)</code> — <code>votes</code> = <code>{ name: card }</code>. If any card is not in the deck return <code>{ error: 'INVALID_CARD' }</code>. Two cards are “close” when they are equal or neighbours in the deck. If the highest and lowest cards are close, return <code>{ consensus: true, estimate }</code> where estimate is the highest card. Otherwise return <code>{ consensus: false, explain: [names with the lowest card, then names with the highest card, each group sorted A→Z] }</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>The tester’s estimate counts like everyone else’s — testing effort is part of the story’s size.</li>\n</ul>",
+      "problemHtmlVi": "<p>Planning poker: mọi người lật bài cùng lúc; nếu ước lượng cách xa nhau thì người cao nhất và thấp nhất giải thích rồi bỏ phiếu lại. Bộ bài Fibonacci cải biên như trên. Viết <code>pokerRound(votes)</code>: bài lạ ⇒ INVALID_CARD; nếu lá cao nhất và thấp nhất “gần nhau” (bằng hoặc kề nhau trong bộ bài) ⇒ đồng thuận, ước lượng = lá cao nhất; ngược lại trả danh sách người cần giải thích (nhóm thấp nhất rồi nhóm cao nhất, mỗi nhóm sắp A→Z).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Ước lượng của tester tính như mọi người — công sức test là một phần kích thước story.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "pokerRound({ An: 3, Binh: 5, Chi: 13, Dung: 5 })",
+          "output": "{ consensus: false, explain: ['An', 'Chi'] }",
+          "explanation": "3 and 13 are far apart: An and Chi explain (often the tester saw extra test work).|||3 và 13 cách xa: An và Chi giải thích (thường tester thấy thêm việc test)."
+        }
+      ],
+      "hintsJson": [
+        "Đổi lá bài thành vị trí trong bộ bài; “gần” = chênh vị trí ≤ 1.",
+        "Tên có thể trùng lá: gom tất cả người có lá thấp nhất / cao nhất."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "poker.js",
+          "language": "javascript",
+          "code": "function pokerRound(votes) {\n  return { consensus: true, estimate: 0 };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "poker.js",
+          "language": "javascript",
+          "code": "const DECK = [1, 2, 3, 5, 8, 13, 20, 40, 100];\nfunction pokerRound(votes) {\n  const names = Object.keys(votes);\n  if (names.some((n) => DECK.indexOf(votes[n]) < 0)) return { error: 'INVALID_CARD' };\n  const idx = names.map((n) => DECK.indexOf(votes[n]));\n  const lo = Math.min(...idx), hi = Math.max(...idx);\n  if (hi - lo <= 1) return { consensus: true, estimate: DECK[hi] };\n  const who = (i) => names.filter((n) => DECK.indexOf(votes[n]) === i).sort();\n  return { consensus: false, explain: [...who(lo), ...who(hi)] };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The discussion between the extremes is the value of planning poker: hidden work (test data, non-functional tests, regression) comes to light before the sprint starts.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "poker.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "the example",
+              "vi": "ví dụ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const n=pokerRound({An:3,Binh:5,Chi:13,Dung:5});return JSON.stringify(n)==='{\"consensus\":false,\"explain\":[\"An\",\"Chi\"]}'?\"OK\":\"got \"+JSON.stringify(n)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "neighbouring cards reach consensus on the higher one",
+              "vi": "lá kề nhau đồng thuận theo lá cao hơn"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const n=pokerRound({a:5,b:8,c:8});return JSON.stringify(n)==='{\"consensus\":true,\"estimate\":8}'?\"OK\":\"got \"+JSON.stringify(n)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "groups of extremes are sorted",
+              "vi": "nhóm cực trị được sắp"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const n=pokerRound({Zed:1,Amy:1,Bob:20,Cat:3,Al:20});return JSON.stringify(n.explain)==='[\"Amy\",\"Zed\",\"Al\",\"Bob\"]'?\"OK\":\"got \"+JSON.stringify(n)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "invalid card",
+              "vi": "lá bài không hợp lệ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>JSON.stringify(pokerRound({a:4,b:5}))==='{\"error\":\"INVALID_CARD\"}'?\"OK\":\"a 4 is not in the deck\")))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "all equal",
+              "vi": "tất cả bằng nhau"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>JSON.stringify(pokerRound({a:13,b:13}))==='{\"consensus\":true,\"estimate\":13}'?\"OK\":\"expected consensus 13\")))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Lấy trung bình các lá — planning poker tìm đồng thuận, không lấy trung bình."
+        },
+        {
+          "loi": "Coi 5 và 13 là gần vì chỉ “lệch hai lá”."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "planning poker",
+          "vi": "ước lượng bằng bài theo nhóm"
+        },
+        {
+          "en": "consensus",
+          "vi": "đồng thuận"
+        }
+      ]
+    },
+    {
+      "title": "Agile estimation 2 — Quality risk per story (K3)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "Agile risk"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>FA-3.2.1: in every iteration the team assesses the quality risk of each story (likelihood × impact) and adapts the testing. Rate each story of LabBook sprint 12.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>FA-3.2.1: ở mọi iteration, đội đánh giá rủi ro chất lượng của từng story (khả năng × tác động) và điều chỉnh việc test. Đánh giá từng story của sprint 12 LabBook.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Có tiền / công nghệ mới / logic phức tạp ⇒ cao.",
+        "Chỉ đổi màu, thêm liên kết ⇒ thấp."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agile estimation 2 — Quality risk per story (K3)\n\nAnswer in the answer panel (no code needed).\n\n1. Story → risk and testingStory → rủi ro và việc test\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agile estimation 2 — Quality risk per story (K3) — answer key\n\n1. Story → risk and testingStory → rủi ro và việc test\n   - r0.r: High — test early, extensively, several techniques\n   - r1.r: Low — light tests or exploratory only\n   - r2.r: Medium — standard tests of the acceptance criteria\n   - r3.r: High — test early, extensively, several techniques\n   - r4.r: Low — light tests or exploratory only\n   - r5.r: Medium — standard tests of the acceptance criteria\n   Money, new technology and complex logic used everywhere ⇒ high; cosmetic or static content ⇒ low; ordinary features ⇒ medium.VI: Tiền, công nghệ mới và logic phức tạp dùng khắp nơi ⇒ cao; giao diện hay nội dung tĩnh ⇒ thấp; tính năng thông thường ⇒ trung bình.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>High · Low · Medium · High · Low · Medium.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Story → risk and testing</p><p style=\"opacity:.75;font-size:.92em\"><i>Story → rủi ro và việc test</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Story"
+              },
+              {
+                "ma": "r",
+                "ten": "Risk",
+                "luaChon": [
+                  "High — test early, extensively, several techniques",
+                  "Medium — standard tests of the acceptance criteria",
+                  "Low — light tests or exploratory only"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Online payment of late-cancellation fees (new payment gateway, money involved)"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Change the colour of the “Book” button to the university blue"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Show the waitlist position next to each PENDING booking (simple read of existing data)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Rewrite the weekly-limit calculation for the new exam-week rule (complex, used by every booking)"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Add a link to the lab rules PDF in the footer"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Filter the lab list by building"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.r": "High — test early, extensively, several techniques",
+              "r1.r": "Low — light tests or exploratory only",
+              "r2.r": "Medium — standard tests of the acceptance criteria",
+              "r3.r": "High — test early, extensively, several techniques",
+              "r4.r": "Low — light tests or exploratory only",
+              "r5.r": "Medium — standard tests of the acceptance criteria"
+            },
+            "giaiThich": "<p>Money, new technology and complex logic used everywhere ⇒ high; cosmetic or static content ⇒ low; ordinary features ⇒ medium.</p><p><i>VI: Tiền, công nghệ mới và logic phức tạp dùng khắp nơi ⇒ cao; giao diện hay nội dung tĩnh ⇒ thấp; tính năng thông thường ⇒ trung bình.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho mọi story cùng một mức test."
+        },
+        {
+          "loi": "Đánh giá rủi ro một lần cho cả bản phát hành rồi thôi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "quality risk",
+          "vi": "rủi ro chất lượng"
+        }
+      ]
+    },
+    {
+      "title": "Agile estimation 3 — Acceptance criteria, ATDD, exploratory and tools (K2–K3)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "acceptance criteria",
+        "Agile tools"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Six questions on FA-3.3.1–3.4.1: testable acceptance criteria, ATDD test cases, exploratory testing and tools in Agile projects.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sáu câu về FA-3.3.1–3.4.1: acceptance criteria kiểm thử được, test case ATDD, kiểm thử khám phá và công cụ trong dự án Agile.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Kiểm thử được = có điều kiện + kết quả đo được.",
+        "ATDD = trước khi code."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agile estimation 3 — Acceptance criteria, ATDD, exploratory and tools (K2–K3)\n\nAnswer in the answer panel (no code needed).\n\n1. Which acceptance criterion is testable?Acceptance criterion nào kiểm thử được?\n2. Which aspects should acceptance criteria cover (FA-3.3.2)?Acceptance criteria nên bao phủ những khía cạnh nào (FA-3.3.2)?\n3. In ATDD, when are the acceptance tests written?Trong ATDD, acceptance test được viết khi nào?\n4. Why is exploratory testing important in Agile projects?Vì sao kiểm thử khám phá quan trọng trong dự án Agile?\n5. Which tool is typical for Agile teams to make status visible?Công cụ nào điển hình để đội Agile làm trạng thái hiển thị?\n6. How is test effort included in Agile estimation?Công sức test được tính vào ước lượng Agile thế nào?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agile estimation 3 — Acceptance criteria, ATDD, exploratory and tools (K2–K3) — answer key\n\n1. Which acceptance criterion is testable?Acceptance criterion nào kiểm thử được?\n   Answer: b) For 95% of requests with 300 concurrent users, the booking page loads within 2 seconds\n   Measurable condition and expected result.VI: Điều kiện và kết quả mong đợi đo được.\n\n2. Which aspects should acceptance criteria cover (FA-3.3.2)?Acceptance criteria nên bao phủ những khía cạnh nào (FA-3.3.2)?\n   Answer: b) Functional behaviour, quality characteristics, scenarios, business rules, external interfaces, constraints and data definitions\n   The syllabus list.VI: Danh sách của syllabus.\n\n3. In ATDD, when are the acceptance tests written?Trong ATDD, acceptance test được viết khi nào?\n   Answer: b) Before coding, in a specification workshop, from the acceptance criteria\n   They become executable requirements.VI: Chúng thành yêu cầu chạy được.\n\n4. Why is exploratory testing important in Agile projects?Vì sao kiểm thử khám phá quan trọng trong dự án Agile?\n   Answer: b) Short iterations and limited time for test analysis: exploratory sessions with charters find what the automated checks miss\n   FA-3.3.5.VI: FA-3.3.5.\n\n5. Which tool is typical for Agile teams to make status visible?Công cụ nào điển hình để đội Agile làm trạng thái hiển thị?\n   Answer: a) Task-management and tracking tools (electronic task boards, burndowns)\n   Plus communication tools, wikis, CI, configuration management, test design, implementation and execution tools.VI: Cùng công cụ giao tiếp, wiki, CI, quản lý cấu hình, công cụ thiết kế và thực thi test.\n\n6. How is test effort included in Agile estimation?Công sức test được tính vào ước lượng Agile thế nào?\n   Answer: b) It is part of each story’s size, estimated by the whole team including the tester\n   Planning poker by the whole team.VI: Planning poker của cả đội.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · b · b · a · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which acceptance criterion is testable?</p><p style=\"opacity:.75;font-size:.92em\"><i>Acceptance criterion nào kiểm thử được?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The booking page loads quickly"
+              },
+              {
+                "ma": "b",
+                "noiDung": "For 95% of requests with 300 concurrent users, the booking page loads within 2 seconds"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The booking page is user-friendly"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Booking works well"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Measurable condition and expected result.</p><p><i>VI: Điều kiện và kết quả mong đợi đo được.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Which aspects should acceptance criteria cover (FA-3.3.2)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Acceptance criteria nên bao phủ những khía cạnh nào (FA-3.3.2)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Only the happy path"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Functional behaviour, quality characteristics, scenarios, business rules, external interfaces, constraints and data definitions"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only the UI"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only performance"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The syllabus list.</p><p><i>VI: Danh sách của syllabus.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>In ATDD, when are the acceptance tests written?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong ATDD, acceptance test được viết khi nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "After the code is finished"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Before coding, in a specification workshop, from the acceptance criteria"
+              },
+              {
+                "ma": "c",
+                "noiDung": "During UAT"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Never"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>They become executable requirements.</p><p><i>VI: Chúng thành yêu cầu chạy được.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Why is exploratory testing important in Agile projects?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao kiểm thử khám phá quan trọng trong dự án Agile?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It needs no skills"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Short iterations and limited time for test analysis: exploratory sessions with charters find what the automated checks miss"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It replaces automation"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It is required by Scrum"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>FA-3.3.5.</p><p><i>VI: FA-3.3.5.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>Which tool is typical for Agile teams to make status visible?</p><p style=\"opacity:.75;font-size:.92em\"><i>Công cụ nào điển hình để đội Agile làm trạng thái hiển thị?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Task-management and tracking tools (electronic task boards, burndowns)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Only spreadsheets e-mailed weekly"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Printed test plans"
+              },
+              {
+                "ma": "d",
+                "noiDung": "None"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Plus communication tools, wikis, CI, configuration management, test design, implementation and execution tools.</p><p><i>VI: Cùng công cụ giao tiếp, wiki, CI, quản lý cấu hình, công cụ thiết kế và thực thi test.</i></p>"
+          },
+          {
+            "ma": "q6",
+            "de": "<p>How is test effort included in Agile estimation?</p><p style=\"opacity:.75;font-size:.92em\"><i>Công sức test được tính vào ước lượng Agile thế nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It is estimated separately after the sprint"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It is part of each story’s size, estimated by the whole team including the tester"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It is ignored"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only the test manager estimates it"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Planning poker by the whole team.</p><p><i>VI: Planning poker của cả đội.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chọn “nhanh” cho tiêu chí kiểm thử được."
+        },
+        {
+          "loi": "Ước lượng công sức test riêng sau sprint."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "executable requirement",
+          "vi": "yêu cầu chạy được"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,488 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-agile-xp-scrum-kanban",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-agile-xp-scrum-kanban"
+  },
+  "exercises": [
+    {
+      "title": "Agile approaches 1 — XP, Scrum or Kanban?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "Agile approaches"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>XP focuses on engineering practices, Scrum is a management framework with fixed sprints, Kanban visualises and limits the flow of work. Name the approach of each practice or term.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>XP tập trung thực hành kỹ thuật, Scrum là khung quản lý với sprint cố định, Kanban trực quan hoá và giới hạn dòng công việc. Gọi tên cách tiếp cận của từng thực hành/thuật ngữ.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Chỉ XP có hướng dẫn kiểm thử cụ thể.",
+        "WIP limit, lead time ⇒ Kanban."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agile approaches 1 — XP, Scrum or Kanban?\n\nAnswer in the answer panel (no code needed).\n\n1. Practice → approachThực hành → cách tiếp cận\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agile approaches 1 — XP, Scrum or Kanban? — answer key\n\n1. Practice → approachThực hành → cách tiếp cận\n   - r0.a: XP\n   - r1.a: Scrum\n   - r2.a: Kanban\n   - r3.a: Scrum\n   - r4.a: XP\n   - r5.a: Kanban\n   - r6.a: Scrum\n   - r7.a: XP\n   XP: engineering practices and testing guidance; Scrum: roles, artefacts, timeboxes, no testing guidance; Kanban: board, WIP limits, pull, lead time, optional iterations.VI: XP: thực hành kỹ thuật và hướng dẫn test; Scrum: vai trò, artefact, timebox, không hướng dẫn test; Kanban: bảng, giới hạn WIP, kéo, lead time, iteration không bắt buộc.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>XP · Scrum · Kanban · Scrum · XP · Kanban · Scrum · XP.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Practice → approach</p><p style=\"opacity:.75;font-size:.92em\"><i>Thực hành → cách tiếp cận</i></p>",
+            "cot": [
+              {
+                "ma": "p",
+                "ten": "Practice / term"
+              },
+              {
+                "ma": "a",
+                "ten": "Approach",
+                "luaChon": [
+                  "XP",
+                  "Scrum",
+                  "Kanban"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "p": "Pair programming and collective code ownership"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "p": "Product Owner, Scrum Master and Developers"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "p": "A work-in-progress limit per board column"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "p": "Sprint of 1–4 weeks with a protected sprint goal"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "p": "Test-first: unit tests for all code before release"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "p": "Lead time measured from request to delivery"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "p": "Definition of Done and the sprint review"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "p": "Five values, fourteen principles, thirteen practices"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.a": "XP",
+              "r1.a": "Scrum",
+              "r2.a": "Kanban",
+              "r3.a": "Scrum",
+              "r4.a": "XP",
+              "r5.a": "Kanban",
+              "r6.a": "Scrum",
+              "r7.a": "XP"
+            },
+            "giaiThich": "<p>XP: engineering practices and testing guidance; Scrum: roles, artefacts, timeboxes, no testing guidance; Kanban: board, WIP limits, pull, lead time, optional iterations.</p><p><i>VI: XP: thực hành kỹ thuật và hướng dẫn test; Scrum: vai trò, artefact, timebox, không hướng dẫn test; Kanban: bảng, giới hạn WIP, kéo, lead time, iteration không bắt buộc.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gán Definition of Done cho XP."
+        },
+        {
+          "loi": "Cho rằng Kanban bắt buộc có sprint."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "WIP limit",
+          "vi": "giới hạn việc đang làm"
+        },
+        {
+          "en": "lead time",
+          "vi": "thời gian từ lúc yêu cầu tới lúc giao"
+        },
+        {
+          "en": "Definition of Done",
+          "vi": "định nghĩa “xong”"
+        }
+      ]
+    },
+    {
+      "title": "Agile approaches 2 — Measure a Kanban board",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "Kanban"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>The LabBook team runs Kanban with columns <code>Todo → Dev → Test → Done</code>. Each card is <code>{ id, column, created, started, done }</code> (day numbers; <code>started</code>/<code>done</code> null until then).</p>\n<p>Write <code>kanban(cards, wip)</code> where <code>wip</code> = <code>{ Dev, Test }</code> limits. Return:</p>\n<ul><li><code>wipViolations</code> — the columns (Dev, Test, in this order) whose number of cards exceeds the limit;</li>\n<li><code>leadTime</code> — average of done − created over Done cards (1 decimal, null if none);</li>\n<li><code>cycleTime</code> — average of done − started over Done cards (1 decimal, null if none);</li>\n<li><code>canPull</code> — <code>{ Dev: boolean, Test: boolean }</code>: whether one more card can be pulled into the column without breaking its limit.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Kanban is a pull system: a column with room pulls the next card; a full column must finish work first.</li>\n</ul>",
+      "problemHtmlVi": "<p>Nhóm LabBook dùng Kanban với các cột <code>Todo → Dev → Test → Done</code>. Viết <code>kanban(cards, wip)</code> trả: cột vượt giới hạn WIP, lead time trung bình (done − created), cycle time trung bình (done − started) của thẻ Done (1 chữ số), và cột nào còn kéo thêm được một thẻ.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Kanban là hệ thống kéo: cột còn chỗ mới kéo thẻ kế tiếp; cột đầy phải làm xong trước.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "kanban([{id:'A',column:'Done',created:1,started:2,done:5},{id:'B',column:'Test',created:2,started:3,done:null},{id:'C',column:'Dev',created:3,started:4,done:null},{id:'D',column:'Dev',created:3,started:5,done:null}], {Dev:2,Test:1})",
+          "output": "{ wipViolations: [], leadTime: 4, cycleTime: 3, canPull: { Dev: false, Test: false } }",
+          "explanation": "Dev holds 2 of 2, Test 1 of 1: both full but not over the limit.|||Dev 2/2, Test 1/1: đầy nhưng chưa vượt."
+        }
+      ],
+      "hintsJson": [
+        "Đếm số thẻ theo cột trước.",
+        "canPull: số thẻ hiện tại + 1 ≤ giới hạn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "kanban.js",
+          "language": "javascript",
+          "code": "function kanban(cards, wip) {\n  return { wipViolations: [], leadTime: null, cycleTime: null, canPull: { Dev: true, Test: true } };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "kanban.js",
+          "language": "javascript",
+          "code": "function kanban(cards, wip) {\n  const count = (c) => cards.filter((x) => x.column === c).length;\n  const done = cards.filter((x) => x.column === 'Done');\n  const avg = (f) => (done.length ? Math.round((done.reduce((s, x) => s + f(x), 0) / done.length) * 10) / 10 : null);\n  return {\n    wipViolations: ['Dev', 'Test'].filter((c) => count(c) > wip[c]),\n    leadTime: avg((x) => x.done - x.created),\n    cycleTime: avg((x) => x.done - x.started),\n    canPull: { Dev: count('Dev') + 1 <= wip.Dev, Test: count('Test') + 1 <= wip.Test },\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Lead time is what the customer feels; cycle time is what the team controls. WIP limits keep cycle time short and expose bottlenecks — often the Test column, a signal to swarm on testing.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "kanban.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "the example",
+              "vi": "ví dụ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const e=kanban([{id:\"A\",column:\"Done\",created:1,started:2,done:5},{id:\"B\",column:\"Test\",created:2,started:3,done:null},{id:\"C\",column:\"Dev\",created:3,started:4,done:null},{id:\"D\",column:\"Dev\",created:3,started:5,done:null}],{Dev:2,Test:1});return JSON.stringify(e)===JSON.stringify({wipViolations:[],leadTime:4,cycleTime:3,canPull:{Dev:!1,Test:!1}})?\"OK\":\"got \"+JSON.stringify(e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "violations in order Dev, Test",
+              "vi": "vi phạm theo thứ tự Dev, Test"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const e=(n,s)=>({id:n,column:s,created:0,started:0,done:null}),t=kanban([e(\"a\",\"Test\"),e(\"b\",\"Test\"),e(\"c\",\"Dev\"),e(\"d\",\"Dev\"),e(\"e\",\"Dev\")],{Dev:2,Test:1});return JSON.stringify(t.wipViolations)==='[\"Dev\",\"Test\"]'&&!t.canPull.Dev?\"OK\":\"got \"+JSON.stringify(t)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "lead and cycle times are averaged and rounded",
+              "vi": "lead time và cycle time được lấy trung bình và làm tròn"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const e=kanban([{id:\"a\",column:\"Done\",created:0,started:1,done:4},{id:\"b\",column:\"Done\",created:2,started:2,done:5},{id:\"c\",column:\"Done\",created:1,started:3,done:4}],{Dev:3,Test:3});return e.leadTime===3.3&&e.cycleTime===2.3&&e.canPull.Dev&&e.canPull.Test?\"OK\":\"got \"+JSON.stringify(e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "no Done cards",
+              "vi": "chưa có thẻ Done"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const n=kanban([{id:\"a\",column:\"Todo\",created:0,started:null,done:null}],{Dev:1,Test:1});return n.leadTime===null&&n.cycleTime===null?\"OK\":\"got \"+JSON.stringify(n)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Tính lead time từ started (đó là cycle time)."
+        },
+        {
+          "loi": "Coi cột đầy (bằng giới hạn) là vi phạm."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "cycle time",
+          "vi": "thời gian từ lúc bắt đầu làm tới lúc xong"
+        },
+        {
+          "en": "pull system",
+          "vi": "hệ thống kéo"
+        },
+        {
+          "en": "bottleneck",
+          "vi": "nút thắt"
+        }
+      ]
+    },
+    {
+      "title": "Agile approaches 3 — Exam questions (K1)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "Agile approaches"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Five FE-style questions on Topic 8 slides 23–47 about XP, Scrum and Kanban and the practices all Agile teams share.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu kiểu FE về slide Topic 8 23–47 về XP, Scrum, Kanban và các thực hành chung của mọi đội Agile.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "XP = kỹ thuật + test; Scrum = quản lý; Kanban = dòng chảy.",
+        "PO sở hữu backlog."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agile approaches 3 — Exam questions (K1)\n\nAnswer in the answer panel (no code needed).\n\n1. Which approach gives explicit guidance on how to test?Cách tiếp cận nào hướng dẫn rõ cách kiểm thử?\n2. In Scrum, who owns the product backlog?Trong Scrum, ai sở hữu product backlog?\n3. Which is shared by most Agile approaches (slide 25)?Thực hành nào chung cho hầu hết cách tiếp cận Agile (slide 25)?\n4. What happens in Kanban when the Test column reaches its WIP limit?Trong Kanban, khi cột Test đạt giới hạn WIP thì sao?\n5. In Scrum, the sprint goal during the sprint is…Trong Scrum, mục tiêu sprint trong lúc sprint chạy…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agile approaches 3 — Exam questions (K1) — answer key\n\n1. Which approach gives explicit guidance on how to test?Cách tiếp cận nào hướng dẫn rõ cách kiểm thử?\n   Answer: b) XP\n   Scrum and Kanban do not prescribe testing practices.VI: Scrum và Kanban không quy định thực hành test.\n\n2. In Scrum, who owns the product backlog?Trong Scrum, ai sở hữu product backlog?\n   Answer: b) The Product Owner\n   The PO orders the backlog by value.VI: PO sắp backlog theo giá trị.\n\n3. Which is shared by most Agile approaches (slide 25)?Thực hành nào chung cho hầu hết cách tiếp cận Agile (slide 25)?\n   Answer: a) Collaborative user story creation, retrospectives, continuous integration, release and iteration planning\n   The four common practices.VI: Bốn thực hành chung.\n\n4. What happens in Kanban when the Test column reaches its WIP limit?Trong Kanban, khi cột Test đạt giới hạn WIP thì sao?\n   Answer: b) No new card is pulled into Test; the team helps finish testing first\n   Limits expose bottlenecks and focus the team.VI: Giới hạn làm lộ nút thắt và giúp đội tập trung.\n\n5. In Scrum, the sprint goal during the sprint is…Trong Scrum, mục tiêu sprint trong lúc sprint chạy…\n   Answer: b) protected — no changes that endanger it\n   Unlike XP, where the customer may swap stories.VI: Khác XP, nơi khách hàng có thể đổi story.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · a · b · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which approach gives explicit guidance on how to test?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cách tiếp cận nào hướng dẫn rõ cách kiểm thử?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Scrum"
+              },
+              {
+                "ma": "b",
+                "noiDung": "XP"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Kanban"
+              },
+              {
+                "ma": "d",
+                "noiDung": "None"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Scrum and Kanban do not prescribe testing practices.</p><p><i>VI: Scrum và Kanban không quy định thực hành test.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>In Scrum, who owns the product backlog?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong Scrum, ai sở hữu product backlog?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The Scrum Master"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The Product Owner"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The testers"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The customer’s lawyer"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The PO orders the backlog by value.</p><p><i>VI: PO sắp backlog theo giá trị.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Which is shared by most Agile approaches (slide 25)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thực hành nào chung cho hầu hết cách tiếp cận Agile (slide 25)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Collaborative user story creation, retrospectives, continuous integration, release and iteration planning"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Big up-front design"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Separate test phase at the end"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Fixed-price contracts"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The four common practices.</p><p><i>VI: Bốn thực hành chung.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>What happens in Kanban when the Test column reaches its WIP limit?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong Kanban, khi cột Test đạt giới hạn WIP thì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Developers keep pushing cards into it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "No new card is pulled into Test; the team helps finish testing first"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The limit is removed"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The sprint ends"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Limits expose bottlenecks and focus the team.</p><p><i>VI: Giới hạn làm lộ nút thắt và giúp đội tập trung.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>In Scrum, the sprint goal during the sprint is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong Scrum, mục tiêu sprint trong lúc sprint chạy…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "changed daily"
+              },
+              {
+                "ma": "b",
+                "noiDung": "protected — no changes that endanger it"
+              },
+              {
+                "ma": "c",
+                "noiDung": "set by the testers"
+              },
+              {
+                "ma": "d",
+                "noiDung": "optional"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Unlike XP, where the customer may swap stories.</p><p><i>VI: Khác XP, nơi khách hàng có thể đổi story.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng Scrum quy định cách test."
+        },
+        {
+          "loi": "Cho rằng Scrum Master sở hữu backlog."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Product Owner",
+          "vi": "chủ sản phẩm"
+        },
+        {
+          "en": "Scrum Master",
+          "vi": "người hỗ trợ quy trình Scrum"
+        }
+      ]
+    }
+  ]
+}

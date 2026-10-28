@@ -1,0 +1,533 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-agile-quadrants",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-agile-quadrants"
+  },
+  "exercises": [
+    {
+      "title": "Agile 1 — Left or right side of the Agile Manifesto?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "Agile Manifesto"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>The four values: <b>individuals and interactions</b> over processes and tools · <b>working software</b> over comprehensive documentation · <b>customer collaboration</b> over contract negotiation · <b>responding to change</b> over following a plan. “While there is value in the items on the right, we value the items on the left more.” Classify each item.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bốn giá trị: <b>cá nhân và tương tác</b> hơn quy trình và công cụ · <b>phần mềm chạy được</b> hơn tài liệu đầy đủ · <b>cộng tác với khách hàng</b> hơn đàm phán hợp đồng · <b>phản hồi thay đổi</b> hơn bám kế hoạch. “Vế phải vẫn có giá trị, nhưng vế trái được coi trọng hơn.” Phân loại từng mục.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Vế trái: con người, phần mềm chạy, khách hàng, thay đổi.",
+        "Vế phải vẫn CÓ giá trị."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agile 1 — Left or right side of the Agile Manifesto?\n\nAnswer in the answer panel (no code needed).\n\n1. Item → sideMục → vế\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agile 1 — Left or right side of the Agile Manifesto? — answer key\n\n1. Item → sideMục → vế\n   - r0.s: Valued more (left side)\n   - r1.s: Still valued, but less (right side)\n   - r2.s: Valued more (left side)\n   - r3.s: Still valued, but less (right side)\n   - r4.s: Still valued, but less (right side)\n   - r5.s: Valued more (left side)\n   - r6.s: Still valued, but less (right side)\n   - r7.s: Valued more (left side)\n   The right-hand items are not worthless — Agile teams still write documents, sign contracts, plan and use tools; they just value the left-hand items more.VI: Vế phải không vô giá trị — đội Agile vẫn viết tài liệu, ký hợp đồng, lập kế hoạch, dùng công cụ; chỉ là coi trọng vế trái hơn.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>L · R · L · R · R · L · R · L.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Item → side</p><p style=\"opacity:.75;font-size:.92em\"><i>Mục → vế</i></p>",
+            "cot": [
+              {
+                "ma": "i",
+                "ten": "Item"
+              },
+              {
+                "ma": "s",
+                "ten": "Side",
+                "luaChon": [
+                  "Valued more (left side)",
+                  "Still valued, but less (right side)"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "i": "Working software"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "i": "Comprehensive documentation"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "i": "Customer collaboration"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "i": "Contract negotiation"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "i": "Following a plan"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "i": "Responding to change"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "i": "Processes and tools"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "i": "Individuals and interactions"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.s": "Valued more (left side)",
+              "r1.s": "Still valued, but less (right side)",
+              "r2.s": "Valued more (left side)",
+              "r3.s": "Still valued, but less (right side)",
+              "r4.s": "Still valued, but less (right side)",
+              "r5.s": "Valued more (left side)",
+              "r6.s": "Still valued, but less (right side)",
+              "r7.s": "Valued more (left side)"
+            },
+            "giaiThich": "<p>The right-hand items are not worthless — Agile teams still write documents, sign contracts, plan and use tools; they just value the left-hand items more.</p><p><i>VI: Vế phải không vô giá trị — đội Agile vẫn viết tài liệu, ký hợp đồng, lập kế hoạch, dùng công cụ; chỉ là coi trọng vế trái hơn.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng Agile bỏ hẳn tài liệu."
+        },
+        {
+          "loi": "Đặt “quy trình và công cụ” ở vế trái."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Agile Manifesto",
+          "vi": "Tuyên ngôn Agile"
+        }
+      ]
+    },
+    {
+      "title": "Agile 2 — Whole team, power of three, early feedback (K1–K2)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "whole-team approach"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Six questions on Topic 8 slides 1–22: the twelve principles, the whole-team approach, the “power of three” and the benefits of early and frequent feedback.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sáu câu về slide Topic 8 1–22: mười hai nguyên tắc, whole-team approach, “power of three” và lợi ích của phản hồi sớm, thường xuyên.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Tiến độ = phần mềm chạy được.",
+        "Power of three = tester + developer + nghiệp vụ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agile 2 — Whole team, power of three, early feedback (K1–K2)\n\nAnswer in the answer panel (no code needed).\n\n1. Which is an Agile principle?Đâu là một nguyên tắc Agile?\n2. What is the primary measure of progress in Agile?Thước đo tiến độ chính trong Agile là gì?\n3. Which is a benefit of the whole-team approach?Lợi ích của whole-team approach?\n4. The “power of three” means…“Power of three” nghĩa là…\n5. Which is a benefit of early and frequent feedback?Lợi ích của phản hồi sớm và thường xuyên?\n6. What is a typical size of an Agile team?Quy mô điển hình của đội Agile?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agile 2 — Whole team, power of three, early feedback (K1–K2) — answer key\n\n1. Which is an Agile principle?Đâu là một nguyên tắc Agile?\n   Answer: b) Welcome changing requirements, even late in development\n   Change is harnessed for the customer’s competitive advantage.VI: Thay đổi được tận dụng vì lợi thế của khách hàng.\n\n2. What is the primary measure of progress in Agile?Thước đo tiến độ chính trong Agile là gì?\n   Answer: b) Working software\n   Principle 7.VI: Nguyên tắc 7.\n\n3. Which is a benefit of the whole-team approach?Lợi ích của whole-team approach?\n   Answer: b) Better communication and collaboration; the team’s skills are used together and quality is everyone’s responsibility\n   Tester, developers and business work as one team.VI: Tester, developer và nghiệp vụ làm việc như một đội.\n\n4. The “power of three” means…“Power of three” nghĩa là…\n   Answer: b) a tester, a developer and a business representative discuss every feature together\n   Also called the three amigos.VI: Còn gọi là “ba người bạn”.\n\n5. Which is a benefit of early and frequent feedback?Lợi ích của phản hồi sớm và thường xuyên?\n   Answer: a) Avoiding requirement misunderstandings that would be found late and be expensive\n   Also: clarifying features early, finding quality problems early, visible productivity, momentum.VI: Cùng với: làm rõ tính năng sớm, tìm vấn đề chất lượng sớm, năng suất thấy được, giữ đà.\n\n6. What is a typical size of an Agile team?Quy mô điển hình của đội Agile?\n   Answer: a) 3 to 9 people\n   Small, co-located, cross-functional, meeting daily.VI: Nhỏ, ngồi cùng nhau, đa năng, họp hằng ngày.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · b · b · a · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which is an Agile principle?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đâu là một nguyên tắc Agile?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Freeze the requirements at the start"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Welcome changing requirements, even late in development"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Deliver once at the end"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Testers work apart from developers"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Change is harnessed for the customer’s competitive advantage.</p><p><i>VI: Thay đổi được tận dụng vì lợi thế của khách hàng.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>What is the primary measure of progress in Agile?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thước đo tiến độ chính trong Agile là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Number of documents"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Working software"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Lines of code"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Hours worked"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Principle 7.</p><p><i>VI: Nguyên tắc 7.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Which is a benefit of the whole-team approach?</p><p style=\"opacity:.75;font-size:.92em\"><i>Lợi ích của whole-team approach?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Testers are not needed"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Better communication and collaboration; the team’s skills are used together and quality is everyone’s responsibility"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Fewer meetings"
+              },
+              {
+                "ma": "d",
+                "noiDung": "No documentation"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Tester, developers and business work as one team.</p><p><i>VI: Tester, developer và nghiệp vụ làm việc như một đội.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>The “power of three” means…</p><p style=\"opacity:.75;font-size:.92em\"><i>“Power of three” nghĩa là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "three testers per developer"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a tester, a developer and a business representative discuss every feature together"
+              },
+              {
+                "ma": "c",
+                "noiDung": "three test levels"
+              },
+              {
+                "ma": "d",
+                "noiDung": "three sprints per release"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Also called the three amigos.</p><p><i>VI: Còn gọi là “ba người bạn”.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>Which is a benefit of early and frequent feedback?</p><p style=\"opacity:.75;font-size:.92em\"><i>Lợi ích của phản hồi sớm và thường xuyên?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Avoiding requirement misunderstandings that would be found late and be expensive"
+              },
+              {
+                "ma": "b",
+                "noiDung": "No need for testing"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Longer iterations"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Fewer releases"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Also: clarifying features early, finding quality problems early, visible productivity, momentum.</p><p><i>VI: Cùng với: làm rõ tính năng sớm, tìm vấn đề chất lượng sớm, năng suất thấy được, giữ đà.</i></p>"
+          },
+          {
+            "ma": "q6",
+            "de": "<p>What is a typical size of an Agile team?</p><p style=\"opacity:.75;font-size:.92em\"><i>Quy mô điển hình của đội Agile?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "3 to 9 people"
+              },
+              {
+                "ma": "b",
+                "noiDung": "20 to 30 people"
+              },
+              {
+                "ma": "c",
+                "noiDung": "1 person"
+              },
+              {
+                "ma": "d",
+                "noiDung": "No limit"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Small, co-located, cross-functional, meeting daily.</p><p><i>VI: Nhỏ, ngồi cùng nhau, đa năng, họp hằng ngày.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng whole team nghĩa là không cần tester."
+        },
+        {
+          "loi": "Nhầm power of three với ba cấp test."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "whole-team approach",
+          "vi": "cách làm cả đội cùng chịu trách nhiệm chất lượng"
+        },
+        {
+          "en": "three amigos",
+          "vi": "tester + developer + nghiệp vụ"
+        }
+      ]
+    },
+    {
+      "title": "Agile 3 — Which principle is the LabBook team applying?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "Agile principles"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Seven situations from the LabBook team’s sprints. Name the Agile principle each one shows.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bảy tình huống trong các sprint của nhóm LabBook. Gọi tên nguyên tắc Agile mà mỗi tình huống thể hiện.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Bỏ việc không cần ⇒ simplicity.",
+        "Cuối sprint bàn cải tiến ⇒ retrospective."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agile 3 — Which principle is the LabBook team applying?\n\nAnswer in the answer panel (no code needed).\n\n1. Situation → principleTình huống → nguyên tắc\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agile 3 — Which principle is the LabBook team applying? — answer key\n\n1. Situation → principleTình huống → nguyên tắc\n   - r0.p: Early and continuous delivery of valuable software\n   - r1.p: Welcome changing requirements\n   - r2.p: Business people and developers work together daily\n   - r3.p: Face-to-face conversation\n   - r4.p: Sustainable pace\n   - r5.p: Simplicity — maximise the work not done\n   - r6.p: Regular reflection and adjustment (retrospective)\n   Rows map to the principles in the order listed.VI: Các dòng ứng với nguyên tắc theo đúng thứ tự liệt kê.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>In order.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Situation → principle</p><p style=\"opacity:.75;font-size:.92em\"><i>Tình huống → nguyên tắc</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Situation"
+              },
+              {
+                "ma": "p",
+                "ten": "Principle",
+                "luaChon": [
+                  "Early and continuous delivery of valuable software",
+                  "Welcome changing requirements",
+                  "Business people and developers work together daily",
+                  "Face-to-face conversation",
+                  "Sustainable pace",
+                  "Simplicity — maximise the work not done",
+                  "Regular reflection and adjustment (retrospective)"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Every two weeks students get a new working version with one more feature"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "In sprint 5 the department asks for an exam-week rule; the team adds it to the backlog instead of refusing"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The lab manager sits with the team every morning for 15 minutes"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "The tester walks to the developer’s desk instead of writing a long e-mail"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "The team refuses to work every weekend before the demo, to keep quality steady"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "The team drops the “export to PDF” idea that no user asked for"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "At the end of each sprint the team discusses what to keep and what to change"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.p": "Early and continuous delivery of valuable software",
+              "r1.p": "Welcome changing requirements",
+              "r2.p": "Business people and developers work together daily",
+              "r3.p": "Face-to-face conversation",
+              "r4.p": "Sustainable pace",
+              "r5.p": "Simplicity — maximise the work not done",
+              "r6.p": "Regular reflection and adjustment (retrospective)"
+            },
+            "giaiThich": "<p>Rows map to the principles in the order listed.</p><p><i>VI: Các dòng ứng với nguyên tắc theo đúng thứ tự liệt kê.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm “giao thường xuyên” với “đón nhận thay đổi”."
+        },
+        {
+          "loi": "Nhầm nhịp làm việc bền vững với tự tổ chức."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "sustainable pace",
+          "vi": "nhịp làm việc bền vững"
+        }
+      ]
+    }
+  ]
+}

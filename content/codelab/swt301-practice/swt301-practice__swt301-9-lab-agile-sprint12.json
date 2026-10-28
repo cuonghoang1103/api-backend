@@ -1,0 +1,382 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-9-lab-agile-sprint12",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-agile-risk-estimation"
+  },
+  "exercises": [
+    {
+      "title": "Lab 9 — Agile Testing in LabBook Sprint 12",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 60,
+      "points": 100,
+      "concepts": [
+        "testing quadrants",
+        "iteration planning",
+        "burndown",
+        "planning poker",
+        "INVEST"
+      ],
+      "prerequisites": [
+        "SWT301 chapter 9"
+      ],
+      "tags": [
+        "swt301",
+        "lab",
+        "agile"
+      ],
+      "problemHtml": "<h1>Lab 9 — Agile Testing in LabBook Sprint 12</h1>\n<p class=\"bi-phu\">Chapter 9 lab · testing quadrants, iteration planning, burndown, planning poker and INVEST · 10 marks</p>\n<h2>1. Overview</h2>\n<p>You are the tester of the LabBook Scrum team in sprint 12.</p>\n<p><b>A. Quadrants.</b> <b>T1</b> JUnit tests of the exam-week rule, written test-first · <b>T2</b> Gherkin scenarios of “waitlist position” written in the three-amigos session · <b>T3</b> Exploratory session with lab managers on the new statistics screen · <b>T4</b> Stress test: 1,000 students booking at 07:00 on Monday · <b>T5</b> Story tests of “cancel a booking” checked against its acceptance criteria · <b>T6</b> Beta test of the mobile view with 30 students · <b>T7</b> Penetration test of the login API · <b>T8</b> Component tests of BookingService with stubs.</p>\n<p><b>B. Iteration planning.</b> Velocity 13. Rule (lesson 9.4): stories without acceptance criteria go back to refinement; the others are considered once, in priority order (ties: backlog order), and taken if they fit the remaining points and their dependencies are already taken.</p><table><thead><tr><th>Story</th><th>Points</th><th>Priority</th><th>Depends on</th><th>Testable</th></tr></thead><tbody><tr><td>S1</td><td>8</td><td>1</td><td>—</td><td>yes</td></tr><tr><td>S2</td><td>5</td><td>1</td><td>S4</td><td>yes</td></tr><tr><td>S3</td><td>3</td><td>2</td><td>—</td><td>no (no acceptance criteria)</td></tr><tr><td>S4</td><td>3</td><td>2</td><td>—</td><td>yes</td></tr><tr><td>S5</td><td>2</td><td>3</td><td>—</td><td>yes</td></tr><tr><td>S6</td><td>5</td><td>2</td><td>—</td><td>yes</td></tr></tbody></table>\n<p><b>C. Burndown.</b> 50 points, 10 working days. Remaining at the end of days 1–5: 47, 44, 40, 38, 37. Use the rules of lesson 9.5 (ideal = total − total × day ÷ days; forecast = ceil(remaining ÷ average burn rate)).</p>\n<p><b>D. Planning poker</b> (deck 1, 2, 3, 5, 8, 13, 20, 40, 100; close = equal or neighbours; consensus = the highest card): R1 An 5, Binh 8, Chi 5 · R2 An 2, Binh 13, Chi 5, Dung 2 · R3 An 20, Binh 20. And which INVEST letter do these break? <b>I1</b> “As a student I want the app to be nice” · <b>I2</b> “As a student I want booking, cancellation, payments and statistics” · <b>I3</b> “As the DBA I want to migrate to PostgreSQL 17”.</p>\n<h3>Main features</h3>\n<ul>\n  <li>A. Quadrant of eight tests.</li>\n  <li>B. Sprint content, points, refinement.</li>\n  <li>C. Burndown reading and action.</li>\n  <li>D. Poker outcomes and INVEST.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>Use exactly the allowed values listed in the data model.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>answers/\n├── a-quadrants.js  ← const QUADRANTS = { T1: 'Q1', … }\n├── b-sprint.js     ← const SPRINT = { taken: [...], points, needsRefinement: [...] }\n├── c-burndown.js   ← const BURNDOWN = { gap, forecastDays, status, action }\n└── d-poker.js      ← const POKER = { R1, R2, R2explain, R3, invest: { I1, I2, I3 } }</pre>\n<h2>3. Data model</h2>\n<p><b>Allowed values</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>QUADRANTS.*</code></td><td>string</td><td>Q1 · Q2 · Q3 · Q4</td></tr><tr><td><code>BURNDOWN.status · action</code></td><td>string</td><td>'DONE' | 'ON_TRACK' | 'AT_RISK' · 'Discuss scope with the PO and swarm on the blocked stories' | 'Wait for the sprint review' | 'Work overtime every weekend'</td></tr><tr><td><code>POKER.R*</code></td><td>number | string</td><td>the agreed card, or 'NO_CONSENSUS'</td></tr><tr><td><code>POKER.invest.*</code></td><td>string</td><td>Independent · Negotiable · Valuable · Estimable · Small · Testable</td></tr></tbody></table>\n<h2>4. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. A. Testing quadrants <span class=\"bi-diem\">3 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Eight tests.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">testing quadrants</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. B. Iteration planning <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Stories, points, refinement.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">iteration planning</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. C. Burndown <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Gap, forecast, status, action.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">test status</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. D. Estimation and stories <span class=\"bi-diem\">3 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Three poker rounds and three INVEST checks.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">planning poker</span> <span class=\"bi-hook\">INVEST</span></p>\n</div>\n<h2>5. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>QUADRANTS</code></td><td>answers/a-quadrants.js</td></tr><tr><td><code>SPRINT</code></td><td>answers/b-sprint.js</td></tr><tr><td><code>BURNDOWN</code></td><td>answers/c-burndown.js</td></tr><tr><td><code>POKER</code></td><td>answers/d-poker.js</td></tr></tbody></table>\n<h2>6. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>A. Testing quadrants</td><td>3</td></tr><tr><td>2</td><td>B. Iteration planning</td><td>2</td></tr><tr><td>3</td><td>C. Burndown</td><td>2</td></tr><tr><td>4</td><td>D. Estimation and stories</td><td>3</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Taking S2 because it has priority 1 — its dependency S4 is not taken yet when it is considered.</li>\n  <li>Averaging the poker cards instead of discussing the extremes.</li>\n</ul>\n<h2>7. Submission</h2>\n<p>Write your answers in the answer files on the right (they mirror the official template: one JavaScript object per test case / issue). Press <b>Run</b> for the visible checks and <b>Submit</b> for full grading, hidden checks included. Your score per question appears in the rubric table.</p>",
+      "problemHtmlVi": "<h1>Lab 9 — Agile Testing in LabBook Sprint 12</h1>\n<p class=\"bi-phu\">Lab chương 9 · bốn góc kiểm thử, lập kế hoạch iteration, burndown, planning poker và INVEST · 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p>Bạn là tester của đội Scrum LabBook ở sprint 12. <b>A.</b> Xếp tám test T1–T8 vào bốn góc kiểm thử. <b>B.</b> Lập sprint với velocity 13 theo luật bài 9.4 cho backlog ở bảng trên. <b>C.</b> Burndown 50 điểm, 10 ngày, còn lại cuối ngày 1–5: 47, 44, 40, 38, 37 — tính độ lệch, số ngày cần thêm, trạng thái, hành động. <b>D.</b> Kết quả ba vòng planning poker và tiêu chí INVEST bị vi phạm của I1–I3.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>A. Góc của tám test.</li>\n  <li>B. Nội dung sprint, số điểm, story cần làm mịn.</li>\n  <li>C. Đọc burndown và hành động.</li>\n  <li>D. Kết quả poker và INVEST.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Dùng đúng giá trị cho phép trong mô hình dữ liệu.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>answers/\n├── a-quadrants.js  ← const QUADRANTS = { T1: 'Q1', … }\n├── b-sprint.js     ← const SPRINT = { taken: [...], points, needsRefinement: [...] }\n├── c-burndown.js   ← const BURNDOWN = { gap, forecastDays, status, action }\n└── d-poker.js      ← const POKER = { R1, R2, R2explain, R3, invest: { I1, I2, I3 } }</pre>\n<h2>3. Mô hình dữ liệu</h2>\n<p><b>Allowed values</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>QUADRANTS.*</code></td><td>string</td><td>Q1 · Q2 · Q3 · Q4</td></tr><tr><td><code>BURNDOWN.status · action</code></td><td>string</td><td>'DONE' | 'ON_TRACK' | 'AT_RISK' · ba hành động như bản tiếng Anh</td></tr><tr><td><code>POKER.R*</code></td><td>number | string</td><td>lá đồng thuận, hoặc 'NO_CONSENSUS'</td></tr><tr><td><code>POKER.invest.*</code></td><td>string</td><td>Independent · Negotiable · Valuable · Estimable · Small · Testable</td></tr></tbody></table>\n<h2>4. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. A. Bốn góc kiểm thử <span class=\"bi-diem\">3 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Tám test.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">testing quadrants</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. B. Lập kế hoạch iteration <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Story, điểm, làm mịn.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">iteration planning</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. C. Burndown <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Độ lệch, dự báo, trạng thái, hành động.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">test status</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. D. Ước lượng và story <span class=\"bi-diem\">3 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Ba vòng poker và ba kiểm INVEST.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">planning poker</span> <span class=\"bi-hook\">INVEST</span></p>\n</div>\n<h2>5. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>QUADRANTS</code></td><td>answers/a-quadrants.js</td></tr><tr><td><code>SPRINT</code></td><td>answers/b-sprint.js</td></tr><tr><td><code>BURNDOWN</code></td><td>answers/c-burndown.js</td></tr><tr><td><code>POKER</code></td><td>answers/d-poker.js</td></tr></tbody></table>\n<h2>6. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>A. Bốn góc kiểm thử</td><td>3</td></tr><tr><td>2</td><td>B. Lập kế hoạch iteration</td><td>2</td></tr><tr><td>3</td><td>C. Burndown</td><td>2</td></tr><tr><td>4</td><td>D. Ước lượng và story</td><td>3</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Nhận S2 vì ưu tiên 1 — lúc xét, phụ thuộc S4 chưa được nhận.</li>\n  <li>Lấy trung bình các lá bài thay vì để hai cực giải thích.</li>\n</ul>\n<h2>7. Nộp bài</h2>\n<p>Viết câu trả lời vào các tệp bên phải (giống template chính thức: mỗi test case / lỗi là một object JavaScript). Bấm <b>Chạy thử</b> để chạy kiểm hiện, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn). Điểm từng câu hiện trong bảng thang điểm.</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "Use exactly the allowed values listed in the data model.|||Dùng đúng giá trị cho phép trong mô hình dữ liệu.",
+      "examplesJson": [
+        {
+          "input": "T4 — stress test with 1,000 students",
+          "output": "'Q4'",
+          "explanation": "Technology-facing, critiquing the product.|||Hướng kỹ thuật, phê bình sản phẩm."
+        }
+      ],
+      "hintsJson": [
+        "A: ai đánh giá được kết quả? test dẫn dắt việc xây hay đánh giá sản phẩm đã xong?",
+        "B: duyệt một lượt theo ưu tiên, story bị bỏ qua không xét lại.",
+        "C: tốc độ trung bình = (50 − 37) ÷ 5.",
+        "D: “gần” nghĩa là bằng hoặc kề nhau trong bộ bài."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers/a-quadrants.js",
+          "language": "javascript",
+          "code": "// 'Q1' | 'Q2' | 'Q3' | 'Q4'\nconst QUADRANTS = { T1: 'Q1', T2: '', T3: '', T4: '', T5: '', T6: '', T7: '', T8: '' };\n"
+        },
+        {
+          "name": "answers/b-sprint.js",
+          "language": "javascript",
+          "code": "const SPRINT = { taken: [], points: 0, needsRefinement: [] };\n"
+        },
+        {
+          "name": "answers/c-burndown.js",
+          "language": "javascript",
+          "code": "const BURNDOWN = { gap: 0, forecastDays: 0, status: '', action: '' };\n"
+        },
+        {
+          "name": "answers/d-poker.js",
+          "language": "javascript",
+          "code": "// invest: Independent | Negotiable | Valuable | Estimable | Small | Testable\nconst POKER = { R1: 0, R2: '', R2explain: [], R3: 0, invest: { I1: '', I2: '', I3: '' } };\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers/a-quadrants.js",
+          "language": "javascript",
+          "code": "const QUADRANTS = {\n  T1: 'Q1',\n  T2: 'Q2',\n  T3: 'Q3',\n  T4: 'Q4',\n  T5: 'Q2',\n  T6: 'Q3',\n  T7: 'Q4',\n  T8: 'Q1',\n};\n"
+        },
+        {
+          "name": "answers/b-sprint.js",
+          "language": "javascript",
+          "code": "// Priority order: S1, S2, S4, S6, S5 (S3 has no acceptance criteria).\n// S1 (8) → left 5 · S2 skipped (S4 not taken yet) · S4 (3) → left 2 · S6 (5) does not fit · S5 (2) → left 0.\nconst SPRINT = { taken: ['S1', 'S4', 'S5'], points: 13, needsRefinement: ['S3'] };\n"
+        },
+        {
+          "name": "answers/c-burndown.js",
+          "language": "javascript",
+          "code": "// Ideal after day 5 = 50 − 25 = 25 → gap 37 − 25 = 12. Burnt 13 in 5 days = 2.6/day → ceil(37 / 2.6) = 15 days > 5 left.\nconst BURNDOWN = { gap: 12, forecastDays: 15, status: 'AT_RISK', action: 'Discuss scope with the PO and swarm on the blocked stories' };\n"
+        },
+        {
+          "name": "answers/d-poker.js",
+          "language": "javascript",
+          "code": "// R1: 5 and 8 are neighbours → 8. R2: 2 and 13 are far apart → An and Dung (2), then Binh (13) explain. R3: 20.\nconst POKER = {\n  R1: 8,\n  R2: 'NO_CONSENSUS',\n  R2explain: ['An', 'Dung', 'Binh'],\n  R3: 20,\n  invest: { I1: 'Testable', I2: 'Small', I3: 'Valuable' },\n};\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>A.</b> Q1 · Q2 · Q3 · Q4 · Q2 · Q3 · Q4 · Q1. <b>B.</b> S1, S4, S5 · 13 · S3. <b>C.</b> 12 · 15 · AT_RISK · discuss scope and swarm. <b>D.</b> 8 · NO_CONSENSUS (An, Dung, Binh) · 20 · Testable, Small, Valuable.</p>",
+      "solutionExplanationHtmlVi": "<p>Xem bản tiếng Anh.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "answers/a-quadrants.js",
+          "answers/b-sprint.js",
+          "answers/c-burndown.js",
+          "answers/d-poker.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A — quadrant of T1",
+              "vi": "A — góc của T1"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (String(QUADRANTS.T1).toUpperCase().slice(0, 2)); } catch (e) { return 'String(QUADRANTS.T1).toUpperCase().slice(0, 2) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'String(QUADRANTS.T1).toUpperCase().slice(0, 2) is empty';\n  var chap = [\"Q1\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — quadrant of T2",
+              "vi": "A — góc của T2"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (String(QUADRANTS.T2).toUpperCase().slice(0, 2)); } catch (e) { return 'String(QUADRANTS.T2).toUpperCase().slice(0, 2) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'String(QUADRANTS.T2).toUpperCase().slice(0, 2) is empty';\n  var chap = [\"Q2\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — quadrant of T3",
+              "vi": "A — góc của T3"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (String(QUADRANTS.T3).toUpperCase().slice(0, 2)); } catch (e) { return 'String(QUADRANTS.T3).toUpperCase().slice(0, 2) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'String(QUADRANTS.T3).toUpperCase().slice(0, 2) is empty';\n  var chap = [\"Q3\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — quadrant of T4",
+              "vi": "A — góc của T4"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (String(QUADRANTS.T4).toUpperCase().slice(0, 2)); } catch (e) { return 'String(QUADRANTS.T4).toUpperCase().slice(0, 2) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'String(QUADRANTS.T4).toUpperCase().slice(0, 2) is empty';\n  var chap = [\"Q4\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — quadrant of T5",
+              "vi": "A — góc của T5"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (String(QUADRANTS.T5).toUpperCase().slice(0, 2)); } catch (e) { return 'String(QUADRANTS.T5).toUpperCase().slice(0, 2) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'String(QUADRANTS.T5).toUpperCase().slice(0, 2) is empty';\n  var chap = [\"Q2\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — quadrant of T6",
+              "vi": "A — góc của T6"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (String(QUADRANTS.T6).toUpperCase().slice(0, 2)); } catch (e) { return 'String(QUADRANTS.T6).toUpperCase().slice(0, 2) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'String(QUADRANTS.T6).toUpperCase().slice(0, 2) is empty';\n  var chap = [\"Q3\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — quadrant of T7",
+              "vi": "A — góc của T7"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (String(QUADRANTS.T7).toUpperCase().slice(0, 2)); } catch (e) { return 'String(QUADRANTS.T7).toUpperCase().slice(0, 2) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'String(QUADRANTS.T7).toUpperCase().slice(0, 2) is empty';\n  var chap = [\"Q4\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "A — quadrant of T8",
+              "vi": "A — góc của T8"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (String(QUADRANTS.T8).toUpperCase().slice(0, 2)); } catch (e) { return 'String(QUADRANTS.T8).toUpperCase().slice(0, 2) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'String(QUADRANTS.T8).toUpperCase().slice(0, 2) is empty';\n  var chap = [\"Q1\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "B — stories taken into the sprint, in order",
+              "vi": "B — story được nhận vào sprint, theo thứ tự"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (JSON.stringify(SPRINT.taken)); } catch (e) { return 'JSON.stringify(SPRINT.taken) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'JSON.stringify(SPRINT.taken) is empty';\n  var chap = [\"[\\\"S1\\\",\\\"S4\\\",\\\"S5\\\"]\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet — one pass in priority order; skip a story whose dependency is not taken yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — points committed",
+              "vi": "B — số điểm cam kết"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (SPRINT.points); } catch (e) { return 'SPRINT.points is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'SPRINT.points is empty';\n  var chap = [13];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"so\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"so\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"so\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — stories sent back to refinement",
+              "vi": "B — story trả về làm mịn"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((SPRINT.needsRefinement || []).map(String)); } catch (e) { return '(SPRINT.needsRefinement || []).map(String) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(SPRINT.needsRefinement || []).map(String) is empty';\n  var chap = [[\"S3\"]];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"tap\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"tap\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"tap\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "C — gap to the ideal line after day 5",
+              "vi": "C — độ lệch so với đường lý tưởng sau ngày 5"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (BURNDOWN.gap); } catch (e) { return 'BURNDOWN.gap is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'BURNDOWN.gap is empty';\n  var chap = [12];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"so\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"so\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"so\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — days still needed at the current rate",
+              "vi": "C — số ngày còn cần theo tốc độ hiện tại"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (BURNDOWN.forecastDays); } catch (e) { return 'BURNDOWN.forecastDays is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'BURNDOWN.forecastDays is empty';\n  var chap = [15];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"so\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"so\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"so\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — status",
+              "vi": "C — trạng thái"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (BURNDOWN.status); } catch (e) { return 'BURNDOWN.status is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'BURNDOWN.status is empty';\n  var chap = [\"AT_RISK\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — what the team should do at the daily stand-up",
+              "vi": "C — đội nên làm gì ở họp hằng ngày"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (BURNDOWN.action); } catch (e) { return 'BURNDOWN.action is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'BURNDOWN.action is empty';\n  var chap = [\"Discuss scope with the PO and swarm on the blocked stories\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "D — outcome of round R1",
+              "vi": "D — kết quả vòng R1"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (POKER.R1); } catch (e) { return 'POKER.R1 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'POKER.R1 is empty';\n  var chap = [8];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"so\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"so\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"so\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "D — outcome of round R2",
+              "vi": "D — kết quả vòng R2"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (POKER.R2); } catch (e) { return 'POKER.R2 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'POKER.R2 is empty';\n  var chap = [\"NO_CONSENSUS\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "D — who explains in R2 (lowest, then highest)",
+              "vi": "D — ai giải thích ở R2 (thấp nhất rồi cao nhất)"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (JSON.stringify(POKER.R2explain)); } catch (e) { return 'JSON.stringify(POKER.R2explain) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'JSON.stringify(POKER.R2explain) is empty';\n  var chap = [\"[\\\"An\\\",\\\"Dung\\\",\\\"Binh\\\"]\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "D — outcome of round R3",
+              "vi": "D — kết quả vòng R3"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (POKER.R3); } catch (e) { return 'POKER.R3 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'POKER.R3 is empty';\n  var chap = [20];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"so\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"so\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"so\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "D — INVEST criterion broken by I1",
+              "vi": "D — tiêu chí INVEST bị I1 vi phạm"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (POKER.invest.I1); } catch (e) { return 'POKER.invest.I1 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'POKER.invest.I1 is empty';\n  var chap = [\"Testable\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "D — INVEST criterion broken by I2",
+              "vi": "D — tiêu chí INVEST bị I2 vi phạm"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (POKER.invest.I2); } catch (e) { return 'POKER.invest.I2 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'POKER.invest.I2 is empty';\n  var chap = [\"Small\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "D — INVEST criterion broken by I3",
+              "vi": "D — tiêu chí INVEST bị I3 vi phạm"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (POKER.invest.I3); } catch (e) { return 'POKER.invest.I3 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'POKER.invest.I3 is empty';\n  var chap = [\"Valuable\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. A. Testing quadrants",
+            "diem": 3
+          },
+          {
+            "ma": "f2",
+            "ten": "2. B. Iteration planning",
+            "diem": 2
+          },
+          {
+            "ma": "f3",
+            "ten": "3. C. Burndown",
+            "diem": 2
+          },
+          {
+            "ma": "f4",
+            "ten": "4. D. Estimation and stories",
+            "diem": 3
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Đặt beta test vào Q4."
+        },
+        {
+          "loi": "Nhận S2 trước S4."
+        },
+        {
+          "loi": "Chọn 5 cho R1 (phải lấy lá cao hơn)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "velocity",
+          "vi": "tốc độ của đội"
+        },
+        {
+          "en": "swarm",
+          "vi": "cả đội dồn vào một việc"
+        },
+        {
+          "en": "refinement",
+          "vi": "làm mịn backlog"
+        }
+      ]
+    }
+  ]
+}

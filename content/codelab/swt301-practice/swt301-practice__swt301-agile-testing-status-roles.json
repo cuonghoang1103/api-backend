@@ -1,0 +1,497 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-agile-testing-status-roles",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-agile-testing-status-roles"
+  },
+  "exercises": [
+    {
+      "title": "Agile testing 1 — Traditional or Agile?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "Agile testing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>FA-2.1.1: how testing activities differ. Decide in which kind of project each statement is typical.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>FA-2.1.1: hoạt động kiểm thử khác nhau thế nào. Xác định mỗi phát biểu điển hình cho loại dự án nào.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "“Mỗi iteration, song song, làm cặp” ⇒ Agile.",
+        "“Sau khi phát triển xong, tài liệu ký duyệt” ⇒ truyền thống."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agile testing 1 — Traditional or Agile?\n\nAnswer in the answer panel (no code needed).\n\n1. Statement → projectPhát biểu → dự án\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agile testing 1 — Traditional or Agile? — answer key\n\n1. Statement → projectPhát biểu → dự án\n   - r0.k: Agile project\n   - r1.k: Traditional (sequential) project\n   - r2.k: Traditional (sequential) project\n   - r3.k: Agile project\n   - r4.k: Traditional (sequential) project\n   - r5.k: Agile project\n   Agile: testing in every iteration, whole team, stories as basis, lightweight documentation, continuous automated regression, pairing. Traditional: a phase, a separate team, complete documents, a regression cycle before release.VI: Agile: test trong mọi iteration, cả đội, story làm cơ sở, tài liệu nhẹ, hồi quy tự động liên tục, làm cặp. Truyền thống: một pha, nhóm riêng, tài liệu đầy đủ, một vòng hồi quy trước phát hành.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A · T · T · A · T · A.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Statement → project</p><p style=\"opacity:.75;font-size:.92em\"><i>Phát biểu → dự án</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Typical of",
+                "luaChon": [
+                  "Traditional (sequential) project",
+                  "Agile project"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Testing happens inside every iteration, in parallel with coding; test levels overlap"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "A separate test team receives the build after development is finished"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The test basis is a signed, complete requirements document"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Automated tests act as living documentation; test documentation is lightweight"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Regression testing is one cycle just before the release"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Testers pair with developers and share the Definition of Done"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Agile project",
+              "r1.k": "Traditional (sequential) project",
+              "r2.k": "Traditional (sequential) project",
+              "r3.k": "Agile project",
+              "r4.k": "Traditional (sequential) project",
+              "r5.k": "Agile project"
+            },
+            "giaiThich": "<p>Agile: testing in every iteration, whole team, stories as basis, lightweight documentation, continuous automated regression, pairing. Traditional: a phase, a separate team, complete documents, a regression cycle before release.</p><p><i>VI: Agile: test trong mọi iteration, cả đội, story làm cơ sở, tài liệu nhẹ, hồi quy tự động liên tục, làm cặp. Truyền thống: một pha, nhóm riêng, tài liệu đầy đủ, một vòng hồi quy trước phát hành.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng Agile không có tài liệu test nào."
+        },
+        {
+          "loi": "Cho rằng Agile không có tester độc lập — có thể có, tuỳ ngữ cảnh."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "living documentation",
+          "vi": "tài liệu sống — test tự động mô tả hành vi"
+        }
+      ]
+    },
+    {
+      "title": "Agile testing 2 — Read the sprint burndown",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "test status in Agile"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>FA-2.2.1: Agile teams show test status with burndown charts and task boards. Write <code>burndown(total, days, remaining)</code>: a sprint of <code>days</code> working days starts with <code>total</code> story points; <code>remaining[i]</code> is the remaining work at the end of day <i>i+1</i> (as many entries as days elapsed so far).</p>\n<ul><li><code>ideal</code> — the ideal remaining work at the end of each elapsed day: total − total × (i+1) ÷ days, rounded to 1 decimal.</li>\n<li><code>gap</code> — last remaining − last ideal (1 decimal; positive = behind).</li>\n<li><code>forecastDays</code> — at the average burn rate so far ((total − last remaining) ÷ elapsed days), how many more days are needed for the rest (ceil); null if nothing was burnt.</li>\n<li><code>status</code> — <code>'DONE'</code> if remaining is 0, <code>'ON_TRACK'</code> if elapsed + forecastDays ≤ days, otherwise <code>'AT_RISK'</code>.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Do not count non-integer days: forecastDays is an integer (Math.ceil).</li>\n</ul>",
+      "problemHtmlVi": "<p>FA-2.2.1: đội Agile cho thấy tình trạng test bằng burndown và task board. Viết <code>burndown(total, days, remaining)</code> trả: đường lý tưởng của các ngày đã qua, độ lệch so với lý tưởng, số ngày cần thêm theo tốc độ trung bình, và trạng thái DONE / ON_TRACK / AT_RISK như bản tiếng Anh.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>forecastDays là số nguyên (Math.ceil).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "burndown(40, 10, [38, 36, 33, 31])",
+          "output": "{ ideal: [36, 32, 28, 24], gap: 7, forecastDays: 14, status: 'AT_RISK' }",
+          "explanation": "Burnt 9 in 4 days = 2.25/day; 31 left needs 14 more days, but only 6 remain.|||Đốt 9 điểm trong 4 ngày = 2,25/ngày; còn 31 cần 14 ngày nữa, mà chỉ còn 6 ngày."
+        }
+      ],
+      "hintsJson": [
+        "ideal[i] = total − total·(i+1)/days.",
+        "forecastDays = ceil(lastRemaining ÷ rate)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "burndown.js",
+          "language": "javascript",
+          "code": "function burndown(total, days, remaining) {\n  return { ideal: [], gap: 0, forecastDays: null, status: 'ON_TRACK' };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "burndown.js",
+          "language": "javascript",
+          "code": "function burndown(total, days, remaining) {\n  const r1 = (x) => Math.round(x * 10) / 10;\n  const n = remaining.length;\n  const ideal = remaining.map((_, i) => r1(total - (total * (i + 1)) / days));\n  const last = n ? remaining[n - 1] : total;\n  const gap = n ? r1(last - ideal[n - 1]) : 0;\n  const burnt = total - last;\n  const forecastDays = burnt > 0 && n > 0 ? Math.ceil(last / (burnt / n)) : null;\n  let status;\n  if (last === 0) status = 'DONE';\n  else if (forecastDays !== null && n + forecastDays <= days) status = 'ON_TRACK';\n  else status = 'AT_RISK';\n  return { ideal, gap, forecastDays, status };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The burndown makes progress visible to the whole team every day; a growing gap triggers a conversation in the daily stand-up (drop scope, swarm on testing, remove an impediment).</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "burndown.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "the example",
+              "vi": "ví dụ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const t=burndown(40,10,[38,36,33,31]);return JSON.stringify(t)===JSON.stringify({ideal:[36,32,28,24],gap:7,forecastDays:14,status:\"AT_RISK\"})?\"OK\":\"got \"+JSON.stringify(t)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "on track",
+              "vi": "đúng tiến độ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const t=burndown(30,10,[27,24,20]);return t.status===\"ON_TRACK\"&&t.forecastDays===6&&t.gap===-1?\"OK\":\"got \"+JSON.stringify(t)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "done",
+              "vi": "xong"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const t=burndown(10,5,[6,2,0]);return t.status===\"DONE\"&&t.forecastDays===0?\"OK\":\"got \"+JSON.stringify(t)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "nothing burnt yet",
+              "vi": "chưa đốt được gì"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const n=burndown(20,10,[20,20]);return n.forecastDays===null&&n.status===\"AT_RISK\"&&n.gap===4?\"OK\":\"got \"+JSON.stringify(n)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "ideal rounding",
+              "vi": "làm tròn đường lý tưởng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const n=burndown(10,3,[7]);return JSON.stringify(n.ideal)===\"[6.7]\"?\"OK\":\"got \"+JSON.stringify(n.ideal)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "So với lý tưởng của ngày cuối sprint thay vì ngày hiện tại."
+        },
+        {
+          "loi": "Chia cho 0 khi chưa đốt được điểm nào."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "burndown chart",
+          "vi": "biểu đồ công việc còn lại"
+        },
+        {
+          "en": "burn rate",
+          "vi": "tốc độ hoàn thành"
+        },
+        {
+          "en": "task board",
+          "vi": "bảng công việc"
+        }
+      ]
+    },
+    {
+      "title": "Agile testing 3 — Skills, role and independence of the Agile tester (K2)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "Agile tester role"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Six questions on FA-2.1.3, FA-2.2.2 and FA-2.3.1–2.3.2: independence in Agile teams, evolving tests across iterations and the tester’s skills and role.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sáu câu về FA-2.1.3, FA-2.2.2 và FA-2.3.1–2.3.2: tính độc lập trong đội Agile, test tiến hoá qua các iteration, kỹ năng và vai trò của tester.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Độc lập vẫn quan trọng trong Agile.",
+        "Tự động hoá = quản lý rủi ro hồi quy."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agile testing 3 — Skills, role and independence of the Agile tester (K2)\n\nAnswer in the answer panel (no code needed).\n\n1. What is a risk for a tester embedded in an Agile team for a long time?Rủi ro của tester ở lâu trong đội Agile là gì?\n2. Why is test automation so important in Agile projects?Vì sao tự động hoá test rất quan trọng trong dự án Agile?\n3. Which is a typical skill of an Agile tester?Đâu là kỹ năng điển hình của tester Agile?\n4. Which is part of the tester’s role in an Agile team?Việc nào thuộc vai trò tester trong đội Agile?\n5. Which tool best shows the status of every task of the sprint at a glance?Công cụ nào cho thấy trạng thái mọi task của sprint trong một cái nhìn?\n6. How do testing and development integrate within one iteration?Phát triển và kiểm thử gắn với nhau thế nào trong một iteration?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Agile testing 3 — Skills, role and independence of the Agile tester (K2) — answer key\n\n1. What is a risk for a tester embedded in an Agile team for a long time?Rủi ro của tester ở lâu trong đội Agile là gì?\n   Answer: a) Loss of independence — adopting the developers’ view\n   Mitigations: an independent test team that supports several Agile teams, rotation, a test lead outside the team.VI: Cách giảm: nhóm test độc lập hỗ trợ nhiều đội, luân chuyển, trưởng nhóm test ngoài đội.\n\n2. Why is test automation so important in Agile projects?Vì sao tự động hoá test rất quan trọng trong dự án Agile?\n   Answer: b) Each iteration adds features; the growing regression risk can only be managed with automated regression tests run continuously\n   FA-2.2.2.VI: FA-2.2.2.\n\n3. Which is a typical skill of an Agile tester?Đâu là kỹ năng điển hình của tester Agile?\n   Answer: b) Communicating well with business and developers, test automation and exploratory skills, and a positive, solution-oriented attitude\n   Plus being proactive, evaluating results, responding to change.VI: Cùng với chủ động, đánh giá kết quả, phản hồi thay đổi.\n\n4. Which is part of the tester’s role in an Agile team?Việc nào thuộc vai trò tester trong đội Agile?\n   Answer: b) Coaching the team on testing, helping define acceptance criteria, reporting test results and defects, keeping the test strategy up to date\n   The PO decides backlog priorities.VI: PO quyết định ưu tiên backlog.\n\n5. Which tool best shows the status of every task of the sprint at a glance?Công cụ nào cho thấy trạng thái mọi task của sprint trong một cái nhìn?\n   Answer: a) A task board (physical or electronic)\n   Together with burndown charts and wikis.VI: Cùng với burndown và wiki.\n\n6. How do testing and development integrate within one iteration?Phát triển và kiểm thử gắn với nhau thế nào trong một iteration?\n   Answer: b) Unit tests, feature verification against acceptance criteria and feature validation happen continuously as each story is built\n   FA-2.1.2.VI: FA-2.1.2.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · b · b · b · a · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>What is a risk for a tester embedded in an Agile team for a long time?</p><p style=\"opacity:.75;font-size:.92em\"><i>Rủi ro của tester ở lâu trong đội Agile là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Loss of independence — adopting the developers’ view"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Too much documentation"
+              },
+              {
+                "ma": "c",
+                "noiDung": "No access to the code"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Working alone"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Mitigations: an independent test team that supports several Agile teams, rotation, a test lead outside the team.</p><p><i>VI: Cách giảm: nhóm test độc lập hỗ trợ nhiều đội, luân chuyển, trưởng nhóm test ngoài đội.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Why is test automation so important in Agile projects?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao tự động hoá test rất quan trọng trong dự án Agile?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It replaces testers"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Each iteration adds features; the growing regression risk can only be managed with automated regression tests run continuously"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Managers like it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It removes the need for acceptance criteria"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>FA-2.2.2.</p><p><i>VI: FA-2.2.2.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Which is a typical skill of an Agile tester?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đâu là kỹ năng điển hình của tester Agile?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Working only from complete specifications"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Communicating well with business and developers, test automation and exploratory skills, and a positive, solution-oriented attitude"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Avoiding developers"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Writing long reports"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Plus being proactive, evaluating results, responding to change.</p><p><i>VI: Cùng với chủ động, đánh giá kết quả, phản hồi thay đổi.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Which is part of the tester’s role in an Agile team?</p><p style=\"opacity:.75;font-size:.92em\"><i>Việc nào thuộc vai trò tester trong đội Agile?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Only executing manual tests at the end"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Coaching the team on testing, helping define acceptance criteria, reporting test results and defects, keeping the test strategy up to date"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Deciding priorities of the backlog"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Managing the budget"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The PO decides backlog priorities.</p><p><i>VI: PO quyết định ưu tiên backlog.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>Which tool best shows the status of every task of the sprint at a glance?</p><p style=\"opacity:.75;font-size:.92em\"><i>Công cụ nào cho thấy trạng thái mọi task của sprint trong một cái nhìn?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A task board (physical or electronic)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The test plan"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The defect report"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The contract"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Together with burndown charts and wikis.</p><p><i>VI: Cùng với burndown và wiki.</i></p>"
+          },
+          {
+            "ma": "q6",
+            "de": "<p>How do testing and development integrate within one iteration?</p><p style=\"opacity:.75;font-size:.92em\"><i>Phát triển và kiểm thử gắn với nhau thế nào trong một iteration?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Testing starts after all stories are coded"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Unit tests, feature verification against acceptance criteria and feature validation happen continuously as each story is built"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only acceptance testing happens"
+              },
+              {
+                "ma": "d",
+                "noiDung": "They are separated by a gate"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>FA-2.1.2.</p><p><i>VI: FA-2.1.2.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng tester Agile quyết định ưu tiên backlog."
+        },
+        {
+          "loi": "Cho rằng test bắt đầu sau khi code hết story."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "daily stand-up",
+          "vi": "họp đứng hằng ngày"
+        }
+      ]
+    }
+  ]
+}

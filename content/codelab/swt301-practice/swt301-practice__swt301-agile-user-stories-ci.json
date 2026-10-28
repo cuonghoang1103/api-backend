@@ -1,0 +1,406 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-agile-user-stories-ci",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-agile-user-stories-ci"
+  },
+  "exercises": [
+    {
+      "title": "User stories 1 — Which INVEST letter does each story break?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "user stories"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>INVEST: <b>I</b>ndependent, <b>N</b>egotiable, <b>V</b>aluable, <b>E</b>stimable, <b>S</b>mall, <b>T</b>estable. Each LabBook story below breaks mainly one letter.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>INVEST: Independent, Negotiable, Valuable, Estimable, Small, Testable. Mỗi story LabBook dưới đây vi phạm chủ yếu một chữ.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Từ mơ hồ (fast, friendly) ⇒ Testable.",
+        "Quy định chi tiết thiết kế ⇒ Negotiable."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# User stories 1 — Which INVEST letter does each story break?\n\nAnswer in the answer panel (no code needed).\n\n1. Story → broken criterionStory → tiêu chí bị vi phạm\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# User stories 1 — Which INVEST letter does each story break? — answer key\n\n1. Story → broken criterionStory → tiêu chí bị vi phạm\n   - r0.c: Testable\n   - r1.c: Valuable\n   - r2.c: Small\n   - r3.c: Independent\n   - r4.c: Estimable\n   - r5.c: Negotiable\n   “Fast, user-friendly” cannot be checked; a refactoring task gives no user value; six features do not fit one iteration; a story that only works after another is not independent; an unknown technology cannot be estimated; a story that fixes the UI design leaves nothing to negotiate.VI: “Nhanh, thân thiện” không kiểm được; refactor không mang giá trị cho người dùng; sáu tính năng không vừa một iteration; story chỉ làm được sau story khác thì không độc lập; công nghệ chưa ai biết thì không ước lượng được; story quy định cứng thiết kế UI thì không còn gì để thương lượng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>T · V · S · I · E · N.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Story → broken criterion</p><p style=\"opacity:.75;font-size:.92em\"><i>Story → tiêu chí bị vi phạm</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Story"
+              },
+              {
+                "ma": "c",
+                "ten": "Criterion",
+                "luaChon": [
+                  "Independent",
+                  "Negotiable",
+                  "Valuable",
+                  "Estimable",
+                  "Small",
+                  "Testable"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "As a student I want the booking page to be fast and user-friendly"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "As a developer I want to refactor the repository layer into three classes"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "As a student I want to book, cancel, join waitlists, see statistics, export to PDF and pay fees online"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "As a student I want to cancel a booking — it can only be done after story US-31 (“book a seat”) is finished in the same sprint"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "As a manager I want AI to predict lab demand — nobody in the team knows how to build or size it"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "As a student I want to book a seat by clicking the blue button in the top-left corner, exactly 40 px wide"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.c": "Testable",
+              "r1.c": "Valuable",
+              "r2.c": "Small",
+              "r3.c": "Independent",
+              "r4.c": "Estimable",
+              "r5.c": "Negotiable"
+            },
+            "giaiThich": "<p>“Fast, user-friendly” cannot be checked; a refactoring task gives no user value; six features do not fit one iteration; a story that only works after another is not independent; an unknown technology cannot be estimated; a story that fixes the UI design leaves nothing to negotiate.</p><p><i>VI: “Nhanh, thân thiện” không kiểm được; refactor không mang giá trị cho người dùng; sáu tính năng không vừa một iteration; story chỉ làm được sau story khác thì không độc lập; công nghệ chưa ai biết thì không ước lượng được; story quy định cứng thiết kế UI thì không còn gì để thương lượng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gán story refactor cho Small."
+        },
+        {
+          "loi": "Gán story quá nhiều tính năng cho Estimable."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "INVEST",
+          "vi": "tiêu chí story tốt của Bill Wake"
+        },
+        {
+          "en": "3C — card, conversation, confirmation",
+          "vi": "thẻ, trao đổi, xác nhận"
+        }
+      ]
+    },
+    {
+      "title": "User stories 2 — Write a testable story with acceptance criteria (K3)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "user stories",
+        "acceptance criteria"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>The department says: “Students should be warned before they lose their seat if they forget to check in — something like a reminder, and the seat should go to someone else if they don’t come.” Facts agreed in the three-amigos conversation: a booking must be checked in within <b>15 minutes</b> after its start; a reminder e-mail is sent <b>10 minutes</b> after the start if not checked in; after 15 minutes the booking becomes <b>NO_SHOW</b> and the first waiting student is promoted.</p>\n<p>Write <code>STORY</code> = <code>{ role, goal, benefit, acceptanceCriteria: [{ given, when, then }] }</code> — the <b>card</b> (As a… I want… so that…) and the <b>confirmation</b>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>At least 3 acceptance criteria, each with non-empty given, when, then.</li>\n  <li>No vague words anywhere: fast, quick, easy, user-friendly, user friendly, simple, nice, etc, appropriate, some, many, flexible, efficient.</li>\n  <li>The criteria must mention the numbers 10 and 15 (minutes), NO_SHOW and the promotion of the waitlist.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phòng lab nói: “Nên nhắc sinh viên trước khi mất chỗ nếu quên check-in — kiểu như nhắc nhở, và chỗ phải chuyển cho người khác nếu không tới.” Sự kiện đã chốt trong buổi ba người: phải check-in trong <b>15 phút</b> sau giờ bắt đầu; gửi thư nhắc <b>10 phút</b> sau giờ bắt đầu nếu chưa check-in; quá 15 phút booking thành <b>NO_SHOW</b> và người chờ đầu tiên được nâng hạng. Viết <code>STORY</code> gồm thẻ (As a… I want… so that…) và phần xác nhận (acceptance criteria Given/When/Then).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Ít nhất 3 acceptance criteria, mỗi cái đủ given, when, then.</li>\n  <li>Không có từ mơ hồ: fast, quick, easy, user-friendly, user friendly, simple, nice, etc, appropriate, some, many, flexible, efficient.</li>\n  <li>Các tiêu chí phải có số 10 và 15 (phút), NO_SHOW và việc nâng hạng người chờ.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "given / when / then",
+          "output": "{ given: 'a CONFIRMED booking starting at 09:00 that is not checked in', when: 'it is 09:10', then: 'the student receives a reminder e-mail' }",
+          "explanation": "Concrete, checkable, with the agreed number.|||Cụ thể, kiểm được, có con số đã chốt."
+        }
+      ],
+      "hintsJson": [
+        "role là sinh viên hoặc người chờ; benefit nói rõ lợi ích (không mất chỗ / chỗ không bỏ trống).",
+        "Mỗi con số chốt trong buổi trao đổi nên có một tiêu chí riêng, kể cả trường hợp check-in đúng hạn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "story.js",
+          "language": "javascript",
+          "code": "const STORY = {\n  role: '',\n  goal: '',\n  benefit: '',\n  acceptanceCriteria: [\n    { given: '', when: '', then: '' },\n  ],\n};\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "story.js",
+          "language": "javascript",
+          "code": "const STORY = {\n  role: 'student with a lab booking',\n  goal: 'to be reminded to check in and to know when my seat is released',\n  benefit: 'I do not lose my seat by accident and seats are not left empty for students who are waiting',\n  acceptanceCriteria: [\n    { given: 'a CONFIRMED booking starting at 09:00 that is not checked in', when: 'it is 09:10 (10 minutes after the start)', then: 'the student receives one reminder e-mail' },\n    { given: 'a CONFIRMED booking starting at 09:00', when: 'the student checks in at 09:15 (15 minutes after the start)', then: 'the booking stays CONFIRMED and no further e-mail is sent' },\n    { given: 'a CONFIRMED booking starting at 09:00 that is not checked in, and a waiting student', when: 'it is 09:16 (more than 15 minutes after the start)', then: 'the booking becomes NO_SHOW and the first waiting student is promoted and e-mailed' },\n    { given: 'a CONFIRMED booking that was checked in at 09:05', when: 'it is 09:10', then: 'no reminder e-mail is sent' },\n  ],\n};\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Card + conversation + confirmation: the conversation turned “something like a reminder” into numbers, and the confirmation turns those numbers into checkable criteria — the basis of the ATDD tests.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "story.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "the card: role, goal and benefit are written",
+              "vi": "thẻ: có role, goal, benefit"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>typeof STORY==\"object\"&&String(STORY.role).trim().length>=3&&String(STORY.goal).trim().length>=10&&String(STORY.benefit).trim().length>=10?\"OK\":\"write role, goal and benefit (As a \\u2026 I want \\u2026 so that \\u2026)\")))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "at least 3 complete Given/When/Then criteria",
+              "vi": "ít nhất 3 tiêu chí Given/When/Then đầy đủ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const e=Array.isArray(STORY.acceptanceCriteria)?STORY.acceptanceCriteria:[];return e.length>=3&&e.every(n=>n&&[\"given\",\"when\",\"then\"].every(r=>String(n[r]||\"\").trim().length>=5))?\"OK\":\"need \\u2265 3 criteria with given, when and then filled in\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "no vague words",
+              "vi": "không có từ mơ hồ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const i=JSON.stringify(STORY).toLowerCase(),e=[\"fast\",\"quick\",\"easy\",\"user-friendly\",\"user friendly\",\"simple\",\"nice\",\"etc\",\"appropriate\",\"some\",\"many\",\"flexible\",\"efficient\",\"something\"].filter(n=>new RegExp(\"\\\\b\"+n.replace(\"-\",\"\\\\-\")+\"\\\\b\").test(i));return e.length?\"vague: \"+e.join(\", \"):\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "the agreed facts are in the criteria (10, 15, NO_SHOW, promotion)",
+              "vi": "các sự kiện đã chốt có trong tiêu chí (10, 15, NO_SHOW, nâng hạng)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const i=JSON.stringify(STORY.acceptanceCriteria||[]),t=[];return/\\b10\\b/.test(i)||t.push(\"10 minutes\"),/\\b15\\b/.test(i)||t.push(\"15 minutes\"),/NO_SHOW/.test(i)||t.push(\"NO_SHOW\"),/promot/i.test(i)||t.push(\"promotion of the waitlist\"),t.length?\"missing: \"+t.join(\", \"):\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Giữ chữ “something like a reminder” của yêu cầu gốc."
+        },
+        {
+          "loi": "Viết tiêu chí không có con số."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "acceptance criteria",
+          "vi": "tiêu chí chấp nhận"
+        },
+        {
+          "en": "Given/When/Then",
+          "vi": "cho trước / khi / thì"
+        },
+        {
+          "en": "check-in",
+          "vi": "xác nhận có mặt"
+        }
+      ]
+    },
+    {
+      "title": "User stories 3 — Retrospectives and continuous integration (K2)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "retrospectives",
+        "continuous integration"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Three of the four common Agile practices. Which practice does each statement describe?</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ba trong bốn thực hành chung của Agile. Mỗi phát biểu mô tả thực hành nào?</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "“Cải tiến quy trình” ⇒ retrospective.",
+        "“Build tự động, regression mỗi ngày” ⇒ CI."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# User stories 3 — Retrospectives and continuous integration (K2)\n\nAnswer in the answer panel (no code needed).\n\n1. Statement → practicePhát biểu → thực hành\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# User stories 3 — Retrospectives and continuous integration (K2) — answer key\n\n1. Statement → practicePhát biểu → thực hành\n   - r0.p: Retrospective\n   - r1.p: Continuous integration\n   - r2.p: Collaborative user story creation\n   - r3.p: Retrospective\n   - r4.p: Continuous integration\n   - r5.p: Collaborative user story creation\n   Retrospectives improve the process; CI gives fast, visible feedback on every change; collaborative story creation makes stories testable before code.VI: Retrospective cải tiến quy trình; CI cho phản hồi nhanh, ai cũng thấy với mỗi thay đổi; viết story cùng nhau làm story kiểm thử được trước khi có mã.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>R · CI · S · R · CI · S.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Statement → practice</p><p style=\"opacity:.75;font-size:.92em\"><i>Phát biểu → thực hành</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "p",
+                "ten": "Practice",
+                "luaChon": [
+                  "Retrospective",
+                  "Continuous integration",
+                  "Collaborative user story creation"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "At the end of the sprint the team discusses what succeeded, what could be improved and how to include the improvements"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Every change is integrated at least daily, followed by an automated build and regression run"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The tester asks “what happens when the lab is full?” while the product owner writes the story with the developers"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Testers bring up test-effectiveness issues — e.g. too many defects escaped — and the team agrees an action"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "A failing build is visible to everyone at once and fixing it becomes the team’s first priority"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Brainstorming and mind maps produce acceptance criteria before any code is written"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.p": "Retrospective",
+              "r1.p": "Continuous integration",
+              "r2.p": "Collaborative user story creation",
+              "r3.p": "Retrospective",
+              "r4.p": "Continuous integration",
+              "r5.p": "Collaborative user story creation"
+            },
+            "giaiThich": "<p>Retrospectives improve the process; CI gives fast, visible feedback on every change; collaborative story creation makes stories testable before code.</p><p><i>VI: Retrospective cải tiến quy trình; CI cho phản hồi nhanh, ai cũng thấy với mỗi thay đổi; viết story cùng nhau làm story kiểm thử được trước khi có mã.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng tester không tham gia retrospective."
+        },
+        {
+          "loi": "Cho rằng CI chỉ là build, không gồm test."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "retrospective",
+          "vi": "buổi nhìn lại cuối iteration"
+        }
+      ]
+    }
+  ]
+}

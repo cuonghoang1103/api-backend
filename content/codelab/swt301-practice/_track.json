@@ -376,6 +376,66 @@
       "description": "Dự án LabBook — mốc chương 8: viết bộ regression hướng từ khoá (Book, Cancel, SetLab, CheckBooking, CheckMail, Login, Lock) chạy trên LabBook và 8 bản build lỗi (FIFO, thư nâng hạng, chỗ PENDING, phòng đóng/mở lại, bộ đếm đăng nhập…), mô tả tổ chức tự động hoá; kèm góc phỏng vấn 8."
     },
     {
+      "slug": "swt301-agile-quadrants",
+      "name": "9.1 Agile fundamentals: manifesto, whole team, feedback",
+      "level": "BEGINNER",
+      "description": "Bốn giá trị Agile (vế trái/vế phải), whole team, power of three, phản hồi sớm, nhận diện nguyên tắc Agile trong các sprint LabBook."
+    },
+    {
+      "slug": "swt301-agile-xp-scrum-kanban",
+      "name": "9.2 Agile approaches: XP, Scrum, Kanban",
+      "level": "BEGINNER",
+      "description": "Phân biệt thực hành XP, Scrum, Kanban, viết code đo bảng Kanban (vi phạm WIP, lead time, cycle time, có kéo thêm được không), câu thi."
+    },
+    {
+      "slug": "swt301-agile-user-stories-ci",
+      "name": "9.3 User stories, retrospectives and continuous integration",
+      "level": "INTERMEDIATE",
+      "description": "INVEST trên story LabBook, viết story kiểm thử được với acceptance criteria Given/When/Then (K3), phân biệt retrospective, CI và viết story cùng nhau."
+    },
+    {
+      "slug": "swt301-agile-release-iteration-planning",
+      "name": "9.4 Release planning and iteration planning",
+      "level": "BEGINNER",
+      "description": "Phân biệt release planning và iteration planning trên LabBook, viết code lập sprint theo velocity, ưu tiên, phụ thuộc và tính kiểm thử được, câu thi về vai trò tester trong lập kế hoạch."
+    },
+    {
+      "slug": "swt301-agile-testing-status-roles",
+      "name": "9.5 Agile testing: status, roles and skills",
+      "level": "BEGINNER",
+      "description": "Kiểm thử truyền thống vs Agile, viết code đọc burndown (đường lý tưởng, độ lệch, dự báo, trạng thái), kỹ năng, vai trò, tính độc lập và tự động hoá hồi quy của tester Agile."
+    },
+    {
+      "slug": "swt301-tdd-bdd",
+      "name": "9.6 TDD, ATDD, BDD and the testing quadrants",
+      "level": "BEGINNER",
+      "description": "Phân biệt TDD/ATDD/BDD, đặt test LabBook vào bốn góc kiểm thử, sắp một vòng TDD, viết acceptance test cho US-17 từ acceptance criteria (chấm bằng mutant)."
+    },
+    {
+      "slug": "swt301-agile-risk-estimation",
+      "name": "9.7 Agile risk, estimation and acceptance criteria",
+      "level": "INTERMEDIATE",
+      "description": "Viết code một vòng planning poker (bộ bài Fibonacci, đồng thuận, ai giải thích), rủi ro chất lượng theo story, acceptance criteria kiểm thử được, ATDD, khám phá và công cụ Agile."
+    },
+    {
+      "slug": "swt301-9-lab-agile-sprint12",
+      "name": "Lab 9 — Agile Testing in LabBook Sprint 12",
+      "level": "ADVANCED",
+      "description": "Lab chương 9: xếp tám test vào bốn góc kiểm thử, lập sprint theo velocity/ưu tiên/phụ thuộc/tính kiểm thử được, đọc burndown và chọn hành động, ba vòng planning poker và kiểm INVEST."
+    },
+    {
+      "slug": "swt301-9-deep-gherkin-runner",
+      "name": "Deep Lab 9 — Build the Core of a BDD Tool",
+      "level": "ADVANCED",
+      "description": "Deep Lab chương 9: tự viết createRunner() kiểu Cucumber — đọc Gherkin (Background, Scenario, Scenario Outline + Examples, And/But, chú thích), khớp bước với {int}/{string} và ký tự đặc biệt, world mới mỗi kịch bản, trạng thái passed/failed/undefined."
+    },
+    {
+      "slug": "swt301-9-project-labbook-bdd-acceptance",
+      "name": "LabBook Project 9 — BDD Acceptance Tests for Release 2.0",
+      "level": "INTERMEDIATE",
+      "description": "Dự án LabBook — mốc cuối: viết acceptance test Gherkin (≥ 6 kịch bản) chạy bằng thư viện bước trên LabBook và 8 bản build lỗi (chỉ xem booking của mình, trùng giờ khác phòng, cửa sổ 14 ngày, khoá tài khoản, huỷ muộn, quyền đóng phòng…), mô tả cách làm BDD; kèm góc phỏng vấn tổng kết."
+    },
+    {
       "slug": "swt301-10-lab2-unit-test-report51",
       "name": "Lab 2 Practice — Unit Test Report 5.1 (reserveSeat)",
       "level": "ADVANCED",

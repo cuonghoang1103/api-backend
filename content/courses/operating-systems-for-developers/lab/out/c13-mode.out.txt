@@ -1,0 +1,20 @@
+$ gcc -O2 syscost.c -o syscost && ./syscost
+plain function call     :     2.3 ns
+getppid() system call   :   186.4 ns
+clock_gettime() via vDSO:    19.9 ns
+write()+read() on a pipe:   449.7 ns
+$ strace -c -o sc.txt ls -l /etc > /dev/null; tail -3 sc.txt
+  0.00    0.000000           0         1           rseq
+------ ----------- ----------- --------- --------- ------------------
+100.00    0.008550          13       651        15 total
+$ strace -c -f -o sc.txt node -e "console.log(1)" > /dev/null; tail -1 sc.txt
+100.00    0.066083          98       671        33 total
+$ strace -c -f -o sc.txt python3 -c "print(1)" > /dev/null; tail -1 sc.txt
+100.00    0.001444           4       344        34 total
+$ strace -c -f -o sc.txt java -version 2> /dev/null; tail -1 sc.txt
+100.00    0.136642         108      1258        77 total
+$ strace -e trace=write,openat -o w.txt python3 -c 'open("/tmp/a.txt","w").write("hi")'; grep -E 'a.txt|write\(3' w.txt
+openat(AT_FDCWD, "/tmp/a.txt", O_WRONLY|O_CREAT|O_TRUNC|O_CLOEXEC, 0666) = 3
+write(3, "hi", 2)                       = 2
+$ grep -m1 vdso /proc/self/maps
+ffff9af84000-ffff9af86000 r-xp 00000000 00:00 0                          [vdso]

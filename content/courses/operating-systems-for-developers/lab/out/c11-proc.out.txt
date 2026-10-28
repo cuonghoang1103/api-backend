@@ -1,0 +1,63 @@
+$ PID=$(pgrep -f "node server.js"); echo $PID
+10
+$ ps -o pid,ppid,stat,nlwp,rss,vsz,etime,cmd -p $PID
+    PID    PPID STAT NLWP   RSS    VSZ     ELAPSED CMD
+     10       7 Sl      7 49324 486424       00:01 node server.js
+$ grep -E '^(Name|State|Pid|PPid|Uid|Threads|VmRSS|VmSize|voluntary|nonvoluntary)' /proc/$PID/status
+Name:	node
+State:	S (sleeping)
+Pid:	10
+PPid:	7
+Uid:	0	0	0	0
+VmSize:	  486424 kB
+VmRSS:	   49324 kB
+Threads:	7
+voluntary_ctxt_switches:	12
+nonvoluntary_ctxt_switches:	6
+$ tr '\0' ' ' < /proc/$PID/cmdline; echo
+node server.js 
+$ readlink /proc/$PID/cwd /proc/$PID/exe
+/lab/ch01
+/usr/local/bin/node
+$ ls -l /proc/$PID/fd | awk '{print $9, $10, $11}'
+  
+0 -> /dev/null
+1 -> /tmp/server.log
+10 -> pipe:[435031]
+11 -> pipe:[435031]
+12 -> anon_inode:[eventfd]
+13 -> anon_inode:[eventpoll]
+14 -> pipe:[437856]
+15 -> pipe:[437856]
+16 -> anon_inode:[eventfd]
+17 -> /dev/null
+18 -> socket:[441008]
+2 -> /tmp/server.log
+3 -> anon_inode:[eventpoll]
+4 -> pipe:[437854]
+5 -> pipe:[437854]
+6 -> pipe:[437855]
+7 -> pipe:[437855]
+8 -> anon_inode:[eventfd]
+9 -> anon_inode:[eventpoll]
+$ ls /proc/$PID/task | head; ls /proc/$PID/task | wc -l
+10
+14
+15
+16
+17
+18
+19
+7
+$ grep -E 'heap|stack|node$' /proc/$PID/maps | head -6
+00400000-066b0000 r-xp 00000000 00:3f 364445                             /usr/local/bin/node
+066cc000-066d0000 r--p 062bc000 00:3f 364445                             /usr/local/bin/node
+066d0000-06712000 rw-p 062c0000 00:3f 364445                             /usr/local/bin/node
+0e08e000-0e200000 rw-p 00000000 00:00 0                                  [heap]
+0e200000-0e400000 rw-p 00000000 00:00 0                                  [heap]
+ffffe3ec4000-ffffe3ee5000 rw-p 00000000 00:00 0                          [stack]
+$ grep -E 'Max open files|Max processes' /proc/$PID/limits
+Max processes             unlimited            unlimited            processes 
+Max open files            1048576              1048576              files     
+$ cat /proc/$PID/stat | cut -d' ' -f1-5,14-15,20
+10 (node) S 7 1 1 1 7

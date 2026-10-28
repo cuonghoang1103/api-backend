@@ -1,0 +1,9 @@
+$ nproc
+2
+$ free -h | head -2
+               total        used        free      shared  buff/cache   available
+Mem:           7.7Gi       2.8Gi       471Mi       151Mi       4.8Gi       4.9Gi
+$ cat /sys/fs/cgroup/cpu.max
+200000 100000
+$ cat /sys/fs/cgroup/memory.max
+1073741824

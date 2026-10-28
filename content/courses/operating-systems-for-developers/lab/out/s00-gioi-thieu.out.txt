@@ -1,0 +1,22 @@
+$ uname -srm
+Linux 7.0.12-linuxkit aarch64
+$ grep PRETTY /etc/os-release
+PRETTY_NAME="Ubuntu 26.04.1 LTS"
+$ nproc
+10
+$ free -h
+               total        used        free      shared  buff/cache   available
+Mem:           7.7Gi       2.8Gi       224Mi       151Mi       5.1Gi       5.0Gi
+Swap:          1.0Gi          0B       1.0Gi
+$ gcc --version | head -1
+gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0
+$ java -version 2>&1 | head -1
+openjdk version "21.0.12.1" 2026-08-18 LTS
+$ node -v; python3 -V
+v22.23.4
+Python 3.14.4
+$ strace -V | head -1
+strace -- version 6.19
+$ id; id dev
+uid=0(root) gid=0(root) groups=0(root)
+uid=1001(dev) gid=1001(dev) groups=1001(dev)

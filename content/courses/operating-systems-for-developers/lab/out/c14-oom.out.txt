@@ -1,0 +1,13 @@
+$ docker run --name os-oom --memory 256m --memory-swap 256m os-lab python3 grow.py
+holding 50 MB
+holding 100 MB
+holding 150 MB
+holding 200 MB
+holding 250 MB
+$ echo $?
+137
+$ docker inspect -f '{{.State.OOMKilled}} {{.State.ExitCode}}' os-oom
+true 137
+$ dmesg | grep -iE "memory cgroup out of memory|oom-kill:" | tail -2
+[19549.174873] oom-kill:constraint=CONSTRAINT_MEMCG,nodemask=(null),cpuset=333a2051e1e54f8bf2bb4674669778c8b5acd3eff2cfd50018d8defad217e138,mems_allowed=0,oom_memcg=/docker/333a2051e1e54f8bf2bb4674669778c8b5acd3eff2cfd50018d8defad217e138,task_memcg=/docker/333a2051e1e54f8bf2bb4674669778c8b5acd3eff2cfd50018d8defad217e138,task=python3,pid=60453,uid=0
+[19549.174920] Memory cgroup out of memory: Killed process 60453 (python3) total-vm:312384kB, anon-rss:261004kB, file-rss:5672kB, shmem-rss:0kB, UID:0 pgtables:576kB oom_score_adj:0

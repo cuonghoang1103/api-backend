@@ -193,6 +193,19 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
     })().catch(() => { /* để nguyên khối mã, vẫn đọc được */ });
     return () => { huy = true; };
   }, [currentLesson?.id, currentLesson?.content, locale]);
+  /* Mô phỏng tương tác của khoá "Operating Systems for Developers" (28/10/2026): bài nhúng
+     `<div class="os-lab os-lab-sim-<tên> os-lab-p-<preset>">` — chỉ class, qua được sanitizeHtml, không chạy mã
+     tuỳ ý (tên phải có trong components/os-lab/registry.ts). Không có khối nào thì không tải gì cả. */
+  useEffect(() => {
+    const root = khungNoiDungRef.current;
+    if (!root || !root.querySelector('div.os-lab')) return;
+    let huy = false;
+    let don: (() => void) | null = null;
+    import('@/components/os-lab/mount').then(({ mountOsLabs }) => {
+      if (!huy && khungNoiDungRef.current) don = mountOsLabs(khungNoiDungRef.current, locale === 'en' ? 'en' : 'vi');
+    }).catch(() => { /* vẫn còn link mở /os-lab trong khối */ });
+    return () => { huy = true; don?.(); };
+  }, [currentLesson?.id, currentLesson?.content, locale]);
   // Only the setter is used now (we reset it on lesson change / completion);
   // the value itself is no longer read since we dropped the YouTube auto-mark.
   const [, setVideoCompleted] = useState(false);

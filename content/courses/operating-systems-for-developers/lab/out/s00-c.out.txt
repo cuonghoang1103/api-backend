@@ -1,0 +1,38 @@
+$ gcc -Wall -g pointers.c -o pointers && ./pointers
+n = 5, &n = 0xffffe1f47458, p = 0xffffe1f47458, *p = 5
+after twice(&n): n = 10
+arr = 0xaaab1bcd0020, arr[2] = 20, *(arr + 2) = 20
+sizeof(int) = 4, sizeof(p) = 8
+name = Cuong (5 chars)
+&count = 0xaaaadd220010 (global), arr = 0xaaab1bcd0020 (heap), &n = 0xffffe1f47458 (stack)
+$ gcc -Wall -g sys.c -o sys && su dev -c ./sys
+my pid is 26, my parent is 24
+written by write(2)
+open /nope.txt: No such file or directory
+open failed: errno=13 (Permission denied)
+$ gcc -g overflow.c -o overflow && ./overflow "this string is far too long for eight bytes"; echo "exit=$?"
+*** stack smashing detected ***: terminated
+/usr/local/bin/phien: line 24:    34 Aborted                    ./overflow "this string is far too long for eight bytes"
+exit=134
+$ gcc -g -fsanitize=address overflow.c -o overflow-asan && ./overflow-asan "this string is far too long" 2>&1 | head -12
+=================================================================
+==42==ERROR: AddressSanitizer: stack-buffer-overflow on address 0xfbff9a8f0028 at pc 0xffff9ceb24c0 bp 0xffffd9428720 sp 0xffffd9427f00
+WRITE of size 28 at 0xfbff9a8f0028 thread T0
+    #0 0xffff9ceb24bc in strcpy ../../../../src/libsanitizer/asan/asan_interceptors.cpp:575
+    #1 0xaaaaadaa0da4 in main /lab/s00/overflow.c:6
+    #2 0xffff9cc62f18 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:59
+    #3 0xffff9cc63058 in __libc_start_main_impl ../csu/libc-start.c:360
+    #4 0xaaaaadaa0bac in _start (/lab/s00/overflow-asan+0xbac) (BuildId: 11bbedb60342ae0189b762b4c6ef8749c0ef6c1c)
+
+Address 0xfbff9a8f0028 is located in stack of thread T0 at offset 40 in frame
+    #0 0xaaaaadaa0cb4 in main /lab/s00/overflow.c:4
+
+$ gcc -g null.c -o null && ./null; echo "exit=$?"
+/usr/local/bin/phien: line 24:    51 Segmentation fault         ./null
+exit=139
+$ gdb -q -batch -ex run -ex bt ./null 2>&1 | tail -5
+Program received signal SIGSEGV, Segmentation fault.
+0x0000aaaac20207b4 in find_age (u=0x0) at null.c:4
+4	int find_age(struct user *u) { return u->id; }   /* u có thể NULL */
+#0  0x0000aaaac20207b4 in find_age (u=0x0) at null.c:4
+#1  0x0000aaaac20207d4 in main () at null.c:7

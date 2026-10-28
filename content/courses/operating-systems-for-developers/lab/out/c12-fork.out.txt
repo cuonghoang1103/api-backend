@@ -1,0 +1,62 @@
+$ gcc -Wall -O2 fork1.c -o fork1 && ./fork1
+before fork: pid=15
+child : pid=16 ppid=15 fork() returned 0, x=101
+parent: pid=15 fork() returned 16, x=100
+parent: child 16 exited with 7
+$ gcc -O2 fork3.c -o fork3 && ./fork3 | sort
+hi from 24
+hi from 26
+hi from 27
+hi from 28
+hi from 29
+hi from 30
+hi from 31
+hi from 32
+$ ./fork3 | wc -l
+8
+$ gcc -O2 buffer.c -o buffer && script -qc ./buffer /dev/null
+hello
+child says bye
+parent says bye
+$ ./buffer | cat
+hello
+child says bye
+hello
+parent says bye
+$ gcc -O2 exec.c -o exec && ./exec
+I am exec.c, pid=78 — now becoming ps
+    PID    PPID COMMAND
+      1       0 bash
+      7       1 phien
+     78       7 ps
+$ gcc -Wall -O2 ctsh.c -o ctsh
+$ gcc -O2 crash.c -o crash
+$ printf 'echo hello from a child\nls /nope\nnosuchcmd\ncd /tmp\npwd\n/lab/ch01/crash\nexit\n' | ./ctsh; echo
+ctsh[0]$ hello from a child
+ctsh[0]$ ls: cannot access '/nope': No such file or directory
+ctsh[2]$ ctsh: nosuchcmd: No such file or directory
+ctsh[127]$ ctsh[0]$ /tmp
+ctsh[0]$ [killed by signal 11]
+ctsh[139]$ 
+$ echo true | strace -f -e trace=clone,clone3,execve,wait4,exit_group -o trace.txt ./ctsh > /dev/null; grep -vE 'SIGCHLD|resumed|ENOENT' trace.txt
+107   execve("./ctsh", ["./ctsh"], 0xffffd03ee5f8 /* 14 vars */) = 0
+107   wait4(108 <unfinished ...>
+108   execve("/usr/bin/true", ["true"], 0xfffff3664268 /* 14 vars */) = 0
+108   exit_group(0)                     = ?
+108   +++ exited with 0 +++
+107   exit_group(0)                     = ?
+107   +++ exited with 0 +++
+$ gcc -O2 spawncost.c -o spawncost && ./spawncost
+fork + exec + wait :  302.6 us each
+posix_spawn + wait :  266.1 us each
+fork + wait (no exec): 132.8 us each
+pthread_create+join:   56.9 us each
+$ node spawn.js
+node pid = 8120
+child pid=8127 ppid=8120
+child exited, code = 3 signal = null
+synchronous: 8128
+$ java Spawn.java
+java pid = 8131
+child pid=8149 ppid=8131
+exit code = 0

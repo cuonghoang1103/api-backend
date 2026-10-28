@@ -1,0 +1,8 @@
+$ gcc -O0 priv.c -o priv && ./priv; echo "exit=$?"
+disabling interrupts from user mode ...
+/usr/local/bin/phien: line 24:    15 Illegal instruction        ./priv
+exit=132
+$ ./priv kernel; echo "exit=$?"
+reading kernel memory at 0xffff800008000000 ...
+/usr/local/bin/phien: line 24:    18 Segmentation fault         ./priv kernel
+exit=139

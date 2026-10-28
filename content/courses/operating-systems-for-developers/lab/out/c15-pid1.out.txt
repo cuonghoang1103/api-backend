@@ -1,0 +1,56 @@
+$ docker run -d --name os-p1a --label oslab=1 os-lab node /lab/ch01/server-nohandler.js > /dev/null
+$ docker exec os-p1a ps -o pid,ppid,stat,cmd
+    PID    PPID STAT CMD
+      1       0 Ssl  node /lab/ch01/server-nohandler.js
+     13       0 Rs   ps -o pid,ppid,stat,cmd
+$ docker exec os-p1a grep SigCgt /proc/1/status
+SigCgt:	0000000100004602
+$ docker stop os-p1a > /dev/null
+# docker stop took 3.1 s
+$ docker inspect -f '{{.State.ExitCode}}' os-p1a
+137
+$ docker run -d --name os-p1b --label oslab=1 os-lab node /lab/ch01/server.js > /dev/null
+$ docker stop os-p1b > /dev/null
+# docker stop took 0.1 s
+$ docker logs os-p1b
+pid 1 listening on 8080
+SIGTERM received, closing…
+bye
+$ docker inspect -f '{{.State.ExitCode}}' os-p1b
+0
+$ docker run -d --init --name os-p1c --label oslab=1 os-lab node /lab/ch01/server-nohandler.js > /dev/null
+$ docker exec os-p1c ps -o pid,ppid,stat,cmd
+    PID    PPID STAT CMD
+      1       0 Ss   /sbin/docker-init -- /__cacert_entrypoint.sh node /lab/ch01/server-nohandler.js
+      7       1 Sl   node /lab/ch01/server-nohandler.js
+     14       0 Rs   ps -o pid,ppid,stat,cmd
+$ docker stop os-p1c > /dev/null
+# docker stop took 0.1 s
+$ docker inspect -f '{{.State.ExitCode}}' os-p1c
+143
+$ docker run -d --name os-p1d --label oslab=1 os-lab sh -c 'echo starting; node /lab/ch01/server.js' > /dev/null
+$ docker exec os-p1d ps -o pid,ppid,stat,cmd
+    PID    PPID STAT CMD
+      1       0 Ss   sh -c echo starting; node /lab/ch01/server.js
+      7       1 Sl   node /lab/ch01/server.js
+     14       0 Rs   ps -o pid,ppid,stat,cmd
+$ docker stop os-p1d > /dev/null
+# docker stop took 3.1 s
+$ docker inspect -f '{{.State.ExitCode}}' os-p1d
+137
+$ docker run -d --name os-p1e --label oslab=1 os-lab node -e 'setInterval(() => {}, 1000)' > /dev/null
+$ docker exec os-p1e sh -c 'sleep 1 & exit'
+$ docker exec os-p1e ps -o pid,ppid,stat,cmd
+    PID    PPID STAT CMD
+      1       0 Ssl  node -e setInterval(() => {}, 1000)
+     19       1 Z    [sleep] <defunct>
+     20       0 Rs   ps -o pid,ppid,stat,cmd
+$ docker run -d --init --name os-p1f --label oslab=1 os-lab node -e 'setInterval(() => {}, 1000)' > /dev/null
+$ docker exec os-p1f sh -c 'sleep 1 & exit'
+$ docker exec os-p1f ps -o pid,ppid,stat,cmd
+    PID    PPID STAT CMD
+      1       0 Ss   /sbin/docker-init -- /__cacert_entrypoint.sh node -e setInterval(() => {}, 1000)
+      6       1 Sl   node -e setInterval(() => {}, 1000)
+     20       0 Rs   ps -o pid,ppid,stat,cmd
+$ time docker stop -t 10 os-p1a
+# docker stop -t 10 took 10.1 s, exit 137

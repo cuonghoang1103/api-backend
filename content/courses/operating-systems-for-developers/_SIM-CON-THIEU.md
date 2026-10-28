@@ -83,6 +83,23 @@ Bài 2.1–2.7 dạy đọc top/vmstat/iostat/free/df bằng output tĩnh; ngư�
 - Hai bản build song song vs tuần tự trên một trần (512 MiB ≈ VPS 6 GB thu nhỏ): hai đường bộ nhớ chồng nhau, memory.peak 512 vs 310 MiB, ai bị giết là cuộc đua; exit 0 + OOMKilled=true khi PID 1 sống (Ch2 cũng xin preset sysmon `oom137build`).
 - Heap runtime trong container: thanh giới hạn container chia heap / ngoài heap (Buffer, sharp, ONNX, metaspace, stack luồng); Node 22 mặc định ≈ ½ giới hạn, sàn 259 MB (> hộp 256 MiB); JVM MaxRAMPercentage 25→75; kết quả 134 / 133 (PID 1 arm64) / 137 / OOME exit 1 / ExitOnOOME exit 3.
 - Kubernetes requests/limits: node với các pod, QoS Guaranteed/Burstable/BestEffort ⇒ oom_score_adj (−997 / công thức / 1000), kubelet eviction (memory.available < 100Mi) trước OOM của nhân.
+
+## Từ Ch13 (28/10) — bảo mật tầng OS (THUẦN PHÒNG THỦ)
+Ch13 (s13-bao-mat.mjs) dùng tạm `memory` (`stack`/`overflow`) cho 13.1/13.2 và `process` (`sandbox`) cho 13.4 —
+hợp lý nhưng chưa khớp hẳn. 13.3 KHÔNG có mô phỏng khớp (đang mượn `memory overflow` với khung "overflow trong
+chương trình setuid = leo quyền"). Những mô phỏng nên dựng để nhúng đúng (tất cả CHỈ minh hoạ cơ chế để HIỂU+PHÒNG
+THỦ, không payload dùng được):
+- **stackframe** — khung stack nhìn theo TỪNG LỆNH (push/pop, saved x29/x30, locals), có công tắc bật/tắt
+  **canary · NX · ASLR · PIE**: gõ chuỗi dài dần, thấy nó chạm local → saved regs → return address, và từng lớp phòng
+  vệ chặn ở đâu (canary ⇒ abort 134; NX ⇒ byte stack không chạy; ASLR ⇒ địa chỉ đổi mỗi lần). Thay cho `memory
+  overflow` ở 13.1/13.2 (preset hiện có không cho bật/tắt từng lớp).
+- **toctou** — dòng thời gian TOCTOU: hai luồng (chương trình · kẻ tấn công), con trỏ "check(access)" và
+  "use(open)", kẻ tấn công tráo symlink trong khe giữa; nút "thu hẹp khe" và công tắc "O_NOFOLLOW/openat" đóng race.
+- **privdrop** — luồng đặc quyền của một tiến trình setuid: ruid/euid theo thời gian, system()→dash bỏ quyền vs
+  execlp giữ euid 0 vs fix (setuid(getuid())+execve tuyệt đối); và sơ đồ capability bounding set bị cắt dần.
+- **container-fence** — hàng rào của một container: CapBnd (mặc định ~14 vs --privileged 41), Seccomp 2 vs 0, số
+  /dev node (15 vs 169, có vda/mem của máy chủ), user namespace uid_map (0→1001) — kéo công tắc default/privileged/
+  rootless để thấy hàng rào cao/thấp. Thay cho `process sandbox` ở 13.4.
 ## Từ Ch9 (28/10) — hệ thống file và quyền; đã nhúng tạm sysmon (diskfull/iostorm/calm), process (shell/sandbox), pagecache (mmap/seq); còn thiếu:
 - ⭐ **Phòng quyền "user X làm được Y không?"** (bài 9.6–9.7 cần nhất): ô nhập mode bát phân/rwx (+ setuid/setgid/sticky), chủ/nhóm của file VÀ của thư mục cha, danh sách user (uid, nhóm phụ, có CAP_DAC_OVERRIDE/CAP_FOWNER không), umask; hỏi "dev đọc/ghi/xoá/thực thi/liệt kê?" ⇒ tô từng bước của phép kiểm: khớp chủ? → chỉ bit chủ (dừng) → nhóm? → other → capability; xoá = w+x trên THƯ MỤC + luật sticky (EPERM vs EACCES). Preset khớp số thật: file 077 chủ dev (dev bị từ chối, bob đọc được), thư mục 744 (ls ra ????, cat từ chối) vs 711, /tmp 1777 (dev không xoá file của bob: Operation not permitted) vs /srv/drop 777, /srv/team 2775 (file mới nhóm team), ids setuid root (euid 0 đọc .env 600), root đọc file 000 nhưng không exec file 644. Thêm ACL: mục user:www-data:r--, mask, chmod 600 ⇒ #effective:---; ACL mặc định chép sang file mới.
 - **Khám phá tên → inode → fd** (bài 9.1–9.2): thư mục là bảng (tên → số inode) kèm byte thô; nút ln / ln -s / rm / mv cùng đĩa / mv khác đĩa (EXDEV ⇒ chép + xoá) cập nhật link count; inode chỉ được giải phóng khi link count = 0 VÀ không còn mô tả file mở (sự cố log đã xoá Ch2); số inode bị dùng lại (14 → 14). Tầng fd: bảng fd của từng tiến trình → mô tả file mở (offset, cờ) → inode; nút dup / fork / open lần hai / O_APPEND; preset "hai worker ghi đè log" đúng số ofd.c (A pos 26, B pos 13 ⇒ "worker B: hi" + "er 1001 paid"; O_APPEND ⇒ B nhảy 39); chuyển hướng = dup2 trái→phải (> f 2>&1 vs 2>&1 > f); exec giữ fd trừ O_CLOEXEC.

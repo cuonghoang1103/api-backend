@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Equivalence 1 — Name the law — answer key\n\n1. ¬(p ∧ q) ≡ ¬p ∨ ¬q is …¬(p ∧ q) ≡ ¬p ∨ ¬q là …\n   Answer: c) De Morgan’s law\n   De Morgan: a negation flips ∧ into ∨ and negates each part.VI: De Morgan: phủ định đổi ∧ thành ∨ và phủ định từng phần.\n\n2. p ∨ (p ∧ q) ≡ p is …p ∨ (p ∧ q) ≡ p là …\n   Answer: a) the absorption law\n   The extra q is “absorbed”: if p is false, p ∧ q is false too.VI: q thừa bị “hấp thụ”: nếu p sai thì p ∧ q cũng sai.\n\n3. p ∧ (q ∨ r) ≡ (p ∧ q) ∨ (p ∧ r) is …p ∧ (q ∨ r) ≡ (p ∧ q) ∨ (p ∧ r) là …\n   Answer: a) the distributive law\n   ∧ distributes over ∨, exactly like × over + in arithmetic.VI: ∧ phân phối trên ∨ giống × trên + trong số học.\n\n4. ¬∀x P(x) is equivalent to …¬∀x P(x) tương đương với …\n   Answer: b) ∃x ¬P(x)\n   A universal claim fails exactly when a counter-example exists.VI: Khẳng định phổ quát sai khi và chỉ khi có phản ví dụ.\n\n5. p → q ≡ ¬p ∨ q is called …p → q ≡ ¬p ∨ q được gọi là …\n   Answer: b) the implication-as-disjunction equivalence\n   It lets us rewrite → inside a proof by chains of equivalences.VI: Nó cho phép viết lại → trong chứng minh bằng chuỗi tương đương.\n\n6. ¬¬p ≡ p is …¬¬p ≡ p là …\n   Answer: d) the double-negation law\n   Two negations cancel.VI: Hai lần phủ định triệt tiêu nhau.\n"
+          "code": "# Equivalence 1 — Name the law — answer key\n\n1. ¬(p ∧ q) ≡ ¬p ∨ ¬q is …¬(p ∧ q) ≡ ¬p ∨ ¬q là …\n   Answer: c) De Morgan’s law\n   De Morgan: a negation flips ∧ into ∨ and negates each part.VI: De Morgan: phủ định đổi ∧ thành ∨ và phủ định từng phần.\n\n2. p ∨ (p ∧ q) ≡ p is …p ∨ (p ∧ q) ≡ p là …\n   Answer: a) the absorption law\n   The extra q is “absorbed”: if p is false, p ∧ q is false too.VI: q thừa bị “hấp thụ”: nếu p sai thì p ∧ q cũng sai.\n\n3. p ∧ (q ∨ r) ≡ (p ∧ q) ∨ (p ∧ r) is …p ∧ (q ∨ r) ≡ (p ∧ q) ∨ (p ∧ r) là …\n   Answer: a) the distributive law\n   ∧ distributes over ∨, exactly like × over + in arithmetic.VI: ∧ phân phối trên ∨ giống × trên + trong số học.\n\n4. ¬∀x P(x) is equivalent to …¬∀x P(x) tương đương với …\n   Answer: b) ∃x ¬P(x)\n   A universal claim fails exactly when a counter-example exists.VI: Khẳng định phổ quát sai khi và chỉ khi có phản ví dụ.\n\n5. p → q ≡ ¬p ∨ q is called …p → q ≡ ¬p ∨ q được gọi là …\n   Answer: b) the implication-as-disjunction equivalence\n   It lets us rewrite → inside a proof by chains of equivalences.VI: Nó cho phép viết lại → trong chứng minh bằng chuỗi tương đương.\n\n6. ¬¬p ≡ p is …¬¬p ≡ p là …\n   Answer: b) the double-negation law\n   Two negations cancel.VI: Hai lần phủ định triệt tiêu nhau.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> De Morgan’s law</p><p>De Morgan: a negation flips ∧ into ∨ and negates each part.</p><p><i>VI: De Morgan: phủ định đổi ∧ thành ∨ và phủ định từng phần.</i></p></li><li><p><b>a)</b> the absorption law</p><p>The extra q is “absorbed”: if p is false, p ∧ q is false too.</p><p><i>VI: q thừa bị “hấp thụ”: nếu p sai thì p ∧ q cũng sai.</i></p></li><li><p><b>a)</b> the distributive law</p><p>∧ distributes over ∨, exactly like × over + in arithmetic.</p><p><i>VI: ∧ phân phối trên ∨ giống × trên + trong số học.</i></p></li><li><p><b>b)</b> ∃x ¬P(x)</p><p>A universal claim fails exactly when a counter-example exists.</p><p><i>VI: Khẳng định phổ quát sai khi và chỉ khi có phản ví dụ.</i></p></li><li><p><b>b)</b> the implication-as-disjunction equivalence</p><p>It lets us rewrite → inside a proof by chains of equivalences.</p><p><i>VI: Nó cho phép viết lại → trong chứng minh bằng chuỗi tương đương.</i></p></li><li><p><b>d)</b> the double-negation law</p><p>Two negations cancel.</p><p><i>VI: Hai lần phủ định triệt tiêu nhau.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> De Morgan’s law</p><p>De Morgan: a negation flips ∧ into ∨ and negates each part.</p><p><i>VI: De Morgan: phủ định đổi ∧ thành ∨ và phủ định từng phần.</i></p></li><li><p><b>a)</b> the absorption law</p><p>The extra q is “absorbed”: if p is false, p ∧ q is false too.</p><p><i>VI: q thừa bị “hấp thụ”: nếu p sai thì p ∧ q cũng sai.</i></p></li><li><p><b>a)</b> the distributive law</p><p>∧ distributes over ∨, exactly like × over + in arithmetic.</p><p><i>VI: ∧ phân phối trên ∨ giống × trên + trong số học.</i></p></li><li><p><b>b)</b> ∃x ¬P(x)</p><p>A universal claim fails exactly when a counter-example exists.</p><p><i>VI: Khẳng định phổ quát sai khi và chỉ khi có phản ví dụ.</i></p></li><li><p><b>b)</b> the implication-as-disjunction equivalence</p><p>It lets us rewrite → inside a proof by chains of equivalences.</p><p><i>VI: Nó cho phép viết lại → trong chứng minh bằng chuỗi tương đương.</i></p></li><li><p><b>b)</b> the double-negation law</p><p>Two negations cancel.</p><p><i>VI: Hai lần phủ định triệt tiêu nhau.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -192,23 +192,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "the negation law"
+                "noiDung": "the complement (negation) law"
               },
               {
                 "ma": "b",
-                "noiDung": "the identity law"
+                "noiDung": "the double-negation law"
               },
               {
                 "ma": "c",
-                "noiDung": "the domination law"
+                "noiDung": "the identity law"
               },
               {
                 "ma": "d",
-                "noiDung": "the double-negation law"
+                "noiDung": "the domination law"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>Two negations cancel.</p><p><i>VI: Hai lần phủ định triệt tiêu nhau.</i></p>"
           }

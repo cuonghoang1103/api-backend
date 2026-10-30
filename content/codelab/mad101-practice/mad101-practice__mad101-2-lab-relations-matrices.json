@@ -39,17 +39,17 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Relations 1 — Properties of relations (concepts)\n\nAnswer in the answer panel (no code needed).\n\n1. R is reflexive on A if …R phản xạ trên A nếu …\n2. R is symmetric if …R đối xứng nếu …\n3. R is antisymmetric if …R phản đối xứng nếu …\n4. An equivalence relation is …Quan hệ tương đương là quan hệ …\n5. The equivalence classes of an equivalence relation on A …Các lớp tương đương của một quan hệ tương đương trên A …\n6. “x divides y” on the positive integers is …“x chia hết y” trên các số nguyên dương là …\n"
+          "code": "# Relations 1 — Properties of relations (concepts)\n\nAnswer in the answer panel (no code needed).\n\n1. R is reflexive on A exactly when …R phản xạ trên A khi và chỉ khi …\n2. R is symmetric exactly when …R đối xứng khi và chỉ khi …\n3. R is antisymmetric exactly when …R phản đối xứng khi và chỉ khi …\n4. An equivalence relation is …Quan hệ tương đương là quan hệ …\n5. The equivalence classes of an equivalence relation on A …Các lớp tương đương của một quan hệ tương đương trên A …\n6. “x divides y” on the positive integers is …“x chia hết y” trên các số nguyên dương là …\n"
         }
       ],
       "solutionCodeJson": [
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Relations 1 — Properties of relations (concepts) — answer key\n\n1. R is reflexive on A if …R phản xạ trên A nếu …\n   Answer: a) (a, a) ∈ R for every a ∈ A\n   Every element is related to itself.VI: Mỗi phần tử có quan hệ với chính nó.\n\n2. R is symmetric if …R đối xứng nếu …\n   Answer: d) (a, b) ∈ R ⇒ (b, a) ∈ R\n   Every arrow has a return arrow.VI: Mỗi mũi tên đều có mũi tên quay lại.\n\n3. R is antisymmetric if …R phản đối xứng nếu …\n   Answer: c) (a, b) and (b, a) in R imply a = b\n   Two different elements are never related both ways. Antisymmetric is NOT the opposite of symmetric.VI: Hai phần tử khác nhau không bao giờ liên hệ cả hai chiều. Phản đối xứng KHÔNG phải là “không đối xứng”.\n\n4. An equivalence relation is …Quan hệ tương đương là quan hệ …\n   Answer: a) reflexive, symmetric and transitive\n   Reflexive + antisymmetric + transitive is a partial order instead.VI: Phản xạ + phản đối xứng + bắc cầu là thứ tự bộ phận.\n\n5. The equivalence classes of an equivalence relation on A …Các lớp tương đương của một quan hệ tương đương trên A …\n   Answer: d) partition A into disjoint non-empty blocks\n   Every element lies in exactly one class.VI: Mỗi phần tử thuộc đúng một lớp.\n\n6. “x divides y” on the positive integers is …“x chia hết y” trên các số nguyên dương là …\n   Answer: d) a partial order\n   Reflexive (x | x), antisymmetric (x | y and y | x ⇒ x = y), transitive.VI: Phản xạ, phản đối xứng, bắc cầu.\n"
+          "code": "# Relations 1 — Properties of relations (concepts) — answer key\n\n1. R is reflexive on A exactly when …R phản xạ trên A khi và chỉ khi …\n   Answer: c) (a, a) ∈ R for every a ∈ A\n   Every element is related to itself.VI: Mỗi phần tử có quan hệ với chính nó.\n\n2. R is symmetric exactly when …R đối xứng khi và chỉ khi …\n   Answer: b) (a, b) ∈ R ⇒ (b, a) ∈ R\n   Every arrow has a return arrow.VI: Mỗi mũi tên đều có mũi tên quay lại.\n\n3. R is antisymmetric exactly when …R phản đối xứng khi và chỉ khi …\n   Answer: d) (a, b) and (b, a) in R imply a = b\n   Two different elements are never related both ways. Antisymmetric is NOT the opposite of symmetric.VI: Hai phần tử khác nhau không bao giờ liên hệ cả hai chiều. Phản đối xứng KHÔNG phải là “không đối xứng”.\n\n4. An equivalence relation is …Quan hệ tương đương là quan hệ …\n   Answer: d) reflexive, symmetric and transitive\n   Reflexive + antisymmetric + transitive is a partial order instead.VI: Phản xạ + phản đối xứng + bắc cầu là thứ tự bộ phận.\n\n5. The equivalence classes of an equivalence relation on A …Các lớp tương đương của một quan hệ tương đương trên A …\n   Answer: b) partition A into disjoint non-empty blocks\n   Every element lies in exactly one class.VI: Mỗi phần tử thuộc đúng một lớp.\n\n6. “x divides y” on the positive integers is …“x chia hết y” trên các số nguyên dương là …\n   Answer: d) a partial order\n   Reflexive (x | x), antisymmetric (x | y and y | x ⇒ x = y), transitive.VI: Phản xạ, phản đối xứng, bắc cầu.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> (a, a) ∈ R for every a ∈ A</p><p>Every element is related to itself.</p><p><i>VI: Mỗi phần tử có quan hệ với chính nó.</i></p></li><li><p><b>d)</b> (a, b) ∈ R ⇒ (b, a) ∈ R</p><p>Every arrow has a return arrow.</p><p><i>VI: Mỗi mũi tên đều có mũi tên quay lại.</i></p></li><li><p><b>c)</b> (a, b) and (b, a) in R imply a = b</p><p>Two different elements are never related both ways. Antisymmetric is NOT the opposite of symmetric.</p><p><i>VI: Hai phần tử khác nhau không bao giờ liên hệ cả hai chiều. Phản đối xứng KHÔNG phải là “không đối xứng”.</i></p></li><li><p><b>a)</b> reflexive, symmetric and transitive</p><p>Reflexive + antisymmetric + transitive is a partial order instead.</p><p><i>VI: Phản xạ + phản đối xứng + bắc cầu là thứ tự bộ phận.</i></p></li><li><p><b>d)</b> partition A into disjoint non-empty blocks</p><p>Every element lies in exactly one class.</p><p><i>VI: Mỗi phần tử thuộc đúng một lớp.</i></p></li><li><p><b>d)</b> a partial order</p><p>Reflexive (x | x), antisymmetric (x | y and y | x ⇒ x = y), transitive.</p><p><i>VI: Phản xạ, phản đối xứng, bắc cầu.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> (a, a) ∈ R for every a ∈ A</p><p>Every element is related to itself.</p><p><i>VI: Mỗi phần tử có quan hệ với chính nó.</i></p></li><li><p><b>b)</b> (a, b) ∈ R ⇒ (b, a) ∈ R</p><p>Every arrow has a return arrow.</p><p><i>VI: Mỗi mũi tên đều có mũi tên quay lại.</i></p></li><li><p><b>d)</b> (a, b) and (b, a) in R imply a = b</p><p>Two different elements are never related both ways. Antisymmetric is NOT the opposite of symmetric.</p><p><i>VI: Hai phần tử khác nhau không bao giờ liên hệ cả hai chiều. Phản đối xứng KHÔNG phải là “không đối xứng”.</i></p></li><li><p><b>d)</b> reflexive, symmetric and transitive</p><p>Reflexive + antisymmetric + transitive is a partial order instead.</p><p><i>VI: Phản xạ + phản đối xứng + bắc cầu là thứ tự bộ phận.</i></p></li><li><p><b>b)</b> partition A into disjoint non-empty blocks</p><p>Every element lies in exactly one class.</p><p><i>VI: Mỗi phần tử thuộc đúng một lớp.</i></p></li><li><p><b>d)</b> a partial order</p><p>Reflexive (x | x), antisymmetric (x | y and y | x ⇒ x = y), transitive.</p><p><i>VI: Phản xạ, phản đối xứng, bắc cầu.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -58,41 +58,41 @@
         "cauHoi": [
           {
             "ma": "c1",
-            "de": "<p>R is reflexive on A if …</p><p style=\"opacity:.75;font-size:.92em\"><i>R phản xạ trên A nếu …</i></p>",
+            "de": "<p>R is reflexive on A exactly when …</p><p style=\"opacity:.75;font-size:.92em\"><i>R phản xạ trên A khi và chỉ khi …</i></p>",
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "(a, a) ∈ R for every a ∈ A"
+                "noiDung": "R = A × A, with every pair present"
               },
               {
                 "ma": "b",
-                "noiDung": "(a, b) ∈ R ⇒ (b, a) ∈ R"
+                "noiDung": "(a, a) ∉ R for every a"
               },
               {
                 "ma": "c",
-                "noiDung": "R = A × A"
+                "noiDung": "(a, a) ∈ R for every a ∈ A"
               },
               {
                 "ma": "d",
-                "noiDung": "(a, a) ∉ R for every a"
+                "noiDung": "(a, b) ∈ R ⇒ (b, a) ∈ R"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>Every element is related to itself.</p><p><i>VI: Mỗi phần tử có quan hệ với chính nó.</i></p>"
           },
           {
             "ma": "c2",
-            "de": "<p>R is symmetric if …</p><p style=\"opacity:.75;font-size:.92em\"><i>R đối xứng nếu …</i></p>",
+            "de": "<p>R is symmetric exactly when …</p><p style=\"opacity:.75;font-size:.92em\"><i>R đối xứng khi và chỉ khi …</i></p>",
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "(a, b), (b, c) ∈ R ⇒ (a, c) ∈ R"
+                "noiDung": "(a, a) ∈ R for all a"
               },
               {
                 "ma": "b",
-                "noiDung": "(a, a) ∈ R for all a"
+                "noiDung": "(a, b) ∈ R ⇒ (b, a) ∈ R"
               },
               {
                 "ma": "c",
@@ -100,21 +100,21 @@
               },
               {
                 "ma": "d",
-                "noiDung": "(a, b) ∈ R ⇒ (b, a) ∈ R"
+                "noiDung": "(a, b), (b, c) ∈ R ⇒ (a, c) ∈ R"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>Every arrow has a return arrow.</p><p><i>VI: Mỗi mũi tên đều có mũi tên quay lại.</i></p>"
           },
           {
             "ma": "c3",
-            "de": "<p>R is antisymmetric if …</p><p style=\"opacity:.75;font-size:.92em\"><i>R phản đối xứng nếu …</i></p>",
+            "de": "<p>R is antisymmetric exactly when …</p><p style=\"opacity:.75;font-size:.92em\"><i>R phản đối xứng khi và chỉ khi …</i></p>",
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "(a, b) ∈ R ⇒ (b, a) ∈ R"
+                "noiDung": "no pair (a, b) with a ≠ b is in R"
               },
               {
                 "ma": "b",
@@ -122,15 +122,15 @@
               },
               {
                 "ma": "c",
-                "noiDung": "(a, b) and (b, a) in R imply a = b"
+                "noiDung": "(a, b) ∈ R ⇒ (b, a) ∈ R"
               },
               {
                 "ma": "d",
-                "noiDung": "no pair (a, b) with a ≠ b is in R"
+                "noiDung": "(a, b) and (b, a) in R imply a = b"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>Two different elements are never related both ways. Antisymmetric is NOT the opposite of symmetric.</p><p><i>VI: Hai phần tử khác nhau không bao giờ liên hệ cả hai chiều. Phản đối xứng KHÔNG phải là “không đối xứng”.</i></p>"
           },
@@ -140,23 +140,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "reflexive, symmetric and transitive"
-              },
-              {
-                "ma": "b",
-                "noiDung": "reflexive, antisymmetric and transitive"
-              },
-              {
-                "ma": "c",
                 "noiDung": "symmetric and antisymmetric"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "transitive only"
+              },
+              {
+                "ma": "c",
+                "noiDung": "reflexive, antisymmetric and transitive"
+              },
+              {
+                "ma": "d",
+                "noiDung": "reflexive, symmetric and transitive"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>Reflexive + antisymmetric + transitive is a partial order instead.</p><p><i>VI: Phản xạ + phản đối xứng + bắc cầu là thứ tự bộ phận.</i></p>"
           },
@@ -166,11 +166,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "overlap in general, so one element can be in two"
+                "noiDung": "always contain exactly one element of A each"
               },
               {
                 "ma": "b",
-                "noiDung": "always contain exactly one element of A each"
+                "noiDung": "partition A into disjoint non-empty blocks"
               },
               {
                 "ma": "c",
@@ -178,11 +178,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "partition A into disjoint non-empty blocks"
+                "noiDung": "overlap in general, so one element can be in two"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>Every element lies in exactly one class.</p><p><i>VI: Mỗi phần tử thuộc đúng một lớp.</i></p>"
           },
@@ -192,7 +192,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "an equivalence relation"
+                "noiDung": "not transitive"
               },
               {
                 "ma": "b",
@@ -200,7 +200,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "not transitive"
+                "noiDung": "an equivalence relation"
               },
               {
                 "ma": "d",
@@ -986,7 +986,7 @@
               },
               {
                 "ma": "b",
-                "noiDung": "5"
+                "noiDung": "6"
               },
               {
                 "ma": "c",
@@ -994,7 +994,7 @@
               },
               {
                 "ma": "d",
-                "noiDung": "4.6"
+                "noiDung": "5"
               }
             ],
             "dapAn": [

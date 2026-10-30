@@ -47,10 +47,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Sets 1 — Notation, subsets and power sets — answer key\n\n1. Which statement is TRUE?Khẳng định nào ĐÚNG?\n   Answer: d) ∅ ⊆ A for every set A\n   The empty set is a subset of every set; it is a member only of sets that contain it.VI: Tập rỗng là tập con của mọi tập; nó chỉ là phần tử của tập nào chứa nó.\n\n2. If A = {1, {2}, 3}, then …Nếu A = {1, {2}, 3} thì …\n   Answer: d) {2} ∈ A but 2 ∉ A\n   {2} is an element of A (a set inside a set); the number 2 is not.VI: {2} là một phần tử của A (tập nằm trong tập); số 2 thì không.\n\n3. A set with n elements has … subsets.Một tập có n phần tử có … tập con.\n   Answer: b) 2ⁿ\n   Each element is either in or out of a subset: 2 choices, n times.VI: Mỗi phần tử hoặc ở trong hoặc ở ngoài tập con: 2 lựa chọn, n lần.\n\n4. |A × B| equals …|A × B| bằng …\n   Answer: b) |A|·|B|\n   Each element of A pairs with each element of B.VI: Mỗi phần tử của A ghép với mỗi phần tử của B.\n\n5. A ⊕ B (symmetric difference) contains …A ⊕ B (hiệu đối xứng) chứa …\n   Answer: b) elements in exactly one of A, B\n   A ⊕ B = (A − B) ∪ (B − A) = (A ∪ B) − (A ∩ B).VI: A ⊕ B = (A − B) ∪ (B − A) = (A ∪ B) − (A ∩ B).\n\n6. |{∅, {∅}}| equals …|{∅, {∅}}| bằng …\n   Answer: d) 2\n   The two elements are ∅ and {∅}.VI: Hai phần tử là ∅ và {∅}.\n"
+          "code": "# Sets 1 — Notation, subsets and power sets — answer key\n\n1. Which statement is TRUE?Khẳng định nào ĐÚNG?\n   Answer: a) ∅ ⊆ A for every set A\n   The empty set is a subset of every set; it is a member only of sets that contain it.VI: Tập rỗng là tập con của mọi tập; nó chỉ là phần tử của tập nào chứa nó.\n\n2. If A = {1, {2}, 3}, then …Nếu A = {1, {2}, 3} thì …\n   Answer: c) {2} ∈ A but 2 ∉ A\n   {2} is an element of A (a set inside a set); the number 2 is not.VI: {2} là một phần tử của A (tập nằm trong tập); số 2 thì không.\n\n3. A set with n elements has … subsets.Một tập có n phần tử có … tập con.\n   Answer: d) 2ⁿ\n   Each element is either in or out of a subset: 2 choices, n times.VI: Mỗi phần tử hoặc ở trong hoặc ở ngoài tập con: 2 lựa chọn, n lần.\n\n4. |A × B| equals …|A × B| bằng …\n   Answer: c) |A|·|B|\n   Each element of A pairs with each element of B.VI: Mỗi phần tử của A ghép với mỗi phần tử của B.\n\n5. A ⊕ B (symmetric difference) contains …A ⊕ B (hiệu đối xứng) chứa …\n   Answer: b) elements in exactly one of A, B\n   A ⊕ B = (A − B) ∪ (B − A) = (A ∪ B) − (A ∩ B).VI: A ⊕ B = (A − B) ∪ (B − A) = (A ∪ B) − (A ∩ B).\n\n6. |{∅, {∅}}| equals …|{∅, {∅}}| bằng …\n   Answer: c) 2\n   The two elements are ∅ and {∅}.VI: Hai phần tử là ∅ và {∅}.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> ∅ ⊆ A for every set A</p><p>The empty set is a subset of every set; it is a member only of sets that contain it.</p><p><i>VI: Tập rỗng là tập con của mọi tập; nó chỉ là phần tử của tập nào chứa nó.</i></p></li><li><p><b>d)</b> {2} ∈ A but 2 ∉ A</p><p>{2} is an element of A (a set inside a set); the number 2 is not.</p><p><i>VI: {2} là một phần tử của A (tập nằm trong tập); số 2 thì không.</i></p></li><li><p><b>b)</b> 2ⁿ</p><p>Each element is either in or out of a subset: 2 choices, n times.</p><p><i>VI: Mỗi phần tử hoặc ở trong hoặc ở ngoài tập con: 2 lựa chọn, n lần.</i></p></li><li><p><b>b)</b> |A|·|B|</p><p>Each element of A pairs with each element of B.</p><p><i>VI: Mỗi phần tử của A ghép với mỗi phần tử của B.</i></p></li><li><p><b>b)</b> elements in exactly one of A, B</p><p>A ⊕ B = (A − B) ∪ (B − A) = (A ∪ B) − (A ∩ B).</p><p><i>VI: A ⊕ B = (A − B) ∪ (B − A) = (A ∪ B) − (A ∩ B).</i></p></li><li><p><b>d)</b> 2</p><p>The two elements are ∅ and {∅}.</p><p><i>VI: Hai phần tử là ∅ và {∅}.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> ∅ ⊆ A for every set A</p><p>The empty set is a subset of every set; it is a member only of sets that contain it.</p><p><i>VI: Tập rỗng là tập con của mọi tập; nó chỉ là phần tử của tập nào chứa nó.</i></p></li><li><p><b>c)</b> {2} ∈ A but 2 ∉ A</p><p>{2} is an element of A (a set inside a set); the number 2 is not.</p><p><i>VI: {2} là một phần tử của A (tập nằm trong tập); số 2 thì không.</i></p></li><li><p><b>d)</b> 2ⁿ</p><p>Each element is either in or out of a subset: 2 choices, n times.</p><p><i>VI: Mỗi phần tử hoặc ở trong hoặc ở ngoài tập con: 2 lựa chọn, n lần.</i></p></li><li><p><b>c)</b> |A|·|B|</p><p>Each element of A pairs with each element of B.</p><p><i>VI: Mỗi phần tử của A ghép với mỗi phần tử của B.</i></p></li><li><p><b>b)</b> elements in exactly one of A, B</p><p>A ⊕ B = (A − B) ∪ (B − A) = (A ∪ B) − (A ∩ B).</p><p><i>VI: A ⊕ B = (A − B) ∪ (B − A) = (A ∪ B) − (A ∩ B).</i></p></li><li><p><b>c)</b> 2</p><p>The two elements are ∅ and {∅}.</p><p><i>VI: Hai phần tử là ∅ và {∅}.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -63,7 +63,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "{∅} = ∅"
+                "noiDung": "∅ ⊆ A for every set A"
               },
               {
                 "ma": "b",
@@ -75,11 +75,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "∅ ⊆ A for every set A"
+                "noiDung": "{∅} = ∅"
               }
             ],
             "dapAn": [
-              "d"
+              "a"
             ],
             "giaiThich": "<p>The empty set is a subset of every set; it is a member only of sets that contain it.</p><p><i>VI: Tập rỗng là tập con của mọi tập; nó chỉ là phần tử của tập nào chứa nó.</i></p>"
           },
@@ -89,23 +89,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "{1, 3} ∈ A"
-              },
-              {
-                "ma": "b",
                 "noiDung": "2 ∈ A"
               },
               {
+                "ma": "b",
+                "noiDung": "{1, 3} ∈ A but 1 ∉ A"
+              },
+              {
                 "ma": "c",
-                "noiDung": "{2} ⊆ A"
+                "noiDung": "{2} ∈ A but 2 ∉ A"
               },
               {
                 "ma": "d",
-                "noiDung": "{2} ∈ A but 2 ∉ A"
+                "noiDung": "{2} ⊆ A and 2 ∈ A"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>{2} is an element of A (a set inside a set); the number 2 is not.</p><p><i>VI: {2} là một phần tử của A (tập nằm trong tập); số 2 thì không.</i></p>"
           },
@@ -115,23 +115,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "n²"
+                "noiDung": "2n"
               },
               {
                 "ma": "b",
-                "noiDung": "2ⁿ"
-              },
-              {
-                "ma": "c",
                 "noiDung": "n!"
               },
               {
+                "ma": "c",
+                "noiDung": "n²"
+              },
+              {
                 "ma": "d",
-                "noiDung": "2n"
+                "noiDung": "2ⁿ"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>Each element is either in or out of a subset: 2 choices, n times.</p><p><i>VI: Mỗi phần tử hoặc ở trong hoặc ở ngoài tập con: 2 lựa chọn, n lần.</i></p>"
           },
@@ -141,15 +141,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "|A| + |B|"
+                "noiDung": "|A|^|B|"
               },
               {
                 "ma": "b",
-                "noiDung": "|A|·|B|"
+                "noiDung": "|A| + |B|"
               },
               {
                 "ma": "c",
-                "noiDung": "|A|^|B|"
+                "noiDung": "|A|·|B|"
               },
               {
                 "ma": "d",
@@ -157,7 +157,7 @@
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Each element of A pairs with each element of B.</p><p><i>VI: Mỗi phần tử của A ghép với mỗi phần tử của B.</i></p>"
           },
@@ -167,7 +167,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "elements in A but not in B only"
+                "noiDung": "elements in both A and B"
               },
               {
                 "ma": "b",
@@ -175,11 +175,11 @@
               },
               {
                 "ma": "c",
-                "noiDung": "all elements of A ∪ B"
+                "noiDung": "elements in A but not in B only"
               },
               {
                 "ma": "d",
-                "noiDung": "elements in both A and B"
+                "noiDung": "all elements of A ∪ B"
               }
             ],
             "dapAn": [
@@ -201,15 +201,15 @@
               },
               {
                 "ma": "c",
-                "noiDung": "1"
+                "noiDung": "2"
               },
               {
                 "ma": "d",
-                "noiDung": "2"
+                "noiDung": "1"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>The two elements are ∅ and {∅}.</p><p><i>VI: Hai phần tử là ∅ và {∅}.</i></p>"
           }
@@ -280,10 +280,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Sets 2 — Compute unions, intersections and differences — answer key\n\n1. A = {1, 2, 3, 5, 8}, B = {2, 4, 5, 9}A = {1, 2, 3, 5, 8}, B = {2, 4, 5, 9}\n   - r1.res: 1,2,3,4,5,8,9 / {1,2,3,4,5,8,9} / {1, 2, 3, 4, 5, 8, 9} / 1, 2, 3, 4, 5, 8, 9 / 1 2 3 4 5 8 9\n   - r2.res: 2,5 / {2,5} / {2, 5} / 2, 5 / 2 5\n   - r3.res: 1,3,8 / {1,3,8} / {1, 3, 8} / 1, 3, 8 / 1 3 8\n   - r4.res: 4,9 / {4,9} / {4, 9} / 4, 9 / 4 9\n   - r5.res: 1,3,4,8,9 / {1,3,4,8,9} / {1, 3, 4, 8, 9} / 1, 3, 4, 8, 9 / 1 3 4 8 9\n   - r6.res: 4,6,7,9,10 / {4,6,7,9,10} / {4, 6, 7, 9, 10} / 4, 6, 7, 9, 10 / 4 6 7 9 10\n   A ∪ B = {1,2,3,4,5,8,9}; A ∩ B = {2,5}; A − B = {1,3,8}; B − A = {4,9}; A ⊕ B = {1,3,4,8,9}; Ā = {4,6,7,9,10}.VI: A ∪ B = {1,2,3,4,5,8,9}; A ∩ B = {2,5}; A − B = {1,3,8}; B − A = {4,9}; A ⊕ B = {1,3,4,8,9}; Ā = {4,6,7,9,10}.\n\n2. A = {2, 4, 6, 8, 10}, B = {3, 6, 9}A = {2, 4, 6, 8, 10}, B = {3, 6, 9}\n   - r1.res: 2,3,4,6,8,9,10 / {2,3,4,6,8,9,10} / {2, 3, 4, 6, 8, 9, 10} / 2, 3, 4, 6, 8, 9, 10 / 2 3 4 6 8 9 10\n   - r2.res: 6 / {6} / {6} / 6 / 6\n   - r3.res: 2,4,8,10 / {2,4,8,10} / {2, 4, 8, 10} / 2, 4, 8, 10 / 2 4 8 10\n   - r4.res: 3,9 / {3,9} / {3, 9} / 3, 9 / 3 9\n   - r5.res: 2,3,4,8,9,10 / {2,3,4,8,9,10} / {2, 3, 4, 8, 9, 10} / 2, 3, 4, 8, 9, 10 / 2 3 4 8 9 10\n   - r6.res: 1,3,5,7,9 / {1,3,5,7,9} / {1, 3, 5, 7, 9} / 1, 3, 5, 7, 9 / 1 3 5 7 9\n   A ∪ B = {2,3,4,6,8,9,10}; A ∩ B = {6}; A − B = {2,4,8,10}; B − A = {3,9}; A ⊕ B = {2,3,4,8,9,10}; Ā = {1,3,5,7,9}.VI: A ∪ B = {2,3,4,6,8,9,10}; A ∩ B = {6}; A − B = {2,4,8,10}; B − A = {3,9}; A ⊕ B = {2,3,4,8,9,10}; Ā = {1,3,5,7,9}.\n\n3. A = {1, 3, 5, 7, 9}, B = {2, 4, 6, 8, 10}A = {1, 3, 5, 7, 9}, B = {2, 4, 6, 8, 10}\n   - r1.res: 1,2,3,4,5,6,7,8,9,10 / {1,2,3,4,5,6,7,8,9,10} / {1, 2, 3, 4, 5, 6, 7, 8, 9, 10} / 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 / 1 2 3 4 5 6 7 8 9 10\n   - r2.res: ∅ / {} / { } / empty / ø\n   - r3.res: 1,3,5,7,9 / {1,3,5,7,9} / {1, 3, 5, 7, 9} / 1, 3, 5, 7, 9 / 1 3 5 7 9\n   - r4.res: 2,4,6,8,10 / {2,4,6,8,10} / {2, 4, 6, 8, 10} / 2, 4, 6, 8, 10 / 2 4 6 8 10\n   - r5.res: 1,2,3,4,5,6,7,8,9,10 / {1,2,3,4,5,6,7,8,9,10} / {1, 2, 3, 4, 5, 6, 7, 8, 9, 10} / 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 / 1 2 3 4 5 6 7 8 9 10\n   - r6.res: 2,4,6,8,10 / {2,4,6,8,10} / {2, 4, 6, 8, 10} / 2, 4, 6, 8, 10 / 2 4 6 8 10\n   A ∪ B = {1,2,3,4,5,6,7,8,9,10}; A ∩ B = {∅}; A − B = {1,3,5,7,9}; B − A = {2,4,6,8,10}; A ⊕ B = {1,2,3,4,5,6,7,8,9,10}; Ā = {2,4,6,8,10}.VI: A ∪ B = {1,2,3,4,5,6,7,8,9,10}; A ∩ B = {∅}; A − B = {1,3,5,7,9}; B − A = {2,4,6,8,10}; A ⊕ B = {1,2,3,4,5,6,7,8,9,10}; Ā = {2,4,6,8,10}.\n"
+          "code": "# Sets 2 — Compute unions, intersections and differences — answer key\n\n1. A = {1, 2, 3, 5, 8}, B = {2, 4, 5, 9}A = {1, 2, 3, 5, 8}, B = {2, 4, 5, 9}\n   - r1.res: 1,2,3,4,5,8,9 / {1,2,3,4,5,8,9} / {1, 2, 3, 4, 5, 8, 9} / 1, 2, 3, 4, 5, 8, 9 / 1 2 3 4 5 8 9\n   - r2.res: 2,5 / {2,5} / {2, 5} / 2, 5 / 2 5\n   - r3.res: 1,3,8 / {1,3,8} / {1, 3, 8} / 1, 3, 8 / 1 3 8\n   - r4.res: 4,9 / {4,9} / {4, 9} / 4, 9 / 4 9\n   - r5.res: 1,3,4,8,9 / {1,3,4,8,9} / {1, 3, 4, 8, 9} / 1, 3, 4, 8, 9 / 1 3 4 8 9\n   - r6.res: 4,6,7,9,10 / {4,6,7,9,10} / {4, 6, 7, 9, 10} / 4, 6, 7, 9, 10 / 4 6 7 9 10\n   A ∪ B = {1,2,3,4,5,8,9}; A ∩ B = {2,5}; A − B = {1,3,8}; B − A = {4,9}; A ⊕ B = {1,3,4,8,9}; Ā = {4,6,7,9,10}.VI: A ∪ B = {1,2,3,4,5,8,9}; A ∩ B = {2,5}; A − B = {1,3,8}; B − A = {4,9}; A ⊕ B = {1,3,4,8,9}; Ā = {4,6,7,9,10}.\n\n2. A = {2, 4, 6, 8, 10}, B = {3, 6, 9}A = {2, 4, 6, 8, 10}, B = {3, 6, 9}\n   - r1.res: 2,3,4,6,8,9,10 / {2,3,4,6,8,9,10} / {2, 3, 4, 6, 8, 9, 10} / 2, 3, 4, 6, 8, 9, 10 / 2 3 4 6 8 9 10\n   - r2.res: 6 / {6} / {6} / 6 / 6\n   - r3.res: 2,4,8,10 / {2,4,8,10} / {2, 4, 8, 10} / 2, 4, 8, 10 / 2 4 8 10\n   - r4.res: 3,9 / {3,9} / {3, 9} / 3, 9 / 3 9\n   - r5.res: 2,3,4,8,9,10 / {2,3,4,8,9,10} / {2, 3, 4, 8, 9, 10} / 2, 3, 4, 8, 9, 10 / 2 3 4 8 9 10\n   - r6.res: 1,3,5,7,9 / {1,3,5,7,9} / {1, 3, 5, 7, 9} / 1, 3, 5, 7, 9 / 1 3 5 7 9\n   A ∪ B = {2,3,4,6,8,9,10}; A ∩ B = {6}; A − B = {2,4,8,10}; B − A = {3,9}; A ⊕ B = {2,3,4,8,9,10}; Ā = {1,3,5,7,9}.VI: A ∪ B = {2,3,4,6,8,9,10}; A ∩ B = {6}; A − B = {2,4,8,10}; B − A = {3,9}; A ⊕ B = {2,3,4,8,9,10}; Ā = {1,3,5,7,9}.\n\n3. A = {1, 3, 5, 7, 9}, B = {2, 4, 6, 8, 10}A = {1, 3, 5, 7, 9}, B = {2, 4, 6, 8, 10}\n   - r1.res: 1,2,3,4,5,6,7,8,9,10 / {1,2,3,4,5,6,7,8,9,10} / {1, 2, 3, 4, 5, 6, 7, 8, 9, 10} / 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 / 1 2 3 4 5 6 7 8 9 10\n   - r2.res: ∅ / {} / { } / empty / ø\n   - r3.res: 1,3,5,7,9 / {1,3,5,7,9} / {1, 3, 5, 7, 9} / 1, 3, 5, 7, 9 / 1 3 5 7 9\n   - r4.res: 2,4,6,8,10 / {2,4,6,8,10} / {2, 4, 6, 8, 10} / 2, 4, 6, 8, 10 / 2 4 6 8 10\n   - r5.res: 1,2,3,4,5,6,7,8,9,10 / {1,2,3,4,5,6,7,8,9,10} / {1, 2, 3, 4, 5, 6, 7, 8, 9, 10} / 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 / 1 2 3 4 5 6 7 8 9 10\n   - r6.res: 2,4,6,8,10 / {2,4,6,8,10} / {2, 4, 6, 8, 10} / 2, 4, 6, 8, 10 / 2 4 6 8 10\n   A ∪ B = {1,2,3,4,5,6,7,8,9,10}; A ∩ B = ∅; A − B = {1,3,5,7,9}; B − A = {2,4,6,8,10}; A ⊕ B = {1,2,3,4,5,6,7,8,9,10}; Ā = {2,4,6,8,10}.VI: A ∪ B = {1,2,3,4,5,6,7,8,9,10}; A ∩ B = ∅; A − B = {1,3,5,7,9}; B − A = {2,4,6,8,10}; A ⊕ B = {1,2,3,4,5,6,7,8,9,10}; Ā = {2,4,6,8,10}.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>A ∪ B = {1,2,3,4,5,8,9}; A ∩ B = {2,5}; A − B = {1,3,8}; B − A = {4,9}; A ⊕ B = {1,3,4,8,9}; Ā = {4,6,7,9,10}.</p><p><i>VI: A ∪ B = {1,2,3,4,5,8,9}; A ∩ B = {2,5}; A − B = {1,3,8}; B − A = {4,9}; A ⊕ B = {1,3,4,8,9}; Ā = {4,6,7,9,10}.</i></p><p>A ∪ B = {2,3,4,6,8,9,10}; A ∩ B = {6}; A − B = {2,4,8,10}; B − A = {3,9}; A ⊕ B = {2,3,4,8,9,10}; Ā = {1,3,5,7,9}.</p><p><i>VI: A ∪ B = {2,3,4,6,8,9,10}; A ∩ B = {6}; A − B = {2,4,8,10}; B − A = {3,9}; A ⊕ B = {2,3,4,8,9,10}; Ā = {1,3,5,7,9}.</i></p><p>A ∪ B = {1,2,3,4,5,6,7,8,9,10}; A ∩ B = {∅}; A − B = {1,3,5,7,9}; B − A = {2,4,6,8,10}; A ⊕ B = {1,2,3,4,5,6,7,8,9,10}; Ā = {2,4,6,8,10}.</p><p><i>VI: A ∪ B = {1,2,3,4,5,6,7,8,9,10}; A ∩ B = {∅}; A − B = {1,3,5,7,9}; B − A = {2,4,6,8,10}; A ⊕ B = {1,2,3,4,5,6,7,8,9,10}; Ā = {2,4,6,8,10}.</i></p>",
+      "solutionExplanationHtml": "<p>A ∪ B = {1,2,3,4,5,8,9}; A ∩ B = {2,5}; A − B = {1,3,8}; B − A = {4,9}; A ⊕ B = {1,3,4,8,9}; Ā = {4,6,7,9,10}.</p><p><i>VI: A ∪ B = {1,2,3,4,5,8,9}; A ∩ B = {2,5}; A − B = {1,3,8}; B − A = {4,9}; A ⊕ B = {1,3,4,8,9}; Ā = {4,6,7,9,10}.</i></p><p>A ∪ B = {2,3,4,6,8,9,10}; A ∩ B = {6}; A − B = {2,4,8,10}; B − A = {3,9}; A ⊕ B = {2,3,4,8,9,10}; Ā = {1,3,5,7,9}.</p><p><i>VI: A ∪ B = {2,3,4,6,8,9,10}; A ∩ B = {6}; A − B = {2,4,8,10}; B − A = {3,9}; A ⊕ B = {2,3,4,8,9,10}; Ā = {1,3,5,7,9}.</i></p><p>A ∪ B = {1,2,3,4,5,6,7,8,9,10}; A ∩ B = ∅; A − B = {1,3,5,7,9}; B − A = {2,4,6,8,10}; A ⊕ B = {1,2,3,4,5,6,7,8,9,10}; Ā = {2,4,6,8,10}.</p><p><i>VI: A ∪ B = {1,2,3,4,5,6,7,8,9,10}; A ∩ B = ∅; A − B = {1,3,5,7,9}; B − A = {2,4,6,8,10}; A ⊕ B = {1,2,3,4,5,6,7,8,9,10}; Ā = {2,4,6,8,10}.</i></p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -579,7 +579,7 @@
                 "2 4 6 8 10"
               ]
             },
-            "giaiThich": "<p>A ∪ B = {1,2,3,4,5,6,7,8,9,10}; A ∩ B = {∅}; A − B = {1,3,5,7,9}; B − A = {2,4,6,8,10}; A ⊕ B = {1,2,3,4,5,6,7,8,9,10}; Ā = {2,4,6,8,10}.</p><p><i>VI: A ∪ B = {1,2,3,4,5,6,7,8,9,10}; A ∩ B = {∅}; A − B = {1,3,5,7,9}; B − A = {2,4,6,8,10}; A ⊕ B = {1,2,3,4,5,6,7,8,9,10}; Ā = {2,4,6,8,10}.</i></p>"
+            "giaiThich": "<p>A ∪ B = {1,2,3,4,5,6,7,8,9,10}; A ∩ B = ∅; A − B = {1,3,5,7,9}; B − A = {2,4,6,8,10}; A ⊕ B = {1,2,3,4,5,6,7,8,9,10}; Ā = {2,4,6,8,10}.</p><p><i>VI: A ∪ B = {1,2,3,4,5,6,7,8,9,10}; A ∩ B = ∅; A − B = {1,3,5,7,9}; B − A = {2,4,6,8,10}; A ⊕ B = {1,2,3,4,5,6,7,8,9,10}; Ā = {2,4,6,8,10}.</i></p>"
           }
         ]
       },
@@ -998,10 +998,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Sets 4 — Cardinality and inclusion–exclusion — answer key\n\n1. How many subsets does a 9-element set have?Tập 9 phần tử có bao nhiêu tập con?\n   Answer: c) 512\n   2⁹ = 512.VI: 2⁹ = 512.\n\n2. |A| = 7, |B| = 6: how many elements does A × B have?|A| = 7, |B| = 6: A × B có bao nhiêu phần tử?\n   Answer: d) 42\n   7 × 6 = 42.VI: 7 × 6 = 42.\n\n3. A has 8 elements. How many subsets contain two given elements?A có 8 phần tử. Có bao nhiêu tập con chứa hai phần tử cho trước?\n   Answer: c) 64\n   The two are forced in; the other 6 are free: 2⁶ = 64.VI: Hai phần tử bắt buộc có mặt; 6 phần tử còn lại tự do: 2⁶ = 64.\n\n4. In a class of 100, 40 study A, 30 study B, 25 study C, 12 study A and B, 10 A and C, 8 B and C, 4 all three. How many study at least one?Lớp 100 người, 40 học A, 30 học B, 25 học C, 12 học A và B, 10 A và C, 8 B và C, 4 học cả ba. Bao nhiêu người học ít nhất một môn?\n   Answer: a) 69\n   |A∪B∪C| = 40+30+25 − 12 − 10 − 8 + 4 = 69.VI: |A∪B∪C| = 40+30+25 − 12 − 10 − 8 + 4 = 69.\n\n5. Same class (100 students): how many study none of A, B, C?Cùng lớp (100 học sinh): bao nhiêu người không học môn nào?\n   Answer: c) 31\n   100 − 69 = 31.VI: 100 − 69 = 31.\n\n6. How many integers in 1..200 are divisible by 4 or 6?Có bao nhiêu số nguyên trong 1..200 chia hết cho 4 hoặc 6?\n   Answer: c) 67\n   ⌊200/4⌋ + ⌊200/6⌋ − ⌊200/12⌋ = 50 + 33 − 16 = 67. Note lcm(4,6) = 12.VI: ⌊200/4⌋ + ⌊200/6⌋ − ⌊200/12⌋ = 67. Lưu ý bội chung nhỏ nhất của 4 và 6 là 12.\n"
+          "code": "# Sets 4 — Cardinality and inclusion–exclusion — answer key\n\n1. How many subsets does a 9-element set have?Tập 9 phần tử có bao nhiêu tập con?\n   Answer: d) 512\n   2⁹ = 512.VI: 2⁹ = 512.\n\n2. |A| = 7, |B| = 6: how many elements does A × B have?|A| = 7, |B| = 6: A × B có bao nhiêu phần tử?\n   Answer: d) 42\n   7 × 6 = 42.VI: 7 × 6 = 42.\n\n3. A has 8 elements. How many subsets contain two given elements?A có 8 phần tử. Có bao nhiêu tập con chứa hai phần tử cho trước?\n   Answer: c) 64\n   The two are forced in; the other 6 are free: 2⁶ = 64.VI: Hai phần tử bắt buộc có mặt; 6 phần tử còn lại tự do: 2⁶ = 64.\n\n4. In a class of 100, 40 study A, 30 study B, 25 study C, 12 study A and B, 10 A and C, 8 B and C, 4 all three. How many study at least one?Lớp 100 người, 40 học A, 30 học B, 25 học C, 12 học A và B, 10 A và C, 8 B và C, 4 học cả ba. Bao nhiêu người học ít nhất một môn?\n   Answer: a) 69\n   |A∪B∪C| = 40+30+25 − 12 − 10 − 8 + 4 = 69.VI: |A∪B∪C| = 40+30+25 − 12 − 10 − 8 + 4 = 69.\n\n5. Same class (100 students): how many study none of A, B, C?Cùng lớp (100 học sinh): bao nhiêu người không học môn nào?\n   Answer: d) 31\n   100 − 69 = 31.VI: 100 − 69 = 31.\n\n6. How many integers in 1..200 are divisible by 4 or 6?Có bao nhiêu số nguyên trong 1..200 chia hết cho 4 hoặc 6?\n   Answer: d) 67\n   ⌊200/4⌋ + ⌊200/6⌋ − ⌊200/12⌋ = 50 + 33 − 16 = 67. Note lcm(4,6) = 12.VI: ⌊200/4⌋ + ⌊200/6⌋ − ⌊200/12⌋ = 67. Lưu ý bội chung nhỏ nhất của 4 và 6 là 12.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> 512</p><p>2⁹ = 512.</p><p><i>VI: 2⁹ = 512.</i></p></li><li><p><b>d)</b> 42</p><p>7 × 6 = 42.</p><p><i>VI: 7 × 6 = 42.</i></p></li><li><p><b>c)</b> 64</p><p>The two are forced in; the other 6 are free: 2⁶ = 64.</p><p><i>VI: Hai phần tử bắt buộc có mặt; 6 phần tử còn lại tự do: 2⁶ = 64.</i></p></li><li><p><b>a)</b> 69</p><p>|A∪B∪C| = 40+30+25 − 12 − 10 − 8 + 4 = 69.</p><p><i>VI: |A∪B∪C| = 40+30+25 − 12 − 10 − 8 + 4 = 69.</i></p></li><li><p><b>c)</b> 31</p><p>100 − 69 = 31.</p><p><i>VI: 100 − 69 = 31.</i></p></li><li><p><b>c)</b> 67</p><p>⌊200/4⌋ + ⌊200/6⌋ − ⌊200/12⌋ = 50 + 33 − 16 = 67. Note lcm(4,6) = 12.</p><p><i>VI: ⌊200/4⌋ + ⌊200/6⌋ − ⌊200/12⌋ = 67. Lưu ý bội chung nhỏ nhất của 4 và 6 là 12.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> 512</p><p>2⁹ = 512.</p><p><i>VI: 2⁹ = 512.</i></p></li><li><p><b>d)</b> 42</p><p>7 × 6 = 42.</p><p><i>VI: 7 × 6 = 42.</i></p></li><li><p><b>c)</b> 64</p><p>The two are forced in; the other 6 are free: 2⁶ = 64.</p><p><i>VI: Hai phần tử bắt buộc có mặt; 6 phần tử còn lại tự do: 2⁶ = 64.</i></p></li><li><p><b>a)</b> 69</p><p>|A∪B∪C| = 40+30+25 − 12 − 10 − 8 + 4 = 69.</p><p><i>VI: |A∪B∪C| = 40+30+25 − 12 − 10 − 8 + 4 = 69.</i></p></li><li><p><b>d)</b> 31</p><p>100 − 69 = 31.</p><p><i>VI: 100 − 69 = 31.</i></p></li><li><p><b>d)</b> 67</p><p>⌊200/4⌋ + ⌊200/6⌋ − ⌊200/12⌋ = 50 + 33 − 16 = 67. Note lcm(4,6) = 12.</p><p><i>VI: ⌊200/4⌋ + ⌊200/6⌋ − ⌊200/12⌋ = 67. Lưu ý bội chung nhỏ nhất của 4 và 6 là 12.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -1014,23 +1014,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "256"
-              },
-              {
-                "ma": "b",
                 "noiDung": "81"
               },
               {
+                "ma": "b",
+                "noiDung": "256"
+              },
+              {
                 "ma": "c",
-                "noiDung": "512"
+                "noiDung": "18"
               },
               {
                 "ma": "d",
-                "noiDung": "18"
+                "noiDung": "512"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>2⁹ = 512.</p><p><i>VI: 2⁹ = 512.</i></p>"
           },
@@ -1040,7 +1040,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "8192"
+                "noiDung": "117649"
               },
               {
                 "ma": "b",
@@ -1048,7 +1048,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "117649"
+                "noiDung": "8192"
               },
               {
                 "ma": "d",
@@ -1066,7 +1066,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "254"
+                "noiDung": "128"
               },
               {
                 "ma": "b",
@@ -1078,7 +1078,7 @@
               },
               {
                 "ma": "d",
-                "noiDung": "128"
+                "noiDung": "254"
               }
             ],
             "dapAn": [
@@ -1096,15 +1096,15 @@
               },
               {
                 "ma": "b",
-                "noiDung": "65"
-              },
-              {
-                "ma": "c",
                 "noiDung": "73"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "95"
+              },
+              {
+                "ma": "d",
+                "noiDung": "65"
               }
             ],
             "dapAn": [
@@ -1118,23 +1118,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "27"
-              },
-              {
-                "ma": "b",
                 "noiDung": "5"
               },
               {
+                "ma": "b",
+                "noiDung": "27"
+              },
+              {
                 "ma": "c",
-                "noiDung": "31"
+                "noiDung": "69"
               },
               {
                 "ma": "d",
-                "noiDung": "69"
+                "noiDung": "31"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>100 − 69 = 31.</p><p><i>VI: 100 − 69 = 31.</i></p>"
           },
@@ -1144,23 +1144,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "99"
+                "noiDung": "75"
               },
               {
                 "ma": "b",
-                "noiDung": "83"
+                "noiDung": "99"
               },
               {
                 "ma": "c",
-                "noiDung": "67"
+                "noiDung": "83"
               },
               {
                 "ma": "d",
-                "noiDung": "75.00000000000001"
+                "noiDung": "67"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>⌊200/4⌋ + ⌊200/6⌋ − ⌊200/12⌋ = 50 + 33 − 16 = 67. Note lcm(4,6) = 12.</p><p><i>VI: ⌊200/4⌋ + ⌊200/6⌋ − ⌊200/12⌋ = 67. Lưu ý bội chung nhỏ nhất của 4 và 6 là 12.</i></p>"
           }

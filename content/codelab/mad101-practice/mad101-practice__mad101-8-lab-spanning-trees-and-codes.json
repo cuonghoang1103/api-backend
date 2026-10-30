@@ -643,8 +643,8 @@
       "tags": [
         "mad101"
       ],
-      "problemHtml": "<p>A comparison sort is a binary decision tree with at least n! leaves, so its height is at least ⌈log₂ n!⌉. Compute n!, that bound, and the comparisons n·⌈log₂ n⌉ − 2^⌈log₂ n⌉ + 1 used by merge-style binary insertion for comparison.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
-      "problemHtmlVi": "<p>Sắp xếp so sánh là cây quyết định nhị phân có ít nhất n! lá nên chiều cao ít nhất ⌈log₂ n!⌉. Tính n!, cận đó, và số so sánh n·⌈log₂ n⌉ − 2^⌈log₂ n⌉ + 1 của chèn nhị phân kiểu trộn để đối chiếu.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "problemHtml": "<p>A comparison sort is a binary decision tree with at least n! leaves, so its height is at least ⌈log₂ n!⌉. Compute n!, that bound, and the comparisons n·⌈log₂ n⌉ − 2^⌈log₂ n⌉ + 1 used by binary insertion sort, for comparison.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sắp xếp so sánh là cây quyết định nhị phân có ít nhất n! lá nên chiều cao ít nhất ⌈log₂ n!⌉. Tính n!, cận đó, và số so sánh n·⌈log₂ n⌉ − 2^⌈log₂ n⌉ + 1 của sắp xếp chèn nhị phân để đối chiếu.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
       "inputSpec": null,
       "outputSpec": null,
       "constraints": "",
@@ -670,10 +670,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Tree lab 6 — Decision trees and the sorting lower bound — answer key\n\n1. Lower bound for comparison sortsCận dưới cho sắp xếp so sánh\n   - r1.f: 6\n   - r1.l: 3\n   - r1.m: 3\n   - r2.f: 24\n   - r2.l: 5\n   - r2.m: 5\n   - r3.f: 120\n   - r3.l: 7\n   - r3.m: 8\n   - r4.f: 720\n   - r4.l: 10\n   - r4.m: 11\n   - r5.f: 5040\n   - r5.l: 13\n   - r5.m: 14\n   - r6.f: 40320\n   - r6.l: 16\n   - r6.m: 17\n   - r7.f: 362880\n   - r7.l: 19\n   - r7.m: 21\n   - r8.f: 3628800\n   - r8.l: 22\n   - r8.m: 25\n   n=3: n!=6, bound 3, merge-insertion 3; n=4: n!=24, bound 5, merge-insertion 5; n=5: n!=120, bound 7, merge-insertion 8; n=6: n!=720, bound 10, merge-insertion 11; n=7: n!=5040, bound 13, merge-insertion 14; n=8: n!=40320, bound 16, merge-insertion 17; n=9: n!=362880, bound 19, merge-insertion 21; n=10: n!=3628800, bound 22, merge-insertion 25. The two columns are close for small n, and the bound is Θ(n log n).VI: n=3: 6, 3, 3; n=4: 24, 5, 5; n=5: 120, 7, 8; n=6: 720, 10, 11; n=7: 5040, 13, 14; n=8: 40320, 16, 17; n=9: 362880, 19, 21; n=10: 3628800, 22, 25.\n"
+          "code": "# Tree lab 6 — Decision trees and the sorting lower bound — answer key\n\n1. Lower bound for comparison sortsCận dưới cho sắp xếp so sánh\n   - r1.f: 6\n   - r1.l: 3\n   - r1.m: 3\n   - r2.f: 24\n   - r2.l: 5\n   - r2.m: 5\n   - r3.f: 120\n   - r3.l: 7\n   - r3.m: 8\n   - r4.f: 720\n   - r4.l: 10\n   - r4.m: 11\n   - r5.f: 5040\n   - r5.l: 13\n   - r5.m: 14\n   - r6.f: 40320\n   - r6.l: 16\n   - r6.m: 17\n   - r7.f: 362880\n   - r7.l: 19\n   - r7.m: 21\n   - r8.f: 3628800\n   - r8.l: 22\n   - r8.m: 25\n   n=3: n!=6, bound 3, binary insertion 3; n=4: n!=24, bound 5, binary insertion 5; n=5: n!=120, bound 7, binary insertion 8; n=6: n!=720, bound 10, binary insertion 11; n=7: n!=5040, bound 13, binary insertion 14; n=8: n!=40320, bound 16, binary insertion 17; n=9: n!=362880, bound 19, binary insertion 21; n=10: n!=3628800, bound 22, binary insertion 25. The two columns are close for small n, and the bound is Θ(n log n).VI: n=3: 6, 3, 3; n=4: 24, 5, 5; n=5: 120, 7, 8; n=6: 720, 10, 11; n=7: 5040, 13, 14; n=8: 40320, 16, 17; n=9: 362880, 19, 21; n=10: 3628800, 22, 25.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>n=3: n!=6, bound 3, merge-insertion 3; n=4: n!=24, bound 5, merge-insertion 5; n=5: n!=120, bound 7, merge-insertion 8; n=6: n!=720, bound 10, merge-insertion 11; n=7: n!=5040, bound 13, merge-insertion 14; n=8: n!=40320, bound 16, merge-insertion 17; n=9: n!=362880, bound 19, merge-insertion 21; n=10: n!=3628800, bound 22, merge-insertion 25. The two columns are close for small n, and the bound is Θ(n log n).</p><p><i>VI: n=3: 6, 3, 3; n=4: 24, 5, 5; n=5: 120, 7, 8; n=6: 720, 10, 11; n=7: 5040, 13, 14; n=8: 40320, 16, 17; n=9: 362880, 19, 21; n=10: 3628800, 22, 25.</i></p>",
+      "solutionExplanationHtml": "<p>n=3: n!=6, bound 3, binary insertion 3; n=4: n!=24, bound 5, binary insertion 5; n=5: n!=120, bound 7, binary insertion 8; n=6: n!=720, bound 10, binary insertion 11; n=7: n!=5040, bound 13, binary insertion 14; n=8: n!=40320, bound 16, binary insertion 17; n=9: n!=362880, bound 19, binary insertion 21; n=10: n!=3628800, bound 22, binary insertion 25. The two columns are close for small n, and the bound is Θ(n log n).</p><p><i>VI: n=3: 6, 3, 3; n=4: 24, 5, 5; n=5: 120, 7, 8; n=6: 720, 10, 11; n=7: 5040, 13, 14; n=8: 40320, 16, 17; n=9: 362880, 19, 21; n=10: 3628800, 22, 25.</i></p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -777,7 +777,7 @@
               "r8.l": "22",
               "r8.m": "25"
             },
-            "giaiThich": "<p>n=3: n!=6, bound 3, merge-insertion 3; n=4: n!=24, bound 5, merge-insertion 5; n=5: n!=120, bound 7, merge-insertion 8; n=6: n!=720, bound 10, merge-insertion 11; n=7: n!=5040, bound 13, merge-insertion 14; n=8: n!=40320, bound 16, merge-insertion 17; n=9: n!=362880, bound 19, merge-insertion 21; n=10: n!=3628800, bound 22, merge-insertion 25. The two columns are close for small n, and the bound is Θ(n log n).</p><p><i>VI: n=3: 6, 3, 3; n=4: 24, 5, 5; n=5: 120, 7, 8; n=6: 720, 10, 11; n=7: 5040, 13, 14; n=8: 40320, 16, 17; n=9: 362880, 19, 21; n=10: 3628800, 22, 25.</i></p>"
+            "giaiThich": "<p>n=3: n!=6, bound 3, binary insertion 3; n=4: n!=24, bound 5, binary insertion 5; n=5: n!=120, bound 7, binary insertion 8; n=6: n!=720, bound 10, binary insertion 11; n=7: n!=5040, bound 13, binary insertion 14; n=8: n!=40320, bound 16, binary insertion 17; n=9: n!=362880, bound 19, binary insertion 21; n=10: n!=3628800, bound 22, binary insertion 25. The two columns are close for small n, and the bound is Θ(n log n).</p><p><i>VI: n=3: 6, 3, 3; n=4: 24, 5, 5; n=5: 120, 7, 8; n=6: 720, 10, 11; n=7: 5040, 13, 14; n=8: 40320, 16, 17; n=9: 362880, 19, 21; n=10: 3628800, 22, 25.</i></p>"
           }
         ]
       },
@@ -838,10 +838,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Tree lab 7 — Counting trees — answer key\n\n1. How many different labelled trees exist on 6 labelled vertices (Cayley: nⁿ⁻²)?Có bao nhiêu cây có nhãn khác nhau trên 6 đỉnh có nhãn (Cayley: nⁿ⁻²)?\n   Answer: c) 1296\n   6⁴ = 1296.VI: 6⁴ = 1296.\n\n2. How many different shapes of binary search trees can be built from 5 distinct keys (all insertion orders considered)?Có bao nhiêu hình dạng cây tìm kiếm nhị phân khác nhau từ 5 khoá phân biệt (xét mọi thứ tự chèn)?\n   Answer: c) 42\n   The Catalan number C₅ = 42 (choose the root, then multiply the counts for the two subtrees).VI: Số Catalan C₅ = 42 (chọn gốc rồi nhân số cách của hai cây con).\n\n3. A forest has 20 vertices and 4 trees. How many edges does it have?Một rừng có 20 đỉnh và 4 cây. Rừng có bao nhiêu cạnh?\n   Answer: c) 16\n   Each tree has (vertices − 1) edges: 20 − 4 = 16.VI: Mỗi cây có (số đỉnh − 1) cạnh: 20 − 4 = 16.\n\n4. A full binary tree has 31 vertices. How many leaves does it have?Cây nhị phân đầy đủ có 31 đỉnh. Có bao nhiêu lá?\n   Answer: d) 16\n   n = 2i + 1 ⇒ i = 15 internal, l = i + 1 = 16.VI: n = 2i + 1 ⇒ i = 15 đỉnh trong, l = i + 1 = 16.\n\n5. What is the maximum number of vertices of a binary tree of height 5?Số đỉnh tối đa của cây nhị phân chiều cao 5 là?\n   Answer: b) 63\n   1 + 2 + 4 + 8 + 16 + 32 = 63 = 2⁶ − 1.VI: 1 + 2 + 4 + 8 + 16 + 32 = 63.\n\n6. Every tree with at least two vertices has …Mọi cây có ít nhất hai đỉnh có …\n   Answer: d) at least two leaves\n   Take a longest path: both its ends have degree 1.VI: Lấy đường đi dài nhất: hai đầu của nó có bậc 1.\n"
+          "code": "# Tree lab 7 — Counting trees — answer key\n\n1. How many different labelled trees exist on 6 labelled vertices (Cayley: nⁿ⁻²)?Có bao nhiêu cây có nhãn khác nhau trên 6 đỉnh có nhãn (Cayley: nⁿ⁻²)?\n   Answer: c) 1296\n   6⁴ = 1296.VI: 6⁴ = 1296.\n\n2. How many different shapes of binary search trees can be built from 5 distinct keys (all insertion orders considered)?Có bao nhiêu hình dạng cây tìm kiếm nhị phân khác nhau từ 5 khoá phân biệt (xét mọi thứ tự chèn)?\n   Answer: c) 42\n   The Catalan number C₅ = 42 (choose the root, then multiply the counts for the two subtrees).VI: Số Catalan C₅ = 42 (chọn gốc rồi nhân số cách của hai cây con).\n\n3. A forest has 20 vertices and 4 trees. How many edges does it have?Một rừng có 20 đỉnh và 4 cây. Rừng có bao nhiêu cạnh?\n   Answer: c) 16\n   Each tree has (vertices − 1) edges: 20 − 4 = 16.VI: Mỗi cây có (số đỉnh − 1) cạnh: 20 − 4 = 16.\n\n4. A full binary tree has 31 vertices. How many leaves does it have?Cây nhị phân đầy đủ có 31 đỉnh. Có bao nhiêu lá?\n   Answer: d) 16\n   n = 2i + 1 ⇒ i = 15 internal, l = i + 1 = 16.VI: n = 2i + 1 ⇒ i = 15 đỉnh trong, l = i + 1 = 16.\n\n5. What is the maximum number of vertices of a binary tree of height 5?Số đỉnh tối đa của cây nhị phân chiều cao 5 là?\n   Answer: b) 63\n   1 + 2 + 4 + 8 + 16 + 32 = 63 = 2⁶ − 1.VI: 1 + 2 + 4 + 8 + 16 + 32 = 63.\n\n6. Every tree with at least two vertices has …Mọi cây có ít nhất hai đỉnh có …\n   Answer: c) at least two leaves\n   Take a longest path: both its ends have degree 1.VI: Lấy đường đi dài nhất: hai đầu của nó có bậc 1.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> 1296</p><p>6⁴ = 1296.</p><p><i>VI: 6⁴ = 1296.</i></p></li><li><p><b>c)</b> 42</p><p>The Catalan number C₅ = 42 (choose the root, then multiply the counts for the two subtrees).</p><p><i>VI: Số Catalan C₅ = 42 (chọn gốc rồi nhân số cách của hai cây con).</i></p></li><li><p><b>c)</b> 16</p><p>Each tree has (vertices − 1) edges: 20 − 4 = 16.</p><p><i>VI: Mỗi cây có (số đỉnh − 1) cạnh: 20 − 4 = 16.</i></p></li><li><p><b>d)</b> 16</p><p>n = 2i + 1 ⇒ i = 15 internal, l = i + 1 = 16.</p><p><i>VI: n = 2i + 1 ⇒ i = 15 đỉnh trong, l = i + 1 = 16.</i></p></li><li><p><b>b)</b> 63</p><p>1 + 2 + 4 + 8 + 16 + 32 = 63 = 2⁶ − 1.</p><p><i>VI: 1 + 2 + 4 + 8 + 16 + 32 = 63.</i></p></li><li><p><b>d)</b> at least two leaves</p><p>Take a longest path: both its ends have degree 1.</p><p><i>VI: Lấy đường đi dài nhất: hai đầu của nó có bậc 1.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> 1296</p><p>6⁴ = 1296.</p><p><i>VI: 6⁴ = 1296.</i></p></li><li><p><b>c)</b> 42</p><p>The Catalan number C₅ = 42 (choose the root, then multiply the counts for the two subtrees).</p><p><i>VI: Số Catalan C₅ = 42 (chọn gốc rồi nhân số cách của hai cây con).</i></p></li><li><p><b>c)</b> 16</p><p>Each tree has (vertices − 1) edges: 20 − 4 = 16.</p><p><i>VI: Mỗi cây có (số đỉnh − 1) cạnh: 20 − 4 = 16.</i></p></li><li><p><b>d)</b> 16</p><p>n = 2i + 1 ⇒ i = 15 internal, l = i + 1 = 16.</p><p><i>VI: n = 2i + 1 ⇒ i = 15 đỉnh trong, l = i + 1 = 16.</i></p></li><li><p><b>b)</b> 63</p><p>1 + 2 + 4 + 8 + 16 + 32 = 63 = 2⁶ − 1.</p><p><i>VI: 1 + 2 + 4 + 8 + 16 + 32 = 63.</i></p></li><li><p><b>c)</b> at least two leaves</p><p>Take a longest path: both its ends have degree 1.</p><p><i>VI: Lấy đường đi dài nhất: hai đầu của nó có bậc 1.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -984,23 +984,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "a cycle"
+                "noiDung": "no leaves at all"
               },
               {
                 "ma": "b",
-                "noiDung": "exactly one leaf"
+                "noiDung": "a cycle of length 3"
               },
               {
                 "ma": "c",
-                "noiDung": "no leaves"
+                "noiDung": "at least two leaves"
               },
               {
                 "ma": "d",
-                "noiDung": "at least two leaves"
+                "noiDung": "exactly one leaf"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>Take a longest path: both its ends have degree 1.</p><p><i>VI: Lấy đường đi dài nhất: hai đầu của nó có bậc 1.</i></p>"
           }

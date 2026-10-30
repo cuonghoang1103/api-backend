@@ -39,17 +39,17 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Functions 1 — Domain, range and one-to-one / onto\n\nAnswer in the answer panel (no code needed).\n\n1. A function f: A → B is one-to-one (injective) if …Hàm f: A → B là đơn ánh nếu …\n2. f is onto (surjective) if …f là toàn ánh nếu …\n3. Only a bijection has an …Chỉ song ánh mới có …\n4. f(x) = x² from ℤ to ℤ is …f(x) = x² từ ℤ vào ℤ là …\n5. f(x) = 2x + 1 from ℝ to ℝ is …f(x) = 2x + 1 từ ℝ vào ℝ là …\n6. If f: A → B is a bijection between finite sets, then …Nếu f: A → B là song ánh giữa hai tập hữu hạn thì …\n"
+          "code": "# Functions 1 — Domain, range and one-to-one / onto\n\nAnswer in the answer panel (no code needed).\n\n1. A function f: A → B is one-to-one (injective) if …Hàm f: A → B là đơn ánh nếu …\n2. f is onto (surjective) if …f là toàn ánh nếu …\n3. Only a bijection has …Chỉ song ánh mới có …\n4. f(x) = x² from ℤ to ℤ is …f(x) = x² từ ℤ vào ℤ là …\n5. f(x) = 2x + 1 from ℝ to ℝ is …f(x) = 2x + 1 từ ℝ vào ℝ là …\n6. If f: A → B is a bijection between finite sets, then …Nếu f: A → B là song ánh giữa hai tập hữu hạn thì …\n"
         }
       ],
       "solutionCodeJson": [
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Functions 1 — Domain, range and one-to-one / onto — answer key\n\n1. A function f: A → B is one-to-one (injective) if …Hàm f: A → B là đơn ánh nếu …\n   Answer: d) different inputs always give different outputs\n   f(a) = f(b) ⇒ a = b.VI: f(a) = f(b) ⇒ a = b.\n\n2. f is onto (surjective) if …f là toàn ánh nếu …\n   Answer: a) the range equals the codomain\n   Every element of the codomain is the image of at least one input.VI: Mỗi phần tử của đích là ảnh của ít nhất một đầu vào.\n\n3. Only a bijection has an …Chỉ song ánh mới có …\n   Answer: c) inverse function\n   A bijection is both one-to-one and onto, so reversing the arrows is again a function.VI: Song ánh vừa đơn ánh vừa toàn ánh nên đảo mũi tên vẫn là hàm.\n\n4. f(x) = x² from ℤ to ℤ is …f(x) = x² từ ℤ vào ℤ là …\n   Answer: d) neither one-to-one nor onto\n   f(2) = f(−2) (not injective) and 3 is never a square (not surjective).VI: f(2) = f(−2) (không đơn ánh) và 3 không là bình phương (không toàn ánh).\n\n5. f(x) = 2x + 1 from ℝ to ℝ is …f(x) = 2x + 1 từ ℝ vào ℝ là …\n   Answer: d) a bijection\n   Solve y = 2x + 1 for x = (y − 1)/2 — always exists and is unique.VI: Giải y = 2x + 1 được x = (y − 1)/2 — luôn tồn tại và duy nhất.\n\n6. If f: A → B is a bijection between finite sets, then …Nếu f: A → B là song ánh giữa hai tập hữu hạn thì …\n   Answer: b) |A| = |B|\n   A bijection pairs the elements one for one.VI: Song ánh ghép các phần tử một-một.\n"
+          "code": "# Functions 1 — Domain, range and one-to-one / onto — answer key\n\n1. A function f: A → B is one-to-one (injective) if …Hàm f: A → B là đơn ánh nếu …\n   Answer: d) different inputs always give different outputs\n   f(a) = f(b) ⇒ a = b.VI: f(a) = f(b) ⇒ a = b.\n\n2. f is onto (surjective) if …f là toàn ánh nếu …\n   Answer: a) the range equals the codomain\n   Every element of the codomain is the image of at least one input.VI: Mỗi phần tử của đích là ảnh của ít nhất một đầu vào.\n\n3. Only a bijection has …Chỉ song ánh mới có …\n   Answer: d) an inverse function\n   A bijection is both one-to-one and onto, so reversing the arrows is again a function.VI: Song ánh vừa đơn ánh vừa toàn ánh nên đảo mũi tên vẫn là hàm.\n\n4. f(x) = x² from ℤ to ℤ is …f(x) = x² từ ℤ vào ℤ là …\n   Answer: d) neither one-to-one nor onto\n   f(2) = f(−2) (not injective) and 3 is never a square (not surjective).VI: f(2) = f(−2) (không đơn ánh) và 3 không là bình phương (không toàn ánh).\n\n5. f(x) = 2x + 1 from ℝ to ℝ is …f(x) = 2x + 1 từ ℝ vào ℝ là …\n   Answer: d) a bijection\n   Solve y = 2x + 1 for x = (y − 1)/2 — always exists and is unique.VI: Giải y = 2x + 1 được x = (y − 1)/2 — luôn tồn tại và duy nhất.\n\n6. If f: A → B is a bijection between finite sets, then …Nếu f: A → B là song ánh giữa hai tập hữu hạn thì …\n   Answer: b) |A| = |B|\n   A bijection pairs the elements one for one.VI: Song ánh ghép các phần tử một-một.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> different inputs always give different outputs</p><p>f(a) = f(b) ⇒ a = b.</p><p><i>VI: f(a) = f(b) ⇒ a = b.</i></p></li><li><p><b>a)</b> the range equals the codomain</p><p>Every element of the codomain is the image of at least one input.</p><p><i>VI: Mỗi phần tử của đích là ảnh của ít nhất một đầu vào.</i></p></li><li><p><b>c)</b> inverse function</p><p>A bijection is both one-to-one and onto, so reversing the arrows is again a function.</p><p><i>VI: Song ánh vừa đơn ánh vừa toàn ánh nên đảo mũi tên vẫn là hàm.</i></p></li><li><p><b>d)</b> neither one-to-one nor onto</p><p>f(2) = f(−2) (not injective) and 3 is never a square (not surjective).</p><p><i>VI: f(2) = f(−2) (không đơn ánh) và 3 không là bình phương (không toàn ánh).</i></p></li><li><p><b>d)</b> a bijection</p><p>Solve y = 2x + 1 for x = (y − 1)/2 — always exists and is unique.</p><p><i>VI: Giải y = 2x + 1 được x = (y − 1)/2 — luôn tồn tại và duy nhất.</i></p></li><li><p><b>b)</b> |A| = |B|</p><p>A bijection pairs the elements one for one.</p><p><i>VI: Song ánh ghép các phần tử một-một.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> different inputs always give different outputs</p><p>f(a) = f(b) ⇒ a = b.</p><p><i>VI: f(a) = f(b) ⇒ a = b.</i></p></li><li><p><b>a)</b> the range equals the codomain</p><p>Every element of the codomain is the image of at least one input.</p><p><i>VI: Mỗi phần tử của đích là ảnh của ít nhất một đầu vào.</i></p></li><li><p><b>d)</b> an inverse function</p><p>A bijection is both one-to-one and onto, so reversing the arrows is again a function.</p><p><i>VI: Song ánh vừa đơn ánh vừa toàn ánh nên đảo mũi tên vẫn là hàm.</i></p></li><li><p><b>d)</b> neither one-to-one nor onto</p><p>f(2) = f(−2) (not injective) and 3 is never a square (not surjective).</p><p><i>VI: f(2) = f(−2) (không đơn ánh) và 3 không là bình phương (không toàn ánh).</i></p></li><li><p><b>d)</b> a bijection</p><p>Solve y = 2x + 1 for x = (y − 1)/2 — always exists and is unique.</p><p><i>VI: Giải y = 2x + 1 được x = (y − 1)/2 — luôn tồn tại và duy nhất.</i></p></li><li><p><b>b)</b> |A| = |B|</p><p>A bijection pairs the elements one for one.</p><p><i>VI: Song ánh ghép các phần tử một-một.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -110,27 +110,27 @@
           },
           {
             "ma": "c3",
-            "de": "<p>Only a bijection has an …</p><p style=\"opacity:.75;font-size:.92em\"><i>Chỉ song ánh mới có …</i></p>",
+            "de": "<p>Only a bijection has …</p><p style=\"opacity:.75;font-size:.92em\"><i>Chỉ song ánh mới có …</i></p>",
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "composition"
+                "noiDung": "a well-defined image"
               },
               {
                 "ma": "b",
-                "noiDung": "domain"
+                "noiDung": "a composition with itself"
               },
               {
                 "ma": "c",
-                "noiDung": "inverse function"
+                "noiDung": "a domain and a codomain"
               },
               {
                 "ma": "d",
-                "noiDung": "image"
+                "noiDung": "an inverse function"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>A bijection is both one-to-one and onto, so reversing the arrows is again a function.</p><p><i>VI: Song ánh vừa đơn ánh vừa toàn ánh nên đảo mũi tên vẫn là hàm.</i></p>"
           },

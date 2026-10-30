@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Induction 1 — Structure of an induction proof — answer key\n\n1. To prove ∀n ≥ 1 P(n) by (weak) induction you prove …Để chứng minh ∀n ≥ 1 P(n) bằng quy nạp (yếu) ta chứng minh …\n   Answer: a) P(1), and P(k) → P(k+1) for every k ≥ 1\n   Basis step plus inductive step: the domino chain.VI: Bước cơ sở cộng bước quy nạp: chuỗi domino.\n\n2. In the inductive step, the inductive hypothesis is …Trong bước quy nạp, giả thiết quy nạp là …\n   Answer: b) the assumption that P(k) is true\n   We assume P(k) and must derive P(k+1) from it.VI: Ta giả sử P(k) rồi suy ra P(k+1) từ nó.\n\n3. Strong induction assumes …Quy nạp mạnh giả sử …\n   Answer: b) P(j) for all j with base ≤ j ≤ k\n   The step for k+1 may use every earlier case — needed when f(k+1) depends on f(k−1), f(k−5), …VI: Bước k+1 được dùng mọi trường hợp trước — cần khi f(k+1) phụ thuộc f(k−1), f(k−5), …\n\n4. Proving a statement for n = 1 … 1000 by checking each one does NOT prove it for all n because …Kiểm tra từng n = 1 … 1000 KHÔNG chứng minh được cho mọi n vì …\n   Answer: d) a counter-example may exist beyond the checked range\n   Examples never constitute a proof of a universal statement.VI: Ví dụ không bao giờ là chứng minh cho mệnh đề phổ quát.\n\n5. A recursive definition of a function on nonnegative integers needs …Định nghĩa đệ quy của hàm trên số nguyên không âm cần …\n   Answer: d) initial value(s) and a rule using smaller arguments\n   Without the initial values the recursion never ends.VI: Không có giá trị đầu thì đệ quy không dừng.\n\n6. Structural induction is used to prove properties of …Quy nạp cấu trúc dùng để chứng minh tính chất của …\n   Answer: a) recursively defined sets (trees, strings, formulas)\n   Basis: the base elements; step: every constructor preserves the property.VI: Cơ sở: các phần tử gốc; bước: mọi phép dựng đều bảo toàn tính chất.\n"
+          "code": "# Induction 1 — Structure of an induction proof — answer key\n\n1. To prove ∀n ≥ 1 P(n) by (weak) induction you prove …Để chứng minh ∀n ≥ 1 P(n) bằng quy nạp (yếu) ta chứng minh …\n   Answer: d) P(1), and P(k) → P(k+1) for every k ≥ 1\n   Basis step plus inductive step: the domino chain.VI: Bước cơ sở cộng bước quy nạp: chuỗi domino.\n\n2. In the inductive step, the inductive hypothesis is …Trong bước quy nạp, giả thiết quy nạp là …\n   Answer: a) the assumption that P(k) is true\n   We assume P(k) and must derive P(k+1) from it.VI: Ta giả sử P(k) rồi suy ra P(k+1) từ nó.\n\n3. Strong induction assumes …Quy nạp mạnh giả sử …\n   Answer: d) P(j) for all j with base ≤ j ≤ k\n   The step for k+1 may use every earlier case — needed when f(k+1) depends on f(k−1), f(k−5), …VI: Bước k+1 được dùng mọi trường hợp trước — cần khi f(k+1) phụ thuộc f(k−1), f(k−5), …\n\n4. Proving a statement for n = 1 … 1000 by checking each one does NOT prove it for all n because …Kiểm tra từng n = 1 … 1000 KHÔNG chứng minh được cho mọi n vì …\n   Answer: a) a counter-example may exist beyond the checked range\n   Examples never constitute a proof of a universal statement.VI: Ví dụ không bao giờ là chứng minh cho mệnh đề phổ quát.\n\n5. A recursive definition of a function on nonnegative integers needs …Định nghĩa đệ quy của hàm trên số nguyên không âm cần …\n   Answer: b) initial value(s) and a rule using smaller arguments\n   Without the initial values the recursion never ends.VI: Không có giá trị đầu thì đệ quy không dừng.\n\n6. Structural induction is used to prove properties of …Quy nạp cấu trúc dùng để chứng minh tính chất của …\n   Answer: d) recursively defined sets (trees, strings)\n   Basis: the base elements; step: every constructor preserves the property.VI: Cơ sở: các phần tử gốc; bước: mọi phép dựng đều bảo toàn tính chất.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> P(1), and P(k) → P(k+1) for every k ≥ 1</p><p>Basis step plus inductive step: the domino chain.</p><p><i>VI: Bước cơ sở cộng bước quy nạp: chuỗi domino.</i></p></li><li><p><b>b)</b> the assumption that P(k) is true</p><p>We assume P(k) and must derive P(k+1) from it.</p><p><i>VI: Ta giả sử P(k) rồi suy ra P(k+1) từ nó.</i></p></li><li><p><b>b)</b> P(j) for all j with base ≤ j ≤ k</p><p>The step for k+1 may use every earlier case — needed when f(k+1) depends on f(k−1), f(k−5), …</p><p><i>VI: Bước k+1 được dùng mọi trường hợp trước — cần khi f(k+1) phụ thuộc f(k−1), f(k−5), …</i></p></li><li><p><b>d)</b> a counter-example may exist beyond the checked range</p><p>Examples never constitute a proof of a universal statement.</p><p><i>VI: Ví dụ không bao giờ là chứng minh cho mệnh đề phổ quát.</i></p></li><li><p><b>d)</b> initial value(s) and a rule using smaller arguments</p><p>Without the initial values the recursion never ends.</p><p><i>VI: Không có giá trị đầu thì đệ quy không dừng.</i></p></li><li><p><b>a)</b> recursively defined sets (trees, strings, formulas)</p><p>Basis: the base elements; step: every constructor preserves the property.</p><p><i>VI: Cơ sở: các phần tử gốc; bước: mọi phép dựng đều bảo toàn tính chất.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> P(1), and P(k) → P(k+1) for every k ≥ 1</p><p>Basis step plus inductive step: the domino chain.</p><p><i>VI: Bước cơ sở cộng bước quy nạp: chuỗi domino.</i></p></li><li><p><b>a)</b> the assumption that P(k) is true</p><p>We assume P(k) and must derive P(k+1) from it.</p><p><i>VI: Ta giả sử P(k) rồi suy ra P(k+1) từ nó.</i></p></li><li><p><b>d)</b> P(j) for all j with base ≤ j ≤ k</p><p>The step for k+1 may use every earlier case — needed when f(k+1) depends on f(k−1), f(k−5), …</p><p><i>VI: Bước k+1 được dùng mọi trường hợp trước — cần khi f(k+1) phụ thuộc f(k−1), f(k−5), …</i></p></li><li><p><b>a)</b> a counter-example may exist beyond the checked range</p><p>Examples never constitute a proof of a universal statement.</p><p><i>VI: Ví dụ không bao giờ là chứng minh cho mệnh đề phổ quát.</i></p></li><li><p><b>b)</b> initial value(s) and a rule using smaller arguments</p><p>Without the initial values the recursion never ends.</p><p><i>VI: Không có giá trị đầu thì đệ quy không dừng.</i></p></li><li><p><b>d)</b> recursively defined sets (trees, strings)</p><p>Basis: the base elements; step: every constructor preserves the property.</p><p><i>VI: Cơ sở: các phần tử gốc; bước: mọi phép dựng đều bảo toàn tính chất.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -62,23 +62,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "P(1), and P(k) → P(k+1) for every k ≥ 1"
+                "noiDung": "P(1), and P(k+1) → P(k) for every k ≥ 1"
               },
               {
                 "ma": "b",
-                "noiDung": "P(1) and P(2) only"
+                "noiDung": "P(1) and P(2), and then nothing more"
               },
               {
                 "ma": "c",
-                "noiDung": "P(k+1) → P(k)"
+                "noiDung": "P(k) for every k directly, one by one"
               },
               {
                 "ma": "d",
-                "noiDung": "P(k) for every k directly"
+                "noiDung": "P(1), and P(k) → P(k+1) for every k ≥ 1"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>Basis step plus inductive step: the domino chain.</p><p><i>VI: Bước cơ sở cộng bước quy nạp: chuỗi domino.</i></p>"
           },
@@ -88,23 +88,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "a proof that P(k) is false"
-              },
-              {
-                "ma": "b",
                 "noiDung": "the assumption that P(k) is true"
               },
               {
+                "ma": "b",
+                "noiDung": "the basis step of the proof"
+              },
+              {
                 "ma": "c",
-                "noiDung": "the claim P(k+1)"
+                "noiDung": "a proof that P(k) is false"
               },
               {
                 "ma": "d",
-                "noiDung": "the basis step"
+                "noiDung": "the claim P(k+1) that must be proved"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>We assume P(k) and must derive P(k+1) from it.</p><p><i>VI: Ta giả sử P(k) rồi suy ra P(k+1) từ nó.</i></p>"
           },
@@ -114,23 +114,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "only P(k)"
+                "noiDung": "only P(k) for the latest value of k"
               },
               {
                 "ma": "b",
-                "noiDung": "P(j) for all j with base ≤ j ≤ k"
+                "noiDung": "P(k+1) for the next value of k"
               },
               {
                 "ma": "c",
-                "noiDung": "P(k+1)"
+                "noiDung": "nothing about any earlier case"
               },
               {
                 "ma": "d",
-                "noiDung": "nothing"
+                "noiDung": "P(j) for all j with base ≤ j ≤ k"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>The step for k+1 may use every earlier case — needed when f(k+1) depends on f(k−1), f(k−5), …</p><p><i>VI: Bước k+1 được dùng mọi trường hợp trước — cần khi f(k+1) phụ thuộc f(k−1), f(k−5), …</i></p>"
           },
@@ -140,23 +140,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "checking is always invalid"
+                "noiDung": "a counter-example may exist beyond the checked range"
               },
               {
                 "ma": "b",
-                "noiDung": "basis steps must use n = 0"
+                "noiDung": "induction itself only works for values up to 1000"
               },
               {
                 "ma": "c",
-                "noiDung": "induction only works up to 1000"
+                "noiDung": "basis steps must use n = 0, not values from 1 to 1000"
               },
               {
                 "ma": "d",
-                "noiDung": "a counter-example may exist beyond the checked range"
+                "noiDung": "checking single values is never a valid method"
               }
             ],
             "dapAn": [
-              "d"
+              "a"
             ],
             "giaiThich": "<p>Examples never constitute a proof of a universal statement.</p><p><i>VI: Ví dụ không bao giờ là chứng minh cho mệnh đề phổ quát.</i></p>"
           },
@@ -170,7 +170,7 @@
               },
               {
                 "ma": "b",
-                "noiDung": "only a rule using larger arguments of the function"
+                "noiDung": "initial value(s) and a rule using smaller arguments"
               },
               {
                 "ma": "c",
@@ -178,11 +178,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "initial value(s) and a rule using smaller arguments"
+                "noiDung": "only a rule using larger arguments of the function"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>Without the initial values the recursion never ends.</p><p><i>VI: Không có giá trị đầu thì đệ quy không dừng.</i></p>"
           },
@@ -192,7 +192,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "recursively defined sets (trees, strings, formulas)"
+                "noiDung": "intervals of real numbers"
               },
               {
                 "ma": "b",
@@ -204,11 +204,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "intervals of real numbers"
+                "noiDung": "recursively defined sets (trees, strings)"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>Basis: the base elements; step: every constructor preserves the property.</p><p><i>VI: Cơ sở: các phần tử gốc; bước: mọi phép dựng đều bảo toàn tính chất.</i></p>"
           }

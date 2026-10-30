@@ -15,7 +15,7 @@ const E1 = tinh({
     q('c3', ['p ∧ (q ∨ r) ≡ (p ∧ q) ∨ (p ∧ r) is …', 'p ∧ (q ∨ r) ≡ (p ∧ q) ∨ (p ∧ r) là …'], ['the distributive law', 'the associative law', 'the absorption law', 'De Morgan’s law'], ['∧ distributes over ∨, exactly like × over + in arithmetic.', '∧ phân phối trên ∨ giống × trên + trong số học.']),
     q('c4', ['¬∀x P(x) is equivalent to …', '¬∀x P(x) tương đương với …'], ['∃x ¬P(x)', '∀x ¬P(x)', '∃x P(x)', '¬∃x ¬P(x)'], ['A universal claim fails exactly when a counter-example exists.', 'Khẳng định phổ quát sai khi và chỉ khi có phản ví dụ.']),
     q('c5', ['p → q ≡ ¬p ∨ q is called …', 'p → q ≡ ¬p ∨ q được gọi là …'], ['the implication-as-disjunction equivalence', 'the contrapositive of the implication', 'the converse of the implication', 'the idempotent law for disjunction'], ['It lets us rewrite → inside a proof by chains of equivalences.', 'Nó cho phép viết lại → trong chứng minh bằng chuỗi tương đương.']),
-    q('c6', ['¬¬p ≡ p is …', '¬¬p ≡ p là …'], ['the double-negation law', 'the identity law', 'the negation law', 'the domination law'], ['Two negations cancel.', 'Hai lần phủ định triệt tiêu nhau.']),
+    q('c6', ['¬¬p ≡ p is …', '¬¬p ≡ p là …'], ['the double-negation law', 'the identity law', 'the complement (negation) law', 'the domination law'], ['Two negations cancel.', 'Hai lần phủ định triệt tiêu nhau.']),
   ],
   goiY: ['De Morgan always changes the connective; distributive and associative laws do not.', 'Say each law aloud in words before matching.'],
   loiHayGap: ['Writing ¬(p ∧ q) ≡ ¬p ∧ ¬q (forgetting to flip the connective).', 'Mixing up absorption and idempotent laws.'],

@@ -48,10 +48,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Logic 1 — Propositions and connectives — answer key\n\n1. Which of the following is a proposition?Câu nào sau đây là một mệnh đề?\n   Answer: b) “17 is a prime number.”\n   A proposition is a declarative sentence that is exactly true or false. “x + 3 = 5” depends on x, so it is a predicate, not a proposition.VI: Mệnh đề là câu khẳng định đúng hoặc sai. “x + 3 = 5” phụ thuộc x nên là vị từ.\n\n2. The negation of “7 > 3” is …Phủ định của “7 > 3” là …\n   Answer: b) 7 ≤ 3\n   ¬(a > b) means a ≤ b — “not greater” includes equality.VI: ¬(a > b) nghĩa là a ≤ b — “không lớn hơn” gồm cả bằng.\n\n3. p → q is FALSE exactly when …p → q chỉ SAI khi …\n   Answer: a) p is true and q is false\n   A promise is broken only if the condition happens and the result does not.VI: Lời hứa chỉ bị phá khi điều kiện xảy ra mà kết quả không xảy ra.\n\n4. The converse of p → q is …Mệnh đề đảo của p → q là …\n   Answer: d) q → p\n   Converse swaps the two sides; contrapositive swaps and negates; inverse negates both.VI: Đảo hoán đổi hai vế; phản đảo hoán đổi và phủ định; nghịch phủ định cả hai vế.\n\n5. p ↔ q is TRUE exactly when …p ↔ q chỉ ĐÚNG khi …\n   Answer: d) p and q have the same truth value\n   p ↔ q ≡ (p → q) ∧ (q → p): both directions hold, so the values agree.VI: p ↔ q ≡ (p → q) ∧ (q → p): hai chiều đều đúng nên giá trị trùng nhau.\n\n6. The exclusive or p ⊕ q is true when …Hoặc loại trừ p ⊕ q đúng khi …\n   Answer: d) exactly one of p, q is true\n   ⊕ differs from ∨ only in the row where both are true: there ∨ is true and ⊕ is false.VI: ⊕ khác ∨ chỉ ở dòng cả hai cùng đúng: ∨ đúng còn ⊕ sai.\n"
+          "code": "# Logic 1 — Propositions and connectives — answer key\n\n1. Which of the following is a proposition?Câu nào sau đây là một mệnh đề?\n   Answer: c) “17 is a prime number.”\n   A proposition is a declarative sentence that is exactly true or false. “x + 3 = 5” depends on x, so it is a predicate, not a proposition.VI: Mệnh đề là câu khẳng định đúng hoặc sai. “x + 3 = 5” phụ thuộc x nên là vị từ.\n\n2. The negation of “7 > 3” is …Phủ định của “7 > 3” là …\n   Answer: b) 7 ≤ 3\n   ¬(a > b) means a ≤ b — “not greater” includes equality.VI: ¬(a > b) nghĩa là a ≤ b — “không lớn hơn” gồm cả bằng.\n\n3. p → q is FALSE exactly when …p → q chỉ SAI khi …\n   Answer: b) p is true and q is false\n   A promise is broken only if the condition happens and the result does not.VI: Lời hứa chỉ bị phá khi điều kiện xảy ra mà kết quả không xảy ra.\n\n4. The converse of p → q is …Mệnh đề đảo của p → q là …\n   Answer: b) q → p\n   Converse swaps the two sides; contrapositive swaps and negates; inverse negates both.VI: Đảo hoán đổi hai vế; phản đảo hoán đổi và phủ định; nghịch phủ định cả hai vế.\n\n5. p ↔ q is TRUE exactly when …p ↔ q chỉ ĐÚNG khi …\n   Answer: d) p and q have the same truth value\n   p ↔ q ≡ (p → q) ∧ (q → p): both directions hold, so the values agree.VI: p ↔ q ≡ (p → q) ∧ (q → p): hai chiều đều đúng nên giá trị trùng nhau.\n\n6. The exclusive or p ⊕ q is true when …Hoặc loại trừ p ⊕ q đúng khi …\n   Answer: b) exactly one of p, q is true\n   ⊕ differs from ∨ only in the row where both are true: there ∨ is true and ⊕ is false.VI: ⊕ khác ∨ chỉ ở dòng cả hai cùng đúng: ∨ đúng còn ⊕ sai.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> “17 is a prime number.”</p><p>A proposition is a declarative sentence that is exactly true or false. “x + 3 = 5” depends on x, so it is a predicate, not a proposition.</p><p><i>VI: Mệnh đề là câu khẳng định đúng hoặc sai. “x + 3 = 5” phụ thuộc x nên là vị từ.</i></p></li><li><p><b>b)</b> 7 ≤ 3</p><p>¬(a > b) means a ≤ b — “not greater” includes equality.</p><p><i>VI: ¬(a > b) nghĩa là a ≤ b — “không lớn hơn” gồm cả bằng.</i></p></li><li><p><b>a)</b> p is true and q is false</p><p>A promise is broken only if the condition happens and the result does not.</p><p><i>VI: Lời hứa chỉ bị phá khi điều kiện xảy ra mà kết quả không xảy ra.</i></p></li><li><p><b>d)</b> q → p</p><p>Converse swaps the two sides; contrapositive swaps and negates; inverse negates both.</p><p><i>VI: Đảo hoán đổi hai vế; phản đảo hoán đổi và phủ định; nghịch phủ định cả hai vế.</i></p></li><li><p><b>d)</b> p and q have the same truth value</p><p>p ↔ q ≡ (p → q) ∧ (q → p): both directions hold, so the values agree.</p><p><i>VI: p ↔ q ≡ (p → q) ∧ (q → p): hai chiều đều đúng nên giá trị trùng nhau.</i></p></li><li><p><b>d)</b> exactly one of p, q is true</p><p>⊕ differs from ∨ only in the row where both are true: there ∨ is true and ⊕ is false.</p><p><i>VI: ⊕ khác ∨ chỉ ở dòng cả hai cùng đúng: ∨ đúng còn ⊕ sai.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> “17 is a prime number.”</p><p>A proposition is a declarative sentence that is exactly true or false. “x + 3 = 5” depends on x, so it is a predicate, not a proposition.</p><p><i>VI: Mệnh đề là câu khẳng định đúng hoặc sai. “x + 3 = 5” phụ thuộc x nên là vị từ.</i></p></li><li><p><b>b)</b> 7 ≤ 3</p><p>¬(a > b) means a ≤ b — “not greater” includes equality.</p><p><i>VI: ¬(a > b) nghĩa là a ≤ b — “không lớn hơn” gồm cả bằng.</i></p></li><li><p><b>b)</b> p is true and q is false</p><p>A promise is broken only if the condition happens and the result does not.</p><p><i>VI: Lời hứa chỉ bị phá khi điều kiện xảy ra mà kết quả không xảy ra.</i></p></li><li><p><b>b)</b> q → p</p><p>Converse swaps the two sides; contrapositive swaps and negates; inverse negates both.</p><p><i>VI: Đảo hoán đổi hai vế; phản đảo hoán đổi và phủ định; nghịch phủ định cả hai vế.</i></p></li><li><p><b>d)</b> p and q have the same truth value</p><p>p ↔ q ≡ (p → q) ∧ (q → p): both directions hold, so the values agree.</p><p><i>VI: p ↔ q ≡ (p → q) ∧ (q → p): hai chiều đều đúng nên giá trị trùng nhau.</i></p></li><li><p><b>b)</b> exactly one of p, q is true</p><p>⊕ differs from ∨ only in the row where both are true: there ∨ is true and ⊕ is false.</p><p><i>VI: ⊕ khác ∨ chỉ ở dòng cả hai cùng đúng: ∨ đúng còn ⊕ sai.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -64,23 +64,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "“Please close the door.”"
+                "noiDung": "“x + 3 = 5.”"
               },
               {
                 "ma": "b",
-                "noiDung": "“17 is a prime number.”"
+                "noiDung": "“Please close the door.”"
               },
               {
                 "ma": "c",
-                "noiDung": "“What time is it?”"
+                "noiDung": "“17 is a prime number.”"
               },
               {
                 "ma": "d",
-                "noiDung": "“x + 3 = 5.”"
+                "noiDung": "“What time is it?”"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>A proposition is a declarative sentence that is exactly true or false. “x + 3 = 5” depends on x, so it is a predicate, not a proposition.</p><p><i>VI: Mệnh đề là câu khẳng định đúng hoặc sai. “x + 3 = 5” phụ thuộc x nên là vị từ.</i></p>"
           },
@@ -90,7 +90,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "7 = 3"
+                "noiDung": "3 > 7"
               },
               {
                 "ma": "b",
@@ -102,7 +102,7 @@
               },
               {
                 "ma": "d",
-                "noiDung": "3 > 7"
+                "noiDung": "7 = 3"
               }
             ],
             "dapAn": [
@@ -116,23 +116,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "p is true and q is false"
-              },
-              {
-                "ma": "b",
-                "noiDung": "p is false and q is true"
-              },
-              {
-                "ma": "c",
                 "noiDung": "p and q are both false"
               },
               {
-                "ma": "d",
+                "ma": "b",
+                "noiDung": "p is true and q is false"
+              },
+              {
+                "ma": "c",
                 "noiDung": "p and q are both true"
+              },
+              {
+                "ma": "d",
+                "noiDung": "p is false and q is true"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>A promise is broken only if the condition happens and the result does not.</p><p><i>VI: Lời hứa chỉ bị phá khi điều kiện xảy ra mà kết quả không xảy ra.</i></p>"
           },
@@ -142,23 +142,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "p → ¬q"
-              },
-              {
-                "ma": "b",
                 "noiDung": "¬p → ¬q"
               },
               {
+                "ma": "b",
+                "noiDung": "q → p"
+              },
+              {
                 "ma": "c",
-                "noiDung": "¬q → ¬p"
+                "noiDung": "p → ¬q"
               },
               {
                 "ma": "d",
-                "noiDung": "q → p"
+                "noiDung": "¬q → ¬p"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>Converse swaps the two sides; contrapositive swaps and negates; inverse negates both.</p><p><i>VI: Đảo hoán đổi hai vế; phản đảo hoán đổi và phủ định; nghịch phủ định cả hai vế.</i></p>"
           },
@@ -168,15 +168,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "p and q are both true"
+                "noiDung": "p → q is true, in that direction"
               },
               {
                 "ma": "b",
-                "noiDung": "exactly one of p, q is true"
+                "noiDung": "p and q are both true"
               },
               {
                 "ma": "c",
-                "noiDung": "p → q is true"
+                "noiDung": "exactly one of p, q is true"
               },
               {
                 "ma": "d",
@@ -194,23 +194,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "both are false"
-              },
-              {
-                "ma": "b",
-                "noiDung": "both are true"
-              },
-              {
-                "ma": "c",
                 "noiDung": "at least one of p, q is true"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "exactly one of p, q is true"
+              },
+              {
+                "ma": "c",
+                "noiDung": "both are true"
+              },
+              {
+                "ma": "d",
+                "noiDung": "both are false"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>⊕ differs from ∨ only in the row where both are true: there ∨ is true and ⊕ is false.</p><p><i>VI: ⊕ khác ∨ chỉ ở dòng cả hai cùng đúng: ∨ đúng còn ⊕ sai.</i></p>"
           }
@@ -754,17 +754,17 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Logic 4 — Translating English: only if, unless, necessary, sufficient\n\nAnswer in the answer panel (no code needed).\n\n1. “You pass the course only if you attend the exam.” (p = pass, q = attend)“Bạn qua môn chỉ nếu bạn dự thi.” (p = qua môn, q = dự thi)\n2. “The server restarts unless the disk is full.” (p = restarts, q = disk full)“Máy chủ khởi động lại trừ khi đĩa đầy.” (p = khởi động lại, q = đĩa đầy)\n3. Which statement is equivalent to “If n is even then n² is even”?Câu nào tương đương với “Nếu n chẵn thì n² chẵn”?\n4. “Being a prime greater than 2 is sufficient for being odd.” (p = prime > 2, q = odd)“Là số nguyên tố lớn hơn 2 là đủ để là số lẻ.”\n5. “A positive integer is even only if its square is even … and conversely.” translates to“Số nguyên dương chẵn khi và chỉ khi bình phương của nó chẵn” dịch là\n6. Which of the following is NOT equivalent to p → q?Công thức nào KHÔNG tương đương với p → q?\n"
+          "code": "# Logic 4 — Translating English: only if, unless, necessary, sufficient\n\nAnswer in the answer panel (no code needed).\n\n1. “You pass the course only if you attend the exam.” (p = pass, q = attend)“Bạn qua môn chỉ nếu bạn dự thi.” (p = qua môn, q = dự thi)\n2. “The server restarts unless the disk is full.” (p = restarts, q = disk full)“Máy chủ khởi động lại trừ khi đĩa đầy.” (p = khởi động lại, q = đĩa đầy)\n3. Which statement is logically equivalent, by its form alone, to “If n is even then n² is even”?Câu nào tương đương logic, chỉ xét theo hình thức, với “Nếu n chẵn thì n² chẵn”?\n4. “Being a prime greater than 2 is sufficient for being odd.” (p = prime > 2, q = odd)“Là số nguyên tố lớn hơn 2 là đủ để là số lẻ.”\n5. “A positive integer is even only if its square is even … and conversely.” translates to“Số nguyên dương chẵn khi và chỉ khi bình phương của nó chẵn” dịch là\n6. Which of the following is NOT equivalent to p → q?Công thức nào KHÔNG tương đương với p → q?\n"
         }
       ],
       "solutionCodeJson": [
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Logic 4 — Translating English: only if, unless, necessary, sufficient — answer key\n\n1. “You pass the course only if you attend the exam.” (p = pass, q = attend)“Bạn qua môn chỉ nếu bạn dự thi.” (p = qua môn, q = dự thi)\n   Answer: b) p → q\n   “p only if q” means q is required for p: p → q.VI: “p chỉ nếu q” nghĩa là q là điều kiện cần của p: p → q.\n\n2. “The server restarts unless the disk is full.” (p = restarts, q = disk full)“Máy chủ khởi động lại trừ khi đĩa đầy.” (p = khởi động lại, q = đĩa đầy)\n   Answer: b) ¬q → p, equivalent to p ∨ q\n   “p unless q” = if not q then p = ¬q → p ≡ q ∨ p.VI: “p trừ khi q” = nếu không q thì p = ¬q → p ≡ q ∨ p.\n\n3. Which statement is equivalent to “If n is even then n² is even”?Câu nào tương đương với “Nếu n chẵn thì n² chẵn”?\n   Answer: a) If n² is odd then n is odd.\n   Only the contrapositive ¬q → ¬p is always equivalent. The converse and the inverse are not.VI: Chỉ mệnh đề phản đảo ¬q → ¬p luôn tương đương; đảo và nghịch thì không.\n\n4. “Being a prime greater than 2 is sufficient for being odd.” (p = prime > 2, q = odd)“Là số nguyên tố lớn hơn 2 là đủ để là số lẻ.”\n   Answer: d) p → q\n   Sufficient: the hypothesis suffices for the conclusion, so p → q.VI: Điều kiện đủ: giả thiết đủ để có kết luận, nên p → q.\n\n5. “A positive integer is even only if its square is even … and conversely.” translates to“Số nguyên dương chẵn khi và chỉ khi bình phương của nó chẵn” dịch là\n   Answer: b) p ↔ q\n   “if and only if” is the biconditional: both implications.VI: “khi và chỉ khi” là tương đương: cả hai chiều.\n\n6. Which of the following is NOT equivalent to p → q?Công thức nào KHÔNG tương đương với p → q?\n   Answer: d) q → p\n   q → p is the converse. The other three are equivalent forms of p → q.VI: q → p là mệnh đề đảo. Ba công thức còn lại là các dạng tương đương của p → q.\n"
+          "code": "# Logic 4 — Translating English: only if, unless, necessary, sufficient — answer key\n\n1. “You pass the course only if you attend the exam.” (p = pass, q = attend)“Bạn qua môn chỉ nếu bạn dự thi.” (p = qua môn, q = dự thi)\n   Answer: b) p → q\n   “p only if q” means q is required for p: p → q.VI: “p chỉ nếu q” nghĩa là q là điều kiện cần của p: p → q.\n\n2. “The server restarts unless the disk is full.” (p = restarts, q = disk full)“Máy chủ khởi động lại trừ khi đĩa đầy.” (p = khởi động lại, q = đĩa đầy)\n   Answer: a) ¬q → p\n   “p unless q” = if not q then p = ¬q → p ≡ q ∨ p.VI: “p trừ khi q” = nếu không q thì p = ¬q → p ≡ q ∨ p.\n\n3. Which statement is logically equivalent, by its form alone, to “If n is even then n² is even”?Câu nào tương đương logic, chỉ xét theo hình thức, với “Nếu n chẵn thì n² chẵn”?\n   Answer: d) If n² is odd then n is odd.\n   Only the contrapositive ¬q → ¬p is always equivalent. The converse and the inverse are not.VI: Chỉ mệnh đề phản đảo ¬q → ¬p luôn tương đương; đảo và nghịch thì không.\n\n4. “Being a prime greater than 2 is sufficient for being odd.” (p = prime > 2, q = odd)“Là số nguyên tố lớn hơn 2 là đủ để là số lẻ.”\n   Answer: d) p → q\n   Sufficient: the hypothesis suffices for the conclusion, so p → q.VI: Điều kiện đủ: giả thiết đủ để có kết luận, nên p → q.\n\n5. “A positive integer is even only if its square is even … and conversely.” translates to“Số nguyên dương chẵn khi và chỉ khi bình phương của nó chẵn” dịch là\n   Answer: b) p ↔ q\n   “if and only if” is the biconditional: both implications.VI: “khi và chỉ khi” là tương đương: cả hai chiều.\n\n6. Which of the following is NOT equivalent to p → q?Công thức nào KHÔNG tương đương với p → q?\n   Answer: d) q → p\n   q → p is the converse. The other three are equivalent forms of p → q.VI: q → p là mệnh đề đảo. Ba công thức còn lại là các dạng tương đương của p → q.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> p → q</p><p>“p only if q” means q is required for p: p → q.</p><p><i>VI: “p chỉ nếu q” nghĩa là q là điều kiện cần của p: p → q.</i></p></li><li><p><b>b)</b> ¬q → p, equivalent to p ∨ q</p><p>“p unless q” = if not q then p = ¬q → p ≡ q ∨ p.</p><p><i>VI: “p trừ khi q” = nếu không q thì p = ¬q → p ≡ q ∨ p.</i></p></li><li><p><b>a)</b> If n² is odd then n is odd.</p><p>Only the contrapositive ¬q → ¬p is always equivalent. The converse and the inverse are not.</p><p><i>VI: Chỉ mệnh đề phản đảo ¬q → ¬p luôn tương đương; đảo và nghịch thì không.</i></p></li><li><p><b>d)</b> p → q</p><p>Sufficient: the hypothesis suffices for the conclusion, so p → q.</p><p><i>VI: Điều kiện đủ: giả thiết đủ để có kết luận, nên p → q.</i></p></li><li><p><b>b)</b> p ↔ q</p><p>“if and only if” is the biconditional: both implications.</p><p><i>VI: “khi và chỉ khi” là tương đương: cả hai chiều.</i></p></li><li><p><b>d)</b> q → p</p><p>q → p is the converse. The other three are equivalent forms of p → q.</p><p><i>VI: q → p là mệnh đề đảo. Ba công thức còn lại là các dạng tương đương của p → q.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> p → q</p><p>“p only if q” means q is required for p: p → q.</p><p><i>VI: “p chỉ nếu q” nghĩa là q là điều kiện cần của p: p → q.</i></p></li><li><p><b>a)</b> ¬q → p</p><p>“p unless q” = if not q then p = ¬q → p ≡ q ∨ p.</p><p><i>VI: “p trừ khi q” = nếu không q thì p = ¬q → p ≡ q ∨ p.</i></p></li><li><p><b>d)</b> If n² is odd then n is odd.</p><p>Only the contrapositive ¬q → ¬p is always equivalent. The converse and the inverse are not.</p><p><i>VI: Chỉ mệnh đề phản đảo ¬q → ¬p luôn tương đương; đảo và nghịch thì không.</i></p></li><li><p><b>d)</b> p → q</p><p>Sufficient: the hypothesis suffices for the conclusion, so p → q.</p><p><i>VI: Điều kiện đủ: giả thiết đủ để có kết luận, nên p → q.</i></p></li><li><p><b>b)</b> p ↔ q</p><p>“if and only if” is the biconditional: both implications.</p><p><i>VI: “khi và chỉ khi” là tương đương: cả hai chiều.</i></p></li><li><p><b>d)</b> q → p</p><p>q → p is the converse. The other three are equivalent forms of p → q.</p><p><i>VI: q → p là mệnh đề đảo. Ba công thức còn lại là các dạng tương đương của p → q.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -803,33 +803,33 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "p → ¬q only"
+                "noiDung": "¬q → p"
               },
               {
                 "ma": "b",
-                "noiDung": "¬q → p, equivalent to p ∨ q"
+                "noiDung": "p → ¬q"
               },
               {
                 "ma": "c",
-                "noiDung": "q → p"
+                "noiDung": "p ∧ ¬q"
               },
               {
                 "ma": "d",
-                "noiDung": "p ∧ ¬q"
+                "noiDung": "q → p"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>“p unless q” = if not q then p = ¬q → p ≡ q ∨ p.</p><p><i>VI: “p trừ khi q” = nếu không q thì p = ¬q → p ≡ q ∨ p.</i></p>"
           },
           {
             "ma": "c3",
-            "de": "<p>Which statement is equivalent to “If n is even then n² is even”?</p><p style=\"opacity:.75;font-size:.92em\"><i>Câu nào tương đương với “Nếu n chẵn thì n² chẵn”?</i></p>",
+            "de": "<p>Which statement is logically equivalent, by its form alone, to “If n is even then n² is even”?</p><p style=\"opacity:.75;font-size:.92em\"><i>Câu nào tương đương logic, chỉ xét theo hình thức, với “Nếu n chẵn thì n² chẵn”?</i></p>",
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "If n² is odd then n is odd."
+                "noiDung": "n is even and n² is odd."
               },
               {
                 "ma": "b",
@@ -837,15 +837,15 @@
               },
               {
                 "ma": "c",
-                "noiDung": "n is even and n² is odd."
+                "noiDung": "If n² is even then n is even."
               },
               {
                 "ma": "d",
-                "noiDung": "If n² is even then n is even."
+                "noiDung": "If n² is odd then n is odd."
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>Only the contrapositive ¬q → ¬p is always equivalent. The converse and the inverse are not.</p><p><i>VI: Chỉ mệnh đề phản đảo ¬q → ¬p luôn tương đương; đảo và nghịch thì không.</i></p>"
           },

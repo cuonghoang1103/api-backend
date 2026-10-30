@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Graphs 1 — Vocabulary and basic facts — answer key\n\n1. The Handshaking Theorem says the sum of the degrees equals …Định lý bắt tay nói tổng bậc bằng …\n   Answer: a) 2·|E|\n   Each edge contributes 1 to the degree of each of its two ends.VI: Mỗi cạnh đóng góp 1 vào bậc của mỗi đầu mút.\n\n2. In any undirected graph the number of vertices of odd degree is …Trong đồ thị vô hướng mọi số đỉnh bậc lẻ …\n   Answer: b) even\n   The degree sum 2|E| is even, so odd terms must come in pairs.VI: Tổng bậc 2|E| chẵn nên số số hạng lẻ phải chẵn.\n\n3. A simple graph has no …Đồ thị đơn không có …\n   Answer: d) loops or multiple edges\n   “Simple” forbids self-loops and parallel edges.VI: “Đơn” cấm khuyên và cạnh song song.\n\n4. A path that uses every edge exactly once and returns to its start is …Đường đi dùng mỗi cạnh đúng một lần và quay về điểm đầu là …\n   Answer: a) an Euler circuit\n   Euler circuit: every edge once. Hamilton cycle: every vertex once.VI: Chu trình Euler: mỗi cạnh một lần. Chu trình Hamilton: mỗi đỉnh một lần.\n\n5. A connected graph has an Euler circuit iff …Đồ thị liên thông có chu trình Euler khi và chỉ khi …\n   Answer: c) every vertex has even degree\n   Exactly two odd vertices gives an Euler path (not a circuit).VI: Đúng hai đỉnh bậc lẻ cho đường Euler (không phải chu trình).\n\n6. A graph is bipartite iff …Đồ thị là hai phía khi và chỉ khi …\n   Answer: d) it has no odd cycle\n   Equivalent: its vertices can be 2-coloured so every edge joins different colours.VI: Tương đương: có thể tô 2 màu sao cho mọi cạnh nối hai màu khác nhau.\n"
+          "code": "# Graphs 1 — Vocabulary and basic facts — answer key\n\n1. The Handshaking Theorem says the sum of the degrees equals …Định lý bắt tay nói tổng bậc bằng …\n   Answer: a) 2·|E|\n   Each edge contributes 1 to the degree of each of its two ends.VI: Mỗi cạnh đóng góp 1 vào bậc của mỗi đầu mút.\n\n2. In any undirected graph the number of vertices of odd degree is …Trong đồ thị vô hướng mọi số đỉnh bậc lẻ …\n   Answer: b) even\n   The degree sum 2|E| is even, so odd terms must come in pairs.VI: Tổng bậc 2|E| chẵn nên số số hạng lẻ phải chẵn.\n\n3. A simple graph has no …Đồ thị đơn không có …\n   Answer: a) loops or multiple edges\n   “Simple” forbids self-loops and parallel edges.VI: “Đơn” cấm khuyên và cạnh song song.\n\n4. A path that uses every edge exactly once and returns to its start is …Đường đi dùng mỗi cạnh đúng một lần và quay về điểm đầu là …\n   Answer: a) an Euler circuit\n   Euler circuit: every edge once. Hamilton cycle: every vertex once.VI: Chu trình Euler: mỗi cạnh một lần. Chu trình Hamilton: mỗi đỉnh một lần.\n\n5. A connected graph has an Euler circuit iff …Đồ thị liên thông có chu trình Euler khi và chỉ khi …\n   Answer: c) every vertex has even degree\n   Exactly two odd vertices gives an Euler path (not a circuit).VI: Đúng hai đỉnh bậc lẻ cho đường Euler (không phải chu trình).\n\n6. A graph is bipartite iff …Đồ thị là hai phía khi và chỉ khi …\n   Answer: d) it has no odd cycle\n   Equivalent: its vertices can be 2-coloured so every edge joins different colours.VI: Tương đương: có thể tô 2 màu sao cho mọi cạnh nối hai màu khác nhau.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> 2·|E|</p><p>Each edge contributes 1 to the degree of each of its two ends.</p><p><i>VI: Mỗi cạnh đóng góp 1 vào bậc của mỗi đầu mút.</i></p></li><li><p><b>b)</b> even</p><p>The degree sum 2|E| is even, so odd terms must come in pairs.</p><p><i>VI: Tổng bậc 2|E| chẵn nên số số hạng lẻ phải chẵn.</i></p></li><li><p><b>d)</b> loops or multiple edges</p><p>“Simple” forbids self-loops and parallel edges.</p><p><i>VI: “Đơn” cấm khuyên và cạnh song song.</i></p></li><li><p><b>a)</b> an Euler circuit</p><p>Euler circuit: every edge once. Hamilton cycle: every vertex once.</p><p><i>VI: Chu trình Euler: mỗi cạnh một lần. Chu trình Hamilton: mỗi đỉnh một lần.</i></p></li><li><p><b>c)</b> every vertex has even degree</p><p>Exactly two odd vertices gives an Euler path (not a circuit).</p><p><i>VI: Đúng hai đỉnh bậc lẻ cho đường Euler (không phải chu trình).</i></p></li><li><p><b>d)</b> it has no odd cycle</p><p>Equivalent: its vertices can be 2-coloured so every edge joins different colours.</p><p><i>VI: Tương đương: có thể tô 2 màu sao cho mọi cạnh nối hai màu khác nhau.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> 2·|E|</p><p>Each edge contributes 1 to the degree of each of its two ends.</p><p><i>VI: Mỗi cạnh đóng góp 1 vào bậc của mỗi đầu mút.</i></p></li><li><p><b>b)</b> even</p><p>The degree sum 2|E| is even, so odd terms must come in pairs.</p><p><i>VI: Tổng bậc 2|E| chẵn nên số số hạng lẻ phải chẵn.</i></p></li><li><p><b>a)</b> loops or multiple edges</p><p>“Simple” forbids self-loops and parallel edges.</p><p><i>VI: “Đơn” cấm khuyên và cạnh song song.</i></p></li><li><p><b>a)</b> an Euler circuit</p><p>Euler circuit: every edge once. Hamilton cycle: every vertex once.</p><p><i>VI: Chu trình Euler: mỗi cạnh một lần. Chu trình Hamilton: mỗi đỉnh một lần.</i></p></li><li><p><b>c)</b> every vertex has even degree</p><p>Exactly two odd vertices gives an Euler path (not a circuit).</p><p><i>VI: Đúng hai đỉnh bậc lẻ cho đường Euler (không phải chu trình).</i></p></li><li><p><b>d)</b> it has no odd cycle</p><p>Equivalent: its vertices can be 2-coloured so every edge joins different colours.</p><p><i>VI: Tương đương: có thể tô 2 màu sao cho mọi cạnh nối hai màu khác nhau.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -114,23 +114,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "isolated vertices"
+                "noiDung": "loops or multiple edges"
               },
               {
                 "ma": "b",
-                "noiDung": "odd degrees"
+                "noiDung": "cycles of any length"
               },
               {
                 "ma": "c",
-                "noiDung": "cycles"
+                "noiDung": "isolated vertices"
               },
               {
                 "ma": "d",
-                "noiDung": "loops or multiple edges"
+                "noiDung": "vertices of odd degree"
               }
             ],
             "dapAn": [
-              "d"
+              "a"
             ],
             "giaiThich": "<p>“Simple” forbids self-loops and parallel edges.</p><p><i>VI: “Đơn” cấm khuyên và cạnh song song.</i></p>"
           },

@@ -844,10 +844,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Graph lab 7 — Planarity, colouring and Hamilton facts — answer key\n\n1. A connected planar graph has 8 vertices and 14 edges. How many faces (regions)?Đồ thị phẳng liên thông có 8 đỉnh, 14 cạnh. Có bao nhiêu miền (mặt)?\n   Answer: a) 8\n   f = 2 − v + e = 2 − 8 + 14 = 8.VI: f = 2 − v + e = 8.\n\n2. Is K₅ planar?K₅ có phẳng không?\n   Answer: b) No: it has 10 edges > 3·5 − 6 = 9\n   The bound e ≤ 3v − 6 fails, so K₅ cannot be drawn without crossings.VI: Cận e ≤ 3v − 6 không thoả nên K₅ không vẽ được không giao nhau.\n\n3. Is K₃,₃ planar?K₃,₃ có phẳng không?\n   Answer: a) No: bipartite with 9 edges > 2·6 − 4 = 8\n   It has no triangles, so the stronger bound e ≤ 2v − 4 applies and is violated.VI: Không có tam giác nên áp dụng cận mạnh hơn e ≤ 2v − 4 và bị vi phạm.\n\n4. The chromatic number of an odd cycle C₅ is …Sắc số của chu trình lẻ C₅ là …\n   Answer: b) 3\n   Two colours alternate around an even cycle but fail on an odd one.VI: Hai màu xen kẽ được trên chu trình chẵn nhưng hỏng ở chu trình lẻ.\n\n5. The chromatic number of K₆ is …Sắc số của K₆ là …\n   Answer: d) 6\n   Every pair of vertices is adjacent, so all colours differ.VI: Mọi cặp đỉnh kề nhau nên mọi màu khác nhau.\n\n6. Dirac’s theorem: a simple graph with n ≥ 3 vertices and every degree ≥ n/2 has …Định lý Dirac: đồ thị đơn n ≥ 3 đỉnh và mọi bậc ≥ n/2 có …\n   Answer: c) a Hamilton cycle\n   It is a sufficient condition for a Hamilton cycle, not a necessary one.VI: Đó là điều kiện đủ cho chu trình Hamilton, không phải điều kiện cần.\n"
+          "code": "# Graph lab 7 — Planarity, colouring and Hamilton facts — answer key\n\n1. A connected planar graph has 8 vertices and 14 edges. How many faces (regions)?Đồ thị phẳng liên thông có 8 đỉnh, 14 cạnh. Có bao nhiêu miền (mặt)?\n   Answer: a) 8\n   f = 2 − v + e = 2 − 8 + 14 = 8.VI: f = 2 − v + e = 8.\n\n2. Is K₅ planar?K₅ có phẳng không?\n   Answer: a) No: it has 10 edges > 3·5 − 6 = 9\n   The bound e ≤ 3v − 6 fails, so K₅ cannot be drawn without crossings.VI: Cận e ≤ 3v − 6 không thoả nên K₅ không vẽ được không giao nhau.\n\n3. Is K₃,₃ planar?K₃,₃ có phẳng không?\n   Answer: b) No: bipartite with 9 edges > 2·6 − 4 = 8\n   It has no triangles, so the stronger bound e ≤ 2v − 4 applies and is violated.VI: Không có tam giác nên áp dụng cận mạnh hơn e ≤ 2v − 4 và bị vi phạm.\n\n4. The chromatic number of an odd cycle C₅ is …Sắc số của chu trình lẻ C₅ là …\n   Answer: b) 3\n   Two colours alternate around an even cycle but fail on an odd one.VI: Hai màu xen kẽ được trên chu trình chẵn nhưng hỏng ở chu trình lẻ.\n\n5. The chromatic number of K₆ is …Sắc số của K₆ là …\n   Answer: d) 6\n   Every pair of vertices is adjacent, so all colours differ.VI: Mọi cặp đỉnh kề nhau nên mọi màu khác nhau.\n\n6. Dirac’s theorem: a simple graph with n ≥ 3 vertices and every degree ≥ n/2 has …Định lý Dirac: đồ thị đơn n ≥ 3 đỉnh và mọi bậc ≥ n/2 có …\n   Answer: c) a Hamilton cycle\n   It is a sufficient condition for a Hamilton cycle, not a necessary one.VI: Đó là điều kiện đủ cho chu trình Hamilton, không phải điều kiện cần.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> 8</p><p>f = 2 − v + e = 2 − 8 + 14 = 8.</p><p><i>VI: f = 2 − v + e = 8.</i></p></li><li><p><b>b)</b> No: it has 10 edges > 3·5 − 6 = 9</p><p>The bound e ≤ 3v − 6 fails, so K₅ cannot be drawn without crossings.</p><p><i>VI: Cận e ≤ 3v − 6 không thoả nên K₅ không vẽ được không giao nhau.</i></p></li><li><p><b>a)</b> No: bipartite with 9 edges > 2·6 − 4 = 8</p><p>It has no triangles, so the stronger bound e ≤ 2v − 4 applies and is violated.</p><p><i>VI: Không có tam giác nên áp dụng cận mạnh hơn e ≤ 2v − 4 và bị vi phạm.</i></p></li><li><p><b>b)</b> 3</p><p>Two colours alternate around an even cycle but fail on an odd one.</p><p><i>VI: Hai màu xen kẽ được trên chu trình chẵn nhưng hỏng ở chu trình lẻ.</i></p></li><li><p><b>d)</b> 6</p><p>Every pair of vertices is adjacent, so all colours differ.</p><p><i>VI: Mọi cặp đỉnh kề nhau nên mọi màu khác nhau.</i></p></li><li><p><b>c)</b> a Hamilton cycle</p><p>It is a sufficient condition for a Hamilton cycle, not a necessary one.</p><p><i>VI: Đó là điều kiện đủ cho chu trình Hamilton, không phải điều kiện cần.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> 8</p><p>f = 2 − v + e = 2 − 8 + 14 = 8.</p><p><i>VI: f = 2 − v + e = 8.</i></p></li><li><p><b>a)</b> No: it has 10 edges > 3·5 − 6 = 9</p><p>The bound e ≤ 3v − 6 fails, so K₅ cannot be drawn without crossings.</p><p><i>VI: Cận e ≤ 3v − 6 không thoả nên K₅ không vẽ được không giao nhau.</i></p></li><li><p><b>b)</b> No: bipartite with 9 edges > 2·6 − 4 = 8</p><p>It has no triangles, so the stronger bound e ≤ 2v − 4 applies and is violated.</p><p><i>VI: Không có tam giác nên áp dụng cận mạnh hơn e ≤ 2v − 4 và bị vi phạm.</i></p></li><li><p><b>b)</b> 3</p><p>Two colours alternate around an even cycle but fail on an odd one.</p><p><i>VI: Hai màu xen kẽ được trên chu trình chẵn nhưng hỏng ở chu trình lẻ.</i></p></li><li><p><b>d)</b> 6</p><p>Every pair of vertices is adjacent, so all colours differ.</p><p><i>VI: Mọi cặp đỉnh kề nhau nên mọi màu khác nhau.</i></p></li><li><p><b>c)</b> a Hamilton cycle</p><p>It is a sufficient condition for a Hamilton cycle, not a necessary one.</p><p><i>VI: Đó là điều kiện đủ cho chu trình Hamilton, không phải điều kiện cần.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -864,15 +864,15 @@
               },
               {
                 "ma": "b",
-                "noiDung": "6"
-              },
-              {
-                "ma": "c",
                 "noiDung": "22"
               },
               {
+                "ma": "c",
+                "noiDung": "6"
+              },
+              {
                 "ma": "d",
-                "noiDung": "-2"
+                "noiDung": "10"
               }
             ],
             "dapAn": [
@@ -886,23 +886,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Only after removing a vertex it is not"
-              },
-              {
-                "ma": "b",
                 "noiDung": "No: it has 10 edges > 3·5 − 6 = 9"
               },
               {
+                "ma": "b",
+                "noiDung": "It depends on how the graph is drawn"
+              },
+              {
                 "ma": "c",
-                "noiDung": "Yes: it has 10 edges"
+                "noiDung": "Yes: 10 edges is below the limit 3·5 = 15"
               },
               {
                 "ma": "d",
-                "noiDung": "Yes: it has 5 vertices"
+                "noiDung": "Yes: every graph with 5 vertices is planar"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>The bound e ≤ 3v − 6 fails, so K₅ cannot be drawn without crossings.</p><p><i>VI: Cận e ≤ 3v − 6 không thoả nên K₅ không vẽ được không giao nhau.</i></p>"
           },
@@ -912,23 +912,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "No: bipartite with 9 edges > 2·6 − 4 = 8"
+                "noiDung": "It depends on how the graph is drawn"
               },
               {
                 "ma": "b",
-                "noiDung": "Yes: 9 ≤ 3·6 − 6"
+                "noiDung": "No: bipartite with 9 edges > 2·6 − 4 = 8"
               },
               {
                 "ma": "c",
-                "noiDung": "It depends on the drawing"
+                "noiDung": "Yes: it has no triangles, so nothing blocks it"
               },
               {
                 "ma": "d",
-                "noiDung": "Yes"
+                "noiDung": "Yes: 9 ≤ 3·6 − 6"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>It has no triangles, so the stronger bound e ≤ 2v − 4 applies and is violated.</p><p><i>VI: Không có tam giác nên áp dụng cận mạnh hơn e ≤ 2v − 4 và bị vi phạm.</i></p>"
           },

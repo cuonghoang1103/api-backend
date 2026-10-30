@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# FE mock A — 20 questions across all chapters — answer key\n\n1. The contrapositive of “If the server is down then the site is unreachable” is …Mệnh đề phản đảo của “Nếu máy chủ hỏng thì trang không truy cập được” là …\n   Answer: c) If the site is reachable then the server is not down.\n   ¬q → ¬p.VI: ¬q → ¬p.\n\n2. ¬(p ∨ ¬q) is equivalent to …¬(p ∨ ¬q) tương đương với …\n   Answer: a) ¬p ∧ q\n   De Morgan then double negation.VI: De Morgan rồi phủ định kép.\n\n3. The negation of “every student passed the quiz” is …Phủ định của “mọi sinh viên đều qua bài kiểm tra” là …\n   Answer: a) some student did not pass the quiz\n   ¬∀x P(x) ≡ ∃x ¬P(x).VI: ¬∀x P(x) ≡ ∃x ¬P(x).\n\n4. A set with 6 elements has … subsets.Tập 6 phần tử có … tập con.\n   Answer: b) 64\n   2⁶ = 64.VI: 2⁶ = 64.\n\n5. A function f: A → B is onto if …Hàm f: A → B là toàn ánh nếu …\n   Answer: b) every element of B is the image of some element of A\n   Range = codomain.VI: Tập ảnh = miền đích.\n\n6. 3n² + n log n + 10 is …3n² + n log n + 10 là …\n   Answer: d) O(n²)\n   The n² term dominates.VI: Số hạng n² trội hơn.\n\n7. Two integers are relatively prime if …Hai số nguyên nguyên tố cùng nhau nếu …\n   Answer: c) their gcd is 1\n   gcd(a, b) = 1.VI: gcd(a, b) = 1.\n\n8. The basis step of an induction proof of ∀n ≥ 1 P(n) verifies …Bước cơ sở của chứng minh quy nạp ∀n ≥ 1 P(n) kiểm tra …\n   Answer: a) P(1)\n   The first case of the claim.VI: Trường hợp đầu của khẳng định.\n\n9. Choosing a 3-person committee from 10 people (order irrelevant) uses …Chọn uỷ ban 3 người từ 10 người (không kể thứ tự) dùng …\n   Answer: b) C(10, 3)\n   Unordered selection without repetition.VI: Chọn không thứ tự, không lặp.\n\n10. A tree with 15 vertices has … edges.Cây có 15 đỉnh có … cạnh.\n   Answer: b) 14\n   n − 1.VI: n − 1.\n\n11. How many rows of the truth table of (p ∧ q) → (r ∨ ¬p) are TRUE (out of 8)?Bảng chân trị của (p ∧ q) → (r ∨ ¬p) có bao nhiêu dòng ĐÚNG (trong 8 dòng)?\n   Answer: c) 7\n   Only p = q = T, r = F makes it false: 7 true rows.VI: Chỉ p = q = T, r = F làm nó sai: 7 dòng đúng.\n\n12. |A| = 60, |B| = 45, |C| = 40, |A∩B| = 20, |A∩C| = 18, |B∩C| = 15, |A∩B∩C| = 8. Then |A ∪ B ∪ C| = …|A| = 60, |B| = 45, |C| = 40, |A∩B| = 20, |A∩C| = 18, |B∩C| = 15, |A∩B∩C| = 8. Khi đó |A ∪ B ∪ C| = …\n   Answer: c) 100\n   145 − 53 + 8 = 100.VI: 145 − 53 + 8 = 100.\n\n13. ⌊−7.5⌋ + ⌈3.2⌉ = …⌊−7,5⌋ + ⌈3,2⌉ = …\n   Answer: a) -4\n   ⌊−7.5⌋ = −8, ⌈3.2⌉ = 4 ⇒ -4.VI: ⌊−7,5⌋ = −8, ⌈3,2⌉ = 4 ⇒ -4.\n\n14. 7²²² mod 11 = …7²²² mod 11 = …\n   Answer: d) 5\n   7¹⁰ ≡ 1 (mod 11) and 222 ≡ 2 (mod 10): 7² = 49 ≡ 5.VI: 7¹⁰ ≡ 1 (mod 11) và 222 ≡ 2 (mod 10): 49 ≡ 5.\n\n15. The inverse of 5 modulo 12 is …Nghịch đảo của 5 theo mô-đun 12 là …\n   Answer: a) 5\n   5·5 = 25 ≡ 1 (mod 12).VI: 5·5 = 25 ≡ 1 (mod 12).\n\n16. a₀ = 1 and aₙ = 2aₙ₋₁ + 3. Then a₆ = …a₀ = 1 và aₙ = 2aₙ₋₁ + 3. Khi đó a₆ = …\n   Answer: b) 253\n   Sequence: 1, 5, 13, 29, 61, 125, 253.VI: Dãy: 1, 5, 13, 29, 61, 125, 253.\n\n17. A team of 5 is chosen from 8 programmers and 6 testers with exactly 3 programmers. Number of teams: …Chọn đội 5 người từ 8 lập trình viên và 6 tester với đúng 3 lập trình viên. Số đội: …\n   Answer: d) 840\n   C(8,3)·C(6,2) = 56·15 = 840.VI: C(8,3)·C(6,2) = 56·15 = 840.\n\n18. In the weighted graph AB4, AC2, BC1, BD5, CD8, CE10, DE2, DF6, EF3, the shortest distance from A to F is …Trong đồ thị có trọng số AB4, AC2, BC1, BD5, CD8, CE10, DE2, DF6, EF3, khoảng cách ngắn nhất từ A tới F là …\n   Answer: c) 13\n   A–C–B–D–E–F = 2+1+5+2+3 = 13.VI: A–C–B–D–E–F = 13.\n\n19. The same graph: the weight of a minimum spanning tree is …Cùng đồ thị: trọng số cây khung nhỏ nhất là …\n   Answer: c) 13\n   Kruskal: BC1, AC2, DE2, EF3, BD5 = 13.VI: Kruskal: BC1, AC2, DE2, EF3, BD5 = 13.\n\n20. A graph has degrees 3, 3, 2, 2, 2, 2, 2. It has … edges.Đồ thị có bậc 3, 3, 2, 2, 2, 2, 2. Nó có … cạnh.\n   Answer: b) 8\n   Handshake: sum 16, edges 8.VI: Bắt tay: tổng bậc 16, 8 cạnh.\n"
+          "code": "# FE mock A — 20 questions across all chapters — answer key\n\n1. The contrapositive of “If the server is down then the site is unreachable” is …Mệnh đề phản đảo của “Nếu máy chủ hỏng thì trang không truy cập được” là …\n   Answer: c) If the site is reachable then the server is not down.\n   ¬q → ¬p.VI: ¬q → ¬p.\n\n2. ¬(p ∨ ¬q) is equivalent to …¬(p ∨ ¬q) tương đương với …\n   Answer: a) ¬p ∧ q\n   De Morgan then double negation.VI: De Morgan rồi phủ định kép.\n\n3. The negation of “every student passed the quiz” is …Phủ định của “mọi sinh viên đều qua bài kiểm tra” là …\n   Answer: a) some student did not pass the quiz\n   ¬∀x P(x) ≡ ∃x ¬P(x).VI: ¬∀x P(x) ≡ ∃x ¬P(x).\n\n4. A set with 6 elements has … subsets.Tập 6 phần tử có … tập con.\n   Answer: b) 64\n   2⁶ = 64.VI: 2⁶ = 64.\n\n5. A function f: A → B is onto if …Hàm f: A → B là toàn ánh nếu …\n   Answer: b) every element of B is the image of an element of A\n   Range = codomain.VI: Tập ảnh = miền đích.\n\n6. 3n² + n log n + 10 is …3n² + n log n + 10 là …\n   Answer: d) O(n²)\n   The n² term dominates.VI: Số hạng n² trội hơn.\n\n7. Two integers are relatively prime if …Hai số nguyên nguyên tố cùng nhau nếu …\n   Answer: c) their gcd is 1\n   gcd(a, b) = 1.VI: gcd(a, b) = 1.\n\n8. The basis step of an induction proof of ∀n ≥ 1 P(n) verifies …Bước cơ sở của chứng minh quy nạp ∀n ≥ 1 P(n) kiểm tra …\n   Answer: a) P(1)\n   The first case of the claim.VI: Trường hợp đầu của khẳng định.\n\n9. Choosing a 3-person committee from 10 people (order irrelevant) uses …Chọn uỷ ban 3 người từ 10 người (không kể thứ tự) dùng …\n   Answer: b) C(10, 3)\n   Unordered selection without repetition.VI: Chọn không thứ tự, không lặp.\n\n10. A tree with 15 vertices has … edges.Cây có 15 đỉnh có … cạnh.\n   Answer: b) 14\n   n − 1.VI: n − 1.\n\n11. How many rows of the truth table of (p ∧ q) → (r ∨ ¬p) are TRUE (out of 8)?Bảng chân trị của (p ∧ q) → (r ∨ ¬p) có bao nhiêu dòng ĐÚNG (trong 8 dòng)?\n   Answer: c) 7\n   Only p = q = T, r = F makes it false: 7 true rows.VI: Chỉ p = q = T, r = F làm nó sai: 7 dòng đúng.\n\n12. |A| = 60, |B| = 45, |C| = 40, |A∩B| = 20, |A∩C| = 18, |B∩C| = 15, |A∩B∩C| = 8. Then |A ∪ B ∪ C| = …|A| = 60, |B| = 45, |C| = 40, |A∩B| = 20, |A∩C| = 18, |B∩C| = 15, |A∩B∩C| = 8. Khi đó |A ∪ B ∪ C| = …\n   Answer: c) 100\n   145 − 53 + 8 = 100.VI: 145 − 53 + 8 = 100.\n\n13. ⌊−7.5⌋ + ⌈3.2⌉ = …⌊−7,5⌋ + ⌈3,2⌉ = …\n   Answer: a) -4\n   ⌊−7.5⌋ = −8, ⌈3.2⌉ = 4 ⇒ -4.VI: ⌊−7,5⌋ = −8, ⌈3,2⌉ = 4 ⇒ -4.\n\n14. 7²²² mod 11 = …7²²² mod 11 = …\n   Answer: d) 5\n   7¹⁰ ≡ 1 (mod 11) and 222 ≡ 2 (mod 10): 7² = 49 ≡ 5.VI: 7¹⁰ ≡ 1 (mod 11) và 222 ≡ 2 (mod 10): 49 ≡ 5.\n\n15. The inverse of 5 modulo 12 is …Nghịch đảo của 5 theo mô-đun 12 là …\n   Answer: a) 5\n   5·5 = 25 ≡ 1 (mod 12).VI: 5·5 = 25 ≡ 1 (mod 12).\n\n16. a₀ = 1 and aₙ = 2aₙ₋₁ + 3. Then a₆ = …a₀ = 1 và aₙ = 2aₙ₋₁ + 3. Khi đó a₆ = …\n   Answer: b) 253\n   Sequence: 1, 5, 13, 29, 61, 125, 253.VI: Dãy: 1, 5, 13, 29, 61, 125, 253.\n\n17. A team of 5 is chosen from 8 programmers and 6 testers with exactly 3 programmers. Number of teams: …Chọn đội 5 người từ 8 lập trình viên và 6 tester với đúng 3 lập trình viên. Số đội: …\n   Answer: d) 840\n   C(8,3)·C(6,2) = 56·15 = 840.VI: C(8,3)·C(6,2) = 56·15 = 840.\n\n18. In the weighted graph AB4, AC2, BC1, BD5, CD8, CE10, DE2, DF6, EF3, the shortest distance from A to F is …Trong đồ thị có trọng số AB4, AC2, BC1, BD5, CD8, CE10, DE2, DF6, EF3, khoảng cách ngắn nhất từ A tới F là …\n   Answer: c) 13\n   A–C–B–D–E–F = 2+1+5+2+3 = 13.VI: A–C–B–D–E–F = 13.\n\n19. The same graph: the weight of a minimum spanning tree is …Cùng đồ thị: trọng số cây khung nhỏ nhất là …\n   Answer: c) 13\n   Kruskal: BC1, AC2, DE2, EF3, BD5 = 13.VI: Kruskal: BC1, AC2, DE2, EF3, BD5 = 13.\n\n20. A graph has degrees 3, 3, 2, 2, 2, 2, 2. It has … edges.Đồ thị có bậc 3, 3, 2, 2, 2, 2, 2. Nó có … cạnh.\n   Answer: b) 8\n   Handshake: sum 16, edges 8.VI: Bắt tay: tổng bậc 16, 8 cạnh.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> If the site is reachable then the server is not down.</p><p>¬q → ¬p.</p><p><i>VI: ¬q → ¬p.</i></p></li><li><p><b>a)</b> ¬p ∧ q</p><p>De Morgan then double negation.</p><p><i>VI: De Morgan rồi phủ định kép.</i></p></li><li><p><b>a)</b> some student did not pass the quiz</p><p>¬∀x P(x) ≡ ∃x ¬P(x).</p><p><i>VI: ¬∀x P(x) ≡ ∃x ¬P(x).</i></p></li><li><p><b>b)</b> 64</p><p>2⁶ = 64.</p><p><i>VI: 2⁶ = 64.</i></p></li><li><p><b>b)</b> every element of B is the image of some element of A</p><p>Range = codomain.</p><p><i>VI: Tập ảnh = miền đích.</i></p></li><li><p><b>d)</b> O(n²)</p><p>The n² term dominates.</p><p><i>VI: Số hạng n² trội hơn.</i></p></li><li><p><b>c)</b> their gcd is 1</p><p>gcd(a, b) = 1.</p><p><i>VI: gcd(a, b) = 1.</i></p></li><li><p><b>a)</b> P(1)</p><p>The first case of the claim.</p><p><i>VI: Trường hợp đầu của khẳng định.</i></p></li><li><p><b>b)</b> C(10, 3)</p><p>Unordered selection without repetition.</p><p><i>VI: Chọn không thứ tự, không lặp.</i></p></li><li><p><b>b)</b> 14</p><p>n − 1.</p><p><i>VI: n − 1.</i></p></li><li><p><b>c)</b> 7</p><p>Only p = q = T, r = F makes it false: 7 true rows.</p><p><i>VI: Chỉ p = q = T, r = F làm nó sai: 7 dòng đúng.</i></p></li><li><p><b>c)</b> 100</p><p>145 − 53 + 8 = 100.</p><p><i>VI: 145 − 53 + 8 = 100.</i></p></li><li><p><b>a)</b> -4</p><p>⌊−7.5⌋ = −8, ⌈3.2⌉ = 4 ⇒ -4.</p><p><i>VI: ⌊−7,5⌋ = −8, ⌈3,2⌉ = 4 ⇒ -4.</i></p></li><li><p><b>d)</b> 5</p><p>7¹⁰ ≡ 1 (mod 11) and 222 ≡ 2 (mod 10): 7² = 49 ≡ 5.</p><p><i>VI: 7¹⁰ ≡ 1 (mod 11) và 222 ≡ 2 (mod 10): 49 ≡ 5.</i></p></li><li><p><b>a)</b> 5</p><p>5·5 = 25 ≡ 1 (mod 12).</p><p><i>VI: 5·5 = 25 ≡ 1 (mod 12).</i></p></li><li><p><b>b)</b> 253</p><p>Sequence: 1, 5, 13, 29, 61, 125, 253.</p><p><i>VI: Dãy: 1, 5, 13, 29, 61, 125, 253.</i></p></li><li><p><b>d)</b> 840</p><p>C(8,3)·C(6,2) = 56·15 = 840.</p><p><i>VI: C(8,3)·C(6,2) = 56·15 = 840.</i></p></li><li><p><b>c)</b> 13</p><p>A–C–B–D–E–F = 2+1+5+2+3 = 13.</p><p><i>VI: A–C–B–D–E–F = 13.</i></p></li><li><p><b>c)</b> 13</p><p>Kruskal: BC1, AC2, DE2, EF3, BD5 = 13.</p><p><i>VI: Kruskal: BC1, AC2, DE2, EF3, BD5 = 13.</i></p></li><li><p><b>b)</b> 8</p><p>Handshake: sum 16, edges 8.</p><p><i>VI: Bắt tay: tổng bậc 16, 8 cạnh.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> If the site is reachable then the server is not down.</p><p>¬q → ¬p.</p><p><i>VI: ¬q → ¬p.</i></p></li><li><p><b>a)</b> ¬p ∧ q</p><p>De Morgan then double negation.</p><p><i>VI: De Morgan rồi phủ định kép.</i></p></li><li><p><b>a)</b> some student did not pass the quiz</p><p>¬∀x P(x) ≡ ∃x ¬P(x).</p><p><i>VI: ¬∀x P(x) ≡ ∃x ¬P(x).</i></p></li><li><p><b>b)</b> 64</p><p>2⁶ = 64.</p><p><i>VI: 2⁶ = 64.</i></p></li><li><p><b>b)</b> every element of B is the image of an element of A</p><p>Range = codomain.</p><p><i>VI: Tập ảnh = miền đích.</i></p></li><li><p><b>d)</b> O(n²)</p><p>The n² term dominates.</p><p><i>VI: Số hạng n² trội hơn.</i></p></li><li><p><b>c)</b> their gcd is 1</p><p>gcd(a, b) = 1.</p><p><i>VI: gcd(a, b) = 1.</i></p></li><li><p><b>a)</b> P(1)</p><p>The first case of the claim.</p><p><i>VI: Trường hợp đầu của khẳng định.</i></p></li><li><p><b>b)</b> C(10, 3)</p><p>Unordered selection without repetition.</p><p><i>VI: Chọn không thứ tự, không lặp.</i></p></li><li><p><b>b)</b> 14</p><p>n − 1.</p><p><i>VI: n − 1.</i></p></li><li><p><b>c)</b> 7</p><p>Only p = q = T, r = F makes it false: 7 true rows.</p><p><i>VI: Chỉ p = q = T, r = F làm nó sai: 7 dòng đúng.</i></p></li><li><p><b>c)</b> 100</p><p>145 − 53 + 8 = 100.</p><p><i>VI: 145 − 53 + 8 = 100.</i></p></li><li><p><b>a)</b> -4</p><p>⌊−7.5⌋ = −8, ⌈3.2⌉ = 4 ⇒ -4.</p><p><i>VI: ⌊−7,5⌋ = −8, ⌈3,2⌉ = 4 ⇒ -4.</i></p></li><li><p><b>d)</b> 5</p><p>7¹⁰ ≡ 1 (mod 11) and 222 ≡ 2 (mod 10): 7² = 49 ≡ 5.</p><p><i>VI: 7¹⁰ ≡ 1 (mod 11) và 222 ≡ 2 (mod 10): 49 ≡ 5.</i></p></li><li><p><b>a)</b> 5</p><p>5·5 = 25 ≡ 1 (mod 12).</p><p><i>VI: 5·5 = 25 ≡ 1 (mod 12).</i></p></li><li><p><b>b)</b> 253</p><p>Sequence: 1, 5, 13, 29, 61, 125, 253.</p><p><i>VI: Dãy: 1, 5, 13, 29, 61, 125, 253.</i></p></li><li><p><b>d)</b> 840</p><p>C(8,3)·C(6,2) = 56·15 = 840.</p><p><i>VI: C(8,3)·C(6,2) = 56·15 = 840.</i></p></li><li><p><b>c)</b> 13</p><p>A–C–B–D–E–F = 2+1+5+2+3 = 13.</p><p><i>VI: A–C–B–D–E–F = 13.</i></p></li><li><p><b>c)</b> 13</p><p>Kruskal: BC1, AC2, DE2, EF3, BD5 = 13.</p><p><i>VI: Kruskal: BC1, AC2, DE2, EF3, BD5 = 13.</i></p></li><li><p><b>b)</b> 8</p><p>Handshake: sum 16, edges 8.</p><p><i>VI: Bắt tay: tổng bậc 16, 8 cạnh.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -166,19 +166,19 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "f has an inverse only"
+                "noiDung": "A and B have the same number of elements"
               },
               {
                 "ma": "b",
-                "noiDung": "every element of B is the image of some element of A"
+                "noiDung": "every element of B is the image of an element of A"
               },
               {
                 "ma": "c",
-                "noiDung": "A = B"
+                "noiDung": "different inputs give different outputs"
               },
               {
                 "ma": "d",
-                "noiDung": "different inputs give different outputs"
+                "noiDung": "f has an inverse only"
               }
             ],
             "dapAn": [
@@ -639,10 +639,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# FE mock B — 20 questions (more calculations) — answer key\n\n1. Which pair is logically equivalent?Cặp nào tương đương logic?\n   Answer: b) p → q and ¬q → ¬p\n   Contrapositive.VI: Phản đảo.\n\n2. From “p → q” and “¬q” we may conclude …Từ “p → q” và “¬q” có thể kết luận …\n   Answer: c) ¬p\n   Modus tollens.VI: Modus tollens.\n\n3. A ⊕ B contains …A ⊕ B chứa …\n   Answer: c) elements in exactly one of A, B\n   Symmetric difference.VI: Hiệu đối xứng.\n\n4. The composition (g∘f)(x) means …Hàm hợp (g∘f)(x) nghĩa là …\n   Answer: d) g(f(x))\n   Apply f first.VI: Áp f trước.\n\n5. Which function grows fastest?Hàm nào tăng nhanh nhất?\n   Answer: a) 2ⁿ\n   Exponential beats polynomial.VI: Hàm mũ vượt đa thức.\n\n6. If a ≡ b (mod m) then …Nếu a ≡ b (mod m) thì …\n   Answer: c) m | (a − b)\n   Definition of congruence.VI: Định nghĩa đồng dư.\n\n7. Strong induction is useful when …Quy nạp mạnh hữu ích khi …\n   Answer: d) the step needs several earlier cases\n   E.g. f(n) uses f(n−2) and f(n−3).VI: Vd f(n) dùng f(n−2) và f(n−3).\n\n8. The pigeonhole principle guarantees …Nguyên lý chuồng bồ câu đảm bảo …\n   Answer: a) some box holds at least ⌈n/k⌉ objects\n   n objects in k boxes.VI: n vật vào k hộp.\n\n9. A graph has an Euler circuit if and only if it is connected and …Đồ thị có chu trình Euler khi và chỉ khi liên thông và …\n   Answer: d) every vertex has even degree\n   Euler’s theorem.VI: Định lý Euler.\n\n10. Kruskal’s algorithm builds a minimum spanning tree by …Thuật toán Kruskal xây cây khung nhỏ nhất bằng cách …\n   Answer: a) adding the cheapest edge that does not create a cycle\n   Sort edges, skip cycle-making ones.VI: Sắp cạnh, bỏ cạnh tạo chu trình.\n\n11. How many of the 4 rows of the truth table of (p ∨ q) ∧ ¬(p ∧ q) are TRUE?Bảng chân trị 4 dòng của (p ∨ q) ∧ ¬(p ∧ q) có bao nhiêu dòng ĐÚNG?\n   Answer: d) 2\n   It is exclusive or: exactly 2 rows.VI: Đó là hoặc loại trừ: đúng 2 dòng.\n\n12. How many non-empty proper subsets does a 7-element set have?Tập 7 phần tử có bao nhiêu tập con khác rỗng và khác chính nó?\n   Answer: b) 126\n   2⁷ − 2 = 126.VI: 2⁷ − 2 = 126.\n\n13. gcd(1071, 462) = …gcd(1071, 462) = …\n   Answer: a) 21\n   1071 = 2·462 + 147; 462 = 3·147 + 21; 147 = 7·21 ⇒ 21.VI: 1071 = 2·462 + 147; 462 = 3·147 + 21; 147 = 7·21 ⇒ 21.\n\n14. The smallest positive x with x ≡ 2 (mod 3), x ≡ 3 (mod 5), x ≡ 2 (mod 7) is …x dương nhỏ nhất với x ≡ 2 (mod 3), x ≡ 3 (mod 5), x ≡ 2 (mod 7) là …\n   Answer: a) 23\n   The classic Sun Tzu answer 23.VI: Đáp án cổ điển của Tôn Tử: 23.\n\n15. The number of positive divisors of 360 is …Số ước nguyên dương của 360 là …\n   Answer: b) 24\n   360 = 2³·3²·5 ⇒ 4·3·2 = 24.VI: 360 = 2³·3²·5 ⇒ 4·3·2 = 24.\n\n16. The 12th Fibonacci number (F₁ = F₂ = 1) is …Số Fibonacci thứ 12 (F₁ = F₂ = 1) là …\n   Answer: a) 144\n   1 1 2 3 5 8 13 21 34 55 89 144.VI: 1 1 2 3 5 8 13 21 34 55 89 144.\n\n17. Number of ways to choose 3 books from 10 (order irrelevant): …Số cách chọn 3 quyển từ 10 (không kể thứ tự): …\n   Answer: c) 120\n   C(10, 3) = 120.VI: C(10, 3) = 120.\n\n18. BFS from A (neighbours in alphabetical order) on edges AB, AC, BD, CD, DE visits E as the … vertex.BFS từ A (láng giềng theo thứ tự chữ cái) trên các cạnh AB, AC, BD, CD, DE thăm E là đỉnh thứ …\n   Answer: c) 5\n   Order A, B, C, D, E.VI: Thứ tự A, B, C, D, E.\n\n19. Huffman coding of frequencies 5, 9, 12, 13, 16, 45 needs a total of … bits.Mã Huffman cho tần số 5, 9, 12, 13, 16, 45 cần tổng cộng … bit.\n   Answer: a) 224\n   Merges 14, 25, 30, 55, 100 sum to 224.VI: Các lần gộp 14, 25, 30, 55, 100 cộng lại 224.\n\n20. A full ternary tree has 7 internal vertices. It has … leaves.Cây tam phân đầy đủ có 7 đỉnh trong. Nó có … lá.\n   Answer: d) 15\n   l = (m − 1)·i + 1 = 15.VI: l = (m − 1)·i + 1 = 15.\n"
+          "code": "# FE mock B — 20 questions (more calculations) — answer key\n\n1. Which pair is logically equivalent?Cặp nào tương đương logic?\n   Answer: d) p → q and ¬q → ¬p\n   Contrapositive.VI: Phản đảo.\n\n2. From “p → q” and “¬q” we may conclude …Từ “p → q” và “¬q” có thể kết luận …\n   Answer: a) ¬p\n   Modus tollens.VI: Modus tollens.\n\n3. A ⊕ B contains …A ⊕ B chứa …\n   Answer: a) elements in exactly one of A, B\n   Symmetric difference.VI: Hiệu đối xứng.\n\n4. The composition (g∘f)(x) means …Hàm hợp (g∘f)(x) nghĩa là …\n   Answer: a) g(f(x))\n   Apply f first.VI: Áp f trước.\n\n5. Which function grows fastest?Hàm nào tăng nhanh nhất?\n   Answer: c) 2ⁿ\n   Exponential beats polynomial.VI: Hàm mũ vượt đa thức.\n\n6. If a ≡ b (mod m) then …Nếu a ≡ b (mod m) thì …\n   Answer: d) m | (a − b)\n   Definition of congruence.VI: Định nghĩa đồng dư.\n\n7. Strong induction is useful when …Quy nạp mạnh hữu ích khi …\n   Answer: d) the step needs several earlier cases\n   E.g. f(n) uses f(n−2) and f(n−3).VI: Vd f(n) dùng f(n−2) và f(n−3).\n\n8. The pigeonhole principle guarantees …Nguyên lý chuồng bồ câu đảm bảo …\n   Answer: a) some box holds at least ⌈n/k⌉ objects\n   n objects in k boxes.VI: n vật vào k hộp.\n\n9. A graph has an Euler circuit if and only if it is connected and …Đồ thị có chu trình Euler khi và chỉ khi liên thông và …\n   Answer: b) every vertex has even degree\n   Euler’s theorem.VI: Định lý Euler.\n\n10. Kruskal’s algorithm builds a minimum spanning tree by …Thuật toán Kruskal xây cây khung nhỏ nhất bằng cách …\n   Answer: b) adding the cheapest edge that does not create a cycle\n   Sort edges, skip cycle-making ones.VI: Sắp cạnh, bỏ cạnh tạo chu trình.\n\n11. How many of the 4 rows of the truth table of (p ∨ q) ∧ ¬(p ∧ q) are TRUE?Bảng chân trị 4 dòng của (p ∨ q) ∧ ¬(p ∧ q) có bao nhiêu dòng ĐÚNG?\n   Answer: d) 2\n   It is exclusive or: exactly 2 rows.VI: Đó là hoặc loại trừ: đúng 2 dòng.\n\n12. How many non-empty proper subsets does a 7-element set have?Tập 7 phần tử có bao nhiêu tập con khác rỗng và khác chính nó?\n   Answer: a) 126\n   2⁷ − 2 = 126.VI: 2⁷ − 2 = 126.\n\n13. gcd(1071, 462) = …gcd(1071, 462) = …\n   Answer: b) 21\n   1071 = 2·462 + 147; 462 = 3·147 + 21; 147 = 7·21 ⇒ 21.VI: 1071 = 2·462 + 147; 462 = 3·147 + 21; 147 = 7·21 ⇒ 21.\n\n14. The smallest positive x with x ≡ 2 (mod 3), x ≡ 3 (mod 5), x ≡ 2 (mod 7) is …x dương nhỏ nhất với x ≡ 2 (mod 3), x ≡ 3 (mod 5), x ≡ 2 (mod 7) là …\n   Answer: d) 23\n   The classic Sun Tzu answer 23.VI: Đáp án cổ điển của Tôn Tử: 23.\n\n15. The number of positive divisors of 360 is …Số ước nguyên dương của 360 là …\n   Answer: c) 24\n   360 = 2³·3²·5 ⇒ 4·3·2 = 24.VI: 360 = 2³·3²·5 ⇒ 4·3·2 = 24.\n\n16. The 12th Fibonacci number (F₁ = F₂ = 1) is …Số Fibonacci thứ 12 (F₁ = F₂ = 1) là …\n   Answer: b) 144\n   1 1 2 3 5 8 13 21 34 55 89 144.VI: 1 1 2 3 5 8 13 21 34 55 89 144.\n\n17. Number of ways to choose 3 books from 10 (order irrelevant): …Số cách chọn 3 quyển từ 10 (không kể thứ tự): …\n   Answer: b) 120\n   C(10, 3) = 120.VI: C(10, 3) = 120.\n\n18. BFS from A (neighbours in alphabetical order) on edges AB, AC, BD, CD, DE visits E as the … vertex.BFS từ A (láng giềng theo thứ tự chữ cái) trên các cạnh AB, AC, BD, CD, DE thăm E là đỉnh thứ …\n   Answer: c) 5\n   Order A, B, C, D, E.VI: Thứ tự A, B, C, D, E.\n\n19. Huffman coding of frequencies 5, 9, 12, 13, 16, 45 needs a total of … bits.Mã Huffman cho tần số 5, 9, 12, 13, 16, 45 cần tổng cộng … bit.\n   Answer: b) 224\n   Merges 14, 25, 30, 55, 100 sum to 224.VI: Các lần gộp 14, 25, 30, 55, 100 cộng lại 224.\n\n20. A full ternary tree has 7 internal vertices. It has … leaves.Cây tam phân đầy đủ có 7 đỉnh trong. Nó có … lá.\n   Answer: c) 15\n   l = (m − 1)·i + 1 = 15.VI: l = (m − 1)·i + 1 = 15.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> p → q and ¬q → ¬p</p><p>Contrapositive.</p><p><i>VI: Phản đảo.</i></p></li><li><p><b>c)</b> ¬p</p><p>Modus tollens.</p><p><i>VI: Modus tollens.</i></p></li><li><p><b>c)</b> elements in exactly one of A, B</p><p>Symmetric difference.</p><p><i>VI: Hiệu đối xứng.</i></p></li><li><p><b>d)</b> g(f(x))</p><p>Apply f first.</p><p><i>VI: Áp f trước.</i></p></li><li><p><b>a)</b> 2ⁿ</p><p>Exponential beats polynomial.</p><p><i>VI: Hàm mũ vượt đa thức.</i></p></li><li><p><b>c)</b> m | (a − b)</p><p>Definition of congruence.</p><p><i>VI: Định nghĩa đồng dư.</i></p></li><li><p><b>d)</b> the step needs several earlier cases</p><p>E.g. f(n) uses f(n−2) and f(n−3).</p><p><i>VI: Vd f(n) dùng f(n−2) và f(n−3).</i></p></li><li><p><b>a)</b> some box holds at least ⌈n/k⌉ objects</p><p>n objects in k boxes.</p><p><i>VI: n vật vào k hộp.</i></p></li><li><p><b>d)</b> every vertex has even degree</p><p>Euler’s theorem.</p><p><i>VI: Định lý Euler.</i></p></li><li><p><b>a)</b> adding the cheapest edge that does not create a cycle</p><p>Sort edges, skip cycle-making ones.</p><p><i>VI: Sắp cạnh, bỏ cạnh tạo chu trình.</i></p></li><li><p><b>d)</b> 2</p><p>It is exclusive or: exactly 2 rows.</p><p><i>VI: Đó là hoặc loại trừ: đúng 2 dòng.</i></p></li><li><p><b>b)</b> 126</p><p>2⁷ − 2 = 126.</p><p><i>VI: 2⁷ − 2 = 126.</i></p></li><li><p><b>a)</b> 21</p><p>1071 = 2·462 + 147; 462 = 3·147 + 21; 147 = 7·21 ⇒ 21.</p><p><i>VI: 1071 = 2·462 + 147; 462 = 3·147 + 21; 147 = 7·21 ⇒ 21.</i></p></li><li><p><b>a)</b> 23</p><p>The classic Sun Tzu answer 23.</p><p><i>VI: Đáp án cổ điển của Tôn Tử: 23.</i></p></li><li><p><b>b)</b> 24</p><p>360 = 2³·3²·5 ⇒ 4·3·2 = 24.</p><p><i>VI: 360 = 2³·3²·5 ⇒ 4·3·2 = 24.</i></p></li><li><p><b>a)</b> 144</p><p>1 1 2 3 5 8 13 21 34 55 89 144.</p><p><i>VI: 1 1 2 3 5 8 13 21 34 55 89 144.</i></p></li><li><p><b>c)</b> 120</p><p>C(10, 3) = 120.</p><p><i>VI: C(10, 3) = 120.</i></p></li><li><p><b>c)</b> 5</p><p>Order A, B, C, D, E.</p><p><i>VI: Thứ tự A, B, C, D, E.</i></p></li><li><p><b>a)</b> 224</p><p>Merges 14, 25, 30, 55, 100 sum to 224.</p><p><i>VI: Các lần gộp 14, 25, 30, 55, 100 cộng lại 224.</i></p></li><li><p><b>d)</b> 15</p><p>l = (m − 1)·i + 1 = 15.</p><p><i>VI: l = (m − 1)·i + 1 = 15.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> p → q and ¬q → ¬p</p><p>Contrapositive.</p><p><i>VI: Phản đảo.</i></p></li><li><p><b>a)</b> ¬p</p><p>Modus tollens.</p><p><i>VI: Modus tollens.</i></p></li><li><p><b>a)</b> elements in exactly one of A, B</p><p>Symmetric difference.</p><p><i>VI: Hiệu đối xứng.</i></p></li><li><p><b>a)</b> g(f(x))</p><p>Apply f first.</p><p><i>VI: Áp f trước.</i></p></li><li><p><b>c)</b> 2ⁿ</p><p>Exponential beats polynomial.</p><p><i>VI: Hàm mũ vượt đa thức.</i></p></li><li><p><b>d)</b> m | (a − b)</p><p>Definition of congruence.</p><p><i>VI: Định nghĩa đồng dư.</i></p></li><li><p><b>d)</b> the step needs several earlier cases</p><p>E.g. f(n) uses f(n−2) and f(n−3).</p><p><i>VI: Vd f(n) dùng f(n−2) và f(n−3).</i></p></li><li><p><b>a)</b> some box holds at least ⌈n/k⌉ objects</p><p>n objects in k boxes.</p><p><i>VI: n vật vào k hộp.</i></p></li><li><p><b>b)</b> every vertex has even degree</p><p>Euler’s theorem.</p><p><i>VI: Định lý Euler.</i></p></li><li><p><b>b)</b> adding the cheapest edge that does not create a cycle</p><p>Sort edges, skip cycle-making ones.</p><p><i>VI: Sắp cạnh, bỏ cạnh tạo chu trình.</i></p></li><li><p><b>d)</b> 2</p><p>It is exclusive or: exactly 2 rows.</p><p><i>VI: Đó là hoặc loại trừ: đúng 2 dòng.</i></p></li><li><p><b>a)</b> 126</p><p>2⁷ − 2 = 126.</p><p><i>VI: 2⁷ − 2 = 126.</i></p></li><li><p><b>b)</b> 21</p><p>1071 = 2·462 + 147; 462 = 3·147 + 21; 147 = 7·21 ⇒ 21.</p><p><i>VI: 1071 = 2·462 + 147; 462 = 3·147 + 21; 147 = 7·21 ⇒ 21.</i></p></li><li><p><b>d)</b> 23</p><p>The classic Sun Tzu answer 23.</p><p><i>VI: Đáp án cổ điển của Tôn Tử: 23.</i></p></li><li><p><b>c)</b> 24</p><p>360 = 2³·3²·5 ⇒ 4·3·2 = 24.</p><p><i>VI: 360 = 2³·3²·5 ⇒ 4·3·2 = 24.</i></p></li><li><p><b>b)</b> 144</p><p>1 1 2 3 5 8 13 21 34 55 89 144.</p><p><i>VI: 1 1 2 3 5 8 13 21 34 55 89 144.</i></p></li><li><p><b>b)</b> 120</p><p>C(10, 3) = 120.</p><p><i>VI: C(10, 3) = 120.</i></p></li><li><p><b>c)</b> 5</p><p>Order A, B, C, D, E.</p><p><i>VI: Thứ tự A, B, C, D, E.</i></p></li><li><p><b>b)</b> 224</p><p>Merges 14, 25, 30, 55, 100 sum to 224.</p><p><i>VI: Các lần gộp 14, 25, 30, 55, 100 cộng lại 224.</i></p></li><li><p><b>c)</b> 15</p><p>l = (m − 1)·i + 1 = 15.</p><p><i>VI: l = (m − 1)·i + 1 = 15.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -655,23 +655,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "p → q and q → p"
-              },
-              {
-                "ma": "b",
-                "noiDung": "p → q and ¬q → ¬p"
-              },
-              {
-                "ma": "c",
                 "noiDung": "p ∧ q and p ∨ q"
               },
               {
-                "ma": "d",
+                "ma": "b",
+                "noiDung": "p → q and q → p"
+              },
+              {
+                "ma": "c",
                 "noiDung": "p → q and ¬p → ¬q"
+              },
+              {
+                "ma": "d",
+                "noiDung": "p → q and ¬q → ¬p"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>Contrapositive.</p><p><i>VI: Phản đảo.</i></p>"
           },
@@ -681,7 +681,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "nothing"
+                "noiDung": "¬p"
               },
               {
                 "ma": "b",
@@ -689,7 +689,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "¬p"
+                "noiDung": "nothing"
               },
               {
                 "ma": "d",
@@ -697,7 +697,7 @@
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>Modus tollens.</p><p><i>VI: Modus tollens.</i></p>"
           },
@@ -707,23 +707,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "elements in both A and B"
-              },
-              {
-                "ma": "b",
-                "noiDung": "all elements of A"
-              },
-              {
-                "ma": "c",
                 "noiDung": "elements in exactly one of A, B"
               },
               {
+                "ma": "b",
+                "noiDung": "elements in both A and B"
+              },
+              {
+                "ma": "c",
+                "noiDung": "all elements of A and none of B"
+              },
+              {
                 "ma": "d",
-                "noiDung": "elements of neither set"
+                "noiDung": "elements that are in neither set"
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>Symmetric difference.</p><p><i>VI: Hiệu đối xứng.</i></p>"
           },
@@ -733,23 +733,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "f(g(x))"
+                "noiDung": "g(f(x))"
               },
               {
                 "ma": "b",
-                "noiDung": "f(x)·g(x)"
+                "noiDung": "f(g(x))"
               },
               {
                 "ma": "c",
-                "noiDung": "f(x) + g(x)"
+                "noiDung": "f(x)·g(x)"
               },
               {
                 "ma": "d",
-                "noiDung": "g(f(x))"
+                "noiDung": "f(x) + g(x)"
               }
             ],
             "dapAn": [
-              "d"
+              "a"
             ],
             "giaiThich": "<p>Apply f first.</p><p><i>VI: Áp f trước.</i></p>"
           },
@@ -759,23 +759,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "2ⁿ"
-              },
-              {
-                "ma": "b",
-                "noiDung": "n log n"
-              },
-              {
-                "ma": "c",
                 "noiDung": "n¹⁰"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "1000n"
+              },
+              {
+                "ma": "c",
+                "noiDung": "2ⁿ"
+              },
+              {
+                "ma": "d",
+                "noiDung": "n log n"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>Exponential beats polynomial.</p><p><i>VI: Hàm mũ vượt đa thức.</i></p>"
           },
@@ -785,23 +785,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "a | b"
-              },
-              {
-                "ma": "b",
                 "noiDung": "m | ab"
               },
               {
+                "ma": "b",
+                "noiDung": "a = b"
+              },
+              {
                 "ma": "c",
-                "noiDung": "m | (a − b)"
+                "noiDung": "a | b"
               },
               {
                 "ma": "d",
-                "noiDung": "a = b"
+                "noiDung": "m | (a − b)"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>Definition of congruence.</p><p><i>VI: Định nghĩa đồng dư.</i></p>"
           },
@@ -811,15 +811,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "the proof has no basis case"
+                "noiDung": "only the case n = 1 matters here"
               },
               {
                 "ma": "b",
-                "noiDung": "the claim is false for large n"
+                "noiDung": "the proof has no basis case at all"
               },
               {
                 "ma": "c",
-                "noiDung": "only the case n = 1 matters"
+                "noiDung": "the claim is false for large n"
               },
               {
                 "ma": "d",
@@ -841,15 +841,15 @@
               },
               {
                 "ma": "b",
-                "noiDung": "a box with exactly one object"
+                "noiDung": "no box is empty in the end"
               },
               {
                 "ma": "c",
-                "noiDung": "no box is empty"
+                "noiDung": "a box with exactly one object"
               },
               {
                 "ma": "d",
-                "noiDung": "every box holds the same number"
+                "noiDung": "every box holds the same number of objects"
               }
             ],
             "dapAn": [
@@ -863,23 +863,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "it is bipartite"
-              },
-              {
-                "ma": "b",
                 "noiDung": "it has a cycle"
               },
               {
+                "ma": "b",
+                "noiDung": "every vertex has even degree"
+              },
+              {
                 "ma": "c",
-                "noiDung": "every vertex has odd degree"
+                "noiDung": "it is bipartite"
               },
               {
                 "ma": "d",
-                "noiDung": "every vertex has even degree"
+                "noiDung": "every vertex has odd degree"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>Euler’s theorem.</p><p><i>VI: Định lý Euler.</i></p>"
           },
@@ -889,23 +889,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "adding the cheapest edge that does not create a cycle"
+                "noiDung": "running BFS from one vertex and keeping its tree edges"
               },
               {
                 "ma": "b",
-                "noiDung": "adding the cheapest edge leaving a vertex set"
+                "noiDung": "adding the cheapest edge that does not create a cycle"
               },
               {
                 "ma": "c",
-                "noiDung": "running BFS"
+                "noiDung": "adding the cheapest edge leaving the current vertex set"
               },
               {
                 "ma": "d",
-                "noiDung": "removing the heaviest edge"
+                "noiDung": "removing the heaviest edge of the graph once"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>Sort edges, skip cycle-making ones.</p><p><i>VI: Sắp cạnh, bỏ cạnh tạo chu trình.</i></p>"
           },
@@ -915,11 +915,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "3"
+                "noiDung": "4"
               },
               {
                 "ma": "b",
-                "noiDung": "4"
+                "noiDung": "3"
               },
               {
                 "ma": "c",
@@ -941,15 +941,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "127"
-              },
-              {
-                "ma": "b",
                 "noiDung": "126"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "128"
+              },
+              {
+                "ma": "c",
+                "noiDung": "127"
               },
               {
                 "ma": "d",
@@ -957,7 +957,7 @@
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>2⁷ − 2 = 126.</p><p><i>VI: 2⁷ − 2 = 126.</i></p>"
           },
@@ -967,23 +967,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "21"
+                "noiDung": "3"
               },
               {
                 "ma": "b",
-                "noiDung": "7"
+                "noiDung": "21"
               },
               {
                 "ma": "c",
-                "noiDung": "42"
+                "noiDung": "7"
               },
               {
                 "ma": "d",
-                "noiDung": "3"
+                "noiDung": "42"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>1071 = 2·462 + 147; 462 = 3·147 + 21; 147 = 7·21 ⇒ 21.</p><p><i>VI: 1071 = 2·462 + 147; 462 = 3·147 + 21; 147 = 7·21 ⇒ 21.</i></p>"
           },
@@ -993,11 +993,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "23"
+                "noiDung": "8"
               },
               {
                 "ma": "b",
-                "noiDung": "8"
+                "noiDung": "128"
               },
               {
                 "ma": "c",
@@ -1005,11 +1005,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "128"
+                "noiDung": "23"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>The classic Sun Tzu answer 23.</p><p><i>VI: Đáp án cổ điển của Tôn Tử: 23.</i></p>"
           },
@@ -1019,23 +1019,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "12"
-              },
-              {
-                "ma": "b",
-                "noiDung": "24"
-              },
-              {
-                "ma": "c",
                 "noiDung": "18"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "30"
+              },
+              {
+                "ma": "c",
+                "noiDung": "24"
+              },
+              {
+                "ma": "d",
+                "noiDung": "12"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>360 = 2³·3²·5 ⇒ 4·3·2 = 24.</p><p><i>VI: 360 = 2³·3²·5 ⇒ 4·3·2 = 24.</i></p>"
           },
@@ -1045,11 +1045,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "144"
+                "noiDung": "143"
               },
               {
                 "ma": "b",
-                "noiDung": "89"
+                "noiDung": "144"
               },
               {
                 "ma": "c",
@@ -1057,11 +1057,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "143"
+                "noiDung": "89"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>1 1 2 3 5 8 13 21 34 55 89 144.</p><p><i>VI: 1 1 2 3 5 8 13 21 34 55 89 144.</i></p>"
           },
@@ -1071,23 +1071,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "30"
+                "noiDung": "720"
               },
               {
                 "ma": "b",
-                "noiDung": "1000"
-              },
-              {
-                "ma": "c",
                 "noiDung": "120"
               },
               {
+                "ma": "c",
+                "noiDung": "30"
+              },
+              {
                 "ma": "d",
-                "noiDung": "720"
+                "noiDung": "1000"
               }
             ],
             "dapAn": [
-              "c"
+              "b"
             ],
             "giaiThich": "<p>C(10, 3) = 120.</p><p><i>VI: C(10, 3) = 120.</i></p>"
           },
@@ -1097,11 +1097,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "4"
+                "noiDung": "6"
               },
               {
                 "ma": "b",
-                "noiDung": "3"
+                "noiDung": "4"
               },
               {
                 "ma": "c",
@@ -1109,7 +1109,7 @@
               },
               {
                 "ma": "d",
-                "noiDung": "6"
+                "noiDung": "3"
               }
             ],
             "dapAn": [
@@ -1123,23 +1123,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "224"
+                "noiDung": "222"
               },
               {
                 "ma": "b",
-                "noiDung": "300"
+                "noiDung": "224"
               },
               {
                 "ma": "c",
-                "noiDung": "230"
+                "noiDung": "300"
               },
               {
                 "ma": "d",
-                "noiDung": "222"
+                "noiDung": "230"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>Merges 14, 25, 30, 55, 100 sum to 224.</p><p><i>VI: Các lần gộp 14, 25, 30, 55, 100 cộng lại 224.</i></p>"
           },
@@ -1149,23 +1149,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "22"
-              },
-              {
-                "ma": "b",
                 "noiDung": "8"
               },
               {
+                "ma": "b",
+                "noiDung": "22"
+              },
+              {
                 "ma": "c",
-                "noiDung": "21"
+                "noiDung": "15"
               },
               {
                 "ma": "d",
-                "noiDung": "15"
+                "noiDung": "21"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>l = (m − 1)·i + 1 = 15.</p><p><i>VI: l = (m − 1)·i + 1 = 15.</i></p>"
           }

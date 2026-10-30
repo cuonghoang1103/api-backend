@@ -47,10 +47,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Number theory 1 — Divisibility and modular vocabulary — answer key\n\n1. a | b means …a | b nghĩa là …\n   Answer: c) b = a·k for some integer k\n   a divides b when b is an integer multiple of a (a ≠ 0).VI: a chia hết b khi b là bội nguyên của a (a ≠ 0).\n\n2. a ≡ b (mod m) means …a ≡ b (mod m) nghĩa là …\n   Answer: d) m divides a − b\n   Equivalent: a and b leave the same remainder when divided by m.VI: Tương đương: a và b có cùng số dư khi chia cho m.\n\n3. −7 mod 3 equals …−7 mod 3 bằng …\n   Answer: b) 2\n   −7 = 3·(−3) + 2, and a remainder is never negative.VI: −7 = 3·(−3) + 2, số dư không bao giờ âm.\n\n4. Integers a and b are relatively prime when …Hai số nguyên a, b nguyên tố cùng nhau khi …\n   Answer: b) gcd(a, b) = 1\n   They share no prime factor — even if neither number is prime (e.g. 8 and 15).VI: Chúng không có thừa số nguyên tố chung — dù cả hai không nguyên tố (vd 8 và 15).\n\n5. For positive a, b: gcd(a, b)·lcm(a, b) equals …Với a, b dương: gcd(a, b)·lcm(a, b) bằng …\n   Answer: d) a·b\n   This identity gives lcm quickly once gcd is known.VI: Đẳng thức này cho BCNN nhanh khi đã biết ƯCLN.\n\n6. The Fundamental Theorem of Arithmetic says every integer n > 1 …Định lý cơ bản của số học nói mọi số nguyên n > 1 …\n   Answer: b) is a product of primes, uniquely up to order\n   Existence and uniqueness of prime factorization.VI: Tồn tại và duy nhất phân tích thừa số nguyên tố.\n"
+          "code": "# Number theory 1 — Divisibility and modular vocabulary — answer key\n\n1. a | b means …a | b nghĩa là …\n   Answer: c) b = a·k for some integer k\n   a divides b when b is an integer multiple of a (a ≠ 0).VI: a chia hết b khi b là bội nguyên của a (a ≠ 0).\n\n2. a ≡ b (mod m) means …a ≡ b (mod m) nghĩa là …\n   Answer: d) m divides a − b\n   Equivalent: a and b leave the same remainder when divided by m.VI: Tương đương: a và b có cùng số dư khi chia cho m.\n\n3. −7 mod 3 equals …−7 mod 3 bằng …\n   Answer: b) 2\n   −7 = 3·(−3) + 2, and a remainder is never negative.VI: −7 = 3·(−3) + 2, số dư không bao giờ âm.\n\n4. Integers a and b are relatively prime when …Hai số nguyên a, b nguyên tố cùng nhau khi …\n   Answer: b) gcd(a, b) = 1\n   They share no prime factor — even if neither number is prime (e.g. 8 and 15).VI: Chúng không có thừa số nguyên tố chung — dù cả hai không nguyên tố (vd 8 và 15).\n\n5. For positive a, b: gcd(a, b)·lcm(a, b) equals …Với a, b dương: gcd(a, b)·lcm(a, b) bằng …\n   Answer: d) a·b\n   This identity gives lcm quickly once gcd is known.VI: Đẳng thức này cho BCNN nhanh khi đã biết ƯCLN.\n\n6. The Fundamental Theorem of Arithmetic says every integer n > 1 …Định lý cơ bản của số học nói mọi số nguyên n > 1 …\n   Answer: a) is a product of primes, uniquely up to order\n   Existence and uniqueness of prime factorization.VI: Tồn tại và duy nhất phân tích thừa số nguyên tố.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> b = a·k for some integer k</p><p>a divides b when b is an integer multiple of a (a ≠ 0).</p><p><i>VI: a chia hết b khi b là bội nguyên của a (a ≠ 0).</i></p></li><li><p><b>d)</b> m divides a − b</p><p>Equivalent: a and b leave the same remainder when divided by m.</p><p><i>VI: Tương đương: a và b có cùng số dư khi chia cho m.</i></p></li><li><p><b>b)</b> 2</p><p>−7 = 3·(−3) + 2, and a remainder is never negative.</p><p><i>VI: −7 = 3·(−3) + 2, số dư không bao giờ âm.</i></p></li><li><p><b>b)</b> gcd(a, b) = 1</p><p>They share no prime factor — even if neither number is prime (e.g. 8 and 15).</p><p><i>VI: Chúng không có thừa số nguyên tố chung — dù cả hai không nguyên tố (vd 8 và 15).</i></p></li><li><p><b>d)</b> a·b</p><p>This identity gives lcm quickly once gcd is known.</p><p><i>VI: Đẳng thức này cho BCNN nhanh khi đã biết ƯCLN.</i></p></li><li><p><b>b)</b> is a product of primes, uniquely up to order</p><p>Existence and uniqueness of prime factorization.</p><p><i>VI: Tồn tại và duy nhất phân tích thừa số nguyên tố.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> b = a·k for some integer k</p><p>a divides b when b is an integer multiple of a (a ≠ 0).</p><p><i>VI: a chia hết b khi b là bội nguyên của a (a ≠ 0).</i></p></li><li><p><b>d)</b> m divides a − b</p><p>Equivalent: a and b leave the same remainder when divided by m.</p><p><i>VI: Tương đương: a và b có cùng số dư khi chia cho m.</i></p></li><li><p><b>b)</b> 2</p><p>−7 = 3·(−3) + 2, and a remainder is never negative.</p><p><i>VI: −7 = 3·(−3) + 2, số dư không bao giờ âm.</i></p></li><li><p><b>b)</b> gcd(a, b) = 1</p><p>They share no prime factor — even if neither number is prime (e.g. 8 and 15).</p><p><i>VI: Chúng không có thừa số nguyên tố chung — dù cả hai không nguyên tố (vd 8 và 15).</i></p></li><li><p><b>d)</b> a·b</p><p>This identity gives lcm quickly once gcd is known.</p><p><i>VI: Đẳng thức này cho BCNN nhanh khi đã biết ƯCLN.</i></p></li><li><p><b>a)</b> is a product of primes, uniquely up to order</p><p>Existence and uniqueness of prime factorization.</p><p><i>VI: Tồn tại và duy nhất phân tích thừa số nguyên tố.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -193,23 +193,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "has exactly two divisors"
-              },
-              {
-                "ma": "b",
                 "noiDung": "is a product of primes, uniquely up to order"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "can be written as a sum of two primes"
               },
               {
+                "ma": "c",
+                "noiDung": "is prime or a power of a prime"
+              },
+              {
                 "ma": "d",
-                "noiDung": "is prime"
+                "noiDung": "has exactly two divisors"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>Existence and uniqueness of prime factorization.</p><p><i>VI: Tồn tại và duy nhất phân tích thừa số nguyên tố.</i></p>"
           }

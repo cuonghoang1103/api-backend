@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Counting 1 — Rules and vocabulary — answer key\n\n1. A task has two independent stages with 4 and 6 ways. The total number of ways is …Một công việc có hai giai đoạn độc lập với 4 và 6 cách. Tổng số cách là …\n   Answer: d) 24 (product rule)\n   Independent stages multiply: 4·6.VI: Các giai đoạn độc lập thì nhân: 4·6.\n\n2. Choose a representative from 12 men OR 15 women (no overlap): number of ways is …Chọn một đại diện từ 12 nam HOẶC 15 nữ (không trùng): số cách là …\n   Answer: d) 27 (sum rule)\n   Alternatives that cannot happen together add.VI: Các phương án không đồng thời thì cộng.\n\n3. Order matters and there is no repetition: use …Thứ tự quan trọng và không lặp: dùng …\n   Answer: b) permutations P(n, r)\n   P(n, r) = n!/(n − r)!.VI: P(n, r) = n!/(n − r)!.\n\n4. Order does not matter, no repetition: use …Thứ tự không quan trọng, không lặp: dùng …\n   Answer: b) C(n, r)\n   C(n, r) = P(n, r)/r!: divide out the orderings.VI: C(n, r) = P(n, r)/r!: chia bỏ các thứ tự.\n\n5. C(n, r) equals …C(n, r) bằng …\n   Answer: b) C(n, n − r)\n   Choosing r objects to take is the same as choosing n − r to leave.VI: Chọn r vật để lấy cũng như chọn n − r vật để bỏ.\n\n6. The pigeonhole principle says: if k + 1 objects go into k boxes, then …Nguyên lý chuồng bồ câu: nếu k + 1 vật vào k hộp thì …\n   Answer: a) some box has at least 2 objects\n   It guarantees a collision but does not say which box.VI: Nó đảm bảo có đụng độ nhưng không nói hộp nào.\n"
+          "code": "# Counting 1 — Rules and vocabulary — answer key\n\n1. A task has two independent stages with 4 and 6 ways. The total number of ways is …Một công việc có hai giai đoạn độc lập với 4 và 6 cách. Tổng số cách là …\n   Answer: d) 24\n   Product rule: independent stages multiply, 4·6 = 24.VI: Quy tắc nhân: các giai đoạn độc lập thì nhân, 4·6 = 24.\n\n2. Choose a representative from 12 men OR 15 women (no overlap): number of ways is …Chọn một đại diện từ 12 nam HOẶC 15 nữ (không trùng): số cách là …\n   Answer: d) 27\n   Sum rule: alternatives that cannot happen together add, 12 + 15 = 27.VI: Quy tắc cộng: các phương án không đồng thời thì cộng, 12 + 15 = 27.\n\n3. Order matters and there is no repetition: use …Thứ tự quan trọng và không lặp: dùng …\n   Answer: b) permutations P(n, r)\n   P(n, r) = n!/(n − r)!.VI: P(n, r) = n!/(n − r)!.\n\n4. Order does not matter, no repetition: use …Thứ tự không quan trọng, không lặp: dùng …\n   Answer: b) C(n, r)\n   C(n, r) = P(n, r)/r!: divide out the orderings.VI: C(n, r) = P(n, r)/r!: chia bỏ các thứ tự.\n\n5. C(n, r) equals …C(n, r) bằng …\n   Answer: b) C(n, n − r)\n   Choosing r objects to take is the same as choosing n − r to leave.VI: Chọn r vật để lấy cũng như chọn n − r vật để bỏ.\n\n6. The pigeonhole principle says: if k + 1 objects go into k boxes, then …Nguyên lý chuồng bồ câu: nếu k + 1 vật vào k hộp thì …\n   Answer: a) some box has at least 2 objects\n   It guarantees a collision but does not say which box.VI: Nó đảm bảo có đụng độ nhưng không nói hộp nào.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> 24 (product rule)</p><p>Independent stages multiply: 4·6.</p><p><i>VI: Các giai đoạn độc lập thì nhân: 4·6.</i></p></li><li><p><b>d)</b> 27 (sum rule)</p><p>Alternatives that cannot happen together add.</p><p><i>VI: Các phương án không đồng thời thì cộng.</i></p></li><li><p><b>b)</b> permutations P(n, r)</p><p>P(n, r) = n!/(n − r)!.</p><p><i>VI: P(n, r) = n!/(n − r)!.</i></p></li><li><p><b>b)</b> C(n, r)</p><p>C(n, r) = P(n, r)/r!: divide out the orderings.</p><p><i>VI: C(n, r) = P(n, r)/r!: chia bỏ các thứ tự.</i></p></li><li><p><b>b)</b> C(n, n − r)</p><p>Choosing r objects to take is the same as choosing n − r to leave.</p><p><i>VI: Chọn r vật để lấy cũng như chọn n − r vật để bỏ.</i></p></li><li><p><b>a)</b> some box has at least 2 objects</p><p>It guarantees a collision but does not say which box.</p><p><i>VI: Nó đảm bảo có đụng độ nhưng không nói hộp nào.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> 24</p><p>Product rule: independent stages multiply, 4·6 = 24.</p><p><i>VI: Quy tắc nhân: các giai đoạn độc lập thì nhân, 4·6 = 24.</i></p></li><li><p><b>d)</b> 27</p><p>Sum rule: alternatives that cannot happen together add, 12 + 15 = 27.</p><p><i>VI: Quy tắc cộng: các phương án không đồng thời thì cộng, 12 + 15 = 27.</i></p></li><li><p><b>b)</b> permutations P(n, r)</p><p>P(n, r) = n!/(n − r)!.</p><p><i>VI: P(n, r) = n!/(n − r)!.</i></p></li><li><p><b>b)</b> C(n, r)</p><p>C(n, r) = P(n, r)/r!: divide out the orderings.</p><p><i>VI: C(n, r) = P(n, r)/r!: chia bỏ các thứ tự.</i></p></li><li><p><b>b)</b> C(n, n − r)</p><p>Choosing r objects to take is the same as choosing n − r to leave.</p><p><i>VI: Chọn r vật để lấy cũng như chọn n − r vật để bỏ.</i></p></li><li><p><b>a)</b> some box has at least 2 objects</p><p>It guarantees a collision but does not say which box.</p><p><i>VI: Nó đảm bảo có đụng độ nhưng không nói hộp nào.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -62,11 +62,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "2⁴"
+                "noiDung": "10"
               },
               {
                 "ma": "b",
-                "noiDung": "10 (sum rule)"
+                "noiDung": "2⁴"
               },
               {
                 "ma": "c",
@@ -74,13 +74,13 @@
               },
               {
                 "ma": "d",
-                "noiDung": "24 (product rule)"
+                "noiDung": "24"
               }
             ],
             "dapAn": [
               "d"
             ],
-            "giaiThich": "<p>Independent stages multiply: 4·6.</p><p><i>VI: Các giai đoạn độc lập thì nhân: 4·6.</i></p>"
+            "giaiThich": "<p>Product rule: independent stages multiply, 4·6 = 24.</p><p><i>VI: Quy tắc nhân: các giai đoạn độc lập thì nhân, 4·6 = 24.</i></p>"
           },
           {
             "ma": "c2",
@@ -88,11 +88,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "12¹⁵"
+                "noiDung": "180"
               },
               {
                 "ma": "b",
-                "noiDung": "180"
+                "noiDung": "12¹⁵"
               },
               {
                 "ma": "c",
@@ -100,13 +100,13 @@
               },
               {
                 "ma": "d",
-                "noiDung": "27 (sum rule)"
+                "noiDung": "27"
               }
             ],
             "dapAn": [
               "d"
             ],
-            "giaiThich": "<p>Alternatives that cannot happen together add.</p><p><i>VI: Các phương án không đồng thời thì cộng.</i></p>"
+            "giaiThich": "<p>Sum rule: alternatives that cannot happen together add, 12 + 15 = 27.</p><p><i>VI: Quy tắc cộng: các phương án không đồng thời thì cộng, 12 + 15 = 27.</i></p>"
           },
           {
             "ma": "c3",
@@ -196,15 +196,15 @@
               },
               {
                 "ma": "b",
-                "noiDung": "every box has exactly one"
-              },
-              {
-                "ma": "c",
                 "noiDung": "some box is empty"
               },
               {
+                "ma": "c",
+                "noiDung": "every box has exactly one"
+              },
+              {
                 "ma": "d",
-                "noiDung": "no box has 2"
+                "noiDung": "no box has 2 objects or more"
               }
             ],
             "dapAn": [

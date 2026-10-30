@@ -48,10 +48,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Big-O 1 — Definitions: O, Ω, Θ — answer key\n\n1. f(n) is O(g(n)) means …f(n) là O(g(n)) nghĩa là …\n   Answer: a) f(n) ≤ C·g(n) for all n > k, for some constants C and k\n   Big-O is an upper bound that holds from some point on, up to a constant factor.VI: Big-O là chặn trên đúng từ một điểm trở đi, sai khác một hệ số hằng.\n\n2. Which is the tightest simple bound on 4n³ + 100n² + 7?Chặn đơn giản chặt nhất cho 4n³ + 100n² + 7 là?\n   Answer: d) O(n³)\n   Drop lower-order terms and the constant factor: n³ dominates.VI: Bỏ các số hạng bậc thấp và hệ số hằng: n³ trội hơn.\n\n3. f(n) is Θ(g(n)) when …f(n) là Θ(g(n)) khi …\n   Answer: d) f is both O(g) and Ω(g)\n   Θ is a tight bound: both upper and lower.VI: Θ là chặn chặt: vừa chặn trên vừa chặn dưới.\n\n4. Which of the following grows fastest?Hàm nào tăng nhanh nhất?\n   Answer: b) n!\n   Factorial beats exponential, which beats every polynomial.VI: Giai thừa vượt luỹ thừa, luỹ thừa vượt mọi đa thức.\n\n5. An algorithm that runs in 5n² + 3n steps is …Thuật toán chạy 5n² + 3n bước là …\n   Answer: c) O(n²) and also O(n³)\n   Big-O is an upper bound: any larger class is also a valid, though loose, bound.VI: Big-O là chặn trên: lớp lớn hơn cũng là chặn hợp lệ nhưng lỏng.\n\n6. log₂ n and log₁₀ n differ by …log₂ n và log₁₀ n khác nhau bởi …\n   Answer: b) a constant factor, so they are the same Big-O class\n   log_a n = log_b n / log_b a — only a constant.VI: log_a n = log_b n / log_b a — chỉ khác một hằng.\n"
+          "code": "# Big-O 1 — Definitions: O, Ω, Θ — answer key\n\n1. f(n) is O(g(n)) means …f(n) là O(g(n)) nghĩa là …\n   Answer: b) f(n) ≤ C·g(n) for all n > k, for some constants C and k\n   Big-O is an upper bound that holds from some point on, up to a constant factor.VI: Big-O là chặn trên đúng từ một điểm trở đi, sai khác một hệ số hằng.\n\n2. Which is the tightest simple bound on 4n³ + 100n² + 7?Chặn đơn giản chặt nhất cho 4n³ + 100n² + 7 là?\n   Answer: d) O(n³)\n   Drop lower-order terms and the constant factor: n³ dominates.VI: Bỏ các số hạng bậc thấp và hệ số hằng: n³ trội hơn.\n\n3. f(n) is Θ(g(n)) when …f(n) là Θ(g(n)) khi …\n   Answer: d) f is both O(g) and Ω(g)\n   Θ is a tight bound: both upper and lower.VI: Θ là chặn chặt: vừa chặn trên vừa chặn dưới.\n\n4. Which of the following grows fastest?Hàm nào tăng nhanh nhất?\n   Answer: b) n!\n   Factorial beats exponential, which beats every polynomial.VI: Giai thừa vượt luỹ thừa, luỹ thừa vượt mọi đa thức.\n\n5. An algorithm that runs in 5n² + 3n steps is …Thuật toán chạy 5n² + 3n bước là …\n   Answer: c) O(n²) and also O(n³)\n   Big-O is an upper bound: any larger class is also a valid, though loose, bound.VI: Big-O là chặn trên: lớp lớn hơn cũng là chặn hợp lệ nhưng lỏng.\n\n6. log₂ n and log₁₀ n differ by …log₂ n và log₁₀ n khác nhau bởi …\n   Answer: b) a constant factor, so they are the same Big-O class\n   log_a n = log_b n / log_b a — only a constant.VI: log_a n = log_b n / log_b a — chỉ khác một hằng.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> f(n) ≤ C·g(n) for all n > k, for some constants C and k</p><p>Big-O is an upper bound that holds from some point on, up to a constant factor.</p><p><i>VI: Big-O là chặn trên đúng từ một điểm trở đi, sai khác một hệ số hằng.</i></p></li><li><p><b>d)</b> O(n³)</p><p>Drop lower-order terms and the constant factor: n³ dominates.</p><p><i>VI: Bỏ các số hạng bậc thấp và hệ số hằng: n³ trội hơn.</i></p></li><li><p><b>d)</b> f is both O(g) and Ω(g)</p><p>Θ is a tight bound: both upper and lower.</p><p><i>VI: Θ là chặn chặt: vừa chặn trên vừa chặn dưới.</i></p></li><li><p><b>b)</b> n!</p><p>Factorial beats exponential, which beats every polynomial.</p><p><i>VI: Giai thừa vượt luỹ thừa, luỹ thừa vượt mọi đa thức.</i></p></li><li><p><b>c)</b> O(n²) and also O(n³)</p><p>Big-O is an upper bound: any larger class is also a valid, though loose, bound.</p><p><i>VI: Big-O là chặn trên: lớp lớn hơn cũng là chặn hợp lệ nhưng lỏng.</i></p></li><li><p><b>b)</b> a constant factor, so they are the same Big-O class</p><p>log_a n = log_b n / log_b a — only a constant.</p><p><i>VI: log_a n = log_b n / log_b a — chỉ khác một hằng.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> f(n) ≤ C·g(n) for all n > k, for some constants C and k</p><p>Big-O is an upper bound that holds from some point on, up to a constant factor.</p><p><i>VI: Big-O là chặn trên đúng từ một điểm trở đi, sai khác một hệ số hằng.</i></p></li><li><p><b>d)</b> O(n³)</p><p>Drop lower-order terms and the constant factor: n³ dominates.</p><p><i>VI: Bỏ các số hạng bậc thấp và hệ số hằng: n³ trội hơn.</i></p></li><li><p><b>d)</b> f is both O(g) and Ω(g)</p><p>Θ is a tight bound: both upper and lower.</p><p><i>VI: Θ là chặn chặt: vừa chặn trên vừa chặn dưới.</i></p></li><li><p><b>b)</b> n!</p><p>Factorial beats exponential, which beats every polynomial.</p><p><i>VI: Giai thừa vượt luỹ thừa, luỹ thừa vượt mọi đa thức.</i></p></li><li><p><b>c)</b> O(n²) and also O(n³)</p><p>Big-O is an upper bound: any larger class is also a valid, though loose, bound.</p><p><i>VI: Big-O là chặn trên: lớp lớn hơn cũng là chặn hợp lệ nhưng lỏng.</i></p></li><li><p><b>b)</b> a constant factor, so they are the same Big-O class</p><p>log_a n = log_b n / log_b a — only a constant.</p><p><i>VI: log_a n = log_b n / log_b a — chỉ khác một hằng.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -64,23 +64,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "f(n) ≤ C·g(n) for all n > k, for some constants C and k"
+                "noiDung": "f(n) = g(n) for all n > k, for some constant k"
               },
               {
                 "ma": "b",
-                "noiDung": "f(n) = g(n) for all n"
+                "noiDung": "f(n) ≤ C·g(n) for all n > k, for some constants C and k"
               },
               {
                 "ma": "c",
-                "noiDung": "f and g have the same derivative"
+                "noiDung": "f and g have the same derivative for all n > k"
               },
               {
                 "ma": "d",
-                "noiDung": "f(n) ≥ C·g(n) for large n"
+                "noiDung": "f(n) ≥ C·g(n) for all n > k, for some constants C and k"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>Big-O is an upper bound that holds from some point on, up to a constant factor.</p><p><i>VI: Big-O là chặn trên đúng từ một điểm trở đi, sai khác một hệ số hằng.</i></p>"
           },

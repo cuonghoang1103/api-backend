@@ -1,0 +1,181 @@
+{
+  "groupSlug": "fptu",
+  "slug": "nwc204-practice",
+  "name": "NWC204 — Luyện tập",
+  "language": "javascript",
+  "color": "#0891b2",
+  "docsUrl": "https://www.netacad.com/courses/networking",
+  "status": "PUBLISHED",
+  "level": "BEGINNER",
+  "description": "Bộ luyện môn NWC204 (Mạng máy tính, theo giáo trình Cisco CCNA ITN) bám dạng đề FE của trường — mỗi bài học một bộ đề từ dễ đến khó, con số trong đề do bộ mô phỏng tính bằng mã (nhị phân và AND, chia subnet và VLSM, CIDR và wildcard, IPv6, bảng định tuyến khớp tiền tố dài nhất, bảng MAC và VLAN, ARP, phân mảnh IP, CRC, bắt tay TCP và cửa sổ trượt, ACL, NAT/PAT, thời gian truyền); bài khó là viết hàm mô phỏng chạy thật trong trình duyệt; ba Lab (hoạch định địa chỉ, mô phỏng router, router biên ACL + PAT) và hai đề FE thi thử cuối môn.",
+  "modules": [
+    {
+      "slug": "nwc204-3-1-protocols-and-models",
+      "name": "3.1 Protocols and the OSI / TCP-IP models",
+      "level": "BEGINNER",
+      "description": "Luyện: Models 1 — What does each layer do? · Models 2 — Protocol, layer, PDU and address · Models 3 — Order the encapsulation at the sender · Models 4 — Header overhead and efficiency · Models 5 — Which layer is the fault?"
+    },
+    {
+      "slug": "nwc204-3-2-encapsulation-segmentation",
+      "name": "3.2 Encapsulation and segmentation",
+      "level": "BEGINNER",
+      "description": "Luyện: Encapsulation 1 — What changes hop by hop? · Encapsulation 2 — Segmentation and bytes on the wire · Encapsulation 3 — Write wireBytes(msgBytes, mss) · Encapsulation 4 — Read the capture"
+    },
+    {
+      "slug": "nwc204-4-1-physical-delay",
+      "name": "4.1 Physical layer: bandwidth and delay",
+      "level": "BEGINNER",
+      "description": "Luyện: Physical 1 — Bandwidth, throughput, latency, goodput · Physical 2 — Transmission time of a file · Physical 3 — Transmission plus propagation delay · Physical 4 — Quick numeric checks · Physical 5 — Write transferTime(bytes, bps, km) · Physical 6 — Store-and-forward over several links"
+    },
+    {
+      "slug": "nwc204-4-4-binary-hex",
+      "name": "4.4 Binary, hexadecimal and dotted decimal",
+      "level": "BEGINNER",
+      "description": "Luyện: Binary 1 — Decimal to 8-bit binary · Binary 2 — Binary to decimal and hexadecimal · Binary 3 — Why hex? Powers of two and ranges · Binary 4 — Dotted decimal to binary · Binary 5 — Write ipToBinary(ip) · Binary 6 — Write hexToIp(hex)"
+    },
+    {
+      "slug": "nwc204-4-5-and-masks",
+      "name": "4.5 Bitwise AND and subnet masks",
+      "level": "BEGINNER",
+      "description": "Luyện: AND 1 — Find the network address · AND 2 — Prefix, mask and wildcard · AND 3 — Same network or not? · AND 4 — Write sameSubnet(a, b, mask) · AND 5 — Write maskToPrefix(mask), reject invalid masks"
+    },
+    {
+      "slug": "nwc204-5-1-error-detection",
+      "name": "5.1 Framing and error detection",
+      "level": "BEGINNER",
+      "description": "Luyện: Link 1 — Framing and error detection concepts · Link 2 — Even parity bit · Link 3 — CRC remainder by hand · Link 4 — What can each check catch? · Link 5 — Write crcRemainder(data, poly) · Link 6 — Write verifyFrame(frame, poly) · Link 7 — The Internet checksum (one’s complement)"
+    },
+    {
+      "slug": "nwc204-5-2-media-access",
+      "name": "5.2 Topologies and media access control",
+      "level": "BEGINNER",
+      "description": "Luyện: Access 1 — Topologies and duplex · Access 2 — Which access method? · Access 3 — Order the CSMA/CD procedure · Access 4 — Count the domains"
+    },
+    {
+      "slug": "nwc204-6-1-ethernet-mac",
+      "name": "6.1 The Ethernet frame and the MAC address",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Ethernet 1 — Frame fields and sizes · Ethernet 2 — Classify the MAC address · Ethernet 3 — Padding and frame size · Ethernet 4 — Frame numbers · Ethernet 5 — Write ethernetFrame(payload) and classifyMac(mac) · Ethernet 6 — Write classifyMac(mac)"
+    },
+    {
+      "slug": "nwc204-6-2-mac-table",
+      "name": "6.2 The MAC address table and forwarding",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Switch 1 — Learn, flood, filter, forward · Switch 2 — What does the switch do with each frame? · Switch 3 — The MAC table after the traffic · Switch 4 — Switching methods and symptoms · Switch 5 — Write macSwitch(frames) · Switch 6 — Aging out entries"
+    },
+    {
+      "slug": "nwc204-6-3-vlan",
+      "name": "6.3 VLANs and trunking",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: VLAN 1 — Concepts · VLAN 2 — Where does the frame go? · VLAN 3 — Which port mode? · VLAN 4 — Order the trip across a trunk · VLAN 5 — Write vlanSwitch(ports, frames) · VLAN 6 — Troubleshoot"
+    },
+    {
+      "slug": "nwc204-7-1-ipv4-packet",
+      "name": "7.1 The IPv4 packet and fragmentation",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: IPv4 1 — Header fields · IPv4 2 — Fragmentation by hand · IPv4 3 — TTL and fragments in practice · IPv4 4 — Write fragment(totalLen, mtu)"
+    },
+    {
+      "slug": "nwc204-7-2-routing-table",
+      "name": "7.2 Routing tables and longest prefix match",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Routing 1 — Reading a routing table · Routing 2 — Longest prefix match · Routing 3 — The host’s own decision · Routing 4 — Write nextHop(routes, dst) · Routing 5 — Choosing between routes: prefix, then AD, then metric · Routing 6 — Router decisions in numbers"
+    },
+    {
+      "slug": "nwc204-7-lab-router-simulator",
+      "name": "Lab 7 — Router forwarding simulator",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Lab 7 — A multi-router forwarding simulator"
+    },
+    {
+      "slug": "nwc204-8-1-arp-and-addresses",
+      "name": "8.1 MAC, IP and ARP",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: ARP 1 — Why two addresses and what ARP does · ARP 2 — Order the steps for a remote destination · ARP 3 — Headers on every link · ARP 4 — Write hopHeaders(src, routers, dst) · ARP 5 — Read the ARP table and symptoms"
+    },
+    {
+      "slug": "nwc204-10-1-ipv4-addressing",
+      "name": "10.1 IPv4 address structure and types",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Addressing 1 — Structure and special addresses · Addressing 2 — Classify the address · Addressing 3 — Network, broadcast and host range · Addressing 4 — How big a prefix do I need? · Addressing 5 — Write ipInfo(ip, prefix)"
+    },
+    {
+      "slug": "nwc204-10-2-subnetting",
+      "name": "10.2 Subnetting",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Subnetting 1 — Borrow bits · Subnetting 2 — List the subnets of 192.168.1.0/24 split into /27 · Subnetting 3 — The subnet a host belongs to · Subnetting 4 — Quick checks · Subnetting 5 — Write subnetList(net, prefix, newPrefix) · Subnetting 6 — Which subnet number is this host in?"
+    },
+    {
+      "slug": "nwc204-10-3-vlsm",
+      "name": "10.3 VLSM",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: VLSM 1 — Why and how · VLSM 2 — Plan 192.168.10.0/24 · VLSM 3 — Plan 172.16.8.0/22 and check the leftover · VLSM 4 — Does the plan fit in a /24? · VLSM 5 — Write vlsm(base, prefix, needs) · VLSM 6 — Detect overlapping subnets"
+    },
+    {
+      "slug": "nwc204-10-4-cidr-summary-wildcard",
+      "name": "10.4 CIDR, summarisation and wildcard masks",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: CIDR 1 — Summarise the routes · CIDR 2 — Exact summary or over-broad? · CIDR 3 — Wildcard masks for ACLs and OSPF · CIDR 4 — Aggregation reasoning · CIDR 5 — Write summarize(nets)"
+    },
+    {
+      "slug": "nwc204-10-lab-address-planner",
+      "name": "Lab 10 — Address planner",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Lab 10 — Address planner for a small company"
+    },
+    {
+      "slug": "nwc204-11-1-ipv6-notation",
+      "name": "11.1 IPv6 notation and address types",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: IPv6 1 — Address types and prefixes · IPv6 2 — Compress the address · IPv6 3 — Expand the address · IPv6 4 — Name the address type · IPv6 5 — Write ipv6Compress(addr) · IPv6 6 — Write ipv6Expand(addr)"
+    },
+    {
+      "slug": "nwc204-11-2-ipv6-subnet-eui64",
+      "name": "11.2 IPv6 subnetting and EUI-64",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: IPv6 subnet 1 — Plan with /48 and /64 · IPv6 subnet 2 — EUI-64 interface IDs · IPv6 subnet 3 — Write eui64(mac) and ipv6Subnet64(prefix48, n)"
+    },
+    {
+      "slug": "nwc204-12-1-icmp-ping-traceroute",
+      "name": "12.1 ICMP, ping and traceroute",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: ICMP 1 — Messages and what they mean · ICMP 2 — Read a traceroute · ICMP 3 — Write traceroute(path, silent, maxTtl)"
+    },
+    {
+      "slug": "nwc204-13-1-tcp-transport",
+      "name": "13.1 Transport: ports, TCP handshake, windows",
+      "level": "ADVANCED",
+      "description": "Luyện: Transport 1 — Ports, TCP and UDP · Transport 2 — Sequence and acknowledgment numbers · Transport 3 — Order the three-way handshake and the close · Transport 4 — Write tcpTrace(isnC, isnS, sizes) · Transport 5 — Go-Back-N versus Selective Repeat · Transport 6 — Write windowSim(total, w, lost, mode) · Transport 7 — Slow start and congestion avoidance"
+    },
+    {
+      "slug": "nwc204-14-1-application-protocols",
+      "name": "14.1 DNS, HTTP and DHCP",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Apps 1 — DNS, HTTP, DHCP concepts · Apps 2 — Order DNS and DHCP exchanges · Apps 3 — Protocol, port and transport"
+    },
+    {
+      "slug": "nwc204-15-1-acl",
+      "name": "15.1 Access control lists",
+      "level": "ADVANCED",
+      "description": "Luyện: ACL 1 — How an ACL works · ACL 2 — Permit or deny? · ACL 3 — A longer extended ACL · ACL 4 — Write aclRun(lines, packets) · ACL 5 — Write the right line"
+    },
+    {
+      "slug": "nwc204-15-2-nat",
+      "name": "15.2 NAT and PAT",
+      "level": "ADVANCED",
+      "description": "Luyện: NAT 1 — Terms and types · NAT 2 — Build the PAT table · NAT 3 — Write patSim(pubIp, startPort, conns) · NAT 4 — Dynamic NAT with a limited pool"
+    },
+    {
+      "slug": "nwc204-15-lab-edge-router",
+      "name": "Lab 15 — Edge router: ACL + PAT",
+      "level": "ADVANCED",
+      "description": "Luyện: Lab 15 — The edge router: outbound ACL then PAT"
+    },
+    {
+      "slug": "nwc204-20-fe-mock",
+      "name": "FE mock — two 20-question mock exams",
+      "level": "ADVANCED",
+      "description": "Luyện: FE mock A — 20 questions (concepts and calculations) · FE mock B — 20 questions (concepts and calculations)"
+    }
+  ]
+}

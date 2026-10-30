@@ -1,0 +1,706 @@
+{
+  "trackSlug": "nwc204-practice",
+  "moduleSlug": "nwc204-3-2-encapsulation-segmentation",
+  "lesson": {
+    "course": "nwc204-computer-networking",
+    "slug": "nwc204-3-2-mo-hinh-tham-chieu-va-dong-goi"
+  },
+  "exercises": [
+    {
+      "title": "Encapsulation 1 — What changes hop by hop?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "hop-by-hop"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>A packet travels PC → R1 → R2 → server. Decide what stays the same end to end and what is rewritten at each router.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Gói đi PC → R1 → R2 → server. Xác định cái gì giữ nguyên từ đầu tới cuối và cái gì bị viết lại ở mỗi router.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask “is this address valid on one link or across the whole path?”",
+        "Routers work at layer 3, switches at layer 2."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Encapsulation 1 — What changes hop by hop?\n\nAnswer in the answer panel (no code needed).\n\n1. Which address stays the same from PC to server (no NAT)?Địa chỉ nào giữ nguyên từ PC tới server (không NAT)?\n2. At every router the Ethernet header is …Ở mỗi router, header Ethernet được …\n3. The IPv4 TTL field is …Trường TTL của IPv4 được …\n4. A switch forwards a frame without changing …Switch chuyển frame mà không thay đổi …\n5. The TCP segment is read and rebuilt only by …Segment TCP chỉ được đọc và dựng lại bởi …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Encapsulation 1 — What changes hop by hop? — answer key\n\n1. Which address stays the same from PC to server (no NAT)?Địa chỉ nào giữ nguyên từ PC tới server (không NAT)?\n   Answer: b) Source and destination IP\n   IP addresses are end-to-end; MAC addresses are valid on one link only.VI: IP là đầu-cuối; MAC chỉ có giá trị trên một liên kết.\n\n2. At every router the Ethernet header is …Ở mỗi router, header Ethernet được …\n   Answer: c) removed and rebuilt with new MAC addresses for the next link\n   A router de-encapsulates to the packet, then re-encapsulates in a new frame.VI: Router mở gói tới packet rồi đóng vào frame mới.\n\n3. The IPv4 TTL field is …Trường TTL của IPv4 được …\n   Answer: d) decreased by 1 at each router\n   A packet whose TTL reaches 0 is discarded (stops routing loops).VI: Gói có TTL về 0 bị huỷ (chống vòng lặp).\n\n4. A switch forwards a frame without changing …Switch chuyển frame mà không thay đổi …\n   Answer: a) the source and destination MAC and the IP packet\n   A layer 2 switch does not touch the packet, only decides the output port.VI: Switch tầng 2 không đụng tới packet, chỉ chọn cổng ra.\n\n5. The TCP segment is read and rebuilt only by …Segment TCP chỉ được đọc và dựng lại bởi …\n   Answer: b) the two end hosts\n   TCP is end-to-end; routers stop reading at layer 3.VI: TCP là đầu-cuối; router chỉ đọc tới tầng 3.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Which address stays the same from PC to server (no NAT)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Địa chỉ nào giữ nguyên từ PC tới server (không NAT)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The frame header"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Source and destination IP"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Source and destination MAC"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The Ethernet FCS"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>IP addresses are end-to-end; MAC addresses are valid on one link only.</p><p><i>VI: IP là đầu-cuối; MAC chỉ có giá trị trên một liên kết.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>At every router the Ethernet header is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Ở mỗi router, header Ethernet được …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "encrypted"
+              },
+              {
+                "ma": "b",
+                "noiDung": "converted into a TCP header"
+              },
+              {
+                "ma": "c",
+                "noiDung": "removed and rebuilt with new MAC addresses for the next link"
+              },
+              {
+                "ma": "d",
+                "noiDung": "copied unchanged"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A router de-encapsulates to the packet, then re-encapsulates in a new frame.</p><p><i>VI: Router mở gói tới packet rồi đóng vào frame mới.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>The IPv4 TTL field is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Trường TTL của IPv4 được …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "increased by 1 at each router"
+              },
+              {
+                "ma": "b",
+                "noiDung": "copied from the MAC header"
+              },
+              {
+                "ma": "c",
+                "noiDung": "reset at each switch"
+              },
+              {
+                "ma": "d",
+                "noiDung": "decreased by 1 at each router"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A packet whose TTL reaches 0 is discarded (stops routing loops).</p><p><i>VI: Gói có TTL về 0 bị huỷ (chống vòng lặp).</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>A switch forwards a frame without changing …</p><p style=\"opacity:.75;font-size:.92em\"><i>Switch chuyển frame mà không thay đổi …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the source and destination MAC and the IP packet"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the IP TTL"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the destination IP"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the TCP ports"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>A layer 2 switch does not touch the packet, only decides the output port.</p><p><i>VI: Switch tầng 2 không đụng tới packet, chỉ chọn cổng ra.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>The TCP segment is read and rebuilt only by …</p><p style=\"opacity:.75;font-size:.92em\"><i>Segment TCP chỉ được đọc và dựng lại bởi …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "only the default gateway"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the two end hosts"
+              },
+              {
+                "ma": "c",
+                "noiDung": "every router on the path"
+              },
+              {
+                "ma": "d",
+                "noiDung": "every switch on the path"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>TCP is end-to-end; routers stop reading at layer 3.</p><p><i>VI: TCP là đầu-cuối; router chỉ đọc tới tầng 3.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Believing the destination MAC is the server’s MAC all the way."
+        },
+        {
+          "loi": "Thinking a switch decrements TTL."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "TTL",
+          "vi": "thời gian sống của gói"
+        }
+      ]
+    },
+    {
+      "title": "Encapsulation 2 — Segmentation and bytes on the wire",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "segmentation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>An application sends a message over TCP. It is cut into segments of at most <b>MSS</b> bytes. Every segment gets a 20-byte TCP header, a 20-byte IP header and an 18-byte Ethernet header+FCS. Give the number of segments and the total bytes on the wire (ignore handshake and ACKs).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ứng dụng gửi một thông điệp qua TCP. Nó bị cắt thành các segment tối đa <b>MSS</b> byte. Mỗi segment thêm header TCP 20 byte, IP 20 byte và Ethernet 18 byte (gồm FCS). Tính số segment và tổng số byte trên đường dây (bỏ qua bắt tay và ACK).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Use the ceiling for the segment count.",
+        "Each segment carries its own 58 bytes of headers."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Encapsulation 2 — Segmentation and bytes on the wire\n\nAnswer in the answer panel (no code needed).\n\n1. SegmentationPhân đoạn\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Encapsulation 2 — Segmentation and bytes on the wire — answer key\n\n1. SegmentationPhân đoạn\n   - r1.n: 1\n   - r1.t: 1518\n   - r2.n: 3\n   - r2.t: 4554\n   - r3.n: 7\n   - r3.t: 10406\n   - r4.n: 123\n   - r4.t: 72669\n   segments = ⌈message ÷ MSS⌉; total = message + segments × 58. 1460/1460: 1 seg, 1518 B; 4380/1460: 3 seg, 4554 B; 10000/1460: 7 seg, 10406 B; 65535/536: 123 seg, 72669 B.VI: số segment = ⌈thông điệp ÷ MSS⌉; tổng = thông điệp + số segment × 58.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>segments = ⌈message ÷ MSS⌉; total = message + segments × 58. 1460/1460: 1 seg, 1518 B; 4380/1460: 3 seg, 4554 B; 10000/1460: 7 seg, 10406 B; 65535/536: 123 seg, 72669 B.</p><p><i>VI: số segment = ⌈thông điệp ÷ MSS⌉; tổng = thông điệp + số segment × 58.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Segmentation</p><p style=\"opacity:.75;font-size:.92em\"><i>Phân đoạn</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Message"
+              },
+              {
+                "ma": "n",
+                "ten": "Segments"
+              },
+              {
+                "ma": "t",
+                "ten": "Bytes on the wire"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "1460 B, MSS 1460"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "4380 B, MSS 1460"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "10000 B, MSS 1460"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "65535 B, MSS 536"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.n": [
+                "1"
+              ],
+              "r1.t": [
+                "1518"
+              ],
+              "r2.n": [
+                "3"
+              ],
+              "r2.t": [
+                "4554"
+              ],
+              "r3.n": [
+                "7"
+              ],
+              "r3.t": [
+                "10406"
+              ],
+              "r4.n": [
+                "123"
+              ],
+              "r4.t": [
+                "72669"
+              ]
+            },
+            "giaiThich": "<p>segments = ⌈message ÷ MSS⌉; total = message + segments × 58. 1460/1460: 1 seg, 1518 B; 4380/1460: 3 seg, 4554 B; 10000/1460: 7 seg, 10406 B; 65535/536: 123 seg, 72669 B.</p><p><i>VI: số segment = ⌈thông điệp ÷ MSS⌉; tổng = thông điệp + số segment × 58.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Rounding the number of segments down."
+        },
+        {
+          "loi": "Counting the headers only once for the whole message."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "MSS",
+          "vi": "kích thước segment tối đa"
+        }
+      ]
+    },
+    {
+      "title": "Encapsulation 3 — Write wireBytes(msgBytes, mss)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "segmentation",
+        "overhead"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Write <code>wireBytes(msgBytes, mss)</code> returning <code>{ segments, totalBytes, lastSegment }</code>. Each segment carries 20 B TCP + 20 B IP + 18 B Ethernet headers; <code>lastSegment</code> is the payload size of the final segment.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>wireBytes(msgBytes, mss)</code> trả <code>{ segments, totalBytes, lastSegment }</code>. Mỗi segment có header 20 B TCP + 20 B IP + 18 B Ethernet; <code>lastSegment</code> là kích thước dữ liệu của segment cuối.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "wireBytes(1460, 1460)",
+          "output": "{\"segments\":1,\"totalBytes\":1518,\"lastSegment\":1460}",
+          "explanation": "First sample case.|||Ca mẫu đầu tiên."
+        }
+      ],
+      "hintsJson": [
+        "segments = Math.ceil(msgBytes / mss).",
+        "The last segment holds what is left: msgBytes − (segments − 1) × mss."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function wireBytes(msgBytes, mss) {\n  // Write your solution here\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction wireBytes(msgBytes, mss) {\n  var segments = Math.ceil(msgBytes / mss);\n  return { segments: segments, totalBytes: msgBytes + segments * (20 + 20 + 18), lastSegment: msgBytes - (segments - 1) * mss };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Segmentation is a ceiling division; the overhead grows with the number of segments, which is why a larger MSS is more efficient.</p><p><i>VI: Phân đoạn là phép chia làm tròn lên; chi phí header tăng theo số segment nên MSS lớn hiệu quả hơn.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: wireBytes(1460, 1460)",
+              "vi": "Ca 1"
+            },
+            "goi": "wireBytes(1460, 1460)",
+            "mongDoi": {
+              "segments": 1,
+              "totalBytes": 1518,
+              "lastSegment": 1460
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: wireBytes(4380, 1460)",
+              "vi": "Ca 2"
+            },
+            "goi": "wireBytes(4380, 1460)",
+            "mongDoi": {
+              "segments": 3,
+              "totalBytes": 4554,
+              "lastSegment": 1460
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: wireBytes(4381, 1460)",
+              "vi": "Ca 3"
+            },
+            "goi": "wireBytes(4381, 1460)",
+            "mongDoi": {
+              "segments": 4,
+              "totalBytes": 4613,
+              "lastSegment": 1
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "wireBytes(100, 1460)",
+            "mongDoi": {
+              "segments": 1,
+              "totalBytes": 158,
+              "lastSegment": 100
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "wireBytes(10000, 536)",
+            "mongDoi": {
+              "segments": 19,
+              "totalBytes": 11102,
+              "lastSegment": 352
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "wireBytes(65535, 1460)",
+            "mongDoi": {
+              "segments": 45,
+              "totalBytes": 68145,
+              "lastSegment": 1295
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "wireBytes(1, 1460)",
+            "mongDoi": {
+              "segments": 1,
+              "totalBytes": 59,
+              "lastSegment": 1
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using Math.floor, losing the partial last segment."
+        },
+        {
+          "loi": "Counting the headers once instead of per segment."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Encapsulation 4 — Read the capture",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 10,
+      "points": 30,
+      "concepts": [
+        "packet capture"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>A capture shows the stack: Ethernet II (dst 00:11:22:33:44:55) / IPv4 (src 10.0.0.5, dst 172.16.1.9, TTL 62) / TCP (src port 51514, dst port 443, SYN).</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một bản bắt gói cho thấy chồng: Ethernet II (dst 00:11:22:33:44:55) / IPv4 (src 10.0.0.5, dst 172.16.1.9, TTL 62) / TCP (cổng nguồn 51514, cổng đích 443, SYN).</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Go layer by layer: MAC → IP → port → flag.",
+        "Common start TTLs are 64, 128 and 255."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Encapsulation 4 — Read the capture\n\nAnswer in the answer panel (no code needed).\n\n1. Which service is the client trying to reach?Client đang cố tới dịch vụ nào?\n2. Whose MAC address is 00:11:22:33:44:55 most likely?Địa chỉ MAC 00:11:22:33:44:55 nhiều khả năng của ai?\n3. Source port 51514 is …Cổng nguồn 51514 là …\n4. The SYN flag shows this is …Cờ SYN cho thấy đây là …\n5. TTL 62 suggests the packet started at 64 and passed …TTL 62 gợi ý gói xuất phát 64 và đã qua …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Encapsulation 4 — Read the capture — answer key\n\n1. Which service is the client trying to reach?Client đang cố tới dịch vụ nào?\n   Answer: b) HTTPS (port 443)\n   Destination port 443 is the well-known HTTPS port.VI: Cổng đích 443 là cổng HTTPS quen thuộc.\n\n2. Whose MAC address is 00:11:22:33:44:55 most likely?Địa chỉ MAC 00:11:22:33:44:55 nhiều khả năng của ai?\n   Answer: c) The next hop (the default gateway)\n   The server is on another network, so the frame is addressed to the gateway.VI: Server ở mạng khác nên frame gửi tới gateway.\n\n3. Source port 51514 is …Cổng nguồn 51514 là …\n   Answer: d) an ephemeral (dynamic) port chosen by the client OS\n   Clients use ports from the dynamic range (49152–65535 per IANA).VI: Client dùng cổng động (49152–65535 theo IANA).\n\n4. The SYN flag shows this is …Cờ SYN cho thấy đây là …\n   Answer: a) the first step of the TCP three-way handshake\n   SYN opens the connection; SYN-ACK and ACK follow.VI: SYN mở kết nối; SYN-ACK và ACK theo sau.\n\n5. TTL 62 suggests the packet started at 64 and passed …TTL 62 gợi ý gói xuất phát 64 và đã qua …\n   Answer: b) 2 routers\n   64 − 62 = 2 decrements, one per router.VI: 64 − 62 = 2 lần giảm, mỗi router một lần.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Which service is the client trying to reach?</p><p style=\"opacity:.75;font-size:.92em\"><i>Client đang cố tới dịch vụ nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "DNS (port 53)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "HTTPS (port 443)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "HTTP (port 80)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "SSH (port 22)"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Destination port 443 is the well-known HTTPS port.</p><p><i>VI: Cổng đích 443 là cổng HTTPS quen thuộc.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Whose MAC address is 00:11:22:33:44:55 most likely?</p><p style=\"opacity:.75;font-size:.92em\"><i>Địa chỉ MAC 00:11:22:33:44:55 nhiều khả năng của ai?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The client itself"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The DNS server"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The next hop (the default gateway)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The server 172.16.1.9"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The server is on another network, so the frame is addressed to the gateway.</p><p><i>VI: Server ở mạng khác nên frame gửi tới gateway.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Source port 51514 is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Cổng nguồn 51514 là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a well-known port"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a reserved port of the server"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a MAC-derived value"
+              },
+              {
+                "ma": "d",
+                "noiDung": "an ephemeral (dynamic) port chosen by the client OS"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Clients use ports from the dynamic range (49152–65535 per IANA).</p><p><i>VI: Client dùng cổng động (49152–65535 theo IANA).</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>The SYN flag shows this is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Cờ SYN cho thấy đây là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the first step of the TCP three-way handshake"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the last step of the connection"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a UDP datagram"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a DNS query"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>SYN opens the connection; SYN-ACK and ACK follow.</p><p><i>VI: SYN mở kết nối; SYN-ACK và ACK theo sau.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>TTL 62 suggests the packet started at 64 and passed …</p><p style=\"opacity:.75;font-size:.92em\"><i>TTL 62 gợi ý gói xuất phát 64 và đã qua …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "64 routers"
+              },
+              {
+                "ma": "b",
+                "noiDung": "2 routers"
+              },
+              {
+                "ma": "c",
+                "noiDung": "62 routers"
+              },
+              {
+                "ma": "d",
+                "noiDung": "1 router"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>64 − 62 = 2 decrements, one per router.</p><p><i>VI: 64 − 62 = 2 lần giảm, mỗi router một lần.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reading the destination MAC as the server’s MAC."
+        },
+        {
+          "loi": "Confusing the source port with a service."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "ephemeral port",
+          "vi": "cổng tạm thời"
+        }
+      ]
+    }
+  ]
+}

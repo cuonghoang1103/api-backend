@@ -1,0 +1,930 @@
+{
+  "trackSlug": "nwc204-practice",
+  "moduleSlug": "nwc204-11-1-ipv6-notation",
+  "lesson": {
+    "course": "nwc204-computer-networking",
+    "slug": "nwc204-11-1-cau-truc-dia-chi-ipv6"
+  },
+  "exercises": [
+    {
+      "title": "IPv6 1 — Address types and prefixes",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "IPv6 types"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Recognise IPv6 address types by prefix.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Nhận biết loại địa chỉ IPv6 theo prefix.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "2/3 = global, fe80 = link-local, fc/fd = private, ff = multicast.",
+        "128 bits = 32 hex digits."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# IPv6 1 — Address types and prefixes\n\nAnswer in the answer panel (no code needed).\n\n1. A global unicast address (GUA) starts with …Địa chỉ global unicast (GUA) bắt đầu bằng …\n2. A link-local address starts with …Địa chỉ link-local bắt đầu bằng …\n3. Unique local addresses (private IPv6) are in …Địa chỉ unique local (IPv6 riêng) nằm trong …\n4. IPv6 has no broadcast. Instead it uses …IPv6 không có broadcast. Thay vào đó dùng …\n5. The IPv6 loopback address is …Địa chỉ loopback IPv6 là …\n6. How many bits is an IPv6 address?Địa chỉ IPv6 dài bao nhiêu bit?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# IPv6 1 — Address types and prefixes — answer key\n\n1. A global unicast address (GUA) starts with …Địa chỉ global unicast (GUA) bắt đầu bằng …\n   Answer: a) 2000::/3 (in practice 2xxx or 3xxx)\n   GUAs are routable on the Internet.VI: GUA định tuyến được trên Internet.\n\n2. A link-local address starts with …Địa chỉ link-local bắt đầu bằng …\n   Answer: b) fe80::/10\n   Every IPv6 interface has one; it is never routed.VI: Mọi giao diện IPv6 có một địa chỉ này; không bao giờ được định tuyến.\n\n3. Unique local addresses (private IPv6) are in …Địa chỉ unique local (IPv6 riêng) nằm trong …\n   Answer: c) fc00::/7 (usually fd00::/8)\n   The IPv6 counterpart of RFC 1918.VI: Tương đương RFC 1918 của IPv6.\n\n4. IPv6 has no broadcast. Instead it uses …IPv6 không có broadcast. Thay vào đó dùng …\n   Answer: d) multicast, e.g. ff02::1 for all nodes\n   ff02::1 = all nodes, ff02::2 = all routers.VI: ff02::1 = mọi node, ff02::2 = mọi router.\n\n5. The IPv6 loopback address is …Địa chỉ loopback IPv6 là …\n   Answer: a) ::1\n   :: (all zeros) means “unspecified”.VI: :: (toàn 0) nghĩa là “chưa xác định”.\n\n6. How many bits is an IPv6 address?Địa chỉ IPv6 dài bao nhiêu bit?\n   Answer: b) 128\n   Eight 16-bit groups = 128 bits.VI: Tám nhóm 16 bit = 128 bit.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A global unicast address (GUA) starts with …</p><p style=\"opacity:.75;font-size:.92em\"><i>Địa chỉ global unicast (GUA) bắt đầu bằng …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "2000::/3 (in practice 2xxx or 3xxx)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "fe80::/10"
+              },
+              {
+                "ma": "c",
+                "noiDung": "fc00::/7"
+              },
+              {
+                "ma": "d",
+                "noiDung": "ff00::/8"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>GUAs are routable on the Internet.</p><p><i>VI: GUA định tuyến được trên Internet.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A link-local address starts with …</p><p style=\"opacity:.75;font-size:.92em\"><i>Địa chỉ link-local bắt đầu bằng …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "::1"
+              },
+              {
+                "ma": "b",
+                "noiDung": "fe80::/10"
+              },
+              {
+                "ma": "c",
+                "noiDung": "2001::/16"
+              },
+              {
+                "ma": "d",
+                "noiDung": "fc00::/7"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Every IPv6 interface has one; it is never routed.</p><p><i>VI: Mọi giao diện IPv6 có một địa chỉ này; không bao giờ được định tuyến.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Unique local addresses (private IPv6) are in …</p><p style=\"opacity:.75;font-size:.92em\"><i>Địa chỉ unique local (IPv6 riêng) nằm trong …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "2000::/3"
+              },
+              {
+                "ma": "b",
+                "noiDung": "ff02::/16"
+              },
+              {
+                "ma": "c",
+                "noiDung": "fc00::/7 (usually fd00::/8)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "fe80::/10"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The IPv6 counterpart of RFC 1918.</p><p><i>VI: Tương đương RFC 1918 của IPv6.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>IPv6 has no broadcast. Instead it uses …</p><p style=\"opacity:.75;font-size:.92em\"><i>IPv6 không có broadcast. Thay vào đó dùng …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "unicast only"
+              },
+              {
+                "ma": "b",
+                "noiDung": "anycast only"
+              },
+              {
+                "ma": "c",
+                "noiDung": "ARP"
+              },
+              {
+                "ma": "d",
+                "noiDung": "multicast, e.g. ff02::1 for all nodes"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>ff02::1 = all nodes, ff02::2 = all routers.</p><p><i>VI: ff02::1 = mọi node, ff02::2 = mọi router.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>The IPv6 loopback address is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Địa chỉ loopback IPv6 là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "::1"
+              },
+              {
+                "ma": "b",
+                "noiDung": "::"
+              },
+              {
+                "ma": "c",
+                "noiDung": "fe80::1"
+              },
+              {
+                "ma": "d",
+                "noiDung": "127.0.0.1"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>:: (all zeros) means “unspecified”.</p><p><i>VI: :: (toàn 0) nghĩa là “chưa xác định”.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>How many bits is an IPv6 address?</p><p style=\"opacity:.75;font-size:.92em\"><i>Địa chỉ IPv6 dài bao nhiêu bit?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "256"
+              },
+              {
+                "ma": "b",
+                "noiDung": "128"
+              },
+              {
+                "ma": "c",
+                "noiDung": "64"
+              },
+              {
+                "ma": "d",
+                "noiDung": "48"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Eight 16-bit groups = 128 bits.</p><p><i>VI: Tám nhóm 16 bit = 128 bit.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Looking for a broadcast address in IPv6."
+        },
+        {
+          "loi": "Thinking fe80 addresses can cross a router."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "GUA",
+          "vi": "địa chỉ unicast toàn cục"
+        },
+        {
+          "en": "link-local",
+          "vi": "địa chỉ liên kết cục bộ"
+        }
+      ]
+    },
+    {
+      "title": "IPv6 2 — Compress the address",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "IPv6 notation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Write each address in its shortest standard form: drop leading zeros in every group and replace the <b>longest</b> run of all-zero groups (two or more) with <code>::</code> once; if two runs tie, compress the first. Use lowercase.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết mỗi địa chỉ ở dạng chuẩn ngắn nhất: bỏ số 0 đầu mỗi nhóm và thay dãy nhóm toàn 0 <b>dài nhất</b> (từ hai nhóm) bằng <code>::</code> một lần; hai dãy bằng nhau thì nén dãy đầu. Dùng chữ thường.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Strip leading zeros first, then look for the longest zero run.",
+        "A single 0 group is never replaced by ::."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# IPv6 2 — Compress the address\n\nAnswer in the answer panel (no code needed).\n\n1. CompressedNén\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# IPv6 2 — Compress the address — answer key\n\n1. CompressedNén\n   - r1.c: 2001:db8::ff00:42:8329\n   - r2.c: 2001:db8:0:1::1\n   - r3.c: fe80::202:b3ff:fe1e:8329\n   - r4.c: ::1\n   - r5.c: 2001:db8::1:0:0:1\n   - r6.c: ff02::1\n   2001:db8::ff00:42:8329 ; 2001:db8:0:1::1 ; fe80::202:b3ff:fe1e:8329 ; ::1 ; 2001:db8::1:0:0:1 ; ff02::1. “::” may appear only once; a single zero group stays “0”.VI: “::” chỉ xuất hiện một lần; một nhóm 0 đơn lẻ viết “0”.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>2001:db8::ff00:42:8329 ; 2001:db8:0:1::1 ; fe80::202:b3ff:fe1e:8329 ; ::1 ; 2001:db8::1:0:0:1 ; ff02::1. “::” may appear only once; a single zero group stays “0”.</p><p><i>VI: “::” chỉ xuất hiện một lần; một nhóm 0 đơn lẻ viết “0”.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Compressed</p><p style=\"opacity:.75;font-size:.92em\"><i>Nén</i></p>",
+            "cot": [
+              {
+                "ma": "a",
+                "ten": "Full address"
+              },
+              {
+                "ma": "c",
+                "ten": "Shortest form"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "a": "2001:0db8:0000:0000:0000:ff00:0042:8329"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "a": "2001:0db8:0000:0001:0000:0000:0000:0001"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "a": "fe80:0000:0000:0000:0202:b3ff:fe1e:8329"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "a": "0000:0000:0000:0000:0000:0000:0000:0001"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "a": "2001:0db8:0000:0000:0001:0000:0000:0001"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "a": "ff02:0000:0000:0000:0000:0000:0000:0001"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.c": [
+                "2001:db8::ff00:42:8329"
+              ],
+              "r2.c": [
+                "2001:db8:0:1::1"
+              ],
+              "r3.c": [
+                "fe80::202:b3ff:fe1e:8329"
+              ],
+              "r4.c": [
+                "::1"
+              ],
+              "r5.c": [
+                "2001:db8::1:0:0:1"
+              ],
+              "r6.c": [
+                "ff02::1"
+              ]
+            },
+            "giaiThich": "<p>2001:db8::ff00:42:8329 ; 2001:db8:0:1::1 ; fe80::202:b3ff:fe1e:8329 ; ::1 ; 2001:db8::1:0:0:1 ; ff02::1. “::” may appear only once; a single zero group stays “0”.</p><p><i>VI: “::” chỉ xuất hiện một lần; một nhóm 0 đơn lẻ viết “0”.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using :: twice."
+        },
+        {
+          "loi": "Compressing the shorter of two zero runs."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "hextet",
+          "vi": "nhóm 16 bit"
+        }
+      ]
+    },
+    {
+      "title": "IPv6 3 — Expand the address",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "IPv6 notation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Write each address in full: eight groups of four hex digits (lowercase).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết đầy đủ mỗi địa chỉ: tám nhóm bốn chữ số hex (chữ thường).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Count the written groups; 8 minus that count is how many zero groups “::” hides.",
+        "Pad each group to 4 digits."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# IPv6 3 — Expand the address\n\nAnswer in the answer panel (no code needed).\n\n1. ExpandedMở rộng\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# IPv6 3 — Expand the address — answer key\n\n1. ExpandedMở rộng\n   - r1.e: 2001:0db8:0000:0000:0000:ff00:0042:8329\n   - r2.e: 0000:0000:0000:0000:0000:0000:0000:0001\n   - r3.e: fe80:0000:0000:0000:0000:0000:0000:0001\n   - r4.e: 2001:0db8:0000:0001:0000:0000:0000:0001\n   - r5.e: 0000:0000:0000:0000:0000:0000:0000:0000\n   2001:db8::ff00:42:8329 = 2001:0db8:0000:0000:0000:ff00:0042:8329; ::1 = 0000:0000:0000:0000:0000:0000:0000:0001; fe80::1 = fe80:0000:0000:0000:0000:0000:0000:0001; 2001:db8:0:1::1 = 2001:0db8:0000:0001:0000:0000:0000:0001; :: = 0000:0000:0000:0000:0000:0000:0000:0000. Count the groups present; “::” hides the missing ones.VI: Đếm số nhóm đang có; “::” che các nhóm còn thiếu.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>2001:db8::ff00:42:8329 = 2001:0db8:0000:0000:0000:ff00:0042:8329; ::1 = 0000:0000:0000:0000:0000:0000:0000:0001; fe80::1 = fe80:0000:0000:0000:0000:0000:0000:0001; 2001:db8:0:1::1 = 2001:0db8:0000:0001:0000:0000:0000:0001; :: = 0000:0000:0000:0000:0000:0000:0000:0000. Count the groups present; “::” hides the missing ones.</p><p><i>VI: Đếm số nhóm đang có; “::” che các nhóm còn thiếu.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Expanded</p><p style=\"opacity:.75;font-size:.92em\"><i>Mở rộng</i></p>",
+            "cot": [
+              {
+                "ma": "a",
+                "ten": "Short form"
+              },
+              {
+                "ma": "e",
+                "ten": "Full address"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "a": "2001:db8::ff00:42:8329"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "a": "::1"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "a": "fe80::1"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "a": "2001:db8:0:1::1"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "a": "::"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.e": [
+                "2001:0db8:0000:0000:0000:ff00:0042:8329"
+              ],
+              "r2.e": [
+                "0000:0000:0000:0000:0000:0000:0000:0001"
+              ],
+              "r3.e": [
+                "fe80:0000:0000:0000:0000:0000:0000:0001"
+              ],
+              "r4.e": [
+                "2001:0db8:0000:0001:0000:0000:0000:0001"
+              ],
+              "r5.e": [
+                "0000:0000:0000:0000:0000:0000:0000:0000"
+              ]
+            },
+            "giaiThich": "<p>2001:db8::ff00:42:8329 = 2001:0db8:0000:0000:0000:ff00:0042:8329; ::1 = 0000:0000:0000:0000:0000:0000:0000:0001; fe80::1 = fe80:0000:0000:0000:0000:0000:0000:0001; 2001:db8:0:1::1 = 2001:0db8:0000:0001:0000:0000:0000:0001; :: = 0000:0000:0000:0000:0000:0000:0000:0000. Count the groups present; “::” hides the missing ones.</p><p><i>VI: Đếm số nhóm đang có; “::” che các nhóm còn thiếu.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Replacing :: with only one zero group."
+        },
+        {
+          "loi": "Forgetting to pad short groups."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "unspecified address",
+          "vi": "địa chỉ chưa xác định"
+        }
+      ]
+    },
+    {
+      "title": "IPv6 4 — Name the address type",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "IPv6 types"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Classify each address.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phân loại từng địa chỉ.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "2xxx/3xxx global, fe8x–febx link-local, fcxx/fdxx unique local, ffxx multicast.",
+        "::1 is the only loopback."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# IPv6 4 — Name the address type\n\nAnswer in the answer panel (no code needed).\n\n1. Address typeLoại địa chỉ\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# IPv6 4 — Name the address type — answer key\n\n1. Address typeLoại địa chỉ\n   - r1.t: global unicast\n   - r2.t: link-local\n   - r3.t: unique local\n   - r4.t: multicast\n   - r5.t: loopback\n   - r6.t: global unicast\n   2001:db8:acad:1::10: global unicast; fe80::a8bb:ccff:fedd:eeff: link-local; fd12:3456:789a::1: unique local; ff02::5: multicast; ::1: loopback; 2607:f8b0:4005:80a::200e: global unicast. Look at the first hextet.VI: Nhìn nhóm đầu tiên.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>2001:db8:acad:1::10: global unicast; fe80::a8bb:ccff:fedd:eeff: link-local; fd12:3456:789a::1: unique local; ff02::5: multicast; ::1: loopback; 2607:f8b0:4005:80a::200e: global unicast. Look at the first hextet.</p><p><i>VI: Nhìn nhóm đầu tiên.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Address type</p><p style=\"opacity:.75;font-size:.92em\"><i>Loại địa chỉ</i></p>",
+            "cot": [
+              {
+                "ma": "a",
+                "ten": "Address"
+              },
+              {
+                "ma": "t",
+                "ten": "Type",
+                "luaChon": [
+                  "global unicast",
+                  "link-local",
+                  "unique local",
+                  "multicast",
+                  "loopback"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "a": "2001:db8:acad:1::10"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "a": "fe80::a8bb:ccff:fedd:eeff"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "a": "fd12:3456:789a::1"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "a": "ff02::5"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "a": "::1"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "a": "2607:f8b0:4005:80a::200e"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.t": [
+                "global unicast"
+              ],
+              "r2.t": [
+                "link-local"
+              ],
+              "r3.t": [
+                "unique local"
+              ],
+              "r4.t": [
+                "multicast"
+              ],
+              "r5.t": [
+                "loopback"
+              ],
+              "r6.t": [
+                "global unicast"
+              ]
+            },
+            "giaiThich": "<p>2001:db8:acad:1::10: global unicast; fe80::a8bb:ccff:fedd:eeff: link-local; fd12:3456:789a::1: unique local; ff02::5: multicast; ::1: loopback; 2607:f8b0:4005:80a::200e: global unicast. Look at the first hextet.</p><p><i>VI: Nhìn nhóm đầu tiên.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling fd… a global address."
+        },
+        {
+          "loi": "Treating ff02::5 as unicast."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "unique local",
+          "vi": "địa chỉ riêng duy nhất"
+        }
+      ]
+    },
+    {
+      "title": "IPv6 5 — Write ipv6Compress(addr)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "IPv6 notation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Write <code>ipv6Compress(addr)</code> returning the RFC 5952 shortest form of a valid IPv6 string (the input may already be partly compressed, e.g. <code>\"2001:db8::1:0:0:1\"</code>): lowercase, no leading zeros in groups, the longest run of at least two zero groups replaced by <code>::</code> (the first on ties).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>ipv6Compress(addr)</code> trả dạng ngắn nhất theo RFC 5952 của chuỗi IPv6 hợp lệ (đầu vào có thể đã nén một phần, vd <code>\"2001:db8::1:0:0:1\"</code>): chữ thường, bỏ số 0 đầu nhóm, dãy dài nhất từ hai nhóm 0 trở lên thay bằng <code>::</code> (hoà thì lấy dãy đầu).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "ipv6Compress(\"2001:0db8:0000:0000:0000:ff00:0042:8329\")",
+          "output": "\"2001:db8::ff00:42:8329\"",
+          "explanation": "First sample case.|||Ca mẫu đầu tiên."
+        }
+      ],
+      "hintsJson": [
+        "First expand to 8 groups, strip the leading zeros, then scan for the longest zero run.",
+        "A run of length 1 is not compressed."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function ipv6Compress(addr) {\n  // Write your solution here\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction ipv6Compress(addr) {\n  var halves = addr.toLowerCase().split('::'), left = halves[0] ? halves[0].split(':') : [], right = halves.length > 1 && halves[1] ? halves[1].split(':') : [];\n  var g = left.slice();\n  if (halves.length > 1) { for (var i = left.length + right.length; i < 8; i++) g.push('0'); g = g.concat(right); }\n  g = g.map(function (x) { return String(parseInt(x, 16).toString(16)); });\n  var bs = -1, bl = 0, s = -1;\n  for (var k = 0; k <= 8; k++) {\n    if (k < 8 && g[k] === '0') { if (s < 0) s = k; }\n    else { if (s >= 0 && k - s > bl) { bl = k - s; bs = s; } s = -1; }\n  }\n  if (bl < 2) return g.join(':');\n  return g.slice(0, bs).join(':') + '::' + g.slice(bs + bl).join(':');\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>RFC 5952 fixes one canonical text form so logs and configs compare equal.</p><p><i>VI: RFC 5952 quy định một dạng chuẩn để log và cấu hình so sánh được.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: ipv6Compress(\"2001:0db8:0000:0000:0000:ff00:0042:8329\")",
+              "vi": "Ca 1"
+            },
+            "goi": "ipv6Compress(\"2001:0db8:0000:0000:0000:ff00:0042:8329\")",
+            "mongDoi": "2001:db8::ff00:42:8329"
+          },
+          {
+            "moTa": {
+              "en": "Case 2: ipv6Compress(\"2001:0db8:0000:0001:0000:0000:0000:0001\")",
+              "vi": "Ca 2"
+            },
+            "goi": "ipv6Compress(\"2001:0db8:0000:0001:0000:0000:0000:0001\")",
+            "mongDoi": "2001:db8:0:1::1"
+          },
+          {
+            "moTa": {
+              "en": "Case 3: ipv6Compress(\"0000:0000:0000:0000:0000:0000:0000:0001\")",
+              "vi": "Ca 3"
+            },
+            "goi": "ipv6Compress(\"0000:0000:0000:0000:0000:0000:0000:0001\")",
+            "mongDoi": "::1"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "ipv6Compress(\"2001:db8:0:0:1:0:0:1\")",
+            "mongDoi": "2001:db8::1:0:0:1",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "ipv6Compress(\"2001:db8:0:1:1:1:1:1\")",
+            "mongDoi": "2001:db8:0:1:1:1:1:1",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "ipv6Compress(\"FE80::0202:B3FF:FE1E:8329\")",
+            "mongDoi": "fe80::202:b3ff:fe1e:8329",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "ipv6Compress(\"0:0:0:0:0:0:0:0\")",
+            "mongDoi": "::",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "ipv6Compress(\"2001:db8::1:0:0:1\")",
+            "mongDoi": "2001:db8::1:0:0:1",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Replacing a single zero group with ::."
+        },
+        {
+          "loi": "Compressing the last of two equal runs."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "IPv6 6 — Write ipv6Expand(addr)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 18,
+      "points": 20,
+      "concepts": [
+        "IPv6 notation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Write <code>ipv6Expand(addr)</code> returning the full 8-group, 4-digit lowercase form of an IPv6 address that may contain one <code>::</code>. Examples: <code>\"::1\"</code> → <code>\"0000:0000:0000:0000:0000:0000:0000:0001\"</code>; <code>\"2001:db8::ff00:42:8329\"</code> → <code>\"2001:0db8:0000:0000:0000:ff00:0042:8329\"</code>. The input may use upper case and groups shorter than four digits; the double colon stands for as many all-zero groups as are needed to reach eight groups.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>ipv6Expand(addr)</code> trả dạng đầy đủ 8 nhóm, mỗi nhóm 4 chữ số thường của địa chỉ IPv6 có thể chứa một <code>::</code>. Ví dụ: <code>\"::1\"</code> → <code>\"0000:0000:0000:0000:0000:0000:0000:0001\"</code>; <code>\"2001:db8::ff00:42:8329\"</code> → <code>\"2001:0db8:0000:0000:0000:ff00:0042:8329\"</code>. Đầu vào có thể viết hoa và nhóm ngắn hơn bốn chữ số; dấu hai chấm kép đại diện cho đủ số nhóm toàn 0 để thành tám nhóm.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "ipv6Expand(\"2001:db8::ff00:42:8329\")",
+          "output": "\"2001:0db8:0000:0000:0000:ff00:0042:8329\"",
+          "explanation": "First sample case.|||Ca mẫu đầu tiên."
+        }
+      ],
+      "hintsJson": [
+        "Split on \"::\" first; the missing group count is 8 − (groups on the left + groups on the right).",
+        "Pad every group with leading zeros to 4 digits."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function ipv6Expand(addr) {\n  // Write your solution here\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction ipv6Expand(addr) {\n  var halves = addr.toLowerCase().split('::'), left = halves[0] ? halves[0].split(':') : [], right = halves.length > 1 && halves[1] ? halves[1].split(':') : [];\n  var groups = left.slice();\n  if (halves.length > 1) { for (var i = left.length + right.length; i < 8; i++) groups.push('0'); groups = groups.concat(right); }\n  return groups.map(function (g) { while (g.length < 4) g = '0' + g; return g; }).join(':');\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Expansion is the inverse of compression and a good test that you understood where :: hides zeros.</p><p><i>VI: Mở rộng là phép ngược của nén, kiểm tra bạn hiểu :: che các nhóm 0 ở đâu.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: ipv6Expand(\"2001:db8::ff00:42:8329\")",
+              "vi": "Ca 1"
+            },
+            "goi": "ipv6Expand(\"2001:db8::ff00:42:8329\")",
+            "mongDoi": "2001:0db8:0000:0000:0000:ff00:0042:8329"
+          },
+          {
+            "moTa": {
+              "en": "Case 2: ipv6Expand(\"::1\")",
+              "vi": "Ca 2"
+            },
+            "goi": "ipv6Expand(\"::1\")",
+            "mongDoi": "0000:0000:0000:0000:0000:0000:0000:0001"
+          },
+          {
+            "moTa": {
+              "en": "Case 3: ipv6Expand(\"::\")",
+              "vi": "Ca 3"
+            },
+            "goi": "ipv6Expand(\"::\")",
+            "mongDoi": "0000:0000:0000:0000:0000:0000:0000:0000"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "ipv6Expand(\"fe80::1\")",
+            "mongDoi": "fe80:0000:0000:0000:0000:0000:0000:0001",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "ipv6Expand(\"2001:DB8:0:1::1\")",
+            "mongDoi": "2001:0db8:0000:0001:0000:0000:0000:0001",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "ipv6Expand(\"1:2:3:4:5:6:7:8\")",
+            "mongDoi": "0001:0002:0003:0004:0005:0006:0007:0008",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "ipv6Expand(\"ff02::1:ff00:1\")",
+            "mongDoi": "ff02:0000:0000:0000:0000:0001:ff00:0001",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting that \"::\" alone is eight zero groups."
+        },
+        {
+          "loi": "Not lowercasing."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

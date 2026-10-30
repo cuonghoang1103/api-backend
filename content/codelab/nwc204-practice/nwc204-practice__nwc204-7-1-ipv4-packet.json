@@ -1,0 +1,974 @@
+{
+  "trackSlug": "nwc204-practice",
+  "moduleSlug": "nwc204-7-1-ipv4-packet",
+  "lesson": {
+    "course": "nwc204-computer-networking",
+    "slug": "nwc204-7-1-dac-tinh-tang-mang-va-goi-ipv4"
+  },
+  "exercises": [
+    {
+      "title": "IPv4 1 — Header fields",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "IPv4 header"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Read the IPv4 header.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đọc header IPv4.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "1/6/17 = ICMP/TCP/UDP.",
+        "The header checksum covers the header only."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# IPv4 1 — Header fields\n\nAnswer in the answer panel (no code needed).\n\n1. The minimum size of an IPv4 header is …Kích thước tối thiểu của header IPv4 là …\n2. The Protocol field value 6 means the payload is …Giá trị 6 của trường Protocol nghĩa là dữ liệu là …\n3. Which field stops a packet from circling forever in a routing loop?Trường nào ngăn gói quay vòng vô tận khi có vòng lặp định tuyến?\n4. Which header fields must a router change when forwarding?Router bắt buộc phải đổi các trường nào của header khi chuyển tiếp?\n5. The DF (Don’t Fragment) bit set and a packet larger than the next link’s MTU. The router …Bit DF (Don’t Fragment) bật và gói lớn hơn MTU của liên kết kế. Router …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# IPv4 1 — Header fields — answer key\n\n1. The minimum size of an IPv4 header is …Kích thước tối thiểu của header IPv4 là …\n   Answer: b) 20 bytes\n   IHL = 5 words of 4 bytes; options can extend it to 60 bytes.VI: IHL = 5 từ 4 byte; option có thể kéo dài tới 60 byte.\n\n2. The Protocol field value 6 means the payload is …Giá trị 6 của trường Protocol nghĩa là dữ liệu là …\n   Answer: c) TCP\n   1 = ICMP, 6 = TCP, 17 = UDP, 89 = OSPF.VI: 1 = ICMP, 6 = TCP, 17 = UDP, 89 = OSPF.\n\n3. Which field stops a packet from circling forever in a routing loop?Trường nào ngăn gói quay vòng vô tận khi có vòng lặp định tuyến?\n   Answer: d) TTL\n   Each router decrements TTL; at 0 the packet is dropped and ICMP Time Exceeded is sent.VI: Mỗi router giảm TTL; về 0 thì gói bị huỷ và gửi ICMP Time Exceeded.\n\n4. Which header fields must a router change when forwarding?Router bắt buộc phải đổi các trường nào của header khi chuyển tiếp?\n   Answer: a) TTL and header checksum\n   TTL changes, so the checksum is recomputed.VI: TTL đổi nên checksum được tính lại.\n\n5. The DF (Don’t Fragment) bit set and a packet larger than the next link’s MTU. The router …Bit DF (Don’t Fragment) bật và gói lớn hơn MTU của liên kết kế. Router …\n   Answer: b) drops the packet and sends ICMP “fragmentation needed”\n   This is the basis of Path MTU Discovery.VI: Đây là nền tảng của Path MTU Discovery.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The minimum size of an IPv4 header is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Kích thước tối thiểu của header IPv4 là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "60 bytes"
+              },
+              {
+                "ma": "b",
+                "noiDung": "20 bytes"
+              },
+              {
+                "ma": "c",
+                "noiDung": "8 bytes"
+              },
+              {
+                "ma": "d",
+                "noiDung": "40 bytes"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>IHL = 5 words of 4 bytes; options can extend it to 60 bytes.</p><p><i>VI: IHL = 5 từ 4 byte; option có thể kéo dài tới 60 byte.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The Protocol field value 6 means the payload is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Giá trị 6 của trường Protocol nghĩa là dữ liệu là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "ICMP"
+              },
+              {
+                "ma": "b",
+                "noiDung": "OSPF"
+              },
+              {
+                "ma": "c",
+                "noiDung": "TCP"
+              },
+              {
+                "ma": "d",
+                "noiDung": "UDP"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>1 = ICMP, 6 = TCP, 17 = UDP, 89 = OSPF.</p><p><i>VI: 1 = ICMP, 6 = TCP, 17 = UDP, 89 = OSPF.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Which field stops a packet from circling forever in a routing loop?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trường nào ngăn gói quay vòng vô tận khi có vòng lặp định tuyến?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Identification"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Header checksum"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Flags"
+              },
+              {
+                "ma": "d",
+                "noiDung": "TTL"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Each router decrements TTL; at 0 the packet is dropped and ICMP Time Exceeded is sent.</p><p><i>VI: Mỗi router giảm TTL; về 0 thì gói bị huỷ và gửi ICMP Time Exceeded.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Which header fields must a router change when forwarding?</p><p style=\"opacity:.75;font-size:.92em\"><i>Router bắt buộc phải đổi các trường nào của header khi chuyển tiếp?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "TTL and header checksum"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Source and destination IP"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Protocol"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Version"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>TTL changes, so the checksum is recomputed.</p><p><i>VI: TTL đổi nên checksum được tính lại.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>The DF (Don’t Fragment) bit set and a packet larger than the next link’s MTU. The router …</p><p style=\"opacity:.75;font-size:.92em\"><i>Bit DF (Don’t Fragment) bật và gói lớn hơn MTU của liên kết kế. Router …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "truncates the payload"
+              },
+              {
+                "ma": "b",
+                "noiDung": "drops the packet and sends ICMP “fragmentation needed”"
+              },
+              {
+                "ma": "c",
+                "noiDung": "fragments it anyway"
+              },
+              {
+                "ma": "d",
+                "noiDung": "forwards it unchanged"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>This is the basis of Path MTU Discovery.</p><p><i>VI: Đây là nền tảng của Path MTU Discovery.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Believing routers rewrite the IP addresses (only NAT does)."
+        },
+        {
+          "loi": "Forgetting to recompute the checksum after changing TTL."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Path MTU Discovery",
+          "vi": "khám phá MTU đường đi"
+        }
+      ]
+    },
+    {
+      "title": "IPv4 2 — Fragmentation by hand",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "fragmentation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>An IPv4 packet of the given <b>total length</b> (header 20 B included) must cross a link with the given MTU. Each fragment carries its own 20-byte header, and the data in a non-final fragment is a multiple of 8 bytes. Give the number of fragments, and for the LAST fragment its fragment offset (in units of 8 bytes) and its data length.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Gói IPv4 có <b>tổng độ dài</b> cho trước (đã gồm header 20 B) phải qua liên kết có MTU cho trước. Mỗi mảnh có header 20 byte riêng và dữ liệu của mảnh không phải cuối là bội của 8 byte. Cho số mảnh, và với mảnh CUỐI: fragment offset (đơn vị 8 byte) và độ dài dữ liệu.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Data to carry = total − 20.",
+        "Offset of fragment k = (sum of previous data) ÷ 8."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# IPv4 2 — Fragmentation by hand\n\nAnswer in the answer panel (no code needed).\n\n1. FragmentationPhân mảnh\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# IPv4 2 — Fragmentation by hand — answer key\n\n1. FragmentationPhân mảnh\n   - r1.n: 3\n   - r1.o: 370\n   - r1.l: 1020\n   - r2.n: 4\n   - r2.o: 207\n   - r2.l: 324\n   - r3.n: 1\n   - r3.o: 0\n   - r3.l: 1480\n   - r4.n: 4\n   - r4.o: 366\n   - r4.l: 52\n   4000/1500: [off 0, 1480 B, MF 1] [off 185, 1480 B, MF 1] [off 370, 1020 B, MF 0]; 2000/576: [off 0, 552 B, MF 1] [off 69, 552 B, MF 1] [off 138, 552 B, MF 1] [off 207, 324 B, MF 0]; 1500/1500: [off 0, 1480 B, MF 0]; 3000/1000: [off 0, 976 B, MF 1] [off 122, 976 B, MF 1] [off 244, 976 B, MF 1] [off 366, 52 B, MF 0]. Max data per fragment = ⌊(MTU − 20) / 8⌋ × 8.VI: Dữ liệu tối đa mỗi mảnh = ⌊(MTU − 20) / 8⌋ × 8.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>4000/1500: [off 0, 1480 B, MF 1] [off 185, 1480 B, MF 1] [off 370, 1020 B, MF 0]; 2000/576: [off 0, 552 B, MF 1] [off 69, 552 B, MF 1] [off 138, 552 B, MF 1] [off 207, 324 B, MF 0]; 1500/1500: [off 0, 1480 B, MF 0]; 3000/1000: [off 0, 976 B, MF 1] [off 122, 976 B, MF 1] [off 244, 976 B, MF 1] [off 366, 52 B, MF 0]. Max data per fragment = ⌊(MTU − 20) / 8⌋ × 8.</p><p><i>VI: Dữ liệu tối đa mỗi mảnh = ⌊(MTU − 20) / 8⌋ × 8.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Fragmentation</p><p style=\"opacity:.75;font-size:.92em\"><i>Phân mảnh</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Packet / MTU"
+              },
+              {
+                "ma": "n",
+                "ten": "Fragments"
+              },
+              {
+                "ma": "o",
+                "ten": "Last offset"
+              },
+              {
+                "ma": "l",
+                "ten": "Last data length"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "4000 B, MTU 1500"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "2000 B, MTU 576"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "1500 B, MTU 1500"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "3000 B, MTU 1000"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.n": [
+                "3"
+              ],
+              "r1.o": [
+                "370"
+              ],
+              "r1.l": [
+                "1020"
+              ],
+              "r2.n": [
+                "4"
+              ],
+              "r2.o": [
+                "207"
+              ],
+              "r2.l": [
+                "324"
+              ],
+              "r3.n": [
+                "1"
+              ],
+              "r3.o": [
+                "0"
+              ],
+              "r3.l": [
+                "1480"
+              ],
+              "r4.n": [
+                "4"
+              ],
+              "r4.o": [
+                "366"
+              ],
+              "r4.l": [
+                "52"
+              ]
+            },
+            "giaiThich": "<p>4000/1500: [off 0, 1480 B, MF 1] [off 185, 1480 B, MF 1] [off 370, 1020 B, MF 0]; 2000/576: [off 0, 552 B, MF 1] [off 69, 552 B, MF 1] [off 138, 552 B, MF 1] [off 207, 324 B, MF 0]; 1500/1500: [off 0, 1480 B, MF 0]; 3000/1000: [off 0, 976 B, MF 1] [off 122, 976 B, MF 1] [off 244, 976 B, MF 1] [off 366, 52 B, MF 0]. Max data per fragment = ⌊(MTU − 20) / 8⌋ × 8.</p><p><i>VI: Dữ liệu tối đa mỗi mảnh = ⌊(MTU − 20) / 8⌋ × 8.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using MTU − 20 without rounding down to a multiple of 8."
+        },
+        {
+          "loi": "Forgetting that the offset is in 8-byte units."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "fragment offset",
+          "vi": "vị trí mảnh"
+        },
+        {
+          "en": "MF flag",
+          "vi": "cờ còn mảnh"
+        }
+      ]
+    },
+    {
+      "title": "IPv4 3 — TTL and fragments in practice",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "TTL",
+        "reassembly"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Numeric and reasoning questions.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi số và suy luận.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "TTL falls by one per router.",
+        "IP is best effort: no recovery."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# IPv4 3 — TTL and fragments in practice\n\nAnswer in the answer panel (no code needed).\n\n1. A packet leaves a host with TTL 64 and crosses 9 routers. The TTL on arrival is …Gói rời host với TTL 64 và qua 9 router. TTL khi tới đích là …\n2. A 4000-byte datagram is fragmented. Which fragment has MF = 0?Datagram 4000 byte bị phân mảnh. Mảnh nào có MF = 0?\n3. Who reassembles the fragments?Ai ghép lại các mảnh?\n4. If one fragment is lost, then …Nếu mất một mảnh thì …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# IPv4 3 — TTL and fragments in practice — answer key\n\n1. A packet leaves a host with TTL 64 and crosses 9 routers. The TTL on arrival is …Gói rời host với TTL 64 và qua 9 router. TTL khi tới đích là …\n   Answer: b) 55\n   64 − 9 = 55.VI: 64 − 9 = 55.\n\n2. A 4000-byte datagram is fragmented. Which fragment has MF = 0?Datagram 4000 byte bị phân mảnh. Mảnh nào có MF = 0?\n   Answer: c) Only the last fragment\n   MF = “more fragments follow”; the last one has none.VI: MF = “còn mảnh theo sau”; mảnh cuối thì không.\n\n3. Who reassembles the fragments?Ai ghép lại các mảnh?\n   Answer: d) The destination host\n   Routers never reassemble; only the final host does, using Identification + offset.VI: Router không bao giờ ghép; chỉ host cuối ghép, dựa vào Identification + offset.\n\n4. If one fragment is lost, then …Nếu mất một mảnh thì …\n   Answer: a) the whole datagram is discarded after the reassembly timer expires\n   IP has no retransmission; TCP or the app must resend all of it.VI: IP không gửi lại; TCP hoặc ứng dụng phải gửi lại toàn bộ.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A packet leaves a host with TTL 64 and crosses 9 routers. The TTL on arrival is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Gói rời host với TTL 64 và qua 9 router. TTL khi tới đích là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "73"
+              },
+              {
+                "ma": "b",
+                "noiDung": "55"
+              },
+              {
+                "ma": "c",
+                "noiDung": "54"
+              },
+              {
+                "ma": "d",
+                "noiDung": "56"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>64 − 9 = 55.</p><p><i>VI: 64 − 9 = 55.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A 4000-byte datagram is fragmented. Which fragment has MF = 0?</p><p style=\"opacity:.75;font-size:.92em\"><i>Datagram 4000 byte bị phân mảnh. Mảnh nào có MF = 0?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "All fragments"
+              },
+              {
+                "ma": "b",
+                "noiDung": "None"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only the last fragment"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only the first fragment"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>MF = “more fragments follow”; the last one has none.</p><p><i>VI: MF = “còn mảnh theo sau”; mảnh cuối thì không.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Who reassembles the fragments?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ai ghép lại các mảnh?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The next router"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The first router"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The switch"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The destination host"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Routers never reassemble; only the final host does, using Identification + offset.</p><p><i>VI: Router không bao giờ ghép; chỉ host cuối ghép, dựa vào Identification + offset.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>If one fragment is lost, then …</p><p style=\"opacity:.75;font-size:.92em\"><i>Nếu mất một mảnh thì …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the whole datagram is discarded after the reassembly timer expires"
+              },
+              {
+                "ma": "b",
+                "noiDung": "only that fragment is retransmitted by IP"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the receiver rebuilds the missing part"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the datagram is delivered with a hole"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>IP has no retransmission; TCP or the app must resend all of it.</p><p><i>VI: IP không gửi lại; TCP hoặc ứng dụng phải gửi lại toàn bộ.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking intermediate routers reassemble."
+        },
+        {
+          "loi": "Subtracting the number of switches from the TTL."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "reassembly",
+          "vi": "ghép mảnh"
+        }
+      ]
+    },
+    {
+      "title": "IPv4 4 — Write fragment(totalLen, mtu)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "fragmentation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Write <code>fragment(totalLen, mtu)</code> returning the fragments as <code>[{ offset, dataLen, mf }]</code>: <code>offset</code> in 8-byte units, <code>dataLen</code> the data bytes of that fragment, <code>mf</code> 1 if more follow else 0. Header is 20 bytes in every fragment; non-final data lengths are multiples of 8. A packet that fits in the MTU gives one fragment with <code>offset 0</code> and <code>mf 0</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>fragment(totalLen, mtu)</code> trả các mảnh dạng <code>[{ offset, dataLen, mf }]</code>: <code>offset</code> theo đơn vị 8 byte, <code>dataLen</code> là số byte dữ liệu của mảnh, <code>mf</code> bằng 1 nếu còn mảnh sau, ngược lại 0. Header 20 byte trong mọi mảnh; dữ liệu mảnh không cuối là bội của 8. Gói vừa MTU cho đúng một mảnh với <code>offset 0</code> và <code>mf 0</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "fragment(4000, 1500)",
+          "output": "[{\"offset\":0,\"dataLen\":1480,\"mf\":1},{\"offset\":185,\"dataLen\":1480,\"mf\":1},{\"offset\":370,\"dataLen\":1020,\"mf\":0}]",
+          "explanation": "First sample case.|||Ca mẫu đầu tiên."
+        }
+      ],
+      "hintsJson": [
+        "perFragment = Math.floor((mtu - 20) / 8) * 8.",
+        "Loop while data remains; offset advances by dataLen / 8."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function fragment(totalLen, mtu) {\n  // Write your solution here\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction fragment(totalLen, mtu) {\n  var data = totalLen - 20, per = Math.floor((mtu - 20) / 8) * 8, off = 0, out = [];\n  while (data > 0) {\n    var n = Math.min(per, data);\n    out.push({ offset: off / 8, dataLen: n, mf: data - n > 0 ? 1 : 0 });\n    off += n; data -= n;\n  }\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This reproduces the textbook 4000/1500 example: 1480 + 1480 + 1020 bytes at offsets 0, 185, 370.</p><p><i>VI: Tái hiện ví dụ sách giáo khoa 4000/1500: 1480 + 1480 + 1020 byte tại offset 0, 185, 370.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: fragment(4000, 1500)",
+              "vi": "Ca 1"
+            },
+            "goi": "fragment(4000, 1500)",
+            "mongDoi": [
+              {
+                "offset": 0,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 185,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 370,
+                "dataLen": 1020,
+                "mf": 0
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 2: fragment(1500, 1500)",
+              "vi": "Ca 2"
+            },
+            "goi": "fragment(1500, 1500)",
+            "mongDoi": [
+              {
+                "offset": 0,
+                "dataLen": 1480,
+                "mf": 0
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 3: fragment(2000, 576)",
+              "vi": "Ca 3"
+            },
+            "goi": "fragment(2000, 576)",
+            "mongDoi": [
+              {
+                "offset": 0,
+                "dataLen": 552,
+                "mf": 1
+              },
+              {
+                "offset": 69,
+                "dataLen": 552,
+                "mf": 1
+              },
+              {
+                "offset": 138,
+                "dataLen": 552,
+                "mf": 1
+              },
+              {
+                "offset": 207,
+                "dataLen": 324,
+                "mf": 0
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "fragment(100, 1500)",
+            "mongDoi": [
+              {
+                "offset": 0,
+                "dataLen": 80,
+                "mf": 0
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "fragment(3000, 1000)",
+            "mongDoi": [
+              {
+                "offset": 0,
+                "dataLen": 976,
+                "mf": 1
+              },
+              {
+                "offset": 122,
+                "dataLen": 976,
+                "mf": 1
+              },
+              {
+                "offset": 244,
+                "dataLen": 976,
+                "mf": 1
+              },
+              {
+                "offset": 366,
+                "dataLen": 52,
+                "mf": 0
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "fragment(65535, 1500)",
+            "mongDoi": [
+              {
+                "offset": 0,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 185,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 370,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 555,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 740,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 925,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 1110,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 1295,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 1480,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 1665,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 1850,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 2035,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 2220,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 2405,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 2590,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 2775,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 2960,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 3145,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 3330,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 3515,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 3700,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 3885,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 4070,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 4255,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 4440,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 4625,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 4810,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 4995,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 5180,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 5365,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 5550,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 5735,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 5920,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 6105,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 6290,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 6475,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 6660,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 6845,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 7030,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 7215,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 7400,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 7585,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 7770,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 7955,
+                "dataLen": 1480,
+                "mf": 1
+              },
+              {
+                "offset": 8140,
+                "dataLen": 395,
+                "mf": 0
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "fragment(21, 28)",
+            "mongDoi": [
+              {
+                "offset": 0,
+                "dataLen": 1,
+                "mf": 0
+              }
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Computing the per-fragment size as mtu - 20 (not a multiple of 8)."
+        },
+        {
+          "loi": "Setting mf to 1 on the final fragment."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

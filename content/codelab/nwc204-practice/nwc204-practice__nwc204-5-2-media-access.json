@@ -1,0 +1,659 @@
+{
+  "trackSlug": "nwc204-practice",
+  "moduleSlug": "nwc204-5-2-media-access",
+  "lesson": {
+    "course": "nwc204-computer-networking",
+    "slug": "nwc204-5-2-topo-mang-va-dieu-khien-truy-cap"
+  },
+  "exercises": [
+    {
+      "title": "Access 1 — Topologies and duplex",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "topology",
+        "duplex"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Physical vs logical topology, half and full duplex.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Topology vật lý và logic, bán song công và song công.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Physical = how it is cabled; logical = how data flows.",
+        "Full duplex + switch = no collisions."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Access 1 — Topologies and duplex\n\nAnswer in the answer panel (no code needed).\n\n1. A modern switched Ethernet LAN is physically a … and logically behaves like …LAN Ethernet có switch hiện nay về vật lý là … và về logic hoạt động như …\n2. In half-duplex a device …Ở chế độ bán song công, thiết bị …\n3. Full-duplex links between a host and a switch …Liên kết song công giữa host và switch …\n4. A hub is a layer 1 device, so all its ports are in …Hub là thiết bị tầng 1 nên mọi cổng của nó nằm trong …\n5. Which topology has a single point of failure at the centre?Topology nào có điểm hỏng duy nhất ở trung tâm?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Access 1 — Topologies and duplex — answer key\n\n1. A modern switched Ethernet LAN is physically a … and logically behaves like …LAN Ethernet có switch hiện nay về vật lý là … và về logic hoạt động như …\n   Answer: d) star; a set of point-to-point links\n   Every device has its own cable to the switch.VI: Mỗi thiết bị có cáp riêng tới switch.\n\n2. In half-duplex a device …Ở chế độ bán song công, thiết bị …\n   Answer: a) can send or receive, but not both at once\n   Half-duplex needs collision handling (CSMA/CD).VI: Bán song công cần xử lý va chạm (CSMA/CD).\n\n3. Full-duplex links between a host and a switch …Liên kết song công giữa host và switch …\n   Answer: b) have no collisions, so CSMA/CD is turned off\n   Separate transmit and receive pairs remove the collision possibility.VI: Cặp truyền và nhận tách biệt loại bỏ va chạm.\n\n4. A hub is a layer 1 device, so all its ports are in …Hub là thiết bị tầng 1 nên mọi cổng của nó nằm trong …\n   Answer: c) one collision domain\n   A hub repeats every signal to all ports.VI: Hub lặp mọi tín hiệu ra tất cả cổng.\n\n5. Which topology has a single point of failure at the centre?Topology nào có điểm hỏng duy nhất ở trung tâm?\n   Answer: d) Star\n   If the centre switch fails, every spoke is isolated.VI: Switch trung tâm hỏng thì mọi nhánh bị cô lập.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A modern switched Ethernet LAN is physically a … and logically behaves like …</p><p style=\"opacity:.75;font-size:.92em\"><i>LAN Ethernet có switch hiện nay về vật lý là … và về logic hoạt động như …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "bus; a shared cable"
+              },
+              {
+                "ma": "b",
+                "noiDung": "ring; token passing"
+              },
+              {
+                "ma": "c",
+                "noiDung": "mesh; full routing"
+              },
+              {
+                "ma": "d",
+                "noiDung": "star; a set of point-to-point links"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Every device has its own cable to the switch.</p><p><i>VI: Mỗi thiết bị có cáp riêng tới switch.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>In half-duplex a device …</p><p style=\"opacity:.75;font-size:.92em\"><i>Ở chế độ bán song công, thiết bị …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "can send or receive, but not both at once"
+              },
+              {
+                "ma": "b",
+                "noiDung": "can send and receive at the same time"
+              },
+              {
+                "ma": "c",
+                "noiDung": "can only send"
+              },
+              {
+                "ma": "d",
+                "noiDung": "can only receive"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Half-duplex needs collision handling (CSMA/CD).</p><p><i>VI: Bán song công cần xử lý va chạm (CSMA/CD).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Full-duplex links between a host and a switch …</p><p style=\"opacity:.75;font-size:.92em\"><i>Liên kết song công giữa host và switch …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "share the bandwidth between send and receive"
+              },
+              {
+                "ma": "b",
+                "noiDung": "have no collisions, so CSMA/CD is turned off"
+              },
+              {
+                "ma": "c",
+                "noiDung": "still need CSMA/CD"
+              },
+              {
+                "ma": "d",
+                "noiDung": "work only on fibre"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Separate transmit and receive pairs remove the collision possibility.</p><p><i>VI: Cặp truyền và nhận tách biệt loại bỏ va chạm.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>A hub is a layer 1 device, so all its ports are in …</p><p style=\"opacity:.75;font-size:.92em\"><i>Hub là thiết bị tầng 1 nên mọi cổng của nó nằm trong …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "separate VLANs"
+              },
+              {
+                "ma": "b",
+                "noiDung": "separate subnets"
+              },
+              {
+                "ma": "c",
+                "noiDung": "one collision domain"
+              },
+              {
+                "ma": "d",
+                "noiDung": "separate collision domains"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A hub repeats every signal to all ports.</p><p><i>VI: Hub lặp mọi tín hiệu ra tất cả cổng.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Which topology has a single point of failure at the centre?</p><p style=\"opacity:.75;font-size:.92em\"><i>Topology nào có điểm hỏng duy nhất ở trung tâm?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Full mesh"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Partial mesh"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Dual ring"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Star"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>If the centre switch fails, every spoke is isolated.</p><p><i>VI: Switch trung tâm hỏng thì mọi nhánh bị cô lập.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Saying a switch makes the LAN a bus."
+        },
+        {
+          "loi": "Mixing up collision domains with broadcast domains."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "collision domain",
+          "vi": "miền va chạm"
+        },
+        {
+          "en": "duplex",
+          "vi": "song công"
+        }
+      ]
+    },
+    {
+      "title": "Access 2 — Which access method?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "MAC methods"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Choose the media access control method used in each scenario.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chọn phương pháp điều khiển truy cập đường truyền dùng trong từng tình huống.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Can the station hear a collision while it transmits? Wired yes, wireless no.",
+        "Contention methods only matter on shared media."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Access 2 — Which access method?\n\nAnswer in the answer panel (no code needed).\n\n1. Access methodPhương pháp truy cập\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Access 2 — Which access method? — answer key\n\n1. Access methodPhương pháp truy cập\n   - r1.m: CSMA/CD\n   - r2.m: CSMA/CA\n   - r3.m: None (no contention)\n   - r4.m: Token passing\n   Wired half-duplex Ethernet detects collisions (CD); wireless cannot detect them so it avoids them (CA); a full-duplex switch link has none; token ring uses a token.VI: Ethernet bán song công có dây phát hiện va chạm (CD); không dây không phát hiện được nên tránh (CA); liên kết song công với switch không có va chạm; token ring dùng token.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Wired half-duplex Ethernet detects collisions (CD); wireless cannot detect them so it avoids them (CA); a full-duplex switch link has none; token ring uses a token.</p><p><i>VI: Ethernet bán song công có dây phát hiện va chạm (CD); không dây không phát hiện được nên tránh (CA); liên kết song công với switch không có va chạm; token ring dùng token.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Access method</p><p style=\"opacity:.75;font-size:.92em\"><i>Phương pháp truy cập</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Scenario"
+              },
+              {
+                "ma": "m",
+                "ten": "Method",
+                "luaChon": [
+                  "CSMA/CD",
+                  "CSMA/CA",
+                  "Token passing",
+                  "None (no contention)"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Classic shared coaxial Ethernet, half duplex"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Wi-Fi access point and laptops"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Host cabled to a switch port, full duplex"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Old token ring LAN"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.m": [
+                "CSMA/CD"
+              ],
+              "r2.m": [
+                "CSMA/CA"
+              ],
+              "r3.m": [
+                "None (no contention)"
+              ],
+              "r4.m": [
+                "Token passing"
+              ]
+            },
+            "giaiThich": "<p>Wired half-duplex Ethernet detects collisions (CD); wireless cannot detect them so it avoids them (CA); a full-duplex switch link has none; token ring uses a token.</p><p><i>VI: Ethernet bán song công có dây phát hiện va chạm (CD); không dây không phát hiện được nên tránh (CA); liên kết song công với switch không có va chạm; token ring dùng token.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using CSMA/CD for Wi-Fi."
+        },
+        {
+          "loi": "Applying contention methods to a full-duplex switch link."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "CSMA/CD",
+          "vi": "đa truy cập cảm nhận sóng mang, phát hiện va chạm"
+        },
+        {
+          "en": "CSMA/CA",
+          "vi": "… tránh va chạm"
+        }
+      ]
+    },
+    {
+      "title": "Access 3 — Order the CSMA/CD procedure",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "CSMA/CD"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>A half-duplex Ethernet station wants to send a frame and a collision happens. Put the steps in order.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một trạm Ethernet bán song công muốn gửi frame và xảy ra va chạm. Sắp các bước theo thứ tự.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "“Listen before talk, listen while talk.”",
+        "The random backoff comes after the jam."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Access 3 — Order the CSMA/CD procedure\n\nAnswer in the answer panel (no code needed).\n\n1. CSMA/CDCSMA/CD\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Access 3 — Order the CSMA/CD procedure — answer key\n\n1. CSMA/CDCSMA/CD\n   Answer: s1) Listen: is the medium idle?  →  s2) Transmit the frame while listening  →  s3) A collision is detected  →  s4) Send a jam signal so everybody notices  →  s5) Wait a random backoff time  →  s6) Try again (up to 16 attempts)\n   Carrier sense, transmit, collision detect, jam, random backoff, retry.VI: Nghe sóng mang, phát, phát hiện va chạm, tín hiệu jam, chờ ngẫu nhiên, thử lại.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Carrier sense, transmit, collision detect, jam, random backoff, retry.</p><p><i>VI: Nghe sóng mang, phát, phát hiện va chạm, tín hiệu jam, chờ ngẫu nhiên, thử lại.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>CSMA/CD</p><p style=\"opacity:.75;font-size:.92em\"><i>CSMA/CD</i></p>",
+            "muc": [
+              {
+                "ma": "s4",
+                "noiDung": "Send a jam signal so everybody notices"
+              },
+              {
+                "ma": "s5",
+                "noiDung": "Wait a random backoff time"
+              },
+              {
+                "ma": "s6",
+                "noiDung": "Try again (up to 16 attempts)"
+              },
+              {
+                "ma": "s1",
+                "noiDung": "Listen: is the medium idle?"
+              },
+              {
+                "ma": "s2",
+                "noiDung": "Transmit the frame while listening"
+              },
+              {
+                "ma": "s3",
+                "noiDung": "A collision is detected"
+              }
+            ],
+            "dapAn": [
+              "s1",
+              "s2",
+              "s3",
+              "s4",
+              "s5",
+              "s6"
+            ],
+            "giaiThich": "<p>Carrier sense, transmit, collision detect, jam, random backoff, retry.</p><p><i>VI: Nghe sóng mang, phát, phát hiện va chạm, tín hiệu jam, chờ ngẫu nhiên, thử lại.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Retransmitting immediately after the collision."
+        },
+        {
+          "loi": "Putting the jam before the detection."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "backoff",
+          "vi": "thời gian chờ lùi"
+        },
+        {
+          "en": "jam signal",
+          "vi": "tín hiệu báo va chạm"
+        }
+      ]
+    },
+    {
+      "title": "Access 4 — Count the domains",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 12,
+      "points": 30,
+      "concepts": [
+        "domains"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Count collision and broadcast domains (switch ports are separate collision domains; a hub joins all its ports into one; only routers or VLANs split broadcast domains).</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đếm miền va chạm và miền broadcast (mỗi cổng switch là một miền va chạm; hub gộp mọi cổng của nó thành một; chỉ router hoặc VLAN mới chia miền broadcast).</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Switch ports split collision domains; routers and VLANs split broadcast domains.",
+        "A hub merges collision domains."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Access 4 — Count the domains\n\nAnswer in the answer panel (no code needed).\n\n1. One 8-port switch with 8 PCs, no VLAN. Collision domains = ?Một switch 8 cổng với 8 PC, không VLAN. Số miền va chạm = ?\n2. The same switch, no VLAN. Broadcast domains = ?Cùng switch đó, không VLAN. Số miền broadcast = ?\n3. A switch has 4 PCs on 4 ports and a hub on a fifth port with 3 PCs. Collision domains = ?Switch có 4 PC trên 4 cổng và một hub trên cổng thứ năm với 3 PC. Số miền va chạm = ?\n4. A router joins 3 switches, each with 5 PCs. Broadcast domains = ?Một router nối 3 switch, mỗi switch 5 PC. Số miền broadcast = ?\n5. One switch carries 3 VLANs (no router). Broadcast domains = ?Một switch có 3 VLAN (không router). Số miền broadcast = ?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Access 4 — Count the domains — answer key\n\n1. One 8-port switch with 8 PCs, no VLAN. Collision domains = ?Một switch 8 cổng với 8 PC, không VLAN. Số miền va chạm = ?\n   Answer: d) 8\n   Each switch port is its own collision domain.VI: Mỗi cổng switch là một miền va chạm.\n\n2. The same switch, no VLAN. Broadcast domains = ?Cùng switch đó, không VLAN. Số miền broadcast = ?\n   Answer: a) 1\n   A switch forwards broadcasts out of every port.VI: Switch chuyển broadcast ra mọi cổng.\n\n3. A switch has 4 PCs on 4 ports and a hub on a fifth port with 3 PCs. Collision domains = ?Switch có 4 PC trên 4 cổng và một hub trên cổng thứ năm với 3 PC. Số miền va chạm = ?\n   Answer: b) 5\n   4 switch-port domains + 1 domain for the hub link and its 3 PCs = 5.VI: 4 miền của cổng switch + 1 miền của liên kết hub cùng 3 PC = 5.\n\n4. A router joins 3 switches, each with 5 PCs. Broadcast domains = ?Một router nối 3 switch, mỗi switch 5 PC. Số miền broadcast = ?\n   Answer: c) 3\n   Each router interface starts a new broadcast domain.VI: Mỗi giao diện router mở một miền broadcast mới.\n\n5. One switch carries 3 VLANs (no router). Broadcast domains = ?Một switch có 3 VLAN (không router). Số miền broadcast = ?\n   Answer: d) 3\n   One broadcast domain per VLAN.VI: Mỗi VLAN một miền broadcast.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>One 8-port switch with 8 PCs, no VLAN. Collision domains = ?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một switch 8 cổng với 8 PC, không VLAN. Số miền va chạm = ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "1"
+              },
+              {
+                "ma": "b",
+                "noiDung": "9"
+              },
+              {
+                "ma": "c",
+                "noiDung": "4"
+              },
+              {
+                "ma": "d",
+                "noiDung": "8"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Each switch port is its own collision domain.</p><p><i>VI: Mỗi cổng switch là một miền va chạm.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The same switch, no VLAN. Broadcast domains = ?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cùng switch đó, không VLAN. Số miền broadcast = ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "1"
+              },
+              {
+                "ma": "b",
+                "noiDung": "8"
+              },
+              {
+                "ma": "c",
+                "noiDung": "2"
+              },
+              {
+                "ma": "d",
+                "noiDung": "0"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>A switch forwards broadcasts out of every port.</p><p><i>VI: Switch chuyển broadcast ra mọi cổng.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A switch has 4 PCs on 4 ports and a hub on a fifth port with 3 PCs. Collision domains = ?</p><p style=\"opacity:.75;font-size:.92em\"><i>Switch có 4 PC trên 4 cổng và một hub trên cổng thứ năm với 3 PC. Số miền va chạm = ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "1"
+              },
+              {
+                "ma": "b",
+                "noiDung": "5"
+              },
+              {
+                "ma": "c",
+                "noiDung": "8"
+              },
+              {
+                "ma": "d",
+                "noiDung": "4"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>4 switch-port domains + 1 domain for the hub link and its 3 PCs = 5.</p><p><i>VI: 4 miền của cổng switch + 1 miền của liên kết hub cùng 3 PC = 5.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>A router joins 3 switches, each with 5 PCs. Broadcast domains = ?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một router nối 3 switch, mỗi switch 5 PC. Số miền broadcast = ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "15"
+              },
+              {
+                "ma": "b",
+                "noiDung": "18"
+              },
+              {
+                "ma": "c",
+                "noiDung": "3"
+              },
+              {
+                "ma": "d",
+                "noiDung": "1"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Each router interface starts a new broadcast domain.</p><p><i>VI: Mỗi giao diện router mở một miền broadcast mới.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>One switch carries 3 VLANs (no router). Broadcast domains = ?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một switch có 3 VLAN (không router). Số miền broadcast = ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "1"
+              },
+              {
+                "ma": "b",
+                "noiDung": "2"
+              },
+              {
+                "ma": "c",
+                "noiDung": "0"
+              },
+              {
+                "ma": "d",
+                "noiDung": "3"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>One broadcast domain per VLAN.</p><p><i>VI: Mỗi VLAN một miền broadcast.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting switch ports as separate broadcast domains."
+        },
+        {
+          "loi": "Counting each hub port as a separate collision domain."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "broadcast domain",
+          "vi": "miền broadcast"
+        }
+      ]
+    }
+  ]
+}

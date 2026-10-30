@@ -1,0 +1,1059 @@
+{
+  "trackSlug": "nwc204-practice",
+  "moduleSlug": "nwc204-5-1-error-detection",
+  "lesson": {
+    "course": "nwc204-computer-networking",
+    "slug": "nwc204-5-1-muc-dich-tang-lien-ket-du-lieu"
+  },
+  "exercises": [
+    {
+      "title": "Link 1 — Framing and error detection concepts",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "error detection"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Concept questions about the data link layer.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi khái niệm về tầng liên kết dữ liệu.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Detection is not correction.",
+        "Parity is cheap but weak; CRC is strong against bursts."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Link 1 — Framing and error detection concepts\n\nAnswer in the answer panel (no code needed).\n\n1. The data link layer delivers frames between …Tầng liên kết dữ liệu chuyển frame giữa …\n2. The FCS (frame check sequence) in the trailer lets the receiver …FCS (chuỗi kiểm tra khung) trong trailer giúp bên nhận …\n3. What does a single even-parity bit detect?Một bit chẵn lẻ (parity chẵn) phát hiện được gì?\n4. CRC treats the bit string as …CRC coi chuỗi bit như …\n5. A receiver recomputes the CRC over data+CRC and gets a non-zero remainder. It …Bên nhận tính lại CRC trên dữ liệu+CRC và được số dư khác 0. Nó …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Link 1 — Framing and error detection concepts — answer key\n\n1. The data link layer delivers frames between …Tầng liên kết dữ liệu chuyển frame giữa …\n   Answer: c) two nodes on the same link / network segment\n   Layer 2 addressing (MAC) is only meaningful on one link.VI: Địa chỉ tầng 2 (MAC) chỉ có nghĩa trên một liên kết.\n\n2. The FCS (frame check sequence) in the trailer lets the receiver …FCS (chuỗi kiểm tra khung) trong trailer giúp bên nhận …\n   Answer: d) detect that the frame was corrupted\n   CRC detects errors; the frame is discarded, retransmission is left to upper layers.VI: CRC phát hiện lỗi; frame bị huỷ, việc gửi lại do tầng trên lo.\n\n3. What does a single even-parity bit detect?Một bit chẵn lẻ (parity chẵn) phát hiện được gì?\n   Answer: a) Any odd number of flipped bits\n   Two flips cancel out, so parity misses all even-size error sets.VI: Hai bit lật triệt tiêu nhau nên parity bỏ sót mọi lỗi có số bit chẵn.\n\n4. CRC treats the bit string as …CRC coi chuỗi bit như …\n   Answer: b) a polynomial divided by a generator polynomial in modulo-2 arithmetic\n   The remainder of the division is the CRC.VI: Số dư của phép chia chính là CRC.\n\n5. A receiver recomputes the CRC over data+CRC and gets a non-zero remainder. It …Bên nhận tính lại CRC trên dữ liệu+CRC và được số dư khác 0. Nó …\n   Answer: c) discards the frame\n   A zero remainder means “no error detected”.VI: Số dư 0 nghĩa là “không phát hiện lỗi”.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The data link layer delivers frames between …</p><p style=\"opacity:.75;font-size:.92em\"><i>Tầng liên kết dữ liệu chuyển frame giữa …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "two processes on one host"
+              },
+              {
+                "ma": "b",
+                "noiDung": "two applications"
+              },
+              {
+                "ma": "c",
+                "noiDung": "two nodes on the same link / network segment"
+              },
+              {
+                "ma": "d",
+                "noiDung": "two hosts on different continents"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Layer 2 addressing (MAC) is only meaningful on one link.</p><p><i>VI: Địa chỉ tầng 2 (MAC) chỉ có nghĩa trên một liên kết.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The FCS (frame check sequence) in the trailer lets the receiver …</p><p style=\"opacity:.75;font-size:.92em\"><i>FCS (chuỗi kiểm tra khung) trong trailer giúp bên nhận …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "correct the corrupted bits"
+              },
+              {
+                "ma": "b",
+                "noiDung": "find the sender’s IP"
+              },
+              {
+                "ma": "c",
+                "noiDung": "encrypt the frame"
+              },
+              {
+                "ma": "d",
+                "noiDung": "detect that the frame was corrupted"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>CRC detects errors; the frame is discarded, retransmission is left to upper layers.</p><p><i>VI: CRC phát hiện lỗi; frame bị huỷ, việc gửi lại do tầng trên lo.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>What does a single even-parity bit detect?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một bit chẵn lẻ (parity chẵn) phát hiện được gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Any odd number of flipped bits"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Any number of flipped bits"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only two flipped bits"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nothing, it corrects errors"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Two flips cancel out, so parity misses all even-size error sets.</p><p><i>VI: Hai bit lật triệt tiêu nhau nên parity bỏ sót mọi lỗi có số bit chẵn.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>CRC treats the bit string as …</p><p style=\"opacity:.75;font-size:.92em\"><i>CRC coi chuỗi bit như …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a hash of the IP header"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a polynomial divided by a generator polynomial in modulo-2 arithmetic"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a decimal number divided by 10"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a sum of bytes"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The remainder of the division is the CRC.</p><p><i>VI: Số dư của phép chia chính là CRC.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>A receiver recomputes the CRC over data+CRC and gets a non-zero remainder. It …</p><p style=\"opacity:.75;font-size:.92em\"><i>Bên nhận tính lại CRC trên dữ liệu+CRC và được số dư khác 0. Nó …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "forwards the frame anyway"
+              },
+              {
+                "ma": "b",
+                "noiDung": "sends a TCP RST"
+              },
+              {
+                "ma": "c",
+                "noiDung": "discards the frame"
+              },
+              {
+                "ma": "d",
+                "noiDung": "fixes the bits"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A zero remainder means “no error detected”.</p><p><i>VI: Số dư 0 nghĩa là “không phát hiện lỗi”.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Saying CRC corrects errors."
+        },
+        {
+          "loi": "Believing parity catches every error."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "FCS",
+          "vi": "chuỗi kiểm tra khung"
+        },
+        {
+          "en": "parity",
+          "vi": "chẵn lẻ"
+        }
+      ]
+    },
+    {
+      "title": "Link 2 — Even parity bit",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "parity"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Give the parity bit that makes the total number of 1-bits <b>even</b>.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cho bit parity làm tổng số bit 1 là <b>số chẵn</b>.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Count the 1-bits.",
+        "Odd count → parity bit 1."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Link 2 — Even parity bit\n\nAnswer in the answer panel (no code needed).\n\n1. Even parityParity chẵn\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Link 2 — Even parity bit — answer key\n\n1. Even parityParity chẵn\n   - r1.p: 0\n   - r2.p: 1\n   - r3.p: 0\n   - r4.p: 1\n   - r5.p: 0\n   1011001: 4 ones → bit 0; 1110000: 3 ones → bit 1; 0000000: 0 ones → bit 0; 1111111: 7 ones → bit 1; 1010101: 4 ones → bit 0.VI: Đếm số bit 1; lẻ thì thêm 1, chẵn thì thêm 0.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>1011001: 4 ones → bit 0; 1110000: 3 ones → bit 1; 0000000: 0 ones → bit 0; 1111111: 7 ones → bit 1; 1010101: 4 ones → bit 0.</p><p><i>VI: Đếm số bit 1; lẻ thì thêm 1, chẵn thì thêm 0.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Even parity</p><p style=\"opacity:.75;font-size:.92em\"><i>Parity chẵn</i></p>",
+            "cot": [
+              {
+                "ma": "d",
+                "ten": "7-bit data"
+              },
+              {
+                "ma": "p",
+                "ten": "Parity bit",
+                "luaChon": [
+                  "0",
+                  "1"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "d": "1011001"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "d": "1110000"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "d": "0000000"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "d": "1111111"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "d": "1010101"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.p": [
+                "0"
+              ],
+              "r2.p": [
+                "1"
+              ],
+              "r3.p": [
+                "0"
+              ],
+              "r4.p": [
+                "1"
+              ],
+              "r5.p": [
+                "0"
+              ]
+            },
+            "giaiThich": "<p>1011001: 4 ones → bit 0; 1110000: 3 ones → bit 1; 0000000: 0 ones → bit 0; 1111111: 7 ones → bit 1; 1010101: 4 ones → bit 0.</p><p><i>VI: Đếm số bit 1; lẻ thì thêm 1, chẵn thì thêm 0.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Computing odd parity."
+        },
+        {
+          "loi": "Counting the zeros."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "parity bit",
+          "vi": "bit chẵn lẻ"
+        }
+      ]
+    },
+    {
+      "title": "Link 3 — CRC remainder by hand",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "CRC"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Append r zeros (r = degree of the generator) to the data and divide by the generator using modulo-2 (XOR) division. Give the r-bit CRC remainder.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Thêm r bit 0 (r = bậc của đa thức sinh) vào dữ liệu rồi chia cho đa thức sinh bằng phép chia modulo 2 (XOR). Cho số dư CRC r bit.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "XOR the generator under the leading 1, shift, repeat until fewer than r+1 bits remain.",
+        "Only XOR when the leading bit is 1."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Link 3 — CRC remainder by hand\n\nAnswer in the answer panel (no code needed).\n\n1. CRCCRC\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Link 3 — CRC remainder by hand — answer key\n\n1. CRCCRC\n   - r1.c: 1110\n   - r1.t: 11010110111110\n   - r2.c: 001\n   - r2.t: 100100001\n   - r3.c: 100\n   - r3.t: 11010011101100100\n   - r4.c: 10\n   - r4.t: 1011010\n   1101011011 / 10011: CRC 1110; 100100 / 1101: CRC 001; 11010011101100 / 1011: CRC 100; 10110 / 101: CRC 10. The transmitted frame is data followed by the CRC; dividing it by the generator leaves remainder 0.VI: Khung truyền là dữ liệu nối CRC; chia cho đa thức sinh được số dư 0.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>1101011011 / 10011: CRC 1110; 100100 / 1101: CRC 001; 11010011101100 / 1011: CRC 100; 10110 / 101: CRC 10. The transmitted frame is data followed by the CRC; dividing it by the generator leaves remainder 0.</p><p><i>VI: Khung truyền là dữ liệu nối CRC; chia cho đa thức sinh được số dư 0.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>CRC</p><p style=\"opacity:.75;font-size:.92em\"><i>CRC</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Data / generator"
+              },
+              {
+                "ma": "c",
+                "ten": "CRC remainder"
+              },
+              {
+                "ma": "t",
+                "ten": "Transmitted bits (data+CRC)"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "1101011011 / 10011"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "100100 / 1101"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "11010011101100 / 1011"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "10110 / 101"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.c": [
+                "1110"
+              ],
+              "r1.t": [
+                "11010110111110"
+              ],
+              "r2.c": [
+                "001"
+              ],
+              "r2.t": [
+                "100100001"
+              ],
+              "r3.c": [
+                "100"
+              ],
+              "r3.t": [
+                "11010011101100100"
+              ],
+              "r4.c": [
+                "10"
+              ],
+              "r4.t": [
+                "1011010"
+              ]
+            },
+            "giaiThich": "<p>1101011011 / 10011: CRC 1110; 100100 / 1101: CRC 001; 11010011101100 / 1011: CRC 100; 10110 / 101: CRC 10. The transmitted frame is data followed by the CRC; dividing it by the generator leaves remainder 0.</p><p><i>VI: Khung truyền là dữ liệu nối CRC; chia cho đa thức sinh được số dư 0.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting to append the r zeros before dividing."
+        },
+        {
+          "loi": "Using ordinary subtraction with borrow instead of XOR."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "generator polynomial",
+          "vi": "đa thức sinh"
+        }
+      ]
+    },
+    {
+      "title": "Link 4 — What can each check catch?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "CRC strength"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Reason about the strength of the checks.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lập luận về độ mạnh của các phép kiểm.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Think of how errors change the pattern, not only the count.",
+        "Burst errors are common on real links."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Link 4 — What can each check catch?\n\nAnswer in the answer panel (no code needed).\n\n1. Two bits of a byte are flipped. Even parity …Hai bit của một byte bị lật. Parity chẵn …\n2. A 32-bit CRC (Ethernet FCS) detects every burst of errors up to … bits.CRC 32 bit (FCS Ethernet) phát hiện mọi chùm lỗi dài tới … bit.\n3. Why is the FCS placed in the trailer instead of the header?Vì sao FCS đặt ở trailer chứ không ở header?\n4. Compared to the Internet checksum, a CRC is …So với Internet checksum, CRC …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Link 4 — What can each check catch? — answer key\n\n1. Two bits of a byte are flipped. Even parity …Hai bit của một byte bị lật. Parity chẵn …\n   Answer: a) does not detect it\n   The count of 1s changes by an even amount, so parity is unchanged.VI: Số bit 1 đổi một lượng chẵn nên parity không đổi.\n\n2. A 32-bit CRC (Ethernet FCS) detects every burst of errors up to … bits.CRC 32 bit (FCS Ethernet) phát hiện mọi chùm lỗi dài tới … bit.\n   Answer: b) 32\n   A CRC of degree r catches all bursts of length ≤ r.VI: CRC bậc r bắt mọi chùm lỗi dài ≤ r.\n\n3. Why is the FCS placed in the trailer instead of the header?Vì sao FCS đặt ở trailer chứ không ở header?\n   Answer: c) It is computed while the frame is being sent, after all the bits are known\n   The sender can stream the frame and append the CRC at the end.VI: Bên gửi có thể truyền liên tục rồi nối CRC ở cuối.\n\n4. Compared to the Internet checksum, a CRC is …So với Internet checksum, CRC …\n   Answer: d) much better at detecting burst errors and cheap in hardware\n   CRC is used at layer 2, the Internet checksum at layers 3–4.VI: CRC dùng ở tầng 2, Internet checksum ở tầng 3–4.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Two bits of a byte are flipped. Even parity …</p><p style=\"opacity:.75;font-size:.92em\"><i>Hai bit của một byte bị lật. Parity chẵn …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "does not detect it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "detects it"
+              },
+              {
+                "ma": "c",
+                "noiDung": "corrects it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "detects and locates it"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The count of 1s changes by an even amount, so parity is unchanged.</p><p><i>VI: Số bit 1 đổi một lượng chẵn nên parity không đổi.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A 32-bit CRC (Ethernet FCS) detects every burst of errors up to … bits.</p><p style=\"opacity:.75;font-size:.92em\"><i>CRC 32 bit (FCS Ethernet) phát hiện mọi chùm lỗi dài tới … bit.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "64"
+              },
+              {
+                "ma": "b",
+                "noiDung": "32"
+              },
+              {
+                "ma": "c",
+                "noiDung": "8"
+              },
+              {
+                "ma": "d",
+                "noiDung": "16"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A CRC of degree r catches all bursts of length ≤ r.</p><p><i>VI: CRC bậc r bắt mọi chùm lỗi dài ≤ r.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Why is the FCS placed in the trailer instead of the header?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao FCS đặt ở trailer chứ không ở header?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The trailer is encrypted"
+              },
+              {
+                "ma": "b",
+                "noiDung": "To make the frame shorter"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It is computed while the frame is being sent, after all the bits are known"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Headers cannot hold numbers"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The sender can stream the frame and append the CRC at the end.</p><p><i>VI: Bên gửi có thể truyền liên tục rồi nối CRC ở cuối.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Compared to the Internet checksum, a CRC is …</p><p style=\"opacity:.75;font-size:.92em\"><i>So với Internet checksum, CRC …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "weaker but simpler in software"
+              },
+              {
+                "ma": "b",
+                "noiDung": "able to correct single-bit errors"
+              },
+              {
+                "ma": "c",
+                "noiDung": "only used by TCP"
+              },
+              {
+                "ma": "d",
+                "noiDung": "much better at detecting burst errors and cheap in hardware"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>CRC is used at layer 2, the Internet checksum at layers 3–4.</p><p><i>VI: CRC dùng ở tầng 2, Internet checksum ở tầng 3–4.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Believing a longer parity makes it correct errors."
+        },
+        {
+          "loi": "Forgetting that even a CRC can miss rare patterns."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "burst error",
+          "vi": "lỗi chùm"
+        }
+      ]
+    },
+    {
+      "title": "Link 5 — Write crcRemainder(data, poly)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "CRC"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Write <code>crcRemainder(data, poly)</code> where both are bit strings. Return the CRC (a string of <code>poly.length - 1</code> bits): append that many zeros to <code>data</code> and perform modulo-2 long division.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>crcRemainder(data, poly)</code> với cả hai là chuỗi bit. Trả CRC (chuỗi <code>poly.length - 1</code> bit): thêm chừng đó bit 0 vào <code>data</code> rồi thực hiện phép chia dài modulo 2.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "crcRemainder(\"1101011011\", \"10011\")",
+          "output": "\"1110\"",
+          "explanation": "First sample case.|||Ca mẫu đầu tiên."
+        }
+      ],
+      "hintsJson": [
+        "Make an array of characters; walk i from 0 while a full generator still fits.",
+        "If a[i] is \"1\" XOR the generator into a[i..i+len-1]."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function crcRemainder(data, poly) {\n  // Write your solution here\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction crcRemainder(data, poly) {\n  var r = poly.length - 1, a = (data + new Array(r + 1).join('0')).split('');\n  for (var i = 0; i + poly.length <= a.length; i++) {\n    if (a[i] === '1') for (var j = 0; j < poly.length; j++) a[i + j] = a[i + j] === poly[j] ? '0' : '1';\n  }\n  return a.slice(a.length - r).join('');\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Hardware does this with a shift register and XOR gates; the code mirrors the paper method.</p><p><i>VI: Phần cứng dùng thanh ghi dịch và cổng XOR; mã mô phỏng đúng cách làm trên giấy.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: crcRemainder(\"1101011011\", \"10011\")",
+              "vi": "Ca 1"
+            },
+            "goi": "crcRemainder(\"1101011011\", \"10011\")",
+            "mongDoi": "1110"
+          },
+          {
+            "moTa": {
+              "en": "Case 2: crcRemainder(\"100100\", \"1101\")",
+              "vi": "Ca 2"
+            },
+            "goi": "crcRemainder(\"100100\", \"1101\")",
+            "mongDoi": "001"
+          },
+          {
+            "moTa": {
+              "en": "Case 3: crcRemainder(\"11010011101100\", \"1011\")",
+              "vi": "Ca 3"
+            },
+            "goi": "crcRemainder(\"11010011101100\", \"1011\")",
+            "mongDoi": "100"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "crcRemainder(\"1\", \"11\")",
+            "mongDoi": "1",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "crcRemainder(\"0000\", \"101\")",
+            "mongDoi": "00",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "crcRemainder(\"10101010101010\", \"110101\")",
+            "mongDoi": "00010",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "crcRemainder(\"11111111\", \"100000111\")",
+            "mongDoi": "11110011",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting to append the zeros first."
+        },
+        {
+          "loi": "Returning the whole working string instead of the last r bits."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Link 6 — Write verifyFrame(frame, poly)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "FCS check"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>The receiver gets <code>frame</code> = data followed by its CRC. Write <code>verifyFrame(frame, poly)</code> returning <code>true</code> when the modulo-2 division of the whole frame by <code>poly</code> leaves a zero remainder (no error detected) and <code>false</code> otherwise. Note that a burst error longer than the CRC, or one that is itself a multiple of the generator, can slip through.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bên nhận có <code>frame</code> = dữ liệu nối CRC. Viết <code>verifyFrame(frame, poly)</code> trả <code>true</code> khi chia modulo 2 cả frame cho <code>poly</code> được số dư 0 (không phát hiện lỗi), ngược lại <code>false</code>. Lưu ý: lỗi chùm dài hơn CRC hoặc chính là bội của đa thức sinh có thể lọt qua.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "verifyFrame(\"11010110111110\", \"10011\")",
+          "output": "true",
+          "explanation": "First sample case.|||Ca mẫu đầu tiên."
+        }
+      ],
+      "hintsJson": [
+        "The same long division, but without appending zeros.",
+        "Zero remainder means no error detected."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function verifyFrame(frame, poly) {\n  // Write your solution here\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction verifyFrame(frame, poly) {\n  var a = frame.split('');\n  for (var i = 0; i + poly.length <= a.length; i++) {\n    if (a[i] === '1') for (var j = 0; j < poly.length; j++) a[i + j] = a[i + j] === poly[j] ? '0' : '1';\n  }\n  return a.slice(a.length - (poly.length - 1)).join('').indexOf('1') < 0;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>That is exactly how a NIC checks the FCS: divide the entire frame; non-zero means drop it.</p><p><i>VI: NIC kiểm FCS đúng như vậy: chia cả frame; khác 0 thì bỏ.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: verifyFrame(\"11010110111110\", \"10011\")",
+              "vi": "Ca 1"
+            },
+            "goi": "verifyFrame(\"11010110111110\", \"10011\")",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "Case 2: verifyFrame(\"11000110111110\", \"10011\")",
+              "vi": "Ca 2"
+            },
+            "goi": "verifyFrame(\"11000110111110\", \"10011\")",
+            "mongDoi": false
+          },
+          {
+            "moTa": {
+              "en": "Case 3: verifyFrame(\"10101011101\", \"10011\")",
+              "vi": "Ca 3"
+            },
+            "goi": "verifyFrame(\"10101011101\", \"10011\")",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "verifyFrame(\"00101011101\", \"10011\")",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "verifyFrame(\"11110010\", \"10011\")",
+            "mongDoi": true,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "verifyFrame(\"10110011100100\", \"10011\")",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "verifyFrame(\"11010000001110\", \"10011\")",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "verifyFrame(\"00000000\", \"10011\")",
+            "mongDoi": true,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Appending zeros before dividing the received frame."
+        },
+        {
+          "loi": "Comparing the remainder with the data instead of with zero."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Link 7 — The Internet checksum (one’s complement)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "Internet checksum"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>IP, TCP and UDP use a 16-bit one’s-complement checksum. Write <code>internetChecksum(words)</code> where <code>words</code> is an array of 4-digit hex strings: add them as 16-bit numbers, <b>wrapping any carry out of bit 16 back into the low bits</b>, then take the bitwise complement. Return 4 uppercase hex digits.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>IP, TCP và UDP dùng checksum bù 1 16 bit. Viết <code>internetChecksum(words)</code> với <code>words</code> là mảng chuỗi hex 4 chữ số: cộng như số 16 bit, <b>cộng vòng phần nhớ vượt bit 16 vào các bit thấp</b>, rồi lấy bù bit. Trả 4 chữ số hex viết hoa.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "internetChecksum([\"4500\",\"0073\",\"0000\",\"4000\",\"4011\",\"C0A8\",\"0001\",\"C0A8\",\"00C7\"])",
+          "output": "\"B861\"",
+          "explanation": "First sample case.|||Ca mẫu đầu tiên."
+        }
+      ],
+      "hintsJson": [
+        "Fold the carry after every addition: while (sum > 0xFFFF) sum = (sum & 0xFFFF) + (sum >>> 16).",
+        "Complement with (~sum) & 0xFFFF; pad the hex to 4 digits."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function internetChecksum(words) {\n  // Write your solution here\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction internetChecksum(words) {\n  var sum = 0;\n  for (var i = 0; i < words.length; i++) {\n    sum += parseInt(words[i], 16);\n    while (sum > 0xffff) sum = (sum & 0xffff) + (sum >>> 16);\n  }\n  var c = (~sum) & 0xffff, h = c.toString(16).toUpperCase();\n  while (h.length < 4) h = '0' + h;\n  return h;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The receiver adds all words including the checksum; an intact packet gives 0xFFFF before complement.</p><p><i>VI: Bên nhận cộng mọi từ kể cả checksum; gói nguyên vẹn cho 0xFFFF trước khi bù.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: internetChecksum([\"4500\",\"0073\",\"0000\",\"4000\",\"4011\",\"C0A8\",\"0001\",\"C0A8\",\"00C7\"])",
+              "vi": "Ca 1"
+            },
+            "goi": "internetChecksum([\"4500\",\"0073\",\"0000\",\"4000\",\"4011\",\"C0A8\",\"0001\",\"C0A8\",\"00C7\"])",
+            "mongDoi": "B861"
+          },
+          {
+            "moTa": {
+              "en": "Case 2: internetChecksum([\"0000\"])",
+              "vi": "Ca 2"
+            },
+            "goi": "internetChecksum([\"0000\"])",
+            "mongDoi": "FFFF"
+          },
+          {
+            "moTa": {
+              "en": "Case 3: internetChecksum([\"FFFF\",\"FFFF\"])",
+              "vi": "Ca 3"
+            },
+            "goi": "internetChecksum([\"FFFF\",\"FFFF\"])",
+            "mongDoi": "0000"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "internetChecksum([\"FFFF\",\"0001\"])",
+            "mongDoi": "FFFE",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "internetChecksum([\"1234\",\"5678\",\"9ABC\"])",
+            "mongDoi": "FC96",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "internetChecksum([])",
+            "mongDoi": "FFFF",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "internetChecksum([\"8000\",\"8000\",\"0001\"])",
+            "mongDoi": "FFFD",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dropping the carry instead of adding it back."
+        },
+        {
+          "loi": "Forgetting to mask with 0xFFFF after the complement (JavaScript uses 32 bits)."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

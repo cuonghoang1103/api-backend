@@ -1,0 +1,1030 @@
+{
+  "trackSlug": "nwc204-practice",
+  "moduleSlug": "nwc204-6-1-ethernet-mac",
+  "lesson": {
+    "course": "nwc204-computer-networking",
+    "slug": "nwc204-6-1-khung-ethernet-va-dia-chi-mac"
+  },
+  "exercises": [
+    {
+      "title": "Ethernet 1 — Frame fields and sizes",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "Ethernet frame"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Ethernet II frame fields.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các trường của frame Ethernet II.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Header 14 B = 6 + 6 + 2; trailer FCS 4 B.",
+        "Minimum 64 B ⇒ data padded to at least 46 B."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Ethernet 1 — Frame fields and sizes\n\nAnswer in the answer panel (no code needed).\n\n1. How long is an Ethernet MAC address?Địa chỉ MAC Ethernet dài bao nhiêu?\n2. The minimum and maximum size of an Ethernet frame (header+data+FCS) are …Kích thước tối thiểu và tối đa của frame Ethernet (header+dữ liệu+FCS) là …\n3. The Type/EtherType field 0x0800 means the payload is …Trường Type/EtherType 0x0800 nghĩa là dữ liệu là …\n4. The first 24 bits of a MAC address identify …24 bit đầu của địa chỉ MAC xác định …\n5. The destination MAC ff:ff:ff:ff:ff:ff is …MAC đích ff:ff:ff:ff:ff:ff là …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Ethernet 1 — Frame fields and sizes — answer key\n\n1. How long is an Ethernet MAC address?Địa chỉ MAC Ethernet dài bao nhiêu?\n   Answer: a) 48 bits (6 bytes)\n   Written as 12 hex digits.VI: Viết bằng 12 chữ số hex.\n\n2. The minimum and maximum size of an Ethernet frame (header+data+FCS) are …Kích thước tối thiểu và tối đa của frame Ethernet (header+dữ liệu+FCS) là …\n   Answer: b) 64 and 1518 bytes\n   Data field 46–1500 plus 14 header and 4 FCS bytes.VI: Trường dữ liệu 46–1500 cộng 14 byte header và 4 byte FCS.\n\n3. The Type/EtherType field 0x0800 means the payload is …Trường Type/EtherType 0x0800 nghĩa là dữ liệu là …\n   Answer: c) IPv4\n   0x0800 = IPv4, 0x0806 = ARP, 0x86DD = IPv6, 0x8100 = 802.1Q.VI: 0x0800 = IPv4, 0x0806 = ARP, 0x86DD = IPv6, 0x8100 = 802.1Q.\n\n4. The first 24 bits of a MAC address identify …24 bit đầu của địa chỉ MAC xác định …\n   Answer: d) the manufacturer (OUI)\n   OUI = Organizationally Unique Identifier; the other 24 bits are vendor-assigned.VI: OUI = mã nhà sản xuất; 24 bit sau do hãng gán.\n\n5. The destination MAC ff:ff:ff:ff:ff:ff is …MAC đích ff:ff:ff:ff:ff:ff là …\n   Answer: a) the Ethernet broadcast address\n   Delivered to every device on the LAN.VI: Gửi tới mọi thiết bị trên LAN.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>How long is an Ethernet MAC address?</p><p style=\"opacity:.75;font-size:.92em\"><i>Địa chỉ MAC Ethernet dài bao nhiêu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "48 bits (6 bytes)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "32 bits"
+              },
+              {
+                "ma": "c",
+                "noiDung": "64 bits"
+              },
+              {
+                "ma": "d",
+                "noiDung": "128 bits"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Written as 12 hex digits.</p><p><i>VI: Viết bằng 12 chữ số hex.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The minimum and maximum size of an Ethernet frame (header+data+FCS) are …</p><p style=\"opacity:.75;font-size:.92em\"><i>Kích thước tối thiểu và tối đa của frame Ethernet (header+dữ liệu+FCS) là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "128 and 9000 bytes"
+              },
+              {
+                "ma": "b",
+                "noiDung": "64 and 1518 bytes"
+              },
+              {
+                "ma": "c",
+                "noiDung": "46 and 1500 bytes"
+              },
+              {
+                "ma": "d",
+                "noiDung": "20 and 65535 bytes"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Data field 46–1500 plus 14 header and 4 FCS bytes.</p><p><i>VI: Trường dữ liệu 46–1500 cộng 14 byte header và 4 byte FCS.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>The Type/EtherType field 0x0800 means the payload is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Trường Type/EtherType 0x0800 nghĩa là dữ liệu là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "IPv6"
+              },
+              {
+                "ma": "b",
+                "noiDung": "VLAN tag"
+              },
+              {
+                "ma": "c",
+                "noiDung": "IPv4"
+              },
+              {
+                "ma": "d",
+                "noiDung": "ARP"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>0x0800 = IPv4, 0x0806 = ARP, 0x86DD = IPv6, 0x8100 = 802.1Q.</p><p><i>VI: 0x0800 = IPv4, 0x0806 = ARP, 0x86DD = IPv6, 0x8100 = 802.1Q.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>The first 24 bits of a MAC address identify …</p><p style=\"opacity:.75;font-size:.92em\"><i>24 bit đầu của địa chỉ MAC xác định …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the network"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the VLAN"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the switch port"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the manufacturer (OUI)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>OUI = Organizationally Unique Identifier; the other 24 bits are vendor-assigned.</p><p><i>VI: OUI = mã nhà sản xuất; 24 bit sau do hãng gán.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>The destination MAC ff:ff:ff:ff:ff:ff is …</p><p style=\"opacity:.75;font-size:.92em\"><i>MAC đích ff:ff:ff:ff:ff:ff là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the Ethernet broadcast address"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a multicast group"
+              },
+              {
+                "ma": "c",
+                "noiDung": "an invalid address"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the gateway"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Delivered to every device on the LAN.</p><p><i>VI: Gửi tới mọi thiết bị trên LAN.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting the preamble inside the 64–1518 bytes."
+        },
+        {
+          "loi": "Thinking the MAC address identifies a network."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "OUI",
+          "vi": "mã nhà sản xuất"
+        },
+        {
+          "en": "EtherType",
+          "vi": "loại giao thức tầng trên"
+        }
+      ]
+    },
+    {
+      "title": "Ethernet 2 — Classify the MAC address",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "MAC address"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>The least-significant bit of the first byte is the I/G bit (1 = group address). The second least-significant bit is the U/L bit (1 = locally administered). Classify each address (unicast, multicast, broadcast) and say whether it is locally administered.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bit thấp nhất của byte đầu là bit I/G (1 = địa chỉ nhóm). Bit thấp thứ hai là bit U/L (1 = do quản trị cục bộ). Phân loại từng địa chỉ (unicast, multicast, broadcast) và cho biết có phải cục bộ không.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Write the first byte in binary and look at the last two bits.",
+        "Broadcast is a special multicast: all ones."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Ethernet 2 — Classify the MAC address\n\nAnswer in the answer panel (no code needed).\n\n1. MAC classesPhân loại MAC\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Ethernet 2 — Classify the MAC address — answer key\n\n1. MAC classesPhân loại MAC\n   - r1.t: unicast\n   - r1.l: no\n   - r2.t: multicast\n   - r2.l: no\n   - r3.t: broadcast\n   - r3.l: yes\n   - r4.t: unicast\n   - r4.l: yes\n   - r5.t: multicast\n   - r5.l: yes\n   00:1A:2B:3C:4D:5E: unicast, local=false; 01:00:5E:00:00:FB: multicast, local=false; ff:ff:ff:ff:ff:ff: broadcast, local=true; 02:42:AC:11:00:02: unicast, local=true; 33:33:00:00:00:01: multicast, local=true. 0x01 → multicast bit; 0x02 → local bit; ff:… → broadcast.VI: Byte đầu 0x01 → bit multicast; 0x02 → bit cục bộ; ff:… → broadcast.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>00:1A:2B:3C:4D:5E: unicast, local=false; 01:00:5E:00:00:FB: multicast, local=false; ff:ff:ff:ff:ff:ff: broadcast, local=true; 02:42:AC:11:00:02: unicast, local=true; 33:33:00:00:00:01: multicast, local=true. 0x01 → multicast bit; 0x02 → local bit; ff:… → broadcast.</p><p><i>VI: Byte đầu 0x01 → bit multicast; 0x02 → bit cục bộ; ff:… → broadcast.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>MAC classes</p><p style=\"opacity:.75;font-size:.92em\"><i>Phân loại MAC</i></p>",
+            "cot": [
+              {
+                "ma": "m",
+                "ten": "MAC"
+              },
+              {
+                "ma": "t",
+                "ten": "Type",
+                "luaChon": [
+                  "unicast",
+                  "multicast",
+                  "broadcast"
+                ]
+              },
+              {
+                "ma": "l",
+                "ten": "Locally administered?",
+                "luaChon": [
+                  "yes",
+                  "no"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "m": "00:1A:2B:3C:4D:5E"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "m": "01:00:5E:00:00:FB"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "m": "ff:ff:ff:ff:ff:ff"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "m": "02:42:AC:11:00:02"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "m": "33:33:00:00:00:01"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.t": [
+                "unicast"
+              ],
+              "r1.l": [
+                "no"
+              ],
+              "r2.t": [
+                "multicast"
+              ],
+              "r2.l": [
+                "no"
+              ],
+              "r3.t": [
+                "broadcast"
+              ],
+              "r3.l": [
+                "yes"
+              ],
+              "r4.t": [
+                "unicast"
+              ],
+              "r4.l": [
+                "yes"
+              ],
+              "r5.t": [
+                "multicast"
+              ],
+              "r5.l": [
+                "yes"
+              ]
+            },
+            "giaiThich": "<p>00:1A:2B:3C:4D:5E: unicast, local=false; 01:00:5E:00:00:FB: multicast, local=false; ff:ff:ff:ff:ff:ff: broadcast, local=true; 02:42:AC:11:00:02: unicast, local=true; 33:33:00:00:00:01: multicast, local=true. 0x01 → multicast bit; 0x02 → local bit; ff:… → broadcast.</p><p><i>VI: Byte đầu 0x01 → bit multicast; 0x02 → bit cục bộ; ff:… → broadcast.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Looking at the most significant bit."
+        },
+        {
+          "loi": "Calling every address that starts with 0 a unicast."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "I/G bit",
+          "vi": "bit cá nhân/nhóm"
+        },
+        {
+          "en": "U/L bit",
+          "vi": "bit toàn cục/cục bộ"
+        }
+      ]
+    },
+    {
+      "title": "Ethernet 3 — Padding and frame size",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "frame size"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Frame size = 14 (header) + data (padded to at least 46) + 4 (FCS). Also give the bytes occupied on the wire including the 8-byte preamble and the 12-byte inter-frame gap.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Kích thước frame = 14 (header) + dữ liệu (đệm tối thiểu 46) + 4 (FCS). Cho thêm số byte chiếm trên đường dây gồm preamble 8 byte và khoảng cách giữa frame 12 byte.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "max(payload, 46) first.",
+        "Wire = frame + 8 + 12."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Ethernet 3 — Padding and frame size\n\nAnswer in the answer panel (no code needed).\n\n1. Frame sizeKích thước frame\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Ethernet 3 — Padding and frame size — answer key\n\n1. Frame sizeKích thước frame\n   - r1.f: 64\n   - r1.w: 84\n   - r2.f: 64\n   - r2.w: 84\n   - r3.f: 118\n   - r3.w: 138\n   - r4.f: 1518\n   - r4.w: 1538\n   - r5.f: 64\n   - r5.w: 84\n   20 B → frame 64 B, wire 84 B; 46 B → frame 64 B, wire 84 B; 100 B → frame 118 B, wire 138 B; 1500 B → frame 1518 B, wire 1538 B; 1 B → frame 64 B, wire 84 B. Padding is added when the payload is below 46 B.VI: Đệm thêm khi dữ liệu dưới 46 B.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>20 B → frame 64 B, wire 84 B; 46 B → frame 64 B, wire 84 B; 100 B → frame 118 B, wire 138 B; 1500 B → frame 1518 B, wire 1538 B; 1 B → frame 64 B, wire 84 B. Padding is added when the payload is below 46 B.</p><p><i>VI: Đệm thêm khi dữ liệu dưới 46 B.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Frame size</p><p style=\"opacity:.75;font-size:.92em\"><i>Kích thước frame</i></p>",
+            "cot": [
+              {
+                "ma": "p",
+                "ten": "Payload (bytes)"
+              },
+              {
+                "ma": "f",
+                "ten": "Frame (bytes)"
+              },
+              {
+                "ma": "w",
+                "ten": "On the wire"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "p": "20"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "p": "46"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "p": "100"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "p": "1500"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "p": "1"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.f": [
+                "64"
+              ],
+              "r1.w": [
+                "84"
+              ],
+              "r2.f": [
+                "64"
+              ],
+              "r2.w": [
+                "84"
+              ],
+              "r3.f": [
+                "118"
+              ],
+              "r3.w": [
+                "138"
+              ],
+              "r4.f": [
+                "1518"
+              ],
+              "r4.w": [
+                "1538"
+              ],
+              "r5.f": [
+                "64"
+              ],
+              "r5.w": [
+                "84"
+              ]
+            },
+            "giaiThich": "<p>20 B → frame 64 B, wire 84 B; 46 B → frame 64 B, wire 84 B; 100 B → frame 118 B, wire 138 B; 1500 B → frame 1518 B, wire 1538 B; 1 B → frame 64 B, wire 84 B. Padding is added when the payload is below 46 B.</p><p><i>VI: Đệm thêm khi dữ liệu dưới 46 B.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting the padding for tiny payloads."
+        },
+        {
+          "loi": "Adding the preamble to the frame size that is compared with 64/1518."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "padding",
+          "vi": "đệm"
+        }
+      ]
+    },
+    {
+      "title": "Ethernet 4 — Frame numbers",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "frame rate"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Compute with the Ethernet limits.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tính theo các giới hạn Ethernet.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "On the wire each frame costs +20 B (preamble 8 + gap 12).",
+        "MTU is the payload limit."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Ethernet 4 — Frame numbers\n\nAnswer in the answer panel (no code needed).\n\n1. What is the maximum frame rate on a 1 Gbps link with minimum-size frames (64 B + 20 B overhead)?Tốc độ frame tối đa trên đường 1 Gbps với frame nhỏ nhất (64 B + 20 B overhead) là?\n2. A 1500-byte payload is sent as one frame. The efficiency (payload ÷ wire bytes with 38 B overhead) is …Dữ liệu 1500 byte gửi trong một frame. Hiệu suất (dữ liệu ÷ byte trên dây với overhead 38 B) là …\n3. A frame arrives with a 30-byte total length. The switch will treat it as a …Frame tới với tổng độ dài 30 byte. Switch coi nó là …\n4. The default MTU of Ethernet (largest payload) is …MTU mặc định của Ethernet (dữ liệu lớn nhất) là …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Ethernet 4 — Frame numbers — answer key\n\n1. What is the maximum frame rate on a 1 Gbps link with minimum-size frames (64 B + 20 B overhead)?Tốc độ frame tối đa trên đường 1 Gbps với frame nhỏ nhất (64 B + 20 B overhead) là?\n   Answer: b) 1,488,095 fps\n   1 Gbps ÷ (84 × 8 bits) ≈ 1,488,095 frames/s.VI: 1 Gbps ÷ (84 × 8 bit) ≈ 1.488.095 frame/giây.\n\n2. A 1500-byte payload is sent as one frame. The efficiency (payload ÷ wire bytes with 38 B overhead) is …Dữ liệu 1500 byte gửi trong một frame. Hiệu suất (dữ liệu ÷ byte trên dây với overhead 38 B) là …\n   Answer: c) 97.5%\n   1500 / (1500 + 18 + 20) = 97.5%.VI: 1500 / (1500 + 18 + 20) = 97,5%.\n\n3. A frame arrives with a 30-byte total length. The switch will treat it as a …Frame tới với tổng độ dài 30 byte. Switch coi nó là …\n   Answer: d) runt (below the 64-byte minimum) and discard it\n   Frames shorter than 64 B are runts, usually the debris of collisions.VI: Frame ngắn hơn 64 B là runt, thường là mảnh vụn sau va chạm.\n\n4. The default MTU of Ethernet (largest payload) is …MTU mặc định của Ethernet (dữ liệu lớn nhất) là …\n   Answer: a) 1500 bytes\n   MTU counts the payload only.VI: MTU chỉ tính phần dữ liệu.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>What is the maximum frame rate on a 1 Gbps link with minimum-size frames (64 B + 20 B overhead)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Tốc độ frame tối đa trên đường 1 Gbps với frame nhỏ nhất (64 B + 20 B overhead) là?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "125,000,000 fps"
+              },
+              {
+                "ma": "b",
+                "noiDung": "1,488,095 fps"
+              },
+              {
+                "ma": "c",
+                "noiDung": "1,953,125 fps"
+              },
+              {
+                "ma": "d",
+                "noiDung": "82,345 fps"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>1 Gbps ÷ (84 × 8 bits) ≈ 1,488,095 frames/s.</p><p><i>VI: 1 Gbps ÷ (84 × 8 bit) ≈ 1.488.095 frame/giây.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A 1500-byte payload is sent as one frame. The efficiency (payload ÷ wire bytes with 38 B overhead) is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Dữ liệu 1500 byte gửi trong một frame. Hiệu suất (dữ liệu ÷ byte trên dây với overhead 38 B) là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "100.0%"
+              },
+              {
+                "ma": "b",
+                "noiDung": "96.3%"
+              },
+              {
+                "ma": "c",
+                "noiDung": "97.5%"
+              },
+              {
+                "ma": "d",
+                "noiDung": "98.8%"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>1500 / (1500 + 18 + 20) = 97.5%.</p><p><i>VI: 1500 / (1500 + 18 + 20) = 97,5%.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A frame arrives with a 30-byte total length. The switch will treat it as a …</p><p style=\"opacity:.75;font-size:.92em\"><i>Frame tới với tổng độ dài 30 byte. Switch coi nó là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "valid frame"
+              },
+              {
+                "ma": "b",
+                "noiDung": "jumbo frame"
+              },
+              {
+                "ma": "c",
+                "noiDung": "giant frame"
+              },
+              {
+                "ma": "d",
+                "noiDung": "runt (below the 64-byte minimum) and discard it"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Frames shorter than 64 B are runts, usually the debris of collisions.</p><p><i>VI: Frame ngắn hơn 64 B là runt, thường là mảnh vụn sau va chạm.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>The default MTU of Ethernet (largest payload) is …</p><p style=\"opacity:.75;font-size:.92em\"><i>MTU mặc định của Ethernet (dữ liệu lớn nhất) là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "1500 bytes"
+              },
+              {
+                "ma": "b",
+                "noiDung": "1518 bytes"
+              },
+              {
+                "ma": "c",
+                "noiDung": "9000 bytes"
+              },
+              {
+                "ma": "d",
+                "noiDung": "576 bytes"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>MTU counts the payload only.</p><p><i>VI: MTU chỉ tính phần dữ liệu.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using 1518 as the MTU."
+        },
+        {
+          "loi": "Forgetting the preamble and gap in the frame rate."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "runt",
+          "vi": "frame quá ngắn"
+        },
+        {
+          "en": "MTU",
+          "vi": "đơn vị truyền tối đa"
+        }
+      ]
+    },
+    {
+      "title": "Ethernet 5 — Write ethernetFrame(payload) and classifyMac(mac)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 18,
+      "points": 20,
+      "concepts": [
+        "frame size",
+        "padding"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Write <code>ethernetFrame(payload)</code> returning <code>{ padded, frameBytes, wireBytes, efficiency }</code>: <code>padded</code> = the data field after padding to 46 B; <code>frameBytes</code> = 14 + padded + 4; <code>wireBytes</code> = frameBytes + 20; <code>efficiency</code> = payload ÷ wireBytes × 100 rounded to 2 decimals.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>ethernetFrame(payload)</code> trả <code>{ padded, frameBytes, wireBytes, efficiency }</code>: <code>padded</code> = trường dữ liệu sau khi đệm tới 46 B; <code>frameBytes</code> = 14 + padded + 4; <code>wireBytes</code> = frameBytes + 20; <code>efficiency</code> = payload ÷ wireBytes × 100 làm tròn 2 chữ số.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "ethernetFrame(1500)",
+          "output": "{\"padded\":1500,\"frameBytes\":1518,\"wireBytes\":1538,\"efficiency\":97.53}",
+          "explanation": "First sample case.|||Ca mẫu đầu tiên."
+        }
+      ],
+      "hintsJson": [
+        "padded = Math.max(payload, 46).",
+        "Round with Math.round(x * 100) / 100 after multiplying by 100."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function ethernetFrame(payload) {\n  // Write your solution here\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction ethernetFrame(payload) {\n  var padded = Math.max(payload, 46), frame = 14 + padded + 4, wire = frame + 20;\n  return { padded: padded, frameBytes: frame, wireBytes: wire, efficiency: Math.round(payload / wire * 10000) / 100 };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Small packets are very inefficient on Ethernet: a 20-byte payload still occupies 84 bytes of wire time.</p><p><i>VI: Gói nhỏ rất kém hiệu quả: dữ liệu 20 byte vẫn chiếm 84 byte thời gian trên dây.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: ethernetFrame(1500)",
+              "vi": "Ca 1"
+            },
+            "goi": "ethernetFrame(1500)",
+            "mongDoi": {
+              "padded": 1500,
+              "frameBytes": 1518,
+              "wireBytes": 1538,
+              "efficiency": 97.53
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: ethernetFrame(46)",
+              "vi": "Ca 2"
+            },
+            "goi": "ethernetFrame(46)",
+            "mongDoi": {
+              "padded": 46,
+              "frameBytes": 64,
+              "wireBytes": 84,
+              "efficiency": 54.76
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: ethernetFrame(20)",
+              "vi": "Ca 3"
+            },
+            "goi": "ethernetFrame(20)",
+            "mongDoi": {
+              "padded": 46,
+              "frameBytes": 64,
+              "wireBytes": 84,
+              "efficiency": 23.81
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "ethernetFrame(1)",
+            "mongDoi": {
+              "padded": 46,
+              "frameBytes": 64,
+              "wireBytes": 84,
+              "efficiency": 1.19
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "ethernetFrame(100)",
+            "mongDoi": {
+              "padded": 100,
+              "frameBytes": 118,
+              "wireBytes": 138,
+              "efficiency": 72.46
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "ethernetFrame(1400)",
+            "mongDoi": {
+              "padded": 1400,
+              "frameBytes": 1418,
+              "wireBytes": 1438,
+              "efficiency": 97.36
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "ethernetFrame(0)",
+            "mongDoi": {
+              "padded": 46,
+              "frameBytes": 64,
+              "wireBytes": 84,
+              "efficiency": 0
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Computing efficiency from the padded size instead of the real payload."
+        },
+        {
+          "loi": "Forgetting the 20 bytes of preamble and gap in wireBytes."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Ethernet 6 — Write classifyMac(mac)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "MAC address",
+        "I/G bit"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Write <code>classifyMac(mac)</code> accepting a MAC written with <code>:</code>, <code>-</code> or Cisco-style dots and returning <code>{ type, local, oui }</code>: <code>type</code> is <code>\"broadcast\"</code> (ff:ff:ff:ff:ff:ff), <code>\"multicast\"</code> (I/G bit set) or <code>\"unicast\"</code>; <code>local</code> is <code>true</code> when the U/L bit is set; <code>oui</code> = first three bytes in uppercase joined with <code>:</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>classifyMac(mac)</code> nhận MAC viết bằng <code>:</code> hoặc <code>-</code> và trả <code>{ type, local, oui }</code>: <code>type</code> là <code>\"broadcast\"</code> (ff:ff:ff:ff:ff:ff), <code>\"multicast\"</code> (bit I/G bật) hoặc <code>\"unicast\"</code>; <code>local</code> là <code>true</code> khi bit U/L bật; <code>oui</code> = ba byte đầu viết hoa nối bằng <code>:</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "classifyMac(\"00:1A:2B:3C:4D:5E\")",
+          "output": "{\"type\":\"unicast\",\"local\":false,\"oui\":\"00:1A:2B\"}",
+          "explanation": "First sample case.|||Ca mẫu đầu tiên."
+        }
+      ],
+      "hintsJson": [
+        "parseInt(firstByte, 16) & 1 is the I/G bit, & 2 the U/L bit.",
+        "Normalise \"-\" to \":\" and lowercase before comparing with the broadcast address."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function classifyMac(mac) {\n  // Write your solution here\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction classifyMac(mac) {\n  var m = mac.toLowerCase().replace(/[-.]/g, ':'), parts = m.split(':');\n  var first = parseInt(parts[0], 16);\n  var type = m === 'ff:ff:ff:ff:ff:ff' ? 'broadcast' : ((first & 1) ? 'multicast' : 'unicast');\n  var oui = parts.slice(0, 3).map(function (x) { return x.toUpperCase(); }).join(':');\n  return { type: type, local: (first & 2) !== 0, oui: oui };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The same two low bits of the first byte explain why Docker (02:42…) and IPv6 multicast (33:33…) MACs look the way they do.</p><p><i>VI: Hai bit thấp của byte đầu giải thích vì sao MAC Docker (02:42…) và multicast IPv6 (33:33…) có dạng đó.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: classifyMac(\"00:1A:2B:3C:4D:5E\")",
+              "vi": "Ca 1"
+            },
+            "goi": "classifyMac(\"00:1A:2B:3C:4D:5E\")",
+            "mongDoi": {
+              "type": "unicast",
+              "local": false,
+              "oui": "00:1A:2B"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: classifyMac(\"01:00:5E:00:00:FB\")",
+              "vi": "Ca 2"
+            },
+            "goi": "classifyMac(\"01:00:5E:00:00:FB\")",
+            "mongDoi": {
+              "type": "multicast",
+              "local": false,
+              "oui": "01:00:5E"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: classifyMac(\"FF-FF-FF-FF-FF-FF\")",
+              "vi": "Ca 3"
+            },
+            "goi": "classifyMac(\"FF-FF-FF-FF-FF-FF\")",
+            "mongDoi": {
+              "type": "broadcast",
+              "local": true,
+              "oui": "FF:FF:FF"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "classifyMac(\"02:42:ac:11:00:02\")",
+            "mongDoi": {
+              "type": "unicast",
+              "local": true,
+              "oui": "02:42:AC"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "classifyMac(\"33-33-00-00-00-01\")",
+            "mongDoi": {
+              "type": "multicast",
+              "local": true,
+              "oui": "33:33:00"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "classifyMac(\"fe:ed:be:ef:00:01\")",
+            "mongDoi": {
+              "type": "unicast",
+              "local": true,
+              "oui": "FE:ED:BE"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "classifyMac(\"a8:5e:45:00:00:00\")",
+            "mongDoi": {
+              "type": "unicast",
+              "local": false,
+              "oui": "A8:5E:45"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Testing only for ff:ff:ff:ff:ff:ff and calling everything else unicast."
+        },
+        {
+          "loi": "Not uppercasing the OUI."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

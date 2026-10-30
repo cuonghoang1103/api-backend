@@ -1,0 +1,978 @@
+{
+  "trackSlug": "nwc204-practice",
+  "moduleSlug": "nwc204-10-1-ipv4-addressing",
+  "lesson": {
+    "course": "nwc204-computer-networking",
+    "slug": "nwc204-10-1-cau-truc-dia-chi-ipv4"
+  },
+  "exercises": [
+    {
+      "title": "Addressing 1 — Structure and special addresses",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "special addresses"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Network portion, host portion and special blocks.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phần mạng, phần host và các dải đặc biệt.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Prefix length tells network vs host bits.",
+        "Memorise the four special blocks: 127, 169.254, private, 224+."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Addressing 1 — Structure and special addresses\n\nAnswer in the answer panel (no code needed).\n\n1. The host portion of 192.168.10.5/24 is …Phần host của 192.168.10.5/24 là …\n2. Which block is reserved for loopback?Dải nào dành cho loopback?\n3. An address starting with 169.254 on a PC means …Địa chỉ bắt đầu bằng 169.254 trên PC nghĩa là …\n4. The private IPv4 ranges (RFC 1918) are …Các dải IPv4 riêng (RFC 1918) là …\n5. Class D addresses (224.0.0.0–239.255.255.255) are used for …Địa chỉ lớp D (224.0.0.0–239.255.255.255) dùng cho …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Addressing 1 — Structure and special addresses — answer key\n\n1. The host portion of 192.168.10.5/24 is …Phần host của 192.168.10.5/24 là …\n   Answer: b) the last 8 bits (5)\n   /24 = 24 network bits, 8 host bits.VI: /24 = 24 bit mạng, 8 bit host.\n\n2. Which block is reserved for loopback?Dải nào dành cho loopback?\n   Answer: c) 127.0.0.0/8\n   127.0.0.1 is the local host.VI: 127.0.0.1 là chính máy này.\n\n3. An address starting with 169.254 on a PC means …Địa chỉ bắt đầu bằng 169.254 trên PC nghĩa là …\n   Answer: d) DHCP failed and Windows self-assigned a link-local address (APIPA)\n   A symptom to look for when users say “no network”.VI: Dấu hiệu cần tìm khi người dùng báo “mất mạng”.\n\n4. The private IPv4 ranges (RFC 1918) are …Các dải IPv4 riêng (RFC 1918) là …\n   Answer: a) 10/8, 172.16/12, 192.168/16\n   Not routed on the public Internet; NAT is needed to reach it.VI: Không định tuyến trên Internet công cộng; cần NAT để ra ngoài.\n\n5. Class D addresses (224.0.0.0–239.255.255.255) are used for …Địa chỉ lớp D (224.0.0.0–239.255.255.255) dùng cho …\n   Answer: b) multicast\n   E.g. 224.0.0.5 for OSPF routers.VI: Vd 224.0.0.5 cho các router OSPF.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The host portion of 192.168.10.5/24 is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Phần host của 192.168.10.5/24 là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the last 16 bits"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the last 8 bits (5)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the first 24 bits"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the middle 16 bits"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>/24 = 24 network bits, 8 host bits.</p><p><i>VI: /24 = 24 bit mạng, 8 bit host.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Which block is reserved for loopback?</p><p style=\"opacity:.75;font-size:.92em\"><i>Dải nào dành cho loopback?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "169.254.0.0/16"
+              },
+              {
+                "ma": "b",
+                "noiDung": "224.0.0.0/4"
+              },
+              {
+                "ma": "c",
+                "noiDung": "127.0.0.0/8"
+              },
+              {
+                "ma": "d",
+                "noiDung": "10.0.0.0/8"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>127.0.0.1 is the local host.</p><p><i>VI: 127.0.0.1 là chính máy này.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>An address starting with 169.254 on a PC means …</p><p style=\"opacity:.75;font-size:.92em\"><i>Địa chỉ bắt đầu bằng 169.254 trên PC nghĩa là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the PC has a public address"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the PC is the DHCP server"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the network uses IPv6"
+              },
+              {
+                "ma": "d",
+                "noiDung": "DHCP failed and Windows self-assigned a link-local address (APIPA)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A symptom to look for when users say “no network”.</p><p><i>VI: Dấu hiệu cần tìm khi người dùng báo “mất mạng”.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>The private IPv4 ranges (RFC 1918) are …</p><p style=\"opacity:.75;font-size:.92em\"><i>Các dải IPv4 riêng (RFC 1918) là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "10/8, 172.16/12, 192.168/16"
+              },
+              {
+                "ma": "b",
+                "noiDung": "10/8, 172.0/8, 192.0/16"
+              },
+              {
+                "ma": "c",
+                "noiDung": "127/8, 169.254/16, 224/4"
+              },
+              {
+                "ma": "d",
+                "noiDung": "10/8 only"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Not routed on the public Internet; NAT is needed to reach it.</p><p><i>VI: Không định tuyến trên Internet công cộng; cần NAT để ra ngoài.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Class D addresses (224.0.0.0–239.255.255.255) are used for …</p><p style=\"opacity:.75;font-size:.92em\"><i>Địa chỉ lớp D (224.0.0.0–239.255.255.255) dùng cho …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "loopback"
+              },
+              {
+                "ma": "b",
+                "noiDung": "multicast"
+              },
+              {
+                "ma": "c",
+                "noiDung": "unicast hosts"
+              },
+              {
+                "ma": "d",
+                "noiDung": "private networks"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>E.g. 224.0.0.5 for OSPF routers.</p><p><i>VI: Vd 224.0.0.5 cho các router OSPF.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling 172.32.0.1 private (the private block ends at 172.31.255.255)."
+        },
+        {
+          "loi": "Assuming 169.254 addresses can reach the Internet."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "APIPA",
+          "vi": "địa chỉ tự gán link-local"
+        },
+        {
+          "en": "RFC 1918",
+          "vi": "dải địa chỉ riêng"
+        }
+      ]
+    },
+    {
+      "title": "Addressing 2 — Classify the address",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "address classes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Give the classful class (A–E) and the type (private, public, loopback, link-local, multicast).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cho lớp địa chỉ (A–E) và loại (private, public, loopback, link-local, multicast).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "First octet: 1–126 A, 128–191 B, 192–223 C, 224–239 D.",
+        "127 is class A by number but reserved for loopback."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Addressing 2 — Classify the address\n\nAnswer in the answer panel (no code needed).\n\n1. Class and typeLớp và loại\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Addressing 2 — Classify the address — answer key\n\n1. Class and typeLớp và loại\n   - r1.c: A\n   - r1.t: private\n   - r2.c: B\n   - r2.t: private\n   - r3.c: B\n   - r3.t: public\n   - r4.c: C\n   - r4.t: private\n   - r5.c: B\n   - r5.t: link-local\n   - r6.c: A\n   - r6.t: loopback\n   - r7.c: D\n   - r7.t: multicast\n   - r8.c: A\n   - r8.t: public\n   10.20.30.40: class A, private; 172.31.255.1: class B, private; 172.32.0.1: class B, public; 192.168.100.7: class C, private; 169.254.12.34: class B, link-local; 127.0.0.5: class A, loopback; 224.0.0.251: class D, multicast; 8.8.8.8: class A, public.VI: Lớp theo octet đầu:\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>10.20.30.40: class A, private; 172.31.255.1: class B, private; 172.32.0.1: class B, public; 192.168.100.7: class C, private; 169.254.12.34: class B, link-local; 127.0.0.5: class A, loopback; 224.0.0.251: class D, multicast; 8.8.8.8: class A, public.</p><p><i>VI: Lớp theo octet đầu: <128 A, <192 B, <224 C, <240 D, còn lại E.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Class and type</p><p style=\"opacity:.75;font-size:.92em\"><i>Lớp và loại</i></p>",
+            "cot": [
+              {
+                "ma": "a",
+                "ten": "Address"
+              },
+              {
+                "ma": "c",
+                "ten": "Class",
+                "luaChon": [
+                  "A",
+                  "B",
+                  "C",
+                  "D",
+                  "E"
+                ]
+              },
+              {
+                "ma": "t",
+                "ten": "Type",
+                "luaChon": [
+                  "private",
+                  "public",
+                  "loopback",
+                  "link-local",
+                  "multicast"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "a": "10.20.30.40"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "a": "172.31.255.1"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "a": "172.32.0.1"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "a": "192.168.100.7"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "a": "169.254.12.34"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "a": "127.0.0.5"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "a": "224.0.0.251"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "a": "8.8.8.8"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.c": [
+                "A"
+              ],
+              "r1.t": [
+                "private"
+              ],
+              "r2.c": [
+                "B"
+              ],
+              "r2.t": [
+                "private"
+              ],
+              "r3.c": [
+                "B"
+              ],
+              "r3.t": [
+                "public"
+              ],
+              "r4.c": [
+                "C"
+              ],
+              "r4.t": [
+                "private"
+              ],
+              "r5.c": [
+                "B"
+              ],
+              "r5.t": [
+                "link-local"
+              ],
+              "r6.c": [
+                "A"
+              ],
+              "r6.t": [
+                "loopback"
+              ],
+              "r7.c": [
+                "D"
+              ],
+              "r7.t": [
+                "multicast"
+              ],
+              "r8.c": [
+                "A"
+              ],
+              "r8.t": [
+                "public"
+              ]
+            },
+            "giaiThich": "<p>10.20.30.40: class A, private; 172.31.255.1: class B, private; 172.32.0.1: class B, public; 192.168.100.7: class C, private; 169.254.12.34: class B, link-local; 127.0.0.5: class A, loopback; 224.0.0.251: class D, multicast; 8.8.8.8: class A, public.</p><p><i>VI: Lớp theo octet đầu: <128 A, <192 B, <224 C, <240 D, còn lại E.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating 172.32/12 as private."
+        },
+        {
+          "loi": "Calling 127.x “public”."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "classful",
+          "vi": "theo lớp"
+        }
+      ]
+    },
+    {
+      "title": "Addressing 3 — Network, broadcast and host range",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "network/broadcast"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>For each host address give the network address, the broadcast address and the number of usable hosts.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi địa chỉ host, cho địa chỉ mạng, địa chỉ broadcast và số host dùng được.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Block size = 2^(32−p) (in the interesting octet 256 − mask octet).",
+        "Broadcast = next network − 1."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Addressing 3 — Network, broadcast and host range\n\nAnswer in the answer panel (no code needed).\n\n1. Network detailsChi tiết mạng\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Addressing 3 — Network, broadcast and host range — answer key\n\n1. Network detailsChi tiết mạng\n   - r1.n: 192.168.10.0\n   - r1.b: 192.168.10.255\n   - r1.u: 254\n   - r2.n: 10.0.0.0\n   - r2.b: 10.255.255.255\n   - r2.u: 16777214\n   - r3.n: 172.16.0.0\n   - r3.b: 172.16.15.255\n   - r3.u: 4094\n   - r4.n: 203.0.113.128\n   - r4.b: 203.0.113.143\n   - r4.u: 14\n   - r5.n: 198.51.100.8\n   - r5.b: 198.51.100.11\n   - r5.u: 2\n   - r6.n: 100.64.0.0\n   - r6.b: 100.127.255.255\n   - r6.u: 4194302\n   192.168.10.77/24: 192.168.10.0 – 192.168.10.255, 254 hosts; 10.1.1.1/8: 10.0.0.0 – 10.255.255.255, 16777214 hosts; 172.16.5.9/20: 172.16.0.0 – 172.16.15.255, 4094 hosts; 203.0.113.130/28: 203.0.113.128 – 203.0.113.143, 14 hosts; 198.51.100.9/30: 198.51.100.8 – 198.51.100.11, 2 hosts; 100.64.1.1/10: 100.64.0.0 – 100.127.255.255, 4194302 hosts. Usable hosts = 2^(32−p) − 2.VI: Host dùng được = 2^(32−p) − 2.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>192.168.10.77/24: 192.168.10.0 – 192.168.10.255, 254 hosts; 10.1.1.1/8: 10.0.0.0 – 10.255.255.255, 16777214 hosts; 172.16.5.9/20: 172.16.0.0 – 172.16.15.255, 4094 hosts; 203.0.113.130/28: 203.0.113.128 – 203.0.113.143, 14 hosts; 198.51.100.9/30: 198.51.100.8 – 198.51.100.11, 2 hosts; 100.64.1.1/10: 100.64.0.0 – 100.127.255.255, 4194302 hosts. Usable hosts = 2^(32−p) − 2.</p><p><i>VI: Host dùng được = 2^(32−p) − 2.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Network details</p><p style=\"opacity:.75;font-size:.92em\"><i>Chi tiết mạng</i></p>",
+            "cot": [
+              {
+                "ma": "h",
+                "ten": "Host / prefix"
+              },
+              {
+                "ma": "n",
+                "ten": "Network"
+              },
+              {
+                "ma": "b",
+                "ten": "Broadcast"
+              },
+              {
+                "ma": "u",
+                "ten": "Usable hosts"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "h": "192.168.10.77/24"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "h": "10.1.1.1/8"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "h": "172.16.5.9/20"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "h": "203.0.113.130/28"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "h": "198.51.100.9/30"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "h": "100.64.1.1/10"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.n": [
+                "192.168.10.0"
+              ],
+              "r1.b": [
+                "192.168.10.255"
+              ],
+              "r1.u": [
+                "254"
+              ],
+              "r2.n": [
+                "10.0.0.0"
+              ],
+              "r2.b": [
+                "10.255.255.255"
+              ],
+              "r2.u": [
+                "16777214"
+              ],
+              "r3.n": [
+                "172.16.0.0"
+              ],
+              "r3.b": [
+                "172.16.15.255"
+              ],
+              "r3.u": [
+                "4094"
+              ],
+              "r4.n": [
+                "203.0.113.128"
+              ],
+              "r4.b": [
+                "203.0.113.143"
+              ],
+              "r4.u": [
+                "14"
+              ],
+              "r5.n": [
+                "198.51.100.8"
+              ],
+              "r5.b": [
+                "198.51.100.11"
+              ],
+              "r5.u": [
+                "2"
+              ],
+              "r6.n": [
+                "100.64.0.0"
+              ],
+              "r6.b": [
+                "100.127.255.255"
+              ],
+              "r6.u": [
+                "4194302"
+              ]
+            },
+            "giaiThich": "<p>192.168.10.77/24: 192.168.10.0 – 192.168.10.255, 254 hosts; 10.1.1.1/8: 10.0.0.0 – 10.255.255.255, 16777214 hosts; 172.16.5.9/20: 172.16.0.0 – 172.16.15.255, 4094 hosts; 203.0.113.130/28: 203.0.113.128 – 203.0.113.143, 14 hosts; 198.51.100.9/30: 198.51.100.8 – 198.51.100.11, 2 hosts; 100.64.1.1/10: 100.64.0.0 – 100.127.255.255, 4194302 hosts. Usable hosts = 2^(32−p) − 2.</p><p><i>VI: Host dùng được = 2^(32−p) − 2.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting to subtract 2 for network and broadcast."
+        },
+        {
+          "loi": "Using the host’s own address as the network address."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "usable host",
+          "vi": "host dùng được"
+        }
+      ]
+    },
+    {
+      "title": "Addressing 4 — How big a prefix do I need?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "prefix sizing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Choose the smallest prefix that fits.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chọn prefix nhỏ nhất đủ chỗ.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Find the smallest h with 2^h − 2 ≥ needed hosts; prefix = 32 − h.",
+        "Power-of-two table: 2^5 = 32 … 2^9 = 512."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Addressing 4 — How big a prefix do I need?\n\nAnswer in the answer panel (no code needed).\n\n1. A subnet must hold 30 hosts. The longest (smallest) prefix that fits is …Mạng con phải chứa 30 host. Prefix dài nhất (nhỏ nhất) đủ chỗ là …\n2. A subnet must hold 60 hosts. The longest (smallest) prefix that fits is …Mạng con phải chứa 60 host. Prefix dài nhất (nhỏ nhất) đủ chỗ là …\n3. A subnet must hold 120 hosts. The longest (smallest) prefix that fits is …Mạng con phải chứa 120 host. Prefix dài nhất (nhỏ nhất) đủ chỗ là …\n4. A subnet must hold 250 hosts. The longest (smallest) prefix that fits is …Mạng con phải chứa 250 host. Prefix dài nhất (nhỏ nhất) đủ chỗ là …\n5. A subnet must hold 500 hosts. The longest (smallest) prefix that fits is …Mạng con phải chứa 500 host. Prefix dài nhất (nhỏ nhất) đủ chỗ là …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Addressing 4 — How big a prefix do I need? — answer key\n\n1. A subnet must hold 30 hosts. The longest (smallest) prefix that fits is …Mạng con phải chứa 30 host. Prefix dài nhất (nhỏ nhất) đủ chỗ là …\n   Answer: b) /27\n   /27 gives 30 usable hosts; /28 gives only 14.VI: /27 cho 30 host; /28 chỉ cho 14.\n\n2. A subnet must hold 60 hosts. The longest (smallest) prefix that fits is …Mạng con phải chứa 60 host. Prefix dài nhất (nhỏ nhất) đủ chỗ là …\n   Answer: c) /26\n   /26 gives 62 usable hosts; /27 gives only 30.VI: /26 cho 62 host; /27 chỉ cho 30.\n\n3. A subnet must hold 120 hosts. The longest (smallest) prefix that fits is …Mạng con phải chứa 120 host. Prefix dài nhất (nhỏ nhất) đủ chỗ là …\n   Answer: d) /25\n   /25 gives 126 usable hosts; /26 gives only 62.VI: /25 cho 126 host; /26 chỉ cho 62.\n\n4. A subnet must hold 250 hosts. The longest (smallest) prefix that fits is …Mạng con phải chứa 250 host. Prefix dài nhất (nhỏ nhất) đủ chỗ là …\n   Answer: a) /24\n   /24 gives 254 usable hosts; /25 gives only 126.VI: /24 cho 254 host; /25 chỉ cho 126.\n\n5. A subnet must hold 500 hosts. The longest (smallest) prefix that fits is …Mạng con phải chứa 500 host. Prefix dài nhất (nhỏ nhất) đủ chỗ là …\n   Answer: b) /23\n   /23 gives 510 usable hosts; /24 gives only 254.VI: /23 cho 510 host; /24 chỉ cho 254.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A subnet must hold 30 hosts. The longest (smallest) prefix that fits is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Mạng con phải chứa 30 host. Prefix dài nhất (nhỏ nhất) đủ chỗ là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "/29"
+              },
+              {
+                "ma": "b",
+                "noiDung": "/27"
+              },
+              {
+                "ma": "c",
+                "noiDung": "/28"
+              },
+              {
+                "ma": "d",
+                "noiDung": "/26"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>/27 gives 30 usable hosts; /28 gives only 14.</p><p><i>VI: /27 cho 30 host; /28 chỉ cho 14.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A subnet must hold 60 hosts. The longest (smallest) prefix that fits is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Mạng con phải chứa 60 host. Prefix dài nhất (nhỏ nhất) đủ chỗ là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "/25"
+              },
+              {
+                "ma": "b",
+                "noiDung": "/28"
+              },
+              {
+                "ma": "c",
+                "noiDung": "/26"
+              },
+              {
+                "ma": "d",
+                "noiDung": "/27"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>/26 gives 62 usable hosts; /27 gives only 30.</p><p><i>VI: /26 cho 62 host; /27 chỉ cho 30.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A subnet must hold 120 hosts. The longest (smallest) prefix that fits is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Mạng con phải chứa 120 host. Prefix dài nhất (nhỏ nhất) đủ chỗ là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "/26"
+              },
+              {
+                "ma": "b",
+                "noiDung": "/24"
+              },
+              {
+                "ma": "c",
+                "noiDung": "/27"
+              },
+              {
+                "ma": "d",
+                "noiDung": "/25"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>/25 gives 126 usable hosts; /26 gives only 62.</p><p><i>VI: /25 cho 126 host; /26 chỉ cho 62.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>A subnet must hold 250 hosts. The longest (smallest) prefix that fits is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Mạng con phải chứa 250 host. Prefix dài nhất (nhỏ nhất) đủ chỗ là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "/24"
+              },
+              {
+                "ma": "b",
+                "noiDung": "/25"
+              },
+              {
+                "ma": "c",
+                "noiDung": "/23"
+              },
+              {
+                "ma": "d",
+                "noiDung": "/26"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>/24 gives 254 usable hosts; /25 gives only 126.</p><p><i>VI: /24 cho 254 host; /25 chỉ cho 126.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>A subnet must hold 500 hosts. The longest (smallest) prefix that fits is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Mạng con phải chứa 500 host. Prefix dài nhất (nhỏ nhất) đủ chỗ là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "/25"
+              },
+              {
+                "ma": "b",
+                "noiDung": "/23"
+              },
+              {
+                "ma": "c",
+                "noiDung": "/24"
+              },
+              {
+                "ma": "d",
+                "noiDung": "/22"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>/23 gives 510 usable hosts; /24 gives only 254.</p><p><i>VI: /23 cho 510 host; /24 chỉ cho 254.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting the −2."
+        },
+        {
+          "loi": "Picking a larger prefix number (smaller network) than needed."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "host bits",
+          "vi": "bit host"
+        }
+      ]
+    },
+    {
+      "title": "Addressing 5 — Write ipInfo(ip, prefix)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 18,
+      "points": 20,
+      "concepts": [
+        "subnet calculation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Write <code>ipInfo(ip, prefix)</code> returning <code>{ network, broadcast, mask, hosts }</code> (all addresses dotted decimal). <code>hosts</code> = 2^(32−prefix) − 2 for prefixes up to /30; /31 → 2 (point-to-point, RFC 3021); /32 → 1. Beware that JavaScript bit operators work on <i>signed</i> 32-bit integers: use <code>&gt;&gt;&gt; 0</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>ipInfo(ip, prefix)</code> trả <code>{ network, broadcast, mask, hosts }</code> (địa chỉ dạng thập phân có chấm). <code>hosts</code> = 2^(32−prefix) − 2 cho prefix tới /30; /31 → 2 (điểm-điểm, RFC 3021); /32 → 1. Lưu ý toán tử bit của JavaScript làm việc trên số nguyên 32 bit <i>có dấu</i>: dùng <code>&gt;&gt;&gt; 0</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "ipInfo(\"192.168.10.77\", 26)",
+          "output": "{\"network\":\"192.168.10.64\",\"broadcast\":\"192.168.10.127\",\"mask\":\"255.255.255.192\",\"hosts\":62}",
+          "explanation": "First sample case.|||Ca mẫu đầu tiên."
+        }
+      ],
+      "hintsJson": [
+        "Mask = (0xFFFFFFFF << (32 − prefix)) >>> 0, but /0 needs a special case (shifting by 32 is a no-op).",
+        "Broadcast = network | ~mask (again with >>> 0)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function ipInfo(ip, prefix) {\n  // Write your solution here\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction ipInfo(ip, prefix) {\n  function toInt(s) { var p = s.split('.'); return ((+p[0]) * 16777216 + (+p[1]) * 65536 + (+p[2]) * 256 + (+p[3])) >>> 0; }\n  function toStr(n) { return [n >>> 24, (n >>> 16) & 255, (n >>> 8) & 255, n & 255].join('.'); }\n  var mask = prefix === 0 ? 0 : (0xFFFFFFFF << (32 - prefix)) >>> 0;\n  var net = (toInt(ip) & mask) >>> 0, bc = (net | (~mask >>> 0)) >>> 0, size = Math.pow(2, 32 - prefix);\n  return { network: toStr(net), broadcast: toStr(bc), mask: toStr(mask), hosts: prefix <= 30 ? size - 2 : (prefix === 31 ? 2 : 1) };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>All subnet maths is 32-bit integer arithmetic; once you have the mask, everything else is AND, OR and NOT.</p><p><i>VI: Mọi phép tính subnet là số học số nguyên 32 bit; có mặt nạ rồi thì còn lại chỉ là AND, OR, NOT.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: ipInfo(\"192.168.10.77\", 26)",
+              "vi": "Ca 1"
+            },
+            "goi": "ipInfo(\"192.168.10.77\", 26)",
+            "mongDoi": {
+              "network": "192.168.10.64",
+              "broadcast": "192.168.10.127",
+              "mask": "255.255.255.192",
+              "hosts": 62
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: ipInfo(\"10.1.2.3\", 8)",
+              "vi": "Ca 2"
+            },
+            "goi": "ipInfo(\"10.1.2.3\", 8)",
+            "mongDoi": {
+              "network": "10.0.0.0",
+              "broadcast": "10.255.255.255",
+              "mask": "255.0.0.0",
+              "hosts": 16777214
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: ipInfo(\"172.16.5.9\", 20)",
+              "vi": "Ca 3"
+            },
+            "goi": "ipInfo(\"172.16.5.9\", 20)",
+            "mongDoi": {
+              "network": "172.16.0.0",
+              "broadcast": "172.16.15.255",
+              "mask": "255.255.240.0",
+              "hosts": 4094
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "ipInfo(\"10.0.0.0\", 31)",
+            "mongDoi": {
+              "network": "10.0.0.0",
+              "broadcast": "10.0.0.1",
+              "mask": "255.255.255.254",
+              "hosts": 2
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "ipInfo(\"1.2.3.4\", 32)",
+            "mongDoi": {
+              "network": "1.2.3.4",
+              "broadcast": "1.2.3.4",
+              "mask": "255.255.255.255",
+              "hosts": 1
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "ipInfo(\"203.0.113.130\", 28)",
+            "mongDoi": {
+              "network": "203.0.113.128",
+              "broadcast": "203.0.113.143",
+              "mask": "255.255.255.240",
+              "hosts": 14
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "ipInfo(\"255.255.255.255\", 0)",
+            "mongDoi": {
+              "network": "0.0.0.0",
+              "broadcast": "255.255.255.255",
+              "mask": "0.0.0.0",
+              "hosts": 4294967294
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "ipInfo(\"128.0.0.1\", 1)",
+            "mongDoi": {
+              "network": "128.0.0.0",
+              "broadcast": "255.255.255.255",
+              "mask": "128.0.0.0",
+              "hosts": 2147483646
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Getting negative numbers because >>> 0 was forgotten."
+        },
+        {
+          "loi": "Computing hosts without the −2 or treating /31 as 0."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

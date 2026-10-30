@@ -1,0 +1,940 @@
+{
+  "trackSlug": "nwc204-practice",
+  "moduleSlug": "nwc204-7-2-routing-table",
+  "lesson": {
+    "course": "nwc204-computer-networking",
+    "slug": "nwc204-7-2-goi-ipv6-va-bang-dinh-tuyen"
+  },
+  "exercises": [
+    {
+      "title": "Routing 1 — Reading a routing table",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "routing table"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Codes and concepts of a Cisco routing table.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mã và khái niệm trong bảng định tuyến Cisco.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Match first by longest prefix, then by AD, then by metric.",
+        "The default route is the least specific."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Routing 1 — Reading a routing table\n\nAnswer in the answer panel (no code needed).\n\n1. In “show ip route”, the code C means …Trong “show ip route”, mã C nghĩa là …\n2. The route 0.0.0.0/0 is …Tuyến 0.0.0.0/0 là …\n3. The router has 10.0.0.0/8 and 10.1.0.0/16. A packet to 10.1.5.5 uses …Router có 10.0.0.0/8 và 10.1.0.0/16. Gói tới 10.1.5.5 dùng …\n4. No route matches and there is no default route. The router …Không tuyến nào khớp và không có default route. Router …\n5. A lower administrative distance means the route source is …Administrative distance thấp hơn nghĩa là nguồn tuyến …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Routing 1 — Reading a routing table — answer key\n\n1. In “show ip route”, the code C means …Trong “show ip route”, mã C nghĩa là …\n   Answer: a) directly connected network\n   C = connected, L = local interface address, S = static, O = OSPF, S* = default.VI: C = nối trực tiếp, L = địa chỉ cục bộ, S = tĩnh, O = OSPF, S* = mặc định.\n\n2. The route 0.0.0.0/0 is …Tuyến 0.0.0.0/0 là …\n   Answer: b) the default route that matches every destination\n   Prefix length 0 matches everything but loses to any longer match.VI: Prefix dài 0 khớp tất cả nhưng thua mọi tuyến dài hơn.\n\n3. The router has 10.0.0.0/8 and 10.1.0.0/16. A packet to 10.1.5.5 uses …Router có 10.0.0.0/8 và 10.1.0.0/16. Gói tới 10.1.5.5 dùng …\n   Answer: c) 10.1.0.0/16 (longest prefix match)\n   The most specific matching route wins.VI: Tuyến khớp cụ thể nhất thắng.\n\n4. No route matches and there is no default route. The router …Không tuyến nào khớp và không có default route. Router …\n   Answer: d) drops the packet and sends ICMP Destination Unreachable\n   No match = no forwarding.VI: Không khớp = không chuyển.\n\n5. A lower administrative distance means the route source is …Administrative distance thấp hơn nghĩa là nguồn tuyến …\n   Answer: a) more trusted\n   Connected 0, static 1, EIGRP 90, OSPF 110, RIP 120.VI: Nối trực tiếp 0, tĩnh 1, EIGRP 90, OSPF 110, RIP 120.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>In “show ip route”, the code C means …</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong “show ip route”, mã C nghĩa là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "directly connected network"
+              },
+              {
+                "ma": "b",
+                "noiDung": "static route"
+              },
+              {
+                "ma": "c",
+                "noiDung": "OSPF route"
+              },
+              {
+                "ma": "d",
+                "noiDung": "default route"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>C = connected, L = local interface address, S = static, O = OSPF, S* = default.</p><p><i>VI: C = nối trực tiếp, L = địa chỉ cục bộ, S = tĩnh, O = OSPF, S* = mặc định.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The route 0.0.0.0/0 is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Tuyến 0.0.0.0/0 là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "an invalid route"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the default route that matches every destination"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a loopback route"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a multicast route"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Prefix length 0 matches everything but loses to any longer match.</p><p><i>VI: Prefix dài 0 khớp tất cả nhưng thua mọi tuyến dài hơn.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>The router has 10.0.0.0/8 and 10.1.0.0/16. A packet to 10.1.5.5 uses …</p><p style=\"opacity:.75;font-size:.92em\"><i>Router có 10.0.0.0/8 và 10.1.0.0/16. Gói tới 10.1.5.5 dùng …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "both, load balanced"
+              },
+              {
+                "ma": "b",
+                "noiDung": "neither"
+              },
+              {
+                "ma": "c",
+                "noiDung": "10.1.0.0/16 (longest prefix match)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "10.0.0.0/8 (it was added first)"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The most specific matching route wins.</p><p><i>VI: Tuyến khớp cụ thể nhất thắng.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>No route matches and there is no default route. The router …</p><p style=\"opacity:.75;font-size:.92em\"><i>Không tuyến nào khớp và không có default route. Router …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "floods it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "sends it to the previous hop"
+              },
+              {
+                "ma": "c",
+                "noiDung": "queues it forever"
+              },
+              {
+                "ma": "d",
+                "noiDung": "drops the packet and sends ICMP Destination Unreachable"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>No match = no forwarding.</p><p><i>VI: Không khớp = không chuyển.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>A lower administrative distance means the route source is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Administrative distance thấp hơn nghĩa là nguồn tuyến …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "more trusted"
+              },
+              {
+                "ma": "b",
+                "noiDung": "less trusted"
+              },
+              {
+                "ma": "c",
+                "noiDung": "slower"
+              },
+              {
+                "ma": "d",
+                "noiDung": "longer"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Connected 0, static 1, EIGRP 90, OSPF 110, RIP 120.</p><p><i>VI: Nối trực tiếp 0, tĩnh 1, EIGRP 90, OSPF 110, RIP 120.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Choosing the first matching line."
+        },
+        {
+          "loi": "Thinking a higher AD is better."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "longest prefix match",
+          "vi": "khớp tiền tố dài nhất"
+        },
+        {
+          "en": "administrative distance",
+          "vi": "độ tin cậy nguồn tuyến"
+        }
+      ]
+    },
+    {
+      "title": "Routing 2 — Longest prefix match",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "longest prefix match"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Routing table: 0.0.0.0/0 via ISP; 10.0.0.0/8 via R-A; 10.1.0.0/16 via R-B; 10.1.2.0/24 via R-C; 192.168.0.0/16 via R-D; 192.168.5.0/25 via R-E. Which next hop does the router use for each destination?</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bảng định tuyến: 0.0.0.0/0 qua ISP; 10.0.0.0/8 qua R-A; 10.1.0.0/16 qua R-B; 10.1.2.0/24 qua R-C; 192.168.0.0/16 qua R-D; 192.168.5.0/25 qua R-E. Router dùng next hop nào cho mỗi đích?</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "List every matching route, then take the longest prefix.",
+        "/25 covers 192.168.5.0–127 only."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Routing 2 — Longest prefix match\n\nAnswer in the answer panel (no code needed).\n\n1. Next hopNext hop\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Routing 2 — Longest prefix match — answer key\n\n1. Next hopNext hop\n   - r1.n: R-C\n   - r2.n: R-B\n   - r3.n: R-A\n   - r4.n: R-E\n   - r5.n: R-D\n   - r6.n: ISP\n   10.1.2.77 → 10.1.2.0/24 via R-C; 10.1.200.1 → 10.1.0.0/16 via R-B; 10.200.1.1 → 10.0.0.0/8 via R-A; 192.168.5.100 → 192.168.5.0/25 via R-E; 192.168.5.200 → 192.168.0.0/16 via R-D; 8.8.8.8 → 0.0.0.0/0 via ISP.VI: Chọn tuyến khớp với prefix dài nhất.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>10.1.2.77 → 10.1.2.0/24 via R-C; 10.1.200.1 → 10.1.0.0/16 via R-B; 10.200.1.1 → 10.0.0.0/8 via R-A; 192.168.5.100 → 192.168.5.0/25 via R-E; 192.168.5.200 → 192.168.0.0/16 via R-D; 8.8.8.8 → 0.0.0.0/0 via ISP.</p><p><i>VI: Chọn tuyến khớp với prefix dài nhất.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Next hop</p><p style=\"opacity:.75;font-size:.92em\"><i>Next hop</i></p>",
+            "cot": [
+              {
+                "ma": "d",
+                "ten": "Destination"
+              },
+              {
+                "ma": "n",
+                "ten": "Next hop",
+                "luaChon": [
+                  "ISP",
+                  "R-A",
+                  "R-B",
+                  "R-C",
+                  "R-D",
+                  "R-E"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "d": "10.1.2.77"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "d": "10.1.200.1"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "d": "10.200.1.1"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "d": "192.168.5.100"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "d": "192.168.5.200"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "d": "8.8.8.8"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.n": [
+                "R-C"
+              ],
+              "r2.n": [
+                "R-B"
+              ],
+              "r3.n": [
+                "R-A"
+              ],
+              "r4.n": [
+                "R-E"
+              ],
+              "r5.n": [
+                "R-D"
+              ],
+              "r6.n": [
+                "ISP"
+              ]
+            },
+            "giaiThich": "<p>10.1.2.77 → 10.1.2.0/24 via R-C; 10.1.200.1 → 10.1.0.0/16 via R-B; 10.200.1.1 → 10.0.0.0/8 via R-A; 192.168.5.100 → 192.168.5.0/25 via R-E; 192.168.5.200 → 192.168.0.0/16 via R-D; 8.8.8.8 → 0.0.0.0/0 via ISP.</p><p><i>VI: Chọn tuyến khớp với prefix dài nhất.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Stopping at the first match."
+        },
+        {
+          "loi": "Assuming 192.168.5.200 is covered by the /25."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "next hop",
+          "vi": "chặng kế tiếp"
+        }
+      ]
+    },
+    {
+      "title": "Routing 3 — The host’s own decision",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "host forwarding"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>A host with the given IP/prefix and default gateway wants to send to a destination. Does it ARP for the <b>destination</b> (same network, deliver directly) or for the <b>gateway</b>?</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Host với IP/prefix và default gateway cho trước muốn gửi tới một đích. Nó ARP cho <b>đích</b> (cùng mạng, gửi trực tiếp) hay cho <b>gateway</b>?</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "AND both addresses with the mask and compare.",
+        "The destination IP in the packet stays the remote host either way."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Routing 3 — The host’s own decision\n\nAnswer in the answer panel (no code needed).\n\n1. Host decisionQuyết định của host\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Routing 3 — The host’s own decision — answer key\n\n1. Host decisionQuyết định của host\n   - r1.a: destination\n   - r2.a: gateway\n   - r3.a: gateway\n   - r4.a: destination\n   - r5.a: gateway\n   192.168.1.99: same network → destination; 192.168.2.5: other network → gateway; 10.0.0.5: other network → gateway; 172.16.15.200: same network → destination; 172.16.16.1: other network → gateway.VI: Cùng mạng → đích; khác mạng → gateway.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>192.168.1.99: same network → destination; 192.168.2.5: other network → gateway; 10.0.0.5: other network → gateway; 172.16.15.200: same network → destination; 172.16.16.1: other network → gateway.</p><p><i>VI: Cùng mạng → đích; khác mạng → gateway.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Host decision</p><p style=\"opacity:.75;font-size:.92em\"><i>Quyết định của host</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Host / gateway / destination"
+              },
+              {
+                "ma": "a",
+                "ten": "ARP for",
+                "luaChon": [
+                  "destination",
+                  "gateway"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "192.168.1.20/24, gw 192.168.1.1, dst 192.168.1.99"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "192.168.1.20/24, gw 192.168.1.1, dst 192.168.2.5"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "10.0.0.130/25, gw 10.0.0.129, dst 10.0.0.5"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "172.16.5.9/20, gw 172.16.0.1, dst 172.16.15.200"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "172.16.5.9/20, gw 172.16.0.1, dst 172.16.16.1"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.a": [
+                "destination"
+              ],
+              "r2.a": [
+                "gateway"
+              ],
+              "r3.a": [
+                "gateway"
+              ],
+              "r4.a": [
+                "destination"
+              ],
+              "r5.a": [
+                "gateway"
+              ]
+            },
+            "giaiThich": "<p>192.168.1.99: same network → destination; 192.168.2.5: other network → gateway; 10.0.0.5: other network → gateway; 172.16.15.200: same network → destination; 172.16.16.1: other network → gateway.</p><p><i>VI: Cùng mạng → đích; khác mạng → gateway.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Sending to the gateway for a local host."
+        },
+        {
+          "loi": "Replacing the destination IP with the gateway’s IP."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "default gateway",
+          "vi": "cổng mặc định"
+        }
+      ]
+    },
+    {
+      "title": "Routing 4 — Write nextHop(routes, dst)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 18,
+      "points": 20,
+      "concepts": [
+        "longest prefix match"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Write <code>nextHop(routes, dst)</code>. <code>routes</code> is <code>[{ net: \"10.0.0.0/8\", nh: \"A\" }]</code>; return the <code>nh</code> of the matching route with the longest prefix (ties: the earlier route), or <code>null</code> when nothing matches.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>nextHop(routes, dst)</code>. <code>routes</code> là <code>[{ net: \"10.0.0.0/8\", nh: \"A\" }]</code>; trả <code>nh</code> của tuyến khớp có prefix dài nhất (hoà: tuyến đứng trước), hoặc <code>null</code> nếu không khớp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "nextHop([{\"net\":\"0.0.0.0/0\",\"nh\":\"ISP\"},{\"net\":\"10.0.0.0/8\",\"nh\":\"R-A\"},{\"net\":\"10.1.0.0/16\",\"nh\":\"R-B\"},{\"net\":\"10.1.2.0/24\",\"nh\":\"R-C\"},{\"net\":\"192.168.0.0/16\",\"nh\":\"R-D\"},{\"net\":\"192.168.5.0/25\",\"nh\":\"R-E\"}], \"10.1.2.77\")",
+          "output": "\"R-C\"",
+          "explanation": "First sample case.|||Ca mẫu đầu tiên."
+        }
+      ],
+      "hintsJson": [
+        "Convert the address and the network to 32-bit integers (use >>> 0 to keep them unsigned).",
+        "Build the mask as (0xFFFFFFFF << (32 - len)) >>> 0, careful with len = 0."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function nextHop(routes, dst) {\n  // Write your solution here\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction nextHop(routes, dst) {\n    function toInt(s) { var p = s.split('.'); return ((+p[0]) * 16777216 + (+p[1]) * 65536 + (+p[2]) * 256 + (+p[3])) >>> 0; }\n    var d = toInt(dst), best = null, bl = -1;\n    for (var i = 0; i < routes.length; i++) {\n      var c = routes[i].net.split('/'), len = +c[1], m = len === 0 ? 0 : (0xFFFFFFFF << (32 - len)) >>> 0;\n      if (((d & m) >>> 0) === ((toInt(c[0]) & m) >>> 0) && len > bl) { best = routes[i]; bl = len; }\n    }\n    return best === null ? null : best.nh;\n  }\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is the lookup every router performs for every packet, done in hardware with TCAMs.</p><p><i>VI: Đây là phép tra mọi router làm cho mọi gói, thực hiện bằng phần cứng TCAM.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: nextHop([{\"net\":\"0.0.0.0/0\",\"nh\":\"ISP\"},{\"net\":\"10.0.0.0/8\",\"nh\":\"R-A\"},{\"net\")",
+              "vi": "Ca 1"
+            },
+            "goi": "nextHop([{\"net\":\"0.0.0.0/0\",\"nh\":\"ISP\"},{\"net\":\"10.0.0.0/8\",\"nh\":\"R-A\"},{\"net\":\"10.1.0.0/16\",\"nh\":\"R-B\"},{\"net\":\"10.1.2.0/24\",\"nh\":\"R-C\"},{\"net\":\"192.168.0.0/16\",\"nh\":\"R-D\"},{\"net\":\"192.168.5.0/25\",\"nh\":\"R-E\"}], \"10.1.2.77\")",
+            "mongDoi": "R-C"
+          },
+          {
+            "moTa": {
+              "en": "Case 2: nextHop([{\"net\":\"0.0.0.0/0\",\"nh\":\"ISP\"},{\"net\":\"10.0.0.0/8\",\"nh\":\"R-A\"},{\"net\")",
+              "vi": "Ca 2"
+            },
+            "goi": "nextHop([{\"net\":\"0.0.0.0/0\",\"nh\":\"ISP\"},{\"net\":\"10.0.0.0/8\",\"nh\":\"R-A\"},{\"net\":\"10.1.0.0/16\",\"nh\":\"R-B\"},{\"net\":\"10.1.2.0/24\",\"nh\":\"R-C\"},{\"net\":\"192.168.0.0/16\",\"nh\":\"R-D\"},{\"net\":\"192.168.5.0/25\",\"nh\":\"R-E\"}], \"10.200.1.1\")",
+            "mongDoi": "R-A"
+          },
+          {
+            "moTa": {
+              "en": "Case 3: nextHop([{\"net\":\"0.0.0.0/0\",\"nh\":\"ISP\"},{\"net\":\"10.0.0.0/8\",\"nh\":\"R-A\"},{\"net\")",
+              "vi": "Ca 3"
+            },
+            "goi": "nextHop([{\"net\":\"0.0.0.0/0\",\"nh\":\"ISP\"},{\"net\":\"10.0.0.0/8\",\"nh\":\"R-A\"},{\"net\":\"10.1.0.0/16\",\"nh\":\"R-B\"},{\"net\":\"10.1.2.0/24\",\"nh\":\"R-C\"},{\"net\":\"192.168.0.0/16\",\"nh\":\"R-D\"},{\"net\":\"192.168.5.0/25\",\"nh\":\"R-E\"}], \"8.8.8.8\")",
+            "mongDoi": "ISP"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "nextHop([{\"net\":\"0.0.0.0/0\",\"nh\":\"ISP\"},{\"net\":\"10.0.0.0/8\",\"nh\":\"R-A\"},{\"net\":\"10.1.0.0/16\",\"nh\":\"R-B\"},{\"net\":\"10.1.2.0/24\",\"nh\":\"R-C\"},{\"net\":\"192.168.0.0/16\",\"nh\":\"R-D\"},{\"net\":\"192.168.5.0/25\",\"nh\":\"R-E\"}], \"192.168.5.200\")",
+            "mongDoi": "R-D",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "nextHop([{\"net\":\"10.0.0.0/8\",\"nh\":\"R-A\"},{\"net\":\"10.1.0.0/16\",\"nh\":\"R-B\"},{\"net\":\"10.1.2.0/24\",\"nh\":\"R-C\"},{\"net\":\"192.168.0.0/16\",\"nh\":\"R-D\"},{\"net\":\"192.168.5.0/25\",\"nh\":\"R-E\"}], \"8.8.8.8\")",
+            "mongDoi": null,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "nextHop([{\"net\":\"10.0.0.0/8\",\"nh\":\"X\"},{\"net\":\"10.0.0.0/8\",\"nh\":\"Y\"}], \"10.9.9.9\")",
+            "mongDoi": "X",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "nextHop([{\"net\":\"1.2.3.4/32\",\"nh\":\"H\"},{\"net\":\"1.2.3.0/24\",\"nh\":\"N\"}], \"1.2.3.4\")",
+            "mongDoi": "H",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "nextHop([], \"1.1.1.1\")",
+            "mongDoi": null,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Shifting by 32 for /0 (JavaScript wraps the shift count)."
+        },
+        {
+          "loi": "Choosing the last match instead of the longest."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Routing 5 — Choosing between routes: prefix, then AD, then metric",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "administrative distance"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Write <code>bestRoute(routes, dst)</code> where routes are <code>{ net, nh, ad, metric }</code>. Among the matching routes pick the longest prefix; for equal prefixes the lowest administrative distance <code>ad</code>; for equal AD the lowest <code>metric</code>; if still tied the earlier route. Return its <code>nh</code> or <code>null</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>bestRoute(routes, dst)</code> với route là <code>{ net, nh, ad, metric }</code>. Trong các tuyến khớp chọn prefix dài nhất; cùng prefix thì chọn administrative distance <code>ad</code> thấp nhất; cùng AD thì chọn <code>metric</code> thấp nhất; vẫn hoà thì lấy tuyến đứng trước. Trả <code>nh</code> của nó hoặc <code>null</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "bestRoute([{\"net\":\"10.0.0.0/8\",\"nh\":\"OSPF\",\"ad\":110,\"metric\":20},{\"net\":\"10.0.0.0/8\",\"nh\":\"STATIC-BACKUP\",\"ad\":200,\"metric\":0},{\"net\":\"10.0.0.0/8\",\"nh\":\"RIP\",\"ad\":120,\"metric\":2},{\"net\":\"10.0.0.0/8\",\"nh\":\"EIGRP\",\"ad\":90,\"metric\":3000},{\"net\":\"10.0.0.0/8\",\"nh\":\"EIGRP2\",\"ad\":90,\"metric\":2000},{\"net\":\"10.2.0.0/16\",\"nh\":\"STATIC\",\"ad\":1,\"metric\":0}], \"10.9.9.9\")",
+          "output": "\"EIGRP2\"",
+          "explanation": "First sample case.|||Ca mẫu đầu tiên."
+        }
+      ],
+      "hintsJson": [
+        "Compare prefix length first; only then look at ad, then metric.",
+        "Use strict comparisons so earlier routes win ties."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function bestRoute(routes, dst) {\n  // Write your solution here\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction bestRoute(routes, dst) {\n  function toInt(s) { var p = s.split('.'); return ((+p[0]) * 16777216 + (+p[1]) * 65536 + (+p[2]) * 256 + (+p[3])) >>> 0; }\n  var d = toInt(dst), best = null, bl = -1;\n  for (var i = 0; i < routes.length; i++) {\n    var r = routes[i], c = r.net.split('/'), len = +c[1], m = len === 0 ? 0 : (0xFFFFFFFF << (32 - len)) >>> 0;\n    if (((d & m) >>> 0) !== ((toInt(c[0]) & m) >>> 0)) continue;\n    if (best === null || len > bl || (len === bl && (r.ad < best.ad || (r.ad === best.ad && r.metric < best.metric)))) { best = r; bl = len; }\n  }\n  return best === null ? null : best.nh;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A floating static route (AD 200) stays invisible until the dynamic route disappears.</p><p><i>VI: Tuyến tĩnh “nổi” (AD 200) bị che cho tới khi tuyến động biến mất.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: bestRoute([{\"net\":\"10.0.0.0/8\",\"nh\":\"OSPF\",\"ad\":110,\"metric\":20},{\"net\":\"10.0.0.)",
+              "vi": "Ca 1"
+            },
+            "goi": "bestRoute([{\"net\":\"10.0.0.0/8\",\"nh\":\"OSPF\",\"ad\":110,\"metric\":20},{\"net\":\"10.0.0.0/8\",\"nh\":\"STATIC-BACKUP\",\"ad\":200,\"metric\":0},{\"net\":\"10.0.0.0/8\",\"nh\":\"RIP\",\"ad\":120,\"metric\":2},{\"net\":\"10.0.0.0/8\",\"nh\":\"EIGRP\",\"ad\":90,\"metric\":3000},{\"net\":\"10.0.0.0/8\",\"nh\":\"EIGRP2\",\"ad\":90,\"metric\":2000},{\"net\":\"10.2.0.0/16\",\"nh\":\"STATIC\",\"ad\":1,\"metric\":0}], \"10.9.9.9\")",
+            "mongDoi": "EIGRP2"
+          },
+          {
+            "moTa": {
+              "en": "Case 2: bestRoute([{\"net\":\"10.0.0.0/8\",\"nh\":\"OSPF\",\"ad\":110,\"metric\":20},{\"net\":\"10.0.0.)",
+              "vi": "Ca 2"
+            },
+            "goi": "bestRoute([{\"net\":\"10.0.0.0/8\",\"nh\":\"OSPF\",\"ad\":110,\"metric\":20},{\"net\":\"10.0.0.0/8\",\"nh\":\"STATIC-BACKUP\",\"ad\":200,\"metric\":0},{\"net\":\"10.0.0.0/8\",\"nh\":\"RIP\",\"ad\":120,\"metric\":2},{\"net\":\"10.0.0.0/8\",\"nh\":\"EIGRP\",\"ad\":90,\"metric\":3000},{\"net\":\"10.0.0.0/8\",\"nh\":\"EIGRP2\",\"ad\":90,\"metric\":2000},{\"net\":\"10.2.0.0/16\",\"nh\":\"STATIC\",\"ad\":1,\"metric\":0}], \"10.2.3.4\")",
+            "mongDoi": "STATIC"
+          },
+          {
+            "moTa": {
+              "en": "Case 3: bestRoute([{\"net\":\"10.0.0.0/8\",\"nh\":\"OSPF\",\"ad\":110,\"metric\":20},{\"net\":\"10.0.0.)",
+              "vi": "Ca 3"
+            },
+            "goi": "bestRoute([{\"net\":\"10.0.0.0/8\",\"nh\":\"OSPF\",\"ad\":110,\"metric\":20},{\"net\":\"10.0.0.0/8\",\"nh\":\"STATIC-BACKUP\",\"ad\":200,\"metric\":0},{\"net\":\"10.0.0.0/8\",\"nh\":\"RIP\",\"ad\":120,\"metric\":2}], \"10.1.1.1\")",
+            "mongDoi": "OSPF"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "bestRoute([{\"net\":\"10.0.0.0/8\",\"nh\":\"OSPF\",\"ad\":110,\"metric\":20},{\"net\":\"10.0.0.0/8\",\"nh\":\"STATIC-BACKUP\",\"ad\":200,\"metric\":0}], \"10.1.1.1\")",
+            "mongDoi": "OSPF",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "bestRoute([{\"net\":\"10.0.0.0/8\",\"nh\":\"OSPF\",\"ad\":110,\"metric\":20},{\"net\":\"10.0.0.0/8\",\"nh\":\"STATIC-BACKUP\",\"ad\":200,\"metric\":0}], \"11.1.1.1\")",
+            "mongDoi": null,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "bestRoute([{\"net\":\"10.0.0.0/8\",\"nh\":\"EIGRP\",\"ad\":90,\"metric\":3000},{\"net\":\"10.0.0.0/8\",\"nh\":\"EIGRP2\",\"ad\":90,\"metric\":2000}], \"10.1.1.1\")",
+            "mongDoi": "EIGRP2",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "bestRoute([], \"1.1.1.1\")",
+            "mongDoi": null,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Comparing AD before the prefix length."
+        },
+        {
+          "loi": "Treating a larger metric as better."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Routing 6 — Router decisions in numbers",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 10,
+      "points": 30,
+      "concepts": [
+        "router decisions"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Work out the result.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tính kết quả.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Prefix first, AD second, metric third.",
+        "The destination IP never changes; MACs change at every hop."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Routing 6 — Router decisions in numbers\n\nAnswer in the answer panel (no code needed).\n\n1. A route to 172.16.0.0/16 exists via OSPF (AD 110) and via a static route with AD 150. Which AD is installed?Tuyến tới 172.16.0.0/16 có qua OSPF (AD 110) và qua tuyến tĩnh AD 150. AD nào được cài?\n2. Why does “ip route 0.0.0.0 0.0.0.0 203.0.113.1” make a router reach the whole Internet?Vì sao “ip route 0.0.0.0 0.0.0.0 203.0.113.1” giúp router tới được toàn Internet?\n3. A router forwards a packet. The source MAC at the output link is …Router chuyển một gói. MAC nguồn ở liên kết ra là …\n4. How many addresses does a /27 route summarise?Một tuyến /27 tóm tắt bao nhiêu địa chỉ?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Routing 6 — Router decisions in numbers — answer key\n\n1. A route to 172.16.0.0/16 exists via OSPF (AD 110) and via a static route with AD 150. Which AD is installed?Tuyến tới 172.16.0.0/16 có qua OSPF (AD 110) và qua tuyến tĩnh AD 150. AD nào được cài?\n   Answer: a) 110\n   The lowest AD wins, so OSPF is installed and the static route floats as backup.VI: AD thấp nhất thắng nên OSPF được cài, tuyến tĩnh làm dự phòng.\n\n2. Why does “ip route 0.0.0.0 0.0.0.0 203.0.113.1” make a router reach the whole Internet?Vì sao “ip route 0.0.0.0 0.0.0.0 203.0.113.1” giúp router tới được toàn Internet?\n   Answer: b) It matches every destination that has no more specific route\n   A /0 prefix is the catch-all.VI: Prefix /0 là tuyến bắt tất cả.\n\n3. A router forwards a packet. The source MAC at the output link is …Router chuyển một gói. MAC nguồn ở liên kết ra là …\n   Answer: c) the MAC of the router’s outgoing interface\n   A new frame is built on every link.VI: Mỗi liên kết có một frame mới.\n\n4. How many addresses does a /27 route summarise?Một tuyến /27 tóm tắt bao nhiêu địa chỉ?\n   Answer: d) 32\n   2^(32−27) = 32 addresses.VI: 2^(32−27) = 32 địa chỉ.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A route to 172.16.0.0/16 exists via OSPF (AD 110) and via a static route with AD 150. Which AD is installed?</p><p style=\"opacity:.75;font-size:.92em\"><i>Tuyến tới 172.16.0.0/16 có qua OSPF (AD 110) và qua tuyến tĩnh AD 150. AD nào được cài?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "110"
+              },
+              {
+                "ma": "b",
+                "noiDung": "150"
+              },
+              {
+                "ma": "c",
+                "noiDung": "1"
+              },
+              {
+                "ma": "d",
+                "noiDung": "0"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The lowest AD wins, so OSPF is installed and the static route floats as backup.</p><p><i>VI: AD thấp nhất thắng nên OSPF được cài, tuyến tĩnh làm dự phòng.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Why does “ip route 0.0.0.0 0.0.0.0 203.0.113.1” make a router reach the whole Internet?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao “ip route 0.0.0.0 0.0.0.0 203.0.113.1” giúp router tới được toàn Internet?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It enables NAT"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It matches every destination that has no more specific route"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It copies the ISP table"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It disables the other routes"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A /0 prefix is the catch-all.</p><p><i>VI: Prefix /0 là tuyến bắt tất cả.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A router forwards a packet. The source MAC at the output link is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Router chuyển một gói. MAC nguồn ở liên kết ra là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the destination’s MAC"
+              },
+              {
+                "ma": "b",
+                "noiDung": "ff:ff:ff:ff:ff:ff"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the MAC of the router’s outgoing interface"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the original sender’s MAC"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A new frame is built on every link.</p><p><i>VI: Mỗi liên kết có một frame mới.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>How many addresses does a /27 route summarise?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một tuyến /27 tóm tắt bao nhiêu địa chỉ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "30"
+              },
+              {
+                "ma": "b",
+                "noiDung": "27"
+              },
+              {
+                "ma": "c",
+                "noiDung": "64"
+              },
+              {
+                "ma": "d",
+                "noiDung": "32"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>2^(32−27) = 32 addresses.</p><p><i>VI: 2^(32−27) = 32 địa chỉ.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Letting a lower AD override a longer prefix."
+        },
+        {
+          "loi": "Mixing up a route’s prefix length and its AD."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "floating static route",
+          "vi": "tuyến tĩnh nổi"
+        }
+      ]
+    }
+  ]
+}

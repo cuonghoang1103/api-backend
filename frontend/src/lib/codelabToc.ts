@@ -30,6 +30,7 @@ export const KHOA_CUA_TRACK: Readonly<Record<string, string>> = Object.freeze({
   'dbi202-practice': 'introduction-to-databases',
   'osg202-practice': 'operating-systems',
   'cea201-practice': 'computer-organization-and-architecture',
+  'nwc204-practice': 'nwc204-computer-networking',
   'mad101-practice': 'discrete-mathematics',
 });
 
@@ -154,6 +155,22 @@ export const TEN_CHUONG: Readonly<Record<string, Readonly<Record<number, string>
     6: 'Đếm & tổ hợp',
     7: 'Đồ thị & đường đi ngắn nhất',
     8: 'Cây & cây khung nhỏ nhất',
+    20: 'Luyện FE — đề thi thử có đồng hồ',
+  },
+  // NWC204 (30/10/2026) — số chương theo khoá nwc204-computer-networking (content/academy/NWC204.mjs); 4 gồm cả chương bổ sung 4B (hệ đếm).
+  'nwc204-practice': {
+    3: 'Giao thức, mô hình OSI/TCP-IP & đóng gói',
+    4: 'Tầng vật lý, độ trễ & hệ đếm nhị phân/hex (4B)',
+    5: 'Tầng liên kết: phát hiện lỗi, CRC, truy cập đường truyền',
+    6: 'Ethernet, bảng MAC & VLAN',
+    7: 'Tầng mạng: gói IPv4, phân mảnh, định tuyến',
+    8: 'ARP & địa chỉ MAC/IP từng chặng',
+    10: 'Địa chỉ IPv4: subnet, VLSM, CIDR, wildcard',
+    11: 'Địa chỉ IPv6',
+    12: 'ICMP: ping & traceroute',
+    13: 'Tầng giao vận: TCP, cửa sổ trượt',
+    14: 'Tầng ứng dụng: DNS, DHCP, HTTP',
+    15: 'An ninh mạng: ACL & NAT',
     20: 'Luyện FE — đề thi thử có đồng hồ',
   },
   // Kỹ năng nghề — số chương theo SSG105 (Ch3 Written communication, Ch4 Presentations).

@@ -1,0 +1,479 @@
+{
+  "trackSlug": "nwc204-practice",
+  "moduleSlug": "nwc204-12-1-icmp-ping-traceroute",
+  "lesson": {
+    "course": "nwc204-computer-networking",
+    "slug": "nwc204-12-2-ping-traceroute-va-lab-2-3"
+  },
+  "exercises": [
+    {
+      "title": "ICMP 1 — Messages and what they mean",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "ICMP"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Read ICMP types and ping/traceroute output.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đọc các kiểu ICMP và kết quả ping/traceroute.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Time Exceeded = TTL ran out; Unreachable = cannot deliver.",
+        "No answer does not prove the host is down."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# ICMP 1 — Messages and what they mean\n\nAnswer in the answer panel (no code needed).\n\n1. ICMP echo request (type 8) and echo reply (type 0) are used by …ICMP echo request (type 8) và echo reply (type 0) được dùng bởi …\n2. A router discards a packet because its TTL reached 0. It sends …Router huỷ gói vì TTL về 0. Nó gửi …\n3. “Destination host unreachable” from your own gateway usually means …“Destination host unreachable” từ chính gateway thường nghĩa là …\n4. “Request timed out” in ping means …“Request timed out” trong ping nghĩa là …\n5. Each traceroute probe uses a TTL that is …Mỗi gói dò của traceroute dùng TTL …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# ICMP 1 — Messages and what they mean — answer key\n\n1. ICMP echo request (type 8) and echo reply (type 0) are used by …ICMP echo request (type 8) và echo reply (type 0) được dùng bởi …\n   Answer: d) ping\n   Ping tests reachability and round-trip time.VI: Ping kiểm tra khả năng tới được và thời gian khứ hồi.\n\n2. A router discards a packet because its TTL reached 0. It sends …Router huỷ gói vì TTL về 0. Nó gửi …\n   Answer: a) ICMP Time Exceeded (type 11)\n   Traceroute exploits exactly this reply.VI: Traceroute khai thác đúng phản hồi này.\n\n3. “Destination host unreachable” from your own gateway usually means …“Destination host unreachable” từ chính gateway thường nghĩa là …\n   Answer: b) the router has no route or cannot ARP the host\n   Destination Unreachable (type 3) comes from the router that cannot deliver.VI: Destination Unreachable (type 3) do router không chuyển được gửi về.\n\n4. “Request timed out” in ping means …“Request timed out” trong ping nghĩa là …\n   Answer: c) no reply came within the timeout (down, filtered, or lost)\n   A firewall that drops ICMP looks the same as a dead host.VI: Firewall chặn ICMP trông giống host chết.\n\n5. Each traceroute probe uses a TTL that is …Mỗi gói dò của traceroute dùng TTL …\n   Answer: d) increased by one each time, starting at 1\n   TTL 1 reaches hop 1, TTL 2 hop 2 and so on.VI: TTL 1 tới chặng 1, TTL 2 tới chặng 2…\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>ICMP echo request (type 8) and echo reply (type 0) are used by …</p><p style=\"opacity:.75;font-size:.92em\"><i>ICMP echo request (type 8) và echo reply (type 0) được dùng bởi …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "traceroute only"
+              },
+              {
+                "ma": "b",
+                "noiDung": "DNS"
+              },
+              {
+                "ma": "c",
+                "noiDung": "ARP"
+              },
+              {
+                "ma": "d",
+                "noiDung": "ping"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Ping tests reachability and round-trip time.</p><p><i>VI: Ping kiểm tra khả năng tới được và thời gian khứ hồi.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A router discards a packet because its TTL reached 0. It sends …</p><p style=\"opacity:.75;font-size:.92em\"><i>Router huỷ gói vì TTL về 0. Nó gửi …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "ICMP Time Exceeded (type 11)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "ICMP Echo Reply"
+              },
+              {
+                "ma": "c",
+                "noiDung": "ICMP Redirect"
+              },
+              {
+                "ma": "d",
+                "noiDung": "TCP RST"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Traceroute exploits exactly this reply.</p><p><i>VI: Traceroute khai thác đúng phản hồi này.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>“Destination host unreachable” from your own gateway usually means …</p><p style=\"opacity:.75;font-size:.92em\"><i>“Destination host unreachable” từ chính gateway thường nghĩa là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the web server is down"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the router has no route or cannot ARP the host"
+              },
+              {
+                "ma": "c",
+                "noiDung": "DNS failed"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the TTL expired in transit"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Destination Unreachable (type 3) comes from the router that cannot deliver.</p><p><i>VI: Destination Unreachable (type 3) do router không chuyển được gửi về.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>“Request timed out” in ping means …</p><p style=\"opacity:.75;font-size:.92em\"><i>“Request timed out” trong ping nghĩa là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "DNS is slow"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the TTL is too large"
+              },
+              {
+                "ma": "c",
+                "noiDung": "no reply came within the timeout (down, filtered, or lost)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the host replied with an error"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A firewall that drops ICMP looks the same as a dead host.</p><p><i>VI: Firewall chặn ICMP trông giống host chết.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Each traceroute probe uses a TTL that is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Mỗi gói dò của traceroute dùng TTL …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "always 255"
+              },
+              {
+                "ma": "b",
+                "noiDung": "random"
+              },
+              {
+                "ma": "c",
+                "noiDung": "decreased from 30"
+              },
+              {
+                "ma": "d",
+                "noiDung": "increased by one each time, starting at 1"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>TTL 1 reaches hop 1, TTL 2 hop 2 and so on.</p><p><i>VI: TTL 1 tới chặng 1, TTL 2 tới chặng 2…</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating “request timed out” as proof the host is off."
+        },
+        {
+          "loi": "Thinking traceroute sends ICMP errors itself."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "round-trip time",
+          "vi": "thời gian khứ hồi"
+        }
+      ]
+    },
+    {
+      "title": "ICMP 2 — Read a traceroute",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "traceroute"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Path to 8.8.8.8: 10.0.0.1 → 172.16.0.1 → 203.0.113.9 → 8.8.8.8. The router at hop 3 does not answer ICMP (it shows “*”). Fill in what each TTL prints.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đường tới 8.8.8.8: 10.0.0.1 → 172.16.0.1 → 203.0.113.9 → 8.8.8.8. Router ở chặng 3 không trả lời ICMP (hiện “*”). Điền kết quả in ra ứng với mỗi TTL.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Probe n expires at router n.",
+        "A silent router prints * but the trace continues."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# ICMP 2 — Read a traceroute\n\nAnswer in the answer panel (no code needed).\n\n1. Traceroute linesDòng traceroute\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# ICMP 2 — Read a traceroute — answer key\n\n1. Traceroute linesDòng traceroute\n   - r1.r: 10.0.0.1\n   - r2.r: 172.16.0.1\n   - r3.r: *\n   - r4.r: 8.8.8.8\n   1 10.0.0.1 | 2 172.16.0.1 | 3 * | 4 8.8.8.8. The destination answers the last probe with an Echo Reply / Port Unreachable.VI: Đích trả lời gói dò cuối bằng Echo Reply / Port Unreachable.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>1 10.0.0.1 | 2 172.16.0.1 | 3 * | 4 8.8.8.8. The destination answers the last probe with an Echo Reply / Port Unreachable.</p><p><i>VI: Đích trả lời gói dò cuối bằng Echo Reply / Port Unreachable.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Traceroute lines</p><p style=\"opacity:.75;font-size:.92em\"><i>Dòng traceroute</i></p>",
+            "cot": [
+              {
+                "ma": "t",
+                "ten": "TTL"
+              },
+              {
+                "ma": "r",
+                "ten": "Printed address"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "t": "1"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "t": "2"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "t": "3"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "t": "4"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.r": [
+                "10.0.0.1"
+              ],
+              "r2.r": [
+                "172.16.0.1"
+              ],
+              "r3.r": [
+                "*"
+              ],
+              "r4.r": [
+                "8.8.8.8"
+              ]
+            },
+            "giaiThich": "<p>1 10.0.0.1 | 2 172.16.0.1 | 3 * | 4 8.8.8.8. The destination answers the last probe with an Echo Reply / Port Unreachable.</p><p><i>VI: Đích trả lời gói dò cuối bằng Echo Reply / Port Unreachable.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Stopping the trace at the first *."
+        },
+        {
+          "loi": "Counting the destination as a router."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "hop",
+          "vi": "chặng"
+        }
+      ]
+    },
+    {
+      "title": "ICMP 3 — Write traceroute(path, silent, maxTtl)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "traceroute"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Simulate traceroute. <code>path</code> lists the hop addresses (the last one is the destination), <code>silent</code> is an array of hop indexes (0-based) that never reply, <code>maxTtl</code> the highest TTL tried. Return one line per TTL as <code>\"&lt;ttl&gt; &lt;address or *&gt;\"</code>, stopping right after the destination answers. If the path is shorter than a TTL (because the destination was silent or unreachable) print <code>\"&lt;ttl&gt; *\"</code> until <code>maxTtl</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mô phỏng traceroute. <code>path</code> liệt kê địa chỉ các chặng (cuối cùng là đích), <code>silent</code> là mảng chỉ số chặng (từ 0) không bao giờ trả lời, <code>maxTtl</code> là TTL cao nhất thử. Trả mỗi TTL một dòng <code>\"&lt;ttl&gt; &lt;địa chỉ hoặc *&gt;\"</code>, dừng ngay sau khi đích trả lời. Nếu đường ngắn hơn TTL (vì đích im lặng hoặc không tới được) in <code>\"&lt;ttl&gt; *\"</code> cho tới <code>maxTtl</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "traceroute([\"10.0.0.1\",\"172.16.0.1\",\"203.0.113.9\",\"8.8.8.8\"], [2], 8)",
+          "output": "[\"1 10.0.0.1\",\"2 172.16.0.1\",\"3 *\",\"4 8.8.8.8\"]",
+          "explanation": "First sample case.|||Ca mẫu đầu tiên."
+        }
+      ],
+      "hintsJson": [
+        "Loop ttl from 1 to maxTtl; the router at index ttl − 1 answers.",
+        "If the destination (last index) answers, stop."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function traceroute(path, silent, maxTtl) {\n  // Write your solution here\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction traceroute(path, silent, maxTtl) {\n  var out = [];\n  for (var ttl = 1; ttl <= maxTtl; ttl++) {\n    var i = ttl - 1;\n    if (i >= path.length) { out.push(ttl + ' *'); continue; }\n    out.push(ttl + ' ' + (silent.indexOf(i) >= 0 ? '*' : path[i]));\n    if (i === path.length - 1) break;\n  }\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A silent last hop makes traceroute run to maxTtl, which is why firewalls produce lines of asterisks.</p><p><i>VI: Chặng cuối im lặng khiến traceroute chạy tới maxTtl, vì thế firewall cho ra cả dòng dấu sao.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: traceroute([\"10.0.0.1\",\"172.16.0.1\",\"203.0.113.9\",\"8.8.8.8\"], [2], 8)",
+              "vi": "Ca 1"
+            },
+            "goi": "traceroute([\"10.0.0.1\",\"172.16.0.1\",\"203.0.113.9\",\"8.8.8.8\"], [2], 8)",
+            "mongDoi": [
+              "1 10.0.0.1",
+              "2 172.16.0.1",
+              "3 *",
+              "4 8.8.8.8"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 2: traceroute([\"10.0.0.1\",\"172.16.0.1\",\"203.0.113.9\",\"8.8.8.8\"], [], 8)",
+              "vi": "Ca 2"
+            },
+            "goi": "traceroute([\"10.0.0.1\",\"172.16.0.1\",\"203.0.113.9\",\"8.8.8.8\"], [], 8)",
+            "mongDoi": [
+              "1 10.0.0.1",
+              "2 172.16.0.1",
+              "3 203.0.113.9",
+              "4 8.8.8.8"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 3: traceroute([\"10.0.0.1\",\"172.16.0.1\",\"203.0.113.9\",\"8.8.8.8\"], [3], 6)",
+              "vi": "Ca 3"
+            },
+            "goi": "traceroute([\"10.0.0.1\",\"172.16.0.1\",\"203.0.113.9\",\"8.8.8.8\"], [3], 6)",
+            "mongDoi": [
+              "1 10.0.0.1",
+              "2 172.16.0.1",
+              "3 203.0.113.9",
+              "4 *"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "traceroute([\"1.1.1.1\"], [], 5)",
+            "mongDoi": [
+              "1 1.1.1.1"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "traceroute([\"10.0.0.1\",\"172.16.0.1\",\"203.0.113.9\",\"8.8.8.8\"], [0,1], 4)",
+            "mongDoi": [
+              "1 *",
+              "2 *",
+              "3 203.0.113.9",
+              "4 8.8.8.8"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "traceroute([], [], 3)",
+            "mongDoi": [
+              "1 *",
+              "2 *",
+              "3 *"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Continuing after the destination replied."
+        },
+        {
+          "loi": "Printing the address of a silent hop."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

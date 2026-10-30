@@ -1,0 +1,264 @@
+{
+  "trackSlug": "nwc204-practice",
+  "moduleSlug": "nwc204-10-lab-address-planner",
+  "lesson": {
+    "course": "nwc204-computer-networking",
+    "slug": "nwc204-ch10-quiz"
+  },
+  "exercises": [
+    {
+      "title": "Lab 10 — Address planner for a small company",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 60,
+      "points": 60,
+      "concepts": [
+        "VLSM",
+        "address planning"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p><b>Scenario.</b> You are the network engineer of a start-up. The ISP gave you one block and each department has a head-count. Write <code>planNetwork(base, prefix, depts)</code> that produces the addressing plan:</p>\n<ol>\n<li>Each department <code>{ name, hosts, growthPct }</code> needs <code>need = ceil(hosts × (1 + growthPct / 100)) + 1</code> addresses (the “+1” is the default gateway on the router).</li>\n<li>Allocate subnets from the start of <code>base/prefix</code>, <b>largest need first</b> (ties keep the input order), each with the longest prefix (never longer than /30) that offers at least <code>need</code> usable hosts.</li>\n<li>Return <code>{ subnets, free, efficiency }</code>. Each subnet: <code>{ name, need, prefix, network, mask, gateway, broadcast, usable }</code> where <code>gateway</code> is the first usable address. <code>free = { next, addresses }</code> is the first unallocated address and how many addresses remain. <code>efficiency</code> = Σ need ÷ Σ allocated block sizes × 100, rounded to 2 decimals.</li>\n<li>If a subnet does not fit, return <code>{ error: \"does not fit\", failedAt: name }</code>.</li>\n</ol>\n<p>Sample: 5 departments in 192.168.0.0/24 — Sales 55 +10%, Engineering 100 +20%, Guests 20, Servers 10 +50%, WAN 1.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Mask the base address down to its network first.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Tình huống.</b> Bạn là kỹ sư mạng của một start-up. ISP cấp một khối địa chỉ và mỗi phòng ban có số người. Viết <code>planNetwork(base, prefix, depts)</code> tạo kế hoạch địa chỉ:</p>\n<ol>\n<li>Mỗi phòng ban <code>{ name, hosts, growthPct }</code> cần <code>need = ceil(hosts × (1 + growthPct / 100)) + 1</code> địa chỉ (“+1” là default gateway trên router).</li>\n<li>Cấp mạng con từ đầu <code>base/prefix</code>, <b>nhu cầu lớn nhất trước</b> (hoà giữ thứ tự đầu vào), mỗi mạng con dùng prefix dài nhất (không dài hơn /30) còn cho ít nhất <code>need</code> host dùng được.</li>\n<li>Trả <code>{ subnets, free, efficiency }</code>. Mỗi mạng con: <code>{ name, need, prefix, network, mask, gateway, broadcast, usable }</code> với <code>gateway</code> là địa chỉ dùng được đầu tiên. <code>free = { next, addresses }</code> là địa chỉ chưa cấp đầu tiên và số địa chỉ còn lại. <code>efficiency</code> = Σ need ÷ Σ kích thước khối đã cấp × 100, làm tròn 2 chữ số.</li>\n<li>Nếu một mạng con không vừa, trả <code>{ error: \"does not fit\", failedAt: name }</code>.</li>\n</ol>\n<p>Ví dụ: 5 phòng ban trong 192.168.0.0/24 — Sales 55 +10%, Engineering 100 +20%, Guests 20, Servers 10 +50%, WAN 1.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Hãy đưa địa chỉ base về địa chỉ mạng trước.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "planNetwork(\"192.168.0.0\", 24, [{\"name\":\"Sales\",\"hosts\":55,\"growthPct\":10},{\"name\":\"Engineering\",\"hosts\":100,\"growthPct\":20},{\"name\":\"Guests\",\"hosts\":20,\"growthPct\":0},{\"name\":\"Servers\",\"hosts\":10,\"growthPct\":50},{\"name\":\"WAN\",\"hosts\":1,\"growthPct\":0}])",
+          "output": "{\"error\":\"does not fit\",\"failedAt\":\"WAN\"}",
+          "explanation": "First sample case.|||Ca mẫu đầu tiên."
+        }
+      ],
+      "hintsJson": [
+        "Compute need per department first, then sort a copy, keeping the original index for ties.",
+        "The prefix search starts at /30 and shortens until 2^(32 − p) − 2 ≥ need; remember the +1 gateway is already in need.",
+        "Keep a running cursor (unsigned 32-bit) and compare cursor + size with the end of the block before allocating."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function planNetwork(base, prefix, depts) {\n  // Write your solution here\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction planNetwork(base, prefix, depts) {\n  function toInt(s) { var p = s.split('.'); return ((+p[0]) * 16777216 + (+p[1]) * 65536 + (+p[2]) * 256 + (+p[3])) >>> 0; }\n  function toStr(n) { return [n >>> 24, (n >>> 16) & 255, (n >>> 8) & 255, n & 255].join('.'); }\n  var m0 = prefix === 0 ? 0 : (0xFFFFFFFF << (32 - prefix)) >>> 0, cur = (toInt(base) & m0) >>> 0, end = cur + Math.pow(2, 32 - prefix);\n  var list = depts.map(function (d, i) {\n    var need = Math.ceil(d.hosts * (1 + (d.growthPct || 0) / 100)) + 1;\n    return { name: d.name, need: need, i: i };\n  });\n  list.sort(function (a, b) { return b.need - a.need || a.i - b.i; });\n  var subnets = [], used = 0, block = 0;\n  for (var k = 0; k < list.length; k++) {\n    var p = 30; while (p > 0 && Math.pow(2, 32 - p) - 2 < list[k].need) p--;\n    var size = Math.pow(2, 32 - p), mask = (0xFFFFFFFF << (32 - p)) >>> 0;\n    if (cur + size > end) return { error: 'does not fit', failedAt: list[k].name };\n    subnets.push({ name: list[k].name, need: list[k].need, prefix: p, network: toStr(cur), mask: toStr(mask), gateway: toStr(cur + 1), broadcast: toStr(cur + size - 1), usable: size - 2 });\n    used += list[k].need; block += size; cur += size;\n  }\n  return { subnets: subnets, free: { next: toStr(cur), addresses: end - cur }, efficiency: block === 0 ? 0 : Math.round(used / block * 10000) / 100 };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is the full job of the addressing step in a network design: demand → block sizes → aligned allocation → documented gateways and spare capacity.</p><p><i>VI: Đây là toàn bộ công việc bước địa chỉ trong thiết kế mạng: nhu cầu → kích thước khối → cấp phát thẳng hàng → ghi lại gateway và phần dự phòng.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: planNetwork(\"192.168.0.0\", 24, [{\"name\":\"Sales\",\"hosts\":55,\"growthPct\":10},{\"name\")",
+              "vi": "Ca 1"
+            },
+            "goi": "planNetwork(\"192.168.0.0\", 24, [{\"name\":\"Sales\",\"hosts\":55,\"growthPct\":10},{\"name\":\"Engineering\",\"hosts\":100,\"growthPct\":20},{\"name\":\"Guests\",\"hosts\":20,\"growthPct\":0},{\"name\":\"Servers\",\"hosts\":10,\"growthPct\":50},{\"name\":\"WAN\",\"hosts\":1,\"growthPct\":0}])",
+            "mongDoi": {
+              "error": "does not fit",
+              "failedAt": "WAN"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: planNetwork(\"192.168.0.0\", 24, [{\"name\":\"A\",\"hosts\":200,\"growthPct\":0},{\"name\":\"B\")",
+              "vi": "Ca 2"
+            },
+            "goi": "planNetwork(\"192.168.0.0\", 24, [{\"name\":\"A\",\"hosts\":200,\"growthPct\":0},{\"name\":\"B\",\"hosts\":60,\"growthPct\":0}])",
+            "mongDoi": {
+              "error": "does not fit",
+              "failedAt": "B"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: planNetwork(\"10.20.0.0\", 22, [{\"name\":\"HQ\",\"hosts\":400,\"growthPct\":25},{\"name\":\"La)",
+              "vi": "Ca 3"
+            },
+            "goi": "planNetwork(\"10.20.0.0\", 22, [{\"name\":\"HQ\",\"hosts\":400,\"growthPct\":25},{\"name\":\"Lab\",\"hosts\":120,\"growthPct\":0},{\"name\":\"Wifi\",\"hosts\":250,\"growthPct\":0},{\"name\":\"Link\",\"hosts\":1,\"growthPct\":0}])",
+            "mongDoi": {
+              "subnets": [
+                {
+                  "name": "HQ",
+                  "need": 501,
+                  "prefix": 23,
+                  "network": "10.20.0.0",
+                  "mask": "255.255.254.0",
+                  "gateway": "10.20.0.1",
+                  "broadcast": "10.20.1.255",
+                  "usable": 510
+                },
+                {
+                  "name": "Wifi",
+                  "need": 251,
+                  "prefix": 24,
+                  "network": "10.20.2.0",
+                  "mask": "255.255.255.0",
+                  "gateway": "10.20.2.1",
+                  "broadcast": "10.20.2.255",
+                  "usable": 254
+                },
+                {
+                  "name": "Lab",
+                  "need": 121,
+                  "prefix": 25,
+                  "network": "10.20.3.0",
+                  "mask": "255.255.255.128",
+                  "gateway": "10.20.3.1",
+                  "broadcast": "10.20.3.127",
+                  "usable": 126
+                },
+                {
+                  "name": "Link",
+                  "need": 2,
+                  "prefix": 30,
+                  "network": "10.20.3.128",
+                  "mask": "255.255.255.252",
+                  "gateway": "10.20.3.129",
+                  "broadcast": "10.20.3.131",
+                  "usable": 2
+                }
+              ],
+              "free": {
+                "next": "10.20.3.132",
+                "addresses": 124
+              },
+              "efficiency": 97.22
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "planNetwork(\"10.20.0.0\", 23, [{\"name\":\"HQ\",\"hosts\":400,\"growthPct\":25},{\"name\":\"Lab\",\"hosts\":120,\"growthPct\":0},{\"name\":\"Wifi\",\"hosts\":250,\"growthPct\":0},{\"name\":\"Link\",\"hosts\":1,\"growthPct\":0}])",
+            "mongDoi": {
+              "error": "does not fit",
+              "failedAt": "Wifi"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "planNetwork(\"192.168.5.77\", 24, [{\"name\":\"only\",\"hosts\":10,\"growthPct\":0}])",
+            "mongDoi": {
+              "subnets": [
+                {
+                  "name": "only",
+                  "need": 11,
+                  "prefix": 28,
+                  "network": "192.168.5.0",
+                  "mask": "255.255.255.240",
+                  "gateway": "192.168.5.1",
+                  "broadcast": "192.168.5.15",
+                  "usable": 14
+                }
+              ],
+              "free": {
+                "next": "192.168.5.16",
+                "addresses": 240
+              },
+              "efficiency": 68.75
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "planNetwork(\"172.16.0.0\", 24, [])",
+            "mongDoi": {
+              "subnets": [],
+              "free": {
+                "next": "172.16.0.0",
+                "addresses": 256
+              },
+              "efficiency": 0
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "planNetwork(\"192.168.0.0\", 24, [{\"name\":\"x\",\"hosts\":10,\"growthPct\":0},{\"name\":\"y\",\"hosts\":10,\"growthPct\":0},{\"name\":\"z\",\"hosts\":40,\"growthPct\":0}])",
+            "mongDoi": {
+              "subnets": [
+                {
+                  "name": "z",
+                  "need": 41,
+                  "prefix": 26,
+                  "network": "192.168.0.0",
+                  "mask": "255.255.255.192",
+                  "gateway": "192.168.0.1",
+                  "broadcast": "192.168.0.63",
+                  "usable": 62
+                },
+                {
+                  "name": "x",
+                  "need": 11,
+                  "prefix": 28,
+                  "network": "192.168.0.64",
+                  "mask": "255.255.255.240",
+                  "gateway": "192.168.0.65",
+                  "broadcast": "192.168.0.79",
+                  "usable": 14
+                },
+                {
+                  "name": "y",
+                  "need": 11,
+                  "prefix": 28,
+                  "network": "192.168.0.80",
+                  "mask": "255.255.255.240",
+                  "gateway": "192.168.0.81",
+                  "broadcast": "192.168.0.95",
+                  "usable": 14
+                }
+              ],
+              "free": {
+                "next": "192.168.0.96",
+                "addresses": 160
+              },
+              "efficiency": 65.63
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting the gateway (“+1”) and giving a /26 to exactly 62 hosts."
+        },
+        {
+          "loi": "Sorting by hosts instead of by need (growth can change the order)."
+        },
+        {
+          "loi": "Not returning the error object when the block is exhausted."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

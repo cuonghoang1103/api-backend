@@ -38,6 +38,8 @@ export const PRACTICE_TRACK_BY_COURSE: Readonly<Record<string, string>> = Object
   'computer-organization-and-architecture': 'cea201-practice',
   // MAD101 (30/10/2026): logic, tập hợp, hàm, Big-O, số học, truy hồi, đếm, đồ thị, cây — content/codelab/mad101-practice (máy chấm choice/order/table/js).
   'discrete-mathematics': 'mad101-practice',
+  // NWC204 (30/10/2026): subnet/VLSM, CIDR, IPv6, bảng định tuyến, MAC/VLAN, TCP, ACL, NAT… — content/codelab/nwc204-practice (máy chấm choice/order/table/js).
+  'nwc204-computer-networking': 'nwc204-practice',
 });
 
 /**
@@ -66,6 +68,7 @@ export const PRACTICE_CATALOG: readonly MucDanhMuc[] = Object.freeze([
   { loai: 'academy', ma: 'PRJ301', ten: 'Java Web Application Development', courseSlug: 'java-web-application-development', trackSlug: 'prj301-practice' },
   { loai: 'academy', ma: 'OSG202', ten: 'Operating Systems', courseSlug: 'operating-systems', trackSlug: 'osg202-practice' },
   { loai: 'academy', ma: 'CEA201', ten: 'Computer Organization and Architecture', courseSlug: 'computer-organization-and-architecture', trackSlug: 'cea201-practice' },
+  { loai: 'academy', ma: 'NWC204', ten: 'Computer Networking', courseSlug: 'nwc204-computer-networking', trackSlug: 'nwc204-practice' },
   { loai: 'academy', ma: 'MAD101', ten: 'Discrete Mathematics', courseSlug: 'discrete-mathematics', trackSlug: 'mad101-practice' },
   { loai: 'course', ten: 'Nền tảng Web', courseSlug: 'web-foundations', trackSlug: 'web-foundations-practice' },
 ] as MucDanhMuc[]);

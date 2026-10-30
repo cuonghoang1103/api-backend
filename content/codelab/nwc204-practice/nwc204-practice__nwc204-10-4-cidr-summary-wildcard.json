@@ -1,0 +1,746 @@
+{
+  "trackSlug": "nwc204-practice",
+  "moduleSlug": "nwc204-10-4-cidr-summary-wildcard",
+  "lesson": {
+    "course": "nwc204-computer-networking",
+    "slug": "nwc204-ch10-quiz"
+  },
+  "exercises": [
+    {
+      "title": "CIDR 1 — Summarise the routes",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "route summarisation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Give the shortest single CIDR block that covers all listed networks (the summary route).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cho khối CIDR đơn ngắn nhất bao trùm mọi mạng được liệt kê (tuyến tóm tắt).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Write the differing octet in binary and find where the common bits stop.",
+        "Four consecutive /24s starting on a multiple of 4 summarise to a /22."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# CIDR 1 — Summarise the routes\n\nAnswer in the answer panel (no code needed).\n\n1. SummariesTóm tắt tuyến\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# CIDR 1 — Summarise the routes — answer key\n\n1. SummariesTóm tắt tuyến\n   - r1.s: 192.168.0.0/22\n   - r2.s: 10.0.0.0/14\n   - r3.s: 172.16.32.0/23\n   - r4.s: 192.168.10.0/24\n   192.168.0.0/22; 10.0.0.0/14; 172.16.32.0/23; 192.168.10.0/24. Count the leading bits the network addresses share.VI: Đếm số bit đầu mà các địa chỉ mạng chung.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>192.168.0.0/22; 10.0.0.0/14; 172.16.32.0/23; 192.168.10.0/24. Count the leading bits the network addresses share.</p><p><i>VI: Đếm số bit đầu mà các địa chỉ mạng chung.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Summaries</p><p style=\"opacity:.75;font-size:.92em\"><i>Tóm tắt tuyến</i></p>",
+            "cot": [
+              {
+                "ma": "n",
+                "ten": "Networks"
+              },
+              {
+                "ma": "s",
+                "ten": "Summary"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "n": "192.168.0.0/24, 192.168.1.0/24, 192.168.2.0/24, 192.168.3.0/24"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "n": "10.1.0.0/16, 10.2.0.0/16, 10.3.0.0/16, 10.0.0.0/16"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "n": "172.16.32.0/24, 172.16.33.0/24"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "n": "192.168.10.64/26, 192.168.10.128/26"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.s": [
+                "192.168.0.0/22"
+              ],
+              "r2.s": [
+                "10.0.0.0/14"
+              ],
+              "r3.s": [
+                "172.16.32.0/23"
+              ],
+              "r4.s": [
+                "192.168.10.0/24"
+              ]
+            },
+            "giaiThich": "<p>192.168.0.0/22; 10.0.0.0/14; 172.16.32.0/23; 192.168.10.0/24. Count the leading bits the network addresses share.</p><p><i>VI: Đếm số bit đầu mà các địa chỉ mạng chung.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using a summary that also swallows networks you do not own."
+        },
+        {
+          "loi": "Starting a /22 on a number that is not a multiple of 4."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "summary route",
+          "vi": "tuyến tóm tắt"
+        },
+        {
+          "en": "supernet",
+          "vi": "siêu mạng"
+        }
+      ]
+    },
+    {
+      "title": "CIDR 2 — Exact summary or over-broad?",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 12,
+      "points": 30,
+      "concepts": [
+        "summary quality"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>A good summary covers exactly the listed networks. Count the addresses in the summary and in the list.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tóm tắt tốt chỉ bao đúng các mạng được liệt kê. Đếm địa chỉ trong tóm tắt và trong danh sách.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Size of /p is 2^(32−p).",
+        "Extra addresses mean the router would advertise networks it cannot reach."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# CIDR 2 — Exact summary or over-broad?\n\nAnswer in the answer panel (no code needed).\n\n1. Networks 172.16.4.0/24, 172.16.5.0/24, 172.16.6.0/24, 172.16.7.0/24 summarised as 172.16.4.0/22. This is …Các mạng 172.16.4.0/24, 172.16.5.0/24, 172.16.6.0/24, 172.16.7.0/24 tóm tắt thành 172.16.4.0/22. Đây là …\n2. Networks 172.16.4.0/24, 172.16.5.0/24, 172.16.7.0/24 summarised as 172.16.4.0/22. This is …Các mạng 172.16.4.0/24, 172.16.5.0/24, 172.16.7.0/24 tóm tắt thành 172.16.4.0/22. Đây là …\n3. Networks 10.0.0.0/24, 10.0.2.0/24 summarised as 10.0.0.0/22. This is …Các mạng 10.0.0.0/24, 10.0.2.0/24 tóm tắt thành 10.0.0.0/22. Đây là …\n4. Networks 192.168.8.0/23, 192.168.10.0/23 summarised as 192.168.8.0/22. This is …Các mạng 192.168.8.0/23, 192.168.10.0/23 tóm tắt thành 192.168.8.0/22. Đây là …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# CIDR 2 — Exact summary or over-broad? — answer key\n\n1. Networks 172.16.4.0/24, 172.16.5.0/24, 172.16.6.0/24, 172.16.7.0/24 summarised as 172.16.4.0/22. This is …Các mạng 172.16.4.0/24, 172.16.5.0/24, 172.16.6.0/24, 172.16.7.0/24 tóm tắt thành 172.16.4.0/22. Đây là …\n   Answer: c) exact: 172.16.4.0/22 has 1024 addresses, the list 1024\n   Compare the address counts: equal means exact.VI: So sánh số địa chỉ: bằng nhau là chính xác.\n\n2. Networks 172.16.4.0/24, 172.16.5.0/24, 172.16.7.0/24 summarised as 172.16.4.0/22. This is …Các mạng 172.16.4.0/24, 172.16.5.0/24, 172.16.7.0/24 tóm tắt thành 172.16.4.0/22. Đây là …\n   Answer: d) over-broad: 172.16.4.0/22 has 1024 addresses, the list only 768\n   Compare the address counts: equal means exact.VI: So sánh số địa chỉ: bằng nhau là chính xác.\n\n3. Networks 10.0.0.0/24, 10.0.2.0/24 summarised as 10.0.0.0/22. This is …Các mạng 10.0.0.0/24, 10.0.2.0/24 tóm tắt thành 10.0.0.0/22. Đây là …\n   Answer: a) over-broad: 10.0.0.0/22 has 1024 addresses, the list only 512\n   Compare the address counts: equal means exact.VI: So sánh số địa chỉ: bằng nhau là chính xác.\n\n4. Networks 192.168.8.0/23, 192.168.10.0/23 summarised as 192.168.8.0/22. This is …Các mạng 192.168.8.0/23, 192.168.10.0/23 tóm tắt thành 192.168.8.0/22. Đây là …\n   Answer: b) exact: 192.168.8.0/22 has 1024 addresses, the list 1024\n   Compare the address counts: equal means exact.VI: So sánh số địa chỉ: bằng nhau là chính xác.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Networks 172.16.4.0/24, 172.16.5.0/24, 172.16.6.0/24, 172.16.7.0/24 summarised as 172.16.4.0/22. This is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Các mạng 172.16.4.0/24, 172.16.5.0/24, 172.16.6.0/24, 172.16.7.0/24 tóm tắt thành 172.16.4.0/22. Đây là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "impossible to summarise"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a valid summary only with NAT"
+              },
+              {
+                "ma": "c",
+                "noiDung": "exact: 172.16.4.0/22 has 1024 addresses, the list 1024"
+              },
+              {
+                "ma": "d",
+                "noiDung": "over-broad: it adds 1024 extra addresses"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Compare the address counts: equal means exact.</p><p><i>VI: So sánh số địa chỉ: bằng nhau là chính xác.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Networks 172.16.4.0/24, 172.16.5.0/24, 172.16.7.0/24 summarised as 172.16.4.0/22. This is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Các mạng 172.16.4.0/24, 172.16.5.0/24, 172.16.7.0/24 tóm tắt thành 172.16.4.0/22. Đây là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "exact"
+              },
+              {
+                "ma": "b",
+                "noiDung": "invalid CIDR"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a default route"
+              },
+              {
+                "ma": "d",
+                "noiDung": "over-broad: 172.16.4.0/22 has 1024 addresses, the list only 768"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Compare the address counts: equal means exact.</p><p><i>VI: So sánh số địa chỉ: bằng nhau là chính xác.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Networks 10.0.0.0/24, 10.0.2.0/24 summarised as 10.0.0.0/22. This is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Các mạng 10.0.0.0/24, 10.0.2.0/24 tóm tắt thành 10.0.0.0/22. Đây là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "over-broad: 10.0.0.0/22 has 1024 addresses, the list only 512"
+              },
+              {
+                "ma": "b",
+                "noiDung": "exact"
+              },
+              {
+                "ma": "c",
+                "noiDung": "invalid CIDR"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a default route"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Compare the address counts: equal means exact.</p><p><i>VI: So sánh số địa chỉ: bằng nhau là chính xác.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Networks 192.168.8.0/23, 192.168.10.0/23 summarised as 192.168.8.0/22. This is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Các mạng 192.168.8.0/23, 192.168.10.0/23 tóm tắt thành 192.168.8.0/22. Đây là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a valid summary only with NAT"
+              },
+              {
+                "ma": "b",
+                "noiDung": "exact: 192.168.8.0/22 has 1024 addresses, the list 1024"
+              },
+              {
+                "ma": "c",
+                "noiDung": "over-broad: it adds 1024 extra addresses"
+              },
+              {
+                "ma": "d",
+                "noiDung": "impossible to summarise"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Compare the address counts: equal means exact.</p><p><i>VI: So sánh số địa chỉ: bằng nhau là chính xác.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Assuming a summary is always fine."
+        },
+        {
+          "loi": "Believing the first and last network decide the summary."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "over-summarisation",
+          "vi": "tóm tắt quá rộng"
+        }
+      ]
+    },
+    {
+      "title": "CIDR 3 — Wildcard masks for ACLs and OSPF",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "wildcard"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Give the wildcard mask that matches exactly all addresses of each network (wildcard = inverse of the subnet mask).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cho wildcard mask khớp đúng mọi địa chỉ của mỗi mạng (wildcard = đảo của subnet mask).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Wildcard octet = 255 − mask octet.",
+        "Sum of mask and wildcard in each octet is 255."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# CIDR 3 — Wildcard masks for ACLs and OSPF\n\nAnswer in the answer panel (no code needed).\n\n1. WildcardsWildcard\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# CIDR 3 — Wildcard masks for ACLs and OSPF — answer key\n\n1. WildcardsWildcard\n   - r1.w: 0.0.0.255\n   - r2.w: 0.0.255.255\n   - r3.w: 0.0.15.255\n   - r4.w: 0.0.0.63\n   - r5.w: 0.0.0.0\n   192.168.10.0/24 → 0.0.0.255; 10.1.0.0/16 → 0.0.255.255; 172.16.32.0/20 → 0.0.15.255; 192.168.1.64/26 → 0.0.0.63; 10.0.0.5/32 → 0.0.0.0. A 0 bit must match, a 1 bit is ignored; a /32 host is 0.0.0.0 (“host x”).VI: Bit 0 phải khớp, bit 1 bỏ qua; host /32 là 0.0.0.0 (“host x”).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>192.168.10.0/24 → 0.0.0.255; 10.1.0.0/16 → 0.0.255.255; 172.16.32.0/20 → 0.0.15.255; 192.168.1.64/26 → 0.0.0.63; 10.0.0.5/32 → 0.0.0.0. A 0 bit must match, a 1 bit is ignored; a /32 host is 0.0.0.0 (“host x”).</p><p><i>VI: Bit 0 phải khớp, bit 1 bỏ qua; host /32 là 0.0.0.0 (“host x”).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Wildcards</p><p style=\"opacity:.75;font-size:.92em\"><i>Wildcard</i></p>",
+            "cot": [
+              {
+                "ma": "n",
+                "ten": "Network"
+              },
+              {
+                "ma": "w",
+                "ten": "Wildcard mask"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "n": "192.168.10.0/24"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "n": "10.1.0.0/16"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "n": "172.16.32.0/20"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "n": "192.168.1.64/26"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "n": "10.0.0.5/32"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.w": [
+                "0.0.0.255"
+              ],
+              "r2.w": [
+                "0.0.255.255"
+              ],
+              "r3.w": [
+                "0.0.15.255"
+              ],
+              "r4.w": [
+                "0.0.0.63"
+              ],
+              "r5.w": [
+                "0.0.0.0"
+              ]
+            },
+            "giaiThich": "<p>192.168.10.0/24 → 0.0.0.255; 10.1.0.0/16 → 0.0.255.255; 172.16.32.0/20 → 0.0.15.255; 192.168.1.64/26 → 0.0.0.63; 10.0.0.5/32 → 0.0.0.0. A 0 bit must match, a 1 bit is ignored; a /32 host is 0.0.0.0 (“host x”).</p><p><i>VI: Bit 0 phải khớp, bit 1 bỏ qua; host /32 là 0.0.0.0 (“host x”).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using the subnet mask in an ACL."
+        },
+        {
+          "loi": "Getting the wildcard of a /26 wrong (0.0.0.63, not 0.0.0.64)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "wildcard mask",
+          "vi": "mặt nạ wildcard"
+        }
+      ]
+    },
+    {
+      "title": "CIDR 4 — Aggregation reasoning",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "CIDR"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Small calculations about CIDR blocks.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các phép tính nhỏ về khối CIDR.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Prefix difference = number of doublings.",
+        "/13 means the second octet is partly host bits."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# CIDR 4 — Aggregation reasoning\n\nAnswer in the answer panel (no code needed).\n\n1. How many /24 networks are inside a /16?Có bao nhiêu mạng /24 trong một /16?\n2. How many addresses in 10.8.0.0/13?10.8.0.0/13 có bao nhiêu địa chỉ?\n3. The last address of 10.8.0.0/13 is …Địa chỉ cuối của 10.8.0.0/13 là …\n4. CIDR (RFC 4632) replaced classful addressing mainly to …CIDR (RFC 4632) thay địa chỉ theo lớp chủ yếu để …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# CIDR 4 — Aggregation reasoning — answer key\n\n1. How many /24 networks are inside a /16?Có bao nhiêu mạng /24 trong một /16?\n   Answer: b) 256\n   2^(24−16) = 256.VI: 2^(24−16) = 256.\n\n2. How many addresses in 10.8.0.0/13?10.8.0.0/13 có bao nhiêu địa chỉ?\n   Answer: c) 524,288\n   2^(32−13) = 524,288.VI: 2^(32−13) = 524.288.\n\n3. The last address of 10.8.0.0/13 is …Địa chỉ cuối của 10.8.0.0/13 là …\n   Answer: d) 10.15.255.255\n   A /13 spans 8 values of the second octet: 8–15.VI: Một /13 trải 8 giá trị của octet thứ hai: 8–15.\n\n4. CIDR (RFC 4632) replaced classful addressing mainly to …CIDR (RFC 4632) thay địa chỉ theo lớp chủ yếu để …\n   Answer: a) use address space efficiently and shrink routing tables via aggregation\n   Prefix length is independent of the first octet.VI: Độ dài prefix không còn phụ thuộc octet đầu.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>How many /24 networks are inside a /16?</p><p style=\"opacity:.75;font-size:.92em\"><i>Có bao nhiêu mạng /24 trong một /16?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "254"
+              },
+              {
+                "ma": "b",
+                "noiDung": "256"
+              },
+              {
+                "ma": "c",
+                "noiDung": "16"
+              },
+              {
+                "ma": "d",
+                "noiDung": "65536"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>2^(24−16) = 256.</p><p><i>VI: 2^(24−16) = 256.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>How many addresses in 10.8.0.0/13?</p><p style=\"opacity:.75;font-size:.92em\"><i>10.8.0.0/13 có bao nhiêu địa chỉ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "1,048,576"
+              },
+              {
+                "ma": "b",
+                "noiDung": "8,192"
+              },
+              {
+                "ma": "c",
+                "noiDung": "524,288"
+              },
+              {
+                "ma": "d",
+                "noiDung": "262,144"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>2^(32−13) = 524,288.</p><p><i>VI: 2^(32−13) = 524.288.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>The last address of 10.8.0.0/13 is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Địa chỉ cuối của 10.8.0.0/13 là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "10.8.255.255"
+              },
+              {
+                "ma": "b",
+                "noiDung": "10.16.0.0"
+              },
+              {
+                "ma": "c",
+                "noiDung": "10.11.255.255"
+              },
+              {
+                "ma": "d",
+                "noiDung": "10.15.255.255"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A /13 spans 8 values of the second octet: 8–15.</p><p><i>VI: Một /13 trải 8 giá trị của octet thứ hai: 8–15.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>CIDR (RFC 4632) replaced classful addressing mainly to …</p><p style=\"opacity:.75;font-size:.92em\"><i>CIDR (RFC 4632) thay địa chỉ theo lớp chủ yếu để …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "use address space efficiently and shrink routing tables via aggregation"
+              },
+              {
+                "ma": "b",
+                "noiDung": "add more classes"
+              },
+              {
+                "ma": "c",
+                "noiDung": "remove the need for masks"
+              },
+              {
+                "ma": "d",
+                "noiDung": "make DHCP faster"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Prefix length is independent of the first octet.</p><p><i>VI: Độ dài prefix không còn phụ thuộc octet đầu.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using the class instead of the prefix."
+        },
+        {
+          "loi": "Forgetting that /13 ends at 15, not 8."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "CIDR",
+          "vi": "định tuyến liên miền không lớp"
+        }
+      ]
+    },
+    {
+      "title": "CIDR 5 — Write summarize(nets)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "route summarisation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Write <code>summarize(nets)</code> where <code>nets</code> is an array of <code>\"a.b.c.d/p\"</code>. Return the shortest CIDR (<code>\"a.b.c.d/p\"</code>, network address of the block) that contains all of them.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>summarize(nets)</code> với <code>nets</code> là mảng <code>\"a.b.c.d/p\"</code>. Trả CIDR ngắn nhất (<code>\"a.b.c.d/p\"</code>, địa chỉ mạng của khối) chứa tất cả.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "summarize([\"192.168.0.0/24\",\"192.168.1.0/24\",\"192.168.2.0/24\",\"192.168.3.0/24\"])",
+          "output": "\"192.168.0.0/22\"",
+          "explanation": "First sample case.|||Ca mẫu đầu tiên."
+        }
+      ],
+      "hintsJson": [
+        "Start with the shortest prefix present and shorten it until all addresses agree after masking.",
+        "Always return the network address, not the first input."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function summarize(nets) {\n  // Write your solution here\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction summarize(nets) {\n  function toInt(s) { var p = s.split('.'); return ((+p[0]) * 16777216 + (+p[1]) * 65536 + (+p[2]) * 256 + (+p[3])) >>> 0; }\n  function toStr(n) { return [n >>> 24, (n >>> 16) & 255, (n >>> 8) & 255, n & 255].join('.'); }\n  var addrs = nets.map(function (s) { return toInt(s.split('/')[0]); }), minP = Math.min.apply(null, nets.map(function (s) { return +s.split('/')[1]; }));\n  var p = minP;\n  while (p > 0) {\n    var m = (0xFFFFFFFF << (32 - p)) >>> 0, first = (addrs[0] & m) >>> 0, ok = true;\n    for (var i = 1; i < addrs.length; i++) if (((addrs[i] & m) >>> 0) !== first) ok = false;\n    if (ok) break;\n    p--;\n  }\n  var mm = p === 0 ? 0 : (0xFFFFFFFF << (32 - p)) >>> 0;\n  return toStr((addrs[0] & mm) >>> 0) + '/' + p;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Summaries are found by shrinking the prefix until all networks fall into one block.</p><p><i>VI: Tóm tắt tìm bằng cách rút ngắn prefix tới khi mọi mạng nằm trong một khối.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: summarize([\"192.168.0.0/24\",\"192.168.1.0/24\",\"192.168.2.0/24\",\"192.168.3.0/24\"])",
+              "vi": "Ca 1"
+            },
+            "goi": "summarize([\"192.168.0.0/24\",\"192.168.1.0/24\",\"192.168.2.0/24\",\"192.168.3.0/24\"])",
+            "mongDoi": "192.168.0.0/22"
+          },
+          {
+            "moTa": {
+              "en": "Case 2: summarize([\"10.1.0.0/16\",\"10.2.0.0/16\",\"10.3.0.0/16\",\"10.0.0.0/16\"])",
+              "vi": "Ca 2"
+            },
+            "goi": "summarize([\"10.1.0.0/16\",\"10.2.0.0/16\",\"10.3.0.0/16\",\"10.0.0.0/16\"])",
+            "mongDoi": "10.0.0.0/14"
+          },
+          {
+            "moTa": {
+              "en": "Case 3: summarize([\"172.16.32.0/24\",\"172.16.33.0/24\"])",
+              "vi": "Ca 3"
+            },
+            "goi": "summarize([\"172.16.32.0/24\",\"172.16.33.0/24\"])",
+            "mongDoi": "172.16.32.0/23"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "summarize([\"10.0.0.0/8\"])",
+            "mongDoi": "10.0.0.0/8",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "summarize([\"10.1.0.0/16\",\"192.168.1.0/24\"])",
+            "mongDoi": "0.0.0.0/0",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "summarize([\"192.168.1.128/25\",\"192.168.1.0/25\"])",
+            "mongDoi": "192.168.1.0/24",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "summarize([\"172.16.0.0/16\",\"172.17.0.0/16\",\"172.18.0.0/16\"])",
+            "mongDoi": "172.16.0.0/14",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Returning the first address unmasked."
+        },
+        {
+          "loi": "Stopping at the first prefix length instead of the longest that works."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

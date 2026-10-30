@@ -1,0 +1,428 @@
+{
+  "trackSlug": "nwc204-practice",
+  "moduleSlug": "nwc204-11-2-ipv6-subnet-eui64",
+  "lesson": {
+    "course": "nwc204-computer-networking",
+    "slug": "nwc204-11-2-cau-hinh-va-chia-subnet-ipv6"
+  },
+  "exercises": [
+    {
+      "title": "IPv6 subnet 1 — Plan with /48 and /64",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "IPv6 subnetting"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>IPv6 subnetting is a counting exercise on the subnet-ID field.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chia mạng IPv6 thực chất là đếm trên trường subnet ID.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Subnet ID is hexadecimal.",
+        "Every LAN is /64."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# IPv6 subnet 1 — Plan with /48 and /64\n\nAnswer in the answer panel (no code needed).\n\n1. How many /64 subnets are in a /48?Một /48 có bao nhiêu mạng /64?\n2. A normal LAN in IPv6 gets a …Một LAN bình thường trong IPv6 được cấp …\n3. 2001:db8:acad::/48 — the 4th hextet is the …2001:db8:acad::/48 — nhóm thứ 4 là …\n4. Which is the 11th /64 (counting from subnet 0) of 2001:db8:acad::/48?Mạng /64 thứ 11 (đếm từ subnet 0) của 2001:db8:acad::/48 là?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# IPv6 subnet 1 — Plan with /48 and /64 — answer key\n\n1. How many /64 subnets are in a /48?Một /48 có bao nhiêu mạng /64?\n   Answer: c) 65,536\n   2^(64−48) = 65,536.VI: 2^(64−48) = 65.536.\n\n2. A normal LAN in IPv6 gets a …Một LAN bình thường trong IPv6 được cấp …\n   Answer: d) /64\n   SLAAC needs 64 bits of interface ID, so LANs are /64 even for 2 hosts.VI: SLAAC cần 64 bit interface ID nên LAN luôn /64 dù chỉ 2 host.\n\n3. 2001:db8:acad::/48 — the 4th hextet is the …2001:db8:acad::/48 — nhóm thứ 4 là …\n   Answer: a) subnet ID\n   Global prefix 48 bits + 16-bit subnet ID + 64-bit interface ID.VI: Prefix toàn cục 48 bit + subnet ID 16 bit + interface ID 64 bit.\n\n4. Which is the 11th /64 (counting from subnet 0) of 2001:db8:acad::/48?Mạng /64 thứ 11 (đếm từ subnet 0) của 2001:db8:acad::/48 là?\n   Answer: b) 2001:db8:acad:b::/64\n   Subnet 11 is written 0xb in hex.VI: Subnet 11 viết 0xb dạng hex.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>How many /64 subnets are in a /48?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một /48 có bao nhiêu mạng /64?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "16"
+              },
+              {
+                "ma": "b",
+                "noiDung": "4,096"
+              },
+              {
+                "ma": "c",
+                "noiDung": "65,536"
+              },
+              {
+                "ma": "d",
+                "noiDung": "256"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>2^(64−48) = 65,536.</p><p><i>VI: 2^(64−48) = 65.536.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A normal LAN in IPv6 gets a …</p><p style=\"opacity:.75;font-size:.92em\"><i>Một LAN bình thường trong IPv6 được cấp …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "/48"
+              },
+              {
+                "ma": "b",
+                "noiDung": "/126"
+              },
+              {
+                "ma": "c",
+                "noiDung": "/32"
+              },
+              {
+                "ma": "d",
+                "noiDung": "/64"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>SLAAC needs 64 bits of interface ID, so LANs are /64 even for 2 hosts.</p><p><i>VI: SLAAC cần 64 bit interface ID nên LAN luôn /64 dù chỉ 2 host.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>2001:db8:acad::/48 — the 4th hextet is the …</p><p style=\"opacity:.75;font-size:.92em\"><i>2001:db8:acad::/48 — nhóm thứ 4 là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "subnet ID"
+              },
+              {
+                "ma": "b",
+                "noiDung": "interface ID"
+              },
+              {
+                "ma": "c",
+                "noiDung": "global routing prefix"
+              },
+              {
+                "ma": "d",
+                "noiDung": "EtherType"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Global prefix 48 bits + 16-bit subnet ID + 64-bit interface ID.</p><p><i>VI: Prefix toàn cục 48 bit + subnet ID 16 bit + interface ID 64 bit.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Which is the 11th /64 (counting from subnet 0) of 2001:db8:acad::/48?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mạng /64 thứ 11 (đếm từ subnet 0) của 2001:db8:acad::/48 là?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "2001:db8:acad:0::/64"
+              },
+              {
+                "ma": "b",
+                "noiDung": "2001:db8:acad:b::/64"
+              },
+              {
+                "ma": "c",
+                "noiDung": "2001:db8:acad:11::/64"
+              },
+              {
+                "ma": "d",
+                "noiDung": "2001:db8:acad:a::/64"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Subnet 11 is written 0xb in hex.</p><p><i>VI: Subnet 11 viết 0xb dạng hex.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using /126 or /127 on user LANs."
+        },
+        {
+          "loi": "Writing the subnet number in decimal."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "subnet ID",
+          "vi": "mã mạng con"
+        }
+      ]
+    },
+    {
+      "title": "IPv6 subnet 2 — EUI-64 interface IDs",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "EUI-64"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>EUI-64: split the 48-bit MAC in the middle, insert <b>ff:fe</b>, and <b>flip the 7th bit</b> (U/L) of the first byte. Write the 64-bit interface ID as four hextets without leading zeros (e.g. <code>21a:2bff:fe3c:4d5e</code>).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>EUI-64: tách MAC 48 bit ở giữa, chèn <b>ff:fe</b> và <b>đảo bit thứ 7</b> (U/L) của byte đầu. Viết interface ID 64 bit thành bốn nhóm bỏ số 0 đầu (vd <code>21a:2bff:fe3c:4d5e</code>).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "00 → 02, A8 → AA, 52 → 50, 02 → 00 in the first byte.",
+        "Insert fffe between the 3rd and 4th byte."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# IPv6 subnet 2 — EUI-64 interface IDs\n\nAnswer in the answer panel (no code needed).\n\n1. EUI-64EUI-64\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# IPv6 subnet 2 — EUI-64 interface IDs — answer key\n\n1. EUI-64EUI-64\n   - r1.i: 21a:2bff:fe3c:4d5e\n   - r2.i: aabb:ccff:fedd:eeff\n   - r3.i: 5054:ff:fe12:3456\n   - r4.i: 42:acff:fe11:2\n   00:1A:2B:3C:4D:5E → 21a:2bff:fe3c:4d5e; A8:BB:CC:DD:EE:FF → aabb:ccff:fedd:eeff; 52:54:00:12:34:56 → 5054:ff:fe12:3456; 02:42:AC:11:00:02 → 42:acff:fe11:2. The first byte is XORed with 0x02.VI: Byte đầu được XOR với 0x02.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>00:1A:2B:3C:4D:5E → 21a:2bff:fe3c:4d5e; A8:BB:CC:DD:EE:FF → aabb:ccff:fedd:eeff; 52:54:00:12:34:56 → 5054:ff:fe12:3456; 02:42:AC:11:00:02 → 42:acff:fe11:2. The first byte is XORed with 0x02.</p><p><i>VI: Byte đầu được XOR với 0x02.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>EUI-64</p><p style=\"opacity:.75;font-size:.92em\"><i>EUI-64</i></p>",
+            "cot": [
+              {
+                "ma": "m",
+                "ten": "MAC"
+              },
+              {
+                "ma": "i",
+                "ten": "Interface ID"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "m": "00:1A:2B:3C:4D:5E"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "m": "A8:BB:CC:DD:EE:FF"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "m": "52:54:00:12:34:56"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "m": "02:42:AC:11:00:02"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.i": [
+                "21a:2bff:fe3c:4d5e"
+              ],
+              "r2.i": [
+                "aabb:ccff:fedd:eeff"
+              ],
+              "r3.i": [
+                "5054:ff:fe12:3456"
+              ],
+              "r4.i": [
+                "42:acff:fe11:2"
+              ]
+            },
+            "giaiThich": "<p>00:1A:2B:3C:4D:5E → 21a:2bff:fe3c:4d5e; A8:BB:CC:DD:EE:FF → aabb:ccff:fedd:eeff; 52:54:00:12:34:56 → 5054:ff:fe12:3456; 02:42:AC:11:00:02 → 42:acff:fe11:2. The first byte is XORed with 0x02.</p><p><i>VI: Byte đầu được XOR với 0x02.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting to flip the U/L bit."
+        },
+        {
+          "loi": "Inserting ff:fe at the end."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "EUI-64",
+          "vi": "định danh 64 bit mở rộng"
+        }
+      ]
+    },
+    {
+      "title": "IPv6 subnet 3 — Write eui64(mac) and ipv6Subnet64(prefix48, n)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "EUI-64",
+        "SLAAC"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Write <code>eui64(mac)</code> that turns a MAC (<code>\"00:1A:2B:3C:4D:5E\"</code>, <code>:</code> or <code>-</code> separated, any case) into the interface ID as four lowercase hextets without leading zeros: <code>\"21a:2bff:fe3c:4d5e\"</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>eui64(mac)</code> đổi MAC (<code>\"00:1A:2B:3C:4D:5E\"</code>, ngăn cách bằng <code>:</code> hoặc <code>-</code>, hoa/thường đều được) thành interface ID gồm bốn nhóm hex thường bỏ số 0 đầu: <code>\"21a:2bff:fe3c:4d5e\"</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "eui64(\"00:1A:2B:3C:4D:5E\")",
+          "output": "\"21a:2bff:fe3c:4d5e\"",
+          "explanation": "First sample case.|||Ca mẫu đầu tiên."
+        }
+      ],
+      "hintsJson": [
+        "Split on [:-] and parse each byte with parseInt(x, 16).",
+        "Combine byte pairs into 16-bit groups and print with toString(16)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function eui64(mac) {\n  // Write your solution here\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction eui64(mac) {\n  var b = mac.split(/[:-]/).map(function (x) { return parseInt(x, 16); });\n  b[0] = b[0] ^ 2;\n  var r = [b[0], b[1], b[2], 0xff, 0xfe, b[3], b[4], b[5]], g = [];\n  for (var i = 0; i < 8; i += 2) g.push((r[i] * 256 + r[i + 1]).toString(16));\n  return g.join(':');\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Stable EUI-64 IDs leak the hardware address, which is why modern OSes use random privacy addresses instead.</p><p><i>VI: ID EUI-64 cố định làm lộ địa chỉ phần cứng nên HĐH hiện đại dùng địa chỉ riêng tư ngẫu nhiên.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: eui64(\"00:1A:2B:3C:4D:5E\")",
+              "vi": "Ca 1"
+            },
+            "goi": "eui64(\"00:1A:2B:3C:4D:5E\")",
+            "mongDoi": "21a:2bff:fe3c:4d5e"
+          },
+          {
+            "moTa": {
+              "en": "Case 2: eui64(\"a8-bb-cc-dd-ee-ff\")",
+              "vi": "Ca 2"
+            },
+            "goi": "eui64(\"a8-bb-cc-dd-ee-ff\")",
+            "mongDoi": "aabb:ccff:fedd:eeff"
+          },
+          {
+            "moTa": {
+              "en": "Case 3: eui64(\"52:54:00:12:34:56\")",
+              "vi": "Ca 3"
+            },
+            "goi": "eui64(\"52:54:00:12:34:56\")",
+            "mongDoi": "5054:ff:fe12:3456"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "eui64(\"02:42:AC:11:00:02\")",
+            "mongDoi": "42:acff:fe11:2",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "eui64(\"FF:FF:FF:FF:FF:FF\")",
+            "mongDoi": "fdff:ffff:feff:ffff",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "eui64(\"00:00:00:00:00:00\")",
+            "mongDoi": "200:ff:fe00:0",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Printing groups with leading zeros."
+        },
+        {
+          "loi": "Flipping the wrong bit (use ^ 2, not ^ 1)."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

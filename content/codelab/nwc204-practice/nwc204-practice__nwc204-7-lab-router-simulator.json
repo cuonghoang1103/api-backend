@@ -1,0 +1,261 @@
+{
+  "trackSlug": "nwc204-practice",
+  "moduleSlug": "nwc204-7-lab-router-simulator",
+  "lesson": {
+    "course": "nwc204-computer-networking",
+    "slug": "nwc204-ch7-quiz"
+  },
+  "exercises": [
+    {
+      "title": "Lab 7 — A multi-router forwarding simulator",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 50,
+      "points": 60,
+      "concepts": [
+        "routing",
+        "longest prefix match",
+        "TTL"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p><b>Scenario.</b> You are debugging a routed network on paper. Write <code>routePacket(routers, start, dst, ttl)</code>:</p>\n<ol>\n<li><code>routers</code> maps a name to <code>{ connected: [\"10.0.1.0/24\", …], routes: [{ net: \"0.0.0.0/0\", via: \"R2\" }, …] }</code>. The packet starts at router <code>start</code> with the given <code>ttl</code>.</li>\n<li>At each router: append its name to <code>path</code>, <b>decrement the TTL</b>; if it reaches 0 (or less) stop with <code>result \"ttl-expired\"</code>.</li>\n<li>Look up <code>dst</code> among the connected networks (as routes with no next hop) and the static routes; use the <b>longest prefix match</b>. If none matches stop with <code>\"unreachable\"</code>; if the best match is a connected network stop with <code>\"delivered\"</code>; otherwise move to the router named in <code>via</code>.</li>\n<li>Return <code>{ path, result, at }</code> where <code>at</code> is the router where the packet stopped.</li>\n</ol>\n<p>This is exactly what <code>traceroute</code> reveals when a loop (two default routes pointing at each other) eats the TTL.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the routers object.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Tình huống.</b> Bạn gỡ lỗi một mạng định tuyến trên giấy. Viết <code>routePacket(routers, start, dst, ttl)</code>:</p>\n<ol>\n<li><code>routers</code> ánh xạ tên sang <code>{ connected: [\"10.0.1.0/24\", …], routes: [{ net: \"0.0.0.0/0\", via: \"R2\" }, …] }</code>. Gói bắt đầu ở router <code>start</code> với <code>ttl</code> cho trước.</li>\n<li>Ở mỗi router: thêm tên vào <code>path</code>, <b>giảm TTL</b>; nếu về 0 (hoặc nhỏ hơn) dừng với <code>result \"ttl-expired\"</code>.</li>\n<li>Tra <code>dst</code> trong các mạng nối trực tiếp (xem như tuyến không next hop) và tuyến tĩnh; dùng <b>khớp tiền tố dài nhất</b>. Không khớp thì dừng với <code>\"unreachable\"</code>; khớp tốt nhất là mạng nối trực tiếp thì dừng với <code>\"delivered\"</code>; ngược lại chuyển tới router ghi ở <code>via</code>.</li>\n<li>Trả <code>{ path, result, at }</code> với <code>at</code> là router nơi gói dừng.</li>\n</ol>\n<p>Đây đúng là điều <code>traceroute</code> cho thấy khi vòng lặp (hai default route trỏ vào nhau) ăn hết TTL.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa đối tượng routers.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "routePacket({\"R1\":{\"connected\":[\"10.0.1.0/24\"],\"routes\":[{\"net\":\"0.0.0.0/0\",\"via\":\"R2\"}]},\"R2\":{\"connected\":[\"10.0.2.0/24\"],\"routes\":[{\"net\":\"10.0.1.0/24\",\"via\":\"R1\"},{\"net\":\"10.0.3.0/24\",\"via\":\"R3\"},{\"net\":\"10.0.4.0/24\",\"via\":\"R3\"}]},\"R3\":{\"connected\":[\"10.0.3.0/24\"],\"routes\":[{\"net\":\"10.0.4.0/24\",\"via\":\"R4\"},{\"net\":\"0.0.0.0/0\",\"via\":\"R2\"}]},\"R4\":{\"connected\":[\"10.0.4.0/24\"],\"routes\":[{\"net\":\"0.0.0.0/0\",\"via\":\"R3\"}]}}, \"R1\", \"10.0.4.9\", 8)",
+          "output": "{\"path\":[\"R1\",\"R2\",\"R3\",\"R4\"],\"result\":\"delivered\",\"at\":\"R4\"}",
+          "explanation": "First sample case.|||Ca mẫu đầu tiên."
+        }
+      ],
+      "hintsJson": [
+        "Write lookup(router, dst) first: it returns the best entry (connected entries have via = null).",
+        "Decrement the TTL before the lookup; a TTL that reaches 0 stops at THIS router.",
+        "A routing loop is not special-cased: the TTL ends it."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function routePacket(routers, start, dst, ttl) {\n  // Write your solution here\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction routePacket(routers, start, dst, ttl) {\n  function toInt(s) { var p = s.split('.'); return ((+p[0]) * 16777216 + (+p[1]) * 65536 + (+p[2]) * 256 + (+p[3])) >>> 0; }\n  var d = toInt(dst), cur = start, path = [];\n  for (;;) {\n    path.push(cur);\n    ttl--;\n    if (ttl <= 0) return { path: path, result: 'ttl-expired', at: cur };\n    var r = routers[cur], best = null, bestLen = -1, i, c;\n    var all = r.connected.map(function (n) { return { net: n, via: null }; }).concat(r.routes);\n    for (i = 0; i < all.length; i++) {\n      c = all[i].net.split('/');\n      var len = +c[1], m = len === 0 ? 0 : (0xFFFFFFFF << (32 - len)) >>> 0;\n      if (((d & m) >>> 0) === ((toInt(c[0]) & m) >>> 0) && len > bestLen) { best = all[i]; bestLen = len; }\n    }\n    if (!best) return { path: path, result: 'unreachable', at: cur };\n    if (best.via === null) return { path: path, result: 'delivered', at: cur };\n    cur = best.via;\n  }\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Every router decides alone, using only its own table and the destination IP. Loops, black holes and wrong default routes all come from these local decisions not agreeing.</p><p><i>VI: Mỗi router tự quyết định, chỉ dựa trên bảng của mình và IP đích. Vòng lặp, hố đen và default route sai đều đến từ việc các quyết định cục bộ không khớp nhau.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: routePacket({\"R1\":{\"connected\":[\"10.0.1.0/24\"],\"routes\":[{\"net\":\"0.0.0.0/0\",\"via\":)",
+              "vi": "Ca 1"
+            },
+            "goi": "routePacket({\"R1\":{\"connected\":[\"10.0.1.0/24\"],\"routes\":[{\"net\":\"0.0.0.0/0\",\"via\":\"R2\"}]},\"R2\":{\"connected\":[\"10.0.2.0/24\"],\"routes\":[{\"net\":\"10.0.1.0/24\",\"via\":\"R1\"},{\"net\":\"10.0.3.0/24\",\"via\":\"R3\"},{\"net\":\"10.0.4.0/24\",\"via\":\"R3\"}]},\"R3\":{\"connected\":[\"10.0.3.0/24\"],\"routes\":[{\"net\":\"10.0.4.0/24\",\"via\":\"R4\"},{\"net\":\"0.0.0.0/0\",\"via\":\"R2\"}]},\"R4\":{\"connected\":[\"10.0.4.0/24\"],\"routes\":[{\"net\":\"0.0.0.0/0\",\"via\":\"R3\"}]}}, \"R1\", \"10.0.4.9\", 8)",
+            "mongDoi": {
+              "path": [
+                "R1",
+                "R2",
+                "R3",
+                "R4"
+              ],
+              "result": "delivered",
+              "at": "R4"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: routePacket({\"R1\":{\"connected\":[\"10.0.1.0/24\"],\"routes\":[{\"net\":\"0.0.0.0/0\",\"via\":)",
+              "vi": "Ca 2"
+            },
+            "goi": "routePacket({\"R1\":{\"connected\":[\"10.0.1.0/24\"],\"routes\":[{\"net\":\"0.0.0.0/0\",\"via\":\"R2\"}]},\"R2\":{\"connected\":[\"10.0.2.0/24\"],\"routes\":[{\"net\":\"10.0.1.0/24\",\"via\":\"R1\"},{\"net\":\"10.0.3.0/24\",\"via\":\"R3\"},{\"net\":\"10.0.4.0/24\",\"via\":\"R3\"}]},\"R3\":{\"connected\":[\"10.0.3.0/24\"],\"routes\":[{\"net\":\"10.0.4.0/24\",\"via\":\"R4\"},{\"net\":\"0.0.0.0/0\",\"via\":\"R2\"}]},\"R4\":{\"connected\":[\"10.0.4.0/24\"],\"routes\":[{\"net\":\"0.0.0.0/0\",\"via\":\"R3\"}]}}, \"R1\", \"10.0.1.55\", 8)",
+            "mongDoi": {
+              "path": [
+                "R1"
+              ],
+              "result": "delivered",
+              "at": "R1"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: routePacket({\"R1\":{\"connected\":[\"10.0.1.0/24\"],\"routes\":[{\"net\":\"0.0.0.0/0\",\"via\":)",
+              "vi": "Ca 3"
+            },
+            "goi": "routePacket({\"R1\":{\"connected\":[\"10.0.1.0/24\"],\"routes\":[{\"net\":\"0.0.0.0/0\",\"via\":\"R2\"}]},\"R2\":{\"connected\":[\"10.0.2.0/24\"],\"routes\":[{\"net\":\"10.0.1.0/24\",\"via\":\"R1\"},{\"net\":\"10.0.3.0/24\",\"via\":\"R3\"},{\"net\":\"10.0.4.0/24\",\"via\":\"R3\"}]},\"R3\":{\"connected\":[\"10.0.3.0/24\"],\"routes\":[{\"net\":\"10.0.4.0/24\",\"via\":\"R4\"},{\"net\":\"0.0.0.0/0\",\"via\":\"R2\"}]},\"R4\":{\"connected\":[\"10.0.4.0/24\"],\"routes\":[{\"net\":\"0.0.0.0/0\",\"via\":\"R3\"}]}}, \"R4\", \"10.0.1.9\", 8)",
+            "mongDoi": {
+              "path": [
+                "R4",
+                "R3",
+                "R2",
+                "R1"
+              ],
+              "result": "delivered",
+              "at": "R1"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "routePacket({\"R1\":{\"connected\":[\"10.0.1.0/24\"],\"routes\":[{\"net\":\"0.0.0.0/0\",\"via\":\"R2\"}]},\"R2\":{\"connected\":[\"10.0.2.0/24\"],\"routes\":[{\"net\":\"10.0.1.0/24\",\"via\":\"R1\"},{\"net\":\"10.0.3.0/24\",\"via\":\"R3\"},{\"net\":\"10.0.4.0/24\",\"via\":\"R3\"}]},\"R3\":{\"connected\":[\"10.0.3.0/24\"],\"routes\":[{\"net\":\"10.0.4.0/24\",\"via\":\"R4\"},{\"net\":\"0.0.0.0/0\",\"via\":\"R2\"}]},\"R4\":{\"connected\":[\"10.0.4.0/24\"],\"routes\":[{\"net\":\"0.0.0.0/0\",\"via\":\"R3\"}]}}, \"R1\", \"10.0.4.9\", 3)",
+            "mongDoi": {
+              "path": [
+                "R1",
+                "R2",
+                "R3"
+              ],
+              "result": "ttl-expired",
+              "at": "R3"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "routePacket({\"R1\":{\"connected\":[\"10.0.1.0/24\"],\"routes\":[{\"net\":\"0.0.0.0/0\",\"via\":\"R2\"}]},\"R2\":{\"connected\":[\"10.0.2.0/24\"],\"routes\":[{\"net\":\"10.0.1.0/24\",\"via\":\"R1\"},{\"net\":\"10.0.3.0/24\",\"via\":\"R3\"},{\"net\":\"10.0.4.0/24\",\"via\":\"R3\"}]},\"R3\":{\"connected\":[\"10.0.3.0/24\"],\"routes\":[{\"net\":\"10.0.4.0/24\",\"via\":\"R4\"},{\"net\":\"0.0.0.0/0\",\"via\":\"R2\"}]},\"R4\":{\"connected\":[\"10.0.4.0/24\"],\"routes\":[{\"net\":\"0.0.0.0/0\",\"via\":\"R3\"}]}}, \"R1\", \"8.8.8.8\", 8)",
+            "mongDoi": {
+              "path": [
+                "R1",
+                "R2"
+              ],
+              "result": "unreachable",
+              "at": "R2"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "routePacket({\"A\":{\"connected\":[\"10.1.0.0/24\"],\"routes\":[{\"net\":\"0.0.0.0/0\",\"via\":\"B\"}]},\"B\":{\"connected\":[\"10.2.0.0/24\"],\"routes\":[{\"net\":\"0.0.0.0/0\",\"via\":\"A\"}]}}, \"A\", \"10.2.0.9\", 6)",
+            "mongDoi": {
+              "path": [
+                "A",
+                "B"
+              ],
+              "result": "delivered",
+              "at": "B"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "routePacket({\"A\":{\"connected\":[\"10.1.0.0/24\"],\"routes\":[{\"net\":\"0.0.0.0/0\",\"via\":\"B\"}]},\"B\":{\"connected\":[\"10.2.0.0/24\"],\"routes\":[{\"net\":\"0.0.0.0/0\",\"via\":\"A\"}]}}, \"A\", \"10.1.0.9\", 6)",
+            "mongDoi": {
+              "path": [
+                "A"
+              ],
+              "result": "delivered",
+              "at": "A"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "routePacket({\"X\":{\"connected\":[\"10.0.0.0/8\"],\"routes\":[{\"net\":\"10.5.0.0/16\",\"via\":\"Y\"}]},\"Y\":{\"connected\":[\"10.5.1.0/24\"],\"routes\":[{\"net\":\"10.5.1.128/25\",\"via\":\"Z\"}]},\"Z\":{\"connected\":[\"10.5.1.128/25\"],\"routes\":[]}}, \"X\", \"10.5.1.200\", 8)",
+            "mongDoi": {
+              "path": [
+                "X",
+                "Y",
+                "Z"
+              ],
+              "result": "delivered",
+              "at": "Z"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 9",
+              "vi": "Ca ẩn 9"
+            },
+            "goi": "routePacket({\"X\":{\"connected\":[\"10.0.0.0/8\"],\"routes\":[{\"net\":\"10.5.0.0/16\",\"via\":\"Y\"}]},\"Y\":{\"connected\":[\"10.5.1.0/24\"],\"routes\":[{\"net\":\"10.5.1.128/25\",\"via\":\"Z\"}]},\"Z\":{\"connected\":[\"10.5.1.128/25\"],\"routes\":[]}}, \"X\", \"10.5.1.20\", 8)",
+            "mongDoi": {
+              "path": [
+                "X",
+                "Y"
+              ],
+              "result": "delivered",
+              "at": "Y"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 10",
+              "vi": "Ca ẩn 10"
+            },
+            "goi": "routePacket({\"X\":{\"connected\":[\"10.0.0.0/8\"],\"routes\":[{\"net\":\"10.5.0.0/16\",\"via\":\"Y\"}]},\"Y\":{\"connected\":[\"10.5.1.0/24\"],\"routes\":[{\"net\":\"10.5.1.128/25\",\"via\":\"Z\"}]},\"Z\":{\"connected\":[\"10.5.1.128/25\"],\"routes\":[]}}, \"X\", \"10.5.9.9\", 8)",
+            "mongDoi": {
+              "path": [
+                "X",
+                "Y"
+              ],
+              "result": "unreachable",
+              "at": "Y"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 11",
+              "vi": "Ca ẩn 11"
+            },
+            "goi": "routePacket({\"X\":{\"connected\":[\"10.0.0.0/8\"],\"routes\":[{\"net\":\"10.5.0.0/16\",\"via\":\"Y\"}]},\"Y\":{\"connected\":[\"10.5.1.0/24\"],\"routes\":[{\"net\":\"10.5.1.128/25\",\"via\":\"Z\"}]},\"Z\":{\"connected\":[\"10.5.1.128/25\"],\"routes\":[]}}, \"X\", \"11.0.0.1\", 8)",
+            "mongDoi": {
+              "path": [
+                "X"
+              ],
+              "result": "unreachable",
+              "at": "X"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Looking up before decrementing the TTL (off by one hop)."
+        },
+        {
+          "loi": "Treating a default route as higher priority than a more specific connected network."
+        },
+        {
+          "loi": "Forgetting that the connected network counts as a route."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

@@ -1,0 +1,987 @@
+{
+  "trackSlug": "nwc204-practice",
+  "moduleSlug": "nwc204-15-1-acl",
+  "lesson": {
+    "course": "nwc204-computer-networking",
+    "slug": "nwc204-15-2-giam-thieu-va-lam-cung-thiet-bi"
+  },
+  "exercises": [
+    {
+      "title": "ACL 1 — How an ACL works",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "ACL"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Concepts of Cisco access control lists.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Khái niệm danh sách kiểm soát truy cập Cisco.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "First match wins; implicit deny at the end.",
+        "Extended near the source, standard near the destination."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# ACL 1 — How an ACL works\n\nAnswer in the answer panel (no code needed).\n\n1. A packet is checked against ACL lines …Gói được so với các dòng ACL …\n2. If no line matches, the packet is …Nếu không dòng nào khớp, gói bị …\n3. Standard ACLs (1–99) filter on …ACL chuẩn (1–99) lọc theo …\n4. Where should an extended ACL normally be placed?ACL mở rộng thường đặt ở đâu?\n5. In an ACL a wildcard mask bit 0 means …Trong ACL, bit 0 của wildcard mask nghĩa là …\n6. An ACL does nothing until it is …ACL không có tác dụng cho tới khi được …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# ACL 1 — How an ACL works — answer key\n\n1. A packet is checked against ACL lines …Gói được so với các dòng ACL …\n   Answer: d) from the top, stopping at the first match\n   Order matters: put specific lines before general ones.VI: Thứ tự quan trọng: dòng cụ thể trước dòng chung.\n\n2. If no line matches, the packet is …Nếu không dòng nào khớp, gói bị …\n   Answer: a) denied (implicit deny any at the end)\n   Add “permit ip any any” if the intention is to block only some traffic.VI: Thêm “permit ip any any” nếu chỉ muốn chặn một phần lưu lượng.\n\n3. Standard ACLs (1–99) filter on …ACL chuẩn (1–99) lọc theo …\n   Answer: b) source IP address only\n   Extended ACLs (100–199) match protocol, source, destination and ports.VI: ACL mở rộng (100–199) khớp giao thức, nguồn, đích và cổng.\n\n4. Where should an extended ACL normally be placed?ACL mở rộng thường đặt ở đâu?\n   Answer: c) As close to the source as possible\n   Drop unwanted traffic early. Standard ACLs go near the destination.VI: Chặn sớm lưu lượng không mong muốn. ACL chuẩn đặt gần đích.\n\n5. In an ACL a wildcard mask bit 0 means …Trong ACL, bit 0 của wildcard mask nghĩa là …\n   Answer: d) the bit must match\n   0.0.0.255 matches a whole /24.VI: 0.0.0.255 khớp cả một /24.\n\n6. An ACL does nothing until it is …ACL không có tác dụng cho tới khi được …\n   Answer: a) applied to an interface in a direction (in or out)\n   “ip access-group 101 in” on the interface.VI: “ip access-group 101 in” trên giao diện.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A packet is checked against ACL lines …</p><p style=\"opacity:.75;font-size:.92em\"><i>Gói được so với các dòng ACL …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "in random order"
+              },
+              {
+                "ma": "b",
+                "noiDung": "from the bottom"
+              },
+              {
+                "ma": "c",
+                "noiDung": "all lines, then majority vote"
+              },
+              {
+                "ma": "d",
+                "noiDung": "from the top, stopping at the first match"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Order matters: put specific lines before general ones.</p><p><i>VI: Thứ tự quan trọng: dòng cụ thể trước dòng chung.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>If no line matches, the packet is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Nếu không dòng nào khớp, gói bị …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "denied (implicit deny any at the end)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "permitted"
+              },
+              {
+                "ma": "c",
+                "noiDung": "logged only"
+              },
+              {
+                "ma": "d",
+                "noiDung": "sent to the default route"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Add “permit ip any any” if the intention is to block only some traffic.</p><p><i>VI: Thêm “permit ip any any” nếu chỉ muốn chặn một phần lưu lượng.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Standard ACLs (1–99) filter on …</p><p style=\"opacity:.75;font-size:.92em\"><i>ACL chuẩn (1–99) lọc theo …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "URL"
+              },
+              {
+                "ma": "b",
+                "noiDung": "source IP address only"
+              },
+              {
+                "ma": "c",
+                "noiDung": "source and destination plus ports"
+              },
+              {
+                "ma": "d",
+                "noiDung": "MAC address"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Extended ACLs (100–199) match protocol, source, destination and ports.</p><p><i>VI: ACL mở rộng (100–199) khớp giao thức, nguồn, đích và cổng.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Where should an extended ACL normally be placed?</p><p style=\"opacity:.75;font-size:.92em\"><i>ACL mở rộng thường đặt ở đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "On the DNS server"
+              },
+              {
+                "ma": "b",
+                "noiDung": "On every switch port"
+              },
+              {
+                "ma": "c",
+                "noiDung": "As close to the source as possible"
+              },
+              {
+                "ma": "d",
+                "noiDung": "As close to the destination as possible"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Drop unwanted traffic early. Standard ACLs go near the destination.</p><p><i>VI: Chặn sớm lưu lượng không mong muốn. ACL chuẩn đặt gần đích.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>In an ACL a wildcard mask bit 0 means …</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong ACL, bit 0 của wildcard mask nghĩa là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the bit is ignored"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the bit must be 1"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the bit is inverted"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the bit must match"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>0.0.0.255 matches a whole /24.</p><p><i>VI: 0.0.0.255 khớp cả một /24.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>An ACL does nothing until it is …</p><p style=\"opacity:.75;font-size:.92em\"><i>ACL không có tác dụng cho tới khi được …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "applied to an interface in a direction (in or out)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "saved to flash"
+              },
+              {
+                "ma": "c",
+                "noiDung": "copied to the switch"
+              },
+              {
+                "ma": "d",
+                "noiDung": "named"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>“ip access-group 101 in” on the interface.</p><p><i>VI: “ip access-group 101 in” trên giao diện.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Putting “permit ip any any” first."
+        },
+        {
+          "loi": "Writing the subnet mask instead of the wildcard mask."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "implicit deny",
+          "vi": "từ chối ngầm"
+        },
+        {
+          "en": "wildcard mask",
+          "vi": "mặt nạ wildcard"
+        }
+      ]
+    },
+    {
+      "title": "ACL 2 — Permit or deny?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "ACL evaluation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>ACL 101 is applied inbound on the LAN interface:<pre>1  deny tcp 192.168.10.0 0.0.0.255 any eq 23\n2  permit tcp 192.168.10.0 0.0.0.255 any eq www\n3  deny ip host 192.168.10.99 any\n4  permit ip 192.168.10.0 0.0.0.255 10.0.0.0 0.255.255.255</pre>For each packet say whether it is permitted or denied, and which line decides it (or “implicit deny”).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>ACL 101 áp dụng chiều vào trên giao diện LAN:<pre>1  deny tcp 192.168.10.0 0.0.0.255 any eq 23\n2  permit tcp 192.168.10.0 0.0.0.255 any eq www\n3  deny ip host 192.168.10.99 any\n4  permit ip 192.168.10.0 0.0.0.255 10.0.0.0 0.255.255.255</pre>Với mỗi gói, cho biết được phép hay bị chặn và dòng nào quyết định (hoặc “implicit deny”).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Go line by line from the top.",
+        "Wildcard 0.0.0.255 means the first three octets must match."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# ACL 2 — Permit or deny?\n\nAnswer in the answer panel (no code needed).\n\n1. ACL decisionsQuyết định ACL\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# ACL 2 — Permit or deny? — answer key\n\n1. ACL decisionsQuyết định ACL\n   - r1.a: deny\n   - r1.l: line 1\n   - r2.a: permit\n   - r2.l: line 2\n   - r3.a: permit\n   - r3.l: line 2\n   - r4.a: permit\n   - r4.l: line 4\n   - r5.a: deny\n   - r5.l: implicit deny\n   - r6.a: deny\n   - r6.l: implicit deny\n   #1 deny (line 1); #2 permit (line 2); #3 permit (line 2); #4 permit (line 4); #5 deny (implicit deny); #6 deny (implicit deny). Note #3: host .99 is permitted for web by line 2 before the deny of line 3 is ever reached, so order decides.VI: Đọc từng dòng theo thứ tự; dòng khớp đầu tiên quyết định.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>#1 deny (line 1); #2 permit (line 2); #3 permit (line 2); #4 permit (line 4); #5 deny (implicit deny); #6 deny (implicit deny). Note #3: host .99 is permitted for web by line 2 before the deny of line 3 is ever reached, so order decides.</p><p><i>VI: Đọc từng dòng theo thứ tự; dòng khớp đầu tiên quyết định.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>ACL decisions</p><p style=\"opacity:.75;font-size:.92em\"><i>Quyết định ACL</i></p>",
+            "cot": [
+              {
+                "ma": "p",
+                "ten": "Packet"
+              },
+              {
+                "ma": "a",
+                "ten": "Action",
+                "luaChon": [
+                  "permit",
+                  "deny"
+                ]
+              },
+              {
+                "ma": "l",
+                "ten": "Decided by",
+                "luaChon": [
+                  "line 1",
+                  "line 2",
+                  "line 3",
+                  "line 4",
+                  "implicit deny"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "p": "TCP 192.168.10.5 → 203.0.113.9:23"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "p": "TCP 192.168.10.5 → 203.0.113.9:80"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "p": "TCP 192.168.10.99 → 203.0.113.9:80"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "p": "UDP 192.168.10.5 → 10.1.2.3:53"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "p": "UDP 192.168.10.5 → 8.8.8.8:53"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "p": "TCP 192.168.20.5 → 203.0.113.9:80"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.a": [
+                "deny"
+              ],
+              "r1.l": [
+                "line 1"
+              ],
+              "r2.a": [
+                "permit"
+              ],
+              "r2.l": [
+                "line 2"
+              ],
+              "r3.a": [
+                "permit"
+              ],
+              "r3.l": [
+                "line 2"
+              ],
+              "r4.a": [
+                "permit"
+              ],
+              "r4.l": [
+                "line 4"
+              ],
+              "r5.a": [
+                "deny"
+              ],
+              "r5.l": [
+                "implicit deny"
+              ],
+              "r6.a": [
+                "deny"
+              ],
+              "r6.l": [
+                "implicit deny"
+              ]
+            },
+            "giaiThich": "<p>#1 deny (line 1); #2 permit (line 2); #3 permit (line 2); #4 permit (line 4); #5 deny (implicit deny); #6 deny (implicit deny). Note #3: host .99 is permitted for web by line 2 before the deny of line 3 is ever reached, so order decides.</p><p><i>VI: Đọc từng dòng theo thứ tự; dòng khớp đầu tiên quyết định.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Skipping to the “most specific” line instead of the first one that matches."
+        },
+        {
+          "loi": "Forgetting the implicit deny for UDP to the Internet."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "inbound",
+          "vi": "chiều vào"
+        }
+      ]
+    },
+    {
+      "title": "ACL 3 — A longer extended ACL",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 16,
+      "points": 30,
+      "concepts": [
+        "extended ACL"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>ACL 110:<pre>1  permit tcp 10.1.1.0 0.0.0.255 host 172.16.0.5 eq 443\n2  deny tcp 10.1.1.0 0.0.0.255 host 172.16.0.5\n3  permit icmp any any\n4  deny udp any any eq 53\n5  permit ip any any</pre>Decide each packet (“icmp” packets have no port).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>ACL 110:<pre>1  permit tcp 10.1.1.0 0.0.0.255 host 172.16.0.5 eq 443\n2  deny tcp 10.1.1.0 0.0.0.255 host 172.16.0.5\n3  permit icmp any any\n4  deny udp any any eq 53\n5  permit ip any any</pre>Quyết định từng gói (gói “icmp” không có cổng).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "A deny with no port blocks every port of that protocol.",
+        "UDP/53 is denied but TCP/53 falls to the final permit."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# ACL 3 — A longer extended ACL\n\nAnswer in the answer panel (no code needed).\n\n1. ACL 110 decisionsQuyết định ACL 110\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# ACL 3 — A longer extended ACL — answer key\n\n1. ACL 110 decisionsQuyết định ACL 110\n   - r1.a: permit\n   - r1.l: line 1\n   - r2.a: deny\n   - r2.l: line 2\n   - r3.a: permit\n   - r3.l: line 5\n   - r4.a: permit\n   - r4.l: line 3\n   - r5.a: deny\n   - r5.l: line 4\n   - r6.a: permit\n   - r6.l: line 5\n   #1 permit (line 1); #2 deny (line 2); #3 permit (line 5); #4 permit (line 3); #5 deny (line 4); #6 permit (line 5).VI: Dòng 2 chặn mọi TCP khác của mạng 10.1.1.0/24 tới server đó.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>#1 permit (line 1); #2 deny (line 2); #3 permit (line 5); #4 permit (line 3); #5 deny (line 4); #6 permit (line 5).</p><p><i>VI: Dòng 2 chặn mọi TCP khác của mạng 10.1.1.0/24 tới server đó.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>ACL 110 decisions</p><p style=\"opacity:.75;font-size:.92em\"><i>Quyết định ACL 110</i></p>",
+            "cot": [
+              {
+                "ma": "p",
+                "ten": "Packet"
+              },
+              {
+                "ma": "a",
+                "ten": "Action",
+                "luaChon": [
+                  "permit",
+                  "deny"
+                ]
+              },
+              {
+                "ma": "l",
+                "ten": "Decided by",
+                "luaChon": [
+                  "line 1",
+                  "line 2",
+                  "line 3",
+                  "line 4",
+                  "line 5",
+                  "implicit deny"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "p": "TCP 10.1.1.20 → 172.16.0.5:443"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "p": "TCP 10.1.1.20 → 172.16.0.5:22"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "p": "TCP 10.1.2.20 → 172.16.0.5:22"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "p": "ICMP 10.1.1.20 → 172.16.0.5"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "p": "UDP 10.9.9.9 → 1.1.1.1:53"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "p": "TCP 10.9.9.9 → 1.1.1.1:53"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.a": [
+                "permit"
+              ],
+              "r1.l": [
+                "line 1"
+              ],
+              "r2.a": [
+                "deny"
+              ],
+              "r2.l": [
+                "line 2"
+              ],
+              "r3.a": [
+                "permit"
+              ],
+              "r3.l": [
+                "line 5"
+              ],
+              "r4.a": [
+                "permit"
+              ],
+              "r4.l": [
+                "line 3"
+              ],
+              "r5.a": [
+                "deny"
+              ],
+              "r5.l": [
+                "line 4"
+              ],
+              "r6.a": [
+                "permit"
+              ],
+              "r6.l": [
+                "line 5"
+              ]
+            },
+            "giaiThich": "<p>#1 permit (line 1); #2 deny (line 2); #3 permit (line 5); #4 permit (line 3); #5 deny (line 4); #6 permit (line 5).</p><p><i>VI: Dòng 2 chặn mọi TCP khác của mạng 10.1.1.0/24 tới server đó.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking line 2 only blocks port 22."
+        },
+        {
+          "loi": "Applying the DNS deny to TCP too."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "extended ACL",
+          "vi": "ACL mở rộng"
+        }
+      ]
+    },
+    {
+      "title": "ACL 4 — Write aclRun(lines, packets)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 35,
+      "points": 30,
+      "concepts": [
+        "ACL parsing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Write <code>aclRun(lines, packets)</code> for Cisco-style lines. Supported syntax (optional leading <code>access-list N</code>): <code>permit|deny</code> then either an <b>extended</b> match <code>proto src [eq sport] dst [eq dport]</code> with proto in ip/tcp/udp/icmp, or a <b>standard</b> match <code>src</code>. Address specs are <code>any</code>, <code>host a.b.c.d</code>, <code>a.b.c.d wildcard</code> (a standard line may give just <code>a.b.c.d</code> = host). Port names: www/http 80, https 443, ftp 21, telnet 23, smtp 25, domain 53, ssh 22. A packet is <code>{ proto, src, dst, sport?, dport? }</code>. Return for each packet <code>{ action, rule }</code> where <code>rule</code> is the 1-based matching line or 0 for the implicit deny (<code>action \"deny\"</code>). Standard lines match on the source only; protocol <code>ip</code> matches everything.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>aclRun(lines, packets)</code> cho các dòng kiểu Cisco. Cú pháp hỗ trợ (có thể có <code>access-list N</code> ở đầu): <code>permit|deny</code> rồi hoặc khớp <b>mở rộng</b> <code>proto src [eq sport] dst [eq dport]</code> với proto là ip/tcp/udp/icmp, hoặc khớp <b>chuẩn</b> <code>src</code>. Đặc tả địa chỉ là <code>any</code>, <code>host a.b.c.d</code>, <code>a.b.c.d wildcard</code> (dòng chuẩn có thể chỉ ghi <code>a.b.c.d</code> = host). Tên cổng: www/http 80, https 443, ftp 21, telnet 23, smtp 25, domain 53, ssh 22. Gói là <code>{ proto, src, dst, sport?, dport? }</code>. Với mỗi gói trả <code>{ action, rule }</code>, <code>rule</code> là số dòng khớp (từ 1) hoặc 0 cho implicit deny (<code>action \"deny\"</code>). Dòng chuẩn chỉ khớp theo nguồn; proto <code>ip</code> khớp mọi gói.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "aclRun([\"access-list 101 deny tcp 192.168.10.0 0.0.0.255 any eq 23\",\"access-list 101 permit tcp 192.168.10.0 0.0.0.255 any eq www\",\"access-list 101 deny ip host 192.168.10.99 any\",\"access-list 101 permit ip 192.168.10.0 0.0.0.255 10.0.0.0 0.255.255.255\"], [{\"proto\":\"tcp\",\"src\":\"192.168.10.5\",\"dst\":\"203.0.113.9\",\"dport\":23},{\"proto\":\"tcp\",\"src\":\"192.168.10.5\",\"dst\":\"203.0.113.9\",\"dport\":80},{\"proto\":\"tcp\",\"src\":\"192.168.10.99\",\"dst\":\"203.0.113.9\",\"dport\":80},{\"proto\":\"udp\",\"src\":\"192.168.10.5\",\"dst\":\"10.1.2.3\",\"dport\":53},{\"proto\":\"udp\",\"src\":\"192.168.10.5\",\"dst\":\"8.8.8.8\",\"dport\":53},{\"proto\":\"tcp\",\"src\":\"192.168.20.5\",\"dst\":\"203.0.113.9\",\"dport\":80}])",
+          "output": "[{\"action\":\"deny\",\"rule\":1},{\"action\":\"permit\",\"rule\":2},{\"action\":\"permit\",\"rule\":2},{\"action\":\"permit\",\"rule\":4},{\"action\":\"deny\",\"rule\":0},{\"action\":\"deny\",\"rule\":0}]",
+          "explanation": "First sample case.|||Ca mẫu đầu tiên."
+        }
+      ],
+      "hintsJson": [
+        "Parse every line once into a rule object, then evaluate all packets.",
+        "A wildcard match is ((ip XOR base) AND NOT wildcard) === 0, using unsigned 32-bit integers."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function aclRun(lines, packets) {\n  // Write your solution here\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction aclRun(lines, packets) {\n  function toInt(s) { var p = s.split('.'); return ((+p[0]) * 16777216 + (+p[1]) * 65536 + (+p[2]) * 256 + (+p[3])) >>> 0; }\n  var named = { www: 80, http: 80, https: 443, ftp: 21, telnet: 23, smtp: 25, domain: 53, ssh: 22 };\n  function port(t) { return named[t] !== undefined ? named[t] : Number(t); }\n  function addr(t, i) {\n    if (t[i] === 'any') return [{ any: true }, i + 1];\n    if (t[i] === 'host') return [{ ip: toInt(t[i + 1]), wild: 0 }, i + 2];\n    if (i + 1 < t.length && /^\\d+\\.\\d+\\.\\d+\\.\\d+$/.test(t[i + 1])) return [{ ip: toInt(t[i]), wild: toInt(t[i + 1]) }, i + 2];\n    return [{ ip: toInt(t[i]), wild: 0 }, i + 1];\n  }\n  var rules = [];\n  for (var n = 0; n < lines.length; n++) {\n    var t = lines[n].trim().split(/\\s+/), i = 0;\n    if (t[0] === 'access-list') i = 2;\n    var r = { action: t[i], proto: 'ip', sport: null, dport: null };\n    i++;\n    var ext = ['ip', 'tcp', 'udp', 'icmp'].indexOf(t[i]) >= 0;\n    if (ext) { r.proto = t[i]; i++; }\n    var a = addr(t, i); r.src = a[0]; i = a[1];\n    if (ext) {\n      if (t[i] === 'eq' && (r.proto === 'tcp' || r.proto === 'udp') && !/^\\d+\\.\\d+/.test(t[i + 1])) { r.sport = port(t[i + 1]); i += 2; }\n      a = addr(t, i); r.dst = a[0]; i = a[1];\n      if (t[i] === 'eq') r.dport = port(t[i + 1]);\n    } else r.dst = { any: true };\n    rules.push(r);\n  }\n  function ok(m, ip) { return m.any || (((toInt(ip) ^ m.ip) & ~m.wild) >>> 0) === 0; }\n  return packets.map(function (p) {\n    for (var k = 0; k < rules.length; k++) {\n      var r = rules[k];\n      if (r.proto !== 'ip' && r.proto !== p.proto) continue;\n      if (!ok(r.src, p.src) || !ok(r.dst, p.dst)) continue;\n      if (r.sport !== null && r.sport !== p.sport) continue;\n      if (r.dport !== null && r.dport !== p.dport) continue;\n      return { action: r.action, rule: k + 1 };\n    }\n    return { action: 'deny', rule: 0 };\n  });\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Reading an ACL by hand and parsing it in code are the same skill; the parser also shows why a wildcard is an inverse mask.</p><p><i>VI: Đọc ACL bằng tay và phân tích trong mã là cùng một kỹ năng; trình phân tích cũng cho thấy vì sao wildcard là mặt nạ đảo.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: aclRun([\"access-list 101 deny tcp 192.168.10.0 0.0.0.255 any eq 23\",\"access-l)",
+              "vi": "Ca 1"
+            },
+            "goi": "aclRun([\"access-list 101 deny tcp 192.168.10.0 0.0.0.255 any eq 23\",\"access-list 101 permit tcp 192.168.10.0 0.0.0.255 any eq www\",\"access-list 101 deny ip host 192.168.10.99 any\",\"access-list 101 permit ip 192.168.10.0 0.0.0.255 10.0.0.0 0.255.255.255\"], [{\"proto\":\"tcp\",\"src\":\"192.168.10.5\",\"dst\":\"203.0.113.9\",\"dport\":23},{\"proto\":\"tcp\",\"src\":\"192.168.10.5\",\"dst\":\"203.0.113.9\",\"dport\":80},{\"proto\":\"tcp\",\"src\":\"192.168.10.99\",\"dst\":\"203.0.113.9\",\"dport\":80},{\"proto\":\"udp\",\"src\":\"192.168.10.5\",\"dst\":\"10.1.2.3\",\"dport\":53},{\"proto\":\"udp\",\"src\":\"192.168.10.5\",\"dst\":\"8.8.8.8\",\"dport\":53},{\"proto\":\"tcp\",\"src\":\"192.168.20.5\",\"dst\":\"203.0.113.9\",\"dport\":80}])",
+            "mongDoi": [
+              {
+                "action": "deny",
+                "rule": 1
+              },
+              {
+                "action": "permit",
+                "rule": 2
+              },
+              {
+                "action": "permit",
+                "rule": 2
+              },
+              {
+                "action": "permit",
+                "rule": 4
+              },
+              {
+                "action": "deny",
+                "rule": 0
+              },
+              {
+                "action": "deny",
+                "rule": 0
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 2: aclRun([\"access-list 110 permit tcp 10.1.1.0 0.0.0.255 host 172.16.0.5 eq 443)",
+              "vi": "Ca 2"
+            },
+            "goi": "aclRun([\"access-list 110 permit tcp 10.1.1.0 0.0.0.255 host 172.16.0.5 eq 443\",\"access-list 110 deny tcp 10.1.1.0 0.0.0.255 host 172.16.0.5\",\"access-list 110 permit icmp any any\",\"access-list 110 deny udp any any eq 53\",\"access-list 110 permit ip any any\"], [{\"proto\":\"tcp\",\"src\":\"10.1.1.20\",\"dst\":\"172.16.0.5\",\"dport\":443},{\"proto\":\"tcp\",\"src\":\"10.1.1.20\",\"dst\":\"172.16.0.5\",\"dport\":22},{\"proto\":\"tcp\",\"src\":\"10.1.2.20\",\"dst\":\"172.16.0.5\",\"dport\":22},{\"proto\":\"icmp\",\"src\":\"10.1.1.20\",\"dst\":\"172.16.0.5\"},{\"proto\":\"udp\",\"src\":\"10.9.9.9\",\"dst\":\"1.1.1.1\",\"dport\":53},{\"proto\":\"tcp\",\"src\":\"10.9.9.9\",\"dst\":\"1.1.1.1\",\"dport\":53}])",
+            "mongDoi": [
+              {
+                "action": "permit",
+                "rule": 1
+              },
+              {
+                "action": "deny",
+                "rule": 2
+              },
+              {
+                "action": "permit",
+                "rule": 5
+              },
+              {
+                "action": "permit",
+                "rule": 3
+              },
+              {
+                "action": "deny",
+                "rule": 4
+              },
+              {
+                "action": "permit",
+                "rule": 5
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 3: aclRun([\"access-list 10 permit 192.168.1.0 0.0.0.255\"], [{\"proto\":\"ip\",\"src\":)",
+              "vi": "Ca 3"
+            },
+            "goi": "aclRun([\"access-list 10 permit 192.168.1.0 0.0.0.255\"], [{\"proto\":\"ip\",\"src\":\"192.168.2.1\",\"dst\":\"1.1.1.1\"},{\"proto\":\"ip\",\"src\":\"192.168.1.77\",\"dst\":\"1.1.1.1\"}])",
+            "mongDoi": [
+              {
+                "action": "deny",
+                "rule": 0
+              },
+              {
+                "action": "permit",
+                "rule": 1
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "aclRun([\"deny host 10.0.0.1\",\"permit any\"], [{\"proto\":\"tcp\",\"src\":\"10.0.0.1\",\"dst\":\"1.1.1.1\",\"dport\":80},{\"proto\":\"tcp\",\"src\":\"10.0.0.2\",\"dst\":\"1.1.1.1\",\"dport\":80}])",
+            "mongDoi": [
+              {
+                "action": "deny",
+                "rule": 1
+              },
+              {
+                "action": "permit",
+                "rule": 2
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "aclRun([\"permit tcp any any eq ssh\"], [{\"proto\":\"tcp\",\"src\":\"1.2.3.4\",\"dst\":\"5.6.7.8\",\"dport\":22},{\"proto\":\"tcp\",\"src\":\"1.2.3.4\",\"dst\":\"5.6.7.8\",\"dport\":2222},{\"proto\":\"udp\",\"src\":\"1.2.3.4\",\"dst\":\"5.6.7.8\",\"dport\":22}])",
+            "mongDoi": [
+              {
+                "action": "permit",
+                "rule": 1
+              },
+              {
+                "action": "deny",
+                "rule": 0
+              },
+              {
+                "action": "deny",
+                "rule": 0
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "aclRun([\"permit tcp 10.0.0.0 0.255.255.255 eq 1024 any\"], [{\"proto\":\"tcp\",\"src\":\"10.2.2.2\",\"dst\":\"5.6.7.8\",\"sport\":1024,\"dport\":80},{\"proto\":\"tcp\",\"src\":\"10.2.2.2\",\"dst\":\"5.6.7.8\",\"sport\":1025,\"dport\":80}])",
+            "mongDoi": [
+              {
+                "action": "permit",
+                "rule": 1
+              },
+              {
+                "action": "deny",
+                "rule": 0
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "aclRun([], [{\"proto\":\"ip\",\"src\":\"1.1.1.1\",\"dst\":\"2.2.2.2\"}])",
+            "mongDoi": [
+              {
+                "action": "deny",
+                "rule": 0
+              }
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using the subnet mask logic instead of the wildcard."
+        },
+        {
+          "loi": "Treating “eq 80” after the source as the destination port."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "ACL 5 — Write the right line",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 12,
+      "points": 30,
+      "concepts": [
+        "ACL design"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Choose the ACL line (or fix) that does what the requirement says.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chọn dòng ACL (hoặc cách sửa) đúng yêu cầu.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Write the permit/deny logic in words, then the line.",
+        "Remember the implicit deny and the order."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# ACL 5 — Write the right line\n\nAnswer in the answer panel (no code needed).\n\n1. Block only web traffic (TCP 80) from 192.168.30.0/24 to the server 10.0.0.10. Which line?Chặn riêng lưu lượng web (TCP 80) từ 192.168.30.0/24 tới server 10.0.0.10. Dòng nào?\n2. After “deny tcp any any eq 23” the traffic of every other kind disappears. Why and how to fix?Sau “deny tcp any any eq 23” mọi lưu lượng khác biến mất. Vì sao và sửa thế nào?\n3. “permit ip any any” is line 1 and “deny tcp any any eq 23” is line 2. Telnet is …“permit ip any any” là dòng 1 và “deny tcp any any eq 23” là dòng 2. Telnet sẽ …\n4. Which wildcard matches 172.16.4.0 – 172.16.7.255?Wildcard nào khớp 172.16.4.0 – 172.16.7.255?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# ACL 5 — Write the right line — answer key\n\n1. Block only web traffic (TCP 80) from 192.168.30.0/24 to the server 10.0.0.10. Which line?Chặn riêng lưu lượng web (TCP 80) từ 192.168.30.0/24 tới server 10.0.0.10. Dòng nào?\n   Answer: d) deny tcp 192.168.30.0 0.0.0.255 host 10.0.0.10 eq 80\n   Wildcard, not mask; protocol tcp with eq 80 on the destination.VI: Wildcard chứ không phải mask; giao thức tcp với eq 80 ở đích.\n\n2. After “deny tcp any any eq 23” the traffic of every other kind disappears. Why and how to fix?Sau “deny tcp any any eq 23” mọi lưu lượng khác biến mất. Vì sao và sửa thế nào?\n   Answer: a) The implicit deny; add “permit ip any any” at the end\n   An ACL with only denies blocks everything.VI: ACL chỉ có deny sẽ chặn tất cả.\n\n3. “permit ip any any” is line 1 and “deny tcp any any eq 23” is line 2. Telnet is …“permit ip any any” là dòng 1 và “deny tcp any any eq 23” là dòng 2. Telnet sẽ …\n   Answer: b) still permitted: line 2 is never reached\n   Order matters: reorder or insert lines with sequence numbers.VI: Thứ tự quan trọng: sắp xếp lại hoặc chèn dòng bằng số thứ tự.\n\n4. Which wildcard matches 172.16.4.0 – 172.16.7.255?Wildcard nào khớp 172.16.4.0 – 172.16.7.255?\n   Answer: c) 0.0.3.255 with base 172.16.4.0\n   4 consecutive /24 = a /22 → wildcard 0.0.3.255.VI: 4 mạng /24 liên tiếp = /22 → wildcard 0.0.3.255.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Block only web traffic (TCP 80) from 192.168.30.0/24 to the server 10.0.0.10. Which line?</p><p style=\"opacity:.75;font-size:.92em\"><i>Chặn riêng lưu lượng web (TCP 80) từ 192.168.30.0/24 tới server 10.0.0.10. Dòng nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "deny tcp 192.168.30.0 255.255.255.0 host 10.0.0.10 eq 80"
+              },
+              {
+                "ma": "b",
+                "noiDung": "deny ip 192.168.30.0 0.0.0.255 host 10.0.0.10"
+              },
+              {
+                "ma": "c",
+                "noiDung": "deny tcp host 10.0.0.10 192.168.30.0 0.0.0.255 eq 80"
+              },
+              {
+                "ma": "d",
+                "noiDung": "deny tcp 192.168.30.0 0.0.0.255 host 10.0.0.10 eq 80"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Wildcard, not mask; protocol tcp with eq 80 on the destination.</p><p><i>VI: Wildcard chứ không phải mask; giao thức tcp với eq 80 ở đích.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>After “deny tcp any any eq 23” the traffic of every other kind disappears. Why and how to fix?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau “deny tcp any any eq 23” mọi lưu lượng khác biến mất. Vì sao và sửa thế nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The implicit deny; add “permit ip any any” at the end"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The deny is too general; delete it"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The ACL must be inbound"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Telnet uses UDP"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>An ACL with only denies blocks everything.</p><p><i>VI: ACL chỉ có deny sẽ chặn tất cả.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>“permit ip any any” is line 1 and “deny tcp any any eq 23” is line 2. Telnet is …</p><p style=\"opacity:.75;font-size:.92em\"><i>“permit ip any any” là dòng 1 và “deny tcp any any eq 23” là dòng 2. Telnet sẽ …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "denied by the implicit deny"
+              },
+              {
+                "ma": "b",
+                "noiDung": "still permitted: line 2 is never reached"
+              },
+              {
+                "ma": "c",
+                "noiDung": "denied by line 2"
+              },
+              {
+                "ma": "d",
+                "noiDung": "logged"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Order matters: reorder or insert lines with sequence numbers.</p><p><i>VI: Thứ tự quan trọng: sắp xếp lại hoặc chèn dòng bằng số thứ tự.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Which wildcard matches 172.16.4.0 – 172.16.7.255?</p><p style=\"opacity:.75;font-size:.92em\"><i>Wildcard nào khớp 172.16.4.0 – 172.16.7.255?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "0.0.4.255 with base 172.16.4.0"
+              },
+              {
+                "ma": "b",
+                "noiDung": "0.0.0.255 with base 172.16.4.0"
+              },
+              {
+                "ma": "c",
+                "noiDung": "0.0.3.255 with base 172.16.4.0"
+              },
+              {
+                "ma": "d",
+                "noiDung": "0.0.7.255 with base 172.16.4.0"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>4 consecutive /24 = a /22 → wildcard 0.0.3.255.</p><p><i>VI: 4 mạng /24 liên tiếp = /22 → wildcard 0.0.3.255.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using a mask where a wildcard is expected."
+        },
+        {
+          "loi": "Putting a general permit before a specific deny."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "sequence number",
+          "vi": "số thứ tự dòng"
+        }
+      ]
+    }
+  ]
+}

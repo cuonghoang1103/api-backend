@@ -1,0 +1,948 @@
+{
+  "trackSlug": "nwc204-practice",
+  "moduleSlug": "nwc204-4-1-physical-delay",
+  "lesson": {
+    "course": "nwc204-computer-networking",
+    "slug": "nwc204-4-1-tang-vat-ly-va-cap-dong"
+  },
+  "exercises": [
+    {
+      "title": "Physical 1 — Bandwidth, throughput, latency, goodput",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "bandwidth",
+        "throughput"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Vocabulary of the physical layer and of performance.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Từ vựng tầng vật lý và hiệu năng.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "“Capacity” → bandwidth; “what I measured” → throughput; “useful bits” → goodput.",
+        "100 m for UTP; fibre goes km."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Physical 1 — Bandwidth, throughput, latency, goodput\n\nAnswer in the answer panel (no code needed).\n\n1. The capacity of a medium to carry data, in bits per second, is its …Khả năng chứa dữ liệu của môi trường, tính bằng bit/giây, là …\n2. Throughput is usually … the bandwidth.Thông lượng thường … băng thông.\n3. Goodput is the …Goodput là …\n4. The maximum length of a UTP Ethernet segment is …Chiều dài tối đa một đoạn cáp UTP Ethernet là …\n5. Compared to copper, fibre-optic cable is …So với cáp đồng, cáp quang …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Physical 1 — Bandwidth, throughput, latency, goodput — answer key\n\n1. The capacity of a medium to carry data, in bits per second, is its …Khả năng chứa dữ liệu của môi trường, tính bằng bit/giây, là …\n   Answer: d) bandwidth\n   Bandwidth is the theoretical capacity; throughput is what you really get.VI: Băng thông là dung lượng lý thuyết; thông lượng là cái thực nhận.\n\n2. Throughput is usually … the bandwidth.Thông lượng thường … băng thông.\n   Answer: a) lower than\n   Congestion, errors and overhead keep throughput under the nominal bandwidth.VI: Tắc nghẽn, lỗi và header khiến thông lượng thấp hơn băng thông danh định.\n\n3. Goodput is the …Goodput là …\n   Answer: b) rate of useful application data (headers and retransmissions excluded)\n   Goodput = throughput minus overhead.VI: Goodput = thông lượng trừ chi phí header.\n\n4. The maximum length of a UTP Ethernet segment is …Chiều dài tối đa một đoạn cáp UTP Ethernet là …\n   Answer: c) 100 m\n   UTP signals attenuate; 100 m is the standard limit.VI: Tín hiệu UTP suy hao; 100 m là giới hạn chuẩn.\n\n5. Compared to copper, fibre-optic cable is …So với cáp đồng, cáp quang …\n   Answer: d) immune to EMI and reaches much longer distances\n   Light does not suffer electromagnetic interference.VI: Ánh sáng không bị nhiễu điện từ.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The capacity of a medium to carry data, in bits per second, is its …</p><p style=\"opacity:.75;font-size:.92em\"><i>Khả năng chứa dữ liệu của môi trường, tính bằng bit/giây, là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "throughput"
+              },
+              {
+                "ma": "b",
+                "noiDung": "latency"
+              },
+              {
+                "ma": "c",
+                "noiDung": "goodput"
+              },
+              {
+                "ma": "d",
+                "noiDung": "bandwidth"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Bandwidth is the theoretical capacity; throughput is what you really get.</p><p><i>VI: Băng thông là dung lượng lý thuyết; thông lượng là cái thực nhận.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Throughput is usually … the bandwidth.</p><p style=\"opacity:.75;font-size:.92em\"><i>Thông lượng thường … băng thông.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "lower than"
+              },
+              {
+                "ma": "b",
+                "noiDung": "higher than"
+              },
+              {
+                "ma": "c",
+                "noiDung": "exactly equal to"
+              },
+              {
+                "ma": "d",
+                "noiDung": "unrelated to"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Congestion, errors and overhead keep throughput under the nominal bandwidth.</p><p><i>VI: Tắc nghẽn, lỗi và header khiến thông lượng thấp hơn băng thông danh định.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Goodput is the …</p><p style=\"opacity:.75;font-size:.92em\"><i>Goodput là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "propagation delay"
+              },
+              {
+                "ma": "b",
+                "noiDung": "rate of useful application data (headers and retransmissions excluded)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "raw bit rate on the wire"
+              },
+              {
+                "ma": "d",
+                "noiDung": "number of devices connected"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Goodput = throughput minus overhead.</p><p><i>VI: Goodput = thông lượng trừ chi phí header.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>The maximum length of a UTP Ethernet segment is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Chiều dài tối đa một đoạn cáp UTP Ethernet là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "1 km"
+              },
+              {
+                "ma": "b",
+                "noiDung": "550 m"
+              },
+              {
+                "ma": "c",
+                "noiDung": "100 m"
+              },
+              {
+                "ma": "d",
+                "noiDung": "10 m"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>UTP signals attenuate; 100 m is the standard limit.</p><p><i>VI: Tín hiệu UTP suy hao; 100 m là giới hạn chuẩn.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Compared to copper, fibre-optic cable is …</p><p style=\"opacity:.75;font-size:.92em\"><i>So với cáp đồng, cáp quang …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "cheaper and easier to terminate"
+              },
+              {
+                "ma": "b",
+                "noiDung": "limited to 100 m"
+              },
+              {
+                "ma": "c",
+                "noiDung": "only usable indoors"
+              },
+              {
+                "ma": "d",
+                "noiDung": "immune to EMI and reaches much longer distances"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Light does not suffer electromagnetic interference.</p><p><i>VI: Ánh sáng không bị nhiễu điện từ.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using bandwidth and throughput as synonyms."
+        },
+        {
+          "loi": "Thinking latency is measured in bits per second."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "goodput",
+          "vi": "thông lượng hữu ích"
+        },
+        {
+          "en": "attenuation",
+          "vi": "suy hao"
+        }
+      ]
+    },
+    {
+      "title": "Physical 2 — Transmission time of a file",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "transmission delay"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Transmission time = bits ÷ link rate (1 MB = 10⁶ bytes, 1 Mbps = 10⁶ bit/s). Give the time in seconds (2 decimals).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Thời gian truyền = số bit ÷ tốc độ đường truyền (1 MB = 10⁶ byte, 1 Mbps = 10⁶ bit/s). Tính bằng giây (2 chữ số thập phân).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Convert bytes to bits first (× 8).",
+        "Keep the units consistent: Mbit ÷ Mbps = s."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Physical 2 — Transmission time of a file\n\nAnswer in the answer panel (no code needed).\n\n1. Transmission timeThời gian truyền\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Physical 2 — Transmission time of a file — answer key\n\n1. Transmission timeThời gian truyền\n   - r1.t: 0.80 / 0.8\n   - r2.t: 2.00 / 2\n   - r3.t: 5.60 / 5.6\n   - r4.t: 696.30 / 696.3\n   1 MB = 8 Mbit; ÷ 10 Mbps = 0.80 s; 25 MB = 200 Mbit; ÷ 100 Mbps = 2.00 s; 700 MB = 5600 Mbit; ÷ 1000 Mbps = 5.60 s; 4700 MB = 37600 Mbit; ÷ 54 Mbps = 696.30 s.VI: Đổi byte sang bit (× 8) rồi chia cho tốc độ.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>1 MB = 8 Mbit; ÷ 10 Mbps = 0.80 s; 25 MB = 200 Mbit; ÷ 100 Mbps = 2.00 s; 700 MB = 5600 Mbit; ÷ 1000 Mbps = 5.60 s; 4700 MB = 37600 Mbit; ÷ 54 Mbps = 696.30 s.</p><p><i>VI: Đổi byte sang bit (× 8) rồi chia cho tốc độ.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Transmission time</p><p style=\"opacity:.75;font-size:.92em\"><i>Thời gian truyền</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "File and link"
+              },
+              {
+                "ma": "t",
+                "ten": "Seconds"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "1 MB over 10 Mbps"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "25 MB over 100 Mbps"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "700 MB over 1000 Mbps"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "4700 MB over 54 Mbps"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.t": [
+                "0.80",
+                "0.8"
+              ],
+              "r2.t": [
+                "2.00",
+                "2"
+              ],
+              "r3.t": [
+                "5.60",
+                "5.6"
+              ],
+              "r4.t": [
+                "696.30",
+                "696.3"
+              ]
+            },
+            "giaiThich": "<p>1 MB = 8 Mbit; ÷ 10 Mbps = 0.80 s; 25 MB = 200 Mbit; ÷ 100 Mbps = 2.00 s; 700 MB = 5600 Mbit; ÷ 1000 Mbps = 5.60 s; 4700 MB = 37600 Mbit; ÷ 54 Mbps = 696.30 s.</p><p><i>VI: Đổi byte sang bit (× 8) rồi chia cho tốc độ.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting that a byte has 8 bits (answer 8× too small)."
+        },
+        {
+          "loi": "Mixing MB and Mb."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "transmission time",
+          "vi": "thời gian truyền"
+        }
+      ]
+    },
+    {
+      "title": "Physical 3 — Transmission plus propagation delay",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "propagation delay"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Transmission delay = L ÷ R. Propagation delay = distance ÷ 2×10⁸ m/s. Give both and the total in milliseconds (3 decimals).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trễ truyền = L ÷ R. Trễ lan truyền = khoảng cách ÷ 2×10⁸ m/s. Tính cả hai và tổng, đơn vị mili-giây (3 chữ số thập phân).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Convert km to m before dividing by 2×10⁸.",
+        "Multiply seconds by 1000 to get ms."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Physical 3 — Transmission plus propagation delay\n\nAnswer in the answer panel (no code needed).\n\n1. Delays (ms)Trễ (ms)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Physical 3 — Transmission plus propagation delay — answer key\n\n1. Delays (ms)Trễ (ms)\n   - r1.t: 0.120 / 0.12\n   - r1.p: 0.500 / 0.5\n   - r1.a: 0.620 / 0.62\n   - r2.t: 1.200 / 1.2\n   - r2.p: 10.000 / 10\n   - r2.a: 11.200 / 11.2\n   - r3.t: 0.001 / 0.001\n   - r3.p: 0.050 / 0.05\n   - r3.a: 0.051 / 0.051\n   - r4.t: 8.000 / 8\n   - r4.p: 25.000 / 25\n   - r4.a: 33.000 / 33\n   Transmission depends on size and rate; propagation on distance only. Note how the 1 MB file on a long link is dominated by transmission while the 64-byte frame is dominated by propagation.VI: Trễ truyền phụ thuộc kích thước và tốc độ; trễ lan truyền chỉ phụ thuộc khoảng cách.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Transmission depends on size and rate; propagation on distance only. Note how the 1 MB file on a long link is dominated by transmission while the 64-byte frame is dominated by propagation.</p><p><i>VI: Trễ truyền phụ thuộc kích thước và tốc độ; trễ lan truyền chỉ phụ thuộc khoảng cách.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Delays (ms)</p><p style=\"opacity:.75;font-size:.92em\"><i>Trễ (ms)</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Case"
+              },
+              {
+                "ma": "t",
+                "ten": "Transmission"
+              },
+              {
+                "ma": "p",
+                "ten": "Propagation"
+              },
+              {
+                "ma": "a",
+                "ten": "Total"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "1500 B, 100 Mbps, 100 km"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "1500 B, 10 Mbps, 2000 km"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "64 B, 1000 Mbps, 10 km"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "1000000 B, 1000 Mbps, 5000 km"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.t": [
+                "0.120",
+                "0.12"
+              ],
+              "r1.p": [
+                "0.500",
+                "0.5"
+              ],
+              "r1.a": [
+                "0.620",
+                "0.62"
+              ],
+              "r2.t": [
+                "1.200",
+                "1.2"
+              ],
+              "r2.p": [
+                "10.000",
+                "10"
+              ],
+              "r2.a": [
+                "11.200",
+                "11.2"
+              ],
+              "r3.t": [
+                "0.001",
+                "0.001"
+              ],
+              "r3.p": [
+                "0.050",
+                "0.05"
+              ],
+              "r3.a": [
+                "0.051",
+                "0.051"
+              ],
+              "r4.t": [
+                "8.000",
+                "8"
+              ],
+              "r4.p": [
+                "25.000",
+                "25"
+              ],
+              "r4.a": [
+                "33.000",
+                "33"
+              ]
+            },
+            "giaiThich": "<p>Transmission depends on size and rate; propagation on distance only. Note how the 1 MB file on a long link is dominated by transmission while the 64-byte frame is dominated by propagation.</p><p><i>VI: Trễ truyền phụ thuộc kích thước và tốc độ; trễ lan truyền chỉ phụ thuộc khoảng cách.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dividing distance by the link rate."
+        },
+        {
+          "loi": "Forgetting to convert km to m."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "propagation delay",
+          "vi": "trễ lan truyền"
+        }
+      ]
+    },
+    {
+      "title": "Physical 4 — Quick numeric checks",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "BDP"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Pick the correct value (units matter).</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chọn giá trị đúng (chú ý đơn vị).</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Write the formula and the units line by line.",
+        "BDP = rate × RTT, then ÷ 8 for bytes."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Physical 4 — Quick numeric checks\n\nAnswer in the answer panel (no code needed).\n\n1. How long does a 2 GB (2×10⁹ B) file take over a 100 Mbps link at full rate?Truyền tệp 2 GB (2×10⁹ B) qua đường 100 Mbps hết tốc độ mất bao lâu?\n2. A 1 Gbps link has RTT 40 ms. The bandwidth-delay product (bytes in flight to fill the pipe) is …Đường 1 Gbps có RTT 40 ms. Tích băng thông-trễ (số byte cần “bay” để lấp đầy ống) là …\n3. A file of 40 MB takes 8 s. The average throughput is …Tệp 40 MB mất 8 s. Thông lượng trung bình là …\n4. An Ethernet frame of 12,000 bits on a 1 Gbps link needs … µs of transmission time.Frame Ethernet 12.000 bit trên đường 1 Gbps cần … µs để truyền.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Physical 4 — Quick numeric checks — answer key\n\n1. How long does a 2 GB (2×10⁹ B) file take over a 100 Mbps link at full rate?Truyền tệp 2 GB (2×10⁹ B) qua đường 100 Mbps hết tốc độ mất bao lâu?\n   Answer: c) 160 s\n   2×10⁹ × 8 = 16×10⁹ bit ÷ 10⁸ = 160 s.VI: 2×10⁹ × 8 = 16×10⁹ bit ÷ 10⁸ = 160 s.\n\n2. A 1 Gbps link has RTT 40 ms. The bandwidth-delay product (bytes in flight to fill the pipe) is …Đường 1 Gbps có RTT 40 ms. Tích băng thông-trễ (số byte cần “bay” để lấp đầy ống) là …\n   Answer: d) 5,000,000 B\n   BDP = 10⁹ × 0.04 / 8 = 5,000,000 bytes.VI: BDP = 10⁹ × 0,04 / 8 = 5.000.000 byte.\n\n3. A file of 40 MB takes 8 s. The average throughput is …Tệp 40 MB mất 8 s. Thông lượng trung bình là …\n   Answer: a) 40 Mbps\n   40 MB × 8 = 320 Mbit ÷ 8 s = 40 Mbps.VI: 40 MB × 8 = 320 Mbit ÷ 8 s = 40 Mbps.\n\n4. An Ethernet frame of 12,000 bits on a 1 Gbps link needs … µs of transmission time.Frame Ethernet 12.000 bit trên đường 1 Gbps cần … µs để truyền.\n   Answer: b) 12 µs\n   12000 ÷ 10⁹ = 12 µs.VI: 12000 ÷ 10⁹ = 12 µs.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>How long does a 2 GB (2×10⁹ B) file take over a 100 Mbps link at full rate?</p><p style=\"opacity:.75;font-size:.92em\"><i>Truyền tệp 2 GB (2×10⁹ B) qua đường 100 Mbps hết tốc độ mất bao lâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "16 s"
+              },
+              {
+                "ma": "b",
+                "noiDung": "200 s"
+              },
+              {
+                "ma": "c",
+                "noiDung": "160 s"
+              },
+              {
+                "ma": "d",
+                "noiDung": "20 s"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>2×10⁹ × 8 = 16×10⁹ bit ÷ 10⁸ = 160 s.</p><p><i>VI: 2×10⁹ × 8 = 16×10⁹ bit ÷ 10⁸ = 160 s.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A 1 Gbps link has RTT 40 ms. The bandwidth-delay product (bytes in flight to fill the pipe) is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Đường 1 Gbps có RTT 40 ms. Tích băng thông-trễ (số byte cần “bay” để lấp đầy ống) là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "40,000,000 B"
+              },
+              {
+                "ma": "b",
+                "noiDung": "625,000 B"
+              },
+              {
+                "ma": "c",
+                "noiDung": "500,000 B"
+              },
+              {
+                "ma": "d",
+                "noiDung": "5,000,000 B"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>BDP = 10⁹ × 0.04 / 8 = 5,000,000 bytes.</p><p><i>VI: BDP = 10⁹ × 0,04 / 8 = 5.000.000 byte.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A file of 40 MB takes 8 s. The average throughput is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Tệp 40 MB mất 8 s. Thông lượng trung bình là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "40 Mbps"
+              },
+              {
+                "ma": "b",
+                "noiDung": "5 Mbps"
+              },
+              {
+                "ma": "c",
+                "noiDung": "320 Mbps"
+              },
+              {
+                "ma": "d",
+                "noiDung": "4 Mbps"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>40 MB × 8 = 320 Mbit ÷ 8 s = 40 Mbps.</p><p><i>VI: 40 MB × 8 = 320 Mbit ÷ 8 s = 40 Mbps.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>An Ethernet frame of 12,000 bits on a 1 Gbps link needs … µs of transmission time.</p><p style=\"opacity:.75;font-size:.92em\"><i>Frame Ethernet 12.000 bit trên đường 1 Gbps cần … µs để truyền.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "0.12 µs"
+              },
+              {
+                "ma": "b",
+                "noiDung": "12 µs"
+              },
+              {
+                "ma": "c",
+                "noiDung": "120 µs"
+              },
+              {
+                "ma": "d",
+                "noiDung": "1.2 µs"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>12000 ÷ 10⁹ = 12 µs.</p><p><i>VI: 12000 ÷ 10⁹ = 12 µs.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating MB/s and Mbps as the same unit."
+        },
+        {
+          "loi": "Using the one-way delay instead of the RTT for the BDP."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "bandwidth-delay product",
+          "vi": "tích băng thông × trễ"
+        }
+      ]
+    },
+    {
+      "title": "Physical 5 — Write transferTime(bytes, bps, km)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "transmission delay",
+        "propagation delay"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Write <code>transferTime(bytes, bps, km)</code> returning <code>{ transmissionMs, propagationMs, totalMs }</code>, each rounded to 3 decimals (<code>Math.round(x * 1000) / 1000</code>). Propagation speed is 2×10⁸ m/s.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>transferTime(bytes, bps, km)</code> trả <code>{ transmissionMs, propagationMs, totalMs }</code>, mỗi số làm tròn 3 chữ số (<code>Math.round(x * 1000) / 1000</code>). Tốc độ lan truyền 2×10⁸ m/s.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "transferTime(1500, 100000000, 100)",
+          "output": "{\"transmissionMs\":0.12,\"propagationMs\":0.5,\"totalMs\":0.62}",
+          "explanation": "First sample case.|||Ca mẫu đầu tiên."
+        }
+      ],
+      "hintsJson": [
+        "bits = bytes × 8; transmission = bits ÷ bps (seconds) × 1000 for ms.",
+        "Round the total from the unrounded parts, not from the rounded ones."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function transferTime(bytes, bps, km) {\n  // Write your solution here\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction transferTime(bytes, bps, km) {\n  var trans = bytes * 8 / bps * 1000, prop = km * 1000 / 2e8 * 1000;\n  return { transmissionMs: Math.round(trans * 1000) / 1000, propagationMs: Math.round(prop * 1000) / 1000, totalMs: Math.round((trans + prop) * 1000) / 1000 };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The two delays are independent: one grows with size/rate, the other with distance.</p><p><i>VI: Hai loại trễ độc lập: một loại tăng theo kích thước/tốc độ, loại kia tăng theo khoảng cách.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: transferTime(1500, 100000000, 100)",
+              "vi": "Ca 1"
+            },
+            "goi": "transferTime(1500, 100000000, 100)",
+            "mongDoi": {
+              "transmissionMs": 0.12,
+              "propagationMs": 0.5,
+              "totalMs": 0.62
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: transferTime(1500, 10000000, 2000)",
+              "vi": "Ca 2"
+            },
+            "goi": "transferTime(1500, 10000000, 2000)",
+            "mongDoi": {
+              "transmissionMs": 1.2,
+              "propagationMs": 10,
+              "totalMs": 11.2
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: transferTime(64, 1000000000, 10)",
+              "vi": "Ca 3"
+            },
+            "goi": "transferTime(64, 1000000000, 10)",
+            "mongDoi": {
+              "transmissionMs": 0.001,
+              "propagationMs": 0.05,
+              "totalMs": 0.051
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "transferTime(1000000, 1000000000, 5000)",
+            "mongDoi": {
+              "transmissionMs": 8,
+              "propagationMs": 25,
+              "totalMs": 33
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "transferTime(1, 1000000, 0)",
+            "mongDoi": {
+              "transmissionMs": 0.008,
+              "propagationMs": 0,
+              "totalMs": 0.008
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "transferTime(9000, 10000000000, 40000)",
+            "mongDoi": {
+              "transmissionMs": 0.007,
+              "propagationMs": 200,
+              "totalMs": 200.007
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Rounding each part first and adding the rounded values."
+        },
+        {
+          "loi": "Using km as metres."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Physical 6 — Store-and-forward over several links",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "store-and-forward"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>A packet of <code>bits</code> bits crosses a path of links <code>hops = [{ bps, km }, …]</code>. Every router stores the whole packet before forwarding it (<b>store-and-forward</b>), so the packet is transmitted once per link. Write <code>pathDelay(bits, hops)</code> returning the end-to-end delay in ms rounded to 3 decimals (no queuing, propagation 2×10⁸ m/s).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một gói <code>bits</code> bit đi qua đường gồm các liên kết <code>hops = [{ bps, km }, …]</code>. Mỗi router nhận trọn gói rồi mới chuyển tiếp (<b>store-and-forward</b>) nên gói được truyền một lần trên mỗi liên kết. Viết <code>pathDelay(bits, hops)</code> trả trễ đầu-cuối tính bằng ms, làm tròn 3 chữ số (không xếp hàng, lan truyền 2×10⁸ m/s).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "pathDelay(12000, [{\"bps\":100000000,\"km\":1}])",
+          "output": "0.125",
+          "explanation": "First sample case.|||Ca mẫu đầu tiên."
+        }
+      ],
+      "hintsJson": [
+        "Add transmission + propagation for each link, then sum over links.",
+        "An empty path costs 0."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function pathDelay(bits, hops) {\n  // Write your solution here\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction pathDelay(bits, hops) {\n  var t = 0;\n  for (var i = 0; i < hops.length; i++) t += bits / hops[i].bps * 1000 + hops[i].km * 1000 / 2e8 * 1000;\n  return Math.round(t * 1000) / 1000;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>With store-and-forward every hop pays the full transmission time again; that is why the bottleneck and the hop count both matter.</p><p><i>VI: Với store-and-forward, mỗi chặng trả lại đủ thời gian truyền; nên cả nút cổ chai lẫn số chặng đều quan trọng.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: pathDelay(12000, [{\"bps\":100000000,\"km\":1}])",
+              "vi": "Ca 1"
+            },
+            "goi": "pathDelay(12000, [{\"bps\":100000000,\"km\":1}])",
+            "mongDoi": 0.125
+          },
+          {
+            "moTa": {
+              "en": "Case 2: pathDelay(12000, [{\"bps\":100000000,\"km\":1},{\"bps\":10000000,\"km\":500},{\"bps\":1000)",
+              "vi": "Ca 2"
+            },
+            "goi": "pathDelay(12000, [{\"bps\":100000000,\"km\":1},{\"bps\":10000000,\"km\":500},{\"bps\":100000000,\"km\":1}])",
+            "mongDoi": 3.95
+          },
+          {
+            "moTa": {
+              "en": "Case 3: pathDelay(8000000, [{\"bps\":1000000000,\"km\":10},{\"bps\":1000000000,\"km\":3000}])",
+              "vi": "Ca 3"
+            },
+            "goi": "pathDelay(8000000, [{\"bps\":1000000000,\"km\":10},{\"bps\":1000000000,\"km\":3000}])",
+            "mongDoi": 31.05
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "pathDelay(12000, [])",
+            "mongDoi": 0,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "pathDelay(1000000, [{\"bps\":1000000,\"km\":0},{\"bps\":2000000,\"km\":0},{\"bps\":4000000,\"km\":0}])",
+            "mongDoi": 1750,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "pathDelay(500, [{\"bps\":1000000000,\"km\":20000}])",
+            "mongDoi": 100.001,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Transmitting the packet only once in total (cut-through thinking)."
+        },
+        {
+          "loi": "Rounding inside the loop."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

@@ -1,0 +1,865 @@
+{
+  "trackSlug": "nwc204-practice",
+  "moduleSlug": "nwc204-4-4-binary-hex",
+  "lesson": {
+    "course": "nwc204-computer-networking",
+    "slug": "nwc204-4b-1-he-nhi-phan-va-chuyen-doi-8-bit"
+  },
+  "exercises": [
+    {
+      "title": "Binary 1 — Decimal to 8-bit binary",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "binary"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Convert each decimal number (0–255) to 8-bit binary. Use the table 128-64-32-16-8-4-2-1.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đổi mỗi số thập phân (0–255) sang nhị phân 8 bit. Dùng bảng 128-64-32-16-8-4-2-1.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Start with 128: does it fit? Then 64, 32 …",
+        "255 is all ones; 192 = 128 + 64."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Binary 1 — Decimal to 8-bit binary\n\nAnswer in the answer panel (no code needed).\n\n1. Decimal → binaryThập phân → nhị phân\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Binary 1 — Decimal to 8-bit binary — answer key\n\n1. Decimal → binaryThập phân → nhị phân\n   - r1.b: 00001101\n   - r2.b: 01001101\n   - r3.b: 10010110\n   - r4.b: 11001000\n   - r5.b: 11111111\n   - r6.b: 11000000\n   13 = 00001101; 77 = 01001101; 150 = 10010110; 200 = 11001000; 255 = 11111111; 192 = 11000000. Subtract the largest column that fits, write 1, continue; otherwise write 0.VI: Trừ cột lớn nhất còn vừa, ghi 1, tiếp tục; không vừa thì ghi 0.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>13 = 00001101; 77 = 01001101; 150 = 10010110; 200 = 11001000; 255 = 11111111; 192 = 11000000. Subtract the largest column that fits, write 1, continue; otherwise write 0.</p><p><i>VI: Trừ cột lớn nhất còn vừa, ghi 1, tiếp tục; không vừa thì ghi 0.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Decimal → binary</p><p style=\"opacity:.75;font-size:.92em\"><i>Thập phân → nhị phân</i></p>",
+            "cot": [
+              {
+                "ma": "d",
+                "ten": "Decimal"
+              },
+              {
+                "ma": "b",
+                "ten": "8-bit binary"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "d": "13"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "d": "77"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "d": "150"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "d": "200"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "d": "255"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "d": "192"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.b": [
+                "00001101"
+              ],
+              "r2.b": [
+                "01001101"
+              ],
+              "r3.b": [
+                "10010110"
+              ],
+              "r4.b": [
+                "11001000"
+              ],
+              "r5.b": [
+                "11111111"
+              ],
+              "r6.b": [
+                "11000000"
+              ]
+            },
+            "giaiThich": "<p>13 = 00001101; 77 = 01001101; 150 = 10010110; 200 = 11001000; 255 = 11111111; 192 = 11000000. Subtract the largest column that fits, write 1, continue; otherwise write 0.</p><p><i>VI: Trừ cột lớn nhất còn vừa, ghi 1, tiếp tục; không vừa thì ghi 0.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Writing fewer than 8 digits (leading zeros are part of an octet)."
+        },
+        {
+          "loi": "Reading the columns left to right as 1-2-4-8."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "octet",
+          "vi": "nhóm 8 bit"
+        }
+      ]
+    },
+    {
+      "title": "Binary 2 — Binary to decimal and hexadecimal",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "hexadecimal"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Convert each 8-bit binary number to decimal and to two hexadecimal digits (uppercase). Tip: split into two nibbles of 4 bits.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đổi mỗi số nhị phân 8 bit sang thập phân và sang hai chữ số hex (chữ hoa). Mẹo: tách thành hai nibble 4 bit.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Nibble values: 0000=0 … 1001=9, 1010=A, 1011=B, 1100=C, 1101=D, 1110=E, 1111=F.",
+        "Decimal = high nibble × 16 + low nibble."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Binary 2 — Binary to decimal and hexadecimal\n\nAnswer in the answer panel (no code needed).\n\n1. Binary → decimal, hexNhị phân → thập phân, hex\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Binary 2 — Binary to decimal and hexadecimal — answer key\n\n1. Binary → decimal, hexNhị phân → thập phân, hex\n   - r1.d: 45\n   - r1.h: 2D\n   - r2.d: 192\n   - r2.h: C0\n   - r3.d: 170\n   - r3.h: AA\n   - r4.d: 127\n   - r4.h: 7F\n   00101101 = 45 = 0x2D; 11000000 = 192 = 0xC0; 10101010 = 170 = 0xAA; 01111111 = 127 = 0x7F.VI: Mỗi nibble 4 bit là một chữ số hex.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>00101101 = 45 = 0x2D; 11000000 = 192 = 0xC0; 10101010 = 170 = 0xAA; 01111111 = 127 = 0x7F.</p><p><i>VI: Mỗi nibble 4 bit là một chữ số hex.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Binary → decimal, hex</p><p style=\"opacity:.75;font-size:.92em\"><i>Nhị phân → thập phân, hex</i></p>",
+            "cot": [
+              {
+                "ma": "b",
+                "ten": "Binary"
+              },
+              {
+                "ma": "d",
+                "ten": "Decimal"
+              },
+              {
+                "ma": "h",
+                "ten": "Hex"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "b": "00101101"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "b": "11000000"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "b": "10101010"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "b": "01111111"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.d": [
+                "45"
+              ],
+              "r1.h": [
+                "2D"
+              ],
+              "r2.d": [
+                "192"
+              ],
+              "r2.h": [
+                "C0"
+              ],
+              "r3.d": [
+                "170"
+              ],
+              "r3.h": [
+                "AA"
+              ],
+              "r4.d": [
+                "127"
+              ],
+              "r4.h": [
+                "7F"
+              ]
+            },
+            "giaiThich": "<p>00101101 = 45 = 0x2D; 11000000 = 192 = 0xC0; 10101010 = 170 = 0xAA; 01111111 = 127 = 0x7F.</p><p><i>VI: Mỗi nibble 4 bit là một chữ số hex.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dropping the leading zero in hex (0x2D, not 0x2D5)."
+        },
+        {
+          "loi": "Mixing up A–F values."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "nibble",
+          "vi": "nửa byte (4 bit)"
+        }
+      ]
+    },
+    {
+      "title": "Binary 3 — Why hex? Powers of two and ranges",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "powers of two"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Conceptual and quick numeric questions.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi khái niệm và số nhanh.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Hex digit = 4 bits; octet = 2 hex digits.",
+        "n bits give 2ⁿ values."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Binary 3 — Why hex? Powers of two and ranges\n\nAnswer in the answer panel (no code needed).\n\n1. Why do MAC addresses and IPv6 use hexadecimal?Vì sao địa chỉ MAC và IPv6 dùng hệ thập lục phân?\n2. The largest value of one IPv4 octet is …Giá trị lớn nhất của một octet IPv4 là …\n3. How many different addresses can 12 host bits provide?12 bit host cho bao nhiêu địa chỉ khác nhau?\n4. The hexadecimal number 0xFF equals …Số hex 0xFF bằng …\n5. A MAC address has 48 bits. How many hex digits is that?MAC có 48 bit. Đó là bao nhiêu chữ số hex?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Binary 3 — Why hex? Powers of two and ranges — answer key\n\n1. Why do MAC addresses and IPv6 use hexadecimal?Vì sao địa chỉ MAC và IPv6 dùng hệ thập lục phân?\n   Answer: d) One hex digit equals exactly 4 bits, so long binary strings become short and easy to read\n   4 bits per digit: a 48-bit MAC is 12 hex digits.VI: 4 bit mỗi chữ số: MAC 48 bit là 12 chữ số hex.\n\n2. The largest value of one IPv4 octet is …Giá trị lớn nhất của một octet IPv4 là …\n   Answer: a) 255\n   2⁸ − 1 = 255.VI: 2⁸ − 1 = 255.\n\n3. How many different addresses can 12 host bits provide?12 bit host cho bao nhiêu địa chỉ khác nhau?\n   Answer: b) 4096\n   2¹² = 4096 (4094 usable hosts after removing network and broadcast).VI: 2¹² = 4096 (dùng được 4094 host sau khi bỏ địa chỉ mạng và broadcast).\n\n4. The hexadecimal number 0xFF equals …Số hex 0xFF bằng …\n   Answer: c) 255\n   15 × 16 + 15 = 255.VI: 15 × 16 + 15 = 255.\n\n5. A MAC address has 48 bits. How many hex digits is that?MAC có 48 bit. Đó là bao nhiêu chữ số hex?\n   Answer: d) 12\n   48 ÷ 4 = 12 (shown as six pairs).VI: 48 ÷ 4 = 12 (viết thành sáu cặp).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Why do MAC addresses and IPv6 use hexadecimal?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao địa chỉ MAC và IPv6 dùng hệ thập lục phân?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Hex is faster for the CPU"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Hex numbers cannot be mistyped"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Routers only understand hex"
+              },
+              {
+                "ma": "d",
+                "noiDung": "One hex digit equals exactly 4 bits, so long binary strings become short and easy to read"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>4 bits per digit: a 48-bit MAC is 12 hex digits.</p><p><i>VI: 4 bit mỗi chữ số: MAC 48 bit là 12 chữ số hex.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The largest value of one IPv4 octet is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Giá trị lớn nhất của một octet IPv4 là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "255"
+              },
+              {
+                "ma": "b",
+                "noiDung": "256"
+              },
+              {
+                "ma": "c",
+                "noiDung": "254"
+              },
+              {
+                "ma": "d",
+                "noiDung": "128"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>2⁸ − 1 = 255.</p><p><i>VI: 2⁸ − 1 = 255.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>How many different addresses can 12 host bits provide?</p><p style=\"opacity:.75;font-size:.92em\"><i>12 bit host cho bao nhiêu địa chỉ khác nhau?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "1024"
+              },
+              {
+                "ma": "b",
+                "noiDung": "4096"
+              },
+              {
+                "ma": "c",
+                "noiDung": "2048"
+              },
+              {
+                "ma": "d",
+                "noiDung": "4094"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>2¹² = 4096 (4094 usable hosts after removing network and broadcast).</p><p><i>VI: 2¹² = 4096 (dùng được 4094 host sau khi bỏ địa chỉ mạng và broadcast).</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>The hexadecimal number 0xFF equals …</p><p style=\"opacity:.75;font-size:.92em\"><i>Số hex 0xFF bằng …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "15"
+              },
+              {
+                "ma": "b",
+                "noiDung": "127"
+              },
+              {
+                "ma": "c",
+                "noiDung": "255"
+              },
+              {
+                "ma": "d",
+                "noiDung": "256"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>15 × 16 + 15 = 255.</p><p><i>VI: 15 × 16 + 15 = 255.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>A MAC address has 48 bits. How many hex digits is that?</p><p style=\"opacity:.75;font-size:.92em\"><i>MAC có 48 bit. Đó là bao nhiêu chữ số hex?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "6"
+              },
+              {
+                "ma": "b",
+                "noiDung": "8"
+              },
+              {
+                "ma": "c",
+                "noiDung": "16"
+              },
+              {
+                "ma": "d",
+                "noiDung": "12"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>48 ÷ 4 = 12 (shown as six pairs).</p><p><i>VI: 48 ÷ 4 = 12 (viết thành sáu cặp).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Answering 256 for the largest octet value."
+        },
+        {
+          "loi": "Forgetting that all-zero and all-one host values are reserved."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "hexadecimal",
+          "vi": "thập lục phân"
+        }
+      ]
+    },
+    {
+      "title": "Binary 4 — Dotted decimal to binary",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "IPv4 binary"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Write each IPv4 address as four 8-bit groups separated by dots.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết mỗi địa chỉ IPv4 thành bốn nhóm 8 bit cách nhau bằng dấu chấm.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Convert one octet at a time.",
+        "Keep all 8 digits of every octet."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Binary 4 — Dotted decimal to binary\n\nAnswer in the answer panel (no code needed).\n\n1. IPv4 → binaryIPv4 → nhị phân\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Binary 4 — Dotted decimal to binary — answer key\n\n1. IPv4 → binaryIPv4 → nhị phân\n   - r1.b: 11000000.10101000.00000001.00001010\n   - r2.b: 00001010.00000000.00000000.11111111\n   - r3.b: 10101100.00010000.01000000.00000011\n   - r4.b: 00001000.00001000.00000100.00000100\n   192.168.1.10 = 11000000.10101000.00000001.00001010; 10.0.0.255 = 00001010.00000000.00000000.11111111; 172.16.64.3 = 10101100.00010000.01000000.00000011; 8.8.4.4 = 00001000.00001000.00000100.00000100.VI: Đổi từng octet riêng, giữ dấu chấm.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>192.168.1.10 = 11000000.10101000.00000001.00001010; 10.0.0.255 = 00001010.00000000.00000000.11111111; 172.16.64.3 = 10101100.00010000.01000000.00000011; 8.8.4.4 = 00001000.00001000.00000100.00000100.</p><p><i>VI: Đổi từng octet riêng, giữ dấu chấm.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>IPv4 → binary</p><p style=\"opacity:.75;font-size:.92em\"><i>IPv4 → nhị phân</i></p>",
+            "cot": [
+              {
+                "ma": "i",
+                "ten": "IPv4"
+              },
+              {
+                "ma": "b",
+                "ten": "Binary"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "i": "192.168.1.10"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "i": "10.0.0.255"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "i": "172.16.64.3"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "i": "8.8.4.4"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.b": [
+                "11000000.10101000.00000001.00001010"
+              ],
+              "r2.b": [
+                "00001010.00000000.00000000.11111111"
+              ],
+              "r3.b": [
+                "10101100.00010000.01000000.00000011"
+              ],
+              "r4.b": [
+                "00001000.00001000.00000100.00000100"
+              ]
+            },
+            "giaiThich": "<p>192.168.1.10 = 11000000.10101000.00000001.00001010; 10.0.0.255 = 00001010.00000000.00000000.11111111; 172.16.64.3 = 10101100.00010000.01000000.00000011; 8.8.4.4 = 00001000.00001000.00000100.00000100.</p><p><i>VI: Đổi từng octet riêng, giữ dấu chấm.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Converting the whole address as one number."
+        },
+        {
+          "loi": "Dropping leading zeros inside an octet."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "dotted decimal",
+          "vi": "dạng thập phân có chấm"
+        }
+      ]
+    },
+    {
+      "title": "Binary 5 — Write ipToBinary(ip)",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "binary conversion"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Write <code>ipToBinary(ip)</code> that turns a dotted-decimal IPv4 string into four dot-separated 8-bit groups, e.g. <code>\"192.168.1.1\"</code> → <code>\"11000000.10101000.00000001.00000001\"</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>ipToBinary(ip)</code> đổi chuỗi IPv4 thập phân có chấm thành bốn nhóm 8 bit cách nhau bằng dấu chấm, vd <code>\"192.168.1.1\"</code> → <code>\"11000000.10101000.00000001.00000001\"</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "ipToBinary(\"192.168.1.1\")",
+          "output": "\"11000000.10101000.00000001.00000001\"",
+          "explanation": "First sample case.|||Ca mẫu đầu tiên."
+        }
+      ],
+      "hintsJson": [
+        "split(\".\") then map each part with Number(x).toString(2).",
+        "Pad on the left with \"0\" until the length is 8."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function ipToBinary(ip) {\n  // Write your solution here\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction ipToBinary(ip) {\n  return ip.split('.').map(function (o) { var s = Number(o).toString(2); while (s.length < 8) s = '0' + s; return s; }).join('.');\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each octet is independent: convert, pad to 8, join.</p><p><i>VI: Mỗi octet độc lập: đổi, đệm đủ 8, nối lại.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: ipToBinary(\"192.168.1.1\")",
+              "vi": "Ca 1"
+            },
+            "goi": "ipToBinary(\"192.168.1.1\")",
+            "mongDoi": "11000000.10101000.00000001.00000001"
+          },
+          {
+            "moTa": {
+              "en": "Case 2: ipToBinary(\"0.0.0.0\")",
+              "vi": "Ca 2"
+            },
+            "goi": "ipToBinary(\"0.0.0.0\")",
+            "mongDoi": "00000000.00000000.00000000.00000000"
+          },
+          {
+            "moTa": {
+              "en": "Case 3: ipToBinary(\"255.255.255.255\")",
+              "vi": "Ca 3"
+            },
+            "goi": "ipToBinary(\"255.255.255.255\")",
+            "mongDoi": "11111111.11111111.11111111.11111111"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "ipToBinary(\"10.1.2.3\")",
+            "mongDoi": "00001010.00000001.00000010.00000011",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "ipToBinary(\"172.16.0.254\")",
+            "mongDoi": "10101100.00010000.00000000.11111110",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "ipToBinary(\"8.8.8.8\")",
+            "mongDoi": "00001000.00001000.00001000.00001000",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting padStart/padding so 1 becomes \"1\" instead of \"00000001\"."
+        },
+        {
+          "loi": "Joining with \"\" instead of \".\"."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Binary 6 — Write hexToIp(hex)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "hexadecimal",
+        "IPv4"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Write <code>hexToIp(hex)</code>: <code>hex</code> is 8 hexadecimal digits (upper or lower case, optionally prefixed with <code>0x</code>) holding a 32-bit IPv4 address, e.g. <code>\"C0A80164\"</code> → <code>\"192.168.1.100\"</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>hexToIp(hex)</code>: <code>hex</code> gồm 8 chữ số hex (hoa hoặc thường, có thể có tiền tố <code>0x</code>) chứa địa chỉ IPv4 32 bit, vd <code>\"C0A80164\"</code> → <code>\"192.168.1.100\"</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "hexToIp(\"C0A80164\")",
+          "output": "\"192.168.1.100\"",
+          "explanation": "First sample case.|||Ca mẫu đầu tiên."
+        }
+      ],
+      "hintsJson": [
+        "Strip an optional 0x prefix first.",
+        "Every 2 hex digits are one octet: parseInt(pair, 16)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function hexToIp(hex) {\n  // Write your solution here\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction hexToIp(hex) {\n  var s = String(hex).replace(/^0x/i, ''), out = [];\n  for (var i = 0; i < 8; i += 2) out.push(parseInt(s.substr(i, 2), 16));\n  return out.join('.');\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Two hex digits are exactly one octet, so no arithmetic beyond parseInt is needed.</p><p><i>VI: Hai chữ số hex đúng bằng một octet nên chỉ cần parseInt.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: hexToIp(\"C0A80164\")",
+              "vi": "Ca 1"
+            },
+            "goi": "hexToIp(\"C0A80164\")",
+            "mongDoi": "192.168.1.100"
+          },
+          {
+            "moTa": {
+              "en": "Case 2: hexToIp(\"0x0A000001\")",
+              "vi": "Ca 2"
+            },
+            "goi": "hexToIp(\"0x0A000001\")",
+            "mongDoi": "10.0.0.1"
+          },
+          {
+            "moTa": {
+              "en": "Case 3: hexToIp(\"ffffffff\")",
+              "vi": "Ca 3"
+            },
+            "goi": "hexToIp(\"ffffffff\")",
+            "mongDoi": "255.255.255.255"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "hexToIp(\"00000000\")",
+            "mongDoi": "0.0.0.0",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "hexToIp(\"AC10FE01\")",
+            "mongDoi": "172.16.254.1",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "hexToIp(\"0x08080808\")",
+            "mongDoi": "8.8.8.8",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "hexToIp(\"7F000001\")",
+            "mongDoi": "127.0.0.1",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Parsing the whole 8 digits as one number and forgetting to split into octets."
+        },
+        {
+          "loi": "Not handling the 0x prefix or lowercase digits."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

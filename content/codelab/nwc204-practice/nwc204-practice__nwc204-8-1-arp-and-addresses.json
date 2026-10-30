@@ -1,0 +1,855 @@
+{
+  "trackSlug": "nwc204-practice",
+  "moduleSlug": "nwc204-8-1-arp-and-addresses",
+  "lesson": {
+    "course": "nwc204-computer-networking",
+    "slug": "nwc204-8-2-arp-va-neighbor-discovery"
+  },
+  "exercises": [
+    {
+      "title": "ARP 1 — Why two addresses and what ARP does",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "ARP"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Concepts of ARP.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Khái niệm về ARP.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "ARP works only inside one broadcast domain.",
+        "Request = broadcast, reply = unicast."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# ARP 1 — Why two addresses and what ARP does\n\nAnswer in the answer panel (no code needed).\n\n1. ARP resolves …ARP phân giải …\n2. An ARP request is sent to …Yêu cầu ARP được gửi tới …\n3. An ARP reply is sent …Phản hồi ARP được gửi …\n4. To reach a host on another network, a PC ARPs for …Để tới host ở mạng khác, PC ARP cho …\n5. The ARP cache entries are kept …Mục trong ARP cache được giữ …\n6. IPv6 replaces ARP with …IPv6 thay ARP bằng …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# ARP 1 — Why two addresses and what ARP does — answer key\n\n1. ARP resolves …ARP phân giải …\n   Answer: a) an IPv4 address to a MAC address\n   IP says who; MAC says which NIC on this link.VI: IP nói là ai; MAC nói NIC nào trên liên kết này.\n\n2. An ARP request is sent to …Yêu cầu ARP được gửi tới …\n   Answer: b) the broadcast MAC address\n   “Who has 192.168.1.1? Tell 192.168.1.10” — everyone on the LAN hears it.VI: “Ai có 192.168.1.1? Báo cho 192.168.1.10” — mọi máy trên LAN đều nghe.\n\n3. An ARP reply is sent …Phản hồi ARP được gửi …\n   Answer: c) unicast to the requester\n   The target already knows the requester’s MAC from the request.VI: Máy đích đã biết MAC của người hỏi từ yêu cầu.\n\n4. To reach a host on another network, a PC ARPs for …Để tới host ở mạng khác, PC ARP cho …\n   Answer: d) the MAC address of its default gateway\n   The remote MAC is unreachable across routers; only the gateway’s MAC matters locally.VI: MAC của host xa không tới được qua router; chỉ MAC gateway có ý nghĩa cục bộ.\n\n5. The ARP cache entries are kept …Mục trong ARP cache được giữ …\n   Answer: a) for a limited time (minutes) and then aged out\n   Windows keeps dynamic entries for a few minutes; Cisco IOS for 4 hours by default.VI: Windows giữ vài phút; Cisco IOS mặc định 4 giờ.\n\n6. IPv6 replaces ARP with …IPv6 thay ARP bằng …\n   Answer: b) Neighbor Discovery (ICMPv6 NS/NA)\n   NS/NA use solicited-node multicast instead of broadcast.VI: NS/NA dùng multicast solicited-node thay cho broadcast.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>ARP resolves …</p><p style=\"opacity:.75;font-size:.92em\"><i>ARP phân giải …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "an IPv4 address to a MAC address"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a MAC address to an IPv4 address"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a hostname to an IP address"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a port to a service"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>IP says who; MAC says which NIC on this link.</p><p><i>VI: IP nói là ai; MAC nói NIC nào trên liên kết này.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>An ARP request is sent to …</p><p style=\"opacity:.75;font-size:.92em\"><i>Yêu cầu ARP được gửi tới …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the DNS server"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the broadcast MAC address"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the unicast MAC of the target"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the default gateway only"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>“Who has 192.168.1.1? Tell 192.168.1.10” — everyone on the LAN hears it.</p><p><i>VI: “Ai có 192.168.1.1? Báo cho 192.168.1.10” — mọi máy trên LAN đều nghe.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>An ARP reply is sent …</p><p style=\"opacity:.75;font-size:.92em\"><i>Phản hồi ARP được gửi …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "to the router"
+              },
+              {
+                "ma": "b",
+                "noiDung": "multicast"
+              },
+              {
+                "ma": "c",
+                "noiDung": "unicast to the requester"
+              },
+              {
+                "ma": "d",
+                "noiDung": "broadcast to everyone"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The target already knows the requester’s MAC from the request.</p><p><i>VI: Máy đích đã biết MAC của người hỏi từ yêu cầu.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>To reach a host on another network, a PC ARPs for …</p><p style=\"opacity:.75;font-size:.92em\"><i>Để tới host ở mạng khác, PC ARP cho …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the MAC address of the remote host"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the MAC of the DNS server"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the MAC of the ISP"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the MAC address of its default gateway"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The remote MAC is unreachable across routers; only the gateway’s MAC matters locally.</p><p><i>VI: MAC của host xa không tới được qua router; chỉ MAC gateway có ý nghĩa cục bộ.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>The ARP cache entries are kept …</p><p style=\"opacity:.75;font-size:.92em\"><i>Mục trong ARP cache được giữ …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "for a limited time (minutes) and then aged out"
+              },
+              {
+                "ma": "b",
+                "noiDung": "forever"
+              },
+              {
+                "ma": "c",
+                "noiDung": "only on routers"
+              },
+              {
+                "ma": "d",
+                "noiDung": "for exactly one packet"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Windows keeps dynamic entries for a few minutes; Cisco IOS for 4 hours by default.</p><p><i>VI: Windows giữ vài phút; Cisco IOS mặc định 4 giờ.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>IPv6 replaces ARP with …</p><p style=\"opacity:.75;font-size:.92em\"><i>IPv6 thay ARP bằng …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "DNS"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Neighbor Discovery (ICMPv6 NS/NA)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "RARP"
+              },
+              {
+                "ma": "d",
+                "noiDung": "DHCPv6"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>NS/NA use solicited-node multicast instead of broadcast.</p><p><i>VI: NS/NA dùng multicast solicited-node thay cho broadcast.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Saying a PC ARPs for the server across the Internet."
+        },
+        {
+          "loi": "Believing the ARP reply is broadcast."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "ARP cache",
+          "vi": "bộ nhớ đệm ARP"
+        }
+      ]
+    },
+    {
+      "title": "ARP 2 — Order the steps for a remote destination",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "ARP flow"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>PC1 (192.168.1.10/24, gateway 192.168.1.1) pings a server on another network for the first time. ARP caches are empty. Put the steps in order.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>PC1 (192.168.1.10/24, gateway 192.168.1.1) ping server ở mạng khác lần đầu. ARP cache đều rỗng. Sắp các bước theo thứ tự.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The AND test comes before any ARP.",
+        "ARP is for the gateway, not the server."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# ARP 2 — Order the steps for a remote destination\n\nAnswer in the answer panel (no code needed).\n\n1. First ping to a remote hostLần ping đầu tới host xa\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# ARP 2 — Order the steps for a remote destination — answer key\n\n1. First ping to a remote hostLần ping đầu tới host xa\n   Answer: s1) PC1 sees the server is NOT in its network (AND with the mask)  →  s2) PC1 broadcasts an ARP request for 192.168.1.1  →  s3) The router replies with its MAC address (unicast)  →  s4) PC1 builds the ICMP echo: dst IP = server, dst MAC = router’s MAC  →  s5) The router routes the packet and sends it out of the next interface in a new frame\n   The destination IP stays the server; the destination MAC is the gateway’s.VI: IP đích vẫn là server; MAC đích là của gateway.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The destination IP stays the server; the destination MAC is the gateway’s.</p><p><i>VI: IP đích vẫn là server; MAC đích là của gateway.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>First ping to a remote host</p><p style=\"opacity:.75;font-size:.92em\"><i>Lần ping đầu tới host xa</i></p>",
+            "muc": [
+              {
+                "ma": "s3",
+                "noiDung": "The router replies with its MAC address (unicast)"
+              },
+              {
+                "ma": "s4",
+                "noiDung": "PC1 builds the ICMP echo: dst IP = server, dst MAC = router’s MAC"
+              },
+              {
+                "ma": "s5",
+                "noiDung": "The router routes the packet and sends it out of the next interface in a new frame"
+              },
+              {
+                "ma": "s1",
+                "noiDung": "PC1 sees the server is NOT in its network (AND with the mask)"
+              },
+              {
+                "ma": "s2",
+                "noiDung": "PC1 broadcasts an ARP request for 192.168.1.1"
+              }
+            ],
+            "dapAn": [
+              "s1",
+              "s2",
+              "s3",
+              "s4",
+              "s5"
+            ],
+            "giaiThich": "<p>The destination IP stays the server; the destination MAC is the gateway’s.</p><p><i>VI: IP đích vẫn là server; MAC đích là của gateway.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "ARPing for the server’s IP."
+        },
+        {
+          "loi": "Putting the router’s IP in the destination IP field."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "echo request",
+          "vi": "yêu cầu echo"
+        }
+      ]
+    },
+    {
+      "title": "ARP 3 — Headers on every link",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "hop-by-hop addressing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>A packet goes PC-A → R1 → R2 → SRV (no NAT). The interface MACs are: PC-A, R1-g0 (towards the PC), R1-g1, R2-g0, R2-g1 (towards the server) and SRV. IPs: PC-A 192.168.1.10, SRV 10.0.9.9. Fill the addresses in the frame on each of the three links.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Gói đi PC-A → R1 → R2 → SRV (không NAT). MAC các giao diện: PC-A, R1-g0 (phía PC), R1-g1, R2-g0, R2-g1 (phía server) và SRV. IP: PC-A 192.168.1.10, SRV 10.0.9.9. Điền địa chỉ trong frame trên từng liên kết trong ba liên kết.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The destination MAC is the next device’s MAC on that link.",
+        "IPs never change without NAT."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# ARP 3 — Headers on every link\n\nAnswer in the answer panel (no code needed).\n\n1. Frames on the three linksFrame trên ba liên kết\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# ARP 3 — Headers on every link — answer key\n\n1. Frames on the three linksFrame trên ba liên kết\n   - r1.s: PC-A\n   - r1.d: R1-g0\n   - r1.si: 192.168.1.10\n   - r1.di: 10.0.9.9\n   - r2.s: R1-g1\n   - r2.d: R2-g0\n   - r2.si: 192.168.1.10\n   - r2.di: 10.0.9.9\n   - r3.s: R2-g1\n   - r3.d: SRV\n   - r3.si: 192.168.1.10\n   - r3.di: 10.0.9.9\n   MACs change at every link (src = sender’s outgoing interface, dst = next hop’s incoming interface); IPs stay PC-A → SRV end to end.VI: MAC đổi ở mỗi liên kết (nguồn = giao diện ra của bên gửi, đích = giao diện vào của chặng kế); IP giữ nguyên PC-A → SRV.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>MACs change at every link (src = sender’s outgoing interface, dst = next hop’s incoming interface); IPs stay PC-A → SRV end to end.</p><p><i>VI: MAC đổi ở mỗi liên kết (nguồn = giao diện ra của bên gửi, đích = giao diện vào của chặng kế); IP giữ nguyên PC-A → SRV.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Frames on the three links</p><p style=\"opacity:.75;font-size:.92em\"><i>Frame trên ba liên kết</i></p>",
+            "cot": [
+              {
+                "ma": "l",
+                "ten": "Link"
+              },
+              {
+                "ma": "s",
+                "ten": "Src MAC",
+                "luaChon": [
+                  "PC-A",
+                  "R1-g0",
+                  "R1-g1",
+                  "R2-g0",
+                  "R2-g1",
+                  "SRV"
+                ]
+              },
+              {
+                "ma": "d",
+                "ten": "Dst MAC",
+                "luaChon": [
+                  "PC-A",
+                  "R1-g0",
+                  "R1-g1",
+                  "R2-g0",
+                  "R2-g1",
+                  "SRV"
+                ]
+              },
+              {
+                "ma": "si",
+                "ten": "Src IP",
+                "luaChon": [
+                  "192.168.1.10",
+                  "10.0.9.9"
+                ]
+              },
+              {
+                "ma": "di",
+                "ten": "Dst IP",
+                "luaChon": [
+                  "192.168.1.10",
+                  "10.0.9.9"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "l": "PC-A → R1"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "l": "R1 → R2"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "l": "R2 → SRV"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.s": [
+                "PC-A"
+              ],
+              "r1.d": [
+                "R1-g0"
+              ],
+              "r1.si": [
+                "192.168.1.10"
+              ],
+              "r1.di": [
+                "10.0.9.9"
+              ],
+              "r2.s": [
+                "R1-g1"
+              ],
+              "r2.d": [
+                "R2-g0"
+              ],
+              "r2.si": [
+                "192.168.1.10"
+              ],
+              "r2.di": [
+                "10.0.9.9"
+              ],
+              "r3.s": [
+                "R2-g1"
+              ],
+              "r3.d": [
+                "SRV"
+              ],
+              "r3.si": [
+                "192.168.1.10"
+              ],
+              "r3.di": [
+                "10.0.9.9"
+              ]
+            },
+            "giaiThich": "<p>MACs change at every link (src = sender’s outgoing interface, dst = next hop’s incoming interface); IPs stay PC-A → SRV end to end.</p><p><i>VI: MAC đổi ở mỗi liên kết (nguồn = giao diện ra của bên gửi, đích = giao diện vào của chặng kế); IP giữ nguyên PC-A → SRV.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Writing SRV’s MAC on the first link."
+        },
+        {
+          "loi": "Changing the IP addresses at the routers."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "next hop",
+          "vi": "chặng kế"
+        }
+      ]
+    },
+    {
+      "title": "ARP 4 — Write hopHeaders(src, routers, dst)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "hop-by-hop addressing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Write <code>hopHeaders(src, routers, dst)</code> where <code>src</code>/<code>dst</code> are <code>{ ip, mac }</code> and <code>routers</code> is an array of <code>{ inMac, outMac }</code> in path order. Return one header per link: <code>{ srcMac, dstMac, srcIp, dstIp }</code>. With no routers there is one link (both hosts on the same LAN).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>hopHeaders(src, routers, dst)</code> với <code>src</code>/<code>dst</code> là <code>{ ip, mac }</code> và <code>routers</code> là mảng <code>{ inMac, outMac }</code> theo thứ tự đường đi. Trả một header cho mỗi liên kết: <code>{ srcMac, dstMac, srcIp, dstIp }</code>. Không có router thì chỉ một liên kết (hai host cùng LAN).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "hopHeaders({\"ip\":\"192.168.1.10\",\"mac\":\"PC-A\"}, [{\"inMac\":\"R1-g0\",\"outMac\":\"R1-g1\"},{\"inMac\":\"R2-g0\",\"outMac\":\"R2-g1\"}], {\"ip\":\"10.0.9.9\",\"mac\":\"SRV\"})",
+          "output": "[{\"srcMac\":\"PC-A\",\"dstMac\":\"R1-g0\",\"srcIp\":\"192.168.1.10\",\"dstIp\":\"10.0.9.9\"},{\"srcMac\":\"R1-g1\",\"dstMac\":\"R2-g0\",\"srcIp\":\"192.168.1.10\",\"dstIp\":\"10.0.9.9\"},{\"srcMac\":\"R2-g1\",\"dstMac\":\"SRV\",\"srcIp\":\"192.168.1.10\",\"dstIp\":\"10.0.9.9\"}]",
+          "explanation": "First sample case.|||Ca mẫu đầu tiên."
+        }
+      ],
+      "hintsJson": [
+        "There are routers.length + 1 links.",
+        "Link i leaves router i − 1 (outMac) and enters router i (inMac)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function hopHeaders(src, routers, dst) {\n  // Write your solution here\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction hopHeaders(src, routers, dst) {\n  var out = [];\n  for (var i = 0; i <= routers.length; i++) {\n    out.push({ srcMac: i === 0 ? src.mac : routers[i - 1].outMac, dstMac: i === routers.length ? dst.mac : routers[i].inMac, srcIp: src.ip, dstIp: dst.ip });\n  }\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is what Wireshark shows at each hop: same IPs, different MACs.</p><p><i>VI: Đây là điều Wireshark hiển thị ở mỗi chặng: IP giống, MAC khác.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: hopHeaders({\"ip\":\"192.168.1.10\",\"mac\":\"PC-A\"}, [{\"inMac\":\"R1-g0\",\"outMac\":\"R1-g1\")",
+              "vi": "Ca 1"
+            },
+            "goi": "hopHeaders({\"ip\":\"192.168.1.10\",\"mac\":\"PC-A\"}, [{\"inMac\":\"R1-g0\",\"outMac\":\"R1-g1\"},{\"inMac\":\"R2-g0\",\"outMac\":\"R2-g1\"}], {\"ip\":\"10.0.9.9\",\"mac\":\"SRV\"})",
+            "mongDoi": [
+              {
+                "srcMac": "PC-A",
+                "dstMac": "R1-g0",
+                "srcIp": "192.168.1.10",
+                "dstIp": "10.0.9.9"
+              },
+              {
+                "srcMac": "R1-g1",
+                "dstMac": "R2-g0",
+                "srcIp": "192.168.1.10",
+                "dstIp": "10.0.9.9"
+              },
+              {
+                "srcMac": "R2-g1",
+                "dstMac": "SRV",
+                "srcIp": "192.168.1.10",
+                "dstIp": "10.0.9.9"
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 2: hopHeaders({\"ip\":\"192.168.1.10\",\"mac\":\"PC-A\"}, [], {\"ip\":\"192.168.1.20\",\"mac\":\"PC)",
+              "vi": "Ca 2"
+            },
+            "goi": "hopHeaders({\"ip\":\"192.168.1.10\",\"mac\":\"PC-A\"}, [], {\"ip\":\"192.168.1.20\",\"mac\":\"PC-B\"})",
+            "mongDoi": [
+              {
+                "srcMac": "PC-A",
+                "dstMac": "PC-B",
+                "srcIp": "192.168.1.10",
+                "dstIp": "192.168.1.20"
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 3: hopHeaders({\"ip\":\"192.168.1.10\",\"mac\":\"PC-A\"}, [{\"inMac\":\"G0\",\"outMac\":\"G1\"}], {\")",
+              "vi": "Ca 3"
+            },
+            "goi": "hopHeaders({\"ip\":\"192.168.1.10\",\"mac\":\"PC-A\"}, [{\"inMac\":\"G0\",\"outMac\":\"G1\"}], {\"ip\":\"10.0.9.9\",\"mac\":\"SRV\"})",
+            "mongDoi": [
+              {
+                "srcMac": "PC-A",
+                "dstMac": "G0",
+                "srcIp": "192.168.1.10",
+                "dstIp": "10.0.9.9"
+              },
+              {
+                "srcMac": "G1",
+                "dstMac": "SRV",
+                "srcIp": "192.168.1.10",
+                "dstIp": "10.0.9.9"
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "hopHeaders({\"ip\":\"1.1.1.1\",\"mac\":\"a\"}, [{\"inMac\":\"b\",\"outMac\":\"c\"},{\"inMac\":\"d\",\"outMac\":\"e\"},{\"inMac\":\"f\",\"outMac\":\"g\"}], {\"ip\":\"2.2.2.2\",\"mac\":\"h\"})",
+            "mongDoi": [
+              {
+                "srcMac": "a",
+                "dstMac": "b",
+                "srcIp": "1.1.1.1",
+                "dstIp": "2.2.2.2"
+              },
+              {
+                "srcMac": "c",
+                "dstMac": "d",
+                "srcIp": "1.1.1.1",
+                "dstIp": "2.2.2.2"
+              },
+              {
+                "srcMac": "e",
+                "dstMac": "f",
+                "srcIp": "1.1.1.1",
+                "dstIp": "2.2.2.2"
+              },
+              {
+                "srcMac": "g",
+                "dstMac": "h",
+                "srcIp": "1.1.1.1",
+                "dstIp": "2.2.2.2"
+              }
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using the destination host’s MAC on every link."
+        },
+        {
+          "loi": "Off-by-one on the first and last link."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "ARP 5 — Read the ARP table and symptoms",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 10,
+      "points": 30,
+      "concepts": [
+        "ARP troubleshooting"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Diagnose with arp -a / show ip arp.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chẩn đoán với arp -a / show ip arp.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Incomplete = no answer. Duplicate MACs for different IPs need explanation.",
+        "ARP has no authentication."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# ARP 5 — Read the ARP table and symptoms\n\nAnswer in the answer panel (no code needed).\n\n1. The ARP table shows two different IPs with the SAME MAC address, 00:50:56:aa:bb:cc, and one is the gateway. Possible meaning?Bảng ARP có hai IP khác nhau cùng một MAC 00:50:56:aa:bb:cc, và một là gateway. Có thể là?\n2. “Incomplete” appears for 192.168.1.50 in show ip arp. It means …“Incomplete” xuất hiện cho 192.168.1.50 trong show ip arp. Nghĩa là …\n3. A gratuitous ARP is …Gratuitous ARP là …\n4. Which attack poisons ARP caches so that the attacker sits in the middle?Tấn công nào làm nhiễm ARP cache để kẻ tấn công nằm giữa?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# ARP 5 — Read the ARP table and symptoms — answer key\n\n1. The ARP table shows two different IPs with the SAME MAC address, 00:50:56:aa:bb:cc, and one is the gateway. Possible meaning?Bảng ARP có hai IP khác nhau cùng một MAC 00:50:56:aa:bb:cc, và một là gateway. Có thể là?\n   Answer: a) Proxy ARP or ARP spoofing; investigate\n   The gateway’s MAC being shared with a second IP is suspicious.VI: MAC của gateway dùng chung với một IP khác là đáng ngờ.\n\n2. “Incomplete” appears for 192.168.1.50 in show ip arp. It means …“Incomplete” xuất hiện cho 192.168.1.50 trong show ip arp. Nghĩa là …\n   Answer: b) the ARP request was sent but no reply came\n   The host is down, unplugged or on a different VLAN.VI: Host tắt, chưa cắm hoặc ở VLAN khác.\n\n3. A gratuitous ARP is …Gratuitous ARP là …\n   Answer: c) a host announcing its own IP-to-MAC mapping (also used to detect duplicate IPs)\n   It updates other hosts’ caches after a change.VI: Nó cập nhật cache của các máy khác sau thay đổi.\n\n4. Which attack poisons ARP caches so that the attacker sits in the middle?Tấn công nào làm nhiễm ARP cache để kẻ tấn công nằm giữa?\n   Answer: d) ARP spoofing / poisoning\n   Dynamic ARP Inspection on the switch defends against it.VI: Dynamic ARP Inspection trên switch chống lại nó.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The ARP table shows two different IPs with the SAME MAC address, 00:50:56:aa:bb:cc, and one is the gateway. Possible meaning?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bảng ARP có hai IP khác nhau cùng một MAC 00:50:56:aa:bb:cc, và một là gateway. Có thể là?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Proxy ARP or ARP spoofing; investigate"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Normal behaviour of every LAN"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The two hosts are one switch port"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The DHCP lease expired"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The gateway’s MAC being shared with a second IP is suspicious.</p><p><i>VI: MAC của gateway dùng chung với một IP khác là đáng ngờ.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>“Incomplete” appears for 192.168.1.50 in show ip arp. It means …</p><p style=\"opacity:.75;font-size:.92em\"><i>“Incomplete” xuất hiện cho 192.168.1.50 trong show ip arp. Nghĩa là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the MAC is multicast"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the ARP request was sent but no reply came"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the entry is permanent"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the host is the router itself"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The host is down, unplugged or on a different VLAN.</p><p><i>VI: Host tắt, chưa cắm hoặc ở VLAN khác.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A gratuitous ARP is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Gratuitous ARP là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a DNS cache flush"
+              },
+              {
+                "ma": "b",
+                "noiDung": "an ARP request for the gateway"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a host announcing its own IP-to-MAC mapping (also used to detect duplicate IPs)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a reply to the router"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>It updates other hosts’ caches after a change.</p><p><i>VI: Nó cập nhật cache của các máy khác sau thay đổi.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Which attack poisons ARP caches so that the attacker sits in the middle?</p><p style=\"opacity:.75;font-size:.92em\"><i>Tấn công nào làm nhiễm ARP cache để kẻ tấn công nằm giữa?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "DNS amplification"
+              },
+              {
+                "ma": "b",
+                "noiDung": "SYN flood"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Smurf"
+              },
+              {
+                "ma": "d",
+                "noiDung": "ARP spoofing / poisoning"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Dynamic ARP Inspection on the switch defends against it.</p><p><i>VI: Dynamic ARP Inspection trên switch chống lại nó.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating an incomplete entry as a router fault."
+        },
+        {
+          "loi": "Trusting an ARP table without cross-checking the switch."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "ARP spoofing",
+          "vi": "giả mạo ARP"
+        }
+      ]
+    }
+  ]
+}

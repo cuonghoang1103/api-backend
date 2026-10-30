@@ -1,0 +1,553 @@
+{
+  "trackSlug": "nwc204-practice",
+  "moduleSlug": "nwc204-14-1-application-protocols",
+  "lesson": {
+    "course": "nwc204-computer-networking",
+    "slug": "nwc204-14-2-web-email-dns-dhcp-chia-se-tep"
+  },
+  "exercises": [
+    {
+      "title": "Apps 1 — DNS, HTTP, DHCP concepts",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "DNS",
+        "DHCP",
+        "HTTP"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Core application-layer protocols.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các giao thức tầng ứng dụng cốt lõi.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "DNS = names, DHCP = addresses, HTTP = web.",
+        "DHCP uses UDP 67 (server) and 68 (client)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Apps 1 — DNS, HTTP, DHCP concepts\n\nAnswer in the answer panel (no code needed).\n\n1. A DNS “A” record maps a name to …Bản ghi DNS “A” ánh xạ tên sang …\n2. DNS normally uses …DNS thường dùng …\n3. HTTP status code 404 means …Mã trạng thái HTTP 404 nghĩa là …\n4. The four DHCP messages are …Bốn thông điệp DHCP là …\n5. A DHCP lease gives a client …Một lease DHCP cấp cho client …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Apps 1 — DNS, HTTP, DHCP concepts — answer key\n\n1. A DNS “A” record maps a name to …Bản ghi DNS “A” ánh xạ tên sang …\n   Answer: c) an IPv4 address\n   AAAA = IPv6, MX = mail, CNAME = alias, NS = name server, PTR = reverse.VI: AAAA = IPv6, MX = mail, CNAME = bí danh, NS = máy chủ tên, PTR = ngược.\n\n2. DNS normally uses …DNS thường dùng …\n   Answer: d) UDP port 53 (TCP for big answers and zone transfers)\n   Short queries fit in one UDP datagram.VI: Truy vấn ngắn vừa trong một datagram UDP.\n\n3. HTTP status code 404 means …Mã trạng thái HTTP 404 nghĩa là …\n   Answer: a) the resource was not found\n   5xx = server errors, 4xx = client errors, 3xx = redirects, 2xx = success.VI: 5xx = lỗi server, 4xx = lỗi client, 3xx = chuyển hướng, 2xx = thành công.\n\n4. The four DHCP messages are …Bốn thông điệp DHCP là …\n   Answer: b) Discover, Offer, Request, Acknowledge\n   “DORA”. Discover and Request are broadcasts.VI: “DORA”. Discover và Request là broadcast.\n\n5. A DHCP lease gives a client …Một lease DHCP cấp cho client …\n   Answer: c) IP address, mask, default gateway and DNS server for a limited time\n   The client renews at 50% of the lease time.VI: Client gia hạn ở 50% thời gian lease.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A DNS “A” record maps a name to …</p><p style=\"opacity:.75;font-size:.92em\"><i>Bản ghi DNS “A” ánh xạ tên sang …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a mail server"
+              },
+              {
+                "ma": "b",
+                "noiDung": "another name"
+              },
+              {
+                "ma": "c",
+                "noiDung": "an IPv4 address"
+              },
+              {
+                "ma": "d",
+                "noiDung": "an IPv6 address"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>AAAA = IPv6, MX = mail, CNAME = alias, NS = name server, PTR = reverse.</p><p><i>VI: AAAA = IPv6, MX = mail, CNAME = bí danh, NS = máy chủ tên, PTR = ngược.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>DNS normally uses …</p><p style=\"opacity:.75;font-size:.92em\"><i>DNS thường dùng …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "TCP port 80"
+              },
+              {
+                "ma": "b",
+                "noiDung": "UDP port 67"
+              },
+              {
+                "ma": "c",
+                "noiDung": "TCP port 25"
+              },
+              {
+                "ma": "d",
+                "noiDung": "UDP port 53 (TCP for big answers and zone transfers)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Short queries fit in one UDP datagram.</p><p><i>VI: Truy vấn ngắn vừa trong một datagram UDP.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>HTTP status code 404 means …</p><p style=\"opacity:.75;font-size:.92em\"><i>Mã trạng thái HTTP 404 nghĩa là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the resource was not found"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the server crashed"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the client must log in"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the request was redirected"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>5xx = server errors, 4xx = client errors, 3xx = redirects, 2xx = success.</p><p><i>VI: 5xx = lỗi server, 4xx = lỗi client, 3xx = chuyển hướng, 2xx = thành công.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>The four DHCP messages are …</p><p style=\"opacity:.75;font-size:.92em\"><i>Bốn thông điệp DHCP là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "SYN, SYN-ACK, ACK, FIN"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Discover, Offer, Request, Acknowledge"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Hello, Offer, Accept, Done"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Request, Reply, Ack, Bye"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>“DORA”. Discover and Request are broadcasts.</p><p><i>VI: “DORA”. Discover và Request là broadcast.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>A DHCP lease gives a client …</p><p style=\"opacity:.75;font-size:.92em\"><i>Một lease DHCP cấp cho client …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a MAC address"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a domain name"
+              },
+              {
+                "ma": "c",
+                "noiDung": "IP address, mask, default gateway and DNS server for a limited time"
+              },
+              {
+                "ma": "d",
+                "noiDung": "only an IP address forever"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The client renews at 50% of the lease time.</p><p><i>VI: Client gia hạn ở 50% thời gian lease.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Confusing 4xx and 5xx."
+        },
+        {
+          "loi": "Thinking DNS runs over TCP only."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "lease",
+          "vi": "thời hạn cấp phát"
+        }
+      ]
+    },
+    {
+      "title": "Apps 2 — Order DNS and DHCP exchanges",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "DNS resolution",
+        "DORA"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Put each exchange in order.</p><p><i>This set has 2 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sắp thứ tự từng cuộc trao đổi.</p><p><i>Bộ này có 2 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "DNS goes from general (root) to specific.",
+        "DHCP spells DORA."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Apps 2 — Order DNS and DHCP exchanges\n\nAnswer in the answer panel (no code needed).\n\n1. Recursive DNS lookup of www.example.com (empty caches)Tra DNS đệ quy www.example.com (cache rỗng)\n2. DHCPDHCP\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Apps 2 — Order DNS and DHCP exchanges — answer key\n\n1. Recursive DNS lookup of www.example.com (empty caches)Tra DNS đệ quy www.example.com (cache rỗng)\n   Answer: s1) The client asks its recursive resolver  →  s2) The resolver asks a root server and gets the .com name servers  →  s3) The resolver asks a .com TLD server and gets example.com’s name servers  →  s4) The resolver asks the example.com authoritative server and gets the A record  →  s5) The resolver caches the answer and returns it to the client\n   Root → TLD → authoritative; the resolver does the legwork and caches.VI: Root → TLD → authoritative; resolver làm việc nặng và lưu cache.\n\n2. DHCPDHCP\n   Answer: s1) Client broadcasts DHCPDISCOVER  →  s2) Server unicasts/broadcasts DHCPOFFER  →  s3) Client broadcasts DHCPREQUEST for the offered address  →  s4) Server sends DHCPACK confirming the lease\n   D-O-R-A.VI: D-O-R-A.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Root → TLD → authoritative; the resolver does the legwork and caches.</p><p><i>VI: Root → TLD → authoritative; resolver làm việc nặng và lưu cache.</i></p><p>D-O-R-A.</p><p><i>VI: D-O-R-A.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Recursive DNS lookup of www.example.com (empty caches)</p><p style=\"opacity:.75;font-size:.92em\"><i>Tra DNS đệ quy www.example.com (cache rỗng)</i></p>",
+            "muc": [
+              {
+                "ma": "s3",
+                "noiDung": "The resolver asks a .com TLD server and gets example.com’s name servers"
+              },
+              {
+                "ma": "s4",
+                "noiDung": "The resolver asks the example.com authoritative server and gets the A record"
+              },
+              {
+                "ma": "s5",
+                "noiDung": "The resolver caches the answer and returns it to the client"
+              },
+              {
+                "ma": "s1",
+                "noiDung": "The client asks its recursive resolver"
+              },
+              {
+                "ma": "s2",
+                "noiDung": "The resolver asks a root server and gets the .com name servers"
+              }
+            ],
+            "dapAn": [
+              "s1",
+              "s2",
+              "s3",
+              "s4",
+              "s5"
+            ],
+            "giaiThich": "<p>Root → TLD → authoritative; the resolver does the legwork and caches.</p><p><i>VI: Root → TLD → authoritative; resolver làm việc nặng và lưu cache.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>DHCP</p><p style=\"opacity:.75;font-size:.92em\"><i>DHCP</i></p>",
+            "muc": [
+              {
+                "ma": "s2",
+                "noiDung": "Server unicasts/broadcasts DHCPOFFER"
+              },
+              {
+                "ma": "s3",
+                "noiDung": "Client broadcasts DHCPREQUEST for the offered address"
+              },
+              {
+                "ma": "s4",
+                "noiDung": "Server sends DHCPACK confirming the lease"
+              },
+              {
+                "ma": "s1",
+                "noiDung": "Client broadcasts DHCPDISCOVER"
+              }
+            ],
+            "dapAn": [
+              "s1",
+              "s2",
+              "s3",
+              "s4"
+            ],
+            "giaiThich": "<p>D-O-R-A.</p><p><i>VI: D-O-R-A.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Asking the authoritative server before the TLD."
+        },
+        {
+          "loi": "Skipping the Request step after the Offer."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "resolver",
+          "vi": "bộ phân giải"
+        },
+        {
+          "en": "authoritative",
+          "vi": "có thẩm quyền"
+        }
+      ]
+    },
+    {
+      "title": "Apps 3 — Protocol, port and transport",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "ports"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Fill the default port number and transport protocol of each service.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Điền số cổng mặc định và giao thức vận chuyển của từng dịch vụ.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Think “is a handshake worth it?” — small request/response protocols use UDP.",
+        "DNS does both."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Apps 3 — Protocol, port and transport\n\nAnswer in the answer panel (no code needed).\n\n1. ServicesDịch vụ\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Apps 3 — Protocol, port and transport — answer key\n\n1. ServicesDịch vụ\n   - r1.p: 80\n   - r1.t: TCP\n   - r2.p: 443\n   - r2.t: TCP\n   - r3.p: 22\n   - r3.t: TCP\n   - r4.p: 53\n   - r4.t: TCP and UDP\n   - r5.p: 67\n   - r5.t: UDP\n   - r6.p: 123\n   - r6.t: UDP\n   - r7.p: 25\n   - r7.t: TCP\n   - r8.p: 3389\n   - r8.t: TCP\n   DNS uses UDP for queries and TCP for large replies; DHCP and NTP are UDP; the rest are TCP.VI: DNS dùng UDP cho truy vấn và TCP cho phản hồi lớn; DHCP và NTP là UDP; còn lại là TCP.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>DNS uses UDP for queries and TCP for large replies; DHCP and NTP are UDP; the rest are TCP.</p><p><i>VI: DNS dùng UDP cho truy vấn và TCP cho phản hồi lớn; DHCP và NTP là UDP; còn lại là TCP.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Services</p><p style=\"opacity:.75;font-size:.92em\"><i>Dịch vụ</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Service"
+              },
+              {
+                "ma": "p",
+                "ten": "Port",
+                "luaChon": [
+                  "22",
+                  "25",
+                  "53",
+                  "67",
+                  "80",
+                  "110",
+                  "123",
+                  "143",
+                  "443",
+                  "3389"
+                ]
+              },
+              {
+                "ma": "t",
+                "ten": "Transport",
+                "luaChon": [
+                  "TCP",
+                  "UDP",
+                  "TCP and UDP"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "HTTP"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "HTTPS"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "SSH"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "DNS"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "DHCP server"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "NTP"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "s": "SMTP"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "s": "RDP"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.p": [
+                "80"
+              ],
+              "r1.t": [
+                "TCP"
+              ],
+              "r2.p": [
+                "443"
+              ],
+              "r2.t": [
+                "TCP"
+              ],
+              "r3.p": [
+                "22"
+              ],
+              "r3.t": [
+                "TCP"
+              ],
+              "r4.p": [
+                "53"
+              ],
+              "r4.t": [
+                "TCP and UDP"
+              ],
+              "r5.p": [
+                "67"
+              ],
+              "r5.t": [
+                "UDP"
+              ],
+              "r6.p": [
+                "123"
+              ],
+              "r6.t": [
+                "UDP"
+              ],
+              "r7.p": [
+                "25"
+              ],
+              "r7.t": [
+                "TCP"
+              ],
+              "r8.p": [
+                "3389"
+              ],
+              "r8.t": [
+                "TCP"
+              ]
+            },
+            "giaiThich": "<p>DNS uses UDP for queries and TCP for large replies; DHCP and NTP are UDP; the rest are TCP.</p><p><i>VI: DNS dùng UDP cho truy vấn và TCP cho phản hồi lớn; DHCP và NTP là UDP; còn lại là TCP.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Saying DNS is TCP only."
+        },
+        {
+          "loi": "Mixing port 25 (SMTP) with 110 (POP3)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "well-known port",
+          "vi": "cổng quen thuộc"
+        }
+      ]
+    }
+  ]
+}

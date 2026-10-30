@@ -1,0 +1,992 @@
+{
+  "trackSlug": "nwc204-practice",
+  "moduleSlug": "nwc204-6-2-mac-table",
+  "lesson": {
+    "course": "nwc204-computer-networking",
+    "slug": "nwc204-6-2-bang-mac-va-cach-switch-chuyen-tiep"
+  },
+  "exercises": [
+    {
+      "title": "Switch 1 — Learn, flood, filter, forward",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "MAC table"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>How a Layer 2 switch builds and uses its MAC address table.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Switch tầng 2 xây dựng và dùng bảng địa chỉ MAC thế nào.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Learn from the source, decide by the destination.",
+        "Unknown or broadcast ⇒ flood; known ⇒ one port."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Switch 1 — Learn, flood, filter, forward\n\nAnswer in the answer panel (no code needed).\n\n1. A switch learns MAC addresses from the …Switch học địa chỉ MAC từ …\n2. The destination MAC is not in the table. The switch …MAC đích không có trong bảng. Switch …\n3. A broadcast frame (ff:ff:ff:ff:ff:ff) is …Frame broadcast (ff:ff:ff:ff:ff:ff) được …\n4. If the destination is learned on the same port the frame arrived on, the switch …Nếu đích đã học nằm trên chính cổng frame tới, switch …\n5. An entry that has not been refreshed is removed after the aging time, by default …Một mục không được làm mới sẽ bị xoá sau thời gian aging, mặc định …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Switch 1 — Learn, flood, filter, forward — answer key\n\n1. A switch learns MAC addresses from the …Switch học địa chỉ MAC từ …\n   Answer: d) source MAC of incoming frames\n   It records “source MAC → ingress port”.VI: Nó ghi “MAC nguồn → cổng vào”.\n\n2. The destination MAC is not in the table. The switch …MAC đích không có trong bảng. Switch …\n   Answer: a) floods the frame out of every port except the one it came in on\n   This is called unknown-unicast flooding.VI: Đây gọi là tràn unicast chưa biết.\n\n3. A broadcast frame (ff:ff:ff:ff:ff:ff) is …Frame broadcast (ff:ff:ff:ff:ff:ff) được …\n   Answer: b) always flooded within the VLAN\n   The broadcast address is never a source, so it is never in the table.VI: Địa chỉ broadcast không bao giờ là địa chỉ nguồn nên không có trong bảng.\n\n4. If the destination is learned on the same port the frame arrived on, the switch …Nếu đích đã học nằm trên chính cổng frame tới, switch …\n   Answer: c) filters (discards) it\n   Both devices sit behind the same port (e.g. a hub), so no forwarding is needed.VI: Hai thiết bị cùng sau một cổng (vd hub) nên không cần chuyển.\n\n5. An entry that has not been refreshed is removed after the aging time, by default …Một mục không được làm mới sẽ bị xoá sau thời gian aging, mặc định …\n   Answer: d) 300 seconds on Cisco switches\n   Aging stops the table from filling with stale stations.VI: Aging tránh bảng đầy các trạm đã đi.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A switch learns MAC addresses from the …</p><p style=\"opacity:.75;font-size:.92em\"><i>Switch học địa chỉ MAC từ …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "destination MAC of incoming frames"
+              },
+              {
+                "ma": "b",
+                "noiDung": "ARP replies only"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the DHCP server"
+              },
+              {
+                "ma": "d",
+                "noiDung": "source MAC of incoming frames"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>It records “source MAC → ingress port”.</p><p><i>VI: Nó ghi “MAC nguồn → cổng vào”.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The destination MAC is not in the table. The switch …</p><p style=\"opacity:.75;font-size:.92em\"><i>MAC đích không có trong bảng. Switch …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "floods the frame out of every port except the one it came in on"
+              },
+              {
+                "ma": "b",
+                "noiDung": "drops the frame"
+              },
+              {
+                "ma": "c",
+                "noiDung": "sends it only to the gateway"
+              },
+              {
+                "ma": "d",
+                "noiDung": "asks the sender to retry"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>This is called unknown-unicast flooding.</p><p><i>VI: Đây gọi là tràn unicast chưa biết.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A broadcast frame (ff:ff:ff:ff:ff:ff) is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Frame broadcast (ff:ff:ff:ff:ff:ff) được …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "learned as a source address"
+              },
+              {
+                "ma": "b",
+                "noiDung": "always flooded within the VLAN"
+              },
+              {
+                "ma": "c",
+                "noiDung": "forwarded to one port"
+              },
+              {
+                "ma": "d",
+                "noiDung": "dropped"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The broadcast address is never a source, so it is never in the table.</p><p><i>VI: Địa chỉ broadcast không bao giờ là địa chỉ nguồn nên không có trong bảng.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>If the destination is learned on the same port the frame arrived on, the switch …</p><p style=\"opacity:.75;font-size:.92em\"><i>Nếu đích đã học nằm trên chính cổng frame tới, switch …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "forwards it back"
+              },
+              {
+                "ma": "b",
+                "noiDung": "sends it to the router"
+              },
+              {
+                "ma": "c",
+                "noiDung": "filters (discards) it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "floods it"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Both devices sit behind the same port (e.g. a hub), so no forwarding is needed.</p><p><i>VI: Hai thiết bị cùng sau một cổng (vd hub) nên không cần chuyển.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>An entry that has not been refreshed is removed after the aging time, by default …</p><p style=\"opacity:.75;font-size:.92em\"><i>Một mục không được làm mới sẽ bị xoá sau thời gian aging, mặc định …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "30 seconds"
+              },
+              {
+                "ma": "b",
+                "noiDung": "24 hours"
+              },
+              {
+                "ma": "c",
+                "noiDung": "never"
+              },
+              {
+                "ma": "d",
+                "noiDung": "300 seconds on Cisco switches"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Aging stops the table from filling with stale stations.</p><p><i>VI: Aging tránh bảng đầy các trạm đã đi.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Learning from the destination MAC."
+        },
+        {
+          "loi": "Forwarding a frame back out of its ingress port."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "flooding",
+          "vi": "tràn khung"
+        },
+        {
+          "en": "aging",
+          "vi": "hết hạn mục bảng"
+        }
+      ]
+    },
+    {
+      "title": "Switch 2 — What does the switch do with each frame?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "switch forwarding"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>The table starts empty. Frames arrive in the order shown (A, B, C, D are the source/destination MACs; port numbers are the ingress ports). For each frame choose: <i>flood</i>, <i>filter</i>, or <i>port N</i> (forward out of port N). Note that D and B are both behind port 2 (a hub).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bảng ban đầu rỗng. Frame đến theo thứ tự cho trước (A, B, C, D là MAC nguồn/đích; số cổng là cổng vào). Với mỗi frame chọn: <i>flood</i>, <i>filter</i> hoặc <i>port N</i> (chuyển ra cổng N). Chú ý D và B cùng nằm sau cổng 2 (một hub).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Update the table with the source of each frame first.",
+        "Same-port destination ⇒ filter."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Switch 2 — What does the switch do with each frame?\n\nAnswer in the answer panel (no code needed).\n\n1. ActionsHành động\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Switch 2 — What does the switch do with each frame? — answer key\n\n1. ActionsHành động\n   - r1.a: flood\n   - r2.a: port 1\n   - r3.a: flood\n   - r4.a: port 3\n   - r5.a: filter\n   - r6.a: filter\n   #1 flood; #2 port 1; #3 flood; #4 port 3; #5 filter; #6 filter. The switch learns the source before deciding on the destination.VI: Switch học nguồn trước rồi mới quyết định theo đích.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>#1 flood; #2 port 1; #3 flood; #4 port 3; #5 filter; #6 filter. The switch learns the source before deciding on the destination.</p><p><i>VI: Switch học nguồn trước rồi mới quyết định theo đích.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Actions</p><p style=\"opacity:.75;font-size:.92em\"><i>Hành động</i></p>",
+            "cot": [
+              {
+                "ma": "f",
+                "ten": "Frame"
+              },
+              {
+                "ma": "a",
+                "ten": "Action",
+                "luaChon": [
+                  "flood",
+                  "filter",
+                  "port 1",
+                  "port 2",
+                  "port 3"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "f": "#1: A → B arrives on port 1"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "f": "#2: B → A arrives on port 2"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "f": "#3: C → broadcast arrives on port 3"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "f": "#4: A → C arrives on port 1"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "f": "#5: D → B arrives on port 2"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "f": "#6: B → D arrives on port 2"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.a": [
+                "flood"
+              ],
+              "r2.a": [
+                "port 1"
+              ],
+              "r3.a": [
+                "flood"
+              ],
+              "r4.a": [
+                "port 3"
+              ],
+              "r5.a": [
+                "filter"
+              ],
+              "r6.a": [
+                "filter"
+              ]
+            },
+            "giaiThich": "<p>#1 flood; #2 port 1; #3 flood; #4 port 3; #5 filter; #6 filter. The switch learns the source before deciding on the destination.</p><p><i>VI: Switch học nguồn trước rồi mới quyết định theo đích.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Looking up the destination before learning the source (matters for filter)."
+        },
+        {
+          "loi": "Flooding a frame whose destination was learned earlier."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "ingress port",
+          "vi": "cổng vào"
+        }
+      ]
+    },
+    {
+      "title": "Switch 3 — The MAC table after the traffic",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "MAC learning"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>After the six frames of the previous set, which port does the switch list for each MAC address? Answer “none” if it is not in the table.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sau sáu frame của bộ trước, bảng của switch ghi cổng nào cho từng địa chỉ MAC? Trả lời “none” nếu chưa có trong bảng.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Every source address is learned; destinations never are.",
+        "A MAC seen on a new port is updated (host moved)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Switch 3 — The MAC table after the traffic\n\nAnswer in the answer panel (no code needed).\n\n1. Final MAC tableBảng MAC cuối cùng\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Switch 3 — The MAC table after the traffic — answer key\n\n1. Final MAC tableBảng MAC cuối cùng\n   - r1.p: 1\n   - r2.p: 2\n   - r3.p: 3\n   - r4.p: 2\n   - r5.p: none\n   Final table: A→1, B→2, C→3, D→2. Broadcast is never learned.VI: Broadcast không bao giờ được học.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Final table: A→1, B→2, C→3, D→2. Broadcast is never learned.</p><p><i>VI: Broadcast không bao giờ được học.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Final MAC table</p><p style=\"opacity:.75;font-size:.92em\"><i>Bảng MAC cuối cùng</i></p>",
+            "cot": [
+              {
+                "ma": "m",
+                "ten": "MAC"
+              },
+              {
+                "ma": "p",
+                "ten": "Port",
+                "luaChon": [
+                  "1",
+                  "2",
+                  "3",
+                  "none"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "m": "A"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "m": "B"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "m": "C"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "m": "D"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "m": "ff:ff:ff:ff:ff:ff"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.p": [
+                "1"
+              ],
+              "r2.p": [
+                "2"
+              ],
+              "r3.p": [
+                "3"
+              ],
+              "r4.p": [
+                "2"
+              ],
+              "r5.p": [
+                "none"
+              ]
+            },
+            "giaiThich": "<p>Final table: A→1, B→2, C→3, D→2. Broadcast is never learned.</p><p><i>VI: Broadcast không bao giờ được học.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Adding the broadcast address to the table."
+        },
+        {
+          "loi": "Keeping the old port when a MAC moves."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "MAC address table",
+          "vi": "bảng địa chỉ MAC (CAM)"
+        }
+      ]
+    },
+    {
+      "title": "Switch 4 — Switching methods and symptoms",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "switching methods"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Forwarding methods and common table problems.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các phương pháp chuyển mạch và sự cố bảng thường gặp.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Store-and-forward trades latency for correctness.",
+        "Stale entries clear by aging or when the host talks."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Switch 4 — Switching methods and symptoms\n\nAnswer in the answer panel (no code needed).\n\n1. Which method receives the whole frame and checks the FCS before forwarding?Phương pháp nào nhận đủ frame và kiểm FCS trước khi chuyển?\n2. Cut-through switching starts forwarding after reading …Chuyển mạch cut-through bắt đầu chuyển sau khi đọc …\n3. A host is moved from port 3 to port 7 and nothing reaches it for minutes. Likely reason?Một host chuyển từ cổng 3 sang cổng 7 và vài phút không nhận được gì. Nguyên nhân khả dĩ?\n4. A MAC flooding attack tries to …Tấn công MAC flooding cố …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Switch 4 — Switching methods and symptoms — answer key\n\n1. Which method receives the whole frame and checks the FCS before forwarding?Phương pháp nào nhận đủ frame và kiểm FCS trước khi chuyển?\n   Answer: c) Store-and-forward\n   Store-and-forward is the Cisco default; it never forwards a corrupt frame.VI: Store-and-forward là mặc định của Cisco; không bao giờ chuyển frame lỗi.\n\n2. Cut-through switching starts forwarding after reading …Chuyển mạch cut-through bắt đầu chuyển sau khi đọc …\n   Answer: d) the destination MAC address\n   Lowest latency, but it may forward errored frames.VI: Trễ thấp nhất nhưng có thể chuyển frame lỗi.\n\n3. A host is moved from port 3 to port 7 and nothing reaches it for minutes. Likely reason?Một host chuyển từ cổng 3 sang cổng 7 và vài phút không nhận được gì. Nguyên nhân khả dĩ?\n   Answer: a) Another stale table entry still points at port 3 until it ages out or the host sends a frame\n   The first frame from the host on the new port refreshes the entry.VI: Frame đầu tiên của host trên cổng mới sẽ làm mới mục bảng.\n\n4. A MAC flooding attack tries to …Tấn công MAC flooding cố …\n   Answer: b) fill the CAM table so the switch floods traffic like a hub\n   Port security limits the number of MACs per port.VI: Port security giới hạn số MAC trên mỗi cổng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Which method receives the whole frame and checks the FCS before forwarding?</p><p style=\"opacity:.75;font-size:.92em\"><i>Phương pháp nào nhận đủ frame và kiểm FCS trước khi chuyển?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Fragment-free"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Wire-speed flooding"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Store-and-forward"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Cut-through (fast-forward)"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Store-and-forward is the Cisco default; it never forwards a corrupt frame.</p><p><i>VI: Store-and-forward là mặc định của Cisco; không bao giờ chuyển frame lỗi.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Cut-through switching starts forwarding after reading …</p><p style=\"opacity:.75;font-size:.92em\"><i>Chuyển mạch cut-through bắt đầu chuyển sau khi đọc …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the whole frame"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the first 64 bytes"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the IP header"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the destination MAC address"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Lowest latency, but it may forward errored frames.</p><p><i>VI: Trễ thấp nhất nhưng có thể chuyển frame lỗi.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A host is moved from port 3 to port 7 and nothing reaches it for minutes. Likely reason?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một host chuyển từ cổng 3 sang cổng 7 và vài phút không nhận được gì. Nguyên nhân khả dĩ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Another stale table entry still points at port 3 until it ages out or the host sends a frame"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The switch has no flooding"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The MAC address changed"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The IP address expired"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The first frame from the host on the new port refreshes the entry.</p><p><i>VI: Frame đầu tiên của host trên cổng mới sẽ làm mới mục bảng.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>A MAC flooding attack tries to …</p><p style=\"opacity:.75;font-size:.92em\"><i>Tấn công MAC flooding cố …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "shut down STP"
+              },
+              {
+                "ma": "b",
+                "noiDung": "fill the CAM table so the switch floods traffic like a hub"
+              },
+              {
+                "ma": "c",
+                "noiDung": "steal the VLAN password"
+              },
+              {
+                "ma": "d",
+                "noiDung": "change the IP address"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Port security limits the number of MACs per port.</p><p><i>VI: Port security giới hạn số MAC trên mỗi cổng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Believing cut-through checks the FCS."
+        },
+        {
+          "loi": "Thinking the table is built from ARP."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "CAM table",
+          "vi": "bảng nội dung có thể địa chỉ hoá"
+        },
+        {
+          "en": "port security",
+          "vi": "bảo mật cổng"
+        }
+      ]
+    },
+    {
+      "title": "Switch 5 — Write macSwitch(frames)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "MAC learning"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Write <code>macSwitch(frames)</code>. <code>frames</code> is an array of <code>{ src, dst, in }</code> (<code>in</code> = ingress port). Starting with an empty table return <code>{ actions, table }</code>: <code>actions[i]</code> is <code>\"flood\"</code> (unknown or broadcast destination <code>ff:ff:ff:ff:ff:ff</code>), <code>\"filter\"</code> (destination on the ingress port) or <code>\"port N\"</code>; <code>table</code> maps MAC → port. Learn the source <b>before</b> deciding.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>macSwitch(frames)</code>. <code>frames</code> là mảng <code>{ src, dst, in }</code> (<code>in</code> = cổng vào). Bắt đầu với bảng rỗng, trả <code>{ actions, table }</code>: <code>actions[i]</code> là <code>\"flood\"</code> (đích chưa biết hoặc broadcast <code>ff:ff:ff:ff:ff:ff</code>), <code>\"filter\"</code> (đích nằm trên cổng vào) hoặc <code>\"port N\"</code>; <code>table</code> ánh xạ MAC → cổng. Học nguồn <b>trước</b> khi quyết định.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "macSwitch([{\"src\":\"A\",\"dst\":\"B\",\"in\":1},{\"src\":\"B\",\"dst\":\"A\",\"in\":2},{\"src\":\"C\",\"dst\":\"ff:ff:ff:ff:ff:ff\",\"in\":3},{\"src\":\"A\",\"dst\":\"C\",\"in\":1},{\"src\":\"D\",\"dst\":\"B\",\"in\":2},{\"src\":\"B\",\"dst\":\"D\",\"in\":2}])",
+          "output": "{\"actions\":[\"flood\",\"port 1\",\"flood\",\"port 3\",\"filter\",\"filter\"],\"table\":{\"A\":1,\"B\":2,\"C\":3,\"D\":2}}",
+          "explanation": "First sample case.|||Ca mẫu đầu tiên."
+        }
+      ],
+      "hintsJson": [
+        "Keep a plain object table; table[src] = in at the start of the loop.",
+        "Check broadcast before looking at the table."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function macSwitch(frames) {\n  // Write your solution here\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction macSwitch(frames) {\n  var table = {}, actions = [];\n  for (var i = 0; i < frames.length; i++) {\n    var f = frames[i];\n    table[f.src] = f.in;\n    if (f.dst === 'ff:ff:ff:ff:ff:ff' || table[f.dst] === undefined) actions.push('flood');\n    else if (table[f.dst] === f.in) actions.push('filter');\n    else actions.push('port ' + table[f.dst]);\n  }\n  return { actions: actions, table: table };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is the heart of every learning bridge since the 1980s.</p><p><i>VI: Đây là lõi của mọi bridge tự học từ thập niên 1980.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: macSwitch([{\"src\":\"A\",\"dst\":\"B\",\"in\":1},{\"src\":\"B\",\"dst\":\"A\",\"in\":2},{\"src\":\"C\",)",
+              "vi": "Ca 1"
+            },
+            "goi": "macSwitch([{\"src\":\"A\",\"dst\":\"B\",\"in\":1},{\"src\":\"B\",\"dst\":\"A\",\"in\":2},{\"src\":\"C\",\"dst\":\"ff:ff:ff:ff:ff:ff\",\"in\":3},{\"src\":\"A\",\"dst\":\"C\",\"in\":1},{\"src\":\"D\",\"dst\":\"B\",\"in\":2},{\"src\":\"B\",\"dst\":\"D\",\"in\":2}])",
+            "mongDoi": {
+              "actions": [
+                "flood",
+                "port 1",
+                "flood",
+                "port 3",
+                "filter",
+                "filter"
+              ],
+              "table": {
+                "A": 1,
+                "B": 2,
+                "C": 3,
+                "D": 2
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: macSwitch([{\"src\":\"A\",\"dst\":\"B\",\"in\":1}])",
+              "vi": "Ca 2"
+            },
+            "goi": "macSwitch([{\"src\":\"A\",\"dst\":\"B\",\"in\":1}])",
+            "mongDoi": {
+              "actions": [
+                "flood"
+              ],
+              "table": {
+                "A": 1
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: macSwitch([{\"src\":\"A\",\"dst\":\"A\",\"in\":1}])",
+              "vi": "Ca 3"
+            },
+            "goi": "macSwitch([{\"src\":\"A\",\"dst\":\"A\",\"in\":1}])",
+            "mongDoi": {
+              "actions": [
+                "filter"
+              ],
+              "table": {
+                "A": 1
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "macSwitch([{\"src\":\"A\",\"dst\":\"B\",\"in\":1},{\"src\":\"B\",\"dst\":\"A\",\"in\":2},{\"src\":\"A\",\"dst\":\"B\",\"in\":3},{\"src\":\"B\",\"dst\":\"A\",\"in\":2}])",
+            "mongDoi": {
+              "actions": [
+                "flood",
+                "port 1",
+                "port 2",
+                "port 3"
+              ],
+              "table": {
+                "A": 3,
+                "B": 2
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "macSwitch([])",
+            "mongDoi": {
+              "actions": [],
+              "table": {}
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "macSwitch([{\"src\":\"X\",\"dst\":\"ff:ff:ff:ff:ff:ff\",\"in\":4},{\"src\":\"Y\",\"dst\":\"X\",\"in\":5},{\"src\":\"X\",\"dst\":\"Y\",\"in\":4}])",
+            "mongDoi": {
+              "actions": [
+                "flood",
+                "port 4",
+                "port 5"
+              ],
+              "table": {
+                "X": 4,
+                "Y": 5
+              }
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Learning the destination as well."
+        },
+        {
+          "loi": "Returning \"filter\" when the destination is on a different port."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Switch 6 — Aging out entries",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "aging"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Extend the switch with aging. Write <code>macSwitchAging(frames, age)</code> where frames are <code>{ src, dst, in, t }</code> in time order (<code>t</code> in seconds). Before handling a frame, delete every entry whose last-seen time is more than <code>age</code> seconds before the frame’s <code>t</code> (strictly greater). Refresh the source entry’s time on every frame. Return only the <code>actions</code> array.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mở rộng switch với aging. Viết <code>macSwitchAging(frames, age)</code> với frame là <code>{ src, dst, in, t }</code> theo thứ tự thời gian (<code>t</code> tính bằng giây). Trước khi xử lý một frame, xoá mọi mục có lần thấy cuối cách <code>t</code> của frame hơn <code>age</code> giây (lớn hơn hẳn). Làm mới thời gian của mục nguồn ở mỗi frame. Chỉ trả mảng <code>actions</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "macSwitchAging([{\"src\":\"A\",\"dst\":\"B\",\"in\":1,\"t\":0},{\"src\":\"B\",\"dst\":\"A\",\"in\":2,\"t\":10},{\"src\":\"A\",\"dst\":\"B\",\"in\":1,\"t\":20}], 300)",
+          "output": "[\"flood\",\"port 1\",\"port 2\"]",
+          "explanation": "First sample case.|||Ca mẫu đầu tiên."
+        }
+      ],
+      "hintsJson": [
+        "At the start of each iteration loop over the table and delete the old entries.",
+        "Compare with strict “>”, so an entry exactly age seconds old survives."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function macSwitchAging(frames, age) {\n  // Write your solution here\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction macSwitchAging(frames, age) {\n  var table = {}, seen = {}, actions = [];\n  for (var i = 0; i < frames.length; i++) {\n    var f = frames[i];\n    for (var m in table) if (f.t - seen[m] > age) { delete table[m]; delete seen[m]; }\n    table[f.src] = f.in; seen[f.src] = f.t;\n    if (f.dst === 'ff:ff:ff:ff:ff:ff' || table[f.dst] === undefined) actions.push('flood');\n    else if (table[f.dst] === f.in) actions.push('filter');\n    else actions.push('port ' + table[f.dst]);\n  }\n  return actions;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Aging explains the minute-long outage after moving a host: an old entry survives until a frame from the new port refreshes it.</p><p><i>VI: Aging giải thích vì sao di chuyển host gây mất mạng cả phút: mục cũ còn đó tới khi frame từ cổng mới làm mới.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: macSwitchAging([{\"src\":\"A\",\"dst\":\"B\",\"in\":1,\"t\":0},{\"src\":\"B\",\"dst\":\"A\",\"in\":2,\"t\":10)",
+              "vi": "Ca 1"
+            },
+            "goi": "macSwitchAging([{\"src\":\"A\",\"dst\":\"B\",\"in\":1,\"t\":0},{\"src\":\"B\",\"dst\":\"A\",\"in\":2,\"t\":10},{\"src\":\"A\",\"dst\":\"B\",\"in\":1,\"t\":20}], 300)",
+            "mongDoi": [
+              "flood",
+              "port 1",
+              "port 2"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 2: macSwitchAging([{\"src\":\"A\",\"dst\":\"B\",\"in\":1,\"t\":0},{\"src\":\"B\",\"dst\":\"A\",\"in\":2,\"t\":10)",
+              "vi": "Ca 2"
+            },
+            "goi": "macSwitchAging([{\"src\":\"A\",\"dst\":\"B\",\"in\":1,\"t\":0},{\"src\":\"B\",\"dst\":\"A\",\"in\":2,\"t\":10},{\"src\":\"A\",\"dst\":\"B\",\"in\":1,\"t\":400}], 300)",
+            "mongDoi": [
+              "flood",
+              "port 1",
+              "flood"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 3: macSwitchAging([{\"src\":\"A\",\"dst\":\"B\",\"in\":1,\"t\":0},{\"src\":\"B\",\"dst\":\"A\",\"in\":2,\"t\":10)",
+              "vi": "Ca 3"
+            },
+            "goi": "macSwitchAging([{\"src\":\"A\",\"dst\":\"B\",\"in\":1,\"t\":0},{\"src\":\"B\",\"dst\":\"A\",\"in\":2,\"t\":100},{\"src\":\"A\",\"dst\":\"B\",\"in\":1,\"t\":301}], 300)",
+            "mongDoi": [
+              "flood",
+              "port 1",
+              "port 2"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "macSwitchAging([{\"src\":\"A\",\"dst\":\"B\",\"in\":1,\"t\":0},{\"src\":\"B\",\"dst\":\"A\",\"in\":2,\"t\":5},{\"src\":\"A\",\"dst\":\"B\",\"in\":1,\"t\":300}], 300)",
+            "mongDoi": [
+              "flood",
+              "port 1",
+              "port 2"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "macSwitchAging([{\"src\":\"A\",\"dst\":\"B\",\"in\":1,\"t\":0},{\"src\":\"B\",\"dst\":\"A\",\"in\":2,\"t\":1},{\"src\":\"C\",\"dst\":\"B\",\"in\":3,\"t\":250},{\"src\":\"A\",\"dst\":\"C\",\"in\":1,\"t\":500}], 300)",
+            "mongDoi": [
+              "flood",
+              "port 1",
+              "port 2",
+              "port 3"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "macSwitchAging([], 300)",
+            "mongDoi": [],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Not refreshing the timestamp of the source entry on every frame."
+        },
+        {
+          "loi": "Using \">=\" so entries expire one second early."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

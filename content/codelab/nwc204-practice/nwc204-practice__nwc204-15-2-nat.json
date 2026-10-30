@@ -1,0 +1,611 @@
+{
+  "trackSlug": "nwc204-practice",
+  "moduleSlug": "nwc204-15-2-nat",
+  "lesson": {
+    "course": "nwc204-computer-networking",
+    "slug": "nwc204-15-1-moi-de-doa-va-cac-kieu-tan-cong"
+  },
+  "exercises": [
+    {
+      "title": "NAT 1 — Terms and types",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "NAT",
+        "PAT"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Network address translation basics.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Kiến thức nền dịch địa chỉ mạng.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Inside/outside describes where the host is; local/global where the address is seen from.",
+        "Port numbers make PAT work."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# NAT 1 — Terms and types\n\nAnswer in the answer panel (no code needed).\n\n1. Why is NAT used with IPv4?Vì sao dùng NAT với IPv4?\n2. In Cisco terms, “inside local” is …Theo thuật ngữ Cisco, “inside local” là …\n3. PAT (NAT overload) distinguishes many inside hosts sharing one public IP by …PAT (NAT overload) phân biệt nhiều host trong dùng chung một IP công cộng bằng …\n4. Static NAT is used for …NAT tĩnh dùng cho …\n5. A drawback of NAT is …Nhược điểm của NAT là …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# NAT 1 — Terms and types — answer key\n\n1. Why is NAT used with IPv4?Vì sao dùng NAT với IPv4?\n   Answer: a) To let many private hosts share few public addresses\n   IPv4 exhaustion made private addressing + NAT the norm.VI: Cạn kiệt IPv4 khiến địa chỉ riêng + NAT trở thành chuẩn.\n\n2. In Cisco terms, “inside local” is …Theo thuật ngữ Cisco, “inside local” là …\n   Answer: b) the private address of an inside host as seen inside\n   Inside global is the public address that represents the host outside.VI: Inside global là địa chỉ công cộng đại diện cho host ra bên ngoài.\n\n3. PAT (NAT overload) distinguishes many inside hosts sharing one public IP by …PAT (NAT overload) phân biệt nhiều host trong dùng chung một IP công cộng bằng …\n   Answer: c) the translated source port number\n   One public address supports ~64,000 simultaneous flows.VI: Một địa chỉ công cộng hỗ trợ khoảng 64.000 luồng cùng lúc.\n\n4. Static NAT is used for …NAT tĩnh dùng cho …\n   Answer: d) an internal server that must be reachable from outside with a fixed public address\n   One-to-one permanent mapping.VI: Ánh xạ một-một cố định.\n\n5. A drawback of NAT is …Nhược điểm của NAT là …\n   Answer: a) it breaks end-to-end addressing and complicates some protocols\n   Inbound connections need port forwarding or static NAT.VI: Kết nối đến cần port forwarding hoặc NAT tĩnh.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Why is NAT used with IPv4?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao dùng NAT với IPv4?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "To let many private hosts share few public addresses"
+              },
+              {
+                "ma": "b",
+                "noiDung": "To encrypt traffic"
+              },
+              {
+                "ma": "c",
+                "noiDung": "To speed up routing"
+              },
+              {
+                "ma": "d",
+                "noiDung": "To replace DNS"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>IPv4 exhaustion made private addressing + NAT the norm.</p><p><i>VI: Cạn kiệt IPv4 khiến địa chỉ riêng + NAT trở thành chuẩn.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>In Cisco terms, “inside local” is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Theo thuật ngữ Cisco, “inside local” là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the router’s loopback"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the private address of an inside host as seen inside"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the public address of an inside host"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the address of an outside host"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Inside global is the public address that represents the host outside.</p><p><i>VI: Inside global là địa chỉ công cộng đại diện cho host ra bên ngoài.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>PAT (NAT overload) distinguishes many inside hosts sharing one public IP by …</p><p style=\"opacity:.75;font-size:.92em\"><i>PAT (NAT overload) phân biệt nhiều host trong dùng chung một IP công cộng bằng …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the TTL"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the VLAN"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the translated source port number"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the MAC address"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>One public address supports ~64,000 simultaneous flows.</p><p><i>VI: Một địa chỉ công cộng hỗ trợ khoảng 64.000 luồng cùng lúc.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Static NAT is used for …</p><p style=\"opacity:.75;font-size:.92em\"><i>NAT tĩnh dùng cho …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "all user PCs"
+              },
+              {
+                "ma": "b",
+                "noiDung": "IPv6 only"
+              },
+              {
+                "ma": "c",
+                "noiDung": "DHCP clients"
+              },
+              {
+                "ma": "d",
+                "noiDung": "an internal server that must be reachable from outside with a fixed public address"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>One-to-one permanent mapping.</p><p><i>VI: Ánh xạ một-một cố định.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>A drawback of NAT is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Nhược điểm của NAT là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "it breaks end-to-end addressing and complicates some protocols"
+              },
+              {
+                "ma": "b",
+                "noiDung": "it uses more IPv4 addresses"
+              },
+              {
+                "ma": "c",
+                "noiDung": "it makes routing tables larger"
+              },
+              {
+                "ma": "d",
+                "noiDung": "it removes the need for firewalls"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Inbound connections need port forwarding or static NAT.</p><p><i>VI: Kết nối đến cần port forwarding hoặc NAT tĩnh.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Believing NAT is a security feature by itself."
+        },
+        {
+          "loi": "Mixing up inside global and inside local."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "PAT",
+          "vi": "dịch địa chỉ cổng"
+        },
+        {
+          "en": "inside global",
+          "vi": "địa chỉ công cộng của host trong"
+        }
+      ]
+    },
+    {
+      "title": "NAT 2 — Build the PAT table",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "PAT"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>A router translates outbound connections to 203.0.113.1 (PAT). New flows (protocol + inside IP + port) get the next free public port starting at 50000; packets of an existing flow reuse their translation. Give the inside global address:port of each packet.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Router dịch kết nối ra ngoài sang 203.0.113.1 (PAT). Luồng mới (giao thức + IP trong + cổng) nhận cổng công cộng rảnh kế tiếp bắt đầu từ 50000; gói của luồng đã có dùng lại phép dịch. Cho địa chỉ:cổng inside global của từng gói.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Make a list of flows already seen.",
+        "A new flow takes the next number; a repeated one reuses it."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# NAT 2 — Build the PAT table\n\nAnswer in the answer panel (no code needed).\n\n1. PAT translationsBảng dịch PAT\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# NAT 2 — Build the PAT table — answer key\n\n1. PAT translationsBảng dịch PAT\n   - r1.g: 203.0.113.1:50000\n   - r2.g: 203.0.113.1:50001\n   - r3.g: 203.0.113.1:50000\n   - r4.g: 203.0.113.1:50002\n   - r5.g: 203.0.113.1:50003\n   - r6.g: 203.0.113.1:50004\n   #1 → 203.0.113.1:50000; #2 → 203.0.113.1:50001; #3 → 203.0.113.1:50000; #4 → 203.0.113.1:50002; #5 → 203.0.113.1:50003; #6 → 203.0.113.1:50004. TCP and UDP flows are different entries even with the same IP and port.VI: Luồng TCP và UDP là mục khác nhau dù cùng IP và cổng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>#1 → 203.0.113.1:50000; #2 → 203.0.113.1:50001; #3 → 203.0.113.1:50000; #4 → 203.0.113.1:50002; #5 → 203.0.113.1:50003; #6 → 203.0.113.1:50004. TCP and UDP flows are different entries even with the same IP and port.</p><p><i>VI: Luồng TCP và UDP là mục khác nhau dù cùng IP và cổng.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>PAT translations</p><p style=\"opacity:.75;font-size:.92em\"><i>Bảng dịch PAT</i></p>",
+            "cot": [
+              {
+                "ma": "p",
+                "ten": "Packet (inside local)"
+              },
+              {
+                "ma": "g",
+                "ten": "Inside global"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "p": "#1 TCP 192.168.1.10:49152"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "p": "#2 TCP 192.168.1.11:49152"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "p": "#3 TCP 192.168.1.10:49152"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "p": "#4 TCP 192.168.1.10:49153"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "p": "#5 UDP 192.168.1.10:49152"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "p": "#6 UDP 192.168.1.12:5000"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.g": [
+                "203.0.113.1:50000"
+              ],
+              "r2.g": [
+                "203.0.113.1:50001"
+              ],
+              "r3.g": [
+                "203.0.113.1:50000"
+              ],
+              "r4.g": [
+                "203.0.113.1:50002"
+              ],
+              "r5.g": [
+                "203.0.113.1:50003"
+              ],
+              "r6.g": [
+                "203.0.113.1:50004"
+              ]
+            },
+            "giaiThich": "<p>#1 → 203.0.113.1:50000; #2 → 203.0.113.1:50001; #3 → 203.0.113.1:50000; #4 → 203.0.113.1:50002; #5 → 203.0.113.1:50003; #6 → 203.0.113.1:50004. TCP and UDP flows are different entries even with the same IP and port.</p><p><i>VI: Luồng TCP và UDP là mục khác nhau dù cùng IP và cổng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Giving the repeated packet a new port."
+        },
+        {
+          "loi": "Treating TCP and UDP with the same port as one flow."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "translation table",
+          "vi": "bảng dịch"
+        }
+      ]
+    },
+    {
+      "title": "NAT 3 — Write patSim(pubIp, startPort, conns)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "PAT"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Write <code>patSim(pubIp, startPort, conns)</code> where <code>conns</code> is <code>[{ ip, port, proto }]</code>. A flow is the triple (proto, ip, port). The first time a flow appears it gets the next public port (<code>startPort</code>, then +1 …); repeats reuse it. Return an array of <code>\"pubIp:port\"</code>, one per connection.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>patSim(pubIp, startPort, conns)</code> với <code>conns</code> là <code>[{ ip, port, proto }]</code>. Một luồng là bộ ba (proto, ip, port). Lần đầu xuất hiện luồng nhận cổng công cộng kế tiếp (<code>startPort</code>, rồi +1 …); lặp lại dùng lại. Trả mảng <code>\"pubIp:port\"</code>, mỗi kết nối một phần tử.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "patSim(\"203.0.113.1\", 50000, [{\"ip\":\"192.168.1.10\",\"port\":49152,\"proto\":\"tcp\"},{\"ip\":\"192.168.1.11\",\"port\":49152,\"proto\":\"tcp\"},{\"ip\":\"192.168.1.10\",\"port\":49152,\"proto\":\"tcp\"},{\"ip\":\"192.168.1.10\",\"port\":49153,\"proto\":\"tcp\"},{\"ip\":\"192.168.1.10\",\"port\":49152,\"proto\":\"udp\"},{\"ip\":\"192.168.1.12\",\"port\":5000,\"proto\":\"udp\"}])",
+          "output": "[\"203.0.113.1:50000\",\"203.0.113.1:50001\",\"203.0.113.1:50000\",\"203.0.113.1:50002\",\"203.0.113.1:50003\",\"203.0.113.1:50004\"]",
+          "explanation": "First sample case.|||Ca mẫu đầu tiên."
+        }
+      ],
+      "hintsJson": [
+        "Use an object keyed by proto|ip:port.",
+        "Increment the next-port counter only for new flows."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function patSim(pubIp, startPort, conns) {\n  // Write your solution here\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction patSim(pubIp, startPort, conns) {\n  var map = {}, next = startPort, out = [];\n  for (var i = 0; i < conns.length; i++) {\n    var k = conns[i].proto + '|' + conns[i].ip + ':' + conns[i].port;\n    if (map[k] === undefined) map[k] = next++;\n    out.push(pubIp + ':' + map[k]);\n  }\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The translation table is the entire state of PAT; losing it breaks all active connections (why NAT boxes are state-sensitive).</p><p><i>VI: Bảng dịch là toàn bộ trạng thái của PAT; mất nó là đứt mọi kết nối đang chạy.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: patSim(\"203.0.113.1\", 50000, [{\"ip\":\"192.168.1.10\",\"port\":49152,\"proto\":\"tcp\")",
+              "vi": "Ca 1"
+            },
+            "goi": "patSim(\"203.0.113.1\", 50000, [{\"ip\":\"192.168.1.10\",\"port\":49152,\"proto\":\"tcp\"},{\"ip\":\"192.168.1.11\",\"port\":49152,\"proto\":\"tcp\"},{\"ip\":\"192.168.1.10\",\"port\":49152,\"proto\":\"tcp\"},{\"ip\":\"192.168.1.10\",\"port\":49153,\"proto\":\"tcp\"},{\"ip\":\"192.168.1.10\",\"port\":49152,\"proto\":\"udp\"},{\"ip\":\"192.168.1.12\",\"port\":5000,\"proto\":\"udp\"}])",
+            "mongDoi": [
+              "203.0.113.1:50000",
+              "203.0.113.1:50001",
+              "203.0.113.1:50000",
+              "203.0.113.1:50002",
+              "203.0.113.1:50003",
+              "203.0.113.1:50004"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 2: patSim(\"198.51.100.7\", 1024, [{\"ip\":\"10.0.0.1\",\"port\":1,\"proto\":\"tcp\"}])",
+              "vi": "Ca 2"
+            },
+            "goi": "patSim(\"198.51.100.7\", 1024, [{\"ip\":\"10.0.0.1\",\"port\":1,\"proto\":\"tcp\"}])",
+            "mongDoi": [
+              "198.51.100.7:1024"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 3: patSim(\"203.0.113.1\", 50000, [])",
+              "vi": "Ca 3"
+            },
+            "goi": "patSim(\"203.0.113.1\", 50000, [])",
+            "mongDoi": []
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "patSim(\"1.2.3.4\", 60000, [{\"ip\":\"a\",\"port\":1,\"proto\":\"tcp\"},{\"ip\":\"a\",\"port\":1,\"proto\":\"udp\"},{\"ip\":\"a\",\"port\":1,\"proto\":\"tcp\"}])",
+            "mongDoi": [
+              "1.2.3.4:60000",
+              "1.2.3.4:60001",
+              "1.2.3.4:60000"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "patSim(\"5.5.5.5\", 65534, [{\"ip\":\"x\",\"port\":1,\"proto\":\"tcp\"},{\"ip\":\"y\",\"port\":1,\"proto\":\"tcp\"},{\"ip\":\"z\",\"port\":1,\"proto\":\"tcp\"}])",
+            "mongDoi": [
+              "5.5.5.5:65534",
+              "5.5.5.5:65535",
+              "5.5.5.5:65536"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Incrementing the port for every packet."
+        },
+        {
+          "loi": "Leaving the protocol out of the key."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "NAT 4 — Dynamic NAT with a limited pool",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "dynamic NAT"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Write <code>poolNat(pool, events)</code>. Events are <code>[\"open\", host]</code> and <code>[\"close\", host]</code>. An <code>open</code> gives the host the first free address of <code>pool</code> (hosts that already hold an address keep it); when the pool is exhausted the host gets <code>null</code>. A <code>close</code> returns the host’s address to the pool. Return the results of the <code>open</code> events only, in order.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>poolNat(pool, events)</code>. Sự kiện là <code>[\"open\", host]</code> và <code>[\"close\", host]</code>. <code>open</code> cấp cho host địa chỉ rảnh đầu tiên của <code>pool</code> (host đã có địa chỉ thì giữ nguyên); hết địa chỉ thì host nhận <code>null</code>. <code>close</code> trả địa chỉ của host về pool. Chỉ trả kết quả của các sự kiện <code>open</code>, theo thứ tự.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "poolNat([\"203.0.113.10\",\"203.0.113.11\"], [[\"open\",\"h1\"],[\"open\",\"h2\"],[\"open\",\"h3\"],[\"close\",\"h1\"],[\"open\",\"h3\"],[\"open\",\"h4\"],[\"close\",\"h2\"],[\"open\",\"h5\"]])",
+          "output": "[\"203.0.113.10\",\"203.0.113.11\",null,\"203.0.113.10\",null,\"203.0.113.11\"]",
+          "explanation": "First sample case.|||Ca mẫu đầu tiên."
+        }
+      ],
+      "hintsJson": [
+        "Track which pool addresses are used and which address each host holds.",
+        "Free the address on close, and ignore closing unknown hosts."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function poolNat(pool, events) {\n  // Write your solution here\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction poolNat(pool, events) {\n  var used = {}, byHost = {}, out = [];\n  for (var i = 0; i < events.length; i++) {\n    var op = events[i][0], h = events[i][1];\n    if (op === 'open') {\n      if (byHost[h] !== undefined) { out.push(byHost[h]); continue; }\n      var got = null;\n      for (var k = 0; k < pool.length; k++) if (!used[pool[k]]) { got = pool[k]; break; }\n      if (got) { used[got] = true; byHost[h] = got; }\n      out.push(got);\n    } else if (byHost[h] !== undefined) { delete used[byHost[h]]; delete byHost[h]; }\n  }\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Dynamic NAT runs out of addresses when there are more simultaneous users than pool entries; that is why overload (PAT) was invented.</p><p><i>VI: NAT động hết địa chỉ khi số người dùng đồng thời vượt pool; đó là lý do ra đời overload (PAT).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: poolNat([\"203.0.113.10\",\"203.0.113.11\"], [[\"open\",\"h1\"],[\"open\",\"h2\"],[\"open\",)",
+              "vi": "Ca 1"
+            },
+            "goi": "poolNat([\"203.0.113.10\",\"203.0.113.11\"], [[\"open\",\"h1\"],[\"open\",\"h2\"],[\"open\",\"h3\"],[\"close\",\"h1\"],[\"open\",\"h3\"],[\"open\",\"h4\"],[\"close\",\"h2\"],[\"open\",\"h5\"]])",
+            "mongDoi": [
+              "203.0.113.10",
+              "203.0.113.11",
+              null,
+              "203.0.113.10",
+              null,
+              "203.0.113.11"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 2: poolNat([\"203.0.113.10\",\"203.0.113.11\"], [[\"open\",\"a\"],[\"open\",\"a\"]])",
+              "vi": "Ca 2"
+            },
+            "goi": "poolNat([\"203.0.113.10\",\"203.0.113.11\"], [[\"open\",\"a\"],[\"open\",\"a\"]])",
+            "mongDoi": [
+              "203.0.113.10",
+              "203.0.113.10"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 3: poolNat([], [[\"open\",\"a\"]])",
+              "vi": "Ca 3"
+            },
+            "goi": "poolNat([], [[\"open\",\"a\"]])",
+            "mongDoi": [
+              null
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "poolNat([\"X\"], [[\"close\",\"z\"],[\"open\",\"a\"],[\"open\",\"b\"],[\"close\",\"a\"],[\"open\",\"b\"]])",
+            "mongDoi": [
+              "X",
+              null,
+              "X"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "poolNat([\"203.0.113.10\",\"203.0.113.11\"], [])",
+            "mongDoi": [],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Giving a host a second address on a repeated open."
+        },
+        {
+          "loi": "Pushing results for close events as well."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

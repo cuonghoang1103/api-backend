@@ -1,0 +1,1573 @@
+{
+  "trackSlug": "nwc204-practice",
+  "moduleSlug": "nwc204-13-1-tcp-transport",
+  "lesson": {
+    "course": "nwc204-computer-networking",
+    "slug": "nwc204-13-2-bat-tay-tin-cay-va-doc-may-chu-that"
+  },
+  "exercises": [
+    {
+      "title": "Transport 1 — Ports, TCP and UDP",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "TCP",
+        "UDP",
+        "ports"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Layer 4 fundamentals.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Kiến thức nền tầng 4.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "TCP = reliable, UDP = fast and simple.",
+        "Ports multiplex many applications on one IP."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Transport 1 — Ports, TCP and UDP\n\nAnswer in the answer panel (no code needed).\n\n1. Which protocol would you choose for a live voice call where late data is useless?Giao thức nào nên chọn cho cuộc gọi thoại trực tiếp, nơi dữ liệu đến muộn là vô dụng?\n2. The well-known port numbers are in the range …Cổng well-known nằm trong khoảng …\n3. A socket is identified by …Một socket được xác định bởi …\n4. What does TCP provide that UDP does not?TCP cung cấp gì mà UDP không có?\n5. HTTPS, SSH, DNS and SMTP use the default ports …HTTPS, SSH, DNS và SMTP dùng cổng mặc định …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Transport 1 — Ports, TCP and UDP — answer key\n\n1. Which protocol would you choose for a live voice call where late data is useless?Giao thức nào nên chọn cho cuộc gọi thoại trực tiếp, nơi dữ liệu đến muộn là vô dụng?\n   Answer: d) UDP\n   UDP has no retransmission delay and no handshake.VI: UDP không trễ do gửi lại và không bắt tay.\n\n2. The well-known port numbers are in the range …Cổng well-known nằm trong khoảng …\n   Answer: a) 0–1023\n   Registered ports are 1024–49151; dynamic/ephemeral 49152–65535.VI: Cổng đăng ký 1024–49151; cổng động 49152–65535.\n\n3. A socket is identified by …Một socket được xác định bởi …\n   Answer: b) IP address + port (and protocol)\n   A TCP connection = two sockets (a 4-tuple).VI: Một kết nối TCP = hai socket (bộ bốn).\n\n4. What does TCP provide that UDP does not?TCP cung cấp gì mà UDP không có?\n   Answer: c) Reliable, ordered delivery with flow and congestion control\n   UDP also has ports and a checksum.VI: UDP cũng có cổng và checksum.\n\n5. HTTPS, SSH, DNS and SMTP use the default ports …HTTPS, SSH, DNS và SMTP dùng cổng mặc định …\n   Answer: d) 443, 22, 53, 25\n   Memorise these four with 80 (HTTP), 23 (Telnet), 21 (FTP), 67/68 (DHCP).VI: Nhớ bốn cổng này cùng 80 (HTTP), 23 (Telnet), 21 (FTP), 67/68 (DHCP).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Which protocol would you choose for a live voice call where late data is useless?</p><p style=\"opacity:.75;font-size:.92em\"><i>Giao thức nào nên chọn cho cuộc gọi thoại trực tiếp, nơi dữ liệu đến muộn là vô dụng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "TCP"
+              },
+              {
+                "ma": "b",
+                "noiDung": "ICMP"
+              },
+              {
+                "ma": "c",
+                "noiDung": "ARP"
+              },
+              {
+                "ma": "d",
+                "noiDung": "UDP"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>UDP has no retransmission delay and no handshake.</p><p><i>VI: UDP không trễ do gửi lại và không bắt tay.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The well-known port numbers are in the range …</p><p style=\"opacity:.75;font-size:.92em\"><i>Cổng well-known nằm trong khoảng …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "0–1023"
+              },
+              {
+                "ma": "b",
+                "noiDung": "1024–49151"
+              },
+              {
+                "ma": "c",
+                "noiDung": "49152–65535"
+              },
+              {
+                "ma": "d",
+                "noiDung": "1–255"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Registered ports are 1024–49151; dynamic/ephemeral 49152–65535.</p><p><i>VI: Cổng đăng ký 1024–49151; cổng động 49152–65535.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A socket is identified by …</p><p style=\"opacity:.75;font-size:.92em\"><i>Một socket được xác định bởi …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "VLAN ID"
+              },
+              {
+                "ma": "b",
+                "noiDung": "IP address + port (and protocol)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "MAC address only"
+              },
+              {
+                "ma": "d",
+                "noiDung": "IP address only"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A TCP connection = two sockets (a 4-tuple).</p><p><i>VI: Một kết nối TCP = hai socket (bộ bốn).</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>What does TCP provide that UDP does not?</p><p style=\"opacity:.75;font-size:.92em\"><i>TCP cung cấp gì mà UDP không có?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Checksums"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Multiplexing"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Reliable, ordered delivery with flow and congestion control"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Port numbers"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>UDP also has ports and a checksum.</p><p><i>VI: UDP cũng có cổng và checksum.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>HTTPS, SSH, DNS and SMTP use the default ports …</p><p style=\"opacity:.75;font-size:.92em\"><i>HTTPS, SSH, DNS và SMTP dùng cổng mặc định …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "80, 23, 53, 110"
+              },
+              {
+                "ma": "b",
+                "noiDung": "443, 21, 67, 25"
+              },
+              {
+                "ma": "c",
+                "noiDung": "8080, 22, 123, 587"
+              },
+              {
+                "ma": "d",
+                "noiDung": "443, 22, 53, 25"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Memorise these four with 80 (HTTP), 23 (Telnet), 21 (FTP), 67/68 (DHCP).</p><p><i>VI: Nhớ bốn cổng này cùng 80 (HTTP), 23 (Telnet), 21 (FTP), 67/68 (DHCP).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Believing UDP has no ports."
+        },
+        {
+          "loi": "Using TCP for real-time voice by habit."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "socket",
+          "vi": "điểm cuối kết nối"
+        },
+        {
+          "en": "multiplexing",
+          "vi": "dồn kênh"
+        }
+      ]
+    },
+    {
+      "title": "Transport 2 — Sequence and acknowledgment numbers",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "TCP numbers"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Client ISN = 1000, server ISN = 5000. The client sends two segments of 100 and 200 bytes; the server ACKs each. SYN and FIN each consume one sequence number. Fill the <b>seq</b> and <b>ack</b> numbers of segments #2–#7 (#1 is SYN seq 1000).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>ISN client = 1000, ISN server = 5000. Client gửi hai segment 100 và 200 byte; server ACK từng cái. SYN và FIN mỗi cái tốn một số thứ tự. Điền <b>seq</b> và <b>ack</b> của segment #2–#7 (#1 là SYN seq 1000).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The SYN-ACK acknowledges client ISN + 1.",
+        "After sending N bytes, the next seq is old seq + N."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Transport 2 — Sequence and acknowledgment numbers\n\nAnswer in the answer panel (no code needed).\n\n1. NumbersSố hiệu\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Transport 2 — Sequence and acknowledgment numbers — answer key\n\n1. NumbersSố hiệu\n   - r1.q: 5000\n   - r1.a: 1001\n   - r2.q: 1001\n   - r2.a: 5001\n   - r3.q: 1001\n   - r3.a: 5001\n   - r4.q: 5001\n   - r4.a: 1101\n   - r5.q: 1101\n   - r5.a: 5001\n   - r6.q: 5001\n   - r6.a: 1301\n   #1 seq 1000 ack 0; #2 seq 5000 ack 1001; #3 seq 1001 ack 5001; #4 seq 1001 ack 5001; #5 seq 5001 ack 1101; #6 seq 1101 ack 5001; #7 seq 5001 ack 1301; #8 seq 1301 ack 5001; #9 seq 5001 ack 1302. ack = the next byte expected from the other side.VI: ack = byte tiếp theo mong nhận từ phía kia.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>#1 seq 1000 ack 0; #2 seq 5000 ack 1001; #3 seq 1001 ack 5001; #4 seq 1001 ack 5001; #5 seq 5001 ack 1101; #6 seq 1101 ack 5001; #7 seq 5001 ack 1301; #8 seq 1301 ack 5001; #9 seq 5001 ack 1302. ack = the next byte expected from the other side.</p><p><i>VI: ack = byte tiếp theo mong nhận từ phía kia.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Numbers</p><p style=\"opacity:.75;font-size:.92em\"><i>Số hiệu</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Segment"
+              },
+              {
+                "ma": "q",
+                "ten": "seq"
+              },
+              {
+                "ma": "a",
+                "ten": "ack"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "#2 server SYN,ACK"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "#3 client ACK"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "#4 client PSH,ACK, 100 data bytes"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "#5 server ACK"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "#6 client PSH,ACK, 200 data bytes"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "#7 server ACK"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.q": [
+                "5000"
+              ],
+              "r1.a": [
+                "1001"
+              ],
+              "r2.q": [
+                "1001"
+              ],
+              "r2.a": [
+                "5001"
+              ],
+              "r3.q": [
+                "1001"
+              ],
+              "r3.a": [
+                "5001"
+              ],
+              "r4.q": [
+                "5001"
+              ],
+              "r4.a": [
+                "1101"
+              ],
+              "r5.q": [
+                "1101"
+              ],
+              "r5.a": [
+                "5001"
+              ],
+              "r6.q": [
+                "5001"
+              ],
+              "r6.a": [
+                "1301"
+              ]
+            },
+            "giaiThich": "<p>#1 seq 1000 ack 0; #2 seq 5000 ack 1001; #3 seq 1001 ack 5001; #4 seq 1001 ack 5001; #5 seq 5001 ack 1101; #6 seq 1101 ack 5001; #7 seq 5001 ack 1301; #8 seq 1301 ack 5001; #9 seq 5001 ack 1302. ack = the next byte expected from the other side.</p><p><i>VI: ack = byte tiếp theo mong nhận từ phía kia.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting that SYN consumes one sequence number."
+        },
+        {
+          "loi": "Using the segment’s own seq as the ack."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "ISN",
+          "vi": "số thứ tự khởi đầu"
+        }
+      ]
+    },
+    {
+      "title": "Transport 3 — Order the three-way handshake and the close",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "TCP lifecycle"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Put the segments of a normal TCP connection life in order.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sắp các segment của một vòng đời kết nối TCP bình thường theo thứ tự.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "SYN, SYN-ACK, ACK.",
+        "FIN and ACK are exchanged in both directions."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Transport 3 — Order the three-way handshake and the close\n\nAnswer in the answer panel (no code needed).\n\n1. Open and closeMở và đóng\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Transport 3 — Order the three-way handshake and the close — answer key\n\n1. Open and closeMở và đóng\n   Answer: s1) Client → server: SYN  →  s2) Server → client: SYN, ACK  →  s3) Client → server: ACK (connection established)  →  s4) Client → server: data (PSH, ACK)  →  s5) Server → client: ACK for the data  →  s6) Client → server: FIN, ACK  →  s7) Server → client: ACK, then FIN, ACK  →  s8) Client → server: final ACK\n   Three steps open the connection; four steps close it (each direction closes separately).VI: Ba bước mở kết nối; bốn bước đóng (mỗi chiều đóng riêng).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Three steps open the connection; four steps close it (each direction closes separately).</p><p><i>VI: Ba bước mở kết nối; bốn bước đóng (mỗi chiều đóng riêng).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Open and close</p><p style=\"opacity:.75;font-size:.92em\"><i>Mở và đóng</i></p>",
+            "muc": [
+              {
+                "ma": "s4",
+                "noiDung": "Client → server: data (PSH, ACK)"
+              },
+              {
+                "ma": "s5",
+                "noiDung": "Server → client: ACK for the data"
+              },
+              {
+                "ma": "s6",
+                "noiDung": "Client → server: FIN, ACK"
+              },
+              {
+                "ma": "s7",
+                "noiDung": "Server → client: ACK, then FIN, ACK"
+              },
+              {
+                "ma": "s8",
+                "noiDung": "Client → server: final ACK"
+              },
+              {
+                "ma": "s1",
+                "noiDung": "Client → server: SYN"
+              },
+              {
+                "ma": "s2",
+                "noiDung": "Server → client: SYN, ACK"
+              },
+              {
+                "ma": "s3",
+                "noiDung": "Client → server: ACK (connection established)"
+              }
+            ],
+            "dapAn": [
+              "s1",
+              "s2",
+              "s3",
+              "s4",
+              "s5",
+              "s6",
+              "s7",
+              "s8"
+            ],
+            "giaiThich": "<p>Three steps open the connection; four steps close it (each direction closes separately).</p><p><i>VI: Ba bước mở kết nối; bốn bước đóng (mỗi chiều đóng riêng).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Sending data before the third ACK in theory (data can ride on the ACK)."
+        },
+        {
+          "loi": "Putting the server FIN before the client FIN."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "three-way handshake",
+          "vi": "bắt tay ba bước"
+        }
+      ]
+    },
+    {
+      "title": "Transport 4 — Write tcpTrace(isnC, isnS, sizes)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "TCP sequence numbers"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Write <code>tcpTrace(isnC, isnS, sizes)</code> returning every segment as <code>{ from, flags, seq, ack, len }</code> (<code>from</code> is <code>\"C\"</code> or <code>\"S\"</code>): SYN (ack 0), SYN,ACK, ACK; then for each size the client sends <code>PSH,ACK</code> with <code>len</code> bytes and the server answers <code>ACK</code>; then close with <code>FIN,ACK</code> (C), <code>ACK</code> (S), <code>FIN,ACK</code> (S), <code>ACK</code> (C). SYN and FIN consume one sequence number each.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>tcpTrace(isnC, isnS, sizes)</code> trả mọi segment dạng <code>{ from, flags, seq, ack, len }</code> (<code>from</code> là <code>\"C\"</code> hoặc <code>\"S\"</code>): SYN (ack 0), SYN,ACK, ACK; rồi với mỗi kích thước client gửi <code>PSH,ACK</code> <code>len</code> byte và server đáp <code>ACK</code>; cuối cùng đóng bằng <code>FIN,ACK</code> (C), <code>ACK</code> (S), <code>FIN,ACK</code> (S), <code>ACK</code> (C). SYN và FIN mỗi cái tốn một số thứ tự.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "tcpTrace(1000, 5000, [100,200])",
+          "output": "[{\"from\":\"C\",\"flags\":\"SYN\",\"seq\":1000,\"ack\":0,\"len\":0},{\"from\":\"S\",\"flags\":\"SYN,ACK\",\"seq\":5000,\"ack\":1001,\"len\":0},{\"from\":\"C\",\"flags\":\"ACK\",\"seq\":1001,\"ack\":5001,\"len\":0},{\"from\":\"C\",\"flags\":\"PSH,ACK\",\"seq\":1001,\"ack\":5001,\"len\":100},{\"from\":\"S\",\"flags\":\"ACK\",\"seq\":5001,\"ack\":1101,\"len\":0},{\"from\":\"C\",\"flags\":\"PSH,ACK\",\"seq\":1101,\"ack\":5001,\"len\":200},{\"from\":\"S\",\"flags\":\"ACK\",\"seq\":5001,\"ack\":1301,\"len\":0},{\"from\":\"C\",\"flags\":\"FIN,ACK\",\"seq\":1301,\"ack\":5001,\"len\":0},{\"from\":\"S\",\"flags\":\"ACK\",\"seq\":5001,\"ack\":1302,\"len\":0},{\"from\":\"S\",\"flags\":\"FIN,ACK\",\"seq\":5001,\"ack\":1302,\"len\":0},{\"from\":\"C\",\"flags\":\"ACK\",\"seq\":1302,\"ack\":5002,\"len\":0}]",
+          "explanation": "First sample case.|||Ca mẫu đầu tiên."
+        }
+      ],
+      "hintsJson": [
+        "Keep two running counters c and s; update them after SYN, after data and after FIN.",
+        "The final ACKs carry the incremented numbers."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function tcpTrace(isnC, isnS, sizes) {\n  // Write your solution here\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction tcpTrace(isnC, isnS, sizes) {\n  var out = [], c = isnC, s = isnS;\n  out.push({ from: 'C', flags: 'SYN', seq: c, ack: 0, len: 0 }); c++;\n  out.push({ from: 'S', flags: 'SYN,ACK', seq: s, ack: c, len: 0 }); s++;\n  out.push({ from: 'C', flags: 'ACK', seq: c, ack: s, len: 0 });\n  for (var i = 0; i < sizes.length; i++) {\n    out.push({ from: 'C', flags: 'PSH,ACK', seq: c, ack: s, len: sizes[i] }); c += sizes[i];\n    out.push({ from: 'S', flags: 'ACK', seq: s, ack: c, len: 0 });\n  }\n  out.push({ from: 'C', flags: 'FIN,ACK', seq: c, ack: s, len: 0 }); c++;\n  out.push({ from: 'S', flags: 'ACK', seq: s, ack: c, len: 0 });\n  out.push({ from: 'S', flags: 'FIN,ACK', seq: s, ack: c, len: 0 }); s++;\n  out.push({ from: 'C', flags: 'ACK', seq: c, ack: s, len: 0 });\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Wireshark’s “relative sequence numbers” are exactly this bookkeeping minus the ISN.</p><p><i>VI: “Relative sequence number” của Wireshark chính là sổ sách này trừ đi ISN.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: tcpTrace(1000, 5000, [100,200])",
+              "vi": "Ca 1"
+            },
+            "goi": "tcpTrace(1000, 5000, [100,200])",
+            "mongDoi": [
+              {
+                "from": "C",
+                "flags": "SYN",
+                "seq": 1000,
+                "ack": 0,
+                "len": 0
+              },
+              {
+                "from": "S",
+                "flags": "SYN,ACK",
+                "seq": 5000,
+                "ack": 1001,
+                "len": 0
+              },
+              {
+                "from": "C",
+                "flags": "ACK",
+                "seq": 1001,
+                "ack": 5001,
+                "len": 0
+              },
+              {
+                "from": "C",
+                "flags": "PSH,ACK",
+                "seq": 1001,
+                "ack": 5001,
+                "len": 100
+              },
+              {
+                "from": "S",
+                "flags": "ACK",
+                "seq": 5001,
+                "ack": 1101,
+                "len": 0
+              },
+              {
+                "from": "C",
+                "flags": "PSH,ACK",
+                "seq": 1101,
+                "ack": 5001,
+                "len": 200
+              },
+              {
+                "from": "S",
+                "flags": "ACK",
+                "seq": 5001,
+                "ack": 1301,
+                "len": 0
+              },
+              {
+                "from": "C",
+                "flags": "FIN,ACK",
+                "seq": 1301,
+                "ack": 5001,
+                "len": 0
+              },
+              {
+                "from": "S",
+                "flags": "ACK",
+                "seq": 5001,
+                "ack": 1302,
+                "len": 0
+              },
+              {
+                "from": "S",
+                "flags": "FIN,ACK",
+                "seq": 5001,
+                "ack": 1302,
+                "len": 0
+              },
+              {
+                "from": "C",
+                "flags": "ACK",
+                "seq": 1302,
+                "ack": 5002,
+                "len": 0
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 2: tcpTrace(0, 0, [])",
+              "vi": "Ca 2"
+            },
+            "goi": "tcpTrace(0, 0, [])",
+            "mongDoi": [
+              {
+                "from": "C",
+                "flags": "SYN",
+                "seq": 0,
+                "ack": 0,
+                "len": 0
+              },
+              {
+                "from": "S",
+                "flags": "SYN,ACK",
+                "seq": 0,
+                "ack": 1,
+                "len": 0
+              },
+              {
+                "from": "C",
+                "flags": "ACK",
+                "seq": 1,
+                "ack": 1,
+                "len": 0
+              },
+              {
+                "from": "C",
+                "flags": "FIN,ACK",
+                "seq": 1,
+                "ack": 1,
+                "len": 0
+              },
+              {
+                "from": "S",
+                "flags": "ACK",
+                "seq": 1,
+                "ack": 2,
+                "len": 0
+              },
+              {
+                "from": "S",
+                "flags": "FIN,ACK",
+                "seq": 1,
+                "ack": 2,
+                "len": 0
+              },
+              {
+                "from": "C",
+                "flags": "ACK",
+                "seq": 2,
+                "ack": 2,
+                "len": 0
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 3: tcpTrace(4294967000, 1, [300])",
+              "vi": "Ca 3"
+            },
+            "goi": "tcpTrace(4294967000, 1, [300])",
+            "mongDoi": [
+              {
+                "from": "C",
+                "flags": "SYN",
+                "seq": 4294967000,
+                "ack": 0,
+                "len": 0
+              },
+              {
+                "from": "S",
+                "flags": "SYN,ACK",
+                "seq": 1,
+                "ack": 4294967001,
+                "len": 0
+              },
+              {
+                "from": "C",
+                "flags": "ACK",
+                "seq": 4294967001,
+                "ack": 2,
+                "len": 0
+              },
+              {
+                "from": "C",
+                "flags": "PSH,ACK",
+                "seq": 4294967001,
+                "ack": 2,
+                "len": 300
+              },
+              {
+                "from": "S",
+                "flags": "ACK",
+                "seq": 2,
+                "ack": 4294967301,
+                "len": 0
+              },
+              {
+                "from": "C",
+                "flags": "FIN,ACK",
+                "seq": 4294967301,
+                "ack": 2,
+                "len": 0
+              },
+              {
+                "from": "S",
+                "flags": "ACK",
+                "seq": 2,
+                "ack": 4294967302,
+                "len": 0
+              },
+              {
+                "from": "S",
+                "flags": "FIN,ACK",
+                "seq": 2,
+                "ack": 4294967302,
+                "len": 0
+              },
+              {
+                "from": "C",
+                "flags": "ACK",
+                "seq": 4294967302,
+                "ack": 3,
+                "len": 0
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "tcpTrace(42, 99, [1,1,1])",
+            "mongDoi": [
+              {
+                "from": "C",
+                "flags": "SYN",
+                "seq": 42,
+                "ack": 0,
+                "len": 0
+              },
+              {
+                "from": "S",
+                "flags": "SYN,ACK",
+                "seq": 99,
+                "ack": 43,
+                "len": 0
+              },
+              {
+                "from": "C",
+                "flags": "ACK",
+                "seq": 43,
+                "ack": 100,
+                "len": 0
+              },
+              {
+                "from": "C",
+                "flags": "PSH,ACK",
+                "seq": 43,
+                "ack": 100,
+                "len": 1
+              },
+              {
+                "from": "S",
+                "flags": "ACK",
+                "seq": 100,
+                "ack": 44,
+                "len": 0
+              },
+              {
+                "from": "C",
+                "flags": "PSH,ACK",
+                "seq": 44,
+                "ack": 100,
+                "len": 1
+              },
+              {
+                "from": "S",
+                "flags": "ACK",
+                "seq": 100,
+                "ack": 45,
+                "len": 0
+              },
+              {
+                "from": "C",
+                "flags": "PSH,ACK",
+                "seq": 45,
+                "ack": 100,
+                "len": 1
+              },
+              {
+                "from": "S",
+                "flags": "ACK",
+                "seq": 100,
+                "ack": 46,
+                "len": 0
+              },
+              {
+                "from": "C",
+                "flags": "FIN,ACK",
+                "seq": 46,
+                "ack": 100,
+                "len": 0
+              },
+              {
+                "from": "S",
+                "flags": "ACK",
+                "seq": 100,
+                "ack": 47,
+                "len": 0
+              },
+              {
+                "from": "S",
+                "flags": "FIN,ACK",
+                "seq": 100,
+                "ack": 47,
+                "len": 0
+              },
+              {
+                "from": "C",
+                "flags": "ACK",
+                "seq": 47,
+                "ack": 101,
+                "len": 0
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "tcpTrace(100, 200, [1460])",
+            "mongDoi": [
+              {
+                "from": "C",
+                "flags": "SYN",
+                "seq": 100,
+                "ack": 0,
+                "len": 0
+              },
+              {
+                "from": "S",
+                "flags": "SYN,ACK",
+                "seq": 200,
+                "ack": 101,
+                "len": 0
+              },
+              {
+                "from": "C",
+                "flags": "ACK",
+                "seq": 101,
+                "ack": 201,
+                "len": 0
+              },
+              {
+                "from": "C",
+                "flags": "PSH,ACK",
+                "seq": 101,
+                "ack": 201,
+                "len": 1460
+              },
+              {
+                "from": "S",
+                "flags": "ACK",
+                "seq": 201,
+                "ack": 1561,
+                "len": 0
+              },
+              {
+                "from": "C",
+                "flags": "FIN,ACK",
+                "seq": 1561,
+                "ack": 201,
+                "len": 0
+              },
+              {
+                "from": "S",
+                "flags": "ACK",
+                "seq": 201,
+                "ack": 1562,
+                "len": 0
+              },
+              {
+                "from": "S",
+                "flags": "FIN,ACK",
+                "seq": 201,
+                "ack": 1562,
+                "len": 0
+              },
+              {
+                "from": "C",
+                "flags": "ACK",
+                "seq": 1562,
+                "ack": 202,
+                "len": 0
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "tcpTrace(7, 8, [10,20,30,40])",
+            "mongDoi": [
+              {
+                "from": "C",
+                "flags": "SYN",
+                "seq": 7,
+                "ack": 0,
+                "len": 0
+              },
+              {
+                "from": "S",
+                "flags": "SYN,ACK",
+                "seq": 8,
+                "ack": 8,
+                "len": 0
+              },
+              {
+                "from": "C",
+                "flags": "ACK",
+                "seq": 8,
+                "ack": 9,
+                "len": 0
+              },
+              {
+                "from": "C",
+                "flags": "PSH,ACK",
+                "seq": 8,
+                "ack": 9,
+                "len": 10
+              },
+              {
+                "from": "S",
+                "flags": "ACK",
+                "seq": 9,
+                "ack": 18,
+                "len": 0
+              },
+              {
+                "from": "C",
+                "flags": "PSH,ACK",
+                "seq": 18,
+                "ack": 9,
+                "len": 20
+              },
+              {
+                "from": "S",
+                "flags": "ACK",
+                "seq": 9,
+                "ack": 38,
+                "len": 0
+              },
+              {
+                "from": "C",
+                "flags": "PSH,ACK",
+                "seq": 38,
+                "ack": 9,
+                "len": 30
+              },
+              {
+                "from": "S",
+                "flags": "ACK",
+                "seq": 9,
+                "ack": 68,
+                "len": 0
+              },
+              {
+                "from": "C",
+                "flags": "PSH,ACK",
+                "seq": 68,
+                "ack": 9,
+                "len": 40
+              },
+              {
+                "from": "S",
+                "flags": "ACK",
+                "seq": 9,
+                "ack": 108,
+                "len": 0
+              },
+              {
+                "from": "C",
+                "flags": "FIN,ACK",
+                "seq": 108,
+                "ack": 9,
+                "len": 0
+              },
+              {
+                "from": "S",
+                "flags": "ACK",
+                "seq": 9,
+                "ack": 109,
+                "len": 0
+              },
+              {
+                "from": "S",
+                "flags": "FIN,ACK",
+                "seq": 9,
+                "ack": 109,
+                "len": 0
+              },
+              {
+                "from": "C",
+                "flags": "ACK",
+                "seq": 109,
+                "ack": 10,
+                "len": 0
+              }
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Not incrementing the counter for SYN/FIN."
+        },
+        {
+          "loi": "Making the server ACK the segment’s own seq."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Transport 5 — Go-Back-N versus Selective Repeat",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "sliding window"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Segments are numbered from 0. Each round trip the sender transmits the window. A segment listed as lost is lost the FIRST time only. Go-Back-N resends from the first lost segment; Selective Repeat resends only the lost ones. Give the number of rounds and the total transmissions.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Segment đánh số từ 0. Mỗi vòng khứ hồi, bên gửi phát cả cửa sổ. Segment trong danh sách mất chỉ ở LẦN ĐẦU. Go-Back-N gửi lại từ segment mất đầu tiên; Selective Repeat chỉ gửi lại các segment mất. Cho số vòng và tổng số lần truyền.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Draw the rounds: which segments are in the window each round?",
+        "In Go-Back-N the window restarts at the first lost segment."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Transport 5 — Go-Back-N versus Selective Repeat\n\nAnswer in the answer panel (no code needed).\n\n1. Window simulationMô phỏng cửa sổ\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Transport 5 — Go-Back-N versus Selective Repeat — answer key\n\n1. Window simulationMô phỏng cửa sổ\n   - r1.r: 2\n   - r1.t: 8\n   - r2.r: 3\n   - r2.t: 11\n   - r3.r: 3\n   - r3.t: 9\n   - r4.r: 4\n   - r4.t: 16\n   - r5.r: 4\n   - r5.t: 12\n   Go-Back-N repeats everything after the loss; Selective Repeat repeats only what was lost. gbn: 2 rounds, 8 tx; gbn: 3 rounds, 11 tx; sr: 3 rounds, 9 tx; gbn: 4 rounds, 16 tx; sr: 4 rounds, 12 tx.VI: Go-Back-N lặp lại mọi thứ sau chỗ mất; Selective Repeat chỉ lặp lại cái bị mất.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Go-Back-N repeats everything after the loss; Selective Repeat repeats only what was lost. gbn: 2 rounds, 8 tx; gbn: 3 rounds, 11 tx; sr: 3 rounds, 9 tx; gbn: 4 rounds, 16 tx; sr: 4 rounds, 12 tx.</p><p><i>VI: Go-Back-N lặp lại mọi thứ sau chỗ mất; Selective Repeat chỉ lặp lại cái bị mất.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Window simulation</p><p style=\"opacity:.75;font-size:.92em\"><i>Mô phỏng cửa sổ</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Case"
+              },
+              {
+                "ma": "r",
+                "ten": "Rounds"
+              },
+              {
+                "ma": "t",
+                "ten": "Transmissions"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "8 segments, window 4, lost none, Go-Back-N"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "8 segments, window 4, lost 1, Go-Back-N"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "8 segments, window 4, lost 1, Selective Repeat"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "10 segments, window 5, lost 2,7, Go-Back-N"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "10 segments, window 5, lost 2,7, Selective Repeat"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.r": [
+                "2"
+              ],
+              "r1.t": [
+                "8"
+              ],
+              "r2.r": [
+                "3"
+              ],
+              "r2.t": [
+                "11"
+              ],
+              "r3.r": [
+                "3"
+              ],
+              "r3.t": [
+                "9"
+              ],
+              "r4.r": [
+                "4"
+              ],
+              "r4.t": [
+                "16"
+              ],
+              "r5.r": [
+                "4"
+              ],
+              "r5.t": [
+                "12"
+              ]
+            },
+            "giaiThich": "<p>Go-Back-N repeats everything after the loss; Selective Repeat repeats only what was lost. gbn: 2 rounds, 8 tx; gbn: 3 rounds, 11 tx; sr: 3 rounds, 9 tx; gbn: 4 rounds, 16 tx; sr: 4 rounds, 12 tx.</p><p><i>VI: Go-Back-N lặp lại mọi thứ sau chỗ mất; Selective Repeat chỉ lặp lại cái bị mất.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting retransmissions only for the lost segment in Go-Back-N."
+        },
+        {
+          "loi": "Letting Selective Repeat slide past an unacknowledged segment."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "sliding window",
+          "vi": "cửa sổ trượt"
+        }
+      ]
+    },
+    {
+      "title": "Transport 6 — Write windowSim(total, w, lost, mode)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "sliding window",
+        "ARQ"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Write <code>windowSim(total, w, lost, mode)</code> returning <code>{ rounds, transmissions }</code> under the rules of the previous exercise. Each round the sender transmits the segments of the window <code>[base, base + w)</code> that are not yet acknowledged (Go-Back-N: <i>all</i> of them from <code>base</code>). A segment in <code>lost</code> is lost on its first transmission only. <code>mode</code> is <code>\"gbn\"</code> (base moves to the first lost segment, or past the window if none) or <code>\"sr\"</code> (received segments are acknowledged individually; base moves to the first unacknowledged segment).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>windowSim(total, w, lost, mode)</code> trả <code>{ rounds, transmissions }</code> theo luật của bài trước. Mỗi vòng bên gửi phát các segment trong cửa sổ <code>[base, base + w)</code> chưa được ACK (Go-Back-N: <i>tất cả</i> từ <code>base</code>). Segment trong <code>lost</code> chỉ mất ở lần phát đầu. <code>mode</code> là <code>\"gbn\"</code> (base nhảy tới segment mất đầu tiên, hoặc qua hết cửa sổ nếu không mất) hoặc <code>\"sr\"</code> (segment nhận được ACK riêng; base nhảy tới segment chưa ACK đầu tiên).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "windowSim(8, 4, [], \"gbn\")",
+          "output": "{\"rounds\":2,\"transmissions\":8}",
+          "explanation": "First sample case.|||Ca mẫu đầu tiên."
+        }
+      ],
+      "hintsJson": [
+        "In Go-Back-N the lost segment is delivered on the next round after the sender goes back.",
+        "Remember to delete a segment from the lost set once it was lost."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function windowSim(total, w, lost, mode) {\n  // Write your solution here\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction windowSim(total, w, lost, mode) {\n  var lostSet = {}, i, base = 0, rounds = 0, tx = 0, acked = {};\n  for (i = 0; i < lost.length; i++) lostSet[lost[i]] = true;\n  while (base < total) {\n    rounds++;\n    var sent = [];\n    for (i = base; i < Math.min(base + w, total); i++) if (mode === 'gbn' || !acked[i]) sent.push(i);\n    tx += sent.length;\n    if (mode === 'gbn') {\n      var firstLost = -1;\n      for (i = 0; i < sent.length; i++) if (lostSet[sent[i]]) { firstLost = sent[i]; break; }\n      if (firstLost < 0) base = sent[sent.length - 1] + 1;\n      else { delete lostSet[firstLost]; base = firstLost; }\n    } else {\n      for (i = 0; i < sent.length; i++) { if (lostSet[sent[i]]) delete lostSet[sent[i]]; else acked[sent[i]] = true; }\n      while (base < total && acked[base]) base++;\n    }\n  }\n  return { rounds: rounds, transmissions: tx };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The difference is the cost of one loss: Go-Back-N wastes the whole window, Selective Repeat just one segment.</p><p><i>VI: Khác biệt là giá của một lần mất: Go-Back-N lãng phí cả cửa sổ, Selective Repeat chỉ một segment.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: windowSim(8, 4, [], \"gbn\")",
+              "vi": "Ca 1"
+            },
+            "goi": "windowSim(8, 4, [], \"gbn\")",
+            "mongDoi": {
+              "rounds": 2,
+              "transmissions": 8
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: windowSim(8, 4, [1], \"gbn\")",
+              "vi": "Ca 2"
+            },
+            "goi": "windowSim(8, 4, [1], \"gbn\")",
+            "mongDoi": {
+              "rounds": 3,
+              "transmissions": 11
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: windowSim(8, 4, [1], \"sr\")",
+              "vi": "Ca 3"
+            },
+            "goi": "windowSim(8, 4, [1], \"sr\")",
+            "mongDoi": {
+              "rounds": 3,
+              "transmissions": 9
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "windowSim(10, 5, [2,7], \"gbn\")",
+            "mongDoi": {
+              "rounds": 4,
+              "transmissions": 16
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "windowSim(10, 5, [2,7], \"sr\")",
+            "mongDoi": {
+              "rounds": 4,
+              "transmissions": 12
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "windowSim(6, 1, [3], \"gbn\")",
+            "mongDoi": {
+              "rounds": 7,
+              "transmissions": 7
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "windowSim(12, 4, [0,5,6], \"sr\")",
+            "mongDoi": {
+              "rounds": 5,
+              "transmissions": 15
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "windowSim(0, 4, [], \"gbn\")",
+            "mongDoi": {
+              "rounds": 0,
+              "transmissions": 0
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Making Selective Repeat resend already acknowledged segments."
+        },
+        {
+          "loi": "Forgetting that loss happens only once."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Transport 7 — Slow start and congestion avoidance",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "congestion control"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Write <code>cwndTrace(ssthresh, rounds, timeouts)</code> returning the congestion window (in MSS) at the <i>start</i> of each round 1…<code>rounds</code>, beginning at 1. After a normal round: while <code>cwnd &lt; ssthresh</code> it doubles (never above <code>ssthresh</code>) — slow start; afterwards it grows by 1 — congestion avoidance. If the round number is in <code>timeouts</code>: <code>ssthresh = max(2, floor(cwnd / 2))</code> and <code>cwnd = 1</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>cwndTrace(ssthresh, rounds, timeouts)</code> trả cửa sổ tắc nghẽn (đơn vị MSS) ở <i>đầu</i> mỗi vòng 1…<code>rounds</code>, bắt đầu từ 1. Sau vòng bình thường: khi <code>cwnd &lt; ssthresh</code> thì nhân đôi (không vượt <code>ssthresh</code>) — slow start; sau đó tăng 1 — tránh tắc nghẽn. Nếu số vòng nằm trong <code>timeouts</code>: <code>ssthresh = max(2, floor(cwnd / 2))</code> và <code>cwnd = 1</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "cwndTrace(8, 8, [5])",
+          "output": "[1,2,4,8,9,1,2,4]",
+          "explanation": "First sample case.|||Ca mẫu đầu tiên."
+        }
+      ],
+      "hintsJson": [
+        "Decide the next cwnd after recording the current one.",
+        "The timeout round itself already ran at the old cwnd."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function cwndTrace(ssthresh, rounds, timeouts) {\n  // Write your solution here\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction cwndTrace(ssthresh, rounds, timeouts) {\n  var cwnd = 1, st = ssthresh, out = [];\n  for (var r = 1; r <= rounds; r++) {\n    out.push(cwnd);\n    if (timeouts.indexOf(r) >= 0) { st = Math.max(2, Math.floor(cwnd / 2)); cwnd = 1; }\n    else if (cwnd < st) cwnd = Math.min(cwnd * 2, st);\n    else cwnd = cwnd + 1;\n  }\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is the saw-tooth of TCP Tahoe: exponential growth, then linear, then collapse on loss.</p><p><i>VI: Đây là răng cưa của TCP Tahoe: tăng theo cấp số nhân, rồi tuyến tính, rồi sụp khi mất gói.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: cwndTrace(8, 8, [5])",
+              "vi": "Ca 1"
+            },
+            "goi": "cwndTrace(8, 8, [5])",
+            "mongDoi": [
+              1,
+              2,
+              4,
+              8,
+              9,
+              1,
+              2,
+              4
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 2: cwndTrace(16, 10, [])",
+              "vi": "Ca 2"
+            },
+            "goi": "cwndTrace(16, 10, [])",
+            "mongDoi": [
+              1,
+              2,
+              4,
+              8,
+              16,
+              17,
+              18,
+              19,
+              20,
+              21
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 3: cwndTrace(4, 8, [])",
+              "vi": "Ca 3"
+            },
+            "goi": "cwndTrace(4, 8, [])",
+            "mongDoi": [
+              1,
+              2,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "cwndTrace(64, 12, [4,8])",
+            "mongDoi": [
+              1,
+              2,
+              4,
+              8,
+              1,
+              2,
+              4,
+              5,
+              1,
+              2,
+              3,
+              4
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "cwndTrace(2, 5, [])",
+            "mongDoi": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "cwndTrace(8, 0, [])",
+            "mongDoi": [],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "cwndTrace(32, 9, [6])",
+            "mongDoi": [
+              1,
+              2,
+              4,
+              8,
+              16,
+              32,
+              1,
+              2,
+              4
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Doubling beyond ssthresh."
+        },
+        {
+          "loi": "Setting ssthresh from the new cwnd instead of the old one."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

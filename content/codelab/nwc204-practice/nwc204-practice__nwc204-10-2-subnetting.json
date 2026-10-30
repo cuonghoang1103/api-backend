@@ -1,0 +1,1360 @@
+{
+  "trackSlug": "nwc204-practice",
+  "moduleSlug": "nwc204-10-2-subnetting",
+  "lesson": {
+    "course": "nwc204-computer-networking",
+    "slug": "nwc204-10-2-chia-subnet-va-vlsm"
+  },
+  "exercises": [
+    {
+      "title": "Subnetting 1 — Borrow bits",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "subnetting"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>You split a network with the given prefix into AT LEAST the given number of equal subnets. Give the number of borrowed bits, the new prefix and the usable hosts per subnet.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chia mạng có prefix cho trước thành ÍT NHẤT số mạng con bằng nhau cho trước. Cho số bit mượn, prefix mới và số host dùng được mỗi mạng con.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Smallest b with 2^b ≥ number of subnets.",
+        "Hosts per subnet = 2^(32 − newPrefix) − 2."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Subnetting 1 — Borrow bits\n\nAnswer in the answer panel (no code needed).\n\n1. Borrowed bitsBit mượn\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Subnetting 1 — Borrow bits — answer key\n\n1. Borrowed bitsBit mượn\n   - r1.b: 1\n   - r1.p: /25 / 25\n   - r1.h: 126\n   - r2.b: 3\n   - r2.p: /27 / 27\n   - r2.h: 30\n   - r3.b: 4\n   - r3.p: /28 / 28\n   - r3.h: 14\n   - r4.b: 7\n   - r4.p: /23 / 23\n   - r4.h: 510\n   - r5.b: 2\n   - r5.p: /22 / 22\n   - r5.h: 1022\n   /24, 2: borrow 1 → /25, 126 hosts; /24, 5: borrow 3 → /27, 30 hosts; /24, 10: borrow 4 → /28, 14 hosts; /16, 100: borrow 7 → /23, 510 hosts; /20, 3: borrow 2 → /22, 1022 hosts. Subnets = 2^borrowed.VI: Số mạng con = 2^bit mượn.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>/24, 2: borrow 1 → /25, 126 hosts; /24, 5: borrow 3 → /27, 30 hosts; /24, 10: borrow 4 → /28, 14 hosts; /16, 100: borrow 7 → /23, 510 hosts; /20, 3: borrow 2 → /22, 1022 hosts. Subnets = 2^borrowed.</p><p><i>VI: Số mạng con = 2^bit mượn.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Borrowed bits</p><p style=\"opacity:.75;font-size:.92em\"><i>Bit mượn</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Split"
+              },
+              {
+                "ma": "b",
+                "ten": "Borrowed bits"
+              },
+              {
+                "ma": "p",
+                "ten": "New prefix"
+              },
+              {
+                "ma": "h",
+                "ten": "Hosts / subnet"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "/24 into ≥ 2 subnets"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "/24 into ≥ 5 subnets"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "/24 into ≥ 10 subnets"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "/16 into ≥ 100 subnets"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "/20 into ≥ 3 subnets"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.b": [
+                "1"
+              ],
+              "r1.p": [
+                "/25",
+                "25"
+              ],
+              "r1.h": [
+                "126"
+              ],
+              "r2.b": [
+                "3"
+              ],
+              "r2.p": [
+                "/27",
+                "27"
+              ],
+              "r2.h": [
+                "30"
+              ],
+              "r3.b": [
+                "4"
+              ],
+              "r3.p": [
+                "/28",
+                "28"
+              ],
+              "r3.h": [
+                "14"
+              ],
+              "r4.b": [
+                "7"
+              ],
+              "r4.p": [
+                "/23",
+                "23"
+              ],
+              "r4.h": [
+                "510"
+              ],
+              "r5.b": [
+                "2"
+              ],
+              "r5.p": [
+                "/22",
+                "22"
+              ],
+              "r5.h": [
+                "1022"
+              ]
+            },
+            "giaiThich": "<p>/24, 2: borrow 1 → /25, 126 hosts; /24, 5: borrow 3 → /27, 30 hosts; /24, 10: borrow 4 → /28, 14 hosts; /16, 100: borrow 7 → /23, 510 hosts; /20, 3: borrow 2 → /22, 1022 hosts. Subnets = 2^borrowed.</p><p><i>VI: Số mạng con = 2^bit mượn.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Borrowing b bits for exactly n subnets when n is not a power of two."
+        },
+        {
+          "loi": "Forgetting that every borrowed bit halves the host space."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "borrow bits",
+          "vi": "mượn bit host"
+        }
+      ]
+    },
+    {
+      "title": "Subnetting 2 — List the subnets of 192.168.1.0/24 split into /27",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "subnet list"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Split <b>192.168.1.0/24</b> into /27 subnets. Fill network, first host, last host and broadcast for subnets #1, #2, #3 and #8 (numbering from 1).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chia <b>192.168.1.0/24</b> thành các mạng con /27. Điền network, host đầu, host cuối và broadcast cho mạng con #1, #2, #3 và #8 (đánh số từ 1).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Increment of 256 − 224 = 32 in the fourth octet.",
+        "Broadcast = next network − 1."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Subnetting 2 — List the subnets of 192.168.1.0/24 split into /27\n\nAnswer in the answer panel (no code needed).\n\n1. Subnet listDanh sách mạng con\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Subnetting 2 — List the subnets of 192.168.1.0/24 split into /27 — answer key\n\n1. Subnet listDanh sách mạng con\n   - r1.n: 192.168.1.0\n   - r1.f: 192.168.1.1\n   - r1.l: 192.168.1.30\n   - r1.b: 192.168.1.31\n   - r2.n: 192.168.1.32\n   - r2.f: 192.168.1.33\n   - r2.l: 192.168.1.62\n   - r2.b: 192.168.1.63\n   - r3.n: 192.168.1.64\n   - r3.f: 192.168.1.65\n   - r3.l: 192.168.1.94\n   - r3.b: 192.168.1.95\n   - r4.n: 192.168.1.224\n   - r4.f: 192.168.1.225\n   - r4.l: 192.168.1.254\n   - r4.b: 192.168.1.255\n   Block size 32: 192.168.1.0, 192.168.1.32, 192.168.1.64, 192.168.1.96, 192.168.1.128, 192.168.1.160, 192.168.1.192, 192.168.1.224.VI: Kích thước khối 32: 192.168.1.0, 192.168.1.32, 192.168.1.64, 192.168.1.96, 192.168.1.128, 192.168.1.160, 192.168.1.192, 192.168.1.224.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Block size 32: 192.168.1.0, 192.168.1.32, 192.168.1.64, 192.168.1.96, 192.168.1.128, 192.168.1.160, 192.168.1.192, 192.168.1.224.</p><p><i>VI: Kích thước khối 32: 192.168.1.0, 192.168.1.32, 192.168.1.64, 192.168.1.96, 192.168.1.128, 192.168.1.160, 192.168.1.192, 192.168.1.224.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Subnet list</p><p style=\"opacity:.75;font-size:.92em\"><i>Danh sách mạng con</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Subnet #"
+              },
+              {
+                "ma": "n",
+                "ten": "Network"
+              },
+              {
+                "ma": "f",
+                "ten": "First host"
+              },
+              {
+                "ma": "l",
+                "ten": "Last host"
+              },
+              {
+                "ma": "b",
+                "ten": "Broadcast"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "#1"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "#2"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "#3"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "#8"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.n": [
+                "192.168.1.0"
+              ],
+              "r1.f": [
+                "192.168.1.1"
+              ],
+              "r1.l": [
+                "192.168.1.30"
+              ],
+              "r1.b": [
+                "192.168.1.31"
+              ],
+              "r2.n": [
+                "192.168.1.32"
+              ],
+              "r2.f": [
+                "192.168.1.33"
+              ],
+              "r2.l": [
+                "192.168.1.62"
+              ],
+              "r2.b": [
+                "192.168.1.63"
+              ],
+              "r3.n": [
+                "192.168.1.64"
+              ],
+              "r3.f": [
+                "192.168.1.65"
+              ],
+              "r3.l": [
+                "192.168.1.94"
+              ],
+              "r3.b": [
+                "192.168.1.95"
+              ],
+              "r4.n": [
+                "192.168.1.224"
+              ],
+              "r4.f": [
+                "192.168.1.225"
+              ],
+              "r4.l": [
+                "192.168.1.254"
+              ],
+              "r4.b": [
+                "192.168.1.255"
+              ]
+            },
+            "giaiThich": "<p>Block size 32: 192.168.1.0, 192.168.1.32, 192.168.1.64, 192.168.1.96, 192.168.1.128, 192.168.1.160, 192.168.1.192, 192.168.1.224.</p><p><i>VI: Kích thước khối 32: 192.168.1.0, 192.168.1.32, 192.168.1.64, 192.168.1.96, 192.168.1.128, 192.168.1.160, 192.168.1.192, 192.168.1.224.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Starting the second subnet at .31."
+        },
+        {
+          "loi": "Giving the network address as the first host."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "block size",
+          "vi": "kích thước khối"
+        }
+      ]
+    },
+    {
+      "title": "Subnetting 3 — The subnet a host belongs to",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "subnet membership"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>For each host give its subnet’s network address, the first and last usable host, and the NEXT subnet’s network address.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi host, cho địa chỉ mạng của nó, host dùng được đầu và cuối, và địa chỉ mạng của mạng con KẾ TIẾP.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Find the interesting octet (where the mask is not 0 or 255).",
+        "Network = largest multiple of the block size ≤ host octet."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Subnetting 3 — The subnet a host belongs to\n\nAnswer in the answer panel (no code needed).\n\n1. Host in subnetHost trong mạng con\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Subnetting 3 — The subnet a host belongs to — answer key\n\n1. Host in subnetHost trong mạng con\n   - r1.n: 172.16.64.0\n   - r1.f: 172.16.64.1\n   - r1.l: 172.16.79.254\n   - r1.x: 172.16.80.0\n   - r2.n: 10.200.32.0\n   - r2.f: 10.200.32.1\n   - r2.l: 10.200.39.254\n   - r2.x: 10.200.40.0\n   - r3.n: 192.168.5.128\n   - r3.f: 192.168.5.129\n   - r3.l: 192.168.5.158\n   - r3.x: 192.168.5.160\n   - r4.n: 192.168.5.128\n   - r4.f: 192.168.5.129\n   - r4.l: 192.168.5.190\n   - r4.x: 192.168.5.192\n   - r5.n: 100.64.200.0\n   - r5.f: 100.64.200.1\n   - r5.l: 100.64.203.254\n   - r5.x: 100.64.204.0\n   Next network = broadcast + 1.VI: Mạng con kế = broadcast + 1.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Next network = broadcast + 1.</p><p><i>VI: Mạng con kế = broadcast + 1.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Host in subnet</p><p style=\"opacity:.75;font-size:.92em\"><i>Host trong mạng con</i></p>",
+            "cot": [
+              {
+                "ma": "h",
+                "ten": "Host / prefix"
+              },
+              {
+                "ma": "n",
+                "ten": "Network"
+              },
+              {
+                "ma": "f",
+                "ten": "First"
+              },
+              {
+                "ma": "l",
+                "ten": "Last"
+              },
+              {
+                "ma": "x",
+                "ten": "Next network"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "h": "172.16.77.9/20"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "h": "10.200.33.250/21"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "h": "192.168.5.130/27"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "h": "192.168.5.130/26"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "h": "100.64.200.5/22"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.n": [
+                "172.16.64.0"
+              ],
+              "r1.f": [
+                "172.16.64.1"
+              ],
+              "r1.l": [
+                "172.16.79.254"
+              ],
+              "r1.x": [
+                "172.16.80.0"
+              ],
+              "r2.n": [
+                "10.200.32.0"
+              ],
+              "r2.f": [
+                "10.200.32.1"
+              ],
+              "r2.l": [
+                "10.200.39.254"
+              ],
+              "r2.x": [
+                "10.200.40.0"
+              ],
+              "r3.n": [
+                "192.168.5.128"
+              ],
+              "r3.f": [
+                "192.168.5.129"
+              ],
+              "r3.l": [
+                "192.168.5.158"
+              ],
+              "r3.x": [
+                "192.168.5.160"
+              ],
+              "r4.n": [
+                "192.168.5.128"
+              ],
+              "r4.f": [
+                "192.168.5.129"
+              ],
+              "r4.l": [
+                "192.168.5.190"
+              ],
+              "r4.x": [
+                "192.168.5.192"
+              ],
+              "r5.n": [
+                "100.64.200.0"
+              ],
+              "r5.f": [
+                "100.64.200.1"
+              ],
+              "r5.l": [
+                "100.64.203.254"
+              ],
+              "r5.x": [
+                "100.64.204.0"
+              ]
+            },
+            "giaiThich": "<p>Next network = broadcast + 1.</p><p><i>VI: Mạng con kế = broadcast + 1.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using the wrong octet as the interesting octet."
+        },
+        {
+          "loi": "Giving the broadcast address as the last host."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "interesting octet",
+          "vi": "octet quyết định"
+        }
+      ]
+    },
+    {
+      "title": "Subnetting 4 — Quick checks",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "subnet counting"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Counting subnets and hosts.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đếm mạng con và host.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "n subnets ⇒ 2^b; hosts ⇒ 2^h − 2.",
+        "Always check network and broadcast."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Subnetting 4 — Quick checks\n\nAnswer in the answer panel (no code needed).\n\n1. How many /28 subnets fit in a /24?Có bao nhiêu mạng con /28 trong một /24?\n2. How many usable hosts in each /28?Mỗi mạng con /28 có bao nhiêu host dùng được?\n3. Which mask gives at least 60 hosts per subnet but the most subnets?Mặt nạ nào cho ít nhất 60 host mỗi mạng con mà nhiều mạng con nhất?\n4. The router interface 192.168.1.97/27 is in the subnet …Giao diện router 192.168.1.97/27 nằm trong mạng con …\n5. Which address is a valid host in 192.168.1.64/26?Địa chỉ nào là host hợp lệ trong 192.168.1.64/26?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Subnetting 4 — Quick checks — answer key\n\n1. How many /28 subnets fit in a /24?Có bao nhiêu mạng con /28 trong một /24?\n   Answer: a) 16\n   2^(28−24) = 16.VI: 2^(28−24) = 16.\n\n2. How many usable hosts in each /28?Mỗi mạng con /28 có bao nhiêu host dùng được?\n   Answer: b) 14\n   2^4 − 2 = 14.VI: 2^4 − 2 = 14.\n\n3. Which mask gives at least 60 hosts per subnet but the most subnets?Mặt nạ nào cho ít nhất 60 host mỗi mạng con mà nhiều mạng con nhất?\n   Answer: c) 255.255.255.192 (/26)\n   /26 gives 62 hosts; /27 only 30.VI: /26 cho 62 host; /27 chỉ 30.\n\n4. The router interface 192.168.1.97/27 is in the subnet …Giao diện router 192.168.1.97/27 nằm trong mạng con …\n   Answer: d) 192.168.1.96/27\n   Block size 32: 96 ≤ 97 VI: Khối 32: 96 ≤ 97\n\n5. Which address is a valid host in 192.168.1.64/26?Địa chỉ nào là host hợp lệ trong 192.168.1.64/26?\n   Answer: a) 192.168.1.126\n   Range .65–.126; .64 is the network and .127 the broadcast.VI: Dải .65–.126; .64 là mạng và .127 là broadcast.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>How many /28 subnets fit in a /24?</p><p style=\"opacity:.75;font-size:.92em\"><i>Có bao nhiêu mạng con /28 trong một /24?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "16"
+              },
+              {
+                "ma": "b",
+                "noiDung": "8"
+              },
+              {
+                "ma": "c",
+                "noiDung": "14"
+              },
+              {
+                "ma": "d",
+                "noiDung": "4"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>2^(28−24) = 16.</p><p><i>VI: 2^(28−24) = 16.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>How many usable hosts in each /28?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mỗi mạng con /28 có bao nhiêu host dùng được?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "12"
+              },
+              {
+                "ma": "b",
+                "noiDung": "14"
+              },
+              {
+                "ma": "c",
+                "noiDung": "16"
+              },
+              {
+                "ma": "d",
+                "noiDung": "15"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>2^4 − 2 = 14.</p><p><i>VI: 2^4 − 2 = 14.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Which mask gives at least 60 hosts per subnet but the most subnets?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mặt nạ nào cho ít nhất 60 host mỗi mạng con mà nhiều mạng con nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "255.255.255.128 (/25)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "255.255.255.240 (/28)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "255.255.255.192 (/26)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "255.255.255.224 (/27)"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>/26 gives 62 hosts; /27 only 30.</p><p><i>VI: /26 cho 62 host; /27 chỉ 30.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>The router interface 192.168.1.97/27 is in the subnet …</p><p style=\"opacity:.75;font-size:.92em\"><i>Giao diện router 192.168.1.97/27 nằm trong mạng con …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "192.168.1.64/27"
+              },
+              {
+                "ma": "b",
+                "noiDung": "192.168.1.0/27"
+              },
+              {
+                "ma": "c",
+                "noiDung": "192.168.1.128/27"
+              },
+              {
+                "ma": "d",
+                "noiDung": "192.168.1.96/27"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Block size 32: 96 ≤ 97 < 128.</p><p><i>VI: Khối 32: 96 ≤ 97 < 128.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Which address is a valid host in 192.168.1.64/26?</p><p style=\"opacity:.75;font-size:.92em\"><i>Địa chỉ nào là host hợp lệ trong 192.168.1.64/26?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "192.168.1.126"
+              },
+              {
+                "ma": "b",
+                "noiDung": "192.168.1.64"
+              },
+              {
+                "ma": "c",
+                "noiDung": "192.168.1.127"
+              },
+              {
+                "ma": "d",
+                "noiDung": "192.168.1.128"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Range .65–.126; .64 is the network and .127 the broadcast.</p><p><i>VI: Dải .65–.126; .64 là mạng và .127 là broadcast.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting .64 or .127 as hosts."
+        },
+        {
+          "loi": "Using the number of host bits instead of the prefix."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "valid host",
+          "vi": "host hợp lệ"
+        }
+      ]
+    },
+    {
+      "title": "Subnetting 5 — Write subnetList(net, prefix, newPrefix)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 18,
+      "points": 20,
+      "concepts": [
+        "subnetting"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Write <code>subnetList(net, prefix, newPrefix)</code> returning every <code>/newPrefix</code> subnet of <code>net/prefix</code> in ascending order as <code>[{ network, broadcast }]</code> (dotted decimal). <code>net</code> may be any address inside the block.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>subnetList(net, prefix, newPrefix)</code> trả mọi mạng con <code>/newPrefix</code> của <code>net/prefix</code> theo thứ tự tăng dần dạng <code>[{ network, broadcast }]</code> (thập phân có chấm). <code>net</code> có thể là địa chỉ bất kỳ trong khối.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "subnetList(\"192.168.1.0\", 24, 26)",
+          "output": "[{\"network\":\"192.168.1.0\",\"broadcast\":\"192.168.1.63\"},{\"network\":\"192.168.1.64\",\"broadcast\":\"192.168.1.127\"},{\"network\":\"192.168.1.128\",\"broadcast\":\"192.168.1.191\"},{\"network\":\"192.168.1.192\",\"broadcast\":\"192.168.1.255\"}]",
+          "explanation": "First sample case.|||Ca mẫu đầu tiên."
+        }
+      ],
+      "hintsJson": [
+        "step = 2^(32 − newPrefix), count = 2^(newPrefix − prefix).",
+        "Mask the starting address first so any address inside the block works."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function subnetList(net, prefix, newPrefix) {\n  // Write your solution here\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction subnetList(net, prefix, newPrefix) {\n  function toInt(s) { var p = s.split('.'); return ((+p[0]) * 16777216 + (+p[1]) * 65536 + (+p[2]) * 256 + (+p[3])) >>> 0; }\n  function toStr(n) { return [n >>> 24, (n >>> 16) & 255, (n >>> 8) & 255, n & 255].join('.'); }\n  var mask = prefix === 0 ? 0 : (0xFFFFFFFF << (32 - prefix)) >>> 0, base = (toInt(net) & mask) >>> 0;\n  var step = Math.pow(2, 32 - newPrefix), count = Math.pow(2, newPrefix - prefix), out = [];\n  for (var i = 0; i < count; i++) out.push({ network: toStr(base + i * step), broadcast: toStr(base + i * step + step - 1) });\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Listing subnets is a loop over a base address with a fixed step.</p><p><i>VI: Liệt kê mạng con là vòng lặp trên địa chỉ gốc với bước cố định.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: subnetList(\"192.168.1.0\", 24, 26)",
+              "vi": "Ca 1"
+            },
+            "goi": "subnetList(\"192.168.1.0\", 24, 26)",
+            "mongDoi": [
+              {
+                "network": "192.168.1.0",
+                "broadcast": "192.168.1.63"
+              },
+              {
+                "network": "192.168.1.64",
+                "broadcast": "192.168.1.127"
+              },
+              {
+                "network": "192.168.1.128",
+                "broadcast": "192.168.1.191"
+              },
+              {
+                "network": "192.168.1.192",
+                "broadcast": "192.168.1.255"
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 2: subnetList(\"10.0.0.0\", 24, 24)",
+              "vi": "Ca 2"
+            },
+            "goi": "subnetList(\"10.0.0.0\", 24, 24)",
+            "mongDoi": [
+              {
+                "network": "10.0.0.0",
+                "broadcast": "10.0.0.255"
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 3: subnetList(\"192.168.1.77\", 24, 27)",
+              "vi": "Ca 3"
+            },
+            "goi": "subnetList(\"192.168.1.77\", 24, 27)",
+            "mongDoi": [
+              {
+                "network": "192.168.1.0",
+                "broadcast": "192.168.1.31"
+              },
+              {
+                "network": "192.168.1.32",
+                "broadcast": "192.168.1.63"
+              },
+              {
+                "network": "192.168.1.64",
+                "broadcast": "192.168.1.95"
+              },
+              {
+                "network": "192.168.1.96",
+                "broadcast": "192.168.1.127"
+              },
+              {
+                "network": "192.168.1.128",
+                "broadcast": "192.168.1.159"
+              },
+              {
+                "network": "192.168.1.160",
+                "broadcast": "192.168.1.191"
+              },
+              {
+                "network": "192.168.1.192",
+                "broadcast": "192.168.1.223"
+              },
+              {
+                "network": "192.168.1.224",
+                "broadcast": "192.168.1.255"
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "subnetList(\"172.16.0.0\", 22, 24)",
+            "mongDoi": [
+              {
+                "network": "172.16.0.0",
+                "broadcast": "172.16.0.255"
+              },
+              {
+                "network": "172.16.1.0",
+                "broadcast": "172.16.1.255"
+              },
+              {
+                "network": "172.16.2.0",
+                "broadcast": "172.16.2.255"
+              },
+              {
+                "network": "172.16.3.0",
+                "broadcast": "172.16.3.255"
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "subnetList(\"10.0.0.0\", 8, 10)",
+            "mongDoi": [
+              {
+                "network": "10.0.0.0",
+                "broadcast": "10.63.255.255"
+              },
+              {
+                "network": "10.64.0.0",
+                "broadcast": "10.127.255.255"
+              },
+              {
+                "network": "10.128.0.0",
+                "broadcast": "10.191.255.255"
+              },
+              {
+                "network": "10.192.0.0",
+                "broadcast": "10.255.255.255"
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "subnetList(\"192.0.2.0\", 24, 30)",
+            "mongDoi": [
+              {
+                "network": "192.0.2.0",
+                "broadcast": "192.0.2.3"
+              },
+              {
+                "network": "192.0.2.4",
+                "broadcast": "192.0.2.7"
+              },
+              {
+                "network": "192.0.2.8",
+                "broadcast": "192.0.2.11"
+              },
+              {
+                "network": "192.0.2.12",
+                "broadcast": "192.0.2.15"
+              },
+              {
+                "network": "192.0.2.16",
+                "broadcast": "192.0.2.19"
+              },
+              {
+                "network": "192.0.2.20",
+                "broadcast": "192.0.2.23"
+              },
+              {
+                "network": "192.0.2.24",
+                "broadcast": "192.0.2.27"
+              },
+              {
+                "network": "192.0.2.28",
+                "broadcast": "192.0.2.31"
+              },
+              {
+                "network": "192.0.2.32",
+                "broadcast": "192.0.2.35"
+              },
+              {
+                "network": "192.0.2.36",
+                "broadcast": "192.0.2.39"
+              },
+              {
+                "network": "192.0.2.40",
+                "broadcast": "192.0.2.43"
+              },
+              {
+                "network": "192.0.2.44",
+                "broadcast": "192.0.2.47"
+              },
+              {
+                "network": "192.0.2.48",
+                "broadcast": "192.0.2.51"
+              },
+              {
+                "network": "192.0.2.52",
+                "broadcast": "192.0.2.55"
+              },
+              {
+                "network": "192.0.2.56",
+                "broadcast": "192.0.2.59"
+              },
+              {
+                "network": "192.0.2.60",
+                "broadcast": "192.0.2.63"
+              },
+              {
+                "network": "192.0.2.64",
+                "broadcast": "192.0.2.67"
+              },
+              {
+                "network": "192.0.2.68",
+                "broadcast": "192.0.2.71"
+              },
+              {
+                "network": "192.0.2.72",
+                "broadcast": "192.0.2.75"
+              },
+              {
+                "network": "192.0.2.76",
+                "broadcast": "192.0.2.79"
+              },
+              {
+                "network": "192.0.2.80",
+                "broadcast": "192.0.2.83"
+              },
+              {
+                "network": "192.0.2.84",
+                "broadcast": "192.0.2.87"
+              },
+              {
+                "network": "192.0.2.88",
+                "broadcast": "192.0.2.91"
+              },
+              {
+                "network": "192.0.2.92",
+                "broadcast": "192.0.2.95"
+              },
+              {
+                "network": "192.0.2.96",
+                "broadcast": "192.0.2.99"
+              },
+              {
+                "network": "192.0.2.100",
+                "broadcast": "192.0.2.103"
+              },
+              {
+                "network": "192.0.2.104",
+                "broadcast": "192.0.2.107"
+              },
+              {
+                "network": "192.0.2.108",
+                "broadcast": "192.0.2.111"
+              },
+              {
+                "network": "192.0.2.112",
+                "broadcast": "192.0.2.115"
+              },
+              {
+                "network": "192.0.2.116",
+                "broadcast": "192.0.2.119"
+              },
+              {
+                "network": "192.0.2.120",
+                "broadcast": "192.0.2.123"
+              },
+              {
+                "network": "192.0.2.124",
+                "broadcast": "192.0.2.127"
+              },
+              {
+                "network": "192.0.2.128",
+                "broadcast": "192.0.2.131"
+              },
+              {
+                "network": "192.0.2.132",
+                "broadcast": "192.0.2.135"
+              },
+              {
+                "network": "192.0.2.136",
+                "broadcast": "192.0.2.139"
+              },
+              {
+                "network": "192.0.2.140",
+                "broadcast": "192.0.2.143"
+              },
+              {
+                "network": "192.0.2.144",
+                "broadcast": "192.0.2.147"
+              },
+              {
+                "network": "192.0.2.148",
+                "broadcast": "192.0.2.151"
+              },
+              {
+                "network": "192.0.2.152",
+                "broadcast": "192.0.2.155"
+              },
+              {
+                "network": "192.0.2.156",
+                "broadcast": "192.0.2.159"
+              },
+              {
+                "network": "192.0.2.160",
+                "broadcast": "192.0.2.163"
+              },
+              {
+                "network": "192.0.2.164",
+                "broadcast": "192.0.2.167"
+              },
+              {
+                "network": "192.0.2.168",
+                "broadcast": "192.0.2.171"
+              },
+              {
+                "network": "192.0.2.172",
+                "broadcast": "192.0.2.175"
+              },
+              {
+                "network": "192.0.2.176",
+                "broadcast": "192.0.2.179"
+              },
+              {
+                "network": "192.0.2.180",
+                "broadcast": "192.0.2.183"
+              },
+              {
+                "network": "192.0.2.184",
+                "broadcast": "192.0.2.187"
+              },
+              {
+                "network": "192.0.2.188",
+                "broadcast": "192.0.2.191"
+              },
+              {
+                "network": "192.0.2.192",
+                "broadcast": "192.0.2.195"
+              },
+              {
+                "network": "192.0.2.196",
+                "broadcast": "192.0.2.199"
+              },
+              {
+                "network": "192.0.2.200",
+                "broadcast": "192.0.2.203"
+              },
+              {
+                "network": "192.0.2.204",
+                "broadcast": "192.0.2.207"
+              },
+              {
+                "network": "192.0.2.208",
+                "broadcast": "192.0.2.211"
+              },
+              {
+                "network": "192.0.2.212",
+                "broadcast": "192.0.2.215"
+              },
+              {
+                "network": "192.0.2.216",
+                "broadcast": "192.0.2.219"
+              },
+              {
+                "network": "192.0.2.220",
+                "broadcast": "192.0.2.223"
+              },
+              {
+                "network": "192.0.2.224",
+                "broadcast": "192.0.2.227"
+              },
+              {
+                "network": "192.0.2.228",
+                "broadcast": "192.0.2.231"
+              },
+              {
+                "network": "192.0.2.232",
+                "broadcast": "192.0.2.235"
+              },
+              {
+                "network": "192.0.2.236",
+                "broadcast": "192.0.2.239"
+              },
+              {
+                "network": "192.0.2.240",
+                "broadcast": "192.0.2.243"
+              },
+              {
+                "network": "192.0.2.244",
+                "broadcast": "192.0.2.247"
+              },
+              {
+                "network": "192.0.2.248",
+                "broadcast": "192.0.2.251"
+              },
+              {
+                "network": "192.0.2.252",
+                "broadcast": "192.0.2.255"
+              }
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Not masking the base address."
+        },
+        {
+          "loi": "Producing negative addresses (forget >>> 0)."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Subnetting 6 — Which subnet number is this host in?",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "subnet membership"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Write <code>findSubnet(base, prefix, newPrefix, ip)</code>. The block <code>base/prefix</code> is split into <code>/newPrefix</code> subnets numbered from 1. Return <code>{ index, network }</code> (network as <code>\"a.b.c.d/p\"</code>) of the subnet that contains <code>ip</code>, or <code>null</code> if <code>ip</code> is outside the block.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>findSubnet(base, prefix, newPrefix, ip)</code>. Khối <code>base/prefix</code> được chia thành các mạng con <code>/newPrefix</code> đánh số từ 1. Trả <code>{ index, network }</code> (network dạng <code>\"a.b.c.d/p\"</code>) của mạng con chứa <code>ip</code>, hoặc <code>null</code> nếu <code>ip</code> nằm ngoài khối.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "findSubnet(\"192.168.1.0\", 24, 27, \"192.168.1.97\")",
+          "output": "{\"index\":4,\"network\":\"192.168.1.96/27\"}",
+          "explanation": "First sample case.|||Ca mẫu đầu tiên."
+        }
+      ],
+      "hintsJson": [
+        "index = floor((ip − base) / step) + 1.",
+        "Check the range of the whole block first."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function findSubnet(base, prefix, newPrefix, ip) {\n  // Write your solution here\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction findSubnet(base, prefix, newPrefix, ip) {\n  function toInt(s) { var p = s.split('.'); return ((+p[0]) * 16777216 + (+p[1]) * 65536 + (+p[2]) * 256 + (+p[3])) >>> 0; }\n  function toStr(n) { return [n >>> 24, (n >>> 16) & 255, (n >>> 8) & 255, n & 255].join('.'); }\n  var m0 = prefix === 0 ? 0 : (0xFFFFFFFF << (32 - prefix)) >>> 0, b = (toInt(base) & m0) >>> 0, a = toInt(ip);\n  var size = Math.pow(2, 32 - prefix);\n  if (a < b || a >= b + size) return null;\n  var step = Math.pow(2, 32 - newPrefix), idx = Math.floor((a - b) / step);\n  return { index: idx + 1, network: toStr(b + idx * step) + '/' + newPrefix };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The subnet number is just integer division; the network address is base + index × step.</p><p><i>VI: Số hiệu mạng con chỉ là phép chia nguyên; địa chỉ mạng là base + chỉ số × bước.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: findSubnet(\"192.168.1.0\", 24, 27, \"192.168.1.97\")",
+              "vi": "Ca 1"
+            },
+            "goi": "findSubnet(\"192.168.1.0\", 24, 27, \"192.168.1.97\")",
+            "mongDoi": {
+              "index": 4,
+              "network": "192.168.1.96/27"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: findSubnet(\"192.168.1.0\", 24, 27, \"192.168.1.255\")",
+              "vi": "Ca 2"
+            },
+            "goi": "findSubnet(\"192.168.1.0\", 24, 27, \"192.168.1.255\")",
+            "mongDoi": {
+              "index": 8,
+              "network": "192.168.1.224/27"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: findSubnet(\"192.168.1.0\", 24, 27, \"192.168.2.1\")",
+              "vi": "Ca 3"
+            },
+            "goi": "findSubnet(\"192.168.1.0\", 24, 27, \"192.168.2.1\")",
+            "mongDoi": null
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "findSubnet(\"10.0.0.0\", 16, 24, \"10.0.200.7\")",
+            "mongDoi": {
+              "index": 201,
+              "network": "10.0.200.0/24"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "findSubnet(\"172.16.0.0\", 20, 22, \"172.16.15.1\")",
+            "mongDoi": {
+              "index": 4,
+              "network": "172.16.12.0/22"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "findSubnet(\"192.168.1.0\", 24, 24, \"192.168.1.1\")",
+            "mongDoi": {
+              "index": 1,
+              "network": "192.168.1.0/24"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "findSubnet(\"10.0.0.0\", 8, 9, \"10.200.0.1\")",
+            "mongDoi": {
+              "index": 2,
+              "network": "10.128.0.0/9"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Numbering subnets from 0."
+        },
+        {
+          "loi": "Not rejecting addresses below the base."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

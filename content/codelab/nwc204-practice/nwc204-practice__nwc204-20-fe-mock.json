@@ -1,0 +1,1188 @@
+{
+  "trackSlug": "nwc204-practice",
+  "moduleSlug": "nwc204-20-fe-mock",
+  "lesson": {
+    "course": "nwc204-computer-networking",
+    "slug": "nwc204-ch16-quiz"
+  },
+  "exercises": [
+    {
+      "title": "FE mock A — 20 questions (concepts and calculations)",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 40,
+      "points": 40,
+      "concepts": [
+        "final exam practice"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Mock final exam in the style of the university paper: 20 multiple-choice questions, half concepts and half calculations. Work the calculations on paper first. 40 minutes. Nothing here is copied from a real paper.</p><p><i>This set has 20 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đề thi thử theo phong cách đề của trường: 20 câu trắc nghiệm, một nửa khái niệm và một nửa tính toán. Tính trên giấy trước. 40 phút. Không chép từ đề thật.</p><p><i>Bộ này có 20 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Do the concept questions first, then the calculations.",
+        "Write the formula before the numbers; check units."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# FE mock A — 20 questions (concepts and calculations)\n\nAnswer in the answer panel (no code needed).\n\n1. Which OSI layer is responsible for end-to-end delivery and port numbers?Tầng OSI nào lo chuyển giao đầu-cuối và số cổng?\n2. A switch builds its MAC address table from the __________ address of incoming frames.Switch xây bảng MAC từ địa chỉ __________ của frame đến.\n3. The default gateway is used when the destination is …Default gateway được dùng khi đích …\n4. DHCP messages are exchanged in the order …Thông điệp DHCP trao đổi theo thứ tự …\n5. Which device creates a separate broadcast domain on each interface?Thiết bị nào tạo miền broadcast riêng trên mỗi giao diện?\n6. The three-way handshake of TCP is …Bắt tay ba bước của TCP là …\n7. A link-local IPv6 address begins with …Địa chỉ IPv6 link-local bắt đầu bằng …\n8. An ACL ends with an implicit …Cuối ACL có một … ngầm.\n9. PAT lets many inside hosts share one public IP by changing the …PAT cho nhiều host trong dùng chung một IP công cộng bằng cách đổi …\n10. A trunk port carries traffic using the __________ standard.Cổng trunk mang lưu lượng theo chuẩn __________.\n11. The network address of 172.16.77.9/20 is …Địa chỉ mạng của 172.16.77.9/20 là …\n12. The number of usable hosts in 203.0.113.130/28 is …Số host dùng được trong 203.0.113.130/28 là …\n13. Which prefix is the smallest that holds 60 hosts?Prefix nào nhỏ nhất đủ cho 60 host?\n14. A 1500-byte packet crosses a 100 Mbps link. The transmission time is …Gói 1500 byte đi qua đường 100 Mbps. Thời gian truyền là …\n15. The shortest form of 2001:0db8:0000:0000:0000:0000:0000:0001 is …Dạng ngắn nhất của 2001:0db8:0000:0000:0000:0000:0000:0001 là …\n16. A 3000-byte IP packet (20-byte header) crosses a link with MTU 1000. The number of fragments is …Gói IP 3000 byte (header 20 byte) qua liên kết MTU 1000. Số mảnh là …\n17. The CRC remainder of data 110101 with generator 1011 is …Số dư CRC của dữ liệu 110101 với đa thức sinh 1011 là …\n18. Routing table: 0.0.0.0/0→R9, 10.0.0.0/8→R1, 10.10.0.0/16→R2, 10.10.10.0/24→R3. A packet to 10.10.20.5 goes to …Bảng định tuyến: 0.0.0.0/0→R9, 10.0.0.0/8→R1, 10.10.0.0/16→R2, 10.10.10.0/24→R3. Gói tới 10.10.20.5 đi tới …\n19. Client ISN 7000: the server’s SYN-ACK acknowledgment number is …ISN của client là 7000: số ack trong SYN-ACK của server là …\n20. The wildcard mask that matches the whole 192.168.8.0/22 is …Wildcard mask khớp toàn bộ 192.168.8.0/22 là …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# FE mock A — 20 questions (concepts and calculations) — answer key\n\n1. Which OSI layer is responsible for end-to-end delivery and port numbers?Tầng OSI nào lo chuyển giao đầu-cuối và số cổng?\n   Answer: d) Transport\n   Layer 4.VI: Tầng 4.\n\n2. A switch builds its MAC address table from the __________ address of incoming frames.Switch xây bảng MAC từ địa chỉ __________ của frame đến.\n   Answer: a) source MAC\n   Learn from the source.VI: Học từ nguồn.\n\n3. The default gateway is used when the destination is …Default gateway được dùng khi đích …\n   Answer: b) on a different network\n   Same network ⇒ ARP for the destination.VI: Cùng mạng ⇒ ARP cho đích.\n\n4. DHCP messages are exchanged in the order …Thông điệp DHCP trao đổi theo thứ tự …\n   Answer: c) Discover, Offer, Request, Acknowledge\n   DORA.VI: DORA.\n\n5. Which device creates a separate broadcast domain on each interface?Thiết bị nào tạo miền broadcast riêng trên mỗi giao diện?\n   Answer: d) Router\n   Routers do not forward broadcasts.VI: Router không chuyển broadcast.\n\n6. The three-way handshake of TCP is …Bắt tay ba bước của TCP là …\n   Answer: a) SYN, SYN-ACK, ACK\n   It synchronises both initial sequence numbers.VI: Nó đồng bộ hai số thứ tự khởi đầu.\n\n7. A link-local IPv6 address begins with …Địa chỉ IPv6 link-local bắt đầu bằng …\n   Answer: b) fe80\n   fe80::/10.VI: fe80::/10.\n\n8. An ACL ends with an implicit …Cuối ACL có một … ngầm.\n   Answer: c) deny any\n   Unmatched packets are dropped.VI: Gói không khớp bị loại.\n\n9. PAT lets many inside hosts share one public IP by changing the …PAT cho nhiều host trong dùng chung một IP công cộng bằng cách đổi …\n   Answer: d) source port\n   Each flow gets its own public port.VI: Mỗi luồng có cổng công cộng riêng.\n\n10. A trunk port carries traffic using the __________ standard.Cổng trunk mang lưu lượng theo chuẩn __________.\n   Answer: a) IEEE 802.1Q\n   802.1Q inserts a 4-byte VLAN tag.VI: 802.1Q chèn thẻ VLAN 4 byte.\n\n11. The network address of 172.16.77.9/20 is …Địa chỉ mạng của 172.16.77.9/20 là …\n   Answer: b) 172.16.64.0\n   Block size 16 in the third octet: 64 ≤ 77 VI: Khối 16 ở octet thứ ba: 64 ≤ 77\n\n12. The number of usable hosts in 203.0.113.130/28 is …Số host dùng được trong 203.0.113.130/28 là …\n   Answer: c) 14\n   2⁴ − 2 = 14.VI: 2⁴ − 2 = 14.\n\n13. Which prefix is the smallest that holds 60 hosts?Prefix nào nhỏ nhất đủ cho 60 host?\n   Answer: d) /26\n   2⁶ − 2 = 62 ≥ 60.VI: 2⁶ − 2 = 62 ≥ 60.\n\n14. A 1500-byte packet crosses a 100 Mbps link. The transmission time is …Gói 1500 byte đi qua đường 100 Mbps. Thời gian truyền là …\n   Answer: a) 120 µs\n   12000 bits ÷ 10⁸ = 120 µs.VI: 12000 bit ÷ 10⁸ = 120 µs.\n\n15. The shortest form of 2001:0db8:0000:0000:0000:0000:0000:0001 is …Dạng ngắn nhất của 2001:0db8:0000:0000:0000:0000:0000:0001 là …\n   Answer: b) 2001:db8::1\n   Remove leading zeros and compress the long zero run once.VI: Bỏ số 0 đầu và nén dãy 0 dài một lần.\n\n16. A 3000-byte IP packet (20-byte header) crosses a link with MTU 1000. The number of fragments is …Gói IP 3000 byte (header 20 byte) qua liên kết MTU 1000. Số mảnh là …\n   Answer: c) 4\n   Data 2980 ÷ 976 per fragment → 4 fragments.VI: Dữ liệu 2980 ÷ 976 mỗi mảnh → 4 mảnh.\n\n17. The CRC remainder of data 110101 with generator 1011 is …Số dư CRC của dữ liệu 110101 với đa thức sinh 1011 là …\n   Answer: d) 111\n   Append 3 zeros and divide with XOR.VI: Thêm 3 bit 0 và chia bằng XOR.\n\n18. Routing table: 0.0.0.0/0→R9, 10.0.0.0/8→R1, 10.10.0.0/16→R2, 10.10.10.0/24→R3. A packet to 10.10.20.5 goes to …Bảng định tuyến: 0.0.0.0/0→R9, 10.0.0.0/8→R1, 10.10.0.0/16→R2, 10.10.10.0/24→R3. Gói tới 10.10.20.5 đi tới …\n   Answer: a) R2\n   Longest matching prefix is 10.10.0.0/16.VI: Prefix khớp dài nhất là 10.10.0.0/16.\n\n19. Client ISN 7000: the server’s SYN-ACK acknowledgment number is …ISN của client là 7000: số ack trong SYN-ACK của server là …\n   Answer: b) 7001\n   SYN consumes one sequence number.VI: SYN tốn một số thứ tự.\n\n20. The wildcard mask that matches the whole 192.168.8.0/22 is …Wildcard mask khớp toàn bộ 192.168.8.0/22 là …\n   Answer: c) 0.0.3.255\n   255.255.252.0 inverted = 0.0.3.255.VI: 255.255.252.0 đảo = 0.0.3.255.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "a1",
+            "de": "<p>Which OSI layer is responsible for end-to-end delivery and port numbers?</p><p style=\"opacity:.75;font-size:.92em\"><i>Tầng OSI nào lo chuyển giao đầu-cuối và số cổng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Network"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Data link"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Session"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Transport"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Layer 4.</p><p><i>VI: Tầng 4.</i></p>"
+          },
+          {
+            "ma": "a2",
+            "de": "<p>A switch builds its MAC address table from the __________ address of incoming frames.</p><p style=\"opacity:.75;font-size:.92em\"><i>Switch xây bảng MAC từ địa chỉ __________ của frame đến.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "source MAC"
+              },
+              {
+                "ma": "b",
+                "noiDung": "destination MAC"
+              },
+              {
+                "ma": "c",
+                "noiDung": "source IP"
+              },
+              {
+                "ma": "d",
+                "noiDung": "destination IP"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Learn from the source.</p><p><i>VI: Học từ nguồn.</i></p>"
+          },
+          {
+            "ma": "a3",
+            "de": "<p>The default gateway is used when the destination is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Default gateway được dùng khi đích …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the host itself"
+              },
+              {
+                "ma": "b",
+                "noiDung": "on a different network"
+              },
+              {
+                "ma": "c",
+                "noiDung": "on the same network"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a broadcast address"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Same network ⇒ ARP for the destination.</p><p><i>VI: Cùng mạng ⇒ ARP cho đích.</i></p>"
+          },
+          {
+            "ma": "a4",
+            "de": "<p>DHCP messages are exchanged in the order …</p><p style=\"opacity:.75;font-size:.92em\"><i>Thông điệp DHCP trao đổi theo thứ tự …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Offer, Discover, Acknowledge, Request"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Discover, Request, Offer, Acknowledge"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Discover, Offer, Request, Acknowledge"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Request, Offer, Discover, Acknowledge"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>DORA.</p><p><i>VI: DORA.</i></p>"
+          },
+          {
+            "ma": "a5",
+            "de": "<p>Which device creates a separate broadcast domain on each interface?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thiết bị nào tạo miền broadcast riêng trên mỗi giao diện?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Switch"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Hub"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Repeater"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Router"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Routers do not forward broadcasts.</p><p><i>VI: Router không chuyển broadcast.</i></p>"
+          },
+          {
+            "ma": "a6",
+            "de": "<p>The three-way handshake of TCP is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Bắt tay ba bước của TCP là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "SYN, SYN-ACK, ACK"
+              },
+              {
+                "ma": "b",
+                "noiDung": "SYN, ACK, FIN"
+              },
+              {
+                "ma": "c",
+                "noiDung": "ACK, SYN, SYN"
+              },
+              {
+                "ma": "d",
+                "noiDung": "SYN, RST, ACK"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>It synchronises both initial sequence numbers.</p><p><i>VI: Nó đồng bộ hai số thứ tự khởi đầu.</i></p>"
+          },
+          {
+            "ma": "a7",
+            "de": "<p>A link-local IPv6 address begins with …</p><p style=\"opacity:.75;font-size:.92em\"><i>Địa chỉ IPv6 link-local bắt đầu bằng …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "ff02"
+              },
+              {
+                "ma": "b",
+                "noiDung": "fe80"
+              },
+              {
+                "ma": "c",
+                "noiDung": "2001"
+              },
+              {
+                "ma": "d",
+                "noiDung": "fc00"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>fe80::/10.</p><p><i>VI: fe80::/10.</i></p>"
+          },
+          {
+            "ma": "a8",
+            "de": "<p>An ACL ends with an implicit …</p><p style=\"opacity:.75;font-size:.92em\"><i>Cuối ACL có một … ngầm.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "log"
+              },
+              {
+                "ma": "b",
+                "noiDung": "reject"
+              },
+              {
+                "ma": "c",
+                "noiDung": "deny any"
+              },
+              {
+                "ma": "d",
+                "noiDung": "permit any"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Unmatched packets are dropped.</p><p><i>VI: Gói không khớp bị loại.</i></p>"
+          },
+          {
+            "ma": "a9",
+            "de": "<p>PAT lets many inside hosts share one public IP by changing the …</p><p style=\"opacity:.75;font-size:.92em\"><i>PAT cho nhiều host trong dùng chung một IP công cộng bằng cách đổi …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "destination MAC"
+              },
+              {
+                "ma": "b",
+                "noiDung": "TTL"
+              },
+              {
+                "ma": "c",
+                "noiDung": "VLAN ID"
+              },
+              {
+                "ma": "d",
+                "noiDung": "source port"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Each flow gets its own public port.</p><p><i>VI: Mỗi luồng có cổng công cộng riêng.</i></p>"
+          },
+          {
+            "ma": "a10",
+            "de": "<p>A trunk port carries traffic using the __________ standard.</p><p style=\"opacity:.75;font-size:.92em\"><i>Cổng trunk mang lưu lượng theo chuẩn __________.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "IEEE 802.1Q"
+              },
+              {
+                "ma": "b",
+                "noiDung": "IEEE 802.3"
+              },
+              {
+                "ma": "c",
+                "noiDung": "IEEE 802.11"
+              },
+              {
+                "ma": "d",
+                "noiDung": "IEEE 802.1X"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>802.1Q inserts a 4-byte VLAN tag.</p><p><i>VI: 802.1Q chèn thẻ VLAN 4 byte.</i></p>"
+          },
+          {
+            "ma": "a11",
+            "de": "<p>The network address of 172.16.77.9/20 is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Địa chỉ mạng của 172.16.77.9/20 là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "172.16.80.0"
+              },
+              {
+                "ma": "b",
+                "noiDung": "172.16.64.0"
+              },
+              {
+                "ma": "c",
+                "noiDung": "172.16.77.0"
+              },
+              {
+                "ma": "d",
+                "noiDung": "172.16.64.1"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Block size 16 in the third octet: 64 ≤ 77 < 80 → 172.16.64.0.</p><p><i>VI: Khối 16 ở octet thứ ba: 64 ≤ 77 < 80 → 172.16.64.0.</i></p>"
+          },
+          {
+            "ma": "a12",
+            "de": "<p>The number of usable hosts in 203.0.113.130/28 is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Số host dùng được trong 203.0.113.130/28 là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "30"
+              },
+              {
+                "ma": "b",
+                "noiDung": "15"
+              },
+              {
+                "ma": "c",
+                "noiDung": "14"
+              },
+              {
+                "ma": "d",
+                "noiDung": "16"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>2⁴ − 2 = 14.</p><p><i>VI: 2⁴ − 2 = 14.</i></p>"
+          },
+          {
+            "ma": "a13",
+            "de": "<p>Which prefix is the smallest that holds 60 hosts?</p><p style=\"opacity:.75;font-size:.92em\"><i>Prefix nào nhỏ nhất đủ cho 60 host?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "/27"
+              },
+              {
+                "ma": "b",
+                "noiDung": "/25"
+              },
+              {
+                "ma": "c",
+                "noiDung": "/28"
+              },
+              {
+                "ma": "d",
+                "noiDung": "/26"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>2⁶ − 2 = 62 ≥ 60.</p><p><i>VI: 2⁶ − 2 = 62 ≥ 60.</i></p>"
+          },
+          {
+            "ma": "a14",
+            "de": "<p>A 1500-byte packet crosses a 100 Mbps link. The transmission time is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Gói 1500 byte đi qua đường 100 Mbps. Thời gian truyền là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "120 µs"
+              },
+              {
+                "ma": "b",
+                "noiDung": "12 µs"
+              },
+              {
+                "ma": "c",
+                "noiDung": "1.2 ms"
+              },
+              {
+                "ma": "d",
+                "noiDung": "15 µs"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>12000 bits ÷ 10⁸ = 120 µs.</p><p><i>VI: 12000 bit ÷ 10⁸ = 120 µs.</i></p>"
+          },
+          {
+            "ma": "a15",
+            "de": "<p>The shortest form of 2001:0db8:0000:0000:0000:0000:0000:0001 is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Dạng ngắn nhất của 2001:0db8:0000:0000:0000:0000:0000:0001 là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "2001:db8:::1"
+              },
+              {
+                "ma": "b",
+                "noiDung": "2001:db8::1"
+              },
+              {
+                "ma": "c",
+                "noiDung": "2001:db8:0:0:0:0:0:1"
+              },
+              {
+                "ma": "d",
+                "noiDung": "2001:db8::0:1"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Remove leading zeros and compress the long zero run once.</p><p><i>VI: Bỏ số 0 đầu và nén dãy 0 dài một lần.</i></p>"
+          },
+          {
+            "ma": "a16",
+            "de": "<p>A 3000-byte IP packet (20-byte header) crosses a link with MTU 1000. The number of fragments is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Gói IP 3000 byte (header 20 byte) qua liên kết MTU 1000. Số mảnh là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "5"
+              },
+              {
+                "ma": "b",
+                "noiDung": "2"
+              },
+              {
+                "ma": "c",
+                "noiDung": "4"
+              },
+              {
+                "ma": "d",
+                "noiDung": "3"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Data 2980 ÷ 976 per fragment → 4 fragments.</p><p><i>VI: Dữ liệu 2980 ÷ 976 mỗi mảnh → 4 mảnh.</i></p>"
+          },
+          {
+            "ma": "a17",
+            "de": "<p>The CRC remainder of data 110101 with generator 1011 is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Số dư CRC của dữ liệu 110101 với đa thức sinh 1011 là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "101"
+              },
+              {
+                "ma": "b",
+                "noiDung": "011"
+              },
+              {
+                "ma": "c",
+                "noiDung": "110"
+              },
+              {
+                "ma": "d",
+                "noiDung": "111"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Append 3 zeros and divide with XOR.</p><p><i>VI: Thêm 3 bit 0 và chia bằng XOR.</i></p>"
+          },
+          {
+            "ma": "a18",
+            "de": "<p>Routing table: 0.0.0.0/0→R9, 10.0.0.0/8→R1, 10.10.0.0/16→R2, 10.10.10.0/24→R3. A packet to 10.10.20.5 goes to …</p><p style=\"opacity:.75;font-size:.92em\"><i>Bảng định tuyến: 0.0.0.0/0→R9, 10.0.0.0/8→R1, 10.10.0.0/16→R2, 10.10.10.0/24→R3. Gói tới 10.10.20.5 đi tới …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "R2"
+              },
+              {
+                "ma": "b",
+                "noiDung": "R1"
+              },
+              {
+                "ma": "c",
+                "noiDung": "R3"
+              },
+              {
+                "ma": "d",
+                "noiDung": "R9"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Longest matching prefix is 10.10.0.0/16.</p><p><i>VI: Prefix khớp dài nhất là 10.10.0.0/16.</i></p>"
+          },
+          {
+            "ma": "a19",
+            "de": "<p>Client ISN 7000: the server’s SYN-ACK acknowledgment number is …</p><p style=\"opacity:.75;font-size:.92em\"><i>ISN của client là 7000: số ack trong SYN-ACK của server là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "0"
+              },
+              {
+                "ma": "b",
+                "noiDung": "7001"
+              },
+              {
+                "ma": "c",
+                "noiDung": "7000"
+              },
+              {
+                "ma": "d",
+                "noiDung": "7002"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>SYN consumes one sequence number.</p><p><i>VI: SYN tốn một số thứ tự.</i></p>"
+          },
+          {
+            "ma": "a20",
+            "de": "<p>The wildcard mask that matches the whole 192.168.8.0/22 is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Wildcard mask khớp toàn bộ 192.168.8.0/22 là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "0.0.0.255"
+              },
+              {
+                "ma": "b",
+                "noiDung": "0.0.15.255"
+              },
+              {
+                "ma": "c",
+                "noiDung": "0.0.3.255"
+              },
+              {
+                "ma": "d",
+                "noiDung": "0.0.7.255"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>255.255.252.0 inverted = 0.0.3.255.</p><p><i>VI: 255.255.252.0 đảo = 0.0.3.255.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting the −2 for network and broadcast addresses."
+        },
+        {
+          "loi": "Choosing a distractor that matches a half-finished result."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "FE",
+          "vi": "thi cuối kỳ"
+        }
+      ]
+    },
+    {
+      "title": "FE mock B — 20 questions (concepts and calculations)",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 40,
+      "points": 40,
+      "concepts": [
+        "final exam practice"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Second mock final exam: 20 multiple-choice questions mixing addressing, switching, transport and security. 40 minutes. Calculations first on paper.</p><p><i>This set has 20 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đề thi thử thứ hai: 20 câu trắc nghiệm trộn địa chỉ, chuyển mạch, giao vận và an ninh. 40 phút. Tính toán trên giấy trước.</p><p><i>Bộ này có 20 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Eliminate options that do not even match the unit.",
+        "Re-derive every calculation once more before submitting."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# FE mock B — 20 questions (concepts and calculations)\n\nAnswer in the answer panel (no code needed).\n\n1. Which layer adds the Ethernet FCS?Tầng nào thêm FCS Ethernet?\n2. UDP is preferred for …UDP được ưu tiên cho …\n3. Which address is used by a switch to forward a frame?Switch dùng địa chỉ nào để chuyển frame?\n4. DNS resolves …DNS phân giải …\n5. Which prefix of IPv4 is private?Dải IPv4 nào là địa chỉ riêng?\n6. The native VLAN is the VLAN whose frames cross a trunk …Native VLAN là VLAN có frame đi qua trunk …\n7. ICMP Time Exceeded is sent when …ICMP Time Exceeded được gửi khi …\n8. Compared with a standard ACL, an extended ACL can match …So với ACL chuẩn, ACL mở rộng còn khớp được …\n9. An ARP request is sent as a …Yêu cầu ARP được gửi dạng …\n10. Full-duplex Ethernet links between switch and host have no …Liên kết Ethernet song công giữa switch và host không có …\n11. The network address of 10.45.99.200/13 is …Địa chỉ mạng của 10.45.99.200/13 là …\n12. VLSM from 192.168.50.0/24: 100, 50 and 12 hosts. The third subnet (12 hosts) is …VLSM từ 192.168.50.0/24: 100, 50 và 12 host. Mạng con thứ ba (12 host) là …\n13. A switch has an empty table. Frames: A→B on port 1, B→A on port 2, C→A on port 3. The third frame is …Switch bảng rỗng. Frame: A→B cổng 1, B→A cổng 2, C→A cổng 3. Frame thứ ba được …\n14. A file of 5 MB (5×10⁶ B) over a 40 Mbps link takes …Tệp 5 MB (5×10⁶ B) qua đường 40 Mbps mất …\n15. The EUI-64 interface ID of MAC 00:1A:2B:3C:4D:5E is …Interface ID EUI-64 của MAC 00:1A:2B:3C:4D:5E là …\n16. Go-Back-N: 8 segments, window 4, segment 1 lost once. Total transmissions =Go-Back-N: 8 segment, cửa sổ 4, segment 1 mất một lần. Tổng số lần truyền =\n17. PAT with first public port 50000: h1:1, h2:1, h1:1 (all TCP). The third packet leaves with …PAT với cổng công cộng đầu 50000: h1:1, h2:1, h1:1 (đều TCP). Gói thứ ba ra ngoài với …\n18. ACL 101: “deny tcp 10.0.0.0 0.0.0.255 any eq 23” then “permit ip any any”. Telnet from 10.0.0.7 is …ACL 101: “deny tcp 10.0.0.0 0.0.0.255 any eq 23” rồi “permit ip any any”. Telnet từ 10.0.0.7 bị …\n19. How many addresses are in 172.16.0.0/21?172.16.0.0/21 có bao nhiêu địa chỉ?\n20. Efficiency of a 100-byte TCP payload carried in one Ethernet frame (20 B TCP + 20 B IP + 18 B Ethernet):Hiệu suất của dữ liệu TCP 100 byte trong một frame Ethernet (dùng 20+20+18 byte header):\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# FE mock B — 20 questions (concepts and calculations) — answer key\n\n1. Which layer adds the Ethernet FCS?Tầng nào thêm FCS Ethernet?\n   Answer: d) Data link\n   The FCS is the frame trailer.VI: FCS là trailer của frame.\n\n2. UDP is preferred for …UDP được ưu tiên cho …\n   Answer: a) live voice and video\n   Late data is useless in real time.VI: Dữ liệu muộn vô dụng trong thời gian thực.\n\n3. Which address is used by a switch to forward a frame?Switch dùng địa chỉ nào để chuyển frame?\n   Answer: b) destination MAC\n   Layer 2 forwarding.VI: Chuyển tiếp tầng 2.\n\n4. DNS resolves …DNS phân giải …\n   Answer: c) names to IP addresses\n   ARP does IP to MAC.VI: ARP làm IP sang MAC.\n\n5. Which prefix of IPv4 is private?Dải IPv4 nào là địa chỉ riêng?\n   Answer: d) 172.20.0.0/16\n   172.16.0.0–172.31.255.255.VI: 172.16.0.0–172.31.255.255.\n\n6. The native VLAN is the VLAN whose frames cross a trunk …Native VLAN là VLAN có frame đi qua trunk …\n   Answer: a) untagged\n   Both ends must agree on it.VI: Hai đầu phải thống nhất.\n\n7. ICMP Time Exceeded is sent when …ICMP Time Exceeded được gửi khi …\n   Answer: b) the TTL of a packet reaches 0\n   Traceroute relies on it.VI: Traceroute dựa vào nó.\n\n8. Compared with a standard ACL, an extended ACL can match …So với ACL chuẩn, ACL mở rộng còn khớp được …\n   Answer: c) protocol, destination and ports\n   Extended ACLs go near the source.VI: ACL mở rộng đặt gần nguồn.\n\n9. An ARP request is sent as a …Yêu cầu ARP được gửi dạng …\n   Answer: d) broadcast\n   ff:ff:ff:ff:ff:ff.VI: ff:ff:ff:ff:ff:ff.\n\n10. Full-duplex Ethernet links between switch and host have no …Liên kết Ethernet song công giữa switch và host không có …\n   Answer: a) collisions\n   CSMA/CD is disabled.VI: CSMA/CD bị tắt.\n\n11. The network address of 10.45.99.200/13 is …Địa chỉ mạng của 10.45.99.200/13 là …\n   Answer: b) 10.40.0.0\n   Block size 8 in the second octet: 40 ≤ 45 VI: Khối 8 ở octet thứ hai: 40 ≤ 45\n\n12. VLSM from 192.168.50.0/24: 100, 50 and 12 hosts. The third subnet (12 hosts) is …VLSM từ 192.168.50.0/24: 100, 50 và 12 host. Mạng con thứ ba (12 host) là …\n   Answer: c) 192.168.50.192/28\n   Largest first: /25, /26, then /28.VI: Lớn trước: /25, /26, rồi /28.\n\n13. A switch has an empty table. Frames: A→B on port 1, B→A on port 2, C→A on port 3. The third frame is …Switch bảng rỗng. Frame: A→B cổng 1, B→A cổng 2, C→A cổng 3. Frame thứ ba được …\n   Answer: d) port 1\n   A was learned on port 1.VI: A đã được học ở cổng 1.\n\n14. A file of 5 MB (5×10⁶ B) over a 40 Mbps link takes …Tệp 5 MB (5×10⁶ B) qua đường 40 Mbps mất …\n   Answer: a) 1 s\n   5×10⁶ × 8 = 40×10⁶ bits.VI: 5×10⁶ × 8 = 40×10⁶ bit.\n\n15. The EUI-64 interface ID of MAC 00:1A:2B:3C:4D:5E is …Interface ID EUI-64 của MAC 00:1A:2B:3C:4D:5E là …\n   Answer: b) 21a:2bff:fe3c:4d5e\n   Insert fffe and flip the U/L bit: 00 → 02.VI: Chèn fffe và đảo bit U/L: 00 → 02.\n\n16. Go-Back-N: 8 segments, window 4, segment 1 lost once. Total transmissions =Go-Back-N: 8 segment, cửa sổ 4, segment 1 mất một lần. Tổng số lần truyền =\n   Answer: c) 11\n   4 + 4 (from segment 1) + 3 = 11.VI: 4 + 4 (từ segment 1) + 3 = 11.\n\n17. PAT with first public port 50000: h1:1, h2:1, h1:1 (all TCP). The third packet leaves with …PAT với cổng công cộng đầu 50000: h1:1, h2:1, h1:1 (đều TCP). Gói thứ ba ra ngoài với …\n   Answer: d) 203.0.113.1:50000\n   A repeated flow reuses its translation.VI: Luồng lặp dùng lại phép dịch.\n\n18. ACL 101: “deny tcp 10.0.0.0 0.0.0.255 any eq 23” then “permit ip any any”. Telnet from 10.0.0.7 is …ACL 101: “deny tcp 10.0.0.0 0.0.0.255 any eq 23” rồi “permit ip any any”. Telnet từ 10.0.0.7 bị …\n   Answer: a) deny\n   Line 1 matches first.VI: Dòng 1 khớp trước.\n\n19. How many addresses are in 172.16.0.0/21?172.16.0.0/21 có bao nhiêu địa chỉ?\n   Answer: b) 2048\n   2^(32−21) = 2048.VI: 2^(32−21) = 2048.\n\n20. Efficiency of a 100-byte TCP payload carried in one Ethernet frame (20 B TCP + 20 B IP + 18 B Ethernet):Hiệu suất của dữ liệu TCP 100 byte trong một frame Ethernet (dùng 20+20+18 byte header):\n   Answer: c) 63.3%\n   100 ÷ (100 + 58) = 63.3%.VI: 100 ÷ (100 + 58) = 63,3%.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "b1",
+            "de": "<p>Which layer adds the Ethernet FCS?</p><p style=\"opacity:.75;font-size:.92em\"><i>Tầng nào thêm FCS Ethernet?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Network"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Physical"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Transport"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Data link"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The FCS is the frame trailer.</p><p><i>VI: FCS là trailer của frame.</i></p>"
+          },
+          {
+            "ma": "b2",
+            "de": "<p>UDP is preferred for …</p><p style=\"opacity:.75;font-size:.92em\"><i>UDP được ưu tiên cho …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "live voice and video"
+              },
+              {
+                "ma": "b",
+                "noiDung": "file download needing integrity"
+              },
+              {
+                "ma": "c",
+                "noiDung": "bank transfers"
+              },
+              {
+                "ma": "d",
+                "noiDung": "email"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Late data is useless in real time.</p><p><i>VI: Dữ liệu muộn vô dụng trong thời gian thực.</i></p>"
+          },
+          {
+            "ma": "b3",
+            "de": "<p>Which address is used by a switch to forward a frame?</p><p style=\"opacity:.75;font-size:.92em\"><i>Switch dùng địa chỉ nào để chuyển frame?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "source IP"
+              },
+              {
+                "ma": "b",
+                "noiDung": "destination MAC"
+              },
+              {
+                "ma": "c",
+                "noiDung": "destination IP"
+              },
+              {
+                "ma": "d",
+                "noiDung": "destination port"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Layer 2 forwarding.</p><p><i>VI: Chuyển tiếp tầng 2.</i></p>"
+          },
+          {
+            "ma": "b4",
+            "de": "<p>DNS resolves …</p><p style=\"opacity:.75;font-size:.92em\"><i>DNS phân giải …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "MAC to ports"
+              },
+              {
+                "ma": "b",
+                "noiDung": "ports to services"
+              },
+              {
+                "ma": "c",
+                "noiDung": "names to IP addresses"
+              },
+              {
+                "ma": "d",
+                "noiDung": "IP addresses to MAC addresses"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>ARP does IP to MAC.</p><p><i>VI: ARP làm IP sang MAC.</i></p>"
+          },
+          {
+            "ma": "b5",
+            "de": "<p>Which prefix of IPv4 is private?</p><p style=\"opacity:.75;font-size:.92em\"><i>Dải IPv4 nào là địa chỉ riêng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "172.32.0.0/16"
+              },
+              {
+                "ma": "b",
+                "noiDung": "192.169.0.0/16"
+              },
+              {
+                "ma": "c",
+                "noiDung": "11.0.0.0/8"
+              },
+              {
+                "ma": "d",
+                "noiDung": "172.20.0.0/16"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>172.16.0.0–172.31.255.255.</p><p><i>VI: 172.16.0.0–172.31.255.255.</i></p>"
+          },
+          {
+            "ma": "b6",
+            "de": "<p>The native VLAN is the VLAN whose frames cross a trunk …</p><p style=\"opacity:.75;font-size:.92em\"><i>Native VLAN là VLAN có frame đi qua trunk …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "untagged"
+              },
+              {
+                "ma": "b",
+                "noiDung": "encrypted"
+              },
+              {
+                "ma": "c",
+                "noiDung": "compressed"
+              },
+              {
+                "ma": "d",
+                "noiDung": "duplicated"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Both ends must agree on it.</p><p><i>VI: Hai đầu phải thống nhất.</i></p>"
+          },
+          {
+            "ma": "b7",
+            "de": "<p>ICMP Time Exceeded is sent when …</p><p style=\"opacity:.75;font-size:.92em\"><i>ICMP Time Exceeded được gửi khi …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the DNS is slow"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the TTL of a packet reaches 0"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the port is closed"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the MAC is unknown"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Traceroute relies on it.</p><p><i>VI: Traceroute dựa vào nó.</i></p>"
+          },
+          {
+            "ma": "b8",
+            "de": "<p>Compared with a standard ACL, an extended ACL can match …</p><p style=\"opacity:.75;font-size:.92em\"><i>So với ACL chuẩn, ACL mở rộng còn khớp được …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "only the MAC"
+              },
+              {
+                "ma": "b",
+                "noiDung": "only the VLAN"
+              },
+              {
+                "ma": "c",
+                "noiDung": "protocol, destination and ports"
+              },
+              {
+                "ma": "d",
+                "noiDung": "only the source"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Extended ACLs go near the source.</p><p><i>VI: ACL mở rộng đặt gần nguồn.</i></p>"
+          },
+          {
+            "ma": "b9",
+            "de": "<p>An ARP request is sent as a …</p><p style=\"opacity:.75;font-size:.92em\"><i>Yêu cầu ARP được gửi dạng …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "unicast"
+              },
+              {
+                "ma": "b",
+                "noiDung": "multicast to routers"
+              },
+              {
+                "ma": "c",
+                "noiDung": "anycast"
+              },
+              {
+                "ma": "d",
+                "noiDung": "broadcast"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>ff:ff:ff:ff:ff:ff.</p><p><i>VI: ff:ff:ff:ff:ff:ff.</i></p>"
+          },
+          {
+            "ma": "b10",
+            "de": "<p>Full-duplex Ethernet links between switch and host have no …</p><p style=\"opacity:.75;font-size:.92em\"><i>Liên kết Ethernet song công giữa switch và host không có …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "collisions"
+              },
+              {
+                "ma": "b",
+                "noiDung": "frames"
+              },
+              {
+                "ma": "c",
+                "noiDung": "MAC addresses"
+              },
+              {
+                "ma": "d",
+                "noiDung": "FCS"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>CSMA/CD is disabled.</p><p><i>VI: CSMA/CD bị tắt.</i></p>"
+          },
+          {
+            "ma": "b11",
+            "de": "<p>The network address of 10.45.99.200/13 is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Địa chỉ mạng của 10.45.99.200/13 là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "10.48.0.0"
+              },
+              {
+                "ma": "b",
+                "noiDung": "10.40.0.0"
+              },
+              {
+                "ma": "c",
+                "noiDung": "10.45.0.0"
+              },
+              {
+                "ma": "d",
+                "noiDung": "10.32.0.0"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Block size 8 in the second octet: 40 ≤ 45 < 48.</p><p><i>VI: Khối 8 ở octet thứ hai: 40 ≤ 45 < 48.</i></p>"
+          },
+          {
+            "ma": "b12",
+            "de": "<p>VLSM from 192.168.50.0/24: 100, 50 and 12 hosts. The third subnet (12 hosts) is …</p><p style=\"opacity:.75;font-size:.92em\"><i>VLSM từ 192.168.50.0/24: 100, 50 và 12 host. Mạng con thứ ba (12 host) là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "192.168.50.176/28"
+              },
+              {
+                "ma": "b",
+                "noiDung": "192.168.50.128/28"
+              },
+              {
+                "ma": "c",
+                "noiDung": "192.168.50.192/28"
+              },
+              {
+                "ma": "d",
+                "noiDung": "192.168.50.192/26"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Largest first: /25, /26, then /28.</p><p><i>VI: Lớn trước: /25, /26, rồi /28.</i></p>"
+          },
+          {
+            "ma": "b13",
+            "de": "<p>A switch has an empty table. Frames: A→B on port 1, B→A on port 2, C→A on port 3. The third frame is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Switch bảng rỗng. Frame: A→B cổng 1, B→A cổng 2, C→A cổng 3. Frame thứ ba được …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "flood"
+              },
+              {
+                "ma": "b",
+                "noiDung": "filter"
+              },
+              {
+                "ma": "c",
+                "noiDung": "port 2"
+              },
+              {
+                "ma": "d",
+                "noiDung": "port 1"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A was learned on port 1.</p><p><i>VI: A đã được học ở cổng 1.</i></p>"
+          },
+          {
+            "ma": "b14",
+            "de": "<p>A file of 5 MB (5×10⁶ B) over a 40 Mbps link takes …</p><p style=\"opacity:.75;font-size:.92em\"><i>Tệp 5 MB (5×10⁶ B) qua đường 40 Mbps mất …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "1 s"
+              },
+              {
+                "ma": "b",
+                "noiDung": "0.125 s"
+              },
+              {
+                "ma": "c",
+                "noiDung": "8 s"
+              },
+              {
+                "ma": "d",
+                "noiDung": "0.2 s"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>5×10⁶ × 8 = 40×10⁶ bits.</p><p><i>VI: 5×10⁶ × 8 = 40×10⁶ bit.</i></p>"
+          },
+          {
+            "ma": "b15",
+            "de": "<p>The EUI-64 interface ID of MAC 00:1A:2B:3C:4D:5E is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Interface ID EUI-64 của MAC 00:1A:2B:3C:4D:5E là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "21a:2bff:fe3c:4d5f"
+              },
+              {
+                "ma": "b",
+                "noiDung": "21a:2bff:fe3c:4d5e"
+              },
+              {
+                "ma": "c",
+                "noiDung": "1a:2bff:fe3c:4d5e"
+              },
+              {
+                "ma": "d",
+                "noiDung": "21a:2b3c:4d5e:fffe"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Insert fffe and flip the U/L bit: 00 → 02.</p><p><i>VI: Chèn fffe và đảo bit U/L: 00 → 02.</i></p>"
+          },
+          {
+            "ma": "b16",
+            "de": "<p>Go-Back-N: 8 segments, window 4, segment 1 lost once. Total transmissions =</p><p style=\"opacity:.75;font-size:.92em\"><i>Go-Back-N: 8 segment, cửa sổ 4, segment 1 mất một lần. Tổng số lần truyền =</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "9"
+              },
+              {
+                "ma": "b",
+                "noiDung": "12"
+              },
+              {
+                "ma": "c",
+                "noiDung": "11"
+              },
+              {
+                "ma": "d",
+                "noiDung": "8"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>4 + 4 (from segment 1) + 3 = 11.</p><p><i>VI: 4 + 4 (từ segment 1) + 3 = 11.</i></p>"
+          },
+          {
+            "ma": "b17",
+            "de": "<p>PAT with first public port 50000: h1:1, h2:1, h1:1 (all TCP). The third packet leaves with …</p><p style=\"opacity:.75;font-size:.92em\"><i>PAT với cổng công cộng đầu 50000: h1:1, h2:1, h1:1 (đều TCP). Gói thứ ba ra ngoài với …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "203.0.113.1:50002"
+              },
+              {
+                "ma": "b",
+                "noiDung": "203.0.113.1:50001"
+              },
+              {
+                "ma": "c",
+                "noiDung": "203.0.113.1:1"
+              },
+              {
+                "ma": "d",
+                "noiDung": "203.0.113.1:50000"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A repeated flow reuses its translation.</p><p><i>VI: Luồng lặp dùng lại phép dịch.</i></p>"
+          },
+          {
+            "ma": "b18",
+            "de": "<p>ACL 101: “deny tcp 10.0.0.0 0.0.0.255 any eq 23” then “permit ip any any”. Telnet from 10.0.0.7 is …</p><p style=\"opacity:.75;font-size:.92em\"><i>ACL 101: “deny tcp 10.0.0.0 0.0.0.255 any eq 23” rồi “permit ip any any”. Telnet từ 10.0.0.7 bị …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "deny"
+              },
+              {
+                "ma": "b",
+                "noiDung": "permit"
+              },
+              {
+                "ma": "c",
+                "noiDung": "logged"
+              },
+              {
+                "ma": "d",
+                "noiDung": "redirected"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Line 1 matches first.</p><p><i>VI: Dòng 1 khớp trước.</i></p>"
+          },
+          {
+            "ma": "b19",
+            "de": "<p>How many addresses are in 172.16.0.0/21?</p><p style=\"opacity:.75;font-size:.92em\"><i>172.16.0.0/21 có bao nhiêu địa chỉ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "2046"
+              },
+              {
+                "ma": "b",
+                "noiDung": "2048"
+              },
+              {
+                "ma": "c",
+                "noiDung": "1024"
+              },
+              {
+                "ma": "d",
+                "noiDung": "4096"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>2^(32−21) = 2048.</p><p><i>VI: 2^(32−21) = 2048.</i></p>"
+          },
+          {
+            "ma": "b20",
+            "de": "<p>Efficiency of a 100-byte TCP payload carried in one Ethernet frame (20 B TCP + 20 B IP + 18 B Ethernet):</p><p style=\"opacity:.75;font-size:.92em\"><i>Hiệu suất của dữ liệu TCP 100 byte trong một frame Ethernet (dùng 20+20+18 byte header):</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "100.0%"
+              },
+              {
+                "ma": "b",
+                "noiDung": "56.2%"
+              },
+              {
+                "ma": "c",
+                "noiDung": "63.3%"
+              },
+              {
+                "ma": "d",
+                "noiDung": "72.5%"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>100 ÷ (100 + 58) = 63.3%.</p><p><i>VI: 100 ÷ (100 + 58) = 63,3%.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Mixing bits and bytes."
+        },
+        {
+          "loi": "Reading “third frame” as the second."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "FE",
+          "vi": "thi cuối kỳ"
+        }
+      ]
+    }
+  ]
+}

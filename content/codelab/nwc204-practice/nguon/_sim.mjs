@@ -221,9 +221,9 @@ export function windowSim(total, w, lost, mode) {
     tx += sent.length;
     if (mode === 'gbn') {
       var firstLost = -1;
-      for (i = 0; i < sent.length; i++) if (lostSet[sent[i]]) { firstLost = sent[i]; break; }
-      if (firstLost < 0) base = sent[sent.length - 1] + 1;
-      else { delete lostSet[firstLost]; base = firstLost; }
+      // đoạn "mất" chỉ mất ở LẦN GỬI ĐẦU: mọi đoạn trong danh sách đã gửi ở vòng này đều hết bị mất, kể cả đoạn đứng sau đoạn mất đầu tiên
+      for (i = 0; i < sent.length; i++) if (lostSet[sent[i]]) { if (firstLost < 0) firstLost = sent[i]; delete lostSet[sent[i]]; }
+      base = firstLost < 0 ? sent[sent.length - 1] + 1 : firstLost;
     } else {
       for (i = 0; i < sent.length; i++) { if (lostSet[sent[i]]) delete lostSet[sent[i]]; else acked[sent[i]] = true; }
       while (base < total && acked[base]) base++;

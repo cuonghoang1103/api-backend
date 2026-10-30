@@ -56,6 +56,8 @@ assert.equal(t.length, 3 + 4 + 4);
 assert.deepEqual(S.windowSim(8, 4, [], 'gbn'), { rounds: 2, transmissions: 8 });
 assert.deepEqual(S.windowSim(8, 4, [1], 'gbn'), { rounds: 3, transmissions: 11 });
 assert.deepEqual(S.windowSim(8, 4, [1], 'sr'), { rounds: 3, transmissions: 9 });
+// hai đoạn mất cùng cửa sổ: đoạn 2 đã dùng hết lần mất của nó ở vòng đầu ⇒ vòng 2 không mất lại
+assert.deepEqual(S.windowSim(8, 4, [1, 2], 'gbn'), { rounds: 3, transmissions: 11 });
 assert.deepEqual(S.cwndTrace(8, 8, [5]), [1, 2, 4, 8, 9, 1, 2, 4]);
 assert.deepEqual(S.traceroute(['10.0.0.1', '10.0.1.1', '8.8.8.8'], [1], 8), ['1 10.0.0.1', '2 *', '3 8.8.8.8']);
 // ACL

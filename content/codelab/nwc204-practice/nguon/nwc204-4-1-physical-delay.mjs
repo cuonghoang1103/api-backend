@@ -7,7 +7,7 @@ const E1 = cs({
   cau: [
     q('c1', ['The capacity of a medium to carry data, in bits per second, is its …', 'Khả năng chứa dữ liệu của môi trường, tính bằng bit/giây, là …'], ['bandwidth', 'throughput', 'latency', 'goodput'], ['Bandwidth is the theoretical capacity; throughput is what you really get.', 'Băng thông là dung lượng lý thuyết; thông lượng là cái thực nhận.']),
     q('c2', ['Throughput is usually … the bandwidth.', 'Thông lượng thường … băng thông.'], ['lower than', 'higher than', 'exactly equal to', 'unrelated to'], ['Congestion, errors and overhead keep throughput under the nominal bandwidth.', 'Tắc nghẽn, lỗi và header khiến thông lượng thấp hơn băng thông danh định.']),
-    q('c3', ['Goodput is the …', 'Goodput là …'], ['rate of useful application data (headers and retransmissions excluded)', 'raw bit rate on the wire', 'number of devices connected', 'propagation delay'], ['Goodput = throughput minus overhead.', 'Goodput = thông lượng trừ chi phí header.']),
+    q('c3', ['Goodput is the …', 'Goodput là …'], ['rate of useful application data (headers and retransmissions excluded)', 'raw bit rate on the wire (headers and retransmissions included)', 'number of bits the link can hold while they travel', 'time a bit needs to cross the link from end to end'], ['Goodput = throughput minus overhead.', 'Goodput = thông lượng trừ chi phí header.']),
     q('c4', ['The maximum length of a UTP Ethernet segment is …', 'Chiều dài tối đa một đoạn cáp UTP Ethernet là …'], ['100 m', '10 m', '1 km', '550 m'], ['UTP signals attenuate; 100 m is the standard limit.', 'Tín hiệu UTP suy hao; 100 m là giới hạn chuẩn.']),
     q('c5', ['Compared to copper, fibre-optic cable is …', 'So với cáp đồng, cáp quang …'], ['immune to EMI and reaches much longer distances', 'cheaper and easier to terminate', 'limited to 100 m', 'only usable indoors'], ['Light does not suffer electromagnetic interference.', 'Ánh sáng không bị nhiễu điện từ.']),
   ],
@@ -38,7 +38,7 @@ const E3 = tinh({
   loai: 'table',
   bang: [bang1('b1', ['Delays (ms)', 'Trễ (ms)'], [{ ma: 'x', ten: 'Case' }, { ma: 't', ten: 'Transmission' }, { ma: 'p', ten: 'Propagation' }, { ma: 'a', ten: 'Total' }],
     D.map(([l, r, d]) => ({ o: { x: `${l / 8} B, ${r / 1e6} Mbps, ${d / 1000} km` }, a: { t: [(l / r * 1000).toFixed(3), String(+(l / r * 1000).toFixed(3))], p: [(d / S * 1000).toFixed(3), String(+(d / S * 1000).toFixed(3))], a: [(l / r * 1000 + d / S * 1000).toFixed(3), String(+(l / r * 1000 + d / S * 1000).toFixed(3))] } })),
-    ['Transmission depends on size and rate; propagation on distance only. Note how the 1 MB file on a long link is dominated by transmission while the 64-byte frame is dominated by propagation.', 'Trễ truyền phụ thuộc kích thước và tốc độ; trễ lan truyền chỉ phụ thuộc khoảng cách.'])],
+    ['Transmission depends on size and rate; propagation on distance only. Propagation dominates in every row here: even the 1 MB file needs only 8 ms to go onto the 1 Gbps link, against 25 ms of travel over 5000 km.', 'Trễ truyền phụ thuộc kích thước và tốc độ; trễ lan truyền chỉ phụ thuộc khoảng cách. Ở mọi dòng của bảng này trễ lan truyền đều trội: ngay cả tệp 1 MB cũng chỉ mất 8 ms để đẩy lên đường 1 Gbps, so với 25 ms đi hết 5000 km.'])],
   goiY: ['Convert km to m before dividing by 2×10⁸.', 'Multiply seconds by 1000 to get ms.'],
   loiHayGap: ['Dividing distance by the link rate.', 'Forgetting to convert km to m.'],
   thuatNgu: [tn('propagation delay', 'trễ lan truyền')], khaiNiem: ['propagation delay'],

@@ -48,10 +48,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Transport 1 — Ports, TCP and UDP — answer key\n\n1. Which protocol would you choose for a live voice call where late data is useless?Giao thức nào nên chọn cho cuộc gọi thoại trực tiếp, nơi dữ liệu đến muộn là vô dụng?\n   Answer: d) UDP\n   UDP has no retransmission delay and no handshake.VI: UDP không trễ do gửi lại và không bắt tay.\n\n2. The well-known port numbers are in the range …Cổng well-known nằm trong khoảng …\n   Answer: a) 0–1023\n   Registered ports are 1024–49151; dynamic/ephemeral 49152–65535.VI: Cổng đăng ký 1024–49151; cổng động 49152–65535.\n\n3. A socket is identified by …Một socket được xác định bởi …\n   Answer: b) IP address + port (and protocol)\n   A TCP connection = two sockets (a 4-tuple).VI: Một kết nối TCP = hai socket (bộ bốn).\n\n4. What does TCP provide that UDP does not?TCP cung cấp gì mà UDP không có?\n   Answer: c) Reliable, ordered delivery with flow and congestion control\n   UDP also has ports and a checksum.VI: UDP cũng có cổng và checksum.\n\n5. HTTPS, SSH, DNS and SMTP use the default ports …HTTPS, SSH, DNS và SMTP dùng cổng mặc định …\n   Answer: d) 443, 22, 53, 25\n   Memorise these four with 80 (HTTP), 23 (Telnet), 21 (FTP), 67/68 (DHCP).VI: Nhớ bốn cổng này cùng 80 (HTTP), 23 (Telnet), 21 (FTP), 67/68 (DHCP).\n"
+          "code": "# Transport 1 — Ports, TCP and UDP — answer key\n\n1. Which protocol would you choose for a live voice call where late data is useless?Giao thức nào nên chọn cho cuộc gọi thoại trực tiếp, nơi dữ liệu đến muộn là vô dụng?\n   Answer: d) UDP\n   UDP has no retransmission delay and no handshake.VI: UDP không trễ do gửi lại và không bắt tay.\n\n2. The well-known port numbers are in the range …Cổng well-known nằm trong khoảng …\n   Answer: b) 0–1023\n   Registered ports are 1024–49151; dynamic/ephemeral 49152–65535.VI: Cổng đăng ký 1024–49151; cổng động 49152–65535.\n\n3. A socket is identified by …Một socket được xác định bởi …\n   Answer: a) IP address + port (and protocol)\n   A TCP connection = two sockets (a 4-tuple).VI: Một kết nối TCP = hai socket (bộ bốn).\n\n4. What does TCP provide that UDP does not?TCP cung cấp gì mà UDP không có?\n   Answer: c) Reliable, ordered delivery with flow and congestion control\n   UDP also has ports and a checksum.VI: UDP cũng có cổng và checksum.\n\n5. HTTPS, SSH, DNS and SMTP use the default ports …HTTPS, SSH, DNS và SMTP dùng cổng mặc định …\n   Answer: b) 443, 22, 53, 25\n   Memorise these four with 80 (HTTP), 23 (Telnet), 21 (FTP), 67/68 (DHCP).VI: Nhớ bốn cổng này cùng 80 (HTTP), 23 (Telnet), 21 (FTP), 67/68 (DHCP).\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> UDP</p><p>UDP has no retransmission delay and no handshake.</p><p><i>VI: UDP không trễ do gửi lại và không bắt tay.</i></p></li><li><p><b>b)</b> 0–1023</p><p>Registered ports are 1024–49151; dynamic/ephemeral 49152–65535.</p><p><i>VI: Cổng đăng ký 1024–49151; cổng động 49152–65535.</i></p></li><li><p><b>a)</b> IP address + port (and protocol)</p><p>A TCP connection = two sockets (a 4-tuple).</p><p><i>VI: Một kết nối TCP = hai socket (bộ bốn).</i></p></li><li><p><b>c)</b> Reliable, ordered delivery with flow and congestion control</p><p>UDP also has ports and a checksum.</p><p><i>VI: UDP cũng có cổng và checksum.</i></p></li><li><p><b>b)</b> 443, 22, 53, 25</p><p>Memorise these four with 80 (HTTP), 23 (Telnet), 21 (FTP), 67/68 (DHCP).</p><p><i>VI: Nhớ bốn cổng này cùng 80 (HTTP), 23 (Telnet), 21 (FTP), 67/68 (DHCP).</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -64,7 +64,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "TCP"
+                "noiDung": "ARP"
               },
               {
                 "ma": "b",
@@ -72,7 +72,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "ARP"
+                "noiDung": "TCP"
               },
               {
                 "ma": "d",
@@ -90,23 +90,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "0–1023"
-              },
-              {
-                "ma": "b",
-                "noiDung": "1024–49151"
-              },
-              {
-                "ma": "c",
                 "noiDung": "49152–65535"
               },
               {
-                "ma": "d",
+                "ma": "b",
+                "noiDung": "0–1023"
+              },
+              {
+                "ma": "c",
                 "noiDung": "1–255"
+              },
+              {
+                "ma": "d",
+                "noiDung": "1024–49151"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>Registered ports are 1024–49151; dynamic/ephemeral 49152–65535.</p><p><i>VI: Cổng đăng ký 1024–49151; cổng động 49152–65535.</i></p>"
           },
@@ -116,23 +116,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "VLAN ID"
-              },
-              {
-                "ma": "b",
                 "noiDung": "IP address + port (and protocol)"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "MAC address only"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "IP address only"
+              },
+              {
+                "ma": "d",
+                "noiDung": "VLAN ID"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>A TCP connection = two sockets (a 4-tuple).</p><p><i>VI: Một kết nối TCP = hai socket (bộ bốn).</i></p>"
           },
@@ -142,11 +142,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Checksums"
+                "noiDung": "Checksums that detect damaged segments and datagrams"
               },
               {
                 "ma": "b",
-                "noiDung": "Multiplexing"
+                "noiDung": "Port numbers that name the sending and receiving process"
               },
               {
                 "ma": "c",
@@ -154,7 +154,7 @@
               },
               {
                 "ma": "d",
-                "noiDung": "Port numbers"
+                "noiDung": "Multiplexing of many applications by port number"
               }
             ],
             "dapAn": [
@@ -172,7 +172,7 @@
               },
               {
                 "ma": "b",
-                "noiDung": "443, 21, 67, 25"
+                "noiDung": "443, 22, 53, 25"
               },
               {
                 "ma": "c",
@@ -180,11 +180,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "443, 22, 53, 25"
+                "noiDung": "443, 21, 67, 25"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>Memorise these four with 80 (HTTP), 23 (Telnet), 21 (FTP), 67/68 (DHCP).</p><p><i>VI: Nhớ bốn cổng này cùng 80 (HTTP), 23 (Telnet), 21 (FTP), 67/68 (DHCP).</i></p>"
           }
@@ -415,7 +415,7 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Transport 3 — Order the three-way handshake and the close — answer key\n\n1. Open and closeMở và đóng\n   Answer: s1) Client → server: SYN  →  s2) Server → client: SYN, ACK  →  s3) Client → server: ACK (connection established)  →  s4) Client → server: data (PSH, ACK)  →  s5) Server → client: ACK for the data  →  s6) Client → server: FIN, ACK  →  s7) Server → client: ACK, then FIN, ACK  →  s8) Client → server: final ACK\n   Three steps open the connection; four steps close it (each direction closes separately).VI: Ba bước mở kết nối; bốn bước đóng (mỗi chiều đóng riêng).\n"
+          "code": "# Transport 3 — Order the three-way handshake and the close — answer key\n\n1. Open and closeMở và đóng\n   Answer: m5) Client → server: SYN  →  m3) Server → client: SYN, ACK  →  m8) Client → server: ACK (connection established)  →  m2) Client → server: data (PSH, ACK)  →  m1) Server → client: ACK for the data  →  m7) Client → server: FIN, ACK  →  m6) Server → client: ACK, then FIN, ACK  →  m4) Client → server: final ACK\n   Three steps open the connection; four steps close it (each direction closes separately).VI: Ba bước mở kết nối; bốn bước đóng (mỗi chiều đóng riêng).\n"
         }
       ],
       "solutionExplanationHtml": "<p>Three steps open the connection; four steps close it (each direction closes separately).</p><p><i>VI: Ba bước mở kết nối; bốn bước đóng (mỗi chiều đóng riêng).</i></p>",
@@ -430,47 +430,47 @@
             "de": "<p>Open and close</p><p style=\"opacity:.75;font-size:.92em\"><i>Mở và đóng</i></p>",
             "muc": [
               {
-                "ma": "s4",
-                "noiDung": "Client → server: data (PSH, ACK)"
-              },
-              {
-                "ma": "s5",
+                "ma": "m1",
                 "noiDung": "Server → client: ACK for the data"
               },
               {
-                "ma": "s6",
-                "noiDung": "Client → server: FIN, ACK"
+                "ma": "m2",
+                "noiDung": "Client → server: data (PSH, ACK)"
               },
               {
-                "ma": "s7",
-                "noiDung": "Server → client: ACK, then FIN, ACK"
-              },
-              {
-                "ma": "s8",
-                "noiDung": "Client → server: final ACK"
-              },
-              {
-                "ma": "s1",
-                "noiDung": "Client → server: SYN"
-              },
-              {
-                "ma": "s2",
+                "ma": "m3",
                 "noiDung": "Server → client: SYN, ACK"
               },
               {
-                "ma": "s3",
+                "ma": "m4",
+                "noiDung": "Client → server: final ACK"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "Client → server: SYN"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "Server → client: ACK, then FIN, ACK"
+              },
+              {
+                "ma": "m7",
+                "noiDung": "Client → server: FIN, ACK"
+              },
+              {
+                "ma": "m8",
                 "noiDung": "Client → server: ACK (connection established)"
               }
             ],
             "dapAn": [
-              "s1",
-              "s2",
-              "s3",
-              "s4",
-              "s5",
-              "s6",
-              "s7",
-              "s8"
+              "m5",
+              "m3",
+              "m8",
+              "m2",
+              "m1",
+              "m7",
+              "m6",
+              "m4"
             ],
             "giaiThich": "<p>Three steps open the connection; four steps close it (each direction closes separately).</p><p><i>VI: Ba bước mở kết nối; bốn bước đóng (mỗi chiều đóng riêng).</i></p>"
           }
@@ -1107,10 +1107,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Transport 5 — Go-Back-N versus Selective Repeat — answer key\n\n1. Window simulationMô phỏng cửa sổ\n   - r1.r: 2\n   - r1.t: 8\n   - r2.r: 3\n   - r2.t: 11\n   - r3.r: 3\n   - r3.t: 9\n   - r4.r: 4\n   - r4.t: 16\n   - r5.r: 4\n   - r5.t: 12\n   Go-Back-N repeats everything after the loss; Selective Repeat repeats only what was lost. gbn: 2 rounds, 8 tx; gbn: 3 rounds, 11 tx; sr: 3 rounds, 9 tx; gbn: 4 rounds, 16 tx; sr: 4 rounds, 12 tx.VI: Go-Back-N lặp lại mọi thứ sau chỗ mất; Selective Repeat chỉ lặp lại cái bị mất.\n"
+          "code": "# Transport 5 — Go-Back-N versus Selective Repeat — answer key\n\n1. Window simulationMô phỏng cửa sổ\n   - r1.r: 2\n   - r1.t: 8\n   - r2.r: 3\n   - r2.t: 11\n   - r3.r: 3\n   - r3.t: 9\n   - r4.r: 3\n   - r4.t: 11\n   - r5.r: 4\n   - r5.t: 16\n   - r6.r: 4\n   - r6.t: 12\n   Go-Back-N repeats everything after the loss; Selective Repeat repeats only what was lost. gbn: 2 rounds, 8 tx; gbn: 3 rounds, 11 tx; sr: 3 rounds, 9 tx; gbn: 3 rounds, 11 tx; gbn: 4 rounds, 16 tx; sr: 4 rounds, 12 tx.VI: Go-Back-N lặp lại mọi thứ sau chỗ mất; Selective Repeat chỉ lặp lại cái bị mất.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Go-Back-N repeats everything after the loss; Selective Repeat repeats only what was lost. gbn: 2 rounds, 8 tx; gbn: 3 rounds, 11 tx; sr: 3 rounds, 9 tx; gbn: 4 rounds, 16 tx; sr: 4 rounds, 12 tx.</p><p><i>VI: Go-Back-N lặp lại mọi thứ sau chỗ mất; Selective Repeat chỉ lặp lại cái bị mất.</i></p>",
+      "solutionExplanationHtml": "<p>Go-Back-N repeats everything after the loss; Selective Repeat repeats only what was lost. gbn: 2 rounds, 8 tx; gbn: 3 rounds, 11 tx; sr: 3 rounds, 9 tx; gbn: 3 rounds, 11 tx; gbn: 4 rounds, 16 tx; sr: 4 rounds, 12 tx.</p><p><i>VI: Go-Back-N lặp lại mọi thứ sau chỗ mất; Selective Repeat chỉ lặp lại cái bị mất.</i></p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -1156,11 +1156,17 @@
               {
                 "ma": "r4",
                 "o": {
-                  "x": "10 segments, window 5, lost 2,7, Go-Back-N"
+                  "x": "8 segments, window 4, lost 1,2, Go-Back-N"
                 }
               },
               {
                 "ma": "r5",
+                "o": {
+                  "x": "10 segments, window 5, lost 2,7, Go-Back-N"
+                }
+              },
+              {
+                "ma": "r6",
                 "o": {
                   "x": "10 segments, window 5, lost 2,7, Selective Repeat"
                 }
@@ -1186,19 +1192,25 @@
                 "9"
               ],
               "r4.r": [
-                "4"
+                "3"
               ],
               "r4.t": [
-                "16"
+                "11"
               ],
               "r5.r": [
                 "4"
               ],
               "r5.t": [
+                "16"
+              ],
+              "r6.r": [
+                "4"
+              ],
+              "r6.t": [
                 "12"
               ]
             },
-            "giaiThich": "<p>Go-Back-N repeats everything after the loss; Selective Repeat repeats only what was lost. gbn: 2 rounds, 8 tx; gbn: 3 rounds, 11 tx; sr: 3 rounds, 9 tx; gbn: 4 rounds, 16 tx; sr: 4 rounds, 12 tx.</p><p><i>VI: Go-Back-N lặp lại mọi thứ sau chỗ mất; Selective Repeat chỉ lặp lại cái bị mất.</i></p>"
+            "giaiThich": "<p>Go-Back-N repeats everything after the loss; Selective Repeat repeats only what was lost. gbn: 2 rounds, 8 tx; gbn: 3 rounds, 11 tx; sr: 3 rounds, 9 tx; gbn: 3 rounds, 11 tx; gbn: 4 rounds, 16 tx; sr: 4 rounds, 12 tx.</p><p><i>VI: Go-Back-N lặp lại mọi thứ sau chỗ mất; Selective Repeat chỉ lặp lại cái bị mất.</i></p>"
           }
         ]
       },
@@ -1233,8 +1245,8 @@
       "tags": [
         "nwc204"
       ],
-      "problemHtml": "<p>Write <code>windowSim(total, w, lost, mode)</code> returning <code>{ rounds, transmissions }</code> under the rules of the previous exercise. Each round the sender transmits the segments of the window <code>[base, base + w)</code> that are not yet acknowledged (Go-Back-N: <i>all</i> of them from <code>base</code>). A segment in <code>lost</code> is lost on its first transmission only. <code>mode</code> is <code>\"gbn\"</code> (base moves to the first lost segment, or past the window if none) or <code>\"sr\"</code> (received segments are acknowledged individually; base moves to the first unacknowledged segment).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
-      "problemHtmlVi": "<p>Viết <code>windowSim(total, w, lost, mode)</code> trả <code>{ rounds, transmissions }</code> theo luật của bài trước. Mỗi vòng bên gửi phát các segment trong cửa sổ <code>[base, base + w)</code> chưa được ACK (Go-Back-N: <i>tất cả</i> từ <code>base</code>). Segment trong <code>lost</code> chỉ mất ở lần phát đầu. <code>mode</code> là <code>\"gbn\"</code> (base nhảy tới segment mất đầu tiên, hoặc qua hết cửa sổ nếu không mất) hoặc <code>\"sr\"</code> (segment nhận được ACK riêng; base nhảy tới segment chưa ACK đầu tiên).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "problemHtml": "<p>Write <code>windowSim(total, w, lost, mode)</code> returning <code>{ rounds, transmissions }</code> under the rules of the previous exercise. Each round the sender transmits the segments of the window <code>[base, base + w)</code> that are not yet acknowledged (Go-Back-N: <i>all</i> of them from <code>base</code>). A segment in <code>lost</code> is lost on its first transmission only, so two lost segments in the same Go-Back-N window cost one go-back, not two. <code>mode</code> is <code>\"gbn\"</code> (base moves to the first lost segment, or past the window if none) or <code>\"sr\"</code> (received segments are acknowledged individually; base moves to the first unacknowledged segment).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>windowSim(total, w, lost, mode)</code> trả <code>{ rounds, transmissions }</code> theo luật của bài trước. Mỗi vòng bên gửi phát các segment trong cửa sổ <code>[base, base + w)</code> chưa được ACK (Go-Back-N: <i>tất cả</i> từ <code>base</code>). Segment trong <code>lost</code> chỉ mất ở lần phát đầu, nên hai segment mất trong cùng một cửa sổ Go-Back-N chỉ tốn một lần lùi, không phải hai. <code>mode</code> là <code>\"gbn\"</code> (base nhảy tới segment mất đầu tiên, hoặc qua hết cửa sổ nếu không mất) hoặc <code>\"sr\"</code> (segment nhận được ACK riêng; base nhảy tới segment chưa ACK đầu tiên).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
       "inputSpec": null,
       "outputSpec": null,
       "constraints": "",
@@ -1247,7 +1259,7 @@
       ],
       "hintsJson": [
         "In Go-Back-N the lost segment is delivered on the next round after the sender goes back.",
-        "Remember to delete a segment from the lost set once it was lost."
+        "A listed segment is lost only the first time it is sent: remove every segment of the round from the lost set, even those after the first loss."
       ],
       "starterCodeJson": [
         {
@@ -1260,7 +1272,7 @@
         {
           "name": "answer.js",
           "language": "javascript",
-          "code": "// Reference solution\nfunction windowSim(total, w, lost, mode) {\n  var lostSet = {}, i, base = 0, rounds = 0, tx = 0, acked = {};\n  for (i = 0; i < lost.length; i++) lostSet[lost[i]] = true;\n  while (base < total) {\n    rounds++;\n    var sent = [];\n    for (i = base; i < Math.min(base + w, total); i++) if (mode === 'gbn' || !acked[i]) sent.push(i);\n    tx += sent.length;\n    if (mode === 'gbn') {\n      var firstLost = -1;\n      for (i = 0; i < sent.length; i++) if (lostSet[sent[i]]) { firstLost = sent[i]; break; }\n      if (firstLost < 0) base = sent[sent.length - 1] + 1;\n      else { delete lostSet[firstLost]; base = firstLost; }\n    } else {\n      for (i = 0; i < sent.length; i++) { if (lostSet[sent[i]]) delete lostSet[sent[i]]; else acked[sent[i]] = true; }\n      while (base < total && acked[base]) base++;\n    }\n  }\n  return { rounds: rounds, transmissions: tx };\n}\n"
+          "code": "// Reference solution\nfunction windowSim(total, w, lost, mode) {\n  var lostSet = {}, i, base = 0, rounds = 0, tx = 0, acked = {};\n  for (i = 0; i < lost.length; i++) lostSet[lost[i]] = true;\n  while (base < total) {\n    rounds++;\n    var sent = [];\n    for (i = base; i < Math.min(base + w, total); i++) if (mode === 'gbn' || !acked[i]) sent.push(i);\n    tx += sent.length;\n    if (mode === 'gbn') {\n      var firstLost = -1;\n      // đoạn \"mất\" chỉ mất ở LẦN GỬI ĐẦU: mọi đoạn trong danh sách đã gửi ở vòng này đều hết bị mất, kể cả đoạn đứng sau đoạn mất đầu tiên\n      for (i = 0; i < sent.length; i++) if (lostSet[sent[i]]) { if (firstLost < 0) firstLost = sent[i]; delete lostSet[sent[i]]; }\n      base = firstLost < 0 ? sent[sent.length - 1] + 1 : firstLost;\n    } else {\n      for (i = 0; i < sent.length; i++) { if (lostSet[sent[i]]) delete lostSet[sent[i]]; else acked[sent[i]] = true; }\n      while (base < total && acked[base]) base++;\n    }\n  }\n  return { rounds: rounds, transmissions: tx };\n}\n"
         }
       ],
       "solutionExplanationHtml": "<p>The difference is the cost of one loss: Go-Back-N wastes the whole window, Selective Repeat just one segment.</p><p><i>VI: Khác biệt là giá của một lần mất: Go-Back-N lãng phí cả cửa sổ, Selective Repeat chỉ một segment.</i></p>",
@@ -1365,6 +1377,18 @@
             "mongDoi": {
               "rounds": 0,
               "transmissions": 0
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 9",
+              "vi": "Ca ẩn 9"
+            },
+            "goi": "windowSim(8, 4, [1,2], \"gbn\")",
+            "mongDoi": {
+              "rounds": 3,
+              "transmissions": 11
             },
             "an": true
           }

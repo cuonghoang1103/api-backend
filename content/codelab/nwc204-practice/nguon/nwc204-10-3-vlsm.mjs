@@ -5,7 +5,7 @@ const E1 = cs({
   ten: 'VLSM 1 — Why and how', kho: 'EASY', phut: 8,
   en: 'Concepts of variable length subnet masks.', vi: 'Khái niệm mặt nạ mạng con độ dài thay đổi.',
   cau: [
-    q('c1', ['VLSM lets you …', 'VLSM cho phép …'], ['use different prefix lengths for different subnets of one block', 'use the same mask everywhere', 'avoid subnetting', 'route without masks'], ['Each subnet gets the smallest block that fits its hosts.', 'Mỗi mạng con nhận khối nhỏ nhất đủ host.']),
+    q('c1', ['VLSM lets you …', 'VLSM cho phép …'], ['use different prefix lengths for different subnets of one block', 'use the same prefix length for all subnets of one block', 'avoid subnetting by giving each site a whole block', 'route between the subnets without carrying any mask'], ['Each subnet gets the smallest block that fits its hosts.', 'Mỗi mạng con nhận khối nhỏ nhất đủ host.']),
     q('c2', ['In a VLSM plan you allocate the subnets in the order …', 'Trong kế hoạch VLSM, bạn cấp mạng con theo thứ tự …'], ['largest requirement first', 'smallest requirement first', 'alphabetical', 'random'], ['Largest first keeps every block aligned and avoids gaps and overlaps.', 'Lớn trước giữ mọi khối thẳng hàng, tránh khe hở và chồng lấn.']),
     q('c3', ['A point-to-point WAN link between two routers needs a …', 'Liên kết WAN điểm-điểm giữa hai router cần …'], ['/30 (2 usable hosts)', '/24', '/28', '/16'], ['Anything bigger wastes addresses; /31 is possible with RFC 3021.', 'Lớn hơn thì phí; /31 cũng được theo RFC 3021.']),
     q('c4', ['Two subnets overlap when …', 'Hai mạng con chồng lấn khi …'], ['one address belongs to both of them', 'they have the same prefix length', 'they are in different VLANs', 'they use private addresses'], ['Routing becomes ambiguous; the allocation is wrong.', 'Định tuyến mơ hồ; cấp phát sai.']),
@@ -58,7 +58,7 @@ const E4 = cs({
     const real = (v !== null) === (r === 'fits') ? 1 : null;
     if (real === null) throw new Error('FIT sai ' + i);
     return q('c' + (i + 1), ['Needs: ' + n.map((x) => x.hosts).join(', ') + ' hosts. Do they fit in one /24?', 'Nhu cầu: ' + n.map((x) => x.hosts).join(', ') + ' host. Có vừa trong một /24 không?'],
-      r === 'fits' ? ['Yes — the blocks add up to ' + (v ? v.reduce((a, x) => a + Math.pow(2, 32 - x.prefix), 0) : 0) + ' addresses ≤ 256', 'No — it needs more than 256 addresses', 'Only if the /24 is a class C', 'Cannot be decided'] : ['No — the rounded-up blocks need more than 256 addresses', 'Yes — the host counts add up to less than 254', 'Only with /31 links', 'Only with NAT'],
+      r === 'fits' ? ['Yes — the blocks add up to ' + (v ? v.reduce((a, x) => a + Math.pow(2, 32 - x.prefix), 0) : 0) + ' addresses ≤ 256', 'No — it needs more than 256 addresses', 'Only if the /24 is a class C', 'Cannot be decided'] : ['No — the rounded-up blocks need more than 256 addresses', 'Yes — the host counts add up to less than 254', 'Only with NAT', 'Only with IPv6 addresses'],
       ['Round each need up to a block (126→128, 62→64, 30→32, 14→16, 6→8, 2→4) and add the sizes.', 'Làm tròn mỗi nhu cầu lên khối (126→128, 62→64, 30→32, 14→16, 6→8, 2→4) rồi cộng.']);
   }),
   goiY: ['Convert every requirement to its block size, then add.', 'Total must be ≤ 256 and the blocks must also align.'],

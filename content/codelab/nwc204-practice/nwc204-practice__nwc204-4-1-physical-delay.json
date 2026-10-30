@@ -47,10 +47,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Physical 1 — Bandwidth, throughput, latency, goodput — answer key\n\n1. The capacity of a medium to carry data, in bits per second, is its …Khả năng chứa dữ liệu của môi trường, tính bằng bit/giây, là …\n   Answer: d) bandwidth\n   Bandwidth is the theoretical capacity; throughput is what you really get.VI: Băng thông là dung lượng lý thuyết; thông lượng là cái thực nhận.\n\n2. Throughput is usually … the bandwidth.Thông lượng thường … băng thông.\n   Answer: a) lower than\n   Congestion, errors and overhead keep throughput under the nominal bandwidth.VI: Tắc nghẽn, lỗi và header khiến thông lượng thấp hơn băng thông danh định.\n\n3. Goodput is the …Goodput là …\n   Answer: b) rate of useful application data (headers and retransmissions excluded)\n   Goodput = throughput minus overhead.VI: Goodput = thông lượng trừ chi phí header.\n\n4. The maximum length of a UTP Ethernet segment is …Chiều dài tối đa một đoạn cáp UTP Ethernet là …\n   Answer: c) 100 m\n   UTP signals attenuate; 100 m is the standard limit.VI: Tín hiệu UTP suy hao; 100 m là giới hạn chuẩn.\n\n5. Compared to copper, fibre-optic cable is …So với cáp đồng, cáp quang …\n   Answer: d) immune to EMI and reaches much longer distances\n   Light does not suffer electromagnetic interference.VI: Ánh sáng không bị nhiễu điện từ.\n"
+          "code": "# Physical 1 — Bandwidth, throughput, latency, goodput — answer key\n\n1. The capacity of a medium to carry data, in bits per second, is its …Khả năng chứa dữ liệu của môi trường, tính bằng bit/giây, là …\n   Answer: c) bandwidth\n   Bandwidth is the theoretical capacity; throughput is what you really get.VI: Băng thông là dung lượng lý thuyết; thông lượng là cái thực nhận.\n\n2. Throughput is usually … the bandwidth.Thông lượng thường … băng thông.\n   Answer: c) lower than\n   Congestion, errors and overhead keep throughput under the nominal bandwidth.VI: Tắc nghẽn, lỗi và header khiến thông lượng thấp hơn băng thông danh định.\n\n3. Goodput is the …Goodput là …\n   Answer: b) rate of useful application data (headers and retransmissions excluded)\n   Goodput = throughput minus overhead.VI: Goodput = thông lượng trừ chi phí header.\n\n4. The maximum length of a UTP Ethernet segment is …Chiều dài tối đa một đoạn cáp UTP Ethernet là …\n   Answer: a) 100 m\n   UTP signals attenuate; 100 m is the standard limit.VI: Tín hiệu UTP suy hao; 100 m là giới hạn chuẩn.\n\n5. Compared to copper, fibre-optic cable is …So với cáp đồng, cáp quang …\n   Answer: c) immune to EMI and reaches much longer distances\n   Light does not suffer electromagnetic interference.VI: Ánh sáng không bị nhiễu điện từ.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> bandwidth</p><p>Bandwidth is the theoretical capacity; throughput is what you really get.</p><p><i>VI: Băng thông là dung lượng lý thuyết; thông lượng là cái thực nhận.</i></p></li><li><p><b>c)</b> lower than</p><p>Congestion, errors and overhead keep throughput under the nominal bandwidth.</p><p><i>VI: Tắc nghẽn, lỗi và header khiến thông lượng thấp hơn băng thông danh định.</i></p></li><li><p><b>b)</b> rate of useful application data (headers and retransmissions excluded)</p><p>Goodput = throughput minus overhead.</p><p><i>VI: Goodput = thông lượng trừ chi phí header.</i></p></li><li><p><b>a)</b> 100 m</p><p>UTP signals attenuate; 100 m is the standard limit.</p><p><i>VI: Tín hiệu UTP suy hao; 100 m là giới hạn chuẩn.</i></p></li><li><p><b>c)</b> immune to EMI and reaches much longer distances</p><p>Light does not suffer electromagnetic interference.</p><p><i>VI: Ánh sáng không bị nhiễu điện từ.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -63,23 +63,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "throughput"
-              },
-              {
-                "ma": "b",
                 "noiDung": "latency"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "goodput"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "bandwidth"
+              },
+              {
+                "ma": "d",
+                "noiDung": "throughput"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>Bandwidth is the theoretical capacity; throughput is what you really get.</p><p><i>VI: Băng thông là dung lượng lý thuyết; thông lượng là cái thực nhận.</i></p>"
           },
@@ -89,23 +89,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "lower than"
-              },
-              {
-                "ma": "b",
-                "noiDung": "higher than"
-              },
-              {
-                "ma": "c",
                 "noiDung": "exactly equal to"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "unrelated to"
+              },
+              {
+                "ma": "c",
+                "noiDung": "lower than"
+              },
+              {
+                "ma": "d",
+                "noiDung": "higher than"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>Congestion, errors and overhead keep throughput under the nominal bandwidth.</p><p><i>VI: Tắc nghẽn, lỗi và header khiến thông lượng thấp hơn băng thông danh định.</i></p>"
           },
@@ -115,7 +115,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "propagation delay"
+                "noiDung": "number of bits the link can hold while they travel"
               },
               {
                 "ma": "b",
@@ -123,11 +123,11 @@
               },
               {
                 "ma": "c",
-                "noiDung": "raw bit rate on the wire"
+                "noiDung": "time a bit needs to cross the link from end to end"
               },
               {
                 "ma": "d",
-                "noiDung": "number of devices connected"
+                "noiDung": "raw bit rate on the wire (headers and retransmissions included)"
               }
             ],
             "dapAn": [
@@ -141,15 +141,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "1 km"
+                "noiDung": "100 m"
               },
               {
                 "ma": "b",
-                "noiDung": "550 m"
+                "noiDung": "1 km"
               },
               {
                 "ma": "c",
-                "noiDung": "100 m"
+                "noiDung": "550 m"
               },
               {
                 "ma": "d",
@@ -157,7 +157,7 @@
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>UTP signals attenuate; 100 m is the standard limit.</p><p><i>VI: Tín hiệu UTP suy hao; 100 m là giới hạn chuẩn.</i></p>"
           },
@@ -171,19 +171,19 @@
               },
               {
                 "ma": "b",
-                "noiDung": "limited to 100 m"
-              },
-              {
-                "ma": "c",
                 "noiDung": "only usable indoors"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "immune to EMI and reaches much longer distances"
+              },
+              {
+                "ma": "d",
+                "noiDung": "limited to 100 m"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>Light does not suffer electromagnetic interference.</p><p><i>VI: Ánh sáng không bị nhiễu điện từ.</i></p>"
           }
@@ -378,10 +378,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Physical 3 — Transmission plus propagation delay — answer key\n\n1. Delays (ms)Trễ (ms)\n   - r1.t: 0.120 / 0.12\n   - r1.p: 0.500 / 0.5\n   - r1.a: 0.620 / 0.62\n   - r2.t: 1.200 / 1.2\n   - r2.p: 10.000 / 10\n   - r2.a: 11.200 / 11.2\n   - r3.t: 0.001 / 0.001\n   - r3.p: 0.050 / 0.05\n   - r3.a: 0.051 / 0.051\n   - r4.t: 8.000 / 8\n   - r4.p: 25.000 / 25\n   - r4.a: 33.000 / 33\n   Transmission depends on size and rate; propagation on distance only. Note how the 1 MB file on a long link is dominated by transmission while the 64-byte frame is dominated by propagation.VI: Trễ truyền phụ thuộc kích thước và tốc độ; trễ lan truyền chỉ phụ thuộc khoảng cách.\n"
+          "code": "# Physical 3 — Transmission plus propagation delay — answer key\n\n1. Delays (ms)Trễ (ms)\n   - r1.t: 0.120 / 0.12\n   - r1.p: 0.500 / 0.5\n   - r1.a: 0.620 / 0.62\n   - r2.t: 1.200 / 1.2\n   - r2.p: 10.000 / 10\n   - r2.a: 11.200 / 11.2\n   - r3.t: 0.001 / 0.001\n   - r3.p: 0.050 / 0.05\n   - r3.a: 0.051 / 0.051\n   - r4.t: 8.000 / 8\n   - r4.p: 25.000 / 25\n   - r4.a: 33.000 / 33\n   Transmission depends on size and rate; propagation on distance only. Propagation dominates in every row here: even the 1 MB file needs only 8 ms to go onto the 1 Gbps link, against 25 ms of travel over 5000 km.VI: Trễ truyền phụ thuộc kích thước và tốc độ; trễ lan truyền chỉ phụ thuộc khoảng cách. Ở mọi dòng của bảng này trễ lan truyền đều trội: ngay cả tệp 1 MB cũng chỉ mất 8 ms để đẩy lên đường 1 Gbps, so với 25 ms đi hết 5000 km.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Transmission depends on size and rate; propagation on distance only. Note how the 1 MB file on a long link is dominated by transmission while the 64-byte frame is dominated by propagation.</p><p><i>VI: Trễ truyền phụ thuộc kích thước và tốc độ; trễ lan truyền chỉ phụ thuộc khoảng cách.</i></p>",
+      "solutionExplanationHtml": "<p>Transmission depends on size and rate; propagation on distance only. Propagation dominates in every row here: even the 1 MB file needs only 8 ms to go onto the 1 Gbps link, against 25 ms of travel over 5000 km.</p><p><i>VI: Trễ truyền phụ thuộc kích thước và tốc độ; trễ lan truyền chỉ phụ thuộc khoảng cách. Ở mọi dòng của bảng này trễ lan truyền đều trội: ngay cả tệp 1 MB cũng chỉ mất 8 ms để đẩy lên đường 1 Gbps, so với 25 ms đi hết 5000 km.</i></p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -485,7 +485,7 @@
                 "33"
               ]
             },
-            "giaiThich": "<p>Transmission depends on size and rate; propagation on distance only. Note how the 1 MB file on a long link is dominated by transmission while the 64-byte frame is dominated by propagation.</p><p><i>VI: Trễ truyền phụ thuộc kích thước và tốc độ; trễ lan truyền chỉ phụ thuộc khoảng cách.</i></p>"
+            "giaiThich": "<p>Transmission depends on size and rate; propagation on distance only. Propagation dominates in every row here: even the 1 MB file needs only 8 ms to go onto the 1 Gbps link, against 25 ms of travel over 5000 km.</p><p><i>VI: Trễ truyền phụ thuộc kích thước và tốc độ; trễ lan truyền chỉ phụ thuộc khoảng cách. Ở mọi dòng của bảng này trễ lan truyền đều trội: ngay cả tệp 1 MB cũng chỉ mất 8 ms để đẩy lên đường 1 Gbps, so với 25 ms đi hết 5000 km.</i></p>"
           }
         ]
       },
@@ -546,10 +546,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Physical 4 — Quick numeric checks — answer key\n\n1. How long does a 2 GB (2×10⁹ B) file take over a 100 Mbps link at full rate?Truyền tệp 2 GB (2×10⁹ B) qua đường 100 Mbps hết tốc độ mất bao lâu?\n   Answer: c) 160 s\n   2×10⁹ × 8 = 16×10⁹ bit ÷ 10⁸ = 160 s.VI: 2×10⁹ × 8 = 16×10⁹ bit ÷ 10⁸ = 160 s.\n\n2. A 1 Gbps link has RTT 40 ms. The bandwidth-delay product (bytes in flight to fill the pipe) is …Đường 1 Gbps có RTT 40 ms. Tích băng thông-trễ (số byte cần “bay” để lấp đầy ống) là …\n   Answer: d) 5,000,000 B\n   BDP = 10⁹ × 0.04 / 8 = 5,000,000 bytes.VI: BDP = 10⁹ × 0,04 / 8 = 5.000.000 byte.\n\n3. A file of 40 MB takes 8 s. The average throughput is …Tệp 40 MB mất 8 s. Thông lượng trung bình là …\n   Answer: a) 40 Mbps\n   40 MB × 8 = 320 Mbit ÷ 8 s = 40 Mbps.VI: 40 MB × 8 = 320 Mbit ÷ 8 s = 40 Mbps.\n\n4. An Ethernet frame of 12,000 bits on a 1 Gbps link needs … µs of transmission time.Frame Ethernet 12.000 bit trên đường 1 Gbps cần … µs để truyền.\n   Answer: b) 12 µs\n   12000 ÷ 10⁹ = 12 µs.VI: 12000 ÷ 10⁹ = 12 µs.\n"
+          "code": "# Physical 4 — Quick numeric checks — answer key\n\n1. How long does a 2 GB (2×10⁹ B) file take over a 100 Mbps link at full rate?Truyền tệp 2 GB (2×10⁹ B) qua đường 100 Mbps hết tốc độ mất bao lâu?\n   Answer: a) 160 s\n   2×10⁹ × 8 = 16×10⁹ bit ÷ 10⁸ = 160 s.VI: 2×10⁹ × 8 = 16×10⁹ bit ÷ 10⁸ = 160 s.\n\n2. A 1 Gbps link has RTT 40 ms. The bandwidth-delay product (bytes in flight to fill the pipe) is …Đường 1 Gbps có RTT 40 ms. Tích băng thông-trễ (số byte cần “bay” để lấp đầy ống) là …\n   Answer: a) 5,000,000 B\n   BDP = 10⁹ × 0.04 / 8 = 5,000,000 bytes.VI: BDP = 10⁹ × 0,04 / 8 = 5.000.000 byte.\n\n3. A file of 40 MB takes 8 s. The average throughput is …Tệp 40 MB mất 8 s. Thông lượng trung bình là …\n   Answer: d) 40 Mbps\n   40 MB × 8 = 320 Mbit ÷ 8 s = 40 Mbps.VI: 40 MB × 8 = 320 Mbit ÷ 8 s = 40 Mbps.\n\n4. An Ethernet frame of 12,000 bits on a 1 Gbps link needs … µs of transmission time.Frame Ethernet 12.000 bit trên đường 1 Gbps cần … µs để truyền.\n   Answer: b) 12 µs\n   12000 ÷ 10⁹ = 12 µs.VI: 12000 ÷ 10⁹ = 12 µs.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> 160 s</p><p>2×10⁹ × 8 = 16×10⁹ bit ÷ 10⁸ = 160 s.</p><p><i>VI: 2×10⁹ × 8 = 16×10⁹ bit ÷ 10⁸ = 160 s.</i></p></li><li><p><b>a)</b> 5,000,000 B</p><p>BDP = 10⁹ × 0.04 / 8 = 5,000,000 bytes.</p><p><i>VI: BDP = 10⁹ × 0,04 / 8 = 5.000.000 byte.</i></p></li><li><p><b>d)</b> 40 Mbps</p><p>40 MB × 8 = 320 Mbit ÷ 8 s = 40 Mbps.</p><p><i>VI: 40 MB × 8 = 320 Mbit ÷ 8 s = 40 Mbps.</i></p></li><li><p><b>b)</b> 12 µs</p><p>12000 ÷ 10⁹ = 12 µs.</p><p><i>VI: 12000 ÷ 10⁹ = 12 µs.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -562,7 +562,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "16 s"
+                "noiDung": "160 s"
               },
               {
                 "ma": "b",
@@ -570,7 +570,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "160 s"
+                "noiDung": "16 s"
               },
               {
                 "ma": "d",
@@ -578,7 +578,7 @@
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>2×10⁹ × 8 = 16×10⁹ bit ÷ 10⁸ = 160 s.</p><p><i>VI: 2×10⁹ × 8 = 16×10⁹ bit ÷ 10⁸ = 160 s.</i></p>"
           },
@@ -588,11 +588,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "40,000,000 B"
+                "noiDung": "5,000,000 B"
               },
               {
                 "ma": "b",
-                "noiDung": "625,000 B"
+                "noiDung": "40,000,000 B"
               },
               {
                 "ma": "c",
@@ -600,11 +600,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "5,000,000 B"
+                "noiDung": "625,000 B"
               }
             ],
             "dapAn": [
-              "d"
+              "a"
             ],
             "giaiThich": "<p>BDP = 10⁹ × 0.04 / 8 = 5,000,000 bytes.</p><p><i>VI: BDP = 10⁹ × 0,04 / 8 = 5.000.000 byte.</i></p>"
           },
@@ -614,23 +614,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "40 Mbps"
-              },
-              {
-                "ma": "b",
-                "noiDung": "5 Mbps"
-              },
-              {
-                "ma": "c",
                 "noiDung": "320 Mbps"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "4 Mbps"
+              },
+              {
+                "ma": "c",
+                "noiDung": "5 Mbps"
+              },
+              {
+                "ma": "d",
+                "noiDung": "40 Mbps"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>40 MB × 8 = 320 Mbit ÷ 8 s = 40 Mbps.</p><p><i>VI: 40 MB × 8 = 320 Mbit ÷ 8 s = 40 Mbps.</i></p>"
           },

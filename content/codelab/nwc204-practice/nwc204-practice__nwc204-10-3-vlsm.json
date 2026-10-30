@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# VLSM 1 — Why and how — answer key\n\n1. VLSM lets you …VLSM cho phép …\n   Answer: d) use different prefix lengths for different subnets of one block\n   Each subnet gets the smallest block that fits its hosts.VI: Mỗi mạng con nhận khối nhỏ nhất đủ host.\n\n2. In a VLSM plan you allocate the subnets in the order …Trong kế hoạch VLSM, bạn cấp mạng con theo thứ tự …\n   Answer: a) largest requirement first\n   Largest first keeps every block aligned and avoids gaps and overlaps.VI: Lớn trước giữ mọi khối thẳng hàng, tránh khe hở và chồng lấn.\n\n3. A point-to-point WAN link between two routers needs a …Liên kết WAN điểm-điểm giữa hai router cần …\n   Answer: b) /30 (2 usable hosts)\n   Anything bigger wastes addresses; /31 is possible with RFC 3021.VI: Lớn hơn thì phí; /31 cũng được theo RFC 3021.\n\n4. Two subnets overlap when …Hai mạng con chồng lấn khi …\n   Answer: c) one address belongs to both of them\n   Routing becomes ambiguous; the allocation is wrong.VI: Định tuyến mơ hồ; cấp phát sai.\n"
+          "code": "# VLSM 1 — Why and how — answer key\n\n1. VLSM lets you …VLSM cho phép …\n   Answer: c) use different prefix lengths for different subnets of one block\n   Each subnet gets the smallest block that fits its hosts.VI: Mỗi mạng con nhận khối nhỏ nhất đủ host.\n\n2. In a VLSM plan you allocate the subnets in the order …Trong kế hoạch VLSM, bạn cấp mạng con theo thứ tự …\n   Answer: b) largest requirement first\n   Largest first keeps every block aligned and avoids gaps and overlaps.VI: Lớn trước giữ mọi khối thẳng hàng, tránh khe hở và chồng lấn.\n\n3. A point-to-point WAN link between two routers needs a …Liên kết WAN điểm-điểm giữa hai router cần …\n   Answer: b) /30 (2 usable hosts)\n   Anything bigger wastes addresses; /31 is possible with RFC 3021.VI: Lớn hơn thì phí; /31 cũng được theo RFC 3021.\n\n4. Two subnets overlap when …Hai mạng con chồng lấn khi …\n   Answer: c) one address belongs to both of them\n   Routing becomes ambiguous; the allocation is wrong.VI: Định tuyến mơ hồ; cấp phát sai.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> use different prefix lengths for different subnets of one block</p><p>Each subnet gets the smallest block that fits its hosts.</p><p><i>VI: Mỗi mạng con nhận khối nhỏ nhất đủ host.</i></p></li><li><p><b>b)</b> largest requirement first</p><p>Largest first keeps every block aligned and avoids gaps and overlaps.</p><p><i>VI: Lớn trước giữ mọi khối thẳng hàng, tránh khe hở và chồng lấn.</i></p></li><li><p><b>b)</b> /30 (2 usable hosts)</p><p>Anything bigger wastes addresses; /31 is possible with RFC 3021.</p><p><i>VI: Lớn hơn thì phí; /31 cũng được theo RFC 3021.</i></p></li><li><p><b>c)</b> one address belongs to both of them</p><p>Routing becomes ambiguous; the allocation is wrong.</p><p><i>VI: Định tuyến mơ hồ; cấp phát sai.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -62,23 +62,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "use the same mask everywhere"
+                "noiDung": "route between the subnets without carrying any mask"
               },
               {
                 "ma": "b",
-                "noiDung": "avoid subnetting"
+                "noiDung": "avoid subnetting by giving each site a whole block"
               },
               {
                 "ma": "c",
-                "noiDung": "route without masks"
+                "noiDung": "use different prefix lengths for different subnets of one block"
               },
               {
                 "ma": "d",
-                "noiDung": "use different prefix lengths for different subnets of one block"
+                "noiDung": "use the same prefix length for all subnets of one block"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>Each subnet gets the smallest block that fits its hosts.</p><p><i>VI: Mỗi mạng con nhận khối nhỏ nhất đủ host.</i></p>"
           },
@@ -88,11 +88,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "largest requirement first"
+                "noiDung": "smallest requirement first"
               },
               {
                 "ma": "b",
-                "noiDung": "smallest requirement first"
+                "noiDung": "largest requirement first"
               },
               {
                 "ma": "c",
@@ -104,7 +104,7 @@
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>Largest first keeps every block aligned and avoids gaps and overlaps.</p><p><i>VI: Lớn trước giữ mọi khối thẳng hàng, tránh khe hở và chồng lấn.</i></p>"
           },
@@ -122,11 +122,11 @@
               },
               {
                 "ma": "c",
-                "noiDung": "/24"
+                "noiDung": "/28"
               },
               {
                 "ma": "d",
-                "noiDung": "/28"
+                "noiDung": "/24"
               }
             ],
             "dapAn": [
@@ -140,11 +140,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "they are in different VLANs"
+                "noiDung": "they use private addresses"
               },
               {
                 "ma": "b",
-                "noiDung": "they use private addresses"
+                "noiDung": "they are in different VLANs"
               },
               {
                 "ma": "c",
@@ -577,10 +577,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# VLSM 4 — Does the plan fit in a /24? — answer key\n\n1. Needs: 100, 100, 20 hosts. Do they fit in one /24?Nhu cầu: 100, 100, 20 host. Có vừa trong một /24 không?\n   Answer: d) No — the rounded-up blocks need more than 256 addresses\n   Round each need up to a block (126→128, 62→64, 30→32, 14→16, 6→8, 2→4) and add the sizes.VI: Làm tròn mỗi nhu cầu lên khối (126→128, 62→64, 30→32, 14→16, 6→8, 2→4) rồi cộng.\n\n2. Needs: 100, 50, 50 hosts. Do they fit in one /24?Nhu cầu: 100, 50, 50 host. Có vừa trong một /24 không?\n   Answer: a) Yes — the blocks add up to 256 addresses ≤ 256\n   Round each need up to a block (126→128, 62→64, 30→32, 14→16, 6→8, 2→4) and add the sizes.VI: Làm tròn mỗi nhu cầu lên khối (126→128, 62→64, 30→32, 14→16, 6→8, 2→4) rồi cộng.\n\n3. Needs: 120, 60, 30, 14, 6 hosts. Do they fit in one /24?Nhu cầu: 120, 60, 30, 14, 6 host. Có vừa trong một /24 không?\n   Answer: b) Yes — the blocks add up to 248 addresses ≤ 256\n   Round each need up to a block (126→128, 62→64, 30→32, 14→16, 6→8, 2→4) and add the sizes.VI: Làm tròn mỗi nhu cầu lên khối (126→128, 62→64, 30→32, 14→16, 6→8, 2→4) rồi cộng.\n\n4. Needs: 126, 62, 30, 14, 6, 2, 2, 2 hosts. Do they fit in one /24?Nhu cầu: 126, 62, 30, 14, 6, 2, 2, 2 host. Có vừa trong một /24 không?\n   Answer: c) No — the rounded-up blocks need more than 256 addresses\n   Round each need up to a block (126→128, 62→64, 30→32, 14→16, 6→8, 2→4) and add the sizes.VI: Làm tròn mỗi nhu cầu lên khối (126→128, 62→64, 30→32, 14→16, 6→8, 2→4) rồi cộng.\n"
+          "code": "# VLSM 4 — Does the plan fit in a /24? — answer key\n\n1. Needs: 100, 100, 20 hosts. Do they fit in one /24?Nhu cầu: 100, 100, 20 host. Có vừa trong một /24 không?\n   Answer: a) No — the rounded-up blocks need more than 256 addresses\n   Round each need up to a block (126→128, 62→64, 30→32, 14→16, 6→8, 2→4) and add the sizes.VI: Làm tròn mỗi nhu cầu lên khối (126→128, 62→64, 30→32, 14→16, 6→8, 2→4) rồi cộng.\n\n2. Needs: 100, 50, 50 hosts. Do they fit in one /24?Nhu cầu: 100, 50, 50 host. Có vừa trong một /24 không?\n   Answer: c) Yes — the blocks add up to 256 addresses ≤ 256\n   Round each need up to a block (126→128, 62→64, 30→32, 14→16, 6→8, 2→4) and add the sizes.VI: Làm tròn mỗi nhu cầu lên khối (126→128, 62→64, 30→32, 14→16, 6→8, 2→4) rồi cộng.\n\n3. Needs: 120, 60, 30, 14, 6 hosts. Do they fit in one /24?Nhu cầu: 120, 60, 30, 14, 6 host. Có vừa trong một /24 không?\n   Answer: c) Yes — the blocks add up to 248 addresses ≤ 256\n   Round each need up to a block (126→128, 62→64, 30→32, 14→16, 6→8, 2→4) and add the sizes.VI: Làm tròn mỗi nhu cầu lên khối (126→128, 62→64, 30→32, 14→16, 6→8, 2→4) rồi cộng.\n\n4. Needs: 126, 62, 30, 14, 6, 2, 2, 2 hosts. Do they fit in one /24?Nhu cầu: 126, 62, 30, 14, 6, 2, 2, 2 host. Có vừa trong một /24 không?\n   Answer: c) No — the rounded-up blocks need more than 256 addresses\n   Round each need up to a block (126→128, 62→64, 30→32, 14→16, 6→8, 2→4) and add the sizes.VI: Làm tròn mỗi nhu cầu lên khối (126→128, 62→64, 30→32, 14→16, 6→8, 2→4) rồi cộng.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> No — the rounded-up blocks need more than 256 addresses</p><p>Round each need up to a block (126→128, 62→64, 30→32, 14→16, 6→8, 2→4) and add the sizes.</p><p><i>VI: Làm tròn mỗi nhu cầu lên khối (126→128, 62→64, 30→32, 14→16, 6→8, 2→4) rồi cộng.</i></p></li><li><p><b>c)</b> Yes — the blocks add up to 256 addresses ≤ 256</p><p>Round each need up to a block (126→128, 62→64, 30→32, 14→16, 6→8, 2→4) and add the sizes.</p><p><i>VI: Làm tròn mỗi nhu cầu lên khối (126→128, 62→64, 30→32, 14→16, 6→8, 2→4) rồi cộng.</i></p></li><li><p><b>c)</b> Yes — the blocks add up to 248 addresses ≤ 256</p><p>Round each need up to a block (126→128, 62→64, 30→32, 14→16, 6→8, 2→4) and add the sizes.</p><p><i>VI: Làm tròn mỗi nhu cầu lên khối (126→128, 62→64, 30→32, 14→16, 6→8, 2→4) rồi cộng.</i></p></li><li><p><b>c)</b> No — the rounded-up blocks need more than 256 addresses</p><p>Round each need up to a block (126→128, 62→64, 30→32, 14→16, 6→8, 2→4) and add the sizes.</p><p><i>VI: Làm tròn mỗi nhu cầu lên khối (126→128, 62→64, 30→32, 14→16, 6→8, 2→4) rồi cộng.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -593,23 +593,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Yes — the host counts add up to less than 254"
+                "noiDung": "No — the rounded-up blocks need more than 256 addresses"
               },
               {
                 "ma": "b",
-                "noiDung": "Only with /31 links"
-              },
-              {
-                "ma": "c",
                 "noiDung": "Only with NAT"
               },
               {
+                "ma": "c",
+                "noiDung": "Yes — the host counts add up to less than 254"
+              },
+              {
                 "ma": "d",
-                "noiDung": "No — the rounded-up blocks need more than 256 addresses"
+                "noiDung": "Only with IPv6 addresses"
               }
             ],
             "dapAn": [
-              "d"
+              "a"
             ],
             "giaiThich": "<p>Round each need up to a block (126→128, 62→64, 30→32, 14→16, 6→8, 2→4) and add the sizes.</p><p><i>VI: Làm tròn mỗi nhu cầu lên khối (126→128, 62→64, 30→32, 14→16, 6→8, 2→4) rồi cộng.</i></p>"
           },
@@ -619,23 +619,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Yes — the blocks add up to 256 addresses ≤ 256"
-              },
-              {
-                "ma": "b",
-                "noiDung": "No — it needs more than 256 addresses"
-              },
-              {
-                "ma": "c",
                 "noiDung": "Only if the /24 is a class C"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "Cannot be decided"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Yes — the blocks add up to 256 addresses ≤ 256"
+              },
+              {
+                "ma": "d",
+                "noiDung": "No — it needs more than 256 addresses"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>Round each need up to a block (126→128, 62→64, 30→32, 14→16, 6→8, 2→4) and add the sizes.</p><p><i>VI: Làm tròn mỗi nhu cầu lên khối (126→128, 62→64, 30→32, 14→16, 6→8, 2→4) rồi cộng.</i></p>"
           },
@@ -645,23 +645,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Cannot be decided"
+                "noiDung": "Only if the /24 is a class C"
               },
               {
                 "ma": "b",
-                "noiDung": "Yes — the blocks add up to 248 addresses ≤ 256"
-              },
-              {
-                "ma": "c",
                 "noiDung": "No — it needs more than 256 addresses"
               },
               {
+                "ma": "c",
+                "noiDung": "Yes — the blocks add up to 248 addresses ≤ 256"
+              },
+              {
                 "ma": "d",
-                "noiDung": "Only if the /24 is a class C"
+                "noiDung": "Cannot be decided"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Round each need up to a block (126→128, 62→64, 30→32, 14→16, 6→8, 2→4) and add the sizes.</p><p><i>VI: Làm tròn mỗi nhu cầu lên khối (126→128, 62→64, 30→32, 14→16, 6→8, 2→4) rồi cộng.</i></p>"
           },
@@ -671,11 +671,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Only with /31 links"
+                "noiDung": "Only with NAT"
               },
               {
                 "ma": "b",
-                "noiDung": "Only with NAT"
+                "noiDung": "Only with IPv6 addresses"
               },
               {
                 "ma": "c",

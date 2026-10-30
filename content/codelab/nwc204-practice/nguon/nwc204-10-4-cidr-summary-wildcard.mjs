@@ -33,7 +33,7 @@ const E2 = cs({
     const s = S.summarize(l), size = Math.pow(2, 32 - Number(s.split('/')[1])), have = count(l);
     if ((size === have) !== (r === 'exact')) throw new Error('EX sai ' + i);
     return q('c' + (i + 1), [`Networks ${l.join(', ')} summarised as ${s}. This is …`, `Các mạng ${l.join(', ')} tóm tắt thành ${s}. Đây là …`],
-      r === 'exact' ? [`exact: ${s} has ${size} addresses, the list ${have}`, `over-broad: it adds ${size} extra addresses`, 'impossible to summarise', 'a valid summary only with NAT'] : [`over-broad: ${s} has ${size} addresses, the list only ${have}`, 'exact', 'invalid CIDR', 'a default route'],
+      r === 'exact' ? [`exact: ${s} has ${size} addresses, the list ${have}`, `over-broad: ${s} has ${size * 2} addresses, the list only ${have}`, 'too narrow: it leaves out one of the listed networks', `invalid CIDR: ${s} is not aligned on its block size`] : [`over-broad: ${s} has ${size} addresses, the list only ${have}`, `exact: ${s} has ${have} addresses, the list ${have}`, 'too narrow: it leaves out one of the listed networks', `invalid CIDR: ${s} is not aligned on its block size`],
       ['Compare the address counts: equal means exact.', 'So sánh số địa chỉ: bằng nhau là chính xác.']);
   }),
   goiY: ['Size of /p is 2^(32−p).', 'Extra addresses mean the router would advertise networks it cannot reach.'],
@@ -61,7 +61,7 @@ const E4 = cs({
     mcNum('c1', ['How many /24 networks are inside a /16?', 'Có bao nhiêu mạng /24 trong một /16?'], 256, [16, 65536, 254], null, ['2^(24−16) = 256.', '2^(24−16) = 256.']),
     mcNum('c2', ['How many addresses in 10.8.0.0/13?', '10.8.0.0/13 có bao nhiêu địa chỉ?'], 524288, [262144, 1048576, 8192], (x) => x.toLocaleString('en-US'), ['2^(32−13) = 524,288.', '2^(32−13) = 524.288.']),
     q('c3', ['The last address of 10.8.0.0/13 is …', 'Địa chỉ cuối của 10.8.0.0/13 là …'], ['10.15.255.255', '10.8.255.255', '10.16.0.0', '10.11.255.255'], ['A /13 spans 8 values of the second octet: 8–15.', 'Một /13 trải 8 giá trị của octet thứ hai: 8–15.']),
-    q('c4', ['CIDR (RFC 4632) replaced classful addressing mainly to …', 'CIDR (RFC 4632) thay địa chỉ theo lớp chủ yếu để …'], ['use address space efficiently and shrink routing tables via aggregation', 'add more classes', 'remove the need for masks', 'make DHCP faster'], ['Prefix length is independent of the first octet.', 'Độ dài prefix không còn phụ thuộc octet đầu.']),
+    q('c4', ['CIDR (RFC 4632) replaced classful addressing mainly to …', 'CIDR (RFC 4632) thay địa chỉ theo lớp chủ yếu để …'], ['use address space efficiently and shrink routing tables via aggregation', 'add more classes (F, G, …) to the existing A, B and C', 'remove the need for masks, because the first bits show the class', 'make DHCP faster by sending shorter options in each lease'], ['Prefix length is independent of the first octet.', 'Độ dài prefix không còn phụ thuộc octet đầu.']),
   ],
   goiY: ['Prefix difference = number of doublings.', '/13 means the second octet is partly host bits.'],
   loi: ['Using the class instead of the prefix.', 'Forgetting that /13 ends at 15, not 8.'],

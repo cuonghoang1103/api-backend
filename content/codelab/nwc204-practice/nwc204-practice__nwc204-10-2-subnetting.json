@@ -584,10 +584,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Subnetting 4 — Quick checks — answer key\n\n1. How many /28 subnets fit in a /24?Có bao nhiêu mạng con /28 trong một /24?\n   Answer: a) 16\n   2^(28−24) = 16.VI: 2^(28−24) = 16.\n\n2. How many usable hosts in each /28?Mỗi mạng con /28 có bao nhiêu host dùng được?\n   Answer: b) 14\n   2^4 − 2 = 14.VI: 2^4 − 2 = 14.\n\n3. Which mask gives at least 60 hosts per subnet but the most subnets?Mặt nạ nào cho ít nhất 60 host mỗi mạng con mà nhiều mạng con nhất?\n   Answer: c) 255.255.255.192 (/26)\n   /26 gives 62 hosts; /27 only 30.VI: /26 cho 62 host; /27 chỉ 30.\n\n4. The router interface 192.168.1.97/27 is in the subnet …Giao diện router 192.168.1.97/27 nằm trong mạng con …\n   Answer: d) 192.168.1.96/27\n   Block size 32: 96 ≤ 97 VI: Khối 32: 96 ≤ 97\n\n5. Which address is a valid host in 192.168.1.64/26?Địa chỉ nào là host hợp lệ trong 192.168.1.64/26?\n   Answer: a) 192.168.1.126\n   Range .65–.126; .64 is the network and .127 the broadcast.VI: Dải .65–.126; .64 là mạng và .127 là broadcast.\n"
+          "code": "# Subnetting 4 — Quick checks — answer key\n\n1. How many /28 subnets fit in a /24?Có bao nhiêu mạng con /28 trong một /24?\n   Answer: d) 16\n   2^(28−24) = 16.VI: 2^(28−24) = 16.\n\n2. How many usable hosts in each /28?Mỗi mạng con /28 có bao nhiêu host dùng được?\n   Answer: b) 14\n   2^4 − 2 = 14.VI: 2^4 − 2 = 14.\n\n3. Which mask gives at least 60 hosts per subnet but the most subnets?Mặt nạ nào cho ít nhất 60 host mỗi mạng con mà nhiều mạng con nhất?\n   Answer: d) 255.255.255.192 (/26)\n   /26 gives 62 hosts; /27 only 30.VI: /26 cho 62 host; /27 chỉ 30.\n\n4. The router interface 192.168.1.97/27 is in the subnet …Giao diện router 192.168.1.97/27 nằm trong mạng con …\n   Answer: c) 192.168.1.96/27\n   Block size 32: 96 ≤ 97 < 128.VI: Khối 32: 96 ≤ 97 < 128.\n\n5. Which address is a valid host in 192.168.1.64/26?Địa chỉ nào là host hợp lệ trong 192.168.1.64/26?\n   Answer: b) 192.168.1.126\n   Range .65–.126; .64 is the network and .127 the broadcast.VI: Dải .65–.126; .64 là mạng và .127 là broadcast.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> 16</p><p>2^(28−24) = 16.</p><p><i>VI: 2^(28−24) = 16.</i></p></li><li><p><b>b)</b> 14</p><p>2^4 − 2 = 14.</p><p><i>VI: 2^4 − 2 = 14.</i></p></li><li><p><b>d)</b> 255.255.255.192 (/26)</p><p>/26 gives 62 hosts; /27 only 30.</p><p><i>VI: /26 cho 62 host; /27 chỉ 30.</i></p></li><li><p><b>c)</b> 192.168.1.96/27</p><p>Block size 32: 96 ≤ 97 < 128.</p><p><i>VI: Khối 32: 96 ≤ 97 < 128.</i></p></li><li><p><b>b)</b> 192.168.1.126</p><p>Range .65–.126; .64 is the network and .127 the broadcast.</p><p><i>VI: Dải .65–.126; .64 là mạng và .127 là broadcast.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -600,23 +600,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "16"
-              },
-              {
-                "ma": "b",
                 "noiDung": "8"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "14"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "4"
+              },
+              {
+                "ma": "d",
+                "noiDung": "16"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>2^(28−24) = 16.</p><p><i>VI: 2^(28−24) = 16.</i></p>"
           },
@@ -626,7 +626,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "12"
+                "noiDung": "16"
               },
               {
                 "ma": "b",
@@ -634,7 +634,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "16"
+                "noiDung": "12"
               },
               {
                 "ma": "d",
@@ -652,23 +652,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "255.255.255.128 (/25)"
+                "noiDung": "255.255.255.224 (/27)"
               },
               {
                 "ma": "b",
-                "noiDung": "255.255.255.240 (/28)"
+                "noiDung": "255.255.255.128 (/25)"
               },
               {
                 "ma": "c",
-                "noiDung": "255.255.255.192 (/26)"
+                "noiDung": "255.255.255.240 (/28)"
               },
               {
                 "ma": "d",
-                "noiDung": "255.255.255.224 (/27)"
+                "noiDung": "255.255.255.192 (/26)"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>/26 gives 62 hosts; /27 only 30.</p><p><i>VI: /26 cho 62 host; /27 chỉ 30.</i></p>"
           },
@@ -686,15 +686,15 @@
               },
               {
                 "ma": "c",
-                "noiDung": "192.168.1.128/27"
+                "noiDung": "192.168.1.96/27"
               },
               {
                 "ma": "d",
-                "noiDung": "192.168.1.96/27"
+                "noiDung": "192.168.1.128/27"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>Block size 32: 96 ≤ 97 < 128.</p><p><i>VI: Khối 32: 96 ≤ 97 < 128.</i></p>"
           },
@@ -704,23 +704,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "192.168.1.126"
-              },
-              {
-                "ma": "b",
                 "noiDung": "192.168.1.64"
               },
               {
+                "ma": "b",
+                "noiDung": "192.168.1.126"
+              },
+              {
                 "ma": "c",
-                "noiDung": "192.168.1.127"
+                "noiDung": "192.168.1.128"
               },
               {
                 "ma": "d",
-                "noiDung": "192.168.1.128"
+                "noiDung": "192.168.1.127"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>Range .65–.126; .64 is the network and .127 the broadcast.</p><p><i>VI: Dải .65–.126; .64 là mạng và .127 là broadcast.</i></p>"
           }

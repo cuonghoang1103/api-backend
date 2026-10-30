@@ -47,10 +47,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# NAT 1 — Terms and types — answer key\n\n1. Why is NAT used with IPv4?Vì sao dùng NAT với IPv4?\n   Answer: a) To let many private hosts share few public addresses\n   IPv4 exhaustion made private addressing + NAT the norm.VI: Cạn kiệt IPv4 khiến địa chỉ riêng + NAT trở thành chuẩn.\n\n2. In Cisco terms, “inside local” is …Theo thuật ngữ Cisco, “inside local” là …\n   Answer: b) the private address of an inside host as seen inside\n   Inside global is the public address that represents the host outside.VI: Inside global là địa chỉ công cộng đại diện cho host ra bên ngoài.\n\n3. PAT (NAT overload) distinguishes many inside hosts sharing one public IP by …PAT (NAT overload) phân biệt nhiều host trong dùng chung một IP công cộng bằng …\n   Answer: c) the translated source port number\n   One public address supports ~64,000 simultaneous flows.VI: Một địa chỉ công cộng hỗ trợ khoảng 64.000 luồng cùng lúc.\n\n4. Static NAT is used for …NAT tĩnh dùng cho …\n   Answer: d) an internal server that must be reachable from outside with a fixed public address\n   One-to-one permanent mapping.VI: Ánh xạ một-một cố định.\n\n5. A drawback of NAT is …Nhược điểm của NAT là …\n   Answer: a) it breaks end-to-end addressing and complicates some protocols\n   Inbound connections need port forwarding or static NAT.VI: Kết nối đến cần port forwarding hoặc NAT tĩnh.\n"
+          "code": "# NAT 1 — Terms and types — answer key\n\n1. Why is NAT used with IPv4?Vì sao dùng NAT với IPv4?\n   Answer: d) To let many private hosts share few public addresses\n   IPv4 exhaustion made private addressing + NAT the norm.VI: Cạn kiệt IPv4 khiến địa chỉ riêng + NAT trở thành chuẩn.\n\n2. In Cisco terms, “inside local” is …Theo thuật ngữ Cisco, “inside local” là …\n   Answer: c) the private address of an inside host as seen inside\n   Inside global is the public address that represents the host outside.VI: Inside global là địa chỉ công cộng đại diện cho host ra bên ngoài.\n\n3. PAT (NAT overload) distinguishes many inside hosts sharing one public IP by …PAT (NAT overload) phân biệt nhiều host trong dùng chung một IP công cộng bằng …\n   Answer: b) the translated source port number\n   One public address supports ~64,000 simultaneous flows.VI: Một địa chỉ công cộng hỗ trợ khoảng 64.000 luồng cùng lúc.\n\n4. Static NAT is used for …NAT tĩnh dùng cho …\n   Answer: c) an internal server that must be reachable from outside with a fixed public address\n   One-to-one permanent mapping.VI: Ánh xạ một-một cố định.\n\n5. A drawback of NAT is …Nhược điểm của NAT là …\n   Answer: b) it breaks end-to-end addressing and complicates some protocols\n   Inbound connections need port forwarding or static NAT.VI: Kết nối đến cần port forwarding hoặc NAT tĩnh.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> To let many private hosts share few public addresses</p><p>IPv4 exhaustion made private addressing + NAT the norm.</p><p><i>VI: Cạn kiệt IPv4 khiến địa chỉ riêng + NAT trở thành chuẩn.</i></p></li><li><p><b>c)</b> the private address of an inside host as seen inside</p><p>Inside global is the public address that represents the host outside.</p><p><i>VI: Inside global là địa chỉ công cộng đại diện cho host ra bên ngoài.</i></p></li><li><p><b>b)</b> the translated source port number</p><p>One public address supports ~64,000 simultaneous flows.</p><p><i>VI: Một địa chỉ công cộng hỗ trợ khoảng 64.000 luồng cùng lúc.</i></p></li><li><p><b>c)</b> an internal server that must be reachable from outside with a fixed public address</p><p>One-to-one permanent mapping.</p><p><i>VI: Ánh xạ một-một cố định.</i></p></li><li><p><b>b)</b> it breaks end-to-end addressing and complicates some protocols</p><p>Inbound connections need port forwarding or static NAT.</p><p><i>VI: Kết nối đến cần port forwarding hoặc NAT tĩnh.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -63,23 +63,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "To let many private hosts share few public addresses"
+                "noiDung": "To encrypt the traffic of private hosts"
               },
               {
                 "ma": "b",
-                "noiDung": "To encrypt traffic"
+                "noiDung": "To replace DNS with a table of addresses"
               },
               {
                 "ma": "c",
-                "noiDung": "To speed up routing"
+                "noiDung": "To speed up routing across the Internet"
               },
               {
                 "ma": "d",
-                "noiDung": "To replace DNS"
+                "noiDung": "To let many private hosts share few public addresses"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>IPv4 exhaustion made private addressing + NAT the norm.</p><p><i>VI: Cạn kiệt IPv4 khiến địa chỉ riêng + NAT trở thành chuẩn.</i></p>"
           },
@@ -93,19 +93,19 @@
               },
               {
                 "ma": "b",
-                "noiDung": "the private address of an inside host as seen inside"
+                "noiDung": "the address of an outside host"
               },
               {
                 "ma": "c",
-                "noiDung": "the public address of an inside host"
+                "noiDung": "the private address of an inside host as seen inside"
               },
               {
                 "ma": "d",
-                "noiDung": "the address of an outside host"
+                "noiDung": "the public address of an inside host"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Inside global is the public address that represents the host outside.</p><p><i>VI: Inside global là địa chỉ công cộng đại diện cho host ra bên ngoài.</i></p>"
           },
@@ -119,11 +119,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "the VLAN"
+                "noiDung": "the translated source port number"
               },
               {
                 "ma": "c",
-                "noiDung": "the translated source port number"
+                "noiDung": "the VLAN"
               },
               {
                 "ma": "d",
@@ -131,7 +131,7 @@
               }
             ],
             "dapAn": [
-              "c"
+              "b"
             ],
             "giaiThich": "<p>One public address supports ~64,000 simultaneous flows.</p><p><i>VI: Một địa chỉ công cộng hỗ trợ khoảng 64.000 luồng cùng lúc.</i></p>"
           },
@@ -141,23 +141,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "all user PCs"
+                "noiDung": "IPv6 hosts only, because IPv4 cannot keep a fixed mapping"
               },
               {
                 "ma": "b",
-                "noiDung": "IPv6 only"
+                "noiDung": "all user PCs that share one public address through port numbers"
               },
               {
                 "ma": "c",
-                "noiDung": "DHCP clients"
+                "noiDung": "an internal server that must be reachable from outside with a fixed public address"
               },
               {
                 "ma": "d",
-                "noiDung": "an internal server that must be reachable from outside with a fixed public address"
+                "noiDung": "DHCP clients that receive a new private address on each lease"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>One-to-one permanent mapping.</p><p><i>VI: Ánh xạ một-một cố định.</i></p>"
           },
@@ -167,23 +167,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "it breaks end-to-end addressing and complicates some protocols"
+                "noiDung": "it makes the routing tables of the ISPs much larger"
               },
               {
                 "ma": "b",
-                "noiDung": "it uses more IPv4 addresses"
+                "noiDung": "it breaks end-to-end addressing and complicates some protocols"
               },
               {
                 "ma": "c",
-                "noiDung": "it makes routing tables larger"
+                "noiDung": "it removes the need for firewalls and for access lists"
               },
               {
                 "ma": "d",
-                "noiDung": "it removes the need for firewalls"
+                "noiDung": "it uses more public IPv4 addresses than hosts inside"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>Inbound connections need port forwarding or static NAT.</p><p><i>VI: Kết nối đến cần port forwarding hoặc NAT tĩnh.</i></p>"
           }

@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Link 1 — Framing and error detection concepts — answer key\n\n1. The data link layer delivers frames between …Tầng liên kết dữ liệu chuyển frame giữa …\n   Answer: c) two nodes on the same link / network segment\n   Layer 2 addressing (MAC) is only meaningful on one link.VI: Địa chỉ tầng 2 (MAC) chỉ có nghĩa trên một liên kết.\n\n2. The FCS (frame check sequence) in the trailer lets the receiver …FCS (chuỗi kiểm tra khung) trong trailer giúp bên nhận …\n   Answer: d) detect that the frame was corrupted\n   CRC detects errors; the frame is discarded, retransmission is left to upper layers.VI: CRC phát hiện lỗi; frame bị huỷ, việc gửi lại do tầng trên lo.\n\n3. What does a single even-parity bit detect?Một bit chẵn lẻ (parity chẵn) phát hiện được gì?\n   Answer: a) Any odd number of flipped bits\n   Two flips cancel out, so parity misses all even-size error sets.VI: Hai bit lật triệt tiêu nhau nên parity bỏ sót mọi lỗi có số bit chẵn.\n\n4. CRC treats the bit string as …CRC coi chuỗi bit như …\n   Answer: b) a polynomial divided by a generator polynomial in modulo-2 arithmetic\n   The remainder of the division is the CRC.VI: Số dư của phép chia chính là CRC.\n\n5. A receiver recomputes the CRC over data+CRC and gets a non-zero remainder. It …Bên nhận tính lại CRC trên dữ liệu+CRC và được số dư khác 0. Nó …\n   Answer: c) discards the frame\n   A zero remainder means “no error detected”.VI: Số dư 0 nghĩa là “không phát hiện lỗi”.\n"
+          "code": "# Link 1 — Framing and error detection concepts — answer key\n\n1. The data link layer delivers frames between …Tầng liên kết dữ liệu chuyển frame giữa …\n   Answer: b) two nodes on the same link / network segment\n   Layer 2 addressing (MAC) is only meaningful on one link.VI: Địa chỉ tầng 2 (MAC) chỉ có nghĩa trên một liên kết.\n\n2. The FCS (frame check sequence) in the trailer lets the receiver …FCS (chuỗi kiểm tra khung) trong trailer giúp bên nhận …\n   Answer: a) detect that the frame was corrupted\n   CRC detects errors; the frame is discarded, retransmission is left to upper layers.VI: CRC phát hiện lỗi; frame bị huỷ, việc gửi lại do tầng trên lo.\n\n3. What does a single even-parity bit detect?Một bit chẵn lẻ (parity chẵn) phát hiện được gì?\n   Answer: b) Any odd number of flipped bits\n   Two flips cancel out, so parity misses all even-size error sets.VI: Hai bit lật triệt tiêu nhau nên parity bỏ sót mọi lỗi có số bit chẵn.\n\n4. CRC treats the bit string as …CRC coi chuỗi bit như …\n   Answer: d) a polynomial divided by a generator polynomial in modulo-2 arithmetic\n   The remainder of the division is the CRC.VI: Số dư của phép chia chính là CRC.\n\n5. A receiver recomputes the CRC over data+CRC and gets a non-zero remainder. It …Bên nhận tính lại CRC trên dữ liệu+CRC và được số dư khác 0. Nó …\n   Answer: d) discards the frame\n   A zero remainder means “no error detected”.VI: Số dư 0 nghĩa là “không phát hiện lỗi”.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> two nodes on the same link / network segment</p><p>Layer 2 addressing (MAC) is only meaningful on one link.</p><p><i>VI: Địa chỉ tầng 2 (MAC) chỉ có nghĩa trên một liên kết.</i></p></li><li><p><b>a)</b> detect that the frame was corrupted</p><p>CRC detects errors; the frame is discarded, retransmission is left to upper layers.</p><p><i>VI: CRC phát hiện lỗi; frame bị huỷ, việc gửi lại do tầng trên lo.</i></p></li><li><p><b>b)</b> Any odd number of flipped bits</p><p>Two flips cancel out, so parity misses all even-size error sets.</p><p><i>VI: Hai bit lật triệt tiêu nhau nên parity bỏ sót mọi lỗi có số bit chẵn.</i></p></li><li><p><b>d)</b> a polynomial divided by a generator polynomial in modulo-2 arithmetic</p><p>The remainder of the division is the CRC.</p><p><i>VI: Số dư của phép chia chính là CRC.</i></p></li><li><p><b>d)</b> discards the frame</p><p>A zero remainder means “no error detected”.</p><p><i>VI: Số dư 0 nghĩa là “không phát hiện lỗi”.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -62,15 +62,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "two processes on one host"
-              },
-              {
-                "ma": "b",
                 "noiDung": "two applications"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "two nodes on the same link / network segment"
+              },
+              {
+                "ma": "c",
+                "noiDung": "two processes on one host"
               },
               {
                 "ma": "d",
@@ -78,7 +78,7 @@
               }
             ],
             "dapAn": [
-              "c"
+              "b"
             ],
             "giaiThich": "<p>Layer 2 addressing (MAC) is only meaningful on one link.</p><p><i>VI: Địa chỉ tầng 2 (MAC) chỉ có nghĩa trên một liên kết.</i></p>"
           },
@@ -88,7 +88,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "correct the corrupted bits"
+                "noiDung": "detect that the frame was corrupted"
               },
               {
                 "ma": "b",
@@ -96,15 +96,15 @@
               },
               {
                 "ma": "c",
-                "noiDung": "encrypt the frame"
+                "noiDung": "correct the corrupted bits"
               },
               {
                 "ma": "d",
-                "noiDung": "detect that the frame was corrupted"
+                "noiDung": "encrypt the frame"
               }
             ],
             "dapAn": [
-              "d"
+              "a"
             ],
             "giaiThich": "<p>CRC detects errors; the frame is discarded, retransmission is left to upper layers.</p><p><i>VI: CRC phát hiện lỗi; frame bị huỷ, việc gửi lại do tầng trên lo.</i></p>"
           },
@@ -114,23 +114,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Any odd number of flipped bits"
+                "noiDung": "Nothing, it corrects errors"
               },
               {
                 "ma": "b",
-                "noiDung": "Any number of flipped bits"
+                "noiDung": "Any odd number of flipped bits"
               },
               {
                 "ma": "c",
-                "noiDung": "Only two flipped bits"
+                "noiDung": "Any number of flipped bits"
               },
               {
                 "ma": "d",
-                "noiDung": "Nothing, it corrects errors"
+                "noiDung": "Only two flipped bits"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>Two flips cancel out, so parity misses all even-size error sets.</p><p><i>VI: Hai bit lật triệt tiêu nhau nên parity bỏ sót mọi lỗi có số bit chẵn.</i></p>"
           },
@@ -140,23 +140,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "a hash of the IP header"
+                "noiDung": "a decimal number divided by 10 to give a check digit"
               },
               {
                 "ma": "b",
-                "noiDung": "a polynomial divided by a generator polynomial in modulo-2 arithmetic"
+                "noiDung": "a sum of 16-bit words with the carries wrapped around"
               },
               {
                 "ma": "c",
-                "noiDung": "a decimal number divided by 10"
+                "noiDung": "a cryptographic hash computed over the IP header only"
               },
               {
                 "ma": "d",
-                "noiDung": "a sum of bytes"
+                "noiDung": "a polynomial divided by a generator polynomial in modulo-2 arithmetic"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>The remainder of the division is the CRC.</p><p><i>VI: Số dư của phép chia chính là CRC.</i></p>"
           },
@@ -166,7 +166,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "forwards the frame anyway"
+                "noiDung": "fixes the bits"
               },
               {
                 "ma": "b",
@@ -174,15 +174,15 @@
               },
               {
                 "ma": "c",
-                "noiDung": "discards the frame"
+                "noiDung": "forwards the frame anyway"
               },
               {
                 "ma": "d",
-                "noiDung": "fixes the bits"
+                "noiDung": "discards the frame"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>A zero remainder means “no error detected”.</p><p><i>VI: Số dư 0 nghĩa là “không phát hiện lỗi”.</i></p>"
           }
@@ -526,10 +526,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Link 4 — What can each check catch? — answer key\n\n1. Two bits of a byte are flipped. Even parity …Hai bit của một byte bị lật. Parity chẵn …\n   Answer: a) does not detect it\n   The count of 1s changes by an even amount, so parity is unchanged.VI: Số bit 1 đổi một lượng chẵn nên parity không đổi.\n\n2. A 32-bit CRC (Ethernet FCS) detects every burst of errors up to … bits.CRC 32 bit (FCS Ethernet) phát hiện mọi chùm lỗi dài tới … bit.\n   Answer: b) 32\n   A CRC of degree r catches all bursts of length ≤ r.VI: CRC bậc r bắt mọi chùm lỗi dài ≤ r.\n\n3. Why is the FCS placed in the trailer instead of the header?Vì sao FCS đặt ở trailer chứ không ở header?\n   Answer: c) It is computed while the frame is being sent, after all the bits are known\n   The sender can stream the frame and append the CRC at the end.VI: Bên gửi có thể truyền liên tục rồi nối CRC ở cuối.\n\n4. Compared to the Internet checksum, a CRC is …So với Internet checksum, CRC …\n   Answer: d) much better at detecting burst errors and cheap in hardware\n   CRC is used at layer 2, the Internet checksum at layers 3–4.VI: CRC dùng ở tầng 2, Internet checksum ở tầng 3–4.\n"
+          "code": "# Link 4 — What can each check catch? — answer key\n\n1. Two bits of a byte are flipped. Even parity …Hai bit của một byte bị lật. Parity chẵn …\n   Answer: d) does not detect it\n   The count of 1s changes by an even amount, so parity is unchanged.VI: Số bit 1 đổi một lượng chẵn nên parity không đổi.\n\n2. A 32-bit CRC (Ethernet FCS) detects every burst of errors up to … bits.CRC 32 bit (FCS Ethernet) phát hiện mọi chùm lỗi dài tới … bit.\n   Answer: c) 32\n   A CRC of degree r catches all bursts of length ≤ r.VI: CRC bậc r bắt mọi chùm lỗi dài ≤ r.\n\n3. Why is the FCS placed in the trailer instead of the header?Vì sao FCS đặt ở trailer chứ không ở header?\n   Answer: a) It is computed while the frame is being sent, after all the bits are known\n   The sender can stream the frame and append the CRC at the end.VI: Bên gửi có thể truyền liên tục rồi nối CRC ở cuối.\n\n4. Compared to the Internet checksum, a CRC is …So với Internet checksum, CRC …\n   Answer: d) much better at detecting burst errors and cheap in hardware\n   CRC is used at layer 2, the Internet checksum at layers 3–4.VI: CRC dùng ở tầng 2, Internet checksum ở tầng 3–4.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> does not detect it</p><p>The count of 1s changes by an even amount, so parity is unchanged.</p><p><i>VI: Số bit 1 đổi một lượng chẵn nên parity không đổi.</i></p></li><li><p><b>c)</b> 32</p><p>A CRC of degree r catches all bursts of length ≤ r.</p><p><i>VI: CRC bậc r bắt mọi chùm lỗi dài ≤ r.</i></p></li><li><p><b>a)</b> It is computed while the frame is being sent, after all the bits are known</p><p>The sender can stream the frame and append the CRC at the end.</p><p><i>VI: Bên gửi có thể truyền liên tục rồi nối CRC ở cuối.</i></p></li><li><p><b>d)</b> much better at detecting burst errors and cheap in hardware</p><p>CRC is used at layer 2, the Internet checksum at layers 3–4.</p><p><i>VI: CRC dùng ở tầng 2, Internet checksum ở tầng 3–4.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -542,23 +542,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "does not detect it"
-              },
-              {
-                "ma": "b",
                 "noiDung": "detects it"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "corrects it"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "detects and locates it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "does not detect it"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>The count of 1s changes by an even amount, so parity is unchanged.</p><p><i>VI: Số bit 1 đổi một lượng chẵn nên parity không đổi.</i></p>"
           },
@@ -568,23 +568,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "64"
+                "noiDung": "16"
               },
               {
                 "ma": "b",
-                "noiDung": "32"
+                "noiDung": "64"
               },
               {
                 "ma": "c",
-                "noiDung": "8"
+                "noiDung": "32"
               },
               {
                 "ma": "d",
-                "noiDung": "16"
+                "noiDung": "8"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>A CRC of degree r catches all bursts of length ≤ r.</p><p><i>VI: CRC bậc r bắt mọi chùm lỗi dài ≤ r.</i></p>"
           },
@@ -594,23 +594,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "The trailer is encrypted"
-              },
-              {
-                "ma": "b",
-                "noiDung": "To make the frame shorter"
-              },
-              {
-                "ma": "c",
                 "noiDung": "It is computed while the frame is being sent, after all the bits are known"
               },
               {
+                "ma": "b",
+                "noiDung": "The trailer is encrypted, so the value cannot be changed on the way"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Headers are read only by routers, which never check the frame"
+              },
+              {
                 "ma": "d",
-                "noiDung": "Headers cannot hold numbers"
+                "noiDung": "The header has no room left, so a trailer makes the frame shorter"
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>The sender can stream the frame and append the CRC at the end.</p><p><i>VI: Bên gửi có thể truyền liên tục rồi nối CRC ở cuối.</i></p>"
           },
@@ -620,11 +620,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "weaker but simpler in software"
+                "noiDung": "able to correct single-bit errors"
               },
               {
                 "ma": "b",
-                "noiDung": "able to correct single-bit errors"
+                "noiDung": "weaker but simpler in software"
               },
               {
                 "ma": "c",

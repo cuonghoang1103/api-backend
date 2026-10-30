@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# IPv4 1 — Header fields — answer key\n\n1. The minimum size of an IPv4 header is …Kích thước tối thiểu của header IPv4 là …\n   Answer: b) 20 bytes\n   IHL = 5 words of 4 bytes; options can extend it to 60 bytes.VI: IHL = 5 từ 4 byte; option có thể kéo dài tới 60 byte.\n\n2. The Protocol field value 6 means the payload is …Giá trị 6 của trường Protocol nghĩa là dữ liệu là …\n   Answer: c) TCP\n   1 = ICMP, 6 = TCP, 17 = UDP, 89 = OSPF.VI: 1 = ICMP, 6 = TCP, 17 = UDP, 89 = OSPF.\n\n3. Which field stops a packet from circling forever in a routing loop?Trường nào ngăn gói quay vòng vô tận khi có vòng lặp định tuyến?\n   Answer: d) TTL\n   Each router decrements TTL; at 0 the packet is dropped and ICMP Time Exceeded is sent.VI: Mỗi router giảm TTL; về 0 thì gói bị huỷ và gửi ICMP Time Exceeded.\n\n4. Which header fields must a router change when forwarding?Router bắt buộc phải đổi các trường nào của header khi chuyển tiếp?\n   Answer: a) TTL and header checksum\n   TTL changes, so the checksum is recomputed.VI: TTL đổi nên checksum được tính lại.\n\n5. The DF (Don’t Fragment) bit set and a packet larger than the next link’s MTU. The router …Bit DF (Don’t Fragment) bật và gói lớn hơn MTU của liên kết kế. Router …\n   Answer: b) drops the packet and sends ICMP “fragmentation needed”\n   This is the basis of Path MTU Discovery.VI: Đây là nền tảng của Path MTU Discovery.\n"
+          "code": "# IPv4 1 — Header fields — answer key\n\n1. The minimum size of an IPv4 header is …Kích thước tối thiểu của header IPv4 là …\n   Answer: b) 20 bytes\n   IHL = 5 words of 4 bytes; options can extend it to 60 bytes.VI: IHL = 5 từ 4 byte; option có thể kéo dài tới 60 byte.\n\n2. The Protocol field value 6 means the payload is …Giá trị 6 của trường Protocol nghĩa là dữ liệu là …\n   Answer: c) TCP\n   1 = ICMP, 6 = TCP, 17 = UDP, 89 = OSPF.VI: 1 = ICMP, 6 = TCP, 17 = UDP, 89 = OSPF.\n\n3. Which field stops a packet from circling forever in a routing loop?Trường nào ngăn gói quay vòng vô tận khi có vòng lặp định tuyến?\n   Answer: c) TTL\n   Each router decrements TTL; at 0 the packet is dropped and ICMP Time Exceeded is sent.VI: Mỗi router giảm TTL; về 0 thì gói bị huỷ và gửi ICMP Time Exceeded.\n\n4. Which header fields must a router change when forwarding?Router bắt buộc phải đổi các trường nào của header khi chuyển tiếp?\n   Answer: d) TTL and header checksum\n   TTL changes, so the checksum is recomputed.VI: TTL đổi nên checksum được tính lại.\n\n5. The DF (Don’t Fragment) bit set and a packet larger than the next link’s MTU. The router …Bit DF (Don’t Fragment) bật và gói lớn hơn MTU của liên kết kế. Router …\n   Answer: b) drops the packet and sends ICMP “fragmentation needed”\n   This is the basis of Path MTU Discovery.VI: Đây là nền tảng của Path MTU Discovery.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> 20 bytes</p><p>IHL = 5 words of 4 bytes; options can extend it to 60 bytes.</p><p><i>VI: IHL = 5 từ 4 byte; option có thể kéo dài tới 60 byte.</i></p></li><li><p><b>c)</b> TCP</p><p>1 = ICMP, 6 = TCP, 17 = UDP, 89 = OSPF.</p><p><i>VI: 1 = ICMP, 6 = TCP, 17 = UDP, 89 = OSPF.</i></p></li><li><p><b>c)</b> TTL</p><p>Each router decrements TTL; at 0 the packet is dropped and ICMP Time Exceeded is sent.</p><p><i>VI: Mỗi router giảm TTL; về 0 thì gói bị huỷ và gửi ICMP Time Exceeded.</i></p></li><li><p><b>d)</b> TTL and header checksum</p><p>TTL changes, so the checksum is recomputed.</p><p><i>VI: TTL đổi nên checksum được tính lại.</i></p></li><li><p><b>b)</b> drops the packet and sends ICMP “fragmentation needed”</p><p>This is the basis of Path MTU Discovery.</p><p><i>VI: Đây là nền tảng của Path MTU Discovery.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -62,7 +62,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "60 bytes"
+                "noiDung": "40 bytes"
               },
               {
                 "ma": "b",
@@ -70,11 +70,11 @@
               },
               {
                 "ma": "c",
-                "noiDung": "8 bytes"
+                "noiDung": "60 bytes"
               },
               {
                 "ma": "d",
-                "noiDung": "40 bytes"
+                "noiDung": "8 bytes"
               }
             ],
             "dapAn": [
@@ -88,7 +88,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "ICMP"
+                "noiDung": "UDP"
               },
               {
                 "ma": "b",
@@ -100,7 +100,7 @@
               },
               {
                 "ma": "d",
-                "noiDung": "UDP"
+                "noiDung": "ICMP"
               }
             ],
             "dapAn": [
@@ -114,23 +114,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Identification"
-              },
-              {
-                "ma": "b",
-                "noiDung": "Header checksum"
-              },
-              {
-                "ma": "c",
                 "noiDung": "Flags"
               },
               {
-                "ma": "d",
+                "ma": "b",
+                "noiDung": "Identification"
+              },
+              {
+                "ma": "c",
                 "noiDung": "TTL"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Header checksum"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>Each router decrements TTL; at 0 the packet is dropped and ICMP Time Exceeded is sent.</p><p><i>VI: Mỗi router giảm TTL; về 0 thì gói bị huỷ và gửi ICMP Time Exceeded.</i></p>"
           },
@@ -140,23 +140,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "TTL and header checksum"
-              },
-              {
-                "ma": "b",
                 "noiDung": "Source and destination IP"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "Protocol"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "Version"
+              },
+              {
+                "ma": "d",
+                "noiDung": "TTL and header checksum"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>TTL changes, so the checksum is recomputed.</p><p><i>VI: TTL đổi nên checksum được tính lại.</i></p>"
           },
@@ -166,7 +166,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "truncates the payload"
+                "noiDung": "truncates the payload to the MTU and forwards the rest"
               },
               {
                 "ma": "b",
@@ -174,11 +174,11 @@
               },
               {
                 "ma": "c",
-                "noiDung": "fragments it anyway"
+                "noiDung": "forwards it unchanged and sends an ICMP redirect"
               },
               {
                 "ma": "d",
-                "noiDung": "forwards it unchanged"
+                "noiDung": "fragments it anyway and sets the MF bit on each fragment"
               }
             ],
             "dapAn": [
@@ -406,10 +406,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# IPv4 3 — TTL and fragments in practice — answer key\n\n1. A packet leaves a host with TTL 64 and crosses 9 routers. The TTL on arrival is …Gói rời host với TTL 64 và qua 9 router. TTL khi tới đích là …\n   Answer: b) 55\n   64 − 9 = 55.VI: 64 − 9 = 55.\n\n2. A 4000-byte datagram is fragmented. Which fragment has MF = 0?Datagram 4000 byte bị phân mảnh. Mảnh nào có MF = 0?\n   Answer: c) Only the last fragment\n   MF = “more fragments follow”; the last one has none.VI: MF = “còn mảnh theo sau”; mảnh cuối thì không.\n\n3. Who reassembles the fragments?Ai ghép lại các mảnh?\n   Answer: d) The destination host\n   Routers never reassemble; only the final host does, using Identification + offset.VI: Router không bao giờ ghép; chỉ host cuối ghép, dựa vào Identification + offset.\n\n4. If one fragment is lost, then …Nếu mất một mảnh thì …\n   Answer: a) the whole datagram is discarded after the reassembly timer expires\n   IP has no retransmission; TCP or the app must resend all of it.VI: IP không gửi lại; TCP hoặc ứng dụng phải gửi lại toàn bộ.\n"
+          "code": "# IPv4 3 — TTL and fragments in practice — answer key\n\n1. A packet leaves a host with TTL 64 and crosses 9 routers. The TTL on arrival is …Gói rời host với TTL 64 và qua 9 router. TTL khi tới đích là …\n   Answer: d) 55\n   64 − 9 = 55.VI: 64 − 9 = 55.\n\n2. A 4000-byte datagram is fragmented. Which fragment has MF = 0?Datagram 4000 byte bị phân mảnh. Mảnh nào có MF = 0?\n   Answer: b) Only the last fragment\n   MF = “more fragments follow”; the last one has none.VI: MF = “còn mảnh theo sau”; mảnh cuối thì không.\n\n3. Who reassembles the fragments?Ai ghép lại các mảnh?\n   Answer: b) The destination host\n   Routers never reassemble; only the final host does, using Identification + offset.VI: Router không bao giờ ghép; chỉ host cuối ghép, dựa vào Identification + offset.\n\n4. If one fragment is lost, then …Nếu mất một mảnh thì …\n   Answer: d) the whole datagram is discarded after the reassembly timer expires\n   IP has no retransmission; TCP or the app must resend all of it.VI: IP không gửi lại; TCP hoặc ứng dụng phải gửi lại toàn bộ.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> 55</p><p>64 − 9 = 55.</p><p><i>VI: 64 − 9 = 55.</i></p></li><li><p><b>b)</b> Only the last fragment</p><p>MF = “more fragments follow”; the last one has none.</p><p><i>VI: MF = “còn mảnh theo sau”; mảnh cuối thì không.</i></p></li><li><p><b>b)</b> The destination host</p><p>Routers never reassemble; only the final host does, using Identification + offset.</p><p><i>VI: Router không bao giờ ghép; chỉ host cuối ghép, dựa vào Identification + offset.</i></p></li><li><p><b>d)</b> the whole datagram is discarded after the reassembly timer expires</p><p>IP has no retransmission; TCP or the app must resend all of it.</p><p><i>VI: IP không gửi lại; TCP hoặc ứng dụng phải gửi lại toàn bộ.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -422,23 +422,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "73"
-              },
-              {
-                "ma": "b",
-                "noiDung": "55"
-              },
-              {
-                "ma": "c",
                 "noiDung": "54"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "56"
+              },
+              {
+                "ma": "c",
+                "noiDung": "73"
+              },
+              {
+                "ma": "d",
+                "noiDung": "55"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>64 − 9 = 55.</p><p><i>VI: 64 − 9 = 55.</i></p>"
           },
@@ -452,19 +452,19 @@
               },
               {
                 "ma": "b",
-                "noiDung": "None"
-              },
-              {
-                "ma": "c",
                 "noiDung": "Only the last fragment"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "Only the first fragment"
+              },
+              {
+                "ma": "d",
+                "noiDung": "None"
               }
             ],
             "dapAn": [
-              "c"
+              "b"
             ],
             "giaiThich": "<p>MF = “more fragments follow”; the last one has none.</p><p><i>VI: MF = “còn mảnh theo sau”; mảnh cuối thì không.</i></p>"
           },
@@ -478,7 +478,7 @@
               },
               {
                 "ma": "b",
-                "noiDung": "The first router"
+                "noiDung": "The destination host"
               },
               {
                 "ma": "c",
@@ -486,11 +486,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "The destination host"
+                "noiDung": "The first router"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>Routers never reassemble; only the final host does, using Identification + offset.</p><p><i>VI: Router không bao giờ ghép; chỉ host cuối ghép, dựa vào Identification + offset.</i></p>"
           },
@@ -500,11 +500,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "the whole datagram is discarded after the reassembly timer expires"
+                "noiDung": "only that fragment is retransmitted by IP"
               },
               {
                 "ma": "b",
-                "noiDung": "only that fragment is retransmitted by IP"
+                "noiDung": "the datagram is delivered with a hole"
               },
               {
                 "ma": "c",
@@ -512,11 +512,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "the datagram is delivered with a hole"
+                "noiDung": "the whole datagram is discarded after the reassembly timer expires"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>IP has no retransmission; TCP or the app must resend all of it.</p><p><i>VI: IP không gửi lại; TCP hoặc ứng dụng phải gửi lại toàn bộ.</i></p>"
           }

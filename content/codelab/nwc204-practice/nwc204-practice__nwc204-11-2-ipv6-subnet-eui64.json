@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# IPv6 subnet 1 — Plan with /48 and /64 — answer key\n\n1. How many /64 subnets are in a /48?Một /48 có bao nhiêu mạng /64?\n   Answer: c) 65,536\n   2^(64−48) = 65,536.VI: 2^(64−48) = 65.536.\n\n2. A normal LAN in IPv6 gets a …Một LAN bình thường trong IPv6 được cấp …\n   Answer: d) /64\n   SLAAC needs 64 bits of interface ID, so LANs are /64 even for 2 hosts.VI: SLAAC cần 64 bit interface ID nên LAN luôn /64 dù chỉ 2 host.\n\n3. 2001:db8:acad::/48 — the 4th hextet is the …2001:db8:acad::/48 — nhóm thứ 4 là …\n   Answer: a) subnet ID\n   Global prefix 48 bits + 16-bit subnet ID + 64-bit interface ID.VI: Prefix toàn cục 48 bit + subnet ID 16 bit + interface ID 64 bit.\n\n4. Which is the 11th /64 (counting from subnet 0) of 2001:db8:acad::/48?Mạng /64 thứ 11 (đếm từ subnet 0) của 2001:db8:acad::/48 là?\n   Answer: b) 2001:db8:acad:b::/64\n   Subnet 11 is written 0xb in hex.VI: Subnet 11 viết 0xb dạng hex.\n"
+          "code": "# IPv6 subnet 1 — Plan with /48 and /64 — answer key\n\n1. How many /64 subnets are in a /48?Một /48 có bao nhiêu mạng /64?\n   Answer: d) 65,536\n   2^(64−48) = 65,536.VI: 2^(64−48) = 65.536.\n\n2. A normal LAN in IPv6 gets a …Một LAN bình thường trong IPv6 được cấp …\n   Answer: d) /64\n   SLAAC needs 64 bits of interface ID, so LANs are /64 even for 2 hosts.VI: SLAAC cần 64 bit interface ID nên LAN luôn /64 dù chỉ 2 host.\n\n3. 2001:db8:acad::/48 — the 4th hextet is the …2001:db8:acad::/48 — nhóm thứ 4 là …\n   Answer: a) subnet ID\n   Global prefix 48 bits + 16-bit subnet ID + 64-bit interface ID.VI: Prefix toàn cục 48 bit + subnet ID 16 bit + interface ID 64 bit.\n\n4. Which is the 11th /64 (counting from subnet 0) of 2001:db8:acad::/48?Mạng /64 thứ 11 (đếm từ subnet 0) của 2001:db8:acad::/48 là?\n   Answer: c) 2001:db8:acad:b::/64\n   Subnet 11 is written 0xb in hex.VI: Subnet 11 viết 0xb dạng hex.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> 65,536</p><p>2^(64−48) = 65,536.</p><p><i>VI: 2^(64−48) = 65.536.</i></p></li><li><p><b>d)</b> /64</p><p>SLAAC needs 64 bits of interface ID, so LANs are /64 even for 2 hosts.</p><p><i>VI: SLAAC cần 64 bit interface ID nên LAN luôn /64 dù chỉ 2 host.</i></p></li><li><p><b>a)</b> subnet ID</p><p>Global prefix 48 bits + 16-bit subnet ID + 64-bit interface ID.</p><p><i>VI: Prefix toàn cục 48 bit + subnet ID 16 bit + interface ID 64 bit.</i></p></li><li><p><b>c)</b> 2001:db8:acad:b::/64</p><p>Subnet 11 is written 0xb in hex.</p><p><i>VI: Subnet 11 viết 0xb dạng hex.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -62,23 +62,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "16"
+                "noiDung": "256"
               },
               {
                 "ma": "b",
-                "noiDung": "4,096"
+                "noiDung": "16"
               },
               {
                 "ma": "c",
-                "noiDung": "65,536"
+                "noiDung": "4,096"
               },
               {
                 "ma": "d",
-                "noiDung": "256"
+                "noiDung": "65,536"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>2^(64−48) = 65,536.</p><p><i>VI: 2^(64−48) = 65.536.</i></p>"
           },
@@ -88,7 +88,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "/48"
+                "noiDung": "/32"
               },
               {
                 "ma": "b",
@@ -96,7 +96,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "/32"
+                "noiDung": "/48"
               },
               {
                 "ma": "d",
@@ -118,15 +118,15 @@
               },
               {
                 "ma": "b",
-                "noiDung": "interface ID"
-              },
-              {
-                "ma": "c",
                 "noiDung": "global routing prefix"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "EtherType"
+              },
+              {
+                "ma": "d",
+                "noiDung": "interface ID"
               }
             ],
             "dapAn": [
@@ -140,15 +140,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "2001:db8:acad:0::/64"
+                "noiDung": "2001:db8:acad:11::/64"
               },
               {
                 "ma": "b",
-                "noiDung": "2001:db8:acad:b::/64"
+                "noiDung": "2001:db8:acad:0::/64"
               },
               {
                 "ma": "c",
-                "noiDung": "2001:db8:acad:11::/64"
+                "noiDung": "2001:db8:acad:b::/64"
               },
               {
                 "ma": "d",
@@ -156,7 +156,7 @@
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Subnet 11 is written 0xb in hex.</p><p><i>VI: Subnet 11 viết 0xb dạng hex.</i></p>"
           }

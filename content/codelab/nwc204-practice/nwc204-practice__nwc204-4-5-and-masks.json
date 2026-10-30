@@ -354,10 +354,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# AND 3 — Same network or not? — answer key\n\n1. 192.168.1.130 and 192.168.1.190 with /26: same network?192.168.1.130 và 192.168.1.190 với /26: cùng mạng?\n   Answer: d) Yes — both are in 192.168.1.128/26\n   Network of the first: 192.168.1.128; of the second: 192.168.1.128.VI: Mạng của máy thứ nhất: 192.168.1.128; của máy thứ hai: 192.168.1.128.\n\n2. 192.168.1.130 and 192.168.1.200 with /26: same network?192.168.1.130 và 192.168.1.200 với /26: cùng mạng?\n   Answer: a) No — 192.168.1.128 vs 192.168.1.192\n   Network of the first: 192.168.1.128; of the second: 192.168.1.192.VI: Mạng của máy thứ nhất: 192.168.1.128; của máy thứ hai: 192.168.1.192.\n\n3. 10.1.5.9 and 10.1.200.9 with /16: same network?10.1.5.9 và 10.1.200.9 với /16: cùng mạng?\n   Answer: b) Yes — both are in 10.1.0.0/16\n   Network of the first: 10.1.0.0; of the second: 10.1.0.0.VI: Mạng của máy thứ nhất: 10.1.0.0; của máy thứ hai: 10.1.0.0.\n\n4. 172.16.31.5 and 172.16.32.5 with /20: same network?172.16.31.5 và 172.16.32.5 với /20: cùng mạng?\n   Answer: c) No — 172.16.16.0 vs 172.16.32.0\n   Network of the first: 172.16.16.0; of the second: 172.16.32.0.VI: Mạng của máy thứ nhất: 172.16.16.0; của máy thứ hai: 172.16.32.0.\n\n5. 10.0.0.1 and 10.0.0.2 with /30: same network?10.0.0.1 và 10.0.0.2 với /30: cùng mạng?\n   Answer: d) Yes — both are in 10.0.0.0/30\n   Network of the first: 10.0.0.0; of the second: 10.0.0.0.VI: Mạng của máy thứ nhất: 10.0.0.0; của máy thứ hai: 10.0.0.0.\n"
+          "code": "# AND 3 — Same network or not? — answer key\n\n1. 192.168.1.130 and 192.168.1.190 with /26: same network?192.168.1.130 và 192.168.1.190 với /26: cùng mạng?\n   Answer: b) Yes — both are in 192.168.1.128/26\n   Network of the first: 192.168.1.128; of the second: 192.168.1.128.VI: Mạng của máy thứ nhất: 192.168.1.128; của máy thứ hai: 192.168.1.128.\n\n2. 192.168.1.130 and 192.168.1.200 with /26: same network?192.168.1.130 và 192.168.1.200 với /26: cùng mạng?\n   Answer: c) No — 192.168.1.128 vs 192.168.1.192\n   Network of the first: 192.168.1.128; of the second: 192.168.1.192.VI: Mạng của máy thứ nhất: 192.168.1.128; của máy thứ hai: 192.168.1.192.\n\n3. 10.1.5.9 and 10.1.200.9 with /16: same network?10.1.5.9 và 10.1.200.9 với /16: cùng mạng?\n   Answer: d) Yes — both are in 10.1.0.0/16\n   Network of the first: 10.1.0.0; of the second: 10.1.0.0.VI: Mạng của máy thứ nhất: 10.1.0.0; của máy thứ hai: 10.1.0.0.\n\n4. 172.16.31.5 and 172.16.32.5 with /20: same network?172.16.31.5 và 172.16.32.5 với /20: cùng mạng?\n   Answer: c) No — 172.16.16.0 vs 172.16.32.0\n   Network of the first: 172.16.16.0; of the second: 172.16.32.0.VI: Mạng của máy thứ nhất: 172.16.16.0; của máy thứ hai: 172.16.32.0.\n\n5. 10.0.0.1 and 10.0.0.2 with /30: same network?10.0.0.1 và 10.0.0.2 với /30: cùng mạng?\n   Answer: c) Yes — both are in 10.0.0.0/30\n   Network of the first: 10.0.0.0; of the second: 10.0.0.0.VI: Mạng của máy thứ nhất: 10.0.0.0; của máy thứ hai: 10.0.0.0.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> Yes — both are in 192.168.1.128/26</p><p>Network of the first: 192.168.1.128; of the second: 192.168.1.128.</p><p><i>VI: Mạng của máy thứ nhất: 192.168.1.128; của máy thứ hai: 192.168.1.128.</i></p></li><li><p><b>c)</b> No — 192.168.1.128 vs 192.168.1.192</p><p>Network of the first: 192.168.1.128; of the second: 192.168.1.192.</p><p><i>VI: Mạng của máy thứ nhất: 192.168.1.128; của máy thứ hai: 192.168.1.192.</i></p></li><li><p><b>d)</b> Yes — both are in 10.1.0.0/16</p><p>Network of the first: 10.1.0.0; of the second: 10.1.0.0.</p><p><i>VI: Mạng của máy thứ nhất: 10.1.0.0; của máy thứ hai: 10.1.0.0.</i></p></li><li><p><b>c)</b> No — 172.16.16.0 vs 172.16.32.0</p><p>Network of the first: 172.16.16.0; of the second: 172.16.32.0.</p><p><i>VI: Mạng của máy thứ nhất: 172.16.16.0; của máy thứ hai: 172.16.32.0.</i></p></li><li><p><b>c)</b> Yes — both are in 10.0.0.0/30</p><p>Network of the first: 10.0.0.0; of the second: 10.0.0.0.</p><p><i>VI: Mạng của máy thứ nhất: 10.0.0.0; của máy thứ hai: 10.0.0.0.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -370,23 +370,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "No — different networks"
-              },
-              {
-                "ma": "b",
                 "noiDung": "Only if they share the gateway"
               },
               {
+                "ma": "b",
+                "noiDung": "Yes — both are in 192.168.1.128/26"
+              },
+              {
                 "ma": "c",
-                "noiDung": "Cannot tell without the MAC"
+                "noiDung": "No — different networks"
               },
               {
                 "ma": "d",
-                "noiDung": "Yes — both are in 192.168.1.128/26"
+                "noiDung": "Cannot tell without the MAC"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>Network of the first: 192.168.1.128; of the second: 192.168.1.128.</p><p><i>VI: Mạng của máy thứ nhất: 192.168.1.128; của máy thứ hai: 192.168.1.128.</i></p>"
           },
@@ -396,23 +396,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "No — 192.168.1.128 vs 192.168.1.192"
-              },
-              {
-                "ma": "b",
-                "noiDung": "Yes — same network"
-              },
-              {
-                "ma": "c",
                 "noiDung": "Only if they share the gateway"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "Cannot tell without the MAC"
+              },
+              {
+                "ma": "c",
+                "noiDung": "No — 192.168.1.128 vs 192.168.1.192"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Yes — same network"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>Network of the first: 192.168.1.128; of the second: 192.168.1.192.</p><p><i>VI: Mạng của máy thứ nhất: 192.168.1.128; của máy thứ hai: 192.168.1.192.</i></p>"
           },
@@ -422,11 +422,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Cannot tell without the MAC"
+                "noiDung": "Only if they share the gateway"
               },
               {
                 "ma": "b",
-                "noiDung": "Yes — both are in 10.1.0.0/16"
+                "noiDung": "Cannot tell without the MAC"
               },
               {
                 "ma": "c",
@@ -434,11 +434,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "Only if they share the gateway"
+                "noiDung": "Yes — both are in 10.1.0.0/16"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>Network of the first: 10.1.0.0; of the second: 10.1.0.0.</p><p><i>VI: Mạng của máy thứ nhất: 10.1.0.0; của máy thứ hai: 10.1.0.0.</i></p>"
           },
@@ -448,7 +448,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Only if they share the gateway"
+                "noiDung": "Yes — same network"
               },
               {
                 "ma": "b",
@@ -460,7 +460,7 @@
               },
               {
                 "ma": "d",
-                "noiDung": "Yes — same network"
+                "noiDung": "Only if they share the gateway"
               }
             ],
             "dapAn": [
@@ -474,23 +474,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "No — different networks"
-              },
-              {
-                "ma": "b",
-                "noiDung": "Only if they share the gateway"
-              },
-              {
-                "ma": "c",
                 "noiDung": "Cannot tell without the MAC"
               },
               {
-                "ma": "d",
+                "ma": "b",
+                "noiDung": "No — different networks"
+              },
+              {
+                "ma": "c",
                 "noiDung": "Yes — both are in 10.0.0.0/30"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only if they share the gateway"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>Network of the first: 10.0.0.0; of the second: 10.0.0.0.</p><p><i>VI: Mạng của máy thứ nhất: 10.0.0.0; của máy thứ hai: 10.0.0.0.</i></p>"
           }

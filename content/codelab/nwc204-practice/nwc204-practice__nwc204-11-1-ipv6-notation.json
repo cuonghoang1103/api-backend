@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# IPv6 1 — Address types and prefixes — answer key\n\n1. A global unicast address (GUA) starts with …Địa chỉ global unicast (GUA) bắt đầu bằng …\n   Answer: a) 2000::/3 (in practice 2xxx or 3xxx)\n   GUAs are routable on the Internet.VI: GUA định tuyến được trên Internet.\n\n2. A link-local address starts with …Địa chỉ link-local bắt đầu bằng …\n   Answer: b) fe80::/10\n   Every IPv6 interface has one; it is never routed.VI: Mọi giao diện IPv6 có một địa chỉ này; không bao giờ được định tuyến.\n\n3. Unique local addresses (private IPv6) are in …Địa chỉ unique local (IPv6 riêng) nằm trong …\n   Answer: c) fc00::/7 (usually fd00::/8)\n   The IPv6 counterpart of RFC 1918.VI: Tương đương RFC 1918 của IPv6.\n\n4. IPv6 has no broadcast. Instead it uses …IPv6 không có broadcast. Thay vào đó dùng …\n   Answer: d) multicast, e.g. ff02::1 for all nodes\n   ff02::1 = all nodes, ff02::2 = all routers.VI: ff02::1 = mọi node, ff02::2 = mọi router.\n\n5. The IPv6 loopback address is …Địa chỉ loopback IPv6 là …\n   Answer: a) ::1\n   :: (all zeros) means “unspecified”.VI: :: (toàn 0) nghĩa là “chưa xác định”.\n\n6. How many bits is an IPv6 address?Địa chỉ IPv6 dài bao nhiêu bit?\n   Answer: b) 128\n   Eight 16-bit groups = 128 bits.VI: Tám nhóm 16 bit = 128 bit.\n"
+          "code": "# IPv6 1 — Address types and prefixes — answer key\n\n1. A global unicast address (GUA) starts with …Địa chỉ global unicast (GUA) bắt đầu bằng …\n   Answer: b) 2000::/3 (in practice 2xxx or 3xxx)\n   GUAs are routable on the Internet.VI: GUA định tuyến được trên Internet.\n\n2. A link-local address starts with …Địa chỉ link-local bắt đầu bằng …\n   Answer: b) fe80::/10\n   Every IPv6 interface has one; it is never routed.VI: Mọi giao diện IPv6 có một địa chỉ này; không bao giờ được định tuyến.\n\n3. Unique local addresses (private IPv6) are in …Địa chỉ unique local (IPv6 riêng) nằm trong …\n   Answer: a) fc00::/7 (usually fd00::/8)\n   The IPv6 counterpart of RFC 1918.VI: Tương đương RFC 1918 của IPv6.\n\n4. IPv6 has no broadcast. Instead it uses …IPv6 không có broadcast. Thay vào đó dùng …\n   Answer: b) multicast, e.g. ff02::1 for all nodes\n   ff02::1 = all nodes, ff02::2 = all routers.VI: ff02::1 = mọi node, ff02::2 = mọi router.\n\n5. The IPv6 loopback address is …Địa chỉ loopback IPv6 là …\n   Answer: d) ::1\n   :: (all zeros) means “unspecified”.VI: :: (toàn 0) nghĩa là “chưa xác định”.\n\n6. How many bits is an IPv6 address?Địa chỉ IPv6 dài bao nhiêu bit?\n   Answer: b) 128\n   Eight 16-bit groups = 128 bits.VI: Tám nhóm 16 bit = 128 bit.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> 2000::/3 (in practice 2xxx or 3xxx)</p><p>GUAs are routable on the Internet.</p><p><i>VI: GUA định tuyến được trên Internet.</i></p></li><li><p><b>b)</b> fe80::/10</p><p>Every IPv6 interface has one; it is never routed.</p><p><i>VI: Mọi giao diện IPv6 có một địa chỉ này; không bao giờ được định tuyến.</i></p></li><li><p><b>a)</b> fc00::/7 (usually fd00::/8)</p><p>The IPv6 counterpart of RFC 1918.</p><p><i>VI: Tương đương RFC 1918 của IPv6.</i></p></li><li><p><b>b)</b> multicast, e.g. ff02::1 for all nodes</p><p>ff02::1 = all nodes, ff02::2 = all routers.</p><p><i>VI: ff02::1 = mọi node, ff02::2 = mọi router.</i></p></li><li><p><b>d)</b> ::1</p><p>:: (all zeros) means “unspecified”.</p><p><i>VI: :: (toàn 0) nghĩa là “chưa xác định”.</i></p></li><li><p><b>b)</b> 128</p><p>Eight 16-bit groups = 128 bits.</p><p><i>VI: Tám nhóm 16 bit = 128 bit.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -62,11 +62,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "2000::/3 (in practice 2xxx or 3xxx)"
+                "noiDung": "ff00::/8"
               },
               {
                 "ma": "b",
-                "noiDung": "fe80::/10"
+                "noiDung": "2000::/3 (in practice 2xxx or 3xxx)"
               },
               {
                 "ma": "c",
@@ -74,11 +74,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "ff00::/8"
+                "noiDung": "fe80::/10"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>GUAs are routable on the Internet.</p><p><i>VI: GUA định tuyến được trên Internet.</i></p>"
           },
@@ -88,7 +88,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "::1"
+                "noiDung": "2001::/16"
               },
               {
                 "ma": "b",
@@ -96,7 +96,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "2001::/16"
+                "noiDung": "::1"
               },
               {
                 "ma": "d",
@@ -114,23 +114,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "2000::/3"
-              },
-              {
-                "ma": "b",
-                "noiDung": "ff02::/16"
-              },
-              {
-                "ma": "c",
                 "noiDung": "fc00::/7 (usually fd00::/8)"
               },
               {
-                "ma": "d",
+                "ma": "b",
+                "noiDung": "2000::/3"
+              },
+              {
+                "ma": "c",
                 "noiDung": "fe80::/10"
+              },
+              {
+                "ma": "d",
+                "noiDung": "ff02::/16"
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>The IPv6 counterpart of RFC 1918.</p><p><i>VI: Tương đương RFC 1918 của IPv6.</i></p>"
           },
@@ -140,23 +140,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "unicast only"
-              },
-              {
-                "ma": "b",
-                "noiDung": "anycast only"
-              },
-              {
-                "ma": "c",
                 "noiDung": "ARP"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "multicast, e.g. ff02::1 for all nodes"
+              },
+              {
+                "ma": "c",
+                "noiDung": "anycast only"
+              },
+              {
+                "ma": "d",
+                "noiDung": "unicast only"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>ff02::1 = all nodes, ff02::2 = all routers.</p><p><i>VI: ff02::1 = mọi node, ff02::2 = mọi router.</i></p>"
           },
@@ -166,7 +166,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "::1"
+                "noiDung": "127.0.0.1"
               },
               {
                 "ma": "b",
@@ -178,11 +178,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "127.0.0.1"
+                "noiDung": "::1"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>:: (all zeros) means “unspecified”.</p><p><i>VI: :: (toàn 0) nghĩa là “chưa xác định”.</i></p>"
           },
@@ -192,7 +192,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "256"
+                "noiDung": "48"
               },
               {
                 "ma": "b",
@@ -200,11 +200,11 @@
               },
               {
                 "ma": "c",
-                "noiDung": "64"
+                "noiDung": "256"
               },
               {
                 "ma": "d",
-                "noiDung": "48"
+                "noiDung": "64"
               }
             ],
             "dapAn": [

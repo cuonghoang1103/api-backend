@@ -6,10 +6,10 @@ const E1 = cs({
   en: 'Core application-layer protocols.', vi: 'Các giao thức tầng ứng dụng cốt lõi.',
   cau: [
     q('c1', ['A DNS “A” record maps a name to …', 'Bản ghi DNS “A” ánh xạ tên sang …'], ['an IPv4 address', 'an IPv6 address', 'a mail server', 'another name'], ['AAAA = IPv6, MX = mail, CNAME = alias, NS = name server, PTR = reverse.', 'AAAA = IPv6, MX = mail, CNAME = bí danh, NS = máy chủ tên, PTR = ngược.']),
-    q('c2', ['DNS normally uses …', 'DNS thường dùng …'], ['UDP port 53 (TCP for big answers and zone transfers)', 'TCP port 80', 'UDP port 67', 'TCP port 25'], ['Short queries fit in one UDP datagram.', 'Truy vấn ngắn vừa trong một datagram UDP.']),
+    q('c2', ['DNS normally uses …', 'DNS thường dùng …'], ['UDP port 53 (TCP for big answers and zone transfers)', 'TCP port 80 (UDP for small answers)', 'UDP port 67 (TCP for big answers)', 'TCP port 25 (UDP for zone transfers)'], ['Short queries fit in one UDP datagram.', 'Truy vấn ngắn vừa trong một datagram UDP.']),
     q('c3', ['HTTP status code 404 means …', 'Mã trạng thái HTTP 404 nghĩa là …'], ['the resource was not found', 'the server crashed', 'the client must log in', 'the request was redirected'], ['5xx = server errors, 4xx = client errors, 3xx = redirects, 2xx = success.', '5xx = lỗi server, 4xx = lỗi client, 3xx = chuyển hướng, 2xx = thành công.']),
     q('c4', ['The four DHCP messages are …', 'Bốn thông điệp DHCP là …'], ['Discover, Offer, Request, Acknowledge', 'Hello, Offer, Accept, Done', 'Request, Reply, Ack, Bye', 'SYN, SYN-ACK, ACK, FIN'], ['“DORA”. Discover and Request are broadcasts.', '“DORA”. Discover và Request là broadcast.']),
-    q('c5', ['A DHCP lease gives a client …', 'Một lease DHCP cấp cho client …'], ['IP address, mask, default gateway and DNS server for a limited time', 'only an IP address forever', 'a MAC address', 'a domain name'], ['The client renews at 50% of the lease time.', 'Client gia hạn ở 50% thời gian lease.']),
+    q('c5', ['A DHCP lease gives a client …', 'Một lease DHCP cấp cho client …'], ['IP address, mask, default gateway and DNS server for a limited time', 'only an IP address, kept forever once it has been given', 'a MAC address, a mask and a gateway for a limited time', 'a domain name, registered for as long as the client is on'], ['The client renews at 50% of the lease time.', 'Client gia hạn ở 50% thời gian lease.']),
   ],
   goiY: ['DNS = names, DHCP = addresses, HTTP = web.', 'DHCP uses UDP 67 (server) and 68 (client).'],
   loi: ['Confusing 4xx and 5xx.', 'Thinking DNS runs over TCP only.'],

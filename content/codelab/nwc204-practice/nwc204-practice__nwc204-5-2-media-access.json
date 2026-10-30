@@ -47,10 +47,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Access 1 — Topologies and duplex — answer key\n\n1. A modern switched Ethernet LAN is physically a … and logically behaves like …LAN Ethernet có switch hiện nay về vật lý là … và về logic hoạt động như …\n   Answer: d) star; a set of point-to-point links\n   Every device has its own cable to the switch.VI: Mỗi thiết bị có cáp riêng tới switch.\n\n2. In half-duplex a device …Ở chế độ bán song công, thiết bị …\n   Answer: a) can send or receive, but not both at once\n   Half-duplex needs collision handling (CSMA/CD).VI: Bán song công cần xử lý va chạm (CSMA/CD).\n\n3. Full-duplex links between a host and a switch …Liên kết song công giữa host và switch …\n   Answer: b) have no collisions, so CSMA/CD is turned off\n   Separate transmit and receive pairs remove the collision possibility.VI: Cặp truyền và nhận tách biệt loại bỏ va chạm.\n\n4. A hub is a layer 1 device, so all its ports are in …Hub là thiết bị tầng 1 nên mọi cổng của nó nằm trong …\n   Answer: c) one collision domain\n   A hub repeats every signal to all ports.VI: Hub lặp mọi tín hiệu ra tất cả cổng.\n\n5. Which topology has a single point of failure at the centre?Topology nào có điểm hỏng duy nhất ở trung tâm?\n   Answer: d) Star\n   If the centre switch fails, every spoke is isolated.VI: Switch trung tâm hỏng thì mọi nhánh bị cô lập.\n"
+          "code": "# Access 1 — Topologies and duplex — answer key\n\n1. A modern switched Ethernet LAN is physically a … and logically behaves like …LAN Ethernet có switch hiện nay về vật lý là … và về logic hoạt động như …\n   Answer: b) star; a set of point-to-point links\n   Every device has its own cable to the switch.VI: Mỗi thiết bị có cáp riêng tới switch.\n\n2. In half-duplex a device …Ở chế độ bán song công, thiết bị …\n   Answer: d) can send or receive, but not both at once\n   Half-duplex needs collision handling (CSMA/CD).VI: Bán song công cần xử lý va chạm (CSMA/CD).\n\n3. Full-duplex links between a host and a switch …Liên kết song công giữa host và switch …\n   Answer: c) have no collisions, so CSMA/CD is turned off\n   Separate transmit and receive pairs remove the collision possibility.VI: Cặp truyền và nhận tách biệt loại bỏ va chạm.\n\n4. A hub is a layer 1 device, so all its ports are in …Hub là thiết bị tầng 1 nên mọi cổng của nó nằm trong …\n   Answer: d) one collision domain\n   A hub repeats every signal to all ports.VI: Hub lặp mọi tín hiệu ra tất cả cổng.\n\n5. Which topology has a single point of failure at the centre?Topology nào có điểm hỏng duy nhất ở trung tâm?\n   Answer: d) Star\n   If the centre switch fails, every spoke is isolated.VI: Switch trung tâm hỏng thì mọi nhánh bị cô lập.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> star; a set of point-to-point links</p><p>Every device has its own cable to the switch.</p><p><i>VI: Mỗi thiết bị có cáp riêng tới switch.</i></p></li><li><p><b>d)</b> can send or receive, but not both at once</p><p>Half-duplex needs collision handling (CSMA/CD).</p><p><i>VI: Bán song công cần xử lý va chạm (CSMA/CD).</i></p></li><li><p><b>c)</b> have no collisions, so CSMA/CD is turned off</p><p>Separate transmit and receive pairs remove the collision possibility.</p><p><i>VI: Cặp truyền và nhận tách biệt loại bỏ va chạm.</i></p></li><li><p><b>d)</b> one collision domain</p><p>A hub repeats every signal to all ports.</p><p><i>VI: Hub lặp mọi tín hiệu ra tất cả cổng.</i></p></li><li><p><b>d)</b> Star</p><p>If the centre switch fails, every spoke is isolated.</p><p><i>VI: Switch trung tâm hỏng thì mọi nhánh bị cô lập.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -63,11 +63,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "bus; a shared cable"
+                "noiDung": "ring; token passing"
               },
               {
                 "ma": "b",
-                "noiDung": "ring; token passing"
+                "noiDung": "star; a set of point-to-point links"
               },
               {
                 "ma": "c",
@@ -75,11 +75,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "star; a set of point-to-point links"
+                "noiDung": "bus; a shared cable"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>Every device has its own cable to the switch.</p><p><i>VI: Mỗi thiết bị có cáp riêng tới switch.</i></p>"
           },
@@ -89,7 +89,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "can send or receive, but not both at once"
+                "noiDung": "can only receive"
               },
               {
                 "ma": "b",
@@ -101,11 +101,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "can only receive"
+                "noiDung": "can send or receive, but not both at once"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>Half-duplex needs collision handling (CSMA/CD).</p><p><i>VI: Bán song công cần xử lý va chạm (CSMA/CD).</i></p>"
           },
@@ -115,23 +115,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "share the bandwidth between send and receive"
+                "noiDung": "work only on fibre"
               },
               {
                 "ma": "b",
-                "noiDung": "have no collisions, so CSMA/CD is turned off"
-              },
-              {
-                "ma": "c",
                 "noiDung": "still need CSMA/CD"
               },
               {
+                "ma": "c",
+                "noiDung": "have no collisions, so CSMA/CD is turned off"
+              },
+              {
                 "ma": "d",
-                "noiDung": "work only on fibre"
+                "noiDung": "share the bandwidth between send and receive"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Separate transmit and receive pairs remove the collision possibility.</p><p><i>VI: Cặp truyền và nhận tách biệt loại bỏ va chạm.</i></p>"
           },
@@ -145,19 +145,19 @@
               },
               {
                 "ma": "b",
-                "noiDung": "separate subnets"
+                "noiDung": "separate collision domains"
               },
               {
                 "ma": "c",
-                "noiDung": "one collision domain"
+                "noiDung": "separate subnets"
               },
               {
                 "ma": "d",
-                "noiDung": "separate collision domains"
+                "noiDung": "one collision domain"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>A hub repeats every signal to all ports.</p><p><i>VI: Hub lặp mọi tín hiệu ra tất cả cổng.</i></p>"
           },
@@ -384,7 +384,7 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Access 3 — Order the CSMA/CD procedure — answer key\n\n1. CSMA/CDCSMA/CD\n   Answer: s1) Listen: is the medium idle?  →  s2) Transmit the frame while listening  →  s3) A collision is detected  →  s4) Send a jam signal so everybody notices  →  s5) Wait a random backoff time  →  s6) Try again (up to 16 attempts)\n   Carrier sense, transmit, collision detect, jam, random backoff, retry.VI: Nghe sóng mang, phát, phát hiện va chạm, tín hiệu jam, chờ ngẫu nhiên, thử lại.\n"
+          "code": "# Access 3 — Order the CSMA/CD procedure — answer key\n\n1. CSMA/CDCSMA/CD\n   Answer: m3) Listen: is the medium idle?  →  m4) Transmit the frame while listening  →  m5) A collision is detected  →  m2) Send a jam signal so everybody notices  →  m6) Wait a random backoff time  →  m1) Try again (up to 16 attempts)\n   Carrier sense, transmit, collision detect, jam, random backoff, retry.VI: Nghe sóng mang, phát, phát hiện va chạm, tín hiệu jam, chờ ngẫu nhiên, thử lại.\n"
         }
       ],
       "solutionExplanationHtml": "<p>Carrier sense, transmit, collision detect, jam, random backoff, retry.</p><p><i>VI: Nghe sóng mang, phát, phát hiện va chạm, tín hiệu jam, chờ ngẫu nhiên, thử lại.</i></p>",
@@ -399,37 +399,37 @@
             "de": "<p>CSMA/CD</p><p style=\"opacity:.75;font-size:.92em\"><i>CSMA/CD</i></p>",
             "muc": [
               {
-                "ma": "s4",
-                "noiDung": "Send a jam signal so everybody notices"
-              },
-              {
-                "ma": "s5",
-                "noiDung": "Wait a random backoff time"
-              },
-              {
-                "ma": "s6",
+                "ma": "m1",
                 "noiDung": "Try again (up to 16 attempts)"
               },
               {
-                "ma": "s1",
+                "ma": "m2",
+                "noiDung": "Send a jam signal so everybody notices"
+              },
+              {
+                "ma": "m3",
                 "noiDung": "Listen: is the medium idle?"
               },
               {
-                "ma": "s2",
+                "ma": "m4",
                 "noiDung": "Transmit the frame while listening"
               },
               {
-                "ma": "s3",
+                "ma": "m5",
                 "noiDung": "A collision is detected"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "Wait a random backoff time"
               }
             ],
             "dapAn": [
-              "s1",
-              "s2",
-              "s3",
-              "s4",
-              "s5",
-              "s6"
+              "m3",
+              "m4",
+              "m5",
+              "m2",
+              "m6",
+              "m1"
             ],
             "giaiThich": "<p>Carrier sense, transmit, collision detect, jam, random backoff, retry.</p><p><i>VI: Nghe sóng mang, phát, phát hiện va chạm, tín hiệu jam, chờ ngẫu nhiên, thử lại.</i></p>"
           }
@@ -496,10 +496,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Access 4 — Count the domains — answer key\n\n1. One 8-port switch with 8 PCs, no VLAN. Collision domains = ?Một switch 8 cổng với 8 PC, không VLAN. Số miền va chạm = ?\n   Answer: d) 8\n   Each switch port is its own collision domain.VI: Mỗi cổng switch là một miền va chạm.\n\n2. The same switch, no VLAN. Broadcast domains = ?Cùng switch đó, không VLAN. Số miền broadcast = ?\n   Answer: a) 1\n   A switch forwards broadcasts out of every port.VI: Switch chuyển broadcast ra mọi cổng.\n\n3. A switch has 4 PCs on 4 ports and a hub on a fifth port with 3 PCs. Collision domains = ?Switch có 4 PC trên 4 cổng và một hub trên cổng thứ năm với 3 PC. Số miền va chạm = ?\n   Answer: b) 5\n   4 switch-port domains + 1 domain for the hub link and its 3 PCs = 5.VI: 4 miền của cổng switch + 1 miền của liên kết hub cùng 3 PC = 5.\n\n4. A router joins 3 switches, each with 5 PCs. Broadcast domains = ?Một router nối 3 switch, mỗi switch 5 PC. Số miền broadcast = ?\n   Answer: c) 3\n   Each router interface starts a new broadcast domain.VI: Mỗi giao diện router mở một miền broadcast mới.\n\n5. One switch carries 3 VLANs (no router). Broadcast domains = ?Một switch có 3 VLAN (không router). Số miền broadcast = ?\n   Answer: d) 3\n   One broadcast domain per VLAN.VI: Mỗi VLAN một miền broadcast.\n"
+          "code": "# Access 4 — Count the domains — answer key\n\n1. One 8-port switch with 8 PCs, no VLAN. Collision domains = ?Một switch 8 cổng với 8 PC, không VLAN. Số miền va chạm = ?\n   Answer: d) 8\n   Each switch port is its own collision domain.VI: Mỗi cổng switch là một miền va chạm.\n\n2. The same switch, no VLAN. Broadcast domains = ?Cùng switch đó, không VLAN. Số miền broadcast = ?\n   Answer: b) 1\n   A switch forwards broadcasts out of every port.VI: Switch chuyển broadcast ra mọi cổng.\n\n3. A switch has 4 PCs on 4 ports and a hub on a fifth port with 3 PCs. Collision domains = ?Switch có 4 PC trên 4 cổng và một hub trên cổng thứ năm với 3 PC. Số miền va chạm = ?\n   Answer: c) 5\n   4 switch-port domains + 1 domain for the hub link and its 3 PCs = 5.VI: 4 miền của cổng switch + 1 miền của liên kết hub cùng 3 PC = 5.\n\n4. A router joins 3 switches, each with 5 PCs. Broadcast domains = ?Một router nối 3 switch, mỗi switch 5 PC. Số miền broadcast = ?\n   Answer: a) 3\n   Each router interface starts a new broadcast domain.VI: Mỗi giao diện router mở một miền broadcast mới.\n\n5. One switch carries 3 VLANs (no router). Broadcast domains = ?Một switch có 3 VLAN (không router). Số miền broadcast = ?\n   Answer: d) 3\n   One broadcast domain per VLAN.VI: Mỗi VLAN một miền broadcast.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> 8</p><p>Each switch port is its own collision domain.</p><p><i>VI: Mỗi cổng switch là một miền va chạm.</i></p></li><li><p><b>b)</b> 1</p><p>A switch forwards broadcasts out of every port.</p><p><i>VI: Switch chuyển broadcast ra mọi cổng.</i></p></li><li><p><b>c)</b> 5</p><p>4 switch-port domains + 1 domain for the hub link and its 3 PCs = 5.</p><p><i>VI: 4 miền của cổng switch + 1 miền của liên kết hub cùng 3 PC = 5.</i></p></li><li><p><b>a)</b> 3</p><p>Each router interface starts a new broadcast domain.</p><p><i>VI: Mỗi giao diện router mở một miền broadcast mới.</i></p></li><li><p><b>d)</b> 3</p><p>One broadcast domain per VLAN.</p><p><i>VI: Mỗi VLAN một miền broadcast.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -512,15 +512,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "1"
-              },
-              {
-                "ma": "b",
                 "noiDung": "9"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "4"
+              },
+              {
+                "ma": "c",
+                "noiDung": "1"
               },
               {
                 "ma": "d",
@@ -538,23 +538,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "1"
-              },
-              {
-                "ma": "b",
                 "noiDung": "8"
               },
               {
+                "ma": "b",
+                "noiDung": "1"
+              },
+              {
                 "ma": "c",
-                "noiDung": "2"
+                "noiDung": "0"
               },
               {
                 "ma": "d",
-                "noiDung": "0"
+                "noiDung": "2"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>A switch forwards broadcasts out of every port.</p><p><i>VI: Switch chuyển broadcast ra mọi cổng.</i></p>"
           },
@@ -564,15 +564,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "1"
+                "noiDung": "8"
               },
               {
                 "ma": "b",
-                "noiDung": "5"
+                "noiDung": "1"
               },
               {
                 "ma": "c",
-                "noiDung": "8"
+                "noiDung": "5"
               },
               {
                 "ma": "d",
@@ -580,7 +580,7 @@
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>4 switch-port domains + 1 domain for the hub link and its 3 PCs = 5.</p><p><i>VI: 4 miền của cổng switch + 1 miền của liên kết hub cùng 3 PC = 5.</i></p>"
           },
@@ -590,23 +590,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "15"
-              },
-              {
-                "ma": "b",
-                "noiDung": "18"
-              },
-              {
-                "ma": "c",
                 "noiDung": "3"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "1"
+              },
+              {
+                "ma": "c",
+                "noiDung": "15"
+              },
+              {
+                "ma": "d",
+                "noiDung": "18"
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>Each router interface starts a new broadcast domain.</p><p><i>VI: Mỗi giao diện router mở một miền broadcast mới.</i></p>"
           },
@@ -616,11 +616,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "1"
+                "noiDung": "2"
               },
               {
                 "ma": "b",
-                "noiDung": "2"
+                "noiDung": "1"
               },
               {
                 "ma": "c",

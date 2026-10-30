@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Ethernet 1 — Frame fields and sizes — answer key\n\n1. How long is an Ethernet MAC address?Địa chỉ MAC Ethernet dài bao nhiêu?\n   Answer: a) 48 bits (6 bytes)\n   Written as 12 hex digits.VI: Viết bằng 12 chữ số hex.\n\n2. The minimum and maximum size of an Ethernet frame (header+data+FCS) are …Kích thước tối thiểu và tối đa của frame Ethernet (header+dữ liệu+FCS) là …\n   Answer: b) 64 and 1518 bytes\n   Data field 46–1500 plus 14 header and 4 FCS bytes.VI: Trường dữ liệu 46–1500 cộng 14 byte header và 4 byte FCS.\n\n3. The Type/EtherType field 0x0800 means the payload is …Trường Type/EtherType 0x0800 nghĩa là dữ liệu là …\n   Answer: c) IPv4\n   0x0800 = IPv4, 0x0806 = ARP, 0x86DD = IPv6, 0x8100 = 802.1Q.VI: 0x0800 = IPv4, 0x0806 = ARP, 0x86DD = IPv6, 0x8100 = 802.1Q.\n\n4. The first 24 bits of a MAC address identify …24 bit đầu của địa chỉ MAC xác định …\n   Answer: d) the manufacturer (OUI)\n   OUI = Organizationally Unique Identifier; the other 24 bits are vendor-assigned.VI: OUI = mã nhà sản xuất; 24 bit sau do hãng gán.\n\n5. The destination MAC ff:ff:ff:ff:ff:ff is …MAC đích ff:ff:ff:ff:ff:ff là …\n   Answer: a) the Ethernet broadcast address\n   Delivered to every device on the LAN.VI: Gửi tới mọi thiết bị trên LAN.\n"
+          "code": "# Ethernet 1 — Frame fields and sizes — answer key\n\n1. How long is an Ethernet MAC address?Địa chỉ MAC Ethernet dài bao nhiêu?\n   Answer: b) 48 bits (6 bytes)\n   Written as 12 hex digits.VI: Viết bằng 12 chữ số hex.\n\n2. The minimum and maximum size of an Ethernet frame (header+data+FCS) are …Kích thước tối thiểu và tối đa của frame Ethernet (header+dữ liệu+FCS) là …\n   Answer: b) 64 and 1518 bytes\n   Data field 46–1500 plus 14 header and 4 FCS bytes.VI: Trường dữ liệu 46–1500 cộng 14 byte header và 4 byte FCS.\n\n3. The Type/EtherType field 0x0800 means the payload is …Trường Type/EtherType 0x0800 nghĩa là dữ liệu là …\n   Answer: d) IPv4\n   0x0800 = IPv4, 0x0806 = ARP, 0x86DD = IPv6, 0x8100 = 802.1Q.VI: 0x0800 = IPv4, 0x0806 = ARP, 0x86DD = IPv6, 0x8100 = 802.1Q.\n\n4. The first 24 bits of a MAC address identify …24 bit đầu của địa chỉ MAC xác định …\n   Answer: d) the manufacturer (OUI)\n   OUI = Organizationally Unique Identifier; the other 24 bits are vendor-assigned.VI: OUI = mã nhà sản xuất; 24 bit sau do hãng gán.\n\n5. The destination MAC ff:ff:ff:ff:ff:ff is …MAC đích ff:ff:ff:ff:ff:ff là …\n   Answer: c) the Ethernet broadcast address\n   Delivered to every device on the LAN.VI: Gửi tới mọi thiết bị trên LAN.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> 48 bits (6 bytes)</p><p>Written as 12 hex digits.</p><p><i>VI: Viết bằng 12 chữ số hex.</i></p></li><li><p><b>b)</b> 64 and 1518 bytes</p><p>Data field 46–1500 plus 14 header and 4 FCS bytes.</p><p><i>VI: Trường dữ liệu 46–1500 cộng 14 byte header và 4 byte FCS.</i></p></li><li><p><b>d)</b> IPv4</p><p>0x0800 = IPv4, 0x0806 = ARP, 0x86DD = IPv6, 0x8100 = 802.1Q.</p><p><i>VI: 0x0800 = IPv4, 0x0806 = ARP, 0x86DD = IPv6, 0x8100 = 802.1Q.</i></p></li><li><p><b>d)</b> the manufacturer (OUI)</p><p>OUI = Organizationally Unique Identifier; the other 24 bits are vendor-assigned.</p><p><i>VI: OUI = mã nhà sản xuất; 24 bit sau do hãng gán.</i></p></li><li><p><b>c)</b> the Ethernet broadcast address</p><p>Delivered to every device on the LAN.</p><p><i>VI: Gửi tới mọi thiết bị trên LAN.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -62,23 +62,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "48 bits (6 bytes)"
-              },
-              {
-                "ma": "b",
                 "noiDung": "32 bits"
               },
               {
+                "ma": "b",
+                "noiDung": "48 bits (6 bytes)"
+              },
+              {
                 "ma": "c",
-                "noiDung": "64 bits"
+                "noiDung": "128 bits"
               },
               {
                 "ma": "d",
-                "noiDung": "128 bits"
+                "noiDung": "64 bits"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>Written as 12 hex digits.</p><p><i>VI: Viết bằng 12 chữ số hex.</i></p>"
           },
@@ -88,7 +88,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "128 and 9000 bytes"
+                "noiDung": "20 and 65535 bytes"
               },
               {
                 "ma": "b",
@@ -96,11 +96,11 @@
               },
               {
                 "ma": "c",
-                "noiDung": "46 and 1500 bytes"
+                "noiDung": "128 and 9000 bytes"
               },
               {
                 "ma": "d",
-                "noiDung": "20 and 65535 bytes"
+                "noiDung": "46 and 1500 bytes"
               }
             ],
             "dapAn": [
@@ -114,23 +114,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "IPv6"
-              },
-              {
-                "ma": "b",
                 "noiDung": "VLAN tag"
               },
               {
+                "ma": "b",
+                "noiDung": "ARP"
+              },
+              {
                 "ma": "c",
-                "noiDung": "IPv4"
+                "noiDung": "IPv6"
               },
               {
                 "ma": "d",
-                "noiDung": "ARP"
+                "noiDung": "IPv4"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>0x0800 = IPv4, 0x0806 = ARP, 0x86DD = IPv6, 0x8100 = 802.1Q.</p><p><i>VI: 0x0800 = IPv4, 0x0806 = ARP, 0x86DD = IPv6, 0x8100 = 802.1Q.</i></p>"
           },
@@ -140,7 +140,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "the network"
+                "noiDung": "the switch port"
               },
               {
                 "ma": "b",
@@ -148,7 +148,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "the switch port"
+                "noiDung": "the network"
               },
               {
                 "ma": "d",
@@ -166,7 +166,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "the Ethernet broadcast address"
+                "noiDung": "an invalid address"
               },
               {
                 "ma": "b",
@@ -174,7 +174,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "an invalid address"
+                "noiDung": "the Ethernet broadcast address"
               },
               {
                 "ma": "d",
@@ -182,7 +182,7 @@
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>Delivered to every device on the LAN.</p><p><i>VI: Gửi tới mọi thiết bị trên LAN.</i></p>"
           }
@@ -566,10 +566,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Ethernet 4 — Frame numbers — answer key\n\n1. What is the maximum frame rate on a 1 Gbps link with minimum-size frames (64 B + 20 B overhead)?Tốc độ frame tối đa trên đường 1 Gbps với frame nhỏ nhất (64 B + 20 B overhead) là?\n   Answer: b) 1,488,095 fps\n   1 Gbps ÷ (84 × 8 bits) ≈ 1,488,095 frames/s.VI: 1 Gbps ÷ (84 × 8 bit) ≈ 1.488.095 frame/giây.\n\n2. A 1500-byte payload is sent as one frame. The efficiency (payload ÷ wire bytes with 38 B overhead) is …Dữ liệu 1500 byte gửi trong một frame. Hiệu suất (dữ liệu ÷ byte trên dây với overhead 38 B) là …\n   Answer: c) 97.5%\n   1500 / (1500 + 18 + 20) = 97.5%.VI: 1500 / (1500 + 18 + 20) = 97,5%.\n\n3. A frame arrives with a 30-byte total length. The switch will treat it as a …Frame tới với tổng độ dài 30 byte. Switch coi nó là …\n   Answer: d) runt (below the 64-byte minimum) and discard it\n   Frames shorter than 64 B are runts, usually the debris of collisions.VI: Frame ngắn hơn 64 B là runt, thường là mảnh vụn sau va chạm.\n\n4. The default MTU of Ethernet (largest payload) is …MTU mặc định của Ethernet (dữ liệu lớn nhất) là …\n   Answer: a) 1500 bytes\n   MTU counts the payload only.VI: MTU chỉ tính phần dữ liệu.\n"
+          "code": "# Ethernet 4 — Frame numbers — answer key\n\n1. What is the maximum frame rate on a 1 Gbps link with minimum-size frames (64 B + 20 B overhead)?Tốc độ frame tối đa trên đường 1 Gbps với frame nhỏ nhất (64 B + 20 B overhead) là?\n   Answer: a) 1,488,095 fps\n   1 Gbps ÷ (84 × 8 bits) ≈ 1,488,095 frames/s.VI: 1 Gbps ÷ (84 × 8 bit) ≈ 1.488.095 frame/giây.\n\n2. A 1500-byte payload is sent as one frame. The efficiency (payload ÷ wire bytes with 38 B overhead) is …Dữ liệu 1500 byte gửi trong một frame. Hiệu suất (dữ liệu ÷ byte trên dây với overhead 38 B) là …\n   Answer: a) 97.5%\n   1500 / (1500 + 18 + 20) = 97.5%.VI: 1500 / (1500 + 18 + 20) = 97,5%.\n\n3. A frame arrives with a 30-byte total length. The switch will treat it as a …Frame tới với tổng độ dài 30 byte. Switch coi nó là …\n   Answer: b) runt (below the 64-byte minimum) and discard it\n   Frames shorter than 64 B are runts, usually the debris of collisions.VI: Frame ngắn hơn 64 B là runt, thường là mảnh vụn sau va chạm.\n\n4. The default MTU of Ethernet (largest payload) is …MTU mặc định của Ethernet (dữ liệu lớn nhất) là …\n   Answer: b) 1500 bytes\n   MTU counts the payload only.VI: MTU chỉ tính phần dữ liệu.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> 1,488,095 fps</p><p>1 Gbps ÷ (84 × 8 bits) ≈ 1,488,095 frames/s.</p><p><i>VI: 1 Gbps ÷ (84 × 8 bit) ≈ 1.488.095 frame/giây.</i></p></li><li><p><b>a)</b> 97.5%</p><p>1500 / (1500 + 18 + 20) = 97.5%.</p><p><i>VI: 1500 / (1500 + 18 + 20) = 97,5%.</i></p></li><li><p><b>b)</b> runt (below the 64-byte minimum) and discard it</p><p>Frames shorter than 64 B are runts, usually the debris of collisions.</p><p><i>VI: Frame ngắn hơn 64 B là runt, thường là mảnh vụn sau va chạm.</i></p></li><li><p><b>b)</b> 1500 bytes</p><p>MTU counts the payload only.</p><p><i>VI: MTU chỉ tính phần dữ liệu.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -582,11 +582,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "125,000,000 fps"
+                "noiDung": "1,488,095 fps"
               },
               {
                 "ma": "b",
-                "noiDung": "1,488,095 fps"
+                "noiDung": "82,345 fps"
               },
               {
                 "ma": "c",
@@ -594,11 +594,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "82,345 fps"
+                "noiDung": "125,000,000 fps"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>1 Gbps ÷ (84 × 8 bits) ≈ 1,488,095 frames/s.</p><p><i>VI: 1 Gbps ÷ (84 × 8 bit) ≈ 1.488.095 frame/giây.</i></p>"
           },
@@ -608,23 +608,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "100.0%"
-              },
-              {
-                "ma": "b",
-                "noiDung": "96.3%"
-              },
-              {
-                "ma": "c",
                 "noiDung": "97.5%"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "98.8%"
+              },
+              {
+                "ma": "c",
+                "noiDung": "96.3%"
+              },
+              {
+                "ma": "d",
+                "noiDung": "100.0%"
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>1500 / (1500 + 18 + 20) = 97.5%.</p><p><i>VI: 1500 / (1500 + 18 + 20) = 97,5%.</i></p>"
           },
@@ -634,23 +634,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "valid frame"
+                "noiDung": "valid frame (it is above the 18-byte header)"
               },
               {
                 "ma": "b",
-                "noiDung": "jumbo frame"
+                "noiDung": "runt (below the 64-byte minimum) and discard it"
               },
               {
                 "ma": "c",
-                "noiDung": "giant frame"
+                "noiDung": "jumbo frame (it needs a larger MTU to pass)"
               },
               {
                 "ma": "d",
-                "noiDung": "runt (below the 64-byte minimum) and discard it"
+                "noiDung": "giant frame (above the 1518-byte maximum)"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>Frames shorter than 64 B are runts, usually the debris of collisions.</p><p><i>VI: Frame ngắn hơn 64 B là runt, thường là mảnh vụn sau va chạm.</i></p>"
           },
@@ -660,23 +660,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "1500 bytes"
-              },
-              {
-                "ma": "b",
-                "noiDung": "1518 bytes"
-              },
-              {
-                "ma": "c",
                 "noiDung": "9000 bytes"
               },
               {
-                "ma": "d",
+                "ma": "b",
+                "noiDung": "1500 bytes"
+              },
+              {
+                "ma": "c",
                 "noiDung": "576 bytes"
+              },
+              {
+                "ma": "d",
+                "noiDung": "1518 bytes"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>MTU counts the payload only.</p><p><i>VI: MTU chỉ tính phần dữ liệu.</i></p>"
           }

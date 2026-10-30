@@ -328,10 +328,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Binary 3 — Why hex? Powers of two and ranges — answer key\n\n1. Why do MAC addresses and IPv6 use hexadecimal?Vì sao địa chỉ MAC và IPv6 dùng hệ thập lục phân?\n   Answer: d) One hex digit equals exactly 4 bits, so long binary strings become short and easy to read\n   4 bits per digit: a 48-bit MAC is 12 hex digits.VI: 4 bit mỗi chữ số: MAC 48 bit là 12 chữ số hex.\n\n2. The largest value of one IPv4 octet is …Giá trị lớn nhất của một octet IPv4 là …\n   Answer: a) 255\n   2⁸ − 1 = 255.VI: 2⁸ − 1 = 255.\n\n3. How many different addresses can 12 host bits provide?12 bit host cho bao nhiêu địa chỉ khác nhau?\n   Answer: b) 4096\n   2¹² = 4096 (4094 usable hosts after removing network and broadcast).VI: 2¹² = 4096 (dùng được 4094 host sau khi bỏ địa chỉ mạng và broadcast).\n\n4. The hexadecimal number 0xFF equals …Số hex 0xFF bằng …\n   Answer: c) 255\n   15 × 16 + 15 = 255.VI: 15 × 16 + 15 = 255.\n\n5. A MAC address has 48 bits. How many hex digits is that?MAC có 48 bit. Đó là bao nhiêu chữ số hex?\n   Answer: d) 12\n   48 ÷ 4 = 12 (shown as six pairs).VI: 48 ÷ 4 = 12 (viết thành sáu cặp).\n"
+          "code": "# Binary 3 — Why hex? Powers of two and ranges — answer key\n\n1. Why do MAC addresses and IPv6 use hexadecimal?Vì sao địa chỉ MAC và IPv6 dùng hệ thập lục phân?\n   Answer: b) One hex digit equals exactly 4 bits, so long binary strings become short and easy to read\n   4 bits per digit: a 48-bit MAC is 12 hex digits.VI: 4 bit mỗi chữ số: MAC 48 bit là 12 chữ số hex.\n\n2. The largest value of one IPv4 octet is …Giá trị lớn nhất của một octet IPv4 là …\n   Answer: d) 255\n   2⁸ − 1 = 255.VI: 2⁸ − 1 = 255.\n\n3. How many different addresses can 12 host bits provide?12 bit host cho bao nhiêu địa chỉ khác nhau?\n   Answer: c) 4096\n   2¹² = 4096 (4094 usable hosts after removing network and broadcast).VI: 2¹² = 4096 (dùng được 4094 host sau khi bỏ địa chỉ mạng và broadcast).\n\n4. The hexadecimal number 0xFF equals …Số hex 0xFF bằng …\n   Answer: a) 255\n   15 × 16 + 15 = 255.VI: 15 × 16 + 15 = 255.\n\n5. A MAC address has 48 bits. How many hex digits is that?MAC có 48 bit. Đó là bao nhiêu chữ số hex?\n   Answer: d) 12\n   48 ÷ 4 = 12 (shown as six pairs).VI: 48 ÷ 4 = 12 (viết thành sáu cặp).\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> One hex digit equals exactly 4 bits, so long binary strings become short and easy to read</p><p>4 bits per digit: a 48-bit MAC is 12 hex digits.</p><p><i>VI: 4 bit mỗi chữ số: MAC 48 bit là 12 chữ số hex.</i></p></li><li><p><b>d)</b> 255</p><p>2⁸ − 1 = 255.</p><p><i>VI: 2⁸ − 1 = 255.</i></p></li><li><p><b>c)</b> 4096</p><p>2¹² = 4096 (4094 usable hosts after removing network and broadcast).</p><p><i>VI: 2¹² = 4096 (dùng được 4094 host sau khi bỏ địa chỉ mạng và broadcast).</i></p></li><li><p><b>a)</b> 255</p><p>15 × 16 + 15 = 255.</p><p><i>VI: 15 × 16 + 15 = 255.</i></p></li><li><p><b>d)</b> 12</p><p>48 ÷ 4 = 12 (shown as six pairs).</p><p><i>VI: 48 ÷ 4 = 12 (viết thành sáu cặp).</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -344,23 +344,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Hex is faster for the CPU"
+                "noiDung": "Routers and switches understand only hex, so binary must be converted anyway"
               },
               {
                 "ma": "b",
-                "noiDung": "Hex numbers cannot be mistyped"
+                "noiDung": "One hex digit equals exactly 4 bits, so long binary strings become short and easy to read"
               },
               {
                 "ma": "c",
-                "noiDung": "Routers only understand hex"
+                "noiDung": "The CPU computes faster in base 16, so routers forward these addresses faster"
               },
               {
                 "ma": "d",
-                "noiDung": "One hex digit equals exactly 4 bits, so long binary strings become short and easy to read"
+                "noiDung": "Hex digits carry a built-in check, so a mistyped address is noticed at once"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>4 bits per digit: a 48-bit MAC is 12 hex digits.</p><p><i>VI: 4 bit mỗi chữ số: MAC 48 bit là 12 chữ số hex.</i></p>"
           },
@@ -370,7 +370,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "255"
+                "noiDung": "254"
               },
               {
                 "ma": "b",
@@ -378,15 +378,15 @@
               },
               {
                 "ma": "c",
-                "noiDung": "254"
+                "noiDung": "128"
               },
               {
                 "ma": "d",
-                "noiDung": "128"
+                "noiDung": "255"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>2⁸ − 1 = 255.</p><p><i>VI: 2⁸ − 1 = 255.</i></p>"
           },
@@ -400,11 +400,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "4096"
+                "noiDung": "2048"
               },
               {
                 "ma": "c",
-                "noiDung": "2048"
+                "noiDung": "4096"
               },
               {
                 "ma": "d",
@@ -412,7 +412,7 @@
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>2¹² = 4096 (4094 usable hosts after removing network and broadcast).</p><p><i>VI: 2¹² = 4096 (dùng được 4094 host sau khi bỏ địa chỉ mạng và broadcast).</i></p>"
           },
@@ -422,7 +422,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "15"
+                "noiDung": "255"
               },
               {
                 "ma": "b",
@@ -430,7 +430,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "255"
+                "noiDung": "15"
               },
               {
                 "ma": "d",
@@ -438,7 +438,7 @@
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>15 × 16 + 15 = 255.</p><p><i>VI: 15 × 16 + 15 = 255.</i></p>"
           },
@@ -448,15 +448,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "6"
+                "noiDung": "16"
               },
               {
                 "ma": "b",
-                "noiDung": "8"
+                "noiDung": "6"
               },
               {
                 "ma": "c",
-                "noiDung": "16"
+                "noiDung": "8"
               },
               {
                 "ma": "d",

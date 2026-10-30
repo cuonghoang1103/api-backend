@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Routing 1 — Reading a routing table — answer key\n\n1. In “show ip route”, the code C means …Trong “show ip route”, mã C nghĩa là …\n   Answer: a) directly connected network\n   C = connected, L = local interface address, S = static, O = OSPF, S* = default.VI: C = nối trực tiếp, L = địa chỉ cục bộ, S = tĩnh, O = OSPF, S* = mặc định.\n\n2. The route 0.0.0.0/0 is …Tuyến 0.0.0.0/0 là …\n   Answer: b) the default route that matches every destination\n   Prefix length 0 matches everything but loses to any longer match.VI: Prefix dài 0 khớp tất cả nhưng thua mọi tuyến dài hơn.\n\n3. The router has 10.0.0.0/8 and 10.1.0.0/16. A packet to 10.1.5.5 uses …Router có 10.0.0.0/8 và 10.1.0.0/16. Gói tới 10.1.5.5 dùng …\n   Answer: c) 10.1.0.0/16 (longest prefix match)\n   The most specific matching route wins.VI: Tuyến khớp cụ thể nhất thắng.\n\n4. No route matches and there is no default route. The router …Không tuyến nào khớp và không có default route. Router …\n   Answer: d) drops the packet and sends ICMP Destination Unreachable\n   No match = no forwarding.VI: Không khớp = không chuyển.\n\n5. A lower administrative distance means the route source is …Administrative distance thấp hơn nghĩa là nguồn tuyến …\n   Answer: a) more trusted\n   Connected 0, static 1, EIGRP 90, OSPF 110, RIP 120.VI: Nối trực tiếp 0, tĩnh 1, EIGRP 90, OSPF 110, RIP 120.\n"
+          "code": "# Routing 1 — Reading a routing table — answer key\n\n1. In “show ip route”, the code C means …Trong “show ip route”, mã C nghĩa là …\n   Answer: d) directly connected network\n   C = connected, L = local interface address, S = static, O = OSPF, S* = default.VI: C = nối trực tiếp, L = địa chỉ cục bộ, S = tĩnh, O = OSPF, S* = mặc định.\n\n2. The route 0.0.0.0/0 is …Tuyến 0.0.0.0/0 là …\n   Answer: c) the default route that matches every destination\n   Prefix length 0 matches everything but loses to any longer match.VI: Prefix dài 0 khớp tất cả nhưng thua mọi tuyến dài hơn.\n\n3. The router has 10.0.0.0/8 and 10.1.0.0/16. A packet to 10.1.5.5 uses …Router có 10.0.0.0/8 và 10.1.0.0/16. Gói tới 10.1.5.5 dùng …\n   Answer: b) 10.1.0.0/16 (longest prefix match)\n   The most specific matching route wins.VI: Tuyến khớp cụ thể nhất thắng.\n\n4. No route matches and there is no default route. The router …Không tuyến nào khớp và không có default route. Router …\n   Answer: b) drops the packet and sends ICMP Destination Unreachable\n   No match = no forwarding.VI: Không khớp = không chuyển.\n\n5. A lower administrative distance means the route source is …Administrative distance thấp hơn nghĩa là nguồn tuyến …\n   Answer: b) more trusted\n   Connected 0, static 1, EIGRP 90, OSPF 110, RIP 120.VI: Nối trực tiếp 0, tĩnh 1, EIGRP 90, OSPF 110, RIP 120.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> directly connected network</p><p>C = connected, L = local interface address, S = static, O = OSPF, S* = default.</p><p><i>VI: C = nối trực tiếp, L = địa chỉ cục bộ, S = tĩnh, O = OSPF, S* = mặc định.</i></p></li><li><p><b>c)</b> the default route that matches every destination</p><p>Prefix length 0 matches everything but loses to any longer match.</p><p><i>VI: Prefix dài 0 khớp tất cả nhưng thua mọi tuyến dài hơn.</i></p></li><li><p><b>b)</b> 10.1.0.0/16 (longest prefix match)</p><p>The most specific matching route wins.</p><p><i>VI: Tuyến khớp cụ thể nhất thắng.</i></p></li><li><p><b>b)</b> drops the packet and sends ICMP Destination Unreachable</p><p>No match = no forwarding.</p><p><i>VI: Không khớp = không chuyển.</i></p></li><li><p><b>b)</b> more trusted</p><p>Connected 0, static 1, EIGRP 90, OSPF 110, RIP 120.</p><p><i>VI: Nối trực tiếp 0, tĩnh 1, EIGRP 90, OSPF 110, RIP 120.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -62,7 +62,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "directly connected network"
+                "noiDung": "default route"
               },
               {
                 "ma": "b",
@@ -74,11 +74,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "default route"
+                "noiDung": "directly connected network"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>C = connected, L = local interface address, S = static, O = OSPF, S* = default.</p><p><i>VI: C = nối trực tiếp, L = địa chỉ cục bộ, S = tĩnh, O = OSPF, S* = mặc định.</i></p>"
           },
@@ -88,23 +88,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "an invalid route"
+                "noiDung": "a multicast route that matches every group address"
               },
               {
                 "ma": "b",
-                "noiDung": "the default route that matches every destination"
+                "noiDung": "an invalid route that the router will never install"
               },
               {
                 "ma": "c",
-                "noiDung": "a loopback route"
+                "noiDung": "the default route that matches every destination"
               },
               {
                 "ma": "d",
-                "noiDung": "a multicast route"
+                "noiDung": "a loopback route that points at the router itself"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Prefix length 0 matches everything but loses to any longer match.</p><p><i>VI: Prefix dài 0 khớp tất cả nhưng thua mọi tuyến dài hơn.</i></p>"
           },
@@ -118,11 +118,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "neither"
+                "noiDung": "10.1.0.0/16 (longest prefix match)"
               },
               {
                 "ma": "c",
-                "noiDung": "10.1.0.0/16 (longest prefix match)"
+                "noiDung": "neither"
               },
               {
                 "ma": "d",
@@ -130,7 +130,7 @@
               }
             ],
             "dapAn": [
-              "c"
+              "b"
             ],
             "giaiThich": "<p>The most specific matching route wins.</p><p><i>VI: Tuyến khớp cụ thể nhất thắng.</i></p>"
           },
@@ -140,23 +140,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "floods it"
+                "noiDung": "sends it back to the previous hop for another try"
               },
               {
                 "ma": "b",
-                "noiDung": "sends it to the previous hop"
+                "noiDung": "drops the packet and sends ICMP Destination Unreachable"
               },
               {
                 "ma": "c",
-                "noiDung": "queues it forever"
+                "noiDung": "floods it out of all interfaces except the incoming one"
               },
               {
                 "ma": "d",
-                "noiDung": "drops the packet and sends ICMP Destination Unreachable"
+                "noiDung": "queues it until a matching route is learned"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>No match = no forwarding.</p><p><i>VI: Không khớp = không chuyển.</i></p>"
           },
@@ -166,11 +166,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "more trusted"
+                "noiDung": "longer"
               },
               {
                 "ma": "b",
-                "noiDung": "less trusted"
+                "noiDung": "more trusted"
               },
               {
                 "ma": "c",
@@ -178,11 +178,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "longer"
+                "noiDung": "less trusted"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>Connected 0, static 1, EIGRP 90, OSPF 110, RIP 120.</p><p><i>VI: Nối trực tiếp 0, tĩnh 1, EIGRP 90, OSPF 110, RIP 120.</i></p>"
           }
@@ -803,10 +803,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Routing 6 — Router decisions in numbers — answer key\n\n1. A route to 172.16.0.0/16 exists via OSPF (AD 110) and via a static route with AD 150. Which AD is installed?Tuyến tới 172.16.0.0/16 có qua OSPF (AD 110) và qua tuyến tĩnh AD 150. AD nào được cài?\n   Answer: a) 110\n   The lowest AD wins, so OSPF is installed and the static route floats as backup.VI: AD thấp nhất thắng nên OSPF được cài, tuyến tĩnh làm dự phòng.\n\n2. Why does “ip route 0.0.0.0 0.0.0.0 203.0.113.1” make a router reach the whole Internet?Vì sao “ip route 0.0.0.0 0.0.0.0 203.0.113.1” giúp router tới được toàn Internet?\n   Answer: b) It matches every destination that has no more specific route\n   A /0 prefix is the catch-all.VI: Prefix /0 là tuyến bắt tất cả.\n\n3. A router forwards a packet. The source MAC at the output link is …Router chuyển một gói. MAC nguồn ở liên kết ra là …\n   Answer: c) the MAC of the router’s outgoing interface\n   A new frame is built on every link.VI: Mỗi liên kết có một frame mới.\n\n4. How many addresses does a /27 route summarise?Một tuyến /27 tóm tắt bao nhiêu địa chỉ?\n   Answer: d) 32\n   2^(32−27) = 32 addresses.VI: 2^(32−27) = 32 địa chỉ.\n"
+          "code": "# Routing 6 — Router decisions in numbers — answer key\n\n1. A route to 172.16.0.0/16 exists via OSPF (AD 110) and via a static route with AD 150. Which AD is installed?Tuyến tới 172.16.0.0/16 có qua OSPF (AD 110) và qua tuyến tĩnh AD 150. AD nào được cài?\n   Answer: a) 110\n   The lowest AD wins, so OSPF is installed and the static route floats as backup.VI: AD thấp nhất thắng nên OSPF được cài, tuyến tĩnh làm dự phòng.\n\n2. Why does “ip route 0.0.0.0 0.0.0.0 203.0.113.1” make a router reach the whole Internet?Vì sao “ip route 0.0.0.0 0.0.0.0 203.0.113.1” giúp router tới được toàn Internet?\n   Answer: c) It matches every destination that has no more specific route\n   A /0 prefix is the catch-all.VI: Prefix /0 là tuyến bắt tất cả.\n\n3. A router forwards a packet. The source MAC at the output link is …Router chuyển một gói. MAC nguồn ở liên kết ra là …\n   Answer: a) the MAC of the router’s outgoing interface\n   A new frame is built on every link.VI: Mỗi liên kết có một frame mới.\n\n4. How many addresses does a /27 route summarise?Một tuyến /27 tóm tắt bao nhiêu địa chỉ?\n   Answer: d) 32\n   2^(32−27) = 32 addresses.VI: 2^(32−27) = 32 địa chỉ.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> 110</p><p>The lowest AD wins, so OSPF is installed and the static route floats as backup.</p><p><i>VI: AD thấp nhất thắng nên OSPF được cài, tuyến tĩnh làm dự phòng.</i></p></li><li><p><b>c)</b> It matches every destination that has no more specific route</p><p>A /0 prefix is the catch-all.</p><p><i>VI: Prefix /0 là tuyến bắt tất cả.</i></p></li><li><p><b>a)</b> the MAC of the router’s outgoing interface</p><p>A new frame is built on every link.</p><p><i>VI: Mỗi liên kết có một frame mới.</i></p></li><li><p><b>d)</b> 32</p><p>2^(32−27) = 32 addresses.</p><p><i>VI: 2^(32−27) = 32 địa chỉ.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -823,11 +823,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "150"
+                "noiDung": "1"
               },
               {
                 "ma": "c",
-                "noiDung": "1"
+                "noiDung": "150"
               },
               {
                 "ma": "d",
@@ -845,23 +845,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "It enables NAT"
+                "noiDung": "It enables NAT towards that next hop"
               },
               {
                 "ma": "b",
-                "noiDung": "It matches every destination that has no more specific route"
+                "noiDung": "It copies the routing table of the ISP"
               },
               {
                 "ma": "c",
-                "noiDung": "It copies the ISP table"
+                "noiDung": "It matches every destination that has no more specific route"
               },
               {
                 "ma": "d",
-                "noiDung": "It disables the other routes"
+                "noiDung": "It replaces all other routes with one entry"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>A /0 prefix is the catch-all.</p><p><i>VI: Prefix /0 là tuyến bắt tất cả.</i></p>"
           },
@@ -871,23 +871,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "the destination’s MAC"
-              },
-              {
-                "ma": "b",
-                "noiDung": "ff:ff:ff:ff:ff:ff"
-              },
-              {
-                "ma": "c",
                 "noiDung": "the MAC of the router’s outgoing interface"
               },
               {
-                "ma": "d",
+                "ma": "b",
+                "noiDung": "the destination’s MAC"
+              },
+              {
+                "ma": "c",
                 "noiDung": "the original sender’s MAC"
+              },
+              {
+                "ma": "d",
+                "noiDung": "ff:ff:ff:ff:ff:ff"
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>A new frame is built on every link.</p><p><i>VI: Mỗi liên kết có một frame mới.</i></p>"
           },
@@ -897,15 +897,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "30"
+                "noiDung": "64"
               },
               {
                 "ma": "b",
-                "noiDung": "27"
+                "noiDung": "30"
               },
               {
                 "ma": "c",
-                "noiDung": "64"
+                "noiDung": "27"
               },
               {
                 "ma": "d",

@@ -48,10 +48,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Apps 1 — DNS, HTTP, DHCP concepts — answer key\n\n1. A DNS “A” record maps a name to …Bản ghi DNS “A” ánh xạ tên sang …\n   Answer: c) an IPv4 address\n   AAAA = IPv6, MX = mail, CNAME = alias, NS = name server, PTR = reverse.VI: AAAA = IPv6, MX = mail, CNAME = bí danh, NS = máy chủ tên, PTR = ngược.\n\n2. DNS normally uses …DNS thường dùng …\n   Answer: d) UDP port 53 (TCP for big answers and zone transfers)\n   Short queries fit in one UDP datagram.VI: Truy vấn ngắn vừa trong một datagram UDP.\n\n3. HTTP status code 404 means …Mã trạng thái HTTP 404 nghĩa là …\n   Answer: a) the resource was not found\n   5xx = server errors, 4xx = client errors, 3xx = redirects, 2xx = success.VI: 5xx = lỗi server, 4xx = lỗi client, 3xx = chuyển hướng, 2xx = thành công.\n\n4. The four DHCP messages are …Bốn thông điệp DHCP là …\n   Answer: b) Discover, Offer, Request, Acknowledge\n   “DORA”. Discover and Request are broadcasts.VI: “DORA”. Discover và Request là broadcast.\n\n5. A DHCP lease gives a client …Một lease DHCP cấp cho client …\n   Answer: c) IP address, mask, default gateway and DNS server for a limited time\n   The client renews at 50% of the lease time.VI: Client gia hạn ở 50% thời gian lease.\n"
+          "code": "# Apps 1 — DNS, HTTP, DHCP concepts — answer key\n\n1. A DNS “A” record maps a name to …Bản ghi DNS “A” ánh xạ tên sang …\n   Answer: d) an IPv4 address\n   AAAA = IPv6, MX = mail, CNAME = alias, NS = name server, PTR = reverse.VI: AAAA = IPv6, MX = mail, CNAME = bí danh, NS = máy chủ tên, PTR = ngược.\n\n2. DNS normally uses …DNS thường dùng …\n   Answer: c) UDP port 53 (TCP for big answers and zone transfers)\n   Short queries fit in one UDP datagram.VI: Truy vấn ngắn vừa trong một datagram UDP.\n\n3. HTTP status code 404 means …Mã trạng thái HTTP 404 nghĩa là …\n   Answer: a) the resource was not found\n   5xx = server errors, 4xx = client errors, 3xx = redirects, 2xx = success.VI: 5xx = lỗi server, 4xx = lỗi client, 3xx = chuyển hướng, 2xx = thành công.\n\n4. The four DHCP messages are …Bốn thông điệp DHCP là …\n   Answer: d) Discover, Offer, Request, Acknowledge\n   “DORA”. Discover and Request are broadcasts.VI: “DORA”. Discover và Request là broadcast.\n\n5. A DHCP lease gives a client …Một lease DHCP cấp cho client …\n   Answer: c) IP address, mask, default gateway and DNS server for a limited time\n   The client renews at 50% of the lease time.VI: Client gia hạn ở 50% thời gian lease.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> an IPv4 address</p><p>AAAA = IPv6, MX = mail, CNAME = alias, NS = name server, PTR = reverse.</p><p><i>VI: AAAA = IPv6, MX = mail, CNAME = bí danh, NS = máy chủ tên, PTR = ngược.</i></p></li><li><p><b>c)</b> UDP port 53 (TCP for big answers and zone transfers)</p><p>Short queries fit in one UDP datagram.</p><p><i>VI: Truy vấn ngắn vừa trong một datagram UDP.</i></p></li><li><p><b>a)</b> the resource was not found</p><p>5xx = server errors, 4xx = client errors, 3xx = redirects, 2xx = success.</p><p><i>VI: 5xx = lỗi server, 4xx = lỗi client, 3xx = chuyển hướng, 2xx = thành công.</i></p></li><li><p><b>d)</b> Discover, Offer, Request, Acknowledge</p><p>“DORA”. Discover and Request are broadcasts.</p><p><i>VI: “DORA”. Discover và Request là broadcast.</i></p></li><li><p><b>c)</b> IP address, mask, default gateway and DNS server for a limited time</p><p>The client renews at 50% of the lease time.</p><p><i>VI: Client gia hạn ở 50% thời gian lease.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -64,7 +64,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "a mail server"
+                "noiDung": "an IPv6 address"
               },
               {
                 "ma": "b",
@@ -72,15 +72,15 @@
               },
               {
                 "ma": "c",
-                "noiDung": "an IPv4 address"
+                "noiDung": "a mail server"
               },
               {
                 "ma": "d",
-                "noiDung": "an IPv6 address"
+                "noiDung": "an IPv4 address"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>AAAA = IPv6, MX = mail, CNAME = alias, NS = name server, PTR = reverse.</p><p><i>VI: AAAA = IPv6, MX = mail, CNAME = bí danh, NS = máy chủ tên, PTR = ngược.</i></p>"
           },
@@ -90,23 +90,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "TCP port 80"
+                "noiDung": "UDP port 67 (TCP for big answers)"
               },
               {
                 "ma": "b",
-                "noiDung": "UDP port 67"
+                "noiDung": "TCP port 80 (UDP for small answers)"
               },
               {
                 "ma": "c",
-                "noiDung": "TCP port 25"
+                "noiDung": "UDP port 53 (TCP for big answers and zone transfers)"
               },
               {
                 "ma": "d",
-                "noiDung": "UDP port 53 (TCP for big answers and zone transfers)"
+                "noiDung": "TCP port 25 (UDP for zone transfers)"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>Short queries fit in one UDP datagram.</p><p><i>VI: Truy vấn ngắn vừa trong một datagram UDP.</i></p>"
           },
@@ -120,15 +120,15 @@
               },
               {
                 "ma": "b",
-                "noiDung": "the server crashed"
+                "noiDung": "the request was redirected"
               },
               {
                 "ma": "c",
-                "noiDung": "the client must log in"
+                "noiDung": "the server crashed"
               },
               {
                 "ma": "d",
-                "noiDung": "the request was redirected"
+                "noiDung": "the client must log in"
               }
             ],
             "dapAn": [
@@ -142,23 +142,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "SYN, SYN-ACK, ACK, FIN"
+                "noiDung": "Request, Reply, Ack, Bye"
               },
               {
                 "ma": "b",
-                "noiDung": "Discover, Offer, Request, Acknowledge"
-              },
-              {
-                "ma": "c",
                 "noiDung": "Hello, Offer, Accept, Done"
               },
               {
+                "ma": "c",
+                "noiDung": "SYN, SYN-ACK, ACK, FIN"
+              },
+              {
                 "ma": "d",
-                "noiDung": "Request, Reply, Ack, Bye"
+                "noiDung": "Discover, Offer, Request, Acknowledge"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>“DORA”. Discover and Request are broadcasts.</p><p><i>VI: “DORA”. Discover và Request là broadcast.</i></p>"
           },
@@ -168,11 +168,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "a MAC address"
+                "noiDung": "only an IP address, kept forever once it has been given"
               },
               {
                 "ma": "b",
-                "noiDung": "a domain name"
+                "noiDung": "a domain name, registered for as long as the client is on"
               },
               {
                 "ma": "c",
@@ -180,7 +180,7 @@
               },
               {
                 "ma": "d",
-                "noiDung": "only an IP address forever"
+                "noiDung": "a MAC address, a mask and a gateway for a limited time"
               }
             ],
             "dapAn": [
@@ -248,7 +248,7 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Apps 2 — Order DNS and DHCP exchanges — answer key\n\n1. Recursive DNS lookup of www.example.com (empty caches)Tra DNS đệ quy www.example.com (cache rỗng)\n   Answer: s1) The client asks its recursive resolver  →  s2) The resolver asks a root server and gets the .com name servers  →  s3) The resolver asks a .com TLD server and gets example.com’s name servers  →  s4) The resolver asks the example.com authoritative server and gets the A record  →  s5) The resolver caches the answer and returns it to the client\n   Root → TLD → authoritative; the resolver does the legwork and caches.VI: Root → TLD → authoritative; resolver làm việc nặng và lưu cache.\n\n2. DHCPDHCP\n   Answer: s1) Client broadcasts DHCPDISCOVER  →  s2) Server unicasts/broadcasts DHCPOFFER  →  s3) Client broadcasts DHCPREQUEST for the offered address  →  s4) Server sends DHCPACK confirming the lease\n   D-O-R-A.VI: D-O-R-A.\n"
+          "code": "# Apps 2 — Order DNS and DHCP exchanges — answer key\n\n1. Recursive DNS lookup of www.example.com (empty caches)Tra DNS đệ quy www.example.com (cache rỗng)\n   Answer: m2) The client asks its recursive resolver  →  m1) The resolver asks a root server and gets the .com name servers  →  m5) The resolver asks a .com TLD server and gets example.com’s name servers  →  m4) The resolver asks the example.com authoritative server and gets the A record  →  m3) The resolver caches the answer and returns it to the client\n   Root → TLD → authoritative; the resolver does the legwork and caches.VI: Root → TLD → authoritative; resolver làm việc nặng và lưu cache.\n\n2. DHCPDHCP\n   Answer: m3) Client broadcasts DHCPDISCOVER  →  m1) Server unicasts/broadcasts DHCPOFFER  →  m4) Client broadcasts DHCPREQUEST for the offered address  →  m2) Server sends DHCPACK confirming the lease\n   D-O-R-A.VI: D-O-R-A.\n"
         }
       ],
       "solutionExplanationHtml": "<p>Root → TLD → authoritative; the resolver does the legwork and caches.</p><p><i>VI: Root → TLD → authoritative; resolver làm việc nặng và lưu cache.</i></p><p>D-O-R-A.</p><p><i>VI: D-O-R-A.</i></p>",
@@ -263,32 +263,32 @@
             "de": "<p>Recursive DNS lookup of www.example.com (empty caches)</p><p style=\"opacity:.75;font-size:.92em\"><i>Tra DNS đệ quy www.example.com (cache rỗng)</i></p>",
             "muc": [
               {
-                "ma": "s3",
-                "noiDung": "The resolver asks a .com TLD server and gets example.com’s name servers"
+                "ma": "m1",
+                "noiDung": "The resolver asks a root server and gets the .com name servers"
               },
               {
-                "ma": "s4",
-                "noiDung": "The resolver asks the example.com authoritative server and gets the A record"
-              },
-              {
-                "ma": "s5",
-                "noiDung": "The resolver caches the answer and returns it to the client"
-              },
-              {
-                "ma": "s1",
+                "ma": "m2",
                 "noiDung": "The client asks its recursive resolver"
               },
               {
-                "ma": "s2",
-                "noiDung": "The resolver asks a root server and gets the .com name servers"
+                "ma": "m3",
+                "noiDung": "The resolver caches the answer and returns it to the client"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "The resolver asks the example.com authoritative server and gets the A record"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "The resolver asks a .com TLD server and gets example.com’s name servers"
               }
             ],
             "dapAn": [
-              "s1",
-              "s2",
-              "s3",
-              "s4",
-              "s5"
+              "m2",
+              "m1",
+              "m5",
+              "m4",
+              "m3"
             ],
             "giaiThich": "<p>Root → TLD → authoritative; the resolver does the legwork and caches.</p><p><i>VI: Root → TLD → authoritative; resolver làm việc nặng và lưu cache.</i></p>"
           },
@@ -297,27 +297,27 @@
             "de": "<p>DHCP</p><p style=\"opacity:.75;font-size:.92em\"><i>DHCP</i></p>",
             "muc": [
               {
-                "ma": "s2",
+                "ma": "m1",
                 "noiDung": "Server unicasts/broadcasts DHCPOFFER"
               },
               {
-                "ma": "s3",
-                "noiDung": "Client broadcasts DHCPREQUEST for the offered address"
-              },
-              {
-                "ma": "s4",
+                "ma": "m2",
                 "noiDung": "Server sends DHCPACK confirming the lease"
               },
               {
-                "ma": "s1",
+                "ma": "m3",
                 "noiDung": "Client broadcasts DHCPDISCOVER"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Client broadcasts DHCPREQUEST for the offered address"
               }
             ],
             "dapAn": [
-              "s1",
-              "s2",
-              "s3",
-              "s4"
+              "m3",
+              "m1",
+              "m4",
+              "m2"
             ],
             "giaiThich": "<p>D-O-R-A.</p><p><i>VI: D-O-R-A.</i></p>"
           }

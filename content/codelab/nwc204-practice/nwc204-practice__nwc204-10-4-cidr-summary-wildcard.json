@@ -174,10 +174,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# CIDR 2 — Exact summary or over-broad? — answer key\n\n1. Networks 172.16.4.0/24, 172.16.5.0/24, 172.16.6.0/24, 172.16.7.0/24 summarised as 172.16.4.0/22. This is …Các mạng 172.16.4.0/24, 172.16.5.0/24, 172.16.6.0/24, 172.16.7.0/24 tóm tắt thành 172.16.4.0/22. Đây là …\n   Answer: c) exact: 172.16.4.0/22 has 1024 addresses, the list 1024\n   Compare the address counts: equal means exact.VI: So sánh số địa chỉ: bằng nhau là chính xác.\n\n2. Networks 172.16.4.0/24, 172.16.5.0/24, 172.16.7.0/24 summarised as 172.16.4.0/22. This is …Các mạng 172.16.4.0/24, 172.16.5.0/24, 172.16.7.0/24 tóm tắt thành 172.16.4.0/22. Đây là …\n   Answer: d) over-broad: 172.16.4.0/22 has 1024 addresses, the list only 768\n   Compare the address counts: equal means exact.VI: So sánh số địa chỉ: bằng nhau là chính xác.\n\n3. Networks 10.0.0.0/24, 10.0.2.0/24 summarised as 10.0.0.0/22. This is …Các mạng 10.0.0.0/24, 10.0.2.0/24 tóm tắt thành 10.0.0.0/22. Đây là …\n   Answer: a) over-broad: 10.0.0.0/22 has 1024 addresses, the list only 512\n   Compare the address counts: equal means exact.VI: So sánh số địa chỉ: bằng nhau là chính xác.\n\n4. Networks 192.168.8.0/23, 192.168.10.0/23 summarised as 192.168.8.0/22. This is …Các mạng 192.168.8.0/23, 192.168.10.0/23 tóm tắt thành 192.168.8.0/22. Đây là …\n   Answer: b) exact: 192.168.8.0/22 has 1024 addresses, the list 1024\n   Compare the address counts: equal means exact.VI: So sánh số địa chỉ: bằng nhau là chính xác.\n"
+          "code": "# CIDR 2 — Exact summary or over-broad? — answer key\n\n1. Networks 172.16.4.0/24, 172.16.5.0/24, 172.16.6.0/24, 172.16.7.0/24 summarised as 172.16.4.0/22. This is …Các mạng 172.16.4.0/24, 172.16.5.0/24, 172.16.6.0/24, 172.16.7.0/24 tóm tắt thành 172.16.4.0/22. Đây là …\n   Answer: b) exact: 172.16.4.0/22 has 1024 addresses, the list 1024\n   Compare the address counts: equal means exact.VI: So sánh số địa chỉ: bằng nhau là chính xác.\n\n2. Networks 172.16.4.0/24, 172.16.5.0/24, 172.16.7.0/24 summarised as 172.16.4.0/22. This is …Các mạng 172.16.4.0/24, 172.16.5.0/24, 172.16.7.0/24 tóm tắt thành 172.16.4.0/22. Đây là …\n   Answer: a) over-broad: 172.16.4.0/22 has 1024 addresses, the list only 768\n   Compare the address counts: equal means exact.VI: So sánh số địa chỉ: bằng nhau là chính xác.\n\n3. Networks 10.0.0.0/24, 10.0.2.0/24 summarised as 10.0.0.0/22. This is …Các mạng 10.0.0.0/24, 10.0.2.0/24 tóm tắt thành 10.0.0.0/22. Đây là …\n   Answer: a) over-broad: 10.0.0.0/22 has 1024 addresses, the list only 512\n   Compare the address counts: equal means exact.VI: So sánh số địa chỉ: bằng nhau là chính xác.\n\n4. Networks 192.168.8.0/23, 192.168.10.0/23 summarised as 192.168.8.0/22. This is …Các mạng 192.168.8.0/23, 192.168.10.0/23 tóm tắt thành 192.168.8.0/22. Đây là …\n   Answer: a) exact: 192.168.8.0/22 has 1024 addresses, the list 1024\n   Compare the address counts: equal means exact.VI: So sánh số địa chỉ: bằng nhau là chính xác.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> exact: 172.16.4.0/22 has 1024 addresses, the list 1024</p><p>Compare the address counts: equal means exact.</p><p><i>VI: So sánh số địa chỉ: bằng nhau là chính xác.</i></p></li><li><p><b>a)</b> over-broad: 172.16.4.0/22 has 1024 addresses, the list only 768</p><p>Compare the address counts: equal means exact.</p><p><i>VI: So sánh số địa chỉ: bằng nhau là chính xác.</i></p></li><li><p><b>a)</b> over-broad: 10.0.0.0/22 has 1024 addresses, the list only 512</p><p>Compare the address counts: equal means exact.</p><p><i>VI: So sánh số địa chỉ: bằng nhau là chính xác.</i></p></li><li><p><b>a)</b> exact: 192.168.8.0/22 has 1024 addresses, the list 1024</p><p>Compare the address counts: equal means exact.</p><p><i>VI: So sánh số địa chỉ: bằng nhau là chính xác.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -190,23 +190,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "impossible to summarise"
+                "noiDung": "too narrow: it leaves out one of the listed networks"
               },
               {
                 "ma": "b",
-                "noiDung": "a valid summary only with NAT"
-              },
-              {
-                "ma": "c",
                 "noiDung": "exact: 172.16.4.0/22 has 1024 addresses, the list 1024"
               },
               {
+                "ma": "c",
+                "noiDung": "over-broad: 172.16.4.0/22 has 2048 addresses, the list only 1024"
+              },
+              {
                 "ma": "d",
-                "noiDung": "over-broad: it adds 1024 extra addresses"
+                "noiDung": "invalid CIDR: 172.16.4.0/22 is not aligned on its block size"
               }
             ],
             "dapAn": [
-              "c"
+              "b"
             ],
             "giaiThich": "<p>Compare the address counts: equal means exact.</p><p><i>VI: So sánh số địa chỉ: bằng nhau là chính xác.</i></p>"
           },
@@ -216,23 +216,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "exact"
+                "noiDung": "over-broad: 172.16.4.0/22 has 1024 addresses, the list only 768"
               },
               {
                 "ma": "b",
-                "noiDung": "invalid CIDR"
+                "noiDung": "exact: 172.16.4.0/22 has 768 addresses, the list 768"
               },
               {
                 "ma": "c",
-                "noiDung": "a default route"
+                "noiDung": "invalid CIDR: 172.16.4.0/22 is not aligned on its block size"
               },
               {
                 "ma": "d",
-                "noiDung": "over-broad: 172.16.4.0/22 has 1024 addresses, the list only 768"
+                "noiDung": "too narrow: it leaves out one of the listed networks"
               }
             ],
             "dapAn": [
-              "d"
+              "a"
             ],
             "giaiThich": "<p>Compare the address counts: equal means exact.</p><p><i>VI: So sánh số địa chỉ: bằng nhau là chính xác.</i></p>"
           },
@@ -246,15 +246,15 @@
               },
               {
                 "ma": "b",
-                "noiDung": "exact"
+                "noiDung": "invalid CIDR: 10.0.0.0/22 is not aligned on its block size"
               },
               {
                 "ma": "c",
-                "noiDung": "invalid CIDR"
+                "noiDung": "exact: 10.0.0.0/22 has 512 addresses, the list 512"
               },
               {
                 "ma": "d",
-                "noiDung": "a default route"
+                "noiDung": "too narrow: it leaves out one of the listed networks"
               }
             ],
             "dapAn": [
@@ -268,23 +268,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "a valid summary only with NAT"
-              },
-              {
-                "ma": "b",
                 "noiDung": "exact: 192.168.8.0/22 has 1024 addresses, the list 1024"
               },
               {
+                "ma": "b",
+                "noiDung": "too narrow: it leaves out one of the listed networks"
+              },
+              {
                 "ma": "c",
-                "noiDung": "over-broad: it adds 1024 extra addresses"
+                "noiDung": "invalid CIDR: 192.168.8.0/22 is not aligned on its block size"
               },
               {
                 "ma": "d",
-                "noiDung": "impossible to summarise"
+                "noiDung": "over-broad: 192.168.8.0/22 has 2048 addresses, the list only 1024"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>Compare the address counts: equal means exact.</p><p><i>VI: So sánh số địa chỉ: bằng nhau là chính xác.</i></p>"
           }
@@ -480,10 +480,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# CIDR 4 — Aggregation reasoning — answer key\n\n1. How many /24 networks are inside a /16?Có bao nhiêu mạng /24 trong một /16?\n   Answer: b) 256\n   2^(24−16) = 256.VI: 2^(24−16) = 256.\n\n2. How many addresses in 10.8.0.0/13?10.8.0.0/13 có bao nhiêu địa chỉ?\n   Answer: c) 524,288\n   2^(32−13) = 524,288.VI: 2^(32−13) = 524.288.\n\n3. The last address of 10.8.0.0/13 is …Địa chỉ cuối của 10.8.0.0/13 là …\n   Answer: d) 10.15.255.255\n   A /13 spans 8 values of the second octet: 8–15.VI: Một /13 trải 8 giá trị của octet thứ hai: 8–15.\n\n4. CIDR (RFC 4632) replaced classful addressing mainly to …CIDR (RFC 4632) thay địa chỉ theo lớp chủ yếu để …\n   Answer: a) use address space efficiently and shrink routing tables via aggregation\n   Prefix length is independent of the first octet.VI: Độ dài prefix không còn phụ thuộc octet đầu.\n"
+          "code": "# CIDR 4 — Aggregation reasoning — answer key\n\n1. How many /24 networks are inside a /16?Có bao nhiêu mạng /24 trong một /16?\n   Answer: c) 256\n   2^(24−16) = 256.VI: 2^(24−16) = 256.\n\n2. How many addresses in 10.8.0.0/13?10.8.0.0/13 có bao nhiêu địa chỉ?\n   Answer: d) 524,288\n   2^(32−13) = 524,288.VI: 2^(32−13) = 524.288.\n\n3. The last address of 10.8.0.0/13 is …Địa chỉ cuối của 10.8.0.0/13 là …\n   Answer: b) 10.15.255.255\n   A /13 spans 8 values of the second octet: 8–15.VI: Một /13 trải 8 giá trị của octet thứ hai: 8–15.\n\n4. CIDR (RFC 4632) replaced classful addressing mainly to …CIDR (RFC 4632) thay địa chỉ theo lớp chủ yếu để …\n   Answer: c) use address space efficiently and shrink routing tables via aggregation\n   Prefix length is independent of the first octet.VI: Độ dài prefix không còn phụ thuộc octet đầu.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> 256</p><p>2^(24−16) = 256.</p><p><i>VI: 2^(24−16) = 256.</i></p></li><li><p><b>d)</b> 524,288</p><p>2^(32−13) = 524,288.</p><p><i>VI: 2^(32−13) = 524.288.</i></p></li><li><p><b>b)</b> 10.15.255.255</p><p>A /13 spans 8 values of the second octet: 8–15.</p><p><i>VI: Một /13 trải 8 giá trị của octet thứ hai: 8–15.</i></p></li><li><p><b>c)</b> use address space efficiently and shrink routing tables via aggregation</p><p>Prefix length is independent of the first octet.</p><p><i>VI: Độ dài prefix không còn phụ thuộc octet đầu.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -496,23 +496,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "254"
-              },
-              {
-                "ma": "b",
-                "noiDung": "256"
-              },
-              {
-                "ma": "c",
                 "noiDung": "16"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "65536"
+              },
+              {
+                "ma": "c",
+                "noiDung": "256"
+              },
+              {
+                "ma": "d",
+                "noiDung": "254"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>2^(24−16) = 256.</p><p><i>VI: 2^(24−16) = 256.</i></p>"
           },
@@ -522,23 +522,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "1,048,576"
-              },
-              {
-                "ma": "b",
                 "noiDung": "8,192"
               },
               {
+                "ma": "b",
+                "noiDung": "1,048,576"
+              },
+              {
                 "ma": "c",
-                "noiDung": "524,288"
+                "noiDung": "262,144"
               },
               {
                 "ma": "d",
-                "noiDung": "262,144"
+                "noiDung": "524,288"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>2^(32−13) = 524,288.</p><p><i>VI: 2^(32−13) = 524.288.</i></p>"
           },
@@ -548,23 +548,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "10.8.255.255"
-              },
-              {
-                "ma": "b",
-                "noiDung": "10.16.0.0"
-              },
-              {
-                "ma": "c",
                 "noiDung": "10.11.255.255"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "10.15.255.255"
+              },
+              {
+                "ma": "c",
+                "noiDung": "10.8.255.255"
+              },
+              {
+                "ma": "d",
+                "noiDung": "10.16.0.0"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>A /13 spans 8 values of the second octet: 8–15.</p><p><i>VI: Một /13 trải 8 giá trị của octet thứ hai: 8–15.</i></p>"
           },
@@ -574,23 +574,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "use address space efficiently and shrink routing tables via aggregation"
+                "noiDung": "remove the need for masks, because the first bits show the class"
               },
               {
                 "ma": "b",
-                "noiDung": "add more classes"
+                "noiDung": "make DHCP faster by sending shorter options in each lease"
               },
               {
                 "ma": "c",
-                "noiDung": "remove the need for masks"
+                "noiDung": "use address space efficiently and shrink routing tables via aggregation"
               },
               {
                 "ma": "d",
-                "noiDung": "make DHCP faster"
+                "noiDung": "add more classes (F, G, …) to the existing A, B and C"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>Prefix length is independent of the first octet.</p><p><i>VI: Độ dài prefix không còn phụ thuộc octet đầu.</i></p>"
           }

@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Instruction 1 — Opcode, operands and instruction types — answer key\n\n1. The opcode field of an instruction specifies …Trường opcode của lệnh chỉ định …\n   Answer: b) the operation to be performed\n   Source/destination operand references and the next-instruction reference are separate elements.VI: Tham chiếu toán hạng nguồn/đích và lệnh kế tiếp là các thành phần riêng.\n\n2. Which category does ADD R1, R2, R3 belong to?ADD R1, R2, R3 thuộc loại nào?\n   Answer: c) Data processing (arithmetic)\n   Arithmetic and logic instructions are data processing.VI: Lệnh số học và logic là xử lý dữ liệu.\n\n3. A conditional jump instruction is mainly a …Lệnh nhảy có điều kiện chủ yếu là lệnh …\n   Answer: d) control (transfer of control) instruction\n   It may change the PC depending on a condition code.VI: Nó có thể đổi PC tuỳ mã điều kiện.\n\n4. Increasing the number of opcode bits lets the ISA …Tăng số bit opcode cho phép ISA …\n   Answer: a) define more distinct operations\n   n opcode bits give up to 2ⁿ operations.VI: n bit opcode cho tối đa 2ⁿ phép toán.\n\n5. A fixed-length instruction format (RISC) mainly helps …Khuôn dạng lệnh độ dài cố định (RISC) chủ yếu giúp …\n   Answer: b) simple, fast decoding and pipelining\n   Equal-sized instructions are fetched and decoded in a predictable way.VI: Lệnh cùng kích thước được nạp và giải mã theo cách dự đoán được.\n"
+          "code": "# Instruction 1 — Opcode, operands and instruction types — answer key\n\n1. The opcode field of an instruction specifies …Trường opcode của lệnh chỉ định …\n   Answer: c) the operation to be performed\n   Source/destination operand references and the next-instruction reference are separate elements.VI: Tham chiếu toán hạng nguồn/đích và lệnh kế tiếp là các thành phần riêng.\n\n2. Which category does ADD R1, R2, R3 belong to?ADD R1, R2, R3 thuộc loại nào?\n   Answer: b) Data processing (arithmetic)\n   Arithmetic and logic instructions are data processing.VI: Lệnh số học và logic là xử lý dữ liệu.\n\n3. A conditional jump instruction is mainly a …Lệnh nhảy có điều kiện chủ yếu là lệnh …\n   Answer: d) control (transfer of control) instruction\n   It may change the PC depending on a condition code.VI: Nó có thể đổi PC tuỳ mã điều kiện.\n\n4. Increasing the number of opcode bits lets the ISA …Tăng số bit opcode cho phép ISA …\n   Answer: c) define more distinct operations\n   n opcode bits give up to 2ⁿ operations.VI: n bit opcode cho tối đa 2ⁿ phép toán.\n\n5. A fixed-length instruction format (RISC) mainly helps …Khuôn dạng lệnh độ dài cố định (RISC) chủ yếu giúp …\n   Answer: b) simple, fast decoding and pipelining\n   Equal-sized instructions are fetched and decoded in a predictable way.VI: Lệnh cùng kích thước được nạp và giải mã theo cách dự đoán được.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> the operation to be performed</p><p>Source/destination operand references and the next-instruction reference are separate elements.</p><p><i>VI: Tham chiếu toán hạng nguồn/đích và lệnh kế tiếp là các thành phần riêng.</i></p></li><li><p><b>b)</b> Data processing (arithmetic)</p><p>Arithmetic and logic instructions are data processing.</p><p><i>VI: Lệnh số học và logic là xử lý dữ liệu.</i></p></li><li><p><b>d)</b> control (transfer of control) instruction</p><p>It may change the PC depending on a condition code.</p><p><i>VI: Nó có thể đổi PC tuỳ mã điều kiện.</i></p></li><li><p><b>c)</b> define more distinct operations</p><p>n opcode bits give up to 2ⁿ operations.</p><p><i>VI: n bit opcode cho tối đa 2ⁿ phép toán.</i></p></li><li><p><b>b)</b> simple, fast decoding and pipelining</p><p>Equal-sized instructions are fetched and decoded in a predictable way.</p><p><i>VI: Lệnh cùng kích thước được nạp và giải mã theo cách dự đoán được.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -62,15 +62,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "the size of the memory"
+                "noiDung": "the address of the next instruction"
               },
               {
                 "ma": "b",
-                "noiDung": "the operation to be performed"
+                "noiDung": "the size of the memory"
               },
               {
                 "ma": "c",
-                "noiDung": "the address of the next instruction"
+                "noiDung": "the operation to be performed"
               },
               {
                 "ma": "d",
@@ -78,7 +78,7 @@
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Source/destination operand references and the next-instruction reference are separate elements.</p><p><i>VI: Tham chiếu toán hạng nguồn/đích và lệnh kế tiếp là các thành phần riêng.</i></p>"
           },
@@ -88,23 +88,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Data movement"
+                "noiDung": "Data storage"
               },
               {
                 "ma": "b",
-                "noiDung": "Control (flow of execution)"
-              },
-              {
-                "ma": "c",
                 "noiDung": "Data processing (arithmetic)"
               },
               {
+                "ma": "c",
+                "noiDung": "Data movement"
+              },
+              {
                 "ma": "d",
-                "noiDung": "Data storage"
+                "noiDung": "Control (flow of execution)"
               }
             ],
             "dapAn": [
-              "c"
+              "b"
             ],
             "giaiThich": "<p>Arithmetic and logic instructions are data processing.</p><p><i>VI: Lệnh số học và logic là xử lý dữ liệu.</i></p>"
           },
@@ -114,11 +114,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "data processing instruction"
+                "noiDung": "I/O instruction"
               },
               {
                 "ma": "b",
-                "noiDung": "I/O instruction"
+                "noiDung": "data processing instruction"
               },
               {
                 "ma": "c",
@@ -140,23 +140,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "define more distinct operations"
-              },
-              {
-                "ma": "b",
-                "noiDung": "address more memory"
-              },
-              {
-                "ma": "c",
                 "noiDung": "run faster"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "use fewer registers"
+              },
+              {
+                "ma": "c",
+                "noiDung": "define more distinct operations"
+              },
+              {
+                "ma": "d",
+                "noiDung": "address more memory"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>n opcode bits give up to 2ⁿ operations.</p><p><i>VI: n bit opcode cho tối đa 2ⁿ phép toán.</i></p>"
           },
@@ -166,7 +166,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "larger immediate values"
+                "noiDung": "more addressing modes"
               },
               {
                 "ma": "b",
@@ -178,7 +178,7 @@
               },
               {
                 "ma": "d",
-                "noiDung": "more addressing modes"
+                "noiDung": "larger immediate values"
               }
             ],
             "dapAn": [
@@ -370,8 +370,8 @@
       "tags": [
         "cea201"
       ],
-      "problemHtml": "<p>Count the instructions needed to compute each expression on four kinds of machine. Rules: <b>3-address</b> (<code>OP dst, s1, s2</code>); <b>2-address</b> (<code>OP dst, src</code> computes dst ← dst OP src; <code>MOV</code> copies); <b>1-address</b> (accumulator: <code>LOAD, STORE, ADD, SUB, MUL</code>); <b>0-address</b> (stack: <code>PUSH, POP</code> and zero-operand ADD/SUB/MUL). Memory variables only; use temporaries as needed and do not recompute anything.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
-      "problemHtmlVi": "<p>Đếm số lệnh cần để tính mỗi biểu thức trên bốn loại máy. Quy tắc: <b>3 địa chỉ</b> (<code>OP dst, s1, s2</code>); <b>2 địa chỉ</b> (<code>OP dst, src</code> tính dst ← dst OP src; <code>MOV</code> sao chép); <b>1 địa chỉ</b> (thanh ghi tích luỹ: <code>LOAD, STORE, ADD, SUB, MUL</code>); <b>0 địa chỉ</b> (ngăn xếp: <code>PUSH, POP</code> và ADD/SUB/MUL không toán hạng). Chỉ biến trong bộ nhớ; dùng biến tạm khi cần và không tính lại gì.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "problemHtml": "<p>Count the instructions of the shortest program that computes each expression on four kinds of machine. Rules: <b>3-address</b> (<code>OP dst, s1, s2</code>); <b>2-address</b> (<code>OP dst, src</code> computes dst ← dst OP src; <code>MOV</code> copies); <b>1-address</b> (accumulator: <code>LOAD, STORE, ADD, SUB, MUL</code>); <b>0-address</b> (stack: <code>PUSH, POP</code> and zero-operand ADD/SUB/MUL). Memory variables only; use temporaries as needed and do not recompute anything.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đếm số lệnh của chương trình ngắn nhất tính mỗi biểu thức trên bốn loại máy. Quy tắc: <b>3 địa chỉ</b> (<code>OP dst, s1, s2</code>); <b>2 địa chỉ</b> (<code>OP dst, src</code> tính dst ← dst OP src; <code>MOV</code> sao chép); <b>1 địa chỉ</b> (thanh ghi tích luỹ: <code>LOAD, STORE, ADD, SUB, MUL</code>); <b>0 địa chỉ</b> (ngăn xếp: <code>PUSH, POP</code> và ADD/SUB/MUL không toán hạng). Chỉ biến trong bộ nhớ; dùng biến tạm khi cần và không tính lại gì.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
       "inputSpec": null,
       "outputSpec": null,
       "constraints": "",
@@ -397,10 +397,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Instruction 3 — 3-, 2-, 1- and 0-address machines: count the instructions — answer key\n\n1. Instruction countsSố lệnh\n   - r1.a3: 3\n   - r1.a2: 6\n   - r1.a1: 7\n   - r1.a0: 8\n   - r2.a3: 3\n   - r2.a2: 6\n   - r2.a1: 7\n   - r2.a0: 8\n   - r3.a3: 2\n   - r3.a2: 4\n   - r3.a1: 4\n   - r3.a0: 6\n   (A+B)×(C−D): 3-addr ADD T1,A,B / SUB T2,C,D / MUL X,T1,T2 = 3; 2-addr MOV T,A / ADD T,B / MOV U,C / SUB U,D / MUL T,U / MOV X,T = 6; 1-addr LOAD A / ADD B / STORE T / LOAD C / SUB D / MUL T / STORE X = 7; stack PUSH A / PUSH B / ADD / PUSH C / PUSH D / SUB / MUL / POP X = 8. A×B + C×D has the same shape. (A+B)×C: 2, 4 (MOV T,A / ADD T,B / MUL T,C / MOV X,T), 4 (LOAD A / ADD B / MUL C / STORE X), 6 (PUSH A / PUSH B / ADD / PUSH C / MUL / POP X).VI: (A+B)×(C−D): 3 địa chỉ: ADD T1,A,B / SUB T2,C,D / MUL X,T1,T2 = 3; 2 địa chỉ: MOV T,A / ADD T,B / MOV U,C / SUB U,D / MUL T,U / MOV X,T = 6; 1 địa chỉ: LOAD A / ADD B / STORE T / LOAD C / SUB D / MUL T / STORE X = 7; ngăn xếp: PUSH A / PUSH B / ADD / PUSH C / PUSH D / SUB / MUL / POP X = 8. A×B + C×D cùng dạng. (A+B)×C: 2, 4, 4, 6. Càng ít địa chỉ càng nhiều lệnh nhưng mỗi lệnh ngắn hơn.\n"
+          "code": "# Instruction 3 — 3-, 2-, 1- and 0-address machines: count the instructions — answer key\n\n1. Instruction countsSố lệnh\n   - r1.a3: 3\n   - r1.a2: 5\n   - r1.a1: 7\n   - r1.a0: 8\n   - r2.a3: 3\n   - r2.a2: 5\n   - r2.a1: 7\n   - r2.a0: 8\n   - r3.a3: 2\n   - r3.a2: 3\n   - r3.a1: 4\n   - r3.a0: 6\n   (A+B)×(C−D): 3-addr ADD T1,A,B / SUB T2,C,D / MUL X,T1,T2 = 3; 2-addr MOV X,A / ADD X,B / MOV T,C / SUB T,D / MUL X,T = 5 (X itself is the working variable, so no final MOV is needed); 1-addr LOAD A / ADD B / STORE T / LOAD C / SUB D / MUL T / STORE X = 7; stack PUSH A / PUSH B / ADD / PUSH C / PUSH D / SUB / MUL / POP X = 8. A×B + C×D has the same shape. (A+B)×C: 2 (ADD T,A,B / MUL X,T,C), 3 (MOV X,A / ADD X,B / MUL X,C), 4 (LOAD A / ADD B / MUL C / STORE X), 6 (PUSH A / PUSH B / ADD / PUSH C / MUL / POP X).VI: (A+B)×(C−D): 3 địa chỉ: ADD T1,A,B / SUB T2,C,D / MUL X,T1,T2 = 3; 2 địa chỉ: MOV X,A / ADD X,B / MOV T,C / SUB T,D / MUL X,T = 5 (chính X là biến làm việc nên không cần MOV cuối); 1 địa chỉ: LOAD A / ADD B / STORE T / LOAD C / SUB D / MUL T / STORE X = 7; ngăn xếp: PUSH A / PUSH B / ADD / PUSH C / PUSH D / SUB / MUL / POP X = 8. A×B + C×D cùng dạng. (A+B)×C: 2, 3, 4, 6. Càng ít địa chỉ càng nhiều lệnh nhưng mỗi lệnh ngắn hơn.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>(A+B)×(C−D): 3-addr ADD T1,A,B / SUB T2,C,D / MUL X,T1,T2 = 3; 2-addr MOV T,A / ADD T,B / MOV U,C / SUB U,D / MUL T,U / MOV X,T = 6; 1-addr LOAD A / ADD B / STORE T / LOAD C / SUB D / MUL T / STORE X = 7; stack PUSH A / PUSH B / ADD / PUSH C / PUSH D / SUB / MUL / POP X = 8. A×B + C×D has the same shape. (A+B)×C: 2, 4 (MOV T,A / ADD T,B / MUL T,C / MOV X,T), 4 (LOAD A / ADD B / MUL C / STORE X), 6 (PUSH A / PUSH B / ADD / PUSH C / MUL / POP X).</p><p><i>VI: (A+B)×(C−D): 3 địa chỉ: ADD T1,A,B / SUB T2,C,D / MUL X,T1,T2 = 3; 2 địa chỉ: MOV T,A / ADD T,B / MOV U,C / SUB U,D / MUL T,U / MOV X,T = 6; 1 địa chỉ: LOAD A / ADD B / STORE T / LOAD C / SUB D / MUL T / STORE X = 7; ngăn xếp: PUSH A / PUSH B / ADD / PUSH C / PUSH D / SUB / MUL / POP X = 8. A×B + C×D cùng dạng. (A+B)×C: 2, 4, 4, 6. Càng ít địa chỉ càng nhiều lệnh nhưng mỗi lệnh ngắn hơn.</i></p>",
+      "solutionExplanationHtml": "<p>(A+B)×(C−D): 3-addr ADD T1,A,B / SUB T2,C,D / MUL X,T1,T2 = 3; 2-addr MOV X,A / ADD X,B / MOV T,C / SUB T,D / MUL X,T = 5 (X itself is the working variable, so no final MOV is needed); 1-addr LOAD A / ADD B / STORE T / LOAD C / SUB D / MUL T / STORE X = 7; stack PUSH A / PUSH B / ADD / PUSH C / PUSH D / SUB / MUL / POP X = 8. A×B + C×D has the same shape. (A+B)×C: 2 (ADD T,A,B / MUL X,T,C), 3 (MOV X,A / ADD X,B / MUL X,C), 4 (LOAD A / ADD B / MUL C / STORE X), 6 (PUSH A / PUSH B / ADD / PUSH C / MUL / POP X).</p><p><i>VI: (A+B)×(C−D): 3 địa chỉ: ADD T1,A,B / SUB T2,C,D / MUL X,T1,T2 = 3; 2 địa chỉ: MOV X,A / ADD X,B / MOV T,C / SUB T,D / MUL X,T = 5 (chính X là biến làm việc nên không cần MOV cuối); 1 địa chỉ: LOAD A / ADD B / STORE T / LOAD C / SUB D / MUL T / STORE X = 7; ngăn xếp: PUSH A / PUSH B / ADD / PUSH C / PUSH D / SUB / MUL / POP X = 8. A×B + C×D cùng dạng. (A+B)×C: 2, 3, 4, 6. Càng ít địa chỉ càng nhiều lệnh nhưng mỗi lệnh ngắn hơn.</i></p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -454,19 +454,19 @@
             ],
             "dapAn": {
               "r1.a3": "3",
-              "r1.a2": "6",
+              "r1.a2": "5",
               "r1.a1": "7",
               "r1.a0": "8",
               "r2.a3": "3",
-              "r2.a2": "6",
+              "r2.a2": "5",
               "r2.a1": "7",
               "r2.a0": "8",
               "r3.a3": "2",
-              "r3.a2": "4",
+              "r3.a2": "3",
               "r3.a1": "4",
               "r3.a0": "6"
             },
-            "giaiThich": "<p>(A+B)×(C−D): 3-addr ADD T1,A,B / SUB T2,C,D / MUL X,T1,T2 = 3; 2-addr MOV T,A / ADD T,B / MOV U,C / SUB U,D / MUL T,U / MOV X,T = 6; 1-addr LOAD A / ADD B / STORE T / LOAD C / SUB D / MUL T / STORE X = 7; stack PUSH A / PUSH B / ADD / PUSH C / PUSH D / SUB / MUL / POP X = 8. A×B + C×D has the same shape. (A+B)×C: 2, 4 (MOV T,A / ADD T,B / MUL T,C / MOV X,T), 4 (LOAD A / ADD B / MUL C / STORE X), 6 (PUSH A / PUSH B / ADD / PUSH C / MUL / POP X).</p><p><i>VI: (A+B)×(C−D): 3 địa chỉ: ADD T1,A,B / SUB T2,C,D / MUL X,T1,T2 = 3; 2 địa chỉ: MOV T,A / ADD T,B / MOV U,C / SUB U,D / MUL T,U / MOV X,T = 6; 1 địa chỉ: LOAD A / ADD B / STORE T / LOAD C / SUB D / MUL T / STORE X = 7; ngăn xếp: PUSH A / PUSH B / ADD / PUSH C / PUSH D / SUB / MUL / POP X = 8. A×B + C×D cùng dạng. (A+B)×C: 2, 4, 4, 6. Càng ít địa chỉ càng nhiều lệnh nhưng mỗi lệnh ngắn hơn.</i></p>"
+            "giaiThich": "<p>(A+B)×(C−D): 3-addr ADD T1,A,B / SUB T2,C,D / MUL X,T1,T2 = 3; 2-addr MOV X,A / ADD X,B / MOV T,C / SUB T,D / MUL X,T = 5 (X itself is the working variable, so no final MOV is needed); 1-addr LOAD A / ADD B / STORE T / LOAD C / SUB D / MUL T / STORE X = 7; stack PUSH A / PUSH B / ADD / PUSH C / PUSH D / SUB / MUL / POP X = 8. A×B + C×D has the same shape. (A+B)×C: 2 (ADD T,A,B / MUL X,T,C), 3 (MOV X,A / ADD X,B / MUL X,C), 4 (LOAD A / ADD B / MUL C / STORE X), 6 (PUSH A / PUSH B / ADD / PUSH C / MUL / POP X).</p><p><i>VI: (A+B)×(C−D): 3 địa chỉ: ADD T1,A,B / SUB T2,C,D / MUL X,T1,T2 = 3; 2 địa chỉ: MOV X,A / ADD X,B / MOV T,C / SUB T,D / MUL X,T = 5 (chính X là biến làm việc nên không cần MOV cuối); 1 địa chỉ: LOAD A / ADD B / STORE T / LOAD C / SUB D / MUL T / STORE X = 7; ngăn xếp: PUSH A / PUSH B / ADD / PUSH C / PUSH D / SUB / MUL / POP X = 8. A×B + C×D cùng dạng. (A+B)×C: 2, 3, 4, 6. Càng ít địa chỉ càng nhiều lệnh nhưng mỗi lệnh ngắn hơn.</i></p>"
           }
         ]
       },

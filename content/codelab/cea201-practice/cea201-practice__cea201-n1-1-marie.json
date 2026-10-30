@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# MARIE 1 — The machine and its instruction set — answer key\n\n1. A MARIE instruction word is 16 bits: …Một từ lệnh MARIE dài 16 bit: …\n   Answer: c) 4 bits of opcode and 12 bits of address\n   12 address bits reach 2¹² = 4096 words.VI: 12 bit địa chỉ với tới 2¹² = 4096 từ.\n\n2. In MARIE the result of Add X is left in …Trong MARIE kết quả của Add X nằm ở …\n   Answer: d) the accumulator AC\n   MARIE is a single-accumulator machine: AC ← AC + M[X].VI: MARIE là máy một thanh ghi tích luỹ: AC ← AC + M[X].\n\n3. What does Skipcond 400 test?Skipcond 400 kiểm tra gì?\n   Answer: a) AC = 0 (skip the next instruction if true)\n   Skipcond 000: AC 0.VI: Skipcond 000: AC 0.\n\n4. JnS X (jump and store) is used to …JnS X (nhảy và lưu) dùng để …\n   Answer: b) call a subroutine: store the return address at X and continue at X + 1\n   The subroutine returns with JumpI X.VI: Chương trình con trả về bằng JumpI X.\n\n5. The machine word 3106 (hex) is …Từ máy 3106 (hex) là …\n   Answer: c) Add 106\n   Opcode 3 = Add; the lower three hex digits are the address.VI: Opcode 3 = Add; ba chữ số hex thấp là địa chỉ.\n\n6. AddI X means …AddI X nghĩa là …\n   Answer: d) AC ← AC + M[M[X]] (indirect)\n   The word at X is the address of the operand.VI: Từ tại X là địa chỉ của toán hạng.\n"
+          "code": "# MARIE 1 — The machine and its instruction set — answer key\n\n1. A MARIE instruction word is 16 bits: …Một từ lệnh MARIE dài 16 bit: …\n   Answer: a) 4 bits of opcode and 12 bits of address\n   12 address bits reach 2¹² = 4096 words.VI: 12 bit địa chỉ với tới 2¹² = 4096 từ.\n\n2. In MARIE the result of Add X is left in …Trong MARIE kết quả của Add X nằm ở …\n   Answer: d) the accumulator AC\n   MARIE is a single-accumulator machine: AC ← AC + M[X].VI: MARIE là máy một thanh ghi tích luỹ: AC ← AC + M[X].\n\n3. What does Skipcond 400 test?Skipcond 400 kiểm tra gì?\n   Answer: b) AC = 0 (skip the next instruction if true)\n   Skipcond 000: AC < 0; 400: AC = 0; 800: AC > 0.VI: Skipcond 000: AC < 0; 400: AC = 0; 800: AC > 0.\n\n4. JnS X (jump and store) is used to …JnS X (nhảy và lưu) dùng để …\n   Answer: b) call a subroutine: store the return address at X and continue at X + 1\n   The subroutine returns with JumpI X.VI: Chương trình con trả về bằng JumpI X.\n\n5. The machine word 3106 (hex) is …Từ máy 3106 (hex) là …\n   Answer: a) Add 106\n   Opcode 3 = Add; the lower three hex digits are the address.VI: Opcode 3 = Add; ba chữ số hex thấp là địa chỉ.\n\n6. AddI X means …AddI X nghĩa là …\n   Answer: d) AC ← AC + M[M[X]] (indirect)\n   The word at X is the address of the operand.VI: Từ tại X là địa chỉ của toán hạng.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> 4 bits of opcode and 12 bits of address</p><p>12 address bits reach 2¹² = 4096 words.</p><p><i>VI: 12 bit địa chỉ với tới 2¹² = 4096 từ.</i></p></li><li><p><b>d)</b> the accumulator AC</p><p>MARIE is a single-accumulator machine: AC ← AC + M[X].</p><p><i>VI: MARIE là máy một thanh ghi tích luỹ: AC ← AC + M[X].</i></p></li><li><p><b>b)</b> AC = 0 (skip the next instruction if true)</p><p>Skipcond 000: AC < 0; 400: AC = 0; 800: AC > 0.</p><p><i>VI: Skipcond 000: AC < 0; 400: AC = 0; 800: AC > 0.</i></p></li><li><p><b>b)</b> call a subroutine: store the return address at X and continue at X + 1</p><p>The subroutine returns with JumpI X.</p><p><i>VI: Chương trình con trả về bằng JumpI X.</i></p></li><li><p><b>a)</b> Add 106</p><p>Opcode 3 = Add; the lower three hex digits are the address.</p><p><i>VI: Opcode 3 = Add; ba chữ số hex thấp là địa chỉ.</i></p></li><li><p><b>d)</b> AC ← AC + M[M[X]] (indirect)</p><p>The word at X is the address of the operand.</p><p><i>VI: Từ tại X là địa chỉ của toán hạng.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -62,23 +62,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "6 bits of opcode and 10 bits of address"
-              },
-              {
-                "ma": "b",
-                "noiDung": "12 bits of opcode and 4 bits of address"
-              },
-              {
-                "ma": "c",
                 "noiDung": "4 bits of opcode and 12 bits of address"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "8 bits of opcode and 8 bits of address"
+              },
+              {
+                "ma": "c",
+                "noiDung": "12 bits of opcode and 4 bits of address"
+              },
+              {
+                "ma": "d",
+                "noiDung": "6 bits of opcode and 10 bits of address"
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>12 address bits reach 2¹² = 4096 words.</p><p><i>VI: 12 bit địa chỉ với tới 2¹² = 4096 từ.</i></p>"
           },
@@ -88,11 +88,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "memory location X"
+                "noiDung": "the PC"
               },
               {
                 "ma": "b",
-                "noiDung": "the PC"
+                "noiDung": "memory location X"
               },
               {
                 "ma": "c",
@@ -114,23 +114,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "AC = 0 (skip the next instruction if true)"
+                "noiDung": "AC > 0 (skip the next instruction if true)"
               },
               {
                 "ma": "b",
-                "noiDung": "AC < 0"
+                "noiDung": "AC = 0 (skip the next instruction if true)"
               },
               {
                 "ma": "c",
-                "noiDung": "AC > 0"
+                "noiDung": "PC = 0 (skip the next instruction if true)"
               },
               {
                 "ma": "d",
-                "noiDung": "PC = 0"
+                "noiDung": "AC < 0 (skip the next instruction if true)"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>Skipcond 000: AC < 0; 400: AC = 0; 800: AC > 0.</p><p><i>VI: Skipcond 000: AC < 0; 400: AC = 0; 800: AC > 0.</i></p>"
           },
@@ -140,7 +140,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "halt the machine"
+                "noiDung": "store a value: copy the AC to X and continue with the next instruction"
               },
               {
                 "ma": "b",
@@ -148,11 +148,11 @@
               },
               {
                 "ma": "c",
-                "noiDung": "jump backwards only"
+                "noiDung": "loop back: jump to X only when the AC is not zero"
               },
               {
                 "ma": "d",
-                "noiDung": "store AC at X"
+                "noiDung": "return from a subroutine: jump to the address stored at X"
               }
             ],
             "dapAn": [
@@ -166,23 +166,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Store 106"
-              },
-              {
-                "ma": "b",
-                "noiDung": "Subt 106"
-              },
-              {
-                "ma": "c",
                 "noiDung": "Add 106"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "Load 106"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Store 106"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Subt 106"
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>Opcode 3 = Add; the lower three hex digits are the address.</p><p><i>VI: Opcode 3 = Add; ba chữ số hex thấp là địa chỉ.</i></p>"
           },
@@ -192,15 +192,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "AC ← AC + X (immediate)"
+                "noiDung": "M[X] ← AC + 1"
               },
               {
                 "ma": "b",
-                "noiDung": "AC ← AC + M[X]"
+                "noiDung": "AC ← AC + X (immediate)"
               },
               {
                 "ma": "c",
-                "noiDung": "M[X] ← AC + 1"
+                "noiDung": "AC ← AC + M[X]"
               },
               {
                 "ma": "d",
@@ -1015,10 +1015,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# MARIE 6 — Which program does the job? (verified by execution) — answer key\n\n1. Which program prints TWICE its input?Chương trình nào in GẤP ĐÔI số nhập vào?\n   Answer: c) ORG 100 Input Store X Add X Output Halt X, Dec 0\n   Verified by running every option with several inputs: only this one gives the required output for all of them.VI: Đã kiểm bằng cách chạy từng phương án với nhiều đầu vào: chỉ phương án này cho kết quả đúng với mọi đầu vào.\n\n2. Which program prints its input MINUS 7?Chương trình nào in số nhập vào TRỪ 7?\n   Answer: d) ORG 100 Input Subt Seven Output Halt Seven, Dec 7\n   Verified by running every option with several inputs: only this one gives the required output for all of them.VI: Đã kiểm bằng cách chạy từng phương án với nhiều đầu vào: chỉ phương án này cho kết quả đúng với mọi đầu vào.\n\n3. Which program prints 3, 2, 1 and stops?Chương trình nào in 3, 2, 1 rồi dừng?\n   Answer: a) ORG 100 Loop, Load N Skipcond 800 Jump End Output Subt One Store N Jump Loop End, Halt N, Dec 3 One, Dec 1\n   Skipcond 800 must skip the exit Jump while N > 0, and Store N must save the decremented value; each wrong option breaks one of the two.VI: Skipcond 800 phải bỏ qua Jump thoát khi N > 0 và Store N phải lưu giá trị đã giảm; mỗi phương án sai phá một trong hai điều đó.\n"
+          "code": "# MARIE 6 — Which program does the job? (verified by execution) — answer key\n\n1. Which program prints TWICE its input?Chương trình nào in GẤP ĐÔI số nhập vào?\n   Answer: d) ORG 100 Input Store X Add X Output Halt X, Dec 0\n   Verified by running every option with several inputs: only this one gives the required output for all of them.VI: Đã kiểm bằng cách chạy từng phương án với nhiều đầu vào: chỉ phương án này cho kết quả đúng với mọi đầu vào.\n\n2. Which program prints its input MINUS 7?Chương trình nào in số nhập vào TRỪ 7?\n   Answer: b) ORG 100 Input Subt Seven Output Halt Seven, Dec 7\n   Verified by running every option with several inputs: only this one gives the required output for all of them.VI: Đã kiểm bằng cách chạy từng phương án với nhiều đầu vào: chỉ phương án này cho kết quả đúng với mọi đầu vào.\n\n3. Which program prints 3, 2, 1 and stops?Chương trình nào in 3, 2, 1 rồi dừng?\n   Answer: b) ORG 100 Loop, Load N Skipcond 800 Jump End Output Subt One Store N Jump Loop End, Halt N, Dec 3 One, Dec 1\n   Skipcond 800 must skip the exit Jump while N > 0, and Store N must save the decremented value; each wrong option breaks one of the two.VI: Skipcond 800 phải bỏ qua Jump thoát khi N > 0 và Store N phải lưu giá trị đã giảm; mỗi phương án sai phá một trong hai điều đó.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> <pre>ORG 100\nInput\nStore X\nAdd X\nOutput\nHalt\nX, Dec 0</pre></p><p>Verified by running every option with several inputs: only this one gives the required output for all of them.</p><p><i>VI: Đã kiểm bằng cách chạy từng phương án với nhiều đầu vào: chỉ phương án này cho kết quả đúng với mọi đầu vào.</i></p></li><li><p><b>b)</b> <pre>ORG 100\nInput\nSubt Seven\nOutput\nHalt\nSeven, Dec 7</pre></p><p>Verified by running every option with several inputs: only this one gives the required output for all of them.</p><p><i>VI: Đã kiểm bằng cách chạy từng phương án với nhiều đầu vào: chỉ phương án này cho kết quả đúng với mọi đầu vào.</i></p></li><li><p><b>b)</b> <pre>ORG 100\nLoop, Load N\nSkipcond 800\nJump End\nOutput\nSubt One\nStore N\nJump Loop\nEnd, Halt\nN, Dec 3\nOne, Dec 1</pre></p><p>Skipcond 800 must skip the exit Jump while N > 0, and Store N must save the decremented value; each wrong option breaks one of the two.</p><p><i>VI: Skipcond 800 phải bỏ qua Jump thoát khi N > 0 và Store N phải lưu giá trị đã giảm; mỗi phương án sai phá một trong hai điều đó.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -1031,23 +1031,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "<pre>ORG 100\nInput\nStore X\nLoad X\nOutput\nHalt\nX, Dec 0</pre>"
+                "noiDung": "<pre>ORG 100\nInput\nAdd X\nOutput\nHalt\nX, Dec 0</pre>"
               },
               {
                 "ma": "b",
-                "noiDung": "<pre>ORG 100\nInput\nOutput\nOutput\nHalt</pre>"
+                "noiDung": "<pre>ORG 100\nInput\nStore X\nLoad X\nOutput\nHalt\nX, Dec 0</pre>"
               },
               {
                 "ma": "c",
-                "noiDung": "<pre>ORG 100\nInput\nStore X\nAdd X\nOutput\nHalt\nX, Dec 0</pre>"
+                "noiDung": "<pre>ORG 100\nInput\nOutput\nOutput\nHalt</pre>"
               },
               {
                 "ma": "d",
-                "noiDung": "<pre>ORG 100\nInput\nAdd X\nOutput\nHalt\nX, Dec 0</pre>"
+                "noiDung": "<pre>ORG 100\nInput\nStore X\nAdd X\nOutput\nHalt\nX, Dec 0</pre>"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>Verified by running every option with several inputs: only this one gives the required output for all of them.</p><p><i>VI: Đã kiểm bằng cách chạy từng phương án với nhiều đầu vào: chỉ phương án này cho kết quả đúng với mọi đầu vào.</i></p>"
           },
@@ -1057,23 +1057,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "<pre>ORG 100\nInput\nStore X\nLoad Seven\nSubt X\nOutput\nHalt\nX, Dec 0\nSeven, Dec 7</pre>"
-              },
-              {
-                "ma": "b",
-                "noiDung": "<pre>ORG 100\nInput\nAdd Seven\nOutput\nHalt\nSeven, Dec 7</pre>"
-              },
-              {
-                "ma": "c",
                 "noiDung": "<pre>ORG 100\nLoad Seven\nOutput\nHalt\nSeven, Dec 7</pre>"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "<pre>ORG 100\nInput\nSubt Seven\nOutput\nHalt\nSeven, Dec 7</pre>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<pre>ORG 100\nInput\nStore X\nLoad Seven\nSubt X\nOutput\nHalt\nX, Dec 0\nSeven, Dec 7</pre>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<pre>ORG 100\nInput\nAdd Seven\nOutput\nHalt\nSeven, Dec 7</pre>"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>Verified by running every option with several inputs: only this one gives the required output for all of them.</p><p><i>VI: Đã kiểm bằng cách chạy từng phương án với nhiều đầu vào: chỉ phương án này cho kết quả đúng với mọi đầu vào.</i></p>"
           },
@@ -1083,11 +1083,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "<pre>ORG 100\nLoop, Load N\nSkipcond 800\nJump End\nOutput\nSubt One\nStore N\nJump Loop\nEnd, Halt\nN, Dec 3\nOne, Dec 1</pre>"
+                "noiDung": "<pre>ORG 100\nLoop, Load N\nSkipcond 800\nJump End\nOutput\nSubt One\nClear\nJump Loop\nEnd, Halt\nN, Dec 3\nOne, Dec 1</pre>"
               },
               {
                 "ma": "b",
-                "noiDung": "<pre>ORG 100\nLoop, Load N\nSkipcond 000\nJump End\nOutput\nSubt One\nStore N\nJump Loop\nEnd, Halt\nN, Dec 3\nOne, Dec 1</pre>"
+                "noiDung": "<pre>ORG 100\nLoop, Load N\nSkipcond 800\nJump End\nOutput\nSubt One\nStore N\nJump Loop\nEnd, Halt\nN, Dec 3\nOne, Dec 1</pre>"
               },
               {
                 "ma": "c",
@@ -1095,11 +1095,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "<pre>ORG 100\nLoop, Load N\nSkipcond 800\nJump End\nOutput\nSubt One\nClear\nJump Loop\nEnd, Halt\nN, Dec 3\nOne, Dec 1</pre>"
+                "noiDung": "<pre>ORG 100\nLoop, Load N\nSkipcond 000\nJump End\nOutput\nSubt One\nStore N\nJump Loop\nEnd, Halt\nN, Dec 3\nOne, Dec 1</pre>"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>Skipcond 800 must skip the exit Jump while N > 0, and Store N must save the decremented value; each wrong option breaks one of the two.</p><p><i>VI: Skipcond 800 phải bỏ qua Jump thoát khi N > 0 và Store N phải lưu giá trị đã giảm; mỗi phương án sai phá một trong hai điều đó.</i></p>"
           }

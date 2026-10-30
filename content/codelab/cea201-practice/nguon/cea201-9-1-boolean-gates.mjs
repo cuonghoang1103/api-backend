@@ -16,7 +16,7 @@ const E1 = tinh({
     q('c3', ['A + A·B simplifies to …', 'A + A·B rút gọn thành …'], ['A', 'A·B', 'A + B', '1'], ['Absorption law: A·(1 + B) = A.', 'Luật hấp thụ: A·(1 + B) = A.']),
     q('c4', ['The XOR of A and B is 1 when …', 'XOR của A và B bằng 1 khi …'], ['A and B differ', 'A and B are both 1', 'A and B are equal', 'either is 0'], ['XOR = A·B′ + A′·B.', 'XOR = A·B′ + A′·B.']),
     q('c5', ['A truth table of n inputs has how many rows?', 'Bảng chân trị n ngõ vào có bao nhiêu dòng?'], ['2ⁿ', 'n²', '2n', 'n!'], ['Each input has 2 values.', 'Mỗi ngõ vào có 2 giá trị.']),
-    q('c6', ['A minterm of 3 variables is …', 'Một minterm của 3 biến là …'], ['a product containing every variable once, true on exactly one row', 'a sum of all variables', 'a single variable', 'a product true on all rows'], ['Sum-of-products form ORs the minterms of the rows where F = 1.', 'Dạng tổng các tích OR các minterm của dòng có F = 1.']),
+    q('c6', ['A minterm of 3 variables is …', 'Một minterm của 3 biến là …'], ['a product containing every variable once, true on exactly one row', 'a sum containing every variable once, false on exactly one row', 'a single variable, true on half of the rows', 'a product of two variables, true on exactly two rows'], ['Sum-of-products form ORs the minterms of the rows where F = 1.', 'Dạng tổng các tích OR các minterm của dòng có F = 1.']),
   ],
   goiY: ['De Morgan swaps AND/OR and complements.', 'Use a truth table to verify any doubtful identity.'],
   loiHayGap: ['Complementing only one side of De Morgan.', 'Believing XOR is “A or B”.'],

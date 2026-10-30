@@ -42,17 +42,17 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Cycle 1 — PC, MAR, MBR, IR: what does each register do?\n\nAnswer in the answer panel (no code needed).\n\n1. Which register holds the address of the NEXT instruction to fetch?Thanh ghi nào giữ địa chỉ của lệnh SẮP được nạp?\n2. During a memory read, the word that comes back from memory is first placed in …Khi đọc bộ nhớ, từ đọc về trước hết được đặt vào …\n3. In the fetch phase, what happens to the PC (no jump)?Ở pha nạp lệnh, PC thay đổi thế nào (không có nhảy)?\n4. A “stored-program” (von Neumann) computer keeps …Máy “chương trình lưu trong bộ nhớ” (von Neumann) lưu …\n5. The four basic actions of an instruction are …Bốn loại tác vụ cơ bản của một lệnh là …\n"
+          "code": "# Cycle 1 — PC, MAR, MBR, IR: what does each register do?\n\nAnswer in the answer panel (no code needed).\n\n1. Which register tells the processor where the NEXT instruction is?Thanh ghi nào cho bộ xử lý biết lệnh SẮP nạp nằm ở đâu?\n2. During a memory read, the word that comes back from memory is first placed in …Khi đọc bộ nhớ, từ đọc về trước hết được đặt vào …\n3. In the fetch phase, what happens to the PC (no jump)?Ở pha nạp lệnh, PC thay đổi thế nào (không có nhảy)?\n4. A “stored-program” (von Neumann) computer keeps …Máy “chương trình lưu trong bộ nhớ” (von Neumann) lưu …\n5. The four basic actions of an instruction are …Bốn loại tác vụ cơ bản của một lệnh là …\n"
         }
       ],
       "solutionCodeJson": [
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Cycle 1 — PC, MAR, MBR, IR: what does each register do? — answer key\n\n1. Which register holds the address of the NEXT instruction to fetch?Thanh ghi nào giữ địa chỉ của lệnh SẮP được nạp?\n   Answer: a) PC (program counter)\n   The PC points to the next instruction; the IR holds the instruction being executed.VI: PC trỏ tới lệnh kế tiếp; IR giữ lệnh đang thực hiện.\n\n2. During a memory read, the word that comes back from memory is first placed in …Khi đọc bộ nhớ, từ đọc về trước hết được đặt vào …\n   Answer: b) MBR (memory buffer register)\n   MAR holds the address going out; MBR holds the data coming in or going out.VI: MAR giữ địa chỉ gửi đi; MBR giữ dữ liệu vào/ra.\n\n3. In the fetch phase, what happens to the PC (no jump)?Ở pha nạp lệnh, PC thay đổi thế nào (không có nhảy)?\n   Answer: c) It is incremented to point to the next instruction\n   The control unit increments the PC after (or while) the instruction is fetched.VI: Đơn vị điều khiển tăng PC khi/ sau khi nạp lệnh.\n\n4. A “stored-program” (von Neumann) computer keeps …Máy “chương trình lưu trong bộ nhớ” (von Neumann) lưu …\n   Answer: d) instructions and data in the same memory\n   The same memory holds both, so a program can be loaded, changed and treated as data.VI: Cùng một bộ nhớ chứa cả hai nên chương trình có thể được nạp, sửa và xem như dữ liệu.\n\n5. The four basic actions of an instruction are …Bốn loại tác vụ cơ bản của một lệnh là …\n   Answer: a) processor–memory, processor–I/O, data processing, control\n   Stallings groups instruction effects into these four categories.VI: Stallings nhóm tác dụng lệnh thành bốn loại này.\n"
+          "code": "# Cycle 1 — PC, MAR, MBR, IR: what does each register do? — answer key\n\n1. Which register tells the processor where the NEXT instruction is?Thanh ghi nào cho bộ xử lý biết lệnh SẮP nạp nằm ở đâu?\n   Answer: d) PC (program counter)\n   The PC points to the next instruction; the IR holds the instruction being executed.VI: PC trỏ tới lệnh kế tiếp; IR giữ lệnh đang thực hiện.\n\n2. During a memory read, the word that comes back from memory is first placed in …Khi đọc bộ nhớ, từ đọc về trước hết được đặt vào …\n   Answer: b) MBR (memory buffer register)\n   MAR holds the address going out; MBR holds the data coming in or going out.VI: MAR giữ địa chỉ gửi đi; MBR giữ dữ liệu vào/ra.\n\n3. In the fetch phase, what happens to the PC (no jump)?Ở pha nạp lệnh, PC thay đổi thế nào (không có nhảy)?\n   Answer: a) It is incremented to point to the next instruction\n   The control unit increments the PC after (or while) the instruction is fetched.VI: Đơn vị điều khiển tăng PC khi/ sau khi nạp lệnh.\n\n4. A “stored-program” (von Neumann) computer keeps …Máy “chương trình lưu trong bộ nhớ” (von Neumann) lưu …\n   Answer: c) instructions and data in the same memory\n   The same memory holds both, so a program can be loaded, changed and treated as data.VI: Cùng một bộ nhớ chứa cả hai nên chương trình có thể được nạp, sửa và xem như dữ liệu.\n\n5. The four basic actions of an instruction are …Bốn loại tác vụ cơ bản của một lệnh là …\n   Answer: b) processor–memory, processor–I/O, data processing, control\n   Stallings groups instruction effects into these four categories.VI: Stallings nhóm tác dụng lệnh thành bốn loại này.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> PC (program counter)</p><p>The PC points to the next instruction; the IR holds the instruction being executed.</p><p><i>VI: PC trỏ tới lệnh kế tiếp; IR giữ lệnh đang thực hiện.</i></p></li><li><p><b>b)</b> MBR (memory buffer register)</p><p>MAR holds the address going out; MBR holds the data coming in or going out.</p><p><i>VI: MAR giữ địa chỉ gửi đi; MBR giữ dữ liệu vào/ra.</i></p></li><li><p><b>a)</b> It is incremented to point to the next instruction</p><p>The control unit increments the PC after (or while) the instruction is fetched.</p><p><i>VI: Đơn vị điều khiển tăng PC khi/ sau khi nạp lệnh.</i></p></li><li><p><b>c)</b> instructions and data in the same memory</p><p>The same memory holds both, so a program can be loaded, changed and treated as data.</p><p><i>VI: Cùng một bộ nhớ chứa cả hai nên chương trình có thể được nạp, sửa và xem như dữ liệu.</i></p></li><li><p><b>b)</b> processor–memory, processor–I/O, data processing, control</p><p>Stallings groups instruction effects into these four categories.</p><p><i>VI: Stallings nhóm tác dụng lệnh thành bốn loại này.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -61,11 +61,11 @@
         "cauHoi": [
           {
             "ma": "c1",
-            "de": "<p>Which register holds the address of the NEXT instruction to fetch?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thanh ghi nào giữ địa chỉ của lệnh SẮP được nạp?</i></p>",
+            "de": "<p>Which register tells the processor where the NEXT instruction is?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thanh ghi nào cho bộ xử lý biết lệnh SẮP nạp nằm ở đâu?</i></p>",
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "PC (program counter)"
+                "noiDung": "MBR (memory buffer register)"
               },
               {
                 "ma": "b",
@@ -73,15 +73,15 @@
               },
               {
                 "ma": "c",
-                "noiDung": "MBR (memory buffer register)"
+                "noiDung": "AC (accumulator)"
               },
               {
                 "ma": "d",
-                "noiDung": "AC (accumulator)"
+                "noiDung": "PC (program counter)"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>The PC points to the next instruction; the IR holds the instruction being executed.</p><p><i>VI: PC trỏ tới lệnh kế tiếp; IR giữ lệnh đang thực hiện.</i></p>"
           },
@@ -117,7 +117,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "It is cleared"
+                "noiDung": "It is incremented to point to the next instruction"
               },
               {
                 "ma": "b",
@@ -125,15 +125,15 @@
               },
               {
                 "ma": "c",
-                "noiDung": "It is incremented to point to the next instruction"
+                "noiDung": "It is loaded with the operand address"
               },
               {
                 "ma": "d",
-                "noiDung": "It is loaded with the operand address"
+                "noiDung": "It is cleared"
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>The control unit increments the PC after (or while) the instruction is fetched.</p><p><i>VI: Đơn vị điều khiển tăng PC khi/ sau khi nạp lệnh.</i></p>"
           },
@@ -147,19 +147,19 @@
               },
               {
                 "ma": "b",
-                "noiDung": "only data in memory; instructions are wired"
-              },
-              {
-                "ma": "c",
                 "noiDung": "programs on the keyboard buffer"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "instructions and data in the same memory"
+              },
+              {
+                "ma": "d",
+                "noiDung": "only data in memory; instructions are wired"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>The same memory holds both, so a program can be loaded, changed and treated as data.</p><p><i>VI: Cùng một bộ nhớ chứa cả hai nên chương trình có thể được nạp, sửa và xem như dữ liệu.</i></p>"
           },
@@ -169,23 +169,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "processor–memory, processor–I/O, data processing, control"
+                "noiDung": "compile, link, load, run, as done before the first instruction"
               },
               {
                 "ma": "b",
-                "noiDung": "fetch, decode, encode, store"
+                "noiDung": "processor–memory, processor–I/O, data processing, control"
               },
               {
                 "ma": "c",
-                "noiDung": "read, write, copy, delete"
+                "noiDung": "fetch, decode, encode, store, repeated for each instruction"
               },
               {
                 "ma": "d",
-                "noiDung": "compile, link, load, run"
+                "noiDung": "read, write, copy, delete, one action per file operation"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>Stallings groups instruction effects into these four categories.</p><p><i>VI: Stallings nhóm tác dụng lệnh thành bốn loại này.</i></p>"
           }
@@ -253,7 +253,7 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Cycle 2 — Order the fetch phase and the interrupt cycle — answer key\n\n1. Order the steps of fetching and starting one instruction.Sắp thứ tự các bước nạp và bắt đầu một lệnh.\n   Answer: s1) MAR ← PC (the address of the next instruction goes on the address bus)  →  s2) The control unit issues a memory READ  →  s3) Memory puts the instruction word into the MBR  →  s4) IR ← MBR (the instruction is latched)  →  s5) PC ← PC + 1 (point to the next instruction)  →  s6) Decode the opcode in the IR and execute\n   The address leaves through MAR, the word returns through MBR, then IR; the PC increment is part of the fetch.VI: Địa chỉ đi ra qua MAR, từ lệnh về qua MBR rồi vào IR; tăng PC thuộc pha nạp.\n\n2. Order the steps of the interrupt cycle.Sắp thứ tự các bước của chu trình ngắt.\n   Answer: s1) The processor finishes the current instruction (execute phase)  →  s2) The processor checks for a pending interrupt  →  s3) It saves the PC (and PSW) of the interrupted program  →  s4) PC ← starting address of the interrupt handler  →  s5) The handler runs and services the device  →  s6) The saved PC is restored and the original program resumes\n   Interrupts are checked at the END of an instruction, never in the middle.VI: Ngắt được kiểm tra ở CUỐI lệnh, không bao giờ giữa chừng.\n"
+          "code": "# Cycle 2 — Order the fetch phase and the interrupt cycle — answer key\n\n1. Order the steps of fetching and starting one instruction.Sắp thứ tự các bước nạp và bắt đầu một lệnh.\n   Answer: m1) MAR ← PC (the address of the next instruction goes on the address bus)  →  m2) The control unit issues a memory READ  →  m3) Memory puts the instruction word into the MBR while PC ← PC + 1  →  m5) IR ← MBR (the instruction is latched)  →  m4) Decode the opcode in the IR and execute\n   The address leaves through MAR, the word returns through MBR, then IR; the PC increment is part of the fetch.VI: Địa chỉ đi ra qua MAR, từ lệnh về qua MBR rồi vào IR; tăng PC thuộc pha nạp.\n\n2. Order the steps of the interrupt cycle.Sắp thứ tự các bước của chu trình ngắt.\n   Answer: m3) The processor finishes the current instruction (execute phase)  →  m5) The processor checks for a pending interrupt  →  m6) It saves the PC (and PSW) of the interrupted program  →  m2) PC ← starting address of the interrupt handler  →  m1) The handler runs and services the device  →  m4) The saved PC is restored and the original program resumes\n   Interrupts are checked at the END of an instruction, never in the middle.VI: Ngắt được kiểm tra ở CUỐI lệnh, không bao giờ giữa chừng.\n"
         }
       ],
       "solutionExplanationHtml": "<p>The address leaves through MAR, the word returns through MBR, then IR; the PC increment is part of the fetch.</p><p><i>VI: Địa chỉ đi ra qua MAR, từ lệnh về qua MBR rồi vào IR; tăng PC thuộc pha nạp.</i></p><p>Interrupts are checked at the END of an instruction, never in the middle.</p><p><i>VI: Ngắt được kiểm tra ở CUỐI lệnh, không bao giờ giữa chừng.</i></p>",
@@ -268,37 +268,32 @@
             "de": "<p>Order the steps of fetching and starting one instruction.</p><p style=\"opacity:.75;font-size:.92em\"><i>Sắp thứ tự các bước nạp và bắt đầu một lệnh.</i></p>",
             "muc": [
               {
-                "ma": "s3",
-                "noiDung": "Memory puts the instruction word into the MBR"
-              },
-              {
-                "ma": "s4",
-                "noiDung": "IR ← MBR (the instruction is latched)"
-              },
-              {
-                "ma": "s5",
-                "noiDung": "PC ← PC + 1 (point to the next instruction)"
-              },
-              {
-                "ma": "s6",
-                "noiDung": "Decode the opcode in the IR and execute"
-              },
-              {
-                "ma": "s1",
+                "ma": "m1",
                 "noiDung": "MAR ← PC (the address of the next instruction goes on the address bus)"
               },
               {
-                "ma": "s2",
+                "ma": "m2",
                 "noiDung": "The control unit issues a memory READ"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Memory puts the instruction word into the MBR while PC ← PC + 1"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Decode the opcode in the IR and execute"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "IR ← MBR (the instruction is latched)"
               }
             ],
             "dapAn": [
-              "s1",
-              "s2",
-              "s3",
-              "s4",
-              "s5",
-              "s6"
+              "m1",
+              "m2",
+              "m3",
+              "m5",
+              "m4"
             ],
             "giaiThich": "<p>The address leaves through MAR, the word returns through MBR, then IR; the PC increment is part of the fetch.</p><p><i>VI: Địa chỉ đi ra qua MAR, từ lệnh về qua MBR rồi vào IR; tăng PC thuộc pha nạp.</i></p>"
           },
@@ -307,37 +302,37 @@
             "de": "<p>Order the steps of the interrupt cycle.</p><p style=\"opacity:.75;font-size:.92em\"><i>Sắp thứ tự các bước của chu trình ngắt.</i></p>",
             "muc": [
               {
-                "ma": "s4",
-                "noiDung": "PC ← starting address of the interrupt handler"
-              },
-              {
-                "ma": "s5",
+                "ma": "m1",
                 "noiDung": "The handler runs and services the device"
               },
               {
-                "ma": "s6",
-                "noiDung": "The saved PC is restored and the original program resumes"
+                "ma": "m2",
+                "noiDung": "PC ← starting address of the interrupt handler"
               },
               {
-                "ma": "s1",
+                "ma": "m3",
                 "noiDung": "The processor finishes the current instruction (execute phase)"
               },
               {
-                "ma": "s2",
+                "ma": "m4",
+                "noiDung": "The saved PC is restored and the original program resumes"
+              },
+              {
+                "ma": "m5",
                 "noiDung": "The processor checks for a pending interrupt"
               },
               {
-                "ma": "s3",
+                "ma": "m6",
                 "noiDung": "It saves the PC (and PSW) of the interrupted program"
               }
             ],
             "dapAn": [
-              "s1",
-              "s2",
-              "s3",
-              "s4",
-              "s5",
-              "s6"
+              "m3",
+              "m5",
+              "m6",
+              "m2",
+              "m1",
+              "m4"
             ],
             "giaiThich": "<p>Interrupts are checked at the END of an instruction, never in the middle.</p><p><i>VI: Ngắt được kiểm tra ở CUỐI lệnh, không bao giờ giữa chừng.</i></p>"
           }
@@ -654,8 +649,8 @@
       "tags": [
         "cea201"
       ],
-      "problemHtml": "<p>The processor runs <code>lengths.length</code> instructions; instruction <code>i</code> takes <code>lengths[i]</code> cycles. Interrupts arrive at the cycle numbers in <code>raises</code> (sorted). An interrupt is recognized only <b>at the end of an instruction</b> — if one or more have arrived (time ≤ current time) the processor runs a handler of <code>isrCost</code> cycles for each, in arrival order, before fetching the next instruction.</p><p>Write <code>isrStarts(lengths, raises, isrCost)</code> returning <code>{ starts, finish }</code>: <code>starts</code> is the cycle at which each handler begins, <code>finish</code> the cycle when the last instruction (or handler) ends. Time starts at 0.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Interrupts that arrive after the last instruction are not served.</li>\n  <li>Handlers are not interrupted.</li>\n</ul>",
-      "problemHtmlVi": "<p>Bộ xử lý chạy <code>lengths.length</code> lệnh; lệnh <code>i</code> mất <code>lengths[i]</code> chu kỳ. Ngắt đến ở các chu kỳ trong <code>raises</code> (đã sắp). Ngắt chỉ được nhận <b>ở cuối một lệnh</b> — nếu đã có ngắt đến (thời điểm ≤ hiện tại) thì bộ xử lý chạy trình xử lý <code>isrCost</code> chu kỳ cho từng ngắt, theo thứ tự đến, trước khi nạp lệnh kế.</p><p>Viết <code>isrStarts(lengths, raises, isrCost)</code> trả <code>{ starts, finish }</code>: <code>starts</code> là chu kỳ bắt đầu mỗi trình xử lý, <code>finish</code> là chu kỳ kết thúc lệnh/trình xử lý cuối. Thời gian bắt đầu từ 0.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Ngắt đến sau lệnh cuối không được phục vụ.</li>\n  <li>Trình xử lý không bị ngắt.</li>\n</ul>",
+      "problemHtml": "<p>The processor runs <code>lengths.length</code> instructions; instruction <code>i</code> takes <code>lengths[i]</code> cycles. Interrupts arrive at the cycle numbers in <code>raises</code> (sorted). An interrupt is recognized only <b>at the end of an instruction</b> — if one or more have arrived (time ≤ current time) the processor runs a handler of <code>isrCost</code> cycles for each, in arrival order, before fetching the next instruction. An interrupt that arrives while a handler is running is served right after that handler, still before the next instruction.</p><p>Write <code>isrStarts(lengths, raises, isrCost)</code> returning <code>{ starts, finish }</code>: <code>starts</code> is the cycle at which each handler begins, <code>finish</code> the cycle when the last instruction (or handler) ends. Time starts at 0.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Interrupts that arrive after the last instruction are not served.</li>\n  <li>Handlers are not interrupted.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bộ xử lý chạy <code>lengths.length</code> lệnh; lệnh <code>i</code> mất <code>lengths[i]</code> chu kỳ. Ngắt đến ở các chu kỳ trong <code>raises</code> (đã sắp). Ngắt chỉ được nhận <b>ở cuối một lệnh</b> — nếu đã có ngắt đến (thời điểm ≤ hiện tại) thì bộ xử lý chạy trình xử lý <code>isrCost</code> chu kỳ cho từng ngắt, theo thứ tự đến, trước khi nạp lệnh kế. Ngắt đến trong lúc trình xử lý đang chạy được phục vụ ngay sau trình xử lý đó, vẫn trước khi nạp lệnh kế.</p><p>Viết <code>isrStarts(lengths, raises, isrCost)</code> trả <code>{ starts, finish }</code>: <code>starts</code> là chu kỳ bắt đầu mỗi trình xử lý, <code>finish</code> là chu kỳ kết thúc lệnh/trình xử lý cuối. Thời gian bắt đầu từ 0.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Ngắt đến sau lệnh cuối không được phục vụ.</li>\n  <li>Trình xử lý không bị ngắt.</li>\n</ul>",
       "inputSpec": null,
       "outputSpec": null,
       "constraints": "",
@@ -682,7 +677,7 @@
         {
           "name": "answer.js",
           "language": "javascript",
-          "code": "function isrStarts(lengths, raises, isrCost) {\n  // lengths[i] = cycles of instruction i; raises = sorted interrupt arrival times; one interrupt is served after each instruction\n  var t = 0, next = 0, starts = [];\n  for (var i = 0; i < lengths.length; i++) {\n    t += lengths[i];\n    while (next < raises.length && raises[next] <= t) {\n      starts.push(t);\n      t += isrCost;\n      next++;\n    }\n  }\n  return { starts: starts, finish: t };\n}\n"
+          "code": "function isrStarts(lengths, raises, isrCost) {\n  // lengths[i] = cycles of instruction i; raises = sorted interrupt arrival times; after each instruction serve every interrupt that has arrived\n  var t = 0, next = 0, starts = [];\n  for (var i = 0; i < lengths.length; i++) {\n    t += lengths[i];\n    while (next < raises.length && raises[next] <= t) {\n      starts.push(t);\n      t += isrCost;\n      next++;\n    }\n  }\n  return { starts: starts, finish: t };\n}\n"
         }
       ],
       "solutionExplanationHtml": "<p>The processor checks for interrupts only at instruction boundaries; pending interrupts are served in order, each adding isrCost to the timeline.</p>",

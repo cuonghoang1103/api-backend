@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Addressing 1 — Immediate, direct, indirect, register and displacement — answer key\n\n1. In immediate addressing the operand …Trong định địa chỉ tức thời toán hạng …\n   Answer: c) is part of the instruction itself\n   No memory access is needed for the operand, but its size is limited by the instruction field.VI: Không cần truy cập bộ nhớ lấy toán hạng nhưng kích thước bị giới hạn bởi trường lệnh.\n\n2. Indirect addressing needs (for the operand) … memory referencesĐịnh địa chỉ gián tiếp cần … lần tham chiếu bộ nhớ (cho toán hạng)\n   Answer: d) two (the pointer, then the data)\n   The address field names a location that contains the real address.VI: Trường địa chỉ gọi tên ô nhớ chứa địa chỉ thật.\n\n3. The main advantage of register addressing is …Ưu điểm chính của định địa chỉ thanh ghi là …\n   Answer: a) no memory access and a short address field\n   A few register bits name the operand; access is as fast as the register file.VI: Vài bit thanh ghi gọi tên toán hạng; truy cập nhanh như tệp thanh ghi.\n\n4. Displacement addressing computes EA = …Định địa chỉ có độ dời tính EA = …\n   Answer: b) A + (R)\n   The instruction holds a constant A, a register holds a base or index.VI: Lệnh chứa hằng A, thanh ghi chứa cơ sở hoặc chỉ số.\n\n5. Which mode is best for walking through an array element by element?Chế độ nào hợp để duyệt từng phần tử một mảng?\n   Answer: c) Indexed (base + scaled index) or register indirect with auto-increment\n   The index register changes while the base stays the same.VI: Thanh ghi chỉ số thay đổi còn cơ sở giữ nguyên.\n\n6. PC-relative addressing is mainly used for …Định địa chỉ tương đối PC chủ yếu dùng cho …\n   Answer: d) branches and position-independent code\n   The target is encoded as an offset from the (next) instruction, so code can be moved.VI: Đích được mã hoá bằng độ lệch so với lệnh (kế tiếp) nên mã có thể dời chỗ.\n"
+          "code": "# Addressing 1 — Immediate, direct, indirect, register and displacement — answer key\n\n1. In immediate addressing the operand …Trong định địa chỉ tức thời toán hạng …\n   Answer: c) is part of the instruction itself\n   No memory access is needed for the operand, but its size is limited by the instruction field.VI: Không cần truy cập bộ nhớ lấy toán hạng nhưng kích thước bị giới hạn bởi trường lệnh.\n\n2. Indirect addressing needs (for the operand) … memory referencesĐịnh địa chỉ gián tiếp cần … lần tham chiếu bộ nhớ (cho toán hạng)\n   Answer: a) two (the pointer, then the data)\n   The address field names a location that contains the real address.VI: Trường địa chỉ gọi tên ô nhớ chứa địa chỉ thật.\n\n3. The main advantage of register addressing is …Ưu điểm chính của định địa chỉ thanh ghi là …\n   Answer: c) no memory access and a short address field\n   A few register bits name the operand; access is as fast as the register file.VI: Vài bit thanh ghi gọi tên toán hạng; truy cập nhanh như tệp thanh ghi.\n\n4. Displacement addressing computes EA = …Định địa chỉ có độ dời tính EA = …\n   Answer: c) A + (R)\n   The instruction holds a constant A, a register holds a base or index.VI: Lệnh chứa hằng A, thanh ghi chứa cơ sở hoặc chỉ số.\n\n5. Which mode is best for walking through an array element by element?Chế độ nào hợp để duyệt từng phần tử một mảng?\n   Answer: a) Indexed (base + scaled index) or register indirect with auto-increment\n   The index register changes while the base stays the same.VI: Thanh ghi chỉ số thay đổi còn cơ sở giữ nguyên.\n\n6. PC-relative addressing is mainly used for …Định địa chỉ tương đối PC chủ yếu dùng cho …\n   Answer: c) branches and position-independent code\n   The target is encoded as an offset from the (next) instruction, so code can be moved.VI: Đích được mã hoá bằng độ lệch so với lệnh (kế tiếp) nên mã có thể dời chỗ.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> is part of the instruction itself</p><p>No memory access is needed for the operand, but its size is limited by the instruction field.</p><p><i>VI: Không cần truy cập bộ nhớ lấy toán hạng nhưng kích thước bị giới hạn bởi trường lệnh.</i></p></li><li><p><b>a)</b> two (the pointer, then the data)</p><p>The address field names a location that contains the real address.</p><p><i>VI: Trường địa chỉ gọi tên ô nhớ chứa địa chỉ thật.</i></p></li><li><p><b>c)</b> no memory access and a short address field</p><p>A few register bits name the operand; access is as fast as the register file.</p><p><i>VI: Vài bit thanh ghi gọi tên toán hạng; truy cập nhanh như tệp thanh ghi.</i></p></li><li><p><b>c)</b> A + (R)</p><p>The instruction holds a constant A, a register holds a base or index.</p><p><i>VI: Lệnh chứa hằng A, thanh ghi chứa cơ sở hoặc chỉ số.</i></p></li><li><p><b>a)</b> Indexed (base + scaled index) or register indirect with auto-increment</p><p>The index register changes while the base stays the same.</p><p><i>VI: Thanh ghi chỉ số thay đổi còn cơ sở giữ nguyên.</i></p></li><li><p><b>c)</b> branches and position-independent code</p><p>The target is encoded as an offset from the (next) instruction, so code can be moved.</p><p><i>VI: Đích được mã hoá bằng độ lệch so với lệnh (kế tiếp) nên mã có thể dời chỗ.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -62,11 +62,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "is in a register"
+                "noiDung": "is in the memory location named by the instruction"
               },
               {
                 "ma": "b",
-                "noiDung": "is on the stack only"
+                "noiDung": "is in a register"
               },
               {
                 "ma": "c",
@@ -74,7 +74,7 @@
               },
               {
                 "ma": "d",
-                "noiDung": "is in the memory location named by the instruction"
+                "noiDung": "is on the stack only"
               }
             ],
             "dapAn": [
@@ -88,23 +88,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "zero"
+                "noiDung": "two (the pointer, then the data)"
               },
               {
                 "ma": "b",
-                "noiDung": "one"
+                "noiDung": "zero"
               },
               {
                 "ma": "c",
-                "noiDung": "three"
+                "noiDung": "one"
               },
               {
                 "ma": "d",
-                "noiDung": "two (the pointer, then the data)"
+                "noiDung": "three"
               }
             ],
             "dapAn": [
-              "d"
+              "a"
             ],
             "giaiThich": "<p>The address field names a location that contains the real address.</p><p><i>VI: Trường địa chỉ gọi tên ô nhớ chứa địa chỉ thật.</i></p>"
           },
@@ -114,15 +114,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "no memory access and a short address field"
-              },
-              {
-                "ma": "b",
                 "noiDung": "a very large address space"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "self-modifying code"
+              },
+              {
+                "ma": "c",
+                "noiDung": "no memory access and a short address field"
               },
               {
                 "ma": "d",
@@ -130,7 +130,7 @@
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>A few register bits name the operand; access is as fast as the register file.</p><p><i>VI: Vài bit thanh ghi gọi tên toán hạng; truy cập nhanh như tệp thanh ghi.</i></p>"
           },
@@ -144,19 +144,19 @@
               },
               {
                 "ma": "b",
-                "noiDung": "A + (R)"
+                "noiDung": "(A)"
               },
               {
                 "ma": "c",
-                "noiDung": "A"
+                "noiDung": "A + (R)"
               },
               {
                 "ma": "d",
-                "noiDung": "(A)"
+                "noiDung": "A"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>The instruction holds a constant A, a register holds a base or index.</p><p><i>VI: Lệnh chứa hằng A, thanh ghi chứa cơ sở hoặc chỉ số.</i></p>"
           },
@@ -166,23 +166,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Direct"
-              },
-              {
-                "ma": "b",
-                "noiDung": "Implied"
-              },
-              {
-                "ma": "c",
                 "noiDung": "Indexed (base + scaled index) or register indirect with auto-increment"
               },
               {
+                "ma": "b",
+                "noiDung": "Immediate, with each element placed in the instruction itself"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Direct, with a new address assembled for each element of the array"
+              },
+              {
                 "ma": "d",
-                "noiDung": "Immediate"
+                "noiDung": "Implied, because the operand is always in the accumulator"
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>The index register changes while the base stays the same.</p><p><i>VI: Thanh ghi chỉ số thay đổi còn cơ sở giữ nguyên.</i></p>"
           },
@@ -192,23 +192,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "large constants"
-              },
-              {
-                "ma": "b",
-                "noiDung": "stack operations only"
-              },
-              {
-                "ma": "c",
                 "noiDung": "I/O ports"
               },
               {
-                "ma": "d",
+                "ma": "b",
+                "noiDung": "large constants"
+              },
+              {
+                "ma": "c",
                 "noiDung": "branches and position-independent code"
+              },
+              {
+                "ma": "d",
+                "noiDung": "stack operations only"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>The target is encoded as an offset from the (next) instruction, so code can be moved.</p><p><i>VI: Đích được mã hoá bằng độ lệch so với lệnh (kế tiếp) nên mã có thể dời chỗ.</i></p>"
           }
@@ -248,8 +248,8 @@
       "tags": [
         "cea201"
       ],
-      "problemHtml": "<p>Machine state: memory <code>M[100] = 250, M[150] = 300, M[200] = 100, M[250] = 77, M[300] = 42, M[308] = 9, M[504] = 11, M[512] = 33</code>; registers <code>R1 = 200, R2 = 300, R3 = 4</code>; unlisted memory locations hold 0. For each operand specifier give the <b>effective address</b> (— if the operand is not in memory) and the <b>operand value</b>.  A location that is not listed contains 0.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
-      "problemHtmlVi": "<p>Trạng thái máy: bộ nhớ <code>M[100] = 250, M[150] = 300, M[200] = 100, M[250] = 77, M[300] = 42, M[308] = 9, M[504] = 11, M[512] = 33</code>; thanh ghi <code>R1 = 200, R2 = 300, R3 = 4</code>; các ô nhớ không liệt kê chứa 0. Với mỗi toán hạng cho <b>địa chỉ hiệu dụng</b> (— nếu toán hạng không ở bộ nhớ) và <b>giá trị toán hạng</b>. Ô nhớ không được liệt kê chứa 0.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "problemHtml": "<p>Machine state: memory <code>M[100] = 250, M[150] = 300, M[200] = 100, M[250] = 77, M[300] = 42, M[308] = 9, M[504] = 11, M[512] = 33</code>; registers <code>R1 = 200, R2 = 300, R3 = 4</code>; unlisted memory locations hold 0. For each operand specifier give the <b>effective address</b> (— if the operand is not in memory) and the <b>operand value</b>.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trạng thái máy: bộ nhớ <code>M[100] = 250, M[150] = 300, M[200] = 100, M[250] = 77, M[300] = 42, M[308] = 9, M[504] = 11, M[512] = 33</code>; thanh ghi <code>R1 = 200, R2 = 300, R3 = 4</code>; các ô nhớ không liệt kê chứa 0. Với mỗi toán hạng cho <b>địa chỉ hiệu dụng</b> (— nếu toán hạng không ở bộ nhớ) và <b>giá trị toán hạng</b>.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
       "inputSpec": null,
       "outputSpec": null,
       "constraints": "",
@@ -514,7 +514,7 @@
               {
                 "ma": "r7",
                 "o": {
-                  "m": "Memory indirect through a register (double indirect, (R))"
+                  "m": "Memory indirect through a register (double indirect, ((R)): the register holds the address of a pointer)"
                 }
               }
             ],
@@ -575,7 +575,7 @@
       ],
       "hintsJson": [
         "Multiply the index by the element size (scale) before adding.",
-        "Convert hex bases to decimal."
+        "The scale is the element size in bytes; the displacement is added once."
       ],
       "starterCodeJson": [
         {

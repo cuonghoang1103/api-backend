@@ -48,10 +48,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Multicore 1 — Parallel organizations and cache coherence: concepts — answer key\n\n1. Why did processor makers move to multicore?Vì sao các hãng chuyển sang đa lõi?\n   Answer: b) Power and heat limited single-core clock speed and ILP\n   The “power wall”: more performance needs more cores at modest clocks.VI: “Bức tường công suất”: muốn hiệu năng thì thêm lõi ở xung nhịp vừa phải.\n\n2. In an SMP system …Trong hệ SMP …\n   Answer: c) all processors share the main memory and are controlled by one OS\n   Symmetric multiprocessors: equal access to memory and I/O.VI: Đa xử lý đối xứng: truy cập bộ nhớ và I/O bình đẳng.\n\n3. The cache coherence problem arises because …Bài toán nhất quán cache nảy sinh vì …\n   Answer: d) several caches may hold different copies of the same memory block\n   A write in one cache must become visible to the others.VI: Một lần ghi ở cache này phải hiện ra với các cache khác.\n\n4. In MESI, a line in the M (Modified) state …Trong MESI, dòng ở trạng thái M (Modified) …\n   Answer: a) is dirty and the only valid copy; memory is stale\n   It must be written back (or supplied to a requester) before others can use it.VI: Phải ghi trả (hoặc cung cấp cho bên yêu cầu) trước khi người khác dùng.\n\n5. SIMD (Flynn) means …SIMD (Flynn) nghĩa là …\n   Answer: b) one instruction stream applied to many data items\n   GPUs and vector units are SIMD-like.VI: GPU và khối vector giống SIMD.\n\n6. Hardware multithreading (SMT) lets a core …Đa luồng phần cứng (SMT) cho phép một lõi …\n   Answer: c) hold the state of several threads and fill idle issue slots with another thread\n   When one thread stalls, another uses the functional units.VI: Khi một luồng đình trệ, luồng khác dùng khối chức năng.\n"
+          "code": "# Multicore 1 — Parallel organizations and cache coherence: concepts — answer key\n\n1. Why did processor makers move to multicore?Vì sao các hãng chuyển sang đa lõi?\n   Answer: c) Power and heat limited single-core clock speed and ILP\n   The “power wall”: more performance needs more cores at modest clocks.VI: “Bức tường công suất”: muốn hiệu năng thì thêm lõi ở xung nhịp vừa phải.\n\n2. In an SMP system …Trong hệ SMP …\n   Answer: c) all processors share the main memory and are controlled by one OS\n   Symmetric multiprocessors: equal access to memory and I/O.VI: Đa xử lý đối xứng: truy cập bộ nhớ và I/O bình đẳng.\n\n3. The cache coherence problem arises because …Bài toán nhất quán cache nảy sinh vì …\n   Answer: c) several caches may hold different copies of the same memory block\n   A write in one cache must become visible to the others.VI: Một lần ghi ở cache này phải hiện ra với các cache khác.\n\n4. In MESI, a line in the M (Modified) state …Trong MESI, dòng ở trạng thái M (Modified) …\n   Answer: d) is dirty and the only valid copy; memory is stale\n   It must be written back (or supplied to a requester) before others can use it.VI: Phải ghi trả (hoặc cung cấp cho bên yêu cầu) trước khi người khác dùng.\n\n5. SIMD (Flynn) means …SIMD (Flynn) nghĩa là …\n   Answer: d) one instruction stream applied to many data items\n   GPUs and vector units are SIMD-like.VI: GPU và khối vector giống SIMD.\n\n6. Hardware multithreading (SMT) lets a core …Đa luồng phần cứng (SMT) cho phép một lõi …\n   Answer: c) hold the state of several threads and fill idle issue slots with another thread\n   When one thread stalls, another uses the functional units.VI: Khi một luồng đình trệ, luồng khác dùng khối chức năng.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> Power and heat limited single-core clock speed and ILP</p><p>The “power wall”: more performance needs more cores at modest clocks.</p><p><i>VI: “Bức tường công suất”: muốn hiệu năng thì thêm lõi ở xung nhịp vừa phải.</i></p></li><li><p><b>c)</b> all processors share the main memory and are controlled by one OS</p><p>Symmetric multiprocessors: equal access to memory and I/O.</p><p><i>VI: Đa xử lý đối xứng: truy cập bộ nhớ và I/O bình đẳng.</i></p></li><li><p><b>c)</b> several caches may hold different copies of the same memory block</p><p>A write in one cache must become visible to the others.</p><p><i>VI: Một lần ghi ở cache này phải hiện ra với các cache khác.</i></p></li><li><p><b>d)</b> is dirty and the only valid copy; memory is stale</p><p>It must be written back (or supplied to a requester) before others can use it.</p><p><i>VI: Phải ghi trả (hoặc cung cấp cho bên yêu cầu) trước khi người khác dùng.</i></p></li><li><p><b>d)</b> one instruction stream applied to many data items</p><p>GPUs and vector units are SIMD-like.</p><p><i>VI: GPU và khối vector giống SIMD.</i></p></li><li><p><b>c)</b> hold the state of several threads and fill idle issue slots with another thread</p><p>When one thread stalls, another uses the functional units.</p><p><i>VI: Khi một luồng đình trệ, luồng khác dùng khối chức năng.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -64,23 +64,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Memory became infinitely fast"
+                "noiDung": "Caches stopped working"
               },
               {
                 "ma": "b",
-                "noiDung": "Power and heat limited single-core clock speed and ILP"
+                "noiDung": "Memory became infinitely fast"
               },
               {
                 "ma": "c",
-                "noiDung": "Software became easier to write"
+                "noiDung": "Power and heat limited single-core clock speed and ILP"
               },
               {
                 "ma": "d",
-                "noiDung": "Caches stopped working"
+                "noiDung": "Software became easier to write"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>The “power wall”: more performance needs more cores at modest clocks.</p><p><i>VI: “Bức tường công suất”: muốn hiệu năng thì thêm lõi ở xung nhịp vừa phải.</i></p>"
           },
@@ -90,7 +90,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "only one processor can access memory"
+                "noiDung": "each processor has private memory and its own OS"
               },
               {
                 "ma": "b",
@@ -102,7 +102,7 @@
               },
               {
                 "ma": "d",
-                "noiDung": "each processor has private memory and its own OS"
+                "noiDung": "only one processor can access memory"
               }
             ],
             "dapAn": [
@@ -116,23 +116,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "caches are too small"
+                "noiDung": "the shared bus is too slow to serve several cores"
               },
               {
                 "ma": "b",
-                "noiDung": "the bus is too slow"
+                "noiDung": "the TLB of one core is full and evicts valid translations"
               },
               {
                 "ma": "c",
-                "noiDung": "the TLB is full"
+                "noiDung": "several caches may hold different copies of the same memory block"
               },
               {
                 "ma": "d",
-                "noiDung": "several caches may hold different copies of the same memory block"
+                "noiDung": "private caches are too small to hold a whole block"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>A write in one cache must become visible to the others.</p><p><i>VI: Một lần ghi ở cache này phải hiện ra với các cache khác.</i></p>"
           },
@@ -142,23 +142,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "is dirty and the only valid copy; memory is stale"
+                "noiDung": "is clean, shared, and may be dropped silently"
               },
               {
                 "ma": "b",
-                "noiDung": "is clean and shared"
+                "noiDung": "exists in every cache and matches memory"
               },
               {
                 "ma": "c",
-                "noiDung": "is invalid"
+                "noiDung": "is invalid and must be fetched again"
               },
               {
                 "ma": "d",
-                "noiDung": "exists in every cache"
+                "noiDung": "is dirty and the only valid copy; memory is stale"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>It must be written back (or supplied to a requester) before others can use it.</p><p><i>VI: Phải ghi trả (hoặc cung cấp cho bên yêu cầu) trước khi người khác dùng.</i></p>"
           },
@@ -172,7 +172,7 @@
               },
               {
                 "ma": "b",
-                "noiDung": "one instruction stream applied to many data items"
+                "noiDung": "one stream on one datum"
               },
               {
                 "ma": "c",
@@ -180,11 +180,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "one stream on one datum"
+                "noiDung": "one instruction stream applied to many data items"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>GPUs and vector units are SIMD-like.</p><p><i>VI: GPU và khối vector giống SIMD.</i></p>"
           },
@@ -194,11 +194,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "avoid using a cache"
+                "noiDung": "run several programs without an OS, because the threads schedule themselves"
               },
               {
                 "ma": "b",
-                "noiDung": "run without an OS"
+                "noiDung": "run at a higher clock by switching threads on every rising and falling edge"
               },
               {
                 "ma": "c",
@@ -206,7 +206,7 @@
               },
               {
                 "ma": "d",
-                "noiDung": "run at a higher clock"
+                "noiDung": "avoid using a cache, because each thread keeps its own private memory"
               }
             ],
             "dapAn": [

@@ -47,10 +47,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Bus 1 — Address, data and control lines — answer key\n\n1. The width of the ADDRESS bus determines …Độ rộng bus ĐỊA CHỈ quyết định …\n   Answer: a) the maximum memory capacity that can be addressed\n   n address lines can name 2ⁿ locations.VI: n đường địa chỉ gọi tên được 2ⁿ vị trí.\n\n2. The width of the DATA bus determines …Độ rộng bus DỮ LIỆU quyết định …\n   Answer: b) how many bits can be transferred at one time\n   A wider data bus moves more bits per bus cycle, raising bandwidth.VI: Bus dữ liệu rộng hơn chuyển nhiều bit hơn mỗi chu kỳ bus, tăng băng thông.\n\n3. Why do systems use bus ARBITRATION?Vì sao hệ thống dùng PHÂN XỬ bus?\n   Answer: c) Only one master may drive the bus at a time\n   When several masters want the bus, arbitration (centralized or distributed) chooses one.VI: Khi nhiều master cùng muốn bus, phân xử (tập trung hoặc phân tán) chọn một.\n\n4. In an ASYNCHRONOUS bus, transfers are timed by …Ở bus BẤT ĐỒNG BỘ, việc truyền được định thời bởi …\n   Answer: d) a handshake between master and slave\n   Request/acknowledge signals replace the common clock.VI: Tín hiệu yêu cầu/xác nhận thay cho xung nhịp chung.\n\n5. Compared to a shared bus, a point-to-point interconnect (PCIe, QPI) …So với bus dùng chung, kết nối điểm-điểm (PCIe, QPI) …\n   Answer: a) avoids bus contention and clocking problems and scales to higher speeds\n   Dedicated serial links remove the shared-bus bottleneck.VI: Liên kết nối tiếp riêng loại bỏ nút cổ chai của bus dùng chung.\n"
+          "code": "# Bus 1 — Address, data and control lines — answer key\n\n1. The width of the ADDRESS bus determines …Độ rộng bus ĐỊA CHỈ quyết định …\n   Answer: d) the maximum memory capacity that can be addressed\n   n address lines can name 2ⁿ locations.VI: n đường địa chỉ gọi tên được 2ⁿ vị trí.\n\n2. The width of the DATA bus determines …Độ rộng bus DỮ LIỆU quyết định …\n   Answer: b) how many bits can be transferred at one time\n   A wider data bus moves more bits per bus cycle, raising bandwidth.VI: Bus dữ liệu rộng hơn chuyển nhiều bit hơn mỗi chu kỳ bus, tăng băng thông.\n\n3. Why do systems use bus ARBITRATION?Vì sao hệ thống dùng PHÂN XỬ bus?\n   Answer: b) Only one master may drive the bus at a time\n   When several masters want the bus, arbitration (centralized or distributed) chooses one.VI: Khi nhiều master cùng muốn bus, phân xử (tập trung hoặc phân tán) chọn một.\n\n4. In an ASYNCHRONOUS bus, transfers are timed by …Ở bus BẤT ĐỒNG BỘ, việc truyền được định thời bởi …\n   Answer: a) a handshake between master and slave\n   Request/acknowledge signals replace the common clock.VI: Tín hiệu yêu cầu/xác nhận thay cho xung nhịp chung.\n\n5. Compared to a shared bus, a point-to-point interconnect (PCIe, QPI) …So với bus dùng chung, kết nối điểm-điểm (PCIe, QPI) …\n   Answer: a) avoids bus contention and clocking problems and scales to higher speeds\n   Dedicated serial links remove the shared-bus bottleneck.VI: Liên kết nối tiếp riêng loại bỏ nút cổ chai của bus dùng chung.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> the maximum memory capacity that can be addressed</p><p>n address lines can name 2ⁿ locations.</p><p><i>VI: n đường địa chỉ gọi tên được 2ⁿ vị trí.</i></p></li><li><p><b>b)</b> how many bits can be transferred at one time</p><p>A wider data bus moves more bits per bus cycle, raising bandwidth.</p><p><i>VI: Bus dữ liệu rộng hơn chuyển nhiều bit hơn mỗi chu kỳ bus, tăng băng thông.</i></p></li><li><p><b>b)</b> Only one master may drive the bus at a time</p><p>When several masters want the bus, arbitration (centralized or distributed) chooses one.</p><p><i>VI: Khi nhiều master cùng muốn bus, phân xử (tập trung hoặc phân tán) chọn một.</i></p></li><li><p><b>a)</b> a handshake between master and slave</p><p>Request/acknowledge signals replace the common clock.</p><p><i>VI: Tín hiệu yêu cầu/xác nhận thay cho xung nhịp chung.</i></p></li><li><p><b>a)</b> avoids bus contention and clocking problems and scales to higher speeds</p><p>Dedicated serial links remove the shared-bus bottleneck.</p><p><i>VI: Liên kết nối tiếp riêng loại bỏ nút cổ chai của bus dùng chung.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -63,11 +63,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "the maximum memory capacity that can be addressed"
+                "noiDung": "the number of bits moved per transfer"
               },
               {
                 "ma": "b",
-                "noiDung": "the number of bits moved per transfer"
+                "noiDung": "the number of devices on the bus"
               },
               {
                 "ma": "c",
@@ -75,11 +75,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "the number of devices on the bus"
+                "noiDung": "the maximum memory capacity that can be addressed"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>n address lines can name 2ⁿ locations.</p><p><i>VI: n đường địa chỉ gọi tên được 2ⁿ vị trí.</i></p>"
           },
@@ -97,11 +97,11 @@
               },
               {
                 "ma": "c",
-                "noiDung": "the maximum memory size"
+                "noiDung": "the number of control signals"
               },
               {
                 "ma": "d",
-                "noiDung": "the number of control signals"
+                "noiDung": "the maximum memory size"
               }
             ],
             "dapAn": [
@@ -115,23 +115,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "To encrypt the data"
+                "noiDung": "To increase the clock rate"
               },
               {
                 "ma": "b",
-                "noiDung": "To widen the address bus"
-              },
-              {
-                "ma": "c",
                 "noiDung": "Only one master may drive the bus at a time"
               },
               {
+                "ma": "c",
+                "noiDung": "To widen the address bus"
+              },
+              {
                 "ma": "d",
-                "noiDung": "To increase the clock rate"
+                "noiDung": "To encrypt the data"
               }
             ],
             "dapAn": [
-              "c"
+              "b"
             ],
             "giaiThich": "<p>When several masters want the bus, arbitration (centralized or distributed) chooses one.</p><p><i>VI: Khi nhiều master cùng muốn bus, phân xử (tập trung hoặc phân tán) chọn một.</i></p>"
           },
@@ -141,23 +141,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "a global clock"
+                "noiDung": "a handshake between master and slave"
               },
               {
                 "ma": "b",
-                "noiDung": "the operating system"
-              },
-              {
-                "ma": "c",
                 "noiDung": "the cache controller"
               },
               {
+                "ma": "c",
+                "noiDung": "a global clock"
+              },
+              {
                 "ma": "d",
-                "noiDung": "a handshake between master and slave"
+                "noiDung": "the operating system"
               }
             ],
             "dapAn": [
-              "d"
+              "a"
             ],
             "giaiThich": "<p>Request/acknowledge signals replace the common clock.</p><p><i>VI: Tín hiệu yêu cầu/xác nhận thay cho xung nhịp chung.</i></p>"
           },
@@ -171,15 +171,15 @@
               },
               {
                 "ma": "b",
-                "noiDung": "is cheaper because it needs fewer wires in every case"
+                "noiDung": "supports only one device"
               },
               {
                 "ma": "c",
-                "noiDung": "cannot use serial links"
+                "noiDung": "is cheaper because it needs fewer wires in every case"
               },
               {
                 "ma": "d",
-                "noiDung": "supports only one device"
+                "noiDung": "cannot use serial links"
               }
             ],
             "dapAn": [
@@ -462,7 +462,7 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Bus 3 — Order an asynchronous read handshake — answer key\n\n1. Asynchronous read cycleChu kỳ đọc bất đồng bộ\n   Answer: s1) The master puts the address and the READ command on the bus  →  s2) The master asserts MSYN  →  s3) The slave decodes the address, puts the data on the bus and asserts SSYN  →  s4) The master reads the data and negates MSYN  →  s5) The slave sees MSYN negated, removes the data and negates SSYN\n   A full handshake: each signal change is a reply to the previous one, so no clock is needed.VI: Bắt tay đầy đủ: mỗi thay đổi tín hiệu là câu trả lời cho thay đổi trước, nên không cần clock.\n"
+          "code": "# Bus 3 — Order an asynchronous read handshake — answer key\n\n1. Asynchronous read cycleChu kỳ đọc bất đồng bộ\n   Answer: m3) The master puts the address and the READ command on the bus  →  m5) The master asserts MSYN  →  m2) The slave decodes the address, puts the data on the bus and asserts SSYN  →  m1) The master reads the data and negates MSYN  →  m4) The slave sees MSYN negated, removes the data and negates SSYN\n   A full handshake: each signal change is a reply to the previous one, so no clock is needed.VI: Bắt tay đầy đủ: mỗi thay đổi tín hiệu là câu trả lời cho thay đổi trước, nên không cần clock.\n"
         }
       ],
       "solutionExplanationHtml": "<p>A full handshake: each signal change is a reply to the previous one, so no clock is needed.</p><p><i>VI: Bắt tay đầy đủ: mỗi thay đổi tín hiệu là câu trả lời cho thay đổi trước, nên không cần clock.</i></p>",
@@ -477,32 +477,32 @@
             "de": "<p>Asynchronous read cycle</p><p style=\"opacity:.75;font-size:.92em\"><i>Chu kỳ đọc bất đồng bộ</i></p>",
             "muc": [
               {
-                "ma": "s2",
-                "noiDung": "The master asserts MSYN"
-              },
-              {
-                "ma": "s3",
-                "noiDung": "The slave decodes the address, puts the data on the bus and asserts SSYN"
-              },
-              {
-                "ma": "s4",
+                "ma": "m1",
                 "noiDung": "The master reads the data and negates MSYN"
               },
               {
-                "ma": "s5",
+                "ma": "m2",
+                "noiDung": "The slave decodes the address, puts the data on the bus and asserts SSYN"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "The master puts the address and the READ command on the bus"
+              },
+              {
+                "ma": "m4",
                 "noiDung": "The slave sees MSYN negated, removes the data and negates SSYN"
               },
               {
-                "ma": "s1",
-                "noiDung": "The master puts the address and the READ command on the bus"
+                "ma": "m5",
+                "noiDung": "The master asserts MSYN"
               }
             ],
             "dapAn": [
-              "s1",
-              "s2",
-              "s3",
-              "s4",
-              "s5"
+              "m3",
+              "m5",
+              "m2",
+              "m1",
+              "m4"
             ],
             "giaiThich": "<p>A full handshake: each signal change is a reply to the previous one, so no clock is needed.</p><p><i>VI: Bắt tay đầy đủ: mỗi thay đổi tín hiệu là câu trả lời cho thay đổi trước, nên không cần clock.</i></p>"
           }

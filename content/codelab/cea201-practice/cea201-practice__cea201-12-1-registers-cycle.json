@@ -47,10 +47,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Processor 1 — Registers, ALU, control unit and the PSW — answer key\n\n1. Which registers can the programmer name directly in instructions?Thanh ghi nào lập trình viên gọi tên trực tiếp được trong lệnh?\n   Answer: b) User-visible registers (general purpose, data, address, condition codes)\n   MAR, MBR, IR and PC-update logic are control/status registers hidden from the programmer (the PC is visible indirectly).VI: MAR, MBR, IR là thanh ghi điều khiển ẩn với lập trình viên.\n\n2. The program status word (PSW) typically holds …Từ trạng thái chương trình (PSW) thường chứa …\n   Answer: c) condition codes, interrupt enable and mode bits\n   Flags such as zero, sign, carry, overflow and the supervisor/user mode.VI: Các cờ như zero, dấu, nhớ, tràn và chế độ giám sát/người dùng.\n\n3. The control unit …Đơn vị điều khiển …\n   Answer: d) generates the control signals that sequence the micro-operations\n   It decodes the opcode and activates the right data paths.VI: Nó giải mã opcode và kích hoạt đường dữ liệu phù hợp.\n\n4. In a load/store (RISC-style) machine, arithmetic instructions operate on …Trong máy load/store (kiểu RISC), lệnh số học thao tác trên …\n   Answer: a) registers only; only load and store touch memory\n   This keeps instructions simple and pipeline-friendly.VI: Giữ lệnh đơn giản và hợp với pipeline.\n\n5. An instruction cycle with indirect addressing consists of …Chu trình lệnh có định địa chỉ gián tiếp gồm …\n   Answer: b) fetch, indirect, execute (and interrupt)\n   The indirect cycle reads the pointer before the operand.VI: Chu kỳ gián tiếp đọc con trỏ trước khi đọc toán hạng.\n"
+          "code": "# Processor 1 — Registers, ALU, control unit and the PSW — answer key\n\n1. Which registers can the programmer name directly in instructions?Thanh ghi nào lập trình viên gọi tên trực tiếp được trong lệnh?\n   Answer: c) User-visible registers (general purpose, data, address, condition codes)\n   MAR, MBR, IR and PC-update logic are control/status registers hidden from the programmer (the PC is visible indirectly).VI: MAR, MBR, IR là thanh ghi điều khiển ẩn với lập trình viên.\n\n2. The program status word (PSW) typically holds …Từ trạng thái chương trình (PSW) thường chứa …\n   Answer: a) condition codes, interrupt enable and mode bits\n   Flags such as zero, sign, carry, overflow and the supervisor/user mode.VI: Các cờ như zero, dấu, nhớ, tràn và chế độ giám sát/người dùng.\n\n3. The control unit …Đơn vị điều khiển …\n   Answer: b) generates the control signals that sequence the micro-operations\n   It decodes the opcode and activates the right data paths.VI: Nó giải mã opcode và kích hoạt đường dữ liệu phù hợp.\n\n4. In a load/store (RISC-style) machine, arithmetic instructions operate on …Trong máy load/store (kiểu RISC), lệnh số học thao tác trên …\n   Answer: d) registers only; only load and store touch memory\n   This keeps instructions simple and pipeline-friendly.VI: Giữ lệnh đơn giản và hợp với pipeline.\n\n5. An instruction cycle with indirect addressing consists of …Chu trình lệnh có định địa chỉ gián tiếp gồm …\n   Answer: b) fetch, indirect, execute (and interrupt)\n   The indirect cycle reads the pointer before the operand.VI: Chu kỳ gián tiếp đọc con trỏ trước khi đọc toán hạng.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> User-visible registers (general purpose, data, address, condition codes)</p><p>MAR, MBR, IR and PC-update logic are control/status registers hidden from the programmer (the PC is visible indirectly).</p><p><i>VI: MAR, MBR, IR là thanh ghi điều khiển ẩn với lập trình viên.</i></p></li><li><p><b>a)</b> condition codes, interrupt enable and mode bits</p><p>Flags such as zero, sign, carry, overflow and the supervisor/user mode.</p><p><i>VI: Các cờ như zero, dấu, nhớ, tràn và chế độ giám sát/người dùng.</i></p></li><li><p><b>b)</b> generates the control signals that sequence the micro-operations</p><p>It decodes the opcode and activates the right data paths.</p><p><i>VI: Nó giải mã opcode và kích hoạt đường dữ liệu phù hợp.</i></p></li><li><p><b>d)</b> registers only; only load and store touch memory</p><p>This keeps instructions simple and pipeline-friendly.</p><p><i>VI: Giữ lệnh đơn giản và hợp với pipeline.</i></p></li><li><p><b>b)</b> fetch, indirect, execute (and interrupt)</p><p>The indirect cycle reads the pointer before the operand.</p><p><i>VI: Chu kỳ gián tiếp đọc con trỏ trước khi đọc toán hạng.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -63,23 +63,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "The internal ALU latches"
+                "noiDung": "The instruction register (IR) and the instruction decoder"
               },
               {
                 "ma": "b",
-                "noiDung": "User-visible registers (general purpose, data, address, condition codes)"
+                "noiDung": "Internal latches at the ALU inputs and outputs (temporary values)"
               },
               {
                 "ma": "c",
-                "noiDung": "MAR and MBR"
+                "noiDung": "User-visible registers (general purpose, data, address, condition codes)"
               },
               {
                 "ma": "d",
-                "noiDung": "IR"
+                "noiDung": "Memory interface registers (MAR, MBR)"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>MAR, MBR, IR and PC-update logic are control/status registers hidden from the programmer (the PC is visible indirectly).</p><p><i>VI: MAR, MBR, IR là thanh ghi điều khiển ẩn với lập trình viên.</i></p>"
           },
@@ -89,23 +89,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "the stack contents"
-              },
-              {
-                "ma": "b",
-                "noiDung": "the cache tags"
-              },
-              {
-                "ma": "c",
                 "noiDung": "condition codes, interrupt enable and mode bits"
               },
               {
+                "ma": "b",
+                "noiDung": "the top values of the current stack"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the next instructions of the program"
+              },
+              {
                 "ma": "d",
-                "noiDung": "the program text"
+                "noiDung": "the tags of the most recent cache lines"
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>Flags such as zero, sign, carry, overflow and the supervisor/user mode.</p><p><i>VI: Các cờ như zero, dấu, nhớ, tràn và chế độ giám sát/người dùng.</i></p>"
           },
@@ -115,23 +115,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "performs arithmetic"
+                "noiDung": "performs the arithmetic and logic operations on the data"
               },
               {
                 "ma": "b",
-                "noiDung": "stores the program"
+                "noiDung": "generates the control signals that sequence the micro-operations"
               },
               {
                 "ma": "c",
-                "noiDung": "holds the registers only"
+                "noiDung": "stores the program and the data that the machine is running"
               },
               {
                 "ma": "d",
-                "noiDung": "generates the control signals that sequence the micro-operations"
+                "noiDung": "holds the general-purpose registers and nothing else"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>It decodes the opcode and activates the right data paths.</p><p><i>VI: Nó giải mã opcode và kích hoạt đường dữ liệu phù hợp.</i></p>"
           },
@@ -141,23 +141,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "registers only; only load and store touch memory"
+                "noiDung": "immediate operands only; other data stay in memory"
               },
               {
                 "ma": "b",
-                "noiDung": "memory operands only"
+                "noiDung": "memory operands only; registers just hold addresses"
               },
               {
                 "ma": "c",
-                "noiDung": "immediate operands only"
+                "noiDung": "the stack only; no register is named"
               },
               {
                 "ma": "d",
-                "noiDung": "the stack only"
+                "noiDung": "registers only; only load and store touch memory"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>This keeps instructions simple and pipeline-friendly.</p><p><i>VI: Giữ lệnh đơn giản và hợp với pipeline.</i></p>"
           },
@@ -175,11 +175,11 @@
               },
               {
                 "ma": "c",
-                "noiDung": "only execute"
+                "noiDung": "only fetch and interrupt"
               },
               {
                 "ma": "d",
-                "noiDung": "only fetch and interrupt"
+                "noiDung": "only execute"
               }
             ],
             "dapAn": [
@@ -417,8 +417,8 @@
       "tags": [
         "cea201"
       ],
-      "problemHtml": "<p>The instruction <code>LOAD (X)</code> (indirect) has just been fetched into the IR. Put the micro-operations in the right order, starting from the beginning of the fetch.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
-      "problemHtmlVi": "<p>Lệnh <code>LOAD (X)</code> (gián tiếp) vừa được nạp vào IR. Sắp các vi thao tác theo đúng thứ tự, bắt đầu từ đầu pha nạp.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "problemHtml": "<p>The processor executes the instruction <code>LOAD (X)</code> (indirect). Put all its micro-operations in the right order, starting from the beginning of the fetch.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bộ xử lý thực hiện lệnh <code>LOAD (X)</code> (gián tiếp). Sắp toàn bộ vi thao tác của nó theo đúng thứ tự, bắt đầu từ đầu pha nạp.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
       "inputSpec": null,
       "outputSpec": null,
       "constraints": "",
@@ -444,7 +444,7 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Processor 3 — Order the micro-operations of an indirect load — answer key\n\n1. Fetch, indirect and execute cyclesChu kỳ nạp, gián tiếp và thực hiện\n   Answer: s1) MAR ← PC  →  s2) MBR ← M[MAR]; PC ← PC + 1  →  s3) IR ← MBR  →  s4) MAR ← IR(address)  →  s5) MBR ← M[MAR] (this is the pointer)  →  s6) MAR ← MBR  →  s7) MBR ← M[MAR] (this is the data)  →  s8) AC ← MBR\n   Two memory reads after the fetch: one for the pointer (indirect cycle) and one for the data (execute cycle).VI: Sau nạp lệnh có hai lần đọc bộ nhớ: một cho con trỏ (chu kỳ gián tiếp) và một cho dữ liệu (chu kỳ thực hiện).\n"
+          "code": "# Processor 3 — Order the micro-operations of an indirect load — answer key\n\n1. Fetch, indirect and execute cyclesChu kỳ nạp, gián tiếp và thực hiện\n   Answer: m8) MAR ← PC  →  m5) MBR ← M[MAR]; PC ← PC + 1  →  m3) IR ← MBR  →  m2) MAR ← IR(address)  →  m7) MBR ← M[MAR] (this is the pointer)  →  m6) MAR ← MBR  →  m1) MBR ← M[MAR] (this is the data)  →  m4) AC ← MBR\n   Two memory reads after the fetch: one for the pointer (indirect cycle) and one for the data (execute cycle).VI: Sau nạp lệnh có hai lần đọc bộ nhớ: một cho con trỏ (chu kỳ gián tiếp) và một cho dữ liệu (chu kỳ thực hiện).\n"
         }
       ],
       "solutionExplanationHtml": "<p>Two memory reads after the fetch: one for the pointer (indirect cycle) and one for the data (execute cycle).</p><p><i>VI: Sau nạp lệnh có hai lần đọc bộ nhớ: một cho con trỏ (chu kỳ gián tiếp) và một cho dữ liệu (chu kỳ thực hiện).</i></p>",
@@ -459,47 +459,47 @@
             "de": "<p>Fetch, indirect and execute cycles</p><p style=\"opacity:.75;font-size:.92em\"><i>Chu kỳ nạp, gián tiếp và thực hiện</i></p>",
             "muc": [
               {
-                "ma": "s4",
-                "noiDung": "MAR ← IR(address)"
-              },
-              {
-                "ma": "s5",
-                "noiDung": "MBR ← M[MAR] (this is the pointer)"
-              },
-              {
-                "ma": "s6",
-                "noiDung": "MAR ← MBR"
-              },
-              {
-                "ma": "s7",
+                "ma": "m1",
                 "noiDung": "MBR ← M[MAR] (this is the data)"
               },
               {
-                "ma": "s8",
+                "ma": "m2",
+                "noiDung": "MAR ← IR(address)"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "IR ← MBR"
+              },
+              {
+                "ma": "m4",
                 "noiDung": "AC ← MBR"
               },
               {
-                "ma": "s1",
-                "noiDung": "MAR ← PC"
-              },
-              {
-                "ma": "s2",
+                "ma": "m5",
                 "noiDung": "MBR ← M[MAR]; PC ← PC + 1"
               },
               {
-                "ma": "s3",
-                "noiDung": "IR ← MBR"
+                "ma": "m6",
+                "noiDung": "MAR ← MBR"
+              },
+              {
+                "ma": "m7",
+                "noiDung": "MBR ← M[MAR] (this is the pointer)"
+              },
+              {
+                "ma": "m8",
+                "noiDung": "MAR ← PC"
               }
             ],
             "dapAn": [
-              "s1",
-              "s2",
-              "s3",
-              "s4",
-              "s5",
-              "s6",
-              "s7",
-              "s8"
+              "m8",
+              "m5",
+              "m3",
+              "m2",
+              "m7",
+              "m6",
+              "m1",
+              "m4"
             ],
             "giaiThich": "<p>Two memory reads after the fetch: one for the pointer (indirect cycle) and one for the data (execute cycle).</p><p><i>VI: Sau nạp lệnh có hai lần đọc bộ nhớ: một cho con trỏ (chu kỳ gián tiếp) và một cho dữ liệu (chu kỳ thực hiện).</i></p>"
           }

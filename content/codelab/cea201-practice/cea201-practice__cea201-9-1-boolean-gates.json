@@ -47,10 +47,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Logic 1 — Laws, De Morgan and universal gates — answer key\n\n1. De Morgan: NOT (A AND B) equals …De Morgan: NOT (A AND B) bằng …\n   Answer: c) (NOT A) OR (NOT B)\n   Complementing an AND turns it into an OR of complements.VI: Lấy bù của AND thành OR của các bù.\n\n2. Which gates are “universal” (any function can be built from only that gate)?Cổng nào là “vạn năng” (mọi hàm xây được chỉ từ cổng đó)?\n   Answer: d) NAND and NOR\n   NAND alone gives NOT, AND and OR; so does NOR.VI: Chỉ NAND đã cho NOT, AND, OR; NOR cũng vậy.\n\n3. A + A·B simplifies to …A + A·B rút gọn thành …\n   Answer: a) A\n   Absorption law: A·(1 + B) = A.VI: Luật hấp thụ: A·(1 + B) = A.\n\n4. The XOR of A and B is 1 when …XOR của A và B bằng 1 khi …\n   Answer: b) A and B differ\n   XOR = A·B′ + A′·B.VI: XOR = A·B′ + A′·B.\n\n5. A truth table of n inputs has how many rows?Bảng chân trị n ngõ vào có bao nhiêu dòng?\n   Answer: c) 2ⁿ\n   Each input has 2 values.VI: Mỗi ngõ vào có 2 giá trị.\n\n6. A minterm of 3 variables is …Một minterm của 3 biến là …\n   Answer: d) a product containing every variable once, true on exactly one row\n   Sum-of-products form ORs the minterms of the rows where F = 1.VI: Dạng tổng các tích OR các minterm của dòng có F = 1.\n"
+          "code": "# Logic 1 — Laws, De Morgan and universal gates — answer key\n\n1. De Morgan: NOT (A AND B) equals …De Morgan: NOT (A AND B) bằng …\n   Answer: c) (NOT A) OR (NOT B)\n   Complementing an AND turns it into an OR of complements.VI: Lấy bù của AND thành OR của các bù.\n\n2. Which gates are “universal” (any function can be built from only that gate)?Cổng nào là “vạn năng” (mọi hàm xây được chỉ từ cổng đó)?\n   Answer: b) NAND and NOR\n   NAND alone gives NOT, AND and OR; so does NOR.VI: Chỉ NAND đã cho NOT, AND, OR; NOR cũng vậy.\n\n3. A + A·B simplifies to …A + A·B rút gọn thành …\n   Answer: a) A\n   Absorption law: A·(1 + B) = A.VI: Luật hấp thụ: A·(1 + B) = A.\n\n4. The XOR of A and B is 1 when …XOR của A và B bằng 1 khi …\n   Answer: a) A and B differ\n   XOR = A·B′ + A′·B.VI: XOR = A·B′ + A′·B.\n\n5. A truth table of n inputs has how many rows?Bảng chân trị n ngõ vào có bao nhiêu dòng?\n   Answer: b) 2ⁿ\n   Each input has 2 values.VI: Mỗi ngõ vào có 2 giá trị.\n\n6. A minterm of 3 variables is …Một minterm của 3 biến là …\n   Answer: b) a product containing every variable once, true on exactly one row\n   Sum-of-products form ORs the minterms of the rows where F = 1.VI: Dạng tổng các tích OR các minterm của dòng có F = 1.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> (NOT A) OR (NOT B)</p><p>Complementing an AND turns it into an OR of complements.</p><p><i>VI: Lấy bù của AND thành OR của các bù.</i></p></li><li><p><b>b)</b> NAND and NOR</p><p>NAND alone gives NOT, AND and OR; so does NOR.</p><p><i>VI: Chỉ NAND đã cho NOT, AND, OR; NOR cũng vậy.</i></p></li><li><p><b>a)</b> A</p><p>Absorption law: A·(1 + B) = A.</p><p><i>VI: Luật hấp thụ: A·(1 + B) = A.</i></p></li><li><p><b>a)</b> A and B differ</p><p>XOR = A·B′ + A′·B.</p><p><i>VI: XOR = A·B′ + A′·B.</i></p></li><li><p><b>b)</b> 2ⁿ</p><p>Each input has 2 values.</p><p><i>VI: Mỗi ngõ vào có 2 giá trị.</i></p></li><li><p><b>b)</b> a product containing every variable once, true on exactly one row</p><p>Sum-of-products form ORs the minterms of the rows where F = 1.</p><p><i>VI: Dạng tổng các tích OR các minterm của dòng có F = 1.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -63,7 +63,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "A OR B"
+                "noiDung": "(NOT A) AND (NOT B)"
               },
               {
                 "ma": "b",
@@ -75,7 +75,7 @@
               },
               {
                 "ma": "d",
-                "noiDung": "(NOT A) AND (NOT B)"
+                "noiDung": "A OR B"
               }
             ],
             "dapAn": [
@@ -89,11 +89,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "AND and OR"
+                "noiDung": "XOR and XNOR"
               },
               {
                 "ma": "b",
-                "noiDung": "XOR and XNOR"
+                "noiDung": "NAND and NOR"
               },
               {
                 "ma": "c",
@@ -101,11 +101,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "NAND and NOR"
+                "noiDung": "AND and OR"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>NAND alone gives NOT, AND and OR; so does NOR.</p><p><i>VI: Chỉ NAND đã cho NOT, AND, OR; NOR cũng vậy.</i></p>"
           },
@@ -123,11 +123,11 @@
               },
               {
                 "ma": "c",
-                "noiDung": "A + B"
+                "noiDung": "1"
               },
               {
                 "ma": "d",
-                "noiDung": "1"
+                "noiDung": "A + B"
               }
             ],
             "dapAn": [
@@ -141,23 +141,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "either is 0"
-              },
-              {
-                "ma": "b",
                 "noiDung": "A and B differ"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "A and B are both 1"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "A and B are equal"
+              },
+              {
+                "ma": "d",
+                "noiDung": "either is 0"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>XOR = A·B′ + A′·B.</p><p><i>VI: XOR = A·B′ + A′·B.</i></p>"
           },
@@ -171,11 +171,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "n!"
+                "noiDung": "2ⁿ"
               },
               {
                 "ma": "c",
-                "noiDung": "2ⁿ"
+                "noiDung": "n!"
               },
               {
                 "ma": "d",
@@ -183,7 +183,7 @@
               }
             ],
             "dapAn": [
-              "c"
+              "b"
             ],
             "giaiThich": "<p>Each input has 2 values.</p><p><i>VI: Mỗi ngõ vào có 2 giá trị.</i></p>"
           },
@@ -193,23 +193,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "a sum of all variables"
+                "noiDung": "a sum containing every variable once, false on exactly one row"
               },
               {
                 "ma": "b",
-                "noiDung": "a single variable"
+                "noiDung": "a product containing every variable once, true on exactly one row"
               },
               {
                 "ma": "c",
-                "noiDung": "a product true on all rows"
+                "noiDung": "a single variable, true on half of the rows"
               },
               {
                 "ma": "d",
-                "noiDung": "a product containing every variable once, true on exactly one row"
+                "noiDung": "a product of two variables, true on exactly two rows"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>Sum-of-products form ORs the minterms of the rows where F = 1.</p><p><i>VI: Dạng tổng các tích OR các minterm của dòng có F = 1.</i></p>"
           }
@@ -661,10 +661,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Logic 3 — Which simplified expression is equivalent? — answer key\n\n1. F = A·B + A·B′ + A′·BF = A·B + A·B′ + A′·B\n   Answer: d) A + B\n   Verified by comparing all rows of the truth table; the others differ on at least one row.VI: Đã kiểm bằng cách so mọi dòng của bảng chân trị; các phương án còn lại sai ở ít nhất một dòng.\n\n2. F = (A + B)·(A + B′)F = (A + B)·(A + B′)\n   Answer: a) A\n   Verified by comparing all rows of the truth table; the others differ on at least one row.VI: Đã kiểm bằng cách so mọi dòng của bảng chân trị; các phương án còn lại sai ở ít nhất một dòng.\n\n3. F = (A + B)′ + A′·BF = (A + B)′ + A′·B\n   Answer: b) A′\n   Verified by comparing all rows of the truth table; the others differ on at least one row.VI: Đã kiểm bằng cách so mọi dòng của bảng chân trị; các phương án còn lại sai ở ít nhất một dòng.\n\n4. F = A·B·C + A·B·C′ + A·B′·CF = A·B·C + A·B·C′ + A·B′·C\n   Answer: c) A·(B + C)\n   Verified by comparing all rows of the truth table; the others differ on at least one row.VI: Đã kiểm bằng cách so mọi dòng của bảng chân trị; các phương án còn lại sai ở ít nhất một dòng.\n"
+          "code": "# Logic 3 — Which simplified expression is equivalent? — answer key\n\n1. F = A·B + A·B′ + A′·BF = A·B + A·B′ + A′·B\n   Answer: d) A + B\n   Verified by comparing all rows of the truth table; the others differ on at least one row.VI: Đã kiểm bằng cách so mọi dòng của bảng chân trị; các phương án còn lại sai ở ít nhất một dòng.\n\n2. F = (A + B)·(A + B′)F = (A + B)·(A + B′)\n   Answer: c) A\n   Verified by comparing all rows of the truth table; the others differ on at least one row.VI: Đã kiểm bằng cách so mọi dòng của bảng chân trị; các phương án còn lại sai ở ít nhất một dòng.\n\n3. F = (A + B)′ + A′·BF = (A + B)′ + A′·B\n   Answer: a) A′\n   Verified by comparing all rows of the truth table; the others differ on at least one row.VI: Đã kiểm bằng cách so mọi dòng của bảng chân trị; các phương án còn lại sai ở ít nhất một dòng.\n\n4. F = A·B·C + A·B·C′ + A·B′·CF = A·B·C + A·B·C′ + A·B′·C\n   Answer: a) A·(B + C)\n   Verified by comparing all rows of the truth table; the others differ on at least one row.VI: Đã kiểm bằng cách so mọi dòng của bảng chân trị; các phương án còn lại sai ở ít nhất một dòng.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> A + B</p><p>Verified by comparing all rows of the truth table; the others differ on at least one row.</p><p><i>VI: Đã kiểm bằng cách so mọi dòng của bảng chân trị; các phương án còn lại sai ở ít nhất một dòng.</i></p></li><li><p><b>c)</b> A</p><p>Verified by comparing all rows of the truth table; the others differ on at least one row.</p><p><i>VI: Đã kiểm bằng cách so mọi dòng của bảng chân trị; các phương án còn lại sai ở ít nhất một dòng.</i></p></li><li><p><b>a)</b> A′</p><p>Verified by comparing all rows of the truth table; the others differ on at least one row.</p><p><i>VI: Đã kiểm bằng cách so mọi dòng của bảng chân trị; các phương án còn lại sai ở ít nhất một dòng.</i></p></li><li><p><b>a)</b> A·(B + C)</p><p>Verified by comparing all rows of the truth table; the others differ on at least one row.</p><p><i>VI: Đã kiểm bằng cách so mọi dòng của bảng chân trị; các phương án còn lại sai ở ít nhất một dòng.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -681,11 +681,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "A·B"
+                "noiDung": "A′·B′"
               },
               {
                 "ma": "c",
-                "noiDung": "A′·B′"
+                "noiDung": "A·B"
               },
               {
                 "ma": "d",
@@ -703,23 +703,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "A"
+                "noiDung": "A·B′"
               },
               {
                 "ma": "b",
-                "noiDung": "B"
-              },
-              {
-                "ma": "c",
                 "noiDung": "A + B"
               },
               {
+                "ma": "c",
+                "noiDung": "A"
+              },
+              {
                 "ma": "d",
-                "noiDung": "A·B′"
+                "noiDung": "B"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>Verified by comparing all rows of the truth table; the others differ on at least one row.</p><p><i>VI: Đã kiểm bằng cách so mọi dòng của bảng chân trị; các phương án còn lại sai ở ít nhất một dòng.</i></p>"
           },
@@ -729,15 +729,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "A + B′"
-              },
-              {
-                "ma": "b",
                 "noiDung": "A′"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "B′"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A + B′"
               },
               {
                 "ma": "d",
@@ -745,7 +745,7 @@
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>Verified by comparing all rows of the truth table; the others differ on at least one row.</p><p><i>VI: Đã kiểm bằng cách so mọi dòng của bảng chân trị; các phương án còn lại sai ở ít nhất một dòng.</i></p>"
           },
@@ -755,23 +755,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "A + B + C"
-              },
-              {
-                "ma": "b",
-                "noiDung": "A·B + C"
-              },
-              {
-                "ma": "c",
                 "noiDung": "A·(B + C)"
               },
               {
-                "ma": "d",
+                "ma": "b",
+                "noiDung": "A + B + C"
+              },
+              {
+                "ma": "c",
                 "noiDung": "A·B·C"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A·B + C"
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>Verified by comparing all rows of the truth table; the others differ on at least one row.</p><p><i>VI: Đã kiểm bằng cách so mọi dòng của bảng chân trị; các phương án còn lại sai ở ít nhất một dòng.</i></p>"
           }

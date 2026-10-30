@@ -47,10 +47,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# RAID 1 — Levels, striping, mirroring, parity and SSDs — answer key\n\n1. RAID 0 provides …RAID 0 cung cấp …\n   Answer: c) striping for speed with no redundancy\n   One failed disk destroys the whole array.VI: Một đĩa hỏng làm mất cả mảng.\n\n2. RAID 1 stores …RAID 1 lưu …\n   Answer: d) two copies of the data on separate disks (mirroring)\n   Half the raw capacity is usable; reads can be served from either copy.VI: Một nửa dung lượng thô dùng được; đọc có thể phục vụ từ bản nào cũng được.\n\n3. RAID 5 distributes …RAID 5 phân tán …\n   Answer: a) parity blocks across all the disks\n   Rotating parity avoids a single parity-disk bottleneck.VI: Parity xoay vòng tránh nút cổ chai ở một đĩa parity.\n\n4. What does RAID 6 add over RAID 5?RAID 6 thêm gì so với RAID 5?\n   Answer: b) A second independent parity: it survives two disk failures\n   Two parity blocks per stripe allow two erasures to be recovered.VI: Hai khối parity mỗi dải cho phép phục hồi hai ổ hỏng.\n\n5. Why do SSDs apply wear levelling?Vì sao SSD dùng cân bằng mài mòn (wear levelling)?\n   Answer: c) Flash cells survive only a limited number of erase cycles, so writes are spread out\n   Spreading erases evenly makes all blocks wear out together, later.VI: Rải đều lần xoá để mọi khối mòn cùng lúc và muộn hơn.\n\n6. Compared with a hard disk, an SSD …So với đĩa cứng, SSD …\n   Answer: d) has no mechanical seek or rotation, so random access is far faster\n   No moving parts removes the positioning cost.VI: Không có bộ phận chuyển động nên không có chi phí định vị.\n"
+          "code": "# RAID 1 — Levels, striping, mirroring, parity and SSDs — answer key\n\n1. RAID 0 provides …RAID 0 cung cấp …\n   Answer: b) striping for speed with no redundancy\n   One failed disk destroys the whole array.VI: Một đĩa hỏng làm mất cả mảng.\n\n2. RAID 1 stores …RAID 1 lưu …\n   Answer: c) two copies of the data on separate disks (mirroring)\n   Half the raw capacity is usable; reads can be served from either copy.VI: Một nửa dung lượng thô dùng được; đọc có thể phục vụ từ bản nào cũng được.\n\n3. RAID 5 distributes …RAID 5 phân tán …\n   Answer: a) parity blocks across all the disks\n   Rotating parity avoids a single parity-disk bottleneck.VI: Parity xoay vòng tránh nút cổ chai ở một đĩa parity.\n\n4. What does RAID 6 add over RAID 5?RAID 6 thêm gì so với RAID 5?\n   Answer: d) A second independent parity: it survives two disk failures\n   Two parity blocks per stripe allow two erasures to be recovered.VI: Hai khối parity mỗi dải cho phép phục hồi hai ổ hỏng.\n\n5. Why do SSDs apply wear levelling?Vì sao SSD dùng cân bằng mài mòn (wear levelling)?\n   Answer: b) Flash cells survive only a limited number of erase cycles, so writes are spread out\n   Spreading erases evenly makes all blocks wear out together, later.VI: Rải đều lần xoá để mọi khối mòn cùng lúc và muộn hơn.\n\n6. Compared with a hard disk, an SSD …So với đĩa cứng, SSD …\n   Answer: a) has no mechanical seek or rotation, so random access is far faster\n   No moving parts removes the positioning cost.VI: Không có bộ phận chuyển động nên không có chi phí định vị.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> striping for speed with no redundancy</p><p>One failed disk destroys the whole array.</p><p><i>VI: Một đĩa hỏng làm mất cả mảng.</i></p></li><li><p><b>c)</b> two copies of the data on separate disks (mirroring)</p><p>Half the raw capacity is usable; reads can be served from either copy.</p><p><i>VI: Một nửa dung lượng thô dùng được; đọc có thể phục vụ từ bản nào cũng được.</i></p></li><li><p><b>a)</b> parity blocks across all the disks</p><p>Rotating parity avoids a single parity-disk bottleneck.</p><p><i>VI: Parity xoay vòng tránh nút cổ chai ở một đĩa parity.</i></p></li><li><p><b>d)</b> A second independent parity: it survives two disk failures</p><p>Two parity blocks per stripe allow two erasures to be recovered.</p><p><i>VI: Hai khối parity mỗi dải cho phép phục hồi hai ổ hỏng.</i></p></li><li><p><b>b)</b> Flash cells survive only a limited number of erase cycles, so writes are spread out</p><p>Spreading erases evenly makes all blocks wear out together, later.</p><p><i>VI: Rải đều lần xoá để mọi khối mòn cùng lúc và muộn hơn.</i></p></li><li><p><b>a)</b> has no mechanical seek or rotation, so random access is far faster</p><p>No moving parts removes the positioning cost.</p><p><i>VI: Không có bộ phận chuyển động nên không có chi phí định vị.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -63,23 +63,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "single parity"
-              },
-              {
-                "ma": "b",
                 "noiDung": "double parity"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "striping for speed with no redundancy"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "mirroring"
+              },
+              {
+                "ma": "d",
+                "noiDung": "single parity"
               }
             ],
             "dapAn": [
-              "c"
+              "b"
             ],
             "giaiThich": "<p>One failed disk destroys the whole array.</p><p><i>VI: Một đĩa hỏng làm mất cả mảng.</i></p>"
           },
@@ -93,19 +93,19 @@
               },
               {
                 "ma": "b",
-                "noiDung": "data only"
-              },
-              {
-                "ma": "c",
                 "noiDung": "parity spread across all disks"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "two copies of the data on separate disks (mirroring)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "data only"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>Half the raw capacity is usable; reads can be served from either copy.</p><p><i>VI: Một nửa dung lượng thô dùng được; đọc có thể phục vụ từ bản nào cũng được.</i></p>"
           },
@@ -119,11 +119,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "data on one disk and parity on another"
+                "noiDung": "copies on every disk"
               },
               {
                 "ma": "c",
-                "noiDung": "copies on every disk"
+                "noiDung": "data on one disk and parity on another"
               },
               {
                 "ma": "d",
@@ -141,23 +141,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Smaller capacity cost than RAID 5"
+                "noiDung": "Faster writes"
               },
               {
                 "ma": "b",
-                "noiDung": "A second independent parity: it survives two disk failures"
-              },
-              {
-                "ma": "c",
                 "noiDung": "Mirroring"
               },
               {
+                "ma": "c",
+                "noiDung": "Smaller capacity cost than RAID 5"
+              },
+              {
                 "ma": "d",
-                "noiDung": "Faster writes"
+                "noiDung": "A second independent parity: it survives two disk failures"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>Two parity blocks per stripe allow two erasures to be recovered.</p><p><i>VI: Hai khối parity mỗi dải cho phép phục hồi hai ổ hỏng.</i></p>"
           },
@@ -167,23 +167,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "To refresh DRAM"
+                "noiDung": "To make reads faster, by moving popular blocks close to the controller"
               },
               {
                 "ma": "b",
-                "noiDung": "To compress data"
-              },
-              {
-                "ma": "c",
                 "noiDung": "Flash cells survive only a limited number of erase cycles, so writes are spread out"
               },
               {
+                "ma": "c",
+                "noiDung": "To compress data, so that each block stores more bits and lasts longer"
+              },
+              {
                 "ma": "d",
-                "noiDung": "To make reads faster"
+                "noiDung": "To refresh the cells in time, because flash loses its charge within seconds"
               }
             ],
             "dapAn": [
-              "c"
+              "b"
             ],
             "giaiThich": "<p>Spreading erases evenly makes all blocks wear out together, later.</p><p><i>VI: Rải đều lần xoá để mọi khối mòn cùng lúc và muộn hơn.</i></p>"
           },
@@ -193,23 +193,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "always has lower cost per GB"
+                "noiDung": "has no mechanical seek or rotation, so random access is far faster"
               },
               {
                 "ma": "b",
-                "noiDung": "is volatile"
+                "noiDung": "is volatile, so it needs a battery to keep data at power-off"
               },
               {
                 "ma": "c",
-                "noiDung": "needs a longer seek"
+                "noiDung": "always has a lower cost per GB, because flash chips have no moving parts"
               },
               {
                 "ma": "d",
-                "noiDung": "has no mechanical seek or rotation, so random access is far faster"
+                "noiDung": "needs a longer seek, because the blocks are spread over many chips"
               }
             ],
             "dapAn": [
-              "d"
+              "a"
             ],
             "giaiThich": "<p>No moving parts removes the positioning cost.</p><p><i>VI: Không có bộ phận chuyển động nên không có chi phí định vị.</i></p>"
           }

@@ -47,10 +47,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# History 1 — Generations of computers and Moore’s law: concepts — answer key\n\n1. Moore’s law states that …Định luật Moore nói rằng …\n   Answer: b) the number of transistors on a chip doubles roughly every two years\n   An observation, not a law of physics; it drove cheaper and faster chips for decades.VI: Một quan sát, không phải định luật vật lý; nó thúc đẩy chip rẻ và nhanh hơn suốt nhiều thập kỷ.\n\n2. The main technology of the second generation of computers was …Công nghệ chính của thế hệ máy tính thứ hai là …\n   Answer: c) transistors\n   First: vacuum tubes; second: transistors; third: ICs; later: LSI/VLSI and microprocessors.VI: Thứ nhất: đèn chân không; thứ hai: transistor; thứ ba: IC; sau đó LSI/VLSI và vi xử lý.\n\n3. The IAS machine is important because it introduced …Máy IAS quan trọng vì nó giới thiệu …\n   Answer: d) the stored-program concept that von Neumann described\n   Program and data in the same memory.VI: Chương trình và dữ liệu trong cùng một bộ nhớ.\n\n4. The “memory wall” refers to …“Bức tường bộ nhớ” nói đến …\n   Answer: a) processor speed growing much faster than memory speed\n   It motivates caches and the memory hierarchy.VI: Nó là động cơ cho cache và phân cấp bộ nhớ.\n\n5. Why did clock rates stop rising around 2004?Vì sao tốc độ clock ngừng tăng khoảng năm 2004?\n   Answer: b) Power density and heat grow with frequency\n   The “power wall” moved the industry to multicore.VI: “Bức tường công suất” đẩy ngành sang đa lõi.\n"
+          "code": "# History 1 — Generations of computers and Moore’s law: concepts — answer key\n\n1. Moore’s law states that …Định luật Moore nói rằng …\n   Answer: d) the number of transistors on a chip doubles roughly every two years\n   An observation, not a law of physics; it drove cheaper and faster chips for decades.VI: Một quan sát, không phải định luật vật lý; nó thúc đẩy chip rẻ và nhanh hơn suốt nhiều thập kỷ.\n\n2. The main technology of the second generation of computers was …Công nghệ chính của thế hệ máy tính thứ hai là …\n   Answer: c) transistors\n   First: vacuum tubes; second: transistors; third: ICs; later: LSI/VLSI and microprocessors.VI: Thứ nhất: đèn chân không; thứ hai: transistor; thứ ba: IC; sau đó LSI/VLSI và vi xử lý.\n\n3. The IAS machine is important because it introduced …Máy IAS quan trọng vì nó giới thiệu …\n   Answer: d) the stored-program concept that von Neumann described\n   Program and data in the same memory.VI: Chương trình và dữ liệu trong cùng một bộ nhớ.\n\n4. The “memory wall” refers to …“Bức tường bộ nhớ” nói đến …\n   Answer: c) processor speed growing much faster than memory speed\n   It motivates caches and the memory hierarchy.VI: Nó là động cơ cho cache và phân cấp bộ nhớ.\n\n5. Why did clock rates stop rising around 2004?Vì sao tốc độ clock ngừng tăng khoảng năm 2004?\n   Answer: c) Power density and heat grow with frequency\n   The “power wall” moved the industry to multicore.VI: “Bức tường công suất” đẩy ngành sang đa lõi.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> the number of transistors on a chip doubles roughly every two years</p><p>An observation, not a law of physics; it drove cheaper and faster chips for decades.</p><p><i>VI: Một quan sát, không phải định luật vật lý; nó thúc đẩy chip rẻ và nhanh hơn suốt nhiều thập kỷ.</i></p></li><li><p><b>c)</b> transistors</p><p>First: vacuum tubes; second: transistors; third: ICs; later: LSI/VLSI and microprocessors.</p><p><i>VI: Thứ nhất: đèn chân không; thứ hai: transistor; thứ ba: IC; sau đó LSI/VLSI và vi xử lý.</i></p></li><li><p><b>d)</b> the stored-program concept that von Neumann described</p><p>Program and data in the same memory.</p><p><i>VI: Chương trình và dữ liệu trong cùng một bộ nhớ.</i></p></li><li><p><b>c)</b> processor speed growing much faster than memory speed</p><p>It motivates caches and the memory hierarchy.</p><p><i>VI: Nó là động cơ cho cache và phân cấp bộ nhớ.</i></p></li><li><p><b>c)</b> Power density and heat grow with frequency</p><p>The “power wall” moved the industry to multicore.</p><p><i>VI: “Bức tường công suất” đẩy ngành sang đa lõi.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -67,7 +67,7 @@
               },
               {
                 "ma": "b",
-                "noiDung": "the number of transistors on a chip doubles roughly every two years"
+                "noiDung": "memory prices double every year"
               },
               {
                 "ma": "c",
@@ -75,11 +75,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "memory prices double every year"
+                "noiDung": "the number of transistors on a chip doubles roughly every two years"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>An observation, not a law of physics; it drove cheaper and faster chips for decades.</p><p><i>VI: Một quan sát, không phải định luật vật lý; nó thúc đẩy chip rẻ và nhanh hơn suốt nhiều thập kỷ.</i></p>"
           },
@@ -115,15 +115,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "the transistor"
+                "noiDung": "the time-sharing operating system with terminals"
               },
               {
                 "ma": "b",
-                "noiDung": "the hard disk"
+                "noiDung": "the hard disk as a store for programs and data"
               },
               {
                 "ma": "c",
-                "noiDung": "the graphical user interface"
+                "noiDung": "the transistor as a replacement for vacuum tubes"
               },
               {
                 "ma": "d",
@@ -141,23 +141,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "processor speed growing much faster than memory speed"
-              },
-              {
-                "ma": "b",
-                "noiDung": "a physical wall in the data centre"
-              },
-              {
-                "ma": "c",
                 "noiDung": "a limit on memory capacity"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "a security feature of the OS"
+              },
+              {
+                "ma": "c",
+                "noiDung": "processor speed growing much faster than memory speed"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a physical wall in the data centre"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>It motivates caches and the memory hierarchy.</p><p><i>VI: Nó là động cơ cho cache và phân cấp bộ nhớ.</i></p>"
           },
@@ -171,11 +171,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "Power density and heat grow with frequency"
+                "noiDung": "Transistors stopped shrinking"
               },
               {
                 "ma": "c",
-                "noiDung": "Transistors stopped shrinking"
+                "noiDung": "Power density and heat grow with frequency"
               },
               {
                 "ma": "d",
@@ -183,7 +183,7 @@
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>The “power wall” moved the industry to multicore.</p><p><i>VI: “Bức tường công suất” đẩy ngành sang đa lõi.</i></p>"
           }
@@ -327,7 +327,7 @@
               {
                 "ma": "r1",
                 "o": {
-                  "T": "1 years"
+                  "T": "1 year"
                 }
               },
               {

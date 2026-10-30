@@ -47,10 +47,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Locality 1 — Temporal and spatial locality — answer key\n\n1. A loop that keeps adding to the same variable sum shows mainly …Vòng lặp liên tục cộng vào biến sum cho thấy chủ yếu …\n   Answer: b) temporal locality\n   The same address is reused again and again — temporal locality.VI: Cùng một địa chỉ được dùng lại nhiều lần — cục bộ thời gian.\n\n2. Reading a[0], a[1], a[2], … of an array shows mainly …Đọc a[0], a[1], a[2], … của mảng cho thấy chủ yếu …\n   Answer: c) spatial locality\n   Neighbouring addresses are used one after the other, so a block fetch brings useful neighbours.VI: Các địa chỉ lân cận được dùng liên tiếp nên nạp một khối mang theo các ô hữu ích.\n\n3. Why is the cache block (line) larger than one word?Vì sao khối (dòng) cache lớn hơn một từ?\n   Answer: d) To exploit spatial locality\n   Fetching neighbours together turns later sequential accesses into hits.VI: Nạp cùng các ô lân cận biến các truy cập tuần tự sau đó thành hit.\n\n4. Moving down the hierarchy (register → cache → RAM → disk) the access time …Đi xuống phân cấp (thanh ghi → cache → RAM → đĩa) thời gian truy cập …\n   Answer: a) increases while capacity increases and cost per bit decreases\n   Fast memory is small and expensive; the hierarchy gives capacity of the bottom with speed of the top.VI: Bộ nhớ nhanh thì nhỏ và đắt; phân cấp cho dung lượng của tầng dưới với tốc độ của tầng trên.\n\n5. A program with a very low hit ratio most likely has …Một chương trình có tỉ lệ hit rất thấp nhiều khả năng có …\n   Answer: b) poor locality or a working set larger than the cache\n   Misses come from poor reuse (capacity/conflict) or first use (compulsory).VI: Miss đến từ ít tái sử dụng (dung lượng/xung đột) hoặc lần đầu dùng (bắt buộc).\n"
+          "code": "# Locality 1 — Temporal and spatial locality — answer key\n\n1. A loop that keeps adding to the same variable sum shows mainly …Vòng lặp liên tục cộng vào biến sum cho thấy chủ yếu …\n   Answer: d) temporal locality\n   The same address is reused again and again — temporal locality.VI: Cùng một địa chỉ được dùng lại nhiều lần — cục bộ thời gian.\n\n2. Reading a[0], a[1], a[2], … of an array shows mainly …Đọc a[0], a[1], a[2], … của mảng cho thấy chủ yếu …\n   Answer: d) spatial locality\n   Neighbouring addresses are used one after the other, so a block fetch brings useful neighbours.VI: Các địa chỉ lân cận được dùng liên tiếp nên nạp một khối mang theo các ô hữu ích.\n\n3. Why is the cache block (line) larger than one word?Vì sao khối (dòng) cache lớn hơn một từ?\n   Answer: c) To exploit spatial locality\n   Fetching neighbours together turns later sequential accesses into hits.VI: Nạp cùng các ô lân cận biến các truy cập tuần tự sau đó thành hit.\n\n4. Moving down the hierarchy (register → cache → RAM → disk) the access time …Đi xuống phân cấp (thanh ghi → cache → RAM → đĩa) thời gian truy cập …\n   Answer: c) increases while capacity increases and cost per bit decreases\n   Fast memory is small and expensive; the hierarchy gives capacity of the bottom with speed of the top.VI: Bộ nhớ nhanh thì nhỏ và đắt; phân cấp cho dung lượng của tầng dưới với tốc độ của tầng trên.\n\n5. A program with a very low hit ratio most likely has …Một chương trình có tỉ lệ hit rất thấp nhiều khả năng có …\n   Answer: a) poor locality or a working set larger than the cache\n   Misses come from poor reuse (capacity/conflict) or first use (compulsory).VI: Miss đến từ ít tái sử dụng (dung lượng/xung đột) hoặc lần đầu dùng (bắt buộc).\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> temporal locality</p><p>The same address is reused again and again — temporal locality.</p><p><i>VI: Cùng một địa chỉ được dùng lại nhiều lần — cục bộ thời gian.</i></p></li><li><p><b>d)</b> spatial locality</p><p>Neighbouring addresses are used one after the other, so a block fetch brings useful neighbours.</p><p><i>VI: Các địa chỉ lân cận được dùng liên tiếp nên nạp một khối mang theo các ô hữu ích.</i></p></li><li><p><b>c)</b> To exploit spatial locality</p><p>Fetching neighbours together turns later sequential accesses into hits.</p><p><i>VI: Nạp cùng các ô lân cận biến các truy cập tuần tự sau đó thành hit.</i></p></li><li><p><b>c)</b> increases while capacity increases and cost per bit decreases</p><p>Fast memory is small and expensive; the hierarchy gives capacity of the bottom with speed of the top.</p><p><i>VI: Bộ nhớ nhanh thì nhỏ và đắt; phân cấp cho dung lượng của tầng dưới với tốc độ của tầng trên.</i></p></li><li><p><b>a)</b> poor locality or a working set larger than the cache</p><p>Misses come from poor reuse (capacity/conflict) or first use (compulsory).</p><p><i>VI: Miss đến từ ít tái sử dụng (dung lượng/xung đột) hoặc lần đầu dùng (bắt buộc).</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -63,23 +63,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "sequential locality of instructions only"
-              },
-              {
-                "ma": "b",
-                "noiDung": "temporal locality"
-              },
-              {
-                "ma": "c",
                 "noiDung": "spatial locality"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "no locality"
+              },
+              {
+                "ma": "c",
+                "noiDung": "sequential locality of instructions only"
+              },
+              {
+                "ma": "d",
+                "noiDung": "temporal locality"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>The same address is reused again and again — temporal locality.</p><p><i>VI: Cùng một địa chỉ được dùng lại nhiều lần — cục bộ thời gian.</i></p>"
           },
@@ -89,23 +89,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "no locality"
-              },
-              {
-                "ma": "b",
                 "noiDung": "random access"
               },
               {
+                "ma": "b",
+                "noiDung": "no locality"
+              },
+              {
                 "ma": "c",
-                "noiDung": "spatial locality"
+                "noiDung": "temporal locality only"
               },
               {
                 "ma": "d",
-                "noiDung": "temporal locality only"
+                "noiDung": "spatial locality"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>Neighbouring addresses are used one after the other, so a block fetch brings useful neighbours.</p><p><i>VI: Các địa chỉ lân cận được dùng liên tiếp nên nạp một khối mang theo các ô hữu ích.</i></p>"
           },
@@ -123,15 +123,15 @@
               },
               {
                 "ma": "c",
-                "noiDung": "To avoid using the tag"
+                "noiDung": "To exploit spatial locality"
               },
               {
                 "ma": "d",
-                "noiDung": "To exploit spatial locality"
+                "noiDung": "To avoid using the tag"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>Fetching neighbours together turns later sequential accesses into hits.</p><p><i>VI: Nạp cùng các ô lân cận biến các truy cập tuần tự sau đó thành hit.</i></p>"
           },
@@ -141,7 +141,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "increases while capacity increases and cost per bit decreases"
+                "noiDung": "increases while cost per bit increases"
               },
               {
                 "ma": "b",
@@ -149,15 +149,15 @@
               },
               {
                 "ma": "c",
-                "noiDung": "stays equal"
+                "noiDung": "increases while capacity increases and cost per bit decreases"
               },
               {
                 "ma": "d",
-                "noiDung": "increases while cost per bit increases"
+                "noiDung": "stays equal"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>Fast memory is small and expensive; the hierarchy gives capacity of the bottom with speed of the top.</p><p><i>VI: Bộ nhớ nhanh thì nhỏ và đắt; phân cấp cho dung lượng của tầng dưới với tốc độ của tầng trên.</i></p>"
           },
@@ -167,23 +167,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "a data bus that is too narrow"
-              },
-              {
-                "ma": "b",
                 "noiDung": "poor locality or a working set larger than the cache"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "too many registers"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "a clock rate that is too high"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a data bus that is too narrow"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>Misses come from poor reuse (capacity/conflict) or first use (compulsory).</p><p><i>VI: Miss đến từ ít tái sử dụng (dung lượng/xung đột) hoặc lần đầu dùng (bắt buộc).</i></p>"
           }
@@ -520,8 +520,8 @@
       "tags": [
         "cea201"
       ],
-      "problemHtml": "<p>A 16 × 16 array of 4-byte integers is stored row by row from address 0. The cache is direct-mapped, 16 lines of 32 bytes, initially empty. Three loops read all 256 elements (the third visits <code>a[(k·8) mod 256]</code> for k = 0 … 255). The numbers were obtained with the cache simulator. Fill in hits and misses.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
-      "problemHtmlVi": "<p>Mảng 16 × 16 số nguyên 4 byte lưu theo hàng từ địa chỉ 0. Cache ánh xạ trực tiếp, 16 dòng 32 byte, ban đầu rỗng. Ba vòng lặp đọc cả 256 phần tử (vòng thứ ba đọc <code>a[(k·8) mod 256]</code>, k = 0 … 255). Số liệu do bộ mô phỏng cache tính. Điền số hit và miss.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "problemHtml": "<p>A 16 × 16 array of 4-byte integers is stored row by row from address 0. The cache is direct-mapped, 16 lines of 32 bytes, initially empty. Three loops make 256 reads each: the first two read every element once; the third, seeing the array as a flat list of 256 elements, reads <code>a[(k·8) mod 256]</code> for k = 0 … 255, which is only 32 different elements, 8 times each. The numbers were obtained with the cache simulator. Fill in hits and misses.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mảng 16 × 16 số nguyên 4 byte lưu theo hàng từ địa chỉ 0. Cache ánh xạ trực tiếp, 16 dòng 32 byte, ban đầu rỗng. Mỗi vòng lặp đọc 256 lần: hai vòng đầu đọc mỗi phần tử một lần; vòng thứ ba, xem mảng như danh sách phẳng 256 phần tử, đọc <code>a[(k·8) mod 256]</code> với k = 0 … 255, tức chỉ có 32 phần tử khác nhau, mỗi phần tử 8 lần. Số liệu do bộ mô phỏng cache tính. Điền số hit và miss.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
       "inputSpec": null,
       "outputSpec": null,
       "constraints": "",

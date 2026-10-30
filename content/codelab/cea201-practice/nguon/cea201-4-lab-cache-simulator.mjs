@@ -44,7 +44,7 @@ const LAB = jsDe({
 <li><code>write = "through"</code>: every write operation also writes memory (<code>memWrites</code> counts write operations). <code>write = "back"</code>: a write only marks the line dirty; memory is written once for each dirty line when it is evicted, and once for each dirty line still in the cache at the end (final flush).</li>
 </ol>
 <p>Return <code>{ hits, misses, hitRatio, memReads, memWrites, missBlocks }</code> — <code>hitRatio</code> = hits / operations rounded to 4 decimals (<code>Math.round(x * 10000) / 10000</code>); <code>missBlocks</code> = block numbers of the misses in order.</p>
-<h4>Sample run (16-byte blocks, 4 lines, direct-mapped, LRU, write-back)</h4>${tab(['#', 'op'], O1.slice(0, 6).map((o, i) => [i + 1, o.join(' ')]))}`,
+<h4>Sample run (16-byte blocks, 4 lines, direct-mapped, LRU, write-back)</h4>${tab(['#', 'op'], O1.slice(0, 6).map((o, i) => [i + 1, o.join(' ')]))}<p>Result: <code>${JSON.stringify(cacheLab(cfgA, O1.slice(0, 6)))}</code></p>`,
   `<p><b>Tình huống.</b> Bạn đang kiểm chứng thiết kế hệ nhớ của một CPU nhúng nhỏ. Viết <code>cacheLab(cfg, ops)</code> phát lại danh sách thao tác nhớ <code>[['R', addr], ['W', addr], …]</code> trên cache mô tả bởi <code>cfg = { blockBytes, lines, ways, policy, write }</code>:</p>
 <ol>
 <li>Cache có <code>lines</code> dòng chia thành <code>lines / ways</code> tập; khối = ⌊addr / blockBytes⌋, tập = khối mod số tập. Ban đầu rỗng.</li>
@@ -52,7 +52,8 @@ const LAB = jsDe({
 <li>Mỗi miss — cả đọc <b>và</b> ghi (<i>write-allocate</i>) — nạp khối từ bộ nhớ (<code>memReads</code> đếm số lần nạp).</li>
 <li><code>write = "through"</code>: mỗi thao tác ghi đều ghi bộ nhớ (<code>memWrites</code> đếm số thao tác ghi). <code>write = "back"</code>: ghi chỉ đánh dấu dòng bẩn; bộ nhớ được ghi một lần cho mỗi dòng bẩn khi bị đuổi, và một lần cho mỗi dòng bẩn còn trong cache lúc kết thúc (xả cuối).</li>
 </ol>
-<p>Trả <code>{ hits, misses, hitRatio, memReads, memWrites, missBlocks }</code> — <code>hitRatio</code> = hits / số thao tác làm tròn 4 chữ số (<code>Math.round(x * 10000) / 10000</code>); <code>missBlocks</code> = số hiệu khối của các lần miss theo thứ tự.</p>`),
+<p>Trả <code>{ hits, misses, hitRatio, memReads, memWrites, missBlocks }</code> — <code>hitRatio</code> = hits / số thao tác làm tròn 4 chữ số (<code>Math.round(x * 10000) / 10000</code>); <code>missBlocks</code> = số hiệu khối của các lần miss theo thứ tự.</p>
+<h4>Chạy mẫu (khối 16 byte, 4 dòng, ánh xạ trực tiếp, LRU, write-back)</h4>${tab(['#', 'thao tác'], O1.slice(0, 6).map((o, i) => [i + 1, o.join(' ')]))}<p>Kết quả: <code>${JSON.stringify(cacheLab(cfgA, O1.slice(0, 6)))}</code></p>`),
   yeuCau: [bi('Do not modify <code>ops</code> or <code>cfg</code>.', 'Không sửa <code>ops</code> hay <code>cfg</code>.'), bi('A write that misses first loads the block (write-allocate) and then counts as a write.', 'Ghi bị miss thì nạp khối trước (write-allocate) rồi mới tính là ghi.')],
   viDu: [{ input: `cacheLab(${JSON.stringify(cfgA)}, ${JSON.stringify(O1.slice(0, 4))})`, output: JSON.stringify(cacheLab(cfgA, O1.slice(0, 4))), explanation: 'Blocks 0 and 4 collide on line 0: the write to block 0 makes it dirty, and bringing block 4 in writes it back.|||Khối 0 và 4 va chạm ở dòng 0: ghi vào khối 0 làm nó bẩn, nạp khối 4 vào thì ghi trả khối 0.' }],
   goiY: ['Build the set structure first and make read-only runs match the Mapping 7 exercise.', 'Add the dirty bit and the two write policies one at a time; keep counters for fetches and memory writes.', 'Do not forget the final flush of dirty lines in write-back mode, and that a write HIT in write-back only sets the dirty bit.'],

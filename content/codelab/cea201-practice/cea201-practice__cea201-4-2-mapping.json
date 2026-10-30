@@ -49,10 +49,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Mapping 1 — Direct, associative and set-associative: concepts — answer key\n\n1. In a direct-mapped cache, a memory block can be placed …Trong cache ánh xạ trực tiếp, một khối bộ nhớ có thể đặt …\n   Answer: c) in exactly one line, chosen by (block number) mod (number of lines)\n   One possible line makes the hardware trivial but causes conflict misses.VI: Chỉ một dòng khả dĩ nên phần cứng đơn giản nhưng gây miss do xung đột.\n\n2. What is the main drawback of fully associative mapping?Nhược điểm chính của ánh xạ liên kết đầy đủ là gì?\n   Answer: d) All tags must be compared in parallel, which is expensive for large caches\n   Every line can hold any block, so every tag is compared at once.VI: Mọi dòng có thể chứa mọi khối nên phải so mọi tag cùng lúc.\n\n3. A 4-way set-associative cache with 64 lines has how many sets?Cache liên kết 4 đường có 64 dòng thì có bao nhiêu tập?\n   Answer: a) 16\n   sets = lines / ways = 64 / 4 = 16.VI: số tập = số dòng / số đường = 64 / 4 = 16.\n\n4. Which replacement algorithm evicts the line that has gone unused for the longest time?Thuật toán thay thế nào đuổi dòng không được dùng lâu nhất?\n   Answer: b) LRU\n   FIFO looks at load time, LFU at frequency, LRU at recency of use.VI: FIFO xét thời điểm nạp, LFU xét tần suất, LRU xét lần dùng gần nhất.\n\n5. With a write-back policy, main memory is updated …Với chính sách write-back, bộ nhớ chính được cập nhật …\n   Answer: c) only when a dirty line is replaced (or flushed)\n   A dirty bit marks lines changed in the cache; they are written once on eviction.VI: Bit bẩn đánh dấu dòng đã đổi trong cache; chúng được ghi một lần khi bị đuổi.\n\n6. Increasing the associativity (same size, same block size) usually …Tăng độ liên kết (cùng dung lượng, cùng cỡ khối) thường …\n   Answer: d) reduces conflict misses but costs more comparators and time\n   More places for a block means fewer conflicts; more tags to check means more hardware.VI: Nhiều chỗ đặt hơn nên ít xung đột; nhiều tag phải kiểm hơn nên tốn phần cứng.\n"
+          "code": "# Mapping 1 — Direct, associative and set-associative: concepts — answer key\n\n1. In a direct-mapped cache, a memory block can be placed …Trong cache ánh xạ trực tiếp, một khối bộ nhớ có thể đặt …\n   Answer: b) in exactly one line, chosen by (block number) mod (number of lines)\n   One possible line makes the hardware trivial but causes conflict misses.VI: Chỉ một dòng khả dĩ nên phần cứng đơn giản nhưng gây miss do xung đột.\n\n2. What is the main drawback of fully associative mapping?Nhược điểm chính của ánh xạ liên kết đầy đủ là gì?\n   Answer: b) All tags must be compared in parallel, which is expensive for large caches\n   Every line can hold any block, so every tag is compared at once.VI: Mọi dòng có thể chứa mọi khối nên phải so mọi tag cùng lúc.\n\n3. A 4-way set-associative cache with 64 lines has how many sets?Cache liên kết 4 đường có 64 dòng thì có bao nhiêu tập?\n   Answer: a) 16\n   sets = lines / ways = 64 / 4 = 16.VI: số tập = số dòng / số đường = 64 / 4 = 16.\n\n4. Which replacement algorithm evicts the line that has gone unused for the longest time?Thuật toán thay thế nào đuổi dòng không được dùng lâu nhất?\n   Answer: b) LRU\n   FIFO looks at load time, LFU at frequency, LRU at recency of use.VI: FIFO xét thời điểm nạp, LFU xét tần suất, LRU xét lần dùng gần nhất.\n\n5. With a write-back policy, main memory is updated …Với chính sách write-back, bộ nhớ chính được cập nhật …\n   Answer: b) only when a dirty line is replaced (or flushed)\n   A dirty bit marks lines changed in the cache; they are written once on eviction.VI: Bit bẩn đánh dấu dòng đã đổi trong cache; chúng được ghi một lần khi bị đuổi.\n\n6. Increasing the associativity (same size, same block size) usually …Tăng độ liên kết (cùng dung lượng, cùng cỡ khối) thường …\n   Answer: a) reduces conflict misses but costs more comparators and time\n   More places for a block means fewer conflicts; more tags to check means more hardware.VI: Nhiều chỗ đặt hơn nên ít xung đột; nhiều tag phải kiểm hơn nên tốn phần cứng.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> in exactly one line, chosen by (block number) mod (number of lines)</p><p>One possible line makes the hardware trivial but causes conflict misses.</p><p><i>VI: Chỉ một dòng khả dĩ nên phần cứng đơn giản nhưng gây miss do xung đột.</i></p></li><li><p><b>b)</b> All tags must be compared in parallel, which is expensive for large caches</p><p>Every line can hold any block, so every tag is compared at once.</p><p><i>VI: Mọi dòng có thể chứa mọi khối nên phải so mọi tag cùng lúc.</i></p></li><li><p><b>a)</b> 16</p><p>sets = lines / ways = 64 / 4 = 16.</p><p><i>VI: số tập = số dòng / số đường = 64 / 4 = 16.</i></p></li><li><p><b>b)</b> LRU</p><p>FIFO looks at load time, LFU at frequency, LRU at recency of use.</p><p><i>VI: FIFO xét thời điểm nạp, LFU xét tần suất, LRU xét lần dùng gần nhất.</i></p></li><li><p><b>b)</b> only when a dirty line is replaced (or flushed)</p><p>A dirty bit marks lines changed in the cache; they are written once on eviction.</p><p><i>VI: Bit bẩn đánh dấu dòng đã đổi trong cache; chúng được ghi một lần khi bị đuổi.</i></p></li><li><p><b>a)</b> reduces conflict misses but costs more comparators and time</p><p>More places for a block means fewer conflicts; more tags to check means more hardware.</p><p><i>VI: Nhiều chỗ đặt hơn nên ít xung đột; nhiều tag phải kiểm hơn nên tốn phần cứng.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -65,23 +65,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "in any line of one set of 4 lines"
+                "noiDung": "only in line 0, and the other lines are kept for instructions"
               },
               {
                 "ma": "b",
-                "noiDung": "only in line 0"
-              },
-              {
-                "ma": "c",
                 "noiDung": "in exactly one line, chosen by (block number) mod (number of lines)"
               },
               {
+                "ma": "c",
+                "noiDung": "in any line of one set, chosen by (block number) mod (number of sets)"
+              },
+              {
                 "ma": "d",
-                "noiDung": "in any line"
+                "noiDung": "in any line, chosen by comparing the tags of all lines"
               }
             ],
             "dapAn": [
-              "c"
+              "b"
             ],
             "giaiThich": "<p>One possible line makes the hardware trivial but causes conflict misses.</p><p><i>VI: Chỉ một dòng khả dĩ nên phần cứng đơn giản nhưng gây miss do xung đột.</i></p>"
           },
@@ -91,23 +91,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "It causes many conflict misses"
+                "noiDung": "It needs longer index bits, which leave no room for the offset field"
               },
               {
                 "ma": "b",
-                "noiDung": "It cannot use LRU"
+                "noiDung": "All tags must be compared in parallel, which is expensive for large caches"
               },
               {
                 "ma": "c",
-                "noiDung": "It needs no tag"
+                "noiDung": "It cannot use LRU, because the lines have no fixed order to keep"
               },
               {
                 "ma": "d",
-                "noiDung": "All tags must be compared in parallel, which is expensive for large caches"
+                "noiDung": "It causes many conflict misses, because each block has only one possible line"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>Every line can hold any block, so every tag is compared at once.</p><p><i>VI: Mọi dòng có thể chứa mọi khối nên phải so mọi tag cùng lúc.</i></p>"
           },
@@ -143,7 +143,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Random"
+                "noiDung": "LFU"
               },
               {
                 "ma": "b",
@@ -155,7 +155,7 @@
               },
               {
                 "ma": "d",
-                "noiDung": "LFU"
+                "noiDung": "Random"
               }
             ],
             "dapAn": [
@@ -169,23 +169,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "never"
+                "noiDung": "only when a line is read for the first time"
               },
               {
                 "ma": "b",
-                "noiDung": "only on reads"
-              },
-              {
-                "ma": "c",
                 "noiDung": "only when a dirty line is replaced (or flushed)"
               },
               {
+                "ma": "c",
+                "noiDung": "on every write, at the same time as the cache"
+              },
+              {
                 "ma": "d",
-                "noiDung": "on every write"
+                "noiDung": "never, because the cache keeps the only copy"
               }
             ],
             "dapAn": [
-              "c"
+              "b"
             ],
             "giaiThich": "<p>A dirty bit marks lines changed in the cache; they are written once on eviction.</p><p><i>VI: Bit bẩn đánh dấu dòng đã đổi trong cache; chúng được ghi một lần khi bị đuổi.</i></p>"
           },
@@ -195,7 +195,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "increases conflict misses"
+                "noiDung": "reduces conflict misses but costs more comparators and time"
               },
               {
                 "ma": "b",
@@ -207,11 +207,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "reduces conflict misses but costs more comparators and time"
+                "noiDung": "increases conflict misses"
               }
             ],
             "dapAn": [
-              "d"
+              "a"
             ],
             "giaiThich": "<p>More places for a block means fewer conflicts; more tags to check means more hardware.</p><p><i>VI: Nhiều chỗ đặt hơn nên ít xung đột; nhiều tag phải kiểm hơn nên tốn phần cứng.</i></p>"
           }
@@ -278,10 +278,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Mapping 2 — Split the address into tag, index and offset — answer key\n\n1. Address fieldsCác trường địa chỉ\n   - r1.o: 16\n   - r1.i: -14\n   - r1.t: 22\n   - r1.s: 0.00006103515625\n   - r2.o: 14\n   - r2.i: -8\n   - r2.t: 26\n   - r2.s: 0.00390625\n   - r3.o: 15\n   - r3.i: -12\n   - r3.t: 29\n   - r3.s: 0.000244140625\n   - r4.o: 10\n   - r4.i: -7\n   - r4.t: 13\n   - r4.s: 0.0078125\n   - r5.o: 13\n   - r5.i: -14\n   - r5.t: 33\n   - r5.s: 0.00006103515625\n   offset = log₂(block); sets = cache / (block × ways); index = log₂(sets); tag = address − index − offset. (22, -14, 16, 0.00006103515625 sets) (26, -8, 14, 0.00390625 sets) (29, -12, 15, 0.000244140625 sets) (13, -7, 10, 0.0078125 sets) (33, -14, 13, 0.00006103515625 sets)VI: offset = log₂(khối); số tập = cache / (khối × số đường); index = log₂(số tập); tag = địa chỉ − index − offset. (22, -14, 16, 0.00006103515625 tập) (26, -8, 14, 0.00390625 tập) (29, -12, 15, 0.000244140625 tập) (13, -7, 10, 0.0078125 tập) (33, -14, 13, 0.00006103515625 tập)\n"
+          "code": "# Mapping 2 — Split the address into tag, index and offset — answer key\n\n1. Address fieldsCác trường địa chỉ\n   - r1.o: 2\n   - r1.i: 14\n   - r1.t: 8\n   - r1.s: 16384\n   - r2.o: 6\n   - r2.i: 8\n   - r2.t: 18\n   - r2.s: 256\n   - r3.o: 5\n   - r3.i: 8\n   - r3.t: 19\n   - r3.s: 256\n   - r4.o: 4\n   - r4.i: 5\n   - r4.t: 7\n   - r4.s: 32\n   - r5.o: 6\n   - r5.i: 0\n   - r5.t: 26\n   - r5.s: 1\n   offset = log₂(block); sets = cache / (block × ways); index = log₂(sets); tag = address − index − offset. (8, 14, 2, 16384 sets) (18, 8, 6, 256 sets) (19, 8, 5, 256 sets) (7, 5, 4, 32 sets) (26, 0, 6, 1 sets)VI: offset = log₂(khối); số tập = cache / (khối × số đường); index = log₂(số tập); tag = địa chỉ − index − offset. (8, 14, 2, 16384 tập) (18, 8, 6, 256 tập) (19, 8, 5, 256 tập) (7, 5, 4, 32 tập) (26, 0, 6, 1 tập)\n"
         }
       ],
-      "solutionExplanationHtml": "<p>offset = log₂(block); sets = cache / (block × ways); index = log₂(sets); tag = address − index − offset. (22, -14, 16, 0.00006103515625 sets) (26, -8, 14, 0.00390625 sets) (29, -12, 15, 0.000244140625 sets) (13, -7, 10, 0.0078125 sets) (33, -14, 13, 0.00006103515625 sets)</p><p><i>VI: offset = log₂(khối); số tập = cache / (khối × số đường); index = log₂(số tập); tag = địa chỉ − index − offset. (22, -14, 16, 0.00006103515625 tập) (26, -8, 14, 0.00390625 tập) (29, -12, 15, 0.000244140625 tập) (13, -7, 10, 0.0078125 tập) (33, -14, 13, 0.00006103515625 tập)</i></p>",
+      "solutionExplanationHtml": "<p>offset = log₂(block); sets = cache / (block × ways); index = log₂(sets); tag = address − index − offset. (8, 14, 2, 16384 sets) (18, 8, 6, 256 sets) (19, 8, 5, 256 sets) (7, 5, 4, 32 sets) (26, 0, 6, 1 sets)</p><p><i>VI: offset = log₂(khối); số tập = cache / (khối × số đường); index = log₂(số tập); tag = địa chỉ − index − offset. (8, 14, 2, 16384 tập) (18, 8, 6, 256 tập) (19, 8, 5, 256 tập) (7, 5, 4, 32 tập) (26, 0, 6, 1 tập)</i></p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -346,28 +346,28 @@
               }
             ],
             "dapAn": {
-              "r1.o": "16",
-              "r1.i": "-14",
-              "r1.t": "22",
-              "r1.s": "0.00006103515625",
-              "r2.o": "14",
-              "r2.i": "-8",
-              "r2.t": "26",
-              "r2.s": "0.00390625",
-              "r3.o": "15",
-              "r3.i": "-12",
-              "r3.t": "29",
-              "r3.s": "0.000244140625",
-              "r4.o": "10",
-              "r4.i": "-7",
-              "r4.t": "13",
-              "r4.s": "0.0078125",
-              "r5.o": "13",
-              "r5.i": "-14",
-              "r5.t": "33",
-              "r5.s": "0.00006103515625"
+              "r1.o": "2",
+              "r1.i": "14",
+              "r1.t": "8",
+              "r1.s": "16384",
+              "r2.o": "6",
+              "r2.i": "8",
+              "r2.t": "18",
+              "r2.s": "256",
+              "r3.o": "5",
+              "r3.i": "8",
+              "r3.t": "19",
+              "r3.s": "256",
+              "r4.o": "4",
+              "r4.i": "5",
+              "r4.t": "7",
+              "r4.s": "32",
+              "r5.o": "6",
+              "r5.i": "0",
+              "r5.t": "26",
+              "r5.s": "1"
             },
-            "giaiThich": "<p>offset = log₂(block); sets = cache / (block × ways); index = log₂(sets); tag = address − index − offset. (22, -14, 16, 0.00006103515625 sets) (26, -8, 14, 0.00390625 sets) (29, -12, 15, 0.000244140625 sets) (13, -7, 10, 0.0078125 sets) (33, -14, 13, 0.00006103515625 sets)</p><p><i>VI: offset = log₂(khối); số tập = cache / (khối × số đường); index = log₂(số tập); tag = địa chỉ − index − offset. (22, -14, 16, 0.00006103515625 tập) (26, -8, 14, 0.00390625 tập) (29, -12, 15, 0.000244140625 tập) (13, -7, 10, 0.0078125 tập) (33, -14, 13, 0.00006103515625 tập)</i></p>"
+            "giaiThich": "<p>offset = log₂(block); sets = cache / (block × ways); index = log₂(sets); tag = address − index − offset. (8, 14, 2, 16384 sets) (18, 8, 6, 256 sets) (19, 8, 5, 256 sets) (7, 5, 4, 32 sets) (26, 0, 6, 1 sets)</p><p><i>VI: offset = log₂(khối); số tập = cache / (khối × số đường); index = log₂(số tập); tag = địa chỉ − index − offset. (8, 14, 2, 16384 tập) (18, 8, 6, 256 tập) (19, 8, 5, 256 tập) (7, 5, 4, 32 tập) (26, 0, 6, 1 tập)</i></p>"
           }
         ]
       },
@@ -405,8 +405,8 @@
       "tags": [
         "cea201"
       ],
-      "problemHtml": "<p>A direct-mapped cache has 0.125 lines of 16 bytes on a 16-bit address (tag 12 bits, line index -3 bits, offset 7 bits). For each hexadecimal address give the <b>offset</b> (decimal), the <b>line index</b> (decimal) and the <b>tag</b> (hexadecimal, no prefix).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
-      "problemHtmlVi": "<p>Cache ánh xạ trực tiếp có 0.125 dòng 16 byte trên địa chỉ 16 bit (tag 12 bit, chỉ số dòng -3 bit, offset 7 bit). Với mỗi địa chỉ hex cho <b>offset</b> (thập phân), <b>chỉ số dòng</b> (thập phân) và <b>tag</b> (hex, không tiền tố).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "problemHtml": "<p>A direct-mapped cache has 8 lines of 16 bytes on a 16-bit address (tag 9 bits, line index 3 bits, offset 4 bits). For each hexadecimal address give the <b>offset</b> (decimal), the <b>line index</b> (decimal) and the <b>tag</b> (hexadecimal, no prefix).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cache ánh xạ trực tiếp có 8 dòng 16 byte trên địa chỉ 16 bit (tag 9 bit, chỉ số dòng 3 bit, offset 4 bit). Với mỗi địa chỉ hex cho <b>offset</b> (thập phân), <b>chỉ số dòng</b> (thập phân) và <b>tag</b> (hex, không tiền tố).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
       "inputSpec": null,
       "outputSpec": null,
       "constraints": "",
@@ -432,10 +432,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Mapping 3 — Where does this address go? (tag, line, offset) — answer key\n\n1. Split of hex addressesTách địa chỉ hex\n   - r1.o: 12\n   - r1.i: 0\n   - r1.t: D10 / D10 / d10\n   - r2.o: 0\n   - r2.i: 0\n   - r2.t: 5A8 / 5A8 / 5a8\n   - r3.o: 7\n   - r3.i: 0\n   - r3.t: 1FF8 / 1FF8 / 1ff8\n   - r4.o: 0\n   - r4.i: 0\n   - r4.t: D10 / D10 / d10\n   - r5.o: 1\n   - r5.i: 0\n   - r5.t: 6000 / 6000 / 6000\n   0x1A2C = block 418: offset 12, line 0, tag D10; 0xB50 = block 181: offset 0, line 0, tag 5A8; 0x3FF7 = block 1023: offset 7, line 0, tag 1FF8; 0x1A20 = block 418: offset 0, line 0, tag D10; 0xC001 = block 3072: offset 1, line 0, tag 6000. Offset = address mod 16; line = block mod 8; tag = block div 8.VI: 0x1A2C: offset 12, dòng 0, tag D10; 0xB50: offset 0, dòng 0, tag 5A8; 0x3FF7: offset 7, dòng 0, tag 1FF8; 0x1A20: offset 0, dòng 0, tag D10; 0xC001: offset 1, dòng 0, tag 6000. Offset = địa chỉ mod 16; dòng = khối mod 8; tag = khối div 8.\n"
+          "code": "# Mapping 3 — Where does this address go? (tag, line, offset) — answer key\n\n1. Split of hex addressesTách địa chỉ hex\n   - r1.o: 12\n   - r1.i: 2\n   - r1.t: 34 / 034 / 34\n   - r2.o: 0\n   - r2.i: 5\n   - r2.t: 16 / 016 / 16\n   - r3.o: 7\n   - r3.i: 7\n   - r3.t: 7F / 07F / 7f\n   - r4.o: 0\n   - r4.i: 2\n   - r4.t: 34 / 034 / 34\n   - r5.o: 1\n   - r5.i: 0\n   - r5.t: 180 / 180 / 180\n   0x1A2C = block 418: offset 12, line 2, tag 34; 0xB50 = block 181: offset 0, line 5, tag 16; 0x3FF7 = block 1023: offset 7, line 7, tag 7F; 0x1A20 = block 418: offset 0, line 2, tag 34; 0xC001 = block 3072: offset 1, line 0, tag 180. Offset = address mod 16; line = block mod 8; tag = block div 8.VI: 0x1A2C: offset 12, dòng 2, tag 34; 0xB50: offset 0, dòng 5, tag 16; 0x3FF7: offset 7, dòng 7, tag 7F; 0x1A20: offset 0, dòng 2, tag 34; 0xC001: offset 1, dòng 0, tag 180. Offset = địa chỉ mod 16; dòng = khối mod 8; tag = khối div 8.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>0x1A2C = block 418: offset 12, line 0, tag D10; 0xB50 = block 181: offset 0, line 0, tag 5A8; 0x3FF7 = block 1023: offset 7, line 0, tag 1FF8; 0x1A20 = block 418: offset 0, line 0, tag D10; 0xC001 = block 3072: offset 1, line 0, tag 6000. Offset = address mod 16; line = block mod 8; tag = block div 8.</p><p><i>VI: 0x1A2C: offset 12, dòng 0, tag D10; 0xB50: offset 0, dòng 0, tag 5A8; 0x3FF7: offset 7, dòng 0, tag 1FF8; 0x1A20: offset 0, dòng 0, tag D10; 0xC001: offset 1, dòng 0, tag 6000. Offset = địa chỉ mod 16; dòng = khối mod 8; tag = khối div 8.</i></p>",
+      "solutionExplanationHtml": "<p>0x1A2C = block 418: offset 12, line 2, tag 34; 0xB50 = block 181: offset 0, line 5, tag 16; 0x3FF7 = block 1023: offset 7, line 7, tag 7F; 0x1A20 = block 418: offset 0, line 2, tag 34; 0xC001 = block 3072: offset 1, line 0, tag 180. Offset = address mod 16; line = block mod 8; tag = block div 8.</p><p><i>VI: 0x1A2C: offset 12, dòng 2, tag 34; 0xB50: offset 0, dòng 5, tag 16; 0x3FF7: offset 7, dòng 7, tag 7F; 0x1A20: offset 0, dòng 2, tag 34; 0xC001: offset 1, dòng 0, tag 180. Offset = địa chỉ mod 16; dòng = khối mod 8; tag = khối div 8.</i></p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -497,42 +497,42 @@
             ],
             "dapAn": {
               "r1.o": "12",
-              "r1.i": "0",
+              "r1.i": "2",
               "r1.t": [
-                "D10",
-                "D10",
-                "d10"
+                "34",
+                "034",
+                "34"
               ],
               "r2.o": "0",
-              "r2.i": "0",
+              "r2.i": "5",
               "r2.t": [
-                "5A8",
-                "5A8",
-                "5a8"
+                "16",
+                "016",
+                "16"
               ],
               "r3.o": "7",
-              "r3.i": "0",
+              "r3.i": "7",
               "r3.t": [
-                "1FF8",
-                "1FF8",
-                "1ff8"
+                "7F",
+                "07F",
+                "7f"
               ],
               "r4.o": "0",
-              "r4.i": "0",
+              "r4.i": "2",
               "r4.t": [
-                "D10",
-                "D10",
-                "d10"
+                "34",
+                "034",
+                "34"
               ],
               "r5.o": "1",
               "r5.i": "0",
               "r5.t": [
-                "6000",
-                "6000",
-                "6000"
+                "180",
+                "180",
+                "180"
               ]
             },
-            "giaiThich": "<p>0x1A2C = block 418: offset 12, line 0, tag D10; 0xB50 = block 181: offset 0, line 0, tag 5A8; 0x3FF7 = block 1023: offset 7, line 0, tag 1FF8; 0x1A20 = block 418: offset 0, line 0, tag D10; 0xC001 = block 3072: offset 1, line 0, tag 6000. Offset = address mod 16; line = block mod 8; tag = block div 8.</p><p><i>VI: 0x1A2C: offset 12, dòng 0, tag D10; 0xB50: offset 0, dòng 0, tag 5A8; 0x3FF7: offset 7, dòng 0, tag 1FF8; 0x1A20: offset 0, dòng 0, tag D10; 0xC001: offset 1, dòng 0, tag 6000. Offset = địa chỉ mod 16; dòng = khối mod 8; tag = khối div 8.</i></p>"
+            "giaiThich": "<p>0x1A2C = block 418: offset 12, line 2, tag 34; 0xB50 = block 181: offset 0, line 5, tag 16; 0x3FF7 = block 1023: offset 7, line 7, tag 7F; 0x1A20 = block 418: offset 0, line 2, tag 34; 0xC001 = block 3072: offset 1, line 0, tag 180. Offset = address mod 16; line = block mod 8; tag = block div 8.</p><p><i>VI: 0x1A2C: offset 12, dòng 2, tag 34; 0xB50: offset 0, dòng 5, tag 16; 0x3FF7: offset 7, dòng 7, tag 7F; 0x1A20: offset 0, dòng 2, tag 34; 0xC001: offset 1, dòng 0, tag 180. Offset = địa chỉ mod 16; dòng = khối mod 8; tag = khối div 8.</i></p>"
           }
         ]
       },
@@ -932,7 +932,7 @@
       ],
       "hintsJson": [
         "lines = 16384 / 64; bits per line = 8 × 64 + tag + valid (+ dirty).",
-        "Every extra way removes one index bit, so the tag grows by one bit."
+        "Doubling the ways halves the sets: one index bit fewer, so the tag grows by one bit."
       ],
       "starterCodeJson": [
         {

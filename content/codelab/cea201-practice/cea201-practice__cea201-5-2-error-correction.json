@@ -48,10 +48,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# ECC 1 — Parity, Hamming distance and SEC-DED — answer key\n\n1. A single even-parity bit can …Một bit chẵn lẻ (even parity) có thể …\n   Answer: d) detect any odd number of bit errors but cannot locate them\n   Parity says only “an odd number of bits flipped”.VI: Parity chỉ cho biết “một số lẻ bit đã đổi”.\n\n2. To correct 1 error a code needs a minimum Hamming distance of …Để sửa 1 lỗi, mã cần khoảng cách Hamming tối thiểu là …\n   Answer: a) 3\n   Distance d corrects ⌊(d−1)/2⌋ errors: 3 → 1.VI: Khoảng cách d sửa được ⌊(d−1)/2⌋ lỗi: 3 → 1.\n\n3. SEC-DED means …SEC-DED nghĩa là …\n   Answer: b) single-error correction, double-error detection\n   One extra overall parity bit turns Hamming (distance 3) into distance 4.VI: Thêm một bit chẵn lẻ tổng biến Hamming (khoảng cách 3) thành khoảng cách 4.\n\n4. In a Hamming code, a non-zero syndrome tells us …Trong mã Hamming, hội chứng khác 0 cho ta biết …\n   Answer: c) the position of the bit in error\n   With even parity the syndrome equals the position (1-based) of the flipped bit.VI: Với parity chẵn, hội chứng bằng vị trí (đánh từ 1) của bit bị lật.\n\n5. Parity bits of a Hamming code are placed at positions …Các bit kiểm tra của mã Hamming nằm ở vị trí …\n   Answer: d) 1, 2, 4, 8, … (powers of two)\n   Each power-of-two position checks the positions whose binary index contains that bit.VI: Mỗi vị trí luỹ thừa 2 kiểm các vị trí mà chỉ số nhị phân chứa bit đó.\n"
+          "code": "# ECC 1 — Parity, Hamming distance and SEC-DED — answer key\n\n1. A single even-parity bit can …Một bit chẵn lẻ (even parity) có thể …\n   Answer: a) detect any odd number of bit errors but cannot locate them\n   Parity says only “an odd number of bits flipped”.VI: Parity chỉ cho biết “một số lẻ bit đã đổi”.\n\n2. To correct 1 error a code needs a minimum Hamming distance of …Để sửa 1 lỗi, mã cần khoảng cách Hamming tối thiểu là …\n   Answer: a) 3\n   Distance d corrects ⌊(d−1)/2⌋ errors: 3 → 1.VI: Khoảng cách d sửa được ⌊(d−1)/2⌋ lỗi: 3 → 1.\n\n3. SEC-DED means …SEC-DED nghĩa là …\n   Answer: d) single-error correction, double-error detection\n   One extra overall parity bit turns Hamming (distance 3) into distance 4.VI: Thêm một bit chẵn lẻ tổng biến Hamming (khoảng cách 3) thành khoảng cách 4.\n\n4. In a Hamming code, a non-zero syndrome tells us …Trong mã Hamming, hội chứng khác 0 cho ta biết …\n   Answer: c) the position of the bit in error\n   With even parity the syndrome equals the position (1-based) of the flipped bit.VI: Với parity chẵn, hội chứng bằng vị trí (đánh từ 1) của bit bị lật.\n\n5. Parity bits of a Hamming code are placed at positions …Các bit kiểm tra của mã Hamming nằm ở vị trí …\n   Answer: d) 1, 2, 4, 8, … (powers of two)\n   Each power-of-two position checks the positions whose binary index contains that bit.VI: Mỗi vị trí luỹ thừa 2 kiểm các vị trí mà chỉ số nhị phân chứa bit đó.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> detect any odd number of bit errors but cannot locate them</p><p>Parity says only “an odd number of bits flipped”.</p><p><i>VI: Parity chỉ cho biết “một số lẻ bit đã đổi”.</i></p></li><li><p><b>a)</b> 3</p><p>Distance d corrects ⌊(d−1)/2⌋ errors: 3 → 1.</p><p><i>VI: Khoảng cách d sửa được ⌊(d−1)/2⌋ lỗi: 3 → 1.</i></p></li><li><p><b>d)</b> single-error correction, double-error detection</p><p>One extra overall parity bit turns Hamming (distance 3) into distance 4.</p><p><i>VI: Thêm một bit chẵn lẻ tổng biến Hamming (khoảng cách 3) thành khoảng cách 4.</i></p></li><li><p><b>c)</b> the position of the bit in error</p><p>With even parity the syndrome equals the position (1-based) of the flipped bit.</p><p><i>VI: Với parity chẵn, hội chứng bằng vị trí (đánh từ 1) của bit bị lật.</i></p></li><li><p><b>d)</b> 1, 2, 4, 8, … (powers of two)</p><p>Each power-of-two position checks the positions whose binary index contains that bit.</p><p><i>VI: Mỗi vị trí luỹ thừa 2 kiểm các vị trí mà chỉ số nhị phân chứa bit đó.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -64,11 +64,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "correct a single-bit error"
+                "noiDung": "detect any odd number of bit errors but cannot locate them"
               },
               {
                 "ma": "b",
-                "noiDung": "detect and correct two-bit errors"
+                "noiDung": "correct a single-bit error"
               },
               {
                 "ma": "c",
@@ -76,11 +76,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "detect any odd number of bit errors but cannot locate them"
+                "noiDung": "detect and correct two-bit errors"
               }
             ],
             "dapAn": [
-              "d"
+              "a"
             ],
             "giaiThich": "<p>Parity says only “an odd number of bits flipped”.</p><p><i>VI: Parity chỉ cho biết “một số lẻ bit đã đổi”.</i></p>"
           },
@@ -98,11 +98,11 @@
               },
               {
                 "ma": "c",
-                "noiDung": "2"
+                "noiDung": "4"
               },
               {
                 "ma": "d",
-                "noiDung": "4"
+                "noiDung": "2"
               }
             ],
             "dapAn": [
@@ -116,23 +116,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "secure error code, direct error detection"
-              },
-              {
-                "ma": "b",
-                "noiDung": "single-error correction, double-error detection"
-              },
-              {
-                "ma": "c",
                 "noiDung": "single-error detection, double-error correction"
               },
               {
-                "ma": "d",
+                "ma": "b",
+                "noiDung": "secure error code, direct error detection"
+              },
+              {
+                "ma": "c",
                 "noiDung": "serial error check, dual error design"
+              },
+              {
+                "ma": "d",
+                "noiDung": "single-error correction, double-error detection"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>One extra overall parity bit turns Hamming (distance 3) into distance 4.</p><p><i>VI: Thêm một bit chẵn lẻ tổng biến Hamming (khoảng cách 3) thành khoảng cách 4.</i></p>"
           },
@@ -168,7 +168,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "1, 3, 5, 7, …"
+                "noiDung": "2, 3, 5, 7, …"
               },
               {
                 "ma": "b",
@@ -176,7 +176,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "2, 3, 5, 7, …"
+                "noiDung": "1, 3, 5, 7, …"
               },
               {
                 "ma": "d",

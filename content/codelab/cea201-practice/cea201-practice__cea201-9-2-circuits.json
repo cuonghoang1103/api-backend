@@ -49,10 +49,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Circuits 1 — Decoders, multiplexers, adders and flip-flops: concepts — answer key\n\n1. A 3-to-8 decoder has …Bộ giải mã 3-sang-8 có …\n   Answer: d) 3 inputs and 8 outputs, exactly one of which is 1\n   It turns a binary number into a one-hot output.VI: Nó biến số nhị phân thành đầu ra one-hot.\n\n2. An 8-to-1 multiplexer needs how many select lines?Bộ chọn kênh 8-sang-1 cần bao nhiêu đường chọn?\n   Answer: a) 3\n   log₂ 8 = 3.VI: log₂ 8 = 3.\n\n3. A half adder computes …Bộ cộng nửa tính …\n   Answer: b) sum = A ⊕ B and carry = A·B\n   No carry-in, so it adds two bits only.VI: Không có nhớ vào nên chỉ cộng hai bit.\n\n4. The difference between a latch/flip-flop and a combinational circuit is that it …Khác biệt giữa chốt/flip-flop và mạch tổ hợp là nó …\n   Answer: c) stores state: the output depends on the past inputs\n   Sequential circuits have memory.VI: Mạch tuần tự có bộ nhớ.\n\n5. A T flip-flop with T = 1 …Flip-flop T với T = 1 …\n   Answer: d) toggles on every clock edge\n   T = 0 holds; T = 1 toggles — the basis of binary counters.VI: T = 0 giữ; T = 1 đảo — nền tảng của bộ đếm nhị phân.\n\n6. How many flip-flops are needed for a counter with 10 states?Cần bao nhiêu flip-flop cho bộ đếm 10 trạng thái?\n   Answer: a) 4\n   ⌈log₂ 10⌉ = 4.VI: ⌈log₂ 10⌉ = 4.\n"
+          "code": "# Circuits 1 — Decoders, multiplexers, adders and flip-flops: concepts — answer key\n\n1. A 3-to-8 decoder has …Bộ giải mã 3-sang-8 có …\n   Answer: d) 3 inputs and 8 outputs, exactly one of which is 1\n   It turns a binary number into a one-hot output.VI: Nó biến số nhị phân thành đầu ra one-hot.\n\n2. An 8-to-1 multiplexer needs how many select lines?Bộ chọn kênh 8-sang-1 cần bao nhiêu đường chọn?\n   Answer: c) 3\n   log₂ 8 = 3.VI: log₂ 8 = 3.\n\n3. A half adder computes …Bộ cộng nửa tính …\n   Answer: b) sum = A ⊕ B and carry = A·B\n   No carry-in, so it adds two bits only.VI: Không có nhớ vào nên chỉ cộng hai bit.\n\n4. The difference between a latch/flip-flop and a combinational circuit is that it …Khác biệt giữa chốt/flip-flop và mạch tổ hợp là nó …\n   Answer: b) stores state: the output depends on the past inputs\n   Sequential circuits have memory.VI: Mạch tuần tự có bộ nhớ.\n\n5. A T flip-flop with T = 1 …Flip-flop T với T = 1 …\n   Answer: c) toggles on every clock edge\n   T = 0 holds; T = 1 toggles — the basis of binary counters.VI: T = 0 giữ; T = 1 đảo — nền tảng của bộ đếm nhị phân.\n\n6. How many flip-flops are needed for a counter with 10 states?Cần bao nhiêu flip-flop cho bộ đếm 10 trạng thái?\n   Answer: a) 4\n   ⌈log₂ 10⌉ = 4.VI: ⌈log₂ 10⌉ = 4.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> 3 inputs and 8 outputs, exactly one of which is 1</p><p>It turns a binary number into a one-hot output.</p><p><i>VI: Nó biến số nhị phân thành đầu ra one-hot.</i></p></li><li><p><b>c)</b> 3</p><p>log₂ 8 = 3.</p><p><i>VI: log₂ 8 = 3.</i></p></li><li><p><b>b)</b> sum = A ⊕ B and carry = A·B</p><p>No carry-in, so it adds two bits only.</p><p><i>VI: Không có nhớ vào nên chỉ cộng hai bit.</i></p></li><li><p><b>b)</b> stores state: the output depends on the past inputs</p><p>Sequential circuits have memory.</p><p><i>VI: Mạch tuần tự có bộ nhớ.</i></p></li><li><p><b>c)</b> toggles on every clock edge</p><p>T = 0 holds; T = 1 toggles — the basis of binary counters.</p><p><i>VI: T = 0 giữ; T = 1 đảo — nền tảng của bộ đếm nhị phân.</i></p></li><li><p><b>a)</b> 4</p><p>⌈log₂ 10⌉ = 4.</p><p><i>VI: ⌈log₂ 10⌉ = 4.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -65,15 +65,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "8 inputs and 3 outputs"
+                "noiDung": "8 inputs and 3 outputs, giving the number of the active input"
               },
               {
                 "ma": "b",
-                "noiDung": "3 inputs and 3 outputs"
+                "noiDung": "3 inputs and 3 outputs, exactly one of which is 0"
               },
               {
                 "ma": "c",
-                "noiDung": "8 inputs and 8 outputs"
+                "noiDung": "8 inputs and 8 outputs, each output a copy of one input"
               },
               {
                 "ma": "d",
@@ -91,7 +91,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "3"
+                "noiDung": "1"
               },
               {
                 "ma": "b",
@@ -99,7 +99,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "1"
+                "noiDung": "3"
               },
               {
                 "ma": "d",
@@ -107,7 +107,7 @@
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>log₂ 8 = 3.</p><p><i>VI: log₂ 8 = 3.</i></p>"
           },
@@ -117,7 +117,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "carry = A ⊕ B ⊕ Cin"
+                "noiDung": "sum = A + B only"
               },
               {
                 "ma": "b",
@@ -125,11 +125,11 @@
               },
               {
                 "ma": "c",
-                "noiDung": "sum = A·B and carry = A ⊕ B"
+                "noiDung": "carry = A ⊕ B ⊕ Cin"
               },
               {
                 "ma": "d",
-                "noiDung": "sum = A + B only"
+                "noiDung": "sum = A·B and carry = A ⊕ B"
               }
             ],
             "dapAn": [
@@ -143,23 +143,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "is always slower"
+                "noiDung": "has no clock: the output changes only on power-up"
               },
               {
                 "ma": "b",
-                "noiDung": "has no clock"
-              },
-              {
-                "ma": "c",
                 "noiDung": "stores state: the output depends on the past inputs"
               },
               {
+                "ma": "c",
+                "noiDung": "has no inputs: the output is fixed when it is built"
+              },
+              {
                 "ma": "d",
-                "noiDung": "has no inputs"
+                "noiDung": "is always slower: the output depends on gate delay only"
               }
             ],
             "dapAn": [
-              "c"
+              "b"
             ],
             "giaiThich": "<p>Sequential circuits have memory.</p><p><i>VI: Mạch tuần tự có bộ nhớ.</i></p>"
           },
@@ -169,23 +169,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "holds its value"
-              },
-              {
-                "ma": "b",
-                "noiDung": "always sets"
-              },
-              {
-                "ma": "c",
                 "noiDung": "always resets"
               },
               {
-                "ma": "d",
+                "ma": "b",
+                "noiDung": "holds its value"
+              },
+              {
+                "ma": "c",
                 "noiDung": "toggles on every clock edge"
+              },
+              {
+                "ma": "d",
+                "noiDung": "always sets"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>T = 0 holds; T = 1 toggles — the basis of binary counters.</p><p><i>VI: T = 0 giữ; T = 1 đảo — nền tảng của bộ đếm nhị phân.</i></p>"
           },
@@ -881,7 +881,7 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Circuits 5 — Order the design of a combinational circuit — answer key\n\n1. Design a combinational circuitThiết kế mạch tổ hợp\n   Answer: s1) State the problem: inputs, outputs and what each output must be  →  s2) Write the truth table  →  s3) Derive the Boolean expression (sum of minterms)  →  s4) Simplify it (laws or a Karnaugh map)  →  s5) Draw the gate-level circuit and verify it against the truth table\n   Truth table first; simplification reduces gates and delay; verify at the end.VI: Bảng chân trị trước; rút gọn giảm số cổng và độ trễ; kiểm lại ở cuối.\n"
+          "code": "# Circuits 5 — Order the design of a combinational circuit — answer key\n\n1. Design a combinational circuitThiết kế mạch tổ hợp\n   Answer: m3) State the problem: inputs, outputs and what each output must be  →  m1) Write the truth table  →  m4) Derive the Boolean expression (sum of minterms)  →  m2) Simplify it (laws or a Karnaugh map)  →  m5) Draw the gate-level circuit and verify it against the truth table\n   Truth table first; simplification reduces gates and delay; verify at the end.VI: Bảng chân trị trước; rút gọn giảm số cổng và độ trễ; kiểm lại ở cuối.\n"
         }
       ],
       "solutionExplanationHtml": "<p>Truth table first; simplification reduces gates and delay; verify at the end.</p><p><i>VI: Bảng chân trị trước; rút gọn giảm số cổng và độ trễ; kiểm lại ở cuối.</i></p>",
@@ -896,32 +896,32 @@
             "de": "<p>Design a combinational circuit</p><p style=\"opacity:.75;font-size:.92em\"><i>Thiết kế mạch tổ hợp</i></p>",
             "muc": [
               {
-                "ma": "s3",
-                "noiDung": "Derive the Boolean expression (sum of minterms)"
+                "ma": "m1",
+                "noiDung": "Write the truth table"
               },
               {
-                "ma": "s4",
+                "ma": "m2",
                 "noiDung": "Simplify it (laws or a Karnaugh map)"
               },
               {
-                "ma": "s5",
-                "noiDung": "Draw the gate-level circuit and verify it against the truth table"
-              },
-              {
-                "ma": "s1",
+                "ma": "m3",
                 "noiDung": "State the problem: inputs, outputs and what each output must be"
               },
               {
-                "ma": "s2",
-                "noiDung": "Write the truth table"
+                "ma": "m4",
+                "noiDung": "Derive the Boolean expression (sum of minterms)"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "Draw the gate-level circuit and verify it against the truth table"
               }
             ],
             "dapAn": [
-              "s1",
-              "s2",
-              "s3",
-              "s4",
-              "s5"
+              "m3",
+              "m1",
+              "m4",
+              "m2",
+              "m5"
             ],
             "giaiThich": "<p>Truth table first; simplification reduces gates and delay; verify at the end.</p><p><i>VI: Bảng chân trị trước; rút gọn giảm số cổng và độ trễ; kiểm lại ở cuối.</i></p>"
           }

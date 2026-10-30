@@ -17,6 +17,7 @@ export function amdahl(f, s) { return 1 / ((1 - f) + f / s); }
 /** Hình học cache: địa chỉ addrBits, khối blockBytes, tổng cacheBytes, ways (1 = trực tiếp; = số dòng ⇒ liên kết đầy đủ). */
 export function cacheGeom(addrBits, blockBytes, cacheBytes, ways) {
   var lines = cacheBytes / blockBytes, sets = lines / ways;
+  if (!Number.isInteger(lines) || !Number.isInteger(sets) || sets < 1) throw new Error('cacheGeom: dòng/tập không nguyên — kiểm thứ tự tham số (addrBits, blockBytes, cacheBytes, ways)');
   var off = Math.round(Math.log2(blockBytes)), idx = Math.round(Math.log2(sets));
   return { lines: lines, sets: sets, offsetBits: off, indexBits: idx, tagBits: addrBits - idx - off };
 }

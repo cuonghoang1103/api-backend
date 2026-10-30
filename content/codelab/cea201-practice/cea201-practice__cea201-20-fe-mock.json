@@ -39,17 +39,17 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# FE mock A — 20 questions (concepts and calculations)\n\nAnswer in the answer panel (no code needed).\n\n1. The __________ holds the address of the next instruction to be fetched.__________ giữ địa chỉ của lệnh kế tiếp cần nạp.\n2. Computer __________ refers to attributes visible to the programmer.__________ máy tính đề cập tới thuộc tính lập trình viên nhìn thấy.\n3. Cache memory is usually built from …Bộ nhớ cache thường được dựng từ …\n4. With a write-through policy, a write to the cache is also written to …Với chính sách write-through, một lần ghi vào cache cũng được ghi vào …\n5. RAID 1 is known as …RAID 1 được gọi là …\n6. In __________ I/O the processor repeatedly tests the status of the device.Trong I/O __________ bộ xử lý liên tục kiểm tra trạng thái thiết bị.\n7. The Boolean expression A + A·B simplifies to …Biểu thức Boole A + A·B rút gọn thành …\n8. Which addressing mode requires two memory references to obtain the operand?Chế độ địa chỉ nào cần hai tham chiếu bộ nhớ để lấy toán hạng?\n9. A data hazard where an instruction needs a result not yet produced is a …Hazard dữ liệu khi lệnh cần kết quả chưa được tạo ra là …\n10. The cache coherence protocol state “Modified” means …Trạng thái “Modified” của giao thức nhất quán cache nghĩa là …\n11. A program executes 3×10⁹ instructions with an average CPI of 1.2 on a 2.4 GHz processor. Its CPU time is …Chương trình thực hiện 3×10⁹ lệnh với CPI trung bình 1,2 trên bộ xử lý 2,4 GHz. Thời gian CPU là …\n12. Hit ratio 0.96, cache time 2 cycles, miss time 100 cycles. The average access time is …Tỉ lệ hit 0,96, thời gian cache 2 chu kỳ, thời gian miss 100 chu kỳ. Thời gian truy cập trung bình là …\n13. A 16 KiB 4-way set-associative cache with 64-byte blocks and 32-bit addresses has a tag of … bits.Cache 16 KiB liên kết 4 đường, khối 64 byte, địa chỉ 32 bit có tag … bit.\n14. A 32-bit virtual address space, 4 KiB pages, 4-byte page-table entries: the single-level page table occupies … bytes.Không gian địa chỉ ảo 32 bit, trang 4 KiB, mục bảng trang 4 byte: bảng trang một cấp chiếm … byte.\n15. How many check bits does a single-error-correcting Hamming code need for 32 data bits?Mã Hamming sửa một lỗi cần bao nhiêu bit kiểm tra cho 32 bit dữ liệu?\n16. A 5-stage pipeline with forwarding runs “lw r1,0(r2) ; add r3,r1,r4 ; sub r5,r3,r6”. Total cycles: …Pipeline 5 tầng có chuyển tiếp chạy “lw r1,0(r2) ; add r3,r1,r4 ; sub r5,r3,r6”. Tổng số chu kỳ: …\n17. −37 in 8-bit two’s complement is …−37 trong bù 2 8 bit là …\n18. Six 2 TB disks in RAID 5 give a usable capacity of … TB.Sáu đĩa 2 TB ở RAID 5 cho dung lượng dùng được … TB.\n19. A program is 90 % parallelizable. The Amdahl speedup on 8 cores is about …Chương trình song song hoá được 90 %. Tăng tốc Amdahl trên 8 lõi xấp xỉ …\n20. A 5400 rpm disk has an average rotational latency of … ms.Đĩa 5400 vòng/phút có độ trễ quay trung bình … ms.\n"
+          "code": "# FE mock A — 20 questions (concepts and calculations)\n\nAnswer in the answer panel (no code needed).\n\n1. After a fetch, the control unit decodes the word that is now in the __________.Sau pha nạp, đơn vị điều khiển giải mã từ lệnh đang nằm trong __________.\n2. Computer __________ refers to attributes visible to the programmer.__________ máy tính đề cập tới thuộc tính lập trình viên nhìn thấy.\n3. Cache memory is usually built from …Bộ nhớ cache thường được dựng từ …\n4. With a write-through policy, a write to the cache is also written to …Với chính sách write-through, một lần ghi vào cache cũng được ghi vào …\n5. RAID 1 is known as …RAID 1 được gọi là …\n6. In __________ I/O the processor repeatedly tests the status of the device.Trong I/O __________ bộ xử lý liên tục kiểm tra trạng thái thiết bị.\n7. The Boolean expression A + A·B simplifies to …Biểu thức Boole A + A·B rút gọn thành …\n8. Which addressing mode requires two memory references to obtain the operand?Chế độ địa chỉ nào cần hai tham chiếu bộ nhớ để lấy toán hạng?\n9. A data hazard where an instruction needs a result not yet produced is a …Hazard dữ liệu khi lệnh cần kết quả chưa được tạo ra là …\n10. The cache coherence protocol state “Modified” means …Trạng thái “Modified” của giao thức nhất quán cache nghĩa là …\n11. A program executes 3×10⁹ instructions with an average CPI of 1.2 on a 2.4 GHz processor. Its CPU time is …Chương trình thực hiện 3×10⁹ lệnh với CPI trung bình 1,2 trên bộ xử lý 2,4 GHz. Thời gian CPU là …\n12. Hit ratio 0.96, cache time 2 cycles, miss time 100 cycles. The average access time is …Tỉ lệ hit 0,96, thời gian cache 2 chu kỳ, thời gian miss 100 chu kỳ. Thời gian truy cập trung bình là …\n13. A 16 KiB 4-way set-associative cache with 64-byte blocks and 32-bit addresses has a tag of … bits.Cache 16 KiB liên kết 4 đường, khối 64 byte, địa chỉ 32 bit có tag … bit.\n14. A 32-bit virtual address space, 4 KiB pages, 4-byte page-table entries: the single-level page table occupies … bytes.Không gian địa chỉ ảo 32 bit, trang 4 KiB, mục bảng trang 4 byte: bảng trang một cấp chiếm … byte.\n15. How many check bits does a single-error-correcting Hamming code need for 32 data bits?Mã Hamming sửa một lỗi cần bao nhiêu bit kiểm tra cho 32 bit dữ liệu?\n16. A 5-stage pipeline with forwarding runs “lw r1,0(r2) ; add r3,r1,r4 ; sub r5,r3,r6”. Total cycles: …Pipeline 5 tầng có chuyển tiếp chạy “lw r1,0(r2) ; add r3,r1,r4 ; sub r5,r3,r6”. Tổng số chu kỳ: …\n17. −37 in 8-bit two’s complement is …−37 trong bù 2 8 bit là …\n18. Six 2 TB disks in RAID 5 give a usable capacity of … TB.Sáu đĩa 2 TB ở RAID 5 cho dung lượng dùng được … TB.\n19. A program is 90 % parallelizable. The Amdahl speedup on 8 cores is about …Chương trình song song hoá được 90 %. Tăng tốc Amdahl trên 8 lõi xấp xỉ …\n20. A 5400 rpm disk has an average rotational latency of … ms.Đĩa 5400 vòng/phút có độ trễ quay trung bình … ms.\n"
         }
       ],
       "solutionCodeJson": [
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# FE mock A — 20 questions (concepts and calculations) — answer key\n\n1. The __________ holds the address of the next instruction to be fetched.__________ giữ địa chỉ của lệnh kế tiếp cần nạp.\n   Answer: d) program counter\n   PC points to the next instruction.VI: PC trỏ tới lệnh kế tiếp.\n\n2. Computer __________ refers to attributes visible to the programmer.__________ máy tính đề cập tới thuộc tính lập trình viên nhìn thấy.\n   Answer: a) architecture\n   Organization is the hardware realization of the architecture.VI: Tổ chức là cách phần cứng hiện thực kiến trúc.\n\n3. Cache memory is usually built from …Bộ nhớ cache thường được dựng từ …\n   Answer: b) SRAM\n   Speed matters more than density for a cache.VI: Với cache, tốc độ quan trọng hơn mật độ.\n\n4. With a write-through policy, a write to the cache is also written to …Với chính sách write-through, một lần ghi vào cache cũng được ghi vào …\n   Answer: c) main memory\n   Memory is always up to date, at the cost of write traffic.VI: Bộ nhớ luôn cập nhật nhưng tốn lưu lượng ghi.\n\n5. RAID 1 is known as …RAID 1 được gọi là …\n   Answer: d) mirroring\n   Each block is stored on two disks.VI: Mỗi khối lưu trên hai đĩa.\n\n6. In __________ I/O the processor repeatedly tests the status of the device.Trong I/O __________ bộ xử lý liên tục kiểm tra trạng thái thiết bị.\n   Answer: a) programmed (polling)\n   Busy-waiting is programmed I/O.VI: Chờ bận là I/O lập trình.\n\n7. The Boolean expression A + A·B simplifies to …Biểu thức Boole A + A·B rút gọn thành …\n   Answer: b) A\n   Absorption law.VI: Luật hấp thụ.\n\n8. Which addressing mode requires two memory references to obtain the operand?Chế độ địa chỉ nào cần hai tham chiếu bộ nhớ để lấy toán hạng?\n   Answer: c) indirect\n   First the pointer, then the data.VI: Trước là con trỏ, sau là dữ liệu.\n\n9. A data hazard where an instruction needs a result not yet produced is a …Hazard dữ liệu khi lệnh cần kết quả chưa được tạo ra là …\n   Answer: d) RAW hazard\n   Read After Write.VI: Đọc sau ghi.\n\n10. The cache coherence protocol state “Modified” means …Trạng thái “Modified” của giao thức nhất quán cache nghĩa là …\n   Answer: a) the line is dirty and the only valid copy\n   Memory is stale.VI: Bộ nhớ đã cũ.\n\n11. A program executes 3×10⁹ instructions with an average CPI of 1.2 on a 2.4 GHz processor. Its CPU time is …Chương trình thực hiện 3×10⁹ lệnh với CPI trung bình 1,2 trên bộ xử lý 2,4 GHz. Thời gian CPU là …\n   Answer: b) 1.50 s\n   T = IC × CPI / f = 3·10⁹ × 1.2 / 2.4·10⁹ = 1.50 s.VI: T = IC × CPI / f = 1.50 s.\n\n12. Hit ratio 0.96, cache time 2 cycles, miss time 100 cycles. The average access time is …Tỉ lệ hit 0,96, thời gian cache 2 chu kỳ, thời gian miss 100 chu kỳ. Thời gian truy cập trung bình là …\n   Answer: c) 5.92 cycles\n   0.96×2 + 0.04×100 = 5.92.VI: 0,96×2 + 0,04×100 = 5.92.\n\n13. A 16 KiB 4-way set-associative cache with 64-byte blocks and 32-bit addresses has a tag of … bits.Cache 16 KiB liên kết 4 đường, khối 64 byte, địa chỉ 32 bit có tag … bit.\n   Answer: d) 20\n   offset 6, sets 64 ⇒ index 6, tag = 32 − 6 − 6 = 20.VI: offset 6, index 6, tag 20.\n\n14. A 32-bit virtual address space, 4 KiB pages, 4-byte page-table entries: the single-level page table occupies … bytes.Không gian địa chỉ ảo 32 bit, trang 4 KiB, mục bảng trang 4 byte: bảng trang một cấp chiếm … byte.\n   Answer: a) 4 MiB\n   2^20 pages × 4 B = 4 MiB.VI: 2^20 trang × 4 B = 4 MiB.\n\n15. How many check bits does a single-error-correcting Hamming code need for 32 data bits?Mã Hamming sửa một lỗi cần bao nhiêu bit kiểm tra cho 32 bit dữ liệu?\n   Answer: b) 6\n   2^6 ≥ 32 + 6 + 1.VI: 2^6 ≥ 32 + 6 + 1.\n\n16. A 5-stage pipeline with forwarding runs “lw r1,0(r2) ; add r3,r1,r4 ; sub r5,r3,r6”. Total cycles: …Pipeline 5 tầng có chuyển tiếp chạy “lw r1,0(r2) ; add r3,r1,r4 ; sub r5,r3,r6”. Tổng số chu kỳ: …\n   Answer: c) 8\n   Ideal 3 + 4 = 7 cycles plus one load-use stall = 8.VI: Lý tưởng 3 + 4 = 7 chu kỳ cộng một đình trệ load-use = 8.\n\n17. −37 in 8-bit two’s complement is …−37 trong bù 2 8 bit là …\n   Answer: d) 11011011\n   37 = 00100101; invert = 11011010; +1 = 11011011.VI: 37 = 00100101; đảo = 11011010; +1 = 11011011.\n\n18. Six 2 TB disks in RAID 5 give a usable capacity of … TB.Sáu đĩa 2 TB ở RAID 5 cho dung lượng dùng được … TB.\n   Answer: a) 10 TB\n   (n − 1) × 2 = 10 TB.VI: (n − 1) × 2 = 10 TB.\n\n19. A program is 90 % parallelizable. The Amdahl speedup on 8 cores is about …Chương trình song song hoá được 90 %. Tăng tốc Amdahl trên 8 lõi xấp xỉ …\n   Answer: b) 4.71×\n   1 / (0.1 + 0.9/8) = 4.71.VI: 1 / (0,1 + 0,9/8) = 4.71.\n\n20. A 5400 rpm disk has an average rotational latency of … ms.Đĩa 5400 vòng/phút có độ trễ quay trung bình … ms.\n   Answer: c) 5.56 ms\n   60000 / 5400 / 2 = 5.56 ms.VI: 60000 / 5400 / 2 = 5,56 ms.\n"
+          "code": "# FE mock A — 20 questions (concepts and calculations) — answer key\n\n1. After a fetch, the control unit decodes the word that is now in the __________.Sau pha nạp, đơn vị điều khiển giải mã từ lệnh đang nằm trong __________.\n   Answer: c) instruction register\n   The word arrives through the MBR and is latched in the IR, where it is decoded.VI: Từ lệnh về qua MBR rồi được chốt vào IR để giải mã.\n\n2. Computer __________ refers to attributes visible to the programmer.__________ máy tính đề cập tới thuộc tính lập trình viên nhìn thấy.\n   Answer: a) architecture\n   Organization is the hardware realization of the architecture.VI: Tổ chức là cách phần cứng hiện thực kiến trúc.\n\n3. Cache memory is usually built from …Bộ nhớ cache thường được dựng từ …\n   Answer: b) SRAM\n   Speed matters more than density for a cache.VI: Với cache, tốc độ quan trọng hơn mật độ.\n\n4. With a write-through policy, a write to the cache is also written to …Với chính sách write-through, một lần ghi vào cache cũng được ghi vào …\n   Answer: a) main memory\n   Memory is always up to date, at the cost of write traffic.VI: Bộ nhớ luôn cập nhật nhưng tốn lưu lượng ghi.\n\n5. RAID 1 is known as …RAID 1 được gọi là …\n   Answer: d) mirroring\n   Each block is stored on two disks.VI: Mỗi khối lưu trên hai đĩa.\n\n6. In __________ I/O the processor repeatedly tests the status of the device.Trong I/O __________ bộ xử lý liên tục kiểm tra trạng thái thiết bị.\n   Answer: d) programmed\n   Busy-waiting is programmed I/O.VI: Chờ bận là I/O lập trình.\n\n7. The Boolean expression A + A·B simplifies to …Biểu thức Boole A + A·B rút gọn thành …\n   Answer: b) A\n   Absorption law.VI: Luật hấp thụ.\n\n8. Which addressing mode requires two memory references to obtain the operand?Chế độ địa chỉ nào cần hai tham chiếu bộ nhớ để lấy toán hạng?\n   Answer: b) indirect\n   First the pointer, then the data.VI: Trước là con trỏ, sau là dữ liệu.\n\n9. A data hazard where an instruction needs a result not yet produced is a …Hazard dữ liệu khi lệnh cần kết quả chưa được tạo ra là …\n   Answer: a) RAW hazard\n   Read After Write.VI: Đọc sau ghi.\n\n10. The cache coherence protocol state “Modified” means …Trạng thái “Modified” của giao thức nhất quán cache nghĩa là …\n   Answer: a) the line is dirty and the only valid copy\n   Memory is stale.VI: Bộ nhớ đã cũ.\n\n11. A program executes 3×10⁹ instructions with an average CPI of 1.2 on a 2.4 GHz processor. Its CPU time is …Chương trình thực hiện 3×10⁹ lệnh với CPI trung bình 1,2 trên bộ xử lý 2,4 GHz. Thời gian CPU là …\n   Answer: d) 1.50 s\n   T = IC × CPI / f = 3·10⁹ × 1.2 / 2.4·10⁹ = 1.50 s.VI: T = IC × CPI / f = 1.50 s.\n\n12. Hit ratio 0.96, cache time 2 cycles, miss time 100 cycles. The average access time is …Tỉ lệ hit 0,96, thời gian cache 2 chu kỳ, thời gian miss 100 chu kỳ. Thời gian truy cập trung bình là …\n   Answer: a) 5.92 cycles\n   0.96×2 + 0.04×100 = 5.92.VI: 0,96×2 + 0,04×100 = 5.92.\n\n13. A 16 KiB 4-way set-associative cache with 64-byte blocks and 32-bit addresses has a tag of … bits.Cache 16 KiB liên kết 4 đường, khối 64 byte, địa chỉ 32 bit có tag … bit.\n   Answer: b) 20\n   offset 6, sets 64 ⇒ index 6, tag = 32 − 6 − 6 = 20.VI: offset 6, index 6, tag 20.\n\n14. A 32-bit virtual address space, 4 KiB pages, 4-byte page-table entries: the single-level page table occupies … bytes.Không gian địa chỉ ảo 32 bit, trang 4 KiB, mục bảng trang 4 byte: bảng trang một cấp chiếm … byte.\n   Answer: d) 4 MiB\n   2^20 pages × 4 B = 4 MiB.VI: 2^20 trang × 4 B = 4 MiB.\n\n15. How many check bits does a single-error-correcting Hamming code need for 32 data bits?Mã Hamming sửa một lỗi cần bao nhiêu bit kiểm tra cho 32 bit dữ liệu?\n   Answer: b) 6\n   2^6 ≥ 32 + 6 + 1.VI: 2^6 ≥ 32 + 6 + 1.\n\n16. A 5-stage pipeline with forwarding runs “lw r1,0(r2) ; add r3,r1,r4 ; sub r5,r3,r6”. Total cycles: …Pipeline 5 tầng có chuyển tiếp chạy “lw r1,0(r2) ; add r3,r1,r4 ; sub r5,r3,r6”. Tổng số chu kỳ: …\n   Answer: a) 8\n   Ideal 3 + 4 = 7 cycles plus one load-use stall = 8.VI: Lý tưởng 3 + 4 = 7 chu kỳ cộng một đình trệ load-use = 8.\n\n17. −37 in 8-bit two’s complement is …−37 trong bù 2 8 bit là …\n   Answer: a) 11011011\n   37 = 00100101; invert = 11011010; +1 = 11011011.VI: 37 = 00100101; đảo = 11011010; +1 = 11011011.\n\n18. Six 2 TB disks in RAID 5 give a usable capacity of … TB.Sáu đĩa 2 TB ở RAID 5 cho dung lượng dùng được … TB.\n   Answer: b) 10 TB\n   (n − 1) × 2 = 10 TB.VI: (n − 1) × 2 = 10 TB.\n\n19. A program is 90 % parallelizable. The Amdahl speedup on 8 cores is about …Chương trình song song hoá được 90 %. Tăng tốc Amdahl trên 8 lõi xấp xỉ …\n   Answer: c) 4.71×\n   1 / (0.1 + 0.9/8) = 4.71.VI: 1 / (0,1 + 0,9/8) = 4.71.\n\n20. A 5400 rpm disk has an average rotational latency of … ms.Đĩa 5400 vòng/phút có độ trễ quay trung bình … ms.\n   Answer: a) 5.56 ms\n   60000 / 5400 / 2 = 5.56 ms.VI: 60000 / 5400 / 2 = 5,56 ms.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> instruction register</p><p>The word arrives through the MBR and is latched in the IR, where it is decoded.</p><p><i>VI: Từ lệnh về qua MBR rồi được chốt vào IR để giải mã.</i></p></li><li><p><b>a)</b> architecture</p><p>Organization is the hardware realization of the architecture.</p><p><i>VI: Tổ chức là cách phần cứng hiện thực kiến trúc.</i></p></li><li><p><b>b)</b> SRAM</p><p>Speed matters more than density for a cache.</p><p><i>VI: Với cache, tốc độ quan trọng hơn mật độ.</i></p></li><li><p><b>a)</b> main memory</p><p>Memory is always up to date, at the cost of write traffic.</p><p><i>VI: Bộ nhớ luôn cập nhật nhưng tốn lưu lượng ghi.</i></p></li><li><p><b>d)</b> mirroring</p><p>Each block is stored on two disks.</p><p><i>VI: Mỗi khối lưu trên hai đĩa.</i></p></li><li><p><b>d)</b> programmed</p><p>Busy-waiting is programmed I/O.</p><p><i>VI: Chờ bận là I/O lập trình.</i></p></li><li><p><b>b)</b> A</p><p>Absorption law.</p><p><i>VI: Luật hấp thụ.</i></p></li><li><p><b>b)</b> indirect</p><p>First the pointer, then the data.</p><p><i>VI: Trước là con trỏ, sau là dữ liệu.</i></p></li><li><p><b>a)</b> RAW hazard</p><p>Read After Write.</p><p><i>VI: Đọc sau ghi.</i></p></li><li><p><b>a)</b> the line is dirty and the only valid copy</p><p>Memory is stale.</p><p><i>VI: Bộ nhớ đã cũ.</i></p></li><li><p><b>d)</b> 1.50 s</p><p>T = IC × CPI / f = 3·10⁹ × 1.2 / 2.4·10⁹ = 1.50 s.</p><p><i>VI: T = IC × CPI / f = 1.50 s.</i></p></li><li><p><b>a)</b> 5.92 cycles</p><p>0.96×2 + 0.04×100 = 5.92.</p><p><i>VI: 0,96×2 + 0,04×100 = 5.92.</i></p></li><li><p><b>b)</b> 20</p><p>offset 6, sets 64 ⇒ index 6, tag = 32 − 6 − 6 = 20.</p><p><i>VI: offset 6, index 6, tag 20.</i></p></li><li><p><b>d)</b> 4 MiB</p><p>2^20 pages × 4 B = 4 MiB.</p><p><i>VI: 2^20 trang × 4 B = 4 MiB.</i></p></li><li><p><b>b)</b> 6</p><p>2^6 ≥ 32 + 6 + 1.</p><p><i>VI: 2^6 ≥ 32 + 6 + 1.</i></p></li><li><p><b>a)</b> 8</p><p>Ideal 3 + 4 = 7 cycles plus one load-use stall = 8.</p><p><i>VI: Lý tưởng 3 + 4 = 7 chu kỳ cộng một đình trệ load-use = 8.</i></p></li><li><p><b>a)</b> 11011011</p><p>37 = 00100101; invert = 11011010; +1 = 11011011.</p><p><i>VI: 37 = 00100101; đảo = 11011010; +1 = 11011011.</i></p></li><li><p><b>b)</b> 10 TB</p><p>(n − 1) × 2 = 10 TB.</p><p><i>VI: (n − 1) × 2 = 10 TB.</i></p></li><li><p><b>c)</b> 4.71×</p><p>1 / (0.1 + 0.9/8) = 4.71.</p><p><i>VI: 1 / (0,1 + 0,9/8) = 4.71.</i></p></li><li><p><b>a)</b> 5.56 ms</p><p>60000 / 5400 / 2 = 5.56 ms.</p><p><i>VI: 60000 / 5400 / 2 = 5,56 ms.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -58,29 +58,29 @@
         "cauHoi": [
           {
             "ma": "a1",
-            "de": "<p>The __________ holds the address of the next instruction to be fetched.</p><p style=\"opacity:.75;font-size:.92em\"><i>__________ giữ địa chỉ của lệnh kế tiếp cần nạp.</i></p>",
+            "de": "<p>After a fetch, the control unit decodes the word that is now in the __________.</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau pha nạp, đơn vị điều khiển giải mã từ lệnh đang nằm trong __________.</i></p>",
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "instruction register"
+                "noiDung": "program counter"
               },
               {
                 "ma": "b",
-                "noiDung": "memory buffer register"
+                "noiDung": "memory address register"
               },
               {
                 "ma": "c",
-                "noiDung": "accumulator"
+                "noiDung": "instruction register"
               },
               {
                 "ma": "d",
-                "noiDung": "program counter"
+                "noiDung": "accumulator"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
-            "giaiThich": "<p>PC points to the next instruction.</p><p><i>VI: PC trỏ tới lệnh kế tiếp.</i></p>"
+            "giaiThich": "<p>The word arrives through the MBR and is latched in the IR, where it is decoded.</p><p><i>VI: Từ lệnh về qua MBR rồi được chốt vào IR để giải mã.</i></p>"
           },
           {
             "ma": "a2",
@@ -92,15 +92,15 @@
               },
               {
                 "ma": "b",
-                "noiDung": "organization"
-              },
-              {
-                "ma": "c",
                 "noiDung": "structure"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "function"
+              },
+              {
+                "ma": "d",
+                "noiDung": "organization"
               }
             ],
             "dapAn": [
@@ -122,11 +122,11 @@
               },
               {
                 "ma": "c",
-                "noiDung": "DRAM"
+                "noiDung": "ROM"
               },
               {
                 "ma": "d",
-                "noiDung": "ROM"
+                "noiDung": "DRAM"
               }
             ],
             "dapAn": [
@@ -140,7 +140,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "the TLB only"
+                "noiDung": "main memory"
               },
               {
                 "ma": "b",
@@ -148,15 +148,15 @@
               },
               {
                 "ma": "c",
-                "noiDung": "main memory"
+                "noiDung": "the register file"
               },
               {
                 "ma": "d",
-                "noiDung": "the register file"
+                "noiDung": "the TLB only"
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>Memory is always up to date, at the cost of write traffic.</p><p><i>VI: Bộ nhớ luôn cập nhật nhưng tốn lưu lượng ghi.</i></p>"
           },
@@ -166,15 +166,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "striping without redundancy"
+                "noiDung": "distributed parity"
               },
               {
                 "ma": "b",
-                "noiDung": "double parity"
+                "noiDung": "striping without redundancy"
               },
               {
                 "ma": "c",
-                "noiDung": "distributed parity"
+                "noiDung": "double parity"
               },
               {
                 "ma": "d",
@@ -192,7 +192,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "programmed (polling)"
+                "noiDung": "DMA"
               },
               {
                 "ma": "b",
@@ -200,15 +200,15 @@
               },
               {
                 "ma": "c",
-                "noiDung": "DMA"
+                "noiDung": "memory-mapped"
               },
               {
                 "ma": "d",
-                "noiDung": "memory-mapped only"
+                "noiDung": "programmed"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>Busy-waiting is programmed I/O.</p><p><i>VI: Chờ bận là I/O lập trình.</i></p>"
           },
@@ -218,7 +218,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "A + B"
+                "noiDung": "B"
               },
               {
                 "ma": "b",
@@ -226,7 +226,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "B"
+                "noiDung": "A + B"
               },
               {
                 "ma": "d",
@@ -244,23 +244,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "register"
+                "noiDung": "immediate"
               },
               {
                 "ma": "b",
-                "noiDung": "direct"
-              },
-              {
-                "ma": "c",
                 "noiDung": "indirect"
               },
               {
+                "ma": "c",
+                "noiDung": "direct"
+              },
+              {
                 "ma": "d",
-                "noiDung": "immediate"
+                "noiDung": "register"
               }
             ],
             "dapAn": [
-              "c"
+              "b"
             ],
             "giaiThich": "<p>First the pointer, then the data.</p><p><i>VI: Trước là con trỏ, sau là dữ liệu.</i></p>"
           },
@@ -270,23 +270,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "WAR hazard"
+                "noiDung": "RAW hazard"
               },
               {
                 "ma": "b",
-                "noiDung": "WAW hazard"
-              },
-              {
-                "ma": "c",
                 "noiDung": "structural hazard"
               },
               {
+                "ma": "c",
+                "noiDung": "WAR hazard"
+              },
+              {
                 "ma": "d",
-                "noiDung": "RAW hazard"
+                "noiDung": "WAW hazard"
               }
             ],
             "dapAn": [
-              "d"
+              "a"
             ],
             "giaiThich": "<p>Read After Write.</p><p><i>VI: Đọc sau ghi.</i></p>"
           },
@@ -300,11 +300,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "the line is shared and clean"
+                "noiDung": "the line is invalid"
               },
               {
                 "ma": "c",
-                "noiDung": "the line is invalid"
+                "noiDung": "the line is shared and clean"
               },
               {
                 "ma": "d",
@@ -326,7 +326,7 @@
               },
               {
                 "ma": "b",
-                "noiDung": "1.50 s"
+                "noiDung": "1.25 s"
               },
               {
                 "ma": "c",
@@ -334,11 +334,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "1.25 s"
+                "noiDung": "1.50 s"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>T = IC × CPI / f = 3·10⁹ × 1.2 / 2.4·10⁹ = 1.50 s.</p><p><i>VI: T = IC × CPI / f = 1.50 s.</i></p>"
           },
@@ -348,7 +348,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "102.00 cycles"
+                "noiDung": "5.92 cycles"
               },
               {
                 "ma": "b",
@@ -356,15 +356,15 @@
               },
               {
                 "ma": "c",
-                "noiDung": "5.92 cycles"
+                "noiDung": "96.08 cycles"
               },
               {
                 "ma": "d",
-                "noiDung": "96.08 cycles"
+                "noiDung": "102.00 cycles"
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>0.96×2 + 0.04×100 = 5.92.</p><p><i>VI: 0,96×2 + 0,04×100 = 5.92.</i></p>"
           },
@@ -374,23 +374,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "22"
-              },
-              {
-                "ma": "b",
                 "noiDung": "18"
               },
               {
+                "ma": "b",
+                "noiDung": "20"
+              },
+              {
                 "ma": "c",
-                "noiDung": "26"
+                "noiDung": "22"
               },
               {
                 "ma": "d",
-                "noiDung": "20"
+                "noiDung": "26"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>offset 6, sets 64 ⇒ index 6, tag = 32 − 6 − 6 = 20.</p><p><i>VI: offset 6, index 6, tag 20.</i></p>"
           },
@@ -400,23 +400,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "4 MiB"
+                "noiDung": "1024 MiB"
               },
               {
                 "ma": "b",
-                "noiDung": "1 MiB"
-              },
-              {
-                "ma": "c",
                 "noiDung": "16 MiB"
               },
               {
+                "ma": "c",
+                "noiDung": "1 MiB"
+              },
+              {
                 "ma": "d",
-                "noiDung": "1024 MiB"
+                "noiDung": "4 MiB"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>2^20 pages × 4 B = 4 MiB.</p><p><i>VI: 2^20 trang × 4 B = 4 MiB.</i></p>"
           },
@@ -426,7 +426,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "8"
+                "noiDung": "5"
               },
               {
                 "ma": "b",
@@ -434,7 +434,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "5"
+                "noiDung": "8"
               },
               {
                 "ma": "d",
@@ -452,23 +452,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "9"
-              },
-              {
-                "ma": "b",
-                "noiDung": "10"
-              },
-              {
-                "ma": "c",
                 "noiDung": "8"
               },
               {
-                "ma": "d",
+                "ma": "b",
+                "noiDung": "9"
+              },
+              {
+                "ma": "c",
                 "noiDung": "7"
+              },
+              {
+                "ma": "d",
+                "noiDung": "10"
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>Ideal 3 + 4 = 7 cycles plus one load-use stall = 8.</p><p><i>VI: Lý tưởng 3 + 4 = 7 chu kỳ cộng một đình trệ load-use = 8.</i></p>"
           },
@@ -478,7 +478,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "11011010"
+                "noiDung": "11011011"
               },
               {
                 "ma": "b",
@@ -490,11 +490,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "11011011"
+                "noiDung": "11011010"
               }
             ],
             "dapAn": [
-              "d"
+              "a"
             ],
             "giaiThich": "<p>37 = 00100101; invert = 11011010; +1 = 11011011.</p><p><i>VI: 37 = 00100101; đảo = 11011010; +1 = 11011011.</i></p>"
           },
@@ -504,11 +504,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "10 TB"
+                "noiDung": "4 TB"
               },
               {
                 "ma": "b",
-                "noiDung": "12 TB"
+                "noiDung": "10 TB"
               },
               {
                 "ma": "c",
@@ -516,11 +516,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "4 TB"
+                "noiDung": "12 TB"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>(n − 1) × 2 = 10 TB.</p><p><i>VI: (n − 1) × 2 = 10 TB.</i></p>"
           },
@@ -534,11 +534,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "4.71×"
+                "noiDung": "8.00×"
               },
               {
                 "ma": "c",
-                "noiDung": "8.00×"
+                "noiDung": "4.71×"
               },
               {
                 "ma": "d",
@@ -546,7 +546,7 @@
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>1 / (0.1 + 0.9/8) = 4.71.</p><p><i>VI: 1 / (0,1 + 0,9/8) = 4.71.</i></p>"
           },
@@ -556,15 +556,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "2.78 ms"
+                "noiDung": "5.56 ms"
               },
               {
                 "ma": "b",
-                "noiDung": "4.17 ms"
+                "noiDung": "2.78 ms"
               },
               {
                 "ma": "c",
-                "noiDung": "5.56 ms"
+                "noiDung": "4.17 ms"
               },
               {
                 "ma": "d",
@@ -572,7 +572,7 @@
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>60000 / 5400 / 2 = 5.56 ms.</p><p><i>VI: 60000 / 5400 / 2 = 5,56 ms.</i></p>"
           }
@@ -635,10 +635,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# FE mock B — 20 questions (more calculations) — answer key\n\n1. In a __________ architecture instructions and data share one memory.Trong kiến trúc __________ lệnh và dữ liệu dùng chung một bộ nhớ.\n   Answer: d) von Neumann\n   Stored-program concept.VI: Khái niệm chương trình lưu trữ.\n\n2. Temporal locality means …Cục bộ thời gian nghĩa là …\n   Answer: a) an address referenced now is likely to be referenced again soon\n   Reuse of the same location.VI: Tái sử dụng cùng một vị trí.\n\n3. A page fault is handled by the …Lỗi trang được xử lý bởi …\n   Answer: b) operating system\n   The OS loads the page from disk.VI: HĐH nạp trang từ đĩa.\n\n4. Which gate gives 1 only when its inputs differ?Cổng nào cho 1 chỉ khi các ngõ vào khác nhau?\n   Answer: c) XOR\n   XOR = A·B′ + A′·B.VI: XOR = A·B′ + A′·B.\n\n5. DMA is most useful for …DMA hữu ích nhất cho …\n   Answer: d) large block transfers\n   The CPU is only involved at start and end.VI: CPU chỉ tham gia ở đầu và cuối.\n\n6. The opcode of an instruction specifies …Opcode của lệnh chỉ định …\n   Answer: a) the operation to perform\n   What to do.VI: Làm gì.\n\n7. A 2-bit saturating counter predictor mispredicts a loop branch mainly …Bộ dự đoán bộ đếm bão hoà 2 bit đoán sai nhánh vòng lặp chủ yếu …\n   Answer: b) once per loop execution (at the exit)\n   The loop exit flips only one prediction.VI: Lối thoát vòng lặp chỉ làm sai một dự đoán.\n\n8. Which RISC characteristic simplifies pipelining?Đặc trưng RISC nào giúp pipeline đơn giản?\n   Answer: c) fixed-length instructions\n   Regular decode.VI: Giải mã đều đặn.\n\n9. A superscalar processor …Bộ xử lý superscalar …\n   Answer: d) issues several instructions per cycle\n   IPC can exceed 1.VI: IPC có thể vượt 1.\n\n10. MARIE’s Skipcond 800 skips the next instruction when …Skipcond 800 của MARIE bỏ qua lệnh kế khi …\n   Answer: a) AC > 0\n   000: 0.VI: 000: 0.\n\n11. A 32-bit data bus at 133 MHz transferring on both clock edges has a peak bandwidth of … MB/s.Bus dữ liệu 32 bit ở 133 MHz truyền ở cả hai sườn xung có băng thông đỉnh … MB/s.\n   Answer: b) 1064 MB/s\n   4 B × 133 MHz × 2 = 1064 MB/s.VI: 4 B × 133 MHz × 2 = 1064 MB/s.\n\n12. Direct-mapped cache, 4 lines of 16 bytes, byte addresses 0,16,32,48,0,64,16,80,32: the number of misses is …Cache trực tiếp 4 dòng 16 byte, địa chỉ byte 0,16,32,48,0,64,16,80,32: số miss là …\n   Answer: c) 6\n   Blocks 0,1,2,3,0,4,1,5,2 map to lines 0,1,2,3,0,0,1,1,2: M M M M H M H M H (M = miss, H = hit); blocks 4 and 5 evict blocks 0 and 1.VI: Khối 0,1,2,3,0,4,1,5,2 ánh xạ vào dòng 0,1,2,3,0,0,1,1,2: M M M M H M H M H (M = miss, H = hit); khối 4 và 5 đuổi khối 0 và 1.\n\n13. The IEEE 754 single-precision pattern of −5.0 in hex is …Mẫu IEEE 754 đơn của −5,0 dạng hex là …\n   Answer: d) C0A00000\n   −5 = −1.01₂ × 2², E = 129 = 10000001, so C0A00000.VI: −5 = −1,01₂ × 2², E = 129 nên C0A00000.\n\n14. At 2 GHz with CPI 1.6 the MIPS rating is …Ở 2 GHz với CPI 1,6, xếp hạng MIPS là …\n   Answer: a) 1250.00 MIPS\n   2000 / 1.6 = 1250.00.VI: 2000 / 1,6 = 1250.00.\n\n15. LRU with 3 frames on the reference string 1 2 3 1 4 2 5 1 2 3 causes … page faults.LRU với 3 khung trên chuỗi 1 2 3 1 4 2 5 1 2 3 gây … lỗi trang.\n   Answer: b) 8\n   Simulate the frames after each reference.VI: Mô phỏng các khung sau mỗi tham chiếu.\n\n16. Two cores: P0 reads, P1 reads, P0 writes the same block. The final MESI states of (P0, P1) are …Hai lõi: P0 đọc, P1 đọc, P0 ghi cùng khối. Trạng thái MESI cuối của (P0, P1) là …\n   Answer: c) MI\n   The write invalidates P1 and leaves P0 Modified.VI: Lần ghi vô hiệu P1 và để P0 ở Modified.\n\n17. A 2-bit counter (start 0) on the branch outcomes TTNTTNTTN mispredicts … times.Bộ đếm 2 bit (bắt đầu 0) trên kết quả nhánh TTNTTNTTN đoán sai … lần.\n   Answer: d) 6\n   Trace the counter value before each branch.VI: Lần theo giá trị bộ đếm trước mỗi nhánh.\n\n18. 90 + 50 in 8-bit two’s complement gives …90 + 50 trong bù 2 8 bit cho …\n   Answer: a) overflow, result 10001100 (−116)\n   90 + 50 = 140 > 127: the sign bit becomes 1 so the signed result is −116 (overflow).VI: 90 + 50 = 140 > 127: bit dấu thành 1 nên kết quả có dấu là −116 (tràn).\n\n19. An 8 MB/s stream moved by DMA in 4 KiB blocks, 2000 cycles per block on a 2 GHz CPU, costs about … % of the CPU.Dòng 8 MB/s được DMA chuyển theo khối 4 KiB, 2000 chu kỳ mỗi khối trên CPU 2 GHz, tốn khoảng … % CPU.\n   Answer: b) 0.20 %\n   1953 blocks/s × 2000 cycles = 3.9·10⁶ cycles/s of 2·10⁹ = 0.20 %.VI: 1953 khối/s × 2000 chu kỳ = 3,9·10⁶ chu kỳ/s trên 2·10⁹ = 0,20 %.\n\n20. A 10,000 rpm disk, 6 ms seek, reads 4096 bytes from a 200,000-byte track: the access time is about … ms.Đĩa 10.000 vòng/phút, seek 6 ms, đọc 4096 byte từ rãnh 200.000 byte: thời gian truy cập khoảng … ms.\n   Answer: c) 9.12 ms\n   6 + 3.00 (half of 6 ms) + 0.12 = 9.12 ms.VI: 6 + 3,00 + 0,12 = 9.12 ms.\n"
+          "code": "# FE mock B — 20 questions (more calculations) — answer key\n\n1. In a __________ architecture instructions and data share one memory.Trong kiến trúc __________ lệnh và dữ liệu dùng chung một bộ nhớ.\n   Answer: d) von Neumann\n   Stored-program concept.VI: Khái niệm chương trình lưu trữ.\n\n2. Temporal locality means …Cục bộ thời gian nghĩa là …\n   Answer: c) an address referenced now is likely to be referenced again soon\n   Reuse of the same location.VI: Tái sử dụng cùng một vị trí.\n\n3. A page fault is handled by the …Lỗi trang được xử lý bởi …\n   Answer: d) operating system\n   The OS loads the page from disk.VI: HĐH nạp trang từ đĩa.\n\n4. Which gate gives 1 only when its inputs differ?Cổng nào cho 1 chỉ khi các ngõ vào khác nhau?\n   Answer: d) XOR\n   XOR = A·B′ + A′·B.VI: XOR = A·B′ + A′·B.\n\n5. DMA is most useful for …DMA hữu ích nhất cho …\n   Answer: a) large block transfers\n   The CPU is only involved at start and end.VI: CPU chỉ tham gia ở đầu và cuối.\n\n6. The opcode of an instruction specifies …Opcode của lệnh chỉ định …\n   Answer: a) the operation to perform\n   What to do.VI: Làm gì.\n\n7. A 2-bit saturating counter predictor mispredicts a loop branch mainly …Bộ dự đoán bộ đếm bão hoà 2 bit đoán sai nhánh vòng lặp chủ yếu …\n   Answer: a) once per loop execution (at the exit)\n   The loop exit flips only one prediction.VI: Lối thoát vòng lặp chỉ làm sai một dự đoán.\n\n8. Which RISC characteristic simplifies pipelining?Đặc trưng RISC nào giúp pipeline đơn giản?\n   Answer: c) fixed-length instructions\n   Regular decode.VI: Giải mã đều đặn.\n\n9. A superscalar processor …Bộ xử lý superscalar …\n   Answer: c) issues several instructions per cycle\n   IPC can exceed 1.VI: IPC có thể vượt 1.\n\n10. MARIE’s Skipcond 800 skips the next instruction when …Skipcond 800 của MARIE bỏ qua lệnh kế khi …\n   Answer: a) AC > 0\n   Skipcond 000: AC < 0; 400: AC = 0; 800: AC > 0.VI: Skipcond 000: AC < 0; 400: AC = 0; 800: AC > 0.\n\n11. A 32-bit data bus at 133 MHz transferring on both clock edges has a peak bandwidth of … MB/s.Bus dữ liệu 32 bit ở 133 MHz truyền ở cả hai sườn xung có băng thông đỉnh … MB/s.\n   Answer: d) 1064 MB/s\n   4 B × 133 MHz × 2 = 1064 MB/s.VI: 4 B × 133 MHz × 2 = 1064 MB/s.\n\n12. Direct-mapped cache, 4 lines of 16 bytes, byte addresses 0,16,32,48,0,64,16,80,32: the number of misses is …Cache trực tiếp 4 dòng 16 byte, địa chỉ byte 0,16,32,48,0,64,16,80,32: số miss là …\n   Answer: d) 6\n   Blocks 0,1,2,3,0,4,1,5,2 map to lines 0,1,2,3,0,0,1,1,2: M M M M H M H M H (M = miss, H = hit); blocks 4 and 5 evict blocks 0 and 1.VI: Khối 0,1,2,3,0,4,1,5,2 ánh xạ vào dòng 0,1,2,3,0,0,1,1,2: M M M M H M H M H (M = miss, H = hit); khối 4 và 5 đuổi khối 0 và 1.\n\n13. The IEEE 754 single-precision pattern of −5.0 in hex is …Mẫu IEEE 754 đơn của −5,0 dạng hex là …\n   Answer: c) C0A00000\n   −5 = −1.01₂ × 2², E = 129 = 10000001, so C0A00000.VI: −5 = −1,01₂ × 2², E = 129 nên C0A00000.\n\n14. At 2 GHz with CPI 1.6 the MIPS rating is …Ở 2 GHz với CPI 1,6, xếp hạng MIPS là …\n   Answer: b) 1250.00 MIPS\n   2000 / 1.6 = 1250.00.VI: 2000 / 1,6 = 1250.00.\n\n15. LRU with 3 frames on the reference string 1 2 3 1 4 2 5 1 2 3 causes … page faults.LRU với 3 khung trên chuỗi 1 2 3 1 4 2 5 1 2 3 gây … lỗi trang.\n   Answer: d) 8\n   Simulate the frames after each reference.VI: Mô phỏng các khung sau mỗi tham chiếu.\n\n16. Two cores: P0 reads, P1 reads, P0 writes the same block. The final MESI states of (P0, P1) are …Hai lõi: P0 đọc, P1 đọc, P0 ghi cùng khối. Trạng thái MESI cuối của (P0, P1) là …\n   Answer: b) MI\n   The write invalidates P1 and leaves P0 Modified.VI: Lần ghi vô hiệu P1 và để P0 ở Modified.\n\n17. A 2-bit counter (start 0) on the branch outcomes TTNTTNTTN mispredicts … times.Bộ đếm 2 bit (bắt đầu 0) trên kết quả nhánh TTNTTNTTN đoán sai … lần.\n   Answer: c) 6\n   Trace the counter value before each branch.VI: Lần theo giá trị bộ đếm trước mỗi nhánh.\n\n18. 90 + 50 in 8-bit two’s complement gives …90 + 50 trong bù 2 8 bit cho …\n   Answer: a) overflow, result 10001100 (−116)\n   90 + 50 = 140 > 127: the sign bit becomes 1 so the signed result is −116 (overflow).VI: 90 + 50 = 140 > 127: bit dấu thành 1 nên kết quả có dấu là −116 (tràn).\n\n19. An 8 MB/s stream moved by DMA in 4 KiB blocks, 2000 cycles per block on a 2 GHz CPU, costs about … % of the CPU.Dòng 8 MB/s được DMA chuyển theo khối 4 KiB, 2000 chu kỳ mỗi khối trên CPU 2 GHz, tốn khoảng … % CPU.\n   Answer: a) 0.20 %\n   1953 blocks/s × 2000 cycles = 3.9·10⁶ cycles/s of 2·10⁹ = 0.20 %.VI: 1953 khối/s × 2000 chu kỳ = 3,9·10⁶ chu kỳ/s trên 2·10⁹ = 0,20 %.\n\n20. A 10,000 rpm disk, 6 ms seek, reads 4096 bytes from a 200,000-byte track: the access time is about … ms.Đĩa 10.000 vòng/phút, seek 6 ms, đọc 4096 byte từ rãnh 200.000 byte: thời gian truy cập khoảng … ms.\n   Answer: b) 9.12 ms\n   6 + 3.00 (half of 6 ms) + 0.12 = 9.12 ms.VI: 6 + 3,00 + 0,12 = 9.12 ms.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> von Neumann</p><p>Stored-program concept.</p><p><i>VI: Khái niệm chương trình lưu trữ.</i></p></li><li><p><b>c)</b> an address referenced now is likely to be referenced again soon</p><p>Reuse of the same location.</p><p><i>VI: Tái sử dụng cùng một vị trí.</i></p></li><li><p><b>d)</b> operating system</p><p>The OS loads the page from disk.</p><p><i>VI: HĐH nạp trang từ đĩa.</i></p></li><li><p><b>d)</b> XOR</p><p>XOR = A·B′ + A′·B.</p><p><i>VI: XOR = A·B′ + A′·B.</i></p></li><li><p><b>a)</b> large block transfers</p><p>The CPU is only involved at start and end.</p><p><i>VI: CPU chỉ tham gia ở đầu và cuối.</i></p></li><li><p><b>a)</b> the operation to perform</p><p>What to do.</p><p><i>VI: Làm gì.</i></p></li><li><p><b>a)</b> once per loop execution (at the exit)</p><p>The loop exit flips only one prediction.</p><p><i>VI: Lối thoát vòng lặp chỉ làm sai một dự đoán.</i></p></li><li><p><b>c)</b> fixed-length instructions</p><p>Regular decode.</p><p><i>VI: Giải mã đều đặn.</i></p></li><li><p><b>c)</b> issues several instructions per cycle</p><p>IPC can exceed 1.</p><p><i>VI: IPC có thể vượt 1.</i></p></li><li><p><b>a)</b> AC > 0</p><p>Skipcond 000: AC &lt; 0; 400: AC = 0; 800: AC &gt; 0.</p><p><i>VI: Skipcond 000: AC &lt; 0; 400: AC = 0; 800: AC &gt; 0.</i></p></li><li><p><b>d)</b> 1064 MB/s</p><p>4 B × 133 MHz × 2 = 1064 MB/s.</p><p><i>VI: 4 B × 133 MHz × 2 = 1064 MB/s.</i></p></li><li><p><b>d)</b> 6</p><p>Blocks 0,1,2,3,0,4,1,5,2 map to lines 0,1,2,3,0,0,1,1,2: M M M M H M H M H (M = miss, H = hit); blocks 4 and 5 evict blocks 0 and 1.</p><p><i>VI: Khối 0,1,2,3,0,4,1,5,2 ánh xạ vào dòng 0,1,2,3,0,0,1,1,2: M M M M H M H M H (M = miss, H = hit); khối 4 và 5 đuổi khối 0 và 1.</i></p></li><li><p><b>c)</b> C0A00000</p><p>−5 = −1.01₂ × 2², E = 129 = 10000001, so C0A00000.</p><p><i>VI: −5 = −1,01₂ × 2², E = 129 nên C0A00000.</i></p></li><li><p><b>b)</b> 1250.00 MIPS</p><p>2000 / 1.6 = 1250.00.</p><p><i>VI: 2000 / 1,6 = 1250.00.</i></p></li><li><p><b>d)</b> 8</p><p>Simulate the frames after each reference.</p><p><i>VI: Mô phỏng các khung sau mỗi tham chiếu.</i></p></li><li><p><b>b)</b> MI</p><p>The write invalidates P1 and leaves P0 Modified.</p><p><i>VI: Lần ghi vô hiệu P1 và để P0 ở Modified.</i></p></li><li><p><b>c)</b> 6</p><p>Trace the counter value before each branch.</p><p><i>VI: Lần theo giá trị bộ đếm trước mỗi nhánh.</i></p></li><li><p><b>a)</b> overflow, result 10001100 (−116)</p><p>90 + 50 = 140 > 127: the sign bit becomes 1 so the signed result is −116 (overflow).</p><p><i>VI: 90 + 50 = 140 > 127: bit dấu thành 1 nên kết quả có dấu là −116 (tràn).</i></p></li><li><p><b>a)</b> 0.20 %</p><p>1953 blocks/s × 2000 cycles = 3.9·10⁶ cycles/s of 2·10⁹ = 0.20 %.</p><p><i>VI: 1953 khối/s × 2000 chu kỳ = 3,9·10⁶ chu kỳ/s trên 2·10⁹ = 0,20 %.</i></p></li><li><p><b>b)</b> 9.12 ms</p><p>6 + 3.00 (half of 6 ms) + 0.12 = 9.12 ms.</p><p><i>VI: 6 + 3,00 + 0,12 = 9.12 ms.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -677,7 +677,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "an address referenced now is likely to be referenced again soon"
+                "noiDung": "memory is accessed in order"
               },
               {
                 "ma": "b",
@@ -685,15 +685,15 @@
               },
               {
                 "ma": "c",
-                "noiDung": "programs run at fixed times"
+                "noiDung": "an address referenced now is likely to be referenced again soon"
               },
               {
                 "ma": "d",
-                "noiDung": "memory is accessed in order"
+                "noiDung": "programs run at fixed times"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>Reuse of the same location.</p><p><i>VI: Tái sử dụng cùng một vị trí.</i></p>"
           },
@@ -703,23 +703,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "bus arbiter"
-              },
-              {
-                "ma": "b",
-                "noiDung": "operating system"
-              },
-              {
-                "ma": "c",
                 "noiDung": "cache controller"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "ALU"
+              },
+              {
+                "ma": "c",
+                "noiDung": "bus arbiter"
+              },
+              {
+                "ma": "d",
+                "noiDung": "operating system"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>The OS loads the page from disk.</p><p><i>VI: HĐH nạp trang từ đĩa.</i></p>"
           },
@@ -737,15 +737,15 @@
               },
               {
                 "ma": "c",
-                "noiDung": "XOR"
+                "noiDung": "AND"
               },
               {
                 "ma": "d",
-                "noiDung": "AND"
+                "noiDung": "XOR"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>XOR = A·B′ + A′·B.</p><p><i>VI: XOR = A·B′ + A′·B.</i></p>"
           },
@@ -755,23 +755,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "single-byte keyboard input"
+                "noiDung": "large block transfers"
               },
               {
                 "ma": "b",
-                "noiDung": "floating-point arithmetic"
-              },
-              {
-                "ma": "c",
                 "noiDung": "cache replacement"
               },
               {
+                "ma": "c",
+                "noiDung": "single-byte keyboard input"
+              },
+              {
                 "ma": "d",
-                "noiDung": "large block transfers"
+                "noiDung": "floating-point arithmetic"
               }
             ],
             "dapAn": [
-              "d"
+              "a"
             ],
             "giaiThich": "<p>The CPU is only involved at start and end.</p><p><i>VI: CPU chỉ tham gia ở đầu và cuối.</i></p>"
           },
@@ -789,11 +789,11 @@
               },
               {
                 "ma": "c",
-                "noiDung": "the page size"
+                "noiDung": "the clock frequency"
               },
               {
                 "ma": "d",
-                "noiDung": "the clock frequency"
+                "noiDung": "the page size"
               }
             ],
             "dapAn": [
@@ -807,23 +807,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "at every iteration"
-              },
-              {
-                "ma": "b",
                 "noiDung": "once per loop execution (at the exit)"
               },
               {
+                "ma": "b",
+                "noiDung": "at every iteration (it flips each time)"
+              },
+              {
                 "ma": "c",
-                "noiDung": "twice per iteration"
+                "noiDung": "twice per loop execution (exit and re-entry)"
               },
               {
                 "ma": "d",
-                "noiDung": "never"
+                "noiDung": "never (once it is trained)"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>The loop exit flips only one prediction.</p><p><i>VI: Lối thoát vòng lặp chỉ làm sai một dự đoán.</i></p>"
           },
@@ -833,11 +833,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "memory-to-memory operations"
+                "noiDung": "many addressing modes"
               },
               {
                 "ma": "b",
-                "noiDung": "microcoded instructions"
+                "noiDung": "memory-to-memory operations"
               },
               {
                 "ma": "c",
@@ -845,7 +845,7 @@
               },
               {
                 "ma": "d",
-                "noiDung": "many addressing modes"
+                "noiDung": "microcoded instructions"
               }
             ],
             "dapAn": [
@@ -859,23 +859,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "has one pipeline stage"
-              },
-              {
-                "ma": "b",
                 "noiDung": "has no cache"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "runs one thread only"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "issues several instructions per cycle"
+              },
+              {
+                "ma": "d",
+                "noiDung": "has one pipeline stage"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>IPC can exceed 1.</p><p><i>VI: IPC có thể vượt 1.</i></p>"
           },
@@ -889,21 +889,21 @@
               },
               {
                 "ma": "b",
-                "noiDung": "AC = 0"
+                "noiDung": "AC ≠ 0"
               },
               {
                 "ma": "c",
-                "noiDung": "AC < 0"
+                "noiDung": "AC = 0"
               },
               {
                 "ma": "d",
-                "noiDung": "AC ≠ 0"
+                "noiDung": "AC < 0"
               }
             ],
             "dapAn": [
               "a"
             ],
-            "giaiThich": "<p>000: <0, 400: =0, 800: >0.</p><p><i>VI: 000: <0, 400: =0, 800: >0.</i></p>"
+            "giaiThich": "<p>Skipcond 000: AC &lt; 0; 400: AC = 0; 800: AC &gt; 0.</p><p><i>VI: Skipcond 000: AC &lt; 0; 400: AC = 0; 800: AC &gt; 0.</i></p>"
           },
           {
             "ma": "b11",
@@ -915,7 +915,7 @@
               },
               {
                 "ma": "b",
-                "noiDung": "1064 MB/s"
+                "noiDung": "8512 MB/s"
               },
               {
                 "ma": "c",
@@ -923,11 +923,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "8512 MB/s"
+                "noiDung": "1064 MB/s"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>4 B × 133 MHz × 2 = 1064 MB/s.</p><p><i>VI: 4 B × 133 MHz × 2 = 1064 MB/s.</i></p>"
           },
@@ -937,23 +937,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "7"
-              },
-              {
-                "ma": "b",
                 "noiDung": "4"
               },
               {
+                "ma": "b",
+                "noiDung": "5"
+              },
+              {
                 "ma": "c",
-                "noiDung": "6"
+                "noiDung": "7"
               },
               {
                 "ma": "d",
-                "noiDung": "5"
+                "noiDung": "6"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>Blocks 0,1,2,3,0,4,1,5,2 map to lines 0,1,2,3,0,0,1,1,2: M M M M H M H M H (M = miss, H = hit); blocks 4 and 5 evict blocks 0 and 1.</p><p><i>VI: Khối 0,1,2,3,0,4,1,5,2 ánh xạ vào dòng 0,1,2,3,0,0,1,1,2: M M M M H M H M H (M = miss, H = hit); khối 4 và 5 đuổi khối 0 và 1.</i></p>"
           },
@@ -963,23 +963,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "40A00000"
-              },
-              {
-                "ma": "b",
                 "noiDung": "C0400000"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "C1200000"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "C0A00000"
+              },
+              {
+                "ma": "d",
+                "noiDung": "40A00000"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>−5 = −1.01₂ × 2², E = 129 = 10000001, so C0A00000.</p><p><i>VI: −5 = −1,01₂ × 2², E = 129 nên C0A00000.</i></p>"
           },
@@ -989,23 +989,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "1250.00 MIPS"
+                "noiDung": "0.80 MIPS"
               },
               {
                 "ma": "b",
-                "noiDung": "3200.00 MIPS"
+                "noiDung": "1250.00 MIPS"
               },
               {
                 "ma": "c",
-                "noiDung": "625.00 MIPS"
+                "noiDung": "3200.00 MIPS"
               },
               {
                 "ma": "d",
-                "noiDung": "0.80 MIPS"
+                "noiDung": "625.00 MIPS"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>2000 / 1.6 = 1250.00.</p><p><i>VI: 2000 / 1,6 = 1250.00.</i></p>"
           },
@@ -1015,23 +1015,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "6"
-              },
-              {
-                "ma": "b",
-                "noiDung": "8"
-              },
-              {
-                "ma": "c",
                 "noiDung": "7"
               },
               {
-                "ma": "d",
+                "ma": "b",
+                "noiDung": "6"
+              },
+              {
+                "ma": "c",
                 "noiDung": "9"
+              },
+              {
+                "ma": "d",
+                "noiDung": "8"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>Simulate the frames after each reference.</p><p><i>VI: Mô phỏng các khung sau mỗi tham chiếu.</i></p>"
           },
@@ -1041,15 +1041,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "EI"
-              },
-              {
-                "ma": "b",
                 "noiDung": "MM"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "MI"
+              },
+              {
+                "ma": "c",
+                "noiDung": "EI"
               },
               {
                 "ma": "d",
@@ -1057,7 +1057,7 @@
               }
             ],
             "dapAn": [
-              "c"
+              "b"
             ],
             "giaiThich": "<p>The write invalidates P1 and leaves P0 Modified.</p><p><i>VI: Lần ghi vô hiệu P1 và để P0 ở Modified.</i></p>"
           },
@@ -1075,15 +1075,15 @@
               },
               {
                 "ma": "c",
-                "noiDung": "8"
+                "noiDung": "6"
               },
               {
                 "ma": "d",
-                "noiDung": "6"
+                "noiDung": "8"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>Trace the counter value before each branch.</p><p><i>VI: Lần theo giá trị bộ đếm trước mỗi nhánh.</i></p>"
           },
@@ -1097,7 +1097,7 @@
               },
               {
                 "ma": "b",
-                "noiDung": "no overflow, result 10001100"
+                "noiDung": "no overflow, result 10001100 (+140)"
               },
               {
                 "ma": "c",
@@ -1105,7 +1105,7 @@
               },
               {
                 "ma": "d",
-                "noiDung": "no overflow, result 10001100 (+140)"
+                "noiDung": "no overflow, result 10001100"
               }
             ],
             "dapAn": [
@@ -1119,15 +1119,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "100.00 %"
-              },
-              {
-                "ma": "b",
                 "noiDung": "0.20 %"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "60.00 %"
+              },
+              {
+                "ma": "c",
+                "noiDung": "100.00 %"
               },
               {
                 "ma": "d",
@@ -1135,7 +1135,7 @@
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>1953 blocks/s × 2000 cycles = 3.9·10⁶ cycles/s of 2·10⁹ = 0.20 %.</p><p><i>VI: 1953 khối/s × 2000 chu kỳ = 3,9·10⁶ chu kỳ/s trên 2·10⁹ = 0,20 %.</i></p>"
           },
@@ -1145,23 +1145,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "6.12 ms"
+                "noiDung": "12.00 ms"
               },
               {
                 "ma": "b",
-                "noiDung": "18.25 ms"
-              },
-              {
-                "ma": "c",
                 "noiDung": "9.12 ms"
               },
               {
+                "ma": "c",
+                "noiDung": "6.12 ms"
+              },
+              {
                 "ma": "d",
-                "noiDung": "12.00 ms"
+                "noiDung": "18.25 ms"
               }
             ],
             "dapAn": [
-              "c"
+              "b"
             ],
             "giaiThich": "<p>6 + 3.00 (half of 6 ms) + 0.12 = 9.12 ms.</p><p><i>VI: 6 + 3,00 + 0,12 = 9.12 ms.</i></p>"
           }

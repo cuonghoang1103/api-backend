@@ -48,10 +48,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# ILP 1 — Superscalar, dependences and renaming: concepts — answer key\n\n1. A superscalar processor …Bộ xử lý superscalar …\n   Answer: a) can issue more than one instruction per clock cycle\n   Multiple functional units and wide issue give IPC > 1.VI: Nhiều khối chức năng và phát lệnh rộng cho IPC > 1.\n\n2. Which dependence is a TRUE dependence that renaming cannot remove?Phụ thuộc nào là phụ thuộc THẬT mà đổi tên không loại được?\n   Answer: b) RAW (read after write)\n   WAR and WAW are name dependences caused by reusing register names.VI: WAR và WAW là phụ thuộc tên do dùng lại tên thanh ghi.\n\n3. Register renaming eliminates …Đổi tên thanh ghi loại bỏ …\n   Answer: c) WAR and WAW hazards\n   Each write gets a fresh physical register.VI: Mỗi lần ghi nhận một thanh ghi vật lý mới.\n\n4. Out-of-order execution mainly helps when …Thực hiện sai thứ tự giúp nhiều nhất khi …\n   Answer: d) an instruction is stalled but later independent instructions could run\n   Independent work is found beyond the stalled instruction.VI: Tìm việc độc lập vượt qua lệnh đang đình trệ.\n\n5. The upper bound on IPC of a program is limited by …Cận trên của IPC của chương trình bị giới hạn bởi …\n   Answer: a) its true data dependences and the issue width\n   A serial chain of RAW dependences cannot be sped up by width.VI: Chuỗi RAW tuần tự không tăng tốc được dù rộng đến đâu.\n"
+          "code": "# ILP 1 — Superscalar, dependences and renaming: concepts — answer key\n\n1. A superscalar processor …Bộ xử lý superscalar …\n   Answer: c) can issue more than one instruction per clock cycle\n   Multiple functional units and wide issue give IPC > 1.VI: Nhiều khối chức năng và phát lệnh rộng cho IPC > 1.\n\n2. Which dependence is a TRUE dependence that renaming cannot remove?Phụ thuộc nào là phụ thuộc THẬT mà đổi tên không loại được?\n   Answer: d) RAW (read after write)\n   WAR and WAW are name dependences caused by reusing register names.VI: WAR và WAW là phụ thuộc tên do dùng lại tên thanh ghi.\n\n3. Register renaming eliminates …Đổi tên thanh ghi loại bỏ …\n   Answer: b) WAR and WAW hazards\n   Each write gets a fresh physical register.VI: Mỗi lần ghi nhận một thanh ghi vật lý mới.\n\n4. Out-of-order execution mainly helps when …Thực hiện sai thứ tự giúp nhiều nhất khi …\n   Answer: d) an instruction is stalled but later independent instructions could run\n   Independent work is found beyond the stalled instruction.VI: Tìm việc độc lập vượt qua lệnh đang đình trệ.\n\n5. The upper bound on IPC of a program is limited by …Cận trên của IPC của chương trình bị giới hạn bởi …\n   Answer: a) its true data dependences and the issue width\n   A serial chain of RAW dependences cannot be sped up by width.VI: Chuỗi RAW tuần tự không tăng tốc được dù rộng đến đâu.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> can issue more than one instruction per clock cycle</p><p>Multiple functional units and wide issue give IPC > 1.</p><p><i>VI: Nhiều khối chức năng và phát lệnh rộng cho IPC > 1.</i></p></li><li><p><b>d)</b> RAW (read after write)</p><p>WAR and WAW are name dependences caused by reusing register names.</p><p><i>VI: WAR và WAW là phụ thuộc tên do dùng lại tên thanh ghi.</i></p></li><li><p><b>b)</b> WAR and WAW hazards</p><p>Each write gets a fresh physical register.</p><p><i>VI: Mỗi lần ghi nhận một thanh ghi vật lý mới.</i></p></li><li><p><b>d)</b> an instruction is stalled but later independent instructions could run</p><p>Independent work is found beyond the stalled instruction.</p><p><i>VI: Tìm việc độc lập vượt qua lệnh đang đình trệ.</i></p></li><li><p><b>a)</b> its true data dependences and the issue width</p><p>A serial chain of RAW dependences cannot be sped up by width.</p><p><i>VI: Chuỗi RAW tuần tự không tăng tốc được dù rộng đến đâu.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -64,7 +64,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "can issue more than one instruction per clock cycle"
+                "noiDung": "executes only one instruction at a time"
               },
               {
                 "ma": "b",
@@ -72,7 +72,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "executes only one instruction at a time"
+                "noiDung": "can issue more than one instruction per clock cycle"
               },
               {
                 "ma": "d",
@@ -80,7 +80,7 @@
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>Multiple functional units and wide issue give IPC > 1.</p><p><i>VI: Nhiều khối chức năng và phát lệnh rộng cho IPC > 1.</i></p>"
           },
@@ -90,23 +90,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "None of them"
+                "noiDung": "WAW"
               },
               {
                 "ma": "b",
-                "noiDung": "RAW (read after write)"
-              },
-              {
-                "ma": "c",
                 "noiDung": "WAR"
               },
               {
+                "ma": "c",
+                "noiDung": "None of them"
+              },
+              {
                 "ma": "d",
-                "noiDung": "WAW"
+                "noiDung": "RAW (read after write)"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>WAR and WAW are name dependences caused by reusing register names.</p><p><i>VI: WAR và WAW là phụ thuộc tên do dùng lại tên thanh ghi.</i></p>"
           },
@@ -116,23 +116,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "branch hazards"
+                "noiDung": "RAW hazards"
               },
               {
                 "ma": "b",
-                "noiDung": "structural hazards"
-              },
-              {
-                "ma": "c",
                 "noiDung": "WAR and WAW hazards"
               },
               {
+                "ma": "c",
+                "noiDung": "branch hazards"
+              },
+              {
                 "ma": "d",
-                "noiDung": "RAW hazards"
+                "noiDung": "structural hazards"
               }
             ],
             "dapAn": [
-              "c"
+              "b"
             ],
             "giaiThich": "<p>Each write gets a fresh physical register.</p><p><i>VI: Mỗi lần ghi nhận một thanh ghi vật lý mới.</i></p>"
           },
@@ -142,7 +142,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "all instructions depend on the previous one"
+                "noiDung": "the clock is slow"
               },
               {
                 "ma": "b",
@@ -150,7 +150,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "the clock is slow"
+                "noiDung": "all instructions depend on the previous one"
               },
               {
                 "ma": "d",
@@ -172,15 +172,15 @@
               },
               {
                 "ma": "b",
-                "noiDung": "the size of the disk"
+                "noiDung": "the size of the main memory and disk"
               },
               {
                 "ma": "c",
-                "noiDung": "the bus width only"
+                "noiDung": "the scheduling policy of the OS"
               },
               {
                 "ma": "d",
-                "noiDung": "the operating system"
+                "noiDung": "the width of the system bus only"
               }
             ],
             "dapAn": [

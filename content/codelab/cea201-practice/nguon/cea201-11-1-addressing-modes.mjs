@@ -11,7 +11,7 @@ const E1 = tinh({
     q('c2', ['Indirect addressing needs (for the operand) … memory references', 'Định địa chỉ gián tiếp cần … lần tham chiếu bộ nhớ (cho toán hạng)'], ['two (the pointer, then the data)', 'zero', 'one', 'three'], ['The address field names a location that contains the real address.', 'Trường địa chỉ gọi tên ô nhớ chứa địa chỉ thật.']),
     q('c3', ['The main advantage of register addressing is …', 'Ưu điểm chính của định địa chỉ thanh ghi là …'], ['no memory access and a short address field', 'a very large address space', 'self-modifying code', 'automatic bounds checking'], ['A few register bits name the operand; access is as fast as the register file.', 'Vài bit thanh ghi gọi tên toán hạng; truy cập nhanh như tệp thanh ghi.']),
     q('c4', ['Displacement addressing computes EA = …', 'Định địa chỉ có độ dời tính EA = …'], ['A + (R)', 'A', '(A)', '(R) only'], ['The instruction holds a constant A, a register holds a base or index.', 'Lệnh chứa hằng A, thanh ghi chứa cơ sở hoặc chỉ số.']),
-    q('c5', ['Which mode is best for walking through an array element by element?', 'Chế độ nào hợp để duyệt từng phần tử một mảng?'], ['Indexed (base + scaled index) or register indirect with auto-increment', 'Immediate', 'Direct', 'Implied'], ['The index register changes while the base stays the same.', 'Thanh ghi chỉ số thay đổi còn cơ sở giữ nguyên.']),
+    q('c5', ['Which mode is best for walking through an array element by element?', 'Chế độ nào hợp để duyệt từng phần tử một mảng?'], ['Indexed (base + scaled index) or register indirect with auto-increment', 'Immediate, with each element placed in the instruction itself', 'Direct, with a new address assembled for each element of the array', 'Implied, because the operand is always in the accumulator'], ['The index register changes while the base stays the same.', 'Thanh ghi chỉ số thay đổi còn cơ sở giữ nguyên.']),
     q('c6', ['PC-relative addressing is mainly used for …', 'Định địa chỉ tương đối PC chủ yếu dùng cho …'], ['branches and position-independent code', 'large constants', 'stack operations only', 'I/O ports'], ['The target is encoded as an offset from the (next) instruction, so code can be moved.', 'Đích được mã hoá bằng độ lệch so với lệnh (kế tiếp) nên mã có thể dời chỗ.']),
   ],
   goiY: ['EA = where the operand is; operand = what is there.', 'Count the memory references including the instruction fetch.'],
@@ -36,7 +36,7 @@ const MODES = [
 const E2 = tinh({
   tieuDe: 'Addressing 2 — Effective address and operand value',
   doKho: 'MEDIUM', phut: 14,
-  moTa: bi(`<p>Machine state: memory <code>${Object.entries(MEM).map(([a, v]) => `M[${a}] = ${v}`).join(', ')}</code>; registers <code>${Object.entries(REGS).map(([r, v]) => `${r} = ${v}`).join(', ')}</code>; unlisted memory locations hold 0. For each operand specifier give the <b>effective address</b> (— if the operand is not in memory) and the <b>operand value</b>.  A location that is not listed contains 0.</p>`, `<p>Trạng thái máy: bộ nhớ <code>${Object.entries(MEM).map(([a, v]) => `M[${a}] = ${v}`).join(', ')}</code>; thanh ghi <code>${Object.entries(REGS).map(([r, v]) => `${r} = ${v}`).join(', ')}</code>; các ô nhớ không liệt kê chứa 0. Với mỗi toán hạng cho <b>địa chỉ hiệu dụng</b> (— nếu toán hạng không ở bộ nhớ) và <b>giá trị toán hạng</b>. Ô nhớ không được liệt kê chứa 0.</p>`),
+  moTa: bi(`<p>Machine state: memory <code>${Object.entries(MEM).map(([a, v]) => `M[${a}] = ${v}`).join(', ')}</code>; registers <code>${Object.entries(REGS).map(([r, v]) => `${r} = ${v}`).join(', ')}</code>; unlisted memory locations hold 0. For each operand specifier give the <b>effective address</b> (— if the operand is not in memory) and the <b>operand value</b>.</p>`, `<p>Trạng thái máy: bộ nhớ <code>${Object.entries(MEM).map(([a, v]) => `M[${a}] = ${v}`).join(', ')}</code>; thanh ghi <code>${Object.entries(REGS).map(([r, v]) => `${r} = ${v}`).join(', ')}</code>; các ô nhớ không liệt kê chứa 0. Với mỗi toán hạng cho <b>địa chỉ hiệu dụng</b> (— nếu toán hạng không ở bộ nhớ) và <b>giá trị toán hạng</b>.</p>`),
   loai: 'table',
   bang: [bang1('b1', ['Effective addresses', 'Địa chỉ hiệu dụng'], [{ ma: 'm', ten: 'Mode' }, { ma: 'e', ten: 'EA' }, { ma: 'v', ten: 'Operand' }],
     MODES.map(([n, f]) => { const r = f(); return { o: { m: n }, a: { e: [String(r.ea), ...(r.ea === '—' ? ['-', 'none'] : [])], v: String(r.v ?? 0) } }; }),
@@ -47,7 +47,7 @@ const E2 = tinh({
   khaiNiem: ['effective address'],
 });
 
-const REFS = [['Immediate', 1], ['Direct', 2], ['Indirect', 3], ['Register', 1], ['Register indirect', 2], ['Displacement', 2], ['Memory indirect through a register (double indirect, (R))', 3]];
+const REFS = [['Immediate', 1], ['Direct', 2], ['Indirect', 3], ['Register', 1], ['Register indirect', 2], ['Displacement', 2], ['Memory indirect through a register (double indirect, ((R)): the register holds the address of a pointer)', 3]];
 const E3 = tinh({
   tieuDe: 'Addressing 3 — Memory references per mode',
   doKho: 'EASY', phut: 8,
@@ -72,7 +72,7 @@ const E4 = tinh({
   bang: [bang1('b1', ['Element addresses', 'Địa chỉ phần tử'], [{ ma: 'a', ten: 'base, index, scale, displacement' }, { ma: 'e', ten: 'EA' }],
     IX.map((x) => ({ o: { a: `base = ${x[0]}, index = ${x[1]}, scale = ${x[2]}, disp = ${x[3]}` }, a: { e: String(ea(x)) } })),
     [IX.map((x) => `${x[0]} + ${x[1]}×${x[2]} + ${x[3]} = ${ea(x)}`).join('; ') + '.', IX.map((x) => `${x[0]} + ${x[1]}×${x[2]} + ${x[3]} = ${ea(x)}`).join('; ') + '.'])],
-  goiY: ['Multiply the index by the element size (scale) before adding.', 'Convert hex bases to decimal.'],
+  goiY: ['Multiply the index by the element size (scale) before adding.', 'The scale is the element size in bytes; the displacement is added once.'],
   loiHayGap: ['Adding the index without the scale.', 'Forgetting the displacement.'],
   thuatNgu: [tn('scale', 'hệ số tỉ lệ')],
   khaiNiem: ['indexed addressing'],

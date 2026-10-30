@@ -48,10 +48,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# OS support 1 — Multiprogramming, paging and virtual memory: concepts — answer key\n\n1. Why does multiprogramming raise CPU utilization?Vì sao đa chương trình làm tăng mức sử dụng CPU?\n   Answer: d) While one program waits for I/O the CPU runs another\n   I/O waits are long compared with CPU bursts; overlapping them keeps the CPU busy.VI: Chờ I/O rất dài so với đợt tính toán; chồng chúng lên nhau giữ CPU bận.\n\n2. In paging, a virtual address is divided into …Trong phân trang, địa chỉ ảo được chia thành …\n   Answer: a) page number and offset\n   The page number indexes the page table; the offset is copied unchanged.VI: Số trang tra bảng trang; offset được chép nguyên.\n\n3. A page fault occurs when …Lỗi trang xảy ra khi …\n   Answer: b) the referenced page is not present in main memory\n   The OS must bring the page from disk, a very expensive event.VI: HĐH phải mang trang từ đĩa lên, một sự kiện rất đắt.\n\n4. The TLB is …TLB là …\n   Answer: c) a small cache of recent page-table entries\n   A TLB hit saves the extra memory access needed to read the page table.VI: TLB hit tránh được một lần truy cập bộ nhớ để đọc bảng trang.\n\n5. Thrashing happens when …Thrashing xảy ra khi …\n   Answer: d) processes spend more time paging than executing\n   Too many processes for the available frames cause constant page faults.VI: Quá nhiều tiến trình so với số khung gây lỗi trang liên tục.\n\n6. Paging removes which problem of contiguous allocation?Phân trang loại bỏ vấn đề nào của cấp phát liên tục?\n   Answer: a) External fragmentation\n   Fixed-size frames can be placed anywhere; only the last page of a process wastes space internally.VI: Khung kích thước cố định đặt ở đâu cũng được; chỉ trang cuối của tiến trình lãng phí bên trong.\n"
+          "code": "# OS support 1 — Multiprogramming, paging and virtual memory: concepts — answer key\n\n1. Why does multiprogramming raise CPU utilization?Vì sao đa chương trình làm tăng mức sử dụng CPU?\n   Answer: d) While one program waits for I/O the CPU runs another\n   I/O waits are long compared with CPU bursts; overlapping them keeps the CPU busy.VI: Chờ I/O rất dài so với đợt tính toán; chồng chúng lên nhau giữ CPU bận.\n\n2. In paging, a virtual address is divided into …Trong phân trang, địa chỉ ảo được chia thành …\n   Answer: c) page number and offset\n   The page number indexes the page table; the offset is copied unchanged.VI: Số trang tra bảng trang; offset được chép nguyên.\n\n3. A page fault occurs when …Lỗi trang xảy ra khi …\n   Answer: d) the referenced page is not present in main memory\n   The OS must bring the page from disk, a very expensive event.VI: HĐH phải mang trang từ đĩa lên, một sự kiện rất đắt.\n\n4. The TLB is …TLB là …\n   Answer: b) a small cache of recent page-table entries\n   A TLB hit saves the extra memory access needed to read the page table.VI: TLB hit tránh được một lần truy cập bộ nhớ để đọc bảng trang.\n\n5. Thrashing happens when …Thrashing xảy ra khi …\n   Answer: d) processes spend more time paging than executing\n   Too many processes for the available frames cause constant page faults.VI: Quá nhiều tiến trình so với số khung gây lỗi trang liên tục.\n\n6. Paging removes which problem of contiguous allocation?Phân trang loại bỏ vấn đề nào của cấp phát liên tục?\n   Answer: a) External fragmentation\n   Fixed-size frames can be placed anywhere; only the last page of a process wastes space internally.VI: Khung kích thước cố định đặt ở đâu cũng được; chỉ trang cuối của tiến trình lãng phí bên trong.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> While one program waits for I/O the CPU runs another</p><p>I/O waits are long compared with CPU bursts; overlapping them keeps the CPU busy.</p><p><i>VI: Chờ I/O rất dài so với đợt tính toán; chồng chúng lên nhau giữ CPU bận.</i></p></li><li><p><b>c)</b> page number and offset</p><p>The page number indexes the page table; the offset is copied unchanged.</p><p><i>VI: Số trang tra bảng trang; offset được chép nguyên.</i></p></li><li><p><b>d)</b> the referenced page is not present in main memory</p><p>The OS must bring the page from disk, a very expensive event.</p><p><i>VI: HĐH phải mang trang từ đĩa lên, một sự kiện rất đắt.</i></p></li><li><p><b>b)</b> a small cache of recent page-table entries</p><p>A TLB hit saves the extra memory access needed to read the page table.</p><p><i>VI: TLB hit tránh được một lần truy cập bộ nhớ để đọc bảng trang.</i></p></li><li><p><b>d)</b> processes spend more time paging than executing</p><p>Too many processes for the available frames cause constant page faults.</p><p><i>VI: Quá nhiều tiến trình so với số khung gây lỗi trang liên tục.</i></p></li><li><p><b>a)</b> External fragmentation</p><p>Fixed-size frames can be placed anywhere; only the last page of a process wastes space internally.</p><p><i>VI: Khung kích thước cố định đặt ở đâu cũng được; chỉ trang cuối của tiến trình lãng phí bên trong.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -64,11 +64,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "It makes each program faster"
+                "noiDung": "It removes the need for memory"
               },
               {
                 "ma": "b",
-                "noiDung": "It removes the need for memory"
+                "noiDung": "It makes each program faster"
               },
               {
                 "ma": "c",
@@ -90,7 +90,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "page number and offset"
+                "noiDung": "segment and base"
               },
               {
                 "ma": "b",
@@ -98,7 +98,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "segment and base"
+                "noiDung": "page number and offset"
               },
               {
                 "ma": "d",
@@ -106,7 +106,7 @@
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>The page number indexes the page table; the offset is copied unchanged.</p><p><i>VI: Số trang tra bảng trang; offset được chép nguyên.</i></p>"
           },
@@ -116,23 +116,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "the cache misses"
+                "noiDung": "the disk is busy with a request from another process"
               },
               {
                 "ma": "b",
-                "noiDung": "the referenced page is not present in main memory"
+                "noiDung": "the TLB is full and an entry must be replaced"
               },
               {
                 "ma": "c",
-                "noiDung": "the TLB is full"
+                "noiDung": "the referenced block is not present in the cache"
               },
               {
                 "ma": "d",
-                "noiDung": "the disk is busy"
+                "noiDung": "the referenced page is not present in main memory"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>The OS must bring the page from disk, a very expensive event.</p><p><i>VI: HĐH phải mang trang từ đĩa lên, một sự kiện rất đắt.</i></p>"
           },
@@ -146,11 +146,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "a register holding the PC"
+                "noiDung": "a small cache of recent page-table entries"
               },
               {
                 "ma": "c",
-                "noiDung": "a small cache of recent page-table entries"
+                "noiDung": "a register holding the PC"
               },
               {
                 "ma": "d",
@@ -158,7 +158,7 @@
               }
             ],
             "dapAn": [
-              "c"
+              "b"
             ],
             "giaiThich": "<p>A TLB hit saves the extra memory access needed to read the page table.</p><p><i>VI: TLB hit tránh được một lần truy cập bộ nhớ để đọc bảng trang.</i></p>"
           },
@@ -168,15 +168,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "the cache is too big"
+                "noiDung": "the CPU is idle because no process is ready"
               },
               {
                 "ma": "b",
-                "noiDung": "the TLB is empty"
+                "noiDung": "the cache is too big for the page size"
               },
               {
                 "ma": "c",
-                "noiDung": "the bus is idle"
+                "noiDung": "the TLB is empty after a context switch"
               },
               {
                 "ma": "d",
@@ -198,7 +198,7 @@
               },
               {
                 "ma": "b",
-                "noiDung": "Internal fragmentation completely"
+                "noiDung": "Address translation"
               },
               {
                 "ma": "c",
@@ -206,7 +206,7 @@
               },
               {
                 "ma": "d",
-                "noiDung": "Address translation"
+                "noiDung": "Internal fragmentation completely"
               }
             ],
             "dapAn": [

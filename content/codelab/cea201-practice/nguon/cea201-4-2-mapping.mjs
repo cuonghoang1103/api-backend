@@ -7,11 +7,11 @@ const E1 = tinh({
   moTa: bi('<p>Six concept questions on mapping functions, replacement and write policies.</p>', '<p>Sáu câu khái niệm về hàm ánh xạ, thuật toán thay thế và chính sách ghi.</p>'),
   loai: 'choice',
   cauHoi: [
-    q('c1', ['In a direct-mapped cache, a memory block can be placed …', 'Trong cache ánh xạ trực tiếp, một khối bộ nhớ có thể đặt …'], ['in exactly one line, chosen by (block number) mod (number of lines)', 'in any line', 'in any line of one set of 4 lines', 'only in line 0'], ['One possible line makes the hardware trivial but causes conflict misses.', 'Chỉ một dòng khả dĩ nên phần cứng đơn giản nhưng gây miss do xung đột.']),
-    q('c2', ['What is the main drawback of fully associative mapping?', 'Nhược điểm chính của ánh xạ liên kết đầy đủ là gì?'], ['All tags must be compared in parallel, which is expensive for large caches', 'It causes many conflict misses', 'It cannot use LRU', 'It needs no tag'], ['Every line can hold any block, so every tag is compared at once.', 'Mọi dòng có thể chứa mọi khối nên phải so mọi tag cùng lúc.']),
+    q('c1', ['In a direct-mapped cache, a memory block can be placed …', 'Trong cache ánh xạ trực tiếp, một khối bộ nhớ có thể đặt …'], ['in exactly one line, chosen by (block number) mod (number of lines)', 'in any line, chosen by comparing the tags of all lines', 'in any line of one set, chosen by (block number) mod (number of sets)', 'only in line 0, and the other lines are kept for instructions'], ['One possible line makes the hardware trivial but causes conflict misses.', 'Chỉ một dòng khả dĩ nên phần cứng đơn giản nhưng gây miss do xung đột.']),
+    q('c2', ['What is the main drawback of fully associative mapping?', 'Nhược điểm chính của ánh xạ liên kết đầy đủ là gì?'], ['All tags must be compared in parallel, which is expensive for large caches', 'It causes many conflict misses, because each block has only one possible line', 'It cannot use LRU, because the lines have no fixed order to keep', 'It needs longer index bits, which leave no room for the offset field'], ['Every line can hold any block, so every tag is compared at once.', 'Mọi dòng có thể chứa mọi khối nên phải so mọi tag cùng lúc.']),
     q('c3', ['A 4-way set-associative cache with 64 lines has how many sets?', 'Cache liên kết 4 đường có 64 dòng thì có bao nhiêu tập?'], ['16', '64', '4', '256'], ['sets = lines / ways = 64 / 4 = 16.', 'số tập = số dòng / số đường = 64 / 4 = 16.']),
     q('c4', ['Which replacement algorithm evicts the line that has gone unused for the longest time?', 'Thuật toán thay thế nào đuổi dòng không được dùng lâu nhất?'], ['LRU', 'FIFO', 'LFU', 'Random'], ['FIFO looks at load time, LFU at frequency, LRU at recency of use.', 'FIFO xét thời điểm nạp, LFU xét tần suất, LRU xét lần dùng gần nhất.']),
-    q('c5', ['With a write-back policy, main memory is updated …', 'Với chính sách write-back, bộ nhớ chính được cập nhật …'], ['only when a dirty line is replaced (or flushed)', 'on every write', 'never', 'only on reads'], ['A dirty bit marks lines changed in the cache; they are written once on eviction.', 'Bit bẩn đánh dấu dòng đã đổi trong cache; chúng được ghi một lần khi bị đuổi.']),
+    q('c5', ['With a write-back policy, main memory is updated …', 'Với chính sách write-back, bộ nhớ chính được cập nhật …'], ['only when a dirty line is replaced (or flushed)', 'on every write, at the same time as the cache', 'never, because the cache keeps the only copy', 'only when a line is read for the first time'], ['A dirty bit marks lines changed in the cache; they are written once on eviction.', 'Bit bẩn đánh dấu dòng đã đổi trong cache; chúng được ghi một lần khi bị đuổi.']),
     q('c6', ['Increasing the associativity (same size, same block size) usually …', 'Tăng độ liên kết (cùng dung lượng, cùng cỡ khối) thường …'], ['reduces conflict misses but costs more comparators and time', 'increases conflict misses', 'reduces compulsory misses to zero', 'removes the need for a tag'], ['More places for a block means fewer conflicts; more tags to check means more hardware.', 'Nhiều chỗ đặt hơn nên ít xung đột; nhiều tag phải kiểm hơn nên tốn phần cứng.']),
   ],
   goiY: ['Direct = 1 place, fully associative = any place, set-associative = any place within one set.', 'sets = lines / ways.'],
@@ -20,6 +20,8 @@ const E1 = tinh({
   khaiNiem: ['direct mapping', 'associative mapping', 'replacement', 'write policy'],
 });
 
+/** Bộ [địa chỉ, cache, khối, số đường] — cacheGeom nhận (địa chỉ, KHỐI, CACHE, số đường), đừng trải thẳng mảng. */
+const hinhHoc = ([a, c, b, w]) => S.cacheGeom(a, b, c, w);
 const G = [[24, 65536, 4, 1], [32, 16384, 64, 1], [32, 32768, 32, 4], [16, 1024, 16, 2], [32, 8192, 64, 128]];
 const gname = ([a, c, b, w]) => `${a}-bit address, ${c >= 1024 ? c / 1024 + ' KiB' : c + ' B'} cache, ${b}-byte blocks, ${w === c / b ? 'fully associative' : w === 1 ? 'direct-mapped' : w + '-way'}`;
 const E2 = tinh({
@@ -28,8 +30,8 @@ const E2 = tinh({
   moTa: bi('<p>For each cache, how many bits are the <b>offset</b>, the <b>index</b> (set index) and the <b>tag</b>, and how many <b>sets</b> are there? (A fully associative cache has 1 set and 0 index bits.)</p>', '<p>Với mỗi cache, <b>offset</b>, <b>index</b> (chỉ số tập) và <b>tag</b> có bao nhiêu bit, và có bao nhiêu <b>tập</b>? (Cache liên kết đầy đủ có 1 tập và 0 bit index.)</p>'),
   loai: 'table',
   bang: [bang1('b1', ['Address fields', 'Các trường địa chỉ'], [{ ma: 'c', ten: 'Cache' }, { ma: 'o', ten: 'Offset' }, { ma: 'i', ten: 'Index' }, { ma: 't', ten: 'Tag' }, { ma: 's', ten: 'Sets' }],
-    G.map((g) => { const r = S.cacheGeom(...g); return { o: { c: gname(g) }, a: { o: String(r.offsetBits), i: String(r.indexBits), t: String(r.tagBits), s: String(r.sets) } }; }),
-    ['offset = log₂(block); sets = cache / (block × ways); index = log₂(sets); tag = address − index − offset. ' + G.map((g) => { const r = S.cacheGeom(...g); return `(${r.tagBits}, ${r.indexBits}, ${r.offsetBits}, ${r.sets} sets)`; }).join(' '), 'offset = log₂(khối); số tập = cache / (khối × số đường); index = log₂(số tập); tag = địa chỉ − index − offset. ' + G.map((g) => { const r = S.cacheGeom(...g); return `(${r.tagBits}, ${r.indexBits}, ${r.offsetBits}, ${r.sets} tập)`; }).join(' ')])],
+    G.map((g) => { const r = hinhHoc(g); return { o: { c: gname(g) }, a: { o: String(r.offsetBits), i: String(r.indexBits), t: String(r.tagBits), s: String(r.sets) } }; }),
+    ['offset = log₂(block); sets = cache / (block × ways); index = log₂(sets); tag = address − index − offset. ' + G.map((g) => { const r = hinhHoc(g); return `(${r.tagBits}, ${r.indexBits}, ${r.offsetBits}, ${r.sets} sets)`; }).join(' '), 'offset = log₂(khối); số tập = cache / (khối × số đường); index = log₂(số tập); tag = địa chỉ − index − offset. ' + G.map((g) => { const r = hinhHoc(g); return `(${r.tagBits}, ${r.indexBits}, ${r.offsetBits}, ${r.sets} tập)`; }).join(' ')])],
   goiY: ['Number of lines = cache size / block size. Divide by the ways to get the sets.', 'The tag is whatever is left of the address.'],
   loiHayGap: ['Using the number of lines (not the sets) for the index of a set-associative cache.', 'Forgetting the offset bits when computing the tag.'],
   thuatNgu: [tn('tag', 'thẻ (phần cao của địa chỉ)'), tn('set index', 'chỉ số tập')],
@@ -38,7 +40,7 @@ const E2 = tinh({
 
 const GA = [16, 128, 16, 1]; // 16-bit, 128 B, 16 B blocks, direct (8 lines)
 const ADDR = [0x1A2C, 0x0B50, 0x3FF7, 0x1A20, 0xC001];
-const gA = S.cacheGeom(...GA);
+const gA = hinhHoc(GA);
 const parts = (a) => { const blk = Math.floor(a / 16); return { off: a % 16, idx: blk % gA.sets, tag: Math.floor(blk / gA.sets) }; };
 const hx = (n) => n.toString(16).toUpperCase();
 const E3 = tinh({
@@ -98,7 +100,7 @@ const E6 = tinh({
   bang: [bang1('b1', ['Total storage', 'Tổng dung lượng lưu trữ'], [{ ma: 'c', ten: 'Cache' }, { ma: 't', ten: 'Tag bits' }, { ma: 'l', ten: 'Bits per line' }, { ma: 'n', ten: 'Total bits' }, { ma: 'p', ten: 'Overhead %' }],
     CB.map((x) => { const r = tot(x); return { o: { c: `${x[3] === 1 ? 'direct-mapped' : x[3] + '-way'}, ${x[4] ? 'write-back (dirty bit)' : 'write-through'}` }, a: { t: String(r.g.tagBits), l: String(r.per), n: String(r.total), p: r2((r.total - r.data) / r.data * 100, 2) } }; }),
     [CB.map((x) => { const r = tot(x); return `tag ${r.g.tagBits}, ${r.per} bits/line × ${r.g.lines} lines = ${r.total} bits, overhead ${((r.total - r.data) / r.data * 100).toFixed(2)}%`; }).join('; ') + '.', CB.map((x) => { const r = tot(x); return `tag ${r.g.tagBits}, ${r.per} bit/dòng × ${r.g.lines} dòng = ${r.total} bit`; }).join('; ') + '.'])],
-  goiY: ['lines = 16384 / 64; bits per line = 8 × 64 + tag + valid (+ dirty).', 'Every extra way removes one index bit, so the tag grows by one bit.'],
+  goiY: ['lines = 16384 / 64; bits per line = 8 × 64 + tag + valid (+ dirty).', 'Doubling the ways halves the sets: one index bit fewer, so the tag grows by one bit.'],
   loiHayGap: ['Counting only the data bits.', 'Forgetting the valid bit (and dirty bit for write-back).'],
   thuatNgu: [tn('valid bit', 'bit hợp lệ'), tn('overhead', 'phần phụ trội')],
   khaiNiem: ['cache size', 'tag overhead'],

@@ -41,7 +41,8 @@ const LAB = jsDe({
 <tr><td>SHR</td><td>dịch phải logic 1</td><td>bit bị đẩy ra (bit 0 cũ)</td><td>0</td></tr>
 <tr><td>SAR</td><td>dịch phải số học 1 (giữ bit dấu)</td><td>bit bị đẩy ra</td><td>0</td></tr>
 </tbody></table>
-<p><b>Z</b> = 1 khi kết quả bằng 0; <b>N</b> = bit cao nhất của kết quả. “Bit dấu” = bit cao nhất của mẫu n bit (bù 2).</p>`),
+<p><b>Z</b> = 1 khi kết quả bằng 0; <b>N</b> = bit cao nhất của kết quả. “Bit dấu” = bit cao nhất của mẫu n bit (bù 2).</p>
+<h4>Mẫu (4 bit)</h4>${tab(['lời gọi', 'kết quả'], [['alu("ADD", 7, 1, 4)', JSON.stringify(alu('ADD', 7, 1, 4))], ['alu("SUB", 3, 5, 4)', JSON.stringify(alu('SUB', 3, 5, 4))], ['alu("SAR", 12, 0, 4)', JSON.stringify(alu('SAR', 12, 0, 4))]])}`),
   yeuCau: [bi('Do not use floating point; use integer / bitwise operations. For <code>bits</code> up to 16 numbers stay exact.', 'Không dùng số thực; dùng phép toán số nguyên / theo bit. Với <code>bits</code> tới 16 các số luôn chính xác.')],
   viDu: [{ input: 'alu("ADD", 7, 1, 4)', output: JSON.stringify(alu('ADD', 7, 1, 4)), explanation: '7 + 1 = 8 = 1000₂: signed overflow (0111 + 0001), no carry-out.|||7 + 1 = 8 = 1000₂: tràn có dấu (0111 + 0001), không có nhớ ra.' }, { input: 'alu("SUB", 3, 5, 4)', output: JSON.stringify(alu('SUB', 3, 5, 4)), explanation: '3 − 5 = −2 = 1110₂; the borrow shows as C = 0.|||3 − 5 = −2 = 1110₂; việc mượn thể hiện bằng C = 0.' }],
   goiY: ['Let mask = 2^bits − 1 and top = 2^(bits−1). Use `& mask` to keep n bits (for bits ≤ 16 JavaScript bitwise operators are safe).', 'SUB: t = a + ((~b) & mask) + 1; C = t > mask; the result is t & mask.', 'Compute Z and N from the result at the end, not per operation.'],

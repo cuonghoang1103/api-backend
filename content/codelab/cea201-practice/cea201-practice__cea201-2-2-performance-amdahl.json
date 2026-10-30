@@ -48,10 +48,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Performance 1 — Clock, CPI, instruction count: who controls what? — answer key\n\n1. Which factor of T = IC × CPI / f is mainly decided by the compiler and the ISA?Thừa số nào của T = IC × CPI / f chủ yếu do trình biên dịch và ISA quyết định?\n   Answer: c) IC (instruction count)\n   IC depends on the ISA and on how well the compiler uses it; f depends on the technology; CPI on the organization.VI: IC phụ thuộc ISA và chất lượng trình biên dịch; f phụ thuộc công nghệ; CPI phụ thuộc tổ chức CPU.\n\n2. A faster clock always makes a program run proportionally faster.Clock nhanh hơn luôn làm chương trình chạy nhanh tỉ lệ thuận.\n   Answer: d) False: CPI and memory stalls may grow, and IC does not change\n   T ∝ 1/f only if IC and CPI stay fixed; memory does not speed up with the clock.VI: T ∝ 1/f chỉ khi IC và CPI giữ nguyên; bộ nhớ không nhanh lên theo clock.\n\n3. Why can MIPS be a misleading way to compare two different ISAs?Vì sao MIPS có thể gây hiểu lầm khi so sánh hai ISA khác nhau?\n   Answer: a) Instructions of different ISAs do different amounts of work\n   One CISC instruction may do the work of several RISC instructions, so a higher MIPS rating need not mean a shorter run time.VI: Một lệnh CISC có thể làm việc của vài lệnh RISC, nên MIPS cao chưa chắc chạy ngắn hơn.\n\n4. The best way to compare the performance of two computers for your workload is …Cách tốt nhất để so sánh hiệu năng hai máy cho khối lượng công việc của bạn là …\n   Answer: b) to run your real programs (or a benchmark suite that represents them) and compare execution time\n   Execution time of representative programs is the only consistent measure.VI: Thời gian chạy của các chương trình đại diện là thước đo nhất quán duy nhất.\n\n5. Which change lowers CPI without changing the ISA?Thay đổi nào làm giảm CPI mà không đổi ISA?\n   Answer: c) A deeper pipeline with better branch prediction and a larger cache\n   CPI is an organization property: caches, pipelining and prediction reduce stall cycles.VI: CPI là thuộc tính tổ chức: cache, pipeline và dự đoán rẽ nhánh giảm chu kỳ chờ.\n"
+          "code": "# Performance 1 — Clock, CPI, instruction count: who controls what? — answer key\n\n1. Which factor of T = IC × CPI / f is mainly decided by the compiler and the ISA?Thừa số nào của T = IC × CPI / f chủ yếu do trình biên dịch và ISA quyết định?\n   Answer: d) IC (instruction count)\n   IC depends on the ISA and on how well the compiler uses it; f depends on the technology; CPI on the organization.VI: IC phụ thuộc ISA và chất lượng trình biên dịch; f phụ thuộc công nghệ; CPI phụ thuộc tổ chức CPU.\n\n2. A faster clock always makes a program run proportionally faster.Clock nhanh hơn luôn làm chương trình chạy nhanh tỉ lệ thuận.\n   Answer: d) False: CPI and memory stalls may grow, and IC does not change\n   T ∝ 1/f only if IC and CPI stay fixed; memory does not speed up with the clock.VI: T ∝ 1/f chỉ khi IC và CPI giữ nguyên; bộ nhớ không nhanh lên theo clock.\n\n3. Why can MIPS be a misleading way to compare two different ISAs?Vì sao MIPS có thể gây hiểu lầm khi so sánh hai ISA khác nhau?\n   Answer: b) Instructions of different ISAs do different amounts of work\n   One CISC instruction may do the work of several RISC instructions, so a higher MIPS rating need not mean a shorter run time.VI: Một lệnh CISC có thể làm việc của vài lệnh RISC, nên MIPS cao chưa chắc chạy ngắn hơn.\n\n4. The best way to compare the performance of two computers for your workload is …Cách tốt nhất để so sánh hiệu năng hai máy cho khối lượng công việc của bạn là …\n   Answer: b) to run your real programs (or a benchmark suite that represents them) and compare execution time\n   Execution time of representative programs is the only consistent measure.VI: Thời gian chạy của các chương trình đại diện là thước đo nhất quán duy nhất.\n\n5. Which change lowers CPI without changing the ISA?Thay đổi nào làm giảm CPI mà không đổi ISA?\n   Answer: c) A deeper pipeline with better branch prediction and a larger cache\n   CPI is an organization property: caches, pipelining and prediction reduce stall cycles.VI: CPI là thuộc tính tổ chức: cache, pipeline và dự đoán rẽ nhánh giảm chu kỳ chờ.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> IC (instruction count)</p><p>IC depends on the ISA and on how well the compiler uses it; f depends on the technology; CPI on the organization.</p><p><i>VI: IC phụ thuộc ISA và chất lượng trình biên dịch; f phụ thuộc công nghệ; CPI phụ thuộc tổ chức CPU.</i></p></li><li><p><b>d)</b> False: CPI and memory stalls may grow, and IC does not change</p><p>T ∝ 1/f only if IC and CPI stay fixed; memory does not speed up with the clock.</p><p><i>VI: T ∝ 1/f chỉ khi IC và CPI giữ nguyên; bộ nhớ không nhanh lên theo clock.</i></p></li><li><p><b>b)</b> Instructions of different ISAs do different amounts of work</p><p>One CISC instruction may do the work of several RISC instructions, so a higher MIPS rating need not mean a shorter run time.</p><p><i>VI: Một lệnh CISC có thể làm việc của vài lệnh RISC, nên MIPS cao chưa chắc chạy ngắn hơn.</i></p></li><li><p><b>b)</b> to run your real programs (or a benchmark suite that represents them) and compare execution time</p><p>Execution time of representative programs is the only consistent measure.</p><p><i>VI: Thời gian chạy của các chương trình đại diện là thước đo nhất quán duy nhất.</i></p></li><li><p><b>c)</b> A deeper pipeline with better branch prediction and a larger cache</p><p>CPI is an organization property: caches, pipelining and prediction reduce stall cycles.</p><p><i>VI: CPI là thuộc tính tổ chức: cache, pipeline và dự đoán rẽ nhánh giảm chu kỳ chờ.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -64,7 +64,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "The size of the main memory"
+                "noiDung": "f (clock rate)"
               },
               {
                 "ma": "b",
@@ -72,15 +72,15 @@
               },
               {
                 "ma": "c",
-                "noiDung": "IC (instruction count)"
+                "noiDung": "The size of the main memory"
               },
               {
                 "ma": "d",
-                "noiDung": "f (clock rate)"
+                "noiDung": "IC (instruction count)"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>IC depends on the ISA and on how well the compiler uses it; f depends on the technology; CPI on the organization.</p><p><i>VI: IC phụ thuộc ISA và chất lượng trình biên dịch; f phụ thuộc công nghệ; CPI phụ thuộc tổ chức CPU.</i></p>"
           },
@@ -90,11 +90,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "True: T is inversely proportional to f in every case"
+                "noiDung": "True, but only for integer programs"
               },
               {
                 "ma": "b",
-                "noiDung": "True, but only for integer programs"
+                "noiDung": "True: T is inversely proportional to f in every case"
               },
               {
                 "ma": "c",
@@ -116,23 +116,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Instructions of different ISAs do different amounts of work"
-              },
-              {
-                "ma": "b",
                 "noiDung": "MIPS counts only floating-point operations"
               },
               {
+                "ma": "b",
+                "noiDung": "Instructions of different ISAs do different amounts of work"
+              },
+              {
                 "ma": "c",
-                "noiDung": "MIPS ignores the clock rate"
+                "noiDung": "MIPS is always larger for CISC"
               },
               {
                 "ma": "d",
-                "noiDung": "MIPS is always larger for CISC"
+                "noiDung": "MIPS ignores the clock rate"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>One CISC instruction may do the work of several RISC instructions, so a higher MIPS rating need not mean a shorter run time.</p><p><i>VI: Một lệnh CISC có thể làm việc của vài lệnh RISC, nên MIPS cao chưa chắc chạy ngắn hơn.</i></p>"
           },
@@ -142,7 +142,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "to compare MIPS ratings"
+                "noiDung": "to compare the clock rates, because execution time is inversely proportional to f"
               },
               {
                 "ma": "b",
@@ -150,11 +150,11 @@
               },
               {
                 "ma": "c",
-                "noiDung": "to compare the clock rates"
+                "noiDung": "to compare the number of cores, because every program speeds up with more of them"
               },
               {
                 "ma": "d",
-                "noiDung": "to compare the number of cores"
+                "noiDung": "to compare the MIPS ratings published by each manufacturer for the two machines"
               }
             ],
             "dapAn": [
@@ -168,11 +168,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Lowering the clock rate"
+                "noiDung": "Using a bigger hard disk and a wider system bus"
               },
               {
                 "ma": "b",
-                "noiDung": "Using a bigger hard disk"
+                "noiDung": "Lowering the clock rate and compiling with more loops"
               },
               {
                 "ma": "c",
@@ -180,7 +180,7 @@
               },
               {
                 "ma": "d",
-                "noiDung": "Adding more instructions to the ISA"
+                "noiDung": "Adding more complex instructions to the instruction set"
               }
             ],
             "dapAn": [
@@ -665,10 +665,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Performance 5 — Which machine is faster, and by how much? — answer key\n\n1. Machine A and BMáy A và B\n   - r1.t: 0.640 / 0.64\n   - r1.p: 1562.5\n   - r2.t: 0.675\n   - r2.p: 1333.3\n   T_A = 0.640 s, T_B = 0.675 s. A is faster by 1.05×; B has the higher clock and the higher MIPS, but compare T, not GHz.VI: T_A = 0.640 s, T_B = 0.675 s. Máy A nhanh hơn 1.05 lần.\n\n2. Speedup of the faster machineHệ số nhanh hơn của máy nhanh\n   - r1.v: 1.05\n   0.675 / 0.640 = 1.05.VI: 0.675 / 0.640 = 1.05.\n"
+          "code": "# Performance 5 — Which machine is faster, and by how much? — answer key\n\n1. Machine A and BMáy A và B\n   - r1.t: 0.640 / 0.64\n   - r1.p: 1562.5\n   - r2.t: 0.675\n   - r2.p: 1333.3\n   T_A = 0.640 s, T_B = 0.675 s. A is faster by 1.05×: B has the higher clock, yet A has the higher MIPS (1562.5 against 1333.3) and, with B’s smaller IC, the times are close. Compare T, not GHz.VI: T_A = 0.640 s, T_B = 0.675 s. Máy A nhanh hơn 1.05 lần: B có clock cao hơn nhưng A lại có MIPS cao hơn (1562.5 so với 1333.3) và vì IC của B nhỏ hơn nên hai thời gian khá gần nhau. Hãy so T, đừng so GHz.\n\n2. Speedup of the faster machineHệ số nhanh hơn của máy nhanh\n   - r1.v: 1.05\n   0.675 / 0.640 = 1.05.VI: 0.675 / 0.640 = 1.05.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>T_A = 0.640 s, T_B = 0.675 s. A is faster by 1.05×; B has the higher clock and the higher MIPS, but compare T, not GHz.</p><p><i>VI: T_A = 0.640 s, T_B = 0.675 s. Máy A nhanh hơn 1.05 lần.</i></p><p>0.675 / 0.640 = 1.05.</p><p><i>VI: 0.675 / 0.640 = 1.05.</i></p>",
+      "solutionExplanationHtml": "<p>T_A = 0.640 s, T_B = 0.675 s. A is faster by 1.05×: B has the higher clock, yet A has the higher MIPS (1562.5 against 1333.3) and, with B’s smaller IC, the times are close. Compare T, not GHz.</p><p><i>VI: T_A = 0.640 s, T_B = 0.675 s. Máy A nhanh hơn 1.05 lần: B có clock cao hơn nhưng A lại có MIPS cao hơn (1562.5 so với 1333.3) và vì IC của B nhỏ hơn nên hai thời gian khá gần nhau. Hãy so T, đừng so GHz.</i></p><p>0.675 / 0.640 = 1.05.</p><p><i>VI: 0.675 / 0.640 = 1.05.</i></p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -721,7 +721,7 @@
                 "1333.3"
               ]
             },
-            "giaiThich": "<p>T_A = 0.640 s, T_B = 0.675 s. A is faster by 1.05×; B has the higher clock and the higher MIPS, but compare T, not GHz.</p><p><i>VI: T_A = 0.640 s, T_B = 0.675 s. Máy A nhanh hơn 1.05 lần.</i></p>"
+            "giaiThich": "<p>T_A = 0.640 s, T_B = 0.675 s. A is faster by 1.05×: B has the higher clock, yet A has the higher MIPS (1562.5 against 1333.3) and, with B’s smaller IC, the times are close. Compare T, not GHz.</p><p><i>VI: T_A = 0.640 s, T_B = 0.675 s. Máy A nhanh hơn 1.05 lần: B có clock cao hơn nhưng A lại có MIPS cao hơn (1562.5 so với 1333.3) và vì IC của B nhỏ hơn nên hai thời gian khá gần nhau. Hãy so T, đừng so GHz.</i></p>"
           },
           {
             "ma": "b2",

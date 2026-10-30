@@ -153,6 +153,15 @@ tests: { loai: 'sql', csdl: '<DDL + INSERT kiểu SQL Server — như DBscript.s
 - **Đề lớn SQL** (Lab/PE): `deLonSql()` trong `dbi202-practice/nguon/_chung.mjs` — mỗi câu một tệp `Q1.sql … Qn.sql` như quy
   định PE, kiểm câu i tự gắn `tep: 'Qi.sql'` + `nhom: 'fi'`; `moHinh` nhận MẢNG bảng.
 
+## 3c. Bộ sinh bằng mã (OSG202, CEA201, MAD101, NWC204)
+
+- `tinh()` xáo phương án bằng `_chung/tracNghiem.mjs`: theo băm NỘI DUNG câu, không phụ thuộc vị trí câu. Đề không được có bước nhảy đều
+  trên ≥ 4 câu liền nhau; đề ≥ 8 câu thì không chữ nào quá 40 % đáp án. Đề `order` cũng xáo (không là phép xoay của đáp án) và đổi mã mục để mã không lộ thứ tự.
+- **Không bao giờ viết tay chữ cái a/b/c/d.** Danh sách đáp án trong lời giải sinh sau khi xáo; giải thích nói theo NỘI DUNG phương án.
+- Phương án sai phải đồng dạng với đáp án: cùng độ dài, cùng kiểu câu, không gắn thêm "(checked …)" chỉ cho đáp án.
+- Sau khi xuất, chạy `node scripts/codelab-kiem-noi-dung.mjs --track <bộ>` (đáp án lặp, lời giải giữ chỗ, nhắc chữ cái, `<` chưa escape,
+  đáp án dài hơn hẳn, số vô lý ở cột đếm). CEA201 thêm `python3 content/codelab/cea201-practice/nguon/_kiem-doc-lap.py`: tính lại độc lập, không dùng `_sim.mjs`.
+
 ## 4. Lệnh
 
 ```bash

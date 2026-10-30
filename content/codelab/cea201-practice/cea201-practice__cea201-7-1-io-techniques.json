@@ -48,10 +48,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# I/O 1 — Programmed I/O, interrupts, DMA and I/O addressing — answer key\n\n1. In programmed (polling) I/O the processor …Trong I/O lập trình (thăm dò) bộ xử lý …\n   Answer: b) repeatedly tests the device status until it is ready, wasting CPU time\n   Busy-waiting keeps the CPU occupied for the whole transfer.VI: Chờ bận khiến CPU bị chiếm suốt lần truyền.\n\n2. With interrupt-driven I/O the processor …Với I/O điều khiển bằng ngắt, bộ xử lý …\n   Answer: c) can do other work while the device is busy, but still moves every word itself\n   The device interrupts when ready; the CPU still executes the transfer instructions.VI: Thiết bị ngắt khi sẵn sàng; CPU vẫn thực hiện lệnh chuyển dữ liệu.\n\n3. DMA is best suited for …DMA phù hợp nhất với …\n   Answer: d) large block transfers such as disk and network traffic\n   The DMA controller moves blocks between device and memory and interrupts once at the end.VI: Bộ điều khiển DMA chuyển khối giữa thiết bị và bộ nhớ và chỉ ngắt một lần ở cuối.\n\n4. In memory-mapped I/O …Trong I/O ánh xạ bộ nhớ …\n   Answer: a) device registers share the memory address space and are accessed by ordinary load/store\n   It removes the need for special I/O instructions but uses up memory addresses.VI: Không cần lệnh I/O riêng nhưng tiêu tốn địa chỉ bộ nhớ.\n\n5. “Cycle stealing” by a DMA controller means …“Cycle stealing” của bộ điều khiển DMA nghĩa là …\n   Answer: b) it takes over the bus for single memory cycles, delaying the CPU slightly\n   The CPU and DMA share the bus; DMA gets individual cycles.VI: CPU và DMA dùng chung bus; DMA chiếm từng chu kỳ.\n"
+          "code": "# I/O 1 — Programmed I/O, interrupts, DMA and I/O addressing — answer key\n\n1. In programmed (polling) I/O the processor …Trong I/O lập trình (thăm dò) bộ xử lý …\n   Answer: c) repeatedly tests the device status until it is ready, wasting CPU time\n   Busy-waiting keeps the CPU occupied for the whole transfer.VI: Chờ bận khiến CPU bị chiếm suốt lần truyền.\n\n2. With interrupt-driven I/O the processor …Với I/O điều khiển bằng ngắt, bộ xử lý …\n   Answer: d) can do other work while the device is busy, but still moves every word itself\n   The device interrupts when ready; the CPU still executes the transfer instructions.VI: Thiết bị ngắt khi sẵn sàng; CPU vẫn thực hiện lệnh chuyển dữ liệu.\n\n3. DMA is best suited for …DMA phù hợp nhất với …\n   Answer: a) large block transfers such as disk and network traffic\n   The DMA controller moves blocks between device and memory and interrupts once at the end.VI: Bộ điều khiển DMA chuyển khối giữa thiết bị và bộ nhớ và chỉ ngắt một lần ở cuối.\n\n4. In memory-mapped I/O …Trong I/O ánh xạ bộ nhớ …\n   Answer: a) device registers share the memory address space and are accessed by ordinary load/store\n   It removes the need for special I/O instructions but uses up memory addresses.VI: Không cần lệnh I/O riêng nhưng tiêu tốn địa chỉ bộ nhớ.\n\n5. “Cycle stealing” by a DMA controller means …“Cycle stealing” của bộ điều khiển DMA nghĩa là …\n   Answer: a) it takes over the bus for single memory cycles, delaying the CPU slightly\n   The CPU and DMA share the bus; DMA gets individual cycles.VI: CPU và DMA dùng chung bus; DMA chiếm từng chu kỳ.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> repeatedly tests the device status until it is ready, wasting CPU time</p><p>Busy-waiting keeps the CPU occupied for the whole transfer.</p><p><i>VI: Chờ bận khiến CPU bị chiếm suốt lần truyền.</i></p></li><li><p><b>d)</b> can do other work while the device is busy, but still moves every word itself</p><p>The device interrupts when ready; the CPU still executes the transfer instructions.</p><p><i>VI: Thiết bị ngắt khi sẵn sàng; CPU vẫn thực hiện lệnh chuyển dữ liệu.</i></p></li><li><p><b>a)</b> large block transfers such as disk and network traffic</p><p>The DMA controller moves blocks between device and memory and interrupts once at the end.</p><p><i>VI: Bộ điều khiển DMA chuyển khối giữa thiết bị và bộ nhớ và chỉ ngắt một lần ở cuối.</i></p></li><li><p><b>a)</b> device registers share the memory address space and are accessed by ordinary load/store</p><p>It removes the need for special I/O instructions but uses up memory addresses.</p><p><i>VI: Không cần lệnh I/O riêng nhưng tiêu tốn địa chỉ bộ nhớ.</i></p></li><li><p><b>a)</b> it takes over the bus for single memory cycles, delaying the CPU slightly</p><p>The CPU and DMA share the bus; DMA gets individual cycles.</p><p><i>VI: CPU và DMA dùng chung bus; DMA chiếm từng chu kỳ.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -68,19 +68,19 @@
               },
               {
                 "ma": "b",
-                "noiDung": "repeatedly tests the device status until it is ready, wasting CPU time"
+                "noiDung": "never executes I/O instructions"
               },
               {
                 "ma": "c",
-                "noiDung": "is told by the device through an interrupt"
+                "noiDung": "repeatedly tests the device status until it is ready, wasting CPU time"
               },
               {
                 "ma": "d",
-                "noiDung": "never executes I/O instructions"
+                "noiDung": "is told by the device through an interrupt"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Busy-waiting keeps the CPU occupied for the whole transfer.</p><p><i>VI: Chờ bận khiến CPU bị chiếm suốt lần truyền.</i></p>"
           },
@@ -90,23 +90,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "waits in a loop"
+                "noiDung": "moves no data at all, because the device writes into memory itself"
               },
               {
                 "ma": "b",
-                "noiDung": "needs a DMA controller"
+                "noiDung": "waits in a loop on the status register until the device is ready"
               },
               {
                 "ma": "c",
-                "noiDung": "can do other work while the device is busy, but still moves every word itself"
+                "noiDung": "needs a DMA controller to move each word, and only starts the block"
               },
               {
                 "ma": "d",
-                "noiDung": "moves no data at all"
+                "noiDung": "can do other work while the device is busy, but still moves every word itself"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>The device interrupts when ready; the CPU still executes the transfer instructions.</p><p><i>VI: Thiết bị ngắt khi sẵn sàng; CPU vẫn thực hiện lệnh chuyển dữ liệu.</i></p>"
           },
@@ -116,23 +116,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "a keyboard"
+                "noiDung": "large block transfers such as disk and network traffic"
               },
               {
                 "ma": "b",
-                "noiDung": "one-byte transfers only"
+                "noiDung": "slow devices such as a keyboard"
               },
               {
                 "ma": "c",
-                "noiDung": "instruction fetch"
+                "noiDung": "instruction fetch from the cache"
               },
               {
                 "ma": "d",
-                "noiDung": "large block transfers such as disk and network traffic"
+                "noiDung": "single bytes that arrive rarely"
               }
             ],
             "dapAn": [
-              "d"
+              "a"
             ],
             "giaiThich": "<p>The DMA controller moves blocks between device and memory and interrupts once at the end.</p><p><i>VI: Bộ điều khiển DMA chuyển khối giữa thiết bị và bộ nhớ và chỉ ngắt một lần ở cuối.</i></p>"
           },
@@ -146,15 +146,15 @@
               },
               {
                 "ma": "b",
-                "noiDung": "there are special IN/OUT instructions only"
+                "noiDung": "devices cannot use interrupts, so the CPU polls their registers in a loop"
               },
               {
                 "ma": "c",
-                "noiDung": "I/O ports have a separate address space"
+                "noiDung": "device registers are reached only with special IN/OUT instructions"
               },
               {
                 "ma": "d",
-                "noiDung": "devices cannot use interrupts"
+                "noiDung": "I/O ports have a separate address space, selected by a special control line"
               }
             ],
             "dapAn": [
@@ -168,23 +168,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "it disables the cache"
-              },
-              {
-                "ma": "b",
                 "noiDung": "it takes over the bus for single memory cycles, delaying the CPU slightly"
               },
               {
+                "ma": "b",
+                "noiDung": "it changes the program counter, so the CPU runs a transfer routine"
+              },
+              {
                 "ma": "c",
-                "noiDung": "it steals CPU registers"
+                "noiDung": "it borrows CPU registers for a moment, slowing the CPU slightly"
               },
               {
                 "ma": "d",
-                "noiDung": "it modifies the program counter"
+                "noiDung": "it disables the cache during a block, forcing the CPU to use memory"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>The CPU and DMA share the bus; DMA gets individual cycles.</p><p><i>VI: CPU và DMA dùng chung bus; DMA chiếm từng chu kỳ.</i></p>"
           }
@@ -382,7 +382,7 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# I/O 3 — Order a DMA read from disk — answer key\n\n1. DMA transferTruyền bằng DMA\n   Answer: s1) The CPU programs the DMA controller with the device, the memory address, the direction and the byte count  →  s2) The CPU continues with other work  →  s3) The DMA controller requests the bus and moves the words between the device and memory, one cycle at a time  →  s4) The DMA controller decrements its count until it reaches zero  →  s5) The DMA controller raises one interrupt to tell the CPU the transfer is complete\n   The CPU is involved only at the start and at the end.VI: CPU chỉ tham gia ở đầu và cuối.\n"
+          "code": "# I/O 3 — Order a DMA read from disk — answer key\n\n1. DMA transferTruyền bằng DMA\n   Answer: m2) The CPU programs the DMA controller with the device, the memory address, the direction and the byte count  →  m1) The CPU continues with other work  →  m4) The DMA controller requests the bus and moves the words between the device and memory, one cycle at a time  →  m3) The DMA controller decrements its count until it reaches zero  →  m5) The DMA controller raises one interrupt to tell the CPU the transfer is complete\n   The CPU is involved only at the start and at the end.VI: CPU chỉ tham gia ở đầu và cuối.\n"
         }
       ],
       "solutionExplanationHtml": "<p>The CPU is involved only at the start and at the end.</p><p><i>VI: CPU chỉ tham gia ở đầu và cuối.</i></p>",
@@ -397,32 +397,32 @@
             "de": "<p>DMA transfer</p><p style=\"opacity:.75;font-size:.92em\"><i>Truyền bằng DMA</i></p>",
             "muc": [
               {
-                "ma": "s2",
+                "ma": "m1",
                 "noiDung": "The CPU continues with other work"
               },
               {
-                "ma": "s3",
-                "noiDung": "The DMA controller requests the bus and moves the words between the device and memory, one cycle at a time"
+                "ma": "m2",
+                "noiDung": "The CPU programs the DMA controller with the device, the memory address, the direction and the byte count"
               },
               {
-                "ma": "s4",
+                "ma": "m3",
                 "noiDung": "The DMA controller decrements its count until it reaches zero"
               },
               {
-                "ma": "s5",
-                "noiDung": "The DMA controller raises one interrupt to tell the CPU the transfer is complete"
+                "ma": "m4",
+                "noiDung": "The DMA controller requests the bus and moves the words between the device and memory, one cycle at a time"
               },
               {
-                "ma": "s1",
-                "noiDung": "The CPU programs the DMA controller with the device, the memory address, the direction and the byte count"
+                "ma": "m5",
+                "noiDung": "The DMA controller raises one interrupt to tell the CPU the transfer is complete"
               }
             ],
             "dapAn": [
-              "s1",
-              "s2",
-              "s3",
-              "s4",
-              "s5"
+              "m2",
+              "m1",
+              "m4",
+              "m3",
+              "m5"
             ],
             "giaiThich": "<p>The CPU is involved only at the start and at the end.</p><p><i>VI: CPU chỉ tham gia ở đầu và cuối.</i></p>"
           }

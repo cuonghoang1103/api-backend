@@ -47,10 +47,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Basics 1 — Organization versus architecture: concepts — answer key\n\n1. Computer architecture refers to …Kiến trúc máy tính đề cập đến …\n   Answer: c) the attributes visible to the programmer that affect the logical execution of a program\n   Instruction set, data representation, addressing and I/O mechanisms are architectural.VI: Tập lệnh, biểu diễn dữ liệu, định địa chỉ và cơ chế I/O thuộc kiến trúc.\n\n2. Computer organization refers to …Tổ chức máy tính đề cập đến …\n   Answer: d) the operational units and their interconnections that realize the architecture\n   Control signals, interfaces and memory technology are organizational.VI: Tín hiệu điều khiển, giao diện và công nghệ bộ nhớ thuộc tổ chức.\n\n3. Why can a family of computers share an architecture but differ in organization?Vì sao một họ máy có thể chung kiến trúc nhưng khác tổ chức?\n   Answer: a) Different price/performance points are built by implementing the same instruction set with different hardware\n   Binary compatibility across generations (e.g. x86) relies on this separation.VI: Tương thích nhị phân giữa các thế hệ (vd x86) dựa trên sự tách biệt này.\n\n4. Which of the following is a FUNCTION of a computer?Cái nào sau đây là CHỨC NĂNG của máy tính?\n   Answer: b) Data processing\n   The four functions are data processing, data storage, data movement and control; the others are structure.VI: Bốn chức năng là xử lý, lưu trữ, di chuyển dữ liệu và điều khiển; các mục còn lại là cấu trúc.\n\n5. The four main structural components of a computer are …Bốn thành phần cấu trúc chính của máy tính là …\n   Answer: c) CPU, main memory, I/O and system interconnection\n   Each top-level component can be decomposed again (CPU = ALU + registers + control unit).VI: Mỗi thành phần cấp cao lại phân rã tiếp (CPU = ALU + thanh ghi + đơn vị điều khiển).\n"
+          "code": "# Basics 1 — Organization versus architecture: concepts — answer key\n\n1. Computer architecture refers to …Kiến trúc máy tính đề cập đến …\n   Answer: b) the attributes visible to the programmer that affect the logical execution of a program\n   Instruction set, data representation, addressing and I/O mechanisms are architectural.VI: Tập lệnh, biểu diễn dữ liệu, định địa chỉ và cơ chế I/O thuộc kiến trúc.\n\n2. Computer organization refers to …Tổ chức máy tính đề cập đến …\n   Answer: d) the operational units and their interconnections that realize the architecture\n   Control signals, interfaces and memory technology are organizational.VI: Tín hiệu điều khiển, giao diện và công nghệ bộ nhớ thuộc tổ chức.\n\n3. Why can a family of computers share an architecture but differ in organization?Vì sao một họ máy có thể chung kiến trúc nhưng khác tổ chức?\n   Answer: a) Different price/performance points are built by implementing the same instruction set with different hardware\n   Binary compatibility across generations (e.g. x86) relies on this separation.VI: Tương thích nhị phân giữa các thế hệ (vd x86) dựa trên sự tách biệt này.\n\n4. Which of the following is a FUNCTION of a computer?Cái nào sau đây là CHỨC NĂNG của máy tính?\n   Answer: d) Data processing\n   The four functions are data processing, data storage, data movement and control; the others are structure.VI: Bốn chức năng là xử lý, lưu trữ, di chuyển dữ liệu và điều khiển; các mục còn lại là cấu trúc.\n\n5. The four main structural components of a computer are …Bốn thành phần cấu trúc chính của máy tính là …\n   Answer: d) CPU, main memory, I/O and system interconnection\n   Each top-level component can be decomposed again (CPU = ALU + registers + control unit).VI: Mỗi thành phần cấp cao lại phân rã tiếp (CPU = ALU + thanh ghi + đơn vị điều khiển).\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> the attributes visible to the programmer that affect the logical execution of a program</p><p>Instruction set, data representation, addressing and I/O mechanisms are architectural.</p><p><i>VI: Tập lệnh, biểu diễn dữ liệu, định địa chỉ và cơ chế I/O thuộc kiến trúc.</i></p></li><li><p><b>d)</b> the operational units and their interconnections that realize the architecture</p><p>Control signals, interfaces and memory technology are organizational.</p><p><i>VI: Tín hiệu điều khiển, giao diện và công nghệ bộ nhớ thuộc tổ chức.</i></p></li><li><p><b>a)</b> Different price/performance points are built by implementing the same instruction set with different hardware</p><p>Binary compatibility across generations (e.g. x86) relies on this separation.</p><p><i>VI: Tương thích nhị phân giữa các thế hệ (vd x86) dựa trên sự tách biệt này.</i></p></li><li><p><b>d)</b> Data processing</p><p>The four functions are data processing, data storage, data movement and control; the others are structure.</p><p><i>VI: Bốn chức năng là xử lý, lưu trữ, di chuyển dữ liệu và điều khiển; các mục còn lại là cấu trúc.</i></p></li><li><p><b>d)</b> CPU, main memory, I/O and system interconnection</p><p>Each top-level component can be decomposed again (CPU = ALU + registers + control unit).</p><p><i>VI: Mỗi thành phần cấp cao lại phân rã tiếp (CPU = ALU + thanh ghi + đơn vị điều khiển).</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -63,23 +63,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "the speed of the hard disk"
+                "noiDung": "the physical layout of the chips and the circuit boards inside the machine"
               },
               {
                 "ma": "b",
-                "noiDung": "the colour of the case"
-              },
-              {
-                "ma": "c",
                 "noiDung": "the attributes visible to the programmer that affect the logical execution of a program"
               },
               {
+                "ma": "c",
+                "noiDung": "the hardware details hidden from the programmer, such as control signals and memory technology"
+              },
+              {
                 "ma": "d",
-                "noiDung": "the physical layout of the circuit boards"
+                "noiDung": "the operating system and the compilers that are shipped together with the machine"
               }
             ],
             "dapAn": [
-              "c"
+              "b"
             ],
             "giaiThich": "<p>Instruction set, data representation, addressing and I/O mechanisms are architectural.</p><p><i>VI: Tập lệnh, biểu diễn dữ liệu, định địa chỉ và cơ chế I/O thuộc kiến trúc.</i></p>"
           },
@@ -89,15 +89,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "the instruction set"
+                "noiDung": "the languages and compilers available for the machine"
               },
               {
                 "ma": "b",
-                "noiDung": "the programming language"
+                "noiDung": "the file system and the other services of the OS"
               },
               {
                 "ma": "c",
-                "noiDung": "the file system"
+                "noiDung": "the instruction set and the addressing modes that a programmer can use"
               },
               {
                 "ma": "d",
@@ -119,15 +119,15 @@
               },
               {
                 "ma": "b",
-                "noiDung": "Because organization is defined by the programmer"
+                "noiDung": "Organization is decided by each programmer, so different programs see different hardware"
               },
               {
                 "ma": "c",
-                "noiDung": "Because the architecture changes every model"
+                "noiDung": "The instruction set must be redesigned for every model, while the hardware stays exactly the same"
               },
               {
                 "ma": "d",
-                "noiDung": "Because organization does not exist"
+                "noiDung": "Organization is only a marketing name; all models of a family use identical hardware"
               }
             ],
             "dapAn": [
@@ -145,19 +145,19 @@
               },
               {
                 "ma": "b",
-                "noiDung": "Data processing"
-              },
-              {
-                "ma": "c",
                 "noiDung": "The CPU"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "The bus"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Data processing"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>The four functions are data processing, data storage, data movement and control; the others are structure.</p><p><i>VI: Bốn chức năng là xử lý, lưu trữ, di chuyển dữ liệu và điều khiển; các mục còn lại là cấu trúc.</i></p>"
           },
@@ -167,7 +167,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "keyboard, monitor, mouse and printer"
+                "noiDung": "ALU, registers, control unit and cache"
               },
               {
                 "ma": "b",
@@ -175,15 +175,15 @@
               },
               {
                 "ma": "c",
-                "noiDung": "CPU, main memory, I/O and system interconnection"
+                "noiDung": "keyboard, monitor, mouse and printer"
               },
               {
                 "ma": "d",
-                "noiDung": "ALU, registers, control unit and cache"
+                "noiDung": "CPU, main memory, I/O and system interconnection"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>Each top-level component can be decomposed again (CPU = ALU + registers + control unit).</p><p><i>VI: Mỗi thành phần cấp cao lại phân rã tiếp (CPU = ALU + thanh ghi + đơn vị điều khiển).</i></p>"
           }

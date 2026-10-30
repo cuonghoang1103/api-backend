@@ -1,0 +1,887 @@
+{
+  "trackSlug": "osg202-practice",
+  "moduleSlug": "osg202-7-2-shell-script",
+  "lesson": {
+    "course": "operating-systems",
+    "slug": "osg202-7-2-shell-script"
+  },
+  "exercises": [
+    {
+      "title": "Shell 1 — Variables, quoting and special parameters",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "variables",
+        "quoting",
+        "parameter expansion"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Five questions on shell basics.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu về cơ bản của shell.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Single quotes = literal; double quotes = expand $ and `.",
+        "% removes from the END, # removes from the START."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Shell 1 — Variables, quoting and special parameters\n\nAnswer in the answer panel (no code needed).\n\n1. x=hello; echo '$x' \"$x\" prints …x=hello; echo '$x' \"$x\" in ra …\n2. What is $??$? là gì?\n3. Why write \"$@\" instead of $* when passing arguments on?Vì sao nên viết \"$@\" thay vì $* khi chuyển tiếp đối số?\n4. What does ${f%.*} do for f=report.tar.gz?${f%.*} làm gì với f=report.tar.gz?\n5. The first line #!/bin/bash of a script is called …Dòng đầu #!/bin/bash của script gọi là …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Shell 1 — Variables, quoting and special parameters — answer key\n\n1. x=hello; echo '$x' \"$x\" prints …x=hello; echo '$x' \"$x\" in ra …\n   Answer: a) $x hello\n   Single quotes block all expansion; double quotes still expand variables.VI: Nháy đơn chặn mọi khai triển; nháy kép vẫn khai triển biến.\n\n2. What is $??$? là gì?\n   Answer: b) The exit status of the last command (0 = success)\n   $$ is the PID, $# the argument count, $@ the arguments.VI: $$ là PID, $# số đối số, $@ các đối số.\n\n3. Why write \"$@\" instead of $* when passing arguments on?Vì sao nên viết \"$@\" thay vì $* khi chuyển tiếp đối số?\n   Answer: c) \"$@\" keeps each argument as one word, even if it contains spaces\n   Unquoted $* is re-split on whitespace: “b c” becomes two words.VI: $* không nháy bị tách lại theo khoảng trắng: “b c” thành hai từ.\n\n4. What does ${f%.*} do for f=report.tar.gz?${f%.*} làm gì với f=report.tar.gz?\n   Answer: d) Removes the shortest suffix matching .* → report.tar\n   % = shortest suffix, %% = longest suffix; # and ## do the same for prefixes.VI: % = hậu tố ngắn nhất, %% = dài nhất; # và ## làm vậy cho tiền tố.\n\n5. The first line #!/bin/bash of a script is called …Dòng đầu #!/bin/bash của script gọi là …\n   Answer: a) the shebang: it names the interpreter the kernel runs\n   exec of a file starting with #! makes the kernel start the named interpreter with the script path.VI: exec một tệp bắt đầu bằng #! làm kernel chạy trình thông dịch được nêu với đường dẫn script.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a · b · c · d · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p><code>x=hello; echo '$x' \"$x\"</code> prints …</p><p style=\"opacity:.75;font-size:.92em\"><i><code>x=hello; echo '$x' \"$x\"</code> in ra …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "$x hello"
+              },
+              {
+                "ma": "b",
+                "noiDung": "hello hello"
+              },
+              {
+                "ma": "c",
+                "noiDung": "$x $x"
+              },
+              {
+                "ma": "d",
+                "noiDung": "hello $x"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Single quotes block all expansion; double quotes still expand variables.</p><p><i>VI: Nháy đơn chặn mọi khai triển; nháy kép vẫn khai triển biến.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>What is <code>$?</code>?</p><p style=\"opacity:.75;font-size:.92em\"><i><code>$?</code> là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The last argument"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The exit status of the last command (0 = success)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The PID of the shell"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The number of arguments"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>$$ is the PID, $# the argument count, $@ the arguments.</p><p><i>VI: $$ là PID, $# số đối số, $@ các đối số.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Why write <code>\"$@\"</code> instead of <code>$*</code> when passing arguments on?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao nên viết <code>\"$@\"</code> thay vì <code>$*</code> khi chuyển tiếp đối số?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "\"$@\" sorts the arguments"
+              },
+              {
+                "ma": "b",
+                "noiDung": "$* is not valid in bash"
+              },
+              {
+                "ma": "c",
+                "noiDung": "\"$@\" keeps each argument as one word, even if it contains spaces"
+              },
+              {
+                "ma": "d",
+                "noiDung": "$* is slower"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Unquoted $* is re-split on whitespace: “b c” becomes two words.</p><p><i>VI: $* không nháy bị tách lại theo khoảng trắng: “b c” thành hai từ.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>What does <code>${f%.*}</code> do for f=report.tar.gz?</p><p style=\"opacity:.75;font-size:.92em\"><i><code>${f%.*}</code> làm gì với f=report.tar.gz?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Removes the longest suffix → report"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Removes the prefix"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Returns gz"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Removes the shortest suffix matching .* → report.tar"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>% = shortest suffix, %% = longest suffix; # and ## do the same for prefixes.</p><p><i>VI: % = hậu tố ngắn nhất, %% = dài nhất; # và ## làm vậy cho tiền tố.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>The first line <code>#!/bin/bash</code> of a script is called …</p><p style=\"opacity:.75;font-size:.92em\"><i>Dòng đầu <code>#!/bin/bash</code> của script gọi là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the shebang: it names the interpreter the kernel runs"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a comment that is ignored by everything"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the exit code"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a variable assignment"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>exec of a file starting with #! makes the kernel start the named interpreter with the script path.</p><p><i>VI: exec một tệp bắt đầu bằng #! làm kernel chạy trình thông dịch được nêu với đường dẫn script.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using $* when arguments may contain spaces."
+        },
+        {
+          "loi": "Confusing $? with $#."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "shebang",
+          "vi": "#! chỉ trình thông dịch"
+        },
+        {
+          "en": "exit status",
+          "vi": "mã thoát"
+        }
+      ]
+    },
+    {
+      "title": "Shell 2 — Predict the output of the one-liner",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "parameter expansion",
+        "arithmetic"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Write exactly what each bash one-liner prints (one line).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết đúng những gì mỗi lệnh bash một dòng in ra (một dòng).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Evaluate arithmetic expansions $(( )) first.",
+        "${var:-d} substitutes without assigning; ${var:=d} assigns."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Shell 2 — Predict the output of the one-liner\n\nAnswer in the answer panel (no code needed).\n\n1. OutputĐầu ra\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Shell 2 — Predict the output of the one-liner — answer key\n\n1. OutputĐầu ra\n   - c0.o: 11\n   - c1.o: 9\n   - c2.o: report.tar report gz\n   - c3.o: 3\n   - c4.o: 3 1 32\n   - c5.o: 3 b\n   - c6.o: d e e\n   All answers were produced by running the snippets in bash. Integer division truncates (7/2 = 3); ** is exponentiation; ${y:=e} assigns when y is unset; ${#arr[@]} counts array elements.VI: Mọi đáp án được chạy thật trong bash. Chia nguyên cắt phần thập phân (7/2 = 3); ** là luỹ thừa; ${y:=e} gán khi y chưa đặt; ${#arr[@]} đếm phần tử mảng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>11 · 9 · report.tar report gz · 3 · 3 1 32 · 3 b · d e e</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Output</p><p style=\"opacity:.75;font-size:.92em\"><i>Đầu ra</i></p>",
+            "cot": [
+              {
+                "ma": "c",
+                "ten": "Snippet"
+              },
+              {
+                "ma": "o",
+                "ten": "Output"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "c0",
+                "o": {
+                  "c": "x=5; y=$((x*2+1)); echo \"$y\""
+                }
+              },
+              {
+                "ma": "c1",
+                "o": {
+                  "c": "name=\"Ana Maria\"; echo ${#name}"
+                }
+              },
+              {
+                "ma": "c2",
+                "o": {
+                  "c": "f=report.tar.gz; echo ${f%.*} ${f%%.*} ${f##*.}"
+                }
+              },
+              {
+                "ma": "c3",
+                "o": {
+                  "c": "set -- a \"b c\" d; echo $#"
+                }
+              },
+              {
+                "ma": "c4",
+                "o": {
+                  "c": "echo $(( 7 / 2 )) $(( 7 % 2 )) $(( 2 ** 5 ))"
+                }
+              },
+              {
+                "ma": "c5",
+                "o": {
+                  "c": "arr=(a b c); echo ${#arr[@]} ${arr[1]}"
+                }
+              },
+              {
+                "ma": "c6",
+                "o": {
+                  "c": "unset y; echo ${y:-d} ${y:=e} $y"
+                }
+              }
+            ],
+            "dapAn": {
+              "c0.o": "11",
+              "c1.o": "9",
+              "c2.o": "report.tar report gz",
+              "c3.o": "3",
+              "c4.o": "3 1 32",
+              "c5.o": "3 b",
+              "c6.o": "d e e"
+            },
+            "giaiThich": "<p>All answers were produced by running the snippets in bash. Integer division truncates (7/2 = 3); ** is exponentiation; ${y:=e} assigns when y is unset; ${#arr[@]} counts array elements.</p><p><i>VI: Mọi đáp án được chạy thật trong bash. Chia nguyên cắt phần thập phân (7/2 = 3); ** là luỹ thừa; ${y:=e} gán khi y chưa đặt; ${#arr[@]} đếm phần tử mảng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Expecting 3.5 from $(( 7 / 2 ))."
+        },
+        {
+          "loi": "Forgetting that ${y:=e} also changes y for the last echo argument."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "parameter expansion",
+          "vi": "khai triển tham số"
+        },
+        {
+          "en": "arithmetic expansion",
+          "vi": "khai triển số học $(( ))"
+        }
+      ]
+    },
+    {
+      "title": "Shell 3 — Exit codes and && / || chains",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "exit status",
+        "and-or lists"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Give the output of each snippet. For the two chains, the output has two lines: write them separated by a single space (e.g. <code>C 0</code>).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cho đầu ra của từng đoạn. Với hai chuỗi lệnh, đầu ra có hai dòng: viết chúng cách nhau một dấu cách (vd <code>C 0</code>).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "&& runs the right side only if the left succeeded; || only if it failed. Both associate to the left.",
+        "$? always refers to the LAST command executed."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Shell 3 — Exit codes and && / || chains\n\nAnswer in the answer panel (no code needed).\n\n1. OutputĐầu ra\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Shell 3 — Exit codes and && / || chains — answer key\n\n1. OutputĐầu ra\n   - c0.o: 1\n   - c1.o: 3\n   - c2.o: 1\n   - c3.o: 0\n   - c4.o: 7\n   - c5.o: C 0\n   - c6.o: D\n   0 means success. [ 3 -gt 5 ] is false → 1; (exit 3) runs in a subshell and its status becomes $?; grep -q x fails → 1. In `true && false || echo C` the && yields 1, so the || branch runs and prints C, and the status of the whole list is that of echo = 0. `false || true && echo D` evaluates left to right: false → run true (0) → run echo.VI: 0 là thành công. [ 3 -gt 5 ] sai → 1; (exit 3) chạy trong subshell, mã của nó thành $?; grep -q x thất bại → 1. Với `true && false || echo C` thì && cho 1, nhánh || chạy và in C, mã của cả danh sách là của echo = 0. `false || true && echo D` tính từ trái sang phải: false → chạy true (0) → chạy echo.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>1 · 3 · 1 · 0 · 7 · C 0 · D</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Output</p><p style=\"opacity:.75;font-size:.92em\"><i>Đầu ra</i></p>",
+            "cot": [
+              {
+                "ma": "c",
+                "ten": "Snippet"
+              },
+              {
+                "ma": "o",
+                "ten": "Output"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "c0",
+                "o": {
+                  "c": "[ 3 -gt 5 ]; echo $?"
+                }
+              },
+              {
+                "ma": "c1",
+                "o": {
+                  "c": "(exit 3); echo $?"
+                }
+              },
+              {
+                "ma": "c2",
+                "o": {
+                  "c": "echo hi | grep -q x; echo $?"
+                }
+              },
+              {
+                "ma": "c3",
+                "o": {
+                  "c": "test -d /; echo $?"
+                }
+              },
+              {
+                "ma": "c4",
+                "o": {
+                  "c": "f(){ return 7; }; f; echo $?"
+                }
+              },
+              {
+                "ma": "c5",
+                "o": {
+                  "c": "true && false || echo C; echo $?"
+                }
+              },
+              {
+                "ma": "c6",
+                "o": {
+                  "c": "false || true && echo D"
+                }
+              }
+            ],
+            "dapAn": {
+              "c0.o": "1",
+              "c1.o": "3",
+              "c2.o": "1",
+              "c3.o": "0",
+              "c4.o": "7",
+              "c5.o": "C 0",
+              "c6.o": "D"
+            },
+            "giaiThich": "<p>0 means success. [ 3 -gt 5 ] is false → 1; (exit 3) runs in a subshell and its status becomes $?; grep -q x fails → 1. In `true && false || echo C` the && yields 1, so the || branch runs and prints C, and the status of the whole list is that of echo = 0. `false || true && echo D` evaluates left to right: false → run true (0) → run echo.</p><p><i>VI: 0 là thành công. [ 3 -gt 5 ] sai → 1; (exit 3) chạy trong subshell, mã của nó thành $?; grep -q x thất bại → 1. Với `true && false || echo C` thì && cho 1, nhánh || chạy và in C, mã của cả danh sách là của echo = 0. `false || true && echo D` tính từ trái sang phải: false → chạy true (0) → chạy echo.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking a && b || c is “if a then b else c” (c also runs when b fails)."
+        },
+        {
+          "loi": "Expecting `exit 3` inside parentheses to end the whole shell."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "subshell",
+          "vi": "shell con chạy trong (...)"
+        },
+        {
+          "en": "command list",
+          "vi": "danh sách lệnh nối bằng && ||"
+        }
+      ]
+    },
+    {
+      "title": "Shell 4 — Split a command line into words like the shell",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "shell parsing",
+        "quoting"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Write <code>splitWords(line)</code>, the first stage of a shell parser. Words are separated by spaces or tabs. Single quotes keep everything inside literally; double quotes keep spaces and only treat <code>\\\"</code> and <code>\\\\</code> as escapes; outside quotes a backslash makes the next character literal. Adjacent pieces form ONE word (<code>a\"b c\"d</code> → <code>ab cd</code>) and an empty pair of quotes still makes an (empty) word. Return the array of words, or <code>null</code> if a quote is not closed or the line ends with a lone backslash. Do not expand variables.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Do not use a regular expression for the whole job: use a small state machine.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>splitWords(line)</code>, giai đoạn đầu của bộ phân tích cú pháp shell. Từ cách nhau bởi dấu cách hoặc tab. Nháy đơn giữ nguyên mọi thứ bên trong; nháy kép giữ dấu cách và chỉ coi <code>\\\"</code> và <code>\\\\</code> là thoát; ngoài nháy, dấu gạch ngược làm ký tự kế tiếp thành nghĩa đen. Các mảnh liền nhau tạo thành MỘT từ (<code>a\"b c\"d</code> → <code>ab cd</code>) và cặp nháy rỗng vẫn tạo ra một từ (rỗng). Trả mảng các từ, hoặc <code>null</code> nếu có nháy chưa đóng hoặc dòng kết thúc bằng một dấu gạch ngược đơn độc. Không khai triển biến.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đừng dùng một biểu thức chính quy cho cả bài: dùng máy trạng thái nhỏ.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "splitWords('echo \"hello world\" \\'x y\\'')",
+          "output": "[\"echo\",\"hello world\",\"x y\"]",
+          "explanation": "Quotes group words and are removed.|||Nháy gom từ và bị bỏ đi."
+        }
+      ],
+      "hintsJson": [
+        "States: normal, inside single quotes, inside double quotes. Keep a flag “word started” so that \"\" produces an empty word.",
+        "On a space in the normal state, push the current word if it started."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function splitWords(line) {\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// A tiny quoting state machine.\nfunction splitWords(line) {\n  var out = [], cur = '', has = false, i = 0, q = null;\n  while (i < line.length) {\n    var ch = line[i];\n    if (q === \"'\") { if (ch === \"'\") q = null; else cur += ch; i++; continue; }\n    if (q === '\"') {\n      if (ch === '\"') q = null;\n      else if (ch === '\\\\' && (line[i + 1] === '\"' || line[i + 1] === '\\\\')) { cur += line[i + 1]; i++; }\n      else cur += ch;\n      i++; continue;\n    }\n    if (ch === \"'\" || ch === '\"') { q = ch; has = true; i++; continue; }\n    if (ch === '\\\\') { if (i + 1 >= line.length) return null; cur += line[i + 1]; has = true; i += 2; continue; }\n    if (ch === ' ' || ch === '\\t') { if (has || cur !== '') { out.push(cur); cur = ''; has = false; } i++; continue; }\n    cur += ch; has = true; i++;\n  }\n  if (q) return null;\n  if (has || cur !== '') out.push(cur);\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is how <code>/bin/sh</code> decides that <code>cp \"my file\" dir</code> has three words, not four.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: splitWords(\"ls -l /tmp\")",
+              "vi": "Ca 1"
+            },
+            "goi": "splitWords(\"ls -l /tmp\")",
+            "mongDoi": [
+              "ls",
+              "-l",
+              "/tmp"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 2: splitWords(\"echo \\\"hello world\\\" 'x y'\")",
+              "vi": "Ca 2"
+            },
+            "goi": "splitWords(\"echo \\\"hello world\\\" 'x y'\")",
+            "mongDoi": [
+              "echo",
+              "hello world",
+              "x y"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 3: splitWords(\"cp \\\"my file\\\" dir\")",
+              "vi": "Ca 3"
+            },
+            "goi": "splitWords(\"cp \\\"my file\\\" dir\")",
+            "mongDoi": [
+              "cp",
+              "my file",
+              "dir"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 4: splitWords(\"a\\\"b c\\\"d e\")",
+              "vi": "Ca 4"
+            },
+            "goi": "splitWords(\"a\\\"b c\\\"d e\")",
+            "mongDoi": [
+              "ab cd",
+              "e"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 5: splitWords(\"echo '' x\")",
+              "vi": "Ca 5"
+            },
+            "goi": "splitWords(\"echo '' x\")",
+            "mongDoi": [
+              "echo",
+              "",
+              "x"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "splitWords(\"echo \\\"unterminated\")",
+            "mongDoi": null,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "splitWords(\"  spaced   out  \")",
+            "mongDoi": [
+              "spaced",
+              "out"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "splitWords(\"say \\\\\\\"hi\\\\\\\" \\\"a\\\\\\\"b\\\" 'c\\\\d'\")",
+            "mongDoi": [
+              "say",
+              "\"hi\"",
+              "a\"b",
+              "c\\d"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 9",
+              "vi": "Ca ẩn 9"
+            },
+            "goi": "splitWords(\"bad\\\\\")",
+            "mongDoi": null,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 10",
+              "vi": "Ca ẩn 10"
+            },
+            "goi": "splitWords(\"\")",
+            "mongDoi": [],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dropping empty words made by \"\"."
+        },
+        {
+          "loi": "Treating backslash inside single quotes as an escape."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Shell 5 — Subshells, pipelines, jobs and trap",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "subshell",
+        "pipelines",
+        "jobs",
+        "trap"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Five questions on how the shell uses processes. All outputs were checked in bash.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu về cách shell dùng tiến trình. Mọi đầu ra đã được kiểm trong bash.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "A subshell is a fork: its variable changes are private.",
+        "Pipeline stages run in parallel as separate processes."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Shell 5 — Subshells, pipelines, jobs and trap\n\nAnswer in the answer panel (no code needed).\n\n1. x=1; (x=2); echo $x prints …x=1; (x=2); echo $x in ra …\n2. cnt=0; echo a | while read l; do cnt=$((cnt+1)); done; echo $cnt prints …cnt=0; echo a | while read l; do cnt=$((cnt+1)); done; echo $cnt in ra …\n3. What does $$ contain?$$ chứa gì?\n4. A script runs a long job in the background with cmd & and later needs its result. Which builtin waits for it?Script chạy công việc dài ở nền bằng cmd & và cần kết quả sau đó. Lệnh dựng sẵn nào chờ nó?\n5. trap 'rm -f /tmp/lock' EXIT in a script …trap 'rm -f /tmp/lock' EXIT trong script …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Shell 5 — Subshells, pipelines, jobs and trap — answer key\n\n1. x=1; (x=2); echo $x prints …x=1; (x=2); echo $x in ra …\n   Answer: c) 1\n   Parentheses run a subshell (a forked child): its variables disappear when it exits.VI: Dấu ngoặc chạy subshell (tiến trình con): biến của nó mất khi nó thoát.\n\n2. cnt=0; echo a | while read l; do cnt=$((cnt+1)); done; echo $cnt prints …cnt=0; echo a | while read l; do cnt=$((cnt+1)); done; echo $cnt in ra …\n   Answer: d) 0 (in bash: the loop ran in a subshell)\n   Each stage of a pipeline is a separate process; the counter changed in the child only. Use process substitution or a here-string to keep it in the parent.VI: Mỗi tầng của pipeline là một tiến trình riêng; biến đếm chỉ đổi ở tiến trình con. Dùng process substitution hoặc here-string để giữ ở tiến trình cha.\n\n3. What does $$ contain?$$ chứa gì?\n   Answer: a) The PID of the current shell\n   $! is the last background job.VI: $! là công việc nền cuối cùng.\n\n4. A script runs a long job in the background with cmd & and later needs its result. Which builtin waits for it?Script chạy công việc dài ở nền bằng cmd & và cần kết quả sau đó. Lệnh dựng sẵn nào chờ nó?\n   Answer: b) wait\n   wait blocks until the background children finish and returns their status.VI: wait chặn tới khi các tiến trình con nền xong và trả mã thoát của chúng.\n\n5. trap 'rm -f /tmp/lock' EXIT in a script …trap 'rm -f /tmp/lock' EXIT trong script …\n   Answer: c) runs the cleanup command whenever the script exits\n   trap installs a handler; EXIT fires on any exit (but not on SIGKILL, which cannot be caught).VI: trap cài trình xử lý; EXIT chạy ở mọi lần thoát (trừ SIGKILL không bắt được).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>c · d · a · b · c.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p><code>x=1; (x=2); echo $x</code> prints …</p><p style=\"opacity:.75;font-size:.92em\"><i><code>x=1; (x=2); echo $x</code> in ra …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "nothing"
+              },
+              {
+                "ma": "b",
+                "noiDung": "an error"
+              },
+              {
+                "ma": "c",
+                "noiDung": "1"
+              },
+              {
+                "ma": "d",
+                "noiDung": "2"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Parentheses run a subshell (a forked child): its variables disappear when it exits.</p><p><i>VI: Dấu ngoặc chạy subshell (tiến trình con): biến của nó mất khi nó thoát.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p><code>cnt=0; echo a | while read l; do cnt=$((cnt+1)); done; echo $cnt</code> prints …</p><p style=\"opacity:.75;font-size:.92em\"><i><code>cnt=0; echo a | while read l; do cnt=$((cnt+1)); done; echo $cnt</code> in ra …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "1"
+              },
+              {
+                "ma": "b",
+                "noiDung": "2"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a"
+              },
+              {
+                "ma": "d",
+                "noiDung": "0 (in bash: the loop ran in a subshell)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Each stage of a pipeline is a separate process; the counter changed in the child only. Use process substitution or a here-string to keep it in the parent.</p><p><i>VI: Mỗi tầng của pipeline là một tiến trình riêng; biến đếm chỉ đổi ở tiến trình con. Dùng process substitution hoặc here-string để giữ ở tiến trình cha.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>What does <code>$$</code> contain?</p><p style=\"opacity:.75;font-size:.92em\"><i><code>$$</code> chứa gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The PID of the current shell"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The exit status"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The number of arguments"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The PID of the last background job"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>$! is the last background job.</p><p><i>VI: $! là công việc nền cuối cùng.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>A script runs a long job in the background with <code>cmd &amp;</code> and later needs its result. Which builtin waits for it?</p><p style=\"opacity:.75;font-size:.92em\"><i>Script chạy công việc dài ở nền bằng <code>cmd &amp;</code> và cần kết quả sau đó. Lệnh dựng sẵn nào chờ nó?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "exec"
+              },
+              {
+                "ma": "b",
+                "noiDung": "wait"
+              },
+              {
+                "ma": "c",
+                "noiDung": "sleep"
+              },
+              {
+                "ma": "d",
+                "noiDung": "fg"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>wait blocks until the background children finish and returns their status.</p><p><i>VI: wait chặn tới khi các tiến trình con nền xong và trả mã thoát của chúng.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p><code>trap 'rm -f /tmp/lock' EXIT</code> in a script …</p><p style=\"opacity:.75;font-size:.92em\"><i><code>trap 'rm -f /tmp/lock' EXIT</code> trong script …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "kills the script"
+              },
+              {
+                "ma": "b",
+                "noiDung": "runs it only on SIGKILL"
+              },
+              {
+                "ma": "c",
+                "noiDung": "runs the cleanup command whenever the script exits"
+              },
+              {
+                "ma": "d",
+                "noiDung": "prevents the script from exiting"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>trap installs a handler; EXIT fires on any exit (but not on SIGKILL, which cannot be caught).</p><p><i>VI: trap cài trình xử lý; EXIT chạy ở mọi lần thoát (trừ SIGKILL không bắt được).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Expecting a variable set in a pipeline loop to survive."
+        },
+        {
+          "loi": "Confusing $$ with $!."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "process substitution",
+          "vi": "thay thế tiến trình <( )"
+        },
+        {
+          "en": "trap",
+          "vi": "bắt tín hiệu hoặc sự kiện thoát"
+        }
+      ]
+    }
+  ]
+}

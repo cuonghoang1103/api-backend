@@ -1,0 +1,284 @@
+{
+  "trackSlug": "osg202-practice",
+  "moduleSlug": "osg202-5-lab-disk-arrivals",
+  "lesson": {
+    "course": "operating-systems",
+    "slug": "osg202-on-ch5"
+  },
+  "exercises": [
+    {
+      "title": "Lab 5 — Disk scheduler with requests arriving over time",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 45,
+      "points": 60,
+      "concepts": [
+        "disk scheduling",
+        "dynamic arrivals"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p><b>Scenario.</b> Real requests do not all wait in the queue at t = 0. Write <code>serve(algo, head, reqs, dir)</code>, a disk scheduler that decides what to do <i>whenever the head is free</i>. <code>reqs</code> is an array of <code>{ id, at, cyl }</code> (arrival time, cylinder). Moving the head one cylinder takes 1 time unit; servicing a request itself takes 0 time. The clock starts at 0; if no request has arrived, the clock jumps to the next arrival.</p>\n<ul>\n<li><code>'FCFS'</code>: the ready request with the earliest arrival (ties: lower array index).</li>\n<li><code>'SSTF'</code>: the ready request closest to the head (ties: earlier arrival, then lower index).</li>\n<li><code>'LOOK'</code>: keep moving in direction <code>dir</code> (<code>'up'</code> = toward higher cylinders; a request on the head’s cylinder counts as ahead): choose the nearest ready request ahead (tie: lower index); if none is ahead, reverse the direction and then pick the nearest ready request.</li>\n</ul>\n<p>“Ready” = arrived by the current time and not yet served. Return <code>{ order, total, avgWait, wait }</code>: the ids in service order, the total head movement, the average waiting time (completion time − arrival time of each request; round to 2 decimals) and the object of waiting times per id.</p>\n<h4>Workload 1</h4><table><thead><tr><th>id</th><th>arrival</th><th>cylinder</th></tr></thead><tbody><tr><td>a</td><td>0</td><td>60</td></tr><tr><td>b</td><td>0</td><td>10</td></tr><tr><td>c</td><td>5</td><td>55</td></tr><tr><td>d</td><td>20</td><td>90</td></tr><tr><td>e</td><td>30</td><td>20</td></tr></tbody></table>\n<h4>Requirements</h4>\n<ul>\n  <li>Do not modify <code>reqs</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Tình huống.</b> Yêu cầu thật không nằm sẵn hết trong hàng đợi lúc t = 0. Viết <code>serve(algo, head, reqs, dir)</code>, bộ lập lịch đĩa quyết định <i>mỗi khi đầu đọc rảnh</i>. <code>reqs</code> là mảng <code>{ id, at, cyl }</code> (thời điểm đến, cylinder). Di chuyển đầu đọc một cylinder mất 1 đơn vị thời gian; phục vụ bản thân yêu cầu mất 0. Đồng hồ bắt đầu ở 0; nếu chưa có yêu cầu nào đến thì nhảy tới lần đến kế tiếp.</p>\n<ul>\n<li><code>'FCFS'</code>: yêu cầu sẵn sàng đến sớm nhất (hoà: chỉ số mảng nhỏ hơn).</li>\n<li><code>'SSTF'</code>: yêu cầu sẵn sàng gần đầu đọc nhất (hoà: đến sớm hơn, rồi chỉ số nhỏ hơn).</li>\n<li><code>'LOOK'</code>: giữ chiều <code>dir</code> (<code>'up'</code> = về cylinder cao; yêu cầu ở ngay cylinder của đầu đọc coi là phía trước): chọn yêu cầu sẵn sàng gần nhất ở phía trước (hoà: chỉ số nhỏ); nếu không có thì đảo chiều rồi chọn yêu cầu sẵn sàng gần nhất.</li>\n</ul>\n<p>“Sẵn sàng” = đã đến tại thời điểm hiện tại và chưa được phục vụ. Trả <code>{ order, total, avgWait, wait }</code>: id theo thứ tự phục vụ, tổng quãng đầu đọc, thời gian chờ trung bình (thời điểm hoàn thành − thời điểm đến của từng yêu cầu; làm tròn 2 chữ số) và đối tượng thời gian chờ theo id.</p>\n<h4>Tải 1</h4><table><thead><tr><th>id</th><th>arrival</th><th>cylinder</th></tr></thead><tbody><tr><td>a</td><td>0</td><td>60</td></tr><tr><td>b</td><td>0</td><td>10</td></tr><tr><td>c</td><td>5</td><td>55</td></tr><tr><td>d</td><td>20</td><td>90</td></tr><tr><td>e</td><td>30</td><td>20</td></tr></tbody></table>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Không sửa <code>reqs</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "serve('SSTF', 50, [{id:'a',at:0,cyl:60},{id:'b',at:0,cyl:10}], 'up').order",
+          "output": "[\"a\",\"b\"]",
+          "explanation": "60 is 10 away, 10 is 40 away.|||60 cách 10, 10 cách 40."
+        }
+      ],
+      "hintsJson": [
+        "The main loop is “find the ready set; if empty advance the clock; else pick by policy; move; update clock”.",
+        "Keep the list of served ids in an object so that you never serve a request twice.",
+        "For LOOK, flip dir permanently when nothing is ahead."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function serve(algo, head, reqs, dir) {\n  return { order: [], total: 0, avgWait: 0, wait: {} };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function serve(algo, head, reqs, dir) {\n  var pos = head, t = 0, total = 0, done = {}, order = [], wait = {}, n = reqs.length, left = n;\n  while (left > 0) {\n    var ready = [], i;\n    for (i = 0; i < n; i++) if (!done[reqs[i].id] && reqs[i].at <= t) ready.push(i);\n    if (!ready.length) {\n      var nx = Infinity;\n      for (i = 0; i < n; i++) if (!done[reqs[i].id] && reqs[i].at < nx) nx = reqs[i].at;\n      t = nx; continue;\n    }\n    var pick = -1;\n    if (algo === 'FCFS') {\n      pick = ready.slice().sort(function (a, b) { return reqs[a].at - reqs[b].at || a - b; })[0];\n    } else if (algo === 'SSTF') {\n      pick = ready.slice().sort(function (a, b) { return Math.abs(reqs[a].cyl - pos) - Math.abs(reqs[b].cyl - pos) || reqs[a].at - reqs[b].at || a - b; })[0];\n    } else {\n      var ahead = ready.filter(function (k) { return dir === 'up' ? reqs[k].cyl >= pos : reqs[k].cyl <= pos; });\n      if (!ahead.length) { dir = dir === 'up' ? 'down' : 'up'; ahead = ready; }\n      pick = ahead.slice().sort(function (a, b) { return Math.abs(reqs[a].cyl - pos) - Math.abs(reqs[b].cyl - pos) || a - b; })[0];\n    }\n    var d = Math.abs(reqs[pick].cyl - pos);\n    t += d; total += d; pos = reqs[pick].cyl;\n    done[reqs[pick].id] = true; left--; order.push(reqs[pick].id);\n    wait[reqs[pick].id] = t - reqs[pick].at;\n  }\n  var s = 0;\n  for (var k in wait) s += wait[k];\n  return { order: order, total: total, avgWait: Math.round((s / n) * 100) / 100, wait: wait };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is what a real elevator-style scheduler does: a decision every time the head becomes free, using only requests that have arrived. SSTF’s starvation and LOOK’s fairness show up in the waiting times.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: serve(\"FCFS\", 50, [{\"id\":\"a\",\"at\":0,\"cyl\":60},{\"id\":\"b\",\"at\":0,\"cyl\":10},{\"i)",
+              "vi": "Ca 1"
+            },
+            "goi": "serve(\"FCFS\", 50, [{\"id\":\"a\",\"at\":0,\"cyl\":60},{\"id\":\"b\",\"at\":0,\"cyl\":10},{\"id\":\"c\",\"at\":5,\"cyl\":55},{\"id\":\"d\",\"at\":20,\"cyl\":90},{\"id\":\"e\",\"at\":30,\"cyl\":20}], \"up\")",
+            "mongDoi": {
+              "order": [
+                "a",
+                "b",
+                "c",
+                "d",
+                "e"
+              ],
+              "total": 210,
+              "avgWait": 94,
+              "wait": {
+                "a": 10,
+                "b": 60,
+                "c": 100,
+                "d": 120,
+                "e": 180
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: serve(\"SSTF\", 50, [{\"id\":\"a\",\"at\":0,\"cyl\":60},{\"id\":\"b\",\"at\":0,\"cyl\":10},{\"i)",
+              "vi": "Ca 2"
+            },
+            "goi": "serve(\"SSTF\", 50, [{\"id\":\"a\",\"at\":0,\"cyl\":60},{\"id\":\"b\",\"at\":0,\"cyl\":10},{\"id\":\"c\",\"at\":5,\"cyl\":55},{\"id\":\"d\",\"at\":20,\"cyl\":90},{\"id\":\"e\",\"at\":30,\"cyl\":20}], \"up\")",
+            "mongDoi": {
+              "order": [
+                "a",
+                "c",
+                "b",
+                "e",
+                "d"
+              ],
+              "total": 140,
+              "avgWait": 48,
+              "wait": {
+                "a": 10,
+                "c": 10,
+                "b": 60,
+                "e": 40,
+                "d": 120
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: serve(\"LOOK\", 50, [{\"id\":\"a\",\"at\":0,\"cyl\":60},{\"id\":\"b\",\"at\":0,\"cyl\":10},{\"i)",
+              "vi": "Ca 3"
+            },
+            "goi": "serve(\"LOOK\", 50, [{\"id\":\"a\",\"at\":0,\"cyl\":60},{\"id\":\"b\",\"at\":0,\"cyl\":10},{\"id\":\"c\",\"at\":5,\"cyl\":55},{\"id\":\"d\",\"at\":20,\"cyl\":90},{\"id\":\"e\",\"at\":30,\"cyl\":20}], \"up\")",
+            "mongDoi": {
+              "order": [
+                "a",
+                "c",
+                "b",
+                "e",
+                "d"
+              ],
+              "total": 140,
+              "avgWait": 48,
+              "wait": {
+                "a": 10,
+                "c": 10,
+                "b": 60,
+                "e": 40,
+                "d": 120
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 4: serve(\"LOOK\", 100, [{\"id\":\"r1\",\"at\":0,\"cyl\":100},{\"id\":\"r2\",\"at\":1,\"cyl\":20})",
+              "vi": "Ca 4"
+            },
+            "goi": "serve(\"LOOK\", 100, [{\"id\":\"r1\",\"at\":0,\"cyl\":100},{\"id\":\"r2\",\"at\":1,\"cyl\":20},{\"id\":\"r3\",\"at\":2,\"cyl\":95},{\"id\":\"r4\",\"at\":3,\"cyl\":105},{\"id\":\"r5\",\"at\":50,\"cyl\":30}], \"down\")",
+            "mongDoi": {
+              "order": [
+                "r1",
+                "r2",
+                "r5",
+                "r3",
+                "r4"
+              ],
+              "total": 165,
+              "avgWait": 87.6,
+              "wait": {
+                "r1": 0,
+                "r2": 80,
+                "r5": 41,
+                "r3": 154,
+                "r4": 163
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "serve(\"SSTF\", 100, [{\"id\":\"r1\",\"at\":0,\"cyl\":100},{\"id\":\"r2\",\"at\":1,\"cyl\":20},{\"id\":\"r3\",\"at\":2,\"cyl\":95},{\"id\":\"r4\",\"at\":3,\"cyl\":105},{\"id\":\"r5\",\"at\":50,\"cyl\":30}], \"up\")",
+            "mongDoi": {
+              "order": [
+                "r1",
+                "r2",
+                "r5",
+                "r3",
+                "r4"
+              ],
+              "total": 165,
+              "avgWait": 87.6,
+              "wait": {
+                "r1": 0,
+                "r2": 80,
+                "r5": 41,
+                "r3": 154,
+                "r4": 163
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "serve(\"FCFS\", 0, [{\"id\":\"x\",\"at\":40,\"cyl\":5},{\"id\":\"y\",\"at\":40,\"cyl\":5},{\"id\":\"z\",\"at\":0,\"cyl\":70}], \"up\")",
+            "mongDoi": {
+              "order": [
+                "z",
+                "x",
+                "y"
+              ],
+              "total": 135,
+              "avgWait": 86.67,
+              "wait": {
+                "z": 70,
+                "x": 95,
+                "y": 95
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "serve(\"LOOK\", 0, [{\"id\":\"p\",\"at\":0,\"cyl\":50},{\"id\":\"q\",\"at\":0,\"cyl\":40},{\"id\":\"r\",\"at\":0,\"cyl\":60},{\"id\":\"s\",\"at\":15,\"cyl\":45},{\"id\":\"t\",\"at\":15,\"cyl\":65}], \"up\")",
+            "mongDoi": {
+              "order": [
+                "q",
+                "s",
+                "p",
+                "r",
+                "t"
+              ],
+              "total": 65,
+              "avgWait": 46,
+              "wait": {
+                "q": 40,
+                "s": 30,
+                "p": 50,
+                "r": 60,
+                "t": 50
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "serve(\"SSTF\", 50, [{\"id\":\"p\",\"at\":0,\"cyl\":50},{\"id\":\"q\",\"at\":0,\"cyl\":40},{\"id\":\"r\",\"at\":0,\"cyl\":60},{\"id\":\"s\",\"at\":15,\"cyl\":45},{\"id\":\"t\",\"at\":15,\"cyl\":65}], \"down\")",
+            "mongDoi": {
+              "order": [
+                "p",
+                "q",
+                "r",
+                "t",
+                "s"
+              ],
+              "total": 55,
+              "avgWait": 20,
+              "wait": {
+                "p": 0,
+                "q": 10,
+                "r": 30,
+                "t": 20,
+                "s": 40
+              }
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Treating future arrivals as ready."
+        },
+        {
+          "loi": "Forgetting that time advances by the distance moved (waiting times depend on it)."
+        },
+        {
+          "loi": "Not flipping the LOOK direction permanently."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

@@ -1,0 +1,851 @@
+{
+  "trackSlug": "osg202-practice",
+  "moduleSlug": "osg202-7-1-lenh-linux",
+  "lesson": {
+    "course": "operating-systems",
+    "slug": "osg202-7-1-lenh-linux"
+  },
+  "exercises": [
+    {
+      "title": "Linux 1 — Commands, redirection and pipes (concepts)",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "redirection",
+        "pipes",
+        "find"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Five questions on the everyday Linux command line.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu về dòng lệnh Linux hằng ngày.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Pipes connect processes; redirections connect a process to a file.",
+        "find looks at names, grep at contents."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Linux 1 — Commands, redirection and pipes (concepts)\n\nAnswer in the answer panel (no code needed).\n\n1. What is the difference between > and >>?> khác >> ở chỗ nào?\n2. What does ls | wc -l print?ls | wc -l in ra gì?\n3. Which command shows permissions, owner, size and date in a long listing?Lệnh nào hiện quyền, chủ sở hữu, kích thước và ngày trong danh sách dài?\n4. cmd > out.txt 2>&1 sends …cmd > out.txt 2>&1 gửi …\n5. Which command finds files named *.log under /var and below?Lệnh nào tìm tệp *.log trong /var và các thư mục con?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Linux 1 — Commands, redirection and pipes (concepts) — answer key\n\n1. What is the difference between > and >>?> khác >> ở chỗ nào?\n   Answer: d) > overwrites (truncates) the file, >> appends to it\n   Use >> for logs; a stray > destroys the old content.VI: Dùng >> cho log; một dấu > lỡ tay sẽ xoá nội dung cũ.\n\n2. What does ls | wc -l print?ls | wc -l in ra gì?\n   Answer: a) The number of entries listed by ls\n   The pipe connects ls’s standard output to wc’s standard input; -l counts lines.VI: Pipe nối stdout của ls vào stdin của wc; -l đếm số dòng.\n\n3. Which command shows permissions, owner, size and date in a long listing?Lệnh nào hiện quyền, chủ sở hữu, kích thước và ngày trong danh sách dài?\n   Answer: b) ls -l\n   -a shows hidden files; -l the long format.VI: -a hiện tệp ẩn; -l là dạng dài.\n\n4. cmd > out.txt 2>&1 sends …cmd > out.txt 2>&1 gửi …\n   Answer: c) both stdout and stderr to out.txt\n   Order matters: first stdout goes to the file, then stderr is duplicated onto stdout’s destination. 2>&1 > out.txt would leave stderr on the terminal.VI: Thứ tự quan trọng: stdout vào tệp rồi stderr nhân đôi theo đích của stdout. 2>&1 > out.txt sẽ để stderr ở terminal.\n\n5. Which command finds files named *.log under /var and below?Lệnh nào tìm tệp *.log trong /var và các thư mục con?\n   Answer: d) find /var -name \"*.log\"\n   find walks the tree; grep searches INSIDE files.VI: find duyệt cây thư mục; grep tìm BÊN TRONG tệp.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>d · a · b · c · d.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>What is the difference between <code>&gt;</code> and <code>&gt;&gt;</code>?</p><p style=\"opacity:.75;font-size:.92em\"><i><code>&gt;</code> khác <code>&gt;&gt;</code> ở chỗ nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "> appends, >> overwrites"
+              },
+              {
+                "ma": "b",
+                "noiDung": "They are identical"
+              },
+              {
+                "ma": "c",
+                "noiDung": "> is for input, >> for output"
+              },
+              {
+                "ma": "d",
+                "noiDung": "> overwrites (truncates) the file, >> appends to it"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Use >> for logs; a stray > destroys the old content.</p><p><i>VI: Dùng >> cho log; một dấu > lỡ tay sẽ xoá nội dung cũ.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>What does <code>ls | wc -l</code> print?</p><p style=\"opacity:.75;font-size:.92em\"><i><code>ls | wc -l</code> in ra gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The number of entries listed by ls"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The size of the directory in bytes"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The words in each file"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nothing; a pipe needs a file name"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The pipe connects ls’s standard output to wc’s standard input; -l counts lines.</p><p><i>VI: Pipe nối stdout của ls vào stdin của wc; -l đếm số dòng.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Which command shows permissions, owner, size and date in a long listing?</p><p style=\"opacity:.75;font-size:.92em\"><i>Lệnh nào hiện quyền, chủ sở hữu, kích thước và ngày trong danh sách dài?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "cat"
+              },
+              {
+                "ma": "b",
+                "noiDung": "ls -l"
+              },
+              {
+                "ma": "c",
+                "noiDung": "ls -a"
+              },
+              {
+                "ma": "d",
+                "noiDung": "pwd"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>-a shows hidden files; -l the long format.</p><p><i>VI: -a hiện tệp ẩn; -l là dạng dài.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p><code>cmd &gt; out.txt 2&gt;&amp;1</code> sends …</p><p style=\"opacity:.75;font-size:.92em\"><i><code>cmd &gt; out.txt 2&gt;&amp;1</code> gửi …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "stdout to the screen and stderr to a file"
+              },
+              {
+                "ma": "b",
+                "noiDung": "stdin to out.txt"
+              },
+              {
+                "ma": "c",
+                "noiDung": "both stdout and stderr to out.txt"
+              },
+              {
+                "ma": "d",
+                "noiDung": "only stderr to out.txt"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Order matters: first stdout goes to the file, then stderr is duplicated onto stdout’s destination. <code>2&gt;&amp;1 &gt; out.txt</code> would leave stderr on the terminal.</p><p><i>VI: Thứ tự quan trọng: stdout vào tệp rồi stderr nhân đôi theo đích của stdout. <code>2&gt;&amp;1 &gt; out.txt</code> sẽ để stderr ở terminal.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Which command finds files named *.log under /var and below?</p><p style=\"opacity:.75;font-size:.92em\"><i>Lệnh nào tìm tệp *.log trong /var và các thư mục con?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "ls /var -name *.log"
+              },
+              {
+                "ma": "b",
+                "noiDung": "grep /var *.log"
+              },
+              {
+                "ma": "c",
+                "noiDung": "cd /var *.log"
+              },
+              {
+                "ma": "d",
+                "noiDung": "find /var -name \"*.log\""
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>find walks the tree; grep searches INSIDE files.</p><p><i>VI: find duyệt cây thư mục; grep tìm BÊN TRONG tệp.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Overwriting a log with > instead of appending with >>."
+        },
+        {
+          "loi": "Using grep to look for file names."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "pipe",
+          "vi": "đường ống: stdout của lệnh này thành stdin của lệnh kia"
+        },
+        {
+          "en": "redirection",
+          "vi": "chuyển hướng I/O chuẩn"
+        }
+      ]
+    },
+    {
+      "title": "Linux 2 — Predict the output of the pipeline",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "text processing",
+        "pipelines"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>The file <code>scores.txt</code> contains:</p><pre>ana:90\nbao:75\nchi:90\ndung:60</pre><p>Write the exact output of each command (a single line each; ignore leading spaces).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tệp <code>scores.txt</code> chứa:</p><pre>ana:90\nbao:75\nchi:90\ndung:60</pre><p>Viết đúng đầu ra của từng lệnh (mỗi lệnh một dòng; bỏ qua khoảng trắng đầu dòng).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Work left to right: the output of each stage is the input of the next.",
+        "grep -n prefixes the line number and a colon."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Linux 2 — Predict the output of the pipeline\n\nAnswer in the answer panel (no code needed).\n\n1. OutputĐầu ra\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Linux 2 — Predict the output of the pipeline — answer key\n\n1. OutputĐầu ra\n   - c0.o: 4\n   - c1.o: 2\n   - c2.o: 60\n   - c3.o: dung\n   - c4.o: bao:75\n   - c5.o: ANA\n   - c6.o: 315\n   - c7.o: 3:chi:90\n   - c8.o: AnA:90\n   Every output was produced by running the command in bash. Key ideas: wc -l counts lines; grep -c counts matching lines (both 90s); cut -f2 isolates the score; sed s/a/A/g replaces EVERY a on the line (without g only the first); awk sums column 2 (90+75+90+60 = 315).VI: Mọi đầu ra đã được chạy thật bằng bash. Ý chính: wc -l đếm dòng; grep -c đếm dòng khớp (cả hai điểm 90); cut -f2 tách điểm; sed s/a/A/g thay MỌI chữ a trên dòng (không có g chỉ thay chữ đầu); awk cộng cột 2 (90+75+90+60 = 315).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>4 · 2 · 60 · dung · bao:75 · ANA · 315 · 3:chi:90 · AnA:90</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Output</p><p style=\"opacity:.75;font-size:.92em\"><i>Đầu ra</i></p>",
+            "cot": [
+              {
+                "ma": "c",
+                "ten": "Command"
+              },
+              {
+                "ma": "o",
+                "ten": "Output"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "c0",
+                "o": {
+                  "c": "wc -l < scores.txt"
+                }
+              },
+              {
+                "ma": "c1",
+                "o": {
+                  "c": "grep -c 90 scores.txt"
+                }
+              },
+              {
+                "ma": "c2",
+                "o": {
+                  "c": "cut -d: -f2 scores.txt | sort -n | head -1"
+                }
+              },
+              {
+                "ma": "c3",
+                "o": {
+                  "c": "tail -n 1 scores.txt | cut -d: -f1"
+                }
+              },
+              {
+                "ma": "c4",
+                "o": {
+                  "c": "head -n 2 scores.txt | tail -n 1"
+                }
+              },
+              {
+                "ma": "c5",
+                "o": {
+                  "c": "cut -d: -f1 scores.txt | tr a-z A-Z | head -n 1"
+                }
+              },
+              {
+                "ma": "c6",
+                "o": {
+                  "c": "awk -F: '{s+=$2} END {print s}' scores.txt"
+                }
+              },
+              {
+                "ma": "c7",
+                "o": {
+                  "c": "grep -n chi scores.txt"
+                }
+              },
+              {
+                "ma": "c8",
+                "o": {
+                  "c": "sed s/a/A/g scores.txt | head -1"
+                }
+              }
+            ],
+            "dapAn": {
+              "c0.o": "4",
+              "c1.o": "2",
+              "c2.o": "60",
+              "c3.o": "dung",
+              "c4.o": "bao:75",
+              "c5.o": "ANA",
+              "c6.o": "315",
+              "c7.o": "3:chi:90",
+              "c8.o": "AnA:90"
+            },
+            "giaiThich": "<p>Every output was produced by running the command in bash. Key ideas: wc -l counts lines; grep -c counts matching lines (both 90s); cut -f2 isolates the score; sed s/a/A/g replaces EVERY a on the line (without g only the first); awk sums column 2 (90+75+90+60 = 315).</p><p><i>VI: Mọi đầu ra đã được chạy thật bằng bash. Ý chính: wc -l đếm dòng; grep -c đếm dòng khớp (cả hai điểm 90); cut -f2 tách điểm; sed s/a/A/g thay MỌI chữ a trên dòng (không có g chỉ thay chữ đầu); awk cộng cột 2 (90+75+90+60 = 315).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting that sed without g replaces only the first match per line."
+        },
+        {
+          "loi": "Counting words instead of lines with wc -l."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "standard input/output",
+          "vi": "stdin / stdout"
+        },
+        {
+          "en": "filter",
+          "vi": "lệnh đọc stdin, ghi stdout"
+        }
+      ]
+    },
+    {
+      "title": "Linux 3 — Read an ls -l line",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "ls -l",
+        "permissions"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Decode this line of <code>ls -l</code>:</p><pre>-rwxr-x--- 2 ana staff 4096 Oct 30 12:00 run.sh</pre><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Giải mã dòng <code>ls -l</code> này:</p><pre>-rwxr-x--- 2 ana staff 4096 Oct 30 12:00 run.sh</pre><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The 10 characters are 1 type + 3 owner + 3 group + 3 others.",
+        "After the permissions: links, owner, group, size, date, name."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Linux 3 — Read an ls -l line\n\nAnswer in the answer panel (no code needed).\n\n1. FieldsCác trường\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Linux 3 — Read an ls -l line — answer key\n\n1. FieldsCác trường\n   - t.a: -\n   - o.a: rwx\n   - g.a: r-x\n   - x.a: ---\n   - n.a: 2\n   - u.a: ana\n   - s.a: 4096\n   -rwxr-x--- = regular file, owner rwx (7), group r-x (5), others none (0): mode 750. Link count 2, owner ana, group staff, 4096 bytes.VI: -rwxr-x--- = tệp thường, chủ rwx (7), nhóm r-x (5), người khác không có (0): mode 750. Số liên kết 2, chủ ana, nhóm staff, 4096 byte.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>- · rwx · r-x · --- · 2 · ana · 4096.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Fields</p><p style=\"opacity:.75;font-size:.92em\"><i>Các trường</i></p>",
+            "cot": [
+              {
+                "ma": "q",
+                "ten": "Question"
+              },
+              {
+                "ma": "a",
+                "ten": "Answer"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "t",
+                "o": {
+                  "q": "File type (first character: - regular, d directory, l symlink)"
+                }
+              },
+              {
+                "ma": "o",
+                "o": {
+                  "q": "Permissions of the owner (3 characters)"
+                }
+              },
+              {
+                "ma": "g",
+                "o": {
+                  "q": "Permissions of the group"
+                }
+              },
+              {
+                "ma": "x",
+                "o": {
+                  "q": "Permissions of others"
+                }
+              },
+              {
+                "ma": "n",
+                "o": {
+                  "q": "Number of hard links"
+                }
+              },
+              {
+                "ma": "u",
+                "o": {
+                  "q": "Owner"
+                }
+              },
+              {
+                "ma": "s",
+                "o": {
+                  "q": "Size in bytes"
+                }
+              }
+            ],
+            "dapAn": {
+              "t.a": "-",
+              "o.a": "rwx",
+              "g.a": "r-x",
+              "x.a": "---",
+              "n.a": "2",
+              "u.a": "ana",
+              "s.a": "4096"
+            },
+            "giaiThich": "<p>-rwxr-x--- = regular file, owner rwx (7), group r-x (5), others none (0): mode 750. Link count 2, owner ana, group staff, 4096 bytes.</p><p><i>VI: -rwxr-x--- = tệp thường, chủ rwx (7), nhóm r-x (5), người khác không có (0): mode 750. Số liên kết 2, chủ ana, nhóm staff, 4096 byte.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reading the first character as part of the owner’s permissions."
+        },
+        {
+          "loi": "Mixing owner and group columns."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "ls -l",
+          "vi": "liệt kê dạng dài"
+        }
+      ]
+    },
+    {
+      "title": "Linux 4 — Redirection order, jobs and signals",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 9,
+      "points": 20,
+      "concepts": [
+        "job control",
+        "signals",
+        "redirection order"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Five questions on redirection, background jobs and signals.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu về chuyển hướng, tiến trình nền và tín hiệu.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Think of redirections as assignments evaluated left to right.",
+        "Catchable signals allow a clean shutdown."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Linux 4 — Redirection order, jobs and signals\n\nAnswer in the answer panel (no code needed).\n\n1. What does a trailing & do, as in sleep 100 &?Dấu & ở cuối, như sleep 100 &, làm gì?\n2. Ctrl-C in a terminal sends which signal to the foreground job?Ctrl-C trong terminal gửi tín hiệu nào cho tiến trình foreground?\n3. Which signal can a process NOT catch or ignore?Tín hiệu nào tiến trình KHÔNG thể bắt hay bỏ qua?\n4. Ctrl-Z followed by bg …Ctrl-Z rồi bg …\n5. cat missing.txt 2>&1 > out.txt (file missing.txt does not exist) puts the error message …cat missing.txt 2>&1 > out.txt (tệp missing.txt không tồn tại) đưa thông báo lỗi …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Linux 4 — Redirection order, jobs and signals — answer key\n\n1. What does a trailing & do, as in sleep 100 &?Dấu & ở cuối, như sleep 100 &, làm gì?\n   Answer: c) Runs the command in the background; the shell returns the prompt at once\n   The shell forks the child but does not wait for it.VI: Shell fork tiến trình con nhưng không chờ nó.\n\n2. Ctrl-C in a terminal sends which signal to the foreground job?Ctrl-C trong terminal gửi tín hiệu nào cho tiến trình foreground?\n   Answer: d) SIGINT\n   SIGINT can be caught; SIGKILL and SIGSTOP cannot.VI: SIGINT bắt được; SIGKILL và SIGSTOP thì không.\n\n3. Which signal can a process NOT catch or ignore?Tín hiệu nào tiến trình KHÔNG thể bắt hay bỏ qua?\n   Answer: a) SIGKILL (9)\n   SIGTERM is the polite request that lets a program clean up; kill -9 is the last resort.VI: SIGTERM là lời yêu cầu lịch sự để chương trình dọn dẹp; kill -9 là cách cuối cùng.\n\n4. Ctrl-Z followed by bg …Ctrl-Z rồi bg …\n   Answer: b) suspends the job, then resumes it in the background\n   Ctrl-Z sends SIGTSTP; bg sends SIGCONT and keeps it in the background; fg brings it back.VI: Ctrl-Z gửi SIGTSTP; bg gửi SIGCONT và để nó chạy nền; fg đưa lại foreground.\n\n5. cat missing.txt 2>&1 > out.txt (file missing.txt does not exist) puts the error message …cat missing.txt 2>&1 > out.txt (tệp missing.txt không tồn tại) đưa thông báo lỗi …\n   Answer: c) on the terminal, because stderr was duplicated onto the terminal BEFORE stdout moved to the file\n   Redirections are processed left to right: 2>&1 copies the current stdout (the terminal), then > moves stdout only.VI: Chuyển hướng xử lý từ trái sang phải: 2>&1 sao chép stdout hiện tại (terminal), rồi > chỉ dời stdout.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>c · d · a · b · c.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>What does a trailing <code>&amp;</code> do, as in <code>sleep 100 &amp;</code>?</p><p style=\"opacity:.75;font-size:.92em\"><i>Dấu <code>&amp;</code> ở cuối, như <code>sleep 100 &amp;</code>, làm gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Makes it run as root"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Pipes it to the next command"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Runs the command in the background; the shell returns the prompt at once"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Runs it twice"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The shell forks the child but does not wait for it.</p><p><i>VI: Shell fork tiến trình con nhưng không chờ nó.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Ctrl-C in a terminal sends which signal to the foreground job?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ctrl-C trong terminal gửi tín hiệu nào cho tiến trình foreground?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "SIGKILL"
+              },
+              {
+                "ma": "b",
+                "noiDung": "SIGSTOP"
+              },
+              {
+                "ma": "c",
+                "noiDung": "SIGHUP"
+              },
+              {
+                "ma": "d",
+                "noiDung": "SIGINT"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>SIGINT can be caught; SIGKILL and SIGSTOP cannot.</p><p><i>VI: SIGINT bắt được; SIGKILL và SIGSTOP thì không.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Which signal can a process NOT catch or ignore?</p><p style=\"opacity:.75;font-size:.92em\"><i>Tín hiệu nào tiến trình KHÔNG thể bắt hay bỏ qua?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "SIGKILL (9)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "SIGTERM (15)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "SIGINT (2)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "SIGHUP (1)"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>SIGTERM is the polite request that lets a program clean up; kill -9 is the last resort.</p><p><i>VI: SIGTERM là lời yêu cầu lịch sự để chương trình dọn dẹp; kill -9 là cách cuối cùng.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Ctrl-Z followed by <code>bg</code> …</p><p style=\"opacity:.75;font-size:.92em\"><i>Ctrl-Z rồi <code>bg</code> …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "restarts it from the beginning"
+              },
+              {
+                "ma": "b",
+                "noiDung": "suspends the job, then resumes it in the background"
+              },
+              {
+                "ma": "c",
+                "noiDung": "kills the job"
+              },
+              {
+                "ma": "d",
+                "noiDung": "moves it to another terminal"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Ctrl-Z sends SIGTSTP; bg sends SIGCONT and keeps it in the background; fg brings it back.</p><p><i>VI: Ctrl-Z gửi SIGTSTP; bg gửi SIGCONT và để nó chạy nền; fg đưa lại foreground.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p><code>cat missing.txt 2&gt;&amp;1 &gt; out.txt</code> (file missing.txt does not exist) puts the error message …</p><p style=\"opacity:.75;font-size:.92em\"><i><code>cat missing.txt 2&gt;&amp;1 &gt; out.txt</code> (tệp missing.txt không tồn tại) đưa thông báo lỗi …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "nowhere"
+              },
+              {
+                "ma": "b",
+                "noiDung": "into missing.txt"
+              },
+              {
+                "ma": "c",
+                "noiDung": "on the terminal, because stderr was duplicated onto the terminal BEFORE stdout moved to the file"
+              },
+              {
+                "ma": "d",
+                "noiDung": "into out.txt"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Redirections are processed left to right: 2>&1 copies the current stdout (the terminal), then > moves stdout only.</p><p><i>VI: Chuyển hướng xử lý từ trái sang phải: 2>&1 sao chép stdout hiện tại (terminal), rồi > chỉ dời stdout.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Believing kill -9 is a good first choice."
+        },
+        {
+          "loi": "Writing 2>&1 first and expecting the error in the file."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "SIGTERM / SIGKILL",
+          "vi": "yêu cầu dừng / buộc dừng"
+        },
+        {
+          "en": "background job",
+          "vi": "công việc chạy nền"
+        }
+      ]
+    },
+    {
+      "title": "Linux 5 — Implement chmod with symbolic modes",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "chmod",
+        "permission bits"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Write <code>applyChmod(mode, spec)</code>. <code>mode</code> is the current permission as a 3-digit octal string such as <code>'644'</code>; <code>spec</code> is a comma-separated list of clauses <code>[ugoa]*[+-=][rwx]*</code> exactly as accepted by <code>chmod</code> (<code>u</code> owner, <code>g</code> group, <code>o</code> others, <code>a</code> all; an empty “who” means all; <code>+</code> adds, <code>-</code> removes, <code>=</code> sets exactly those bits for the named classes). Clauses are applied left to right. Return the new mode as a 3-digit octal string.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Ignore the umask and the special bits (setuid, sticky).</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>applyChmod(mode, spec)</code>. <code>mode</code> là quyền hiện tại dạng chuỗi bát phân 3 chữ số như <code>'644'</code>; <code>spec</code> là danh sách các mệnh đề cách nhau bằng dấu phẩy dạng <code>[ugoa]*[+-=][rwx]*</code> đúng như <code>chmod</code> chấp nhận (<code>u</code> chủ, <code>g</code> nhóm, <code>o</code> người khác, <code>a</code> tất cả; “who” rỗng nghĩa là tất cả; <code>+</code> thêm, <code>-</code> bớt, <code>=</code> đặt đúng các bit đó cho các lớp được nêu). Các mệnh đề áp dụng từ trái sang phải. Trả mode mới dạng chuỗi bát phân 3 chữ số.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Bỏ qua umask và các bit đặc biệt (setuid, sticky).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "applyChmod('644', 'u+x')",
+          "output": "\"744\"",
+          "explanation": "rw-r--r-- plus execute for the owner = rwxr--r--.|||rw-r--r-- thêm thực thi cho chủ = rwxr--r--."
+        }
+      ],
+      "hintsJson": [
+        "Each class occupies 3 bits: user 6–8, group 3–5, others 0–2.",
+        "“=” clears the 3 bits of the class before setting the new ones."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function applyChmod(mode, spec) {\n  return mode;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Parse each clause; shift the bits into the right class.\nfunction applyChmod(mode, spec) {\n  var m = parseInt(mode, 8);\n  var sh = { u: 6, g: 3, o: 0 };\n  spec.split(',').forEach(function (clause) {\n    var mt = /^([ugoa]*)([-+=])([rwx]*)$/.exec(clause);\n    if (!mt) throw new Error('bad clause: ' + clause);\n    var who = mt[1] || 'a';\n    if (who.indexOf('a') >= 0) who = 'ugo';\n    var bits = (mt[3].indexOf('r') >= 0 ? 4 : 0) + (mt[3].indexOf('w') >= 0 ? 2 : 0) + (mt[3].indexOf('x') >= 0 ? 1 : 0);\n    who.split('').forEach(function (c) {\n      var b = bits << sh[c];\n      var mask = 7 << sh[c];\n      if (mt[2] === '+') m |= b;\n      else if (mt[2] === '-') m &= ~b;\n      else m = (m & ~mask) | b;\n    });\n  });\n  return ('000' + m.toString(8)).slice(-3);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Symbolic chmod is bit arithmetic: shift the rwx value into the class position and OR, AND-NOT or replace.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: applyChmod(\"644\", \"u+x\")",
+              "vi": "Ca 1"
+            },
+            "goi": "applyChmod(\"644\", \"u+x\")",
+            "mongDoi": "744"
+          },
+          {
+            "moTa": {
+              "en": "Case 2: applyChmod(\"755\", \"go-rx\")",
+              "vi": "Ca 2"
+            },
+            "goi": "applyChmod(\"755\", \"go-rx\")",
+            "mongDoi": "700"
+          },
+          {
+            "moTa": {
+              "en": "Case 3: applyChmod(\"600\", \"a+r\")",
+              "vi": "Ca 3"
+            },
+            "goi": "applyChmod(\"600\", \"a+r\")",
+            "mongDoi": "644"
+          },
+          {
+            "moTa": {
+              "en": "Case 4: applyChmod(\"777\", \"u=rw,g=r,o=\")",
+              "vi": "Ca 4"
+            },
+            "goi": "applyChmod(\"777\", \"u=rw,g=r,o=\")",
+            "mongDoi": "640"
+          },
+          {
+            "moTa": {
+              "en": "Case 5: applyChmod(\"000\", \"a=rwx\")",
+              "vi": "Ca 5"
+            },
+            "goi": "applyChmod(\"000\", \"a=rwx\")",
+            "mongDoi": "777"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "applyChmod(\"644\", \"+x\")",
+            "mongDoi": "755",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "applyChmod(\"750\", \"g+w,o+r,u-x\")",
+            "mongDoi": "674",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "applyChmod(\"640\", \"ug=rw\")",
+            "mongDoi": "660",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating “=” like “+” (the old bits remain)."
+        },
+        {
+          "loi": "Forgetting that an empty “who” means all three classes."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

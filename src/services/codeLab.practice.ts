@@ -32,6 +32,8 @@ export const PRACTICE_TRACK_BY_COURSE: Readonly<Record<string, string>> = Object
   'ssg105-communication-and-in-group-working-skills': 'ky-nang-practice',
   // DBI202 (29/10/2026): máy chấm SQL trong trình duyệt (PostgreSQL WASM, chế độ SQL Server) — content/codelab/dbi202-practice.
   'introduction-to-databases': 'dbi202-practice',
+  // OSG202 (30/10/2026): lập lịch CPU, thay trang, Banker, đĩa, i-node… — content/codelab/osg202-practice (máy chấm choice/order/table/js).
+  'operating-systems': 'osg202-practice',
 });
 
 /**

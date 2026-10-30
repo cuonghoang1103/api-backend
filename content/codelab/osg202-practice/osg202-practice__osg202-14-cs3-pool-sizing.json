@@ -1,0 +1,282 @@
+{
+  "trackSlug": "osg202-practice",
+  "moduleSlug": "osg202-14-cs3-pool-sizing",
+  "lesson": {
+    "course": "operating-systems",
+    "slug": "osg202-cs3-on"
+  },
+  "exercises": [
+    {
+      "title": "Thread pool 1 — How many worker threads?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "thread pool sizing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>A rule of thumb for a pool of identical workers on <b>N</b> cores: threads = N × (1 + W / C), where W is the time a request spends waiting (I/O) and C the CPU time it needs. Round UP to a whole number. Give the pool size for each case.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Quy tắc kinh nghiệm cho nhóm worker giống nhau trên <b>N</b> lõi: số luồng = N × (1 + W / C), trong đó W là thời gian yêu cầu chờ (I/O) và C là thời gian CPU nó cần. Làm tròn LÊN số nguyên. Cho cỡ nhóm cho từng trường hợp.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "W / C is how many other requests one core can serve while one waits.",
+        "W = 0 gives exactly N threads."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Thread pool 1 — How many worker threads?\n\nAnswer in the answer panel (no code needed).\n\n1. Pool sizesCỡ nhóm luồng\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Thread pool 1 — How many worker threads? — answer key\n\n1. Pool sizesCỡ nhóm luồng\n   - c0.n: 4\n   - c1.n: 40\n   - c2.n: 80\n   - c3.n: 32\n   - c4.n: 202\n   N=4, W=0, C=10: 4×(1+0/10) = 4; N=4, W=90, C=10: 4×(1+90/10) = 40; N=8, W=45, C=5: 8×(1+45/5) = 80; N=16, W=20, C=20: 16×(1+20/20) = 32; N=2, W=300, C=3: 2×(1+300/3) = 202. A purely CPU-bound task (W = 0) needs only N threads; the more it waits, the more threads keep the cores busy.VI: 4×(1+0/10) = 4; 4×(1+90/10) = 40; 8×(1+45/5) = 80; 16×(1+20/20) = 32; 2×(1+300/3) = 202. Việc thuần CPU (W = 0) chỉ cần N luồng; càng chờ nhiều càng cần nhiều luồng để lõi luôn bận.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>4 · 40 · 80 · 32 · 202</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Pool sizes</p><p style=\"opacity:.75;font-size:.92em\"><i>Cỡ nhóm luồng</i></p>",
+            "cot": [
+              {
+                "ma": "c",
+                "ten": "Cores, wait W, CPU C"
+              },
+              {
+                "ma": "n",
+                "ten": "Threads"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "c0",
+                "o": {
+                  "c": "N = 4, W = 0 ms, C = 10 ms"
+                }
+              },
+              {
+                "ma": "c1",
+                "o": {
+                  "c": "N = 4, W = 90 ms, C = 10 ms"
+                }
+              },
+              {
+                "ma": "c2",
+                "o": {
+                  "c": "N = 8, W = 45 ms, C = 5 ms"
+                }
+              },
+              {
+                "ma": "c3",
+                "o": {
+                  "c": "N = 16, W = 20 ms, C = 20 ms"
+                }
+              },
+              {
+                "ma": "c4",
+                "o": {
+                  "c": "N = 2, W = 300 ms, C = 3 ms"
+                }
+              }
+            ],
+            "dapAn": {
+              "c0.n": "4",
+              "c1.n": "40",
+              "c2.n": "80",
+              "c3.n": "32",
+              "c4.n": "202"
+            },
+            "giaiThich": "<p>N=4, W=0, C=10: 4×(1+0/10) = 4; N=4, W=90, C=10: 4×(1+90/10) = 40; N=8, W=45, C=5: 8×(1+45/5) = 80; N=16, W=20, C=20: 16×(1+20/20) = 32; N=2, W=300, C=3: 2×(1+300/3) = 202. A purely CPU-bound task (W = 0) needs only N threads; the more it waits, the more threads keep the cores busy.</p><p><i>VI: 4×(1+0/10) = 4; 4×(1+90/10) = 40; 8×(1+45/5) = 80; 16×(1+20/20) = 32; 2×(1+300/3) = 202. Việc thuần CPU (W = 0) chỉ cần N luồng; càng chờ nhiều càng cần nhiều luồng để lõi luôn bận.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting the “1 +” (the thread also needs the CPU for C)."
+        },
+        {
+          "loi": "Rounding down."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "thread pool",
+          "vi": "nhóm luồng"
+        },
+        {
+          "en": "I/O-bound",
+          "vi": "bị giới hạn bởi I/O"
+        }
+      ]
+    },
+    {
+      "title": "Thread pool 2 — Little’s law and pool sizing in code",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "Little’s law",
+        "capacity planning"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Write two small capacity-planning helpers. <code>concurrency(lambda, seconds)</code> applies <b>Little’s law</b>: the average number of requests in the system L = λ × W (λ requests per second, W seconds each). <code>poolSize(cores, waitMs, computeMs)</code> returns <code>⌈cores × (1 + waitMs / computeMs)⌉</code>. Both return numbers. Example: 200 req/s at 50 ms each means 10 requests in flight.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Round to 6 decimals in <code>concurrency</code> to hide floating-point noise.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết hai hàm trợ giúp lập kế hoạch năng lực. <code>concurrency(lambda, seconds)</code> áp dụng <b>định luật Little</b>: số yêu cầu trung bình trong hệ thống L = λ × W (λ yêu cầu mỗi giây, W giây mỗi yêu cầu). <code>poolSize(cores, waitMs, computeMs)</code> trả <code>⌈cores × (1 + waitMs / computeMs)⌉</code>. Cả hai trả số. Ví dụ: 200 req/s, mỗi yêu cầu 50 ms nghĩa là 10 yêu cầu đang xử lý.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Làm tròn 6 chữ số thập phân trong <code>concurrency</code> để che nhiễu dấu phẩy động.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "concurrency(200, 0.05)",
+          "output": "10",
+          "explanation": "200 × 0.05 = 10 requests in flight.|||200 × 0,05 = 10 yêu cầu đang xử lý."
+        }
+      ],
+      "hintsJson": [
+        "Math.ceil for the pool size.",
+        "Math.round(x * 1e6) / 1e6 for concurrency."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function concurrency(lambda, seconds) {\n  return 0;\n}\nfunction poolSize(cores, waitMs, computeMs) {\n  return 0;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Little's law: L = lambda * W (requests in flight = throughput * latency).\nfunction concurrency(lambda, seconds) {\n  return Math.round(lambda * seconds * 1e6) / 1e6;\n}\n// Pool size for a mix of waiting (I/O) and computing: cores * (1 + wait / compute), rounded up.\nfunction poolSize(cores, waitMs, computeMs) {\n  return Math.ceil(cores * (1 + waitMs / computeMs));\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Little’s law links the three quantities of any stable queue: concurrency = throughput × latency. It is how you size connection pools and thread pools from observed numbers.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: concurrency(200, 0.05)",
+              "vi": "Ca 1"
+            },
+            "goi": "concurrency(200, 0.05)",
+            "mongDoi": 10
+          },
+          {
+            "moTa": {
+              "en": "Case 2: concurrency(1000, 0.2)",
+              "vi": "Ca 2"
+            },
+            "goi": "concurrency(1000, 0.2)",
+            "mongDoi": 200
+          },
+          {
+            "moTa": {
+              "en": "Case 3: concurrency(50, 1.5)",
+              "vi": "Ca 3"
+            },
+            "goi": "concurrency(50, 1.5)",
+            "mongDoi": 75
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "concurrency(3, 0.333333)",
+            "mongDoi": 0.999999,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "poolSize case 1",
+              "vi": "poolSize ca 1"
+            },
+            "goi": "poolSize(4, 0, 10)",
+            "mongDoi": 4
+          },
+          {
+            "moTa": {
+              "en": "poolSize case 2",
+              "vi": "poolSize ca 2"
+            },
+            "goi": "poolSize(4, 90, 10)",
+            "mongDoi": 40
+          },
+          {
+            "moTa": {
+              "en": "poolSize case 3",
+              "vi": "poolSize ca 3"
+            },
+            "goi": "poolSize(8, 45, 5)",
+            "mongDoi": 80
+          },
+          {
+            "moTa": {
+              "en": "poolSize case 4",
+              "vi": "poolSize ca 4"
+            },
+            "goi": "poolSize(16, 20, 20)",
+            "mongDoi": 32,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "poolSize case 5",
+              "vi": "poolSize ca 5"
+            },
+            "goi": "poolSize(2, 300, 3)",
+            "mongDoi": 202,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using milliseconds for W in Little’s law without converting."
+        },
+        {
+          "loi": "Forgetting Math.ceil."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

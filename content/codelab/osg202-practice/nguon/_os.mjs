@@ -147,3 +147,18 @@ export const tn = (en, vi) => ({ en, vi });
 
 /** Mã nguồn của hàm tham chiếu, đổi tên hàm thành `ten` (toString không có chữ export). */
 export const dat = (fn, ten) => String(fn).replace(/^(async\s+)?function\s+[\w$]+/, `function ${ten}`) + '\n';
+
+/** Bốn phương án số: đáp án đúng + 3 nhiễu (lệch cho trước), xếp xác định. Trả [[ma,nội dung]…] và mã đúng. */
+export function so4(dung, nhieu, fmt) {
+  const f = fmt || ((x) => String(x));
+  const ds = [dung, ...nhieu].map((v) => f(v));
+  const duyNhat = [...new Set(ds)];
+  if (duyNhat.length < 4) throw new Error('so4: phương án trùng ' + JSON.stringify(ds));
+  return duyNhat.slice(0, 4);
+}
+
+/** Câu trắc nghiệm số: đáp án đúng (hiện đầu, tinh() sẽ xoay) + 3 nhiễu. */
+export function mcNum(ma, de, dung, nhieu, fmt, gt) {
+  const ds = so4(dung, nhieu, fmt);
+  return mc(ma, de, ds.map((t, i) => ['abcd'[i], t]), 'a', gt);
+}

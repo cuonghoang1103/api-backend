@@ -8,5 +8,186 @@
   "status": "PUBLISHED",
   "level": "BEGINNER",
   "description": "Bộ luyện môn OSG202 (Operating Systems) bám giáo trình Tanenbaum và đề FE của trường — mỗi bài học một bộ đề từ dễ đến khó, con số trong đề do bộ mô phỏng tính (lập lịch CPU, thay trang, Banker, lập lịch đĩa, cấp phát bộ nhớ, dịch địa chỉ, i-node/FAT, semaphore, race condition); bài khó là viết hàm mô phỏng chạy thật trong trình duyệt; mỗi chương một Lab và đề FE thi thử cuối môn.",
-  "modules": []
+  "modules": [
+    {
+      "slug": "osg202-1-1-kernel-syscall",
+      "name": "1.1 What an OS is: kernel & system calls",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Kernel mode, user mode and the role of the OS · Which operations need kernel mode? · Order the steps of a system call · Match the UNIX system call to its purpose · Summarise a strace log and find leaked descriptors"
+    },
+    {
+      "slug": "osg202-1-3-phan-cung",
+      "name": "1.3 Hardware review: interrupts, DMA & dual mode",
+      "level": "BEGINNER",
+      "description": "Luyện: Interrupts, traps and the memory hierarchy (concepts) · Average memory access time with a cache · Order the steps of interrupt handling · How much CPU do interrupts cost?"
+    },
+    {
+      "slug": "osg202-2-2-luong-dong-bo",
+      "name": "2.2 Threads & parallel speed-up",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: What do threads share and what is private? · CPU utilisation with multiprogramming: 1 − pⁿ · Amdahl’s law: speed-up of a parallel program · Pthreads: join, detach and thread-safe code · How many cores do you need? (Amdahl, solved in code)"
+    },
+    {
+      "slug": "osg202-2-3-fork-exec",
+      "name": "2.3 Process states, the PCB & fork/exec",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Which transition does the event cause? · fork(), exec(), zombie and orphan · How many processes and how many lines? · Output buffering and wait(): what really gets printed? · Order the life of the command “ls -l” · Write a fork-tree counter"
+    },
+    {
+      "slug": "osg202-2-4-lap-lich-tinh-toan",
+      "name": "2.4 Scheduling algorithms, calculated",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: FCFS: completion, turnaround and waiting time · Which algorithm? (convoy effect, starvation, quantum) · SJF (non-preemptive) versus SRTF (preemptive) · Round Robin (q = 3): the order of the time slices · How the quantum changes Round Robin · Priority scheduling: non-preemptive and preemptive · Write"
+    },
+    {
+      "slug": "osg202-2-5-ipc-dong-bo",
+      "name": "2.5 IPC & synchronization: races, mutex, semaphore",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Critical sections and the four conditions · The lost update: counter++ without a lock · Trace a counting semaphore · Semaphores that enforce an order · Enumerate every outcome of a data race · Write a semaphore simulator"
+    },
+    {
+      "slug": "osg202-2-6-bai-toan-ipc",
+      "name": "2.6 The three classical IPC problems",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Producer–consumer: the three semaphores · Order the producer, then spot the deadlock · Readers–writers and the philosophers (concepts) · Dining philosophers: which Coffman condition does each strategy break? · When does the bounded buffer first block? · Simulate the dining philosophers"
+    },
+    {
+      "slug": "osg202-2-lab-scheduler-comparison",
+      "name": "Lab 2 — CPU scheduler comparison report",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: CPU scheduler comparison report"
+    },
+    {
+      "slug": "osg202-slide-osg3-1",
+      "name": "3.0 Memory allocation: swapping, holes & fit strategies",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Where does each request go? First, best, worst, next fit · Internal fragmentation of paged processes · The buddy system: block sizes · Swapping, base/limit, compaction · Write a hole allocator"
+    },
+    {
+      "slug": "osg202-3-1-phan-trang",
+      "name": "3.1 Paging & virtual memory",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Split a virtual address: offset bits, page-number bits, number of pages · Translate logical addresses with a page table · How big is a single-level page table? · Internal fragmentation, protection and the bits of a PTE · Write an MMU: translate a batch of addresses"
+    },
+    {
+      "slug": "osg202-3-2-thay-trang",
+      "name": "3.2 Page faults & replacement",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Count the page faults of FIFO, LRU and OPT · FIFO step by step: hit or fault? · LRU: which page is evicted at each fault? · Belady’s anomaly: more frames, more faults? · Second chance (Clock) versus FIFO · NRU, aging, working set: which is which? · Write a page-replacement simulator"
+    },
+    {
+      "slug": "osg202-3-3-tlb-dia-chi",
+      "name": "3.3 Address translation: page tables & the TLB",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: The path of one memory access (TLB miss, page present) · Effective access time with a TLB · Split a 32-bit address for a two-level page table (10 | 10 | 12) · TLB flushes, ASIDs, inverted page tables · Split an address into n fields and count TLB hits"
+    },
+    {
+      "slug": "osg202-3-4-thrashing",
+      "name": "3.4 Working set, thrashing & frame allocation",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Compute W(t, Δ) · Proportional frame allocation · Recognising and curing thrashing · Working-set sizes over time and the thrashing test"
+    },
+    {
+      "slug": "osg202-3-lab-vm-simulator",
+      "name": "Lab 3 — A tiny virtual-memory machine",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: A tiny virtual-memory machine (TLB + page table + replacement)"
+    },
+    {
+      "slug": "osg202-4-1-he-thong-tep",
+      "name": "4.1 Files, directories & implementation",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Files, directories and links (concepts) · Follow the FAT chain · Match the allocation method to the property · Walk and validate a FAT chain"
+    },
+    {
+      "slug": "osg202-4-2-inode",
+      "name": "4.2 Allocation methods, i-nodes & permissions",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Maximum file size of a UNIX i-node · How many disk reads for one byte? · Permissions in octal, symbolic form and umask · Hard links, symbolic links and what an i-node stores · Size of the free-space bitmap · Locate a byte through the indirect blocks"
+    },
+    {
+      "slug": "osg202-4-lab-mini-fat",
+      "name": "Lab 4 — A mini FAT file system",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: A mini FAT file system"
+    },
+    {
+      "slug": "osg202-5-1-io",
+      "name": "5.1 I/O hardware & software",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Polling, interrupts, DMA and memory-mapped I/O · The I/O software stack and a DMA transfer · Disk access time = seek + rotational latency + transfer · RAID: usable capacity and guaranteed fault tolerance · RAID capacity and disk access time in code"
+    },
+    {
+      "slug": "osg202-5-2-lap-lich-dia",
+      "name": "5.2 Disk scheduling, calculated",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: FCFS and SSTF: service order and total head movement · SCAN, C-SCAN, LOOK, C-LOOK: total head movement · Order the requests as SSTF serves them · Order the requests as SCAN serves them (moving down first) · Which algorithm for which workload? · Write a disk-scheduling simulator"
+    },
+    {
+      "slug": "osg202-5-lab-disk-arrivals",
+      "name": "Lab 5 — Disk scheduler with requests arriving over time",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Disk scheduler with requests arriving over time"
+    },
+    {
+      "slug": "osg202-6-1-deadlock",
+      "name": "6.1 Deadlock: conditions & handling",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: The four conditions and the ostrich · Read a resource-allocation graph (one instance per resource) · Which condition does each prevention technique attack? · Prevention, avoidance, detection or recovery? · Detect a cycle in a resource-allocation graph"
+    },
+    {
+      "slug": "osg202-6-2-banker",
+      "name": "6.2 Resource graphs & the Banker’s algorithm",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Compute the Need matrix · Find the safe sequence · Resource-request decisions · Deadlock detection with several instances per resource · What the Banker’s algorithm needs, and its limits · Implement the safety and request algorithms"
+    },
+    {
+      "slug": "osg202-6-lab-resource-manager",
+      "name": "Lab 6 — A deadlock-avoiding resource manager",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: A deadlock-avoiding resource manager"
+    },
+    {
+      "slug": "osg202-7-1-lenh-linux",
+      "name": "7.1 Essential Linux commands",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Commands, redirection and pipes (concepts) · Predict the output of the pipeline · Read an ls -l line · Redirection order, jobs and signals · Implement chmod with symbolic modes"
+    },
+    {
+      "slug": "osg202-7-2-shell-script",
+      "name": "7.2 Shell scripting basics",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Variables, quoting and special parameters · Predict the output of the one-liner · Exit codes and && / || chains · Split a command line into words like the shell · Subshells, pipelines, jobs and trap"
+    },
+    {
+      "slug": "osg202-8-multiprocessor",
+      "name": "8.1 Multiple processor systems: UMA/NUMA, Amdahl, networks",
+      "level": "BEGINNER",
+      "description": "Luyện: UMA, NUMA, spin locks and scheduling (concepts) · Speed-up and parallel efficiency · The omega network: stages and switches"
+    },
+    {
+      "slug": "osg202-9-security",
+      "name": "9.1 Security: principles, entropy, ACLs and capabilities",
+      "level": "BEGINNER",
+      "description": "Luyện: Principles, attacks and defences (concepts) · Password entropy · From the access matrix to ACLs and capability lists"
+    },
+    {
+      "slug": "osg202-13-pe-fe-mock",
+      "name": "PE Practice — FE mock exams (3 × 15 questions, timed)",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Introduction, processes, scheduling and memory (15 questions) · File systems, I/O and deadlock (15 questions) · Mixed paper with Linux, security and virtualization (15 questions)"
+    },
+    {
+      "slug": "osg202-14-cs3-pool-sizing",
+      "name": "14.3 CS.3 Thread pools & Little’s law",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: How many worker threads? · Little’s law and pool sizing in code"
+    },
+    {
+      "slug": "osg202-14-cs5-memory-oom",
+      "name": "14.5 CS.5 Memory on a real server: RSS, OOM and exit codes",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Resident memory, overcommit and the OOM killer · Decode the exit code 128 + n · Write an exit-code explainer"
+    }
+  ]
 }

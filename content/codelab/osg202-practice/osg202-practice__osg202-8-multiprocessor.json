@@ -1,0 +1,492 @@
+{
+  "trackSlug": "osg202-practice",
+  "moduleSlug": "osg202-8-multiprocessor",
+  "lesson": {
+    "course": "operating-systems",
+    "slug": "osg202-on-ch8"
+  },
+  "exercises": [
+    {
+      "title": "Multiprocessors 1 — UMA, NUMA, spin locks and scheduling (concepts)",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "multiprocessor",
+        "spin lock",
+        "gang scheduling"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Five questions on multiple-processor systems.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu về hệ thống nhiều bộ xử lý.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Shared memory ↔ multiprocessor; messages ↔ multicomputer.",
+        "Think about what travels over the bus."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Multiprocessors 1 — UMA, NUMA, spin locks and scheduling (concepts)\n\nAnswer in the answer panel (no code needed).\n\n1. What is the difference between a multiprocessor and a multicomputer?Multiprocessor khác multicomputer ở chỗ nào?\n2. Why is a plain test-and-set spin lock bad on a multiprocessor?Vì sao spin lock test-and-set thuần tuý kém trên multiprocessor?\n3. Gang scheduling means …Gang scheduling nghĩa là …\n4. “CPU affinity” (processor affinity) lets the scheduler …“CPU affinity” cho phép bộ lập lịch …\n5. In a symmetric multiprocessing (SMP) OS …Trong hệ điều hành đa xử lý đối xứng (SMP) …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Multiprocessors 1 — UMA, NUMA, spin locks and scheduling (concepts) — answer key\n\n1. What is the difference between a multiprocessor and a multicomputer?Multiprocessor khác multicomputer ở chỗ nào?\n   Answer: a) A multiprocessor shares one memory; a multicomputer has private memories and communicates by messages\n   Shared-memory (multiprocessor) versus message passing (multicomputer, cluster).VI: Bộ nhớ chung (multiprocessor) so với truyền thông điệp (multicomputer, cluster).\n\n2. Why is a plain test-and-set spin lock bad on a multiprocessor?Vì sao spin lock test-and-set thuần tuý kém trên multiprocessor?\n   Answer: b) Every spin writes the shared word, so the cache line bounces between cores and floods the bus\n   Test-and-test-and-set spins on a cached read and writes only when the lock looks free.VI: Test-and-test-and-set quay trên bản đọc đã cache và chỉ ghi khi khoá có vẻ rảnh.\n\n3. Gang scheduling means …Gang scheduling nghĩa là …\n   Answer: c) all threads of a related group are scheduled to run at the same time on different CPUs\n   Communicating threads then do not wait for a thread that is descheduled.VI: Các luồng giao tiếp với nhau không phải chờ một luồng đang bị tạm dừng.\n\n4. “CPU affinity” (processor affinity) lets the scheduler …“CPU affinity” cho phép bộ lập lịch …\n   Answer: d) keep a thread on the same core to reuse its warm cache\n   Moving a thread loses its cache contents (cold start).VI: Chuyển luồng sang lõi khác làm mất nội dung cache (khởi động nguội).\n\n5. In a symmetric multiprocessing (SMP) OS …Trong hệ điều hành đa xử lý đối xứng (SMP) …\n   Answer: a) every CPU can run kernel and user code and all share one copy of the OS\n   Master–slave designs make CPU 0 a bottleneck; SMP needs fine-grained locking in the kernel.VI: Thiết kế master–slave làm CPU 0 thành nút cổ chai; SMP cần khoá hạt mịn trong kernel.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a · b · c · d · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>What is the difference between a multiprocessor and a multicomputer?</p><p style=\"opacity:.75;font-size:.92em\"><i>Multiprocessor khác multicomputer ở chỗ nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A multiprocessor shares one memory; a multicomputer has private memories and communicates by messages"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A multicomputer has one CPU"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A multiprocessor has no cache"
+              },
+              {
+                "ma": "d",
+                "noiDung": "There is no difference"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Shared-memory (multiprocessor) versus message passing (multicomputer, cluster).</p><p><i>VI: Bộ nhớ chung (multiprocessor) so với truyền thông điệp (multicomputer, cluster).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Why is a plain test-and-set spin lock bad on a multiprocessor?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao spin lock test-and-set thuần tuý kém trên multiprocessor?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It only works with two threads"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Every spin writes the shared word, so the cache line bounces between cores and floods the bus"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It cannot lock anything"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It needs a disk"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Test-and-test-and-set spins on a cached read and writes only when the lock looks free.</p><p><i>VI: Test-and-test-and-set quay trên bản đọc đã cache và chỉ ghi khi khoá có vẻ rảnh.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Gang scheduling means …</p><p style=\"opacity:.75;font-size:.92em\"><i>Gang scheduling nghĩa là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "threads are scheduled in random order"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the OS ignores thread groups"
+              },
+              {
+                "ma": "c",
+                "noiDung": "all threads of a related group are scheduled to run at the same time on different CPUs"
+              },
+              {
+                "ma": "d",
+                "noiDung": "one thread gets all CPUs"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Communicating threads then do not wait for a thread that is descheduled.</p><p><i>VI: Các luồng giao tiếp với nhau không phải chờ một luồng đang bị tạm dừng.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>“CPU affinity” (processor affinity) lets the scheduler …</p><p style=\"opacity:.75;font-size:.92em\"><i>“CPU affinity” cho phép bộ lập lịch …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "run a thread on every core"
+              },
+              {
+                "ma": "b",
+                "noiDung": "change the page size"
+              },
+              {
+                "ma": "c",
+                "noiDung": "disable the TLB"
+              },
+              {
+                "ma": "d",
+                "noiDung": "keep a thread on the same core to reuse its warm cache"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Moving a thread loses its cache contents (cold start).</p><p><i>VI: Chuyển luồng sang lõi khác làm mất nội dung cache (khởi động nguội).</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>In a symmetric multiprocessing (SMP) OS …</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong hệ điều hành đa xử lý đối xứng (SMP) …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "every CPU can run kernel and user code and all share one copy of the OS"
+              },
+              {
+                "ma": "b",
+                "noiDung": "only CPU 0 runs the kernel"
+              },
+              {
+                "ma": "c",
+                "noiDung": "each CPU has its own OS and memory"
+              },
+              {
+                "ma": "d",
+                "noiDung": "user code runs on a special CPU"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Master–slave designs make CPU 0 a bottleneck; SMP needs fine-grained locking in the kernel.</p><p><i>VI: Thiết kế master–slave làm CPU 0 thành nút cổ chai; SMP cần khoá hạt mịn trong kernel.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling a cluster a multiprocessor."
+        },
+        {
+          "loi": "Thinking affinity forbids migration entirely."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "SMP",
+          "vi": "đa xử lý đối xứng"
+        },
+        {
+          "en": "gang scheduling",
+          "vi": "lập lịch theo nhóm đồng thời"
+        },
+        {
+          "en": "CPU affinity",
+          "vi": "gắn luồng với lõi"
+        }
+      ]
+    },
+    {
+      "title": "Multiprocessors 2 — Speed-up and parallel efficiency",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "Amdahl",
+        "efficiency"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Amdahl speed-up = 1 / ((1 − f) + f / n). Parallel efficiency = speed-up / n. Give both (speed-up with 2 decimals, efficiency in percent rounded to the nearest integer, digits only).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Speed-up Amdahl = 1 / ((1 − f) + f / n). Hiệu suất song song = speed-up / n. Cho cả hai (speed-up 2 chữ số thập phân, hiệu suất theo phần trăm làm tròn đến số nguyên, chỉ chữ số).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Compute the speed-up first, then divide by n.",
+        "Efficiency 100% would be perfect scaling."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Multiprocessors 2 — Speed-up and parallel efficiency\n\nAnswer in the answer panel (no code needed).\n\n1. Speed-up and efficiencySpeed-up và hiệu suất\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Multiprocessors 2 — Speed-up and parallel efficiency — answer key\n\n1. Speed-up and efficiencySpeed-up và hiệu suất\n   - c95_4.s: 3.48 / 3.48\n   - c95_4.e: 87\n   - c95_16.s: 9.14 / 9.14\n   - c95_16.e: 57\n   - c95_64.s: 15.42 / 15.42\n   - c95_64.e: 24\n   - c50_8.s: 1.78 / 1.78\n   - c50_8.e: 22\n   f=0.95, n=4: 3.48 (87%); f=0.95, n=16: 9.14 (57%); f=0.95, n=64: 15.42 (24%); f=0.5, n=8: 1.78 (22%). Efficiency falls quickly as cores are added: the sequential fraction dominates.VI: f=0.95, n=4: 3.48 (87%); f=0.95, n=16: 9.14 (57%); f=0.95, n=64: 15.42 (24%); f=0.5, n=8: 1.78 (22%). Hiệu suất giảm nhanh khi thêm lõi: phần tuần tự lấn át.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>3.48 / 87% · 9.14 / 57% · 15.42 / 24% · 1.78 / 22%</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Speed-up and efficiency</p><p style=\"opacity:.75;font-size:.92em\"><i>Speed-up và hiệu suất</i></p>",
+            "cot": [
+              {
+                "ma": "c",
+                "ten": "f and n"
+              },
+              {
+                "ma": "s",
+                "ten": "Speed-up"
+              },
+              {
+                "ma": "e",
+                "ten": "Efficiency (%)"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "c95_4",
+                "o": {
+                  "c": "f = 0.95, n = 4"
+                }
+              },
+              {
+                "ma": "c95_16",
+                "o": {
+                  "c": "f = 0.95, n = 16"
+                }
+              },
+              {
+                "ma": "c95_64",
+                "o": {
+                  "c": "f = 0.95, n = 64"
+                }
+              },
+              {
+                "ma": "c50_8",
+                "o": {
+                  "c": "f = 0.5, n = 8"
+                }
+              }
+            ],
+            "dapAn": {
+              "c95_4.s": [
+                "3.48",
+                "3.48"
+              ],
+              "c95_4.e": "87",
+              "c95_16.s": [
+                "9.14",
+                "9.14"
+              ],
+              "c95_16.e": "57",
+              "c95_64.s": [
+                "15.42",
+                "15.42"
+              ],
+              "c95_64.e": "24",
+              "c50_8.s": [
+                "1.78",
+                "1.78"
+              ],
+              "c50_8.e": "22"
+            },
+            "giaiThich": "<p>f=0.95, n=4: 3.48 (87%); f=0.95, n=16: 9.14 (57%); f=0.95, n=64: 15.42 (24%); f=0.5, n=8: 1.78 (22%). Efficiency falls quickly as cores are added: the sequential fraction dominates.</p><p><i>VI: f=0.95, n=4: 3.48 (87%); f=0.95, n=16: 9.14 (57%); f=0.95, n=64: 15.42 (24%); f=0.5, n=8: 1.78 (22%). Hiệu suất giảm nhanh khi thêm lõi: phần tuần tự lấn át.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dividing the fraction f by n again."
+        },
+        {
+          "loi": "Reporting efficiency as a fraction when percent is asked."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "parallel efficiency",
+          "vi": "hiệu suất song song = speed-up / số lõi"
+        }
+      ]
+    },
+    {
+      "title": "Multiprocessors 3 — The omega network: stages and switches",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "interconnection networks"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>An omega switching network connects n CPUs to n memories with 2×2 switches arranged in log₂(n) stages of n/2 switches each. Give the number of stages and the total number of switches (a crossbar would need n² crosspoints).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mạng chuyển mạch omega nối n CPU với n bộ nhớ bằng các công tắc 2×2 xếp thành log₂(n) tầng, mỗi tầng n/2 công tắc. Cho số tầng và tổng số công tắc (crossbar cần n² điểm nối).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Stages = log₂ n; switches = stages × n/2.",
+        "Crossbar = n × n."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Multiprocessors 3 — The omega network: stages and switches\n\nAnswer in the answer panel (no code needed).\n\n1. Omega network sizeKích thước mạng omega\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Multiprocessors 3 — The omega network: stages and switches — answer key\n\n1. Omega network sizeKích thước mạng omega\n   - n4.s: 2\n   - n4.t: 4\n   - n4.x: 16\n   - n8.s: 3\n   - n8.t: 12\n   - n8.x: 64\n   - n16.s: 4\n   - n16.t: 32\n   - n16.x: 256\n   - n64.s: 6\n   - n64.t: 192\n   - n64.x: 4096\n   n=4: 2 stages × 2 = 4 switches vs 16 crosspoints; n=8: 3 stages × 4 = 12 switches vs 64 crosspoints; n=16: 4 stages × 8 = 32 switches vs 256 crosspoints; n=64: 6 stages × 32 = 192 switches vs 4096 crosspoints. The omega network grows as n·log n instead of n², but it can block: two requests may need the same internal link.VI: n=4: 2 tầng × 2 = 4 công tắc so với 16 điểm nối; n=8: 3 tầng × 4 = 12 công tắc so với 64 điểm nối; n=16: 4 tầng × 8 = 32 công tắc so với 256 điểm nối; n=64: 6 tầng × 32 = 192 công tắc so với 4096 điểm nối. Mạng omega tăng như n·log n thay vì n², nhưng có thể bị chặn: hai yêu cầu có thể cần cùng một liên kết trong.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>4: 2 / 4 / 16 · 8: 3 / 12 / 64 · 16: 4 / 32 / 256 · 64: 6 / 192 / 4096</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Omega network size</p><p style=\"opacity:.75;font-size:.92em\"><i>Kích thước mạng omega</i></p>",
+            "cot": [
+              {
+                "ma": "n",
+                "ten": "n (CPUs = memories)"
+              },
+              {
+                "ma": "s",
+                "ten": "Stages"
+              },
+              {
+                "ma": "t",
+                "ten": "Switches"
+              },
+              {
+                "ma": "x",
+                "ten": "Crossbar crosspoints"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "n4",
+                "o": {
+                  "n": "4"
+                }
+              },
+              {
+                "ma": "n8",
+                "o": {
+                  "n": "8"
+                }
+              },
+              {
+                "ma": "n16",
+                "o": {
+                  "n": "16"
+                }
+              },
+              {
+                "ma": "n64",
+                "o": {
+                  "n": "64"
+                }
+              }
+            ],
+            "dapAn": {
+              "n4.s": "2",
+              "n4.t": "4",
+              "n4.x": "16",
+              "n8.s": "3",
+              "n8.t": "12",
+              "n8.x": "64",
+              "n16.s": "4",
+              "n16.t": "32",
+              "n16.x": "256",
+              "n64.s": "6",
+              "n64.t": "192",
+              "n64.x": "4096"
+            },
+            "giaiThich": "<p>n=4: 2 stages × 2 = 4 switches vs 16 crosspoints; n=8: 3 stages × 4 = 12 switches vs 64 crosspoints; n=16: 4 stages × 8 = 32 switches vs 256 crosspoints; n=64: 6 stages × 32 = 192 switches vs 4096 crosspoints. The omega network grows as n·log n instead of n², but it can block: two requests may need the same internal link.</p><p><i>VI: n=4: 2 tầng × 2 = 4 công tắc so với 16 điểm nối; n=8: 3 tầng × 4 = 12 công tắc so với 64 điểm nối; n=16: 4 tầng × 8 = 32 công tắc so với 256 điểm nối; n=64: 6 tầng × 32 = 192 công tắc so với 4096 điểm nối. Mạng omega tăng như n·log n thay vì n², nhưng có thể bị chặn: hai yêu cầu có thể cần cùng một liên kết trong.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using n instead of n/2 switches per stage."
+        },
+        {
+          "loi": "Counting log₂ of the wrong number."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "omega network",
+          "vi": "mạng omega"
+        },
+        {
+          "en": "crossbar",
+          "vi": "mạng chéo đầy đủ"
+        }
+      ]
+    }
+  ]
+}

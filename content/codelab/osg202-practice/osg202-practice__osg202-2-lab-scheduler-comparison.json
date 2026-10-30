@@ -1,0 +1,320 @@
+{
+  "trackSlug": "osg202-practice",
+  "moduleSlug": "osg202-2-lab-scheduler-comparison",
+  "lesson": {
+    "course": "operating-systems",
+    "slug": "osg202-on-ch2"
+  },
+  "exercises": [
+    {
+      "title": "Lab 2 — CPU scheduler comparison report",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 45,
+      "points": 60,
+      "concepts": [
+        "scheduling comparison",
+        "report"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p><b>Scenario.</b> The operations team of CuongThai.com wants to choose a scheduling policy for a build server. You must write a small tool that runs the same workload under <b>FCFS, SJF (non-preemptive), SRTF and Round Robin</b> and prints the numbers used in the lab report: average waiting, turnaround and response time and the number of context switches.</p>\n<p><b>Task.</b> You are given a working helper <code>schedule(algo, procs, quantum)</code> in <code>scheduler.js</code> (it returns <code>{ gantt, ct, tat, wt, rt, avgWt, avgTat, avgRt, … }</code>; <code>gantt</code> is a list of <code>[id, start, end]</code> slices). In <code>answer.js</code> write <code>report(procs, q)</code> returning</p>\n<pre>{ algos: { FCFS: { avgWt, avgTat, avgRt, switches }, SJF: {…}, SRTF: {…}, RR: {…} }, bestWt, bestRt }</pre>\n<p><code>switches</code> = number of Gantt slices − 1. <code>bestWt</code> / <code>bestRt</code> = name of the algorithm with the smallest average waiting / response time; ties go to the algorithm listed first in the order FCFS, SJF, SRTF, RR. Round Robin uses quantum <code>q</code>. Rules: lowest-index tie-breaks, context-switch time 0 (see exercise “Scheduling 7”).</p>\n<h4>Workloads used by the checks</h4><table><thead><tr><th>Process</th><th>Arrival</th><th>Burst</th></tr></thead><tbody><tr><td>A</td><td>0</td><td>8</td></tr><tr><td>B</td><td>1</td><td>4</td></tr><tr><td>C</td><td>2</td><td>9</td></tr><tr><td>D</td><td>3</td><td>5</td></tr></tbody></table><p>Workload 2 is the classic convoy case (24, 3, 3 arriving together).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Call the provided <code>schedule</code>; do not rewrite it.</li>\n  <li>Return numbers, not strings.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Tình huống.</b> Đội vận hành CuongThai.com muốn chọn chính sách lập lịch cho máy chủ build. Bạn viết một công cụ nhỏ chạy cùng một tải với <b>FCFS, SJF (không ngắt), SRTF và Round Robin</b> và in các con số dùng trong báo cáo lab: thời gian chờ, hoàn thành, phản hồi trung bình và số lần chuyển ngữ cảnh.</p>\n<p><b>Nhiệm vụ.</b> Tệp <code>scheduler.js</code> cho sẵn hàm chạy được <code>schedule(algo, procs, quantum)</code> (trả <code>{ gantt, ct, tat, wt, rt, avgWt, avgTat, avgRt, … }</code>; <code>gantt</code> là danh sách lát <code>[id, bắt đầu, kết thúc]</code>). Trong <code>answer.js</code> viết <code>report(procs, q)</code> trả</p>\n<pre>{ algos: { FCFS: { avgWt, avgTat, avgRt, switches }, SJF: {…}, SRTF: {…}, RR: {…} }, bestWt, bestRt }</pre>\n<p><code>switches</code> = số lát Gantt − 1. <code>bestWt</code> / <code>bestRt</code> = tên thuật toán có waiting / response trung bình nhỏ nhất; hoà thì chọn thuật toán đứng trước theo thứ tự FCFS, SJF, SRTF, RR. Round Robin dùng quantum <code>q</code>.</p>\n<h4>Tải dùng trong các kiểm</h4><table><thead><tr><th>Process</th><th>Arrival</th><th>Burst</th></tr></thead><tbody><tr><td>A</td><td>0</td><td>8</td></tr><tr><td>B</td><td>1</td><td>4</td></tr><tr><td>C</td><td>2</td><td>9</td></tr><tr><td>D</td><td>3</td><td>5</td></tr></tbody></table><p>Tải 2 là ca “convoy” kinh điển (24, 3, 3 đến cùng lúc).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Gọi hàm <code>schedule</code> cho sẵn; đừng viết lại.</li>\n  <li>Trả số, không phải chuỗi.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "report([{id:'A',at:0,bt:24},{id:'B',at:0,bt:3},{id:'C',at:0,bt:3}], 4).bestWt",
+          "output": "\"SJF\"",
+          "explanation": "SJF/SRTF run the short jobs first, so the convoy disappears.|||SJF/SRTF chạy việc ngắn trước nên hết hiện tượng convoy."
+        }
+      ],
+      "hintsJson": [
+        "Loop over the four names, call schedule once per name and copy the four numbers.",
+        "Pick the winners in a second loop with strict “<” so that ties keep the earlier algorithm.",
+        "switches = r.gantt.length - 1."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// scheduler.js (loaded before this file) provides schedule(algo, procs, quantum)\nfunction report(procs, q) {\n  return { algos: {}, bestWt: null, bestRt: null };\n}\n"
+        },
+        {
+          "name": "scheduler.js",
+          "language": "javascript",
+          "code": "// Provided: a correct scheduler (do not edit)\nfunction schedule(algo, procs, quantum) {\n  const n = procs.length;\n  const P = procs.map((p, i) => ({ id: p.id, at: p.at, bt: p.bt, pr: p.pr == null ? 0 : p.pr, i }));\n  const rem = {}; const first = {}; const ct = {};\n  P.forEach((p) => { rem[p.id] = p.bt; });\n  const gantt = [];\n  const push = (id, s, e) => {\n    if (e <= s) return;\n    const g = gantt[gantt.length - 1];\n    if (g && g[0] === id && g[2] === s) g[2] = e; else gantt.push([id, s, e]);\n  };\n  const khoiDong = (id, t) => { if (first[id] === undefined) first[id] = t; };\n  let t = 0; let xong = 0;\n  if (algo === 'RR') {\n    const q = quantum;\n    const sx = P.slice().sort((a, b) => a.at - b.at || a.i - b.i);\n    let k = 0; const hang = [];\n    while (xong < n) {\n      while (k < n && sx[k].at <= t) hang.push(sx[k++]);\n      if (!hang.length) { t = sx[k].at; continue; }\n      const p = hang.shift();\n      khoiDong(p.id, t);\n      const run = Math.min(q, rem[p.id]);\n      push(p.id, t, t + run); t += run; rem[p.id] -= run;\n      while (k < n && sx[k].at <= t) hang.push(sx[k++]);\n      if (rem[p.id] > 0) hang.push(p); else { ct[p.id] = t; xong++; }\n    }\n  } else if (algo === 'FCFS' || algo === 'SJF' || algo === 'PRIORITY') {\n    const daXong = {};\n    while (xong < n) {\n      let ds = P.filter((p) => !daXong[p.id] && p.at <= t);\n      if (!ds.length) { t = Math.min.apply(null, P.filter((p) => !daXong[p.id]).map((p) => p.at)); continue; }\n      const khoa = (p) => (algo === 'FCFS' ? [p.at, p.i] : algo === 'SJF' ? [p.bt, p.at, p.i] : [p.pr, p.at, p.i]);\n      ds.sort((a, b) => { const x = khoa(a), y = khoa(b); for (let j = 0; j < x.length; j++) if (x[j] !== y[j]) return x[j] - y[j]; return 0; });\n      const p = ds[0];\n      khoiDong(p.id, t); push(p.id, t, t + p.bt); t += p.bt; ct[p.id] = t; daXong[p.id] = true; xong++;\n    }\n  } else {\n    // SRTF / PRIORITY_P: quyết định lại sau MỖI đơn vị thời gian\n    while (xong < n) {\n      const ds = P.filter((p) => rem[p.id] > 0 && p.at <= t);\n      if (!ds.length) { t = Math.min.apply(null, P.filter((p) => rem[p.id] > 0).map((p) => p.at)); continue; }\n      const khoa = (p) => (algo === 'SRTF' ? [rem[p.id], p.at, p.i] : [p.pr, p.at, p.i]);\n      ds.sort((a, b) => { const x = khoa(a), y = khoa(b); for (let j = 0; j < x.length; j++) if (x[j] !== y[j]) return x[j] - y[j]; return 0; });\n      const p = ds[0];\n      khoiDong(p.id, t); push(p.id, t, t + 1); rem[p.id]--; t++;\n      if (rem[p.id] === 0) { ct[p.id] = t; xong++; }\n    }\n  }\n  const lam2 = (x) => Math.round(x * 100) / 100;\n  const tat = {}; const wt = {}; const rt = {};\n  let sw = 0; let st = 0; let sr = 0;\n  P.forEach((p) => {\n    tat[p.id] = ct[p.id] - p.at; wt[p.id] = tat[p.id] - p.bt; rt[p.id] = first[p.id] - p.at;\n    sw += wt[p.id]; st += tat[p.id]; sr += rt[p.id];\n  });\n  return { gantt, ct, tat, wt, rt, sumWt: sw, sumTat: st, avgWt: lam2(sw / n), avgTat: lam2(st / n), avgRt: lam2(sr / n), end: t };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function report(procs, q) {\n  var out = { algos: {}, bestWt: null, bestRt: null };\n  var names = ['FCFS', 'SJF', 'SRTF', 'RR'];\n  names.forEach(function (a) {\n    var r = schedule(a, procs, q);\n    out.algos[a] = { avgWt: r.avgWt, avgTat: r.avgTat, avgRt: r.avgRt, switches: r.gantt.length - 1 };\n  });\n  names.forEach(function (a) {\n    if (out.bestWt === null || out.algos[a].avgWt < out.algos[out.bestWt].avgWt) out.bestWt = a;\n    if (out.bestRt === null || out.algos[a].avgRt < out.algos[out.bestRt].avgRt) out.bestRt = a;\n  });\n  return out;\n}\n"
+        },
+        {
+          "name": "scheduler.js",
+          "language": "javascript",
+          "code": "// Provided: a correct scheduler (do not edit)\nfunction schedule(algo, procs, quantum) {\n  const n = procs.length;\n  const P = procs.map((p, i) => ({ id: p.id, at: p.at, bt: p.bt, pr: p.pr == null ? 0 : p.pr, i }));\n  const rem = {}; const first = {}; const ct = {};\n  P.forEach((p) => { rem[p.id] = p.bt; });\n  const gantt = [];\n  const push = (id, s, e) => {\n    if (e <= s) return;\n    const g = gantt[gantt.length - 1];\n    if (g && g[0] === id && g[2] === s) g[2] = e; else gantt.push([id, s, e]);\n  };\n  const khoiDong = (id, t) => { if (first[id] === undefined) first[id] = t; };\n  let t = 0; let xong = 0;\n  if (algo === 'RR') {\n    const q = quantum;\n    const sx = P.slice().sort((a, b) => a.at - b.at || a.i - b.i);\n    let k = 0; const hang = [];\n    while (xong < n) {\n      while (k < n && sx[k].at <= t) hang.push(sx[k++]);\n      if (!hang.length) { t = sx[k].at; continue; }\n      const p = hang.shift();\n      khoiDong(p.id, t);\n      const run = Math.min(q, rem[p.id]);\n      push(p.id, t, t + run); t += run; rem[p.id] -= run;\n      while (k < n && sx[k].at <= t) hang.push(sx[k++]);\n      if (rem[p.id] > 0) hang.push(p); else { ct[p.id] = t; xong++; }\n    }\n  } else if (algo === 'FCFS' || algo === 'SJF' || algo === 'PRIORITY') {\n    const daXong = {};\n    while (xong < n) {\n      let ds = P.filter((p) => !daXong[p.id] && p.at <= t);\n      if (!ds.length) { t = Math.min.apply(null, P.filter((p) => !daXong[p.id]).map((p) => p.at)); continue; }\n      const khoa = (p) => (algo === 'FCFS' ? [p.at, p.i] : algo === 'SJF' ? [p.bt, p.at, p.i] : [p.pr, p.at, p.i]);\n      ds.sort((a, b) => { const x = khoa(a), y = khoa(b); for (let j = 0; j < x.length; j++) if (x[j] !== y[j]) return x[j] - y[j]; return 0; });\n      const p = ds[0];\n      khoiDong(p.id, t); push(p.id, t, t + p.bt); t += p.bt; ct[p.id] = t; daXong[p.id] = true; xong++;\n    }\n  } else {\n    // SRTF / PRIORITY_P: quyết định lại sau MỖI đơn vị thời gian\n    while (xong < n) {\n      const ds = P.filter((p) => rem[p.id] > 0 && p.at <= t);\n      if (!ds.length) { t = Math.min.apply(null, P.filter((p) => rem[p.id] > 0).map((p) => p.at)); continue; }\n      const khoa = (p) => (algo === 'SRTF' ? [rem[p.id], p.at, p.i] : [p.pr, p.at, p.i]);\n      ds.sort((a, b) => { const x = khoa(a), y = khoa(b); for (let j = 0; j < x.length; j++) if (x[j] !== y[j]) return x[j] - y[j]; return 0; });\n      const p = ds[0];\n      khoiDong(p.id, t); push(p.id, t, t + 1); rem[p.id]--; t++;\n      if (rem[p.id] === 0) { ct[p.id] = t; xong++; }\n    }\n  }\n  const lam2 = (x) => Math.round(x * 100) / 100;\n  const tat = {}; const wt = {}; const rt = {};\n  let sw = 0; let st = 0; let sr = 0;\n  P.forEach((p) => {\n    tat[p.id] = ct[p.id] - p.at; wt[p.id] = tat[p.id] - p.bt; rt[p.id] = first[p.id] - p.at;\n    sw += wt[p.id]; st += tat[p.id]; sr += rt[p.id];\n  });\n  return { gantt, ct, tat, wt, rt, sumWt: sw, sumTat: st, avgWt: lam2(sw / n), avgTat: lam2(st / n), avgRt: lam2(sr / n), end: t };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The report is a thin layer over the scheduler: run every policy on the same workload, then compare. The interesting part of the lab is reading the table: SJF/SRTF win on waiting time, RR wins on response time and pays with many more context switches, FCFS is the baseline.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "scheduler.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: report([{\"id\":\"A\",\"at\":0,\"bt\":8},{\"id\":\"B\",\"at\":1,\"bt\":4},{\"id\":\"C\",\"at\":2,\"b)",
+              "vi": "Ca 1"
+            },
+            "goi": "report([{\"id\":\"A\",\"at\":0,\"bt\":8},{\"id\":\"B\",\"at\":1,\"bt\":4},{\"id\":\"C\",\"at\":2,\"bt\":9},{\"id\":\"D\",\"at\":3,\"bt\":5}], 3)",
+            "mongDoi": {
+              "algos": {
+                "FCFS": {
+                  "avgWt": 8.75,
+                  "avgTat": 15.25,
+                  "avgRt": 8.75,
+                  "switches": 3
+                },
+                "SJF": {
+                  "avgWt": 7.75,
+                  "avgTat": 14.25,
+                  "avgRt": 7.75,
+                  "switches": 3
+                },
+                "SRTF": {
+                  "avgWt": 6.5,
+                  "avgTat": 13,
+                  "avgRt": 4.25,
+                  "switches": 4
+                },
+                "RR": {
+                  "avgWt": 13.5,
+                  "avgTat": 20,
+                  "avgRt": 3,
+                  "switches": 9
+                }
+              },
+              "bestWt": "SRTF",
+              "bestRt": "RR"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: report([{\"id\":\"A\",\"at\":0,\"bt\":24},{\"id\":\"B\",\"at\":0,\"bt\":3},{\"id\":\"C\",\"at\":0,\")",
+              "vi": "Ca 2"
+            },
+            "goi": "report([{\"id\":\"A\",\"at\":0,\"bt\":24},{\"id\":\"B\",\"at\":0,\"bt\":3},{\"id\":\"C\",\"at\":0,\"bt\":3}], 4)",
+            "mongDoi": {
+              "algos": {
+                "FCFS": {
+                  "avgWt": 17,
+                  "avgTat": 27,
+                  "avgRt": 17,
+                  "switches": 2
+                },
+                "SJF": {
+                  "avgWt": 3,
+                  "avgTat": 13,
+                  "avgRt": 3,
+                  "switches": 2
+                },
+                "SRTF": {
+                  "avgWt": 3,
+                  "avgTat": 13,
+                  "avgRt": 3,
+                  "switches": 2
+                },
+                "RR": {
+                  "avgWt": 5.67,
+                  "avgTat": 15.67,
+                  "avgRt": 3.67,
+                  "switches": 3
+                }
+              },
+              "bestWt": "SJF",
+              "bestRt": "SJF"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: report([{\"id\":\"A\",\"at\":0,\"bt\":5},{\"id\":\"B\",\"at\":2,\"bt\":2},{\"id\":\"C\",\"at\":4,\"b)",
+              "vi": "Ca 3"
+            },
+            "goi": "report([{\"id\":\"A\",\"at\":0,\"bt\":5},{\"id\":\"B\",\"at\":2,\"bt\":2},{\"id\":\"C\",\"at\":4,\"bt\":1},{\"id\":\"D\",\"at\":20,\"bt\":3}], 2)",
+            "mongDoi": {
+              "algos": {
+                "FCFS": {
+                  "avgWt": 1.5,
+                  "avgTat": 4.25,
+                  "avgRt": 1.5,
+                  "switches": 3
+                },
+                "SJF": {
+                  "avgWt": 1.25,
+                  "avgTat": 4,
+                  "avgRt": 1.25,
+                  "switches": 3
+                },
+                "SRTF": {
+                  "avgWt": 0.75,
+                  "avgTat": 3.5,
+                  "avgRt": 0,
+                  "switches": 4
+                },
+                "RR": {
+                  "avgWt": 1.25,
+                  "avgTat": 4,
+                  "avgRt": 0.5,
+                  "switches": 5
+                }
+              },
+              "bestWt": "SRTF",
+              "bestRt": "SRTF"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "report([{\"id\":\"P1\",\"at\":0,\"bt\":6},{\"id\":\"P2\",\"at\":1,\"bt\":6},{\"id\":\"P3\",\"at\":2,\"bt\":6},{\"id\":\"P4\",\"at\":3,\"bt\":6}], 3)",
+            "mongDoi": {
+              "algos": {
+                "FCFS": {
+                  "avgWt": 7.5,
+                  "avgTat": 13.5,
+                  "avgRt": 7.5,
+                  "switches": 3
+                },
+                "SJF": {
+                  "avgWt": 7.5,
+                  "avgTat": 13.5,
+                  "avgRt": 7.5,
+                  "switches": 3
+                },
+                "SRTF": {
+                  "avgWt": 7.5,
+                  "avgTat": 13.5,
+                  "avgRt": 7.5,
+                  "switches": 3
+                },
+                "RR": {
+                  "avgWt": 12,
+                  "avgTat": 18,
+                  "avgRt": 3,
+                  "switches": 7
+                }
+              },
+              "bestWt": "FCFS",
+              "bestRt": "RR"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "report([{\"id\":\"X\",\"at\":0,\"bt\":1},{\"id\":\"Y\",\"at\":0,\"bt\":1},{\"id\":\"Z\",\"at\":0,\"bt\":10},{\"id\":\"W\",\"at\":5,\"bt\":2},{\"id\":\"V\",\"at\":5,\"bt\":2}], 2)",
+            "mongDoi": {
+              "algos": {
+                "FCFS": {
+                  "avgWt": 3.8,
+                  "avgTat": 7,
+                  "avgRt": 3.8,
+                  "switches": 4
+                },
+                "SJF": {
+                  "avgWt": 3.8,
+                  "avgTat": 7,
+                  "avgRt": 3.8,
+                  "switches": 4
+                },
+                "SRTF": {
+                  "avgWt": 1.8,
+                  "avgTat": 5,
+                  "avgRt": 1,
+                  "switches": 5
+                },
+                "RR": {
+                  "avgWt": 2.2,
+                  "avgTat": 5.4,
+                  "avgRt": 1.4,
+                  "switches": 5
+                }
+              },
+              "bestWt": "SRTF",
+              "bestRt": "SRTF"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "report([{\"id\":\"X\",\"at\":0,\"bt\":1},{\"id\":\"Y\",\"at\":0,\"bt\":1},{\"id\":\"Z\",\"at\":0,\"bt\":10},{\"id\":\"W\",\"at\":5,\"bt\":2},{\"id\":\"V\",\"at\":5,\"bt\":2}], 4)",
+            "mongDoi": {
+              "algos": {
+                "FCFS": {
+                  "avgWt": 3.8,
+                  "avgTat": 7,
+                  "avgRt": 3.8,
+                  "switches": 4
+                },
+                "SJF": {
+                  "avgWt": 3.8,
+                  "avgTat": 7,
+                  "avgRt": 3.8,
+                  "switches": 4
+                },
+                "SRTF": {
+                  "avgWt": 1.8,
+                  "avgTat": 5,
+                  "avgRt": 1,
+                  "switches": 5
+                },
+                "RR": {
+                  "avgWt": 2.2,
+                  "avgTat": 5.4,
+                  "avgRt": 1.4,
+                  "switches": 5
+                }
+              },
+              "bestWt": "SRTF",
+              "bestRt": "SRTF"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Using “<=” when searching for the minimum: the LAST tied algorithm wins instead of the first."
+        },
+        {
+          "loi": "Forgetting that RR needs the quantum argument."
+        },
+        {
+          "loi": "Counting context switches as the number of processes."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

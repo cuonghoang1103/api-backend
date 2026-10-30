@@ -1,0 +1,530 @@
+{
+  "trackSlug": "osg202-practice",
+  "moduleSlug": "osg202-14-cs5-memory-oom",
+  "lesson": {
+    "course": "operating-systems",
+    "slug": "osg202-cs5-on"
+  },
+  "exercises": [
+    {
+      "title": "Server memory 1 — Resident memory, overcommit and the OOM killer",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "VSZ vs RSS",
+        "overcommit",
+        "OOM killer"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Five questions on memory on a real Linux server.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu về bộ nhớ trên máy chủ Linux thật.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "VSZ = promised, RSS = used.",
+        "Think “lazy allocation, eager consequences”."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Server memory 1 — Resident memory, overcommit and the OOM killer\n\nAnswer in the answer panel (no code needed).\n\n1. What is the difference between VSZ and RSS in ps?VSZ và RSS trong ps khác nhau thế nào?\n2. Linux memory overcommit means that …Memory overcommit của Linux nghĩa là …\n3. When RAM and swap are exhausted, the kernel’s OOM killer …Khi RAM và swap cạn, OOM killer của kernel …\n4. A container with a 512 MB memory limit grows past it. What happens?Container có giới hạn bộ nhớ 512 MB vượt quá giới hạn. Điều gì xảy ra?\n5. Which setting protects the database process from the OOM killer first?Thiết lập nào bảo vệ tiến trình cơ sở dữ liệu khỏi OOM killer trước tiên?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Server memory 1 — Resident memory, overcommit and the OOM killer — answer key\n\n1. What is the difference between VSZ and RSS in ps?VSZ và RSS trong ps khác nhau thế nào?\n   Answer: d) VSZ is the virtual address space size; RSS is the part currently resident in RAM\n   A process may reserve far more virtual memory than it touches.VI: Tiến trình có thể giữ chỗ bộ nhớ ảo nhiều hơn rất nhiều so với phần nó chạm tới.\n\n2. Linux memory overcommit means that …Memory overcommit của Linux nghĩa là …\n   Answer: a) malloc can succeed even if RAM + swap cannot back all the memory promised; the problem appears when pages are touched\n   Allocation is lazy; real pages are assigned on first touch.VI: Cấp phát là lười; trang thật được gán lúc chạm lần đầu.\n\n3. When RAM and swap are exhausted, the kernel’s OOM killer …Khi RAM và swap cạn, OOM killer của kernel …\n   Answer: b) kills a process chosen by badness score (oom_score) with SIGKILL\n   You can bias the choice with oom_score_adj (−1000 disables killing the process).VI: Có thể thiên lệch lựa chọn bằng oom_score_adj (−1000 là không bị giết).\n\n4. A container with a 512 MB memory limit grows past it. What happens?Container có giới hạn bộ nhớ 512 MB vượt quá giới hạn. Điều gì xảy ra?\n   Answer: c) The cgroup OOM killer kills a process of the container (exit code 137)\n   The cgroup limit is enforced inside the container’s control group.VI: Giới hạn cgroup được áp ngay trong nhóm kiểm soát của container.\n\n5. Which setting protects the database process from the OOM killer first?Thiết lập nào bảo vệ tiến trình cơ sở dữ liệu khỏi OOM killer trước tiên?\n   Answer: d) A very low (negative) oom_score_adj for that process\n   oom_score_adj = −1000 exempts it; the killer picks other victims.VI: oom_score_adj = −1000 miễn trừ; killer chọn nạn nhân khác.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>d · a · b · c · d.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>What is the difference between VSZ and RSS in <code>ps</code>?</p><p style=\"opacity:.75;font-size:.92em\"><i>VSZ và RSS trong <code>ps</code> khác nhau thế nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "VSZ is swap; RSS is disk"
+              },
+              {
+                "ma": "b",
+                "noiDung": "They are always equal"
+              },
+              {
+                "ma": "c",
+                "noiDung": "RSS counts shared libraries once per process only"
+              },
+              {
+                "ma": "d",
+                "noiDung": "VSZ is the virtual address space size; RSS is the part currently resident in RAM"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A process may reserve far more virtual memory than it touches.</p><p><i>VI: Tiến trình có thể giữ chỗ bộ nhớ ảo nhiều hơn rất nhiều so với phần nó chạm tới.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Linux memory overcommit means that …</p><p style=\"opacity:.75;font-size:.92em\"><i>Memory overcommit của Linux nghĩa là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "malloc can succeed even if RAM + swap cannot back all the memory promised; the problem appears when pages are touched"
+              },
+              {
+                "ma": "b",
+                "noiDung": "malloc always fails when RAM is full"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Pages are compressed"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The kernel never swaps"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Allocation is lazy; real pages are assigned on first touch.</p><p><i>VI: Cấp phát là lười; trang thật được gán lúc chạm lần đầu.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>When RAM and swap are exhausted, the kernel’s OOM killer …</p><p style=\"opacity:.75;font-size:.92em\"><i>Khi RAM và swap cạn, OOM killer của kernel …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "pauses all processes"
+              },
+              {
+                "ma": "b",
+                "noiDung": "kills a process chosen by badness score (oom_score) with SIGKILL"
+              },
+              {
+                "ma": "c",
+                "noiDung": "reboots the machine"
+              },
+              {
+                "ma": "d",
+                "noiDung": "asks processes to free memory politely"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>You can bias the choice with oom_score_adj (−1000 disables killing the process).</p><p><i>VI: Có thể thiên lệch lựa chọn bằng oom_score_adj (−1000 là không bị giết).</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>A container with a 512 MB memory limit grows past it. What happens?</p><p style=\"opacity:.75;font-size:.92em\"><i>Container có giới hạn bộ nhớ 512 MB vượt quá giới hạn. Điều gì xảy ra?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Memory is added automatically"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The limit is ignored"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The cgroup OOM killer kills a process of the container (exit code 137)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The host kills the whole host"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The cgroup limit is enforced inside the container’s control group.</p><p><i>VI: Giới hạn cgroup được áp ngay trong nhóm kiểm soát của container.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Which setting protects the database process from the OOM killer first?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thiết lập nào bảo vệ tiến trình cơ sở dữ liệu khỏi OOM killer trước tiên?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A larger page size"
+              },
+              {
+                "ma": "b",
+                "noiDung": "More swap only"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Running it as root"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A very low (negative) oom_score_adj for that process"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>oom_score_adj = −1000 exempts it; the killer picks other victims.</p><p><i>VI: oom_score_adj = −1000 miễn trừ; killer chọn nạn nhân khác.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reading VSZ as memory used."
+        },
+        {
+          "loi": "Thinking malloc failing is the usual sign of memory exhaustion on Linux."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "RSS",
+          "vi": "bộ nhớ thường trú: trang đang nằm trong RAM"
+        },
+        {
+          "en": "OOM killer",
+          "vi": "trình giết tiến trình khi hết bộ nhớ"
+        },
+        {
+          "en": "overcommit",
+          "vi": "cấp phát vượt khả năng đáp ứng"
+        }
+      ]
+    },
+    {
+      "title": "Server memory 2 — Decode the exit code 128 + n",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "exit codes",
+        "signals"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>When a process dies from a signal, the shell reports <b>128 + signal number</b>. Name the signal that produced each exit code (SIGHUP 1, SIGINT 2, SIGQUIT 3, SIGABRT 6, SIGKILL 9, SIGSEGV 11, SIGPIPE 13, SIGTERM 15).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Khi một tiến trình chết vì tín hiệu, shell báo <b>128 + số tín hiệu</b>. Gọi tên tín hiệu gây ra mỗi mã thoát (SIGHUP 1, SIGINT 2, SIGQUIT 3, SIGABRT 6, SIGKILL 9, SIGSEGV 11, SIGPIPE 13, SIGTERM 15).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Subtract 128, then look the number up.",
+        "SIGKILL cannot be caught, so a service killed by it had no chance to clean up."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Server memory 2 — Decode the exit code 128 + n\n\nAnswer in the answer panel (no code needed).\n\n1. Exit code → signalMã thoát → tín hiệu\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Server memory 2 — Decode the exit code 128 + n — answer key\n\n1. Exit code → signalMã thoát → tín hiệu\n   - c137.s: SIGKILL\n   - c139.s: SIGSEGV\n   - c143.s: SIGTERM\n   - c130.s: SIGINT\n   - c134.s: SIGABRT\n   - c141.s: SIGPIPE\n   137 = 128 + 9 → SIGKILL; 139 = 128 + 11 → SIGSEGV; 143 = 128 + 15 → SIGTERM; 130 = 128 + 2 → SIGINT; 134 = 128 + 6 → SIGABRT; 141 = 128 + 13 → SIGPIPE. 137 in a container usually means the OOM killer; 143 is a clean docker stop; 139 a crash.VI: 137 = 128 + 9 → SIGKILL; 139 = 128 + 11 → SIGSEGV; 143 = 128 + 15 → SIGTERM; 130 = 128 + 2 → SIGINT; 134 = 128 + 6 → SIGABRT; 141 = 128 + 13 → SIGPIPE. 137 trong container thường là OOM killer; 143 là docker stop sạch; 139 là sập chương trình.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>SIGKILL · SIGSEGV · SIGTERM · SIGINT · SIGABRT · SIGPIPE</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Exit code → signal</p><p style=\"opacity:.75;font-size:.92em\"><i>Mã thoát → tín hiệu</i></p>",
+            "cot": [
+              {
+                "ma": "c",
+                "ten": "Exit code"
+              },
+              {
+                "ma": "s",
+                "ten": "Signal",
+                "luaChon": [
+                  "SIGHUP",
+                  "SIGINT",
+                  "SIGQUIT",
+                  "SIGABRT",
+                  "SIGKILL",
+                  "SIGSEGV",
+                  "SIGPIPE",
+                  "SIGTERM"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "c137",
+                "o": {
+                  "c": "137"
+                }
+              },
+              {
+                "ma": "c139",
+                "o": {
+                  "c": "139"
+                }
+              },
+              {
+                "ma": "c143",
+                "o": {
+                  "c": "143"
+                }
+              },
+              {
+                "ma": "c130",
+                "o": {
+                  "c": "130"
+                }
+              },
+              {
+                "ma": "c134",
+                "o": {
+                  "c": "134"
+                }
+              },
+              {
+                "ma": "c141",
+                "o": {
+                  "c": "141"
+                }
+              }
+            ],
+            "dapAn": {
+              "c137.s": "SIGKILL",
+              "c139.s": "SIGSEGV",
+              "c143.s": "SIGTERM",
+              "c130.s": "SIGINT",
+              "c134.s": "SIGABRT",
+              "c141.s": "SIGPIPE"
+            },
+            "giaiThich": "<p>137 = 128 + 9 → SIGKILL; 139 = 128 + 11 → SIGSEGV; 143 = 128 + 15 → SIGTERM; 130 = 128 + 2 → SIGINT; 134 = 128 + 6 → SIGABRT; 141 = 128 + 13 → SIGPIPE. 137 in a container usually means the OOM killer; 143 is a clean docker stop; 139 a crash.</p><p><i>VI: 137 = 128 + 9 → SIGKILL; 139 = 128 + 11 → SIGSEGV; 143 = 128 + 15 → SIGTERM; 130 = 128 + 2 → SIGINT; 134 = 128 + 6 → SIGABRT; 141 = 128 + 13 → SIGPIPE. 137 trong container thường là OOM killer; 143 là docker stop sạch; 139 là sập chương trình.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reading 134 as an exit(134) call instead of SIGABRT."
+        },
+        {
+          "loi": "Confusing 137 (KILL) with 143 (TERM)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "exit status",
+          "vi": "mã thoát"
+        },
+        {
+          "en": "SIGKILL",
+          "vi": "tín hiệu giết không thể bắt"
+        }
+      ]
+    },
+    {
+      "title": "Server memory 3 — Write an exit-code explainer",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "exit codes",
+        "signals"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Write <code>explainExit(code)</code> for a monitoring tool. Return <code>{ kind: 'success' }</code> for 0; <code>{ kind: 'signal', signal, number }</code> for codes 129–255 (<code>number = code − 128</code>; <code>signal</code> is the name from the table SIGHUP 1, SIGINT 2, SIGQUIT 3, SIGABRT 6, SIGKILL 9, SIGSEGV 11, SIGPIPE 13, SIGTERM 15, otherwise <code>'SIG' + number</code>); and <code>{ kind: 'error', code }</code> for every other code (1–128).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Do not hard-code individual codes: compute 128 + n.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>explainExit(code)</code> cho công cụ giám sát. Trả <code>{ kind: 'success' }</code> với 0; <code>{ kind: 'signal', signal, number }</code> với mã 129–255 (<code>number = code − 128</code>; <code>signal</code> là tên theo bảng SIGHUP 1, SIGINT 2, SIGQUIT 3, SIGABRT 6, SIGKILL 9, SIGSEGV 11, SIGPIPE 13, SIGTERM 15, còn lại <code>'SIG' + number</code>); và <code>{ kind: 'error', code }</code> với mọi mã khác (1–128).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đừng viết cứng từng mã: tính 128 + n.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "explainExit(137)",
+          "output": "{\"kind\":\"signal\",\"signal\":\"SIGKILL\",\"number\":9}",
+          "explanation": "137 − 128 = 9 → SIGKILL (often the OOM killer).|||137 − 128 = 9 → SIGKILL (thường là OOM killer)."
+        }
+      ],
+      "hintsJson": [
+        "Check 0 first, then the 129–255 range, then everything else.",
+        "A lookup object for the known names; fall back to \"SIG\" + n."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function explainExit(code) {\n  return { kind: 'error', code: code };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// 0 = success, 129..255 = 128 + signal, otherwise an error code.\nfunction explainExit(code) {\n  var names = { 1: 'SIGHUP', 2: 'SIGINT', 3: 'SIGQUIT', 6: 'SIGABRT', 9: 'SIGKILL', 11: 'SIGSEGV', 13: 'SIGPIPE', 15: 'SIGTERM' };\n  if (code === 0) return { kind: 'success' };\n  if (code > 128 && code < 256) { var n = code - 128; return { kind: 'signal', signal: names[n] || 'SIG' + n, number: n }; }\n  return { kind: 'error', code: code };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is the first thing to do when a container restarts: map the exit code back to a cause (137 OOM/kill -9, 139 segfault, 143 graceful stop).</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: explainExit(0)",
+              "vi": "Ca 1"
+            },
+            "goi": "explainExit(0)",
+            "mongDoi": {
+              "kind": "success"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: explainExit(137)",
+              "vi": "Ca 2"
+            },
+            "goi": "explainExit(137)",
+            "mongDoi": {
+              "kind": "signal",
+              "signal": "SIGKILL",
+              "number": 9
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: explainExit(143)",
+              "vi": "Ca 3"
+            },
+            "goi": "explainExit(143)",
+            "mongDoi": {
+              "kind": "signal",
+              "signal": "SIGTERM",
+              "number": 15
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 4: explainExit(1)",
+              "vi": "Ca 4"
+            },
+            "goi": "explainExit(1)",
+            "mongDoi": {
+              "kind": "error",
+              "code": 1
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "explainExit(139)",
+            "mongDoi": {
+              "kind": "signal",
+              "signal": "SIGSEGV",
+              "number": 11
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "explainExit(128)",
+            "mongDoi": {
+              "kind": "error",
+              "code": 128
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "explainExit(255)",
+            "mongDoi": {
+              "kind": "signal",
+              "signal": "SIG127",
+              "number": 127
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "explainExit(134)",
+            "mongDoi": {
+              "kind": "signal",
+              "signal": "SIGABRT",
+              "number": 6
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating 128 itself as a signal (it is an ordinary error code)."
+        },
+        {
+          "loi": "Forgetting the fallback name for signals not in the table."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

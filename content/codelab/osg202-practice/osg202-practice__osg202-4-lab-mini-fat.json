@@ -1,0 +1,271 @@
+{
+  "trackSlug": "osg202-practice",
+  "moduleSlug": "osg202-4-lab-mini-fat",
+  "lesson": {
+    "course": "operating-systems",
+    "slug": "osg202-on-ch4"
+  },
+  "exercises": [
+    {
+      "title": "Lab 4 — A mini FAT file system",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 45,
+      "points": 60,
+      "concepts": [
+        "FAT",
+        "first-free allocation",
+        "fragmentation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p><b>Scenario.</b> Implement the core of a FAT-style file system on a tiny disk. Write <code>fsSim(nBlocks, ops)</code>. The disk has <code>nBlocks</code> blocks (numbered from 0); the FAT array has one entry per block: <code>null</code> = free, <code>-1</code> = last block of a file, otherwise the number of the next block. Operations (strings):</p>\n<ul>\n<li><code>'create name size'</code> — allocate <code>size</code> blocks using the <b>lowest-numbered free blocks</b> (first-free, in increasing order) and chain them. Results: <code>'OK b1,b2,…'</code> (the chain), <code>'EXISTS'</code> (name already used), <code>'NOSPACE'</code> (size &lt; 1 or not enough free blocks; nothing is allocated).</li>\n<li><code>'delete name'</code> — free all blocks of the file; result <code>'OK'</code> or <code>'NOFILE'</code>.</li>\n<li><code>'read name k'</code> — the DISK block number holding the k-th block (0-based) of the file, as a string; <code>'EOF'</code> if k is past the end; <code>'NOFILE'</code>.</li>\n</ul>\n<p>Return <code>{ results, fat, free, fragments }</code>: one result string per operation, the final FAT, the number of free blocks, and for every existing file (keys in alphabetical order) the number of <b>fragments</b> = number of runs of consecutive block numbers when the file’s blocks are sorted.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Free blocks go back to <code>null</code>; deleting must not touch other files.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Tình huống.</b> Cài đặt phần lõi của hệ tệp kiểu FAT trên một đĩa nhỏ. Viết <code>fsSim(nBlocks, ops)</code>. Đĩa có <code>nBlocks</code> khối (đánh số từ 0); mảng FAT có một mục mỗi khối: <code>null</code> = trống, <code>-1</code> = khối cuối của tệp, ngược lại là số khối kế tiếp. Các thao tác (chuỗi):</p>\n<ul>\n<li><code>'create name size'</code> — cấp <code>size</code> khối lấy các <b>khối trống số nhỏ nhất</b> (first-free, tăng dần) và nối chuỗi. Kết quả: <code>'OK b1,b2,…'</code> (chuỗi khối), <code>'EXISTS'</code> (tên đã dùng), <code>'NOSPACE'</code> (size &lt; 1 hoặc không đủ khối trống; không cấp gì).</li>\n<li><code>'delete name'</code> — giải phóng mọi khối của tệp; kết quả <code>'OK'</code> hoặc <code>'NOFILE'</code>.</li>\n<li><code>'read name k'</code> — số khối TRÊN ĐĨA chứa khối thứ k (từ 0) của tệp, dạng chuỗi; <code>'EOF'</code> nếu k vượt cuối; <code>'NOFILE'</code>.</li>\n</ul>\n<p>Trả <code>{ results, fat, free, fragments }</code>: mỗi thao tác một chuỗi kết quả, FAT cuối cùng, số khối trống, và với mỗi tệp còn tồn tại (khoá theo thứ tự chữ cái) số <b>mảnh</b> = số đoạn số khối liên tiếp khi sắp các khối của tệp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Khối được giải phóng trở về <code>null</code>; xoá không được đụng tệp khác.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "fsSim(6, ['create a 2', 'create b 2', 'delete a', 'create c 3']).results",
+          "output": "[\"OK 0,1\",\"OK 2,3\",\"OK\",\"OK 0,1,4\"]",
+          "explanation": "After deleting a, c takes the free blocks 0,1 and then 4: it is fragmented.|||Sau khi xoá a, c lấy khối trống 0,1 rồi 4: tệp bị phân mảnh."
+        }
+      ],
+      "hintsJson": [
+        "Write a helper chain(first) that follows the FAT until -1; delete, read and fragments all use it.",
+        "For create, collect all free indices first and check the length before changing anything.",
+        "Fragments: sort the block numbers and count the gaps."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function fsSim(nBlocks, ops) {\n  return { results: [], fat: [], free: nBlocks, fragments: {} };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function fsSim(nBlocks, ops) {\n  var fat = [], files = {}, results = [], i;\n  for (i = 0; i < nBlocks; i++) fat.push(null);\n  function chain(first) {\n    var c = [], b = first;\n    while (b !== -1) { c.push(b); b = fat[b]; }\n    return c;\n  }\n  ops.forEach(function (op) {\n    var p = op.split(' ');\n    if (p[0] === 'create') {\n      var size = parseInt(p[2], 10), free = [];\n      if (files[p[1]] !== undefined) { results.push('EXISTS'); return; }\n      for (i = 0; i < nBlocks; i++) if (fat[i] === null) free.push(i);\n      if (size < 1 || free.length < size) { results.push('NOSPACE'); return; }\n      var take = free.slice(0, size);\n      for (i = 0; i < take.length; i++) fat[take[i]] = i + 1 < take.length ? take[i + 1] : -1;\n      files[p[1]] = take[0];\n      results.push('OK ' + take.join(','));\n    } else if (p[0] === 'delete') {\n      if (files[p[1]] === undefined) { results.push('NOFILE'); return; }\n      chain(files[p[1]]).forEach(function (b) { fat[b] = null; });\n      delete files[p[1]];\n      results.push('OK');\n    } else if (p[0] === 'read') {\n      if (files[p[1]] === undefined) { results.push('NOFILE'); return; }\n      var c = chain(files[p[1]]), k = parseInt(p[2], 10);\n      results.push(k >= 0 && k < c.length ? String(c[k]) : 'EOF');\n    } else results.push('BAD');\n  });\n  var fragments = {}, freeCount = 0;\n  Object.keys(files).sort().forEach(function (n) {\n    var c = chain(files[n]).slice().sort(function (a, b) { return a - b; }), runs = 1;\n    for (i = 1; i < c.length; i++) if (c[i] !== c[i - 1] + 1) runs++;\n    fragments[n] = runs;\n  });\n  for (i = 0; i < nBlocks; i++) if (fat[i] === null) freeCount++;\n  return { results: results, fat: fat, free: freeCount, fragments: fragments };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>First-free allocation turns delete/create cycles into fragmentation; the FAT keeps files readable anyway, at the price of a longer chain walk. This is exactly why defragmentation tools existed.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: fsSim(10, [\"create a 3\",\"create b 2\",\"create c 3\",\"delete b\",\"create d 3\",\"r)",
+              "vi": "Ca 1"
+            },
+            "goi": "fsSim(10, [\"create a 3\",\"create b 2\",\"create c 3\",\"delete b\",\"create d 3\",\"read d 2\",\"read a 5\",\"create a 1\",\"delete zz\",\"create e 9\"])",
+            "mongDoi": {
+              "results": [
+                "OK 0,1,2",
+                "OK 3,4",
+                "OK 5,6,7",
+                "OK",
+                "OK 3,4,8",
+                "8",
+                "EOF",
+                "EXISTS",
+                "NOFILE",
+                "NOSPACE"
+              ],
+              "fat": [
+                1,
+                2,
+                -1,
+                4,
+                8,
+                6,
+                7,
+                -1,
+                -1,
+                null
+              ],
+              "free": 1,
+              "fragments": {
+                "a": 1,
+                "c": 1,
+                "d": 2
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: fsSim(8, [\"create x 4\",\"create y 4\",\"delete x\",\"create z 2\",\"create w 3\",\"re)",
+              "vi": "Ca 2"
+            },
+            "goi": "fsSim(8, [\"create x 4\",\"create y 4\",\"delete x\",\"create z 2\",\"create w 3\",\"read w 0\",\"read y 3\",\"read z 1\"])",
+            "mongDoi": {
+              "results": [
+                "OK 0,1,2,3",
+                "OK 4,5,6,7",
+                "OK",
+                "OK 0,1",
+                "NOSPACE",
+                "NOFILE",
+                "7",
+                "1"
+              ],
+              "fat": [
+                1,
+                -1,
+                null,
+                null,
+                5,
+                6,
+                7,
+                -1
+              ],
+              "free": 2,
+              "fragments": {
+                "y": 1,
+                "z": 1
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: fsSim(8, [\"create f 2\",\"create g 2\",\"create h 2\",\"delete g\",\"delete f\",\"crea)",
+              "vi": "Ca 3"
+            },
+            "goi": "fsSim(8, [\"create f 2\",\"create g 2\",\"create h 2\",\"delete g\",\"delete f\",\"create i 3\",\"read i 2\",\"create j 2\"])",
+            "mongDoi": {
+              "results": [
+                "OK 0,1",
+                "OK 2,3",
+                "OK 4,5",
+                "OK",
+                "OK",
+                "OK 0,1,2",
+                "2",
+                "OK 3,6"
+              ],
+              "fat": [
+                1,
+                2,
+                -1,
+                6,
+                5,
+                -1,
+                -1,
+                null
+              ],
+              "free": 1,
+              "fragments": {
+                "h": 1,
+                "i": 1,
+                "j": 2
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "fsSim(4, [\"create a 4\",\"create b 1\",\"read a 3\",\"delete a\",\"create b 1\",\"create b 1\"])",
+            "mongDoi": {
+              "results": [
+                "OK 0,1,2,3",
+                "NOSPACE",
+                "3",
+                "OK",
+                "OK 0",
+                "EXISTS"
+              ],
+              "fat": [
+                -1,
+                null,
+                null,
+                null
+              ],
+              "free": 3,
+              "fragments": {
+                "b": 1
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "fsSim(6, [\"create p 2\",\"create q 2\",\"create r 2\",\"delete q\",\"create s 2\",\"create t 1\"])",
+            "mongDoi": {
+              "results": [
+                "OK 0,1",
+                "OK 2,3",
+                "OK 4,5",
+                "OK",
+                "OK 2,3",
+                "NOSPACE"
+              ],
+              "fat": [
+                1,
+                -1,
+                3,
+                -1,
+                5,
+                -1
+              ],
+              "free": 0,
+              "fragments": {
+                "p": 1,
+                "r": 1,
+                "s": 1
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "fsSim(3, [])",
+            "mongDoi": {
+              "results": [],
+              "fat": [
+                null,
+                null,
+                null
+              ],
+              "free": 3,
+              "fragments": {}
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Allocating blocks before checking there is enough space (a failed create must leave the disk unchanged)."
+        },
+        {
+          "loi": "Forgetting to clear the FAT entries when deleting."
+        },
+        {
+          "loi": "Counting fragments on the chain order instead of the sorted block numbers."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

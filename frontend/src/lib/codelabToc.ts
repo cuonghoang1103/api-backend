@@ -28,6 +28,7 @@ export const KHOA_CUA_TRACK: Readonly<Record<string, string>> = Object.freeze({
   'swr302-practice': 'software-requirements',
   'ky-nang-practice': 'ssg105-communication-and-in-group-working-skills',
   'dbi202-practice': 'introduction-to-databases',
+  'osg202-practice': 'operating-systems',
 });
 
 /**
@@ -104,6 +105,20 @@ export const TEN_CHUONG: Readonly<Record<string, Readonly<Record<number, string>
     6: 'Truy vấn SQL: SELECT, JOIN, GROUP BY, truy vấn con, DML',
     7: 'View (procedure/trigger T-SQL: máy chấm SQL Server — sắp có)',
     9: 'Luyện PE — đề thực hành có đồng hồ',
+  },
+  // OSG202 (30/10/2026) — số chương theo Tanenbaum/khoá operating-systems (content/academy/OSG202.mjs).
+  'osg202-practice': {
+    1: 'Giới thiệu: kernel, lời gọi hệ thống, phần cứng',
+    2: 'Tiến trình, luồng, đồng bộ & lập lịch CPU',
+    3: 'Quản lý bộ nhớ & bộ nhớ ảo',
+    4: 'Hệ thống tệp',
+    5: 'Vào/ra, đĩa & RAID',
+    6: 'Deadlock & thuật toán nhà băng',
+    7: 'Linux & shell',
+    8: 'Hệ thống nhiều bộ xử lý',
+    9: 'Bảo mật',
+    13: 'Luyện FE — đề thi thử có đồng hồ',
+    14: 'Chuyên sâu cho backend: luồng, bộ nhớ trên máy chủ',
   },
   // Kỹ năng nghề — số chương theo SSG105 (Ch3 Written communication, Ch4 Presentations).
   'ky-nang-practice': {
